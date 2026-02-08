@@ -17,8 +17,8 @@ export const metadata: Metadata = {
         'synthpop beats', 'club beats', 'deep house beats', 'drill beats',
         'beats for sale', 'license beats', 'instrumental beats',
         'Virzy Guns Production', 'VGP', 'music production',
-        'HealingWave', 'functional audio', 'focus music', 'productivity audio',
-        'neuro-acoustics', 'binaural beats', 'wellness audio', 'VST plugin', 'clock generator',
+        'HealingWave', 'functional audio', 'focus music', 'productivity app',
+        'neuro-acoustics', 'binaural beats', 'wellness app', 'sleep audio', 'circadian rhythm',
         'producer', 'beatmaker', 'music for artists', 'commercial beats'
     ],
 };

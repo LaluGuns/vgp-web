@@ -96,7 +96,7 @@ export default function HealingWavePage() {
                     >
                         <p className="mono-label text-primary mb-4">HEALINGWAVE PROJECT</p>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-hero mb-6">
-                            HealingWave VST & Functional Audio Ecosystem
+                            HealingWave: Productivity & Wellness Eco-System
                         </h1>
                         <p className="text-cool-grey text-lg leading-relaxed">
                             Building the next generation of VST plugins and audio tools for human performance,
