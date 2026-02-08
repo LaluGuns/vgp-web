@@ -54,7 +54,7 @@ const modules = [
         platform: 'Web Application',
         Icon: BrainIcon,
         description: 'Browser based functional audio environment for deep work, flow states, and cognitive performance. Engineered soundscapes backed by psychoacoustic research.',
-        features: ['Binaural beats', 'Focus timers', 'Session analytics', 'Custom presets'],
+        features: ['Focus timers', 'Session analytics', 'Custom presets', 'Study Mode'],
         status: 'IN DEVELOPMENT',
         progress: 75,
         eta: 'Q2 2026',
@@ -96,12 +96,13 @@ export default function HealingWavePage() {
                     >
                         <p className="mono-label text-primary mb-4">HEALINGWAVE PROJECT</p>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-hero mb-6">
-                            HealingWave: Productivity & Wellness Eco-System
+                            HealingWave: Productivity & Wellness Ecosystem
                         </h1>
                         <p className="text-cool-grey text-lg leading-relaxed">
-                            Building the next generation of VST plugins and audio tools for human performance,
-                            wellness, and cognitive optimization. Sound is not just entertainment.
-                            It is a biological signal.
+                            The ultimate <strong className="text-primary">Productivity & Wellness App Ecosystem</strong> designed
+                            for peak performance. Specialized modules for <strong className="text-white">Deep Focus, Running, Gym Workouts,
+                                Meditation, Sleep Optimization, and Study Concentration</strong>. Seamlessly integrated across Web, iOS, and Android.
+                            Sound is not just entertainment—it&apos;s a precision tool for cognitive function.
                         </p>
                     </m.div>
                 </div>
