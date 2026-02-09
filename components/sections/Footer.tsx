@@ -86,8 +86,8 @@ export function Footer() {
                         <a
                             key={link.name}
                             href={link.href}
-                            target={link.href.startsWith('http') ? '_blank' : undefined}
-                            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                            target={link.href.startsWith('http') || link.href.startsWith('mailto') ? '_blank' : undefined}
+                            rel={link.href.startsWith('http') || link.href.startsWith('mailto') ? 'noopener noreferrer' : undefined}
                             className="text-white/40 hover:text-white transition-colors text-sm"
                         >
                             {link.name}
