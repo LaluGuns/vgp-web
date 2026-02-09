@@ -52,6 +52,7 @@ export default function HomePage() {
                                     alt="VGP"
                                     width={80}
                                     height={80}
+                                    priority
                                     className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(0,229,255,0.6)]"
                                 />
                             </div>

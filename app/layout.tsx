@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { NavbarWrapper } from '@/components/NavbarWrapper';
@@ -7,6 +8,18 @@ import { Footer } from '@/components/sections/Footer';
 import { SubscribePopup } from '@/components/SubscribePopup';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import './globals.css';
+
+const inter = Inter({
+    subsets: ['latin'],
+    variable: '--font-inter',
+    display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+    subsets: ['latin'],
+    variable: '--font-jetbrains',
+    display: 'swap',
+});
 
 export const metadata: Metadata = {
     title: 'Virzy Guns Production | Buy Premium Beats Online | HealingWave Functional Audio',
@@ -35,7 +48,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className="lenis">
+        <html lang="en" className={`lenis ${inter.variable} ${jetbrainsMono.variable}`}>
             <body className="bg-background text-white antialiased">
                 {/* Wave Physics Background */}
                 <div className="wave-physics-bg" aria-hidden="true" />
