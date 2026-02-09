@@ -338,21 +338,20 @@ export default function BeatsPage() {
                                 ))}
                             </div>
 
-                            <a
-                                href="mailto:founder@virzyguns.com?subject=Exclusive License Inquiry"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 border border-primary text-primary rounded-xl hover:bg-primary hover:text-obsidian hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all duration-200"
+                            href="https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com&su=Exclusive%20License%20Inquiry"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 border border-primary text-primary rounded-xl hover:bg-primary hover:text-obsidian hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all duration-200"
                             >
-                                <span>Make an Offer</span>
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </a>
-                        </GlassCard>
-                    </m.div>
-                </div>
-            </section>
-        </PageTransition>
+                            <span>Make an Offer</span>
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </a>
+                    </GlassCard>
+                </m.div>
+            </div>
+        </section>
+        </PageTransition >
     );
 }

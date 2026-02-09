@@ -19,7 +19,7 @@ const labLinks = [
 
 const otherLinks = [
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
+    { name: 'Contact', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com' },
 ];
 
 export function Footer() {
@@ -86,8 +86,8 @@ export function Footer() {
                         <a
                             key={link.name}
                             href={link.href}
-                            target={link.href.startsWith('http') || link.href.startsWith('mailto') ? '_blank' : undefined}
-                            rel={link.href.startsWith('http') || link.href.startsWith('mailto') ? 'noopener noreferrer' : undefined}
+                            target={link.href.startsWith('http') ? '_blank' : undefined}
+                            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                             className="text-white/40 hover:text-white transition-colors text-sm"
                         >
                             {link.name}
