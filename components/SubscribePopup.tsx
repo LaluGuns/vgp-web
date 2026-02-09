@@ -36,14 +36,11 @@ export function SubscribePopup() {
         setIsSubmitting(true);
 
         try {
-            // Send to Web3Forms
-            const response = await fetch('https://api.web3forms.com/submit', {
+            // Send to Local API (Hostinger SMTP)
+            const response = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    access_key: '8d3a6332-0aab-457e-8b8f-9430dbce4c9a',
-                    subject: 'New VGP Newsletter Subscriber',
-                    from_name: 'VGP Website',
                     name: formData.name,
                     email: formData.email,
                 }),

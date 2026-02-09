@@ -18,9 +18,14 @@ export const metadata: Metadata = {
         'beats for sale', 'license beats', 'instrumental beats',
         'Virzy Guns Production', 'VGP', 'music production',
         'HealingWave', 'functional audio', 'focus music', 'productivity app',
-        'neuro-acoustics', 'binaural beats', 'wellness app', 'sleep audio', 'circadian rhythm',
+        'neuroacoustic', 'binaural beats', 'wellness app', 'sleep audio', 'circadian rhythm',
         'producer', 'beatmaker', 'music for artists', 'commercial beats'
     ],
+    icons: {
+        icon: '/branding/logo-tg.png',
+        shortcut: '/branding/logo-tg.png',
+        apple: '/branding/logo-tg.png',
+    },
 };
 
 export default function RootLayout({
@@ -42,7 +47,7 @@ export default function RootLayout({
                         </main>
                         <Footer />
                         {/* SocialDock moved to home page only */}
-                        {/* <SubscribePopup /> */} {/* Disabled - enable when business email is ready */}
+                        <SubscribePopup />
                     </LazyMotion>
                 </SmoothScrollProvider>
             </body>

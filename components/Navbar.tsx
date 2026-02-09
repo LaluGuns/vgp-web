@@ -189,6 +189,14 @@ export function Navbar() {
                             <div className="h-px bg-white/10 my-2" />
 
                             <Link
+                                href="/blog"
+                                onClick={() => setMobileOpen(false)}
+                                className={`block px-4 py-2.5 rounded-lg text-sm ${pathname === '/blog' ? 'text-primary' : 'text-dim-grey'}`}
+                            >
+                                BLOG
+                            </Link>
+
+                            <Link
                                 href="/about"
                                 onClick={() => setMobileOpen(false)}
                                 className={`block px-4 py-2.5 rounded-lg text-sm ${pathname === '/about' ? 'text-primary' : 'text-dim-grey'}`}

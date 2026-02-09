@@ -27,6 +27,7 @@ const navLinks = [
         ]
     },
     { name: 'LAB', href: '/lab/healingwave' },
+    { name: 'BLOG', href: '/blog' },
     { name: 'ABOUT', href: '/about' },
 ];
 
