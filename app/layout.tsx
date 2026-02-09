@@ -5,6 +5,7 @@ import { NavbarWrapper } from '@/components/NavbarWrapper';
 import { SocialDock } from '@/components/SocialDock';
 import { Footer } from '@/components/sections/Footer';
 import { SubscribePopup } from '@/components/SubscribePopup';
+import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -39,17 +40,19 @@ export default function RootLayout({
                 {/* Wave Physics Background */}
                 <div className="wave-physics-bg" aria-hidden="true" />
 
-                <SmoothScrollProvider>
-                    <LazyMotion features={domAnimation} strict>
-                        <NavbarWrapper />
-                        <main className="relative z-10 pt-24 pb-16">
-                            {children}
-                        </main>
-                        <Footer />
-                        {/* SocialDock moved to home page only */}
-                        <SubscribePopup />
-                    </LazyMotion>
-                </SmoothScrollProvider>
+                <NewsletterProvider>
+                    <SmoothScrollProvider>
+                        <LazyMotion features={domAnimation} strict>
+                            <NavbarWrapper />
+                            <main className="relative z-10 pt-24 pb-16">
+                                {children}
+                            </main>
+                            <Footer />
+                            {/* SocialDock moved to home page only */}
+                            <SubscribePopup />
+                        </LazyMotion>
+                    </SmoothScrollProvider>
+                </NewsletterProvider>
             </body>
         </html>
     );

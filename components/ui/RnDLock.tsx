@@ -7,6 +7,7 @@
 
 import { m } from 'framer-motion';
 import { ReactNode } from 'react';
+import { useNewsletter } from '@/components/context/NewsletterContext';
 
 interface RnDLockProps {
     children: ReactNode;
@@ -28,6 +29,7 @@ export function RnDLock({
     const isStudio = variant === 'studio';
     const accentColor = isStudio ? '#ec4899' : '#00ff88';
     const glowClass = isStudio ? 'shadow-[0_0_60px_rgba(236,72,153,0.15)]' : 'shadow-[0_0_60px_rgba(0,255,136,0.15)]';
+    const { openPopup } = useNewsletter();
 
     return (
         <div className="relative">
@@ -107,10 +109,8 @@ export function RnDLock({
 
                 {/* Waitlist CTA */}
                 {showWaitlist && (
-                    <m.a
-                        href="https://ig.me/m/virzyguns"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <m.button
+                        onClick={openPopup}
                         className="group relative px-8 py-3 border rounded-full text-xs tracking-widest transition-all duration-300"
                         style={{
                             borderColor: `${accentColor}40`,
@@ -129,7 +129,7 @@ export function RnDLock({
                             transition={{ duration: 2, repeat: Infinity }}
                         />
                         <span className="relative z-10">[ JOIN WAITLIST ]</span>
-                    </m.a>
+                    </m.button>
                 )}
             </m.div>
         </div>

@@ -13,6 +13,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { GlowButton } from '@/components/ui/GlowButton';
 import { RnDLock } from '@/components/ui/RnDLock';
 import { staggerParent, staggerChild, revealUp } from '@/lib/motion-presets';
+import { useNewsletter } from '@/components/context/NewsletterContext';
 
 // Icons
 const BrainIcon = () => (
@@ -84,6 +85,8 @@ const modules = [
 ];
 
 export default function HealingWavePage() {
+    const { openPopup } = useNewsletter();
+
     return (
         <PageTransition>
             {/* Hero */}
@@ -215,7 +218,7 @@ export default function HealingWavePage() {
                             <GlowButton variant="primary" href="/about">
                                 About The Founder
                             </GlowButton>
-                            <GlowButton variant="ghost" href="/masterclass">
+                            <GlowButton variant="ghost" href="/studio/masterclass">
                                 Masterclass
                             </GlowButton>
                         </div>
@@ -237,7 +240,10 @@ export default function HealingWavePage() {
                             <p className="text-cool-grey text-sm mb-4">
                                 Be the first to know when HealingWave Focus launches.
                             </p>
-                            <p className="text-dim-grey text-xs">Coming Q1 2026</p>
+                            <p className="text-dim-grey text-xs mb-6">Coming Q1 2026</p>
+                            <GlowButton variant="primary" onClick={openPopup}>
+                                JOIN WAITLIST
+                            </GlowButton>
                         </GlassCard>
                     </m.div>
                 </div>

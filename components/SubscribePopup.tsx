@@ -1,194 +1,166 @@
 'use client';
 
-/**
- * SubscribePopup - Email subscription modal
- * Shows on first visit with name/email form
- */
-
 import { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
+import { useNewsletter } from '@/components/context/NewsletterContext';
 
 export function SubscribePopup() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [formData, setFormData] = useState({ name: '', email: '', agreed: false });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const { isOpen, openPopup, closePopup } = useNewsletter();
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
 
+    // Auto-show logic (only if not manually opened/closed)
     useEffect(() => {
-        // Check if user has already seen/dismissed the popup
-        const hasSeenPopup = localStorage.getItem('vgp_popup_dismissed');
-        if (!hasSeenPopup) {
-            // Show popup after 1.5 seconds
-            const timer = setTimeout(() => setIsOpen(true), 1500);
+        const hasSubscribed = localStorage.getItem('vgp_newsletter_subscribed');
+        const hasSeenPopup = sessionStorage.getItem('vgp_popup_seen');
+
+        if (!hasSubscribed && !hasSeenPopup && !isOpen) {
+            const timer = setTimeout(() => {
+                openPopup();
+                sessionStorage.setItem('vgp_popup_seen', 'true');
+            }, 10000); // Show after 10s (delayed for better UX)
+
             return () => clearTimeout(timer);
         }
-    }, []);
+    }, [openPopup, isOpen]);
 
     const handleClose = () => {
-        setIsOpen(false);
-        localStorage.setItem('vgp_popup_dismissed', 'true');
+        closePopup();
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.name || !formData.email || !formData.agreed) return;
-
-        setIsSubmitting(true);
+        setStatus('loading');
+        setErrorMessage('');
 
         try {
-            // Send to Local API (Hostinger SMTP)
+            // Updated to use Local Next.js API Route for Hostinger SMTP
             const response = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
+                    name: 'VGP Subscriber', // Default name or add field if needed
+                    email: email,
                 }),
             });
 
-            const result = await response.json();
+            const data = await response.json();
 
-            if (result.success) {
-                setSubmitted(true);
-                localStorage.setItem('vgp_subscribed', 'true');
-                localStorage.setItem('vgp_popup_dismissed', 'true');
-                setTimeout(() => handleClose(), 2000);
+            if (response.ok) {
+                setStatus('success');
+                localStorage.setItem('vgp_newsletter_subscribed', 'true');
+                setTimeout(() => {
+                    closePopup();
+                    setStatus('idle');
+                    setEmail('');
+                }, 3000);
             } else {
-                throw new Error('Submission failed');
+                setStatus('error');
+                setErrorMessage(data.error || 'Something went wrong.');
             }
         } catch (error) {
-            console.error('Subscription error:', error);
-            // Still show success for better UX
-            setSubmitted(true);
-            localStorage.setItem('vgp_subscribed', 'true');
-            localStorage.setItem('vgp_popup_dismissed', 'true');
-            setTimeout(() => handleClose(), 2000);
+            setStatus('error');
+            setErrorMessage('Network error. Please try again.');
         }
     };
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <m.div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                >
+                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-6">
                     {/* Backdrop */}
                     <m.div
-                        className="absolute inset-0 bg-obsidian/80 backdrop-blur-sm"
-                        onClick={handleClose}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        onClick={handleClose}
+                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
                     />
 
-                    {/* Modal */}
+                    {/* Popup Card */}
                     <m.div
-                        className="relative w-full max-w-md bg-titanium border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,229,255,0.15)]"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                        className="relative w-full max-w-md bg-[#050505] border border-white/10 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,229,255,0.15)]"
                     >
-                        {/* Close button */}
-                        <button
-                            onClick={handleClose}
-                            className="absolute top-4 right-4 text-dim-grey hover:text-white transition-colors"
-                        >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
-                            </svg>
-                        </button>
+                        {/* Artistic Header */}
+                        <div className="relative h-32 bg-zinc-900 overflow-hidden">
+                            <div className="absolute inset-0 opacity-30 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80')] bg-cover bg-center mix-blend-overlay" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
+                            <div className="absolute bottom-4 left-6">
+                                <p className="mono-label text-primary text-xs mb-1">VGP INNER CIRCLE</p>
+                                <h3 className="text-xl font-bold text-white tracking-wide">Join the Movement</h3>
+                            </div>
+                            <button
+                                onClick={handleClose}
+                                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+                            >
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
 
-                        {!submitted ? (
-                            <>
-                                <div className="text-center mb-6">
-                                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                            <polyline points="22,6 12,13 2,6" />
-                                        </svg>
-                                    </div>
-                                    <h2 className="text-xl sm:text-2xl font-bold mb-2">Stay in the Loop</h2>
-                                    <p className="text-cool-grey text-sm leading-relaxed">
-                                        Get the latest updates, exclusive promos, and new beat drops delivered straight to your inbox.
-                                    </p>
-                                </div>
+                        {/* Content */}
+                        <div className="p-6">
+                            <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+                                Get exclusive access to <strong className="text-primary">Free Beats</strong>, HealingWave updates, and production tips.
+                                No spam, just pure signal.
+                            </p>
 
-                                {/* Form */}
+                            {status === 'success' ? (
+                                <m.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 text-center"
+                                >
+                                    <p className="text-green-400 font-semibold mb-1">Welcome aboard! 🚀</p>
+                                    <p className="text-gray-400 text-xs">Check your email for confirmation.</p>
+                                </m.div>
+                            ) : (
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     <div>
-                                        <label htmlFor="name" className="block text-xs text-dim-grey mb-1.5 uppercase tracking-wider">
-                                            Full Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            placeholder="John Doe"
-                                            className="w-full px-4 py-3 bg-carbon border border-white/10 rounded-xl text-white placeholder:text-dim-grey focus:border-primary focus:outline-none transition-colors"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="email" className="block text-xs text-dim-grey mb-1.5 uppercase tracking-wider">
-                                            Email Address
-                                        </label>
                                         <input
                                             type="email"
-                                            id="email"
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            placeholder="john@example.com"
-                                            className="w-full px-4 py-3 bg-carbon border border-white/10 rounded-xl text-white placeholder:text-dim-grey focus:border-primary focus:outline-none transition-colors"
                                             required
+                                            placeholder="Enter your best email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm"
                                         />
                                     </div>
 
-                                    {/* Consent Checkbox */}
-                                    <div className="flex items-start gap-3">
-                                        <input
-                                            type="checkbox"
-                                            id="agreed"
-                                            checked={formData.agreed}
-                                            onChange={(e) => setFormData({ ...formData, agreed: e.target.checked })}
-                                            className="mt-1 w-4 h-4 rounded border-white/20 bg-carbon text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer"
-                                            required
-                                        />
-                                        <label htmlFor="agreed" className="text-xs text-cool-grey leading-relaxed cursor-pointer">
-                                            I agree to receive newsletters about new beats, exclusive promos, and updates from Virzy Guns Production. You can unsubscribe anytime.
-                                        </label>
-                                    </div>
+                                    {status === 'error' && (
+                                        <p className="text-red-400 text-xs">{errorMessage}</p>
+                                    )}
 
                                     <button
                                         type="submit"
-                                        disabled={isSubmitting || !formData.agreed}
-                                        className="w-full py-3 bg-primary text-obsidian font-semibold rounded-xl hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={status === 'loading'}
+                                        className="w-full bg-white text-black font-bold py-3 rounded-lg hover:bg-primary hover:text-black transition-all duration-300 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+                                        {status === 'loading' ? (
+                                            <span className="animate-pulse">Processing...</span>
+                                        ) : (
+                                            <>
+                                                <span>JOIN NOW</span>
+                                                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </>
+                                        )}
                                     </button>
-                                </form>
 
-                            </>
-                        ) : (
-                            /* Success state */
-                            <div className="text-center py-8">
-                                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center">
-                                    <svg className="w-8 h-8 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">Welcome to VGP!</h3>
-                                <p className="text-cool-grey text-sm">
-                                    Thanks for subscribing. Check your inbox for confirmation.
-                                </p>
-                            </div>
-                        )}
+                                    <p className="text-center text-[10px] text-gray-600">
+                                        We respect your privacy. Unsubscribe at any time.
+                                    </p>
+                                </form>
+                            )}
+                        </div>
                     </m.div>
-                </m.div>
+                </div>
             )}
         </AnimatePresence>
     );
