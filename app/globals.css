@@ -117,6 +117,12 @@ body::before {
   z-index: 9999;
 }
 
+@media (max-width: 768px) {
+  body::before {
+    display: none;
+  }
+}
+
 /* ========================================
    Y3K GLASS SYSTEM
    ======================================== */

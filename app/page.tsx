@@ -147,7 +147,7 @@ export default function HomePage() {
                             <m.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                transition={{ ...springConfig, delay: 0.2 }}
+                                transition={{ ...springConfig, delay: 0.1 }}
                             >
                                 <p className="mono-label text-[#ec4899]/70 mb-4 tracking-[0.3em]">
                                     FOR ARTISTS & CREATORS
@@ -193,7 +193,7 @@ export default function HomePage() {
                             <m.div
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                transition={{ ...springConfig, delay: 0.4 }}
+                                transition={{ ...springConfig, delay: 0.2 }}
                             >
                                 <p className="mono-label text-[#00ff88]/70 mb-4 tracking-[0.3em]">
                                     ENTER THE HEALINGWAVE
