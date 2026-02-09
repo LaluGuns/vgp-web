@@ -5,6 +5,29 @@
  * With Stitch-designed Y3K genre icons + Smart Copy Feature
  */
 
+import { Metadata } from 'next'; // This type is for layout but next/head meta is managed by export
+// Note: In App Router, page.tsx exporting metadata ONLY works in Server Components.
+// This is a CLIENT component ('use client').
+// To add metadata here, I should actually make a layout.tsx for this route OR remove 'use client' if possible.
+// BUT this page uses state heavily.
+// Alternative: Keep 'use client' but standard metadata export is IGNORED by Next.js in Client Components.
+// WAIT. The user wants SEO.
+// If I export `metadata` from a client component, Next.js throws a warning/error or ignores it.
+// SOLUTION: Split into layout/page or just put metadata in `layout.tsx` of this folder?
+// OR: Just keep it if Vercel allows it (sometimes it works if Next.js version is new enough to separate it).
+// STRICTLY: Metadata must be in Server Component/Layout.
+// So I should create `app/studio/beats/layout.tsx` for SEO?
+// Or just ignore it?
+// Actually, I can just not export metadata here and accept global.
+// USER ASKED FOR SEO UPDATE.
+// The proper way is to add `app/studio/beats/layout.tsx`.
+
+// However, I will overwrite this file MINUS the metadata export for now to fix the LINK first.
+// And I will Create `layout.tsx` for Beats separately?
+// Let's just fix the link first.
+// Wait, Step 3624 tried to add metadata.
+// I'll add the link change.
+
 import { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { PageTransition } from '@/components/PageTransition';
@@ -316,9 +339,7 @@ export default function BeatsPage() {
                             </div>
 
                             <a
-                                href="https://ig.me/m/virzyguns"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                href="mailto:founder@virzyguns.com?subject=Exclusive License Inquiry"
                                 className="inline-flex items-center gap-2 px-6 py-3 border border-primary text-primary rounded-xl hover:bg-primary hover:text-obsidian hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all duration-200"
                             >
                                 <span>Make an Offer</span>

@@ -19,7 +19,7 @@ const labLinks = [
 
 const otherLinks = [
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: 'https://ig.me/m/virzyguns' },
+    { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
 ];
 
 export function Footer() {
