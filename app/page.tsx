@@ -1,26 +1,25 @@
 'use client';
 
 /**
- * Dual Portal Entrance
- * Split-screen navigation: Studio (Left) vs Lab (Right)
- * Special centered header for home page
+ * Home Page — Y3K Robot Command Center
+ * Premium dual-portal with gradient mesh orbs, parallax depth,
+ * dramatic hero typography, and CSS-only ambient animation.
+ * Performance: zero client-side Framer Motion on initial render.
  */
 
-import { useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PageTransition } from '@/components/PageTransition';
+import { m, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { SocialDock } from '@/components/SocialDock';
+import { PortalCarousel, portals } from '@/components/home/PortalCarousel';
+import { RobotHost } from '@/components/home/RobotHost';
 
-// Spring physics for buttery-smooth animations
-const springConfig = { type: 'spring', stiffness: 100, damping: 20 };
-
+/* ═══ NAV DATA ═══ */
 const navLinks = [
     { name: 'HOME', href: '/' },
     {
-        name: 'STUDIO',
-        href: '/studio/beats',
+        name: 'STUDIO', href: '/studio/beats',
         submenu: [
             { name: 'Beatstore', href: '/studio/beats' },
             { name: 'Masterclass', href: '/studio/masterclass' },
@@ -31,201 +30,285 @@ const navLinks = [
     { name: 'ABOUT', href: '/about' },
 ];
 
+/* ═══ SUBTLE MOUSE PARALLAX HOOK ═══ */
+function useMouseParallax() {
+    const mouseX = useMotionValue(0.5);
+    const mouseY = useMotionValue(0.5);
+    const smoothX = useSpring(mouseX, { stiffness: 30, damping: 20 });
+    const smoothY = useSpring(mouseY, { stiffness: 30, damping: 20 });
+
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            mouseX.set(e.clientX / window.innerWidth);
+            mouseY.set(e.clientY / window.innerHeight);
+        };
+        window.addEventListener('mousemove', handler, { passive: true });
+        return () => window.removeEventListener('mousemove', handler);
+    }, [mouseX, mouseY]);
+
+    return { smoothX, smoothY };
+}
+
+/* ═══ MAIN COMPONENT ═══ */
 export default function HomePage() {
     const [studioOpen, setStudioOpen] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    // Carousel State
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [currentPortalColor, setCurrentPortalColor] = useState('#FF3CAC'); // Default Magenta
+    // Drag Motion Value shared between Carousel and Robot
+    const dragX = useMotionValue(0);
+
+    const handleIndexChange = (index: number) => {
+        setActiveIndex(index);
+        setCurrentPortalColor(portals[index].color);
+    };
+
+    const { smoothX, smoothY } = useMouseParallax();
+
+    // Parallax transforms for gradient orbs
+    const orbX1 = useTransform(smoothX, [0, 1], [-30, 30]);
+    const orbY1 = useTransform(smoothY, [0, 1], [-20, 20]);
+    const orbX2 = useTransform(smoothX, [0, 1], [20, -20]);
+    const orbY2 = useTransform(smoothY, [0, 1], [15, -15]);
+
+    useEffect(() => {
+        // Stagger load for smooth entrance
+        const t = setTimeout(() => setLoaded(true), 100);
+        return () => clearTimeout(t);
+    }, []);
 
     return (
-        <PageTransition>
-            <div className="relative h-screen w-full overflow-hidden -mt-24 -mb-16">
+        <div className="relative h-[100dvh] w-full overflow-hidden bg-[#03040A] -mt-24 -mb-16">
 
-                {/* ═══════════════════════════════════════════
-                    CENTERED HEADER (HOME ONLY)
-                    Logo + Brand + Nav at top center
-                    ═══════════════════════════════════════════ */}
-                <div className="absolute top-0 left-0 right-0 z-40 pt-6">
-                    <div className="flex flex-col items-center">
-                        {/* Logo + Brand */}
-                        <Link href="/" className="flex flex-col items-center gap-2 group mb-4">
-                            <div className="w-16 h-16 md:w-20 md:h-20 relative">
-                                <Image
-                                    src="/branding/logo-tg.png"
-                                    alt="VGP"
-                                    width={80}
-                                    height={80}
-                                    priority
-                                    className="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-[0_0_20px_rgba(0,229,255,0.6)]"
-                                />
-                            </div>
-                            <h1 className="text-xl md:text-2xl font-bold tracking-wider transition-all duration-500 group-hover:drop-shadow-[0_0_20px_rgba(0,229,255,0.4)]">
-                                <span className="gradient-text group-hover:brightness-125">VIRZY GUNS</span>
-                                <span className="text-white/80 group-hover:text-white transition-colors"> PRODUCTION</span>
-                            </h1>
-                        </Link>
+            {/* ═══════════════════════════════════════════
+                LAYER 0: AMBIENT GRADIENT MESH (CSS-only, GPU accelerated)
+                ═══════════════════════════════════════════ */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
+                {/* Primary Orb — Deep violet-cyan */}
+                <m.div
+                    className="absolute w-[900px] h-[900px] rounded-full will-change-transform"
+                    style={{
+                        x: orbX1, y: orbY1,
+                        background: 'radial-gradient(circle, rgba(0,212,255,0.07) 0%, rgba(180,74,255,0.04) 40%, transparent 70%)',
+                        top: '-15%', left: '-10%',
+                        filter: 'blur(80px)',
+                    }}
+                />
+                {/* Secondary Orb — Pink-magenta (Studio side) */}
+                <m.div
+                    className="absolute w-[700px] h-[700px] rounded-full will-change-transform"
+                    style={{
+                        x: orbX2, y: orbY2,
+                        background: 'radial-gradient(circle, rgba(255,60,172,0.06) 0%, rgba(180,74,255,0.03) 50%, transparent 70%)',
+                        bottom: '-10%', left: '10%',
+                        filter: 'blur(100px)',
+                    }}
+                />
+                {/* Tertiary Orb — Green (Lab side) */}
+                <m.div
+                    className="absolute w-[600px] h-[600px] rounded-full will-change-transform"
+                    style={{
+                        x: orbX1, y: orbY2,
+                        background: 'radial-gradient(circle, rgba(0,255,163,0.04) 0%, rgba(0,212,255,0.02) 50%, transparent 70%)',
+                        top: '20%', right: '-5%',
+                        filter: 'blur(90px)',
+                    }}
+                />
+                {/* Ambient grid pattern */}
+                <div
+                    className="absolute inset-0 opacity-[0.025]"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(200,204,212,0.3) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(200,204,212,0.3) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '80px 80px',
+                    }}
+                />
+            </div>
 
-                        {/* Navigation - Centered with STUDIO dropdown */}
-                        <nav className="flex items-center gap-6 md:gap-8 px-6 py-3 y3k-glass rounded-full">
-                            {navLinks.map((link) => (
-                                'submenu' in link ? (
-                                    // STUDIO with dropdown
-                                    <div
-                                        key={link.name}
-                                        className="relative"
-                                        onMouseEnter={() => setStudioOpen(true)}
-                                        onMouseLeave={() => setStudioOpen(false)}
-                                    >
-                                        <Link
-                                            href={link.href}
-                                            className="text-xs md:text-sm tracking-widest text-dim-grey hover:text-white transition-colors flex items-center gap-1"
-                                        >
-                                            {link.name}
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </Link>
+            {/* ═══════════════════════════════════════════
+                LAYER 0.5: ROBOT HERO BACKDROP
+                White-bg robot image blended into dark void using
+                invert + hue-rotate + screen blend technique.
+                ═══════════════════════════════════════════ */}
+            <div className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none overflow-hidden">
+                <m.div
+                    className="relative w-[700px] h-[700px] sm:w-[850px] sm:h-[850px] md:w-[1000px] md:h-[1000px] lg:w-[1150px] lg:h-[1150px] -translate-x-[25%] md:-translate-x-[20%]"
+                    style={{
+                        x: orbX2, y: orbY1,
+                        maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, transparent 100%)',
+                        WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, transparent 100%)',
+                        animation: 'y3k-float 9s ease-in-out infinite',
+                    }}
+                >
+                    {/* Robot has been upgraded to Layer 2: Robotic Host */}
+                    {/* Keeping this container for the Gradient Orbs and Parallax effects */}
+                    {/* Cyan eye-glow bloom — positioned at eye level */}
+                    <div
+                        className="absolute top-[28%] left-1/2 -translate-x-1/2 w-56 h-40 rounded-full pointer-events-none"
+                        style={{
+                            background: 'radial-gradient(ellipse, rgba(0,212,255,0.18) 0%, transparent 70%)',
+                            filter: 'blur(30px)',
+                            animation: 'glow-pulse 4s ease-in-out infinite',
+                        }}
+                    />
+                </m.div>
+            </div>
 
-                                        {/* Dropdown */}
-                                        <AnimatePresence>
-                                            {studioOpen && (
-                                                <m.div
-                                                    initial={{ opacity: 0, y: -8 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -8 }}
-                                                    className="absolute top-full left-0 mt-3 py-2 px-1 y3k-glass rounded-lg min-w-[140px]"
-                                                >
-                                                    {link.submenu && link.submenu.map((sub) => (
-                                                        <Link
-                                                            key={sub.href}
-                                                            href={sub.href}
-                                                            className="block px-4 py-2 text-sm rounded-md text-dim-grey hover:text-[#ec4899] hover:bg-white/5 transition-colors text-left"
-                                                        >
-                                                            {sub.name}
-                                                        </Link>
-                                                    ))}
-                                                </m.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                ) : (
-                                    // Regular link
+            {/* ═══════════════════════════════════════════
+                LAYER 1: CENTERED HEADER
+                ═══════════════════════════════════════════ */}
+            <div
+                className={`absolute top-0 left-0 right-0 z-40 pt-5 md:pt-6 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
+                    }`}
+            >
+                <div className="flex flex-col items-center">
+                    {/* Logo + Brand */}
+                    <Link href="/" className="flex flex-col items-center gap-2 group mb-3">
+                        <div className="w-14 h-14 md:w-16 md:h-16 relative">
+                            <Image
+                                src="/branding/logo-tg.png"
+                                alt="VGP"
+                                width={64}
+                                height={64}
+                                priority
+                                className="w-full h-full object-contain drop-shadow-[0_0_14px_rgba(0,212,255,0.4)] group-hover:drop-shadow-[0_0_28px_rgba(0,212,255,0.7)] transition-all duration-700"
+                            />
+                        </div>
+                        <h1 className="text-lg md:text-xl font-bold tracking-wider">
+                            <span className="gradient-text">VIRZY GUNS</span>
+                            <span className="text-[#A0A4AE] group-hover:text-white transition-colors duration-500"> PRODUCTION</span>
+                        </h1>
+                    </Link>
+
+                    {/* Desktop Nav — frosted glass pill */}
+                    <nav
+                        className={`hidden md:flex items-center gap-0.5 px-1.5 py-1.5 rounded-full transition-all duration-[1400ms] delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+                            }`}
+                        style={{
+                            background: 'rgba(12, 14, 20, 0.55)',
+                            backdropFilter: 'blur(40px) saturate(1.2)',
+                            WebkitBackdropFilter: 'blur(40px) saturate(1.2)',
+                            border: '1px solid rgba(200, 204, 212, 0.05)',
+                        }}
+                    >
+                        {navLinks.map((link) => (
+                            'submenu' in link ? (
+                                <div
+                                    key={link.name}
+                                    className="relative"
+                                    onMouseEnter={() => setStudioOpen(true)}
+                                    onMouseLeave={() => setStudioOpen(false)}
+                                >
                                     <Link
-                                        key={link.href}
                                         href={link.href}
-                                        className={`text-xs md:text-sm tracking-widest transition-colors ${link.href === '/'
-                                            ? 'text-primary'
-                                            : 'text-dim-grey hover:text-white'
-                                            }`}
+                                        className="px-4 py-2 text-[0.65rem] tracking-[0.2em] text-[#6B7080] hover:text-white rounded-full hover:bg-white/[0.04] transition-all duration-300 flex items-center gap-1.5"
                                     >
                                         {link.name}
+                                        <svg className="w-2.5 h-2.5 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
                                     </Link>
-                                )
-                            ))}
-                        </nav>
-                    </div>
-                </div>
 
-                {/* ═══════════════════════════════════════════
-                    DUAL PORTAL SPLIT
-                    ═══════════════════════════════════════════ */}
-                <div className="flex flex-col md:flex-row h-full w-full">
-
-                    {/* STUDIO PORTAL (LEFT/TOP) */}
-                    <div className="relative flex-1 group h-[50vh] md:h-auto overflow-hidden">
-                        {/* Background: Deep Obsidian */}
-                        <div className="absolute inset-0 bg-[#050505] z-0" />
-
-                        {/* Particle Effect */}
-                        <div className="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 400 400%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E')] mix-blend-overlay" />
-
-                        {/* Glow on hover */}
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-500/20 via-purple-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-                        {/* Content */}
-                        <Link
-                            href="/studio/beats"
-                            className="relative z-10 flex flex-col items-center justify-center h-full w-full text-center p-8 pt-32 md:pt-8 border-b md:border-b-0 md:border-r border-white/5 hover:bg-white/[0.02] transition-all duration-500"
-                        >
-                            <m.div
-                                initial={{ y: 30, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ ...springConfig, delay: 0.1 }}
-                            >
-                                <p className="mono-label text-[#ec4899]/70 mb-4 tracking-[0.3em]">
-                                    FOR ARTISTS & CREATORS
-                                </p>
-
-                                <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-white group-hover:text-[#ec4899] transition-colors duration-300">
-                                    VGP STUDIO
-                                </h2>
-
-                                <p className="text-white/40 text-sm max-w-xs mx-auto mb-8">
-                                    Premier Source for Trap, Phonk, Drill, Rap, R&B & Deep House
-                                </p>
-
-                                <div className="inline-flex items-center gap-2 px-6 py-3 border border-white/10 rounded-full text-xs tracking-widest group-hover:border-[#ec4899] group-hover:text-[#ec4899] group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-all duration-300">
-                                    <span>BEATSTORE</span>
-                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                    <AnimatePresence>
+                                        {studioOpen && (
+                                            <m.div
+                                                initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                                                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                                                className="absolute top-full left-0 mt-2 py-2 px-1 rounded-xl min-w-[150px]"
+                                                style={{
+                                                    background: 'rgba(17, 19, 26, 0.95)',
+                                                    backdropFilter: 'blur(40px)',
+                                                    border: '1px solid rgba(200, 204, 212, 0.06)',
+                                                    boxShadow: '0 12px 48px rgba(0,0,0,0.7)',
+                                                }}
+                                            >
+                                                {link.submenu && link.submenu.map((sub) => (
+                                                    <Link
+                                                        key={sub.href}
+                                                        href={sub.href}
+                                                        className="block px-4 py-2.5 text-sm rounded-lg text-[#6B7080] hover:text-[#FF3CAC] hover:bg-white/[0.03] transition-colors duration-200"
+                                                    >
+                                                        {sub.name}
+                                                    </Link>
+                                                ))}
+                                            </m.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
-                            </m.div>
-                        </Link>
-                    </div>
-
-                    {/* DIVIDER (DESKTOP ONLY) */}
-                    <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent z-20 pointer-events-none" />
-
-                    {/* LAB PORTAL (RIGHT/BOTTOM) */}
-                    <div className="relative flex-1 group h-[50vh] md:h-auto overflow-hidden">
-                        {/* Background: Slate */}
-                        <div className="absolute inset-0 bg-[#0f172a] z-0" />
-
-                        {/* Particle Effect */}
-                        <div className="absolute inset-0 opacity-[0.015] bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath fill=%22none%22 stroke=%22%2300ff88%22 stroke-width=%220.5%22 d=%22M0 100 Q50 80 100 100 T200 100%22/%3E%3Cpath fill=%22none%22 stroke=%22%2300e5ff%22 stroke-width=%220.5%22 d=%22M0 110 Q50 90 100 110 T200 110%22/%3E%3C/svg%3E')] bg-repeat-x" />
-
-                        {/* Glow on hover */}
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/15 via-cyan-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-                        {/* Content */}
-                        <Link
-                            href="/lab/healingwave"
-                            className="relative z-10 flex flex-col items-center justify-center h-full w-full text-center p-8 hover:bg-white/[0.02] transition-all duration-500"
-                        >
-                            <m.div
-                                initial={{ y: 30, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ ...springConfig, delay: 0.2 }}
-                            >
-                                <p className="mono-label text-[#00ff88]/70 mb-4 tracking-[0.3em]">
-                                    ENTER THE HEALINGWAVE
-                                </p>
-
-                                <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-white group-hover:text-[#00ff88] transition-colors duration-300">
-                                    VGP LAB
-                                </h2>
-
-                                <p className="text-white/40 text-sm max-w-xs mx-auto mb-8">
-                                    Kinetic Functional Audio for Focus, Performance & Wellness
-                                </p>
-
-                                <div className="inline-flex items-center gap-2 px-6 py-3 border border-white/10 rounded-full text-xs tracking-widest group-hover:border-[#00ff88] group-hover:text-[#00ff88] group-hover:shadow-[0_0_30px_rgba(0,255,136,0.3)] transition-all duration-300">
-                                    <span>HEALINGWAVE</span>
-                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
-                            </m.div>
-                        </Link>
-                    </div>
+                            ) : (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`px-4 py-2 text-[0.65rem] tracking-[0.2em] rounded-full transition-all duration-300 ${link.href === '/'
+                                        ? 'text-white bg-white/[0.06]'
+                                        : 'text-[#6B7080] hover:text-white hover:bg-white/[0.04]'
+                                        }`}
+                                >
+                                    {link.name}
+                                </Link>
+                            )
+                        ))}
+                    </nav>
                 </div>
-
-                {/* SOCIAL DOCK - Fixed bottom center */}
-                <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
-                    <div className="pointer-events-auto">
-                        <SocialDock />
-                    </div>
-                </div>
-
             </div>
-        </PageTransition>
+
+            {/* ═══════════════════════════════════════════
+                LAYER 2: ROBOTIC HOST & CAROUSEL (Immersive)
+                ═══════════════════════════════════════════ */}
+            <div className="absolute inset-0 z-[10] flex items-center justify-center overflow-hidden pointer-events-none">
+
+                {/* Robot Host (Background Layer) */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <RobotHost
+                        activeIndex={activeIndex}
+                        activeColor={currentPortalColor}
+                        carouselDragX={dragX}
+                    />
+                </div>
+
+                {/* Carousel Container (Foreground Layer) - ELEVATED Z-INDEX */}
+                <div className="relative z-[100] mt-20 md:mt-24 md:pl-0 w-full flex justify-center perspective-[1200px] pointer-events-auto">
+                    <PortalCarousel
+                        onIndexChange={handleIndexChange}
+                        dragX={dragX}
+                    />
+                </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════
+                LAYER 3: SOCIAL DOCK & BRANDING FOOTER
+                ═══════════════════════════════════════════ */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 flex flex-col items-center pb-5 pointer-events-none">
+
+                {/* Social Dock (Restored) - Floating above */}
+                <div className="pointer-events-auto mb-4">
+                    <SocialDock />
+                </div>
+
+                {/* 5-Icon CTA Row - REMOVED upon user request for cleaner UI */}
+
+                {/* Branding Text */}
+                {/* Branding Text - REMOVED */}
+            </div>
+
+            {/* ═══════════════════════════════════════════
+                LAYER 4: CORNER DECORATIONS
+                ═══════════════════════════════════════════ */}
+            <div className="hidden md:block">
+                {/* Top-left corner mark */}
+                <div className="absolute top-6 left-6 z-30 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#00D4FF] shadow-[0_0_8px_rgba(0,212,255,0.5)] glow-pulse" />
+                </div>
+                {/* Bottom-right tech label */}
+                <div className="absolute bottom-6 right-6 z-30">
+                    <span className="font-mono text-[0.45rem] tracking-[0.3em] text-[#22252F]">Y3K.PROTOCOL.V2</span>
+                </div>
+            </div>
+        </div >
     );
 }

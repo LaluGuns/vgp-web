@@ -86,80 +86,135 @@ const guides = [
 export default function GuidesPage() {
     return (
         <PageTransition>
-            <section className="py-12 px-6">
-                <div className="max-w-5xl mx-auto">
-                    <SectionHeader
-                        label="DIGITAL ARSENAL"
-                        title="Production Guides"
-                        description="Curated knowledge to accelerate your production journey."
-                    />
+            <div className="relative min-h-screen overflow-hidden">
+                {/* ═══════════════════════════════════════════
+                    Y3K BACKGROUND LAYERS
+                   ═══════════════════════════════════════════ */}
+                {/* Gradient orbs — Green/Cyan for Digital Arsenal */}
+                <div className="absolute top-[-10%] left-1/4 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,255,163,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,212,255,0.05)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
 
-                    {/* Guides Grid */}
-                    <m.div
-                        className="grid md:grid-cols-2 gap-6"
-                        variants={staggerParent}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {guides.map((guide) => (
-                            <m.div key={guide.id} variants={staggerChild}>
-                                <GlassCard className="h-full" padding="none" hover>
-                                    <div className="flex h-full">
-                                        {/* Icon Side */}
-                                        <div className="w-28 shrink-0 flex items-center justify-center bg-carbon border-r border-white/5 text-dim-grey">
-                                            <guide.Icon />
-                                        </div>
+                {/* Ambient grid */}
+                <div
+                    className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '80px 80px',
+                    }}
+                />
 
-                                        {/* Content */}
-                                        <div className="flex-1 p-5 flex flex-col">
-                                            {guide.tag && (
-                                                <span className="mono-label text-primary text-xs mb-2">{guide.tag}</span>
-                                            )}
-                                            <h3 className="text-base font-medium mb-1.5 tracking-apple">{guide.title}</h3>
-                                            <p className="text-cool-grey text-sm mb-3 flex-1 leading-relaxed">{guide.description}</p>
-
-                                            <div className="flex items-center gap-3 text-xs text-dim-grey mb-4">
-                                                <span>{guide.pages}</span>
-                                                <span>PDF</span>
-                                            </div>
-
-                                            <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                                                <span className="text-xl font-semibold text-primary">{guide.price}</span>
-                                                <GlowButton variant="ghost" size="sm">
-                                                    Acquire
-                                                </GlowButton>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </GlassCard>
+                <section className="relative pt-24 pb-12 px-6">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Dramatic Hero */}
+                        <div className="text-center mb-20 relative z-10">
+                            <m.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6 }}
+                            >
+                                <p className="font-mono text-[0.6rem] tracking-[0.4em] text-[#00FFA3]/80 mb-6 uppercase">
+                                    VGP Digital Arsenal
+                                </p>
+                                <h1 className="text-5xl md:text-7xl font-black tracking-[-0.04em] leading-[0.9] mb-6">
+                                    Production
+                                    <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FFA3] via-white to-[#00D4FF] animate-gradient-text">
+                                        Guides
+                                    </span>
+                                </h1>
+                                <p className="text-cool-grey text-lg max-w-xl mx-auto leading-relaxed">
+                                    Curated knowledge to accelerate your production journey.
+                                    <br className="hidden sm:block" />
+                                    Blueprints for professional sound design and engineering.
+                                </p>
                             </m.div>
-                        ))}
-                    </m.div>
+                        </div>
 
-                    {/* Bundle */}
-                    <m.div
-                        className="mt-12 text-center"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <GlassCard className="inline-block" padding="lg" glow="subtle">
-                            <p className="mono-label text-primary mb-2">COMPLETE BUNDLE</p>
-                            <h3 className="text-xl font-semibold mb-2">All Guides Package</h3>
-                            <p className="text-cool-grey text-sm mb-4">All current and future guides at 40% off.</p>
-                            <div className="flex items-center justify-center gap-3 mb-4">
-                                <span className="text-dim-grey line-through">$153</span>
-                                <span className="text-2xl font-semibold text-primary">$89</span>
-                            </div>
-                            <GlowButton variant="primary" size="md">
-                                Get Bundle
-                            </GlowButton>
-                        </GlassCard>
-                    </m.div>
-                </div>
-            </section>
+                        {/* Guides Grid */}
+                        <m.div
+                            className="grid md:grid-cols-2 gap-6 relative z-10"
+                            variants={staggerParent}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
+                            {guides.map((guide) => (
+                                <m.div key={guide.id} variants={staggerChild}>
+                                    <GlassCard className="h-full bg-black/40 border-white/5" padding="none" hover>
+                                        <div className="flex h-full group">
+                                            {/* Icon Side with Glow */}
+                                            <div className="w-28 shrink-0 flex items-center justify-center bg-white/[0.02] border-r border-white/5 text-dim-grey group-hover:text-[#00FFA3] group-hover:bg-[#00FFA3]/[0.02] transition-colors duration-500">
+                                                <div className="group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(0,255,163,0.4)] transition-all duration-500">
+                                                    <guide.Icon />
+                                                </div>
+                                            </div>
+
+                                            {/* Content */}
+                                            <div className="flex-1 p-6 flex flex-col">
+                                                {guide.tag && (
+                                                    <span className="mono-label text-[#00FFA3] text-[0.6rem] mb-2 tracking-widest">{guide.tag}</span>
+                                                )}
+                                                <h3 className="text-xl font-bold mb-2 tracking-tight text-white group-hover:text-[#00FFA3] transition-colors duration-300">
+                                                    {guide.title}
+                                                </h3>
+                                                <p className="text-cool-grey text-sm mb-4 flex-1 leading-relaxed border-l-2 border-white/10 pl-3">
+                                                    {guide.description}
+                                                </p>
+
+                                                <div className="flex items-center gap-4 text-xs font-mono text-dim-grey mb-6">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+                                                        {guide.pages}
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+                                                        PDF FORMAT
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                                                    <span className="text-2xl font-bold text-white tracking-tight">{guide.price}</span>
+                                                    <GlowButton variant="ghost" size="sm" className="group-hover:border-[#00FFA3]/30 group-hover:text-[#00FFA3]">
+                                                        Acquire
+                                                    </GlowButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </GlassCard>
+                                </m.div>
+                            ))}
+                        </m.div>
+
+                        {/* Bundle */}
+                        <m.div
+                            className="mt-16 text-center relative z-10"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            <GlassCard className="inline-block relative overflow-hidden" padding="lg">
+                                <div className="absolute inset-0 bg-gradient-to-r from-[#00D4FF]/5 to-[#00FFA3]/5" />
+                                <div className="relative z-10">
+                                    <p className="mono-label text-[#00D4FF] mb-3 tracking-[0.25em]">COMPLETE ARSENAL</p>
+                                    <h3 className="text-2xl font-bold mb-2 text-white">All Guides Package</h3>
+                                    <p className="text-cool-grey text-sm mb-6">All current and future guides included.</p>
+                                    <div className="flex items-center justify-center gap-4 mb-6">
+                                        <span className="text-dim-grey line-through text-lg">$153</span>
+                                        <span className="text-3xl font-black text-[#00FFA3] drop-shadow-[0_0_15px_rgba(0,255,163,0.3)]">$89</span>
+                                    </div>
+                                    <GlowButton variant="primary" size="md">
+                                        Get Full Bundle
+                                    </GlowButton>
+                                </div>
+                            </GlassCard>
+                        </m.div>
+                    </div>
+                </section>
+            </div>
         </PageTransition>
     );
 }

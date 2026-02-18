@@ -1,30 +1,34 @@
 'use client';
 
 /**
- * PageTransition - Wraps pages with fade-in/slide-up animation
+ * PageTransition — Lightweight CSS-only page entrance
+ * Uses CSS transitions instead of Framer Motion spring physics
+ * for dramatically faster page loads.
  */
 
-import { m } from 'framer-motion';
-import { ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 
 interface PageTransitionProps {
     children: ReactNode;
 }
 
 export function PageTransition({ children }: PageTransitionProps) {
+    const [visible, setVisible] = useState(false);
+
+    useEffect(() => {
+        // Micro-delay for CSS transition to kick in
+        const t = requestAnimationFrame(() => setVisible(true));
+        return () => cancelAnimationFrame(t);
+    }, []);
+
     return (
-        <m.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{
-                type: 'spring',
-                stiffness: 100,
-                damping: 20,
-                duration: 0.4,
-            }}
+        <div
+            className={`transition-all duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${visible
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                }`}
         >
             {children}
-        </m.div>
+        </div>
     );
 }

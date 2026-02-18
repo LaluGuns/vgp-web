@@ -1,72 +1,96 @@
 'use client';
 
 /**
- * Navbar - Y3K Sovereign Navigation with STUDIO dropdown
+ * Navbar — Y3K Robot Chrome Navigation
+ * Desktop: Frosted glass pill with chrome border
+ * Mobile: Bottom tab bar (native app feel)
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { m, AnimatePresence } from 'framer-motion';
+import { springFast } from '@/lib/motion-presets';
 
 const navLinks = [
-    { name: 'HOME', href: '/' },
+    { name: 'HOME', href: '/', icon: '⬡' },
     {
         name: 'STUDIO',
         href: '/studio/beats',
+        icon: '◆',
         submenu: [
             { name: 'Beatstore', href: '/studio/beats' },
             { name: 'Masterclass', href: '/studio/masterclass' },
         ]
     },
-    { name: 'LAB', href: '/lab/healingwave' },
-    { name: 'BLOG', href: '/blog' },
-    { name: 'ABOUT', href: '/about' },
+    { name: 'LAB', href: '/lab/healingwave', icon: '◎' },
+    { name: 'BLOG', href: '/blog', icon: '▣' },
+    { name: 'ABOUT', href: '/about', icon: '◈' },
 ];
 
 export function Navbar() {
     const pathname = usePathname();
-    const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const [studioOpen, setStudioOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const isActive = (href: string) => {
         if (href === '/') return pathname === '/';
-        return pathname === href || pathname.startsWith(href.split('/').slice(0, 3).join('/'));
+        return pathname.startsWith(href);
     };
 
     const isStudioActive = () => {
         return pathname.startsWith('/studio');
     };
 
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Hide navbar on home page (has its own nav)
+    if (pathname === '/') return null;
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50">
-            <div className="mx-4 sm:mx-6 mt-4 sm:mt-6">
-                <div className="y3k-glass rounded-xl px-4 sm:px-5 py-2.5 sm:py-3">
-                    <div className="max-w-6xl mx-auto flex items-center justify-between">
-                        {/* Logo + Brand Text */}
+        <>
+            {/* ═══════════════════════════════════════════
+                DESKTOP NAVBAR
+                ═══════════════════════════════════════════ */}
+            <header
+                className={`
+                    fixed top-0 left-0 right-0 z-50 hidden md:block
+                    transition-all duration-500
+                    ${scrolled ? 'py-3' : 'py-5'}
+                `}
+            >
+                <nav className={`
+                    max-w-4xl mx-auto px-1
+                    transition-all duration-500
+                    ${scrolled ? 'bg-[#0C0E14]/80 backdrop-blur-2xl border border-[rgba(200,204,212,0.06)] rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : ''}
+                `}>
+                    <div className="flex items-center justify-between px-6 py-3">
+                        {/* Logo */}
                         <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 relative">
+                            <div className="w-8 h-8 relative">
                                 <Image
                                     src="/branding/logo-tg.png"
                                     alt="VGP"
-                                    width={48}
-                                    height={48}
-                                    className="w-full h-full object-contain transition-all duration-[1200ms] ease-[cubic-bezier(0.4,0,0.2,1)] hue-rotate-[20deg] saturate-150 group-hover:hue-rotate-0 group-hover:saturate-200 group-hover:brightness-125 group-hover:scale-110 group-hover:drop-shadow-[0_0_12px_rgba(0,229,255,0.6)]"
+                                    width={32}
+                                    height={32}
+                                    className="w-full h-full object-contain transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(0,212,255,0.5)]"
                                 />
                             </div>
-                            <div className="hidden sm:block">
-                                <p className="font-bold text-sm tracking-wider text-primary transition-all duration-[1000ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(0,229,255,0.6)]">
-                                    VIRZY GUNS PRODUCTION
-                                </p>
-                            </div>
+                            <span className="text-sm font-semibold tracking-wide">
+                                <span className="gradient-text">VGP</span>
+                            </span>
                         </Link>
 
-                        {/* Desktop Nav */}
-                        <div className="hidden lg:flex items-center gap-6">
+                        {/* Nav Links */}
+                        <div className="flex items-center gap-1">
                             {navLinks.map((link) => (
-                                link.submenu ? (
-                                    // STUDIO with dropdown
+                                'submenu' in link ? (
                                     <div
                                         key={link.name}
                                         className="relative"
@@ -75,11 +99,17 @@ export function Navbar() {
                                     >
                                         <Link
                                             href={link.href}
-                                            className={`text-sm font-light transition-colors flex items-center gap-1 ${isStudioActive() ? 'text-[#ec4899]' : 'text-dim-grey hover:text-white'
-                                                }`}
+                                            className={`
+                                                relative px-4 py-2 text-xs tracking-[0.2em] rounded-full
+                                                flex items-center gap-1.5 transition-all duration-300
+                                                ${isStudioActive()
+                                                    ? 'text-white bg-white/[0.06]'
+                                                    : 'text-[var(--chrome-dim)] hover:text-white hover:bg-white/[0.03]'
+                                                }
+                                            `}
                                         >
                                             {link.name}
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <svg className="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
                                             </svg>
                                         </Link>
@@ -88,19 +118,23 @@ export function Navbar() {
                                         <AnimatePresence>
                                             {studioOpen && (
                                                 <m.div
-                                                    initial={{ opacity: 0, y: -8 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -8 }}
-                                                    className="absolute top-full left-0 mt-2 py-2 px-1 y3k-glass rounded-lg min-w-[140px]"
+                                                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                                                    transition={springFast}
+                                                    className="absolute top-full left-0 mt-2 py-2 px-1 bg-[#11131A]/95 backdrop-blur-2xl border border-[rgba(200,204,212,0.06)] rounded-xl min-w-[160px] shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
                                                 >
-                                                    {link.submenu.map((sub) => (
+                                                    {link.submenu && link.submenu.map((sub) => (
                                                         <Link
                                                             key={sub.href}
                                                             href={sub.href}
-                                                            className={`block px-4 py-2 text-sm rounded-md transition-colors ${pathname === sub.href
-                                                                ? 'text-[#ec4899] bg-white/5'
-                                                                : 'text-dim-grey hover:text-white hover:bg-white/5'
-                                                                }`}
+                                                            className={`
+                                                                block px-4 py-2.5 text-sm rounded-lg transition-all duration-200
+                                                                ${isActive(sub.href)
+                                                                    ? 'text-[var(--studio-accent)] bg-[rgba(255,60,172,0.08)]'
+                                                                    : 'text-[var(--chrome-dim)] hover:text-[var(--studio-accent)] hover:bg-white/[0.03]'
+                                                                }
+                                                            `}
                                                         >
                                                             {sub.name}
                                                         </Link>
@@ -110,103 +144,74 @@ export function Navbar() {
                                         </AnimatePresence>
                                     </div>
                                 ) : (
-                                    // Regular link
                                     <Link
                                         key={link.href}
                                         href={link.href}
-                                        className={`text-sm font-light transition-colors ${isActive(link.href)
-                                            ? link.name === 'LAB' ? 'text-[#00ff88]' : 'text-primary'
-                                            : 'text-dim-grey hover:text-white'
-                                            }`}
+                                        className={`
+                                            relative px-4 py-2 text-xs tracking-[0.2em] rounded-full
+                                            transition-all duration-300
+                                            ${isActive(link.href)
+                                                ? 'text-white bg-white/[0.06]'
+                                                : 'text-[var(--chrome-dim)] hover:text-white hover:bg-white/[0.03]'
+                                            }
+                                        `}
                                     >
                                         {link.name}
+                                        {isActive(link.href) && (
+                                            <m.div
+                                                layoutId="activeTab"
+                                                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--cyan)]"
+                                                style={{ boxShadow: '0 0 8px rgba(0, 212, 255, 0.6)' }}
+                                                transition={springFast}
+                                            />
+                                        )}
                                     </Link>
                                 )
                             ))}
                         </div>
+                    </div>
+                </nav>
+            </header>
 
-                        {/* Mobile Toggle */}
-                        <button
-                            onClick={() => setMobileOpen(!mobileOpen)}
-                            className="lg:hidden w-8 h-8 flex items-center justify-center text-dim-grey hover:text-white"
-                            aria-label="Menu"
-                        >
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                {mobileOpen ? (
-                                    <path d="M6 6l12 12M6 18L18 6" strokeLinecap="round" />
-                                ) : (
-                                    <path d="M4 8h16M4 16h16" strokeLinecap="round" />
-                                )}
-                            </svg>
-                        </button>
+            {/* ═══════════════════════════════════════════
+                MOBILE BOTTOM TAB BAR (Native App Feel)
+                ═══════════════════════════════════════════ */}
+            <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+                <div className="bg-[#0C0E14]/90 backdrop-blur-2xl border-t border-[rgba(200,204,212,0.06)] safe-area-bottom">
+                    <div className="flex items-center justify-around px-2 py-2">
+                        {navLinks.filter(l => !('submenu' in l) || l.name === 'STUDIO').map((link) => {
+                            const active = 'submenu' in link ? isStudioActive() : isActive(link.href);
+                            return (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className={`
+                                        flex flex-col items-center gap-1 px-3 py-2 rounded-xl min-w-[56px]
+                                        transition-all duration-300
+                                        ${active
+                                            ? 'text-[var(--cyan)]'
+                                            : 'text-[var(--chrome-dim)]'
+                                        }
+                                    `}
+                                >
+                                    <span className="text-lg leading-none">{link.icon}</span>
+                                    <span className="text-[0.55rem] tracking-[0.15em] font-medium">
+                                        {link.name}
+                                    </span>
+                                    {active && (
+                                        <m.div
+                                            layoutId="mobileActiveTab"
+                                            className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--cyan)]"
+                                            style={{ boxShadow: '0 0 8px rgba(0, 212, 255, 0.6)' }}
+                                            transition={springFast}
+                                        />
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
-
-                {/* Mobile Menu */}
-                <AnimatePresence>
-                    {mobileOpen && (
-                        <m.div
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            className="lg:hidden mt-2 y3k-glass rounded-xl p-3"
-                        >
-                            <Link
-                                href="/"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-4 py-2.5 rounded-lg text-sm ${pathname === '/' ? 'text-primary' : 'text-dim-grey'}`}
-                            >
-                                Home
-                            </Link>
-
-                            {/* Studio Section */}
-                            <div className="px-4 py-2 text-xs text-[#ec4899]/70 tracking-widest">VGP STUDIO</div>
-                            <Link
-                                href="/studio/beats"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-6 py-2 rounded-lg text-sm ${pathname === '/studio/beats' ? 'text-[#ec4899]' : 'text-dim-grey'}`}
-                            >
-                                Beatstore
-                            </Link>
-                            <Link
-                                href="/studio/masterclass"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-6 py-2 rounded-lg text-sm ${pathname === '/studio/masterclass' ? 'text-[#ec4899]' : 'text-dim-grey'}`}
-                            >
-                                Masterclass
-                            </Link>
-
-                            {/* Lab Section */}
-                            <div className="px-4 py-2 mt-2 text-xs text-[#00ff88]/70 tracking-widest">VGP LAB</div>
-                            <Link
-                                href="/lab/healingwave"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-6 py-2 rounded-lg text-sm ${pathname === '/lab/healingwave' ? 'text-[#00ff88]' : 'text-dim-grey'}`}
-                            >
-                                HealingWave
-                            </Link>
-
-                            <div className="h-px bg-white/10 my-2" />
-
-                            <Link
-                                href="/blog"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-4 py-2.5 rounded-lg text-sm ${pathname === '/blog' ? 'text-primary' : 'text-dim-grey'}`}
-                            >
-                                BLOG
-                            </Link>
-
-                            <Link
-                                href="/about"
-                                onClick={() => setMobileOpen(false)}
-                                className={`block px-4 py-2.5 rounded-lg text-sm ${pathname === '/about' ? 'text-primary' : 'text-dim-grey'}`}
-                            >
-                                ABOUT
-                            </Link>
-                        </m.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </nav>
+            </nav>
+        </>
     );
 }

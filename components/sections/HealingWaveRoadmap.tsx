@@ -91,7 +91,7 @@ export function HealingWaveRoadmap() {
                                 className="h-full"
                                 padding="lg"
                                 hover
-                                glow={index === 0 ? 'subtle' : 'none'}
+                                glow={index === 0 ? 'cyan' : 'none'}
                             >
                                 {/* Header */}
                                 <div className="flex items-center justify-between mb-5">

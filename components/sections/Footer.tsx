@@ -1,11 +1,12 @@
 'use client';
 
 /**
- * Footer Section - Properly centered with same icons as SocialDock
+ * Footer — Y3K Robot Chrome Footer
+ * Gradient divider, social glow icons, chrome text
  */
 
 import { m } from 'framer-motion';
-import { revealUp } from '@/lib/motion-presets';
+import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 import { socialData } from '@/components/SocialDock';
 
 const studioLinks = [
@@ -26,7 +27,10 @@ export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative py-24 px-6 border-t border-white/10">
+        <footer className="relative py-20 md:py-24 px-6 border-t border-[rgba(200,204,212,0.04)]">
+            {/* Chrome gradient divider */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[rgba(0,212,255,0.15)] to-transparent" />
+
             <m.div
                 className="max-w-4xl mx-auto"
                 variants={revealUp}
@@ -34,95 +38,112 @@ export function Footer() {
                 whileInView="visible"
                 viewport={{ once: true }}
             >
-                {/* CENTERED BRAND */}
-                <div className="text-center mb-16">
-                    <h3 className="text-3xl md:text-4xl font-bold tracking-ultra-tight mb-4">
+                {/* Brand */}
+                <div className="text-center mb-14">
+                    <h3 className="text-2xl md:text-3xl font-bold tracking-ultra-tight mb-3">
                         <span className="gradient-text">VIRZY GUNS</span>
-                        <span className="text-white/80"> PRODUCTION</span>
+                        <span className="text-[var(--chrome)]"> PRODUCTION</span>
                     </h3>
-                    <p className="text-white/40 text-sm">
+                    <p className="text-[var(--dim-grey)] text-sm">
                         Engineering sound for the digital era.
                     </p>
                 </div>
 
-                {/* SPLIT NAV: Studio (Left) | Lab (Right) */}
-                <div className="grid grid-cols-2 gap-12 mb-12 max-w-md mx-auto">
-                    {/* VGP STUDIO */}
-                    <div className="text-center">
-                        <p className="mono-label text-[#ec4899]/70 mb-4 tracking-widest text-xs">VGP STUDIO</p>
-                        <nav className="flex flex-col items-center gap-2">
+                {/* Navigation Grid */}
+                <m.div
+                    className="grid grid-cols-2 md:grid-cols-3 gap-10 mb-14 max-w-lg mx-auto"
+                    variants={staggerParent}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                >
+                    {/* Studio */}
+                    <m.div className="text-center" variants={staggerChild}>
+                        <p className="mono-label text-[var(--studio-accent)]/70 mb-4 tracking-[0.25em]">STUDIO</p>
+                        <nav className="flex flex-col items-center gap-2.5">
                             {studioLinks.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    className="text-white/50 hover:text-[#ec4899] transition-colors text-sm"
+                                    className="text-[var(--chrome-dim)] hover:text-[var(--studio-accent)] transition-colors text-sm"
                                 >
                                     {link.name}
                                 </a>
                             ))}
                         </nav>
-                    </div>
+                    </m.div>
 
-                    {/* VGP LAB */}
-                    <div className="text-center">
-                        <p className="mono-label text-[#00ff88]/70 mb-4 tracking-widest text-xs">VGP LAB</p>
-                        <nav className="flex flex-col items-center gap-2">
+                    {/* Lab */}
+                    <m.div className="text-center" variants={staggerChild}>
+                        <p className="mono-label text-[var(--lab-accent)]/70 mb-4 tracking-[0.25em]">LAB</p>
+                        <nav className="flex flex-col items-center gap-2.5">
                             {labLinks.map((link) => (
                                 <a
                                     key={link.name}
                                     href={link.href}
-                                    className="text-white/50 hover:text-[#00ff88] transition-colors text-sm"
+                                    className="text-[var(--chrome-dim)] hover:text-[var(--lab-accent)] transition-colors text-sm"
                                 >
                                     {link.name}
                                 </a>
                             ))}
                         </nav>
-                    </div>
-                </div>
+                    </m.div>
 
-                {/* OTHER LINKS */}
-                <nav className="flex items-center justify-center gap-8 mb-12">
-                    {otherLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            target={link.href.startsWith('http') ? '_blank' : undefined}
-                            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                            className="text-white/40 hover:text-white transition-colors text-sm"
-                        >
-                            {link.name}
-                        </a>
-                    ))}
-                </nav>
+                    {/* Other */}
+                    <m.div className="text-center col-span-2 md:col-span-1" variants={staggerChild}>
+                        <p className="mono-label text-[var(--chrome-dim)] mb-4 tracking-[0.25em]">MORE</p>
+                        <nav className="flex flex-col items-center gap-2.5">
+                            {otherLinks.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    target={link.href.startsWith('http') ? '_blank' : undefined}
+                                    rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                    className="text-[var(--chrome-dim)] hover:text-white transition-colors text-sm"
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                        </nav>
+                    </m.div>
+                </m.div>
 
-                {/* SOCIAL ICONS - Using same SVG icons as SocialDock */}
-                <div className="flex items-center justify-center gap-4 mb-16">
+                {/* Social Icons */}
+                <div className="flex items-center justify-center gap-3 mb-14">
                     {socialData.map((social) => (
-                        <a
+                        <m.a
                             key={social.name}
                             href={social.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-11 h-11 glass rounded-full flex items-center justify-center text-white/50 hover:text-primary hover:bg-white/10 transition-all"
+                            className="w-10 h-10 rounded-full bg-[rgba(200,204,212,0.04)] border border-[rgba(200,204,212,0.06)] flex items-center justify-center text-[var(--chrome-dim)] hover:text-[var(--cyan)] hover:border-[rgba(0,212,255,0.2)] hover:shadow-[0_0_16px_rgba(0,212,255,0.12)] transition-all duration-300"
+                            whileHover={{ scale: 1.1, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
                             aria-label={social.name}
                         >
                             {social.icon}
-                        </a>
+                        </m.a>
                     ))}
                 </div>
 
-                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8" />
+                {/* Divider */}
+                <div className="h-px bg-[rgba(200,204,212,0.06)] mb-8 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(0,212,255,0.4)] to-transparent w-1/2 -translate-x-full animate-[shimmer_3s_infinite]" />
+                </div>
 
-                {/* COPYRIGHT */}
-                <div className="text-center">
-                    <p className="terminal-text text-white/30 mb-2 text-xs">
-                        © {currentYear} VIRZY GUNS PRODUCTION. ALL RIGHTS RESERVED.
+                {/* Newsletter & Copyright */}
+                <div className="flex flex-col items-center justify-center gap-4 text-center w-full">
+                    <p className="terminal-text text-[var(--chrome-muted)] text-[0.7rem] tracking-wider uppercase font-medium mb-1">
+                        © 2026 VIRZY GUNS PRODUCTION. ALL RIGHTS RESERVED.
                     </p>
-                    <p className="terminal-text text-white/20 text-xs">
+                    <p className="terminal-text text-[rgba(200,204,212,0.2)] text-[0.6rem] tracking-[0.25em] font-mono uppercase">
                         BUILT WITH ◈ NEXT.JS ◈ TAILWIND ◈ FRAMER MOTION
                     </p>
                 </div>
             </m.div>
+
+            {/* Mobile safe area spacing for bottom nav */}
+            <div className="h-20 md:hidden" />
         </footer>
     );
 }

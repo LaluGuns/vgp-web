@@ -7,7 +7,15 @@ const stitchScript = path.join(__dirname, 'node_modules', '@_davideast', 'stitch
 // Spawn the Stitch proxy
 // We explicitly use the current node executable
 const child = spawn(process.execPath, [stitchScript, 'proxy'], {
-    env: process.env,
+    env: {
+        ...process.env,
+        // Ensure API Key is passed even if parent environment misses it
+        STITCH_API_KEY: process.env.STITCH_API_KEY || 'AQ.Ab8RN6KktLjObKsndddFvLqhLJY2cIXVyCyTJT3RHdPHMvg5QQ',
+        // Try to suppress interaction or color codes
+        CI: 'true',
+        FORCE_COLOR: '0',
+        NO_COLOR: '1'
+    },
     stdio: ['pipe', 'pipe', 'pipe'] // We handle stdio manually
 });
 

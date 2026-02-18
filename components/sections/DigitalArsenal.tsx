@@ -56,7 +56,7 @@ export function DigitalArsenal() {
                 >
                     {products.map((product) => (
                         <m.div key={product.id} variants={staggerChild}>
-                            <GlassCard className="h-full flex flex-col" padding="none" glow="subtle">
+                            <GlassCard className="h-full flex flex-col" padding="none" glow="cyan">
                                 <div className="relative h-40 bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center rounded-t-2xl">
                                     {product.tag && (
                                         <span className="absolute top-4 left-4 mono-label bg-primary text-background px-3 py-1 rounded-full text-xs font-semibold">

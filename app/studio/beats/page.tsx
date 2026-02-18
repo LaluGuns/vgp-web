@@ -128,20 +128,41 @@ export default function BeatsPage() {
         <PageTransition>
 
             {/* Hero */}
-            <section className="py-16 sm:py-24 px-4 sm:px-6 text-center">
-                <div className="max-w-3xl mx-auto">
+            <section className="relative py-20 sm:py-28 px-4 sm:px-6 text-center overflow-hidden">
+                {/* Gradient orbs — Studio pink theme */}
+                <div className="absolute top-[-10%] left-1/3 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,60,172,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(180,74,255,0.04)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+
+                {/* Ambient grid */}
+                <div
+                    className="absolute inset-0 opacity-[0.02] pointer-events-none"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(255,60,172,0.2) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255,60,172,0.2) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '80px 80px',
+                    }}
+                />
+
+                <div className="max-w-3xl mx-auto relative">
                     <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+                        initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        transition={{ type: 'spring', stiffness: 60, damping: 18 }}
                     >
-                        <p className="mono-label text-primary mb-4">VGP BEATSTORE</p>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-hero mb-6">
-                            Premium Instrumentals for Artists
+                        <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#FF3CAC]/60 mb-5 uppercase">VGP BEATSTORE</p>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[var(--cyan)]">
+                                Premium
+                            </span>
+                            <br />
+                            <span className="text-[#FF3CAC]">Instrumentals</span>{' '}
+                            <span className="text-white">for Artists</span>
                         </h1>
-                        <p className="text-cool-grey text-lg leading-relaxed">
+                        <p className="text-[#565B66] text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
                             Curated beats across multiple genres. From hard hitting Trap & Drill to atmospheric
-                            Phonk & Synthwave. Plus smooth R&B, Rap, Club & Pop. Find your signature sound.
+                            Phonk & Synthwave. Plus smooth R&B, Rap, Club & Pop.
                         </p>
                     </m.div>
                 </div>
@@ -157,7 +178,7 @@ export default function BeatsPage() {
                                 <button
                                     key={genre.name}
                                     onClick={() => handleGenreClick(genre.name)}
-                                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border bg-carbon border-white/5 text-dim-grey transition-all duration-150 hover:-translate-y-1 hover:scale-105 active:scale-95"
+                                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border bg-[var(--carbon)] border-[rgba(200,204,212,0.05)] text-[var(--dim-grey)] transition-all duration-200 hover:-translate-y-1 hover:scale-105 active:scale-95"
                                     style={{
                                         backgroundColor: isActive ? genre.color + '1A' : undefined,
                                         borderColor: isActive ? genre.color : 'rgba(255,255,255,0.05)',
@@ -205,15 +226,15 @@ export default function BeatsPage() {
                         viewport={{ once: true }}
                     >
                         {/* Terminal Header */}
-                        <div className="flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 border-b border-white/5 bg-carbon">
+                        <div className="flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 border-b border-[rgba(200,204,212,0.04)] bg-[var(--carbon)]">
                             <div className="flex items-center gap-1.5 sm:gap-2">
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/20" />
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/20" />
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white/20" />
+                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
+                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
+                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
                             </div>
                             <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                                <span className="terminal-text text-white/50 text-xs">VGP://BEATSTORE</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
+                                <span className="terminal-text text-[var(--chrome-dim)] text-xs">VGP://BEATSTORE</span>
                             </div>
                             <div className="w-12" />
                         </div>
@@ -244,7 +265,7 @@ export default function BeatsPage() {
             </section>
 
             {/* Non-Exclusive Licensing */}
-            <section className="py-12 sm:py-20 px-4 sm:px-6 bg-carbon">
+            <section className="py-12 sm:py-20 px-4 sm:px-6 bg-[var(--carbon)]">
                 <div className="max-w-5xl mx-auto">
                     <SectionHeader
                         label="NON-EXCLUSIVE LICENSES"
@@ -290,7 +311,7 @@ export default function BeatsPage() {
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        <GlassCard padding="lg" glow="subtle" className="text-center">
+                        <GlassCard padding="lg" glow="cyan" className="text-center">
                             <p className="mono-label text-primary mb-3">EXCLUSIVE LICENSE</p>
                             <h3 className="text-2xl sm:text-3xl font-bold mb-2">Full Rights Package</h3>
                             <p className="text-dim-grey mb-6">Negotiable / Make an Offer</p>

@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { m, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { PageTransition } from '@/components/PageTransition';
 import { GlassCard } from '@/components/ui/GlassCard';
 import type { BlogArticle, Category } from '@/lib/blog-data';
@@ -53,7 +53,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
     return (
         <PageTransition>
             {/* Reading Progress Bar */}
-            <m.div
+            <motion.div
                 className="fixed top-0 left-0 right-0 h-1 z-50 origin-left"
                 style={{
                     scaleX,
@@ -79,7 +79,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                 <article className="relative py-16 px-6">
                     <div className="max-w-3xl mx-auto">
                         {/* Breadcrumb */}
-                        <m.div
+                        <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="flex items-center gap-2 text-sm text-dim-grey mb-8"
@@ -97,10 +97,10 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                             >
                                 {category?.name || article.category}
                             </Link>
-                        </m.div>
+                        </motion.div>
 
                         {/* Category Badge */}
-                        <m.div
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.1 }}
@@ -109,10 +109,10 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
                                 {category?.name}
                             </span>
-                        </m.div>
+                        </motion.div>
 
                         {/* Title */}
-                        <m.div
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.15 }}
@@ -124,10 +124,10 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                             <p className="text-cool-grey text-lg leading-relaxed mb-8">
                                 {article.excerpt}
                             </p>
-                        </m.div>
+                        </motion.div>
 
                         {/* Meta Info Card */}
-                        <m.div
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
@@ -155,7 +155,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                     </time>
                                 </div>
                             </GlassCard>
-                        </m.div>
+                        </motion.div>
                     </div>
                 </article>
             </div>
@@ -172,7 +172,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                     />
 
                     {/* Content */}
-                    <m.div
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.3 }}
@@ -184,16 +184,16 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 __html: formatContent(article.content, colors.hex)
                             }}
                         />
-                    </m.div>
+                    </motion.div>
 
                     {/* Author Card + CTA */}
-                    <m.div
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                         className="mt-16"
                     >
-                        <GlassCard padding="lg" glow="subtle" className="relative overflow-hidden">
+                        <GlassCard padding="lg" glow="cyan" className="relative overflow-hidden">
                             {/* Decorative gradient */}
                             <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[60px] opacity-20" style={{ background: colors.hex }} />
 
@@ -241,10 +241,10 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 </div>
                             </div>
                         </GlassCard>
-                    </m.div>
+                    </motion.div>
 
                     {/* Tags / Keywords */}
-                    <m.div
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
@@ -278,7 +278,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 </span>
                             ))}
                         </div>
-                    </m.div>
+                    </motion.div>
                 </div>
             </article>
 
@@ -326,7 +326,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/5 via-transparent to-transparent" />
 
                 <div className="max-w-2xl mx-auto relative">
-                    <m.div
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
@@ -347,7 +347,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </Link>
-                    </m.div>
+                    </motion.div>
                 </div>
             </section>
         </PageTransition>
@@ -431,7 +431,7 @@ function formatContent(content: string, accentColor: string): string {
         .replace(/\*\*(Quick Guide|Tip|Note|Important):\*\*/g, `
             <div class="my-6 p-5 rounded-xl border border-white/10 bg-gradient-to-r from-white/[0.03] to-transparent border-accent-left">
                 <p class="text-xs font-bold tracking-wider mb-2 text-accent">$1</p>
-        `)
+            `)
         // Numbered lists
         .replace(/^(\d+)\. (.*$)/gm, `
             <div class="flex items-start gap-4 mb-4">

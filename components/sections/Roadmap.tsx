@@ -57,7 +57,7 @@ export function Roadmap() {
                 >
                     {modules.map((module) => (
                         <m.div key={module.id} variants={staggerChild}>
-                            <GlassCard className="h-full relative overflow-hidden" padding="lg" glow="subtle">
+                            <GlassCard className="h-full relative overflow-hidden" padding="lg" glow="cyan">
                                 <div className="absolute top-4 right-4">
                                     <span className="mono-label text-secondary text-xs px-2 py-1 rounded-full border border-secondary/50 bg-secondary/10">
                                         {module.status}

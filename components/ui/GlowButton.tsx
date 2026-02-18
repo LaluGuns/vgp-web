@@ -1,32 +1,52 @@
 'use client';
 
 /**
- * GlowButton - Y3K Sovereign Button with Cyan Glow
- * Apple-level smooth transitions
+ * GlowButton — Y3K Robot Chrome Button
+ * Gradient fill on hover, spring physics, chrome shimmer
  */
 
-import { m } from 'framer-motion';
 import Link from 'next/link';
+import { m } from 'framer-motion';
+import { springFast } from '@/lib/motion-presets';
 
 interface GlowButtonProps {
     children: React.ReactNode;
-    variant?: 'primary' | 'ghost' | 'outline';
+    variant?: 'primary' | 'ghost' | 'studio' | 'lab';
     size?: 'sm' | 'md' | 'lg';
     href?: string;
     onClick?: () => void;
     className?: string;
+    type?: 'button' | 'submit';
+    disabled?: boolean;
 }
 
-const sizeClasses = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-sm',
-    lg: 'px-8 py-4 text-base',
+const sizeMap = {
+    sm: 'px-5 py-2.5 text-[0.65rem]',
+    md: 'px-7 py-3 text-xs',
+    lg: 'px-10 py-4 text-sm',
 };
 
-const variantClasses = {
-    primary: 'bg-transparent border border-primary text-white shadow-[0_0_20px_rgba(0,229,255,0.3)]',
-    ghost: 'bg-transparent border border-white/10 text-cool-grey',
-    outline: 'bg-transparent border border-primary/50 text-primary',
+const variantMap = {
+    primary: {
+        base: 'border-[rgba(0,212,255,0.35)] text-white',
+        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(0,212,255,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
+        gradient: 'from-[#00D4FF] to-[#B44AFF]',
+    },
+    ghost: {
+        base: 'border-[rgba(200,204,212,0.1)] text-[#C8CCD4]',
+        hover: 'hover:border-[rgba(0,212,255,0.3)] hover:text-white hover:shadow-[0_0_20px_rgba(0,212,255,0.1)]',
+        gradient: '',
+    },
+    studio: {
+        base: 'border-[rgba(255,60,172,0.35)] text-white',
+        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(255,60,172,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
+        gradient: 'from-[#FF3CAC] to-[#B44AFF]',
+    },
+    lab: {
+        base: 'border-[rgba(0,255,163,0.35)] text-white',
+        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(0,255,163,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
+        gradient: 'from-[#00FFA3] to-[#00D4FF]',
+    },
 };
 
 export function GlowButton({
@@ -36,49 +56,46 @@ export function GlowButton({
     href,
     onClick,
     className = '',
+    type = 'button',
+    disabled = false,
 }: GlowButtonProps) {
-    const baseClasses = `
-    inline-flex items-center justify-center gap-2
-    font-medium rounded-xl
-    transition-colors duration-200
-    ${sizeClasses[size]}
-    ${variantClasses[variant]}
-    ${className}
-  `;
+    const v = variantMap[variant];
+    const hasGradient = variant !== 'ghost';
 
-    // Apple-smooth hover states
-    const hoverState = variant === 'primary'
-        ? {
-            backgroundColor: '#00E5FF',
-            color: '#000000',
-            scale: 1.02,
-            boxShadow: '0 0 40px rgba(0,229,255,0.5)',
-        }
-        : {
-            borderColor: '#00E5FF',
-            color: '#FFFFFF',
-            scale: 1.02,
-            boxShadow: '0 0 25px rgba(0,229,255,0.25)',
-        };
-
-    const content = (
+    const buttonContent = (
         <m.span
-            className={baseClasses}
-            whileHover={hoverState}
+            className={`
+                relative inline-flex items-center justify-center gap-2
+                rounded-full border font-medium tracking-[0.15em] uppercase
+                cursor-pointer overflow-hidden
+                transition-all duration-400 ease-out
+                ${sizeMap[size]} ${v.base} ${v.hover}
+                ${disabled ? 'opacity-50 pointer-events-none' : ''}
+                ${className}
+            `}
+            whileHover={{ y: -2, scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            transition={{
-                type: 'spring',
-                stiffness: 400,
-                damping: 15,
-            }}
+            transition={springFast}
         >
-            {children}
+            {/* Gradient background — hidden by default, revealed on hover */}
+            {hasGradient && (
+                <span className={`absolute inset-0 bg-gradient-to-r ${v.gradient} opacity-0 hover-parent-opacity transition-opacity duration-400 rounded-full`} />
+            )}
+            <span className="relative z-10">{children}</span>
         </m.span>
     );
 
     if (href) {
-        return <Link href={href}>{content}</Link>;
+        return (
+            <Link href={href} className="inline-block">
+                {buttonContent}
+            </Link>
+        );
     }
 
-    return <button onClick={onClick}>{content}</button>;
+    return (
+        <button type={type} onClick={onClick} disabled={disabled} className="inline-block">
+            {buttonContent}
+        </button>
+    );
 }

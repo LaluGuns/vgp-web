@@ -4,6 +4,7 @@ import { LazyMotion, domAnimation } from 'framer-motion';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { NavbarWrapper } from '@/components/NavbarWrapper';
 import { SocialDock } from '@/components/SocialDock';
+import { CustomCursor } from '@/components/CustomCursor';
 import { Footer } from '@/components/sections/Footer';
 import { SubscribePopup } from '@/components/SubscribePopup';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
@@ -36,9 +37,31 @@ export const metadata: Metadata = {
         'producer', 'beatmaker', 'music for artists', 'commercial beats'
     ],
     icons: {
-        icon: '/branding/logo-tg.png',
-        shortcut: '/branding/logo-tg.png',
-        apple: '/branding/logo-tg.png',
+        icon: '/branding/logo-tg.jpg',
+        shortcut: '/branding/logo-tg.jpg',
+        apple: '/branding/logo-tg.jpg',
+    },
+    openGraph: {
+        title: 'Virzy Guns Production | Premium Beats & HealingWave Audio',
+        description: 'Buy exclusive Trap, Cyberphonk, Synthwave, R&B beats for artists and creators. Explore HealingWave functional audio technology.',
+        url: 'https://virzyguns.com',
+        siteName: 'Virzy Guns Production',
+        images: [
+            {
+                url: '/branding/og-image.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Virzy Guns Production Logo',
+            },
+        ],
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Virzy Guns Production | Premium Beats & HealingWave Audio',
+        description: 'Buy exclusive Trap, Cyberphonk, Synthwave, R&B beats. Explore HealingWave functional audio.',
+        images: ['/branding/og-image.jpg'],
     },
 };
 
@@ -55,7 +78,7 @@ export default function RootLayout({
 
                 <NewsletterProvider>
                     <SmoothScrollProvider>
-                        <LazyMotion features={domAnimation} strict>
+                        <LazyMotion features={domAnimation}>
                             <NavbarWrapper />
                             <main className="relative z-10 pt-24 pb-16">
                                 {children}
