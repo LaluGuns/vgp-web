@@ -9,8 +9,8 @@ const stitchScript = path.join(__dirname, 'node_modules', '@_davideast', 'stitch
 const child = spawn(process.execPath, [stitchScript, 'proxy'], {
     env: {
         ...process.env,
-        // Ensure API Key is passed even if parent environment misses it
-        STITCH_API_KEY: process.env.STITCH_API_KEY || 'AQ.Ab8RN6KktLjObKsndddFvLqhLJY2cIXVyCyTJT3RHdPHMvg5QQ',
+        // Ensure API Key is passed (Must be set in environment)
+        STITCH_API_KEY: process.env.STITCH_API_KEY,
         // Try to suppress interaction or color codes
         CI: 'true',
         FORCE_COLOR: '0',
