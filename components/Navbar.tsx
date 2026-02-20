@@ -172,46 +172,6 @@ export function Navbar() {
                     </div>
                 </nav>
             </header>
-
-            {/* ═══════════════════════════════════════════
-                MOBILE BOTTOM TAB BAR (Native App Feel)
-                ═══════════════════════════════════════════ */}
-            <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-                <div className="bg-[#0C0E14]/90 backdrop-blur-2xl border-t border-[rgba(200,204,212,0.06)] safe-area-bottom">
-                    <div className="flex items-center justify-around px-2 py-2">
-                        {navLinks.filter(l => !('submenu' in l) || l.name === 'STUDIO').map((link) => {
-                            const active = 'submenu' in link ? isStudioActive() : isActive(link.href);
-                            return (
-                                <Link
-                                    key={link.name}
-                                    href={link.href}
-                                    className={`
-                                        flex flex-col items-center gap-1 px-3 py-2 rounded-xl min-w-[56px]
-                                        transition-all duration-300
-                                        ${active
-                                            ? 'text-[var(--cyan)]'
-                                            : 'text-[var(--chrome-dim)]'
-                                        }
-                                    `}
-                                >
-                                    <span className="text-lg leading-none">{link.icon}</span>
-                                    <span className="text-[0.55rem] tracking-[0.15em] font-medium">
-                                        {link.name}
-                                    </span>
-                                    {active && (
-                                        <m.div
-                                            layoutId="mobileActiveTab"
-                                            className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--cyan)]"
-                                            style={{ boxShadow: '0 0 8px rgba(0, 212, 255, 0.6)' }}
-                                            transition={springFast}
-                                        />
-                                    )}
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </div>
-            </nav>
         </>
     );
 }

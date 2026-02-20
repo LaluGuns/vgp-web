@@ -105,12 +105,90 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
 
     const activeColor = portals[activeIndex]?.color ?? '#ffffff';
 
+    // Mobile Scroll Handler
+    const handleMobileScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const scrollLeft = e.currentTarget.scrollLeft;
+        const width = e.currentTarget.offsetWidth;
+        // Simple snap index calculation
+        const newIndex = Math.round(scrollLeft / width);
+        if (newIndex !== activeIndex && newIndex >= 0 && newIndex < portals.length) {
+            setActiveIndex(newIndex);
+            onIndexChange?.(newIndex);
+        }
+    };
+
     return (
         <div className="relative w-full flex flex-col items-center gap-6 select-none py-4">
 
-            {/* ── STAGE ROW ── */}
+            {/* ── MOBILE: NATIVE SNAP SCROLL (App-Like Performance) ── */}
+            <div className="relative w-full md:hidden">
+                <div
+                    className="w-full flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-4 pt-8 pb-14"
+                    onScroll={handleMobileScroll}
+                    style={{ scrollBehavior: 'smooth' }}
+                >
+                    {portals.map((portal) => (
+                        <div
+                            key={portal.id}
+                            className="flex-shrink-0 w-full snap-center flex justify-center items-center"
+                        >
+                            <div
+                                className="bg-[#111]/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-between text-center relative overflow-hidden will-change-transform"
+                                style={{
+                                    width: '300px',
+                                    height: '420px',
+                                    boxShadow: activeIndex === portals.indexOf(portal)
+                                        ? `0 10px 30px ${portal.color}10`
+                                        : 'none'
+                                }}
+                            >
+                                {/* Top Badge */}
+                                <div className="text-[0.7rem] tracking-[0.2em] font-mono opacity-80" style={{ color: portal.color }}>
+                                    {portal.subtitle.toUpperCase()}
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex flex-col gap-4">
+                                    <h2 className="text-4xl font-black text-white">{portal.title}</h2>
+                                    <div className="w-12 h-px bg-white/20 mx-auto" />
+                                    <p className="text-base text-white/70">{portal.description}</p>
+                                </div>
+
+                                {/* CTA */}
+                                <Link
+                                    href={portal.href}
+                                    className="px-6 py-3 rounded-full text-sm font-bold tracking-widest border transition-colors"
+                                    style={{
+                                        borderColor: portal.color,
+                                        color: portal.color,
+                                        backgroundColor: `${portal.color}10`
+                                    }}
+                                >
+                                    {portal.cta}
+                                </Link>
+
+                                {/* Active Glow */}
+                                {activeIndex === portals.indexOf(portal) && (
+                                    <div className="absolute inset-0 pointer-events-none" style={{ border: `1px solid ${portal.color}30` }} />
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* ── SIMPLE SWIPE INSTRUCTION (Mobile Native Hint) ── */}
+                <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center opacity-50 pointer-events-none">
+                    <svg className="w-4 h-4 mr-2 animate-bounce-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                    </svg>
+                    <span className="text-[0.65rem] font-mono tracking-[0.2em] uppercase">Swipe to Explore</span>
+                </div>
+            </div>
+
+
+            {/* ── DESKTOP: 3D FRAMER MOTION CAROUSEL ── */}
             <div
-                className="relative w-full flex items-center justify-center"
+                className="hidden md:flex relative w-full items-center justify-center"
                 style={{ height: `${CARD_H + 40}px`, perspective: '1200px' }}
             >
                 {/* LEFT ARROW — anchored relative to center card */}
@@ -167,21 +245,6 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                 </motion.div>
             </div>
 
-            {/* ── DOT INDICATORS ── */}
-            <div className="flex items-center gap-2">
-                {portals.map((portal, i) => (
-                    <button
-                        key={portal.id}
-                        onClick={() => index.set(i)}
-                        className="rounded-full transition-all duration-300 pointer-events-auto cursor-pointer"
-                        style={{
-                            width: i === activeIndex ? '20px' : '6px',
-                            height: '6px',
-                            backgroundColor: i === activeIndex ? activeColor : 'rgba(255,255,255,0.2)',
-                        }}
-                    />
-                ))}
-            </div>
         </div>
     );
 }
@@ -207,10 +270,10 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
     const rotateY = useTransform(offset, (v) => v * -10);
     const z = useTransform(offset, (v) => Math.abs(v) * -60);
     const filter = useTransform(offset, (v) =>
-        Math.abs(v) < 0.3 ? 'none' : `blur(${Math.min(Math.abs(v) * 2, 4)}px) brightness(0.5)`
+        Math.abs(v) < 0.3 ? 'none' : `brightness(${Math.max(0.5, 1 - Math.abs(v) * 0.3)})`
     );
 
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(() => Math.abs(offset.get()) < 0.2);
     useMotionValueEvent(offset, 'change', (v) => setIsActive(Math.abs(v) < 0.2));
 
     return (
@@ -222,13 +285,14 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                 width: `${cardW}px`,
                 height: `${cardH}px`,
                 x, scale, zIndex, opacity, rotateY, z, filter,
+                willChange: 'transform, opacity, filter',
             }}
         >
             {/* Card shell — manual styles to avoid GlassCard quirks */}
             <div
                 className="w-full h-full rounded-2xl flex flex-col items-center justify-between py-9 px-7 text-center relative overflow-hidden"
                 style={{
-                    background: 'rgba(255,255,255,0.04)',
+                    background: 'rgba(10,12,16,0.75)',
                     backdropFilter: 'blur(24px)',
                     WebkitBackdropFilter: 'blur(24px)',
                     border: '1px solid rgba(255,255,255,0.07)',
@@ -250,7 +314,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
 
                 {/* TOP — subtitle */}
                 <div
-                    className="relative z-10 px-4 py-1.5 rounded-full text-[0.58rem] tracking-[0.25em] font-mono border pointer-events-none"
+                    className="relative z-10 px-4 py-1.5 rounded-full text-[0.7rem] tracking-[0.25em] font-mono border pointer-events-none"
                     style={{
                         color: portal.color,
                         borderColor: `${portal.color}45`,
@@ -264,7 +328,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                 <div className="relative z-10 flex flex-col items-center gap-5 pointer-events-none select-none px-2">
                     <h2
                         className="font-black tracking-tighter text-white leading-none text-wrap"
-                        style={{ fontSize: portal.title.length > 10 ? '1.75rem' : '2.5rem' }}
+                        style={{ fontSize: portal.title.length > 10 ? '2.25rem' : '3.25rem' }}
                     >
                         {portal.title}
                     </h2>
@@ -274,7 +338,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                         style={{ backgroundColor: `${portal.color}70` }}
                     />
 
-                    <p className="text-[0.75rem] text-white/45 leading-relaxed">
+                    <p className="text-sm text-white/70 leading-relaxed">
                         {portal.description}
                     </p>
                 </div>
@@ -310,7 +374,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                             (e.currentTarget as HTMLElement).style.backgroundColor = `${portal.color}10`;
                         }}
                     >
-                        <span className="text-[0.62rem] font-bold tracking-[0.2em]">
+                        <span className="text-[0.75rem] font-bold tracking-[0.2em]">
                             {portal.cta}
                         </span>
                         <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

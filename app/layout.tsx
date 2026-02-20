@@ -7,6 +7,7 @@ import { SocialDock } from '@/components/SocialDock';
 import { CustomCursor } from '@/components/CustomCursor';
 import { Footer } from '@/components/sections/Footer';
 import { SubscribePopup } from '@/components/SubscribePopup';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import './globals.css';
 
@@ -80,12 +81,13 @@ export default function RootLayout({
                     <SmoothScrollProvider>
                         <LazyMotion features={domAnimation}>
                             <NavbarWrapper />
-                            <main className="relative z-10 pt-24 pb-16">
+                            <main className="relative z-10 pt-24 pb-24 md:pb-16">
                                 {children}
                             </main>
                             <Footer />
                             {/* SocialDock moved to home page only */}
                             <SubscribePopup />
+                            <MobileBottomNav />
                         </LazyMotion>
                     </SmoothScrollProvider>
                 </NewsletterProvider>

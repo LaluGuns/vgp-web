@@ -26,9 +26,7 @@ export function RobotHost({ activeIndex, activeColor, carouselDragX }: RobotHost
                 style={{
                     rotateY,
                     x: translateX,
-                    // Dynamic drop shadow for "Backlit" effect
-                    filter: `drop-shadow(0 0 40px ${activeColor}40)`,
-                    transition: 'filter 0.5s ease-out'
+                    // Replaced heavy filter: drop-shadow with a background glow element for better performance
                 }}
                 animate={{
                     // Slight "breathing" scale
@@ -38,8 +36,14 @@ export function RobotHost({ activeIndex, activeColor, carouselDragX }: RobotHost
                     scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
                 }}
             >
+                {/* Background Glow instead of filter: drop-shadow for better mobile performance */}
+                <div
+                    className="absolute inset-0 rounded-full blur-[60px] md:blur-[100px] transition-colors duration-500 scale-75"
+                    style={{ backgroundColor: activeColor, opacity: 0.25 }}
+                />
+
                 <Image
-                    src="/images/robot-mascot-v3.png"
+                    src="/images/robot-mascot-v3.webp"
                     alt="VGP Robot Host"
                     fill
                     className="object-contain object-center"
@@ -63,6 +67,6 @@ export function RobotHost({ activeIndex, activeColor, carouselDragX }: RobotHost
                 className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[60%] h-[20%] blur-[100px] transition-colors duration-700 opacity-40 mix-blend-screen"
                 style={{ backgroundColor: activeColor }}
             />
-        </div>
+        </div >
     );
 }

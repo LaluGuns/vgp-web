@@ -429,33 +429,33 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                 }
             `}</style>
 
-            <div style={{ background: '#03030a', minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'relative', overflow: 'hidden' }}>
 
-                {/* Ambient blobs */}
-                <div style={{ position: 'fixed', top: '-15%', left: '-8%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(0,212,255,0.065) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none', transform: 'translateZ(0)', willChange: 'transform' }} />
-                <div style={{ position: 'fixed', top: '25%', right: '-10%', width: '55vw', height: '55vw', background: 'radial-gradient(circle, rgba(255,60,172,0.045) 0%, transparent 60%)', filter: 'blur(90px)', pointerEvents: 'none', transform: 'translateZ(0)', willChange: 'transform' }} />
+                {/* Ambient blobs - Changed to absolute to prevent fixed + filter mobile Safari glitch */}
+                <div style={{ position: 'absolute', top: '-5%', left: '-8%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(0,212,255,0.065) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', top: '25%', right: '-10%', width: '55vw', height: '55vw', background: 'radial-gradient(circle, rgba(255,60,172,0.045) 0%, transparent 60%)', filter: 'blur(90px)', pointerEvents: 'none' }} />
 
                 {/* Global scanlines */}
                 <div style={{
-                    position: 'fixed', inset: 0, pointerEvents: 'none', opacity: 0.022,
+                    position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.022,
                     backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,1) 3px, rgba(255,255,255,1) 4px)',
                 }} />
 
-                <section style={{ paddingTop: 96, paddingBottom: 96, paddingLeft: 24, paddingRight: 24 }}>
+                <section style={{ paddingTop: 32, paddingBottom: 80, paddingLeft: 24, paddingRight: 24 }}>
                     <div style={{ maxWidth: 1152, margin: '0 auto' }}>
 
                         {/* ── HEADER ── */}
                         <motion.div
-                            style={{ marginBottom: 80, position: 'relative' }}
+                            style={{ marginBottom: 60, position: 'relative' }}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
                         >
                             {/* Ghost BG */}
                             <div aria-hidden style={{
-                                position: 'absolute', top: -8, left: 0,
+                                position: 'absolute', top: -16, left: 0,
                                 fontFamily: sfPro, fontWeight: 900,
-                                fontSize: 'clamp(4rem, 14vw, 10rem)',
+                                fontSize: 'clamp(3rem, 10vw, 8rem)',
                                 lineHeight: 1, letterSpacing: '-0.05em',
                                 color: 'rgba(255,255,255,0.018)',
                                 userSelect: 'none', pointerEvents: 'none',

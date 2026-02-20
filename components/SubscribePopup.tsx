@@ -11,15 +11,16 @@ export function SubscribePopup() {
     const [errorMessage, setErrorMessage] = useState('');
 
     // Auto-show logic (only if not manually opened/closed)
+    // Auto-show logic
     useEffect(() => {
-        const hasSubscribed = localStorage.getItem('vgp_newsletter_subscribed');
-        const hasSeenPopup = sessionStorage.getItem('vgp_popup_seen');
+        const hasSubscribed = localStorage.getItem('vgp_newsletter_subscribed_v2');
+        const hasSeenPopup = sessionStorage.getItem('vgp_popup_seen_v2');
 
         if (!hasSubscribed && !hasSeenPopup && !isOpen) {
             const timer = setTimeout(() => {
                 openPopup();
-                sessionStorage.setItem('vgp_popup_seen', 'true');
-            }, 10000); // Show after 10s (delayed for better UX)
+                sessionStorage.setItem('vgp_popup_seen_v2', 'true');
+            }, 1000); // Show after 1s
 
             return () => clearTimeout(timer);
         }
@@ -49,7 +50,7 @@ export function SubscribePopup() {
 
             if (response.ok) {
                 setStatus('success');
-                localStorage.setItem('vgp_newsletter_subscribed', 'true');
+                localStorage.setItem('vgp_newsletter_subscribed_v2', 'true');
                 setTimeout(() => {
                     closePopup();
                     setStatus('idle');
