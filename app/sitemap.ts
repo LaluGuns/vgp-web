@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://vgp.studio'; // Replace with actual domain later
+    const baseUrl = 'https://virzyguns.com';
 
     // 1. Static Routes
     const routes = [

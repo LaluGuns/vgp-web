@@ -24,7 +24,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-    title: 'Virzy Guns Production | Buy Premium Beats Online | HealingWave Functional Audio',
+    metadataBase: new URL('https://virzyguns.com'),
+    title: {
+        template: '%s | Virzy Guns Production',
+        default: 'Virzy Guns Production | Premium Beats & Audio',
+    },
     description: 'Buy exclusive Trap, Cyberphonk, Synthwave, R&B, Synthpop, Club, Deep House, and Drill beats for artists and creators. Explore HealingWave functional audio technology for focus and wellness. Licensed instrumentals for commercial use.',
     keywords: [
         'buy beats online', 'premium beats', 'exclusive instrumentals', 'type beats',

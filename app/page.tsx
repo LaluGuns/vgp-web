@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { m, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { SocialDock } from '@/components/SocialDock';
+import { OrganizationSchema } from '@/components/seo/OrganizationSchema';
 import { PortalCarousel, portals } from '@/components/home/PortalCarousel';
 import { RobotHost } from '@/components/home/RobotHost';
 
@@ -80,6 +81,7 @@ export default function HomePage() {
 
     return (
         <div className="relative h-[100dvh] w-full overflow-hidden bg-[#03040A] -mt-24 -mb-16">
+            <OrganizationSchema />
 
             {/* ═══════════════════════════════════════════
                 LAYER 0: AMBIENT GRADIENT MESH (CSS-only, GPU accelerated)

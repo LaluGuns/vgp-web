@@ -3,7 +3,7 @@ import { articles, categories, getFeaturedArticles } from '@/lib/blog-data';
 import { BlogIndex } from './BlogIndex';
 
 export const metadata: Metadata = {
-    title: 'Blog | VGP Studio - Beat Production Tips & Licensing Guides',
+    title: 'Blog & Insights',
     description: 'Expert articles on beat selection, music licensing, production techniques, and genre guides. Elevate your music with professional insights.',
     keywords: ['music production blog', 'beat license guide', 'producer tips', 'trap production', 'beat making'],
     openGraph: {
