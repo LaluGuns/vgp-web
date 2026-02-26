@@ -40,9 +40,8 @@ export function GlassCard({
     return (
         <m.div
             className={`
-                relative rounded-2xl overflow-hidden
-                bg-[#11131A]/90 backdrop-blur-xl
-                border border-[rgba(200,204,212,0.05)]
+                relative rounded-3xl overflow-hidden
+                obsidian-glass
                 transition-all duration-500 ease-out
                 ${glowStyles[glow]}
                 ${paddingMap[padding]}

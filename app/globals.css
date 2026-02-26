@@ -136,6 +136,28 @@ body::before {
     border: 1px solid rgba(200, 204, 212, 0.05);
   }
 
+  /* Polished Obsidian Glass — Apple Y3K Heavy Blur */
+  .obsidian-glass {
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(60px) saturate(150%);
+    -webkit-backdrop-filter: blur(60px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Titanium Text */
+  .titanium-text {
+    background: linear-gradient(135deg, #FFFFFF 0%, #A1A1A6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Intense Cyan Neon Gas */
+  .neon-cyan-gas {
+    box-shadow: 0 0 100px rgba(0, 194, 255, 0.5), 0 0 40px rgba(0, 194, 255, 0.3);
+  }
+
   .glass-card {
     background: var(--carbon);
     border: 1px solid rgba(200, 204, 212, 0.05);
@@ -701,4 +723,250 @@ body::before {
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ═══ Portal 3D Icon Animations ═══ */
+
+.portal-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes icon-spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: icon-spin-slow 12s linear infinite;
+}
+
+@keyframes icon-float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: icon-float 3s ease-in-out infinite;
+}
+
+@keyframes icon-waveform {
+
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  50% {
+    transform: scaleY(0.4);
+  }
+}
+
+.animate-waveform {
+  animation: icon-waveform 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes icon-wave-path {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 200;
+  }
+}
+
+.animate-wave-path {
+  stroke-dasharray: 10 6;
+  animation: icon-wave-path 3s linear infinite;
+}
+
+@keyframes icon-dna-rotate {
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+.animate-dna-rotate {
+  animation: icon-dna-rotate 8s linear infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes icon-pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 0.08;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+.animate-pulse-ring {
+  animation: icon-pulse-ring 2.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.animate-pulse-core {
+  animation: icon-pulse-ring 1.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes icon-orbit {
+  0% {
+    transform: rotate(0deg) translateX(45px) rotate(0deg);
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(45px) rotate(-360deg);
+    opacity: 0.4;
+  }
+}
+
+.animate-orbit {
+  animation: icon-orbit 4s linear infinite;
+}
+
+@keyframes icon-rotate-3d {
+  0% {
+    transform: perspective(400px) rotateY(0deg) rotateX(5deg);
+  }
+
+  50% {
+    transform: perspective(400px) rotateY(15deg) rotateX(-5deg);
+  }
+
+  100% {
+    transform: perspective(400px) rotateY(0deg) rotateX(5deg);
+  }
+}
+
+.animate-rotate-3d {
+  animation: icon-rotate-3d 6s ease-in-out infinite;
+}
+
+@keyframes icon-cursor-blink {
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-cursor-blink {
+  animation: icon-cursor-blink 1s step-end infinite;
+}
+
+@keyframes icon-data-stream {
+  0% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0.3;
+  }
+}
+
+.animate-data-stream {
+  animation: icon-data-stream 2s ease-in-out infinite;
+}
+
+@keyframes icon-shield-pulse {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0px transparent);
+  }
+
+  50% {
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+}
+
+.animate-shield-pulse {
+  animation: icon-shield-pulse 3s ease-in-out infinite;
+}
+
+/* ═══ Blog Article Icon Animations ═══ */
+
+@keyframes blog-pendulum-swing {
+
+  0%,
+  100% {
+    transform: rotate(-15deg);
+    transform-origin: 50px 30px;
+  }
+
+  50% {
+    transform: rotate(15deg);
+    transform-origin: 50px 30px;
+  }
+}
+
+.blog-icon-pendulum {
+  animation: blog-pendulum-swing 2s ease-in-out infinite;
+}
+
+@keyframes blog-balance-tilt {
+
+  0%,
+  100% {
+    transform: rotate(-3deg);
+    transform-origin: 50px 35px;
+  }
+
+  50% {
+    transform: rotate(3deg);
+    transform-origin: 50px 35px;
+  }
+}
+
+.blog-icon-balance {
+  animation: blog-balance-tilt 3s ease-in-out infinite;
 }

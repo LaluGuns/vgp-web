@@ -7,6 +7,7 @@
  */
 
 import { m } from 'framer-motion';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
 import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -40,10 +41,16 @@ export default function AboutPage() {
                     />
 
                     <div className="max-w-4xl mx-auto relative">
+                        {/* Immersive Background Icon */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
+                            <Portal3DIcon portalId="about" color="#00D4FF" size={350} />
+                        </div>
+
                         <m.header
                             variants={staggerParent}
                             initial="hidden"
                             animate="visible"
+                            className="relative z-10"
                         >
                             <m.p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00D4FF]/60 mb-5 uppercase" variants={staggerChild}>
                                 DOSSIER
@@ -52,7 +59,7 @@ export default function AboutPage() {
                                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6"
                                 variants={staggerChild}
                             >
-                                Professional Music
+                                <span className="titanium-text font-bold tracking-tight">Professional Music</span>
                                 <br />
                                 <span className="text-white/40">Producer & Beatmaker</span>
                             </m.h1>

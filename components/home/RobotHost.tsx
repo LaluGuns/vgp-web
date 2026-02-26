@@ -1,72 +1,58 @@
 'use client';
 
 import { m, useSpring, useTransform, MotionValue } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect } from 'react';
 
 interface RobotHostProps {
     activeIndex: number;
     activeColor: string;
-    carouselDragX: MotionValue<number>; // To sync with drag
+    carouselDragX: MotionValue<number>;
 }
 
 export function RobotHost({ activeIndex, activeColor, carouselDragX }: RobotHostProps) {
-    // Smoothen the drag input for head tracking
-    const smoothDrag = useSpring(carouselDragX, { damping: 30, stiffness: 200 });
+    // Smoothen the drag input for subtle background parallax
+    const smoothDrag = useSpring(carouselDragX, { damping: 40, stiffness: 150 });
 
-    // Map drag x to rotation/translation for 2.5D effect
-    // As user drags left (carousel goes right), robot looks right
-    const rotateY = useTransform(smoothDrag, [-500, 500], [-15, 15]);
-    const translateX = useTransform(smoothDrag, [-500, 500], [-30, 30]);
+    // Subtle parallax: when dragging carousel, the background video shifts slightly in the opposite direction
+    const translateX = useTransform(smoothDrag, [-500, 500], ['-2%', '2%']);
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-black z-0">
+            {/* Enlarged slightly container to hide edges during parallax */}
             <m.div
-                className="relative w-[700px] h-[700px] sm:w-[850px] sm:h-[850px] md:w-[1000px] md:h-[1000px] lg:w-[1150px] lg:h-[1150px] -translate-x-[25%] md:-translate-x-[20%]"
-                style={{
-                    rotateY,
-                    x: translateX,
-                    // Replaced heavy filter: drop-shadow with a background glow element for better performance
-                }}
-                animate={{
-                    // Slight "breathing" scale
-                    scale: [1, 1.02, 1],
-                }}
-                transition={{
-                    scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                }}
+                className="absolute inset-0 w-[104%] h-[104%] -left-[2%] -top-[2%]"
+                style={{ x: translateX }}
             >
-                {/* Background Glow instead of filter: drop-shadow for better mobile performance */}
-                <div
-                    className="absolute inset-0 rounded-full blur-[60px] md:blur-[100px] transition-colors duration-500 scale-75"
-                    style={{ backgroundColor: activeColor, opacity: 0.25 }}
-                />
-
-                <Image
-                    src="/images/robot-mascot-v3.webp"
-                    alt="VGP Robot Host"
-                    fill
-                    className="object-contain object-center"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 1150px"
-                    style={{ opacity: 0.9 }}
-                />
-
-                {/* Eye/Visor Scanning Effect */}
-                <div
-                    className="absolute top-[28%] left-[48%] w-40 h-10 blur-xl mix-blend-screen transition-colors duration-500"
-                    style={{ backgroundColor: activeColor, opacity: 0.6 }}
+                <video
+                    src="/videos/robot.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="w-full h-full object-cover opacity-90"
+                    style={{ contentVisibility: 'auto' }}
                 />
             </m.div>
 
-            {/* Ambient Floor Light */}
+            {/* Premium Apple Y3K Gradient Overlays */}
+            {/* 1. Vignette & Edge Darkening */}
+            <div className="absolute inset-0 bg-radial-gradient(ellipse_at_center,_transparent_0%,_rgba(0,0,0,0.8)_100%)" />
+
+            {/* 2. Heavy bottom gradient for seamless transition and dock readability */}
+            <div className="absolute inset-x-0 bottom-0 h-[50vh] bg-gradient-to-t from-black via-black/80 to-transparent" />
+
+            {/* 3. Top gradient for header navbar readability */}
+            <div className="absolute inset-x-0 top-0 h-[30vh] bg-gradient-to-b from-black/90 via-black/40 to-transparent" />
+
+            {/* Dynamic Active Portal Color Bloom */}
             <div
-                className="absolute bottom-0 left-0 right-0 h-[40vh] bg-gradient-to-t from-black via-transparent to-transparent opacity-80 z-10"
-            />
-            <div
-                className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[60%] h-[20%] blur-[100px] transition-colors duration-700 opacity-40 mix-blend-screen"
+                className="absolute inset-0 transition-colors duration-1000 mix-blend-color opacity-20"
                 style={{ backgroundColor: activeColor }}
             />
-        </div >
+            <div
+                className="absolute inset-x-0 bottom-0 h-[60vh] mix-blend-screen opacity-15 blur-[100px] transition-colors duration-1000"
+                style={{ backgroundColor: activeColor }}
+            />
+        </div>
     );
 }

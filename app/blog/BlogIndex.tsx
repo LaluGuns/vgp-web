@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
+import { BlogArticleIcon } from '@/components/ui/BlogArticleIcon';
 import { PageTransition } from '@/components/PageTransition';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
@@ -21,9 +23,8 @@ const fallback = { color: '#B8FF00', secondary: '#00FF88' };
 const getCat = (slug: string) => CAT[slug] ?? fallback;
 
 // ── HOLO THUMB ────────────────────────────────────────────────────────
-function HoloThumb({ slug, title, variant = 'sm' }: { slug: string; title: string; variant?: 'sm' | 'lg' }) {
+function HoloThumb({ slug, title, articleSlug, variant = 'sm' }: { slug: string; title: string; articleSlug?: string; variant?: 'sm' | 'lg' }) {
     const { color, secondary } = getCat(slug);
-    const ch = title.charAt(0).toUpperCase();
     const uid = `${slug}-${variant}`;
 
     return (
@@ -56,21 +57,11 @@ function HoloThumb({ slug, title, variant = 'sm' }: { slug: string; title: strin
                 pointerEvents: 'none',
             }} />
 
-            {/* Ghost letter */}
-            <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                <span style={{
-                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
-                    fontWeight: 900,
-                    fontSize: variant === 'lg' ? '18rem' : '7rem',
-                    lineHeight: 1,
-                    color: 'transparent',
-                    WebkitTextStroke: `1px ${color}`,
-                    opacity: 0.12,
-                    letterSpacing: '-0.05em',
-                    userSelect: 'none',
-                }}>
-                    {ch}
-                </span>
+            {/* Centered animated icon */}
+            <div className="absolute inset-0 flex items-center justify-center z-[2] pointer-events-none">
+                <div style={{ filter: `drop-shadow(0 4px 25px ${color}50)` }}>
+                    <BlogArticleIcon slug={articleSlug || slug} category={slug} size={variant === 'lg' ? 120 : 64} />
+                </div>
             </div>
 
             {/* Spinning conic blob */}
@@ -170,7 +161,7 @@ function FeaturedCard({ article, getCategoryName }: { article: BlogArticle; getC
                 <div className="grid lg:grid-cols-2">
                     {/* Visual side */}
                     <div className="relative overflow-hidden" style={{ height: 380 }}>
-                        <HoloThumb slug={article.category} title={article.title} variant="lg" />
+                        <HoloThumb slug={article.category} title={article.title} articleSlug={article.slug} variant="lg" />
                         {/* Fade to content */}
                         <div className="hidden lg:block absolute inset-y-0 right-0 w-28" style={{
                             background: 'linear-gradient(to right, transparent, #03030a)',
@@ -296,7 +287,7 @@ function ArticleCard({ article, index, getCategoryName }: {
                 >
                     {/* Thumb */}
                     <div className="relative overflow-hidden shrink-0" style={{ height: 168 }}>
-                        <HoloThumb slug={article.category} title={article.title} />
+                        <HoloThumb slug={article.category} title={article.title} articleSlug={article.slug} />
 
                         {/* Badge */}
                         <div style={{
@@ -431,78 +422,52 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
 
             <div style={{ position: 'relative', overflow: 'hidden' }}>
 
-                {/* Ambient blobs - Changed to absolute to prevent fixed + filter mobile Safari glitch */}
-                <div style={{ position: 'absolute', top: '-5%', left: '-8%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(0,212,255,0.065) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', top: '25%', right: '-10%', width: '55vw', height: '55vw', background: 'radial-gradient(circle, rgba(255,60,172,0.045) 0%, transparent 60%)', filter: 'blur(90px)', pointerEvents: 'none' }} />
+                <section className="relative py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden">
+                    {/* Gradient orbs — Blog cyan theme */}
+                    <div className="absolute top-[-10%] left-1/3 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,212,255,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+                    <div className="absolute bottom-[-10%] right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,60,172,0.04)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
 
-                {/* Global scanlines */}
-                <div style={{
-                    position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.022,
-                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,1) 3px, rgba(255,255,255,1) 4px)',
-                }} />
+                    {/* Ambient grid */}
+                    <div
+                        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                        style={{
+                            backgroundImage: `
+                                linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)
+                            `,
+                            backgroundSize: '80px 80px',
+                        }}
+                    />
 
-                <section style={{ paddingTop: 32, paddingBottom: 80, paddingLeft: 24, paddingRight: 24 }}>
-                    <div style={{ maxWidth: 1152, margin: '0 auto' }}>
+                    <div className="max-w-3xl mx-auto relative">
+                        {/* Immersive Background Icon */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
+                            <Portal3DIcon portalId="blog" color="#00D4FF" size={350} />
+                        </div>
 
-                        {/* ── HEADER ── */}
                         <motion.div
-                            style={{ marginBottom: 60, position: 'relative' }}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
+                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+                            className="relative z-10"
                         >
-                            {/* Ghost BG */}
-                            <div aria-hidden style={{
-                                position: 'absolute', top: -16, left: 0,
-                                fontFamily: sfPro, fontWeight: 900,
-                                fontSize: 'clamp(3rem, 10vw, 8rem)',
-                                lineHeight: 1, letterSpacing: '-0.05em',
-                                color: 'rgba(255,255,255,0.018)',
-                                userSelect: 'none', pointerEvents: 'none',
-                                whiteSpace: 'nowrap',
-                            }}>BLOG</div>
-
-                            <div style={{ position: 'relative', zIndex: 10 }}>
-                                {/* Eyebrow */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                                    <div style={{ width: 24, height: 1, backgroundColor: '#00D4FF' }} />
-                                    <span style={{ fontFamily: sfMono, fontSize: '0.58rem', letterSpacing: '0.4em', color: 'rgba(0,212,255,0.7)', textTransform: 'uppercase' }}>
-                                        VGP Knowledge Base
-                                    </span>
-                                </div>
-
-                                {/* Title — contained, no overflow */}
-                                <h1 style={{
-                                    fontFamily: sfPro,
-                                    fontWeight: 900,
-                                    fontSize: 'clamp(2.8rem, 6vw, 5.5rem)',
-                                    lineHeight: 0.92,
-                                    letterSpacing: '-0.045em',
-                                    marginBottom: 28,
-                                }}>
-                                    <span style={{ display: 'block', color: 'rgba(255,255,255,0.95)' }}>Production</span>
-                                    <span style={{
-                                        display: 'block',
-                                        backgroundImage: 'linear-gradient(135deg, #00D4FF 0%, #7DF9FF 25%, #FF3CAC 55%, #FFD700 85%, #00D4FF 100%)',
-                                        backgroundSize: '300% 300%',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        backgroundClip: 'text',
-                                        animation: 'holo 5s ease infinite',
-                                    }}>
-                                        Insights
-                                    </span>
-                                </h1>
-
-                                {/* Descriptor */}
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, maxWidth: 400 }}>
-                                    <div style={{ width: 1, minHeight: 36, flexShrink: 0, background: 'linear-gradient(to bottom, #00D4FF, transparent)' }} />
-                                    <p style={{ fontFamily: sfPro, fontSize: '0.875rem', lineHeight: 1.85, color: 'rgba(255,255,255,0.32)', fontWeight: 300 }}>
-                                        Expert guides on beat licensing, production techniques, and industry trends.
-                                    </p>
-                                </div>
-                            </div>
+                            <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00D4FF]/60 mb-5 uppercase">VGP KNOWLEDGE BASE</p>
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6">
+                                <span className="titanium-text font-bold tracking-tight">
+                                    Production
+                                </span>
+                                <br />
+                                <span className="text-[#00D4FF]">Insights</span>
+                            </h1>
+                            <p className="text-[#565B66] text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
+                                Expert guides on beat licensing, production techniques, and industry trends.
+                            </p>
                         </motion.div>
+                    </div>
+                </section>
+
+                <section className="px-4 sm:px-6 pb-20">
+                    <div style={{ maxWidth: 1152, margin: '0 auto' }}>
 
                         {/* ── FEATURED ── */}
                         {featuredArticle && (

@@ -38,7 +38,7 @@ export function SectionHeader({
                 {label}
             </m.p>
             <m.h2
-                className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-ultra-tight mb-4"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-ultra-tight mb-4 titanium-text"
                 variants={staggerChild}
             >
                 {title}

@@ -31,7 +31,7 @@ const config: Config = {
                 'dim-grey': '#7A8088',
             },
             fontFamily: {
-                sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'sans-serif'],
+                sans: ['"SF Pro Display"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
                 mono: ['JetBrains Mono', 'monospace'],
             },
             letterSpacing: {

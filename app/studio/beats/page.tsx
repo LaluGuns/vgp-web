@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -146,14 +147,20 @@ export default function BeatsPage() {
                 />
 
                 <div className="max-w-3xl mx-auto relative">
+                    {/* Immersive Background Icon */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
+                        <Portal3DIcon portalId="studio" color="#FF3CAC" size={350} />
+                    </div>
+
                     <m.div
                         initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         transition={{ type: 'spring', stiffness: 60, damping: 18 }}
+                        className="relative z-10"
                     >
                         <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#FF3CAC]/60 mb-5 uppercase">VGP BEATSTORE</p>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6">
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-[var(--cyan)]">
+                            <span className="titanium-text font-bold tracking-tight">
                                 Premium
                             </span>
                             <br />
@@ -219,14 +226,14 @@ export default function BeatsPage() {
                     />
 
                     <m.div
-                        className="bg-titanium rounded-xl overflow-hidden border border-white/5"
+                        className="obsidian-glass rounded-[2rem] overflow-hidden"
                         variants={revealUp}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
                         {/* Terminal Header */}
-                        <div className="flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 border-b border-[rgba(200,204,212,0.04)] bg-[var(--carbon)]">
+                        <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-[rgba(255,255,255,0.05)] bg-[#0A0A0A]/40">
                             <div className="flex items-center gap-1.5 sm:gap-2">
                                 <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
                                 <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
@@ -240,7 +247,7 @@ export default function BeatsPage() {
                         </div>
 
                         {/* Beatstars Embed */}
-                        <div className="bg-obsidian flex justify-center" id="beatstore-player">
+                        <div className="bg-[#03040A] flex justify-center" id="beatstore-player">
                             <iframe
                                 src="https://player.beatstars.com/?storeId=122437"
                                 width="100%"

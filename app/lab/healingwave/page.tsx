@@ -7,6 +7,7 @@
  */
 
 import { m } from 'framer-motion';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -108,16 +109,22 @@ export default function HealingWavePage() {
                 />
 
                 <div className="max-w-3xl mx-auto relative">
+                    {/* Immersive Background Icon */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
+                        <Portal3DIcon portalId="lab" color="#00FFA3" size={350} />
+                    </div>
+
                     <m.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
+                        className="relative z-10"
                     >
                         <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00FFA3]/60 mb-5 uppercase">
                             HEALINGWAVE PROJECT
                         </p>
                         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6">
-                            Productivity &
+                            <span className="titanium-text font-bold tracking-tight">Productivity &</span>
                             <br />
                             <span className="text-[#00FFA3]">Wellness</span>{' '}
                             <span className="text-white/40">Ecosystem</span>

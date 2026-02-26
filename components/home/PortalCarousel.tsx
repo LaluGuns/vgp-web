@@ -10,11 +10,11 @@ import {
     useMotionValueEvent,
     type PanInfo,
 } from 'framer-motion';
-import { GlassCard } from '@/components/ui/GlassCard';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
 
 export const portals = [
     {
-        id: 'studio',
+        id: 'studio' as const,
         title: 'VGP STUDIO',
         subtitle: 'For Artists & Creators',
         description: 'Premier beats — Trap, Phonk, Drill, R&B, Synthwave & Deep House.',
@@ -23,7 +23,7 @@ export const portals = [
         cta: 'BEATSTORE',
     },
     {
-        id: 'lab',
+        id: 'lab' as const,
         title: 'VGP LAB',
         subtitle: 'Enter the HealingWave',
         description: 'Kinetic functional audio for focus, performance & wellness.',
@@ -32,7 +32,7 @@ export const portals = [
         cta: 'HEALINGWAVE',
     },
     {
-        id: 'masterclass',
+        id: 'masterclass' as const,
         title: 'MASTERCLASS',
         subtitle: 'Learn from the Best',
         description: 'Exclusive tutorials on production, mixing, and music business.',
@@ -41,7 +41,7 @@ export const portals = [
         cta: 'START LEARNING',
     },
     {
-        id: 'blog',
+        id: 'blog' as const,
         title: 'VGP BLOG',
         subtitle: 'Insights & Updates',
         description: 'Industry news, production tips, and VGP community stories.',
@@ -50,7 +50,7 @@ export const portals = [
         cta: 'READ ARTICLES',
     },
     {
-        id: 'about',
+        id: 'about' as const,
         title: 'ABOUT US',
         subtitle: 'The Vision',
         description: 'Meet the team and discover the philosophy behind Virzy Guns.',
@@ -66,9 +66,9 @@ interface PortalCarouselProps {
 }
 
 // ── Tweak these to resize everything ──
-const CARD_W = 300;
-const CARD_H = 420;
-const SPREAD = 340; // px between center card and side cards
+const CARD_W = 360;
+const CARD_H = 560;
+const SPREAD = 380; // px between center card and side cards
 
 export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCarouselProps) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -133,22 +133,27 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                             className="flex-shrink-0 w-full snap-center flex justify-center items-center"
                         >
                             <div
-                                className="bg-[#111]/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-between text-center relative overflow-hidden will-change-transform"
+                                className="obsidian-glass rounded-3xl p-8 flex flex-col items-center justify-between text-center relative overflow-hidden will-change-transform"
                                 style={{
-                                    width: '300px',
-                                    height: '420px',
+                                    width: '340px',
+                                    height: '560px',
                                     boxShadow: activeIndex === portals.indexOf(portal)
-                                        ? `0 10px 30px ${portal.color}10`
-                                        : 'none'
+                                        ? `inset 0 1px 1px rgba(255,255,255,0.1), 0 0 40px ${portal.color}25`
+                                        : 'inset 0 1px 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5)'
                                 }}
                             >
+                                {/* Animated Icon — visible, prominent, above text */}
+                                <div className="flex items-center justify-center z-10 mb-2" style={{ filter: `drop-shadow(0 0 20px ${portal.color}30)` }}>
+                                    <Portal3DIcon portalId={portal.id} color={portal.color} size={140} />
+                                </div>
+
                                 {/* Top Badge */}
-                                <div className="text-[0.7rem] tracking-[0.2em] font-mono opacity-80" style={{ color: portal.color }}>
+                                <div className="text-[0.7rem] tracking-[0.2em] font-mono opacity-80 z-10" style={{ color: portal.color }}>
                                     {portal.subtitle.toUpperCase()}
                                 </div>
 
                                 {/* Content */}
-                                <div className="flex flex-col gap-4">
+                                <div className="flex flex-col gap-4 z-10">
                                     <h2 className="text-4xl font-black text-white">{portal.title}</h2>
                                     <div className="w-12 h-px bg-white/20 mx-auto" />
                                     <p className="text-base text-white/70">{portal.description}</p>
@@ -157,7 +162,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                                 {/* CTA */}
                                 <Link
                                     href={portal.href}
-                                    className="px-6 py-3 rounded-full text-sm font-bold tracking-widest border transition-colors"
+                                    className="px-6 py-3 rounded-full text-sm font-bold tracking-widest border transition-colors z-10"
                                     style={{
                                         borderColor: portal.color,
                                         color: portal.color,
@@ -169,7 +174,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
 
                                 {/* Active Glow */}
                                 {activeIndex === portals.indexOf(portal) && (
-                                    <div className="absolute inset-0 pointer-events-none" style={{ border: `1px solid ${portal.color}30` }} />
+                                    <div className="absolute inset-0 pointer-events-none z-[2]" style={{ border: `1px solid ${portal.color}30` }} />
                                 )}
                             </div>
                         </div>
@@ -288,37 +293,48 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                 willChange: 'transform, opacity, filter',
             }}
         >
-            {/* Card shell — manual styles to avoid GlassCard quirks */}
+            {/* Card shell — Apple Y3K Obsidian Glass */}
             <div
-                className="w-full h-full rounded-2xl flex flex-col items-center justify-between py-9 px-7 text-center relative overflow-hidden"
+                className="obsidian-glass w-full h-full rounded-[2rem] flex flex-col items-center justify-between py-10 px-8 text-center relative overflow-hidden"
                 style={{
-                    background: 'rgba(10,12,16,0.75)',
-                    backdropFilter: 'blur(24px)',
-                    WebkitBackdropFilter: 'blur(24px)',
-                    border: '1px solid rgba(255,255,255,0.07)',
                     boxShadow: isActive
-                        ? `0 0 80px ${portal.color}18, 0 24px 80px rgba(0,0,0,0.6)`
-                        : '0 24px 60px rgba(0,0,0,0.45)',
+                        ? `inset 0 1px 1px rgba(255,255,255,0.3), 0 0 100px ${portal.color}30, 0 32px 80px rgba(0,0,0,0.8)`
+                        : 'inset 0 1px 1px rgba(255,255,255,0.1), 0 24px 60px rgba(0,0,0,0.6)',
                 }}
             >
-                {/* Active glowing border overlay */}
+                {/* Animated Icon — visible, prominent, with glow */}
+                <div
+                    className="z-10 transition-all duration-500 will-change-transform"
+                    style={{
+                        transform: isActive ? 'scale(1.15) translateY(-4px)' : 'scale(0.8) translateY(0)',
+                        filter: isActive ? `drop-shadow(0 10px 40px ${portal.color}50)` : 'drop-shadow(0 5px 15px rgba(0,0,0,0.5))',
+                        opacity: isActive ? 1 : 0.6,
+                    }}
+                >
+                    <Portal3DIcon portalId={portal.id} color={portal.color} size={160} />
+                </div>
+
+                {/* Background ambient lighting */}
+                <div className="absolute inset-0 z-0 opacity-20 pointer-events-none" style={{ backgroundImage: `linear-gradient(to bottom, transparent, transparent, ${portal.color}15)` }} />
+
+                {/* Active intense glowing border overlay */}
                 <motion.div
-                    className="absolute inset-0 rounded-2xl pointer-events-none"
+                    className="absolute inset-0 rounded-[2rem] pointer-events-none"
                     animate={{ opacity: isActive ? 1 : 0 }}
-                    transition={{ duration: 0.35 }}
+                    transition={{ duration: 0.5 }}
                     style={{
                         border: `1.5px solid ${portal.color}`,
-                        boxShadow: `inset 0 0 40px ${portal.color}08`,
+                        boxShadow: `inset 0 0 40px ${portal.color}15`,
                     }}
                 />
 
                 {/* TOP — subtitle */}
                 <div
-                    className="relative z-10 px-4 py-1.5 rounded-full text-[0.7rem] tracking-[0.25em] font-mono border pointer-events-none"
+                    className="relative z-10 px-4 py-1.5 rounded-full text-[0.7rem] tracking-[0.3em] font-mono border pointer-events-none backdrop-blur-md"
                     style={{
                         color: portal.color,
-                        borderColor: `${portal.color}45`,
-                        backgroundColor: `${portal.color}10`,
+                        borderColor: `${portal.color}35`,
+                        backgroundColor: `rgba(0,0,0,0.4)`,
                     }}
                 >
                     {portal.subtitle.toUpperCase()}
