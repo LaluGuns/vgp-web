@@ -80,8 +80,11 @@ export default function HomePage() {
     }, []);
 
     return (
-        <div className="relative h-[100dvh] w-full overflow-hidden bg-[#03040A] -mt-24 -mb-16">
+        <div className="relative w-full bg-[#03040A] min-h-screen">
             <OrganizationSchema />
+            
+            {/* HERO SECTION */}
+            <div className="relative h-[100dvh] w-full overflow-hidden -mt-24 -mb-16">
 
             {/* ═══════════════════════════════════════════
                 LAYER 0: AMBIENT GRADIENT MESH (CSS-only, GPU accelerated)
@@ -309,6 +312,64 @@ export default function HomePage() {
                 {/* Bottom-right tech label */}
                 <div className="absolute bottom-6 right-6 z-30">
                     <span className="font-mono text-[0.45rem] tracking-[0.3em] text-[#22252F]">Y3K.PROTOCOL.V2</span>
+                </div>
+            </div>
+            </div>
+
+            {/* ═══════════════════════════════════════════
+                LAYER 5: CONVERSION / INFO SECTION (Scrollable)
+                ═══════════════════════════════════════════ */}
+            <div className="relative z-50 bg-[#03040A] border-t border-white/[0.02]">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-24 lg:py-32">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                        {/* Box 1: Studio / Buy Beats */}
+                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
+                            <div className="w-12 h-12 bg-[#00D4FF]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#00D4FF]/20 group-hover:scale-110 transition-transform">
+                                <svg className="w-6 h-6 text-[#00D4FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-wide">Studio & Beatstore</h3>
+                            <p className="text-gray-400 text-sm mb-8 leading-relaxed">
+                                Premium instrumentals, industry-grade mixing, and exclusive licensing for your next hit.
+                            </p>
+                            <Link href="/studio/beats" className="inline-flex items-center gap-2 text-sm font-bold text-[#00D4FF] hover:text-white transition-colors">
+                                EXPLORE BEATS <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        </div>
+
+                        {/* Box 2: HealingWave */}
+                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
+                            <div className="w-12 h-12 bg-[#00FFA3]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#00FFA3]/20 group-hover:scale-110 transition-transform">
+                                <svg className="w-6 h-6 text-[#00FFA3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-wide">HealingWave Lab</h3>
+                            <p className="text-gray-400 text-sm mb-8 leading-relaxed">
+                                Auditory wellness experiences, binaural beats, and frequencies designed to elevate your mind.
+                            </p>
+                            <Link href="/lab/healingwave" className="inline-flex items-center gap-2 text-sm font-bold text-[#00FFA3] hover:text-white transition-colors">
+                                ENTER THE LAB <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        </div>
+
+                        {/* Box 3: Blog & Academy */}
+                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
+                            <div className="w-12 h-12 bg-[#FF3CAC]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#FF3CAC]/20 group-hover:scale-110 transition-transform">
+                                <svg className="w-6 h-6 text-[#FF3CAC]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3 tracking-wide">Blog & Masterclass</h3>
+                            <p className="text-gray-400 text-sm mb-8 leading-relaxed">
+                                Deep dives into music production, beat licensing guides, and industry insights.
+                            </p>
+                            <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-[#FF3CAC] hover:text-white transition-colors">
+                                READ ARTICLES <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div >

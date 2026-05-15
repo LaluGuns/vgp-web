@@ -20,11 +20,22 @@ export function SubscribePopup() {
             const timer = setTimeout(() => {
                 openPopup();
                 sessionStorage.setItem('vgp_popup_seen_v2', 'true');
-            }, 1000); // Show after 1s
+            }, 15000); // Show after 15s
 
             return () => clearTimeout(timer);
         }
     }, [openPopup, isOpen]);
+
+    // Handle Escape key to close
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isOpen) {
+                closePopup();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, closePopup]);
 
     const handleClose = () => {
         closePopup();
@@ -81,6 +92,9 @@ export function SubscribePopup() {
 
                     {/* Popup Card */}
                     <m.div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="popup-title"
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -92,10 +106,11 @@ export function SubscribePopup() {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
                             <div className="absolute bottom-4 left-6">
                                 <p className="mono-label text-primary text-xs mb-1">VGP INNER CIRCLE</p>
-                                <h3 className="text-xl font-bold text-white tracking-wide">Join the Movement</h3>
+                                <h3 id="popup-title" className="text-xl font-bold text-white tracking-wide">Join the Movement</h3>
                             </div>
                             <button
                                 onClick={handleClose}
+                                aria-label="Close dialog"
                                 className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
                             >
                                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

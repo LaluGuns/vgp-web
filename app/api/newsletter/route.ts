@@ -5,9 +5,21 @@ export async function POST(request: Request) {
     try {
         const { email, name } = await request.json();
 
-        if (!email) {
-            return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+        // 1. Basic validation
+        if (!email || typeof email !== 'string') {
+            return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
         }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
+        }
+
+        // 2. Sanitization
+        // Strip out basic HTML tags from name just to be safe
+        const sanitize = (str: string) => str.replace(/<[^>]*>?/gm, '');
+        const rawName = name && typeof name === 'string' ? name : 'Producer';
+        const subscriberName = sanitize(rawName);
 
         // Configure Hostinger SMTP Transporter
         const transporter = nodemailer.createTransport({
@@ -84,7 +96,7 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error('Newsletter API Error:', error);
         return NextResponse.json(
-            { error: 'Failed to send email', details: (error as Error).message },
+            { error: 'Failed to send email. Please try again later.' },
             { status: 500 }
         );
     }
