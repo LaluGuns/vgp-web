@@ -32,8 +32,6 @@ export async function POST(request: Request) {
             },
         });
 
-        const subscriberName = name || 'Producer';
-
         // 1. Send Notification to Admin (You)
         await transporter.sendMail({
             from: `"VGP System" <${process.env.SMTP_USER}>`,
