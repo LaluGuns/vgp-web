@@ -130,7 +130,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                     {portals.map((portal) => (
                         <div
                             key={portal.id}
-                            className="flex-shrink-0 w-full snap-center flex justify-center items-center"
+                            className="flex-shrink-0 w-full snap-center snap-always flex justify-center items-center"
                         >
                             <div
                                 className="obsidian-glass rounded-3xl p-8 flex flex-col items-center justify-between text-center relative overflow-hidden will-change-transform"

@@ -1,38 +1,24 @@
 'use client';
 
-import { m, useSpring, useTransform, MotionValue } from 'framer-motion';
-
 interface RobotHostProps {
     activeIndex: number;
     activeColor: string;
-    carouselDragX: MotionValue<number>;
+    carouselDragX: unknown;
 }
 
-export function RobotHost({ activeIndex, activeColor, carouselDragX }: RobotHostProps) {
-    // Smoothen the drag input for subtle background parallax
-    const smoothDrag = useSpring(carouselDragX, { damping: 40, stiffness: 150 });
-
-    // Subtle parallax: when dragging carousel, the background video shifts slightly in the opposite direction
-    const translateX = useTransform(smoothDrag, [-500, 500], ['-2%', '2%']);
-
+export function RobotHost({ activeColor }: RobotHostProps) {
     return (
         <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-black z-0">
-            {/* Enlarged slightly container to hide edges during parallax */}
-            <m.div
-                className="absolute inset-0 w-[104%] h-[104%] -left-[2%] -top-[2%]"
-                style={{ x: translateX }}
-            >
-                <video
-                    src="/videos/robot.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="w-full h-full object-cover opacity-90"
-                    style={{ contentVisibility: 'auto' }}
-                />
-            </m.div>
+            <video
+                src="/videos/robot.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover opacity-90"
+            />
 
             {/* Premium Apple Y3K Gradient Overlays */}
             {/* 1. Vignette & Edge Darkening */}

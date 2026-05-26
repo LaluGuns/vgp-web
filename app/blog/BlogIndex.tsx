@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { motion, useInView } from 'framer-motion';
-import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
-import { BlogArticleIcon } from '@/components/ui/BlogArticleIcon';
+import { useMemo, useState } from 'react';
+import { m } from 'framer-motion';
+import { ArrowRight, Bell, BookOpen, Clock, FileText, ListFilter, Mail, Newspaper } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
+import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
+import { useNewsletter } from '@/components/context/NewsletterContext';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
 interface BlogIndexProps {
@@ -14,546 +16,393 @@ interface BlogIndexProps {
     featured: BlogArticle[];
 }
 
-const CAT: Record<string, { color: string; secondary: string }> = {
-    'production-tips': { color: '#00D4FF', secondary: '#0066FF' },
-    'licensing-guide': { color: '#FF3CAC', secondary: '#FF0066' },
-    'genre-guides': { color: '#FFD700', secondary: '#FF6B00' },
+const categoryStyles: Record<string, { label: string; badge: string; line: string }> = {
+    'production-tips': {
+        label: 'Production',
+        badge: 'bg-blue-50 text-blue-700 ring-blue-100',
+        line: 'bg-blue-500',
+    },
+    'licensing-guide': {
+        label: 'Licensing',
+        badge: 'bg-amber-50 text-amber-700 ring-amber-100',
+        line: 'bg-amber-500',
+    },
+    'genre-guides': {
+        label: 'Genre',
+        badge: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
+        line: 'bg-emerald-500',
+    },
 };
-const fallback = { color: '#B8FF00', secondary: '#00FF88' };
-const getCat = (slug: string) => CAT[slug] ?? fallback;
 
-// ── HOLO THUMB ────────────────────────────────────────────────────────
-function HoloThumb({ slug, title, articleSlug, variant = 'sm' }: { slug: string; title: string; articleSlug?: string; variant?: 'sm' | 'lg' }) {
-    const { color, secondary } = getCat(slug);
-    const uid = `${slug}-${variant}`;
+const fallbackCategory = {
+    label: 'Guide',
+    badge: 'bg-neutral-100 text-neutral-700 ring-neutral-200',
+    line: 'bg-neutral-400',
+};
 
+const launchStats = [
+    { label: 'Status', value: 'Coming Soon' },
+    { label: 'Edition', value: 'Trap Production' },
+    { label: 'Length', value: '104 Pages' },
+    { label: 'Format', value: 'PDF' },
+];
+
+const guideModules = [
+    'Rhythmic Operating System',
+    'Trap Framework',
+    'Low End and 808 Physics',
+    'Sequencing and Session Design',
+    'Vocal Processing',
+    'Mixing the Full Track',
+    'Mastering for Streaming',
+    'Release Metadata and Rights',
+];
+
+const getCategoryStyle = (slug: string) => categoryStyles[slug] ?? fallbackCategory;
+
+function SoftLabel({ children }: { children: React.ReactNode }) {
     return (
-        <div className="absolute inset-0 overflow-hidden" style={{ background: '#03030a' }}>
-            <svg width="0" height="0" style={{ position: 'absolute' }}>
-                <defs>
-                    <radialGradient id={`glow-${uid}`} cx="55%" cy="45%" r="55%">
-                        <stop offset="0%" stopColor={color} stopOpacity="0.22" />
-                        <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-                    </radialGradient>
-                    <pattern id={`grid-${uid}`} width="24" height="24" patternUnits="userSpaceOnUse">
-                        <path d="M 24 0 L 0 0 0 24" fill="none" stroke={color} strokeWidth="0.35" />
-                    </pattern>
-                </defs>
-            </svg>
-
-            {/* Glow */}
-            <svg className="absolute inset-0 w-full h-full">
-                <rect width="100%" height="100%" fill={`url(#glow-${uid})`} />
-            </svg>
-
-            {/* Grid */}
-            <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.05 }}>
-                <rect width="100%" height="100%" fill={`url(#grid-${uid})`} />
-            </svg>
-
-            {/* Scanlines */}
-            <div className="absolute inset-0" style={{
-                backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px)',
-                pointerEvents: 'none',
-            }} />
-
-            {/* Centered animated icon */}
-            <div className="absolute inset-0 flex items-center justify-center z-[2] pointer-events-none">
-                <div style={{ filter: `drop-shadow(0 4px 25px ${color}50)` }}>
-                    <BlogArticleIcon slug={articleSlug || slug} category={slug} size={variant === 'lg' ? 120 : 64} />
-                </div>
-            </div>
-
-            {/* Spinning conic blob */}
-            <div style={{
-                position: 'absolute',
-                width: variant === 'lg' ? '280px' : '110px',
-                height: variant === 'lg' ? '280px' : '110px',
-                borderRadius: '50%',
-                background: `conic-gradient(from 0deg, ${color}35, ${secondary}25, transparent, ${color}35)`,
-                filter: 'blur(35px)',
-                top: '5%', right: '5%',
-                animation: 'spin 14s linear infinite',
-                willChange: 'transform',
-                transform: 'translateZ(0)',
-            }} />
-
-            {/* Horizontal light streak */}
-            <div style={{
-                position: 'absolute',
-                left: 0, right: 0,
-                top: '40%',
-                height: '1px',
-                background: `linear-gradient(90deg, transparent, ${color}70, ${secondary}50, transparent)`,
-                boxShadow: `0 0 10px ${color}80`,
-            }} />
-
-            {/* Corner brackets */}
-            <div style={{ position: 'absolute', top: 10, right: 10, width: 14, height: 14, borderTop: `1px solid ${color}60`, borderRight: `1px solid ${color}60` }} />
-            <div style={{ position: 'absolute', bottom: 10, left: 10, width: 14, height: 14, borderBottom: `1px solid ${color}60`, borderLeft: `1px solid ${color}60` }} />
-
-            {/* Bottom line */}
-            <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0, height: 1,
-                background: `linear-gradient(90deg, transparent, ${color}50, transparent)`,
-            }} />
-        </div>
-    );
-}
-
-function DataTag({ color, children }: { color: string; children: React.ReactNode }) {
-    return (
-        <span style={{
-            fontFamily: 'ui-monospace, "SF Mono", monospace',
-            fontSize: '0.55rem',
-            letterSpacing: '0.28em',
-            textTransform: 'uppercase',
-            color,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-        }}>
-            <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: color, display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' }} />
+        <span className="inline-flex items-center gap-2 text-sm font-medium text-white/50">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0071e3]" />
             {children}
         </span>
     );
 }
 
-// ── FEATURED CARD ─────────────────────────────────────────────────────
-function FeaturedCard({ article, getCategoryName }: { article: BlogArticle; getCategoryName: (s: string) => string }) {
-    const { color, secondary } = getCat(article.category);
+function StatItem({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="border-t border-white/10 pt-4">
+            <p className="text-sm text-white/40">{label}</p>
+            <p className="mt-1 text-base font-semibold text-white">{value}</p>
+        </div>
+    );
+}
+
+function CategoryButton({
+    category,
+    active,
+    onClick,
+}: {
+    category: { slug: string; name: string };
+    active: boolean;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            onClick={onClick}
+            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+                active
+                    ? 'border-white bg-white text-[#1d1d1f]'
+                    : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+            }`}
+        >
+            {category.name}
+        </button>
+    );
+}
+
+function BookMockup() {
+    return (
+        <div className="relative mx-auto max-w-[560px]">
+            <div className="absolute inset-x-8 bottom-0 h-16 rounded-[50%] bg-cyan-500/10 blur-3xl" />
+            <div className="relative z-10 mx-auto w-[300px] max-w-[82vw] overflow-hidden rounded-lg bg-neutral-950 shadow-[0_34px_90px_rgba(0,0,0,0.48)] ring-1 ring-white/10 sm:w-[min(76vw,420px)]">
+                <Image
+                    src="/ebooks/trap-guide-book-cover.jpg"
+                    alt="Music Production Guide: Trap Edition book cover"
+                    width={815}
+                    height={1058}
+                    priority
+                    sizes="(min-width: 1024px) 420px, 76vw"
+                    className="h-auto w-full"
+                />
+            </div>
+        </div>
+    );
+}
+
+function FeaturedArticle({
+    article,
+    getCategoryName,
+}: {
+    article: BlogArticle;
+    getCategoryName: (slug: string) => string;
+}) {
+    const category = getCategoryStyle(article.category);
 
     return (
-        <Link href={`/blog/${article.slug}`} className="group block">
-            <div
-                className="relative overflow-hidden rounded-2xl transition-all duration-500"
-                style={{
-                    background: 'rgba(255,255,255,0.022)',
-                    border: '1px solid rgba(255,255,255,0.07)',
-                    boxShadow: '0 40px 100px rgba(0,0,0,0.6)',
-                    transition: 'border-color 0.4s ease, box-shadow 0.4s ease',
-                }}
-                onMouseEnter={e => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = `${color}40`;
-                    el.style.boxShadow = `0 40px 100px rgba(0,0,0,0.7), 0 0 60px ${color}12`;
-                }}
-                onMouseLeave={e => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = 'rgba(255,255,255,0.07)';
-                    el.style.boxShadow = '0 40px 100px rgba(0,0,0,0.6)';
-                }}
-            >
-                {/* HUD top bar */}
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '10px 20px',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    background: 'rgba(255,255,255,0.015)',
-                }}>
-                    <DataTag color={color}>SYS.FEATURED</DataTag>
-                    <div style={{ display: 'flex', gap: 16 }}>
-                        <DataTag color="rgba(255,255,255,0.22)">{article.publishedAt}</DataTag>
-                        <DataTag color={color}>{getCategoryName(article.category)}</DataTag>
-                    </div>
+        <Link
+            href={`/blog/${article.slug}`}
+            className="group block overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]"
+        >
+            <div className="flex flex-col justify-between p-6 sm:p-8 lg:p-10">
+                <div>
+                    <span className={`inline-flex rounded-md px-3 py-1 text-xs font-semibold ring-1 ${category.badge}`}>
+                        {getCategoryName(article.category)}
+                    </span>
+                    <h2 className="mt-5 max-w-3xl text-2xl font-semibold leading-tight text-white sm:text-4xl">
+                        {article.title}
+                    </h2>
+                    <p className="mt-5 max-w-3xl text-base leading-8 text-white/60">
+                        {article.excerpt}
+                    </p>
                 </div>
 
-                <div className="grid lg:grid-cols-2">
-                    {/* Visual side */}
-                    <div className="relative overflow-hidden" style={{ height: 380 }}>
-                        <HoloThumb slug={article.category} title={article.title} articleSlug={article.slug} variant="lg" />
-                        {/* Fade to content */}
-                        <div className="hidden lg:block absolute inset-y-0 right-0 w-28" style={{
-                            background: 'linear-gradient(to right, transparent, #03030a)',
-                        }} />
-                    </div>
-
-                    {/* Content side */}
-                    <div className="flex flex-col justify-between p-8 lg:p-10" style={{ position: 'relative', zIndex: 10 }}>
-                        <div>
-                            {/* Pill */}
-                            <div style={{
-                                display: 'inline-flex', alignItems: 'center', gap: 8,
-                                padding: '6px 14px', borderRadius: 999, marginBottom: 20,
-                                background: `linear-gradient(135deg, ${color}15, ${secondary}10)`,
-                                border: `1px solid ${color}30`,
-                                boxShadow: `0 0 18px ${color}18`,
-                            }}>
-                                <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
-                                <span style={{
-                                    fontFamily: 'ui-monospace, "SF Mono", monospace',
-                                    fontSize: '0.58rem', letterSpacing: '0.28em',
-                                    textTransform: 'uppercase', color,
-                                }}>Featured Article</span>
-                            </div>
-
-                            <h2 style={{
-                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
-                                fontWeight: 800,
-                                fontSize: 'clamp(1.5rem, 2.8vw, 2.2rem)',
-                                lineHeight: 1.1,
-                                letterSpacing: '-0.03em',
-                                color: 'rgba(255,255,255,0.9)',
-                                marginBottom: 16,
-                            }}>
-                                {article.title}
-                            </h2>
-
-                            <p style={{
-                                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                                fontSize: '0.875rem',
-                                lineHeight: 1.85,
-                                color: 'rgba(255,255,255,0.35)',
-                                display: '-webkit-box',
-                                WebkitLineClamp: 3,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden',
-                            }}>
-                                {article.excerpt}
-                            </p>
-                        </div>
-
-                        {/* CTA */}
-                        <div style={{ marginTop: 32 }}>
-                            <div style={{
-                                width: 40, height: 1, marginBottom: 20,
-                                backgroundColor: color,
-                                transition: 'width 0.4s ease',
-                            }} className="group-hover:w-16" />
-                            <div style={{
-                                display: 'inline-flex', alignItems: 'center', gap: 12,
-                                fontFamily: 'ui-monospace, "SF Mono", monospace',
-                                fontSize: '0.62rem', letterSpacing: '0.24em',
-                                textTransform: 'uppercase', color,
-                            }}>
-                                Access Article
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* HUD bottom bar */}
-                <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: '8px 20px',
-                    borderTop: '1px solid rgba(255,255,255,0.04)',
-                    background: 'rgba(255,255,255,0.01)',
-                }}>
-                    <span style={{ fontFamily: 'ui-monospace, "SF Mono", monospace', fontSize: '0.5rem', letterSpacing: '0.35em', color: 'rgba(255,255,255,0.12)', textTransform: 'uppercase' }}>VGP.BLOG.v2025</span>
-                    <span style={{ fontFamily: 'ui-monospace, "SF Mono", monospace', fontSize: '0.5rem', letterSpacing: '0.35em', color: 'rgba(255,255,255,0.12)', textTransform: 'uppercase' }}>READ_MORE ↗</span>
+                <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-white/10 pt-5 text-sm text-white/45">
+                    <span className="inline-flex items-center gap-2">
+                        <Clock size={16} />
+                        {article.readingTime} min read
+                    </span>
+                    <span className="ml-auto inline-flex items-center gap-2 font-semibold text-[#0071e3]">
+                        Open article <ArrowRight size={16} />
+                    </span>
                 </div>
             </div>
         </Link>
     );
 }
 
-// ── ARTICLE CARD ──────────────────────────────────────────────────────
-function ArticleCard({ article, index, getCategoryName }: {
-    article: BlogArticle; index: number; getCategoryName: (s: string) => string;
+function ArticleCard({
+    article,
+    getCategoryName,
+}: {
+    article: BlogArticle;
+    getCategoryName: (slug: string) => string;
 }) {
-    const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, margin: '-40px' });
-    const { color, secondary } = getCat(article.category);
+    const category = getCategoryStyle(article.category);
 
     return (
-        <motion.div ref={ref}
-            initial={{ opacity: 0, y: 28 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-        >
-            <Link href={`/blog/${article.slug}`} className="group block h-full">
-                <div
-                    className="h-full flex flex-col overflow-hidden rounded-xl"
-                    style={{
-                        background: 'rgba(255,255,255,0.022)',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease, border-color 0.35s ease',
-                    }}
-                    onMouseEnter={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.transform = 'translateY(-5px)';
-                        el.style.borderColor = `${color}30`;
-                        el.style.boxShadow = `0 20px 50px rgba(0,0,0,0.55), 0 0 30px ${color}10`;
-                    }}
-                    onMouseLeave={e => {
-                        const el = e.currentTarget as HTMLElement;
-                        el.style.transform = 'translateY(0)';
-                        el.style.borderColor = 'rgba(255,255,255,0.06)';
-                        el.style.boxShadow = 'none';
-                    }}
-                >
-                    {/* Thumb */}
-                    <div className="relative overflow-hidden shrink-0" style={{ height: 168 }}>
-                        <HoloThumb slug={article.category} title={article.title} articleSlug={article.slug} />
+        <article className="h-full">
+            <Link
+                href={`/blog/${article.slug}`}
+                className="group flex h-full flex-col rounded-lg border border-white/10 bg-white/[0.035] p-6 transition-colors hover:border-white/20"
+            >
+                <div className={`mb-5 h-1 w-10 rounded-full ${category.line}`} />
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                    <span className={`inline-flex rounded-md px-2.5 py-1 text-xs font-semibold ring-1 ${category.badge}`}>
+                        {getCategoryName(article.category)}
+                    </span>
+                    <span className="text-xs text-white/35">{article.publishedAt}</span>
+                </div>
 
-                        {/* Badge */}
-                        <div style={{
-                            position: 'absolute', top: 10, left: 10, zIndex: 10,
-                            display: 'inline-flex', alignItems: 'center', gap: 5,
-                            padding: '4px 10px', borderRadius: 999,
-                            backdropFilter: 'blur(12px)',
-                            background: `${color}12`,
-                            border: `1px solid ${color}30`,
-                        }}>
-                            <div style={{ width: 4, height: 4, borderRadius: '50%', backgroundColor: color, boxShadow: `0 0 4px ${color}` }} />
-                            <span style={{
-                                fontFamily: 'ui-monospace, "SF Mono", monospace',
-                                fontSize: '0.52rem', letterSpacing: '0.22em',
-                                textTransform: 'uppercase', color,
-                            }}>{getCategoryName(article.category)}</span>
-                        </div>
+                <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-white">
+                    {article.title}
+                </h3>
+                <p className="mt-4 line-clamp-3 flex-1 text-sm leading-7 text-white/55">
+                    {article.excerpt}
+                </p>
 
-                        {/* Hover bottom glow line */}
-                        <div
-                            className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{
-                                height: 1,
-                                background: `linear-gradient(90deg, transparent, ${color}, ${secondary}, transparent)`,
-                                boxShadow: `0 0 8px ${color}`,
-                            }}
-                        />
-                    </div>
-
-                    {/* Body */}
-                    <div className="flex flex-col flex-1 p-5">
-                        {/* Timestamp row */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                            <span style={{ fontFamily: 'ui-monospace, "SF Mono", monospace', fontSize: '0.52rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.18)' }}>
-                                {article.publishedAt}
-                            </span>
-                            <div style={{ display: 'flex', gap: 3 }}>
-                                {[0, 1, 2].map(i => (
-                                    <div key={i} style={{ width: 4, height: 4, borderRadius: '50%', backgroundColor: i === 0 ? color : `${color}28` }} />
-                                ))}
-                            </div>
-                        </div>
-
-                        <h3 style={{
-                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
-                            fontWeight: 700,
-                            fontSize: '0.9rem',
-                            lineHeight: 1.4,
-                            letterSpacing: '-0.02em',
-                            color: 'rgba(255,255,255,0.82)',
-                            marginBottom: 10,
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                        }}>
-                            {article.title}
-                        </h3>
-
-                        <p style={{
-                            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
-                            fontSize: '0.75rem',
-                            lineHeight: 1.7,
-                            color: 'rgba(255,255,255,0.28)',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                            flex: 1,
-                            marginBottom: 16,
-                        }}>
-                            {article.excerpt}
-                        </p>
-
-                        {/* Footer */}
-                        <div style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            paddingTop: 12,
-                            borderTop: '1px solid rgba(255,255,255,0.05)',
-                        }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                <div style={{ width: 12, height: 1, backgroundColor: `${color}50` }} />
-                                <span style={{ fontFamily: 'ui-monospace, "SF Mono", monospace', fontSize: '0.5rem', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase' }}>VGP</span>
-                            </div>
-                            <span
-                                className="group-hover:gap-3"
-                                style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                                    fontFamily: 'ui-monospace, "SF Mono", monospace',
-                                    fontSize: '0.55rem', letterSpacing: '0.25em',
-                                    textTransform: 'uppercase', color,
-                                    transition: 'gap 0.3s ease',
-                                }}
-                            >
-                                ACCESS
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                </svg>
-                            </span>
-                        </div>
-                    </div>
+                <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 text-sm">
+                    <span className="inline-flex items-center gap-2 text-white/45">
+                        <Clock size={15} />
+                        {article.readingTime} min
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 font-semibold text-[#0071e3]">
+                        Read <ArrowRight size={15} />
+                    </span>
                 </div>
             </Link>
-        </motion.div>
+        </article>
     );
 }
 
-// ── MAIN ──────────────────────────────────────────────────────────────
 export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const { openPopup } = useNewsletter();
 
-    const filteredArticles = articles.filter(a =>
-        selectedCategory === 'all' || a.category === selectedCategory
+    const filteredArticles = useMemo(
+        () => articles.filter((article) => selectedCategory === 'all' || article.category === selectedCategory),
+        [articles, selectedCategory],
     );
 
     const featuredArticle = featured[0] ?? articles[0];
-    const getCategoryName = (slug: string) => categories.find(c => c.slug === slug)?.name || slug;
-
-    const sfPro = '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif';
-    const sfMono = 'ui-monospace, "SF Mono", monospace';
+    const getCategoryName = (slug: string) => categories.find((category) => category.slug === slug)?.name || getCategoryStyle(slug).label;
 
     return (
         <PageTransition>
-            <style>{`
-                @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-                @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-                @keyframes holo {
-                    0%,100% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                }
-            `}</style>
+        <main className="relative max-w-full overflow-hidden bg-[#03040A] text-white">
+                <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16">
+                    {/* Subtle gradient orbs — Blog theme */}
+                    <div className="pointer-events-none absolute top-[-10%] left-1/3 h-[400px] w-[400px] bg-[radial-gradient(circle,rgba(0,113,227,0.07)_0%,transparent_70%)] blur-[80px]" />
+                    <div className="pointer-events-none absolute bottom-0 right-1/4 h-[300px] w-[300px] bg-[radial-gradient(circle,rgba(0,212,255,0.04)_0%,transparent_70%)] blur-[80px]" />
 
-            <div style={{ position: 'relative', overflow: 'hidden' }}>
+                    <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
+                        <div className="relative max-w-3xl min-w-0">
+                            {/* Portal3DIcon — Background blog animation */}
+                            <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20">
+                                <Portal3DIcon portalId="blog" color="#0071e3" size={380} />
+                            </div>
 
-                <section className="relative py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden">
-                    {/* Gradient orbs — Blog cyan theme */}
-                    <div className="absolute top-[-10%] left-1/3 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,212,255,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
-                    <div className="absolute bottom-[-10%] right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,60,172,0.04)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+                            <m.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                                className="relative z-10"
+                            >
+                                <SoftLabel>VGP reading room</SoftLabel>
+                                <h1
+                                    aria-label="Music Production Guide: Trap Edition"
+                                    className="mt-6 max-w-full break-words text-4xl font-semibold leading-[1.06] text-white sm:text-6xl lg:text-7xl"
+                                >
+                                    <span className="block">Music Production</span>
+                                    <span className="block">Guide:</span>
+                                    <span className="block text-white/45">Trap Edition</span>
+                                </h1>
+                                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/25">
+                                    100% Art. 100% Science.
+                                </p>
+                                <p className="mt-6 max-w-[21.5rem] text-base leading-7 text-white/60 sm:max-w-2xl sm:text-xl sm:leading-9">
+                                    The physics, math, and engineering behind professional trap music. A practical guide for
+                                    turning creative instinct into repeatable systems for drums, 808s, vocals, mixing, and mastering.
+                                </p>
 
-                    {/* Ambient grid */}
-                    <div
-                        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                        style={{
-                            backgroundImage: `
-                                linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)
-                            `,
-                            backgroundSize: '80px 80px',
-                        }}
-                    />
-
-                    <div className="max-w-3xl mx-auto relative">
-                        {/* Immersive Background Icon */}
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
-                            <Portal3DIcon portalId="blog" color="#00D4FF" size={350} />
+                                <div className="mt-7 flex max-w-[21.5rem] flex-col gap-3 sm:max-w-none sm:flex-row">
+                                    <button
+                                        onClick={openPopup}
+                                        className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-semibold text-[#1d1d1f] transition-colors hover:bg-white/90"
+                                    >
+                                        <Bell size={17} />
+                                        Notify me
+                                    </button>
+                                    <a
+                                        href="#vgp-reading-room"
+                                        className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition-colors hover:border-white/30"
+                                    >
+                                        <BookOpen size={17} />
+                                        Read articles
+                                    </a>
+                                </div>
+                            </m.div>
                         </div>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                            className="relative z-10"
+                        <m.div
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
                         >
-                            <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00D4FF]/60 mb-5 uppercase">VGP KNOWLEDGE BASE</p>
-                            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.06em] leading-[0.9] mb-6">
-                                <span className="titanium-text font-bold tracking-tight">
-                                    Production
-                                </span>
-                                <br />
-                                <span className="text-[#00D4FF]">Insights</span>
-                            </h1>
-                            <p className="text-[#565B66] text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-                                Expert guides on beat licensing, production techniques, and industry trends.
-                            </p>
-                        </motion.div>
+                            <BookMockup />
+                        </m.div>
+                    </div>
+
+                    <div className="relative mx-auto mt-12 grid max-w-7xl grid-cols-2 gap-x-5 gap-y-6 sm:grid-cols-4 lg:mt-14">
+                        {launchStats.map((item) => (
+                            <StatItem key={item.label} label={item.label} value={item.value} />
+                        ))}
                     </div>
                 </section>
 
-                <section className="px-4 sm:px-6 pb-20">
-                    <div style={{ maxWidth: 1152, margin: '0 auto' }}>
 
-                        {/* ── FEATURED ── */}
-                        {featuredArticle && (
-                            <motion.div
-                                style={{ marginBottom: 72 }}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.75, delay: 0.15 }}
-                            >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                                    <span style={{ fontFamily: sfMono, fontSize: '0.52rem', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase' }}>
-                                        Latest.Featured
+                <section className="overflow-hidden border-y border-white/10 bg-white/[0.035] px-4 py-14 sm:px-6">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+                        <div>
+                            <SoftLabel>Inside the book</SoftLabel>
+                            <h2 className="mt-4 max-w-[21.5rem] text-3xl font-semibold leading-tight text-white sm:max-w-xl sm:text-4xl">
+                                A production syllabus that looks like it belongs on a serious producer desk.
+                            </h2>
+                            <p className="mt-5 max-w-[21.5rem] text-base leading-8 text-white/55 sm:max-w-xl">
+                                Chapter-style systems for turning creative instinct into repeatable production decisions.
+                                Study the core ideas before the full PDF is available.
+                            </p>
+                        </div>
+
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            {guideModules.map((module, index) => (
+                                <div
+                                    key={module}
+                                    className="flex items-center gap-4 rounded-lg border border-white/10 bg-white/[0.035] p-4"
+                                >
+                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/[0.05] text-sm font-semibold text-white/55 ring-1 ring-white/10">
+                                        {String(index + 1).padStart(2, '0')}
                                     </span>
-                                    <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(255,255,255,0.06), transparent)' }} />
+                                    <span className="text-sm font-semibold text-white/82">{module}</span>
                                 </div>
-                                <FeaturedCard article={featuredArticle} getCategoryName={getCategoryName} />
-                            </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="vgp-reading-room" className="overflow-hidden px-4 py-16 sm:px-6 lg:py-20">
+                    <div className="mx-auto max-w-7xl">
+                        <div className="mb-9 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                            <div>
+                                <SoftLabel>Editorial system</SoftLabel>
+                                <h2 className="mt-4 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+                                    Production notes from the guide.
+                                </h2>
+                                <p className="mt-4 max-w-2xl text-base leading-8 text-white/55">
+                                    Practical articles on beat selection, 808 control, home recording, licensing, and
+                                    release-ready production decisions.
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-3 text-center">
+                                <div className="rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3">
+                                    <Newspaper className="mx-auto mb-2 text-white/45" size={19} />
+                                    <p className="text-xs font-semibold text-white/45">Articles</p>
+                                </div>
+                                <div className="rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3">
+                                    <FileText className="mx-auto mb-2 text-white/45" size={19} />
+                                    <p className="text-xs font-semibold text-white/45">Chapters</p>
+                                </div>
+                                <button
+                                    onClick={openPopup}
+                                    className="rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-center transition-colors hover:border-white/20"
+                                >
+                                    <Mail className="mx-auto mb-2 text-white/45" size={19} />
+                                    <span className="text-xs font-semibold text-white/45">Waitlist</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {featuredArticle && (
+                            <div className="mb-12">
+                                <FeaturedArticle article={featuredArticle} getCategoryName={getCategoryName} />
+                            </div>
                         )}
 
-                        {/* ── FILTER ── */}
-                        <motion.div
-                            style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 36 }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <span style={{ fontFamily: sfMono, fontSize: '0.52rem', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase', marginRight: 4 }}>
-                                Filter://
+                        <div className="mb-8 flex flex-col gap-4 rounded-lg border border-white/10 bg-white/[0.035] p-4 md:flex-row md:items-center">
+                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-white/50">
+                                <ListFilter size={16} />
+                                Filter
                             </span>
-
-                            {[{ slug: 'all', name: 'All' }, ...categories].map((c) => {
-                                const isActive = selectedCategory === c.slug;
-                                const color = c.slug === 'all' ? 'rgba(255,255,255,0.9)' : getCat(c.slug).color;
-
-                                return (
-                                    <button
-                                        key={c.slug}
-                                        onClick={() => setSelectedCategory(c.slug)}
-                                        style={{
-                                            fontFamily: sfMono,
-                                            fontSize: '0.6rem',
-                                            letterSpacing: '0.22em',
-                                            textTransform: 'uppercase',
-                                            padding: '6px 16px',
-                                            borderRadius: 999,
-                                            border: `1px solid ${isActive ? color : 'rgba(255,255,255,0.08)'}`,
-                                            background: isActive ? color : 'transparent',
-                                            color: isActive ? '#000' : 'rgba(255,255,255,0.3)',
-                                            boxShadow: isActive ? `0 0 18px ${color}45` : 'none',
-                                            cursor: 'pointer',
-                                            transition: 'all 0.25s ease',
-                                        }}
-                                    >
-                                        {c.name}
-                                    </button>
-                                );
-                            })}
-
-                            <span style={{ marginLeft: 'auto', fontFamily: sfMono, fontSize: '0.52rem', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.15)', textTransform: 'uppercase' }}>
-                                {filteredArticles.length}_ENTRIES
+                            <div className="flex flex-wrap gap-2">
+                                {[{ slug: 'all', name: 'All' }, ...categories].map((category) => (
+                                    <CategoryButton
+                                        key={category.slug}
+                                        category={category}
+                                        active={selectedCategory === category.slug}
+                                        onClick={() => setSelectedCategory(category.slug)}
+                                    />
+                                ))}
+                            </div>
+                            <span className="text-sm font-medium text-white/45 md:ml-auto">
+                                {filteredArticles.length} entries
                             </span>
-                        </motion.div>
+                        </div>
 
-                        {/* ── GRID ── */}
                         {filteredArticles.length > 0 ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
-                                {filteredArticles.map((article, i) => (
-                                    <ArticleCard key={article.slug} article={article} index={i} getCategoryName={getCategoryName} />
+                            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                                {filteredArticles.map((article) => (
+                                    <ArticleCard
+                                        key={article.slug}
+                                        article={article}
+                                        getCategoryName={getCategoryName}
+                                    />
                                 ))}
                             </div>
                         ) : (
-                            <motion.div style={{ textAlign: 'center', padding: '96px 0' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                <p style={{ fontFamily: sfMono, fontSize: '0.62rem', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.18)', textTransform: 'uppercase', marginBottom: 16 }}>
-                                    NULL.RESULTS
-                                </p>
+                            <div className="rounded-lg border border-white/10 bg-white/[0.035] py-16 text-center">
+                                <p className="text-sm font-semibold text-white/50">No entries in this filter.</p>
                                 <button
                                     onClick={() => setSelectedCategory('all')}
-                                    style={{ fontFamily: sfMono, fontSize: '0.58rem', letterSpacing: '0.3em', color: '#00D4FF', textTransform: 'uppercase', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    className="mt-4 text-sm font-semibold text-[#0071e3]"
                                 >
-                                    CLEAR.FILTER →
+                                    Clear filter
                                 </button>
-                            </motion.div>
+                            </div>
                         )}
                     </div>
                 </section>
-            </div>
+        </main>
         </PageTransition>
     );
 }

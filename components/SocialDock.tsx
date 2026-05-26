@@ -6,6 +6,7 @@
  */
 
 import { m } from 'framer-motion';
+import Image from 'next/image';
 import { MagneticIcon } from '@/components/ui/MagneticIcon';
 
 // Shared social data with SVG icons - exported for Footer reuse
@@ -59,9 +60,11 @@ export const socialData = [
         name: 'BeatStars',
         href: 'https://www.beatstars.com/virzyguns',
         icon: (
-            <img
+            <Image
                 src="/branding/logo_beatstars.svg"
                 alt="BeatStars"
+                width={32}
+                height={32}
                 className="w-8 h-8 object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 hover:hue-rotate-[150deg] hover:saturate-150 transition-all"
             />
         )

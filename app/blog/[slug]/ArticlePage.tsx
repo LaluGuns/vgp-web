@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { PageTransition } from '@/components/PageTransition';
 import { GlassCard } from '@/components/ui/GlassCard';
@@ -202,9 +203,11 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 <div
                                     className="w-20 h-20 flex items-center justify-center shrink-0"
                                 >
-                                    <img
+                                    <Image
                                         src="/branding/logo-tg.png"
                                         alt="VGP"
+                                        width={80}
+                                        height={80}
                                         className="w-full h-full object-contain"
                                         style={{
                                             filter: `drop-shadow(0 0 15px ${colors.hex}80)`,

@@ -22,6 +22,7 @@ const navLinks = [
         submenu: [
             { name: 'Beatstore', href: '/studio/beats' },
             { name: 'Masterclass', href: '/studio/masterclass' },
+            { name: 'Book', href: '/book' },
         ]
     },
     { name: 'LAB', href: '/lab/healingwave', icon: '◎' },
