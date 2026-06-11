@@ -1,9 +1,21 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import MasterclassClient from './MasterclassClient';
 
 export const metadata: Metadata = {
-    title: 'Masterclass — Music Production Courses',
-    description: 'Learn music production from Virzy Guns. Courses on fundamentals, AI workflow, sound design, and mixing & mastering. 100% Art. 100% Science.',
+    title: 'Music Production Masterclass | VGP',
+    description:
+        'Learn music production from VGP with practical courses on workflow, sound design, mixing, mastering, trap production, and release decisions.',
+    keywords: [
+        'music production masterclass',
+        'producer education',
+        'trap production course',
+        'beatmaking course',
+        'mixing and mastering course',
+        'Virzy Guns masterclass',
+    ],
+    alternates: {
+        canonical: '/studio/masterclass',
+    },
 };
 
 export default function MasterclassPage() {

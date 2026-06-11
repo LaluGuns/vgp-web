@@ -13,11 +13,11 @@ export function OrganizationSchema() {
             width: 400,
             height: 400,
         },
-        description: 'Premium music production, beats, and functional audio technology. 100% Art. 100% Science.',
+        description: 'Virzy Guns Production is a music-tech ecosystem for songs, premium beats, custom production, functional audio, CADENZ, books, and producer education.',
         founder: {
             '@type': 'Person',
             name: 'Virzy Guns',
-            jobTitle: 'Music Producer & Audio Technologist',
+            jobTitle: 'Top 10% songwriter and top 25% producer, founder of Virzy Guns Production',
             sameAs: 'https://www.linkedin.com/in/virzyguns/',
         },
         sameAs: [
@@ -40,7 +40,7 @@ export function OrganizationSchema() {
         '@type': 'WebSite',
         name: 'Virzy Guns Production',
         url: 'https://virzyguns.com',
-        description: '100% Art. 100% Science. Premium beats, music production education, and functional audio technology.',
+        description: 'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
         publisher: {
             '@type': 'Organization',
             name: 'Virzy Guns Production',
@@ -55,6 +55,35 @@ export function OrganizationSchema() {
         },
     };
 
+    const founder = {
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Virzy Guns',
+        url: 'https://virzyguns.com/about',
+        jobTitle: 'Top 10% songwriter and top 25% producer',
+        worksFor: {
+            '@type': 'Organization',
+            name: 'Virzy Guns Production',
+            url: 'https://virzyguns.com',
+        },
+        knowsAbout: [
+            'songwriting',
+            'music production',
+            'beatmaking',
+            'mixing and mastering',
+            'functional audio',
+            'producer education',
+        ],
+        sameAs: [
+            'https://www.youtube.com/@VirzyGuns',
+            'https://www.instagram.com/virzyguns/',
+            'https://x.com/virzyguns',
+            'https://www.tiktok.com/@virzyguns808',
+            'https://www.linkedin.com/in/virzyguns/',
+            'https://www.beatstars.com/virzyguns',
+        ],
+    };
+
     return (
         <>
             <Script
@@ -66,6 +95,11 @@ export function OrganizationSchema() {
                 id="website-schema"
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
+            />
+            <Script
+                id="founder-person-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(founder) }}
             />
         </>
     );

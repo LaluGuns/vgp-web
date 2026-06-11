@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+﻿import { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -8,9 +8,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const routes = [
         '',
         '/about',
+        '/studio',
         '/studio/beats',
         '/studio/masterclass',
         '/lab/healingwave',
+        '/cadenz',
+        '/book',
         '/blog',
     ].map((route) => ({
         url: `${baseUrl}${route}`,

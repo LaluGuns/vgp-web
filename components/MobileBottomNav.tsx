@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Headphones, Activity, BookOpen, GraduationCap } from 'lucide-react';
+import { Home, Headphones, Activity, BookOpen, Timer } from 'lucide-react';
 
 export function MobileBottomNav() {
     const pathname = usePathname();
@@ -10,8 +10,8 @@ export function MobileBottomNav() {
 
     const navItems = [
         { name: 'Home', href: '/', icon: Home },
-        { name: 'Beats', href: '/studio/beats', icon: Headphones },
-        { name: 'Class', href: '/studio/masterclass', icon: GraduationCap },
+        { name: 'Studio', href: '/studio/beats', icon: Headphones },
+        { name: 'CADENZ', href: '/cadenz', icon: Timer },
         { name: 'Lab', href: '/lab/healingwave', icon: Activity },
         { name: 'Blog', href: '/blog', icon: BookOpen },
     ];

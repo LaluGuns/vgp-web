@@ -1,280 +1,179 @@
-'use client';
+﻿'use client';
 
-/**
- * HealingWave Project Page
- * Functional audio technology — Y3K Lab aesthetic
- * STATUS: IN R&D - Modules wrapped with visual lock
- */
-
+import Image from 'next/image';
 import { m } from 'framer-motion';
-import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
+import { Activity, AudioLines, Clock, Focus, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { GlowButton } from '@/components/ui/GlowButton';
-import { RnDLock } from '@/components/ui/RnDLock';
-import { staggerParent, staggerChild, revealUp } from '@/lib/motion-presets';
+import {
+    EditorialButton,
+    PageHeader,
+    SectionShell,
+} from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
+import { healingWaveModules } from '@/lib/vgp-ecosystem';
+import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
-// Icons
-const BrainIcon = () => (
-    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.5V12h4V9.5c1.2-.7 2-2 2-3.5a4 4 0 0 0-4-4z" />
-        <path d="M12 12v10" />
-        <path d="M8 14c-3 0-5 2-5 5s2 3 5 3" />
-        <path d="M16 14c3 0 5 2 5 5s-2 3-5 3" />
-        <circle cx="12" cy="6" r="1.5" fill="currentColor" />
-    </svg>
-);
-
-const PaceIcon = () => (
-    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="12" cy="4" r="2" />
-        <path d="M7 21l3-8" />
-        <path d="M17 21l-3-8" />
-        <path d="M12 10v3" />
-        <path d="M6 10h12" />
-        <path d="M4 14l3-4" />
-        <path d="M20 14l-3-4" />
-    </svg>
-);
-
-const GymIcon = () => (
-    <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="2" y="9" width="5" height="6" rx="1" />
-        <rect x="17" y="9" width="5" height="6" rx="1" />
-        <path d="M7 12h10" />
-        <path d="M5 6v12" />
-        <path d="M19 6v12" />
-    </svg>
-);
-
-const modules = [
-    {
-        id: 'focus',
-        name: 'HealingWave Focus',
-        platform: 'Web Application',
-        Icon: BrainIcon,
-        description: 'Browser based functional audio environment for deep work, flow states, and cognitive performance. Engineered soundscapes backed by psychoacoustic research.',
-        features: ['Focus timers', 'Session analytics', 'Custom presets', 'Study Mode'],
-        status: 'IN DEVELOPMENT',
-        progress: 75,
-        eta: 'Q2 2026',
-    },
-    {
-        id: 'pacer',
-        name: 'VGP Pacer',
-        platform: 'iOS and Android',
-        Icon: PaceIcon,
-        description: 'Running cadence optimization through real time BPM detection and tempo matched music. Sync your playlist to your stride for optimal performance.',
-        features: ['BPM detection', 'Cadence sync', 'Route tracking', 'Training plans'],
-        status: 'Q3 2026',
-        progress: 35,
-        eta: 'Q3 2026',
-    },
-    {
-        id: 'gym',
-        name: 'VGP Gym',
-        platform: 'iOS and Android',
-        Icon: GymIcon,
-        description: 'Fitness focused audio for strength training and HIIT workouts. Tempo matched playlists that adapt to your workout intensity.',
-        features: ['Workout detection', 'Tempo matching', 'Rep counting', 'Progress log'],
-        status: 'CONCEPT PHASE',
-        progress: 15,
-        eta: 'Q4 2026',
-    },
-];
+const iconMap = [Focus, Timer, Activity];
 
 export default function HealingWaveClient() {
     const { openPopup } = useNewsletter();
 
     return (
         <PageTransition>
-            {/* ═══ HERO ═══ */}
-            <section className="relative py-24 sm:py-32 px-4 sm:px-6 text-center overflow-hidden">
-                {/* Gradient orbs — Lab green theme */}
-                <div className="absolute top-[-10%] left-1/3 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,255,163,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
-                <div className="absolute bottom-[-10%] right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,212,255,0.05)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+            <article className="editorial-shell min-h-screen text-white">
+                <PageHeader
+                    eyebrow="HealingWave Lab"
+                    title="Functional audio"
+                    mutedTitle="for focus and movement."
+                    description="HealingWave Lab by Virzy Guns builds functional audio concepts for focus, recovery, running cadence, cycling cadence, and calm listening."
+                    primary={{ label: 'Preview CADENZ', href: '/cadenz' }}
+                    secondary={{ label: 'Join Updates', onClick: openPopup }}
+                />
 
-                <div className="max-w-3xl mx-auto relative">
-                    {/* Immersive Background Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
-                        <Portal3DIcon portalId="lab" color="#00FFA3" size={350} />
+                <SectionShell className="pt-4">
+                    <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+                        <m.div
+                            variants={revealUp}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            className="liquid-glass-strong rounded-lg p-6 sm:p-8"
+                        >
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                                Lab Thesis
+                            </p>
+                            <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
+                                Sound with purpose, handled carefully.
+                            </h2>
+                            <p className="mt-5 text-base leading-8 text-white/60">
+                                HealingWave is a VGP lab for focus music, recovery listening, cadence music, meditation, and study sessions. It keeps the language careful and does not overpromise what sound can do.
+                            </p>
+                            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                                <EditorialButton href="/cadenz">Explore CADENZ</EditorialButton>
+                                <EditorialButton href="/about" variant="ghost">About VGP</EditorialButton>
+                            </div>
+                        </m.div>
+
+                        <m.div
+                            variants={revealUp}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            className="liquid-glass overflow-hidden rounded-lg"
+                        >
+                            <div className="relative min-h-[24rem]">
+                                <Image
+                                    src="/images/CADENZ_POSTER.jpg"
+                                    alt="CADENZ by HealingWave Lab visual preview"
+                                    fill
+                                    sizes="(min-width: 1024px) 620px, 92vw"
+                                    className="object-cover opacity-80"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#030405] via-[#030405]/35 to-transparent" />
+                                <div className="absolute bottom-0 left-0 right-0 p-6">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100/70">
+                                        First HealingWave Product
+                                    </p>
+                                    <h3 className="mt-3 text-2xl font-semibold text-white">CADENZ is coming soon.</h3>
+                                    <p className="mt-2 text-sm leading-6 text-white/60">
+                                        UI built. Backend in progress.
+                                    </p>
+                                </div>
+                            </div>
+                        </m.div>
+                    </div>
+                </SectionShell>
+
+                <SectionShell>
+                    <div className="mb-10 max-w-3xl">
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                            Modules
+                        </p>
+                        <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
+                            The lab is organized around real listening use cases.
+                        </h2>
                     </div>
 
                     <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="relative z-10"
-                    >
-                        <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00FFA3]/60 mb-5 uppercase">
-                            HEALINGWAVE PROJECT
-                        </p>
-                        <h1
-                            aria-label="Productivity and Wellness Ecosystem"
-                            className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-2"
-                        >
-                            <span className="block text-white">Productivity &</span>
-                            <span className="block"><span className="text-[#00FFA3]">Wellness</span> <span className="text-white/35">Ecosystem.</span></span>
-                        </h1>
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#00FFA3]/60 mb-6">
-                            100% Art. 100% Science.
-                        </p>
-                        <p className="text-[#6B7080] text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-                            The ultimate <strong className="text-[#00FFA3]">Productivity & Wellness App</strong> designed
-                            for peak performance. Specialized modules for <strong className="text-white/80">Deep Focus, Running, Gym Workouts,
-                                Meditation, Sleep Optimization, and Study Concentration</strong>.
-                        </p>
-                    </m.div>
-                </div>
-            </section>
-
-            {/* ═══ MODULES ═══ */}
-            <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#0C0E14]/50">
-                <div className="max-w-6xl mx-auto">
-                    <SectionHeader
-                        label="ECOSYSTEM"
-                        title="The Modules"
-                        description="Three interconnected products designed for specific use cases."
-                    />
-
-                    <m.div
-                        className="space-y-6"
+                        className="grid gap-4 lg:grid-cols-3"
                         variants={staggerParent}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {modules.map((module, index) => (
-                            <m.div key={module.id} variants={staggerChild}>
-                                <RnDLock
-                                    variant="lab"
-                                    moduleName={module.name.toUpperCase()}
-                                    status={module.status}
-                                    eta={module.eta}
+                        {healingWaveModules.map((module, index) => {
+                            const Icon = iconMap[index] ?? AudioLines;
+                            return (
+                                <m.article
+                                    key={module.name}
+                                    variants={staggerChild}
+                                    className="liquid-glass flex h-full flex-col rounded-lg p-6"
                                 >
-                                    <GlassCard
-                                        padding="none"
-                                        hover
-                                        glow={index === 0 ? 'lab' : 'none'}
-                                    >
-                                        <div className="flex flex-col md:flex-row">
-                                            {/* Icon Side */}
-                                            <div className="w-full md:w-48 shrink-0 flex items-center justify-center py-8 md:py-0 bg-[#06070B] border-b md:border-b-0 md:border-r border-white/[0.04] text-[#3A3E48]">
-                                                <module.Icon />
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="flex-1 p-6 sm:p-8">
-                                                <div className="flex flex-wrap items-center gap-3 mb-4">
-                                                    <span className="font-mono text-[0.55rem] tracking-[0.2em] text-[#00FFA3] px-2.5 py-1 bg-[#00FFA3]/10 rounded-md">
-                                                        {module.status}
-                                                    </span>
-                                                    <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#3A3E48]">{module.platform}</span>
-                                                </div>
-
-                                                <h3 className="text-xl sm:text-2xl font-semibold tracking-[-0.04em] mb-3">{module.name}</h3>
-                                                <p className="text-[#6B7080] leading-relaxed mb-6">
-                                                    {module.description}
-                                                </p>
-
-                                                {/* Features */}
-                                                <div className="flex flex-wrap gap-2 mb-6">
-                                                    {module.features.map((feature) => (
-                                                        <span key={feature} className="text-xs bg-white/[0.04] px-3 py-1.5 rounded-full text-[#565B66] border border-white/[0.04]">
-                                                            {feature}
-                                                        </span>
-                                                    ))}
-                                                </div>
-
-                                                {/* Progress */}
-                                                <div>
-                                                    <div className="flex items-center justify-between mb-2">
-                                                        <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#3A3E48]">DEVELOPMENT PROGRESS</span>
-                                                        <span className="font-mono text-[0.5rem] tracking-[0.2em] text-[#00FFA3]">{module.progress}%</span>
-                                                    </div>
-                                                    <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
-                                                        <m.div
-                                                            className="h-full rounded-full"
-                                                            initial={{ width: 0 }}
-                                                            whileInView={{ width: `${module.progress}%` }}
-                                                            viewport={{ once: true }}
-                                                            transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                                            style={{
-                                                                background: `linear-gradient(90deg, #00FFA3, #00D4FF)`,
-                                                                boxShadow: '0 0 12px rgba(0,255,163,0.4)',
-                                                            }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div className="mb-8 flex items-start justify-between gap-4">
+                                        <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                                            <Icon className="h-5 w-5" aria-hidden="true" />
                                         </div>
-                                    </GlassCard>
-                                </RnDLock>
-                            </m.div>
-                        ))}
+                                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
+                                            {module.status}
+                                        </span>
+                                    </div>
+                                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/50">
+                                        {module.platform}
+                                    </p>
+                                    <h3 className="text-xl font-semibold text-white">{module.name}</h3>
+                                    <p className="mt-4 text-sm leading-7 text-white/50">{module.description}</p>
+                                    <div className="mt-6 flex flex-wrap gap-2">
+                                        {module.features.map((feature) => (
+                                            <span
+                                                key={feature}
+                                                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/50"
+                                            >
+                                                {feature}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="mt-auto border-t border-white/[0.08] pt-5">
+                                        <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-white/40">
+                                            <span>Progress</span>
+                                            <span>{module.progress}%</span>
+                                        </div>
+                                        <div className="h-1 overflow-hidden rounded-full bg-white/[0.08]">
+                                            <m.div
+                                                className="h-full rounded-full bg-gradient-to-r from-sky-200 to-blue-400"
+                                                initial={{ width: 0 }}
+                                                whileInView={{ width: `${module.progress}%` }}
+                                                viewport={{ once: true }}
+                                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                                            />
+                                        </div>
+                                        <p className="mt-3 inline-flex items-center gap-2 text-xs text-white/50">
+                                            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                                            {module.eta}
+                                        </p>
+                                    </div>
+                                </m.article>
+                            );
+                        })}
                     </m.div>
-                </div>
-            </section>
+                </SectionShell>
 
-            {/* ═══ VISION ═══ */}
-            <section className="relative py-20 sm:py-28 px-4 sm:px-6 overflow-hidden">
-                {/* Gradient orb */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(0,255,163,0.04)_0%,transparent_70%)] blur-[60px] pointer-events-none" />
-
-                <div className="max-w-3xl mx-auto text-center relative">
-                    <m.div
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00FFA3]/60 mb-4 uppercase">VISION</p>
-                        <h2 className="text-3xl sm:text-4xl font-black tracking-[-0.05em] mb-6">
-                            The Future of Audio
-                            <br />
-                            <span className="text-white/40">is Functional</span>
-                        </h2>
-                        <p className="text-[#6B7080] leading-relaxed mb-8">
-                            We believe audio can do more than entertain. It can optimize cognitive function,
-                            enhance physical performance, and support mental wellness. Our mission is to
-                            engineer sound that serves a purpose.
+                <SectionShell className="pb-24">
+                    <div className="liquid-glass-strong rounded-lg p-6 text-center sm:p-8">
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                            Stay Updated
                         </p>
-                        <div className="flex flex-wrap justify-center gap-4">
-                            <GlowButton variant="primary" href="/about">
-                                About The Founder
-                            </GlowButton>
-                            <GlowButton variant="ghost" href="/studio/masterclass">
-                                Masterclass
-                            </GlowButton>
+                        <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
+                            Follow the first HealingWave release.
+                        </h2>
+                        <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/60">
+                            Join VGP updates for CADENZ progress, lab notes, and release information when it is ready.
+                        </p>
+                        <div className="mt-8 flex justify-center">
+                            <EditorialButton onClick={openPopup}>Join Updates</EditorialButton>
                         </div>
-                    </m.div>
-                </div>
-            </section>
-
-            {/* ═══ WAITLIST CTA ═══ */}
-            <section className="py-16 sm:py-20 px-4 sm:px-6 bg-[#0C0E14]/50">
-                <div className="max-w-xl mx-auto text-center">
-                    <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <GlassCard padding="lg" glow="lab">
-                            <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#00FFA3]/60 mb-3 uppercase">STAY UPDATED</p>
-                            <h3 className="text-xl font-semibold mb-3">Join the Waiting List</h3>
-                            <p className="text-[#6B7080] text-sm mb-4">
-                                Be the first to know when HealingWave Focus launches.
-                            </p>
-                            <p className="font-mono text-[0.5rem] tracking-[0.3em] text-[#3A3E48] mb-6">COMING Q2 2026</p>
-                            <GlowButton variant="lab" onClick={openPopup}>
-                                JOIN WAITLIST
-                            </GlowButton>
-                        </GlassCard>
-                    </m.div>
-                </div>
-            </section>
+                    </div>
+                </SectionShell>
+            </article>
         </PageTransition>
     );
 }

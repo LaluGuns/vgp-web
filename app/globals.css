@@ -1,15 +1,32 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    VIRZY GUNS PRODUCTION
-   Y3K ROBOT AESTHETIC — Design System v2.0
-   Chrome • Silver • Void • Electric
-   ════════════════════════════════════════════════════════════ */
+   Y3K ROBOT AESTHETIC  -  Design System v2.0
+   Chrome â€¢ Silver â€¢ Void â€¢ Electric
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 :root {
-  /* ── Void Surfaces ── */
+  --bg: #030405;
+  --bg-soft: #07090d;
+  --surface-editorial: rgba(255, 255, 255, 0.035);
+  --surface-editorial-strong: rgba(255, 255, 255, 0.065);
+  --border-editorial: rgba(255, 255, 255, 0.1);
+  --border-editorial-strong: rgba(255, 255, 255, 0.18);
+  --text-editorial: #f5f5f7;
+  --text-muted-editorial: #a1a1aa;
+  --text-soft-editorial: #71717a;
+  --editorial-cyan: #7dd3fc;
+  --editorial-blue: #60a5fa;
+  --editorial-deep-blue: #2563eb;
+  --editorial-gold: #7dd3fc;
+  --font-inter: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  --font-jetbrains: "SF Mono", "SFMono-Regular", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+
+  /* â”€â”€ Void Surfaces â”€â”€ */
   --void: #06070B;
   --void-deep: #030408;
   --graphite: #0C0E14;
@@ -17,13 +34,13 @@
   --chrome-dark: #181B24;
   --chrome-mid: #22252F;
 
-  /* ── Chrome Palette ── */
+  /* â”€â”€ Chrome Palette â”€â”€ */
   --chrome: #C8CCD4;
   --chrome-light: #E2E5EB;
   --chrome-dim: #565B66;
   --chrome-muted: #3A3E48;
 
-  /* ── Electric Accents ── */
+  /* â”€â”€ Electric Accents â”€â”€ */
   --cyan: #00D4FF;
   --cyan-soft: #00A8CC;
   --cyan-glow: rgba(0, 212, 255, 0.35);
@@ -32,22 +49,22 @@
   --ultraviolet: #B44AFF;
   --uv-glow: rgba(180, 74, 255, 0.35);
 
-  /* ── Portal: Studio ── */
+  /* â”€â”€ Portal: Studio â”€â”€ */
   --studio-accent: #FF3CAC;
   --studio-secondary: #B44AFF;
   --studio-glow: rgba(255, 60, 172, 0.3);
 
-  /* ── Portal: Lab ── */
+  /* â”€â”€ Portal: Lab â”€â”€ */
   --lab-accent: #00FFA3;
   --lab-secondary: #00D4FF;
   --lab-glow: rgba(0, 255, 163, 0.3);
 
-  /* ── Typography ── */
+  /* â”€â”€ Typography â”€â”€ */
   --white: #FFFFFF;
   --cool-grey: #BFC3C9;
   --dim-grey: #6B7080;
 
-  /* ── Semantic ── */
+  /* â”€â”€ Semantic â”€â”€ */
   --success: #00FFA3;
   --warning: #FFB800;
   --danger: #FF3B5C;
@@ -64,9 +81,9 @@
   --primary-glow: var(--lab-glow);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BASE STYLES
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 html {
   scroll-behavior: smooth;
@@ -77,9 +94,9 @@ html.lenis {
 }
 
 body {
-  background: var(--void);
+  background: var(--bg);
   color: var(--white);
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-family: var(--font-inter);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -92,9 +109,9 @@ body {
   color: var(--void);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    NOISE OVERLAY (Film grain texture)
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 body::before {
   content: '';
@@ -114,13 +131,13 @@ body::before {
   }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    Y3K GLASS SYSTEM 2.0
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @layer utilities {
 
-  /* Ultra Glass — Deep blur, chrome edge */
+  /* Ultra Glass  -  Deep blur, chrome edge */
   .y3k-glass {
     background: rgba(12, 14, 20, 0.7);
     backdrop-filter: blur(40px) saturate(1.2);
@@ -128,7 +145,7 @@ body::before {
     border: 1px solid rgba(200, 204, 212, 0.06);
   }
 
-  /* Glass Card — Solid surface */
+  /* Glass Card  -  Solid surface */
   .glass {
     background: rgba(24, 27, 36, 0.85);
     backdrop-filter: blur(20px);
@@ -136,7 +153,7 @@ body::before {
     border: 1px solid rgba(200, 204, 212, 0.05);
   }
 
-  /* Polished Obsidian Glass — Apple Y3K Heavy Blur */
+  /* Polished Obsidian Glass  -  Apple Y3K Heavy Blur */
   .obsidian-glass {
     background: rgba(10, 10, 10, 0.5);
     backdrop-filter: blur(60px) saturate(150%);
@@ -169,7 +186,7 @@ body::before {
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
-  /* Chrome Border — Rainbow gradient on hover */
+  /* Chrome Border  -  Rainbow gradient on hover */
   .chrome-border {
     border: 1px solid rgba(200, 204, 212, 0.08);
     transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -214,7 +231,7 @@ body::before {
     text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
   }
 
-  /* ── Typography Utilities ── */
+  /* â”€â”€ Typography Utilities â”€â”€ */
 
   .mono-label {
     font-family: var(--font-jetbrains), monospace;
@@ -236,7 +253,7 @@ body::before {
     letter-spacing: -0.07em;
   }
 
-  /* ── Gradient Text ── */
+  /* â”€â”€ Gradient Text â”€â”€ */
   .gradient-text {
     background: linear-gradient(135deg, var(--cyan) 0%, var(--ultraviolet) 50%, var(--studio-accent) 100%);
     -webkit-background-clip: text;
@@ -259,9 +276,9 @@ body::before {
   }
 }
 
-/* ════════════════════════════════════════════════════════════
-   BUTTON SYSTEM — Y3K Chrome
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BUTTON SYSTEM  -  Y3K Chrome
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .btn-primary {
   position: relative;
@@ -328,11 +345,11 @@ body::before {
   transform: translateY(0) scale(0.98);
 }
 
-/* ════════════════════════════════════════════════════════════
-   ANIMATIONS — Y3K Ambient
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ANIMATIONS  -  Y3K Ambient
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* Chrome Shimmer — horizontal light sweep */
+/* Chrome Shimmer  -  horizontal light sweep */
 @keyframes chrome-shimmer {
   0% {
     background-position: -200% center;
@@ -354,7 +371,7 @@ body::before {
   animation: chrome-shimmer 4s ease-in-out infinite;
 }
 
-/* Glow Pulse — breathing glow for accents */
+/* Glow Pulse  -  breathing glow for accents */
 @keyframes glow-pulse {
 
   0%,
@@ -371,7 +388,7 @@ body::before {
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
-/* Scan Line — vertical scan effect */
+/* Scan Line  -  vertical scan effect */
 @keyframes scan-line {
   0% {
     transform: translateY(-100%);
@@ -400,7 +417,7 @@ body::before {
   pointer-events: none;
 }
 
-/* Float — gentle hovering */
+/* Float  -  gentle hovering */
 @keyframes y3k-float {
 
   0%,
@@ -463,9 +480,9 @@ body::before {
   }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    TERMINAL STYLES
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .terminal-text {
   font-family: var(--font-jetbrains), monospace;
@@ -479,9 +496,9 @@ body::before {
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    RADIAL GLOWS
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .bg-radial-glow {
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0, 212, 255, 0.04) 0%, transparent 70%);
@@ -495,9 +512,9 @@ body::before {
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0, 255, 163, 0.04) 0%, transparent 70%);
 }
 
-/* ════════════════════════════════════════════════════════════
-   CUSTOM SCROLLBAR — Chrome Thin
-   ════════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   CUSTOM SCROLLBAR  -  Chrome Thin
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 ::-webkit-scrollbar {
   width: 2px;
@@ -516,17 +533,17 @@ body::before {
   background: var(--cyan);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    HERO GRADIENT
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .hero-gradient {
   background: linear-gradient(180deg, var(--void-deep) 0%, var(--void) 60%, var(--graphite) 100%);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    COLOR CLASSES
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .text-primary {
   color: var(--cyan);
@@ -568,9 +585,9 @@ body::before {
   border-color: rgba(200, 204, 212, 0.05);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    MOBILE-FIRST APP FEEL
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @media (max-width: 768px) {
 
@@ -603,9 +620,9 @@ body::before {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    REDUCED MOTION
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -618,9 +635,9 @@ body::before {
   }
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    WAVE PHYSICS BACKGROUND (Compat)
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 .wave-physics-bg {
   position: fixed;
@@ -671,9 +688,9 @@ body::before {
   color: var(--lab-accent);
 }
 
-/* ════════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    Y3K EXTENSIONS (Phase 2)
-   ════════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 /* flowing gradient text */
 @keyframes gradient-flow {
@@ -725,7 +742,7 @@ body::before {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* ═══ Portal 3D Icon Animations ═══ */
+/* â•â•â• Portal 3D Icon Animations â•â•â• */
 
 .portal-icon-wrapper {
   display: flex;
@@ -933,7 +950,7 @@ body::before {
   animation: icon-shield-pulse 3s ease-in-out infinite;
 }
 
-/* ═══ Blog Article Icon Animations ═══ */
+/* â•â•â• Blog Article Icon Animations â•â•â• */
 
 @keyframes blog-pendulum-swing {
 
@@ -969,4 +986,74 @@ body::before {
 
 .blog-icon-balance {
   animation: blog-balance-tilt 3s ease-in-out infinite;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+.editorial-shell {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(125, 211, 252, 0.09), transparent 28rem),
+    linear-gradient(180deg, #030405 0%, #05070a 52%, #030405 100%);
+}
+
+.liquid-glass,
+.liquid-glass-strong,
+.liquid-glass-soft {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035) 42%, rgba(125, 211, 252, 0.035)),
+    rgba(7, 9, 13, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.045),
+    0 24px 80px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(26px) saturate(1.45);
+  -webkit-backdrop-filter: blur(26px) saturate(1.45);
+}
+
+.liquid-glass-strong {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.045) 46%, rgba(125, 211, 252, 0.045)),
+    rgba(7, 9, 13, 0.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 28px 90px rgba(0, 0, 0, 0.42);
+}
+
+.liquid-glass-soft {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.026) 48%, rgba(125, 211, 252, 0.025)),
+    rgba(7, 9, 13, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 58px rgba(0, 0, 0, 0.28);
+}
+
+.liquid-glass::before,
+.liquid-glass-strong::before,
+.liquid-glass-soft::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.18), transparent 22%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.1), transparent 34%);
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .liquid-glass,
+  .liquid-glass-strong,
+  .liquid-glass-soft {
+    background: rgba(7, 9, 13, 0.92);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

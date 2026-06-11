@@ -77,8 +77,9 @@ export function SocialDock() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.5 }}
+            className="pointer-events-none fixed bottom-6 left-1/2 z-40 hidden -translate-x-1/2 md:block"
         >
-            <div className="flex items-center gap-1 px-2 py-2 y3k-glass rounded-full">
+            <div className="liquid-glass-soft pointer-events-auto flex items-center gap-1 rounded-full px-2 py-2">
                 {socialData.map((social) => (
                     <MagneticIcon key={social.name} href={social.href} label={social.name}>
                         {social.icon}

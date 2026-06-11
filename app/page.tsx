@@ -1,362 +1,178 @@
 'use client';
 
-/**
- * Home Page — VGP Command Center
- * 100% Art. 100% Science.
- */
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { m, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import Link from 'next/link';
+import { m } from 'framer-motion';
+import { BookOpen, Headphones, Timer } from 'lucide-react';
+import { PageTransition } from '@/components/PageTransition';
 import { SocialDock } from '@/components/SocialDock';
 import { OrganizationSchema } from '@/components/seo/OrganizationSchema';
-import { PortalCarousel, portals } from '@/components/home/PortalCarousel';
-import { RobotHost } from '@/components/home/RobotHost';
+import {
+    CinematicBackdrop,
+    EcosystemCard,
+    EditorialButton,
+    FeatureStrip,
+    SectionShell,
+} from '@/components/editorial/EditorialPrimitives';
+import { AudioSentinelHeroMedia } from '@/components/editorial/AudioSentinelHeroMedia';
+import { ecosystemCards, founderStatement } from '@/lib/vgp-ecosystem';
+import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
+import { useNewsletter } from '@/components/context/NewsletterContext';
 
-/* ═══ NAV DATA ═══ */
-const navLinks = [
-    { name: 'HOME', href: '/' },
-    {
-        name: 'STUDIO', href: '/studio/beats',
-        submenu: [
-            { name: 'Beatstore', href: '/studio/beats' },
-            { name: 'Masterclass', href: '/studio/masterclass' },
-        ]
-    },
-    { name: 'LAB', href: '/lab/healingwave' },
-    { name: 'BLOG', href: '/blog' },
-    { name: 'ABOUT', href: '/about' },
+const quickSignals = [
+    { label: 'Studio', value: 'Beats and audio services', href: '/studio/beats', Icon: Headphones },
+    { label: 'CADENZ', value: 'Coming-soon cadence app', href: '/cadenz', Icon: Timer },
+    { label: 'Library', value: 'Books, blog, and masterclass', href: '/book', Icon: BookOpen },
 ];
 
-/* ═══ MOUSE PARALLAX HOOK ═══ */
-function useMouseParallax() {
-    const mouseX = useMotionValue(0.5);
-    const mouseY = useMotionValue(0.5);
-    const smoothX = useSpring(mouseX, { stiffness: 30, damping: 20 });
-    const smoothY = useSpring(mouseY, { stiffness: 30, damping: 20 });
-
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            mouseX.set(e.clientX / window.innerWidth);
-            mouseY.set(e.clientY / window.innerHeight);
-        };
-        window.addEventListener('mousemove', handler, { passive: true });
-        return () => window.removeEventListener('mousemove', handler);
-    }, [mouseX, mouseY]);
-
-    return { smoothX, smoothY };
-}
-
-/* ═══ MAIN COMPONENT ═══ */
 export default function HomePage() {
-    const [studioOpen, setStudioOpen] = useState(false);
-    const [loaded, setLoaded] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [currentPortalColor, setCurrentPortalColor] = useState('#FF3CAC');
-    const dragX = useMotionValue(0);
-
-    const handleIndexChange = (index: number) => {
-        setActiveIndex(index);
-        setCurrentPortalColor(portals[index].color);
-    };
-
-    const { smoothX, smoothY } = useMouseParallax();
-    const orbX1 = useTransform(smoothX, [0, 1], [-30, 30]);
-    const orbY1 = useTransform(smoothY, [0, 1], [-20, 20]);
-    const orbX2 = useTransform(smoothX, [0, 1], [20, -20]);
-    const orbY2 = useTransform(smoothY, [0, 1], [15, -15]);
-
-    useEffect(() => {
-        const t = setTimeout(() => setLoaded(true), 100);
-        return () => clearTimeout(t);
-    }, []);
+    const { openPopup } = useNewsletter();
 
     return (
-        <div className="relative w-full bg-[#03040A] min-h-screen">
-            <OrganizationSchema />
+        <PageTransition>
+            <main className="editorial-shell relative min-h-screen overflow-hidden text-white">
+                <OrganizationSchema />
+                <SocialDock />
 
-            {/* HERO SECTION */}
-            <div className="relative h-[100dvh] w-full overflow-hidden -mt-24 -mb-16">
+                <section className="relative min-h-[680px] overflow-hidden px-4 pb-10 pt-10 sm:px-6 sm:pt-12 lg:min-h-[760px] lg:pb-12 lg:pt-14">
+                    <CinematicBackdrop />
+                    <AudioSentinelHeroMedia placement="heroBackground" />
 
-                {/* LAYER 0: AMBIENT GRADIENT MESH */}
-                <div className="absolute inset-0 z-0 overflow-hidden">
-                    <m.div
-                        className="absolute w-[900px] h-[900px] rounded-full will-change-transform"
-                        style={{
-                            x: orbX1, y: orbY1,
-                            background: 'radial-gradient(circle, rgba(0,212,255,0.07) 0%, rgba(180,74,255,0.04) 40%, transparent 70%)',
-                            top: '-15%', left: '-10%',
-                            filter: 'blur(80px)',
-                        }}
-                    />
-                    <m.div
-                        className="absolute w-[700px] h-[700px] rounded-full will-change-transform"
-                        style={{
-                            x: orbX2, y: orbY2,
-                            background: 'radial-gradient(circle, rgba(255,60,172,0.06) 0%, rgba(180,74,255,0.03) 50%, transparent 70%)',
-                            bottom: '-10%', left: '10%',
-                            filter: 'blur(100px)',
-                        }}
-                    />
-                    <m.div
-                        className="absolute w-[600px] h-[600px] rounded-full will-change-transform"
-                        style={{
-                            x: orbX1, y: orbY2,
-                            background: 'radial-gradient(circle, rgba(0,255,163,0.04) 0%, rgba(0,212,255,0.02) 50%, transparent 70%)',
-                            top: '20%', right: '-5%',
-                            filter: 'blur(90px)',
-                        }}
-                    />
-                    {/* Ambient grid */}
-                    <div
-                        className="absolute inset-0 opacity-[0.025]"
-                        style={{
-                            backgroundImage: `
-                                linear-gradient(rgba(200,204,212,0.3) 1px, transparent 1px),
-                                linear-gradient(90deg, rgba(200,204,212,0.3) 1px, transparent 1px)
-                            `,
-                            backgroundSize: '80px 80px',
-                        }}
-                    />
-                </div>
-
-                {/* LAYER 0.5: ROBOT EYE BLOOM */}
-                <div className="absolute inset-0 z-[1] flex items-center justify-center pointer-events-none overflow-hidden">
-                    <m.div
-                        className="relative w-[700px] h-[700px] sm:w-[850px] sm:h-[850px] md:w-[1000px] md:h-[1000px] lg:w-[1150px] lg:h-[1150px] -translate-x-[25%] md:-translate-x-[20%]"
-                        style={{
-                            x: orbX2, y: orbY1,
-                            maskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, transparent 100%)',
-                            animation: 'y3k-float 9s ease-in-out infinite',
-                        }}
-                    >
-                        <div
-                            className="absolute top-[28%] left-1/2 -translate-x-1/2 w-56 h-40 rounded-full pointer-events-none"
-                            style={{
-                                background: 'radial-gradient(ellipse, rgba(0,212,255,0.18) 0%, transparent 70%)',
-                                filter: 'blur(30px)',
-                                animation: 'glow-pulse 4s ease-in-out infinite',
-                            }}
-                        />
-                    </m.div>
-                </div>
-
-                {/* LAYER 1: CENTERED HEADER */}
-                <div
-                    className={`absolute top-0 left-0 right-0 z-40 pt-5 md:pt-6 transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                        loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-6'
-                    }`}
-                >
-                    <div className="flex flex-col items-center">
-                        {/* Logo + Brand */}
-                        <Link href="/" className="flex flex-col items-center gap-2 group mb-3">
-                            <div className="w-14 h-14 md:w-16 md:h-16 relative">
-                                <Image
-                                    src="/branding/logo-tg.png"
-                                    alt="VGP"
-                                    width={64}
-                                    height={64}
-                                    priority
-                                    className="w-full h-full object-contain drop-shadow-[0_0_14px_rgba(0,212,255,0.4)] group-hover:drop-shadow-[0_0_28px_rgba(0,212,255,0.7)] transition-all duration-700"
-                                />
-                            </div>
-                            <h1 className="text-lg md:text-xl font-bold tracking-wider">
-                                <span className="gradient-text">VIRZY GUNS</span>
-                                <span className="text-[#A0A4AE] group-hover:text-white transition-colors duration-500"> PRODUCTION</span>
-                            </h1>
-                        </Link>
-                        <p className="max-w-[26rem] px-4 text-center text-xs leading-5 text-white/45 md:text-sm">
-                            100% Art. 100% Science.
-                        </p>
-                        <div className="mt-3 hidden items-center gap-2 md:flex">
-                            <Link
-                                href="/studio/beats"
-                                className="rounded-full border border-[#00D4FF]/35 bg-[#00D4FF]/10 px-4 py-2 text-[0.62rem] font-bold tracking-[0.2em] text-[#00D4FF] transition-all hover:bg-[#00D4FF] hover:text-black"
-                            >
-                                BEATSTORE
-                            </Link>
-                            <Link
-                                href="/blog"
-                                className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[0.62rem] font-bold tracking-[0.2em] text-white/55 transition-all hover:text-white"
-                            >
-                                TRAP GUIDE
-                            </Link>
-                        </div>
-
-                        {/* Desktop Nav */}
-                        <nav
-                            className={`hidden md:flex items-center gap-0.5 px-1.5 py-1.5 rounded-full mt-4 transition-all duration-[1400ms] delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                                loaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-                            }`}
-                            style={{
-                                background: 'rgba(12, 14, 20, 0.55)',
-                                backdropFilter: 'blur(40px) saturate(1.2)',
-                                WebkitBackdropFilter: 'blur(40px) saturate(1.2)',
-                                border: '1px solid rgba(200, 204, 212, 0.05)',
-                            }}
+                    <div className="relative z-10 mx-auto max-w-7xl">
+                        <m.div
+                            variants={staggerParent}
+                            initial="hidden"
+                            animate="visible"
+                            className="max-w-[43rem]"
                         >
-                            {navLinks.map((link) => (
-                                'submenu' in link ? (
-                                    <div
-                                        key={link.name}
-                                        className="relative"
-                                        onMouseEnter={() => setStudioOpen(true)}
-                                        onMouseLeave={() => setStudioOpen(false)}
-                                    >
-                                        <Link
-                                            href={link.href}
-                                            className="px-4 py-2 text-[0.65rem] tracking-[0.2em] text-[#6B7080] hover:text-white rounded-full hover:bg-white/[0.04] transition-all duration-300 flex items-center gap-1.5"
-                                        >
-                                            {link.name}
-                                            <svg className="w-2.5 h-2.5 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </Link>
+                            <m.p variants={staggerChild} className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/60">
+                                Virzy Guns Production
+                            </m.p>
+                            <m.h1
+                                variants={staggerChild}
+                                className="font-display text-5xl font-semibold leading-[0.98] text-white sm:text-6xl md:text-7xl lg:text-[5.65rem]"
+                            >
+                                <span className="block sm:whitespace-nowrap">100% Art.</span>
+                                <span className="block sm:whitespace-nowrap text-white/40">100% Science.</span>
+                            </m.h1>
+                            <m.p variants={staggerChild} className="mt-7 max-w-2xl text-base leading-8 text-white/60 sm:text-xl sm:leading-9">
+                                Beats, custom production, functional audio, CADENZ, books, and producer education from Virzy Guns.
+                            </m.p>
+                            <m.div variants={staggerChild} className="mt-9 flex flex-col gap-3 sm:flex-row">
+                                <EditorialButton href="/studio/beats">Explore Studio</EditorialButton>
+                                <EditorialButton href="/lab/healingwave" variant="ghost">Enter The Lab</EditorialButton>
+                            </m.div>
 
-                                        <AnimatePresence>
-                                            {studioOpen && (
-                                                <m.div
-                                                    initial={{ opacity: 0, y: -6, scale: 0.96 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: -6, scale: 0.96 }}
-                                                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                                                    className="absolute top-full left-0 mt-2 py-2 px-1 rounded-xl min-w-[150px]"
-                                                    style={{
-                                                        background: 'rgba(17, 19, 26, 0.95)',
-                                                        backdropFilter: 'blur(40px)',
-                                                        border: '1px solid rgba(200, 204, 212, 0.06)',
-                                                        boxShadow: '0 12px 48px rgba(0,0,0,0.7)',
-                                                    }}
-                                                >
-                                                    {link.submenu && link.submenu.map((sub) => (
-                                                        <Link
-                                                            key={sub.href}
-                                                            href={sub.href}
-                                                            className="block px-4 py-2.5 text-sm rounded-lg text-[#6B7080] hover:text-[#FF3CAC] hover:bg-white/[0.03] transition-colors duration-200"
-                                                        >
-                                                            {sub.name}
-                                                        </Link>
-                                                    ))}
-                                                </m.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                ) : (
+                            <m.div variants={staggerChild} className="mt-8 grid gap-3 sm:grid-cols-3">
+                                {quickSignals.map((item) => (
                                     <Link
-                                        key={link.href}
-                                        href={link.href}
-                                        className={`px-4 py-2 text-[0.65rem] tracking-[0.2em] rounded-full transition-all duration-300 ${
-                                            link.href === '/'
-                                                ? 'text-white bg-white/[0.06]'
-                                                : 'text-[#6B7080] hover:text-white hover:bg-white/[0.04]'
-                                        }`}
+                                        key={item.label}
+                                        href={item.href}
+                                        className="liquid-glass-soft group rounded-lg p-4 transition hover:border-sky-200/25 hover:bg-white/[0.055] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
                                     >
-                                        {link.name}
+                                        <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-sky-100">
+                                            <item.Icon className="h-4 w-4" aria-hidden="true" />
+                                        </div>
+                                        <p className="text-sm font-semibold text-white">{item.label}</p>
+                                        <p className="mt-1 text-xs leading-5 text-white/45">{item.value}</p>
                                     </Link>
-                                )
-                            ))}
-                        </nav>
-                    </div>
-                </div>
+                                ))}
+                            </m.div>
 
-                {/* LAYER 2: ROBOTIC HOST & CAROUSEL */}
-                <div className="absolute inset-0 z-[10] flex items-center justify-center overflow-hidden pointer-events-none">
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-                        <RobotHost
-                            activeIndex={activeIndex}
-                            activeColor={currentPortalColor}
-                            carouselDragX={dragX}
-                        />
+                            <m.div variants={staggerChild} className="mt-8 md:hidden">
+                                <AudioSentinelHeroMedia />
+                            </m.div>
+                        </m.div>
                     </div>
-                    <div className="relative z-[100] mt-20 md:mt-24 md:pl-0 w-full flex justify-center perspective-[1200px] pointer-events-auto">
-                        <PortalCarousel
-                            onIndexChange={handleIndexChange}
-                            dragX={dragX}
-                        />
-                    </div>
-                </div>
+                </section>
 
-                {/* LAYER 3: SOCIAL DOCK */}
-                <div className="fixed bottom-0 left-0 right-0 z-50 flex flex-col items-center pb-5 pointer-events-none">
-                    <div className="pointer-events-auto mb-4">
-                        <SocialDock />
-                    </div>
-                </div>
-
-                {/* LAYER 4: CORNER DECORATIONS */}
-                <div className="hidden md:block">
-                    <div className="absolute top-6 left-6 z-30 flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#00D4FF] shadow-[0_0_8px_rgba(0,212,255,0.5)] glow-pulse" />
-                    </div>
-                </div>
-            </div>
-
-            {/* LAYER 5: CONVERSION / INFO SECTION */}
-            <div className="relative z-50 bg-[#03040A] border-t border-white/[0.02]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-24 lg:py-32">
-                    {/* Section Header */}
-                    <div className="text-center mb-16">
-                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/30 mb-3">
-                            Virzy Guns Production
+                <SectionShell id="ecosystem" className="pt-8">
+                    <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                        <div>
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                                The Ecosystem
+                            </p>
+                            <h2 className="max-w-4xl font-display text-4xl font-semibold leading-[1.02] text-white sm:text-6xl">
+                                One studio, one lab, one learning system.
+                            </h2>
+                        </div>
+                        <p className="max-w-md text-sm leading-7 text-white/50">
+                            Songs, beats, audio tools, and producer education from one studio system.
                         </p>
-                        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-[1.05]">
-                            100% Art.{' '}
-                            <span className="text-white/30">100% Science.</span>
-                        </h2>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                        {/* Studio / Buy Beats */}
-                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
-                            <div className="w-12 h-12 bg-[#00D4FF]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#00D4FF]/20 group-hover:scale-110 transition-transform">
-                                <svg className="w-6 h-6 text-[#00D4FF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-white mb-3">Studio & Beatstore</h3>
-                            <p className="text-white/40 text-sm mb-8 leading-relaxed">
-                                Premium instrumentals, industry-grade mixing, and exclusive licensing for your next hit.
-                            </p>
-                            <Link href="/studio/beats" className="inline-flex items-center gap-2 text-sm font-bold text-[#00D4FF] hover:text-white transition-colors">
-                                EXPLORE BEATS <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </Link>
-                        </div>
 
-                        {/* HealingWave */}
-                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
-                            <div className="w-12 h-12 bg-[#00FFA3]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#00FFA3]/20 group-hover:scale-110 transition-transform">
-                                <svg className="w-6 h-6 text-[#00FFA3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                            </div>
-                            <h3 className="text-xl font-bold text-white mb-3">HealingWave Lab</h3>
-                            <p className="text-white/40 text-sm mb-8 leading-relaxed">
-                                Auditory wellness experiences, binaural beats, and frequencies designed to elevate your mind.
-                            </p>
-                            <Link href="/lab/healingwave" className="inline-flex items-center gap-2 text-sm font-bold text-[#00FFA3] hover:text-white transition-colors">
-                                ENTER THE LAB <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </Link>
-                        </div>
+                    <m.div
+                        className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
+                        variants={staggerParent}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
+                        {ecosystemCards.map((card, index) => (
+                            <EcosystemCard key={card.title} {...card} index={index} />
+                        ))}
+                    </m.div>
+                </SectionShell>
 
-                        {/* Blog & Academy */}
-                        <div className="bg-white/[0.02] border border-white/[0.05] rounded-3xl p-8 hover:bg-white/[0.04] transition-all duration-500 group">
-                            <div className="w-12 h-12 bg-[#FF3CAC]/10 rounded-2xl flex items-center justify-center mb-6 border border-[#FF3CAC]/20 group-hover:scale-110 transition-transform">
-                                <svg className="w-6 h-6 text-[#FF3CAC]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
+                <SectionShell>
+                    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-stretch">
+                        <FeatureStrip
+                            label="Featured Product"
+                            title="CADENZ is the first product under HealingWave Lab."
+                            description="A cadence music app for runners and cyclists. The interface is built, backend work is in progress, and the first release is being prepared."
+                            href="/cadenz"
+                            cta="Preview CADENZ"
+                        />
+
+                        <m.div
+                            variants={revealUp}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            className="h-full overflow-hidden rounded-lg border border-white/[0.1] bg-white/[0.035]"
+                        >
+                            <div className="relative h-full min-h-[23rem]">
+                                <Image
+                                    src="/images/CADENZ_POSTER.jpg"
+                                    alt="CADENZ by HealingWave Lab poster"
+                                    fill
+                                    sizes="(min-width: 1024px) 520px, 92vw"
+                                    className="object-cover object-center opacity-[0.78]"
+                                />
+                                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,0.06)_0%,rgba(3,4,5,0.28)_45%,rgba(3,4,5,0.86)_100%)]" />
+                                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100/70">
+                                        Coming Soon
+                                    </p>
+                                    <h3 className="mt-3 max-w-sm text-2xl font-semibold leading-tight text-white">UI built. Backend in progress.</h3>
+                                </div>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">Blog & Masterclass</h3>
-                            <p className="text-white/40 text-sm mb-8 leading-relaxed">
-                                Deep dives into music production, beat licensing guides, and industry insights.
+                        </m.div>
+                    </div>
+                </SectionShell>
+
+                <SectionShell className="pb-24">
+                    <div className="liquid-glass-strong grid gap-8 rounded-lg p-6 sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-10">
+                        <div>
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                                Founder Philosophy
                             </p>
-                            <Link href="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-[#FF3CAC] hover:text-white transition-colors">
-                                READ ARTICLES <span className="group-hover:translate-x-1 transition-transform">→</span>
-                            </Link>
+                            <h2 className="font-display text-4xl font-semibold leading-[1.02] text-white sm:text-5xl">
+                                100% Art.
+                                <br />
+                                <span className="text-white/40">100% Science.</span>
+                            </h2>
+                        </div>
+                        <div>
+                            <p className="text-lg leading-9 text-white/60">{founderStatement}</p>
+                            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                                <EditorialButton href="/about">Read About VGP</EditorialButton>
+                                <EditorialButton onClick={openPopup} variant="ghost">Join Updates</EditorialButton>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </SectionShell>
+            </main>
+        </PageTransition>
     );
 }

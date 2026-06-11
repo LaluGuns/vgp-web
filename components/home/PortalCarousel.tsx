@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useRef } from 'react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ export const portals = [
         id: 'studio' as const,
         title: 'VGP STUDIO',
         subtitle: 'For Artists & Creators',
-        description: 'Premier beats — Trap, Phonk, Drill, R&B, Synthwave & Deep House.',
+        description: 'Premium beats, custom production, mixing, mastering, and sound design.',
         color: '#FF3CAC',
         href: '/studio/beats',
         cta: 'BEATSTORE',
@@ -26,7 +26,7 @@ export const portals = [
         id: 'lab' as const,
         title: 'VGP LAB',
         subtitle: 'Enter the HealingWave',
-        description: 'Kinetic functional audio for focus, performance & wellness.',
+        description: 'Functional audio for focus, recovery, cadence music, and intentional listening.',
         color: '#00FFA3',
         href: '/lab/healingwave',
         cta: 'HEALINGWAVE',
@@ -65,7 +65,7 @@ interface PortalCarouselProps {
     dragX?: any;
 }
 
-// ── Tweak these to resize everything ──
+// â”€â”€ Tweak these to resize everything â”€â”€
 const CARD_W = 360;
 const CARD_H = 560;
 const SPREAD = 380; // px between center card and side cards
@@ -120,7 +120,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
     return (
         <div className="relative w-full flex flex-col items-center gap-6 select-none py-4">
 
-            {/* ── MOBILE: NATIVE SNAP SCROLL (App-Like Performance) ── */}
+            {/* â”€â”€ MOBILE: NATIVE SNAP SCROLL (App-Like Performance) â”€â”€ */}
             <div className="relative w-full md:hidden">
                 <div
                     className="w-full flex overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 gap-4 pt-8 pb-14"
@@ -142,7 +142,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                                         : 'inset 0 1px 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5)'
                                 }}
                             >
-                                {/* Animated Icon — visible, prominent, above text */}
+                                {/* Animated Icon  -  visible, prominent, above text */}
                                 <div className="flex items-center justify-center z-10 mb-2" style={{ filter: `drop-shadow(0 0 20px ${portal.color}30)` }}>
                                     <Portal3DIcon portalId={portal.id} color={portal.color} size={140} />
                                 </div>
@@ -181,7 +181,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                     ))}
                 </div>
 
-                {/* ── SIMPLE SWIPE INSTRUCTION (Mobile Native Hint) ── */}
+                {/* â”€â”€ SIMPLE SWIPE INSTRUCTION (Mobile Native Hint) â”€â”€ */}
                 <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center opacity-50 pointer-events-none">
                     <svg className="w-4 h-4 mr-2 animate-bounce-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -191,12 +191,12 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
             </div>
 
 
-            {/* ── DESKTOP: 3D FRAMER MOTION CAROUSEL ── */}
+            {/* â”€â”€ DESKTOP: 3D FRAMER MOTION CAROUSEL â”€â”€ */}
             <div
                 className="hidden md:flex relative w-full items-center justify-center"
                 style={{ height: `${CARD_H + 40}px`, perspective: '1200px' }}
             >
-                {/* LEFT ARROW — anchored relative to center card */}
+                {/* LEFT ARROW  -  anchored relative to center card */}
                 <button
                     onClick={prevSlide}
                     aria-label="Previous"
@@ -220,7 +220,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
                     </svg>
                 </button>
 
-                {/* DRAG STAGE — overflow visible so side cards peek through */}
+                {/* DRAG STAGE  -  overflow visible so side cards peek through */}
                 <motion.div
                     style={{
                         position: 'relative',
@@ -254,7 +254,7 @@ export function PortalCarousel({ onIndexChange, dragX: parentDragX }: PortalCaro
     );
 }
 
-// ── ITEM ──────────────────────────────────────────────────────────────
+// â”€â”€ ITEM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, spread }: any) {
     const offset = useTransform(baseIndex, (current: number) => {
@@ -293,7 +293,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                 willChange: 'transform, opacity, filter',
             }}
         >
-            {/* Card shell — Apple Y3K Obsidian Glass */}
+            {/* Card shell  -  Apple Y3K Obsidian Glass */}
             <div
                 className="obsidian-glass w-full h-full rounded-[2rem] flex flex-col items-center justify-between py-10 px-8 text-center relative overflow-hidden"
                 style={{
@@ -302,7 +302,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                         : 'inset 0 1px 1px rgba(255,255,255,0.1), 0 24px 60px rgba(0,0,0,0.6)',
                 }}
             >
-                {/* Animated Icon — visible, prominent, with glow */}
+                {/* Animated Icon  -  visible, prominent, with glow */}
                 <div
                     className="z-10 transition-all duration-500 will-change-transform"
                     style={{
@@ -328,7 +328,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                     }}
                 />
 
-                {/* TOP — subtitle */}
+                {/* TOP  -  subtitle */}
                 <div
                     className="relative z-10 px-4 py-1.5 rounded-full text-[0.7rem] tracking-[0.3em] font-mono border pointer-events-none backdrop-blur-md"
                     style={{
@@ -340,7 +340,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                     {portal.subtitle.toUpperCase()}
                 </div>
 
-                {/* MIDDLE — title + divider + description */}
+                {/* MIDDLE  -  title + divider + description */}
                 <div className="relative z-10 flex flex-col items-center gap-5 pointer-events-none select-none px-2">
                     <h2
                         className="font-black tracking-tighter text-white leading-none text-wrap"
@@ -359,7 +359,7 @@ function CarouselItem({ portal, i, baseIndex, total, isDragging, cardW, cardH, s
                     </p>
                 </div>
 
-                {/* BOTTOM — CTA */}
+                {/* BOTTOM  -  CTA */}
                 <motion.div
                     className="relative z-[60]"
                     animate={{

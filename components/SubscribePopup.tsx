@@ -14,6 +14,49 @@ export function SubscribePopup() {
     const dialogRef = useRef<HTMLDivElement>(null);
     const emailInputRef = useRef<HTMLInputElement>(null);
     const pathname = usePathname();
+    const popupCopy = (() => {
+        if (pathname.startsWith('/cadenz')) {
+            return {
+                eyebrow: 'CADENZ updates',
+                title: 'Join the CADENZ waitlist',
+                description:
+                    'Get CADENZ release notes, HealingWave progress, and VGP music-tech updates. No spam, no hard selling.',
+                button: 'Join CADENZ waitlist',
+                subscriberName: 'CADENZ Waitlist',
+            };
+        }
+
+        if (pathname.startsWith('/lab/healingwave')) {
+            return {
+                eyebrow: 'HealingWave updates',
+                title: 'Join HealingWave updates',
+                description:
+                    'Get CADENZ progress, functional audio notes, and release updates from VGP. No spam, no hard selling.',
+                button: 'Join updates',
+                subscriberName: 'HealingWave Subscriber',
+            };
+        }
+
+        if (pathname.startsWith('/book') || pathname.startsWith('/books') || pathname.startsWith('/blog')) {
+            return {
+                eyebrow: 'VGP Library',
+                title: 'Join the book waitlist',
+                description:
+                    'Get the launch note for the Trap Edition guide, plus practical production articles from VGP. No spam, no hard selling.',
+                button: 'Join book waitlist',
+                subscriberName: 'Book Waitlist',
+            };
+        }
+
+        return {
+            eyebrow: 'VGP updates',
+            title: 'Join VGP updates',
+            description:
+                'Get CADENZ release notes, new beats, books, and practical production updates from Virzy Guns. No spam, no hard selling.',
+            button: 'Join updates',
+            subscriberName: 'VGP Subscriber',
+        };
+    })();
 
     useEffect(() => {
         const hasSubscribed = localStorage.getItem('vgp_newsletter_subscribed_v2');
@@ -77,7 +120,7 @@ export function SubscribePopup() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: 'VGP Subscriber',
+                    name: popupCopy.subscriberName,
                     email,
                     website: '',
                 }),
@@ -127,9 +170,9 @@ export function SubscribePopup() {
                         className="relative w-full max-w-md overflow-hidden rounded-lg border border-white/10 bg-[#08090d] shadow-[0_28px_80px_rgba(0,0,0,0.42)]"
                     >
                         <div className="relative border-b border-white/10 bg-white/[0.035] px-6 py-5">
-                            <p className="mb-2 text-sm font-medium text-white/45">VGP updates</p>
+                            <p className="mb-2 text-sm font-medium text-white/45">{popupCopy.eyebrow}</p>
                             <h3 id="popup-title" className="text-2xl font-semibold leading-tight text-white">
-                                Join the book waitlist
+                                {popupCopy.title}
                             </h3>
                             <button
                                 onClick={closePopup}
@@ -142,8 +185,7 @@ export function SubscribePopup() {
 
                         <div className="p-6">
                             <p id="popup-description" className="mb-6 text-sm leading-7 text-white/58">
-                                Get the launch note for the Trap Edition guide, plus practical production articles from VGP.
-                                No spam, no hard selling.
+                                {popupCopy.description}
                             </p>
 
                             {status === 'success' ? (
@@ -194,7 +236,7 @@ export function SubscribePopup() {
                                             <span>Processing...</span>
                                         ) : (
                                             <>
-                                                <span>Join waitlist</span>
+                                                <span>{popupCopy.button}</span>
                                                 <ArrowRight size={17} />
                                             </>
                                         )}

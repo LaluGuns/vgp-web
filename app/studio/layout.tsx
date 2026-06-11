@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 /**
  * Studio Portal Layout - Dark Obsidian Theme
- * For: Beats, Masterclass, Digital Arsenal
+ * For: Beats, Masterclass, and VGP Library
  */
 
 export default function StudioLayout({

@@ -1,9 +1,22 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata } from 'next';
 import HealingWaveClient from './HealingWaveClient';
 
 export const metadata: Metadata = {
-    title: 'HealingWave Project — Functional Audio Lab',
-    description: 'Productivity & Wellness Ecosystem by VGP. Functional audio for deep focus, running, workouts, and sleep. 100% Art. 100% Science.',
+    title: 'HealingWave Lab | Functional Audio',
+    description:
+        'HealingWave Lab by Virzy Guns covers functional audio for focus music, recovery listening, running cadence, cycling cadence, and CADENZ.',
+    keywords: [
+        'HealingWave Lab',
+        'functional audio',
+        'focus music',
+        'cadence music',
+        'CADENZ',
+        'Virzy Guns',
+        'music-tech',
+    ],
+    alternates: {
+        canonical: '/lab/healingwave',
+    },
 };
 
 export default function HealingWavePage() {

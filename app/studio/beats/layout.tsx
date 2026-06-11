@@ -1,10 +1,10 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import { MusicStoreSchema } from '@/components/seo/MusicStoreSchema';
 
 export const metadata: Metadata = {
-    title: 'Premium Beats & Instrumentals',
-    description: 'Premium instrumentals for artists. Browse our curated collection of Trap, Drill, Cyberphonk, and Synthwave beats. Instant license delivery.',
-    keywords: ['buy beats', 'trap beats', 'drill instrumentals', 'phonk beats', 'cyberphonk', 'synthwave type beat', 'beatstore'],
+    title: 'VGP Studio | Premium Beats and Instrumentals',
+    description: 'Premium instrumentals and audio services for artists. Browse Trap, Drill, Cyberphonk, Synthwave, R&B, and more from Virzy Guns Production.',
+    keywords: ['buy beats', 'trap beats', 'drill instrumentals', 'phonk beats', 'cyberphonk', 'synthwave type beat', 'beatstore', 'music production services'],
 };
 
 export default function BeatsLayout({

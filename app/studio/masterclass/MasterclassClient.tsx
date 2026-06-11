@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * Masterclass Page — Music Production Masterclass
+ * Masterclass Page  -  Music Production Masterclass
  * Y3K Studio aesthetic with gradient orbs & enhanced cards
  * STATUS: IN R&D - Wrapped with visual lock
  */
@@ -69,8 +69,8 @@ const courses = [
     },
     {
         id: 3,
-        title: 'AI Era Producer Workflow',
-        description: 'Leverage AI tools to 10x your production speed without losing creative control.',
+        title: 'Modern Producer Workflow',
+        description: 'Build faster sessions, cleaner decisions, and repeatable production systems without losing creative control.',
         price: 'TBA',
         tag: 'NEW',
         Icon: CircuitIcon,
@@ -102,9 +102,9 @@ const courses = [
 export default function MasterclassClient() {
     return (
         <PageTransition>
-            {/* ═══ HERO ═══ */}
+            {/* â•â•â• HERO â•â•â• */}
             <section className="relative py-24 sm:py-32 px-6 text-center overflow-hidden">
-                {/* Gradient orbs — Studio pink theme */}
+                {/* Gradient orbs  -  Studio pink theme */}
                 <div className="absolute top-[-10%] right-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,60,172,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
                 <div className="absolute bottom-0 left-1/3 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(180,74,255,0.05)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
 
@@ -130,13 +130,13 @@ export default function MasterclassClient() {
                             100% Art. 100% Science.
                         </p>
                         <p className="text-[#6B7080] text-base sm:text-lg max-w-xl mx-auto">
-                            Curated knowledge to accelerate your production journey.
+                            Practical education for producers who want cleaner sound, sharper decisions, and stronger releases.
                         </p>
                     </m.div>
                 </div>
             </section>
 
-            {/* ═══ COURSES ═══ */}
+            {/* â•â•â• COURSES â•â•â• */}
             <section className="py-12 px-6 bg-[#0C0E14]/50">
                 <div className="max-w-5xl mx-auto">
                         {/* Courses Grid */}

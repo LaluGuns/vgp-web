@@ -1,282 +1,244 @@
 'use client';
 
-import { m } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { m } from 'framer-motion';
+import { Activity, Award, Building2, Disc3, ExternalLink, GraduationCap, Mic2, Music2, Waves } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
-import { StatCounter } from '@/components/ui/UseCounter';
-
-const fadeUp = {
-    hidden: { opacity: 0, y: 24 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
-};
-
-const stagger = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-};
-
-const credentials = ['BMI Songwriter', 'Sony Music Publishing', 'BeatStars Verified'];
+import {
+    EditorialButton,
+    PageHeader,
+    SectionShell,
+} from '@/components/editorial/EditorialPrimitives';
+import { founderBio, founderStatement } from '@/lib/vgp-ecosystem';
+import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
 const pillars = [
     {
-        label: 'The Work',
+        label: 'Studio',
         heading: 'Premium beats. Serious craft.',
-        body: 'Exclusive instrumentals across Trap, Cyberphonk, Synthwave, R&B, Club, Drill, and Deep House - built for artists who demand more than average.',
-        color: '#FF3CAC',
+        body: 'Instrumentals, custom production, mixing, mastering, and sound design for creators who care about detail.',
+        Icon: Disc3,
+        href: '/studio/beats',
     },
     {
-        label: 'The Science',
-        heading: 'Audio engineered for the brain.',
-        body: 'Holding a BSc in Meteorology & Geophysics, I apply wave physics and psychoacoustics to design sound that does more than sound good.',
-        color: '#00D4FF',
+        label: 'Lab',
+        heading: 'Functional audio, carefully framed.',
+        body: 'HealingWave covers focus, recovery, running cadence, cycling cadence, and calm listening without overstating what sound can do.',
+        Icon: Activity,
+        href: '/lab/healingwave',
     },
     {
-        label: 'The Vision',
-        heading: 'The future of audio is functional.',
-        body: 'HealingWave is a functional audio ecosystem for focus, performance, and recovery - backed by science, not intuition.',
-        color: '#00FFA3',
+        label: 'Education',
+        heading: 'Producer knowledge made practical.',
+        body: 'Masterclass, books, and editorial notes for cleaner decisions, stronger arrangements, and better releases.',
+        Icon: GraduationCap,
+        href: '/studio/masterclass',
     },
+];
+
+const creditRoles = [
+    { label: 'Primary Artist', value: '550 credits', Icon: Mic2 },
+    { label: 'Producer', value: '526 credits', Icon: Music2 },
+    { label: 'Composer', value: '351 credits', Icon: Disc3 },
+    { label: 'Lyricist', value: '337 credits', Icon: Waves },
+];
+
+const profileSignals = [
+    { label: 'Top 10% Songwriters', value: 'MUSO.AI ranking', Icon: Award },
+    { label: 'Top 25% Producers', value: 'MUSO.AI ranking', Icon: Award },
+    { label: 'VGP Record Label', value: '131 releases', Icon: Building2 },
+    { label: 'BeatStars Publishing', value: '255 compositions', Icon: Building2 },
 ];
 
 export default function AboutClient() {
     return (
         <PageTransition>
-            <article>
-                {/* ─── HERO ─── */}
-                <section className="relative overflow-hidden px-4 py-24 text-center sm:px-6 sm:py-32">
-                    {/* Gradient orbs */}
-                    <div className="pointer-events-none absolute top-0 left-1/4 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(0,212,255,0.05)_0%,transparent_70%)] blur-[80px]" />
-                    <div className="pointer-events-none absolute bottom-0 right-1/4 h-[400px] w-[400px] bg-[radial-gradient(circle,rgba(180,74,255,0.04)_0%,transparent_70%)] blur-[80px]" />
+            <article className="editorial-shell min-h-screen text-white">
+                <PageHeader
+                    eyebrow="About Virzy Guns Production"
+                    title="100% Art."
+                    mutedTitle="100% Science."
+                    description="Virzy Guns Production is the music-tech ecosystem of Virzy Guns, ranked top 10% songwriter and top 25% producer, building beats, songs, functional audio, books, and producer education."
+                    primary={{ label: 'Explore Studio', href: '/studio/beats' }}
+                    secondary={{ label: 'Enter HealingWave', href: '/lab/healingwave' }}
+                />
 
-                    <div className="relative mx-auto max-w-4xl">
-                        {/* Background animated icon */}
-                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-20">
-                            <Portal3DIcon portalId="about" color="#00D4FF" size={400} />
-                        </div>
+                <SectionShell className="pt-4">
+                    <div className="grid items-center gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+                        <m.div
+                            variants={revealUp}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            className="relative"
+                        >
+                            <div className="absolute inset-8 rounded-full bg-sky-300/10 blur-3xl" aria-hidden="true" />
+                            <div className="liquid-glass-strong relative overflow-hidden rounded-lg p-3">
+                                <div className="relative aspect-square overflow-hidden rounded-xl">
+                                    <Image
+                                        src="/images/founder.jpg"
+                                        alt="Virzy Guns, founder of Virzy Guns Production"
+                                        fill
+                                        sizes="(min-width: 1024px) 480px, 92vw"
+                                        className="object-cover grayscale-[0.18]"
+                                        priority
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#030405]/85 via-transparent to-transparent" />
+                                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
+                                            Virzy Guns
+                                        </p>
+                                        <p className="mt-1 text-sm text-white/50">Top 10% songwriter. Top 25% producer. Founder of VGP.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </m.div>
 
                         <m.div
-                            variants={stagger}
+                            variants={staggerParent}
                             initial="hidden"
-                            animate="visible"
-                            className="relative z-10"
+                            whileInView="visible"
+                            viewport={{ once: true }}
                         >
-                            <m.p
-                                variants={fadeUp}
-                                className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/40"
-                            >
-                                Virzy Guns Production
+                            <m.p variants={staggerChild} className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                                Founder Statement
                             </m.p>
-                            <m.h1
-                                variants={fadeUp}
-                                className="mb-6 text-5xl font-bold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl"
-                            >
-                                100% Art.
-                                <br />
-                                <span className="text-white/35">100% Science.</span>
-                            </m.h1>
-                            <m.p
-                                variants={fadeUp}
-                                className="mx-auto max-w-xl text-base leading-relaxed text-white/50 sm:text-lg"
-                            >
-                                Music producer, beatmaker, and audio technologist building at the intersection of
-                                sound and science.
+                            <m.h2 variants={staggerChild} className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
+                                Sound is art, signal, and system.
+                            </m.h2>
+                            <m.p variants={staggerChild} className="mt-6 text-base leading-8 text-white/60">
+                                {founderStatement}
                             </m.p>
-                            <m.div variants={fadeUp} className="mt-8 flex flex-wrap justify-center gap-3">
-                                <Link
-                                    href="/studio/beats"
-                                    className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-black transition hover:bg-white/90"
-                                >
-                                    Browse Beats
-                                </Link>
-                                <Link
+                            <m.p variants={staggerChild} className="mt-5 text-base leading-8 text-white/60">
+                                {founderBio}
+                            </m.p>
+                            <m.p variants={staggerChild} className="mt-5 text-base leading-8 text-white/60">
+                                The background is technical too: wave physics, signal processing, data science, psychoacoustics, and a BSc in Meteorology and Geophysics all feed into how VGP treats sound.
+                            </m.p>
+                            <m.div variants={staggerChild} className="mt-7 flex flex-wrap gap-2">
+                                {['Top 10% songwriter', 'Top 25% producer', 'BMI Songwriter', 'Sony Music Publishing Affiliate', 'BeatStars Verified'].map((item) => (
+                                    <span
+                                        key={item}
+                                        className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-white/55"
+                                    >
+                                        {item}
+                                    </span>
+                                ))}
+                            </m.div>
+                            <m.div variants={staggerChild} className="mt-8 flex flex-col gap-3 sm:flex-row">
+                                <a
                                     href="https://www.linkedin.com/in/virzyguns/"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="rounded-full border border-white/15 bg-white/[0.04] px-6 py-2.5 text-sm font-semibold text-white transition hover:border-white/30"
+                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-sky-200/25 bg-sky-200/10 px-5 py-2.5 text-sm font-semibold text-sky-100 transition hover:border-sky-100/45 hover:bg-sky-200/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405]"
                                 >
-                                    Connect
-                                </Link>
+                                    Connect on LinkedIn
+                                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                                </a>
+                                <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
                             </m.div>
                         </m.div>
                     </div>
-                </section>
+                </SectionShell>
 
-                {/* ─── FOUNDER CARD ─── */}
-                <section className="px-4 py-16 sm:px-6">
-                    <div className="mx-auto max-w-5xl">
-                        <m.div
-                            className="grid items-center gap-12 lg:grid-cols-2"
-                            variants={stagger}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                        >
-                            <m.div variants={fadeUp} className="order-2 lg:order-1">
-                                <div className="relative aspect-square max-w-sm mx-auto overflow-hidden rounded-3xl border border-white/[0.06] group">
-                                    <Image
-                                        src="/images/founder.jpg"
-                                        alt="Virzy Guns - Music Producer"
-                                        fill
-                                        sizes="(min-width: 1024px) 384px, 90vw"
-                                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                                        priority
-                                    />
-                                    {/* Scan line */}
-                                    <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                        <div
-                                            className="absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00D4FF]/30 to-transparent"
-                                            style={{ animation: 'scan-line 3s ease-in-out infinite' }}
-                                        />
-                                    </div>
-                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#03040A]/80 to-transparent p-5">
-                                        <p className="text-xs font-semibold tracking-widest text-white/60 uppercase">Virzy Guns</p>
-                                        <p className="text-[10px] text-white/30 tracking-wider uppercase mt-0.5">Founder & Producer</p>
-                                    </div>
-                                </div>
-                            </m.div>
-
-                            <m.div variants={fadeUp} className="order-1 lg:order-2">
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/35">Background</p>
-                                <h2 className="mb-5 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
-                                    Science-first thinking.<br />
-                                    <span className="text-white/40">Applied to music.</span>
-                                </h2>
-                                <p className="mb-5 text-base leading-relaxed text-white/55">
-                                    Sound is not just art - it is a biological signal. I founded VGP with a singular thesis:
-                                    in an era of cognitive overload, audio must evolve from passive entertainment into a
-                                    functional tool for mental performance and well-being.
-                                </p>
-                                <p className="mb-6 text-base leading-relaxed text-white/55">
-                                    My work sits at the intersection of{' '}
-                                    <span className="text-[#00D4FF]">Signal Processing</span>,{' '}
-                                    <span className="text-[#00D4FF]">Data Science</span>, and{' '}
-                                    <span className="text-[#00D4FF]">Psychoacoustics</span> - with a BSc in Meteorology & Geophysics
-                                    as the scientific backbone.
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {credentials.map((c) => (
-                                        <span
-                                            key={c}
-                                            className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-white/50"
-                                        >
-                                            {c}
-                                        </span>
-                                    ))}
-                                </div>
-                            </m.div>
-                        </m.div>
-                    </div>
-                </section>
-
-                {/* ─── THREE PILLARS ─── */}
-                <section className="bg-white/[0.02] px-4 py-16 sm:px-6">
-                    <div className="mx-auto max-w-5xl">
-                        <m.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={stagger}
-                            className="grid gap-5 sm:grid-cols-3"
-                        >
-                            {pillars.map((p) => (
-                                <m.div
-                                    key={p.label}
-                                    variants={fadeUp}
-                                    className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 transition hover:border-white/[0.12]"
-                                >
-                                    <div
-                                        className="mb-4 h-1 w-8 rounded-full"
-                                        style={{ background: p.color }}
-                                    />
-                                    <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-white/35">
-                                        {p.label}
-                                    </p>
-                                    <h3 className="mb-3 text-lg font-semibold leading-snug text-white">
-                                        {p.heading}
-                                    </h3>
-                                    <p className="text-sm leading-relaxed text-white/50">{p.body}</p>
-                                </m.div>
-                            ))}
-                        </m.div>
-                    </div>
-                </section>
-
-                {/* ─── STATS ─── */}
-                <section className="px-4 py-16 sm:px-6">
-                    <div className="mx-auto max-w-5xl">
-                        <m.div
-                            className="grid grid-cols-3 gap-4"
-                            variants={stagger}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                        >
-                            {[
-                                { value: 10, suffix: '%', label: 'Top Songwriter', color: '#00D4FF' },
-                                { value: 25, suffix: '%', label: 'Top Producer', color: '#B44AFF' },
-                                { value: 2026, suffix: '', label: 'HealingWave Launch', color: '#00FFA3' },
-                            ].map((stat) => (
-                                <m.div
-                                    key={stat.label}
-                                    variants={fadeUp}
-                                    className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-6 text-center"
-                                >
-                                    <div
-                                        className="mb-1 text-3xl font-black"
-                                        style={{ color: stat.color }}
-                                    >
-                                        {stat.label.includes('Launch') ? (
-                                            <StatCounter end={stat.value} />
-                                        ) : (
-                                            <>Top <StatCounter end={stat.value} />{stat.suffix}</>
-                                        )}
-                                    </div>
-                                    <p className="text-[10px] font-semibold uppercase tracking-widest text-white/30">
-                                        {stat.label}
-                                    </p>
-                                </m.div>
-                            ))}
-                        </m.div>
-                    </div>
-                </section>
-
-                {/* ─── CTA ─── */}
-                <section className="border-t border-white/[0.05] px-4 py-16 text-center sm:px-6">
-                    <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="mx-auto max-w-xl"
-                    >
-                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-white/35">
-                            Global Vision
+                <SectionShell>
+                    <div className="mb-10 max-w-3xl">
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                            Credits and proof
                         </p>
-                        <h2 className="mb-4 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
-                            The future of health<br />
-                            <span className="text-white/35">is non-invasive.</span>
+                        <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-5xl">
+                            Songwriting, production, credits, and publishing in one profile.
                         </h2>
-                        <p className="mb-8 text-base leading-relaxed text-white/50">
-                            Conducting advanced R&D in functional audio. Join the movement.
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                        {profileSignals.map((item) => (
+                            <m.article
+                                key={item.label}
+                                variants={revealUp}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className="liquid-glass rounded-lg p-5"
+                            >
+                                <div className="mb-8 flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                                    <item.Icon className="h-5 w-5" aria-hidden="true" />
+                                </div>
+                                <p className="text-sm font-semibold text-white">{item.label}</p>
+                                <p className="mt-2 text-sm text-white/50">{item.value}</p>
+                            </m.article>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                        {creditRoles.map((item) => (
+                            <m.article
+                                key={item.label}
+                                variants={revealUp}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className="liquid-glass-soft rounded-lg p-5"
+                            >
+                                <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                                    <item.Icon className="h-4 w-4" aria-hidden="true" />
+                                </div>
+                                <p className="text-sm font-semibold text-white">{item.label}</p>
+                                <p className="mt-2 text-sm text-white/50">{item.value}</p>
+                            </m.article>
+                        ))}
+                    </div>
+                </SectionShell>
+
+                <SectionShell>
+                    <div className="grid gap-4 md:grid-cols-3">
+                        {pillars.map((pillar) => (
+                            <m.article
+                                key={pillar.label}
+                                variants={revealUp}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className="liquid-glass rounded-lg p-6"
+                            >
+                                <div className="mb-8 flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                                    <pillar.Icon className="h-5 w-5" aria-hidden="true" />
+                                </div>
+                                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/50">
+                                    {pillar.label}
+                                </p>
+                                <h3 className="text-xl font-semibold text-white">{pillar.heading}</h3>
+                                <p className="mt-4 text-sm leading-7 text-white/50">{pillar.body}</p>
+                                <Link
+                                    href={pillar.href}
+                                    className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-sky-100/80 hover:text-white"
+                                >
+                                    Explore
+                                    <Waves className="h-4 w-4" aria-hidden="true" />
+                                </Link>
+                            </m.article>
+                        ))}
+                    </div>
+                </SectionShell>
+
+                <SectionShell className="pb-24">
+                    <div className="liquid-glass-strong rounded-lg p-6 text-center sm:p-8">
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                            Mission
                         </p>
-                        <div className="flex flex-wrap justify-center gap-3">
-                            <Link
-                                href="/lab/healingwave"
-                                className="rounded-full bg-white px-6 py-2.5 text-sm font-semibold text-black transition hover:bg-white/90"
-                            >
-                                Explore HealingWave
-                            </Link>
-                            <Link
-                                href="/studio/beats"
-                                className="rounded-full border border-white/15 bg-white/[0.04] px-6 py-2.5 text-sm font-semibold text-white transition hover:border-white/30"
-                            >
-                                Browse Beats
-                            </Link>
+                        <h2 className="mx-auto max-w-3xl font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
+                            Build music, tools, and education that respect the listener.
+                        </h2>
+                        <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/60">
+                            VGP is bigger than a beat store. It is a home for Virzy Guns songs, premium beats, functional audio, CADENZ, books, and producer education.
+                        </p>
+                        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                            <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
+                            <EditorialButton href="/cadenz" variant="ghost">Preview CADENZ</EditorialButton>
                         </div>
-                    </m.div>
-                </section>
+                    </div>
+                </SectionShell>
             </article>
         </PageTransition>
     );

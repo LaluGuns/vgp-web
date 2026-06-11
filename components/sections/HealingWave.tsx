@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * HealingWave Section - The Tech Showcase
+ * HealingWave Section - Functional Audio Showcase
  * Control Panel UI with Before/After toggle and real-time visualizer
  */
 
@@ -42,8 +42,8 @@ export function HealingWave() {
                         className="text-white/60 max-w-2xl mx-auto"
                         variants={fadeInUp}
                     >
-                        Proprietary audio processing that transforms your music into a wellness tool.
-                        Experience the difference between raw audio and HealingWave-optimized sound.
+                        Functional audio experiments for focus, movement, and intentional listening.
+                        Experience a calm comparison between raw audio and a guided sound preset.
                     </motion.p>
                 </motion.div>
 
@@ -96,18 +96,18 @@ export function HealingWave() {
                             <div className="grid md:grid-cols-3 gap-6">
                                 <FeatureBlock
                                     title="Frequency Alignment"
-                                    description="Precise calibration to 432Hz and other therapeutic frequencies."
-                                    icon="◎"
+                                    description="Careful frequency shaping for calmer listening sessions."
+                                    icon="â—Ž"
                                 />
                                 <FeatureBlock
                                     title="Brainwave Entrainment"
-                                    description="Embedded binaural beats for focus, relaxation, or deep sleep."
-                                    icon="◉"
+                                    description="Layered pulse design for focus, relaxation, or evening listening."
+                                    icon="â—‰"
                                 />
                                 <FeatureBlock
                                     title="Sonic Clarity"
-                                    description="AI-powered noise reduction without losing musical detail."
-                                    icon="◐"
+                                    description="Noise reduction designed to preserve musical detail."
+                                    icon="â—"
                                 />
                             </div>
                         </div>

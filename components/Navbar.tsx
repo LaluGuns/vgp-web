@@ -1,178 +1,173 @@
-'use client';
+﻿'use client';
 
-/**
- * Navbar — Y3K Robot Chrome Navigation
- * Desktop: Frosted glass pill with chrome border
- * Mobile: Bottom tab bar (native app feel)
- */
-
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { m, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import { siteNav, studioNav } from '@/lib/vgp-ecosystem';
 import { springFast } from '@/lib/motion-presets';
-
-const navLinks = [
-    { name: 'HOME', href: '/', icon: '⬡' },
-    {
-        name: 'STUDIO',
-        href: '/studio/beats',
-        icon: '◆',
-        submenu: [
-            { name: 'Beatstore', href: '/studio/beats' },
-            { name: 'Masterclass', href: '/studio/masterclass' },
-            { name: 'Book', href: '/book' },
-        ]
-    },
-    { name: 'LAB', href: '/lab/healingwave', icon: '◎' },
-    { name: 'BLOG', href: '/blog', icon: '▣' },
-    { name: 'ABOUT', href: '/about', icon: '◈' },
-];
 
 export function Navbar() {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
-    const [studioOpen, setStudioOpen] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-    const isActive = (href: string) => {
-        if (href === '/') return pathname === '/';
-        return pathname.startsWith(href);
-    };
-
-    const isStudioActive = () => {
-        return pathname.startsWith('/studio');
-    };
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 20);
+        const handleScroll = () => setScrolled(window.scrollY > 18);
+        handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Hide navbar on home page (has its own nav)
-    if (pathname === '/') return null;
+    useEffect(() => {
+        const frame = requestAnimationFrame(() => {
+            setMobileOpen(false);
+        });
+
+        return () => cancelAnimationFrame(frame);
+    }, [pathname]);
+
+    const isActive = (href: string) => {
+        if (href === '/') return pathname === '/';
+        if (href === '/studio') return pathname.startsWith('/studio');
+        return pathname === href || pathname.startsWith(`${href}/`);
+    };
 
     return (
-        <>
-            {/* ═══════════════════════════════════════════
-                DESKTOP NAVBAR
-                ═══════════════════════════════════════════ */}
-            <header
-                className={`
-                    fixed top-0 left-0 right-0 z-50 hidden md:block
-                    transition-all duration-500
-                    ${scrolled ? 'py-3' : 'py-5'}
-                `}
+        <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-3 sm:px-6">
+            <nav
+                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full px-3 py-2 transition duration-300 ${
+                    scrolled
+                        ? 'shadow-[0_18px_60px_rgba(0,0,0,0.34)]'
+                        : ''
+                }`}
+                aria-label="Main navigation"
             >
-                <nav className={`
-                    max-w-4xl mx-auto px-1
-                    transition-all duration-500
-                    ${scrolled ? 'bg-[#0C0E14]/80 backdrop-blur-2xl border border-[rgba(200,204,212,0.06)] rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : ''}
-                `}>
-                    <div className="flex items-center justify-between px-6 py-3">
-                        {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 group">
-                            <div className="w-8 h-8 relative">
-                                <Image
-                                    src="/branding/logo-tg.png"
-                                    alt="VGP"
-                                    width={32}
-                                    height={32}
-                                    className="w-full h-full object-contain transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(0,212,255,0.5)]"
-                                />
-                            </div>
-                            <span className="text-sm font-semibold tracking-wide">
-                                <span className="gradient-text">VGP</span>
-                            </span>
-                        </Link>
+                <div className="flex h-full items-center justify-between gap-3">
+                    <Link
+                        href="/"
+                        className="flex min-w-0 shrink-0 items-center gap-3 rounded-full pr-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70"
+                        aria-label="Virzy Guns Production home"
+                    >
+                        <Image
+                            src="/branding/logo-tg.png"
+                            alt="VGP"
+                            width={36}
+                            height={36}
+                            className="h-9 w-9 shrink-0 object-contain opacity-60 brightness-50 saturate-[0.45] contrast-125"
+                            priority
+                        />
+                        <span className="hidden whitespace-nowrap text-sm font-semibold text-white sm:block">
+                            Virzy Guns Production
+                        </span>
+                    </Link>
 
-                        {/* Nav Links */}
-                        <div className="flex items-center gap-1">
-                            {navLinks.map((link) => (
-                                'submenu' in link ? (
-                                    <div
-                                        key={link.name}
-                                        className="relative"
-                                        onMouseEnter={() => setStudioOpen(true)}
-                                        onMouseLeave={() => setStudioOpen(false)}
-                                    >
+                    <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
+                        {siteNav.map((item) => {
+                            if (item.name === 'Studio') {
+                                return (
+                                    <div key={item.href} className="group relative">
                                         <Link
-                                            href={link.href}
-                                            className={`
-                                                relative px-4 py-2 text-xs tracking-[0.2em] rounded-full
-                                                flex items-center gap-1.5 transition-all duration-300
-                                                ${isStudioActive()
-                                                    ? 'text-white bg-white/[0.06]'
-                                                    : 'text-[var(--chrome-dim)] hover:text-white hover:bg-white/[0.03]'
-                                                }
-                                            `}
+                                            href={item.href}
+                                            className={`inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
+                                                isActive(item.href)
+                                                    ? 'bg-white/[0.08] text-white'
+                                                    : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
+                                            }`}
                                         >
-                                            {link.name}
-                                            <svg className="w-3 h-3 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
+                                            <span>Studio</span>
+                                            <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
                                         </Link>
 
-                                        {/* Dropdown */}
-                                        <AnimatePresence>
-                                            {studioOpen && (
-                                                <m.div
-                                                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                    exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                                                    transition={springFast}
-                                                    className="absolute top-full left-0 mt-2 py-2 px-1 bg-[#11131A]/95 backdrop-blur-2xl border border-[rgba(200,204,212,0.06)] rounded-xl min-w-[160px] shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
-                                                >
-                                                    {link.submenu && link.submenu.map((sub) => (
-                                                        <Link
-                                                            key={sub.href}
-                                                            href={sub.href}
-                                                            className={`
-                                                                block px-4 py-2.5 text-sm rounded-lg transition-all duration-200
-                                                                ${isActive(sub.href)
-                                                                    ? 'text-[var(--studio-accent)] bg-[rgba(255,60,172,0.08)]'
-                                                                    : 'text-[var(--chrome-dim)] hover:text-[var(--studio-accent)] hover:bg-white/[0.03]'
-                                                                }
-                                                            `}
-                                                        >
-                                                            {sub.name}
-                                                        </Link>
-                                                    ))}
-                                                </m.div>
-                                            )}
-                                        </AnimatePresence>
+                                        <div className="pointer-events-none absolute left-0 top-full z-[90] w-56 pt-2 opacity-0 transition duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                                            <div className="liquid-glass-strong rounded-lg p-2 shadow-[0_22px_70px_rgba(0,0,0,0.42)]">
+                                                {studioNav.map((sub) => (
+                                                    <Link
+                                                        key={sub.href}
+                                                        href={sub.href}
+                                                        className={`block rounded-md px-3 py-2.5 text-sm transition ${
+                                                            isActive(sub.href)
+                                                                ? 'bg-white/[0.07] text-white'
+                                                                : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
+                                                        }`}
+                                                    >
+                                                        {sub.name}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
-                                ) : (
-                                    <Link
-                                        key={link.href}
-                                        href={link.href}
-                                        className={`
-                                            relative px-4 py-2 text-xs tracking-[0.2em] rounded-full
-                                            transition-all duration-300
-                                            ${isActive(link.href)
-                                                ? 'text-white bg-white/[0.06]'
-                                                : 'text-[var(--chrome-dim)] hover:text-white hover:bg-white/[0.03]'
-                                            }
-                                        `}
-                                    >
-                                        {link.name}
-                                        {isActive(link.href) && (
-                                            <m.div
-                                                layoutId="activeTab"
-                                                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--cyan)]"
-                                                style={{ boxShadow: '0 0 8px rgba(0, 212, 255, 0.6)' }}
-                                                transition={springFast}
-                                            />
-                                        )}
-                                    </Link>
-                                )
+                                );
+                            }
+
+                            return (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
+                                        isActive(item.href)
+                                            ? 'bg-white/[0.08] text-white'
+                                            : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
+                                    }`}
+                                >
+                                    {item.name}
+                                </Link>
+                            );
+                        })}
+                    </div>
+
+                    <div className="hidden items-center gap-2 lg:flex">
+                        <Link
+                            href="/studio/beats"
+                            className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-white/15 bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                        >
+                            Enter Studio
+                        </Link>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => setMobileOpen((open) => !open)}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white lg:hidden"
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-nav-panel"
+                        aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                    >
+                        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                    </button>
+                </div>
+            </nav>
+
+            <AnimatePresence>
+                {mobileOpen ? (
+                    <m.div
+                        id="mobile-nav-panel"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={springFast}
+                        className="liquid-glass-strong mx-auto mt-2 max-w-7xl overflow-hidden rounded-lg p-3 lg:hidden"
+                    >
+                        <div className="grid gap-1">
+                            {[{ name: 'Home', href: '/' }, ...siteNav].map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                                        isActive(item.href)
+                                            ? 'bg-white/[0.08] text-white'
+                                            : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
+                                    }`}
+                                >
+                                    {item.name}
+                                </Link>
                             ))}
                         </div>
-                    </div>
-                </nav>
-            </header>
-        </>
+                    </m.div>
+                ) : null}
+            </AnimatePresence>
+        </header>
     );
 }

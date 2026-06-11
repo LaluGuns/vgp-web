@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 /**
  * Roadmap Section - The Ecosystem (Coming Soon)
@@ -14,15 +14,15 @@ const modules = [
         id: 'healingwave',
         title: 'HealingWave Focus',
         description: 'Browser-based functional audio for deep work and flow states.',
-        icon: '🧠',
+        icon: 'ðŸ§ ',
         status: 'IN DEVELOPMENT',
         progress: 65,
     },
     {
-        id: 'pacer',
-        title: 'VGP Pacer',
-        description: 'Mobile app for running cadence optimization.',
-        icon: '🏃',
+        id: 'cadenz',
+        title: 'CADENZ',
+        description: 'Coming-soon cadence music app by HealingWave Lab.',
+        icon: 'ðŸƒ',
         status: 'COMING Q3 2026',
         progress: 30,
     },
@@ -30,7 +30,7 @@ const modules = [
         id: 'gym',
         title: 'VGP Gym',
         description: 'Fitness-focused audio performance app.',
-        icon: '💪',
+        icon: 'ðŸ’ª',
         status: 'CONCEPT',
         progress: 10,
     },
@@ -45,7 +45,7 @@ export function Roadmap() {
                 <SectionHeader
                     label="THE ECOSYSTEM"
                     title="Beyond Beats"
-                    description="Building tools for human performance and wellness."
+                    description="Building functional audio tools for focus, movement, and intentional listening."
                 />
 
                 <m.div

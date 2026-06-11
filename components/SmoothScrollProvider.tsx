@@ -2,7 +2,7 @@
 
 /**
  * Lenis Smooth Scroll Provider
- * Premium, buttery-smooth scrolling for Apple-level feel
+ * Light desktop smoothing without making wheel input feel delayed.
  */
 
 import { useEffect } from 'react';
@@ -14,25 +14,30 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
 
     useEffect(() => {
         if (pathname.startsWith('/blog')) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.matchMedia('(max-width: 767px)').matches) return;
 
         const lenis = new Lenis({
-            duration: 1.2,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Expo easing
+            duration: 0.45,
+            easing: (t) => 1 - Math.pow(1 - t, 3),
             orientation: 'vertical',
             gestureOrientation: 'vertical',
             smoothWheel: true,
-            wheelMultiplier: 1,
+            wheelMultiplier: 1.25,
             touchMultiplier: 2,
         });
 
+        let rafId = 0;
+
         function raf(time: number) {
             lenis.raf(time);
-            requestAnimationFrame(raf);
+            rafId = requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        rafId = requestAnimationFrame(raf);
 
         return () => {
+            cancelAnimationFrame(rafId);
             lenis.destroy();
         };
     }, [pathname]);

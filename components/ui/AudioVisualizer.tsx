@@ -20,11 +20,11 @@ export function AudioVisualizer({
     barCount = 24,
     className = '',
 }: AudioVisualizerProps) {
-    // Generate random heights for bars
+    // Deterministic variation keeps render output stable for React 19 lint rules.
     const bars = Array.from({ length: barCount }, (_, i) => ({
         id: i,
         delay: i * 0.05,
-        baseHeight: 20 + Math.random() * 60,
+        baseHeight: 20 + ((i * 37) % 60),
     }));
 
     return (

@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * Digital Arsenal Section - PDF Guides Store
+ * Producer Library Section - PDF Guides Store
  */
 
 import { m } from 'framer-motion';
@@ -17,15 +17,15 @@ const products = [
         description: 'The foundational blueprint for professional music production.',
         price: '$29',
         tag: 'BESTSELLER',
-        icon: '📘',
+        icon: 'ðŸ“˜',
     },
     {
         id: 2,
-        title: 'The AI-Era Producer Workflow',
-        description: 'Leverage AI tools to 10x your production speed.',
+        title: 'Modern Producer Workflow',
+        description: 'Build faster sessions, cleaner decisions, and repeatable production systems.',
         price: '$39',
         tag: 'NEW',
-        icon: '🤖',
+        icon: 'ðŸ¤–',
     },
     {
         id: 3,
@@ -33,7 +33,7 @@ const products = [
         description: 'Deep-dive into synthesis and sound design.',
         price: '$49',
         tag: 'ADVANCED',
-        icon: '🔊',
+        icon: 'ðŸ”Š',
     },
 ];
 
@@ -42,9 +42,9 @@ export function DigitalArsenal() {
         <section id="arsenal" className="relative py-32 px-6 bg-surface">
             <div className="max-w-6xl mx-auto">
                 <SectionHeader
-                    label="DIGITAL ARSENAL"
+                    label="PRODUCER LIBRARY"
                     title="Premium Knowledge Base"
-                    description="Curated guides to elevate your production skills."
+                    description="Curated guides for sharper production decisions."
                 />
 
                 <m.div
@@ -71,7 +71,7 @@ export function DigitalArsenal() {
                                     <div className="flex items-center justify-between pt-4 border-t border-white/10">
                                         <span className="text-primary font-bold text-2xl">{product.price}</span>
                                         <GlowButton variant="primary" size="sm">
-                                            Acquire Data
+                                            View Details
                                         </GlowButton>
                                     </div>
                                 </div>

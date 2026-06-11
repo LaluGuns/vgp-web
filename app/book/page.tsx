@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 
 /**
- * Guides / Book Landing Page — Apple Premium Dark
+ * Guides / Book Landing Page  -  Apple Premium Dark
  * "Music Production Guide: Trap Edition"
  * Pre-order CTA + Book showcase
  */
@@ -46,7 +46,7 @@ export default function GuidesPage() {
         <PageTransition>
             <article className="bg-[#03040A] text-white min-h-screen">
 
-                {/* ─── HERO ─── */}
+                {/* â”€â”€â”€ HERO â”€â”€â”€ */}
                 <section className="relative overflow-hidden px-4 pt-24 pb-16 sm:px-6 sm:pt-32 sm:pb-20">
                     {/* Gradient orbs */}
                     <div className="pointer-events-none absolute top-0 left-1/4 h-[500px] w-[500px] bg-[radial-gradient(circle,rgba(0,113,227,0.06)_0%,transparent_70%)] blur-[80px]" />
@@ -67,7 +67,7 @@ export default function GuidesPage() {
                             {/* Left: Text */}
                             <div>
                                 <m.p variants={fadeUp} className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/35">
-                                    VGP Digital Arsenal
+                                    VGP Library
                                 </m.p>
                                 <m.h1 variants={fadeUp} className="mb-3 text-5xl font-bold leading-[1.03] tracking-tight text-white sm:text-6xl md:text-7xl">
                                     Music Production
@@ -138,7 +138,7 @@ export default function GuidesPage() {
                     </div>
                 </section>
 
-                {/* ─── CHAPTERS ─── */}
+                {/* â”€â”€â”€ CHAPTERS â”€â”€â”€ */}
                 <section className="bg-white/[0.02] border-y border-white/[0.05] px-4 py-16 sm:px-6">
                     <div className="mx-auto max-w-5xl">
                         <m.div
@@ -170,7 +170,7 @@ export default function GuidesPage() {
                     </div>
                 </section>
 
-                {/* ─── PRE-ORDER CTA ─── */}
+                {/* â”€â”€â”€ PRE-ORDER CTA â”€â”€â”€ */}
                 <section className="px-4 py-20 text-center sm:px-6">
                     <m.div
                         initial={{ opacity: 0, y: 20 }}

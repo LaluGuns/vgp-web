@@ -21,7 +21,7 @@ export function CustomCursor() {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         if (isTouchDevice) return;
 
-        setIsVisible(true);
+        const visibilityFrame = requestAnimationFrame(() => setIsVisible(true));
 
         const moveCursor = (e: MouseEvent) => {
             mouseX.set(e.clientX);
@@ -49,6 +49,7 @@ export function CustomCursor() {
         observer.observe(document.body, { childList: true, subtree: true });
 
         return () => {
+            cancelAnimationFrame(visibilityFrame);
             window.removeEventListener('mousemove', moveCursor);
             observer.disconnect();
             const hoverables = document.querySelectorAll('a, button'); // Simple cleanup

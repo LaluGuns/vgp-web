@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'About the Founder',
-    description: 'Virzy Guns is a professional music producer, beatmaker, and Founder of VGP. Discover the science behind our functional audio and premium instrumentals.',
-    keywords: ['Virzy Guns', 'music producer', 'beatmaker', 'audio engineer', 'functional audio', 'about VGP'],
+    title: 'About Virzy Guns',
+    description: 'Virzy Guns is ranked top 10% songwriter and top 25% producer, plus beatmaker and founder of VGP.',
+    keywords: ['Virzy Guns', 'top 10% songwriter', 'top 25% producer', 'music producer', 'beatmaker', 'audio engineer', 'functional audio', 'about VGP'],
 };
 
 export default function AboutLayout({
