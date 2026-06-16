@@ -42,14 +42,111 @@ const categoryColors: Record<string, { text: string; bg: string; glow: string; g
         gradient: 'from-[#00ff88]/20 via-transparent to-transparent',
         hex: '#00ff88',
     },
+    'songwriting': {
+        text: 'text-[#f59e0b]',
+        bg: 'bg-[#f59e0b]/10',
+        glow: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]',
+        gradient: 'from-[#f59e0b]/20 via-transparent to-transparent',
+        hex: '#f59e0b',
+    },
+    'arrangement-groove': {
+        text: 'text-[#a855f7]',
+        bg: 'bg-[#a855f7]/10',
+        glow: 'shadow-[0_0_20px_rgba(168,85,247,0.3)]',
+        gradient: 'from-[#a855f7]/20 via-transparent to-transparent',
+        hex: '#a855f7',
+    },
+    'sound-design': {
+        text: 'text-[#10b981]',
+        bg: 'bg-[#10b981]/10',
+        glow: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]',
+        gradient: 'from-[#10b981]/20 via-transparent to-transparent',
+        hex: '#10b981',
+    },
+    'vocal-production': {
+        text: 'text-[#f43f5e]',
+        bg: 'bg-[#f43f5e]/10',
+        glow: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]',
+        gradient: 'from-[#f43f5e]/20 via-transparent to-transparent',
+        hex: '#f43f5e',
+    },
+    'mixing-mastering': {
+        text: 'text-[#06b6d4]',
+        bg: 'bg-[#06b6d4]/10',
+        glow: 'shadow-[0_0_20px_rgba(6,182,212,0.3)]',
+        gradient: 'from-[#06b6d4]/20 via-transparent to-transparent',
+        hex: '#06b6d4',
+    },
+    'producer-psychology': {
+        text: 'text-[#eab308]',
+        bg: 'bg-[#eab308]/10',
+        glow: 'shadow-[0_0_20px_rgba(234,179,8,0.3)]',
+        gradient: 'from-[#eab308]/20 via-transparent to-transparent',
+        hex: '#eab308',
+    },
+    'audio-science': {
+        text: 'text-[#3b82f6]',
+        bg: 'bg-[#3b82f6]/10',
+        glow: 'shadow-[0_0_20px_rgba(59,130,246,0.3)]',
+        gradient: 'from-[#3b82f6]/20 via-transparent to-transparent',
+        hex: '#3b82f6',
+    },
 };
 
 export function ArticlePage({ article, category, related }: ArticlePageProps) {
     const colors = categoryColors[article.category] || categoryColors['production-tips'];
 
+    // Check if article discusses critical physiological, hearing risk, or brainwave entrainment claims
+    const hasMedicalOrHearingClaims = 
+        /tinnitus|hearing loss|hearing damage|hearing safety|acoustic reflex|binaural|entrainment/i.test(article.content) ||
+        /tinnitus|hearing loss|hearing damage|hearing safety|acoustic reflex|binaural|entrainment/i.test(article.excerpt);
+
     // Reading progress
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+    // Load MathJax dynamically to render LaTeX formulas
+    useEffect(() => {
+        (window as any).MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+
+        const scriptId = 'mathjax-script';
+        let script = document.getElementById(scriptId) as HTMLScriptElement;
+
+        if (!script) {
+            script = document.createElement('script');
+            script.id = scriptId;
+            script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            script.async = true;
+            document.head.appendChild(script);
+        }
+
+        const handleLoad = () => {
+            if ((window as any).MathJax && (window as any).MathJax.typesetPromise) {
+                (window as any).MathJax.typesetPromise();
+            }
+        };
+
+        script.addEventListener('load', handleLoad);
+
+        if ((window as any).MathJax && (window as any).MathJax.typesetPromise) {
+            handleLoad();
+        }
+
+        return () => {
+            if (script) {
+                script.removeEventListener('load', handleLoad);
+            }
+        };
+    }, [article]);
 
     return (
         <PageTransition>
@@ -122,7 +219,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 {article.title}
                             </h1>
                             {/* Excerpt */}
-                            <p className="text-cool-grey text-lg leading-relaxed mb-8">
+                            <p className="text-cool-grey text-lg leading-relaxed mb-8 text-justify">
                                 {article.excerpt}
                             </p>
                         </motion.div>
@@ -246,6 +343,19 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                         </GlassCard>
                     </motion.div>
 
+                    {/* Educational / Science / Hearing Safety Disclaimer */}
+                    {hasMedicalOrHearingClaims && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.45 }}
+                            className="mt-12 p-5 rounded-xl border border-amber-500/20 bg-amber-500/[0.02] text-xs text-cool-grey leading-relaxed text-justify"
+                        >
+                            <strong className="text-amber-400 block mb-1 font-semibold uppercase tracking-wider">Educational & Hearing Safety Disclaimer</strong>
+                            The psychological, physiological, neurobiological, and acoustic safety concepts discussed in this article (such as dopamine responses, cognitive habituation, ear fatigue, acoustic reflexes, and sound pressure levels) are intended solely for educational, creative, and music production research. This content does not substitute for professional medical advice, clinical diagnosis, or treatment. Loud monitoring and prolonged exposure can cause permanent hearing damage, tinnitus, or auditory fatigue. Always practice safe monitoring levels (recommended below 80-85 dB SPL) and take regular ear breaks. If you experience hearing discomfort, persistent ringing, or severe mental fatigue, consult a licensed medical professional.
+                        </motion.div>
+                    )}
+
                     {/* Tags / Keywords */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -297,27 +407,30 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                             Continue Reading
                         </h2>
                         <div className="grid sm:grid-cols-2 gap-6">
-                            {related.map((rel) => (
-                                <Link key={rel.slug} href={`/blog/${rel.slug}`}>
-                                    <GlassCard padding="md" hover className="h-full group">
-                                        <span className={`mono-label text-xs ${categoryColors[rel.category].text}`}>
-                                            {category?.name}
-                                        </span>
-                                        <h3 className="text-base font-medium mt-2 mb-2 leading-snug group-hover:text-white transition-colors">
-                                            {rel.title}
-                                        </h3>
-                                        <p className="text-cool-grey text-sm line-clamp-2 mb-4">
-                                            {rel.excerpt}
-                                        </p>
-                                        <div className={`text-xs ${categoryColors[rel.category].text} flex items-center gap-1`}>
-                                            Read more
-                                            <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                    </GlassCard>
-                                </Link>
-                            ))}
+                            {related.map((rel) => {
+                                const relColors = categoryColors[rel.category] || categoryColors['production-tips'];
+                                return (
+                                    <Link key={rel.slug} href={`/blog/${rel.slug}`}>
+                                        <GlassCard padding="md" hover className="h-full group">
+                                            <span className={`mono-label text-xs ${relColors.text}`}>
+                                                {rel.category}
+                                            </span>
+                                            <h3 className="text-base font-medium mt-2 mb-2 leading-snug group-hover:text-white transition-colors">
+                                                {rel.title}
+                                            </h3>
+                                            <p className="text-cool-grey text-sm line-clamp-2 mb-4">
+                                                {rel.excerpt}
+                                            </p>
+                                            <div className={`text-xs ${relColors.text} flex items-center gap-1`}>
+                                                Read more
+                                                <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </div>
+                                        </GlassCard>
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
@@ -449,7 +562,7 @@ function formatContent(content: string, accentColor: string): string {
 
     // Actually, simple regex replacement at end is risky.
     // Let's use a simpler heuristic: match lines that DON'T start with < and aren't empty
-    formatted = formatted.replace(/^([^<\s].*)$/gm, `<p class="text-cool-grey leading-relaxed mb-6">$1</p>`);
+    formatted = formatted.replace(/^([^<\s].*)$/gm, `<p class="text-cool-grey leading-relaxed mb-6 text-justify">$1</p>`);
 
     // Apply accent colors dynamically via regex replacement for style attributes
     formatted = formatted

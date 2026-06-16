@@ -3,12 +3,14 @@
  * SEO-optimized article structure with categories
  */
 
+import { newArticles } from './blog-posts';
+
 export interface BlogArticle {
     slug: string;
     title: string;
     excerpt: string;
     content: string;
-    category: 'production-tips' | 'licensing-guide' | 'genre-guides';
+    category: 'production-tips' | 'licensing-guide' | 'genre-guides' | 'songwriting' | 'arrangement-groove' | 'sound-design' | 'vocal-production' | 'mixing-mastering' | 'producer-psychology' | 'audio-science';
     publishedAt: string;
     readingTime: number;
     featured?: boolean;
@@ -40,6 +42,41 @@ export const categories: Category[] = [
         slug: 'genre-guides',
         name: 'Genre Guides',
         description: 'Deep dives into Trap, Cyberphonk, R&B, and more production styles.',
+    },
+    {
+        slug: 'songwriting',
+        name: 'Songwriting',
+        description: 'Melodic structure, lyric rhythm, and hook design.',
+    },
+    {
+        slug: 'arrangement-groove',
+        name: 'Arrangement & Groove',
+        description: 'Dynamic section curves, microtiming, and rhythm pocket.',
+    },
+    {
+        slug: 'sound-design',
+        name: 'Sound Design',
+        description: 'Synthesis, textures, distortion, and timbre.',
+    },
+    {
+        slug: 'vocal-production',
+        name: 'Vocal Production',
+        description: 'Microphone choice, comping, tuning, and presence.',
+    },
+    {
+        slug: 'mixing-mastering',
+        name: 'Mixing & Mastering',
+        description: 'Masking, compression, loudness targets, and EQ design.',
+    },
+    {
+        slug: 'producer-psychology',
+        name: 'Producer Mindset',
+        description: 'Overcoming perfectionism, references, and session habits.',
+    },
+    {
+        slug: 'audio-science',
+        name: 'Audio Science',
+        description: 'DSP, Fourier transform, room modes, and sampling physics.',
     },
 ];
 
@@ -858,7 +895,7 @@ We specialize in this dirty, high-energy sound. Our Cyberphonk catalog is pre-cl
         slug: 'architecture-of-infinite-headroom-32-bit-float',
         title: 'The Architecture of Infinite Headroom: 32-Bit Floating-Point Explained',
         excerpt: 'An exhaustive technical treatise on how floating-point math renders internal clipping impossible and why 0dBFS is just a reference point.',
-        category: 'production-tips',
+        category: 'audio-science',
         publishedAt: '2026-02-15',
         readingTime: 15,
         featured: true,
@@ -1070,7 +1107,7 @@ R & B bass should be felt more than heard.
         slug: 'fft-for-producers-how-to-read-spectrum-analyzer',
         title: 'FFT for Producers: How to Read a Spectrum Analyzer Without Losing Your Mind',
         excerpt: 'Spectrum analyzers look scientific. They are. But that doesn\'t mean the pretty graph is telling you the truth about your mix. Here\'s what FFT actually does and why your ears still win.',
-        category: 'production-tips',
+        category: 'audio-science',
         publishedAt: '2026-06-10',
         readingTime: 12,
         content: `
@@ -1209,7 +1246,7 @@ If you find yourself staring at the analyzer more than listening to the music, c
         slug: 'why-your-low-end-lies-in-small-room',
         title: 'Why Your Low End Lies in a Small Room',
         excerpt: 'Your 808 sounds perfect at your desk. In the car it\'s a boomy mess. In your friend\'s studio it barely exists. The problem isn\'t your mix. It\'s your room.',
-        category: 'production-tips',
+        category: 'audio-science',
         publishedAt: '2026-06-08',
         readingTime: 10,
         content: `
@@ -1340,8 +1377,8 @@ The room is not broken. It's just small. And small rooms tell big lies about bas
     {
         slug: 'masking-why-vocals-drown-even-when-fader-goes-up',
         title: 'Masking: Why Your Vocals Drown Even When the Fader Goes Up',
-        excerpt: 'You keep pushing the vocal fader and it still won\'t cut through. The problem isn\'t level. It\'s that something else is sitting right on top of it in the frequency spectrum.',
-        category: 'production-tips',
+        excerpt: 'You turn the vocals up. They are still drowned by the beat. You turn them up again. Now they are on top of the mix, disconnected and separate. The problem is frequency masking, and the fader won\'t fix it.',
+        category: 'mixing-mastering',
         publishedAt: '2026-06-06',
         readingTime: 10,
         content: `
@@ -1428,7 +1465,7 @@ Masking isn't a bug. It's just how hearing works. Once you stop fighting it and 
         slug: 'compression-ratio-what-4-to-1-actually-means',
         title: 'Compression Ratio: What 4:1 Actually Means in Practice',
         excerpt: 'You set the ratio to 4:1 and crank the makeup gain. It sounds better. But louder always sounds better, so you haven\'t actually learned anything yet.',
-        category: 'production-tips',
+        category: 'mixing-mastering',
         publishedAt: '2026-06-04',
         readingTime: 11,
         content: `
@@ -1532,7 +1569,7 @@ Before you decide if compression is helping your track, level-match the output t
         slug: 'phase-vs-polarity-kick-bass-will-thank-you',
         title: 'Phase vs Polarity: Stop Confusing Them (Your Kick and Bass Will Thank You)',
         excerpt: 'Your kick sounds fat solo. Your bass sounds fat solo. Together they sound thin. The problem probably isn\'t EQ. It\'s phase cancellation, and fixing it starts with understanding what phase actually is.',
-        category: 'production-tips',
+        category: 'mixing-mastering',
         publishedAt: '2026-06-02',
         readingTime: 10,
         content: `
@@ -1637,7 +1674,7 @@ And one more thing. Phase problems from multi-mic recording (like snare top and 
         slug: 'saturation-clipping-limiting-three-flavors-of-loud',
         title: 'Saturation, Clipping, and Limiting: Three Flavors of Loud',
         excerpt: 'Saturation, clipping, and limiting all make things louder. But they do it in fundamentally different ways, and confusing them is how you end up with a crushed master that sounds worse on Spotify than it did in your DAW.',
-        category: 'production-tips',
+        category: 'mixing-mastering',
         publishedAt: '2026-05-30',
         readingTime: 11,
         content: `
@@ -1746,6 +1783,7 @@ Know which tool you're reaching for and why. Saturation adds harmonics and gentl
             keywords: ['saturation vs clipping', 'limiter mastering', 'true peak', 'audio clipping', 'soft clipping', 'drum bus clipping', 'loudness war', 'streaming loudness normalization', 'harmonic distortion music'],
         },
     },
+    ...newArticles,
 ];
 
 // Helper functions
