@@ -156,7 +156,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before adding another layer.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: intro timeline with too many labels collapsing. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -172,10 +172,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show cold open with the problem visible before the viewer reads the full headline.
-Headline accent: Intros die when
-Support accent: The intro gives
-Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Visual direction: Cold open. A premium leather-bound notebook lies open on a dark wood desk, handwritten lyrics in white ink with a single word crossed out in red. Next to it, a glowing smartphone with a voice memo waveform on screen. Moody blue side-lighting from a single source creates long shadows. The dotted grid canvas is barely visible beneath the objects. Shot type: top-down macro, 45 degree angle. Materials: matte leather, paper grain, glass phone screen. Composition: notebook occupies left 60%, phone occupies right 30%, 10% negative space between them. The headline appears as a kinetic reveal on the accented phrase "Intros die when" in warm amber, then the full headline snaps in white. Support line fades in below with ice-blue underline on "The intro gives". Motion cue: In the first 0.5 seconds, a quick punch-in on the crossed-out word occurs, followed by the headline reveal.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 2 - THE TRAP
@@ -188,10 +185,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show red pressure mark appears on the false fix while the better path stays cyan.
-Headline accent: Playing the whole
-Support accent: Giving away the
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the intro overload.
+Visual direction: DAW timeline crop showing 8 overloaded MIDI lanes, all playing the full hook melody simultaneously. A red neon warning light pulses from the top-right corner, casting a red glow across the cluttered lanes. One single cyan path cuts through the chaos, showing a filtered version of the hook. Shot type: wide crop, straight-on. Materials: glass DAW interface, glowing neon tubes. Composition: red overload occupies 70% of frame, cyan path occupies 20%, 10% negative space at bottom. Headline accent "Playing the whole" in red. Support accent "Giving away the" in red. Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the clean path.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 3 - THE EAR
@@ -204,10 +198,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show one signal path draws first, then the supporting detail fades in around it.
-Headline accent: The ear prefers
-Support accent: A hint of
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the intro overload.
+Visual direction: Extreme close-up of a studio headphone driver diaphragm, shot from a 30 degree angle. A single glowing cyan path of light traces from the center of the diaphragm outward, representing the teased hook signal. The rest of the diaphragm remains dark and unlit. Shot type: macro, shallow depth of field. Materials: metallic mesh, black plastic housing, cyan light source. Composition: diaphragm fills 80% of frame, cyan path occupies 20%. Headline accent "The ear prefers" in cyan. Support accent "A hint of" in cyan. Motion cue: The cyan path draws itself from center to edge over 2 seconds, then the supporting detail fades in around it.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 4 - THE SCIENCE
@@ -220,10 +211,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show science model builds one node at a time with no fake values.
-Headline accent: Managing the attention
-Support accent: The human attention
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Abstract 3D signal flow diagram. Three glowing glass nodes connected by thin cyan lines on a dotted grid canvas. The first node is bright and large, the second is dimmer and smaller, the third is barely visible. A red "overload" warning pulse emanates from the first node. Shot type: isometric, 45 degree angle. Materials: frosted glass, cyan neon, dark void background. Composition: nodes occupy center 60%, dotted grid fills background. Headline accent "Managing the attention" in cyan. Support accent "The human attention" in cyan. Motion cue: Nodes build one at a time with a soft glow pulse on each connection.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 5 - THE ART
@@ -236,10 +224,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show human taste moment lands as one knob, note, or lane is chosen.
-Headline accent: An intro should
-Support accent: An intro should
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Single physical brass knob on a vintage audio console, in sharp focus. Warm amber spotlight hits the knob from above, casting a soft glow on the wood-grain surface. The rest of the console fades into darkness. Shot type: macro, straight-on. Materials: brushed brass, wood grain, amber light. Composition: knob occupies center 40%, negative space surrounds it. Headline accent "An intro should" in warm amber. Support accent "An intro should" in warm amber. Motion cue: The knob rotates slowly by 15 degrees, then stops.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 6 - THE MOVE
@@ -252,10 +237,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show cursor performs the production move once, clearly, in context.
-Headline accent: Tease the identity
-Support accent: Play a filtered
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Clean DAW interface showing a single MIDI lane with a filtered hook melody. A cursor hovers over a high-pass filter curve, with the frequency knob set to 200Hz. The waveform below shows a chopped, simplified version of the hook. Shot type: straight-on, UI crop. Materials: glass interface, cyan accents. Composition: DAW window occupies center 70%, cursor is highlighted in cyan. Headline accent "Tease the identity" in cyan. Support accent "Play a filtered" in cyan. Motion cue: The cursor clicks the filter knob, and the waveform changes from full to filtered.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 7 - THE TEST
@@ -268,10 +250,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show A/B or mute switch toggles at matched level with the meters held honest.
-Headline accent: Cut the intro
-Support accent: Try cutting the
-Motion cue: Use a tap, mute, or device-swap action. The intro overload should change visibly without adding extra on-screen words.
+Visual direction: Two parallel glass toggle switches on a dark panel. The left switch is cyan and set to ON, the right switch is grey and set to OFF. Below each switch, a level meter shows the intro length: left meter shows half length, right meter shows full length. Shot type: straight-on, macro. Materials: frosted glass, brushed metal, cyan LED. Composition: switches occupy center 50%, meters occupy bottom 30%. Headline accent "Cut the intro" in cyan. Support accent "Try cutting the" in cyan. Motion cue: The left switch toggles ON with a soft click animation, and its meter drops to half.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 8 - THE CHECK
@@ -284,10 +263,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show translation devices or listening contexts enter as separate checks.
-Headline accent: Check the lead
-Support accent: Ensure the transition
-Motion cue: Use a tap, mute, or device-swap action. The intro overload should change visibly without adding extra on-screen words.
+Visual direction: Three listening context icons arranged in a row: a laptop, a car dashboard, and a mono speaker. Each icon is rendered in glass with cyan outlines. The laptop icon has a glowing checkmark, the car icon has a dim checkmark, the mono speaker has a red X. Shot type: straight-on, icon grid. Materials: glass, cyan neon, dark background. Composition: icons occupy center 60%, spaced evenly. Headline accent "Check the lead" in cyan. Support accent "Ensure the transition" in cyan. Motion cue: Each icon lights up in sequence with a soft pulse.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 9 - THE RULE
@@ -300,10 +276,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show rule locks into a simple visual diagram with extra space around it.
-Headline accent: The first vocal
-Support accent: Tease the hook
-Motion cue: Hold the frame longer. Let the intro overload settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Minimalist schematic layout. A bold cyan dividing line splits the frame horizontally. Above the line, a small waveform labeled "intro" shows a filtered hook. Below the line, a large waveform labeled "chorus" shows the full hook. Thin glass borders frame each section. Shot type: straight-on, diagram. Materials: glass panels, cyan lines, dark background. Composition: dividing line at center, waveforms occupy 40% each. Headline accent "The first vocal" in cyan. Support accent "Tease the hook" in cyan. Motion cue: The dividing line draws itself from left to right, then the waveforms appear.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 
 ### Prompt 10 - THE TAKEAWAY
@@ -312,18 +285,9 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before adding another layer.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: intro timeline with too many labels collapsing. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
-Headline accent: Tease the hook
-Support accent: Follow for daily
-Motion cue: Hold the frame longer. Let the intro overload settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Dark high-end closing frame. A premium smartphone lies flat on a dark surface, displaying a looping plain text message: "Tease the hook. Save the payoff." The screen glows with a soft cyan backlight. The dotted grid canvas is barely visible in the background. Shot type: top-down macro, 30 degree angle. Materials: glass phone, matte surface, cyan light. Composition: phone occupies center 40%, negative space surrounds it. Headline accent "Save this before" in cyan. Support accent "Follow for daily" in cyan. Motion cue: The phone screen pulses softly with a cyan glow every 3 seconds.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
-
-## Caption
-Stop giving away the whole song in the first ten seconds. A great intro is a teaser, not a summary. If you play the full melody and beat early, the listener has no reason to stay. Filter the hook, chop it up, and make them wait for the payoff.
-
-## Pinned comment
-Session move: Use a low-pass filter on your intro hook, then open it up exactly when the first verse starts. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

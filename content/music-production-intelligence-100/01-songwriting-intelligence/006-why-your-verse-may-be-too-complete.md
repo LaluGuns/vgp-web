@@ -26,12 +26,6 @@ Slide 1 thumbnail read: verse stealing chorus
 
 Viral hook: The verse is stealing the chorus
 
-Title: The verse is stealing the chorus
-
-Description: Is your verse resolving too early? Learn how to use open loops to keep listeners hooked and make your choruses feel massive.
-
-5 hashtags: #VGP #Songwriting #MusicProduction #MusicTheory #ProducerTips
-
 Primary keyword: verse arrangement
 
 Science anchor: narrative tension
@@ -151,7 +145,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: verse notebook page blocking the chorus title. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,7 +161,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. A premium leather-bound notebook lies open on a dark wood desk, its left page filled with handwritten verse lyrics in blue ink. A glowing smartphone with a voice memo waveform sits beside it. A single red X marks the chorus title on the right page, partially hidden by the verse page. Side-lighting from a warm amber lamp casts long shadows. Shot type: tight editorial crop, 50mm macro lens, shallow depth of field. Composition: notebook fills the lower two-thirds, phone sits top-right, headline text overlays the upper-left. Materials: matte paper, smooth leather, glass phone screen. Dark blue canvas with subtle dotted grid. Cyan accent glow on the word "stealing" in the headline. Motion cue: In the first 0.5 seconds, a quick punch-in on the red X occurs, followed by a kinetic headline reveal on the accented phrase.
 Headline accent: The verse is
 Support accent: The verse answers
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -183,7 +177,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: A DAW session view with a red warning glow. An overloaded mixer channel strip shows faders pushed to the red, with a neon red "CLIP" indicator flashing. A single cyan path of light traces from the verse section to a greyed-out chorus section, but the path is blocked by a red X. Shot type: close-up on the mixer, 35mm lens, slightly wide. Composition: mixer fills the frame, red glow emanates from the verse channel, cyan path is thin and precise. Materials: glass faders, metal channel strips, glowing LEDs. Dark blue canvas with dotted grid. Red accent on "Wrapping up" in the headline. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the verse gate.
 Headline accent: Wrapping up the
 Support accent: Resolving the story
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the verse gate.
@@ -199,7 +193,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Extreme close-up of a studio headphone driver diaphragm. A single glowing cyan path of light traces from the center of the diaphragm outward, splitting into two paths: one solid and one dashed. The dashed path fades into darkness. Shot type: macro, 100mm lens, extreme shallow depth of field. Composition: diaphragm fills the frame, cyan path is the only bright element. Materials: metallic mesh, black plastic, copper wire. Dark blue canvas with dotted grid. Cyan accent on "open question" in the headline. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the verse gate.
 Headline accent: The ear demands
 Support accent: Listeners stay engaged
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the verse gate.
@@ -215,7 +209,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show science model builds one node at a time with no fake values.
+Visual direction: Abstract 3D node diagram. Three glowing glass spheres connected by thin cyan lines form an incomplete triangle. The fourth node is a ghosted outline, waiting to be connected. A subtle dotted grid recedes into the background. Shot type: isometric, 45-degree angle, clean render. Composition: nodes centered, lines are precise and thin. Materials: frosted glass, cyan light, dark void. Dark blue canvas with dotted grid. Cyan accent on "open loops" in the headline. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: The psychology of
 Support accent: The human brain
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -231,7 +225,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Single physical brass knob on a vintage console, in sharp focus. A single wood-grain piano key sits next to it, also in focus. A warm amber spotlight illuminates the knob and key from above, casting long shadows. Shot type: macro, 100mm lens, extreme shallow depth of field. Composition: knob and key fill the lower third, headline overlays the upper third. Materials: polished brass, aged wood, warm light. Dark blue canvas with dotted grid. Warm amber accent on "move" in the headline. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: A verse should
 Support accent: A great verse
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -247,7 +241,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show cursor performs the production move once, clearly, in context.
+Visual direction: Clean DAW interface. A cursor hovers over a high-pass filter curve on an EQ plugin. The curve shows a steep roll-off at the end of the verse region, leaving a gap before the chorus region begins. Shot type: close-up on the DAW screen, 50mm lens, flat angle. Composition: EQ plugin fills the frame, cursor is the focal point. Materials: glass screen, digital interface, cyan highlights. Dark blue canvas with dotted grid. Cyan accent on "emotional gap" in the headline. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: Leave one emotional
 Support accent: Stop the verse
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -263,7 +257,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Matched A/B test. Two parallel glass toggle switches sit side by side on a brushed metal panel. The left switch is cyan and set to ON, the right switch is grey and set to OFF. Two level-meters below show identical levels. Shot type: close-up, 50mm lens, flat angle. Composition: switches centered, meters below. Materials: glass toggles, brushed metal, cyan and grey LEDs. Dark blue canvas with dotted grid. Cyan accent on "Remove the best" in the headline. Motion cue: Use a tap, mute, or device-swap action. The verse gate should change visibly without adding extra on-screen words.
 Headline accent: Remove the best
 Support accent: Play your versetochorus
 Motion cue: Use a tap, mute, or device-swap action. The verse gate should change visibly without adding extra on-screen words.
@@ -279,7 +273,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Three listening contexts shown as separate glass panels: a laptop screen, a car dashboard, and a mono speaker. Each panel has a cyan checkmark or a red X. The laptop and car show a checkmark, the mono speaker shows a red X. Shot type: wide shot, 35mm lens, flat angle. Composition: three panels arranged horizontally, centered. Materials: glass panels, digital screens, cyan and red LEDs. Dark blue canvas with dotted grid. Cyan accent on "Check the lyric" in the headline. Motion cue: Use a tap, mute, or device-swap action. The verse gate should change visibly without adding extra on-screen words.
 Headline accent: Check the lyric
 Support accent: Ensure the story
 Motion cue: Use a tap, mute, or device-swap action. The verse gate should change visibly without adding extra on-screen words.
@@ -295,7 +289,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Minimalist schematic layout. A bold cyan dividing line separates a "Verse" section on the left from a "Chorus" section on the right. The verse section has a small red X, the chorus section has a large cyan checkmark. Thin glass borders frame each section. Shot type: flat, 2D schematic, clean render. Composition: dividing line centered, sections balanced. Materials: glass borders, cyan line, dark void. Dark blue canvas with dotted grid. Cyan accent on "hook gets" in the headline. Motion cue: Hold the frame longer. Let the verse gate settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: The hook gets
 Support accent: Never resolve the
 Motion cue: Hold the frame longer. Let the verse gate settle, then use a small cyan pulse on the final accented phrase.
@@ -307,18 +301,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: verse notebook page blocking the chorus title. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Dark high-end closing frame. A premium smartphone lies flat on a dark wood desk, its screen displaying a single line of plain text: "The hook gets a job." The phone is the only object in frame. Shot type: top-down, 50mm lens, flat angle. Composition: phone centered, fills the middle third. Materials: glass screen, metal frame, dark wood. Dark blue canvas with dotted grid. Cyan accent on "Save this" in the headline. Motion cue: Hold the frame longer. Let the verse gate settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: Keep the verse
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the verse gate settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Huron 2006 | Bregman 1990
-
-## Caption
-If your chorus is not hitting hard, your verse might be too complete. When you resolve the melody and chords in the verse, you release all the tension. Instead, leave the last chord hanging. Force the listener to wait for the chorus to get the resolution they want.
-
-## Pinned comment
-Session tip: End your verse on a V chord (dominant) or a subdominant chord, and cut the drums for the last two beats before the chorus hits. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

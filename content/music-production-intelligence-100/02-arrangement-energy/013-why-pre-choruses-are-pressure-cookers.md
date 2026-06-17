@@ -26,12 +26,6 @@ Slide 1 thumbnail read: pressure not filler
 
 Viral hook: Pre-chorus is pressure, not filler
 
-Title: Pre-chorus is pressure, not filler
-
-Description: Stop weakening your drops. Learn how to use your pre-chorus as a pressure cooker that makes your choruses hit twice as hard.
-
-5 hashtags: #VGP #Arrangement #MusicProduction #BeatMaking #ProducerTips
-
 Primary keyword: pre chorus tension
 
 Science anchor: tension and release
@@ -151,7 +145,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before adding another layer.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: pressure gauge rising through stacked pre-chorus lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,7 +161,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Extreme close-up of a premium black notebook with handwritten lyrics in white ink, a glowing smartphone with a voice memo waveform on screen placed beside it. Moody blue side-lighting casts long shadows across the dotted grid dark-blue canvas. The hero object is a single glowing cyan pressure gauge needle rising through stacked translucent DAW lanes. Shot type: macro, shallow depth of field. Lighting: single key light from left, cyan gel, soft bloom on the gauge. Materials: matte black notebook, frosted glass phone, brushed metal gauge. Composition: gauge centered in upper third, notebook and phone in lower third, headline text floating above with a warm amber accent on "pressure". No logos or symbols. Footer centered at bottom.
 Headline accent: Prechorus is pressure
 Support accent: The prechorus has
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -183,7 +177,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red neon warning light pulses from behind a cluttered DAW interface. Overloaded faders in red, a hot red warning light glows on a mixing console. The hero object is a single red pressure gauge needle pinned to the danger zone. Shot type: wide crop of a DAW timeline with red overlays. Lighting: harsh red backlight, cyan accent on the correct path. Materials: glass faders, red LED indicators, dark brushed metal. Composition: red gauge on left, overloaded lanes on right, headline in upper center with red accent on "Starting the chorus". Footer centered at bottom.
 Headline accent: Starting the chorus
 Support accent: Letting your prechorus
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the pressure rise.
@@ -199,7 +193,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing through it. The path represents auditory stream segregation: the ear separating tension from release. Shot type: macro, shallow depth of field. Lighting: single cyan key light from behind the diaphragm, soft rim light. Materials: black mesh, copper voice coil, translucent plastic. Composition: diaphragm centered, cyan path arcing from left to right, headline in upper third with cyan accent on "The ear expects". Footer centered at bottom.
 Headline accent: The ear expects
 Support accent: Listeners will tolerate
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the pressure rise.
@@ -215,7 +209,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show science model builds one node at a time with no fake values.
+Visual direction: Abstract 3D signal flow node diagram. Glowing glass nodes connected by thin cyan lines on a dotted grid dark-blue canvas. One node pulses with a warm amber glow representing the peak of tension. Shot type: isometric, clean. Lighting: soft ambient cyan, amber accent on the peak node. Materials: frosted glass nodes, thin cyan fiber optic lines. Composition: node diagram centered, headline in upper third with cyan accent on "How tension and". Footer centered at bottom.
 Headline accent: How tension and
 Support accent: Psychological studies show
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -231,7 +225,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Single physical brass knob in sharp focus on a wood-grain keyboard key. Warm amber spotlight illuminates the knob, casting a soft glow on the key. The hero object is the knob, slightly off-center, suggesting incompleteness. Shot type: macro, shallow depth of field. Lighting: single warm amber key light, dark background. Materials: polished brass, aged wood, black key. Composition: knob in lower third, key in background, headline in upper third with amber accent on "A good prechorus". Footer centered at bottom.
 Headline accent: A good prechorus
 Support accent: A great prechorus
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -247,7 +241,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show cursor performs the production move once, clearly, in context.
+Visual direction: Clean DAW interface showing a cursor hovering over a high-pass filter curve or stereo width slider. The cursor is a thin cyan line. The interface is dark with a dotted grid background. Shot type: close-up of the DAW screen. Lighting: soft ambient cyan from the screen. Materials: glass screen, dark metal bezel. Composition: cursor and filter curve centered, headline in upper third with cyan accent on "Thin the lows". Footer centered at bottom.
 Headline accent: Thin the lows
 Support accent: Filter out the
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -263,7 +257,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Parallel glass toggle switches on a dark panel. One switch is cyan and ON, the other is grey and OFF. Level-meters next to each switch show a drop in the grey channel. Shot type: close-up, straight on. Lighting: soft cyan backlight, grey ambient. Materials: frosted glass switches, brushed metal panel. Composition: switches centered, meters on right, headline in upper third with cyan accent on "Mute the chorus". Footer centered at bottom.
 Headline accent: Mute the chorus
 Support accent: Mute the kick
 Motion cue: Use a tap, mute, or device-swap action. The pressure rise should change visibly without adding extra on-screen words.
@@ -279,7 +273,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Three listening context icons: a laptop, a car dashboard, and a mono speaker. Each icon is a thin cyan outline on a dark background. A small level-meter next to each shows the pre-chorus volume relative to the chorus. Shot type: flat lay, clean. Lighting: soft ambient cyan. Materials: glass icons, dark canvas. Composition: icons in a row, meters below, headline in upper third with cyan accent on "Check the transition". Footer centered at bottom.
 Headline accent: Check the transition
 Support accent: Ensure that the
 Motion cue: Use a tap, mute, or device-swap action. The pressure rise should change visibly without adding extra on-screen words.
@@ -295,7 +289,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Minimalist schematic layout. A bold cyan dividing line separates a pre-chorus section (left, with a rising pressure curve) from a chorus section (right, with a falling release curve). Thin glass borders frame each section. Shot type: flat, clean. Lighting: soft ambient cyan. Materials: glass panels, thin cyan lines. Composition: dividing line centered, curves on each side, headline in upper third with cyan accent on "The chorus opens". Footer centered at bottom.
 Headline accent: The chorus opens
 Support accent: Build maximum pressure
 Motion cue: Hold the frame longer. Let the pressure rise settle, then use a small cyan pulse on the final accented phrase.
@@ -307,18 +301,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before adding another layer.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: pressure gauge rising through stacked pre-chorus lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Dark high-end closing frame. A premium smartphone displays looping plain text: "Pre-chorus is pressure, not filler." The phone is centered on a dark-blue dotted grid canvas. Shot type: straight on, clean. Lighting: soft ambient cyan from the phone screen. Materials: glass phone, dark metal bezel. Composition: phone centered, headline in upper third with cyan accent on "Save this before". Footer centered at bottom.
 Headline accent: Use the prechorus
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the pressure rise settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Ronan et al. 2018 | Senior accessed 2026
-
-## Caption
-Your chorus feels small because your pre-chorus is too big. If you don't build tension first, the release won't hit. Use the pre-chorus as a pressure cooker: cut the low end, narrow the width, and let the tension build until the drop hits.
-
-## Pinned comment
-Session move: Put a high-pass filter on your main instrumental group in the pre-chorus, automating it up to 150Hz before cutting it on the drop. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

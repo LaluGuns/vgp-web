@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Doubling works nobody notices
 
 Viral hook: Doubling works when nobody notices
 
-Title: Doubling works when nobody notices
-
-Description: Loud vocal doubles clutter the mix and detract from the lead singer. This guide explains the science of auditory fusion and provides a session move to tuck double tracks so they build size without drawing attention.
-
-5 hashtags: #VGP #VocalProduction #MixingTips #AudioScience #HomeStudio
-
-Primary keyword: vocal doubling
-
-Science anchor: auditory fusion
-
-Art and taste anchor: The best support part often disappears into the lead.
-
-Claim safety: producer interpretation. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -59,50 +45,6 @@ Humanizer status: passed
   - Year: 1990
   - Use: source separation, auditory grouping, listener attention
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Doubling works when nobody notices
-Support: A double can add size without calling attention to itself.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Heavy doubles masking the lead
-Support: Blaring double tracks clutter the center image and smear the lead vocal's details.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: Finding cohesive vocal width
-Support: Listeners should notice the choruses opening up without hearing distinct secondary voices.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The psychology of auditory fusion
-Support: Two similar sounds arriving close together blend into a single, wider sound source.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Support vocals should melt in
-Support: Adjust the tone and timing of doubles so they lock seamlessly behind the lead performance.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Tuck doubles under the main take
-Support: Lower the double's fader until you only perceive it when it is muted.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Test the hook without doubles
-Support: Toggle the mute button on the backing track to feel if the chorus loses its weight.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Monitor the stereo image width
-Support: Listen to the mix in mono to verify the double does not create phase cancelation.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Keep subtle supporting tracks
-Support: Maintain the double if the chorus feels larger without sounding messy.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before cutting another vocal take.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: double take ghost lane behind a lead vocal. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -133,6 +75,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Doubling works when nobody notices
+Support: A double can add size without calling attention to itself.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Heavy doubles masking the lead
+Support: Visible vocal doubles can clutter the stereo field and mask the main vocal's frequency center.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Finding cohesive vocal width
+Support: Listeners hear distinct pitch and timing discrepancies rather than a single cohesive performance.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: The psychology of auditory fusion
+Support: Auditory stream segregation occurs when time differences between vocal tracks exceed 15 milliseconds.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Support vocals should melt in
+Support: Blend the double to support the lead vocal's timbre without drawing focus to itself.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Tuck doubles under the main take
+Support: Align vocal doubles using manual micro-timing adjustments and tight pitch-matching tools.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Test the hook without doubles
+Support: Mute the doubles to verify if the lead vocal loses thickness and core weight.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Monitor the stereo image width
+Support: Verify the stereo vocal balance in mono to ensure phase cancellation does not occur.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Keep subtle supporting tracks
+Support: Keep doubles low in the mix to reinforce lead density without creating audible clutter.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next vocal mixing session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: double take ghost lane behind a lead vocal. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -145,7 +132,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. The ghost double is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed double take ghost lane behind a lead vocal, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: Doubling works
 Support accent: size without calling attention
 Motion cue: First 0.5 seconds: quick punch-in on the ghost double, then kinetic headline reveal on the accented phrase.
@@ -157,11 +144,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Heavy doubles masking the lead
-- Blaring double tracks clutter the center image and smear the lead vocal's details.
+- Visible vocal doubles can clutter the stereo field and mask the main vocal's frequency center.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Heavy doubles masking
 Support accent: clutter the center image
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ghost double.
@@ -173,11 +160,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - Finding cohesive vocal width
-- Listeners should notice the choruses opening up without hearing distinct secondary voices.
+- Listeners hear distinct pitch and timing discrepancies rather than a single cohesive performance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: cohesive vocal width
 Support accent: distinct secondary voices
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ghost double.
@@ -189,11 +176,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - The psychology of auditory fusion
-- Two similar sounds arriving close together blend into a single, wider sound source.
+- Auditory stream segregation occurs when time differences between vocal tracks exceed 15 milliseconds.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed double take ghost lane behind a lead vocal is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: auditory fusion
 Support accent: single wider sound source
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -205,11 +192,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Support vocals should melt in
-- Adjust the tone and timing of doubles so they lock seamlessly behind the lead performance.
+- Blend the double to support the lead vocal's timbre without drawing focus to itself.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: vocals should melt
 Support accent: lock seamlessly
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -221,11 +208,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Tuck doubles under the main take
-- Lower the double's fader until you only perceive it when it is muted.
+- Align vocal doubles using manual micro-timing adjustments and tight pitch-matching tools.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: Tuck doubles
 Support accent: only perceive it when
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -237,11 +224,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Test the hook without doubles
-- Toggle the mute button on the backing track to feel if the chorus loses its weight.
+- Mute the doubles to verify if the lead vocal loses thickness and core weight.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: hook without doubles
 Support accent: chorus loses weight
 Motion cue: Use a tap or mute action. The ghost double changes visibly.
@@ -253,11 +240,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Monitor the stereo image width
-- Listen to the mix in mono to verify the double does not create phase cancelation.
+- Verify the stereo vocal balance in mono to ensure phase cancellation does not occur.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed double take ghost lane behind a lead vocal is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: stereo image width
 Support accent: no phase cancelation
 Motion cue: Use a tap or mute action. The ghost double changes visibly.
@@ -269,11 +256,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Keep subtle supporting tracks
-- Maintain the double if the chorus feels larger without sounding messy.
+- Keep doubles low in the mix to reinforce lead density without creating audible clutter.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: subtle supporting tracks
 Support accent: larger without sounding messy
 Motion cue: Hold frame longer. Let the ghost double settle, then pulse the final accent.
@@ -284,22 +271,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before cutting another vocal take.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next vocal mixing session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Double take ghost lane behind a lead vocal. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Tuck vocal doubles
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the ghost double settle, then pulse the accent.
 Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
-
-## Caption
-Vocal doubles are meant to be felt, not heard as separate layers. When doubles are too loud, they clutter the stereo field and mask the main performance. By tucking them down until they blend into the lead, you utilize auditory fusion to make the chorus feel wider and thicker. Try muting the double to see if the track loses its size. If it does, you have hit the sweet spot. Save this post for your next mix. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Pro tip: Roll off the high and low frequencies of your doubles using a bandpass filter. Removing sibilance and low rumble helps them tuck neatly behind the lead vocal without causing clutter. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use double take ghost lane behind a lead vocal. Keep the ghost double motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

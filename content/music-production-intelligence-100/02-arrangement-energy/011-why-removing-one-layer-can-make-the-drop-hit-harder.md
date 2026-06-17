@@ -82,7 +82,7 @@ Palette: black-blue, cyan, electric blue, ice blue, white, muted grey. Red reser
 
 Pillar visual language: Arrangement and energy: DAW lanes, mute states, energy curves, density ladders, section jumps, chorus weight.
 
-Footer: Render only `www.virzyguns.com` and `100% Art. 100% Science.` as centered plain text in the footer zone. No symbols, logos, stylized V, monogram, icon, emblem, badge, mark, or decorative shape anywhere.
+Footer: Render only `www.virzyguns.com` and `100% Art. 100% Science.` as centered plain text in the footer zone. No symbols, logos, stylized V, monogram, icon, emblem, badge, mark, decorative shape anywhere.
 
 Composition: Slide label top-left. Headline upper-middle with accent. Hero visual in middle. Support line lower-middle with accent. Footer centered in footer zone. Reference line tiny and muted.
 
@@ -156,7 +156,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before adding another layer.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: muted synth lane above a heavier drop waveform. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -172,7 +172,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Extreme close-up of a premium black notebook with handwritten lyrics in white ink, next to a glowing smartphone showing a voice memo waveform. Moody blue side-lighting from the left creates deep shadows. The notebook page shows the phrase "Remove one layer" crossed out and rewritten as "Make the drop heavier." A single cyan LED strip on the phone screen pulses softly. Shot type: macro product shot. Materials: matte black paper, glass phone screen, aluminum phone edge. Composition: notebook occupies left 60%, phone occupies right 40%, both at slight angle. Dark blue-black background with subtle dotted grid. Headline "Remove one layer. Make the drop heavier" appears in SF Pro Display 120px white with "Remove one layer" in warm amber gradient. Support line "The drop is busy, but the punch is hidden." in SF Pro Text 42px with "The drop is" in ice-blue underline. Footer centered: www.virzyguns.com and 100% Art. 100% Science. in plain text. Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
 Headline accent: Remove one layer
 Support accent: The drop is
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -188,7 +188,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red pressure mark appears on the false fix while the better path stays cyan. Close-up of a DAW mixer section with 8 overloaded faders, all peaking in the red zone. A single red neon warning light pulses above the faders. The waveform display shows dense, overlapping frequency clusters in red. One cyan path cuts through the clutter, representing the muted layer. Shot type: macro detail of mixer faders. Materials: glass fader caps, brushed metal mixer surface, red LED indicators. Composition: faders fill the frame diagonally from bottom-left to top-right. Red glow from the overload indicators casts a warning hue. Headline "Stacking layers to build energy" in SF Pro Display 110px white with "Stacking layers to" in red accent. Support line in SF Pro Text 40px with "Stacking more and" in red underline. Footer centered. Reference line present.
 Headline accent: Stacking layers to
 Support accent: Stacking more and
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the mute impact.
@@ -204,7 +204,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: One signal path draws first, then the supporting detail fades in around it. Extreme close-up of a headphone driver diaphragm with a single glowing cyan path of light tracing from the center outward. The diaphragm is metallic silver with fine concentric rings. A soft blue glow emanates from the center. Shot type: macro product detail. Materials: metal diaphragm, copper voice coil visible at edges, black plastic housing. Composition: diaphragm fills the frame, cyan light path cuts diagonally from center to top-right. Deep black-blue background with dotted grid. Headline "The ear needs space to feel weight" in SF Pro Display 120px white with "The ear needs" in cyan gradient. Support line in SF Pro Text 42px with "A drop only" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: The ear needs
 Support accent: A drop only
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the mute impact.
@@ -220,7 +220,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show science model builds one node at a time with no fake values.
+Visual direction: Science model builds one node at a time with no fake values. Abstract 3D signal flow diagram with two glowing glass nodes labeled "Synth 440Hz" and "Guitar 440Hz" connected by a thick red line labeled "Masking Zone." A third glass node labeled "Brain" sits above, connected by thin cyan lines. The red line pulses to show frequency overlap. Shot type: isometric 3D diagram. Materials: frosted glass nodes, thin cyan neon tubes for connections, dark blue-black background with dotted grid. Composition: nodes form a triangle, red connection line is the base, cyan lines form the sides. Headline "The mechanics of auditory masking" in SF Pro Display 110px white with "The mechanics of" in cyan accent. Support line in SF Pro Text 40px with "When two sounds" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: The mechanics of
 Support accent: When two sounds
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -236,7 +236,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Human taste moment lands as one knob, note, or lane is chosen. Single physical brass knob on a vintage console, in sharp focus, with warm amber spotlight from above. The knob is turned to the "Mute" position. A wood-grain keyboard key is visible in the background, slightly out of focus. Shot type: macro product detail. Materials: polished brass knob, wood-grain key, brushed aluminum console surface. Composition: knob occupies center-left, key occupies background right. Warm amber light creates a premium, tactile feel. Deep black-blue background with dotted grid. Headline "A brave mute can sound more expensive than another stack" in SF Pro Display 100px white with "A brave mute" in warm amber accent. Support line in SF Pro Text 38px with "Muting a massive" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: A brave mute
 Support accent: Muting a massive
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -252,7 +252,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show cursor performs the production move once, clearly, in context.
+Visual direction: Cursor performs the production move once, clearly, in context. Clean DAW interface showing a cursor hovering over a high-pass filter curve on a synth track. The cursor is a thin cyan arrow. The filter curve is highlighted in cyan, showing a steep cut below 200Hz. A second track labeled "Lead Synth" is visible with a full-range waveform. Shot type: UI detail. Materials: glass-like DAW interface, cyan cursor, dark blue-black background with dotted grid. Composition: DAW window fills the frame, cursor is centered, filter curve is prominent. Headline "Remove the layer that copies the lead job" in SF Pro Display 110px white with "Remove the layer" in cyan accent. Support line in SF Pro Text 40px with "Identify and mute" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: Remove the layer
 Support accent: Identify and mute
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -268,7 +268,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: A/B or mute switch toggles at matched level with the meters held honest. Parallel glass toggle switches on a mixing console, one switch is cyan (ON), the other is grey (OFF). Two level meters next to the switches show identical levels, proving the test is fair. Shot type: macro detail of console switches. Materials: glass toggle switches, brushed metal console surface, LED level meters. Composition: switches occupy left side, meters occupy right side. Cyan glow from the ON switch casts a subtle light. Deep black-blue background with dotted grid. Headline "Mute each support layer during the drop" in SF Pro Display 110px white with "Mute each support" in cyan accent. Support line in SF Pro Text 40px with "Mute support tracks" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: Mute each support
 Support accent: Mute support tracks
 Motion cue: Use a tap, mute, or device-swap action. The mute impact should change visibly without adding extra on-screen words.
@@ -284,7 +284,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Translation devices or listening contexts enter as separate checks. Three devices arranged in a row: a laptop with a waveform on screen, a car dashboard with a speaker grille, and a mono bluetooth speaker. Each device has a small cyan checkmark above it. The laptop screen shows a clean low-end waveform. Shot type: flat lay product shot. Materials: aluminum laptop, car dashboard plastic, fabric speaker grille. Composition: devices are evenly spaced from left to right. Deep black-blue background with dotted grid. Headline "Check the low-end definition" in SF Pro Display 120px white with "Check the lowend" in cyan accent. Support line in SF Pro Text 42px with "Ensure that muting" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: Check the lowend
 Support accent: Ensure that muting
 Motion cue: Use a tap, mute, or device-swap action. The mute impact should change visibly without adding extra on-screen words.
@@ -300,7 +300,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Rule locks into a simple visual diagram with extra space around it. Minimalist schematic layout with a bold cyan dividing line down the center. On the left side, a single glass node labeled "Unique Job" with a cyan glow. On the right side, three grey nodes labeled "Redundant" crossed out with a thin red line. Thin glass borders frame each side. Shot type: isometric diagram. Materials: frosted glass nodes, thin cyan neon lines, dark blue-black background with dotted grid. Composition: dividing line is vertical center, nodes are evenly spaced on each side. Headline "The drop gets a clear front edge" in SF Pro Display 120px white with "The drop gets" in cyan accent. Support line in SF Pro Text 42px with "Keep the drop" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: The drop gets
 Support accent: Keep the drop
 Motion cue: Hold the frame longer. Let the mute impact settle, then use a small cyan pulse on the final accented phrase.
@@ -312,18 +312,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before adding another layer.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: muted synth lane above a heavier drop waveform. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: The final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Dark high-end closing frame with a premium smartphone displaying looping plain text: "Remove one layer. Make the drop heavier." The phone is centered on a dark blue-black background with subtle dotted grid. A single cyan LED strip on the phone screen pulses softly. Shot type: product shot. Materials: glass phone screen, aluminum phone edge, dark background. Composition: phone is centered, text on screen is centered and readable. Headline "Save this before adding another layer." in SF Pro Display 120px white with "Save this before" in cyan accent. Support line "Follow for daily session science. Visit www.virzyguns.com" in SF Pro Text 42px with "Follow for daily" in ice-blue underline. Footer centered. Reference line present.
 Headline accent: Mute the clutter
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the mute impact settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018 | Senior accessed 2026
-
-## Caption
-Stacking more layers on your drop is actually making it sound smaller. More tracks mean more masking and less headroom. By muting the layers that clash with your lead, you give your kick, snare, and bass room to breathe.
-
-## Pinned comment
-Session check: Mute your secondary chord stacks during the drop and hear how much punchier your main synth and bass become. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

@@ -151,7 +151,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: chorus lyric line under an unchanged volume meter. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,7 +167,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. A premium leather-bound notebook lies open on a dark wood desk, handwritten hook lyrics in white ink on the left page. Beside it, a glowing smartphone screen shows a voice memo waveform paused at the chorus. A single cyan path of light traces from the verse lyric to the chorus lyric, highlighting the energy gap. Side-lighting from a warm amber lamp casts long shadows. The headline snaps in on the first beat with a kinetic reveal on "Make the chorus". The support line fades in below with "The hook feels" in ice-blue. The dotted grid canvas is barely visible in the deep black-blue background. Shot type: tight editorial crop, 50mm lens, shallow depth of field. Materials: leather, paper, glass, metal. Composition: notebook and phone occupy the lower two-thirds, headline and support float in the upper third. Motion cue: quick punch-in on the hero object in the first 0.5 seconds, then kinetic headline reveal on the accented phrase.
 Headline accent: Make the chorus
 Support accent: The hook feels
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -183,7 +183,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: A DAW mixer view with overloaded faders pushed to the red. A hot red warning light pulses on the master channel. The chorus doorway is marked in cyan, but a red pressure mark covers the false fix path. The better path stays cyan and clean. The headline "Pushing the faders" appears in red, then the support line "Simply making the" fades in with a red underline. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the mixer section, 35mm lens, high contrast. Materials: glass faders, metal rails, glowing LEDs. Composition: faders dominate the frame, headline and support float in the upper third. Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
 Headline accent: Pushing the faders
 Support accent: Simply making the
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
@@ -199,7 +199,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing the auditory focus path. The path starts narrow and intimate (verse) then expands wide and bright (chorus). The headline "The ear responds" appears in white with "responds" in cyan. The support line "A chorus only" fades in with "only" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 100mm lens, extreme shallow depth of field. Materials: metal mesh, plastic housing, copper wire. Composition: diaphragm fills the lower two-thirds, headline and support float in the upper third. Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
 Headline accent: The ear responds
 Support accent: A chorus only
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
@@ -215,7 +215,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show science model builds one node at a time with no fake values.
+Visual direction: Abstract 3D signal flow diagram with glowing glass nodes connected by thin cyan lines. One node labeled "Verse" is small and dim, another labeled "Chorus" is large and bright. The path between them shows a clear energy gradient. The headline "The perceptual power" appears in white with "power" in cyan. The support line "Our auditory system" fades in with "auditory system" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 24mm lens, clean lines. Materials: glass, light, wire. Composition: diagram occupies the center, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: The perceptual power
 Support accent: Our auditory system
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -231,7 +231,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Single physical brass knob on a vintage audio console, in sharp focus. A wood-grain keyboard key sits beside it. A warm amber spotlight illuminates the knob, casting a soft glow. The headline "Size is often" appears in white with "often" in warm amber. The support line "Creating the illusion" fades in with "illusion" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 85mm lens, shallow depth of field. Materials: brass, wood, metal. Composition: knob and key occupy the lower two-thirds, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: Size is often
 Support accent: Creating the illusion
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -247,7 +247,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show cursor performs the production move once, clearly, in context.
+Visual direction: Clean DAW interface showing a cursor hovering over a high-pass filter curve or stereo width slider. The verse track is highlighted with a narrow stereo field indicator, while the chorus track shows a wide field. The headline "Make the verse" appears in white with "verse" in cyan. The support line "Narrowing the stereo" fades in with "stereo" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the DAW interface, 50mm lens, clean UI. Materials: glass screen, metal body. Composition: DAW interface fills the frame, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: Make the verse
 Support accent: Narrowing the stereo
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -263,7 +263,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Parallel glass toggle switches on a mixing console. One switch is cyan and ON, the other is grey and OFF. Level-meters beside them show a clear difference in energy. The headline "Mute one verse" appears in white with "verse" in cyan. The support line "Mute one key" fades in with "key" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the switches, 50mm lens, clean lines. Materials: glass, metal, plastic. Composition: switches and meters occupy the lower two-thirds, headline and support float in the upper third. Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
 Headline accent: Mute one verse
 Support accent: Mute one key
 Motion cue: Use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
@@ -279,7 +279,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Three listening contexts shown as separate checks: a laptop speaker, a car dashboard, and a mono speaker icon. Each is rendered in thin cyan outlines on a dark background. The headline "Listen to the" appears in white with "Listen" in cyan. The support line "If the contrast" fades in with "contrast" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 35mm lens, clean icons. Materials: glass, metal, plastic. Composition: three icons arranged in a row in the center, headline and support float in the upper third. Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
 Headline accent: Listen to the
 Support accent: If the contrast
 Motion cue: Use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
@@ -295,7 +295,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Minimalist schematic layout with a bold cyan dividing line separating a narrow verse section (left) from a tall chorus section (right). Thin glass borders frame each section. The headline "The chorus feels" appears in white with "feels" in cyan. The support line "A great chorus" fades in with "great" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: flat lay, 50mm lens, clean lines. Materials: glass, light, wire. Composition: schematic occupies the center, headline and support float in the upper third. Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: The chorus feels
 Support accent: A great chorus
 Motion cue: Hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
@@ -307,18 +307,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: chorus lyric line under an unchanged volume meter. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Dark high-end closing frame. A premium smartphone displays looping plain text: "Save this before writing the next hook." The phone sits on a dark surface with a subtle cyan glow around it. The headline "Save this before" appears in white with "Save" in cyan. The support line "Follow for daily" fades in with "daily" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the phone screen, 50mm lens, clean lines. Materials: glass, metal, dark surface. Composition: phone occupies the center, headline and support float in the upper third. Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: Build size through
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
-
-## Caption
-If your chorus feels flat, the problem is usually the verse. Simply turning up the volume or stacking layers just leads to a muddy mix. The secret is relative size. By making your verse narrow and dry, the chorus will naturally sound huge and expensive. Use this transition checklist in your next session.
-
-## Pinned comment
-Session tip: Try filtering out everything below 100Hz in the verse, then let the full low end kick in exactly on downbeat of the chorus. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

@@ -151,7 +151,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: silent gap before the title on a lyric timeline. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -307,7 +307,7 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
@@ -316,9 +316,3 @@ Headline accent: Cut the music
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the title silence gap settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
-
-## Caption
-Silence is the ultimate spotlight. If your title line is buried under drums and synths, the listener will miss the point of the song. Try cutting all backing instruments for one beat right before the title vocal. The sudden silence makes the hook pop instantly.
-
-## Pinned comment
-Session move: Cut your bass and drums two beats before the chorus downbeat, letting only the clean vocal lead the listener in. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

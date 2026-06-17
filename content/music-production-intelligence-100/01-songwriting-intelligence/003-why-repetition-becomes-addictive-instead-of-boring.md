@@ -151,7 +151,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: looped lyric phrase with tiny mutation marks. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,10 +167,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show cold open with the problem visible before the viewer reads the full headline.
-Headline accent: Repetition gets addictive
-Support accent: The line repeats
-Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Visual direction: Cold open. Tight editorial crop on a premium leather-bound notebook with handwritten lyrics in white ink. A glowing smartphone voice memo app sits beside it, screen showing a waveform with a single cyan mutation mark. Moody blue side-lighting from a single key light at 45 degrees. Deep black-blue canvas with subtle dotted grid. The headline snaps in with a kinetic reveal on "Repetition gets addictive" in warm amber accent. Support line fades in with ice-blue underline on "The line repeats". Hero object: the notebook and phone, shot from a low angle with shallow depth of field. 40% visual density for scroll-stop impact. Motion cue: quick punch-in on the mutation mark in the first 0.5 seconds.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 2 - THE TRAP
@@ -183,10 +180,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show red pressure mark appears on the false fix while the better path stays cyan.
-Headline accent: Repeating the exact
-Support accent: Copying and pasting
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the loop mutation.
+Visual direction: Red pressure point. Close-up of a DAW piano roll with a single note repeated identically across 8 bars. A red neon warning glow pulses on the third repeat. The false fix is highlighted in red, while a cyan guide line points to a subtle mutation on the fifth repeat. Deep black-blue background with dotted grid. Headline "Repeating the exact" in red accent. Support line "Copying and pasting" with red underline. Hero object: the piano roll with red pressure marks. Motion cue: fast A/B wipe. Red detail appears for one beat, then cyan line pulls the eye to the mutation.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 3 - THE EAR
@@ -199,10 +193,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show one signal path draws first, then the supporting detail fades in around it.
-Headline accent: The ear craves
-Support accent: Listeners want to
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the loop mutation.
+Visual direction: Auditory focus path. Extreme close-up of a studio headphone diaphragm with a single glowing cyan path of light tracing through it. The path splits into two: one straight line (familiar) and one with a tiny curve (novelty). Deep black-blue canvas with dotted grid. Headline "The ear craves" in cyan accent. Support line "Listeners want to" with ice-blue underline. Hero object: the headphone diaphragm with light path. Motion cue: the cyan path draws itself from left to right over 2 seconds.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 4 - THE SCIENCE
@@ -215,10 +206,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show science model builds one node at a time with no fake values.
-Headline accent: How the brain
-Support accent: The brain rewards
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Node diagram. Abstract 3D signal flow with three glowing glass nodes connected by thin cyan lines. Node 1 (Prediction) sends a straight line to Node 2 (Reward). Node 3 (Variation) sends a curved line that intersects. Deep black-blue background with dotted grid. Headline "How the brain" in cyan accent. Support line "The brain rewards" with ice-blue underline. Hero object: the three glass nodes. Motion cue: nodes build one at a time. Text snaps in on the first beat, then the melody path draws itself.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 5 - THE ART
@@ -231,10 +219,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show human taste moment lands as one knob, note, or lane is chosen.
-Headline accent: Taste decides how
-Support accent: Finding the sweet
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Taste moment. Single physical brass knob on a vintage console, in sharp focus with shallow depth of field. Wood-grain keyboard key in the background, slightly blurred. Warm amber spotlight hits the knob from above. Deep black-blue canvas with dotted grid. Headline "Taste decides how" in warm amber accent. Support line "Finding the sweet" with amber underline. Hero object: the brass knob. Motion cue: the knob rotates 5 degrees slowly over 2 seconds.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 6 - THE MOVE
@@ -247,10 +232,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show cursor performs the production move once, clearly, in context.
-Headline accent: Repeat the anchor
-Support accent: Change a single
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: DAW action. Clean DAW interface showing a cursor hovering over a high-pass filter curve on a vocal track. The waveform shows three identical repeats, with the third repeat having a tiny cyan highlight on one note. Deep black-blue background with dotted grid. Headline "Repeat the anchor" in cyan accent. Support line "Change a single" with ice-blue underline. Hero object: the DAW waveform with cyan mutation mark. Motion cue: cursor clicks on the third repeat, and the waveform shifts slightly.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 7 - THE TEST
@@ -263,10 +245,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show A/B or mute switch toggles at matched level with the meters held honest.
-Headline accent: Loop the hook
-Support accent: Loop your hook
-Motion cue: Use a tap, mute, or device-swap action. The loop mutation should change visibly without adding extra on-screen words.
+Visual direction: Matched A/B test. Two parallel glass toggle switches on a brushed metal panel. Left switch is cyan and ON, right switch is grey and OFF. Level-meters beside each switch show identical levels. Deep black-blue background with dotted grid. Headline "Loop the hook" in cyan accent. Support line "Loop your hook" with ice-blue underline. Hero object: the two toggle switches. Motion cue: the right switch toggles OFF with a tap sound, and its meter drops to zero.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 8 - THE CHECK
@@ -279,10 +258,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show translation devices or listening contexts enter as separate checks.
-Headline accent: Test the hook
-Support accent: If the backing
-Motion cue: Use a tap, mute, or device-swap action. The loop mutation should change visibly without adding extra on-screen words.
+Visual direction: Translation context check. Three devices arranged diagonally: a laptop speaker, a car dashboard, and a mono Bluetooth speaker. Each shows a waveform with the vocal track muted (greyed out) and the backing tracks highlighted in cyan. Deep black-blue background with dotted grid. Headline "Test the hook" in cyan accent. Support line "If the backing" with ice-blue underline. Hero object: the three devices. Motion cue: each device lights up in sequence from left to right.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 9 - THE RULE
@@ -295,10 +271,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show rule locks into a simple visual diagram with extra space around it.
-Headline accent: The phrase turns
-Support accent: Repeat the melody
-Motion cue: Hold the frame longer. Let the loop mutation settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line in the center. Left side shows a straight arrow (Repeat melody). Right side shows a curved arrow (Mutate detail). Thin glass borders around each arrow. Deep black-blue background with dotted grid. Headline "The phrase turns" in cyan accent. Support line "Repeat the melody" with ice-blue underline. Hero object: the two arrows divided by the cyan line. Motion cue: hold the frame for 3 seconds, then a small cyan pulse on the curved arrow.
 Reference line: Refs: Huron 2006 | Bregman 1990
 
 ### Prompt 10 - THE TAKEAWAY
@@ -307,18 +280,9 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: looped lyric phrase with tiny mutation marks. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
-Headline accent: Mutate your repeats
-Support accent: Follow for daily
-Motion cue: Hold the frame longer. Let the loop mutation settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Closing loop. Dark high-end closing frame with a premium smartphone displaying looping plain text: "Mutate your repeats." The phone is centered on a dark reflective surface. Deep black-blue background with dotted grid. Headline "Save this before writing the next hook." in white with no accent. Support line "Follow for daily session science. Visit www.virzyguns.com" in muted grey. Hero object: the smartphone. Motion cue: hold the frame for 4 seconds, then a small cyan pulse on the phone screen.
 Reference line: Refs: Huron 2006 | Bregman 1990
-
-## Caption
-Repetition is how you write a hit, but copy-paste repetition is how you lose your listener. The brain loves patterns, but it needs a tiny surprise to stay engaged. The move is simple: repeat your main phrase, but change one small detail on the third or fourth pass. Here is how to keep your hooks loopable.
-
-## Pinned comment
-Actionable tip: Keep your vocal melody identical, but change the underlying chord on the third repeat to create an emotional lift. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

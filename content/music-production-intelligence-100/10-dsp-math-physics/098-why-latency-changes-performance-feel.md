@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Latency changes player body
 
 Viral hook: Latency changes the player body
 
-Title: Latency changes the player body
 
-Description: Stiff, rushed performances are often caused by monitoring lag. Learn how DAW buffer sizes disrupt a performer's physical feedback loop, and how to set up zero-latency tracking.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: audio latency
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: open textbook
   - Year/access: accessed 2026
   - Use: filters, resonance, phase response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Latency changes the player body
-Support: A few milliseconds can change how a performer leans into time.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The dragging performance trap
-Support: Recording a musician with software monitoring active through heavy plugins causes them to unconsciously play ahead of the beat to compensate for the lag.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The psychological lag
-Support: When a singer hears their voice delayed by even 10 milliseconds, their pitch and phrasing suffer because their auditory feedback loop is broken.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Acoustic delay and audio buffer size
-Support: Audio latency is determined by your DAW's buffer size, which is the time it takes the computer to process samples. Larger buffers delay the monitor signal.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Latency is a feel problem before it is a number
-Support: Do not trust a metric on a screen. If the performer feels a lag, turn off high-latency processing plugins immediately.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Lower monitoring latency before judging the take
-Support: Set your DAW buffer size to 64 or 128 samples when recording, and disable look-ahead limiters on the master bus.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Record the same line with direct monitoring and software monitoring
-Support: A/B the player's groove timing under software monitoring vs zero-latency direct monitoring from the audio interface.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Test the performer timing alignment
-Support: Inspect the recorded waveforms against the grid. If the notes are consistently rushed, look for buffer delay issues in the cue mix.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The performance lands easier
-Support: Zero-latency monitoring lets musicians focus on raw emotion and phrasing, leading to tighter, more natural takes.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: latency delay line between player hand and sound. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Latency changes the player body
+Support: Monitoring lag ruins the performance swing. Reduce buffers.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Tracking with high buffers
+Support: Recording vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Auditory motor loop disruption
+Support: The brain coordinates physical playing with immediate acoustic feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Propagation delay
+Support: Buffer size determines the block size of samples processed by the CPU. Large buffers delay the round-trip signal, creating a timing offset between performance and monitor.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Monitor response dictates energy
+Support: A musician performs best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Set DAW buffer to 64 samples
+Support: Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip delay.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The monitoring delay test
+Support: Record a guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check round trip sample latency
+Support: Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total delay remains under 10 ms.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Track low and mix high
+Support: Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during mixing to free up CPU power.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to eliminate monitoring lag
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,171 +131,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Latency changes the player body
-- A few milliseconds can change how a performer leans into time.
+- Monitoring lag ruins the performance swing. Reduce buffers.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a player's hand silhouette near an instrument, with a glowing cyan delay line extending to a speaker symbol.
-Headline accent: Latency changes player
-Support accent: performer leans into time
-Motion cue: Quick zoom on the latency body, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Smith 2026 | Smith 2026
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A timeline wave showing two paths, with a red timing delay offset indicator. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Latency
+Support accent: buffers.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The dragging performance trap
-- Recording a musician with software monitoring active through heavy plugins causes them to unconsciously play ahead of the beat to compensate for the lag.
+- Tracking with high buffers
+- Recording vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A DAW timeline grid showing MIDI notes shifted early in red, ahead of the grid lines.
-Headline accent: dragging performance trap
-Support accent: play ahead of beat
+Visual direction: Macro studio photograph of an audio interface panel showing a 1024 sample buffer selected, with a red warning glow. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The psychological lag
-- When a singer hears their voice delayed by even 10 milliseconds, their pitch and phrasing suffer because their auditory feedback loop is broken.
+- Auditory motor loop disruption
+- The brain coordinates physical playing with immediate acoustic feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A stylized vocal wave delayed behind a singer silhouette outline, highlighted with a red warning glow.
-Headline accent: psychological lag
-Support accent: auditory feedback loop
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a schematic of the auditory motor loop showing delay between a playing hand and an ear icon. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Acoustic delay and audio buffer size
-- Audio latency is determined by your DAW's buffer size, which is the time it takes the computer to process samples. Larger buffers delay the monitor signal.
+- Propagation delay
+- Buffer size determines the block size of samples processed by the CPU. Large buffers delay the round-trip signal, creating a timing offset between performance and monitor.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A scientific block diagram illustrating data packets queuing into a buffer block, with a delay indicator in cyan.
-Headline accent: audio buffer size
-Support accent: Larger buffers delay
+Visual direction: Schematic diagram of the CPU buffer block diagram showing sample block queues. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Latency is a feel problem before it is a number
-- Do not trust a metric on a screen. If the performer feels a lag, turn off high-latency processing plugins immediately.
+- Monitor response dictates energy
+- A musician performs best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean glass display showing a simple "Latency = 0 ms" reading in soft cyan light.
-Headline accent: feel problem
-Support accent: turn off high-latency
+Visual direction: Macro photograph of a clean timeline showing tight, aligned audio regions. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Lower monitoring latency before judging the take
-- Set your DAW buffer size to 64 or 128 samples when recording, and disable look-ahead limiters on the master bus.
+- Set DAW buffer to 64 samples
+- Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip delay.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital panel showing a buffer size selection box set to "64 Samples" glowing in cyan.
-Headline accent: Lower monitoring latency
-Support accent: buffer size to 64
+Visual direction: Audio interface driver panel displaying '64 samples' selected in bright cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Record the same line with direct monitoring and software monitoring
-- A/B the player's groove timing under software monitoring vs zero-latency direct monitoring from the audio interface.
+- The monitoring delay test
+- Record a guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B toggle switch on a glass control console strip split between "Direct Monitor" (cyan) and "DAW Buffer" (red).
-Headline accent: Record same line
-Support accent: zero-latency direct monitoring
+Visual direction: Close-up of two recorded guitar waveforms showing a timing offset compared to grid lines. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Test the performer timing alignment
-- Inspect the recorded waveforms against the grid. If the notes are consistently rushed, look for buffer delay issues in the cue mix.
+- Check round trip sample latency
+- Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total delay remains under 10 ms.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A waveform track display with vertical grid lines aligned perfectly with the transient starts in cyan.
-Headline accent: timing alignment
-Support accent: consistently rushed
+Visual direction: Round-trip latency readout showing '4.2 ms' in glowing cyan on a dark screen. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The performance lands easier
-- Zero-latency monitoring lets musicians focus on raw emotion and phrasing, leading to tighter, more natural takes.
+- Track low and mix high
+- Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during mixing to free up CPU power.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic diagram showing a player wave locked in time with the backing track, glowing cyan.
-Headline accent: lands easier
-Support accent: focus on raw emotion
+Visual direction: A clean schematic showing a timeline ending in a solid lock symbol. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: MIT OCW 2016
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to eliminate monitoring lag
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | Smith 2026
-
-## Caption
-If your vocalists or musicians are consistently rushing or playing out of time, it might not be their fault. It is probably latency.
-
-When a performer hears their instrument delayed in their headphones by even 8 to 12 milliseconds, their brain's auditory feedback loop gets confused. To make the sound line up with what they feel in their hands or vocal cords, they will unconsciously rush the beat. 
-
-The play: Prioritize monitoring speed. Set your DAW buffer to 64 samples or lower when tracking. Turn off look-ahead limiters and linear-phase EQs on your master channel. If possible, use the zero-latency direct monitoring feature on your audio interface.
-
-Fix the latency before you judge the groove. Save this to clean up your tracking sessions tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Always check your master bus before recording. A single look-ahead limiter or multi-band compressor on your master output can add over 50 milliseconds of latency, even if your DAW buffer is set low. Bypass them all before hitting record. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: MIT OCW 2016

@@ -26,12 +26,6 @@ Slide 1 thumbnail read: melody needs question mark
 
 Viral hook: A melody needs a question mark
 
-Title: A melody needs a question mark
-
-Description: Great songwriting is about asking musical questions. Learn how to use melodic tension to keep your listeners hooked until the chorus resolves it.
-
-5 hashtags: #VGP #Songwriting #MusicProduction #MusicTheory #ProducerTips
-
 Primary keyword: melodic tension
 
 Science anchor: expectation and resolution
@@ -156,7 +150,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: piano-roll melody contour bending into a question mark. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -172,7 +166,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Tight editorial crop on a premium black notebook with handwritten lyrics in white ink. Next to it, a glowing smartphone with a voice memo waveform on screen. A single cyan melody contour line rises from the notebook and bends into a question mark shape. Moody blue side-lighting from the left. Deep black-blue background with subtle dotted grid. The headline snaps in on the first beat. The support line fades in below. Footer centered at the bottom. Reference line in muted grey at the very bottom.
 Headline accent: A melody needs
 Support accent: A melody can
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -188,7 +182,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red neon pressure point. Close-up on a DAW piano roll with multiple melody lines all ending on the same root note. A red warning glow pulses over the root note hits. A single cyan path shows the better unresolved path bending away. Deep black-blue background with dotted grid. Red accent only on the problem area. Headline in white with red accent on "Resolving every melody". Support line in white with red accent on "If every phrase". Footer centered.
 Headline accent: Resolving every melody
 Support accent: If every phrase
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the melody question curve.
@@ -204,7 +198,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Auditory focus path. Extreme close-up of a headphone driver diaphragm with a single glowing cyan light path tracing through it. The path bends into a question mark shape. Deep black-blue background with dotted grid. Glass-like reflections on the headphone. Headline in white with cyan accent on "The ear wants". Support line in white with cyan accent on "A melody is". Footer centered.
 Headline accent: The ear wants
 Support accent: A melody is
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the melody question curve.
@@ -220,7 +214,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show science model builds one node at a time with no fake values.
+Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. One node is bright cyan (unresolved note), others are dimmed. Dotted grid on the deep black-blue background. Headline in white with cyan accent on "Melodic tension and". Support line in white with cyan accent on "Cognitive science shows". Footer centered.
 Headline accent: Melodic tension and
 Support accent: Cognitive science shows
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -236,7 +230,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Taste moment. Single physical brass knob in sharp focus on a wood-grain surface. Warm amber spotlight hits the knob from above. A single cyan melody contour line curves next to it. Deep black-blue background with dotted grid. Headline in white with warm amber accent on "The best melodic". Support line in white with warm amber accent on "The most memorable". Footer centered.
 Headline accent: The best melodic
 Support accent: The most memorable
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -252,7 +246,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show cursor performs the production move once, clearly, in context.
+Visual direction: DAW action. Clean DAW interface showing a piano roll with a cursor hovering over a note that is being dragged to a later position. The note is highlighted in cyan. A high-pass filter curve is visible in the background. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Delay the note". Support line in white with cyan accent on "End your verse". Footer centered.
 Headline accent: Delay the note
 Support accent: End your verse
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -268,7 +262,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Matched A/B test. Two parallel glass toggle switches on a dark panel. One switch is cyan and ON, the other is grey and OFF. Level meters next to each switch show matched levels. A single cyan melody contour line is cut off before the final note. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Sing the phrase". Support line in white with cyan accent on "Sing or play". Footer centered.
 Headline accent: Sing the phrase
 Support accent: Sing or play
 Motion cue: Use a tap, mute, or device-swap action. The melody question curve should change visibly without adding extra on-screen words.
@@ -284,7 +278,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Speaker/translation context checks. Three small icons in a row: a laptop, a car dashboard, and a mono speaker. Each icon has a thin cyan outline. A single cyan melody contour line runs above them, clean and isolated. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Check the melody". Support line in white with cyan accent on "If the melody". Footer centered.
 Headline accent: Check the melody
 Support accent: If the melody
 Motion cue: Use a tap, mute, or device-swap action. The melody question curve should change visibly without adding extra on-screen words.
@@ -300,7 +294,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line separating "VERSE" (open melody) from "CHORUS" (resolved melody). Thin glass borders around each section. A single cyan melody contour line bends upward in the verse section and resolves downward in the chorus section. Deep black-blue background with dotted grid. Headline in white with cyan accent on "The chorus earns". Support line in white with cyan accent on "Keep the melody". Footer centered.
 Headline accent: The chorus earns
 Support accent: Keep the melody
 Motion cue: Hold the frame longer. Let the melody question curve settle, then use a small cyan pulse on the final accented phrase.
@@ -312,18 +306,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: piano-roll melody contour bending into a question mark. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone display shows looping plain text: "A melody needs a question mark" in white on black. The phone is on a dark surface with a single cyan reflection. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Save this before". Support line in white with cyan accent on "Follow for daily". Footer centered.
 Headline accent: Delay the resolution
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the melody question curve settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
-
-## Caption
-If your melodies feel flat, you are probably resolving them too early. A great melody is like a conversation: it needs to ask a question before it gives the answer. By leaving your phrases hanging on the second or fifth scale degree, you create an itch that the listener has to scratch.
-
-## Pinned comment
-Session move: Delay the root note of your chorus melody by one full beat to make the resolution hit twice as hard. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

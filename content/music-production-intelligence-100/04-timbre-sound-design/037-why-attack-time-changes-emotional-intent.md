@@ -1,4 +1,4 @@
-# 037 - Attack time changes intent
+# 037, Attack time changes intent
 
 Content ID: 037
 Pillar: Timbre and sound design
@@ -12,9 +12,6 @@ Motion plan: 0-3s attack envelope blade changing the face of a note appears befo
 CTA: Save this before compressing your transients
 Slide 1 thumbnail read: Attack time changes intent
 Viral hook: Attack time changes intent
-Title: Attack time changes intent
-Description: How the initial transient amplitude envelope dictates spatial depth. Shape attack times to position elements in the mix depth stage.
-5 hashtags: #VGP #SoundDesign #MusicProduction #AudioScience #Synths
 Primary keyword: attack time
 Science anchor: amplitude envelope
 Art and taste anchor: The first milliseconds set the attitude.
@@ -59,7 +56,7 @@ Core look: Premium dark futuristic Apple editorial. Deep black-blue background w
 
 Palette: black-blue, cyan, electric blue, ice blue, white, muted grey. Red reserved for warnings/bad decisions only.
 
-Pillar visual language: Timbre and sound design: synth macro, spectral fingerprint, envelope sculpture, harmonic glow, texture particles, small speaker clues.
+Pillar visual language: Timbre and sound design: spectral plot, waveform crest, harmonic overtones, ADSR envelope curve, tube glow, analog VU meter.
 
 Footer: Render only `www.virzyguns.com` and `100% Art. 100% Science.` as centered plain text in the footer zone. No symbols, logos, stylized V, monogram, icon, emblem, badge, mark, or decorative shape anywhere.
 
@@ -68,80 +65,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
 ## 10-slide script
-
 ### Slide 1: SLIDE 1 | THE HOOK
 Headline: Attack time changes intent
 
 Support: The first milliseconds set the attitude.
 
-Visual: attack envelope blade changing the face of a note. Show cold open with the problem visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show cold open with the raw state visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 2: SLIDE 2 | THE TRAP
 Headline: Fast compression kills transient punch
 
-Support: Setting the attack time too fast on your compressor squashes the impact of the sound.
+Support: Setting the attack time too fast on your compressor squashes the impact of the sound, making it dull.
 
 Visual: attack envelope blade changing the face of a note. Show red pressure mark appears on the false fix while the better path stays cyan. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 3: SLIDE 3 | THE EAR
 Headline: The ear uses transients to locate sounds
 
-Support: Listeners perceive sharp attacks as close and dull attacks as far away.
+Support: The auditory system interprets sharp transients as close and clear, and soft transients as distant and diffuse.
 
 Visual: attack envelope blade changing the face of a note. Show one signal path draws first, then the supporting detail fades in around it. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
 Headline: Amplitude envelope dictates spatial depth
 
-Support: The initial transient spike tells the brain how fast the sound source is moving and where it sits.
+Support: The speed of the initial transient envelope determines how the brain calculates distance and localization.
 
 Visual: attack envelope blade changing the face of a note. Show science model builds one node at a time with no fake values. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 5: SLIDE 5 | THE ART
 Headline: Shape the attack before reaching for EQ
 
-Support: Adjust the envelope of your synth or compressor before you try to change the tone with EQ.
+Support: Adjust the envelope shape of your tracks to control their presence before using EQ to change tone.
 
-Visual: attack envelope blade changing the face of a note. Show human taste moment lands as one knob, note, or lane is chosen. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show human taste setting lands as one knob or dial is adjusted. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 6: SLIDE 6 | THE MOVE
 Headline: Shape the attack to match the groove
 
-Support: Use a transient shaper or envelope generator to accentuate or soften the start of the note.
+Support: Set the compressor attack time to 30 milliseconds, letting the transient pass through before compression begins.
 
-Visual: attack envelope blade changing the face of a note. Show cursor performs the production move once, clearly, in context. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show cursor performs the production move once, clearly, on the interface. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 7: SLIDE 7 | THE TEST
 Headline: Shorten attack on a duplicate and compare the mood
 
-Support: Compare the original performance against a transient-softened copy to see which sits better.
+Support: A/B fast and slow attack settings at matched output volume, checking which option sits better in the mix.
 
-Visual: attack envelope blade changing the face of a note. Show A/B or mute switch toggles at matched level with the meters held honest. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show A/B split contrast between the raw and modified versions on screen. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 8: SLIDE 8 | THE CHECK
 Headline: Check transient response at low volume
 
-Support: Turn down the mix to verify if the transient still cuts through without being harsh.
+Support: Reduce the monitor level to verify that the transient still cuts through without being harsh.
 
-Visual: attack envelope blade changing the face of a note. Show translation devices or listening contexts enter as separate checks. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show wireframe devices enter as separate translation checks. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 9: SLIDE 9 | THE RULE
 Headline: The sound speaks with the right face
 
-Support: Keep the transient sharp if the sound needs to lead, and soften it if it needs to support.
+Support: Adjust attack times to control the physical distance of a sound, preserving transients for front-row presence.
 
-Visual: attack envelope blade changing the face of a note. Show rule locks into a simple visual diagram with extra space around it. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show rule locks into a simple visual diagram with green indicators. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before compressing your transients
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
-Visual: attack envelope blade changing the face of a note. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+Visual: attack envelope blade changing the face of a note. Show the final decision as a clean plain-text closing frame, ready for the loop. Keep it premium, dark, specific, and readable in one glance.
 
 ## 10-slide image prompts
-
-### Prompt 1 - THE HOOK
+### Prompt 1, THE HOOK
 Archetype: THE HOOK
 
 Visible text:
@@ -151,161 +146,152 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. Cold open showing attack envelope blade changing the face of a note in a raw state before the full headline reveals.
+Visual direction: Macro studio photograph of a 3D visualization representing attack envelope blade changing the face of a note. A sleek, dark-blue glass panel displays the attack blade with a glowing cyan and electric-blue outline. Warm amber side-lighting casts a soft bloom across a dark-titanium grid. Apple editorial aesthetic, subtle dotted grid texture on a matte-black background, 35% negative space, shallow depth of field.
 Headline accent: changes emotional intent
 Support accent: set the attitude
 Motion cue: First 0.5 seconds: quick punch-in on the attack envelope blade changing the face of a note, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 2 - THE TRAP
+### Prompt 2, THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
 - Fast compression kills transient punch
-- Setting the attack time too fast on your compressor squashes the impact of the sound.
+- Setting the attack time too fast on your compressor squashes the impact of the sound, making it dull.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A red highlight or warning marker identifies the rigid or incorrect decision.
+Visual direction: Close-up schematic of a digital grid displaying attack envelope blade changing the face of a note. A rigid, math-perfect alignment is highlighted with a soft red neon stroke, indicating the robotic trap. The dark-titanium interface features glass panels, with the correct groove paths dimmed. Apple editorial aesthetic, subtle dotted grid texture, dramatic shadows, 35% negative space.
 Headline accent: kills transient punch
 Support accent: squashes the impact
 Motion cue: A rapid transition showing a red alert fade-in on the problem area of the attack envelope blade changing the face of a note layout.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 3 - THE EAR
+### Prompt 3, THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear uses transients to locate sounds
-- Listeners perceive sharp attacks as close and dull attacks as far away.
+- The auditory system interprets sharp transients as close and clear, and soft transients as distant and diffuse.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A clean cyan signal path illustrates how the listener perceives the sound in real time.
+Visual direction: Conceptual 3D diagram showing the auditory focus path of attack envelope blade changing the face of a note. A glowing cyan signal wave flows through a semi-transparent glass model of the human auditory pathway. Muted side-lighting and shallow depth of field highlight the moment of perception. Apple editorial aesthetic, dark-blue canvas, dotted grid background, 30% negative space.
 Headline accent: uses transients to
 Support accent: sharp attacks as close
 Motion cue: A wave pulse expands outward from the center, lighting up the cyan attack envelope blade changing the face of a note elements.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 4 - THE SCIENCE
+### Prompt 4, THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Amplitude envelope dictates spatial depth
-- The initial transient spike tells the brain how fast the sound source is moving and where it sits.
+- The speed of the initial transient envelope determines how the brain calculates distance and localization.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. The visual builds an analytical diagram of the science concept with clear cyan indicators.
+Visual direction: Ultra-clean technical diagram of attack envelope blade changing the face of a note analyzing the attack blade. The display features precise cyan lines, numerical values, and grid overlays on a dark-titanium glass panel. Soft ambient blue lighting emphasizes the scientific model. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture, 35% negative space.
 Headline accent: dictates spatial depth
 Support accent: where it sits
 Motion cue: The analytical diagram nodes on the attack envelope blade changing the face of a note build sequentially with subtle cyan highlights.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 5 - THE ART
+### Prompt 5, THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
 - Shape the attack before reaching for EQ
-- Adjust the envelope of your synth or compressor before you try to change the tone with EQ.
+- Adjust the envelope shape of your tracks to control their presence before using EQ to change tone.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A glowing cyan dial or control interface shows the taste decision.
+Visual direction: Close-up of a premium tactile controller with a glowing cyan rotary knob adjusting attack envelope blade changing the face of a note. The finger-touch surface is dark titanium with a matte finish. Soft cyan bloom accentuates the creative taste setting. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, shallow depth of field.
 Headline accent: reaching for EQ
 Support accent: synth or compressor
 Motion cue: The virtual control indicator on the attack envelope blade changing the face of a note dial moves slightly off-center with a soft glow.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 6 - THE MOVE
+### Prompt 6, THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
 - Shape the attack to match the groove
-- Use a transient shaper or envelope generator to accentuate or soften the start of the note.
+- Set the compressor attack time to 30 milliseconds, letting the transient pass through before compression begins.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A cursor or selection marker performs the session move on the interface.
+Visual direction: Action shot of a digital interface where a cursor selects and shifts a component of attack envelope blade changing the face of a note on a glass panel. A sharp cyan bounding box highlights the production move, showing it slipping off the grid. Apple editorial aesthetic, dark-blue canvas, matte-black desk, 30% negative space.
 Headline accent: match the groove
 Support accent: transient shaper or
 Motion cue: A clean cursor movement slides the target attack envelope blade changing the face of a note elements into position.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 7 - THE TEST
+### Prompt 7, THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
 - Shorten attack on a duplicate and compare the mood
-- Compare the original performance against a transient-softened copy to see which sits better.
+- A/B fast and slow attack settings at matched output volume, checking which option sits better in the mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A clean A/B comparison layout contrasts the raw and modified versions.
+Visual direction: Split-screen A/B comparison displaying attack envelope blade changing the face of a note. The left glass panel represents the raw grid in muted grey, while the right panel highlights the modified pocket in glowing cyan. A vertical line divides the panels, casting soft shadows. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture.
 Headline accent: compare the mood
 Support accent: transient-softened copy
 Motion cue: A fast A/B screen wipe alternates between the raw and modified attack envelope blade changing the face of a note states.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 8 - THE CHECK
+### Prompt 8, THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
 - Check transient response at low volume
-- Turn down the mix to verify if the transient still cuts through without being harsh.
+- Reduce the monitor level to verify that the transient still cuts through without being harsh.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. The visual shows translation contexts or speaker symbols to verify the check.
+Visual direction: Editorial studio photograph of sleek wireframe devices (a smartphone, a laptop, and studio monitor speakers) displaying attack envelope blade changing the face of a note. Soft cyan light beams propagate from the speakers, showing translation paths. Apple editorial aesthetic, dark-blue canvas, matte-black desk, shallow depth of field.
 Headline accent: at low volume
 Support accent: cuts through without
 Motion cue: Sound wave ripples expand outward from the speaker icons on the screen.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 9 - THE RULE
+### Prompt 9, THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
 - The sound speaks with the right face
-- Keep the transient sharp if the sound needs to lead, and soften it if it needs to support.
+- Adjust attack times to control the physical distance of a sound, preserving transients for front-row presence.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A simple visual diagram locks in the core rule with surrounding negative space.
+Visual direction: Minimalist 3D diagram locking the core rule of attack envelope blade changing the face of a note into place. A clean glass panel displays the final attack blade with a glowing green and cyan checkmark indicator. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, 40% negative space.
 Headline accent: with the right face
 Support accent: soften it if it
 Motion cue: A green checkmark pulses next to the corrected path on the attack envelope blade changing the face of a note diagram.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 10 - THE TAKEAWAY
+### Prompt 10, THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before compressing your transients
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central attack envelope blade changing the face of a note visual representing attack time. A clean plain-text closing frame highlighting the final call to action.
+Visual direction: High-end minimalist closing frame. A dark-titanium plaque with glowing cyan accents is set against a dark-blue canvas. A clean, plain-text call to action is centered on the panel. Apple editorial aesthetic, subtle dotted grid texture, 35% negative space.
 Headline accent: Save this before
 Support accent: Follow for daily
 Motion cue: The central call to action text fades in slowly with an ambient cyan glow.
-Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith accessed 2026
-
-## Caption
-The first few milliseconds of a sound establish its attitude. setting compression attack times too fast squashes the transient punch, pushing the sound to the back of the mix. Shape your transient envelopes to control their depth before you reach for EQ or reverb. Save this before compressing your transients.
-
-## Pinned comment
-Session tip: Use a transient shaper on supporting synth tracks to soften their attack. This makes the lead vocal sound much closer by comparison.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use attack envelope blade changing the face of a note. Keep the attack envelope blade changing the face of a note visible across the slide set. Keep text inside the shared safe zone. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.
+Reference line: Refs: Moore 2012 | Smith accessed 2026 | Smith Filters accessed 2026

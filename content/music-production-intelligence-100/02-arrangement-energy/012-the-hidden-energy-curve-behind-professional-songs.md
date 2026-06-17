@@ -151,7 +151,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before adding another layer.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: song energy curve over a full arrangement timeline. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,11 +167,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show cold open with the problem visible before the viewer reads the full headline.
-Headline accent: Professional songs ride
-Support accent: The song has
-Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show cold open with the problem visible before the viewer reads the full headline. Shot type: extreme wide crop of a DAW timeline with a single cyan energy curve drawn across the top. Lighting: moody blue side-lighting from the left, casting soft shadows on a premium notebook and a glowing smartphone voice memo on the right. Materials: matte black notebook with handwritten lyrics in white ink, glass smartphone screen with cyan waveform. Composition: notebook and phone occupy the lower third, the energy curve arcs above them in thin cyan strokes on a dark-blue dotted grid background. Headline accent: Professional songs ride. Support accent: The song has. Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
@@ -183,11 +179,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show red pressure mark appears on the false fix while the better path stays cyan.
-Headline accent: Keeping the energy
-Support accent: Letting the drums
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the energy curve.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show red pressure mark appears on the false fix while the better path stays cyan. Shot type: close-up of a DAW mixer with overloaded faders and red neon warning lights. Lighting: harsh red neon from above, casting hot red highlights on the faders and a glowing red warning light in the upper right. Materials: brushed metal faders with red LED clips, glass panels with red reflections. Composition: the energy curve is a flat red line across the center, with a cyan curved path faintly visible behind it. Headline accent: Keeping the energy. Support accent: Letting the drums. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the energy curve. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
@@ -199,11 +191,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show one signal path draws first, then the supporting detail fades in around it.
-Headline accent: The ear responds
-Support accent: Listeners stay engaged
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the energy curve.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show one signal path draws first, then the supporting detail fades in around it. Shot type: macro close-up of a headphone diaphragm with a single glowing cyan path of light tracing its movement. Lighting: soft cyan backlight from behind the diaphragm, creating a halo effect. Materials: black mesh grille, copper voice coil, translucent cyan light path. Composition: the diaphragm fills the left half, the cyan path arcs across the right half on a dark-blue dotted grid. Headline accent: The ear responds. Support accent: Listeners stay engaged. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the energy curve. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
@@ -215,11 +203,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show science model builds one node at a time with no fake values.
-Headline accent: The psychology of
-Support accent: Brain tracking shows
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show science model builds one node at a time with no fake values. Shot type: abstract 3D signal flow diagram with glowing glass nodes connected by thin cyan lines. Lighting: soft ambient blue with cyan node glows. Materials: frosted glass spheres, thin cyan fiber-optic lines, dark-blue dotted grid background. Composition: nodes form a wave pattern across the center, with one node brighter than the others. Headline accent: The psychology of. Support accent: Brain tracking shows. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -231,11 +215,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show human taste moment lands as one knob, note, or lane is chosen.
-Headline accent: A record needs
-Support accent: Knowing when to
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show human taste moment lands as one knob, note, or lane is chosen. Shot type: extreme close-up of a single physical brass knob on a vintage console, with a wood-grain keyboard key in sharp focus behind it. Lighting: warm amber spotlight from above, creating a soft glow on the brass and wood. Materials: polished brass knob with knurled edge, dark wood grain, black console surface. Composition: the knob is in the lower left, the keyboard key is in the upper right, with negative space between them. Headline accent: A record needs. Support accent: Knowing when to. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
@@ -247,11 +227,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show cursor performs the production move once, clearly, in context.
-Headline accent: Draw the energy
-Support accent: Use a density
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show cursor performs the production move once, clearly, in context. Shot type: clean DAW interface showing a cursor hovering over a high-pass curve or stereo width slider. Lighting: soft cyan glow from the DAW interface, dark ambient room. Materials: glass DAW window with thin cyan borders, black background. Composition: the DAW window fills the center, the cursor is a white arrow pointing at a cyan-highlighted parameter. Headline accent: Draw the energy. Support accent: Use a density. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
@@ -263,11 +239,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show A/B or mute switch toggles at matched level with the meters held honest.
-Headline accent: Rate each section
-Support accent: Draw a simple
-Motion cue: Use a tap, mute, or device-swap action. The energy curve should change visibly without adding extra on-screen words.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show A/B or mute switch toggles at matched level with the meters held honest. Shot type: parallel glass toggle switches, one cyan ON, the other grey OFF, with level-meters showing different readings. Lighting: soft cyan glow from the ON switch, grey ambient for the OFF switch. Materials: frosted glass toggle switches, brushed metal base, cyan LED indicators. Composition: two switches side by side in the center, level-meters below them showing different heights. Headline accent: Rate each section. Support accent: Draw a simple. Motion cue: Use a tap, mute, or device-swap action. The energy curve should change visibly without adding extra on-screen words. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
@@ -279,11 +251,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show translation devices or listening contexts enter as separate checks.
-Headline accent: Check the transition
-Support accent: Ensure that every
-Motion cue: Use a tap, mute, or device-swap action. The energy curve should change visibly without adding extra on-screen words.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show translation devices or listening contexts enter as separate checks. Shot type: three devices in a row: a laptop, a car dashboard, and a mono speaker. Lighting: soft ambient blue with cyan highlights on each device. Materials: silver laptop, black car dashboard, grey mono speaker. Composition: devices are arranged horizontally across the center, each with a small cyan energy curve above them. Headline accent: Check the transition. Support accent: Ensure that every. Motion cue: Use a tap, mute, or device-swap action. The energy curve should change visibly without adding extra on-screen words. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
@@ -295,11 +263,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show rule locks into a simple visual diagram with extra space around it.
-Headline accent: The listener feels
-Support accent: Never let three
-Motion cue: Hold the frame longer. Let the energy curve settle, then use a small cyan pulse on the final accented phrase.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
+Visual direction: song energy curve over a full arrangement timeline. Show rule locks into a simple visual diagram with extra space around it. Shot type: minimalist schematic layout with a bold cyan dividing line and thin glass borders. Lighting: soft ambient blue with cyan accent on the dividing line. Materials: glass panels with thin cyan borders, dark-blue dotted grid background. Composition: a simple line graph with three sections marked, the third section has a cyan arrow pointing up. Headline accent: The listener feels. Support accent: Never let three. Motion cue: Hold the frame longer. Let the energy curve settle, then use a small cyan pulse on the final accented phrase. Reference line: Refs: Bregman 1990 | Ronan et al. 2018
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
@@ -307,18 +271,8 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before adding another layer.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: song energy curve over a full arrangement timeline. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
-Headline accent: Map your energy
-Support accent: Follow for daily
-Motion cue: Hold the frame longer. Let the energy curve settle, then use a small cyan pulse on the final accented phrase.
-Reference line: Refs: Bregman 1990 | Ronan et al. 2018
-
-## Caption
-If your track feels long, it's not the length, it's the energy. Professional arrangements don't stay flat; they move in curves. Use a density ladder to make sure each section has a clear step up or down in energy.
-
-## Pinned comment
-Session move: Try stripping your second verse down to just bass, vocals, and a simple percussion loop for the first eight bars. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.
+Visual direction: song energy curve over a full arrangement timeline. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Shot type: dark high-end closing frame with a premium phone displaying looping plain text. Lighting: soft cyan glow from the phone screen, dark ambient room. Materials: black glass phone, thin cyan text on screen. Composition: the phone is centered, the text "Save this before adding another layer." loops on the screen. Headline accent: Map your energy. Support accent: Follow for daily. Motion cue: Hold the frame longer. Let the energy curve settle, then use a small cyan pulse on the final accented phrase. Reference line: Refs: Bregman 1990 | Ronan et al. 2018

@@ -95,21 +95,21 @@ Visual:
 ### Slide 2: SLIDE 2 | THE TRAP
 Headline: Stacking complex runs to find a hook
 
-Support: Stacking too many pitch changes makes the line difficult to remember and hard for the listener to sing along.
+Support: Stacking too many pitch changes triggers auditory masking. The brain cannot parse each note, so the hook loses its identity.
 
 Visual: 
 
 ### Slide 3: SLIDE 3 | THE EAR
 Headline: The ear clings to simple rhythm
 
-Support: Rhythmic identity is often more memorable than melody, giving the brain an instant pattern to lock onto.
+Support: The brain uses temporal integration to lock onto a repeating rhythmic pattern before it processes pitch at all.
 
 Visual: 
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
 Headline: Rhythmic simplicity and memory recall
 
-Support: Simple pitch structures allow the brain to focus its cognitive energy on processing the groove and timbre.
+Support: Simple pitch structures reduce cognitive load. The brain then allocates more processing power to groove and timbre encoding.
 
 Visual: 
 
@@ -151,7 +151,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: single glowing note on a sparse piano grid. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,7 +167,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Tight editorial crop on a premium leather-bound notebook with handwritten lyrics in white ink. A glowing smartphone with a voice memo waveform sits beside it. A single cyan piano key glows on a dark piano roll behind the notebook. Moody blue side-lighting from the left casts long shadows. The headline snaps in on the first beat with a warm amber accent on "One note can". The support line fades in below with an ice-blue underline on "One pitch can". Shot type: close-up, slightly overhead. Materials: matte black leather, white paper, glass phone screen, brushed aluminum phone edge. Composition: notebook occupies the lower left third, phone the lower right third, piano key glows in the upper center. Dotted grid visible on the dark blue canvas background. Footer text centered at the bottom in plain white.
 Headline accent: One note can
 Support accent: One pitch can
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -179,11 +179,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Stacking complex runs to find a hook
-- Stacking too many pitch changes makes the line difficult to remember and hard for the listener to sing along.
+- Stacking too many pitch changes triggers auditory masking. The brain cannot parse each note, so the hook loses its identity.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red pressure mark appears on the false fix while the better path stays cyan. Close-up of a DAW piano roll overloaded with dense red note clusters. A single cyan note sits isolated to the right. Red neon warning light casts a hot glow from the top right. Shot type: medium close-up on the piano roll grid. Materials: glass piano roll interface, red glowing plastic, cyan LED. Composition: red cluster occupies the left two thirds, single cyan note on the right third. Dotted grid background in deep black-blue. Headline in white with red accent on "Stacking complex runs". Support line below with red underline on "Stacking too many". Footer text centered at the bottom.
 Headline accent: Stacking complex runs
 Support accent: Stacking too many
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the single-note spotlight.
@@ -195,13 +195,13 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear clings to simple rhythm
-- Rhythmic identity is often more memorable than melody, giving the brain an instant pattern to lock onto.
+- The brain uses temporal integration to lock onto a repeating rhythmic pattern before it processes pitch at all.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Auditory focus path. Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing a rhythmic waveform across it. The waveform is simple and repetitive. Shot type: macro close-up. Materials: black mesh, copper voice coil, translucent plastic diaphragm. Lighting: single cyan beam from the left, dark ambient fill. Composition: diaphragm fills the frame, cyan path arcs from left to right. Dotted grid visible in the deep background. Headline in white with cyan accent on "The ear clings". Support line below with ice-blue underline on "temporal integration". Footer text centered at the bottom.
 Headline accent: The ear clings
-Support accent: Rhythmic identity is
+Support accent: temporal integration
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the single-note spotlight.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
@@ -211,11 +211,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Rhythmic simplicity and memory recall
-- Simple pitch structures allow the brain to focus its cognitive energy on processing the groove and timbre.
+- Simple pitch structures reduce cognitive load. The brain then allocates more processing power to groove and timbre encoding.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show science model builds one node at a time with no fake values.
+Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. One central node labeled "Cognitive Load" pulses softly. Two smaller nodes labeled "Groove" and "Timbre" receive cyan energy. Shot type: isometric, slightly above. Materials: frosted glass spheres, thin cyan neon tubes, dark brushed metal base. Composition: central node at the top center, two child nodes below forming a triangle. Dotted grid on the dark blue canvas floor. Headline in white with cyan accent on "Rhythmic simplicity and". Support line below with ice-blue underline on "Simple pitch structures". Footer text centered at the bottom.
 Headline accent: Rhythmic simplicity and
 Support accent: Simple pitch structures
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -231,7 +231,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Taste moment. Single physical brass knob in sharp focus on a vintage console. A wood-grain piano key sits blurred in the background. Warm amber spotlight hits the brass knob from above. Shot type: extreme close-up, shallow depth of field. Materials: polished brass, dark wood, black plastic. Composition: brass knob occupies the lower left third, wood key blurred in the upper right third. Dotted grid barely visible in the deep shadows. Headline in white with warm amber accent on "A small melody". Support line below with ice-blue underline on "A onenote melody". Footer text centered at the bottom.
 Headline accent: A small melody
 Support accent: A onenote melody
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -247,7 +247,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show cursor performs the production move once, clearly, in context.
+Visual direction: DAW action. Clean DAW interface showing a cursor hovering over a high-pass curve on an EQ. A single MIDI note is highlighted in cyan on the piano roll below. The rhythm grid shows a syncopated pattern. Shot type: medium shot, straight on. Materials: glass interface, dark UI elements, cyan highlights. Composition: EQ window on the left, piano roll on the right, cursor centered. Dotted grid background. Headline in white with cyan accent on "Make the rhythm". Support line below with ice-blue underline on "Design a highly". Footer text centered at the bottom.
 Headline accent: Make the rhythm
 Support accent: Design a highly
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -263,7 +263,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Matched A/B test. Parallel glass toggle switches on a dark panel. One switch is cyan and ON, the other is grey and OFF. Two level-meters show identical levels. Shot type: close-up, straight on. Materials: frosted glass toggles, brushed aluminum panel, cyan LED indicators. Composition: two switches side by side, meters below them. Dotted grid background. Headline in white with cyan accent on "Tap the hook". Support line below with ice-blue underline on "Tap the rhythm". Footer text centered at the bottom.
 Headline accent: Tap the hook
 Support accent: Tap the rhythm
 Motion cue: Use a tap, mute, or device-swap action. The single-note spotlight should change visibly without adding extra on-screen words.
@@ -279,7 +279,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Speaker/translation context checks. Three devices arranged in a row: a laptop, a smartphone, and a mono Bluetooth speaker. All are dark and premium. A cyan waveform emanates from the speaker. Shot type: wide shot, slightly above. Materials: aluminum laptop, glass phone, matte black speaker. Composition: laptop on the left, phone in the center, speaker on the right. Dotted grid on the dark surface. Headline in white with cyan accent on "Listen to the". Support line below with ice-blue underline on "A onenote line". Footer text centered at the bottom.
 Headline accent: Listen to the
 Support accent: A onenote line
 Motion cue: Use a tap, mute, or device-swap action. The single-note spotlight should change visibly without adding extra on-screen words.
@@ -295,7 +295,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line down the center. On the left, a simple rhythmic waveform. On the right, a complex pitch cluster crossed out in red. Thin glass borders frame each side. Shot type: straight on, symmetrical. Materials: glass panels, thin cyan neon lines, dark brushed metal. Composition: left panel with waveform, right panel with crossed-out cluster, cyan line between them. Dotted grid background. Headline in white with cyan accent on "The hook stays". Support line below with ice-blue underline on "Rhythmic pocket beats". Footer text centered at the bottom.
 Headline accent: The hook stays
 Support accent: Rhythmic pocket beats
 Motion cue: Hold the frame longer. Let the single-note spotlight settle, then use a small cyan pulse on the final accented phrase.
@@ -307,18 +307,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single glowing note on a sparse piano grid. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone displays looping plain text: "One note can own the hook." The phone sits on a dark glass surface. A single cyan note glows faintly in the background. Shot type: medium close-up, slightly overhead. Materials: glass phone, dark polished surface, cyan LED. Composition: phone centered, glowing note blurred in the upper background. Dotted grid visible on the surface. Headline in white with cyan accent on "Simplify the notes". Support line below with ice-blue underline on "Follow for daily". Footer text centered at the bottom.
 Headline accent: Simplify the notes
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the single-note spotlight settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
-
-## Caption
-Some of the biggest hooks in history are built on just one note. When you reduce pitch complexity, you force the listener to focus on rhythm, tone, and attitude. If your melody feels weak, try simplifying the notes and making the rhythm twice as syncopated.
-
-## Pinned comment
-Session check: Try reducing your entire chorus melody to a single note, edit the rhythm until it grooves perfectly, then add back only two or three pitch changes. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

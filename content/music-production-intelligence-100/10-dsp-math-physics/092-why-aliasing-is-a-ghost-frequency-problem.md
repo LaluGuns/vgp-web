@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Aliasing fake frequency leak
 
 Viral hook: Aliasing is a fake frequency leak
 
-Title: Aliasing is a fake frequency leak
 
-Description: Harsh digital high-end is often just aliasing. Learn why saturation creates ghost frequencies that fold backward into your mix, and how oversampling fixes it.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: aliasing
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: open textbook
   - Year/access: accessed 2026
   - Use: filters, resonance, phase response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Aliasing is a fake frequency leak
-Support: Digital distortion can create frequencies that fold back wrong.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The digital saturation trap
-Support: Pushing a digital limiter or clipper too hard without oversampling creates harmonic content that goes past the Nyquist limit.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: Ghost signals corrupt the mix
-Support: Frequencies that exceed the Nyquist limit cannot be represented. They fold backward into the audible range as harsh noise.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The Nyquist limit boundary
-Support: The highest frequency a digital system can record is exactly half the sample rate. Anything higher folds back as distortion.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Aliasing is math leaving fingerprints
-Support: Unlike analog distortion which rolls off smoothly, digital aliasing creates unrelated inharmonic frequencies that sound harsh.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Use oversampling when nonlinear processing makes harsh top end
-Support: Oversampling temporarily raises the sample rate inside the plugin, shifting the aliasing region far above human hearing.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Turn oversampling on and level match the result
-Support: Compare the high-end clarity of your clippers and saturators with 4x or 8x oversampling enabled to hear the difference.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the high frequency spectrum
-Support: Use a high-resolution analyzer to look for random, unrelated spikes in the high frequencies during saturated passages.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Distortion gets cleaner
-Support: By eliminating alias foldback, you keep your saturation sounding warm and analog rather than cold and metallic.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: alias frequency leaking through a broken sampling grid. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Aliasing is a fake frequency leak
+Support: Digital clipping generates harmonic reflections you cannot hear but feel.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The harsh high-end accumulation
+Support: Saturation plugins generate high-frequency harmonics. Without filtering, these exceed the Nyquist frequency and fold back into the audible band as unharmonic noise.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Unharmonic noise ruins clarity
+Support: Unlike musical harmonics, alias frequencies are not mathematically related to the fundamental pitch. The brain perceives this foldback as harsh digital glare.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Nyquist limit violations
+Support: When non-linear processing creates harmonics above half the sample rate, these signals cannot be represented. They reflect backward across the Nyquist limit into the audible spectrum.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: High frequencies need clean margins
+Support: Some analog emulation plugins add pleasing harmonic warmth but introduce aliasing. Balance harmonic content with high-frequency cleanliness.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Enable oversampling on non-linear plugins
+Support: Turn on 4x or 8x oversampling inside saturators, limiters, and clippers. This raises the Nyquist limit, allowing anti-aliasing filters to remove high harmonics.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The high-frequency sweep sweep
+Support: Sweep a high-frequency sine wave through a saturator. Listen for a tone that moves downward while the input sweep moves upward.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check the spectrum analyzer
+Support: Look at the spectrum analyzer at low volumes. Identify if there are unharmonic spikes appearing in the mid-range during high-frequency input transients.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Filter before folding
+Support: Always use oversampling or high-cut filters before non-linear processing to prevent mirror-image frequencies from corrupting your mix.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to prevent digital harshness
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,171 +131,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Aliasing is a fake frequency leak
-- Digital distortion can create frequencies that fold back wrong.
+- Digital clipping generates harmonic reflections you cannot hear but feel.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital spectrum analyzer displaying ghost frequency spikes folding backward, highlighted on a dark grid.
-Headline accent: Aliasing fake frequency
-Support accent: fold back wrong
-Motion cue: Quick zoom on the alias leak, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Smith 2026 | Smith 2026
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A spectrum showing high-frequency foldback lines in red mirroring back into the cyan region. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Aliasing
+Support accent: feel.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The digital saturation trap
-- Pushing a digital limiter or clipper too hard without oversampling creates harmonic content that goes past the Nyquist limit.
+- The harsh high-end accumulation
+- Saturation plugins generate high-frequency harmonics. Without filtering, these exceed the Nyquist frequency and fold back into the audible band as unharmonic noise.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital meter track clipping into a solid red warning glow at the Nyquist limit line.
-Headline accent: saturation trap
-Support accent: past Nyquist limit
+Visual direction: Macro studio photograph of a saturation curve display showing harmonic overtones exceeding the Nyquist limit, marked with a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Ghost signals corrupt the mix
-- Frequencies that exceed the Nyquist limit cannot be represented. They fold backward into the audible range as harsh noise.
+- Unharmonic noise ruins clarity
+- Unlike musical harmonics, alias frequencies are not mathematically related to the fundamental pitch. The brain perceives this foldback as harsh digital glare.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel showing clean cyan signal lines interrupted by jagged red ghost frequencies.
-Headline accent: Ghost signals corrupt
-Support accent: audible range as harsh
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a waveform displaying harsh, jagged spikes. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- The Nyquist limit boundary
-- The highest frequency a digital system can record is exactly half the sample rate. Anything higher folds back as distortion.
+- Nyquist limit violations
+- When non-linear processing creates harmonics above half the sample rate, these signals cannot be represented. They reflect backward across the Nyquist limit into the audible spectrum.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mathematical chart illustrating a hard divider line at 22.05 kHz on a dark frequency grid.
-Headline accent: Nyquist limit boundary
-Support accent: half the sample rate
+Visual direction: Schematic diagram of the digital frequency axis showing the half-sample-rate folding point in glowing cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Aliasing is math leaving fingerprints
-- Unlike analog distortion which rolls off smoothly, digital aliasing creates unrelated inharmonic frequencies that sound harsh.
+- High frequencies need clean margins
+- Some analog emulation plugins add pleasing harmonic warmth but introduce aliasing. Balance harmonic content with high-frequency cleanliness.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A comparison curve showing a smooth analog roll-off in cyan vs jagged digital spikes in red.
-Headline accent: math leaving fingerprints
-Support accent: unrelated inharmonic frequencies
+Visual direction: Macro photograph of a tube saturation plugin interface with glowing tubes and a cyan oversampling switch. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Use oversampling when nonlinear processing makes harsh top end
-- Oversampling temporarily raises the sample rate inside the plugin, shifting the aliasing region far above human hearing.
+- Enable oversampling on non-linear plugins
+- Turn on 4x or 8x oversampling inside saturators, limiters, and clippers. This raises the Nyquist limit, allowing anti-aliasing filters to remove high harmonics.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A schematic diagram illustrating a signal line splitting, with a cyan "Oversampling 4x" box boosting the grid resolution.
-Headline accent: Use oversampling
-Support accent: shifting aliasing region
+Visual direction: A glass control panel showing 8x oversampling selected in bright cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Turn oversampling on and level match the result
-- Compare the high-end clarity of your clippers and saturators with 4x or 8x oversampling enabled to hear the difference.
+- The high-frequency sweep sweep
+- Sweep a high-frequency sine wave through a saturator. Listen for a tone that moves downward while the input sweep moves upward.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B switch on a glass control panel toggling between "1x" (red) and "8x Oversampling" (cyan).
-Headline accent: Turn oversampling on
-Support accent: high-end clarity
+Visual direction: Close-up of a frequency generator swept up to 24 kHz, showing reflected sine waves in red. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check the high frequency spectrum
-- Use a high-resolution analyzer to look for random, unrelated spikes in the high frequencies during saturated passages.
+- Check the spectrum analyzer
+- Look at the spectrum analyzer at low volumes. Identify if there are unharmonic spikes appearing in the mid-range during high-frequency input transients.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A technical screen zooming in on a clean cyan high-frequency slope with no stray spikes.
-Headline accent: high frequency spectrum
-Support accent: high-resolution analyzer
+Visual direction: A spectrum analyzer displaying mid-range intermodulation spikes. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Distortion gets cleaner
-- By eliminating alias foldback, you keep your saturation sounding warm and analog rather than cold and metallic.
+- Filter before folding
+- Always use oversampling or high-cut filters before non-linear processing to prevent mirror-image frequencies from corrupting your mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean, smooth saturation curve glowing cyan, locked inside a validation box.
-Headline accent: Distortion gets cleaner
-Support accent: eliminating alias foldback
+Visual direction: A clean schematic showing a high-cut filter slope on a dark grid attenuating the ultra-high spectrum. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | Smith 2026
+Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to prevent digital harshness
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | Smith 2026
-
-## Caption
-That harsh, metallic glare in your digital saturation is not the plugin's fault. It is aliasing.
-
-When you use saturators, clippers, or limiters, they generate new harmonics. If those harmonics exceed half of your project's sample rate (the Nyquist limit), the digital system cannot display them. Instead, they fold backward into the audible spectrum as unrelated, inharmonic noise. 
-
-The play: Turn on oversampling (2x, 4x, or 8x) on your nonlinear plugins. This raises the internal sample rate, pushing those new harmonics far beyond human hearing before filtering them out.
-
-Clean up your saturation. Save this before starting your next mix pass. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Oversampling eats CPU power. Don't run it active during tracking. Save it for your mixing and mastering passes, especially on high-gain clippers and limiters. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Smith 2026 | MIT OCW 2011

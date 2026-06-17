@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Proximity effect trap you
 
 Viral hook: Proximity effect can trap you
 
-Title: Proximity effect can trap you
-
-Description: Singing too close to a directional microphone creates an artificial low-end boost that ruins vocal clarity. This guide explains the physics of the proximity effect and provides a session move to balance warmth and clarity using microphone distance.
-
-5 hashtags: #VGP #VocalProduction #RecordingVocals #MusicProduction #HomeStudio
-
-Primary keyword: proximity effect
-
-Science anchor: microphone proximity effect
-
-Art and taste anchor: Closeness has a bass bill.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -59,50 +45,6 @@ Humanizer status: passed
   - Year: 1990
   - Use: source separation, auditory grouping, listener attention
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Proximity effect can trap you
-Support: Close vocals get weight, but the low end can crowd the mix.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Compensating with aggressive EQ
-Support: Sing too close to the mic and you will end up hacking away the low end with high-pass filters.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: Loss of low-mid clarity
-Support: Listeners hear a boomy, muddy low-end buildup that masks the singer's articulation and vocals.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Physics of directional microphones
-Support: Cardioid microphones naturally boost low frequencies as the sound source gets closer to the capsule.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Distance determines tone
-Support: Balance the warmth of proximity against the clarity of room reflections.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Adjust the singer's mic distance
-Support: Move the vocalist three to six inches back to control bass build-up naturally before recording.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Record at different distances
-Support: Track one phrase close and another a few inches back to find the sweet spot for the voice.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the low-end mud
-Support: Play back the vocal with the bass and kick playing to make sure the low-mids do not clash.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Capture natural acoustic balance
-Support: Use the physical distance setup if the vocal sits cleanly in the mix without heavy EQ.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before cutting another vocal take.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: proximity effect rings building low-mid pressure. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -133,6 +75,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Proximity effect can trap you
+Support: Close vocals get weight, but the low end can crowd the mix.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Compensating with aggressive EQ
+Support: Singing too close to a cardioid microphone creates a muddy, boomy low-end buildup.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Loss of low-mid clarity
+Support: The vocal loses clarity and detail, sounding masked and distant in the mix.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Physics of directional microphones
+Support: Cardioid polar patterns exhibit low-frequency boost as the sound source approaches the capsule.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Distance determines tone
+Support: Utilize the low-end boost for thin voices while avoiding bass overload on warm tones.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Adjust the singer's mic distance
+Support: Maintain a consistent distance of six inches from the microphone to control low-end response.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Record at different distances
+Support: A/B the vocal tracking distance to find the balance between warmth and intelligibility.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check the low-end mud
+Support: Check the low-end buildup on small speakers to ensure the vocal does not rumble.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Capture natural acoustic balance
+Support: Control singer placement to manage bass buildup before reaching for the equalizer.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next vocal recording session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: proximity effect rings building low-mid pressure. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -145,7 +132,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. The proximity trap is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed proximity effect rings building low-mid pressure, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: Proximity effect
 Support accent: low end can crowd
 Motion cue: First 0.5 seconds: quick punch-in on the proximity trap, then kinetic headline reveal on the accented phrase.
@@ -157,11 +144,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Compensating with aggressive EQ
-- Sing too close to the mic and you will end up hacking away the low end with high-pass filters.
+- Singing too close to a cardioid microphone creates a muddy, boomy low-end buildup.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Compensating with aggressive
 Support accent: hacking away low end
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the proximity trap.
@@ -173,11 +160,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - Loss of low-mid clarity
-- Listeners hear a boomy, muddy low-end buildup that masks the singer's articulation and vocals.
+- The vocal loses clarity and detail, sounding masked and distant in the mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: low-mid clarity
 Support accent: boomy muddy buildup
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the proximity trap.
@@ -189,11 +176,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Physics of directional microphones
-- Cardioid microphones naturally boost low frequencies as the sound source gets closer to the capsule.
+- Cardioid polar patterns exhibit low-frequency boost as the sound source approaches the capsule.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed proximity effect rings building low-mid pressure is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: directional microphones
 Support accent: naturally boost low
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -205,11 +192,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Distance determines tone
-- Balance the warmth of proximity against the clarity of room reflections.
+- Utilize the low-end boost for thin voices while avoiding bass overload on warm tones.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: determines tone
 Support accent: warmth of proximity
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -221,11 +208,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Adjust the singer's mic distance
-- Move the vocalist three to six inches back to control bass build-up naturally before recording.
+- Maintain a consistent distance of six inches from the microphone to control low-end response.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: mic distance
 Support accent: control bass build-up
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -237,11 +224,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Record at different distances
-- Track one phrase close and another a few inches back to find the sweet spot for the voice.
+- A/B the vocal tracking distance to find the balance between warmth and intelligibility.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: different distances
 Support accent: find the sweet spot
 Motion cue: Use a tap or mute action. The proximity trap changes visibly.
@@ -253,11 +240,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Check the low-end mud
-- Play back the vocal with the bass and kick playing to make sure the low-mids do not clash.
+- Check the low-end buildup on small speakers to ensure the vocal does not rumble.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed proximity effect rings building low-mid pressure is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: low-end mud
 Support accent: low-mids do not clash
 Motion cue: Use a tap or mute action. The proximity trap changes visibly.
@@ -269,11 +256,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Capture natural acoustic balance
-- Use the physical distance setup if the vocal sits cleanly in the mix without heavy EQ.
+- Control singer placement to manage bass buildup before reaching for the equalizer.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: natural acoustic balance
 Support accent: cleanly in the mix
 Motion cue: Hold frame longer. Let the proximity trap settle, then pulse the final accent.
@@ -284,22 +271,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before cutting another vocal take.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next vocal recording session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Proximity effect rings building low-mid pressure. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed proximity effect rings building low-mid pressure is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Control mic proximity
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the proximity trap settle, then pulse the accent.
 Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
-
-## Caption
-Getting close to the mic adds warmth, but it comes at a cost. The proximity effect boosts the low-mids, creating a boomy mess that clutters the mix. Instead of trying to fix this later with drastic EQ cuts, move the singer back three to six inches. This simple physical adjustment cleans up the mud while keeping the vocal natural and clear. Save this post for your next recording session. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Recording tip: Use a physical pop filter as a distance guard. Place it four inches from the microphone capsule to force the vocalist to stay at a consistent, clean distance. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use proximity effect rings building low-mid pressure. Keep the proximity trap motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

@@ -26,20 +26,6 @@ Slide 1 thumbnail read: EQ attention design
 
 Viral hook: EQ is attention design
 
-Title: EQ is attention design
-
-Description: EQ is not just about correcting frequencies; it is about directing the listener's attention. This guide explains how spectral contrast controls cognitive focus and shows you how to design a clear hierarchy in your mix.
-
-5 hashtags: #VGP #MixingTips #AudioScience #HomeStudio #MusicProduction
-
-Primary keyword: EQ attention
-
-Science anchor: spectral contrast
-
-Art and taste anchor: A mix is a set of decisions about attention.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -54,50 +40,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: small studio mixing practice
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: EQ is attention design
-Support: EQ is less about pretty curves and more about who gets heard.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Boosting every track to find presence
-Support: Adding high-mid boosts to all instruments creates a harsh wall of sound that tires the listener.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The chaotic frequency battle
-Support: When every instrument fights for the same frequency spotlight, the listener's brain gets confused.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Focus and spectral contrast
-Support: Human ears focus on the sound source that displays the highest contrast against the background noise.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: A mix has only one hero at a time
-Support: Use EQ as a spotlight, brightening the main element while keeping backing tracks darker.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Boost the hero and damp the background
-Support: Brighten your lead track at its sweet spot, then apply a high-cut or dip to competing elements.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Test the mix with a bandpass filter
-Support: Filter the entire master track to isolate the mid-range and check if the lead remains distinct.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Monitor the mix on small speakers
-Support: Play the mix back quietly on a phone speaker to verify that the main element remains the hero.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Guide the listener's attention
-Support: Keep the EQ adjustments only if the main melody stands out cleanly without fighting.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before touching another fader.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: EQ curve spotlight moving attention toward the lead. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +70,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: EQ is attention design
+Support: EQ is less about pretty curves and more about who gets heard.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Boosting every track to find presence
+Support: Equalizing every track to sound big in solo creates a cluttered and competitive mix.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The chaotic frequency battle
+Support: The listener's brain is overwhelmed, unable to focus on a clear focal point.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Focus and spectral contrast
+Support: The cocktail party effect demonstrates that the brain needs contrast to focus on a single sound source.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: A mix has only one hero at a time
+Support: Dull secondary elements to make the lead vocal stand out as the hero.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Boost the hero and damp the background
+Support: Apply low-pass and high-pass filters to background tracks to focus the listener's attention.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Test the mix with a bandpass filter
+Support: Mute the main element to check if the backing tracks occupy too much space.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Monitor the mix on small speakers
+Support: Listen to the mix at very low volume to ensure the lead remains the focal point.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Guide the listener's attention
+Support: Use frequency contrast to direct the listener's attention where it belongs.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next EQ session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: EQ curve spotlight moving attention toward the lead. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -140,7 +127,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. The EQ spotlight is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed EQ curve spotlight moving attention toward the lead, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: EQ is attention design
 Support accent: who gets heard
 Motion cue: First 0.5 seconds: quick punch-in on the EQ spotlight, then kinetic headline reveal on the accented phrase.
@@ -152,11 +139,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Boosting every track to find presence
-- Adding high-mid boosts to all instruments creates a harsh wall of sound that tires the listener.
+- Equalizing every track to sound big in solo creates a cluttered and competitive mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Boosting every track
 Support accent: harsh wall of sound
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the EQ spotlight.
@@ -168,11 +155,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The chaotic frequency battle
-- When every instrument fights for the same frequency spotlight, the listener's brain gets confused.
+- The listener's brain is overwhelmed, unable to focus on a clear focal point.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: chaotic frequency battle
 Support accent: listener's brain gets confused
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the EQ spotlight.
@@ -184,11 +171,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Focus and spectral contrast
-- Human ears focus on the sound source that displays the highest contrast against the background noise.
+- The cocktail party effect demonstrates that the brain needs contrast to focus on a single sound source.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed EQ curve spotlight moving attention toward the lead is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: spectral contrast
 Support accent: highest contrast against background
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -200,11 +187,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - A mix has only one hero at a time
-- Use EQ as a spotlight, brightening the main element while keeping backing tracks darker.
+- Dull secondary elements to make the lead vocal stand out as the hero.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: one hero at time
 Support accent: keeping backing tracks darker
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -216,11 +203,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Boost the hero and damp the background
-- Brighten your lead track at its sweet spot, then apply a high-cut or dip to competing elements.
+- Apply low-pass and high-pass filters to background tracks to focus the listener's attention.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: Boost the hero
 Support accent: dip competing elements
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -232,11 +219,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Test the mix with a bandpass filter
-- Filter the entire master track to isolate the mid-range and check if the lead remains distinct.
+- Mute the main element to check if the backing tracks occupy too much space.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: bandpass filter
 Support accent: lead remains distinct
 Motion cue: Use a tap or mute action. The EQ spotlight changes visibly.
@@ -248,11 +235,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Monitor the mix on small speakers
-- Play the mix back quietly on a phone speaker to verify that the main element remains the hero.
+- Listen to the mix at very low volume to ensure the lead remains the focal point.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed EQ curve spotlight moving attention toward the lead is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: mix on small speakers
 Support accent: main element remains hero
 Motion cue: Use a tap or mute action. The EQ spotlight changes visibly.
@@ -264,11 +251,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Guide the listener's attention
-- Keep the EQ adjustments only if the main melody stands out cleanly without fighting.
+- Use frequency contrast to direct the listener's attention where it belongs.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: Guide listener attention
 Support accent: stands out cleanly
 Motion cue: Hold frame longer. Let the EQ spotlight settle, then pulse the final accent.
@@ -279,22 +266,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before touching another fader.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next EQ session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: EQ curve spotlight moving attention toward the lead. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed EQ curve spotlight moving attention toward the lead is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Design mix focus
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the EQ spotlight settle, then pulse the accent.
 Reference line: Refs: Bregman 1990 | Senior accessed 2026
-
-## Caption
-Every time you boost EQ on a track, you are demanding the listener's attention. If you boost everything, you end up with a wall of noise that causes ear fatigue. Instead of using EQ to make every element bright, choose one main hero for each frequency zone. Keep supporting instruments darker to build spectral contrast. This makes the lead element stand out instantly without having to push the volume fader. Save this post for your next mix. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Mix check: Try importing a reference track and filtering both your mix and the reference between 1kHz and 4kHz. Compare them to see if your lead instrument sits as cleanly as the reference. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use EQ curve spotlight moving attention toward the lead. Keep the EQ spotlight motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

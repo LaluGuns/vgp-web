@@ -156,7 +156,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: vocal waveform with consonant rhythm blocks. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -172,7 +172,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Tight editorial crop over a premium leather-bound notebook with handwritten lyrics in white ink. Next to it, a glowing smartphone showing a voice memo waveform in cyan. Moody blue side-lighting from the left casts long shadows. The vocal waveform with consonant rhythm blocks appears as a translucent cyan overlay floating above the notebook. The headline snaps in on the first beat. The support line fades in below. The hero object is the waveform blocks. Composition: notebook and phone occupy the lower third, waveform blocks float in the upper middle. Dark blue canvas with subtle dotted grid. 40% negative space for scroll-stop impact.
 Headline accent: Lyric rhythm sells
 Support accent: People feel the
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -188,7 +188,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red pressure mark. Close-up of a DAW piano roll with overloaded faders and red neon warning lights. A single red glowing line cuts through a cluttered waveform, representing the false fix. The better path remains a clean cyan line on the right. The vocal waveform with consonant rhythm blocks is shown as a chaotic red mess on the left, with a single cyan block on the right. Composition: split frame, red left, cyan right. Dark blue canvas with dotted grid. Red accent reserved for the warning zone only.
 Headline accent: Prioritizing literal meaning
 Support accent: Forcing deep lyrics
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the lyric rhythm blocks.
@@ -204,7 +204,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Auditory focus path. Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing through it. The vocal waveform with consonant rhythm blocks appears as a translucent cyan overlay on the diaphragm. The path draws itself from left to right. Composition: diaphragm fills the center, path cuts diagonally. Dark blue canvas with dotted grid. 30% negative space.
 Headline accent: The ear hears
 Support accent: The human voice
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the lyric rhythm blocks.
@@ -220,7 +220,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show science model builds one node at a time with no fake values.
+Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. Each node represents a phonetic property (vowel, consonant, pitch). The vocal waveform with consonant rhythm blocks is shown as a series of glass blocks along the path. Composition: nodes form a triangle, waveform blocks sit at the base. Dark blue canvas with dotted grid. No fake values or labels.
 Headline accent: The emotional power
 Support accent: Brain scans show
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -236,7 +236,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Taste moment. Single physical brass knob in sharp focus, with wood-grain keyboard key behind it. Warm amber spotlight from above illuminates the knob. The vocal waveform with consonant rhythm blocks appears as a faint cyan reflection on the brass surface. Composition: knob in lower center, keyboard key in upper left. Dark blue canvas with dotted grid. 30% negative space.
 Headline accent: The mouth is
 Support accent: Matching the brightness
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -252,7 +252,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show cursor performs the production move once, clearly, in context.
+Visual direction: DAW action. Clean DAW interface showing a cursor hovering over a high-pass curve or stereo width slider. The vocal waveform with consonant rhythm blocks is shown as a cyan overlay on the waveform display. The cursor is a thin cyan line. Composition: DAW window fills the center, cursor at the top of the curve. Dark blue canvas with dotted grid. No extra UI elements.
 Headline accent: Write the cadence
 Support accent: Choose words with
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -268,7 +268,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Matched A/B test. Parallel glass toggle switches, one cyan ON, other grey OFF. Level-meters next to each switch show matched levels. The vocal waveform with consonant rhythm blocks is shown as a cyan line on the ON side, grey on the OFF side. Composition: switches in center, meters on the sides. Dark blue canvas with dotted grid. 30% negative space.
 Headline accent: Speak the line
 Support accent: Whisper or speak
 Motion cue: Use a tap, mute, or device-swap action. The lyric rhythm blocks should change visibly without adding extra on-screen words.
@@ -284,7 +284,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Speaker/translation context checks. Three small icons: laptop, car, mono speaker. Each icon has a cyan checkmark or red X. The vocal waveform with consonant rhythm blocks is shown as a cyan line passing through all three icons. Composition: icons in a row, waveform line above them. Dark blue canvas with dotted grid. 30% negative space.
 Headline accent: Check the vocal
 Support accent: Verify that the
 Motion cue: Use a tap, mute, or device-swap action. The lyric rhythm blocks should change visibly without adding extra on-screen words.
@@ -300,7 +300,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line in the center. Thin glass borders frame the text. The vocal waveform with consonant rhythm blocks is shown as a single cyan block on the left, a red block on the right. Composition: dividing line vertical, blocks on either side. Dark blue canvas with dotted grid. 40% negative space.
 Headline accent: The line starts
 Support accent: If a word
 Motion cue: Hold the frame longer. Let the lyric rhythm blocks settle, then use a small cyan pulse on the final accented phrase.
@@ -312,18 +312,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: vocal waveform with consonant rhythm blocks. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone displays looping plain text: "Lyric rhythm sells emotion first." The vocal waveform with consonant rhythm blocks is shown as a cyan line on the phone screen. Composition: phone in center, text on screen. Dark blue canvas with dotted grid. 30% negative space. No extra elements.
 Headline accent: Prioritize vowel sounds
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the lyric rhythm blocks settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
-
-## Caption
-Lyrics need to sound good before they make sense. The human voice is an instrument first. If you force awkward consonant clusters onto high notes, you ruin the melody. Use open, bright vowels on your highest notes and keep the rhythm tight.
-
-## Pinned comment
-Session move: If a line feels clunky to sing, rewrite it using words with softer consonants and more open vowels. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Resonance sing wreck mix
 
 Viral hook: Resonance can sing or wreck the mix
 
-Title: Resonance can sing or wreck the mix
 
-Description: Stiff, lifeless mixes are often the result of over-filtering. Learn why resonance happens, how to hunt for harsh frequencies without ruining your track, and why some peaks must survive.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: resonance
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official course material
   - Year/access: accessed 2026
   - Use: systems, convolution, frequency response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Resonance can sing or wreck the mix
-Support: A resonant peak can add character or stab the ear.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The blind sweep and destroy trap
-Support: Sweeping an EQ band boosted by 15 dB makes every frequency sound harsh. You end up cutting natural resonances the track actually needs.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: Over-filtering makes the mix thin
-Support: If you cut every minor resonant peak, you remove the harmonic building blocks that give instruments their warmth and body.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Feedback loops and frequency response
-Support: Resonance occurs when specific frequencies build up through physical acoustic feedback or digital filter feedback, magnifying their volume.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Resonance is focus with consequences
-Support: A resonance peak can highlight a vocal's character. Only cut the peaks that build up over time or sound painful.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Find the note the room or synth keeps shouting
-Support: Listen to the track in context to identify which note jumps out, and target only that specific frequency.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Sweep quietly and cut only what keeps ringing
-Support: Keep your EQ boost below 6 dB when hunting. If a frequency rings long after the sound stops, apply a narrow cut.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify the spectral density
-Support: Check that your cuts have not left a massive hole in the midrange frequency spectrum of your instrument.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The tone stays alive without pain
-Support: Targeted, narrow cuts preserve the overall frequency slope while protecting the listener from harsh spikes.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: resonance peak needle rising into a warning zone. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Resonance can sing or wreck the mix
+Support: Dynamic peaks carry the life of the track. Do not notch them all.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The sweeping EQ trap
+Support: Sweeping with a narrow Q boost leads to acoustic bias. You identify normal transient peaks as offensive resonances, over-filtering and thinning the track.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Loss of natural acoustic energy
+Support: Over-filtered tracks lose their frequency density and transient life. The ear perceives the result as a hollow, synthetic, and lifeless sound.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Q factor and standing waves
+Support: Resonance occurs when acoustic feedback or digital filters boost a narrow band. High Q settings create steep peaks that ring in the time domain.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Let natural resonances breathe
+Support: Some resonant peaks carry the unique character and wood tone of an acoustic instrument. Attenuate only the peaks that collide with other tracks.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Clean resonances dynamically
+Support: Use a dynamic equalizer or multiband compressor instead of static notches. This attenuates harsh resonant peaks only when they exceed the threshold.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The narrow Q bypass sweep
+Support: Sweep with a narrow boost to find a resonance, then bypass the EQ. If the track sounds better without the cut in the full mix, delete the notch.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check levels after notches
+Support: Compare the volume of your processed track with the bypass. Ensure your EQ notches have not reduced the fundamental weight of the sound.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Target dynamically to preserve tone
+Support: Never use static EQ notches for transient resonances. Apply dynamic equalization to protect the natural harmonic structure.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to balance your resonance peaks
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,171 +131,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Resonance can sing or wreck the mix
-- A resonant peak can add character or stab the ear.
+- Dynamic peaks carry the life of the track. Do not notch them all.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a frequency spectrum analyzer with a single glowing cyan peak reaching high.
-Headline accent: Resonance can sing or
-Support accent: character or stab ear
-Motion cue: Quick zoom on the resonance needle, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A frequency analyzer showing a steep, narrow resonant peak in cyan. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Resonance
+Support accent: all.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The blind sweep and destroy trap
-- Sweeping an EQ band boosted by 15 dB makes every frequency sound harsh. You end up cutting natural resonances the track actually needs.
+- The sweeping EQ trap
+- Sweeping with a narrow Q boost leads to acoustic bias. You identify normal transient peaks as offensive resonances, over-filtering and thinning the track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An EQ curve showing a massive, red-highlighted 15 dB peak sweeping across a frequency display.
-Headline accent: sweep and destroy
-Support accent: cutting natural resonances
+Visual direction: Macro studio photograph of a single audio channel EQ showing a narrow Q boost sweeping across a waveform, marked by a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Over-filtering makes the mix thin
-- If you cut every minor resonant peak, you remove the harmonic building blocks that give instruments their warmth and body.
+- Loss of natural acoustic energy
+- Over-filtered tracks lose their frequency density and transient life. The ear perceives the result as a hollow, synthetic, and lifeless sound.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A frequency graph showing multiple dynamic notches pulled down, leaving a hollowed-out midrange line in red.
-Headline accent: makes mix thin
-Support accent: remove harmonic building
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a waveform displaying thin, hollow wave lines. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Feedback loops and frequency response
-- Resonance occurs when specific frequencies build up through physical acoustic feedback or digital filter feedback, magnifying their volume.
+- Q factor and standing waves
+- Resonance occurs when acoustic feedback or digital filters boost a narrow band. High Q settings create steep peaks that ring in the time domain.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A scientific schematic showing a feedback signal path circling back into a waveform, creating an amplified peak.
-Headline accent: Feedback loops frequency
-Support accent: physical acoustic feedback
+Visual direction: Schematic diagram of the phase shift and ringing diagram showing a high Q peak decaying slowly over time. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Resonance is focus with consequences
-- A resonance peak can highlight a vocal's character. Only cut the peaks that build up over time or sound painful.
+- Let natural resonances breathe
+- Some resonant peaks carry the unique character and wood tone of an acoustic instrument. Attenuate only the peaks that collide with other tracks.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single glowing track block displaying a vocal wave with one specific harmonic peak highlighted in cyan.
-Headline accent: focus with consequences
-Support accent: highlight vocal character
+Visual direction: Macro photograph of a violin body showing the grain of the wood, with warm side-lighting. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Find the note the room or synth keeps shouting
-- Listen to the track in context to identify which note jumps out, and target only that specific frequency.
+- Clean resonances dynamically
+- Use a dynamic equalizer or multiband compressor instead of static notches. This attenuates harsh resonant peaks only when they exceed the threshold.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean EQ display showing a single narrow cut at a specific frequency point, highlighted in cyan.
-Headline accent: Find note room
-Support accent: note jumps out
+Visual direction: A dynamic EQ interface showing a notch expanding and contracting in cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Sweep quietly and cut only what keeps ringing
-- Keep your EQ boost below 6 dB when hunting. If a frequency rings long after the sound stops, apply a narrow cut.
+- The narrow Q bypass sweep
+- Sweep with a narrow boost to find a resonance, then bypass the EQ. If the track sounds better without the cut in the full mix, delete the notch.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A control dial turned to a moderate 4 dB position on a clean dark technical panel.
-Headline accent: Sweep quietly cut
-Support accent: rings long after
+Visual direction: Close-up of an EQ bypass switch on a glass console panel, glowing in cyan. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify the spectral density
-- Check that your cuts have not left a massive hole in the midrange frequency spectrum of your instrument.
+- Check levels after notches
+- Compare the volume of your processed track with the bypass. Ensure your EQ notches have not reduced the fundamental weight of the sound.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A spectrum display showing a balanced slope with a subtle, clean cyan indicator line.
-Headline accent: spectral density
-Support accent: massive hole midrange
+Visual direction: A level meter showing active and bypassed signals. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The tone stays alive without pain
-- Targeted, narrow cuts preserve the overall frequency slope while protecting the listener from harsh spikes.
+- Target dynamically to preserve tone
+- Never use static EQ notches for transient resonances. Apply dynamic equalization to protect the natural harmonic structure.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic chart leading from a targeted frequency notch to a solid validation check box.
-Headline accent: stays alive
-Support accent: targeted narrow cuts
+Visual direction: A clean schematic showing dynamic EQ lines compressing a resonant peak. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2026 | MIT OCW 2016
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to balance your resonance peaks
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-Stop sweeping your EQs with huge 15 dB boosts.
-
-When you boost an EQ band to search for resonance, you make everything sound bad. If you cut every frequency that sounds harsh under a massive boost, you will end up with a hollow, thin mix. Some resonance is necessary. It is what gives a vocal its chest tone, a snare its body, and a guitar its bite.
-
-The play: Hunt quietly. Use a small 3 dB to 5 dB boost. Sweep slowly, and apply a narrow cut only if a frequency rings out or stabs your ears in context.
-
-Target the pain, but keep the character. Save this before starting your next EQ pass. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Try using dynamic EQs for resonance control. They only pull down the target frequency when it exceeds a threshold, keeping the natural warmth intact when the instrument is playing softly. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Smith 2026 | MIT OCW 2016

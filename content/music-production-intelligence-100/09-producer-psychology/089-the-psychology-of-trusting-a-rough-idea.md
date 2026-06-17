@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Rough ideas need protection
 
 Viral hook: Rough ideas need protection
 
-Title: Rough ideas need protection
 
-Description: Don't let clean-up passes kill your song's energy. Learn why early rough ideas contain the track's best instincts, and how to protect the emotion of your first bounce.
 
-5 hashtags: #VGP #ProducerMindset #MusicProduction #Workflow #BeatMaking
 
 Primary keyword: rough idea
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official platform documentation
   - Year/access: accessed 2026
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Rough ideas need protection
-Support: A rough loop can have the song's best instinct.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The clean-up destruction trap
-Support: Replacing cheap sounds too early can strip away the raw energy that made you write the song in the first place.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The listener feels the performance
-Support: A listener will choose a raw, exciting vocal take over a perfectly tuned, sterile performance every time.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How the brain evaluates raw ideas
-Support: Acoustic psychology shows that early rough balances capture the initial emotional impact before analysis gets in the way.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Early energy is easy to over-edit
-Support: The raw recording has a vibe. Protect it before you start cleaning up transients and EQ clashing.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Mark what works before fixing what sounds cheap
-Support: Identify the core track that carries the emotion, and lock it down so you do not accidentally replace it.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Write the reason the loop made you move
-Support: Jot down one sentence explaining why you liked the rough draft, and use that as a guide for the final production.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Compare the new mix to the rough bounce
-Support: A/B the active project with your initial rough export. If the new version feels less exciting, revert the changes.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The record keeps its first pulse
-Support: A successful production refines the sonic quality without losing the raw energy of the initial idea.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before reopening the session tonight.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: rough idea protected under a small glass cover. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Rough ideas need protection
+Support: First takes contain the emotional core of the song.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The clean up trap
+Support: Spending hours aligning transients and tuning vocals kills the initial energy of the recording. You end up with a mathematically perfect track that has no groove.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Stiff timing kills the groove
+Support: The human ear detects tiny deviations in micro-timing. When you quantize everything to a strict grid, you remove the natural swing that keeps the listener engaged.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Spontaneity and adaptation level
+Support: Psychology shows that the brain adapts to repetitive patterns quickly. Natural variations in timing and pitch prevent habituation, keeping the brain alert.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Keep the human flaws
+Support: The emotional power of a performance resides in its imperfections. A vocal that is slightly sharp or a drum hit that is slightly late often carries the key energy of the hook.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Protect the first bounce
+Support: Keep your original rough mix as a reference track in your session. Switch to it frequently to ensure your editing passes have not stripped away the performance energy.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The Polish vs Rough A/B check
+Support: Match the levels of your rough demo and your polished mix. Play them side-by-side for a listener. If they prefer the rough, roll back your edits.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Inspect the transient peaks
+Support: Check the waveforms of your edited tracks. Ensure your clean-up plugins have not blunted the transients of the drums or vocals.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Limit edits to technical defects
+Support: Only edit to remove unwanted noises or clicks. Leave the micro-timing and natural pitch variations of the performance untouched to protect the groove.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to protect your rough ideas
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,171 +131,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Rough ideas need protection
-- A rough loop can have the song's best instinct.
+- First takes contain the emotional core of the song.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing waveform visual is enclosed in a protective glass dome, set on a dark technical desktop.
-Headline accent: Rough ideas need
-Support accent: best instinct
-Motion cue: Quick zoom on the rough protection, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. A glowing raw audio wave on a sleek glass interface panel. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rough
+Support accent: song.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The clean-up destruction trap
-- Replacing cheap sounds too early can strip away the raw energy that made you write the song in the first place.
+- The clean up trap
+- Spending hours aligning transients and tuning vocals kills the initial energy of the recording. You end up with a mathematically perfect track that has no groove.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A waveform strip highlighted with red warning markers, with pieces fading away as if being deleted.
-Headline accent: clean-up destruction
-Support accent: strip away raw energy
+Visual direction: Macro studio photograph of an audio wave locked to a grid, with red markers showing blunted transient points. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The listener feels the performance
-- A listener will choose a raw, exciting vocal take over a perfectly tuned, sterile performance every time.
+- Stiff timing kills the groove
+- The human ear detects tiny deviations in micro-timing. When you quantize everything to a strict grid, you remove the natural swing that keeps the listener engaged.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean mockup of a mobile phone audio app showing a rough recording track playing with a bright cyan volume meter.
-Headline accent: feels the performance
-Support accent: raw exciting vocal
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a spectrogram with natural timing swing and micro-timing variations. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How the brain evaluates raw ideas
-- Acoustic psychology shows that early rough balances capture the initial emotional impact before analysis gets in the way.
+- Spontaneity and adaptation level
+- Psychology shows that the brain adapts to repetitive patterns quickly. Natural variations in timing and pitch prevent habituation, keeping the brain alert.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A scientific chart showing cognitive reaction curves peak early at "Initial Vibe" and drop at "Over-Analysis".
-Headline accent: brain evaluates
-Support accent: initial emotional impact
+Visual direction: Schematic diagram showing a brain scan chart with neural response to spontaneous patterns. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Early energy is easy to over-edit
-- The raw recording has a vibe. Protect it before you start cleaning up transients and EQ clashing.
+- Keep the human flaws
+- The emotional power of a performance resides in its imperfections. A vocal that is slightly sharp or a drum hit that is slightly late often carries the key energy of the hook.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single glowing track block labeled "Demo Stems" on a clean dark timeline interface.
-Headline accent: easy to over-edit
-Support accent: raw recording
+Visual direction: Macro photograph of a singer's silhouette behind a studio microphone with warm side-lighting. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Mark what works before fixing what sounds cheap
-- Identify the core track that carries the emotion, and lock it down so you do not accidentally replace it.
+- Protect the first bounce
+- Keep your original rough mix as a reference track in your session. Switch to it frequently to ensure your editing passes have not stripped away the performance energy.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A track lane on a DAW interface highlighted with a glowing cyan padlock symbol.
-Headline accent: Mark what works
-Support accent: lock it down
+Visual direction: DAW screen showing a clean cyan 'Rough Mix' track routed to the output on a glass console. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Write the reason the loop made you move
-- Jot down one sentence explaining why you liked the rough draft, and use that as a guide for the final production.
+- The Polish vs Rough A/B check
+- Match the levels of your rough demo and your polished mix. Play them side-by-side for a listener. If they prefer the rough, roll back your edits.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single line of text glowing on a clean dark glass notebook panel.
-Headline accent: Write the reason
-Support accent: guide for final
+Visual direction: Close-up of a side-by-side split waveform comparing polished and rough mixes. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Compare the new mix to the rough bounce
-- A/B the active project with your initial rough export. If the new version feels less exciting, revert the changes.
+- Inspect the transient peaks
+- Check the waveforms of your edited tracks. Ensure your clean-up plugins have not blunted the transients of the drums or vocals.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A double fader meter comparing "Rough Export" and "Current Mix" levels side-by-side.
-Headline accent: Compare the new
-Support accent: rough export
+Visual direction: A dynamic waveform showing sharp transient spikes in cyan. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The record keeps its first pulse
-- A successful production refines the sonic quality without losing the raw energy of the initial idea.
+- Limit edits to technical defects
+- Only edit to remove unwanted noises or clicks. Leave the micro-timing and natural pitch variations of the performance untouched to protect the groove.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic chart leading from a raw spark symbol to a finished wave track, connected in cyan.
-Headline accent: keeps its first pulse
-Support accent: refines sonic quality
+Visual direction: A clean schematic showing a slicing tool on a timeline with a lock symbol on the performance swing. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before reopening the session tonight.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to protect your rough ideas
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
-
-## Caption
-The biggest mistake producers make is cleaning up a track too early. 
-
-When you replace your cheap synth presets, aggressively tune raw vocals, or quantize every drum hit to the grid, you often kill the exact energy that made you write the song. Early rough ideas carry a raw emotional pulse that analysis cannot replicate.
-
-The play: Before you start fixing anything, write down one sentence explaining why the rough loop made you move. Protect that core element, and make sure your clean-up pass does not erase it.
-
-Clean it up, but do not make it sterile. Save this to protect your rough ideas tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Before you start replacing demo sounds, print the rough mix and put it on a track. Toggle back and forth as you work. If your new high-end plugin settings feel less exciting than the rough track, you are over-editing. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Senior 2026 | Katz 2026

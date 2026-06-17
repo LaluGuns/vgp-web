@@ -26,20 +26,6 @@ Slide 1 thumbnail read: quiet vocal detail sounds
 
 Viral hook: The quiet vocal detail sounds expensive
 
-Title: The quiet vocal detail sounds expensive
-
-Description: Aggressive noise gates often cut off the delicate details and tails of a vocal take, making it sound synthetic. This guide explains the science of fine detail perception and shows you how to preserve quiet vocal cues for an intimate, expensive-sounding mix.
-
-5 hashtags: #VGP #VocalProduction #MixingTips #AudioScience #HomeStudio
-
-Primary keyword: quiet vocal detail
-
-Science anchor: fine detail perception
-
-Art and taste anchor: Expensive can mean controlled intimacy.
-
-Claim safety: producer interpretation. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -54,50 +40,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: small studio mixing practice
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: The quiet vocal detail sounds expensive
-Support: Tiny mouth sounds and tails can make a vocal feel real.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Heavy gating crushing nuances
-Support: Noise gates and aggressive expanders choke trailing notes, breaths, and mouth noises.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The lifeless vocal mix
-Support: Listeners miss the small physical sounds that make a performance feel intimate and real.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Cognitive processing of quiet cues
-Support: Micro-transients and low-level tail sounds trigger human empathy by mimicking close-range speech.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Intimacy lives in low-level signals
-Support: Preserve tail detail and low-level mouth sounds to create a close-up listening experience.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Clean noise floor before compressing
-Support: Manually edit out clicks and rumbles so you can compress quiet details without boosting noise.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Check vocal tails in solo
-Support: Listen to the decays of words at the ends of phrases to check if they cut off abruptly.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Evaluate intimacy on earbuds
-Support: Test playback on consumer earbuds to ensure the quietest nuances are audible.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Let the performance breathe
-Support: Keep the low-level details if they make the singer sound closer and more human.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before cutting another vocal take.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: quiet mouth detail beside a soft automation curve. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +70,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: The quiet vocal detail sounds expensive
+Support: Tiny mouth sounds and tails can make a vocal feel real.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Heavy gating crushing nuances
+Support: Losing low-level vocal details behind a high noise floor ruins the professional sound.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The lifeless vocal mix
+Support: Listeners miss the subtle breathy textures and mouth clicks that make a vocal intimate.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Cognitive processing of quiet cues
+Support: Microphone self-noise and room reflections mask high-frequency details in quiet vocal passages.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Intimacy lives in low-level signals
+Support: Bring out quiet vocal textures while keeping the noise floor below audible levels.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Clean noise floor before compressing
+Support: Use expanders or manual gate automation to silence empty spaces between vocal lines.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Check vocal tails in solo
+Support: Listen to the quiet sections with high compression to check for noise buildup.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Evaluate intimacy on earbuds
+Support: Check the vocal tail on headphones to verify a clean decay without noise.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Let the performance breathe
+Support: Keep the room and hardware noise floor low to expose high-frequency details.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next vocal mixing session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: quiet mouth detail beside a soft automation curve. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -140,7 +127,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. The quiet detail is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed quiet mouth detail beside a soft automation curve, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: quiet vocal detail
 Support accent: make a vocal feel real
 Motion cue: First 0.5 seconds: quick punch-in on the quiet detail, then kinetic headline reveal on the accented phrase.
@@ -152,11 +139,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Heavy gating crushing nuances
-- Noise gates and aggressive expanders choke trailing notes, breaths, and mouth noises.
+- Losing low-level vocal details behind a high noise floor ruins the professional sound.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Heavy gating crushing
 Support accent: choke trailing notes
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the quiet detail.
@@ -168,11 +155,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The lifeless vocal mix
-- Listeners miss the small physical sounds that make a performance feel intimate and real.
+- Listeners miss the subtle breathy textures and mouth clicks that make a vocal intimate.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: lifeless vocal mix
 Support accent: physical sounds feel intimate
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the quiet detail.
@@ -184,11 +171,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Cognitive processing of quiet cues
-- Micro-transients and low-level tail sounds trigger human empathy by mimicking close-range speech.
+- Microphone self-noise and room reflections mask high-frequency details in quiet vocal passages.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed quiet mouth detail beside a soft automation curve is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: cognitive processing
 Support accent: mimicking close range
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -200,11 +187,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Intimacy lives in low-level signals
-- Preserve tail detail and low-level mouth sounds to create a close-up listening experience.
+- Bring out quiet vocal textures while keeping the noise floor below audible levels.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: low level signals
 Support accent: close up listening
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -216,11 +203,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Clean noise floor before compressing
-- Manually edit out clicks and rumbles so you can compress quiet details without boosting noise.
+- Use expanders or manual gate automation to silence empty spaces between vocal lines.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: Clean noise floor
 Support accent: compress quiet details
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -232,11 +219,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Check vocal tails in solo
-- Listen to the decays of words at the ends of phrases to check if they cut off abruptly.
+- Listen to the quiet sections with high compression to check for noise buildup.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: Check vocal tails
 Support accent: cut off abruptly
 Motion cue: Use a tap or mute action. The quiet detail changes visibly.
@@ -248,11 +235,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Evaluate intimacy on earbuds
-- Test playback on consumer earbuds to ensure the quietest nuances are audible.
+- Check the vocal tail on headphones to verify a clean decay without noise.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed quiet mouth detail beside a soft automation curve is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: intimacy on earbuds
 Support accent: quietest nuances audible
 Motion cue: Use a tap or mute action. The quiet detail changes visibly.
@@ -264,11 +251,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Let the performance breathe
-- Keep the low-level details if they make the singer sound closer and more human.
+- Keep the room and hardware noise floor low to expose high-frequency details.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: performance breathe
 Support accent: closer and more human
 Motion cue: Hold frame longer. Let the quiet detail settle, then pulse the final accent.
@@ -279,22 +266,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before cutting another vocal take.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next vocal mixing session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Quiet mouth detail beside a soft automation curve. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed quiet mouth detail beside a soft automation curve is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Protect quiet details
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the quiet detail settle, then pulse the accent.
 Reference line: Refs: Moore 2012 | Senior accessed 2026
-
-## Caption
-An expensive-sounding vocal is built on micro-details. When you run aggressive noise gates, you chop off the trailing decays, mouth sounds, and low-level nuances that make a vocal feel real and close. Instead of using global expanders, manually edit out clicks and floor noise. This lets you compress the vocal to bring up the intimate details safely without raising the noise floor. Save this post for your next vocal edit. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Pro tip: Use manual gain staging. Clip gain the trailing breaths and decaying notes up by 3dB to 6dB before they hit your compressor to keep them from getting lost in the mix. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use quiet mouth detail beside a soft automation curve. Keep the quiet detail motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

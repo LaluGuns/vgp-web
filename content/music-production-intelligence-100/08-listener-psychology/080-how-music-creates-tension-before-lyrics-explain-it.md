@@ -1,4 +1,4 @@
-# 080 - Lyrics are late. Music warns first
+# 080: Lyrics are late. Music warns first
 
 Content ID: 080
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Lyrics are late Music
 
 Viral hook: Lyrics are late. Music warns first
 
-Title: Lyrics are late. Music warns first
-
-Description: How musical elements create physiological tension before lyrics explain the theme, and how to use tempo drift and filter sweeps to set up hooks.
-
-5 hashtags: #VGP #MusicPsychology #Songwriting #MusicProduction #AudioScience
-
-Primary keyword: musical tension
-
-Science anchor: expectation and arousal
-
-Art and taste anchor: The body hears the setup early.
-
-Claim safety: producer interpretation. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -63,78 +49,6 @@ Humanizer status: passed
   - Type: established textbook
   - Year: 1990
   - Use: source separation, auditory grouping, listener attention
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Lyrics are late. Music warns first
-
-Support: The listener feels musical tension before they understand the lyric.
-
-Visual: A tension curve rising in cyan before a vocal waveform block enters the timeline.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Relying on lyrics to build energy
-
-Support: Assuming a sad lyric or screaming vocal can make up for a flat instrumental arrangement leaves your song weak.
-
-Visual: A vocal track waveform marked in warning red over flat, empty instrumental tracks.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Auditory response is physiological
-
-Support: Harmonic tension and tempo changes trigger autonomic responses like goosebumps long before the brain decodes words.
-
-Visual: A physical goosebump icon glowing in cyan next to a speaker outline.
-
-### Slide 4: SLIDE 4 | How expectation triggers arousal
-Headline: How expectation triggers arousal
-
-Support: Autonomic arousal increases when chord resolutions are delayed. The physical feeling of anticipation builds a visceral response that primes the ear.
-
-Visual: An arousal index graph showing vertical spikes on chord changes.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: The body hears the setup early
-
-Support: Use the instrumental track to set the scene. Create the emotional atmosphere before the singer speaks a word.
-
-Visual: An instrumental waveform block expanding in cyan, preceding a vocal waveform track.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Build tension with tempo and filter drift
-
-Support: Add a slow low-pass filter sweep on backing pads. Shift the tempo forward by two beats per minute during the buildup.
-
-Visual: An automation grid showing tempo rising from 120 to 122 beats per minute in cyan.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Mute vocals to check the buildup
-
-Support: Play the buildup section with vocals muted. If the instrumental track does not build tension on its own, revise your chords.
-
-Visual: A vocal track mute button highlighted in warning red, with instrument tracks active.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify energy levels in mono
-
-Support: Check the buildup phase in mono. Make sure filter sweeps do not cause volume drops from phase cancellations.
-
-Visual: A mono speaker switch illuminated in cyan.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Music establishes the mood
-
-Support: Keep your buildup automation only if the instrumental track evokes emotion on its own.
-
-Visual: A speaker icon next to a checkmark in cyan.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before forcing emotion into the track.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: music tension shadow appearing before lyric text arrives. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -165,6 +79,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Lyrics are late. Music warns first
+
+Support: The listener feels musical tension before they understand the lyric.
+
+Visual: A tension curve rising in cyan before a vocal waveform block enters the timeline.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Relying on lyrics to build energy
+
+Support: Relying solely on lyrics to build energy ignores the fact that the brain processes non-verbal musical cues first.
+
+Visual: A vocal track waveform marked in warning red over flat, empty instrumental tracks.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Auditory response is physiological
+
+Support: Harmonic tension and tempo shifts trigger autonomic responses like goosebumps long before the brain decodes verbal meaning.
+
+Visual: A physical goosebump icon glowing in cyan next to a speaker outline.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How expectation triggers arousal
+
+Support: Autonomic arousal increases when harmonic resolutions are delayed. The physical anticipation primes the listener for the lyric.
+
+Visual: An arousal index graph showing vertical spikes on chord changes.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: The body hears the setup early
+
+Support: Use the instrumental arrangement to establish the emotional scene, creating the atmosphere before the singer speaks a word.
+
+Visual: An instrumental waveform block expanding in cyan, preceding a vocal waveform track.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Build tension with tempo and filter drift
+
+Support: Introduce a slow low-pass filter sweep on backing pads and shift the tempo forward by two beats per minute in the build.
+
+Visual: An automation grid showing tempo rising from 120 to 122 beats per minute in cyan.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Mute vocals to check the buildup
+
+Support: Play the build-up section with vocals muted. If the instrumental track does not create tension, revise the chords.
+
+Visual: A vocal track mute button highlighted in warning red, with instrument tracks active.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Verify energy levels in mono
+
+Support: Check the build-up in mono, ensuring that the filter sweeps do not cause phase cancellation or volume drops.
+
+Visual: A mono speaker switch illuminated in cyan.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Music establishes the mood
+
+Support: Retain the instrumental automation only if it evokes a physiological and emotional response on its own.
+
+Visual: A speaker icon next to a checkmark in cyan.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before forcing emotion into the track.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: music tension shadow appearing before lyric text arrives. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -177,7 +163,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A tension curve rising in cyan before a vocal waveform block enters the timeline.
+Visual direction: Macro studio photograph of tension curve rising in cyan before vocal waveform block enters the timeline in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: Music warns first
 Support accent: feels tension
 Motion cue: Tension curve rises sharply, then a vocal block pops in at the climax.
@@ -189,11 +175,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Relying on lyrics to build energy
-- Assuming a sad lyric or screaming vocal can make up for a flat instrumental arrangement leaves your song weak.
+- Relying solely on lyrics to build energy ignores the fact that the brain processes non-verbal musical cues first.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A vocal track waveform marked in warning red over flat, empty instrumental tracks.
+Visual direction: Close-up schematic of vocal track waveform marked in warning red over flat, empty instrumental tracks with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: Relying on lyrics
 Support accent: flat arrangement
 Motion cue: Vocal waveform peaks flash in red while instrumental lines stay straight.
@@ -205,31 +191,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Auditory response is physiological
-- Harmonic tension and tempo changes trigger autonomic responses like goosebumps long before the brain decodes words.
+- Harmonic tension and tempo shifts trigger autonomic responses like goosebumps long before the brain decodes verbal meaning.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A physical goosebump icon glowing in cyan next to a speaker outline.
+Visual direction: High-angle focus shot of physical goosebump icon glowing in cyan next to speaker outline with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: response is physiological
 Support accent: autonomic responses
 Motion cue: Cyan waves pulse from the speaker to the goosebump icon.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
-### Prompt 4 - How expectation triggers arousal
-Archetype: How expectation triggers arousal
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How expectation triggers arousal
+- SLIDE 4 | THE SCIENCE
 - How expectation triggers arousal
-- Autonomic arousal increases when chord resolutions are delayed. The physical feeling of anticipation builds a visceral response that primes the ear.
+- Autonomic arousal increases when harmonic resolutions are delayed. The physical anticipation primes the listener for the lyric.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An arousal index graph showing vertical spikes on chord changes.
-Headline accent: triggers arousal
-Support accent: anticipation builds
-Motion cue: A line sweeps left to right on the graph, spiking on chord boundaries.
-Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -237,11 +223,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - The body hears the setup early
-- Use the instrumental track to set the scene. Create the emotional atmosphere before the singer speaks a word.
+- Use the instrumental arrangement to establish the emotional scene, creating the atmosphere before the singer speaks a word.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An instrumental waveform block expanding in cyan, preceding a vocal waveform track.
+Visual direction: Tactile macro photograph of An instrumental waveform block expanding in cyan, preceding vocal waveform track. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: setup early
 Support accent: set the scene
 Motion cue: Instrumental block glows and expands, followed by the vocal track.
@@ -253,11 +239,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Build tension with tempo and filter drift
-- Add a slow low-pass filter sweep on backing pads. Shift the tempo forward by two beats per minute during the buildup.
+- Introduce a slow low-pass filter sweep on backing pads and shift the tempo forward by two beats per minute in the build.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An automation grid showing tempo rising from 120 to 122 beats per minute in cyan.
+Visual direction: Ultra-clean close-up of An automation grid showing tempo rising from 120 to 122 beats per minute in cyan. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: tempo and filter
 Support accent: tempo rising
 Motion cue: Tempo line rises gradually, and filter curve moves from left to right.
@@ -269,11 +255,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Mute vocals to check the buildup
-- Play the buildup section with vocals muted. If the instrumental track does not build tension on its own, revise your chords.
+- Play the build-up section with vocals muted. If the instrumental track does not create tension, revise the chords.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A vocal track mute button highlighted in warning red, with instrument tracks active.
+Visual direction: Detailed view of vocal track mute button highlighted in warning red, with instrument tracks active. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: Mute vocals
 Support accent: instrumental build
 Motion cue: Vocal track mute button clicks red, and instrumental waves pulse.
@@ -285,11 +271,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Verify energy levels in mono
-- Check the buildup phase in mono. Make sure filter sweeps do not cause volume drops from phase cancellations.
+- Check the build-up in mono, ensuring that the filter sweeps do not cause phase cancellation or volume drops.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mono speaker switch illuminated in cyan.
+Visual direction: Studio photograph of mono speaker switch illuminated in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: energy in mono
 Support accent: does not cause drops
 Motion cue: Highlight flashes on the mono position.
@@ -301,11 +287,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Music establishes the mood
-- Keep your buildup automation only if the instrumental track evokes emotion on its own.
+- Retain the instrumental automation only if it evokes a physiological and emotional response on its own.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A speaker icon next to a checkmark in cyan.
+Visual direction: Minimalist graphic chart of speaker icon next to checkmark in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: establishes mood
 Support accent: evokes emotion
 Motion cue: Checkmark pulses next to the speaker icon.
@@ -317,33 +303,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before forcing emotion into the track.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
-
-
-## Caption
-Music warns the body before lyrics explain the story.
-
-Listeners experience emotional arousal from music before they process the vocal message. Building tension using tempo drift, filter sweeps, or rising harmonic density sets up your hooks for maximum payoff.
-
-Try this in your next project:
-1. Build tension using tempo drift, filter sweeps, or rising harmonic density.
-2. Check if your transition works with the vocal track completely muted.
-3. Make sure the instrumental arrangement carries the emotional narrative.
-
-Let the music setup the story.
-
-Save this before producing your next track.
-
-## Pinned comment
-Session tip: Mute your vocals during the build up. If the instrumental does not build tension on its own, add a filter sweep or harmonized pads to create a rising energy curve.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use tension curve rising before vocal waveforms enter. Keep the expectation and arousal motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

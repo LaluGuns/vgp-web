@@ -1,4 +1,4 @@
-# 079 - Contrast resets tired ears
+# 079: Contrast resets tired ears
 
 Content ID: 079
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Contrast resets tired ears
 
 Viral hook: Contrast resets tired ears
 
-Title: Contrast resets tired ears
-
-Description: Why sonic contrast resets ear fatigue, and how managing energy levels between verses and choruses keeps the listener engaged.
-
-5 hashtags: #VGP #MusicPsychology #Songwriting #MusicProduction #AudioScience
-
-Primary keyword: listener fatigue
-
-Science anchor: attention and adaptation
-
-Art and taste anchor: Relief makes impact possible.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -53,78 +39,6 @@ Humanizer status: passed
   - Type: established textbook
   - Year: 2006
   - Use: expectation, tension, surprise
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Contrast resets tired ears
-
-Support: Constant volume causes ear fatigue and ruins your chorus drop.
-
-Visual: A dynamic contrast curve showing verse energy dropping down in cyan before a chorus peak.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Keeping energy at maximum
-
-Support: Arranging a track with maximum density from start to finish makes it exhausting to listen to.
-
-Visual: A solid block of audio waveform showing maximum amplitude across the entire song timeline in warning red.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Brains adapt to constant levels
-
-Support: The human auditory system ignores constant sound. Impact requires variation. You must lower levels to build power.
-
-Visual: A sensory adaptation line graph flatlining in red, then shifting to high spikes in cyan.
-
-### Slide 4: SLIDE 4 | How attention adapts to sound
-Headline: How attention adapts to sound
-
-Support: Sensory adaptation occurs when neural firing drops during continuous stimulation. Introducing a quiet verse resets attention, restoring impact.
-
-Visual: A neural signal diagram showing decreased activity during constant noise, then spiking during a transition.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Relief makes impact possible
-
-Support: Make the verse narrow and quiet. When the chorus hits, open up the stereo width and volume to surprise the ear.
-
-Visual: A stereo width visualizer showing a narrow verse widening into a massive circle on the chorus in cyan.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Drop verse levels to build chorus power
-
-Support: Automate verse volume down by one decibel and pull back the guitar widths. Let the chorus expand naturally.
-
-Visual: Fader automation lanes showing volume dropping in the verse, highlighted in cyan.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: A/B transition width and levels
-
-Support: Compare the drop with and without volume automation. The version with the drop should make the chorus feel twice as big.
-
-Visual: An A/B switch highlighting the automated vs non-automated mix versions.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Audit fatigue on a full listen through
-
-Support: Play the song from start to finish. If you feel like skipping the second verse, your energy levels are too static.
-
-Visual: A progress bar showing song playback with skip indicators.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Manage the energy curves
-
-Support: Keep your energy drops only when they restore impact to the chorus and keep the song engaging.
-
-Visual: A wave outline icon next to a checkmark in cyan.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before forcing emotion into the track.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: fatigue meter reset by a sudden sonic contrast. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -155,6 +69,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Contrast resets tired ears
+
+Support: Constant volume causes ear fatigue and ruins your chorus drop.
+
+Visual: A dynamic contrast curve showing verse energy dropping down in cyan before a chorus peak.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Keeping energy at maximum
+
+Support: Maintaining maximum spectral density and loudness from start to finish induces auditory fatigue and destroys the impact of drops.
+
+Visual: A solid block of audio waveform showing maximum amplitude across the entire song timeline in warning red.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Brains adapt to constant levels
+
+Support: Sensory adaptation occurs when auditory nerves adapt to constant volume. Perceived size requires contrast and level variations.
+
+Visual: A sensory adaptation line graph flatlining in red, then shifting to high spikes in cyan.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How attention adapts to sound
+
+Support: Continuous loud stimulation causes neural firing rates to drop. Introducing a quiet, narrow verse resets the auditory system's sensitivity.
+
+Visual: A neural signal diagram showing decreased activity during constant noise, then spiking during a transition.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Relief makes impact possible
+
+Support: Create a narrow, quiet verse space, then expand the stereo width and low-frequency power when the chorus hits to surprise the ear.
+
+Visual: A stereo width visualizer showing a narrow verse widening into a massive circle on the chorus in cyan.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Drop verse levels to build chorus power
+
+Support: Automate the verse level down by one point five decibels and narrow the panning width, letting the chorus explode naturally.
+
+Visual: Fader automation lanes showing volume dropping in the verse, highlighted in cyan.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: A/B transition width and levels
+
+Support: A/B the drop transition with and without automation to verify that the level shift makes the chorus feel massive.
+
+Visual: An A/B switch highlighting the automated vs non-automated mix versions.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Audit fatigue on a full listen through
+
+Support: Listen to the song from start to finish. If you feel the urge to skip sections, the dynamic contrast is too low.
+
+Visual: A progress bar showing song playback with skip indicators.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Manage the energy curves
+
+Support: Keep energy drops in the arrangement only when they restore impact to the climax and keep the song engaging.
+
+Visual: A wave outline icon next to a checkmark in cyan.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before forcing emotion into the track.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: fatigue meter reset by a sudden sonic contrast. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -167,7 +153,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dynamic contrast curve showing verse energy dropping down in cyan before a chorus peak.
+Visual direction: Macro studio photograph of dynamic contrast curve showing verse energy dropping down in cyan before chorus peak in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: resets tired ears
 Support accent: ruins chorus drop
 Motion cue: Contrast curve dips down in the verse segment, then rises sharply on the chorus.
@@ -179,11 +165,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Keeping energy at maximum
-- Arranging a track with maximum density from start to finish makes it exhausting to listen to.
+- Maintaining maximum spectral density and loudness from start to finish induces auditory fatigue and destroys the impact of drops.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A solid block of audio waveform showing maximum amplitude across the entire song timeline in warning red.
+Visual direction: Close-up schematic of solid block of audio waveform showing maximum amplitude across the entire song timeline in warning red with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: energy at maximum
 Support accent: exhausting
 Motion cue: Red block waveform remains static while a warning sign flashes.
@@ -195,31 +181,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Brains adapt to constant levels
-- The human auditory system ignores constant sound. Impact requires variation. You must lower levels to build power.
+- Sensory adaptation occurs when auditory nerves adapt to constant volume. Perceived size requires contrast and level variations.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A sensory adaptation line graph flatlining in red, then shifting to high spikes in cyan.
+Visual direction: High-angle focus shot of sensory adaptation line graph flatlining in red, then shifting to high spikes in cyan with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: adapt to constant
 Support accent: requires variation
 Motion cue: Graph flatlines, then transitions to dynamic spikes that pulse in cyan.
 Reference line: Refs: Koelsch 2014 | Huron 2006
 
-### Prompt 4 - How attention adapts to sound
-Archetype: How attention adapts to sound
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How attention adapts to sound
+- SLIDE 4 | THE SCIENCE
 - How attention adapts to sound
-- Sensory adaptation occurs when neural firing drops during continuous stimulation. Introducing a quiet verse resets attention, restoring impact.
+- Continuous loud stimulation causes neural firing rates to drop. Introducing a quiet, narrow verse resets the auditory system's sensitivity.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A neural signal diagram showing decreased activity during constant noise, then spiking during a transition.
-Headline accent: attention adapts
-Support accent: resets attention
-Motion cue: Signal pulses slow down during steady blocks, then flash rapidly at the transition point.
-Reference line: Refs: Koelsch 2014 | Huron 2006
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -227,11 +213,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Relief makes impact possible
-- Make the verse narrow and quiet. When the chorus hits, open up the stereo width and volume to surprise the ear.
+- Create a narrow, quiet verse space, then expand the stereo width and low-frequency power when the chorus hits to surprise the ear.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A stereo width visualizer showing a narrow verse widening into a massive circle on the chorus in cyan.
+Visual direction: Tactile macro photograph of stereo width visualizer showing narrow verse widening into massive circle on the chorus in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: makes impact
 Support accent: stereo width
 Motion cue: Visualizer circle expands outward from narrow to wide.
@@ -243,11 +229,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Drop verse levels to build chorus power
-- Automate verse volume down by one decibel and pull back the guitar widths. Let the chorus expand naturally.
+- Automate the verse level down by one point five decibels and narrow the panning width, letting the chorus explode naturally.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Fader automation lanes showing volume dropping in the verse, highlighted in cyan.
+Visual direction: Ultra-clean close-up of Fader automation lanes showing volume dropping in the verse, highlighted in cyan. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: build chorus power
 Support accent: Automate volume
 Motion cue: Automation faders pull down slowly, then jump up on the chorus entry.
@@ -259,11 +245,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - A/B transition width and levels
-- Compare the drop with and without volume automation. The version with the drop should make the chorus feel twice as big.
+- A/B the drop transition with and without automation to verify that the level shift makes the chorus feel massive.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B switch highlighting the automated vs non-automated mix versions.
+Visual direction: Detailed view of An A/B switch highlighting the automated vs non-automated mix versions. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: transition width
 Support accent: feel twice as big
 Motion cue: Selection switches from non-automated to automated.
@@ -275,11 +261,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Audit fatigue on a full listen through
-- Play the song from start to finish. If you feel like skipping the second verse, your energy levels are too static.
+- Listen to the song from start to finish. If you feel the urge to skip sections, the dynamic contrast is too low.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A progress bar showing song playback with skip indicators.
+Visual direction: Studio photograph of progress bar showing song playback with skip indicators. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: Audit fatigue
 Support accent: levels static
 Motion cue: Playhead sweeps through the progress bar, lighting up sections.
@@ -291,11 +277,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Manage the energy curves
-- Keep your energy drops only when they restore impact to the chorus and keep the song engaging.
+- Keep energy drops in the arrangement only when they restore impact to the climax and keep the song engaging.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A wave outline icon next to a checkmark in cyan.
+Visual direction: Minimalist graphic chart of wave outline icon next to checkmark in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: energy curves
 Support accent: restore impact
 Motion cue: Checkmark pulses next to the wave outline icon.
@@ -307,33 +293,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before forcing emotion into the track.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: Koelsch 2014 | Huron 2006
-
-
-## Caption
-Contrast resets tired ears.
-
-Constant volume leads to ear fatigue. If your verse is just as dense and loud as your chorus, the climax loses its impact. Dropping the energy levels in the verse prepares the listener's brain for the heavy chorus drop.
-
-Try this in your arrangement:
-1. Drop verse energy levels by automating volume and width.
-2. Build a clear transition that resets the listener's attention.
-3. Make sure the transition width works with and without the verse drop.
-
-Let the contrast reset the ear.
-
-Save this to build more dynamic impact.
-
-## Pinned comment
-Session tip: Automate your verse track width to narrow down by 15% in the stereo field. When the chorus hit occurs, open the width to 100% to create a massive explosion.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use dynamic contrast curve showing verse drops. Keep the attention adaptation motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

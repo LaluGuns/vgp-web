@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Fourier shows ingredients
 
 Viral hook: Fourier shows the ingredients
 
-Title: Fourier shows the ingredients
 
-Description: Stop mixing with your eyes. Learn how the Fourier transform breaks down complex waveforms into individual frequencies, and why analyzers are just clues, not taste replacements.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: Fourier transform
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official course material
   - Year/access: accessed 2026
   - Use: systems, convolution, frequency response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Fourier shows the ingredients
-Support: A complex wave is just a collection of simple sine waves.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Mixing with your eyes trap
-Support: Staring at a spectrum analyzer instead of listening to the speakers can trick you into fixing visual bumps that actually sound fine.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear evaluates dynamic energy
-Support: A graph cannot tell you how a frequency feels in context. Trust your ears to judge the musical balance.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Fourier frequency decomposition
-Support: The Fourier transform mathematically breaks down a complex time-domain wave into its individual frequency components.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: The graph is a flashlight, not a judge
-Support: Use the analyzer to confirm what your ears are already hearing, not to dictate your level adjustments.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Use analyzers as clues, not taste replacements
-Support: Open the analyzer only when you hear an issue you cannot isolate, like a muddy low-mid build-up.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Find a problem by ear before opening the spectrum
-Support: Close your eyes, find the frequency clash by listening, then use the analyzer to verify its exact range.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Analyze the full mix balance
-Support: Use the analyzer to inspect the overall slope of the track, ensuring the energy distribution is consistent.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The mix decision stays musical
-Support: Adjust levels based on the song's energy and emotional impact. The graph should only serve as a guide.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: Fourier ingredient jars turning one sound into parts. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Fourier shows the ingredients
+Support: Your eyes are not mixing tools. Trust the acoustic field.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Staring at the spectrum analyzer
+Support: Mixing based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear evaluates time and phase
+Support: The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides phase correlation.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Fast Fourier Transform
+Support: The Fourier transform converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Let reference guides remain guidelines
+Support: Use spectrum analyzers to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Match analyzer settings to human hearing
+Support: Set your analyzer block size to 4096 samples and use a Hann window. This balances time and frequency resolution for low-end checking.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The blind frequency sweep
+Support: Close your eyes and adjust an EQ band. Once the sound is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Verify low-end masking
+Support: Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same frequency bin.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Measure for diagnostic checks
+Support: Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your ears.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to understand spectral analyzers
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,14 +131,14 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Fourier shows the ingredients
-- A complex wave is just a collection of simple sine waves.
+- Your eyes are not mixing tools. Trust the acoustic field.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel showing a complex waveform separating into multiple smooth glowing cyan sine waves.
-Headline accent: Fourier shows ingredients
-Support accent: collection of simple sine
-Motion cue: Quick zoom on the Fourier ingredients, then kinetic headline reveal on the accented phrase in 0.5s.
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A complex audio wave decomposed into three individual sine waves glowing in cyan. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Fourier
+Support accent: field.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
@@ -151,14 +146,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Mixing with your eyes trap
-- Staring at a spectrum analyzer instead of listening to the speakers can trick you into fixing visual bumps that actually sound fine.
+- Staring at the spectrum analyzer
+- Mixing based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital spectrum analyzer display glowing red with warning rings around a specific frequency peak.
-Headline accent: mixing eyes trap
-Support accent: fixing visual bumps
+Visual direction: Macro studio photograph of a producer's eyes staring at a large glowing spectrum analyzer on a dark desk. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -167,14 +162,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear evaluates dynamic energy
-- A graph cannot tell you how a frequency feels in context. Trust your ears to judge the musical balance.
+- The ear evaluates time and phase
+- The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides phase correlation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A sleek speaker cone silhouette emitting cyan dynamic sound waves, with no technical graphs visible.
-Headline accent: evaluates dynamic energy
-Support accent: judge musical balance
+Visual direction: Studio product photograph of a clean, sleek glass screen showing an audio waveform displaying a red phase offset indicator. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -183,14 +178,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Fourier frequency decomposition
-- The Fourier transform mathematically breaks down a complex time-domain wave into its individual frequency components.
+- Fast Fourier Transform
+- The Fourier transform converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mathematical diagram illustrating a time-domain wave converting into a frequency-domain spectrum graph.
-Headline accent: frequency decomposition
-Support accent: mathematically breaks down
+Visual direction: Schematic diagram of the Fourier mathematical transformation formula glowing on a sleek glass blackboard. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -199,14 +194,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- The graph is a flashlight, not a judge
-- Use the analyzer to confirm what your ears are already hearing, not to dictate your level adjustments.
+- Let reference guides remain guidelines
+- Use spectrum analyzers to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A simple glass panel showing a flashlight beam icon illuminating a specific frequency band.
-Headline accent: flashlight not judge
-Support accent: ears already hearing
+Visual direction: Macro photograph of a frequency spectrum bar chart displaying individual frequency bins in cyan and white. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -215,14 +210,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Use analyzers as clues, not taste replacements
-- Open the analyzer only when you hear an issue you cannot isolate, like a muddy low-mid build-up.
+- Match analyzer settings to human hearing
+- Set your analyzer block size to 4096 samples and use a Hann window. This balances time and frequency resolution for low-end checking.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean EQ display showing a narrow frequency band pulled down, highlighted by a cyan outline.
-Headline accent: clues not replacements
-Support accent: muddy low-mid build-up
+Visual direction: A spectrum analyzer display set to 4096 window size with Hann window selection illuminated. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -231,14 +226,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Find a problem by ear before opening the spectrum
-- Close your eyes, find the frequency clash by listening, then use the analyzer to verify its exact range.
+- The blind frequency sweep
+- Close your eyes and adjust an EQ band. Once the sound is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark interface where a glowing waveform is hidden behind a frosted glass screen, waiting to reveal itself.
-Headline accent: Find problem ear
-Support accent: verify exact range
+Visual direction: Close-up of a hand turning an EQ frequency knob on a dark console. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -247,14 +242,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Analyze the full mix balance
-- Use the analyzer to inspect the overall slope of the track, ensuring the energy distribution is consistent.
+- Verify low-end masking
+- Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same frequency bin.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A full-spectrum graph showing a clean, steady slope line glowing in cyan.
-Headline accent: full mix balance
-Support accent: energy distribution consistent
+Visual direction: A split spectrum view showing kick and bass frequency curves colliding in a red zone. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -263,14 +258,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The mix decision stays musical
-- Adjust levels based on the song's energy and emotional impact. The graph should only serve as a guide.
+- Measure for diagnostic checks
+- Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your ears.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A flowchart showing an ear symbol leading to a volume slider control, highlighted in cyan.
-Headline accent: stays musical
-Support accent: emotional impact
+Visual direction: A clean schematic showing a diagnostic checkbox panel on a sleek glass interface. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -279,28 +274,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to understand spectral analyzers
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-If you mix with your eyes, you are setting yourself up for failure. 
-
-The Fourier transform is the math behind your spectrum analyzer. It decomposes a complex wave into its individual sine wave frequencies. It is incredibly useful for spotting a hidden low-end build-up or a harsh whistle. But the analyzer does not know what music sounds like. It only knows measurements. If you EQ a track until the graph looks perfectly flat, you will likely end up with a sterile, boring mix.
-
-The play: Keep the analyzer closed. Listen to the track and find the problem area by ear first. Open the spectrum only to target the exact frequency range you already heard clashing.
-
-Use the graph as a flashlight, not a judge. Save this to keep your mix decisions musical. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Try this exercise today: Hide your spectrum analyzer plugins. Do a full vocal EQ pass using only your ears. Open the analyzer at the end only to verify your decisions. You might find you made bolder, better choices. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

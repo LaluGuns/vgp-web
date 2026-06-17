@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Bit depth noise headroom
 
 Viral hook: Bit depth is noise headroom
 
-Title: Bit depth is noise headroom
 
-Description: Bit depth is not about warmth or frequency detail. Learn how dynamic range works in 24-bit and 32-bit float systems, and how to prevent quantization noise.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: bit depth
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official course material
   - Year/access: accessed 2026
   - Use: systems, convolution, frequency response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Bit depth is noise headroom
-Support: Higher bit depth protects quiet detail and headroom during work.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The resolution myth trap
-Support: Believing that bit depth determines frequency details or adds harmonic analog warmth is a misunderstanding of digital amplitude limits.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The noise floor boundary
-Support: Each bit of depth adds exactly 6 dB of dynamic range. If your bit depth is too low, quiet decays get buried in digital noise.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Digital quantization noise
-Support: Bit depth defines the number of amplitude steps available to measure a sample. Rounding errors between steps create quantization noise.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Bit depth is margin
-Support: A 24-bit file provides 144 dB of dynamic range, which is far below the physical noise floor of any studio analog gear.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Record and process with enough headroom before export
-Support: Record at 24-bit to prevent clipping while keeping quiet passages far above the digital noise floor.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Turn down a quiet recording and raise it again to hear noise behavior
-Support: Drastically lower a track level, bounce it at 16-bit without dither, then gain it up to hear the digital truncation noise.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify your export settings
-Support: Always apply dither when exporting a 24-bit mix to a 16-bit file to mask quantization errors with harmless noise.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The session stays cleaner
-Support: Maintaining high bit depth during processing ensures your reverb tails and fades remain crystal clear.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: bit depth noise floor under a quiet signal. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Bit depth is noise headroom
+Support: Digital resolution is about the noise floor, not harmonic warmth.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The warmth bit myth
+Support: Believing that higher bit depths add warm analog harmonic saturation or detail is a common misunderstanding of digital resolution.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The dynamic floor is silent
+Support: The human ear cannot detect the noise floor of 24-bit audio in normal listening conditions. Higher bit depth does not make the loud parts clearer.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Quantization noise floor
+Support: Bit depth determines the amplitude resolution of each sample. Each bit adds 6 dB of dynamic range, setting the quantization noise floor below the signal.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Headroom is for processing
+Support: Use 24-bit or 32-bit float to record signals with wide dynamic ranges. This prevents digital clipping without requiring brickwall limiting on input.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Export at 24-bit with dither
+Support: Record at 24-bit or 32-bit float in your DAW. Apply triangular dither when exporting your final mix to a 16-bit or 24-bit file format.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The low level noise check
+Support: Gain up a quiet fade-out by 60 dB. Listen for quantization distortion in the undithered file vs the smooth noise hiss of the dithered file.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check peak headroom ceilings
+Support: Maintain your average session levels at -18 dBFS. This aligns with analog gear headroom and prevents converter distortion.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Dither down to preserve resolution
+Support: Always export at 24-bit and apply dither when reducing bit depth to convert quantization distortion into randomized noise.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to understand digital bit depth
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,14 +131,14 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Bit depth is noise headroom
-- Higher bit depth protects quiet detail and headroom during work.
+- Digital resolution is about the noise floor, not harmonic warmth.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a clean dynamic range line in cyan, dropping down into a subtle grid noise region.
-Headline accent: Bit depth is noise
-Support accent: protects quiet detail
-Motion cue: Quick zoom on the noise floor, then kinetic headline reveal on the accented phrase in 0.5s.
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A digital waveform showing amplitude resolution levels, with a dither noise floor in glowing cyan. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Bit
+Support accent: warmth.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
@@ -151,14 +146,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The resolution myth trap
-- Believing that bit depth determines frequency details or adds harmonic analog warmth is a misunderstanding of digital amplitude limits.
+- The warmth bit myth
+- Believing that higher bit depths add warm analog harmonic saturation or detail is a common misunderstanding of digital resolution.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A red warning flag over a stylized analog tube graphic, set against a dark grid.
-Headline accent: resolution myth trap
-Support accent: digital amplitude limits
+Visual direction: Macro studio photograph of a bit depth selector showing a low resolution setting with a red warning glow. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -167,14 +162,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The noise floor boundary
-- Each bit of depth adds exactly 6 dB of dynamic range. If your bit depth is too low, quiet decays get buried in digital noise.
+- The dynamic floor is silent
+- The human ear cannot detect the noise floor of 24-bit audio in normal listening conditions. Higher bit depth does not make the loud parts clearer.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A signal level meter drop-off showing quiet room reflections disappearing into a red noise band.
-Headline accent: noise floor boundary
-Support accent: dynamic range
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a noise floor spectrum analyzer displaying a clean, flat dynamic range line. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -183,14 +178,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Digital quantization noise
-- Bit depth defines the number of amplitude steps available to measure a sample. Rounding errors between steps create quantization noise.
+- Quantization noise floor
+- Bit depth determines the amplitude resolution of each sample. Each bit adds 6 dB of dynamic range, setting the quantization noise floor below the signal.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mathematical diagram illustrating rounding errors between amplitude measurement grid lines in cyan.
-Headline accent: quantization noise
-Support accent: amplitude steps available
+Visual direction: Schematic diagram of the mathematical graph showing quantization error steps. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -199,14 +194,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Bit depth is margin
-- A 24-bit file provides 144 dB of dynamic range, which is far below the physical noise floor of any studio analog gear.
+- Headroom is for processing
+- Use 24-bit or 32-bit float to record signals with wide dynamic ranges. This prevents digital clipping without requiring brickwall limiting on input.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A comparison chart showing dynamic ranges: 16-bit CD range in cyan vs 24-bit system headroom stretching far down.
-Headline accent: is margin
-Support accent: dynamic range
+Visual direction: Macro photograph of a waveform showing dynamic headroom range in 24-bit. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -215,14 +210,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Record and process with enough headroom before export
-- Record at 24-bit to prevent clipping while keeping quiet passages far above the digital noise floor.
+- Export at 24-bit with dither
+- Record at 24-bit or 32-bit float in your DAW. Apply triangular dither when exporting your final mix to a 16-bit or 24-bit file format.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital audio fader scale displaying peak meters comfortably hitting -12 dB in cyan.
-Headline accent: Record and process
-Support accent: enough headroom
+Visual direction: Export dialog box with '24-bit' and 'Dither' checked in bright cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -231,14 +226,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Turn down a quiet recording and raise it again to hear noise behavior
-- Drastically lower a track level, bounce it at 16-bit without dither, then gain it up to hear the digital truncation noise.
+- The low level noise check
+- Gain up a quiet fade-out by 60 dB. Listen for quantization distortion in the undithered file vs the smooth noise hiss of the dithered file.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B switch on a glass control panel toggling between "16-bit No Dither" (red) and "24-bit Original" (cyan).
-Headline accent: hear noise behavior
-Support accent: digital truncation noise
+Visual direction: Close-up of a quiet audio fade-out wave. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -247,14 +242,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify your export settings
-- Always apply dither when exporting a 24-bit mix to a 16-bit file to mask quantization errors with harmless noise.
+- Check peak headroom ceilings
+- Maintain your average session levels at -18 dBFS. This aligns with analog gear headroom and prevents converter distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing dither button active on a clean export panel interface, highlighted in cyan.
-Headline accent: export settings
-Support accent: apply dither
+Visual direction: A master level meter showing peaks at -18 dBFS. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -263,14 +258,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The session stays cleaner
-- Maintaining high bit depth during processing ensures your reverb tails and fades remain crystal clear.
+- Dither down to preserve resolution
+- Always export at 24-bit and apply dither when reducing bit depth to convert quantization distortion into randomized noise.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic showing a fading reverb tail wave remaining smooth and noise-free in cyan, locked inside a box.
-Headline accent: stays cleaner
-Support accent: reverb tails fades
+Visual direction: A clean schematic showing dither noise converting quantization distortion into hiss. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -279,28 +274,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to understand digital bit depth
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-Bit depth has nothing to do with analog warmth or frequency detail. It is simply about the digital noise floor.
-
-Every bit in your digital system represents 6 dB of dynamic range. A 16-bit CD gives you 96 dB of range, while a 24-bit project file offers 144 dB. The higher your bit depth, the more precisely the computer can measure the amplitude of a sound. When you convert audio to a lower bit depth, rounding errors create harsh, digital quantization noise.
-
-The play: Record and mix at 24-bit or 32-bit float. This keeps your low-level details, like reverb tails and fades, completely clean. Always apply dither when exporting down to 16-bit to mask those rounding errors.
-
-Understand the math to protect your quiet details. Save this to keep your exports clean tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Why use 32-bit float? Unlike fixed 24-bit files, 32-bit float has a floating decimal point. This makes it mathematically impossible to clip the audio internally inside your DAW channels, protecting your headroom during heavy processing passes. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

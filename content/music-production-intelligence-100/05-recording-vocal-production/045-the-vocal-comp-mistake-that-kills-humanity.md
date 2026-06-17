@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Perfect vocal comps kill
 
 Viral hook: Perfect vocal comps can kill the human
 
-Title: Perfect vocal comps can kill the human
-
-Description: Over-editing and piecing together micro-takes can rob a vocal of its natural emotional flow. This guide explains how performance continuity affects listener believability and shows you how to comp vocals for raw feeling rather than clinical pitch.
-
-5 hashtags: #VGP #VocalProduction #MixingTips #AudioScience #HomeStudio
-
-Primary keyword: vocal comping
-
-Science anchor: performance continuity
-
-Art and taste anchor: Perfect is not always believable.
-
-Claim safety: safe analogy. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -54,50 +40,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: small studio mixing practice
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Perfect vocal comps can kill the human
-Support: A perfect comp can erase the reason the take worked.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Chasing pitch at the cost of emotion
-Support: Piecing together micro-edits from ten different takes destroys natural delivery and dynamic flow.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: Believability over technical perfection
-Support: Listeners connect with the singer's focus and emotional flow, not their pitch correction accuracy.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The psychology of performance continuity
-Support: Subtle variations in singer timing and throat texture reveal the raw physical reality of performance.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Raw character beats clean takes
-Support: Choose the take with the best emotional delivery even if it requires manual pitch adjustment.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Comp for phrasing and message first
-Support: Select longer contiguous blocks to maintain the vocal's original groove and breath patterns.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Compare your comp to full takes
-Support: Listen to a single continuous performance alongside your stitched edit to find edits that sound fake.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the flow in context
-Support: Play back the vocal inside the full arrangement to ensure the edits sound natural.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Believe the performance first
-Support: Retain a comp cut only if the track feels more convincing and human.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before cutting another vocal take.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: comp lane stitches across several human takes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +70,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Perfect vocal comps can kill the human
+Support: A perfect comp can erase the reason the take worked.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Chasing pitch at the cost of emotion
+Support: Stitching tiny vocal fragments together ruins the performance phrasing and natural emotional curve.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Believability over technical perfection
+Support: The brain detects microscopic changes in vocal tract resonance across abrupt edit boundaries.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: The psychology of performance continuity
+Support: Phonetic transitions require continuous laryngeal adjustment that artificial edits disrupt.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Raw character beats clean takes
+Support: Prioritize a cohesive emotional performance line over technically perfect individual syllables.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Comp for phrasing and message first
+Support: Comp in longer phrases of full lines to preserve the singer's natural breathing and dynamics.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Compare your comp to full takes
+Support: Listen to the comped vocal in solo to check for unnatural pitch jumps and phase issues.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check the flow in context
+Support: Check the comp against the full mix to ensure the performance flow feels continuous.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Believe the performance first
+Support: Select takes that maintain emotional consistency and natural acoustic phrasing.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next vocal comping session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: comp lane stitches across several human takes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -140,7 +127,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. The human comp is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed comp lane stitches across several human takes, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: kill the human
 Support accent: erase the reason
 Motion cue: First 0.5 seconds: quick punch-in on the human comp, then kinetic headline reveal on the accented phrase.
@@ -152,11 +139,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Chasing pitch at the cost of emotion
-- Piecing together micro-edits from ten different takes destroys natural delivery and dynamic flow.
+- Stitching tiny vocal fragments together ruins the performance phrasing and natural emotional curve.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed comp lane stitches across several human takes is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Chasing pitch
 Support accent: destroys natural delivery
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the human comp.
@@ -168,11 +155,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - Believability over technical perfection
-- Listeners connect with the singer's focus and emotional flow, not their pitch correction accuracy.
+- The brain detects microscopic changes in vocal tract resonance across abrupt edit boundaries.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed comp lane stitches across several human takes is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: Believability over perfection
 Support accent: singer's focus and flow
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the human comp.
@@ -184,11 +171,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - The psychology of performance continuity
-- Subtle variations in singer timing and throat texture reveal the raw physical reality of performance.
+- Phonetic transitions require continuous laryngeal adjustment that artificial edits disrupt.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed comp lane stitches across several human takes is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: performance continuity
 Support accent: raw physical reality
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -200,11 +187,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Raw character beats clean takes
-- Choose the take with the best emotional delivery even if it requires manual pitch adjustment.
+- Prioritize a cohesive emotional performance line over technically perfect individual syllables.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed comp lane stitches across several human takes is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: character beats clean
 Support accent: best emotional delivery
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -216,11 +203,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Comp for phrasing and message first
-- Select longer contiguous blocks to maintain the vocal's original groove and breath patterns.
+- Comp in longer phrases of full lines to preserve the singer's natural breathing and dynamics.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed comp lane stitches across several human takes showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: Comp for phrasing
 Support accent: maintain original groove
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
@@ -232,11 +219,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Compare your comp to full takes
-- Listen to a single continuous performance alongside your stitched edit to find edits that sound fake.
+- Listen to the comped vocal in solo to check for unnatural pitch jumps and phase issues.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed comp lane stitches across several human takes showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: Compare your comp
 Support accent: edits that sound fake
 Motion cue: Use a tap or mute action. The human comp changes visibly.
@@ -248,11 +235,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Check the flow in context
-- Play back the vocal inside the full arrangement to ensure the edits sound natural.
+- Check the comp against the full mix to ensure the performance flow feels continuous.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed comp lane stitches across several human takes is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: Check flow in context
 Support accent: edits sound natural
 Motion cue: Use a tap or mute action. The human comp changes visibly.
@@ -264,11 +251,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Believe the performance first
-- Retain a comp cut only if the track feels more convincing and human.
+- Select takes that maintain emotional consistency and natural acoustic phrasing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed comp lane stitches across several human takes is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: Believe performance first
 Support accent: convincing and human
 Motion cue: Hold frame longer. Let the human comp settle, then pulse the final accent.
@@ -279,22 +266,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before cutting another vocal take.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next vocal comping session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Comp lane stitches across several human takes. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed comp lane stitches across several human takes is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Comp emotional delivery
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the human comp settle, then pulse the accent.
 Reference line: Refs: Moore 2012 | Senior accessed 2026
-
-## Caption
-A technically perfect vocal comp can easily sound lifeless. When you stitch together single words from dozens of takes, you destroy the natural phrasing, breath patterns, and emotional arc of the performance. Listeners notice when a vocal feels artificial, even if every note is perfectly in tune. Try comping in longer blocks and prioritize the take that feels the most real. Save this post for your next tracking session. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Workflow tip: When comping, try to use at least two consecutive lines from the same take. This maintains the singer's natural vocal timbre, volume contours, and breathing rhythm. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use comp lane stitches across several human takes. Keep the human comp motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

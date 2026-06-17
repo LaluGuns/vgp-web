@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Convolution reverb copies space
 
 Viral hook: Convolution reverb copies a space
 
-Title: Convolution reverb copies a space
 
-Description: Algorithmic reverbs often sound synthetic. Learn how convolution reverb uses impulse responses to capture a room's physical acoustic signature, and how to pick the right space.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: convolution reverb
 
@@ -64,51 +61,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: waves, resonance, phase, interference
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Convolution reverb copies a space
-Support: Convolution uses a recorded response to imprint space.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The algorithmic decay trap
-Support: Using digital feedback algorithms to simulate complex rooms often sounds synthetic and lacks the dense early reflection patterns of real physical spaces.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The real space signature
-Support: A physical room has thousands of tiny reflections that cannot be modeled by simple digital delay networks.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Linear systems and impulse response
-Support: Convolution reverb works by multiplying the input audio with an Impulse Response (IR), a high-resolution recording of a room's acoustic fingerprint.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: A room sample can become a production decision
-Support: Choose an IR that fits the size and tone of the song. The room must support the arrangement, not bury it.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Choose the impulse response for the scene, not the preset name
-Support: Select the room based on the physical size your song needs. A short wood room works better for dry vocals than a massive cathedral.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Switch IRs with the dry vocal unchanged
-Support: Keep your dry vocal level exactly the same while switching IRs to evaluate how the space interacts with the performance.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Clean the low end decay
-Support: Apply a high-pass filter to the reverb return track to prevent muddy low frequencies from cluttering your kick and bass.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The space feels chosen
-Support: A calibrated convolution reverb makes your dry tracks sound like they were recorded in the same high-end physical studio.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: impulse response fingerprint opening a virtual room. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
-
 ## Visual design system
 
 Canvas: 1080 x 1920 px, portrait 9:16.
@@ -138,6 +90,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Convolution reverb copies a space
+Support: Multiply waveforms with space to capture physical acoustic room signatures.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Synthetic spatial simulation
+Support: Algorithmic reverbs use digital delay lines that can sound metallic. They fail to capture the complex, randomized reflections of a real acoustic room.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Fake spaces mud the mix
+Support: Synthetic reverb tails lack the density and early reflections of real rooms. The ear detects the artificial tail, which masks the dry transient.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Mathematical convolution
+Support: Convolution reverb multiplies the dry input signal with the time-domain impulse response of a real room. This replicates the room reflections and frequency absorption.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Blend physical space with dry source
+Support: Choose convolution for realistic drums and acoustic guitars. Use algorithmic reverb when you want artificial, modulation-based tails for pads.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Route convolution to a stereo auxiliary bus
+Support: Load your convolution reverb on a send channel. Insert a high-pass filter at 150 Hz before the reverb to prevent muddy low-end build-up.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The Impulse Response check
+Support: Toggle between a plate algorithmic reverb and a convolution room reverb on a dry vocal. Verify if the convolution space sits the vocal in the depth field.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check pre-delay timing
+Support: Adjust the pre-delay to separate the dry transient from the early reflections. Ensure the reverb tail does not wash out the attack of the source.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Use convolution for physical placement
+Support: Apply convolution reverb when you need to position dry elements in a realistic acoustic space. Protect transient clarity with high-passes.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to master realistic reverbs
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -146,171 +141,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Convolution reverb copies a space
-- Convolution uses a recorded response to imprint space.
+- Multiply waveforms with space to capture physical acoustic room signatures.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a virtual room wireframe, with a detailed fingerprint graphic representing the acoustic impulse.
-Headline accent: Convolution reverb copies
-Support accent: recorded response to imprint
-Motion cue: Quick zoom on the impulse room, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A 3D wireframe mesh representing the room acoustics of a concert hall, glowing in cyan. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Convolution
+Support accent: signatures.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The algorithmic decay trap
-- Using digital feedback algorithms to simulate complex rooms often sounds synthetic and lacks the dense early reflection patterns of real physical spaces.
+- Synthetic spatial simulation
+- Algorithmic reverbs use digital delay lines that can sound metallic. They fail to capture the complex, randomized reflections of a real acoustic room.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A schematic showing repeating delay taps in red, with feedback lines piling up into a warning zone.
-Headline accent: algorithmic decay trap
-Support accent: sounds synthetic
+Visual direction: Macro studio photograph of an algorithmic reverb interface showing digital delay lines, marked by a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The real space signature
-- A physical room has thousands of tiny reflections that cannot be modeled by simple digital delay networks.
+- Fake spaces mud the mix
+- Synthetic reverb tails lack the density and early reflections of real rooms. The ear detects the artificial tail, which masks the dry transient.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dense, complex network of cyan reflection paths bouncing off classroom wall outlines on a dark grid.
-Headline accent: real space signature
-Support accent: physical room has
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a spectrogram with a chaotic, blocky reverb tail masking dry vocal transients. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Linear systems and impulse response
-- Convolution reverb works by multiplying the input audio with an Impulse Response (IR), a high-resolution recording of a room's acoustic fingerprint.
+- Mathematical convolution
+- Convolution reverb multiplies the dry input signal with the time-domain impulse response of a real room. This replicates the room reflections and frequency absorption.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mathematical diagram showing an input signal multiplying by an impulse response decay curve to produce a wet output in cyan.
-Headline accent: Impulse Response
-Support accent: multiplying the input
+Visual direction: Schematic diagram of the mathematical convolution equation (f * g) glowing on a glass interface. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- A room sample can become a production decision
-- Choose an IR that fits the size and tone of the song. The room must support the arrangement, not bury it.
+- Blend physical space with dry source
+- Choose convolution for realistic drums and acoustic guitars. Use algorithmic reverb when you want artificial, modulation-based tails for pads.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single glowing control dial displaying a room selection menu on a sleek glass panel interface.
-Headline accent: room sample
-Support accent: support the arrangement
+Visual direction: Macro photograph of a split display showing a concrete room on one side and a digital synthesizer on the other. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Choose the impulse response for the scene, not the preset name
-- Select the room based on the physical size your song needs. A short wood room works better for dry vocals than a massive cathedral.
+- Route convolution to a stereo auxiliary bus
+- Load your convolution reverb on a send channel. Insert a high-pass filter at 150 Hz before the reverb to prevent muddy low-end build-up.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A comparison panel showing two rooms: a small wooden studio room in cyan vs a large cathedral wireframe in gray.
-Headline accent: Choose impulse response
-Support accent: physical size your
+Visual direction: A stereo auxiliary bus routing diagram on a glass console with high-pass filter curve in cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Switch IRs with the dry vocal unchanged
-- Keep your dry vocal level exactly the same while switching IRs to evaluate how the space interacts with the performance.
+- The Impulse Response check
+- Toggle between a plate algorithmic reverb and a convolution room reverb on a dry vocal. Verify if the convolution space sits the vocal in the depth field.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B switch on a glass control panel toggling between "Wood Room IR" (cyan) and "Hall IR" (cyan) with vocal fader locked.
-Headline accent: Switch IRs vocal
-Support accent: dry vocal level
+Visual direction: Close-up of a waveform comparing algorithmic and convolution decay tails. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Clean the low end decay
-- Apply a high-pass filter to the reverb return track to prevent muddy low frequencies from cluttering your kick and bass.
+- Check pre-delay timing
+- Adjust the pre-delay to separate the dry transient from the early reflections. Ensure the reverb tail does not wash out the attack of the source.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An EQ curve showing a high-pass filter cutting low frequencies at 150 Hz on a reverb return channel.
-Headline accent: low end decay
-Support accent: high-pass filter
+Visual direction: Close-up of a pre-delay dial on a sleek glass interface panel. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The space feels chosen
-- A calibrated convolution reverb makes your dry tracks sound like they were recorded in the same high-end physical studio.
+- Use convolution for physical placement
+- Apply convolution reverb when you need to position dry elements in a realistic acoustic space. Protect transient clarity with high-passes.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic showing two signals meeting in a unified, cyan room boundary, locked inside a box.
-Headline accent: space feels chosen
-Support accent: same high-end physical
+Visual direction: A clean schematic showing impulse response routing. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to master realistic reverbs
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-If your virtual spaces sound cheap and digital, you are likely using the wrong type of reverb.
-
-Algorithmic reverbs use digital delay networks to simulate room decay. They are great for modulated plates and lush synth pads, but they struggle with realistic spaces. Convolution reverb works by multiplying your audio with an Impulse Response (IR) - a recording of a starter pistol or sine sweep captured in a real room. It literally wraps your sound in the physical acoustics of that space.
-
-The play: Match the IR to the arrangement's physical needs. Use short wood room IRs for intimate vocals, and save large halls only for instruments that have empty space to decay. Filter the low-end of your reverb send to keep the mix clean.
-
-Sample real spaces. Save this to improve your room depth tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Pro tip: You don't have to limit convolution to rooms. You can load impulse responses of analog hardware EQ curves, tape machines, and guitar cabinets to print their physical character onto your tracks. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: MIT OCW 2011

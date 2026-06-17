@@ -26,12 +26,6 @@ Slide 1 thumbnail read: One tiny percussion hit
 
 Viral hook: One tiny percussion hit can reset attention
 
-Title: One tiny percussion hit can reset attention
-
-Description: Loud drum fills are ruining your transitions. Learn how to use a single percussion sound to reset the listener's attention and keep the groove moving.
-
-5 hashtags: #VGP #Arrangement #MusicProduction #BeatMaking #ProducerTips
-
 Primary keyword: percussion ear candy
 
 Science anchor: novelty and timing
@@ -151,7 +145,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before adding another layer.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: single percussion transient lighting an attention radar. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,7 +161,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Extreme close-up of a single metallic percussion transient (a woodblock or rimshot) suspended in mid-air, lit by a sharp cyan side-light that creates a glowing halo around the object. The background is a deep black-blue canvas with a subtle dotted grid. A premium leather-bound notebook lies open on the left, handwritten lyrics in white ink visible. A glowing smartphone with a voice memo waveform on screen sits to the right. Moody blue side-lighting casts long shadows. The headline "One tiny percussion hit can reset attention" appears in bold white SF Pro Display, with "One tiny percussion" in warm amber accent. The support line "The groove loops too long and the ear stops checking in." is in ice-blue SF Pro Text. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition is dense but clean, with the hero object occupying the center third. Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
 Headline accent: One tiny percussion
 Support accent: The groove loops
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -183,7 +177,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Red pressure point. Wide shot of a DAW timeline overloaded with dense drum lanes, red waveform peaks, and cluttered faders. A single red neon warning light pulses in the top-right corner, casting a hot red glow across the screen. The background is a dark blue canvas with a dotted grid. The headline "Using massive drum fills every four bars" is in white SF Pro Display, with "Using massive drum" in red accent. The support line "Cluttering every transition with loud snare rolls and sweeps ruins the groove and distracts from the vocal." is in ice-blue SF Pro Text. A cyan guide line cuts through the red chaos, pointing to a clean empty lane. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space, with the red warning light as the hero object. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the attention ping.
 Headline accent: Using massive drum
 Support accent: Cluttering every transition
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the attention ping.
@@ -199,7 +193,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Auditory focus path. Extreme close-up of a headphone diaphragm, its metallic surface catching a single glowing cyan path of light that traces a sharp transient waveform. The background is a deep black-blue canvas with a subtle dotted grid. The headline "The ear responds to unexpected details" is in white SF Pro Display, with "The ear responds" in cyan accent. The support line "A single, unique percussion sound catches the ear and resets attention far better than a predictable drum fill." is in ice-blue SF Pro Text. The cyan light path is the only bright element, drawing the eye from the diaphragm to the text. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space, with the headphone diaphragm as the hero object. Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the attention ping.
 Headline accent: The ear responds
 Support accent: A single unique
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the attention ping.
@@ -215,7 +209,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show science model builds one node at a time with no fake values.
+Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. One node pulses brighter than the others, representing the "novelty" trigger. The background is a deep black-blue canvas with a dotted grid. The headline "How novelty and timing capture focus" is in white SF Pro Display, with "How novelty and" in cyan accent. The support line "Cognitive science shows that the brain filters out repetitive loops, but wakes up when a tiny, unexpected sound appears on a key beat." is in ice-blue SF Pro Text. The node diagram is the hero visual, with no fake values or labels. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: How novelty and
 Support accent: Cognitive science shows
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -231,7 +225,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Taste moment. Single physical brass knob in sharp focus, its surface reflecting a warm amber spotlight. A wood-grain keyboard key sits blurred in the background. The background is a deep black-blue canvas with a dotted grid. The headline "Small sounds hit when they arrive on purpose" is in white SF Pro Display, with "Small sounds hit" in warm amber accent. The support line "The best ear candy is tiny and dry, placed exactly where the rest of the arrangement leaves a pocket of space." is in ice-blue SF Pro Text. The brass knob is the hero object, occupying the center third. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: Small sounds hit
 Support accent: The best ear
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -247,7 +241,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show cursor performs the production move once, clearly, in context.
+Visual direction: DAW action. Clean DAW interface showing a cursor hovering over a high-pass curve or stereo width slider. A single woodblock waveform is highlighted in cyan on the timeline, positioned at the section turn. The background is a deep black-blue canvas with a dotted grid. The headline "Place one small sound at the section turn" is in white SF Pro Display, with "Place one small" in cyan accent. The support line "Place a single woodblock, rimshot, or metallic click on the final beat of a section to reset the listener's focus." is in ice-blue SF Pro Text. The cursor and waveform are the hero objects. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Headline accent: Place one small
 Support accent: Place a single
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -263,7 +257,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Matched A/B test. Parallel glass toggle switches, one cyan ON and the other grey OFF. Level-meters show a clean signal on the cyan side and a cluttered signal on the grey side. The background is a deep black-blue canvas with a dotted grid. The headline "Mute every fill except the one that changes the next section" is in white SF Pro Display, with "Mute every fill" in cyan accent. The support line "Mute all complex transition fills and use only one small percussion element to see if the groove feels tighter." is in ice-blue SF Pro Text. The toggle switches are the hero objects. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Use a tap, mute, or device-swap action. The attention ping should change visibly without adding extra on-screen words.
 Headline accent: Mute every fill
 Support accent: Mute all complex
 Motion cue: Use a tap, mute, or device-swap action. The attention ping should change visibly without adding extra on-screen words.
@@ -279,7 +273,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Speaker/translation context checks. Three devices arranged in a row: a laptop, a car dashboard, and a mono Bluetooth speaker. Each device shows a small cyan waveform on its screen. The background is a deep black-blue canvas with a dotted grid. The headline "Check the percussion level" is in white SF Pro Display, with "Check the percussion" in cyan accent. The support line "Make sure the detail is loud enough to be heard but quiet enough to stay in the background of the mix." is in ice-blue SF Pro Text. The three devices are the hero objects. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Use a tap, mute, or device-swap action. The attention ping should change visibly without adding extra on-screen words.
 Headline accent: Check the percussion
 Support accent: Make sure the
 Motion cue: Use a tap, mute, or device-swap action. The attention ping should change visibly without adding extra on-screen words.
@@ -295,7 +289,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line separating a small waveform (the tiny sound) from a large cluttered waveform (the drum fill). Thin glass borders frame each side. The background is a deep black-blue canvas with a dotted grid. The headline "The loop feels less automatic" is in white SF Pro Display, with "The loop feels" in cyan accent. The support line "A tiny sound in the right spot beats a loud drum fill every time." is in ice-blue SF Pro Text. The dividing line is the hero object. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Hold the frame longer. Let the attention ping settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: The loop feels
 Support accent: A tiny sound
 Motion cue: Hold the frame longer. Let the attention ping settle, then use a small cyan pulse on the final accented phrase.
@@ -307,18 +301,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before adding another layer.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: single percussion transient lighting an attention radar. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
+Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone displays looping plain text: "One tiny percussion hit can reset attention." The phone is centered on a black-blue canvas with a dotted grid. A single cyan transient pulse glows behind the phone. The headline "Save this before adding another layer." is in white SF Pro Display, with "Save this before" in cyan accent. The support line "Follow for daily session science. Visit www.virzyguns.com" is in ice-blue SF Pro Text. The phone is the hero object. The footer shows "www.virzyguns.com" and "100% Art. 100% Science." centered. A small reference line reads "Refs: Bregman 1990 | Ronan et al. 2018" in muted grey. The composition uses 30% negative space. Motion cue: Hold the frame longer. Let the attention ping settle, then use a small cyan pulse on the final accented phrase.
 Headline accent: Reset attention with
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the attention ping settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Bregman 1990 | Ronan et al. 2018
-
-## Caption
-Stop using massive snare rolls to transition between sections. They are predictable and clutter the mix. Instead, use a single, unexpected percussion sound. A tiny woodblock or rimshot on the last beat resets the ear without breaking the groove.
-
-## Pinned comment
-Session check: Mute all your cymbal crashes and sweeps, then add one unique metallic hit right at the section transition. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

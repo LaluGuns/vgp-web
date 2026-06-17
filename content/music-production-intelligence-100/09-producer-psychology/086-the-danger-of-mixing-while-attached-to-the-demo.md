@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Demo love ruin mix
 
 Viral hook: Demo love can ruin the mix
 
-Title: Demo love can ruin the mix
 
-Description: Stuck trying to replicate your rough demo mix? Familiarity bias tricks your brain into loving mistakes. Learn how to let go of demo attachment and build cleaner mixes.
 
-5 hashtags: #VGP #ProducerMindset #MusicProduction #Workflow #BeatMaking
 
 Primary keyword: demo attachment
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official platform documentation
   - Year/access: accessed 2026
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Demo love can ruin the mix
-Support: The demo can become a memory you defend instead of a song you improve.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The emotional anchor trap
-Support: Clinging to the rough balance of the demo stops you from finding the real sonic power of the track.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The listener has no nostalgia
-Support: Your audience never heard the demo version. They only judge the final master.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Familiarity bias tricks your brain
-Support: Cognitive science shows that the brain prefers familiar stimuli, mistake-ridden rough mixes included.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Taste is not the same as nostalgia
-Support: Separate the raw emotion of the performance from the technical quality of the raw recording.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Protect the feeling, not every rough sound
-Support: Identify what gave the demo its energy, then rebuild that specific impact with cleaner tools.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Mute the demo layer and ask what emotion must survive
-Support: Hide the reference mix entirely for one pass so you can make decisions based on what you hear now.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Commit the channel processing
-Support: Print your creative effects early so you are not tempted to keep reverting to the dry demo stems.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The final keeps the reason
-Support: A great mix honors the original vibe without letting low-quality levels drag the track down.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before reopening the session tonight.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: demo attachment lock wrapped around the mix bus. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Demo love can ruin the mix
+Support: Familiarity bias makes defects sound like character.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The demo love trap
+Support: Repeatedly listening to a rough mix triggers habituation. Your neural pathways accept phase imbalances and frequency collisions as essential musical character.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Familiarity overrides quality
+Support: The brain mistakes familiar sounds for correct sounds. When you mix, you try to recreate the flat, narrow dynamics of the rough demo instead of carving out space.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: The mere-exposure effect
+Support: Psychological studies demonstrate that repeated exposure to a stimulus increases positive affect toward it. In mixing, this translates to demoitis, where defects are perceived as character.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Let go of the raw state
+Support: The emotion of the track resides in the performance and melody, not in the muddy room tone or bad balance of the demo. Keep the soul, clean the mud.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Mute the rough demo and mix from scratch
+Support: Start your final mix session without loading the rough demo. Build the low-end foundation and lead vocal first, forcing your ears to hear the new balance.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The Blind A/B Comparison
+Support: Have a colleague switch between the demo and your new mix at matched loudness. Verify if your mix improves transient response and dynamic range.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check dynamic headroom
+Support: Measure the peak-to-average ratio of your new mix. Ensure you have not compressed the life out of the track trying to match the limited dynamics of the demo.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Reject familiar defects
+Support: Never use a rough demo as a sonic target. Calibrate your mix decisions against commercial releases to maintain professional standards.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to break your demo love
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -136,171 +131,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Demo love can ruin the mix
-- The demo can become a memory you defend instead of a song you improve.
+- Familiarity bias makes defects sound like character.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing cybernetic lock is wrapped around the main output fader of a digital mixing console display.
-Headline accent: Demo love can ruin
-Support accent: memory you defend
-Motion cue: Quick zoom on the demo lock, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. A timeline wave showing two paths, with one marked in a red warning circle. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Demo
+Support accent: character.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The emotional anchor trap
-- Clinging to the rough balance of the demo stops you from finding the real sonic power of the track.
+- The demo love trap
+- Repeatedly listening to a rough mix triggers habituation. Your neural pathways accept phase imbalances and frequency collisions as essential musical character.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A red anchor icon dragging down a clean soundwave waveform, set against a dark grid.
-Headline accent: anchor trap
-Support accent: sonic power
+Visual direction: Macro studio photograph of a single audio fader with a red warning glow, showing a feedback loop path back to a rough audio waveform display. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The listener has no nostalgia
-- Your audience never heard the demo version. They only judge the final master.
+- Familiarity overrides quality
+- The brain mistakes familiar sounds for correct sounds. When you mix, you try to recreate the flat, narrow dynamics of the rough demo instead of carving out space.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A simplified listener silhouette wearing glowing headphones, looking at a clean music player dashboard.
-Headline accent: no nostalgia
-Support accent: final master
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a waveform transitioning from chaotic red lines to a clean cyan path. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Familiarity bias tricks your brain
-- Cognitive science shows that the brain prefers familiar stimuli, mistake-ridden rough mixes included.
+- The mere-exposure effect
+- Psychological studies demonstrate that repeated exposure to a stimulus increases positive affect toward it. In mixing, this translates to demoitis, where defects are perceived as character.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean scientific diagram illustrating a brain synapse calibration line connecting a memory state to a feedback loop.
-Headline accent: Familiarity bias
-Support accent: brain prefers familiar
+Visual direction: Schematic diagram of the brain showing neural nodes habituating to a repeated wave pattern. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Taste is not the same as nostalgia
-- Separate the raw emotion of the performance from the technical quality of the raw recording.
+- Let go of the raw state
+- The emotion of the track resides in the performance and melody, not in the muddy room tone or bad balance of the demo. Keep the soul, clean the mud.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Two glass blocks side-by-side: one glows warm amber labeled "Emotion", the other glows cyan labeled "Quality".
-Headline accent: same as nostalgia
-Support accent: raw emotion
+Visual direction: Macro photograph of a microphone capsule on a glass stand with warm lighting. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Protect the feeling, not every rough sound
-- Identify what gave the demo its energy, then rebuild that specific impact with cleaner tools.
+- Mute the rough demo and mix from scratch
+- Start your final mix session without loading the rough demo. Build the low-end foundation and lead vocal first, forcing your ears to hear the new balance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A high-contrast display isolating the main lead vocal track wave in cyan, muting secondary tracks in grey.
-Headline accent: Protect the feeling
-Support accent: cleaner tools
+Visual direction: DAW timeline display with a red demo track completely muted, and a clean cyan vocal track illuminated. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Mute the demo layer and ask what emotion must survive
-- Hide the reference mix entirely for one pass so you can make decisions based on what you hear now.
+- The Blind A/B Comparison
+- Have a colleague switch between the demo and your new mix at matched loudness. Verify if your mix improves transient response and dynamic range.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing mute button on a glass console strip, with a soft cyan aura.
-Headline accent: Mute the demo
-Support accent: what you hear now
+Visual direction: Close-up of a level-matched A/B comparison screen showing a split waveform on a sleek glass interface panel. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Commit the channel processing
-- Print your creative effects early so you are not tempted to keep reverting to the dry demo stems.
+- Check dynamic headroom
+- Measure the peak-to-average ratio of your new mix. Ensure you have not compressed the life out of the track trying to match the limited dynamics of the demo.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A progress bar labeled "Exporting Channel Stems" completing in cyan, on a dark display panel.
-Headline accent: Commit processing
-Support accent: dry demo stems
+Visual direction: A dynamic range meter showing high peak headroom with cyan levels. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The final keeps the reason
-- A great mix honors the original vibe without letting low-quality levels drag the track down.
+- Reject familiar defects
+- Never use a rough demo as a sonic target. Calibrate your mix decisions against commercial releases to maintain professional standards.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic chart leading from "Vibe Check" to a solid checkmark lock icon.
-Headline accent: keeps the reason
-Support accent: honors original vibe
+Visual direction: A clean schematic showing calibrated speaker monitors with a cyan signal line. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before reopening the session tonight.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to break your demo love
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
-
-## Caption
-Demo attachment is the silent killer of great records. Because you listened to the rough mix fifty times while writing, your brain accepted all its balance errors, muddy frequencies, and dynamic flaws as part of the song.
-
-This is familiarity bias. Your brain confuses comfort with quality. When you mix, you end up trying to recreate the demo balance instead of making the record sound commercial.
-
-The play: Mute the demo. Close the rough reference. Focus only on the emotion that needs to survive. Rebuild the energy using clean balances rather than defending old mistakes.
-
-Honor the vibe, but do not copy the clutter. Save this to help you let go of the rough mix tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Before importing stems, write down the three specific emotional anchors of the demo (e.g., the vocal presence, the snare slap, the sub weight). Focus only on translating those three things, and let the rest of the rough mix go. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Senior 2026 | Katz 2026

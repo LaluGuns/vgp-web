@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Great producers protect momentum
 
 Viral hook: Great producers protect momentum
 
-Title: Great producers protect momentum
 
-Description: Speed is a creative weapon. Learn why stopping for tiny sound design fixes kills your flow state, and how keeping your sessions moving helps you finish better songs.
 
-5 hashtags: #VGP #ProducerMindset #MusicProduction #Workflow #BeatMaking
 
 Primary keyword: producer momentum
 
@@ -58,51 +55,6 @@ Humanizer status: passed
   - Type: official platform documentation
   - Year/access: accessed 2026
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Great producers protect momentum
-Support: Stopping for tiny fixes too early can kill the song's direction.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The technical speed bump trap
-Support: Stopping your arrangement flow to search for a perfect snare sample kills the creative drive of the session.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The vibe demands flow
-Support: If you do not capture the arrangement while the inspiration is hot, you lose the overall perspective.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How workflow attention shapes tracks
-Support: Psychological studies show that keeping a high-tempo workflow keeps your brain in a flow state, improving creativity.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Momentum is part of the sound
-Support: The speed of your choices is printed into the performance. Keep the project moving forward.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Capture the full idea before micro-editing
-Support: Write the structural skeleton of the song first, and leave the sound design details for a separate pass.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Finish the arrangement pass before opening the mixer
-Support: Force yourself to arrange the full track length before loading any compressors or EQ plugins.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Test flow with a fast bounce
-Support: Export the rough sketch immediately and listen from start to finish. If the structure works, the mix will follow.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The session keeps moving
-Support: Protect your speed. Commit to choices quickly to keep the song's energy alive.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before reopening the session tonight.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: momentum checkpoint with bounce button ready. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -133,6 +85,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Great producers protect momentum
+Support: Speed is a technical asset, not a rush.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The micro edit trap
+Support: Stopping a recording session to edit midi velocity or adjust a plugin parameter breaks your creative momentum. You get stuck in detail work and lose the big picture.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Detail loops ruin perspective
+Support: Focusing on a single snare sound for thirty minutes causes local ear fatigue. Your brain loses the ability to hear how the drum fits the full arrangement.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Flow state and task switching
+Support: Psychology shows that flow state requires deep concentration. Task-switching between creative writing and analytical editing resets your focus, wasting finite cognitive energy.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Momentum is the main tool
+Support: A finished song with a few raw edges is always better than a perfect snippet that is never completed. Keep the session moving to keep the energy high.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Commit sounds quickly and move on
+Support: Set a timer for your sound design choices. Print your synth sounds and instrument tracks to audio immediately, forcing yourself to build on top of finished decisions.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The 90 second rule
+Support: Give yourself exactly 90 seconds to select or tweak a sound. If it is not working by then, bypass the plugin and move to the next section.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check track completion
+Support: Review your session history. Ensure you are finishing tracks rather than starting new projects because you got stuck in a details loop.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Keep the timeline moving
+Support: Prioritize speed and flow over microscopic details. Finish the arrangement and structure of the song before you start the cleanup process.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to maintain your session momentum
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -141,171 +136,156 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Great producers protect momentum
-- Stopping for tiny fixes too early can kill the song's direction.
+- Speed is a technical asset, not a rush.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel displaying a glowing checkpoint track indicator with a cyan "Bounce" progress bar loading.
-Headline accent: Great producers protect
-Support accent: kill the song s direction
-Motion cue: Quick zoom on the momentum checkpoint, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. Sleek glass panel displaying a glowing speed indicator. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Great
+Support accent: rush.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The technical speed bump trap
-- Stopping your arrangement flow to search for a perfect snare sample kills the creative drive of the session.
+- The micro edit trap
+- Stopping a recording session to edit midi velocity or adjust a plugin parameter breaks your creative momentum. You get stuck in detail work and lose the big picture.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A red warning flag over a single midi note on a timeline grid, showing a disruption in the signal path.
-Headline accent: speed bump trap
-Support accent: kills creative drive
+Visual direction: Macro studio photograph of a cascade of complex plugin menus with a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The vibe demands flow
-- If you do not capture the arrangement while the inspiration is hot, you lose the overall perspective.
+- Detail loops ruin perspective
+- Focusing on a single snare sound for thirty minutes causes local ear fatigue. Your brain loses the ability to hear how the drum fits the full arrangement.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A stylized running signal wave in electric blue stretching across a dark screen display.
-Headline accent: demands flow
-Support accent: lose overall perspective
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a producer's hand adjusting a level knob. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How workflow attention shapes tracks
-- Psychological studies show that keeping a high-tempo workflow keeps your brain in a flow state, improving creativity.
+- Flow state and task switching
+- Psychology shows that flow state requires deep concentration. Task-switching between creative writing and analytical editing resets your focus, wasting finite cognitive energy.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A workflow chart displaying a continuous horizontal path labeled "Flow State" in bright cyan lines.
-Headline accent: workflow attention
-Support accent: flow state improving
+Visual direction: Schematic diagram of flow state showing task-switching cognitive load. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Momentum is part of the sound
-- The speed of your choices is printed into the performance. Keep the project moving forward.
+- Momentum is the main tool
+- A finished song with a few raw edges is always better than a perfect snippet that is never completed. Keep the session moving to keep the energy high.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A sleek technical dial marked "Tempo" glowing in soft cyan light, set to a high-speed value.
-Headline accent: part of sound
-Support accent: speed of choices
+Visual direction: Macro photograph of a single clean timeline track printed to audio. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Capture the full idea before micro-editing
-- Write the structural skeleton of the song first, and leave the sound design details for a separate pass.
+- Commit sounds quickly and move on
+- Set a timer for your sound design choices. Print your synth sounds and instrument tracks to audio immediately, forcing yourself to build on top of finished decisions.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean structural outline showing blocks labeled "Verse", "Chorus", and "Bridge" on a dark grid.
-Headline accent: Capture full idea
-Support accent: structural skeleton
+Visual direction: A digital countdown timer showing a 90-second limit on a glass panel. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Finish the arrangement pass before opening the mixer
-- Force yourself to arrange the full track length before loading any compressors or EQ plugins.
+- The 90 second rule
+- Give yourself exactly 90 seconds to select or tweak a sound. If it is not working by then, bypass the plugin and move to the next section.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark DAW screen showing the full song blocks laid out from left to right, with a locked mixing panel below.
-Headline accent: Finish arrangement pass
-Support accent: arrange full track
+Visual direction: Close-up of a bypass switch on a glass console panel, glowing with cyan light. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Test flow with a fast bounce
-- Export the rough sketch immediately and listen from start to finish. If the structure works, the mix will follow.
+- Check track completion
+- Review your session history. Ensure you are finishing tracks rather than starting new projects because you got stuck in a details loop.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing bounce progress icon with a target checkmark inside a cyan circle.
-Headline accent: fast bounce
-Support accent: listen start finish
+Visual direction: A session history timeline showing completed song files. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The session keeps moving
-- Protect your speed. Commit to choices quickly to keep the song's energy alive.
+- Keep the timeline moving
+- Prioritize speed and flow over microscopic details. Finish the arrangement and structure of the song before you start the cleanup process.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean arrow pointing right, slicing through timeline lines, glowing cyan.
-Headline accent: keeps moving
-Support accent: Protect your speed
+Visual direction: A clean schematic showing a timeline path moving forward in a straight line. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before reopening the session tonight.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to maintain your session momentum
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
-
-## Caption
-The fastest way to kill a song is to stop writing so you can EQ a snare drum. 
-
-Creative momentum is fragile. When you interrupt your writing process to handle minor technical details, you yank your brain out of the flow state. You end up with a perfectly processed eight-bar loop, but no finished song.
-
-The play: Separate your tasks. Write and arrange the full layout of the song first. Use place-holder sounds, avoid loading processing plugins, and get the structure down before you open the mixer.
-
-Speed is your best creative tool. Save this to keep your sessions moving tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Try the "no mixing while writing" rule: For the first hour of your next track, you are only allowed to use volume faders and pan pots. No compressors, no EQs, no reverb sends. Focus 100% on the arrangement. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Senior 2026 | Katz 2026

@@ -1,4 +1,4 @@
-# 036 - Small speakers need bass clues
+# 036, Small speakers need bass clues
 
 Content ID: 036
 Pillar: Timbre and sound design
@@ -12,9 +12,6 @@ Motion plan: 0-3s small speaker bass clue map with missing fundamental glow appe
 CTA: Save this before mixing your low end
 Slide 1 thumbnail read: Small speakers need bass
 Viral hook: Small speakers need bass clues
-Title: Small speakers need bass clues
-Description: How upper harmonics trick the brain into hearing low fundamental bass on mobile devices. Design bass for translation outside the room.
-5 hashtags: #VGP #BassMixing #MixingTips #AudioScience #BeatMaking
 Primary keyword: bass translation
 Science anchor: harmonics and playback limits
 Art and taste anchor: Translation is what survives outside the room.
@@ -54,7 +51,7 @@ Core look: Premium dark futuristic Apple editorial. Deep black-blue background w
 
 Palette: black-blue, cyan, electric blue, ice blue, white, muted grey. Red reserved for warnings/bad decisions only.
 
-Pillar visual language: Timbre and sound design: synth macro, spectral fingerprint, envelope sculpture, harmonic glow, texture particles, small speaker clues.
+Pillar visual language: Timbre and sound design: spectral plot, waveform crest, harmonic overtones, ADSR envelope curve, tube glow, analog VU meter.
 
 Footer: Render only `www.virzyguns.com` and `100% Art. 100% Science.` as centered plain text in the footer zone. No symbols, logos, stylized V, monogram, icon, emblem, badge, mark, or decorative shape anywhere.
 
@@ -63,80 +60,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
 ## 10-slide script
-
 ### Slide 1: SLIDE 1 | THE HOOK
 Headline: Small speakers need bass clues
 
 Support: The phone cannot play the sub.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show cold open with the problem visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show cold open with the raw state visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 2: SLIDE 2 | THE TRAP
 Headline: Boosting sub frequencies ruins the mix
 
-Support: Turning up the low-end EQ to hear it on small speakers just clips the master channel on big systems.
+Support: Relying on fundamental sub-bass frequencies below 60 Hz makes the bass line silent on small speakers.
 
 Visual: small speaker bass clue map with missing fundamental glow. Show red pressure mark appears on the false fix while the better path stays cyan. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 3: SLIDE 3 | THE EAR
 Headline: The brain creates the missing fundamental
 
-Support: When the ear hears upper harmonics, the brain automatically reconstructs the deep bass pitch.
+Support: The ear hears upper harmonics and reconstructs the missing fundamental pitch, creating the illusion of bass.
 
 Visual: small speaker bass clue map with missing fundamental glow. Show one signal path draws first, then the supporting detail fades in around it. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
 Headline: Harmonic series dictate pitch perception
 
-Support: The human brain relies on the spacing of higher overtones to determine the base frequency of a sound.
+Support: The brain decodes the spacing of upper harmonics to identify the fundamental frequency, even when that frequency is absent.
 
 Visual: small speaker bass clue map with missing fundamental glow. Show science model builds one node at a time with no fake values. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 5: SLIDE 5 | THE ART
 Headline: Translation is what survives outside the room
 
-Support: Design your bass to be heard on a phone, not just felt in a treated studio.
+Support: Add mid-range harmonics to your bass track, choosing saturation over volume boosts to preserve headroom.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show human taste moment lands as one knob, note, or lane is chosen. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show human taste setting lands as one knob or dial is adjusted. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 6: SLIDE 6 | THE MOVE
 Headline: Add upper harmonics that imply the missing fundamental
 
-Support: Use saturation or a dedicated driver on the bass track to generate frequencies between 100 and 300 Hz.
+Support: Set up a parallel distortion send, bandpass it between 200 Hz and 800 Hz, and blend it with the sub-bass.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show cursor performs the production move once, clearly, in context. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show cursor performs the production move once, clearly, on the interface. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 7: SLIDE 7 | THE TEST
 Headline: Check the bass on phone speakers after level matching
 
-Support: Bounce the audio and play it directly on your phone to ensure the bass melody is audible.
+Support: Play the mix through a smartphone speaker to check if the bass line remains clear and readable.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show A/B or mute switch toggles at matched level with the meters held honest. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show A/B split contrast between the raw and modified versions on screen. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 8: SLIDE 8 | THE CHECK
 Headline: Compare bass levels on different monitors
 
-Support: Toggle between your main monitors and a small speaker to verify the low end is balanced.
+Support: Sum the mix to mono to verify that the saturated parallel send does not cancel out the main bass track.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show translation devices or listening contexts enter as separate checks. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show wireframe devices enter as separate translation checks. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 9: SLIDE 9 | THE RULE
 Headline: The bass line remains readable
 
-Support: A great bass sound must communicate both the rhythm and the pitch on any playback device.
+Support: Add upper harmonics to low-frequency tracks, ensuring the bass pitch translates on small playback systems.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show rule locks into a simple visual diagram with extra space around it. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show rule locks into a simple visual diagram with green indicators. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before mixing your low end
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
-Visual: small speaker bass clue map with missing fundamental glow. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+Visual: small speaker bass clue map with missing fundamental glow. Show the final decision as a clean plain-text closing frame, ready for the loop. Keep it premium, dark, specific, and readable in one glance.
 
 ## 10-slide image prompts
-
-### Prompt 1 - THE HOOK
+### Prompt 1, THE HOOK
 Archetype: THE HOOK
 
 Visible text:
@@ -146,161 +141,152 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. Cold open showing small speaker bass clue map with missing fundamental glow in a raw state before the full headline reveals.
+Visual direction: Macro studio photograph of a 3D visualization representing small speaker bass clue map with missing fundamental glow. A sleek, dark-blue glass panel displays the bass clue with a glowing cyan and electric-blue outline. Warm amber side-lighting casts a soft bloom across a dark-titanium grid. Apple editorial aesthetic, subtle dotted grid texture on a matte-black background, 35% negative space, shallow depth of field.
 Headline accent: need bass clues
 Support accent: cannot play the sub
 Motion cue: First 0.5 seconds: quick punch-in on the small speaker bass clue map with missing fundamental glow, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 2 - THE TRAP
+### Prompt 2, THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
 - Boosting sub frequencies ruins the mix
-- Turning up the low-end EQ to hear it on small speakers just clips the master channel on big systems.
+- Relying on fundamental sub-bass frequencies below 60 Hz makes the bass line silent on small speakers.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A red highlight or warning marker identifies the rigid or incorrect decision.
+Visual direction: Close-up schematic of a digital grid displaying small speaker bass clue map with missing fundamental glow. A rigid, math-perfect alignment is highlighted with a soft red neon stroke, indicating the robotic trap. The dark-titanium interface features glass panels, with the correct groove paths dimmed. Apple editorial aesthetic, subtle dotted grid texture, dramatic shadows, 35% negative space.
 Headline accent: ruins the mix
 Support accent: clips the master channel
 Motion cue: A rapid transition showing a red alert fade-in on the problem area of the small speaker bass clue map with missing fundamental glow layout.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 3 - THE EAR
+### Prompt 3, THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
 - The brain creates the missing fundamental
-- When the ear hears upper harmonics, the brain automatically reconstructs the deep bass pitch.
+- The ear hears upper harmonics and reconstructs the missing fundamental pitch, creating the illusion of bass.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A clean cyan signal path illustrates how the listener perceives the sound in real time.
+Visual direction: Conceptual 3D diagram showing the auditory focus path of small speaker bass clue map with missing fundamental glow. A glowing cyan signal wave flows through a semi-transparent glass model of the human auditory pathway. Muted side-lighting and shallow depth of field highlight the moment of perception. Apple editorial aesthetic, dark-blue canvas, dotted grid background, 30% negative space.
 Headline accent: creates the missing
 Support accent: automatically reconstructs the
 Motion cue: A wave pulse expands outward from the center, lighting up the cyan small speaker bass clue map with missing fundamental glow elements.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 4 - THE SCIENCE
+### Prompt 4, THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Harmonic series dictate pitch perception
-- The human brain relies on the spacing of higher overtones to determine the base frequency of a sound.
+- The brain decodes the spacing of upper harmonics to identify the fundamental frequency, even when that frequency is absent.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. The visual builds an analytical diagram of the science concept with clear cyan indicators.
+Visual direction: Ultra-clean technical diagram of small speaker bass clue map with missing fundamental glow analyzing the bass clue. The display features precise cyan lines, numerical values, and grid overlays on a dark-titanium glass panel. Soft ambient blue lighting emphasizes the scientific model. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture, 35% negative space.
 Headline accent: dictate pitch perception
 Support accent: determine the base frequency
 Motion cue: The analytical diagram nodes on the small speaker bass clue map with missing fundamental glow build sequentially with subtle cyan highlights.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 5 - THE ART
+### Prompt 5, THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
 - Translation is what survives outside the room
-- Design your bass to be heard on a phone, not just felt in a treated studio.
+- Add mid-range harmonics to your bass track, choosing saturation over volume boosts to preserve headroom.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A glowing cyan dial or control interface shows the taste decision.
+Visual direction: Close-up of a premium tactile controller with a glowing cyan rotary knob adjusting small speaker bass clue map with missing fundamental glow. The finger-touch surface is dark titanium with a matte finish. Soft cyan bloom accentuates the creative taste setting. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, shallow depth of field.
 Headline accent: outside the room
 Support accent: survives outside the
 Motion cue: The virtual control indicator on the small speaker bass clue map with missing fundamental glow dial moves slightly off-center with a soft glow.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 6 - THE MOVE
+### Prompt 6, THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
 - Add upper harmonics that imply the missing fundamental
-- Use saturation or a dedicated driver on the bass track to generate frequencies between 100 and 300 Hz.
+- Set up a parallel distortion send, bandpass it between 200 Hz and 800 Hz, and blend it with the sub-bass.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A cursor or selection marker performs the session move on the interface.
+Visual direction: Action shot of a digital interface where a cursor selects and shifts a component of small speaker bass clue map with missing fundamental glow on a glass panel. A sharp cyan bounding box highlights the production move, showing it slipping off the grid. Apple editorial aesthetic, dark-blue canvas, matte-black desk, 30% negative space.
 Headline accent: imply the missing
 Support accent: 100 and 300 Hz
 Motion cue: A clean cursor movement slides the target small speaker bass clue map with missing fundamental glow elements into position.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 7 - THE TEST
+### Prompt 7, THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
 - Check the bass on phone speakers after level matching
-- Bounce the audio and play it directly on your phone to ensure the bass melody is audible.
+- Play the mix through a smartphone speaker to check if the bass line remains clear and readable.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A clean A/B comparison layout contrasts the raw and modified versions.
+Visual direction: Split-screen A/B comparison displaying small speaker bass clue map with missing fundamental glow. The left glass panel represents the raw grid in muted grey, while the right panel highlights the modified pocket in glowing cyan. A vertical line divides the panels, casting soft shadows. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture.
 Headline accent: Check the bass
 Support accent: bass melody is audible
 Motion cue: A fast A/B screen wipe alternates between the raw and modified small speaker bass clue map with missing fundamental glow states.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 8 - THE CHECK
+### Prompt 8, THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
 - Compare bass levels on different monitors
-- Toggle between your main monitors and a small speaker to verify the low end is balanced.
+- Sum the mix to mono to verify that the saturated parallel send does not cancel out the main bass track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. The visual shows translation contexts or speaker symbols to verify the check.
+Visual direction: Editorial studio photograph of sleek wireframe devices (a smartphone, a laptop, and studio monitor speakers) displaying small speaker bass clue map with missing fundamental glow. Soft cyan light beams propagate from the speakers, showing translation paths. Apple editorial aesthetic, dark-blue canvas, matte-black desk, shallow depth of field.
 Headline accent: Compare bass levels
 Support accent: low end is balanced
 Motion cue: Sound wave ripples expand outward from the speaker icons on the screen.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 9 - THE RULE
+### Prompt 9, THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
 - The bass line remains readable
-- A great bass sound must communicate both the rhythm and the pitch on any playback device.
+- Add upper harmonics to low-frequency tracks, ensuring the bass pitch translates on small playback systems.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A simple visual diagram locks in the core rule with surrounding negative space.
+Visual direction: Minimalist 3D diagram locking the core rule of small speaker bass clue map with missing fundamental glow into place. A clean glass panel displays the final bass clue with a glowing green and cyan checkmark indicator. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, 40% negative space.
 Headline accent: remains readable
 Support accent: any playback device
 Motion cue: A green checkmark pulses next to the corrected path on the small speaker bass clue map with missing fundamental glow diagram.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026
 
-### Prompt 10 - THE TAKEAWAY
+### Prompt 10, THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before mixing your low end
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A central small speaker bass clue map with missing fundamental glow visual representing bass translation. A clean plain-text closing frame highlighting the final call to action.
+Visual direction: High-end minimalist closing frame. A dark-titanium plaque with glowing cyan accents is set against a dark-blue canvas. A clean, plain-text call to action is centered on the panel. Apple editorial aesthetic, subtle dotted grid texture, 35% negative space.
 Headline accent: Save this before
 Support accent: Follow for daily
 Motion cue: The central call to action text fades in slowly with an ambient cyan glow.
-Reference line: Refs: Smith accessed 2026 | Smith accessed 2026
-
-## Caption
-Mobile devices cannot play deep sub-bass frequencies. Boosting the sub EQ just clips your master channel. Use saturation to generate upper harmonics between 100 and 300 Hz. The brain uses these overtones to reconstruct the missing fundamental bass pitch. Save this before mixing your low end.
-
-## Pinned comment
-Session tip: Play your mix on phone speakers at a moderate level. If you cannot hear the bass notes, add a subtle tape driver to the bass mid-range.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use small speaker bass clue map with missing fundamental glow. Keep the small speaker bass clue map with missing fundamental glow visible across the slide set. Keep text inside the shared safe zone. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.
+Reference line: Refs: Smith accessed 2026 | Smith Filters accessed 2026

@@ -26,20 +26,6 @@ Slide 1 thumbnail read: masking not dirt
 
 Viral hook: Mud is often masking, not dirt
 
-Title: Mud is often masking, not dirt
-
-Description: Boosting your vocal fader to fight mid-range clutter just creates a harsh, messy mix. This guide explains the physics of simultaneous masking and provides a session move to carve space for the lead vocal.
-
-5 hashtags: #VGP #MixingTips #AudioScience #HomeStudio #MusicProduction
-
-Primary keyword: frequency masking
-
-Science anchor: simultaneous masking
-
-Art and taste anchor: The vocal may be fine. The room around it is not.
-
-Claim safety: producer interpretation. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -54,50 +40,6 @@ Humanizer status: passed
   - Year: 1990
   - Use: source separation, auditory grouping, listener attention
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Mud is often masking, not dirt
-Support: Mud often means too many parts share the same lane.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: Boosting vocal presence to fight mud
-Support: Cranking the high-mids on a lead vocal clutters the mix instead of solving the conflict at the source.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The muddy mid-range buildup
-Support: Competing instruments like synths, guitars, and keys overlap in the mid frequencies, masking vocal details.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Physics of simultaneous masking
-Support: When two sounds overlap in the same frequency band, the human ear only registers the louder of the two.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Clear space for the spotlight
-Support: Make room for the main performance by carving out competing elements rather than boosting.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Cut competing frequencies first
-Support: Use an EQ to carve a small dip in background instruments where the vocal's key presence sits.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Pull down background tracks
-Support: Reduce the level of competing tracks by 2dB in the conflict range to check if vocal clarity returns.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check mid-range balance in mono
-Support: Listen to your mix in mono to reveal where background instruments are fighting the lead.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Carve room for the vocal
-Support: Keep the EQ cuts only if the lead vocal sounds clear and intelligible without volume boosts.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before touching another fader.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: masking heatmap between vocal and synth lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +70,51 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Mud is often masking, not dirt
+Support: Mud often means too many parts share the same lane.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Boosting vocal presence to fight mud
+Support: Boosting individual tracks to find clarity creates a cluttered and muddy mid-range.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The muddy mid-range buildup
+Support: The listener hears a thick, undefined low-mid area where instruments compete for space.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Physics of simultaneous masking
+Support: Auditory masking occurs when energy in adjacent frequency bands prevents the brain from separating sounds.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Clear space for the spotlight
+Support: Carve out frequencies from supporting elements to let the main instrument shine.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Cut competing frequencies first
+Support: Apply a wide notch equalizer cut in the 200 to 500 Hertz region on secondary instruments.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Pull down background tracks
+Support: Solo the bass and vocal to check if their low-mid overlap is resolved.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check mid-range balance in mono
+Support: Check the low-mids on small mono speakers to ensure clarity and separation.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Carve room for the vocal
+Support: Carve space in supporting tracks instead of boosting the target frequencies.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this for your next EQ session
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Visual: masking heatmap between vocal and synth lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -140,7 +127,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. The masking heat is the hero object, showing the cold open with the problem.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed masking heatmap between vocal and synth lanes, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
 Headline accent: masking not dirt
 Support accent: too many parts share
 Motion cue: First 0.5 seconds: quick punch-in on the masking heat, then kinetic headline reveal on the accented phrase.
@@ -152,11 +139,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - Boosting vocal presence to fight mud
-- Cranking the high-mids on a lead vocal clutters the mix instead of solving the conflict at the source.
+- Boosting individual tracks to find clarity creates a cluttered and muddy mid-range.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Red pressure marks appear on the false fix while the better path stays cyan.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
 Headline accent: Boosting vocal presence
 Support accent: clutters the mix
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the masking heat.
@@ -168,11 +155,11 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The muddy mid-range buildup
-- Competing instruments like synths, guitars, and keys overlap in the mid frequencies, masking vocal details.
+- The listener hears a thick, undefined low-mid area where instruments compete for space.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. One signal path draws first, then supporting detail fades in.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
 Headline accent: mid-range buildup
 Support accent: masking vocal details
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the masking heat.
@@ -184,11 +171,11 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - Physics of simultaneous masking
-- When two sounds overlap in the same frequency band, the human ear only registers the louder of the two.
+- Auditory masking occurs when energy in adjacent frequency bands prevents the brain from separating sounds.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Science model builds one node at a time.
+Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed masking heatmap between vocal and synth lanes is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
 Headline accent: simultaneous masking
 Support accent: registers the louder
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -200,11 +187,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Clear space for the spotlight
-- Make room for the main performance by carving out competing elements rather than boosting.
+- Carve out frequencies from supporting elements to let the main instrument shine.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Human taste moment lands as one knob is selected.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
 Headline accent: space for spotlight
 Support accent: carving out competing
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -216,11 +203,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Cut competing frequencies first
-- Use an EQ to carve a small dip in background instruments where the vocal's key presence sits.
+- Apply a wide notch equalizer cut in the 200 to 500 Hertz region on secondary instruments.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Cursor performs the production move once, clearly, in context.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
 Headline accent: Cut competing frequencies
 Support accent: carve a small dip
 Motion cue: A/B wipe toggles between the broken mix and the cleaner decision. Keep small labels still.
@@ -232,11 +219,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Pull down background tracks
-- Reduce the level of competing tracks by 2dB in the conflict range to check if vocal clarity returns.
+- Solo the bass and vocal to check if their low-mid overlap is resolved.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. A/B or mute switch toggles at matched level.
+Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
 Headline accent: Pull down background
 Support accent: check vocal clarity
 Motion cue: Use a tap or mute action. The masking heat changes visibly.
@@ -248,11 +235,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Check mid-range balance in mono
-- Listen to your mix in mono to reveal where background instruments are fighting the lead.
+- Check the low-mids on small mono speakers to ensure clarity and separation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Translation devices or listening contexts enter as separate checks.
+Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed masking heatmap between vocal and synth lanes is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
 Headline accent: balance in mono
 Support accent: fighting the lead
 Motion cue: Use a tap or mute action. The masking heat changes visibly.
@@ -264,11 +251,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Carve room for the vocal
-- Keep the EQ cuts only if the lead vocal sounds clear and intelligible without volume boosts.
+- Carve space in supporting tracks instead of boosting the target frequencies.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. Rule locks into a simple visual diagram.
+Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
 Headline accent: Carve room
 Support accent: clear and intelligible
 Motion cue: Hold frame longer. Let the masking heat settle, then pulse the final accent.
@@ -279,22 +266,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before touching another fader.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this for your next EQ session
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Masking heatmap between vocal and synth lanes. A clean plain-text closing frame.
+Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed masking heatmap between vocal and synth lanes is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
 Headline accent: Carve space
 Support accent: Follow for daily
 Motion cue: Hold frame longer. Let the masking heat settle, then pulse the accent.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
-
-## Caption
-When a mix sounds muddy, your instinct is to boost the vocal. That is a trap. The mud is actually simultaneous masking, where synths, guitars, or pads overlap the vocal's key mid-range frequencies. Instead of boosting the lead, use EQ to carve a subtle 2dB dip in the backing tracks around 1kHz to 3kHz. This creates a pocket of space, letting the vocal sit cleanly on top without raising its volume. Save this post for your next mix. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-EQ tip: Temporarily solo the backing tracks together and look at an analyzer. Find the peak mid-range energy and carve a narrow cut there on your background bus to let the vocal shine through. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use masking heatmap between vocal and synth lanes. Keep the masking heat motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

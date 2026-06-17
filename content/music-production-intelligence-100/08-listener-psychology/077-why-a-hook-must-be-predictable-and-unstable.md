@@ -1,4 +1,4 @@
-# 077 - Hooks need comfort plus instability
+# 077: Hooks need comfort plus instability
 
 Content ID: 077
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Hooks need comfort plus
 
 Viral hook: Hooks need comfort plus instability
 
-Title: Hooks need comfort plus instability
-
-Description: Why a successful song hook requires a balance of melodic comfort and harmonic instability to invite repeated replays.
-
-5 hashtags: #VGP #Songwriting #Hooks #MusicProduction #ProducerTips
-
-Primary keyword: hook psychology
-
-Science anchor: prediction and tension
-
-Art and taste anchor: A hook should invite the next replay.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -63,78 +49,6 @@ Humanizer status: passed
   - Type: established textbook
   - Year: 1990
   - Use: source separation, auditory grouping, listener attention
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Hooks need comfort plus instability
-
-Support: Predictable hooks get boring, while unstable hooks invite a replay.
-
-Visual: A musical hook melody line in cyan, resting on a shifting bass note line below.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Perfect repetition without variation
-
-Support: Repeating the exact same melody and chord progression over and over leads to listener fatigue.
-
-Visual: A loop waveform repeating endlessly with warning red highlights.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Brains love prediction and tension
-
-Support: Listeners enjoy recognizing a pattern, but they stay engaged when the resolution shifts slightly.
-
-Visual: A curve showing tension rising as a melody repeats over a new bass note.
-
-### Slide 4: SLIDE 4 | How hook patterns keep attention
-Headline: How hook patterns keep attention
-
-Support: Tension-resolution loops lock in attention. By pairing a familiar vocal line with shifting chords, you create memory traces that force a replay.
-
-Visual: A memory trace loop diagram showing connection nodes lighting up in cyan.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: A hook invites the next play
-
-Support: End your chorus melody on a chord that does not fully resolve. This makes the listener stay for the verse.
-
-Visual: A MIDI piano roll showing a final melody note hanging unresolved over a dominant chord.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Repeat melody but change the bass
-
-Support: Keep the vocal melody identical on the second pass, but change the bass root note to create a new harmonic color.
-
-Visual: A dual track view showing vocal melody lanes constant while the bass track blocks shift.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Sing the hook from memory
-
-Support: Listen once, wait ten seconds, and try to hum the hook. If the melody does not stick, simplify the notes.
-
-Visual: A hum waveform showing a simple outline next to the main vocal line.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check hook clarity on cheap speakers
-
-Support: Ensure the shifting bass note does not muddy the low midrange frequencies on consumer earbuds.
-
-Visual: A frequency display showing clear space between bass and low mids in cyan.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Vary harmonic support
-
-Support: Keep the chord changes only when they enhance the melody without making the hook hard to remember.
-
-Visual: A music note icon next to a checkmark in cyan.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before forcing emotion into the track.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: comfort and instability seesaw under a hook melody. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -165,6 +79,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Hooks need comfort plus instability
+
+Support: Predictable hooks get boring, while unstable hooks invite a replay.
+
+Visual: A musical hook melody line in cyan, resting on a shifting bass note line below.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Perfect repetition without variation
+
+Support: Repeating the exact same melodic and harmonic structure without variation causes habituation, making the listener skip the track.
+
+Visual: A loop waveform repeating endlessly with warning red highlights.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Brains love prediction and tension
+
+Support: The brain experiences cognitive pleasure from recognizing patterns, but remains engaged when the resolution deviates slightly.
+
+Visual: A curve showing tension rising as a melody repeats over a new bass note.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How hook patterns keep attention
+
+Support: Tension-resolution loops strengthen memory encoding. Pairing a familiar vocal melody with shifting bass notes creates a strong memory trace.
+
+Visual: A memory trace loop diagram showing connection nodes lighting up in cyan.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: A hook invites the next play
+
+Support: End the chorus melody on an unresolved harmonic interval to prevent closure, keeping the listener engaged for the next section.
+
+Visual: A MIDI piano roll showing a final melody note hanging unresolved over a dominant chord.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Repeat melody but change the bass
+
+Support: Keep the vocal melody identical on the second pass while changing the underlying bass root note to alter the harmonic context.
+
+Visual: A dual track view showing vocal melody lanes constant while the bass track blocks shift.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Sing the hook from memory
+
+Support: Sing the hook from memory after a single listen. If the melody does not stick, simplify the interval jumps.
+
+Visual: A hum waveform showing a simple outline next to the main vocal line.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check hook clarity on cheap speakers
+
+Support: Verify the hook clarity on consumer speakers, ensuring the shifting bass notes do not muddy the low-mid frequencies.
+
+Visual: A frequency display showing clear space between bass and low mids in cyan.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Vary harmonic support
+
+Support: Vary the harmonic support only when the chord changes lift the melody without making the hook difficult to remember.
+
+Visual: A music note icon next to a checkmark in cyan.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before forcing emotion into the track.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: comfort and instability seesaw under a hook melody. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -177,7 +163,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A musical hook melody line in cyan, resting on a shifting bass note line below.
+Visual direction: Macro studio photograph of musical hook melody line in cyan, resting on shifting bass note line below in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: comfort plus instability
 Support accent: invite replay
 Motion cue: Melody line stays steady while the bass note shifts to change chord context.
@@ -189,11 +175,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Perfect repetition without variation
-- Repeating the exact same melody and chord progression over and over leads to listener fatigue.
+- Repeating the exact same melodic and harmonic structure without variation causes habituation, making the listener skip the track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A loop waveform repeating endlessly with warning red highlights.
+Visual direction: Close-up schematic of loop waveform repeating endlessly with warning red highlights with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: Perfect repetition
 Support accent: listener fatigue
 Motion cue: Waveform loop plays, flashing red on every repeat.
@@ -205,31 +191,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Brains love prediction and tension
-- Listeners enjoy recognizing a pattern, but they stay engaged when the resolution shifts slightly.
+- The brain experiences cognitive pleasure from recognizing patterns, but remains engaged when the resolution deviates slightly.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A curve showing tension rising as a melody repeats over a new bass note.
+Visual direction: High-angle focus shot of curve showing tension rising as melody repeats over new bass note with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: prediction and tension
 Support accent: resolution shifts
 Motion cue: Tension curve rises slowly across the repeat cycle.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
-### Prompt 4 - How hook patterns keep attention
-Archetype: How hook patterns keep attention
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How hook patterns keep attention
+- SLIDE 4 | THE SCIENCE
 - How hook patterns keep attention
-- Tension-resolution loops lock in attention. By pairing a familiar vocal line with shifting chords, you create memory traces that force a replay.
+- Tension-resolution loops strengthen memory encoding. Pairing a familiar vocal melody with shifting bass notes creates a strong memory trace.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A memory trace loop diagram showing connection nodes lighting up in cyan.
-Headline accent: keep attention
-Support accent: Tension-resolution loops
-Motion cue: Signal pulse travels around a circular path, lighting up node connections.
-Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -237,11 +223,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - A hook invites the next play
-- End your chorus melody on a chord that does not fully resolve. This makes the listener stay for the verse.
+- End the chorus melody on an unresolved harmonic interval to prevent closure, keeping the listener engaged for the next section.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A MIDI piano roll showing a final melody note hanging unresolved over a dominant chord.
+Visual direction: Tactile macro photograph of MIDI piano roll showing final melody note hanging unresolved over dominant chord. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: invites next play
 Support accent: hanging unresolved
 Motion cue: Highlight sits on the final note as it rings out.
@@ -253,11 +239,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Repeat melody but change the bass
-- Keep the vocal melody identical on the second pass, but change the bass root note to create a new harmonic color.
+- Keep the vocal melody identical on the second pass while changing the underlying bass root note to alter the harmonic context.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dual track view showing vocal melody lanes constant while the bass track blocks shift.
+Visual direction: Ultra-clean close-up of dual track view showing vocal melody lanes constant while the bass track blocks shift. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: change the bass
 Support accent: vocal melody identical
 Motion cue: Vocal track glows steady, bass track block shifts down.
@@ -269,11 +255,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Sing the hook from memory
-- Listen once, wait ten seconds, and try to hum the hook. If the melody does not stick, simplify the notes.
+- Sing the hook from memory after a single listen. If the melody does not stick, simplify the interval jumps.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A hum waveform showing a simple outline next to the main vocal line.
+Visual direction: Detailed view of hum waveform showing simple outline next to the main vocal line. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: hum the hook
 Support accent: simplify notes
 Motion cue: Waveform outline matches the vocal line in cyan.
@@ -285,11 +271,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Check hook clarity on cheap speakers
-- Ensure the shifting bass note does not muddy the low midrange frequencies on consumer earbuds.
+- Verify the hook clarity on consumer speakers, ensuring the shifting bass notes do not muddy the low-mid frequencies.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A frequency display showing clear space between bass and low mids in cyan.
+Visual direction: Studio photograph of frequency display showing clear space between bass and low mids in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: hook clarity
 Support accent: clear space
 Motion cue: Highlight sweeps the low midrange frequency band.
@@ -301,13 +287,13 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Vary harmonic support
-- Keep the chord changes only when they enhance the melody without making the hook hard to remember.
+- Vary the harmonic support only when the chord changes lift the melody without making the hook difficult to remember.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A music note icon next to a checkmark in cyan.
+Visual direction: Minimalist graphic chart of music note icon next to checkmark in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: harmonic support
-Support accent: enhance melody
+Support accent: lift melody
 Motion cue: Checkmark pulses next to the music note.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -317,33 +303,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before forcing emotion into the track.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
-
-
-## Caption
-A hook must be comfortable but unstable.
-
-If a hook is too predictable, the listener gets bored. If it is too chaotic, they switch songs. A great hook repeats a familiar melody outline but changes the underlying bass note to create harmonic instability.
-
-Try this in your songwriting:
-1. Repeat the melody line but change the bass movement underneath.
-2. Balance prediction and tension to keep the listener interested.
-3. Make sure you can sing the hook from memory after one listen.
-
-Keep the hook unstable.
-
-Save this before writing your next hook.
-
-## Pinned comment
-Session tip: Write a four-bar melody. Repeat it, but change the bass note under the repeat from the root chord to the relative minor. The change builds tension and invites a replay.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use hook melody with shifting bass notes. Keep the prediction and tension motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

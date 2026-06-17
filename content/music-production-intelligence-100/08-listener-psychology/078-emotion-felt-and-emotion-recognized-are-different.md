@@ -1,4 +1,4 @@
-# 078 - Felt emotion and named emotion differ
+# 078: Felt emotion and named emotion differ
 
 Content ID: 078
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Felt emotion named emotion
 
 Viral hook: Felt emotion and named emotion differ
 
-Title: Felt emotion and named emotion differ
-
-Description: The difference between felt emotion and recognized emotion in music, and how to focus on the groove to evoke physical responses.
-
-5 hashtags: #VGP #MusicPsychology #Songwriting #MusicProduction #AudioScience
-
-Primary keyword: music emotion
-
-Science anchor: perceived and induced emotion
-
-Art and taste anchor: Mood labels are too small for music.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -53,78 +39,6 @@ Humanizer status: passed
   - Type: peer-reviewed neuroscience review
   - Year: 2014
   - Use: music, emotion, reward, brain response
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Felt emotion and named emotion differ
-
-Support: A song can describe sadness, but the groove is what makes you feel it.
-
-Visual: A human body silhouette reacting to a groove, with pulse lines radiating in cyan.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Overloading lyrics with drama
-
-Support: Piling on sad words and crying vocals without a solid groove makes your song feel melodramatic and cheap.
-
-Visual: A text display showing lyrics highlighted in warning red, with no supporting instrumentation blocks.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Bodies respond to groove
-
-Support: Felt emotion is physiological. Rhythmic synchronization is how music bypasses critical thinking and triggers the body directly.
-
-Visual: A drum grid pattern with transient beats glowing in cyan.
-
-### Slide 4: SLIDE 4 | How music induces physical response
-Headline: How music induces physical response
-
-Support: Musical features induce emotion by altering heart rate and motor responses. Groove targets motor areas in the brain, driving felt emotion.
-
-Visual: A brain diagram highlighting motor coordination zones in cyan.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Mood labels are too small
-
-Support: Do not mix for a generic emotion tag. Build tension using dynamics and rhythm to create complex, unnameable feelings.
-
-Visual: A scale balancing dynamic peaks and soft valleys, surrounded by a cyan glow.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Focus on the physical groove first
-
-Support: Lock the relationship between the kick drum and bass. Keep transient peaks clean so the listener feels the physical beat.
-
-Visual: A kick drum track and bass track aligned perfectly on a DAW timeline, with transients highlighted.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Track listener physical movement
-
-Support: Watch if a listener nods their head or taps their foot. Physical response is the proof of felt emotion.
-
-Visual: A wave silhouette showing head nod motions on a timeline.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Audit pacing in context
-
-Support: Make sure the tempo fits the emotional movement. A ballad that drags too much will lose the listener's interest.
-
-Visual: A tempo display showing beats per minute, surrounded by a cyan circular gauge.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Groove carries the feeling
-
-Support: Keep arrangement changes only when they drive the physical movement and enhance the felt energy.
-
-Visual: A heart icon enclosed inside a drum track block in cyan.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before forcing emotion into the track.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: felt emotion and named emotion split into two glass lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -155,6 +69,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Felt emotion and named emotion differ
+
+Support: A song can describe sadness, but the groove is what makes you feel it.
+
+Visual: A human body silhouette reacting to a groove, with pulse lines radiating in cyan.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Overloading lyrics with drama
+
+Support: Overloading lyrics with dramatic sentimentality without building a solid physical groove results in a melodramatic, unconvincing track.
+
+Visual: A text display showing lyrics highlighted in warning red, with no supporting instrumentation blocks.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Bodies respond to groove
+
+Support: Felt emotion is physiological. Rhythmic synchronization and low-frequency transients bypass cognitive filters to trigger the motor cortex.
+
+Visual: A drum grid pattern with transient beats glowing in cyan.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How music induces physical response
+
+Support: Groove and tempo activate motor and autonomic networks in the brain, inducing physiological responses like heart rate shifts.
+
+Visual: A brain diagram highlighting motor coordination zones in cyan.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Mood labels are too small
+
+Support: Avoid mixing for generic emotional categories. Use dynamics and micro-timing to build complex, nuanced, and unnameable feelings.
+
+Visual: A scale balancing dynamic peaks and soft valleys, surrounded by a cyan glow.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Focus on the physical groove first
+
+Support: Lock the timing relationship between the kick and bass, keeping transient peaks clean to drive the listener's motor response.
+
+Visual: A kick drum track and bass track aligned perfectly on a DAW timeline, with transients highlighted.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Track listener physical movement
+
+Support: Watch the listener's physical response. Head nodding and foot tapping verify that the groove has induced physiological synchronization.
+
+Visual: A wave silhouette showing head nod motions on a timeline.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Audit pacing in context
+
+Support: Evaluate the tempo pacing across the arrangement. A track that drags too much will lose its physical drive.
+
+Visual: A tempo display showing beats per minute, surrounded by a cyan circular gauge.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Groove carries the feeling
+
+Support: Commit to arrangement adjustments only if they drive physical movement and boost the felt energy of the track.
+
+Visual: A heart icon enclosed inside a drum track block in cyan.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before forcing emotion into the track.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: felt emotion and named emotion split into two glass lanes. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -167,7 +153,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A human body silhouette reacting to a groove, with pulse lines radiating in cyan.
+Visual direction: Macro studio photograph of human body silhouette reacting to groove, with pulse lines radiating in cyan in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: emotion differ
 Support accent: groove is what
 Motion cue: Pulse lines radiate outward in sync with a kick drum transient.
@@ -179,11 +165,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Overloading lyrics with drama
-- Piling on sad words and crying vocals without a solid groove makes your song feel melodramatic and cheap.
+- Overloading lyrics with dramatic sentimentality without building a solid physical groove results in a melodramatic, unconvincing track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A text display showing lyrics highlighted in warning red, with no supporting instrumentation blocks.
+Visual direction: Close-up schematic of text display showing lyrics highlighted in warning red, with no supporting instrumentation blocks with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: lyrics with drama
 Support accent: melodramatic
 Motion cue: Red text lines pop up erratically on screen.
@@ -195,31 +181,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Bodies respond to groove
-- Felt emotion is physiological. Rhythmic synchronization is how music bypasses critical thinking and triggers the body directly.
+- Felt emotion is physiological. Rhythmic synchronization and low-frequency transients bypass cognitive filters to trigger the motor cortex.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A drum grid pattern with transient beats glowing in cyan.
+Visual direction: High-angle focus shot of drum grid pattern with transient beats glowing in cyan with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: respond to groove
 Support accent: bypasses critical
 Motion cue: Grid line beats pulse bright cyan sequentially.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014
 
-### Prompt 4 - How music induces physical response
-Archetype: How music induces physical response
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How music induces physical response
+- SLIDE 4 | THE SCIENCE
 - How music induces physical response
-- Musical features induce emotion by altering heart rate and motor responses. Groove targets motor areas in the brain, driving felt emotion.
+- Groove and tempo activate motor and autonomic networks in the brain, inducing physiological responses like heart rate shifts.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A brain diagram highlighting motor coordination zones in cyan.
-Headline accent: physical response
-Support accent: targets motor areas
-Motion cue: Motor coordination zone pulses in cyan.
-Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -227,11 +213,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Mood labels are too small
-- Do not mix for a generic emotion tag. Build tension using dynamics and rhythm to create complex, unnameable feelings.
+- Avoid mixing for generic emotional categories. Use dynamics and micro-timing to build complex, nuanced, and unnameable feelings.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A scale balancing dynamic peaks and soft valleys, surrounded by a cyan glow.
+Visual direction: Tactile macro photograph of scale balancing dynamic peaks and soft valleys, surrounded by cyan glow. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: Mood labels
 Support accent: complex feelings
 Motion cue: Scale tilts gently, glowing in cyan.
@@ -243,11 +229,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Focus on the physical groove first
-- Lock the relationship between the kick drum and bass. Keep transient peaks clean so the listener feels the physical beat.
+- Lock the timing relationship between the kick and bass, keeping transient peaks clean to drive the listener's motor response.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A kick drum track and bass track aligned perfectly on a DAW timeline, with transients highlighted.
+Visual direction: Ultra-clean close-up of kick drum track and bass track aligned perfectly on DAW timeline, with transients highlighted. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: physical groove
 Support accent: transients clean
 Motion cue: Kick and bass waveforms pulse in sync, highlighting the transients.
@@ -259,11 +245,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Track listener physical movement
-- Watch if a listener nods their head or taps their foot. Physical response is the proof of felt emotion.
+- Watch the listener's physical response. Head nodding and foot tapping verify that the groove has induced physiological synchronization.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A wave silhouette showing head nod motions on a timeline.
+Visual direction: Detailed view of wave silhouette showing head nod motions on timeline. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: physical movement
 Support accent: head nod motion
 Motion cue: Nod curve traces a smooth up and down movement.
@@ -275,11 +261,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Audit pacing in context
-- Make sure the tempo fits the emotional movement. A ballad that drags too much will lose the listener's interest.
+- Evaluate the tempo pacing across the arrangement. A track that drags too much will lose its physical drive.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A tempo display showing beats per minute, surrounded by a cyan circular gauge.
+Visual direction: Studio photograph of tempo display showing beats per minute, surrounded by cyan circular gauge. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: Audit pacing
 Support accent: tempo fits
 Motion cue: Gauge indicator pulses in sync with the beats per minute value.
@@ -291,11 +277,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Groove carries the feeling
-- Keep arrangement changes only when they drive the physical movement and enhance the felt energy.
+- Commit to arrangement adjustments only if they drive physical movement and boost the felt energy of the track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A heart icon enclosed inside a drum track block in cyan.
+Visual direction: Minimalist graphic chart of heart icon enclosed inside drum track block in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: carries feeling
 Support accent: drives physical
 Motion cue: Heart icon pulses in sync with the drum block transients.
@@ -307,33 +293,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before forcing emotion into the track.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014
-
-
-## Caption
-Felt emotion and recognized emotion are different.
-
-Listeners can recognize a sad lyric without feeling sad themselves. To make them feel the emotion, you must target physical responses through the groove and arrangement. Groove moves the body, while lyrics only tell the story.
-
-Try this in your next mix:
-1. Focus on the physical groove rather than overloading the lyrics with drama.
-2. Keep your transient punch intact so the listener feels the beat.
-3. Make sure the tempo matches the emotional energy of the song.
-
-Let the body feel the groove.
-
-Save this before starting your next arrangement.
-
-## Pinned comment
-Session tip: Do not over-process vocals to sound emotional. Let the natural microtiming of the performance and the swing of the rhythm section carry the feeling.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use human body reacting to a groove. Keep the perceived vs induced emotion motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

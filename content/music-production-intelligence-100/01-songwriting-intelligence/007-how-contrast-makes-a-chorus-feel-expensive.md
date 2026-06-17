@@ -156,7 +156,7 @@ Visual:
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
 Headline: Save this before writing the next hook.
 
-Support: Follow for daily session science. Visit www.virzyguns.com
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 
 Visual: split lyric page with narrow verse and wide chorus space. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -172,7 +172,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show cold open with the problem visible before the viewer reads the full headline.
+Visual direction: Cold open. Tight editorial crop on a premium leather-bound notebook with handwritten lyrics. The verse lines are cramped and narrow in the left column. The chorus lines spread wide across the right page. A glowing smartphone with a voice memo waveform sits beside the notebook. Moody blue side-lighting from the left casts long shadows. The headline snaps in on the first beat with a warm amber accent on "contrast". The support line fades in below with an ice-blue underline on "room open". Deep black-blue background with subtle dotted grid. 40% negative space for scroll-stop impact. No logos or symbols.
+
 Headline accent: Expensive choruses start
 Support accent: A chorus feels
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
@@ -188,7 +189,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show red pressure mark appears on the false fix while the better path stays cyan.
+Visual direction: Split lyric page with narrow verse and wide chorus space. The verse side is overloaded with red glowing faders, double-track icons, and wide stereo meters all peaking in the red zone. A hot red warning light pulses on the false fix. The chorus side remains empty and dark. A single cyan guide line pulls the eye from the red clutter to the empty chorus space. Deep black-blue background with dotted grid. Red neon pressure points. No logos or symbols.
+
 Headline accent: Stacking layers without
 Support accent: Stacking wide synths
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the contrast window.
@@ -204,7 +206,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show one signal path draws first, then the supporting detail fades in around it.
+Visual direction: Extreme close-up of a high-end headphone diaphragm. A single glowing cyan path of light traces from the center (narrow) and expands outward (wide) across the diaphragm surface. The path represents auditory stream segregation: the ear separates the narrow verse stream from the wide chorus stream. Deep black-blue background with dotted grid. Soft bloom on the cyan path. No logos or symbols.
+
 Headline accent: The ear detects
 Support accent: A chorus only
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the contrast window.
@@ -220,7 +223,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show science model builds one node at a time with no fake values.
+Visual direction: Abstract 3D signal flow diagram. Three glowing glass nodes represent the verse (narrow), the transition, and the chorus (wide). Thin cyan lines connect them in a left-to-right path. The verse node is small and tight. The chorus node is large and expansive. A dotted grid floor recedes into the background. The nodes have no fake values or labels. Deep black-blue background. Soft bloom on the cyan lines. No logos or symbols.
+
 Headline accent: How the brain
 Support accent: Auditory science shows
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -236,7 +240,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show human taste moment lands as one knob, note, or lane is chosen.
+Visual direction: Single physical brass knob in sharp focus on a wood-grain surface. The knob is turned to the left (dry/mono position). A warm amber spotlight illuminates the knob from above, casting a soft glow. The background is dark and minimal. The headline appears above with a cyan accent on "controlled". The support line appears below with an ice-blue underline on "taste choice". Deep black-blue background with dotted grid. No logos or symbols.
+
 Headline accent: Expensive usually means
 Support accent: Deciding to keep
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -252,7 +257,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show cursor performs the production move once, clearly, in context.
+Visual direction: Clean DAW interface. A cursor hovers over a stereo width utility plugin on a verse track. The width slider is at 75%. A second cursor points to the automation lane showing a step change from 75% to 100% at the chorus downbeat. The interface is dark with cyan accents. No fake track names or numbers. Deep black-blue background with dotted grid. No logos or symbols.
+
 Headline accent: Change width register
 Support accent: Automate the verse
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
@@ -268,7 +274,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show A/B or mute switch toggles at matched level with the meters held honest.
+Visual direction: Two parallel glass toggle switches on a dark panel. The left switch is labelled "VERSE" and is grey/off. The right switch is labelled "CHORUS" and is cyan/on. Two level meters sit below each switch, both showing the same level (matched). The contrast window between them shows the verse as a narrow line and the chorus as a wide spread. Deep black-blue background with dotted grid. No logos or symbols.
+
 Headline accent: AB the chorus
 Support accent: Compare the verse
 Motion cue: Use a tap, mute, or device-swap action. The contrast window should change visibly without adding extra on-screen words.
@@ -284,7 +291,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show translation devices or listening contexts enter as separate checks.
+Visual direction: Three listening context icons in a row: a laptop speaker, a car dashboard, and a mono speaker. Each icon is a thin glass panel with a cyan outline. The laptop and car icons have a small checkmark. The mono speaker icon has a small warning triangle. A single headphone icon sits above them, glowing cyan. Deep black-blue background with dotted grid. No logos or symbols.
+
 Headline accent: Check the width
 Support accent: Make sure the
 Motion cue: Use a tap, mute, or device-swap action. The contrast window should change visibly without adding extra on-screen words.
@@ -300,7 +308,8 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show rule locks into a simple visual diagram with extra space around it.
+Visual direction: Minimalist schematic layout. A bold cyan dividing line splits the frame vertically. On the left, a thin glass rectangle labelled "VERSE" is narrow and tall. On the right, a wide glass rectangle labelled "CHORUS" is broad and short. Both rectangles have the same height (same level). The contrast is obvious. Deep black-blue background with dotted grid. Thin glass borders. No logos or symbols.
+
 Headline accent: The hook feels
 Support accent: A chorus cannot
 Motion cue: Hold the frame longer. Let the contrast window settle, then use a small cyan pulse on the final accented phrase.
@@ -312,18 +321,13 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before writing the next hook.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: split lyric page with narrow verse and wide chorus space. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1.
-Headline accent: Make your chorus
+Visual direction: Dark high-end closing frame. A premium smartphone sits centered on a dark surface, displaying looping plain text: "NARROW VERSE. WIDE CHORUS." The screen is the only light source, casting a soft cyan glow. The background is deep black-blue with a subtle dotted grid. The headline appears above the phone with a cyan accent on "Save this". The support line appears below with an ice-blue underline on "daily session science". No logos or symbols.
+
+Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Hold the frame longer. Let the contrast window settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
-
-## Caption
-You do not need expensive plugins to make a chorus sound big. You just need contrast. If your verse is already wide, wet, and bright, the chorus has nowhere to go. Keep the verse narrow, dry, and centered, then let the chorus explode into the stereo field.
-
-## Pinned comment
-Session move: Group all your verse tracks and automate the stereo width down to 75% using a utility utility, then snap it to 100% on the chorus. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

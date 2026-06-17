@@ -1,4 +1,4 @@
-# 063 - True peak bites after encoding
+# 063: True peak bites after encoding
 
 Content ID: 063
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: True peak bites encoding
 
 Viral hook: True peak bites after encoding
 
-Title: True peak bites after encoding
-
-Description: How true peak ceiling prevents codec distortion, and why leaving headroom is essential before converting files to lossy formats.
-
-5 hashtags: #VGP #Mastering #LUFS #AudioEngineering #MusicProduction
-
-Primary keyword: true peak
-
-Science anchor: inter-sample peak estimation
-
-Art and taste anchor: The listener hears the decoded file.
-
-Claim safety: source-backed. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -53,78 +39,6 @@ Humanizer status: passed
   - Type: official platform documentation
   - Year/access: accessed 2026
   - Use: streaming loudness behavior
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: True peak bites after encoding
-
-Support: A clean DAW bounce can still distort after conversion.
-
-Visual: A digital audio waveform with inter-sample peaks marked in red exceeding the ceiling.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Setting peak limits to zero
-
-Support: Bouncing at zero decibels true peak guarantees clipping once platforms convert your master to MP3 or AAC.
-
-Visual: A limiter ceiling set at 0.0 dB on a digital interface, with red warning indicators.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Listeners hear digital crackle
-
-Support: High frequency transients like cymbals and vocals can sound raspy on consumer speakers after compression.
-
-Visual: A close-up of a phone speaker with distorted high frequency energy waves emerging in red.
-
-### Slide 4: SLIDE 4 | How inter-sample peaks distort
-Headline: How inter-sample peaks distort
-
-Support: Codec encoding reconstructs the analog waveform. The reconstructed peak can exceed the digital samples by up to two decibels.
-
-Visual: A graph showing digital sample points connected by a curved analog reconstruction wave that peaks higher than the points.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Protect high end clarity
-
-Support: Keep cymbals crisp and vocal transients sharp. Avoid letting lossy codecs eat your mix details.
-
-Visual: A frequency spectrum screen highlighting the upper treble area in glowing cyan.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Leave headroom for lossy encoding
-
-Support: Set your limiter true peak ceiling to minus one decibel to prevent conversion distortion.
-
-Visual: A limiter interface showing the output ceiling dial adjusted to -1.0 dB.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Run files through codec preview tools
-
-Support: Check your master with an encoder plugin to hear translation before exporting.
-
-Visual: A plugin window showing a codec format selection dropdown with MP3 active.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Inspect the peak log after export
-
-Support: Ensure the true peak reading on the exported WAV file stays below minus one decibel.
-
-Visual: A file exporter window showing an export analysis log with a green checkmark next to Peak Level.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Headroom prevents distortion
-
-Support: Keep the headroom cushion because a clean conversion is always better than a louder distorted master.
-
-Visual: A simple bar graph showing a safe margin between the peak level and the absolute digital ceiling.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: true peak ceiling catching codec overs after export. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -155,6 +69,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: True peak bites after encoding
+
+Support: A clean DAW bounce can still distort after conversion.
+
+Visual: A digital audio waveform with inter-sample peaks marked in red exceeding the ceiling.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Setting peak limits to zero
+
+Support: Bouncing at zero decibels true peak ignores the interpolation errors generated when lossy codecs reconstruct the continuous analog waveform.
+
+Visual: A limiter ceiling set at 0.0 dB on a digital interface, with red warning indicators.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Listeners hear digital crackle
+
+Support: Lossy MP3 and AAC codecs introduce high-frequency aliasing and transient ringing, making peak-clipped high-hats and vocals sound raspy.
+
+Visual: A close-up of a phone speaker with distorted high frequency energy waves emerging in red.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How inter-sample peaks distort
+
+Support: During digital-to-analog reconstruction, interpolation filters smooth the discrete sample points, generating inter-sample peaks that exceed the digital ceiling.
+
+Visual: A graph showing digital sample points connected by a curved analog reconstruction wave that peaks higher than the points.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Protect high end clarity
+
+Support: Maintain high-frequency phase coherence and transient detail by preserving headroom, preventing lossy codecs from generating reconstruction distortion.
+
+Visual: A frequency spectrum screen highlighting the upper treble area in glowing cyan.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Leave headroom for lossy encoding
+
+Support: Set the limiter true peak ceiling to minus one point zero decibels to provide a safety margin for inter-sample interpolation peaks.
+
+Visual: A limiter interface showing the output ceiling dial adjusted to -1.0 dB.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Run files through codec preview tools
+
+Support: Employ real-time codec emulation filters during the mastering session to audition and analyze the transcode degradation before export.
+
+Visual: A plugin window showing a codec format selection dropdown with MP3 active.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Inspect the peak log after export
+
+Support: Examine the post-export true peak log file. Ensure no inter-sample peaks exceed the minus one point zero decibels ceiling.
+
+Visual: A file exporter window showing an export analysis log with a green checkmark next to Peak Level.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Headroom prevents distortion
+
+Support: Establish a peak headroom cushion to preserve transient fidelity during lossy transcoding rather than chasing maximum digital levels.
+
+Visual: A simple bar graph showing a safe margin between the peak level and the absolute digital ceiling.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before chasing another loudness number.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: true peak ceiling catching codec overs after export. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -167,7 +153,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital audio waveform with inter-sample peaks marked in red exceeding the ceiling.
+Visual direction: Macro studio photograph of digital audio waveform with inter-sample peaks marked in red exceeding the ceiling in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: bites after encoding
 Support accent: bounce can distort
 Motion cue: Zoom-in on a waveform peak where red dots appear between digital sample points.
@@ -179,11 +165,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Setting peak limits to zero
-- Bouncing at zero decibels true peak guarantees clipping once platforms convert your master to MP3 or AAC.
+- Bouncing at zero decibels true peak ignores the interpolation errors generated when lossy codecs reconstruct the continuous analog waveform.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A limiter ceiling set at 0.0 dB on a digital interface, with red warning indicators.
+Visual direction: Close-up schematic of limiter ceiling set at 0.0 dB on digital interface, with red warning indicators with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: limits to zero
 Support accent: conversion clipping
 Motion cue: A slider drops from 0.0 dB to a safe level while warning indicators turn off.
@@ -195,31 +181,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Listeners hear digital crackle
-- High frequency transients like cymbals and vocals can sound raspy on consumer speakers after compression.
+- Lossy MP3 and AAC codecs introduce high-frequency aliasing and transient ringing, making peak-clipped high-hats and vocals sound raspy.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A close-up of a phone speaker with distorted high frequency energy waves emerging in red.
+Visual direction: High-angle focus shot of close-up of phone speaker with distorted high frequency energy waves emerging in red with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: digital crackle
 Support accent: sound raspy
 Motion cue: Sound waves pulse in red, then change to clean cyan waves when true peak is adjusted.
 Reference line: Refs: ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026
 
-### Prompt 4 - How inter-sample peaks distort
-Archetype: How inter-sample peaks distort
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How inter-sample peaks distort
+- SLIDE 4 | THE SCIENCE
 - How inter-sample peaks distort
-- Codec encoding reconstructs the analog waveform. The reconstructed peak can exceed the digital samples by up to two decibels.
+- During digital-to-analog reconstruction, interpolation filters smooth the discrete sample points, generating inter-sample peaks that exceed the digital ceiling.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A graph showing digital sample points connected by a curved analog reconstruction wave that peaks higher than the points.
-Headline accent: inter-sample peaks
-Support accent: analog reconstruction
-Motion cue: A curved line draws between dots, rising above a horizontal dashed ceiling line.
-Reference line: Refs: ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -227,11 +213,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Protect high end clarity
-- Keep cymbals crisp and vocal transients sharp. Avoid letting lossy codecs eat your mix details.
+- Maintain high-frequency phase coherence and transient detail by preserving headroom, preventing lossy codecs from generating reconstruction distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A frequency spectrum screen highlighting the upper treble area in glowing cyan.
+Visual direction: Tactile macro photograph of frequency spectrum screen highlighting the upper treble arein glowing cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: high end clarity
 Support accent: mix details
 Motion cue: TREBLE band pulses gently in cyan.
@@ -243,11 +229,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Leave headroom for lossy encoding
-- Set your limiter true peak ceiling to minus one decibel to prevent conversion distortion.
+- Set the limiter true peak ceiling to minus one point zero decibels to provide a safety margin for inter-sample interpolation peaks.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A limiter interface showing the output ceiling dial adjusted to -1.0 dB.
+Visual direction: Ultra-clean close-up of limiter interface showing the output ceiling dial adjusted to -1.0 dB. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: Leave headroom
 Support accent: prevent distortion
 Motion cue: Limiter output ceiling dial turns back to -1.0 dB.
@@ -259,11 +245,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Run files through codec preview tools
-- Check your master with an encoder plugin to hear translation before exporting.
+- Employ real-time codec emulation filters during the mastering session to audition and analyze the transcode degradation before export.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A plugin window showing a codec format selection dropdown with MP3 active.
+Visual direction: Detailed view of plugin window showing codec format selection dropdown with MP3 active. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: codec preview
 Support accent: hear translation
 Motion cue: Dropdown menu opens and selects 'MP3 320kbps'.
@@ -275,11 +261,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Inspect the peak log after export
-- Ensure the true peak reading on the exported WAV file stays below minus one decibel.
+- Examine the post-export true peak log file. Ensure no inter-sample peaks exceed the minus one point zero decibels ceiling.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A file exporter window showing an export analysis log with a green checkmark next to Peak Level.
+Visual direction: Studio photograph of file exporter window showing an export analysis log with green checkmark next to Peak Level. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: peak log
 Support accent: stays below
 Motion cue: Green checkmark appears on the export log screen.
@@ -291,11 +277,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Headroom prevents distortion
-- Keep the headroom cushion because a clean conversion is always better than a louder distorted master.
+- Establish a peak headroom cushion to preserve transient fidelity during lossy transcoding rather than chasing maximum digital levels.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A simple bar graph showing a safe margin between the peak level and the absolute digital ceiling.
+Visual direction: Minimalist graphic chart of simple bar graph showing safe margin between the peak level and the absolute digital ceiling with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: Headroom prevents
 Support accent: clean conversion
 Motion cue: Safe margin area pulses in cyan.
@@ -307,33 +293,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before chasing another loudness number.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026
-
-
-## Caption
-Your clean DAW bounce can still distort after conversion.
-
-Bouncing at zero decibels true peak guarantees clipping once streaming apps convert your master to MP3 or AAC. Codecs reconstruct the analog waveform, and these peaks can exceed digital samples by up to two decibels.
-
-Try this in your next project:
-1. Set your limiter true peak ceiling to minus one decibel.
-2. Run files through a codec preview tool before bouncing.
-3. Verify that peak levels stay clean on your export log.
-
-Protect your high end clarity from lossy distortion.
-
-Save this to protect your masters from codec distortion.
-
-## Pinned comment
-Session tip: Keep a true peak cushion. Setting your ceiling to -1.0 dB instead of 0.0 dB prevents cymbals and vocals from sounding raspy on consumer speakers after compression.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use true peak ceiling catching codec overs after export. Keep the true peak bite motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.

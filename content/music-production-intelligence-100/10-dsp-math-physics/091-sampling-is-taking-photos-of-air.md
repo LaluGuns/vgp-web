@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Sampling takes photos air
 
 Viral hook: Sampling takes photos of air
 
-Title: Sampling takes photos of air
 
-Description: Digital audio isn't stair-stepped. Learn how the Nyquist-Shannon theorem reconstructs smooth physical waveforms, and why sample rate matters for pitch-shifting.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: sampling audio
 
@@ -64,51 +61,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: waves, resonance, phase, interference
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Sampling takes photos of air
-Support: Digital audio stores snapshots of pressure changes.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The continuous wave trap
-Support: Believing digital audio is stair-stepped and missing sound between samples is a fundamental misunderstanding of reconstruction.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The DAC draws a smooth curve
-Support: The reconstruction filter transforms sample points back into a continuous physical soundwave without jagged steps.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The Nyquist Shannon theorem
-Support: To accurately reconstruct a waveform, you must sample at a rate greater than twice the highest frequency in the signal.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: The computer is not hearing, it is measuring
-Support: A sample rate of 44.1 kHz captures the full human hearing spectrum up to 20 kHz, leaving room for the anti-aliasing filter.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Choose sample rate for delivery and processing needs
-Support: Work at 48 kHz for standard video and streaming, and use 96 kHz when processing heavy pitch-shifting or saturation.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Compare pitch-shifted audio at different render settings
-Support: Listen to high-frequency transients after extreme pitch changes to detect aliasing and choose the best sample rate.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the reconstructed waveform
-Support: Verify translation by checking for inter-sample peaks that might clip your digital-to-analog converter during playback.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The signal becomes editable
-Support: Proper sampling rates allow you to edit and process audio without introducing unwanted digital artifacts.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: sampling camera frames frozen over a moving waveform. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
-
 ## Visual design system
 
 Canvas: 1080 x 1920 px, portrait 9:16.
@@ -138,6 +90,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Sampling takes photos of air
+Support: Digital audio stores snapshots of pressure changes.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The continuous wave trap
+Support: The stair-step visualization of digital audio is a mathematical fiction. This leads producers to believe that samples miss critical acoustic information between intervals.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: DACs reconstruct smooth pressure waves
+Support: Digital-to-analog converters run discrete values through a low-pass reconstruction filter. This mathematical interpolation outputs a continuous, smooth physical waveform.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: The Nyquist Shannon theorem
+Support: Any continuous band-limited signal can be perfectly reconstructed if sampled at a rate greater than twice the highest frequency component.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Match bandwidth to human limits
+Support: A 44.1 kHz rate captures frequencies up to 22.05 kHz. This exceeds the human auditory limit of 20 kHz while providing a transition band for anti-aliasing filters.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Match your sample rate to the processing
+Support: Use 48 kHz for standard video projects. Up-sample to 96 kHz during tracking or sound design only when using heavy pitch-shifting or non-linear saturation.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The extreme pitch shift check
+Support: Pitch-shift a high-frequency source down by two octaves. Listen for mirror-image frequencies that indicate high-frequency foldback.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Scan for inter-sample peaks
+Support: Insert a true-peak meter on your master bus. Verify that interpolated values between sample points do not exceed 0 dBFS and clip the converter.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Reconstruct before clipping
+Support: Set your output ceiling to -1.0 dBTP to accommodate inter-sample reconstruction peaks and prevent digital distortion.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to master digital sampling
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -150,10 +145,10 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a glowing soundwave, with vertical sampling grids frozen in time like camera frames.
-Headline accent: Sampling takes photos
-Support accent: snapshots of pressure
-Motion cue: Quick zoom on the sample frames, then kinetic headline reveal on the accented phrase in 0.5s.
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A glowing cyan soundwave with vertical sampling grids frozen in time. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Sampling
+Support accent: changes.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
@@ -162,13 +157,13 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The continuous wave trap
-- Believing digital audio is stair-stepped and missing sound between samples is a fundamental misunderstanding of reconstruction.
+- The stair-step visualization of digital audio is a mathematical fiction. This leads producers to believe that samples miss critical acoustic information between intervals.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A jagged, red stair-step waveform graphic crossing a smooth cyan path, set on a dark technical grid.
-Headline accent: stair-stepped trap
-Support accent: misunderstanding of reconstruction
+Visual direction: Macro studio photograph of a jagged, red stair-step waveform crossing a smooth cyan path, set on a dark technical grid. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -177,14 +172,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The DAC draws a smooth curve
-- The reconstruction filter transforms sample points back into a continuous physical soundwave without jagged steps.
+- DACs reconstruct smooth pressure waves
+- Digital-to-analog converters run discrete values through a low-pass reconstruction filter. This mathematical interpolation outputs a continuous, smooth physical waveform.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Clean cyan dots on a grid connected by a perfectly smooth, flowing wave, with soft ambient light.
-Headline accent: DAC draws curve
-Support accent: continuous physical soundwave
+Visual direction: Studio product photograph of a clean, sleek glass screen showing clean cyan dots on a grid connected by a perfectly smooth, flowing wave. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -194,13 +189,13 @@ Archetype: THE SCIENCE
 Visible text:
 - SLIDE 4 | THE SCIENCE
 - The Nyquist Shannon theorem
-- To accurately reconstruct a waveform, you must sample at a rate greater than twice the highest frequency in the signal.
+- Any continuous band-limited signal can be perfectly reconstructed if sampled at a rate greater than twice the highest frequency component.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mathematical diagram illustrating a frequency spectrum showing the Nyquist limit divider line in cyan.
-Headline accent: Nyquist Shannon theorem
-Support accent: twice highest frequency
+Visual direction: Schematic diagram of the Nyquist limit frequency spectrum with a divider line in glowing cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -209,14 +204,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- The computer is not hearing, it is measuring
-- A sample rate of 44.1 kHz captures the full human hearing spectrum up to 20 kHz, leaving room for the anti-aliasing filter.
+- Match bandwidth to human limits
+- A 44.1 kHz rate captures frequencies up to 22.05 kHz. This exceeds the human auditory limit of 20 kHz while providing a transition band for anti-aliasing filters.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A sleek glass panel showing a frequency meter flatting out at 20 kHz with a cyan glow.
-Headline accent: is measuring
-Support accent: full human hearing
+Visual direction: Macro photograph of a sleek glass panel showing a frequency meter flattening out at 20 kHz with a cyan glow. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -225,14 +220,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Choose sample rate for delivery and processing needs
-- Work at 48 kHz for standard video and streaming, and use 96 kHz when processing heavy pitch-shifting or saturation.
+- Match your sample rate to the processing
+- Use 48 kHz for standard video projects. Up-sample to 96 kHz during tracking or sound design only when using heavy pitch-shifting or non-linear saturation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Two clean digital panels side-by-side: one glows cyan labeled "48 kHz Video", the other labeled "96 kHz Sound Design".
-Headline accent: Choose sample rate
-Support accent: pitch-shifting saturation
+Visual direction: Two clean digital panels side-by-side: one glows cyan labeled '48 kHz Video', the other labeled '96 kHz Sound Design'. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -241,14 +236,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Compare pitch-shifted audio at different render settings
-- Listen to high-frequency transients after extreme pitch changes to detect aliasing and choose the best sample rate.
+- The extreme pitch shift check
+- Pitch-shift a high-frequency source down by two octaves. Listen for mirror-image frequencies that indicate high-frequency foldback.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A spectral display showing a pitch envelope drop, with cyan artifacts highlighted on a dark screen.
-Headline accent: Compare pitch-shifted
-Support accent: detect aliasing
+Visual direction: Close-up of a spectral display showing a pitch envelope drop, with cyan artifacts glowing. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -257,14 +252,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check the reconstructed waveform
-- Verify translation by checking for inter-sample peaks that might clip your digital-to-analog converter during playback.
+- Scan for inter-sample peaks
+- Insert a true-peak meter on your master bus. Verify that interpolated values between sample points do not exceed 0 dBFS and clip the converter.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A digital audio meter showing a red clip indicator at the very top of a cyan fader path.
-Headline accent: reconstructed waveform
-Support accent: inter-sample peaks
+Visual direction: A digital audio meter showing a red clip indicator at the very top of a cyan fader path. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -273,14 +268,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The signal becomes editable
-- Proper sampling rates allow you to edit and process audio without introducing unwanted digital artifacts.
+- Reconstruct before clipping
+- Set your output ceiling to -1.0 dBTP to accommodate inter-sample reconstruction peaks and prevent digital distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic showing an editing tool slicing a waveform, highlighted with a solid cyan indicator box.
-Headline accent: becomes editable
-Support accent: digital artifacts
+Visual direction: A clean schematic showing an editing tool slicing a waveform, marked by a solid cyan indicator box. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -289,28 +284,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to master digital sampling
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-Digital audio does not look like stairs. 
-
-One of the most common myths is that digital audio is jagged and misses the information between the samples. In reality, thanks to the Nyquist-Shannon theorem, your digital-to-analog converter can reconstruct the original continuous physical wave with 100% accuracy. 
-
-The play: Match your sample rate to your task. Use 48 kHz for video and general projects. Switch to 96 kHz only when you are doing heavy pitch-shifting, time-stretching, or high-gain saturation to prevent digital artifacts.
-
-Understand the math to make better choices in the DAW. Save this to master digital audio basics tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-If you are pitch-shifting a sample down by an octave, you pull the high frequencies down. Work at 96 kHz during sound design to keep those high-frequency snapshots clean and avoid alias noise. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Finishing uses different brain
 
 Viral hook: Finishing uses a different brain state
 
-Title: Finishing uses a different brain state
 
-Description: Finishing music is a separate mental task from creating it. Learn how to stop task-switching, set a clear finish line, and export more finished tracks.
 
-5 hashtags: #VGP #ProducerMindset #MusicProduction #Workflow #BeatMaking
 
 Primary keyword: finishing music
 
@@ -53,51 +50,6 @@ Humanizer status: passed
   - Type: official platform documentation
   - Year/access: accessed 2026
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Finishing uses a different brain state
-Support: Making ideas and closing records use different energy.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The creative loop trap
-Support: When you try to arrange and edit while you write, you kill your creative momentum.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The edit requires a clean perspective
-Support: You cannot evaluate structure while you are still searching for a baseline melody.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Separate task states keep focus sharp
-Support: Cognitive science proves that task-switching drains your energy, lowering the quality of your decisions.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: A finished song is a decision trail
-Support: Great records are built by locking choices down step by step, not by keeping options open forever.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Define the finish line before opening new tracks
-Support: Write down exactly what the song needs to be finished before you launch your next session.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Write three fixes max before the next bounce
-Support: Limit your repair list so you focus on major balances instead of endless minor adjustments.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Listen to the rough mix against the bounce
-Support: Compare the energy of your early quick balances to your current draft to see if you over-processed it.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The project leaves the loop
-Support: You finish the song by choosing progress over perfection. Print it and move on.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before reopening the session tonight.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: create mode and finish mode split across one desk. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -128,6 +80,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Finishing is separate from creating
+Support: Creation and cleanup require separate brain states.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The editing loop trap
+Support: Stopping to quantize midi notes during a melody session interrupts flow. This task-switching forces the brain to dump working memory, killing creative momentum.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Analytical listening kills feel
+Support: The brain cannot process macro rhythm and micro timing corrections simultaneously. Over-editing details during creation results in stiff, clinical-sounding tracks.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Brain networks in conflict
+Support: Neuroimaging shows that creative generation activates the default mode network, while analytical pruning uses the executive control network. Forcing them to run together causes cognitive friction.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Let the first capture stand
+Support: The emotional resonance of a song is carried by the timing deviations of a live performance. Accept minor flaws if the raw groove connects.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Separate tracking days from editing days
+Support: Record all parts without looking at the waveform editor. Allocate a separate day for editing, tuning, and cleanup to keep your brain states isolated.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The One Take Rule
+Support: Limit yourself to three vocal takes, comp them in fifteen minutes, then export the vocal stem. Check if the speed keeps the performance energy alive.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Lock the edit window
+Support: Close the piano roll and track editor during mixing. If you cannot hear a timing error in the context of the full arrangement, do not edit it.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Isolate generation from execution
+Support: Never edit while creating, and never write while mixing. Keep your creative and analytical passes completely separate.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to finish more tracks
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -135,172 +130,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Finishing uses a different brain state
-- Making ideas and closing records use different energy.
+- Finishing is separate from creating
+- Creation and cleanup require separate brain states.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A split desk visual where the left side glows warm amber for writing, and the right side has a clean glass screen showing a dynamic curve in electric blue.
-Headline accent: different brain state
-Support accent: closing records different
-Motion cue: Quick zoom on the mode switch, then kinetic headline reveal on the accented phrase in 0.5s.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. A split brain schematic glowing in cyan and white. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Finishing
+Support accent: states.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The creative loop trap
-- When you try to arrange and edit while you write, you kill your creative momentum.
+- The editing loop trap
+- Stopping to quantize midi notes during a melody session interrupts flow. This task-switching forces the brain to dump working memory, killing creative momentum.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A circular progress bar trapped in a repeating track timeline, highlighted with a red warning glow.
-Headline accent: creative loop trap
-Support accent: kill creative momentum
+Visual direction: Macro studio photograph of a MIDI grid showing notes offset from the grid lines, glowing with a red warning light. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The edit requires a clean perspective
-- You cannot evaluate structure while you are still searching for a baseline melody.
+- Analytical listening kills feel
+- The brain cannot process macro rhythm and micro timing corrections simultaneously. Over-editing details during creation results in stiff, clinical-sounding tracks.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean, empty timeline grid in dark electric blue, showing a single bright melody wave.
-Headline accent: clean perspective
-Support accent: evaluate structure
+Visual direction: Studio product photograph of a clean, sleek glass speaker panel showing soundwaves that alternate in width and amplitude. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Separate task states keep focus sharp
-- Cognitive science proves that task-switching drains your energy, lowering the quality of your decisions.
+- Brain networks in conflict
+- Neuroimaging shows that creative generation activates the default mode network, while analytical pruning uses the executive control network. Forcing them to run together causes cognitive friction.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A simple line chart depicting two separate workflow lanes, showing steady high efficiency vs a jagged line of task-switching drops.
-Headline accent: keep focus sharp
-Support accent: task-switching drains
+Visual direction: Schematic diagram of two neural networks in conflict: default mode network in cyan vs executive control network in amber. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- A finished song is a decision trail
-- Great records are built by locking choices down step by step, not by keeping options open forever.
+- Let the first capture stand
+- The emotional resonance of a song is carried by the timing deviations of a live performance. Accept minor flaws if the raw groove connects.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A path of glowing stepping stones represented by locked checkmark boxes on a dark glass control surface.
-Headline accent: decision trail
-Support accent: locking choices down
+Visual direction: Macro photograph of a microphone capsule on a glass stand with warm lighting. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Define the finish line before opening new tracks
-- Write down exactly what the song needs to be finished before you launch your next session.
+- Separate tracking days from editing days
+- Record all parts without looking at the waveform editor. Allocate a separate day for editing, tuning, and cleanup to keep your brain states isolated.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A neat digital checklist overlaying a dark DAW interface, with the final task highlighted in cyan.
-Headline accent: Define finish line
-Support accent: exactly what song
+Visual direction: Studio photograph of a calendar interface with two distinct blocks: one in cyan labeled 'Creation', the other in grey labeled 'Cleanup'. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Write three fixes max before the next bounce
-- Limit your repair list so you focus on major balances instead of endless minor adjustments.
+- The One Take Rule
+- Limit yourself to three vocal takes, comp them in fifteen minutes, then export the vocal stem. Check if the speed keeps the performance energy alive.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A glowing number 3 display inside a circular outline, sitting on a dark grey control console.
-Headline accent: three fixes max
-Support accent: Limit your repair
+Visual direction: Close-up of a digital countdown timer displaying three ticks on a sleek glass interface panel. Subtle dotted grid canvas texture, dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Listen to the rough mix against the bounce
-- Compare the energy of your early quick balances to your current draft to see if you over-processed it.
+- Lock the edit window
+- Close the piano roll and track editor during mixing. If you cannot hear a timing error in the context of the full arrangement, do not edit it.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An A/B toggle switch with glowing cyan indicators, split between "Rough Mix" and "Active Bounce".
-Headline accent: rough mix
-Support accent: Compare the energy
+Visual direction: A locked window icon over a waveform display on a glass UI panel. Subtle dotted grid canvas texture, dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The project leaves the loop
-- You finish the song by choosing progress over perfection. Print it and move on.
+- Isolate generation from execution
+- Never edit while creating, and never write while mixing. Keep your creative and analytical passes completely separate.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A timeline cursor moving past the end marker of a song track, with a glowing export indicator.
-Headline accent: leaves the loop
-Support accent: progress over perfection
+Visual direction: A clean schematic showing two parallel, non-intersecting signal lines, ending in clean output paths. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2026 | Katz 2026
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before reopening the session tonight.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to finish more tracks
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Katz 2012 | TikTok Newsroom 2026
-
-## Caption
-Writing a song and finishing a mix are two completely different jobs. If you try to do both at the same time, you will likely get stuck in loop purgatory.
-
-Task-switching drains your cognitive energy. When you jump back and forth between writing a melody and editing audio waveforms, your brain gets fatigued. You lose the big-picture perspective.
-
-The play: Separate your session goals. Write down exactly what the track needs to be finished before you even open the DAW. Then, limit yourself to three major fixes per export.
-
-Create first, edit later. Save this to help you break out of the loop. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Try this workflow: Spend one session only writing, with zero mixing plugins allowed. In the next session, focus only on balance and cleanup, with no new parts permitted. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.
+Reference line: Refs: Senior 2026 | Katz 2026

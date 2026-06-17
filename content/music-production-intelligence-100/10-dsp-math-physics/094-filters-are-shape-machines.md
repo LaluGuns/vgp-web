@@ -26,11 +26,8 @@ Slide 1 thumbnail read: Filters are shape machines
 
 Viral hook: Filters are shape machines
 
-Title: Filters are shape machines
 
-Description: Aggressive high-pass filters are ruining your transient punch. Learn how filter slopes alter frequency and phase response, and why gentle cuts sound more musical.
 
-5 hashtags: #VGP #DSP #AudioScience #MusicProduction #SoundDesign
 
 Primary keyword: audio filters
 
@@ -64,51 +61,6 @@ Humanizer status: passed
   - Year/access: accessed 2026
   - Use: waves, resonance, phase, interference
 
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Filters are shape machines
-Support: A filter changes more than tone when the slope gets steep.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The aggressive high pass trap
-Support: Using steep 48 dB high-pass filters on every track to clean up low end introduces massive phase rotation and muddy resonance.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The phase smear problem
-Support: Steep digital filter curves delay the frequencies around the cutoff point, ruining the transient punch and clarity.
-
-### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Frequency and phase interaction
-Support: A filter cannot change amplitude without altering the phase alignment of adjacent frequencies, except in linear-phase mode.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: A filter has a feel
-Support: Gentle 6 dB or 12 dB slopes roll off frequencies gradually, preserving transient timing and sounding more natural.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Choose gentle filters unless the problem needs surgery
-Support: Use low-order slopes for general tone balancing, and reserve steep cuts for isolating specific noises.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Compare a steep cut with a gentler one at matched level
-Support: A/B a 24 dB cut against a 12 dB shelf or cut to verify if the steeper filter is sucking the life out of the track.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify the low end alignment
-Support: Listen to how your bass and kick align in mono after filtering. Ensure the filter did not delay the sub transient.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: The sound keeps its body
-Support: Choosing gentle filter shapes preserves phase coherence, keeping your tracks punchy and full.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before blaming the plugin.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: filter slope shape machine carving a spectrum. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
-
 ## Visual design system
 
 Canvas: 1080 x 1920 px, portrait 9:16.
@@ -138,6 +90,49 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Filters are shape machines
+Support: Steep filter cuts introduce transient phase smearing.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: Over filtering low-end
+Support: High-passing every track to clean up mud causes phase smearing. Steep filters distort transient timing and reduce the punch of your drums.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: Phase shifts weaken transients
+Support: Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this group delay as a loss of transient clarity and low-end definition.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: Filter phase response
+Support: Recursive digital filters sum delayed signals to attenuate frequencies. This delay introduces phase shifts that change the timing of frequency components.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Gentle cuts sound musical
+Support: Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less phase distortion and blend tracks more naturally.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Use shelves instead of high-passes
+Support: Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing group delay.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: The transient correlation check
+Support: Toggle a high-pass filter on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Check phase alignment in mono
+Support: Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused phase cancellation in the sub-bass.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Use minimum cuts to preserve phase
+Support: Apply the gentlest filter slope possible to achieve clean separation. Protect the phase alignment of your low-frequency transients.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this to clean up your filter cuts
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -146,14 +141,14 @@ Archetype: THE HOOK
 Visible text:
 - SLIDE 1 | THE HOOK
 - Filters are shape machines
-- A filter changes more than tone when the slope gets steep.
+- Steep filter cuts introduce transient phase smearing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark background displaying a frequency slope curve in glowing cyan, carving through a spectral signal.
-Headline accent: Filters are shape
-Support accent: slope gets steep
-Motion cue: Quick zoom on the filter shape, then kinetic headline reveal on the accented phrase in 0.5s.
+Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A high-pass filter slope showing transient time delay in red. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Filters
+Support accent: smearing.
+Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
@@ -161,14 +156,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The aggressive high pass trap
-- Using steep 48 dB high-pass filters on every track to clean up low end introduces massive phase rotation and muddy resonance.
+- Over filtering low-end
+- High-passing every track to clean up mud causes phase smearing. Steep filters distort transient timing and reduce the punch of your drums.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A vertical high-pass filter curve glowing red, showing distorted phase lines at the corner.
-Headline accent: high pass trap
-Support accent: massive phase rotation
+Visual direction: Macro studio photograph of a steep 24 dB filter curve cutting off the low-end, marked by a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Warning
+Support accent: Problem
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -177,14 +172,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The phase smear problem
-- Steep digital filter curves delay the frequencies around the cutoff point, ruining the transient punch and clarity.
+- Phase shifts weaken transients
+- Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this group delay as a loss of transient clarity and low-end definition.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A time graph showing delayed sub-frequencies in red behind the clean main transient wave in cyan.
-Headline accent: phase smear
-Support accent: transient punch
+Visual direction: Studio product photograph of a clean, sleek glass screen showing a waveform displaying smeared, blunted transient peaks. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Ear
+Support accent: Response
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -193,14 +188,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Frequency and phase interaction
-- A filter cannot change amplitude without altering the phase alignment of adjacent frequencies, except in linear-phase mode.
+- Filter phase response
+- Recursive digital filters sum delayed signals to attenuate frequencies. This delay introduces phase shifts that change the timing of frequency components.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A split display showing a frequency curve on top and its corresponding phase delay curve below, drawn in clean cyan lines.
-Headline accent: phase interaction
-Support accent: altering phase alignment
+Visual direction: Schematic diagram of the phase shift diagram showing phase angle delay at the filter cutoff. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Science
+Support accent: Mechanism
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -209,14 +204,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- A filter has a feel
-- Gentle 6 dB or 12 dB slopes roll off frequencies gradually, preserving transient timing and sounding more natural.
+- Gentle cuts sound musical
+- Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less phase distortion and blend tracks more naturally.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single control dial displaying a gentle slope setting, lit by soft ambient cyan light.
-Headline accent: has a feel
-Support accent: preserving transient timing
+Visual direction: Macro photograph of a gentle 6 dB filter curve blending two tracks together smoothly. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Taste
+Support accent: Choice
 Motion cue: Glass panel glows as a single dial locks firmly into position.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -225,14 +220,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Choose gentle filters unless the problem needs surgery
-- Use low-order slopes for general tone balancing, and reserve steep cuts for isolating specific noises.
+- Use shelves instead of high-passes
+- Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing group delay.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean EQ display showing a gentle 6 dB shelf shape alongside a narrow notch cut, highlighted in cyan.
-Headline accent: Choose gentle filters
-Support accent: low-order slopes
+Visual direction: A low-shelf EQ curve showing 3 dB attenuation in cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Action
+Support accent: Session
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -241,14 +236,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Compare a steep cut with a gentler one at matched level
-- A/B a 24 dB cut against a 12 dB shelf or cut to verify if the steeper filter is sucking the life out of the track.
+- The transient correlation check
+- Toggle a high-pass filter on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Two side-by-side EQ curves: a steep vertical cliff vs a gradual slope, with a glowing A/B comparison light.
-Headline accent: Compare steep cut
-Support accent: sucking the life
+Visual direction: Close-up of a snare drum transient waveform with a bypass toggle switch. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Test
+Support accent: Signal
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -257,14 +252,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify the low end alignment
-- Listen to how your bass and kick align in mono after filtering. Ensure the filter did not delay the sub transient.
+- Check phase alignment in mono
+- Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused phase cancellation in the sub-bass.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A mono alignment meter showing bass and kick signals overlapping perfectly on a cyan center line.
-Headline accent: low end alignment
-Support accent: delay sub transient
+Visual direction: Two low-frequency waveforms summed to mono showing cancellation gaps. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Verify
+Support accent: System
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -273,14 +268,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The sound keeps its body
-- Choosing gentle filter shapes preserves phase coherence, keeping your tracks punchy and full.
+- Use minimum cuts to preserve phase
+- Apply the gentlest filter slope possible to achieve clean separation. Protect the phase alignment of your low-frequency transients.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A clean schematic diagram showing a solid, punchy waveform outline enclosed in a cyan validation box.
-Headline accent: keeps its body
-Support accent: preserves phase coherence
+Visual direction: A clean filter schematic showing minimum-phase processing lines. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Rule
+Support accent: Lock
 Motion cue: Lock symbol blinks and glows solid cyan.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
 
@@ -289,28 +284,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before blaming the plugin.
-- Follow for daily session science. Visit www.virzyguns.com
+- Save this to clean up your filter cuts
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A dark glass panel featuring the topic-specific call to action in large white lettering, with soft ambient light.
-Headline accent: Save this
-Support accent: Follow for daily
+Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
+Headline accent: Save
+Support accent: Follow
 Motion cue: Glowing pulse fades in around the CTA text.
 Reference line: Refs: Smith 2026 | MIT OCW 2011
-
-## Caption
-Using steep high-pass filters on every track is ruining your mix.
-
-Every time you load a 24 dB or 48 dB slope to clean up the low-end, you do more than cut frequencies. You introduce phase rotation around the cutoff point. This delay smears your transients, making your kick, bass, and vocals sound muddy and disconnected. 
-
-The play: Switch to gentle 6 dB or 12 dB slopes for general cleaning. Reserve steep cuts only for surgery, like removing a physical room rumble.
-
-Keep your filters gentle to protect your transients. Save this to keep your mix punchy tonight. Follow @virzyguns and visit www.virzyguns.com for daily session science.
-
-## Pinned comment
-Try this test tonight: Take a kick drum and apply a steep 24 dB cut at 30 Hz. Then switch it to a gentle 6 dB cut at the same frequency. Listen to the sub transient. You will feel the punch return. Save this post and follow for more.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use endless tweak loop circling a tired DAW screen. Keep the tweak loop motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting.

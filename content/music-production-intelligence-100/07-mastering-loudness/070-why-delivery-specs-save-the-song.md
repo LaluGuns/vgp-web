@@ -1,4 +1,4 @@
-# 070 - Delivery specs protect the record
+# 070: Delivery specs protect the record
 
 Content ID: 070
 
@@ -26,20 +26,6 @@ Slide 1 thumbnail read: Delivery specs protect record
 
 Viral hook: Delivery specs protect the record
 
-Title: Delivery specs protect the record
-
-Description: How following delivery specifications protects your record from platform constraints, and why export logs verify technical safety.
-
-5 hashtags: #VGP #Mastering #LUFS #AudioEngineering #MusicProduction
-
-Primary keyword: master delivery
-
-Science anchor: codec and platform constraints
-
-Art and taste anchor: Delivery is part of the master.
-
-Claim safety: safe analogy. Avoid absolute claims. Use this as a production decision guided by sources, not a universal law.
-
 Humanizer status: passed
 
 ## Sources
@@ -63,78 +49,6 @@ Humanizer status: passed
   - Type: named expert / established book
   - Year/access: accessed 2026
   - Use: mastering judgment, dynamics, translation
-
-## 10-slide script
-
-### Slide 1: SLIDE 1 | THE HOOK
-Headline: Delivery specs protect the record
-
-Support: Ignoring delivery specs can lead to platform transcoding errors.
-
-Visual: A delivery specifications checklist on screen, with key items checked in cyan.
-
-### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Delivering one master for everything
-
-Support: Sending the same hot master to streaming, vinyl, and high-resolution archives causes translation failures.
-
-Visual: A single master file split into paths marked in warning red for different formats.
-
-### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Listeners hear transcoding distortion
-
-Support: If you ignore platform limits, conversion encoders will introduce harsh artifacts that ruin the listening experience.
-
-Visual: A headphone speaker with digital conversion noise lines radiating in red.
-
-### Slide 4: SLIDE 4 | How codec constraints affect audio
-Headline: How codec constraints affect audio
-
-Support: Lossy compression algorithms strip out high frequencies. If your file is clipped, the encoder struggles, generating audible distortion.
-
-Visual: A comparison bar graph showing bandwidth loss between raw WAV and MP3 files.
-
-### Slide 5: SLIDE 5 | THE ART
-Headline: Delivery is part of the master
-
-Support: Format files specifically for the medium. Tailor the peak headroom and loudness to the destination.
-
-Visual: An export settings window with custom output format options highlighted in cyan.
-
-### Slide 6: SLIDE 6 | THE MOVE
-Headline: Export formats matching specs
-
-Support: Prepare distinct files for streaming and archive formats. Set appropriate ceiling levels for each export.
-
-Visual: A DAW export queue showing multiple files named for streaming, vinyl, and WAV.
-
-### Slide 7: SLIDE 7 | THE TEST
-Headline: Inspect true peak and LUFS logs
-
-Support: Check the export log details. Verify that integrated loudness and peak headroom conform to your target rules.
-
-Visual: An analysis log window showing measurements for LUFS and True Peak in green.
-
-### Slide 8: SLIDE 8 | THE CHECK
-Headline: Test files with normalization active
-
-Support: Audition the stream-ready master with gain scaling enabled to ensure it stays clean when platforms adjust it.
-
-Visual: A virtual player with normalization toggle highlighted in cyan.
-
-### Slide 9: SLIDE 9 | THE RULE
-Headline: Conform to technical guidelines
-
-Support: Only deliver files that satisfy target specifications without exceeding peak limits.
-
-Visual: A document icon with a cyan seal representing compliance.
-
-### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
-
-Support: Follow for daily session science. Visit www.virzyguns.com
-
-Visual: delivery checklist protecting the final master file. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 ## Visual design system
 
@@ -165,6 +79,78 @@ Composition: Slide label top-left. Headline upper-middle with accent. Hero visua
 
 Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green thumbnails, fake brands, fake numbers, extra words, any logo or symbol shape.
 
+## 10-slide script
+
+### Slide 1: SLIDE 1 | THE HOOK
+Headline: Delivery specs protect the record
+
+Support: Ignoring delivery specs can lead to platform transcoding errors.
+
+Visual: A delivery specifications checklist on screen, with key items checked in cyan.
+
+### Slide 2: SLIDE 2 | THE TRAP
+Headline: The trap: Delivering one master for everything
+
+Support: Exporting a single master file for all distribution formats leads to conversion errors and playback distortion.
+
+Visual: A single master file split into paths marked in warning red for different formats.
+
+### Slide 3: SLIDE 3 | THE EAR
+Headline: The ear: Listeners hear transcoding distortion
+
+Support: Streaming codecs transcode files into lossy formats. If the master has no peak headroom, transcoding introduces distortion.
+
+Visual: A headphone speaker with digital conversion noise lines radiating in red.
+
+### Slide 4: SLIDE 4 | THE SCIENCE
+Headline: How codec constraints affect audio
+
+Support: Lossy compression algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
+
+Visual: A comparison bar graph showing bandwidth loss between raw WAV and MP3 files.
+
+### Slide 5: SLIDE 5 | THE ART
+Headline: Delivery is part of the master
+
+Support: Optimize your masters for the target medium, setting the peak headroom and integrated level to match the destination specs.
+
+Visual: An export settings window with custom output format options highlighted in cyan.
+
+### Slide 6: SLIDE 6 | THE MOVE
+Headline: Export formats matching specs
+
+Support: Prepare separate files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
+
+Visual: A DAW export queue showing multiple files named for streaming, vinyl, and WAV.
+
+### Slide 7: SLIDE 7 | THE TEST
+Headline: Inspect true peak and LUFS logs
+
+Support: Analyze the export log files to verify that integrated loudness and true peak levels comply with your target guidelines.
+
+Visual: An analysis log window showing measurements for LUFS and True Peak in green.
+
+### Slide 8: SLIDE 8 | THE CHECK
+Headline: Test files with normalization active
+
+Support: Audition the final exported files with platform-style normalization active to ensure they remain clean under gain scaling.
+
+Visual: A virtual player with normalization toggle highlighted in cyan.
+
+### Slide 9: SLIDE 9 | THE RULE
+Headline: Conform to technical guidelines
+
+Support: Deliver files only when they meet the exact technical guidelines of the destination without exceeding peak limits.
+
+Visual: A document icon with a cyan seal representing compliance.
+
+### Slide 10: SLIDE 10 | THE TAKEAWAY
+Headline: Save this before chasing another loudness number.
+
+Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+
+Visual: delivery checklist protecting the final master file. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
+
 ## 10-slide image prompts
 
 ### Prompt 1 - THE HOOK
@@ -177,7 +163,7 @@ Visible text:
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A delivery specifications checklist on screen, with key items checked in cyan.
+Visual direction: Macro studio photograph of delivery specifications checklist on screen, with key items checked in cyan in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
 Headline accent: protect the record
 Support accent: transcoding errors
 Motion cue: A checkmark appears next to the first specification on the list.
@@ -189,11 +175,11 @@ Archetype: THE TRAP
 Visible text:
 - SLIDE 2 | THE TRAP
 - The trap: Delivering one master for everything
-- Sending the same hot master to streaming, vinyl, and high-resolution archives causes translation failures.
+- Exporting a single master file for all distribution formats leads to conversion errors and playback distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A single master file split into paths marked in warning red for different formats.
+Visual direction: Close-up schematic of single master file split into paths marked in warning red for different formats with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
 Headline accent: delivering one master
 Support accent: translation failures
 Motion cue: Split paths flash red to indicate errors.
@@ -205,31 +191,31 @@ Archetype: THE EAR
 Visible text:
 - SLIDE 3 | THE EAR
 - The ear: Listeners hear transcoding distortion
-- If you ignore platform limits, conversion encoders will introduce harsh artifacts that ruin the listening experience.
+- Streaming codecs transcode files into lossy formats. If the master has no peak headroom, transcoding introduces distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A headphone speaker with digital conversion noise lines radiating in red.
+Visual direction: High-angle focus shot of headphone speaker with digital conversion noise lines radiating in red with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
 Headline accent: transcoding distortion
 Support accent: ruin the experience
 Motion cue: Red noise lines flicker, then fade to a smooth wave when specifications are met.
 Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
 
-### Prompt 4 - How codec constraints affect audio
-Archetype: How codec constraints affect audio
+### Prompt 4 - THE SCIENCE
+Archetype: THE SCIENCE
 
 Visible text:
-- SLIDE 4 | How codec constraints affect audio
+- SLIDE 4 | THE SCIENCE
 - How codec constraints affect audio
-- Lossy compression algorithms strip out high frequencies. If your file is clipped, the encoder struggles, generating audible distortion.
+- Lossy compression algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A comparison bar graph showing bandwidth loss between raw WAV and MP3 files.
-Headline accent: codec constraints
-Support accent: generating distortion
-Motion cue: A WAV bar graph matches MP3, showing the missing high-frequency area in red.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent:
+Support accent:
+Motion cue:
+Reference line:
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
@@ -237,11 +223,11 @@ Archetype: THE ART
 Visible text:
 - SLIDE 5 | THE ART
 - Delivery is part of the master
-- Format files specifically for the medium. Tailor the peak headroom and loudness to the destination.
+- Optimize your masters for the target medium, setting the peak headroom and integrated level to match the destination specs.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An export settings window with custom output format options highlighted in cyan.
+Visual direction: Tactile macro photograph of An export settings window with custom output format options highlighted in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
 Headline accent: part of the master
 Support accent: custom output format
 Motion cue: Highlight moves down the export formats list.
@@ -253,11 +239,11 @@ Archetype: THE MOVE
 Visible text:
 - SLIDE 6 | THE MOVE
 - Export formats matching specs
-- Prepare distinct files for streaming and archive formats. Set appropriate ceiling levels for each export.
+- Prepare separate files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A DAW export queue showing multiple files named for streaming, vinyl, and WAV.
+Visual direction: Ultra-clean close-up of DAW export queue showing multiple files named for streaming, vinyl, and WAV. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
 Headline accent: matching specs
 Support accent: distinct files
 Motion cue: Files in the queue light up sequentially in cyan.
@@ -269,11 +255,11 @@ Archetype: THE TEST
 Visible text:
 - SLIDE 7 | THE TEST
 - Inspect true peak and LUFS logs
-- Check the export log details. Verify that integrated loudness and peak headroom conform to your target rules.
+- Analyze the export log files to verify that integrated loudness and true peak levels comply with your target guidelines.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: An analysis log window showing measurements for LUFS and True Peak in green.
+Visual direction: Detailed view of An analysis log window showing measurements for LUFS and True Peak in green. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
 Headline accent: Inspect logs
 Support accent: measurements conform
 Motion cue: Measurement numbers update on the log screen.
@@ -285,11 +271,11 @@ Archetype: THE CHECK
 Visible text:
 - SLIDE 8 | THE CHECK
 - Test files with normalization active
-- Audition the stream-ready master with gain scaling enabled to ensure it stays clean when platforms adjust it.
+- Audition the final exported files with platform-style normalization active to ensure they remain clean under gain scaling.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A virtual player with normalization toggle highlighted in cyan.
+Visual direction: Studio photograph of virtual player with normalization toggle highlighted in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
 Headline accent: normalization active
 Support accent: stays clean
 Motion cue: Virtual player slider moves to normalized level.
@@ -301,11 +287,11 @@ Archetype: THE RULE
 Visible text:
 - SLIDE 9 | THE RULE
 - Conform to technical guidelines
-- Only deliver files that satisfy target specifications without exceeding peak limits.
+- Deliver files only when they meet the exact technical guidelines of the destination without exceeding peak limits.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A document icon with a cyan seal representing compliance.
+Visual direction: Minimalist graphic chart of document icon with cyan seal representing compliance with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
 Headline accent: technical guidelines
 Support accent: satisfy specifications
 Motion cue: Cyan seal glows on the document.
@@ -317,33 +303,12 @@ Archetype: THE TAKEAWAY
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
 - Save this before chasing another loudness number.
-- Follow for daily session science. Visit www.virzyguns.com
+- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Plain-text takeaway slide on a dark grid.
+Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
 Headline accent: Save this
 Support accent: Follow for daily
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
-
-
-## Caption
-Platform delivery specifications are not optional.
-
-Ignoring delivery guidelines can cause streaming sites to transcode and transcode your audio, creating distortion and lowering your output quality. Proper delivery protects the sound of your record.
-
-Try this check:
-1. Export file formats that match the specific platform guidelines.
-2. Inspect integrated LUFS and true peak levels on your export logs.
-3. Make delivery specs a core part of your mastering checklist.
-
-Keep your master safe.
-
-Save this to protect your final delivery quality.
-
-## Pinned comment
-Session check: Always export separate files for streaming and high-resolution archives. Use the specific codec and peak guidelines to avoid platform transcoding errors.
-
-## Production notes
-Slide 10 is the CTA frame. Edit rhythm: first frame interrupts, second frame proves the problem, middle frames show the mechanism, final frame gives the rule. Use delivery specs checklist with green checkmarks. Keep the delivery constraints motif visible across the slide set. Keep text inside the shared safe zone and test the audio example at matched level before posting. Follow @virzyguns and visit www.virzyguns.com for daily session science. Save this post and follow for more.
