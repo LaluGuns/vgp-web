@@ -27,7 +27,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 
 ## Visual design system
@@ -61,232 +61,233 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 
 ## 10-slide script
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Late snares can fake weight
+Headline: Late snares can [fake weight]
 
-Support: A lazy backbeat feels wider.
+Support: A lazy [backbeat feels wider].
 
 Visual: late snare shadow landing behind the grid line. Show cold open with the raw state visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Rigid snare alignment makes beats feel small
+Headline: Rigid snare alignment makes [beats feel small]
 
-Support: Snapping the snare drum to the exact grid downbeat can make the backbeat sound small and robotic.
+Support: Snapping the snare drum to the exact grid downbeat can make the backbeat [sound] small and robotic.
 
 Visual: late snare shadow landing behind the grid line. Show red pressure mark appears on the false fix while the better path stays cyan. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The brain expects a delay on heavy hits
+Headline: The brain expects a [delay on heavy hits]
 
-Support: The auditory system perceives a snare that hits after the beat as heavier, interpreting the delay as physical inertia.
+Support: The auditory system perceives a snare that hits after the beat as heavier, interpreting the [delay] as physical inertia.
 
 Visual: late snare shadow landing behind the grid line. Show one signal path draws first, then the supporting detail fades in around it. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Transient spacing changes perceived size
+Headline: Transient spacing changes [perceived size]
 
-Support: Delaying the snare transient by 10 to 25 milliseconds prevents it from masking the kick, keeping both punches clear.
+Support: Delaying the snare [transient] by 10 to 25 milliseconds prevents it from masking the kick, keeping both punches clear.
 
 Visual: late snare shadow landing behind the grid line. Show science model builds one node at a time with no fake values. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Late is a flavor, not an error
+Headline: Late is a flavor, [not an error]
 
-Support: Adjust the snare delay to control how much the beat leans back, matching the style of the song.
+Support: Adjust the snare [delay] to control how much the beat leans back, matching the style of the song.
 
 Visual: late snare shadow landing behind the grid line. Show human taste setting lands as one knob or dial is adjusted. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Let the snare sit behind fast hats when the genre allows it
+Headline: Let the snare sit [behind fast hats] when the genre allows it
 
-Support: Select all backbeat snare hits and delay them by 12 to 20 milliseconds while keeping the kick locked.
+Support: Select all backbeat snare hits and [delay] them by 12 to 20 milliseconds while keeping the kick locked.
 
 Visual: late snare shadow landing behind the grid line. Show cursor performs the production move once, clearly, on the interface. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Shift the snare late in tiny steps and stop before drag
+Headline: Shift the snare late in [tiny steps] and stop before drag
 
-Support: Toggle between the grid-locked snare and the delayed snare, listening for changes in groove weight and size.
+Support: [Toggle between] the grid-locked snare and the delayed snare, listening for changes in groove weight and size.
 
 Visual: late snare shadow landing behind the grid line. Show A/B split contrast between the raw and modified versions on screen. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check snare translation in mono
+Headline: Check snare [translation in mono]
 
-Support: Sum the mix to mono to verify that the delayed snare transient maintains its punch and clarity.
+Support: Sum the mix to mono to verify that the delayed snare [transient] maintains its punch and clarity.
 
 Visual: late snare shadow landing behind the grid line. Show wireframe devices enter as separate translation checks. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The backbeat feels wider
+Headline: The backbeat [feels wider]
 
-Support: Delay the snare when you need a heavy, relaxed groove, using timing to create the illusion of weight.
+Support: [Delay] the snare when you need a heavy, relaxed groove, using timing to create the illusion of weight.
 
 Visual: late snare shadow landing behind the grid line. Show rule locks into a simple visual diagram with green indicators. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before quantizing your snare
+Headline: [Save this] before quantizing your snare
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: late snare shadow landing behind the grid line. Show the final decision as a clean plain-text closing frame, ready for the loop. Keep it premium, dark, specific, and readable in one glance.
 
 ## 10-slide image prompts
+
 ### Prompt 1, THE HOOK
 Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Late snares can fake weight
-- A lazy backbeat feels wider.
+- Late snares can [fake weight]
+- A lazy [backbeat feels wider].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a 3D visualization representing late snare shadow landing behind the grid line. A sleek, dark-blue glass panel displays the late snare shadow with a glowing cyan and electric-blue outline. Warm amber side-lighting casts a soft bloom across a dark-titanium grid. Apple editorial aesthetic, subtle dotted grid texture on a matte-black background, 35% negative space, shallow depth of field.
-Headline accent: fake weight
-Support accent: backbeat feels wider
+Headline accent: [fake weight]
+Support accent: [backbeat feels wider]
 Motion cue: First 0.5 seconds: quick punch-in on the late snare shadow landing behind the grid line, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 2, THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Rigid snare alignment makes beats feel small
-- Snapping the snare drum to the exact grid downbeat can make the backbeat sound small and robotic.
+- Rigid snare alignment makes [beats feel small]
+- Snapping the snare drum to the exact grid downbeat can make the backbeat [sound] small and robotic.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of a digital grid displaying late snare shadow landing behind the grid line. A rigid, math-perfect alignment is highlighted with a soft red neon stroke, indicating the robotic trap. The dark-titanium interface features glass panels, with the correct groove paths dimmed. Apple editorial aesthetic, subtle dotted grid texture, dramatic shadows, 35% negative space.
-Headline accent: beats feel small
-Support accent: rhythm feel rushed
+Headline accent: [beats feel small]
+Support accent: [sound]
 Motion cue: A rapid transition showing a red alert fade-in on the problem area of the late snare shadow landing behind the grid line layout.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 3, THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The brain expects a delay on heavy hits
-- The auditory system perceives a snare that hits after the beat as heavier, interpreting the delay as physical inertia.
+- The brain expects a [delay on heavy hits]
+- The auditory system perceives a snare that hits after the beat as heavier, interpreting the [delay] as physical inertia.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Conceptual 3D diagram showing the auditory focus path of late snare shadow landing behind the grid line. A glowing cyan signal wave flows through a semi-transparent glass model of the human auditory pathway. Muted side-lighting and shallow depth of field highlight the moment of perception. Apple editorial aesthetic, dark-blue canvas, dotted grid background, 30% negative space.
-Headline accent: delay on heavy hits
-Support accent: maximum force
+Headline accent: [delay on heavy hits]
+Support accent: [delay]
 Motion cue: A wave pulse expands outward from the center, lighting up the cyan late snare shadow landing behind the grid line elements.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 4, THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Transient spacing changes perceived size
-- Delaying the snare transient by 10 to 25 milliseconds prevents it from masking the kick, keeping both punches clear.
+- Transient spacing changes [perceived size]
+- Delaying the snare [transient] by 10 to 25 milliseconds prevents it from masking the kick, keeping both punches clear.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean technical diagram of late snare shadow landing behind the grid line analyzing the late snare shadow. The display features precise cyan lines, numerical values, and grid overlays on a dark-titanium glass panel. Soft ambient blue lighting emphasizes the scientific model. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture, 35% negative space.
-Headline accent: perceived size
-Support accent: larger physical space
+Headline accent: [perceived size]
+Support accent: [transient]
 Motion cue: The analytical diagram nodes on the late snare shadow landing behind the grid line build sequentially with subtle cyan highlights.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 5, THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Late is a flavor, not an error
-- Adjust the snare delay to control how much the beat leans back, matching the style of the song.
+- Late is a flavor, [not an error]
+- Adjust the snare [delay] to control how much the beat leans back, matching the style of the song.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a premium tactile controller with a glowing cyan rotary knob adjusting late snare shadow landing behind the grid line. The finger-touch surface is dark titanium with a matte finish. Soft cyan bloom accentuates the creative taste setting. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, shallow depth of field.
-Headline accent: not an error
-Support accent: groove and speed
+Headline accent: [not an error]
+Support accent: [delay]
 Motion cue: The virtual control indicator on the late snare shadow landing behind the grid line dial moves slightly off-center with a soft glow.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 6, THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Let the snare sit behind fast hats when the genre allows it
-- Select all backbeat snare hits and delay them by 12 to 20 milliseconds while keeping the kick locked.
+- Let the snare sit [behind fast hats] when the genre allows it
+- Select all backbeat snare hits and [delay] them by 12 to 20 milliseconds while keeping the kick locked.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Action shot of a digital interface where a cursor selects and shifts a component of late snare shadow landing behind the grid line on a glass panel. A sharp cyan bounding box highlights the production move, showing it slipping off the grid. Apple editorial aesthetic, dark-blue canvas, matte-black desk, 30% negative space.
-Headline accent: behind fast hats
-Support accent: 5 to 15 milliseconds
+Headline accent: [behind fast hats]
+Support accent: [delay]
 Motion cue: A clean cursor movement slides the target late snare shadow landing behind the grid line elements into position.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 7, THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Shift the snare late in tiny steps and stop before drag
-- Toggle between the grid-locked snare and the delayed snare, listening for changes in groove weight and size.
+- Shift the snare late in [tiny steps] and stop before drag
+- [Toggle between] the grid-locked snare and the delayed snare, listening for changes in groove weight and size.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Split-screen A/B comparison displaying late snare shadow landing behind the grid line. The left glass panel represents the raw grid in muted grey, while the right panel highlights the modified pocket in glowing cyan. A vertical line divides the panels, casting soft shadows. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture.
-Headline accent: tiny steps and stop
-Support accent: until the beat drags
+Headline accent: [tiny steps]
+Support accent: [Toggle between]
 Motion cue: A fast A/B screen wipe alternates between the raw and modified late snare shadow landing behind the grid line states.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 8, THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check snare translation in mono
-- Sum the mix to mono to verify that the delayed snare transient maintains its punch and clarity.
+- Check snare [translation in mono]
+- Sum the mix to mono to verify that the delayed snare [transient] maintains its punch and clarity.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Editorial studio photograph of sleek wireframe devices (a smartphone, a laptop, and studio monitor speakers) displaying late snare shadow landing behind the grid line. Soft cyan light beams propagate from the speakers, showing translation paths. Apple editorial aesthetic, dark-blue canvas, matte-black desk, shallow depth of field.
-Headline accent: translation in mono
-Support accent: phase issues
+Headline accent: [translation in mono]
+Support accent: [transient]
 Motion cue: Sound wave ripples expand outward from the speaker icons on the screen.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 9, THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The backbeat feels wider
-- Delay the snare when you need a heavy, relaxed groove, using timing to create the illusion of weight.
+- The backbeat [feels wider]
+- [Delay] the snare when you need a heavy, relaxed groove, using timing to create the illusion of weight.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist 3D diagram locking the core rule of late snare shadow landing behind the grid line into place. A clean glass panel displays the final late snare shadow with a glowing green and cyan checkmark indicator. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, 40% negative space.
-Headline accent: feels wider
-Support accent: relaxed attitude
+Headline accent: [feels wider]
+Support accent: [Delay]
 Motion cue: A green checkmark pulses next to the corrected path on the late snare shadow landing behind the grid line diagram.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011
 
 ### Prompt 10, THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before quantizing your snare
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before quantizing your snare
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-end minimalist closing frame. A dark-titanium plaque with glowing cyan accents is set against a dark-blue canvas. A clean, plain-text call to action is centered on the panel. Apple editorial aesthetic, subtle dotted grid texture, 35% negative space.
-Headline accent: Save this before
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: The central call to action text fades in slowly with an ambient cyan glow.
-Reference line: Refs: Huron 2006 | Senior accessed 2026
+Reference line: Refs: Huron 2006 | Senior 2011

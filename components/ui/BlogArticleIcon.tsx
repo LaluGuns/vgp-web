@@ -12,8 +12,8 @@ interface BlogArticleIconProps {
 /* Category color mapping — matches BlogIndex CAT */
 const CAT_COLORS: Record<string, { primary: string; accent: string }> = {
     'production-tips': { primary: '#00D4FF', accent: '#0066FF' },
-    'licensing-guide': { primary: '#FF3CAC', accent: '#FF0066' },
-    'genre-guides': { primary: '#FFD700', accent: '#FF6B00' },
+    'licensing-guide': { primary: '#38BDF8', accent: '#93C5FD' },
+    'genre-guides': { primary: '#67E8F9', accent: '#0EA5E9' },
 };
 const fallbackColor = { primary: '#00D4FF', accent: '#0066FF' };
 const getColors = (cat: string) => CAT_COLORS[cat] ?? fallbackColor;
@@ -42,8 +42,8 @@ export function BlogArticleIcon({ slug, category, size = 48, className = '' }: B
                 return <BalanceScaleIcon size={size} c={c} a={a} />;
             case 'trap-beats-anatomy-of-the-perfect-808':
                 return <Bass808Icon size={size} c={c} a={a} />;
-            case 'cyberphonk-production-dark-melodies':
-                return <CyberSkullIcon size={size} c={c} a={a} />;
+            case 'phonk-production-dark-melodies':
+                return <PhonkPulseIcon size={size} c={c} a={a} />;
             default:
                 return getCategoryFallback(category, size, c, a);
         }
@@ -239,32 +239,27 @@ function Bass808Icon({ size, c, a }: P) {
     );
 }
 
-// ── CYBER SKULL (Cyberphonk) ─────────────────────────────────────────
-function CyberSkullIcon({ size, c, a }: P) {
+function PhonkPulseIcon({ size, c, a }: P) {
     return (
         <svg viewBox="0 0 100 100" width={size} height={size} fill="none">
-            {/* Skull outline */}
+            <circle cx="50" cy="50" r="27" stroke={c} strokeWidth="2" fill={c} fillOpacity="0.05" className="animate-pulse-ring" />
             <path
-                d="M30 55 C30 30, 70 30, 70 55 C70 65, 65 70, 60 72 L60 78 L40 78 L40 72 C35 70, 30 65, 30 55Z"
-                stroke={c} strokeWidth="2" fill={c} fillOpacity="0.05"
-                className="animate-float"
+                d="M20 52 C28 38, 36 66, 44 52 S60 38, 68 52 S78 66, 86 52"
+                stroke={c}
+                strokeWidth="3"
+                strokeLinecap="round"
+                className="animate-waveform"
             />
-            {/* Glowing eyes */}
-            <rect x="37" y="45" width="8" height="5" rx="1" fill={a} opacity="0.9"
-                className="animate-cursor-blink"
+            <path
+                d="M25 64 C34 57, 43 71, 52 64 S70 57, 79 64"
+                stroke={a}
+                strokeWidth="2"
+                strokeLinecap="round"
+                opacity="0.65"
+                className="animate-waveform"
+                style={{ animationDelay: '0.25s' }}
             />
-            <rect x="55" y="45" width="8" height="5" rx="1" fill={a} opacity="0.9"
-                className="animate-cursor-blink" style={{ animationDelay: '0.2s' }}
-            />
-            {/* Nose */}
-            <path d="M48 56 L50 52 L52 56" stroke={c} strokeWidth="1" opacity="0.5" />
-            {/* Teeth */}
-            {[43, 47, 51, 55].map((x) => (
-                <line key={x} x1={x} y1="72" x2={x} y2="78" stroke={c} strokeWidth="1" opacity="0.3" />
-            ))}
-            {/* Distortion waves */}
-            <path d="M22 40 L28 38 L22 36" stroke={a} strokeWidth="1" opacity="0.3" className="animate-pulse-core" />
-            <path d="M78 40 L72 38 L78 36" stroke={a} strokeWidth="1" opacity="0.3" className="animate-pulse-core" style={{ animationDelay: '0.5s' }} />
+            <circle cx="50" cy="50" r="5" fill={a} opacity="0.75" className="animate-pulse-core" />
         </svg>
     );
 }

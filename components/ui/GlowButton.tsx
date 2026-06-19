@@ -30,7 +30,7 @@ const variantMap = {
     primary: {
         base: 'border-[rgba(0,212,255,0.35)] text-white',
         hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(0,212,255,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
-        gradient: 'from-[#00D4FF] to-[#B44AFF]',
+        gradient: 'from-[#00D4FF] to-[#93c5fd]',
     },
     ghost: {
         base: 'border-[rgba(200,204,212,0.1)] text-[#C8CCD4]',
@@ -38,14 +38,14 @@ const variantMap = {
         gradient: '',
     },
     studio: {
-        base: 'border-[rgba(255,60,172,0.35)] text-white',
-        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(255,60,172,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
-        gradient: 'from-[#FF3CAC] to-[#B44AFF]',
+        base: 'border-[rgba(56,189,248,0.35)] text-white',
+        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(56,189,248,0.3),0_8px_32px_rgba(0,0,0,0.4)]',
+        gradient: 'from-[#38bdf8] to-[#0ea5e9]',
     },
     lab: {
-        base: 'border-[rgba(0,255,163,0.35)] text-white',
-        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(0,255,163,0.35),0_8px_32px_rgba(0,0,0,0.4)]',
-        gradient: 'from-[#00FFA3] to-[#00D4FF]',
+        base: 'border-[rgba(103,232,249,0.35)] text-white',
+        hover: 'hover:border-transparent hover:shadow-[0_0_30px_rgba(103,232,249,0.28),0_8px_32px_rgba(0,0,0,0.4)]',
+        gradient: 'from-[#67e8f9] to-[#38bdf8]',
     },
 };
 

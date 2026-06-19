@@ -124,7 +124,7 @@ export async function POST(request: Request) {
                         </ul>
                         
                         <div style="text-align: center; margin-top: 40px;">
-                            <a href="https://virzyguns.com/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block;">
+                            <a href="https://www.virzyguns.com/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block;">
                                 BROWSE STUDIO
                             </a>
                         </div>

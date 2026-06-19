@@ -9,7 +9,7 @@ import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import './globals.css';
 
 export const metadata: Metadata = {
-    metadataBase: new URL('https://virzyguns.com'),
+    metadataBase: new URL('https://www.virzyguns.com'),
     title: {
         template: '%s | Virzy Guns Production',
         default: 'Virzy Guns Production | Beats, Songs, Functional Audio',
@@ -30,7 +30,6 @@ export const metadata: Metadata = {
         'type beats',
         'trap beats',
         'phonk beats',
-        'cyberphonk beats',
         'synthwave beats',
         'r&b beats',
         'rap beats',
@@ -54,7 +53,7 @@ export const metadata: Metadata = {
         'beatmaker',
         '100% Art 100% Science',
     ],
-    authors: [{ name: 'Virzy Guns', url: 'https://virzyguns.com/about' }],
+    authors: [{ name: 'Virzy Guns', url: 'https://www.virzyguns.com/about' }],
     creator: 'Virzy Guns',
     publisher: 'Virzy Guns Production',
     category: 'music',
@@ -67,14 +66,14 @@ export const metadata: Metadata = {
         title: 'Virzy Guns Production | Beats, Songs, Functional Audio',
         description:
             'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
-        url: 'https://virzyguns.com',
+        url: 'https://www.virzyguns.com',
         siteName: 'Virzy Guns Production',
         images: [
             {
-                url: '/branding/og-image.jpg',
-                width: 1200,
-                height: 630,
-                alt: 'Virzy Guns Production | 100% Art. 100% Science.',
+                url: '/branding/vgp-logo-chrome-full.png',
+                width: 1024,
+                height: 1024,
+                alt: 'Virzy Guns Production chrome logo',
             },
         ],
         locale: 'en_US',
@@ -85,7 +84,7 @@ export const metadata: Metadata = {
         title: 'Virzy Guns Production | Beats, Songs, Functional Audio',
         description:
             'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
-        images: ['/branding/og-image.jpg'],
+        images: ['/branding/vgp-logo-chrome-full.png'],
         creator: '@virzyguns',
     },
     robots: {
@@ -113,11 +112,11 @@ export default function RootLayout({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Virzy Guns Production',
-        url: 'https://virzyguns.com',
+        url: 'https://www.virzyguns.com',
         description: 'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
         potentialAction: {
             '@type': 'SearchAction',
-            target: 'https://virzyguns.com/search?q={search_term_string}',
+            target: 'https://www.virzyguns.com/search?q={search_term_string}',
             'query-input': 'required name=search_term_string',
         },
     };
@@ -126,8 +125,8 @@ export default function RootLayout({
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: 'Virzy Guns Production',
-        url: 'https://virzyguns.com',
-        logo: 'https://virzyguns.com/branding/logo-tg.png',
+        url: 'https://www.virzyguns.com',
+        logo: 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png',
         founder: {
             '@type': 'Person',
             name: 'Virzy Guns',
@@ -140,7 +139,7 @@ export default function RootLayout({
     };
 
     return (
-        <html lang="en" className="lenis">
+        <html lang="en" className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
             <head>
                 <script
                     type="application/ld+json"

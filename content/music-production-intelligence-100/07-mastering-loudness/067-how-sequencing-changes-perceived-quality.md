@@ -32,22 +32,22 @@ Humanizer status: passed
 - European Broadcasting Union. EBU R 128 loudness normalisation and permitted maximum level.
   - URL: https://tech.ebu.ch/publications/r128/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: LUFS, loudness range, true peak descriptors
 - International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level.
   - URL: https://www.itu.int/rec/R-REC-BS.1770/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2006
   - Use: loudness measurement and true peak
 - Spotify for Artists. Loudness normalization.
   - URL: https://artists.spotify.com/help/article/loudness-normalization
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: streaming loudness behavior
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: mastering judgment, dynamics, translation
 
 ## Visual design system
@@ -82,72 +82,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Sequencing changes perceived quality
+Headline: [Sequencing changes] perceived quality
 
-Support: A bad transition can make a great mix sound like an amateur mistake.
+Support: A [bad transition] can make a great mix sound like an amateur mistake.
 
 Visual: A timeline sequence with gaps marked in cyan between audio blocks.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Using identical gaps for every song
+Headline: The trap: Using [identical gaps] for every song
 
-Support: Applying an arbitrary two-second gap between songs ignores the emotional transition and tempo relationship of the tracks.
+Support: [Applying an] arbitrary two-second gap between songs ignores the emotional transition and tempo relationship of the tracks.
 
 Visual: A track list with generic two-second gap markings highlighted in warning red.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Loudness memory resets slowly
+Headline: The ear: Loudness [memory resets] slowly
 
-Support: The auditory system uses the previous track's spectral balance and loudness as a reference point, making sudden jumps feel jarring.
+Support: The auditory system uses the previous track's spectral balance and loudness as a [reference] point, making sudden jumps feel jarring.
 
 Visual: A graph showing loudness memory fading slowly over a transition gap.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How context affects loudness memory
+Headline: How [context affects] loudness memory
 
-Support: Auditory habituation causes our hearing to adapt to average levels. The perceived impact of a song depends on the preceding track's dynamics.
+Support: Auditory [habituation] causes our hearing to adapt to average levels. The perceived impact of a song depends on the preceding track's dynamics.
 
 Visual: A comparison diagram showing two adjacent track waveforms with level differences.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: The ear carries memory between tracks
+Headline: The ear [carries memory] between tracks
 
-Support: Utilize transition gaps to guide the listener's expectations and emotional response, letting the silence act as a palate cleanser.
+Support: Utilize transition gaps to guide the listener's expectations and emotional response, letting the [silence] act as a palate cleanser.
 
 Visual: A timeline view showing a waveform tail fading out into a silent gap.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Space tracks using loudness memory
+Headline: [Space tracks] using loudness memory
 
-Support: Adjust the duration of silence gaps relative to the song tempos. High-tempo tracks require tighter gaps than slow ballads.
+Support: Adjust the duration of silence gaps relative to the [song tempos]. High-tempo tracks require tighter gaps than slow ballads.
 
 Visual: A DAW timeline with custom gap width sliders in cyan.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Listen to transition zones without volume edits
+Headline: Listen to [transition zones] without volume edits
 
-Support: Play the transition zone between tracks without adjusting your monitor level, evaluating the relative scale and spectral balance.
+Support: [Play the] transition zone between tracks without adjusting your monitor level, evaluating the relative scale and spectral balance.
 
 Visual: An A/B playback screen showing transition sections highlighted.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify flow on phone speakers
+Headline: Verify flow on phone [speakers]
 
-Support: Check the transitions on consumer earbuds. The shift in low-frequency energy and stereo width should feel natural and intentional.
+Support: Check the transitions on consumer earbuds. The shift in low-frequency energy and stereo width should [feel natural] and intentional.
 
 Visual: A mobile music player interface showing track playback.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Let transitions feel intentional
+Headline: Let transitions [feel intentional]
 
-Support: Retain transition spacing only if the shift in energy between songs feels like an intentional narrative progression.
+Support: Retain transition spacing only if the shift in [energy] between songs feels like an intentional narrative progression.
 
 Visual: A timeline path with two track blocks flowing smoothly.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
+Headline: [Save this] before chasing another loudness number.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: album sequence strip changing the first impression. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -158,157 +158,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Sequencing changes perceived quality
-- A bad transition can make a great mix sound like an amateur mistake.
+- [Sequencing changes] perceived quality
+- A [bad transition] can make a great mix sound like an amateur mistake.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of timeline sequence with gaps marked in cyan between audio blocks in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: Sequencing changes
-Support accent: bad transition
+Headline accent: [Sequencing changes]
+Support accent: [bad transition]
 Motion cue: Timeline playhead moves across a gap between two audio blocks.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Using identical gaps for every song
-- Applying an arbitrary two-second gap between songs ignores the emotional transition and tempo relationship of the tracks.
+- The trap: Using [identical gaps] for every song
+- [Applying an] arbitrary two-second gap between songs ignores the emotional transition and tempo relationship of the tracks.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of track list with generic two-second gap markings highlighted in warning red with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: identical gaps
-Support accent: ignores energy
+Headline accent: [identical gaps]
+Support accent: [Applying an]
 Motion cue: Red gap markers flash on the track list.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Loudness memory resets slowly
-- The auditory system uses the previous track's spectral balance and loudness as a reference point, making sudden jumps feel jarring.
+- The ear: Loudness [memory resets] slowly
+- The auditory system uses the previous track's spectral balance and loudness as a [reference] point, making sudden jumps feel jarring.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of graph showing loudness memory fading slowly over transition gap with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: memory resets
-Support accent: reference level
+Headline accent: [memory resets]
+Support accent: [reference]
 Motion cue: A line graph curves downward slowly across a timeline gap.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How context affects loudness memory
-- Auditory habituation causes our hearing to adapt to average levels. The perceived impact of a song depends on the preceding track's dynamics.
+- How [context affects] loudness memory
+- Auditory [habituation] causes our hearing to adapt to average levels. The perceived impact of a song depends on the preceding track's dynamics.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent:
-Support accent:
-Motion cue:
-Reference line:
+Visual direction: Premium technical diagram of on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent: [context affects]
+Support accent: [habituation]
+Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Reference line: Refs: European Broadcasting Union 2011 | URL: https://tech 2011 | Type: official standard 2011 | Year/access: 2011 | Use: LUFS, loudness range, true peak descriptors 2011 | International Telecommunication Union 2006 | URL: https://www 2006 | Type: official standard 2011 | Year/access: 2011 | Use: loudness measurement and true peak 2011 | Spotify for Artists 2020 | URL: https://artists 2020 | Type: official platform documentation 2011 | Year/access: 2011 | Use: streaming loudness behavior 2011 | Katz 2013 | URL: https://www 2006 | Type: named expert / established book 2011 | Year/access: 2011 | Use: mastering judgment, dynamics, translation 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- The ear carries memory between tracks
-- Utilize transition gaps to guide the listener's expectations and emotional response, letting the silence act as a palate cleanser.
+- The ear [carries memory] between tracks
+- Utilize transition gaps to guide the listener's expectations and emotional response, letting the [silence] act as a palate cleanser.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of timeline view showing waveform tail fading out into silent gap. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: carries memory
-Support accent: silence breathe
+Headline accent: [carries memory]
+Support accent: [silence]
 Motion cue: Waveform tail fades out slowly in cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Space tracks using loudness memory
-- Adjust the duration of silence gaps relative to the song tempos. High-tempo tracks require tighter gaps than slow ballads.
+- [Space tracks] using loudness memory
+- Adjust the duration of silence gaps relative to the [song tempos]. High-tempo tracks require tighter gaps than slow ballads.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of DAW timeline with custom gap width sliders in cyan. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: Space tracks
-Support accent: song tempos
+Headline accent: [Space tracks]
+Support accent: [song tempos]
 Motion cue: Gap slider expands and contracts to show custom spacing.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Listen to transition zones without volume edits
-- Play the transition zone between tracks without adjusting your monitor level, evaluating the relative scale and spectral balance.
+- Listen to [transition zones] without volume edits
+- [Play the] transition zone between tracks without adjusting your monitor level, evaluating the relative scale and spectral balance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of An A/B playback screen showing transition sections highlighted. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: transition zones
-Support accent: without volume edits
+Headline accent: [transition zones]
+Support accent: [Play the]
 Motion cue: Playhead sweeps through the transition zone.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify flow on phone speakers
-- Check the transitions on consumer earbuds. The shift in low-frequency energy and stereo width should feel natural and intentional.
+- Verify flow on phone [speakers]
+- Check the transitions on consumer earbuds. The shift in low-frequency energy and stereo width should [feel natural] and intentional.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of mobile music player interface showing track playback. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: album flow
-Support accent: feel natural
+Headline accent: [speakers]
+Support accent: [feel natural]
 Motion cue: Track name updates on the phone screen.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Let transitions feel intentional
-- Retain transition spacing only if the shift in energy between songs feels like an intentional narrative progression.
+- Let transitions [feel intentional]
+- Retain transition spacing only if the shift in [energy] between songs feels like an intentional narrative progression.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of timeline path with track blocks flowing smoothly with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: feel intentional
-Support accent: like a choice
+Headline accent: [feel intentional]
+Support accent: [energy]
 Motion cue: Timeline blocks pulse in cyan sequence.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before chasing another loudness number.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before chasing another loudness number.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013

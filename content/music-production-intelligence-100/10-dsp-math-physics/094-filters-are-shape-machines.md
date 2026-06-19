@@ -43,22 +43,22 @@ Humanizer status: passed
 - Smith. Spectral Audio Signal Processing. CCRMA, Stanford.
   - URL: https://ccrma.stanford.edu/~jos/sasp/
   - Type: open textbook
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: FFT, STFT, filters, spectral analysis
 - Smith. Introduction to Digital Filters with Audio Applications. CCRMA, Stanford.
   - URL: https://ccrma.stanford.edu/~jos/filters/
   - Type: open textbook
-  - Year/access: accessed 2026
+  - Year/access: 2007
   - Use: filters, resonance, phase response
 - MIT OpenCourseWare. Signals and Systems.
   - URL: https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/
   - Type: official course material
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: systems, convolution, frequency response
 - MIT OpenCourseWare. Vibrations and Waves.
   - URL: https://ocw.mit.edu/courses/8-03sc-physics-iii-vibrations-and-waves-fall-2016/
   - Type: official course material
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: waves, resonance, phase, interference
 
 ## Visual design system
@@ -93,45 +93,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Filters are shape machines
-Support: Steep filter cuts introduce transient phase smearing.
+Headline: [Filters] are shape machines
+Support: Steep filter cuts introduce [transient] phase smearing.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Over filtering low-end
-Support: High-passing every track to clean up mud causes phase smearing. Steep filters distort transient timing and reduce the punch of your drums.
+Headline: [Over filtering] low-end
+Support: High-passing every track to clean up mud causes phase smearing. Steep filters distort [transient] timing and reduce the punch of your drums.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Phase shifts weaken transients
-Support: Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this group delay as a loss of transient clarity and low-end definition.
+Headline: Phase shifts weaken [transients]
+Support: Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this [group delay] as a loss of transient clarity and low-end definition.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Filter phase response
-Support: Recursive digital filters sum delayed signals to attenuate frequencies. This delay introduces phase shifts that change the timing of frequency components.
+Headline: [Filter] phase response
+Support: Recursive digital filters sum delayed signals to attenuate [frequencies]. This delay introduces phase shifts that change the timing of frequency components.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Gentle cuts sound musical
-Support: Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less phase distortion and blend tracks more naturally.
+Headline: Gentle cuts [sound] musical
+Support: Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less [phase] distortion and blend tracks more naturally.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Use shelves instead of high-passes
-Support: Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing group delay.
+Headline: Use [shelves instead] of high-passes
+Support: Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing [group delay].
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The transient correlation check
-Support: Toggle a high-pass filter on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
+Headline: The [transient] correlation check
+Support: Toggle a [high-pass filter] on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check phase alignment in mono
-Support: Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused phase cancellation in the sub-bass.
+Headline: Check [phase alignment] in mono
+Support: Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused [phase cancellation] in the sub-bass.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Use minimum cuts to preserve phase
-Support: Apply the gentlest filter slope possible to achieve clean separation. Protect the phase alignment of your low-frequency transients.
+Headline: Use minimum cuts to preserve [phase]
+Support: Apply the gentlest filter slope possible to achieve clean separation. Protect the [phase alignment] of your low-frequency transients.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to clean up your filter cuts
+Headline: [Save this] to clean up your filter cuts
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -140,157 +140,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Filters are shape machines
-- Steep filter cuts introduce transient phase smearing.
+- [Filters] are shape machines
+- Steep filter cuts introduce [transient] phase smearing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A high-pass filter slope showing transient time delay in red. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Filters
-Support accent: smearing.
+Headline accent: [Filters]
+Support accent: [transient]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Over filtering low-end
-- High-passing every track to clean up mud causes phase smearing. Steep filters distort transient timing and reduce the punch of your drums.
+- [Over filtering] low-end
+- High-passing every track to clean up mud causes phase smearing. Steep filters distort [transient] timing and reduce the punch of your drums.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a steep 24 dB filter curve cutting off the low-end, marked by a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [Over filtering]
+Support accent: [transient]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Phase shifts weaken transients
-- Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this group delay as a loss of transient clarity and low-end definition.
+- Phase shifts weaken [transients]
+- Minimum-phase EQs introduce time delay at the filter cutoff. The ear hears this [group delay] as a loss of transient clarity and low-end definition.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass screen showing a waveform displaying smeared, blunted transient peaks. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [transients]
+Support accent: [group delay]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Filter phase response
-- Recursive digital filters sum delayed signals to attenuate frequencies. This delay introduces phase shifts that change the timing of frequency components.
+- [Filter] phase response
+- Recursive digital filters sum delayed signals to attenuate [frequencies]. This delay introduces phase shifts that change the timing of frequency components.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of the phase shift diagram showing phase angle delay at the filter cutoff. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [Filter]
+Support accent: [frequencies]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Gentle cuts sound musical
-- Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less phase distortion and blend tracks more naturally.
+- Gentle cuts [sound] musical
+- Use 6 dB or 12 dB per octave slopes instead of steep 24 dB cuts. Gentle slopes introduce less [phase] distortion and blend tracks more naturally.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a gentle 6 dB filter curve blending two tracks together smoothly. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [sound]
+Support accent: [phase]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Use shelves instead of high-passes
-- Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing group delay.
+- Use [shelves instead] of high-passes
+- Apply low-shelf attenuation instead of steep high-pass filters on instruments. This reduces low-frequency build-up without introducing [group delay].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A low-shelf EQ curve showing 3 dB attenuation in cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [shelves instead]
+Support accent: [group delay]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The transient correlation check
-- Toggle a high-pass filter on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
+- The [transient] correlation check
+- Toggle a [high-pass filter] on a snare drum track. Listen for a change in the weight of the transient hit. If it thins out, bypass the filter.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a snare drum transient waveform with a bypass toggle switch. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [transient]
+Support accent: [high-pass filter]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check phase alignment in mono
-- Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused phase cancellation in the sub-bass.
+- Check [phase alignment] in mono
+- Sum your low-end tracks to mono with and without high-pass filters. Ensure the filters have not caused [phase cancellation] in the sub-bass.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Two low-frequency waveforms summed to mono showing cancellation gaps. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [phase alignment]
+Support accent: [phase cancellation]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Use minimum cuts to preserve phase
-- Apply the gentlest filter slope possible to achieve clean separation. Protect the phase alignment of your low-frequency transients.
+- Use minimum cuts to preserve [phase]
+- Apply the gentlest filter slope possible to achieve clean separation. Protect the [phase alignment] of your low-frequency transients.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean filter schematic showing minimum-phase processing lines. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [phase]
+Support accent: [phase alignment]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to clean up your filter cuts
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to clean up your filter cuts
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2016

@@ -85,72 +85,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: A melody needs a question mark
+Headline: A [melody needs] a question mark
 
-Support: A melody can lean forward before the lyric explains anything.
+Support: A [melody can] lean forward before the lyric explains anything.
 
 Visual: 
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Resolving every melody line too soon
+Headline: [Resolving every melody] line too soon
 
-Support: If every phrase lands on the root note immediately, the song feels static and the momentum dies.
+Support: If every [phrase] lands on the root note immediately, the song feels static and the momentum dies.
 
 Visual: 
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear wants to resolve the puzzle
+Headline: The [ear wants] to resolve the puzzle
 
-Support: A melody is a story, and listeners will stay locked in just to hear the final resolution.
+Support: A [melody] is a story, and listeners will stay locked in just to hear the final resolution.
 
 Visual: 
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Melodic tension and the urge for resolution
+Headline: [Melodic tension] and the urge for resolution
 
-Support: Cognitive science shows that unresolved notes keep the auditory cortex active, creating anticipation.
+Support: [Cognitive science shows] that unresolved notes keep the auditory cortex active, creating anticipation.
 
 Visual: 
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: The best melodic question sounds obvious after it resolves
+Headline: The [best melodic] question sounds obvious after it resolves
 
-Support: The most memorable questions are the ones that make the final resolution feel inevitable and earned.
+Support: The most [memorable] questions are the ones that make the final resolution feel inevitable and earned.
 
 Visual: 
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Delay the note that feels like home
+Headline: [Delay the note] that feels like home
 
-Support: End your verse and pre-chorus phrases on the second or fifth scale degree to leave the listener hanging.
+Support: End your [verse] and pre-chorus phrases on the second or fifth scale degree to leave the listener hanging.
 
 Visual: 
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Sing the phrase with the final note removed
+Headline: [Sing the phrase] with the final note removed
 
-Support: Sing or play your hook and stop right before the final note to feel the physical pull of the tension.
+Support: [Sing or play] your hook and stop right before the final note to feel the physical pull of the tension.
 
 Visual: 
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the melody without the chords
+Headline: Check the [melody] without the chords
 
-Support: If the melody does not feel tense on its own, adding complex chords will only muddy the message.
+Support: If the [melody] does not feel tense on its own, adding complex chords will only muddy the message.
 
 Visual: 
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The chorus earns its release
+Headline: The [chorus earns] its release
 
-Support: Keep the melody open in the verse to pull the listener directly into the chorus.
+Support: Keep the [melody] open in the verse to pull the listener directly into the chorus.
 
 Visual: 
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before writing the next hook.
+Headline: [Save this] before writing the next hook.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: piano-roll melody contour bending into a question mark. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -161,14 +161,14 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- A melody needs a question mark
-- A melody can lean forward before the lyric explains anything.
+- A [melody needs] a question mark
+- A [melody can] lean forward before the lyric explains anything.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Cold open. Tight editorial crop on a premium black notebook with handwritten lyrics in white ink. Next to it, a glowing smartphone with a voice memo waveform on screen. A single cyan melody contour line rises from the notebook and bends into a question mark shape. Moody blue side-lighting from the left. Deep black-blue background with subtle dotted grid. The headline snaps in on the first beat. The support line fades in below. Footer centered at the bottom. Reference line in muted grey at the very bottom.
-Headline accent: A melody needs
-Support accent: A melody can
+Headline accent: [melody needs]
+Support accent: [melody can]
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -177,14 +177,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Resolving every melody line too soon
-- If every phrase lands on the root note immediately, the song feels static and the momentum dies.
+- [Resolving every melody] line too soon
+- If every [phrase] lands on the root note immediately, the song feels static and the momentum dies.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Red neon pressure point. Close-up on a DAW piano roll with multiple melody lines all ending on the same root note. A red warning glow pulses over the root note hits. A single cyan path shows the better unresolved path bending away. Deep black-blue background with dotted grid. Red accent only on the problem area. Headline in white with red accent on "Resolving every melody". Support line in white with red accent on "If every phrase". Footer centered.
-Headline accent: Resolving every melody
-Support accent: If every phrase
+Headline accent: [Resolving every melody]
+Support accent: [phrase]
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the melody question curve.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -193,14 +193,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear wants to resolve the puzzle
-- A melody is a story, and listeners will stay locked in just to hear the final resolution.
+- The [ear wants] to resolve the puzzle
+- A [melody] is a story, and listeners will stay locked in just to hear the final resolution.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Auditory focus path. Extreme close-up of a headphone driver diaphragm with a single glowing cyan light path tracing through it. The path bends into a question mark shape. Deep black-blue background with dotted grid. Glass-like reflections on the headphone. Headline in white with cyan accent on "The ear wants". Support line in white with cyan accent on "A melody is". Footer centered.
-Headline accent: The ear wants
-Support accent: A melody is
+Headline accent: [ear wants]
+Support accent: [melody]
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the melody question curve.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -209,14 +209,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Melodic tension and the urge for resolution
-- Cognitive science shows that unresolved notes keep the auditory cortex active, creating anticipation.
+- [Melodic tension] and the urge for resolution
+- [Cognitive science shows] that unresolved notes keep the auditory cortex active, creating anticipation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. One node is bright cyan (unresolved note), others are dimmed. Dotted grid on the deep black-blue background. Headline in white with cyan accent on "Melodic tension and". Support line in white with cyan accent on "Cognitive science shows". Footer centered.
-Headline accent: Melodic tension and
-Support accent: Cognitive science shows
+Headline accent: [Melodic tension]
+Support accent: [Cognitive science shows]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -225,14 +225,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- The best melodic question sounds obvious after it resolves
-- The most memorable questions are the ones that make the final resolution feel inevitable and earned.
+- The [best melodic] question sounds obvious after it resolves
+- The most [memorable] questions are the ones that make the final resolution feel inevitable and earned.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Taste moment. Single physical brass knob in sharp focus on a wood-grain surface. Warm amber spotlight hits the knob from above. A single cyan melody contour line curves next to it. Deep black-blue background with dotted grid. Headline in white with warm amber accent on "The best melodic". Support line in white with warm amber accent on "The most memorable". Footer centered.
-Headline accent: The best melodic
-Support accent: The most memorable
+Headline accent: [best melodic]
+Support accent: [memorable]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -241,14 +241,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Delay the note that feels like home
-- End your verse and pre-chorus phrases on the second or fifth scale degree to leave the listener hanging.
+- [Delay the note] that feels like home
+- End your [verse] and pre-chorus phrases on the second or fifth scale degree to leave the listener hanging.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: DAW action. Clean DAW interface showing a piano roll with a cursor hovering over a note that is being dragged to a later position. The note is highlighted in cyan. A high-pass filter curve is visible in the background. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Delay the note". Support line in white with cyan accent on "End your verse". Footer centered.
-Headline accent: Delay the note
-Support accent: End your verse
+Headline accent: [Delay the note]
+Support accent: [verse]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -257,14 +257,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Sing the phrase with the final note removed
-- Sing or play your hook and stop right before the final note to feel the physical pull of the tension.
+- [Sing the phrase] with the final note removed
+- [Sing or play] your hook and stop right before the final note to feel the physical pull of the tension.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Matched A/B test. Two parallel glass toggle switches on a dark panel. One switch is cyan and ON, the other is grey and OFF. Level meters next to each switch show matched levels. A single cyan melody contour line is cut off before the final note. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Sing the phrase". Support line in white with cyan accent on "Sing or play". Footer centered.
-Headline accent: Sing the phrase
-Support accent: Sing or play
+Headline accent: [Sing the phrase]
+Support accent: [Sing or play]
 Motion cue: Use a tap, mute, or device-swap action. The melody question curve should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -273,14 +273,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check the melody without the chords
-- If the melody does not feel tense on its own, adding complex chords will only muddy the message.
+- Check the [melody] without the chords
+- If the [melody] does not feel tense on its own, adding complex chords will only muddy the message.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Speaker/translation context checks. Three small icons in a row: a laptop, a car dashboard, and a mono speaker. Each icon has a thin cyan outline. A single cyan melody contour line runs above them, clean and isolated. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Check the melody". Support line in white with cyan accent on "If the melody". Footer centered.
-Headline accent: Check the melody
-Support accent: If the melody
+Headline accent: [melody]
+Support accent: [melody]
 Motion cue: Use a tap, mute, or device-swap action. The melody question curve should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -289,14 +289,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The chorus earns its release
-- Keep the melody open in the verse to pull the listener directly into the chorus.
+- The [chorus earns] its release
+- Keep the [melody] open in the verse to pull the listener directly into the chorus.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line separating "VERSE" (open melody) from "CHORUS" (resolved melody). Thin glass borders around each section. A single cyan melody contour line bends upward in the verse section and resolves downward in the chorus section. Deep black-blue background with dotted grid. Headline in white with cyan accent on "The chorus earns". Support line in white with cyan accent on "Keep the melody". Footer centered.
-Headline accent: The chorus earns
-Support accent: Keep the melody
+Headline accent: [chorus earns]
+Support accent: [melody]
 Motion cue: Hold the frame longer. Let the melody question curve settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -305,13 +305,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before writing the next hook.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before writing the next hook.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone display shows looping plain text: "A melody needs a question mark" in white on black. The phone is on a dark surface with a single cyan reflection. Deep black-blue background with dotted grid. Headline in white with cyan accent on "Save this before". Support line in white with cyan accent on "Follow for daily". Footer centered.
-Headline accent: Delay the resolution
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold the frame longer. Let the melody question curve settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990

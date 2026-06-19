@@ -95,19 +95,19 @@ export function HealingWave() {
                             {/* Feature Grid */}
                             <div className="grid md:grid-cols-3 gap-6">
                                 <FeatureBlock
-                                    title="Frequency Alignment"
-                                    description="Careful frequency shaping for calmer listening sessions."
-                                    icon="â—Ž"
+                                    title="Rhythmic Alignment"
+                                    description="Careful sound shaping for calmer listening sessions."
+                                    icon="01"
                                 />
                                 <FeatureBlock
-                                    title="Brainwave Entrainment"
-                                    description="Layered pulse design for focus, relaxation, or evening listening."
-                                    icon="â—‰"
+                                    title="Pulse Design"
+                                    description="Layered timing, texture, and motion for focus or evening listening."
+                                    icon="02"
                                 />
                                 <FeatureBlock
                                     title="Sonic Clarity"
                                     description="Noise reduction designed to preserve musical detail."
-                                    icon="â—"
+                                    icon="03"
                                 />
                             </div>
                         </div>

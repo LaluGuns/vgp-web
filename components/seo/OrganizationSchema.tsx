@@ -6,18 +6,18 @@ export function OrganizationSchema() {
         '@type': 'MusicProductionCompany',
         name: 'Virzy Guns Production',
         alternateName: 'VGP',
-        url: 'https://virzyguns.com',
+        url: 'https://www.virzyguns.com',
         logo: {
             '@type': 'ImageObject',
-            url: 'https://virzyguns.com/branding/logo-tg.jpg',
-            width: 400,
-            height: 400,
+            url: 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png',
+            width: 1024,
+            height: 1024,
         },
         description: 'Virzy Guns Production is a music-tech ecosystem for songs, premium beats, custom production, functional audio, CADENZ, books, and producer education.',
         founder: {
             '@type': 'Person',
             name: 'Virzy Guns',
-            jobTitle: 'Top 10% songwriter and top 25% producer, founder of Virzy Guns Production',
+            jobTitle: 'Founder and creative director of Virzy Guns Production',
             sameAs: 'https://www.linkedin.com/in/virzyguns/',
         },
         sameAs: [
@@ -31,7 +31,7 @@ export function OrganizationSchema() {
         hasOfferCatalog: {
             '@type': 'OfferCatalog',
             name: 'Beats & Instrumentals',
-            url: 'https://virzyguns.com/studio/beats',
+            url: 'https://www.virzyguns.com/studio/beats',
         },
     };
 
@@ -39,7 +39,7 @@ export function OrganizationSchema() {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Virzy Guns Production',
-        url: 'https://virzyguns.com',
+        url: 'https://www.virzyguns.com',
         description: 'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
         publisher: {
             '@type': 'Organization',
@@ -49,7 +49,7 @@ export function OrganizationSchema() {
             '@type': 'SearchAction',
             target: {
                 '@type': 'EntryPoint',
-                urlTemplate: 'https://virzyguns.com/blog?q={search_term_string}',
+                urlTemplate: 'https://www.virzyguns.com/blog?q={search_term_string}',
             },
             'query-input': 'required name=search_term_string',
         },
@@ -59,12 +59,12 @@ export function OrganizationSchema() {
         '@context': 'https://schema.org',
         '@type': 'Person',
         name: 'Virzy Guns',
-        url: 'https://virzyguns.com/about',
-        jobTitle: 'Top 10% songwriter and top 25% producer',
+        url: 'https://www.virzyguns.com/about',
+        jobTitle: 'Founder and creative director of Virzy Guns Production',
         worksFor: {
             '@type': 'Organization',
             name: 'Virzy Guns Production',
-            url: 'https://virzyguns.com',
+            url: 'https://www.virzyguns.com',
         },
         knowsAbout: [
             'songwriting',

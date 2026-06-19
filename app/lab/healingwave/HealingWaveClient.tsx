@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { m } from 'framer-motion';
-import { Activity, AudioLines, Clock, Focus, Timer } from 'lucide-react';
+import { Activity, AudioLines, Focus, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     EditorialButton,
@@ -31,7 +31,7 @@ export default function HealingWaveClient() {
                 />
 
                 <SectionShell className="pt-4">
-                    <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+                    <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-start">
                         <m.div
                             variants={revealUp}
                             initial="hidden"
@@ -39,13 +39,13 @@ export default function HealingWaveClient() {
                             viewport={{ once: true }}
                             className="liquid-glass-strong rounded-lg p-6 sm:p-8"
                         >
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
                                 Lab Thesis
                             </p>
                             <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
                                 Sound with purpose, handled carefully.
                             </h2>
-                            <p className="mt-5 text-base leading-8 text-white/60">
+                            <p className="mt-5 text-base leading-8 text-white/75">
                                 HealingWave is a VGP lab for focus music, recovery listening, cadence music, meditation, and study sessions. It keeps the language careful and does not overpromise what sound can do.
                             </p>
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -59,26 +59,25 @@ export default function HealingWaveClient() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            className="liquid-glass overflow-hidden rounded-lg"
+                            className="liquid-glass mx-auto w-full max-w-[28rem] overflow-hidden rounded-lg lg:mr-0"
                         >
-                            <div className="relative min-h-[24rem]">
+                            <div className="relative aspect-[575/1024] bg-[#02070c]">
                                 <Image
                                     src="/images/CADENZ_POSTER.jpg"
                                     alt="CADENZ by HealingWave Lab visual preview"
                                     fill
-                                    sizes="(min-width: 1024px) 620px, 92vw"
-                                    className="object-cover opacity-80"
+                                    sizes="(min-width: 1024px) 448px, 88vw"
+                                    className="object-contain"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#030405] via-[#030405]/35 to-transparent" />
-                                <div className="absolute bottom-0 left-0 right-0 p-6">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100/70">
-                                        First HealingWave Product
-                                    </p>
-                                    <h3 className="mt-3 text-2xl font-semibold text-white">CADENZ is coming soon.</h3>
-                                    <p className="mt-2 text-sm leading-6 text-white/60">
-                                        UI built. Backend in progress.
-                                    </p>
-                                </div>
+                            </div>
+                            <div className="border-t border-white/10 p-6">
+                                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100/75">
+                                    First HealingWave product
+                                </p>
+                                <h3 className="mt-3 text-2xl font-semibold text-white">CADENZ is coming soon.</h3>
+                                <p className="mt-3 text-sm leading-7 text-white/70">
+                                    Cadence-first original music for running and cycling.
+                                </p>
                             </div>
                         </m.div>
                     </div>
@@ -86,8 +85,8 @@ export default function HealingWaveClient() {
 
                 <SectionShell>
                     <div className="mb-10 max-w-3xl">
-                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
-                            Modules
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/70">
+                            Listening experiences
                         </p>
                         <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
                             The lab is organized around real listening use cases.
@@ -113,43 +112,30 @@ export default function HealingWaveClient() {
                                         <div className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
                                             <Icon className="h-5 w-5" aria-hidden="true" />
                                         </div>
-                                        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
-                                            {module.status}
-                                        </span>
+                                        <span className="text-xs font-semibold tabular-nums text-white/55">0{index + 1}</span>
                                     </div>
-                                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/50">
+                                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">
                                         {module.platform}
                                     </p>
+                                    {module.availability && (
+                                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-sky-100/80">
+                                            {module.availability}
+                                        </p>
+                                    )}
                                     <h3 className="text-xl font-semibold text-white">{module.name}</h3>
-                                    <p className="mt-4 text-sm leading-7 text-white/50">{module.description}</p>
+                                    <p className="mt-4 text-sm leading-7 text-white/70">{module.description}</p>
                                     <div className="mt-6 flex flex-wrap gap-2">
                                         {module.features.map((feature) => (
                                             <span
                                                 key={feature}
-                                                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/50"
+                                                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70"
                                             >
                                                 {feature}
                                             </span>
                                         ))}
                                     </div>
                                     <div className="mt-auto border-t border-white/[0.08] pt-5">
-                                        <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-[0.14em] text-white/40">
-                                            <span>Progress</span>
-                                            <span>{module.progress}%</span>
-                                        </div>
-                                        <div className="h-1 overflow-hidden rounded-full bg-white/[0.08]">
-                                            <m.div
-                                                className="h-full rounded-full bg-gradient-to-r from-sky-200 to-blue-400"
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: `${module.progress}%` }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                                            />
-                                        </div>
-                                        <p className="mt-3 inline-flex items-center gap-2 text-xs text-white/50">
-                                            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-                                            {module.eta}
-                                        </p>
+                                        <p className="text-sm leading-7 text-white/70">{module.note}</p>
                                     </div>
                                 </m.article>
                             );
@@ -159,14 +145,14 @@ export default function HealingWaveClient() {
 
                 <SectionShell className="pb-24">
                     <div className="liquid-glass-strong rounded-lg p-6 text-center sm:p-8">
-                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/70">
                             Stay Updated
                         </p>
                         <h2 className="font-display text-4xl font-normal leading-[1.02] text-white sm:text-5xl">
                             Follow the first HealingWave release.
                         </h2>
-                        <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/60">
-                            Join VGP updates for CADENZ progress, lab notes, and release information when it is ready.
+                        <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/75">
+                            Join VGP updates for CADENZ news, HealingWave notes, and release information when it is ready.
                         </p>
                         <div className="mt-8 flex justify-center">
                             <EditorialButton onClick={openPopup}>Join Updates</EditorialButton>

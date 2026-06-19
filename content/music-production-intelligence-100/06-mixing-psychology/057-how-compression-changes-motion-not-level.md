@@ -42,7 +42,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 
 
@@ -79,44 +79,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Compression changes motion before level
-Support: Compression can make a sound move differently, even at the same loudness.
+Headline: Compression [changes motion] before level
+Support: Compression can make a sound [move differently, even] at the same loudness.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Squashing the life out of transients
-Support: Using compression as a static volume control flattens the transient life of your track.
+Headline: [Squashing the life] out of transients
+Support: Using [compression] as a static volume control flattens the transient life of your track.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Improper release timings kill rhythm
-Support: The listener hears a lifeless, squashed performance with no rhythmic pulse or groove.
+Headline: Improper release timings [kill rhythm]
+Support: The [listener hears] a lifeless, squashed performance with no rhythmic pulse or groove.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Dynamic range control shapes transient envelopes
-Support: Compressors shape transient envelopes, altering the attack-to-sustain ratio to create movement.
+Headline: Dynamic range control [shapes transient envelopes]
+Support: [Compressors] shape transient envelopes, altering the attack-to-sustain ratio to create movement.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Compression is timing pressure
-Support: Set attack and release times to match the song tempo and drive the rhythm.
+Headline: Compression is [timing pressure]
+Support: Set attack and [release] times to match the song tempo and drive the rhythm.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Listen to envelope movement before makeup gain
-Support: Adjust the compressor release time so the gain reduction meter returns to zero before the next beat.
+Headline: Listen to envelope movement before [makeup gain]
+Support: Adjust the [compressor] release time so the gain reduction meter returns to zero before the next beat.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Bypass makeup gain and compare the groove
-Support: Bypass the compressor to check if the track groove improves or stiffens.
+Headline: Bypass makeup gain and [compare the groove]
+Support: Bypass the [compressor] to check if the track groove improves or stiffens.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the groove at low volume
-Support: Listen to the dynamic motion on small speakers to ensure the groove translates.
+Headline: Check the groove at [low volume]
+Support: Listen to the dynamic motion on small [speakers] to ensure the groove translates.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The part sits with the beat
-Support: Use compression to shape transient envelopes and reinforce the song's tempo.
+Headline: The part [sits with the beat]
+Support: Use [compression] to shape transient envelopes and reinforce the song's tempo.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next compression session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next compression session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: compressor needle tracing motion instead of volume. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -127,157 +127,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Compression changes motion before level
-- Compression can make a sound move differently, even at the same loudness.
+- Compression [changes motion] before level
+- Compression can make a sound [move differently, even] at the same loudness.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed compressor needle tracing motion instead of volume, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: changes motion before
-Support accent: move differently, even
+Headline accent: [changes motion]
+Support accent: [move differently, even]
 Motion cue: First 0.5 seconds: quick punch-in on the motion needle, then kinetic headline reveal.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Squashing the life out of transients
-- Using compression as a static volume control flattens the transient life of your track.
+- [Squashing the life] out of transients
+- Using [compression] as a static volume control flattens the transient life of your track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: squashing the life
-Support accent: destroys the initial
+Headline accent: [Squashing the life]
+Support accent: [compression]
 Motion cue: A fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the motion needle.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Improper release timings kill rhythm
-- The listener hears a lifeless, squashed performance with no rhythmic pulse or groove.
+- Improper release timings [kill rhythm]
+- The [listener hears] a lifeless, squashed performance with no rhythmic pulse or groove.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: kill rhythm
-Support accent: remains clamped down
+Headline accent: [kill rhythm]
+Support accent: [listener hears]
 Motion cue: One signal path draws first, then the supporting detail fades in around it.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Dynamic range control shapes transient envelopes
-- Compressors shape transient envelopes, altering the attack-to-sustain ratio to create movement.
+- Dynamic range control [shapes transient envelopes]
+- [Compressors] shape transient envelopes, altering the attack-to-sustain ratio to create movement.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed compressor needle tracing motion instead of volume is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: shapes transient envelopes
-Support accent: dictates the volume
+Headline accent: [shapes transient envelopes]
+Support accent: [Compressors]
 Motion cue: Science model builds one node at a time with no fake values.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Compression is timing pressure
-- Set attack and release times to match the song tempo and drive the rhythm.
+- Compression is [timing pressure]
+- Set attack and [release] times to match the song tempo and drive the rhythm.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: timing pressure
-Support accent: tail of a note
+Headline accent: [timing pressure]
+Support accent: [release]
 Motion cue: Visual changes to highlight the dynamic pump with a soft bloom.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Listen to envelope movement before makeup gain
-- Adjust the compressor release time so the gain reduction meter returns to zero before the next beat.
+- Listen to envelope movement before [makeup gain]
+- Adjust the [compressor] release time so the gain reduction meter returns to zero before the next beat.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: before makeup gain
-Support accent: feel the dynamic
+Headline accent: [makeup gain]
+Support accent: [compressor]
 Motion cue: A clean indicator light pulses to show the fader adjustment.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Bypass makeup gain and compare the groove
-- Bypass the compressor to check if the track groove improves or stiffens.
+- Bypass makeup gain and [compare the groove]
+- Bypass the [compressor] to check if the track groove improves or stiffens.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: compare the groove
-Support accent: Toggle the compressor
+Headline accent: [compare the groove]
+Support accent: [compressor]
 Motion cue: A/B mute switch toggles at matched level with the meters held honest.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check the groove at low volume
-- Listen to the dynamic motion on small speakers to ensure the groove translates.
+- Check the groove at [low volume]
+- Listen to the dynamic motion on small [speakers] to ensure the groove translates.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed compressor needle tracing motion instead of volume is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: low volume
-Support accent: transient snap still
+Headline accent: [low volume]
+Support accent: [speakers]
 Motion cue: A single wave vector emerges showing the dynamic spikes.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The part sits with the beat
-- Use compression to shape transient envelopes and reinforce the song's tempo.
+- The part [sits with the beat]
+- Use [compression] to shape transient envelopes and reinforce the song's tempo.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: sits with the beat
-Support accent: rhythmic glue
+Headline accent: [sits with the beat]
+Support accent: [compression]
 Motion cue: Hold the frame longer. Let the motion needle settle, then use a small cyan pulse on the final accented phrase.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next compression session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next compression session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed compressor needle tracing motion instead of volume is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Shape your dynamic
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: The text fades in slowly, settling into a clean final frame.
-Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior accessed 2026
+Reference line: Refs: Ronan et al. 2018 | Bregman 1990 | Senior 2011

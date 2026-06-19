@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
 
 export const metadata: Metadata = {
-    title: 'About Virzy Guns | Top 10% Songwriter, Top 25% Producer',
+    title: 'About Virzy Guns | Founder of Virzy Guns Production',
     description:
-        'Virzy Guns is ranked top 10% songwriter and top 25% producer, plus beatmaker and founder of Virzy Guns Production, a music-tech ecosystem for songs, premium beats, functional audio, CADENZ, books, and producer education.',
+        'Meet Virzy Guns, founder and creative director of a music-tech ecosystem spanning VGP Studio, HealingWave Lab, CADENZ, books, and producer education.',
     keywords: [
         'Virzy Guns',
         'top 10% songwriter',
@@ -19,10 +19,10 @@ export const metadata: Metadata = {
         canonical: '/about',
     },
     openGraph: {
-        title: 'About Virzy Guns | Top 10% Songwriter, Top 25% Producer',
+        title: 'About Virzy Guns | Founder of Virzy Guns Production',
         description:
-            'Meet Virzy Guns, ranked top 10% songwriter and top 25% producer behind VGP, HealingWave Lab, CADENZ, books, premium beats, and producer education.',
-        url: 'https://virzyguns.com/about',
+            'Meet the founder behind VGP Studio, HealingWave Lab, CADENZ, books, premium beats, and producer education.',
+        url: 'https://www.virzyguns.com/about',
     },
 };
 

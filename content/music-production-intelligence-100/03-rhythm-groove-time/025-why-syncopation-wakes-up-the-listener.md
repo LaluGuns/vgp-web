@@ -22,7 +22,7 @@ Humanizer status: passed
 - MIT OpenCourseWare. Vibrations and Waves.
   - URL: https://ocw.mit.edu/courses/8-03sc-physics-iii-vibrations-and-waves-fall-2016/
   - Type: official course material
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: waves, resonance, phase, interference
 - Huron. Sweet Anticipation: Music and the Psychology of Expectation. MIT Press. 2006.
   - URL: https://mitpress.mit.edu/9780262582780/sweet-anticipation/
@@ -61,232 +61,233 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 
 ## 10-slide script
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Syncopation wakes up a bored ear
+Headline: Syncopation [wakes up a bored] ear
 
-Support: Standard rhythms get ignored.
+Support: [Standard rhythms] get ignored.
 
 Visual: syncopated hit flashing off the expected beat. Show cold open with the raw state visible before the viewer reads the full headline. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Repeating simple patterns causes listener fatigue
+Headline: Repeating simple patterns causes [listener fatigue]
 
-Support: Repeating standard downbeat patterns causes the brain to ignore the rhythm, leading to listener fatigue.
+Support: Repeating standard downbeat patterns causes the [brain] to ignore the rhythm, leading to listener fatigue.
 
 Visual: syncopated hit flashing off the expected beat. Show red pressure mark appears on the false fix while the better path stays cyan. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The brain pays attention to offbeats
+Headline: The brain pays [attention to offbeats]
 
-Support: The auditory system monitors rhythmic grids, generating dopamine when an expected beat is delayed or displaced.
+Support: The auditory system monitors rhythmic grids, generating [dopamine] when an expected beat is delayed or displaced.
 
 Visual: syncopated hit flashing off the expected beat. Show one signal path draws first, then the supporting detail fades in around it. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Expectation violation triggers immediate focus
+Headline: Expectation violation [triggers immediate focus]
 
-Support: Huron's expectation theory shows that offbeat syncopation delays prediction fulfillment, increasing tension and listener satisfaction upon resolution.
+Support: Huron's expectation theory shows that offbeat syncopation delays prediction fulfillment, increasing [tension] and listener satisfaction upon resolution.
 
 Visual: syncopated hit flashing off the expected beat. Show science model builds one node at a time with no fake values. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Syncopation is a controlled surprise
+Headline: Syncopation is a [controlled surprise]
 
-Support: Introduce syncopated accents on secondary instruments while keeping the main pulse stable to anchor the listener.
+Support: [Introduce syncopated] accents on secondary instruments while keeping the main pulse stable to anchor the listener.
 
 Visual: syncopated hit flashing off the expected beat. Show human taste setting lands as one knob or dial is adjusted. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Move one accent off the obvious beat
+Headline: [Move one accent] off the obvious beat
 
-Support: Move a snare or synth stab from the beat 4 downbeat to the preceding 16th-note upbeat.
+Support: [Move a] snare or synth stab from the beat 4 downbeat to the preceding 16th-note upbeat.
 
 Visual: syncopated hit flashing off the expected beat. Show cursor performs the production move once, clearly, on the interface. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Mute the offbeat sound and feel the energy drop
+Headline: Mute the offbeat sound and [feel the energy drop]
 
-Support: Mute the syncopated element to check if the groove loses its drive or if the rhythm becomes predictable.
+Support: [Mute the] syncopated element to check if the groove loses its drive or if the rhythm becomes predictable.
 
 Visual: syncopated hit flashing off the expected beat. Show A/B split contrast between the raw and modified versions on screen. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check syncopation with a rhythmic click
+Headline: Check syncopation with a [rhythmic click]
 
-Support: Sum the mix to mono to verify that the syncopated accent does not disappear behind main channel elements.
+Support: Sum the mix to [mono] to verify that the syncopated accent does not disappear behind main channel elements.
 
 Visual: syncopated hit flashing off the expected beat. Show wireframe devices enter as separate translation checks. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The groove asks for attention
+Headline: The groove [asks for attention]
 
-Support: Use syncopation to break metric expectations, but keep the underlying pulse clear to avoid confusing the listener.
+Support: Use [syncopation to] break metric expectations, but keep the underlying pulse clear to avoid confusing the listener.
 
 Visual: syncopated hit flashing off the expected beat. Show rule locks into a simple visual diagram with green indicators. Keep it premium, dark, specific, and readable in one glance.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before quantizing your next beat
+Headline: [Save this] before quantizing your next beat
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: syncopated hit flashing off the expected beat. Show the final decision as a clean plain-text closing frame, ready for the loop. Keep it premium, dark, specific, and readable in one glance.
 
 ## 10-slide image prompts
+
 ### Prompt 1, THE HOOK
 Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Syncopation wakes up a bored ear
-- Standard rhythms get ignored.
+- Syncopation [wakes up a bored] ear
+- [Standard rhythms] get ignored.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a 3D visualization representing syncopated hit flashing off the expected beat. A sleek, dark-blue glass panel displays the offbeat flash with a glowing cyan and electric-blue outline. Warm amber side-lighting casts a soft bloom across a dark-titanium grid. Apple editorial aesthetic, subtle dotted grid texture on a matte-black background, 35% negative space, shallow depth of field.
-Headline accent: wakes up a bored
-Support accent: Standard rhythms get
+Headline accent: [wakes up a bored]
+Support accent: [Standard rhythms]
 Motion cue: First 0.5 seconds: quick punch-in on the syncopated hit flashing off the expected beat, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 2, THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Repeating simple patterns causes listener fatigue
-- Repeating standard downbeat patterns causes the brain to ignore the rhythm, leading to listener fatigue.
+- Repeating simple patterns causes [listener fatigue]
+- Repeating standard downbeat patterns causes the [brain] to ignore the rhythm, leading to listener fatigue.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of a digital grid displaying syncopated hit flashing off the expected beat. A rigid, math-perfect alignment is highlighted with a soft red neon stroke, indicating the robotic trap. The dark-titanium interface features glass panels, with the correct groove paths dimmed. Apple editorial aesthetic, subtle dotted grid texture, dramatic shadows, 35% negative space.
-Headline accent: listener fatigue
-Support accent: predictable and flat
+Headline accent: [listener fatigue]
+Support accent: [brain]
 Motion cue: A rapid transition showing a red alert fade-in on the problem area of the syncopated hit flashing off the expected beat layout.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 3, THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The brain pays attention to offbeats
-- The auditory system monitors rhythmic grids, generating dopamine when an expected beat is delayed or displaced.
+- The brain pays [attention to offbeats]
+- The auditory system monitors rhythmic grids, generating [dopamine] when an expected beat is delayed or displaced.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Conceptual 3D diagram showing the auditory focus path of syncopated hit flashing off the expected beat. A glowing cyan signal wave flows through a semi-transparent glass model of the human auditory pathway. Muted side-lighting and shallow depth of field highlight the moment of perception. Apple editorial aesthetic, dark-blue canvas, dotted grid background, 30% negative space.
-Headline accent: attention to offbeats
-Support accent: break the repetitive
+Headline accent: [attention to offbeats]
+Support accent: [dopamine]
 Motion cue: A wave pulse expands outward from the center, lighting up the cyan syncopated hit flashing off the expected beat elements.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 4, THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Expectation violation triggers immediate focus
-- Huron's expectation theory shows that offbeat syncopation delays prediction fulfillment, increasing tension and listener satisfaction upon resolution.
+- Expectation violation [triggers immediate focus]
+- Huron's expectation theory shows that offbeat syncopation delays prediction fulfillment, increasing [tension] and listener satisfaction upon resolution.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean technical diagram of syncopated hit flashing off the expected beat analyzing the offbeat flash. The display features precise cyan lines, numerical values, and grid overlays on a dark-titanium glass panel. Soft ambient blue lighting emphasizes the scientific model. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture, 35% negative space.
-Headline accent: triggers immediate focus
-Support accent: tiny spike in
+Headline accent: [triggers immediate focus]
+Support accent: [tension]
 Motion cue: The analytical diagram nodes on the syncopated hit flashing off the expected beat build sequentially with subtle cyan highlights.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 5, THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Syncopation is a controlled surprise
-- Introduce syncopated accents on secondary instruments while keeping the main pulse stable to anchor the listener.
+- Syncopation is a [controlled surprise]
+- [Introduce syncopated] accents on secondary instruments while keeping the main pulse stable to anchor the listener.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a premium tactile controller with a glowing cyan rotary knob adjusting syncopated hit flashing off the expected beat. The finger-touch surface is dark titanium with a matte finish. Soft cyan bloom accentuates the creative taste setting. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, shallow depth of field.
-Headline accent: controlled surprise
-Support accent: empty spaces of
+Headline accent: [controlled surprise]
+Support accent: [Introduce syncopated]
 Motion cue: The virtual control indicator on the syncopated hit flashing off the expected beat dial moves slightly off-center with a soft glow.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 6, THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Move one accent off the obvious beat
-- Move a snare or synth stab from the beat 4 downbeat to the preceding 16th-note upbeat.
+- [Move one accent] off the obvious beat
+- [Move a] snare or synth stab from the beat 4 downbeat to the preceding 16th-note upbeat.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Action shot of a digital interface where a cursor selects and shifts a component of syncopated hit flashing off the expected beat on a glass panel. A sharp cyan bounding box highlights the production move, showing it slipping off the grid. Apple editorial aesthetic, dark-blue canvas, matte-black desk, 30% negative space.
-Headline accent: Move one accent
-Support accent: eighth note early
+Headline accent: [Move one accent]
+Support accent: [Move a]
 Motion cue: A clean cursor movement slides the target syncopated hit flashing off the expected beat elements into position.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 7, THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Mute the offbeat sound and feel the energy drop
-- Mute the syncopated element to check if the groove loses its drive or if the rhythm becomes predictable.
+- Mute the offbeat sound and [feel the energy drop]
+- [Mute the] syncopated element to check if the groove loses its drive or if the rhythm becomes predictable.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Split-screen A/B comparison displaying syncopated hit flashing off the expected beat. The left glass panel represents the raw grid in muted grey, while the right panel highlights the modified pocket in glowing cyan. A vertical line divides the panels, casting soft shadows. Apple editorial aesthetic, matte-black desk, subtle dotted grid texture.
-Headline accent: feel the energy drop
-Support accent: drives the track forward
+Headline accent: [feel the energy drop]
+Support accent: [Mute the]
 Motion cue: A fast A/B screen wipe alternates between the raw and modified syncopated hit flashing off the expected beat states.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 8, THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check syncopation with a rhythmic click
-- Sum the mix to mono to verify that the syncopated accent does not disappear behind main channel elements.
+- Check syncopation with a [rhythmic click]
+- Sum the mix to [mono] to verify that the syncopated accent does not disappear behind main channel elements.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Editorial studio photograph of sleek wireframe devices (a smartphone, a laptop, and studio monitor speakers) displaying syncopated hit flashing off the expected beat. Soft cyan light beams propagate from the speakers, showing translation paths. Apple editorial aesthetic, dark-blue canvas, matte-black desk, shallow depth of field.
-Headline accent: rhythmic click
-Support accent: feel deliberate
+Headline accent: [rhythmic click]
+Support accent: [mono]
 Motion cue: Sound wave ripples expand outward from the speaker icons on the screen.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 9, THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The groove asks for attention
-- Use syncopation to break metric expectations, but keep the underlying pulse clear to avoid confusing the listener.
+- The groove [asks for attention]
+- Use [syncopation to] break metric expectations, but keep the underlying pulse clear to avoid confusing the listener.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist 3D diagram locking the core rule of syncopated hit flashing off the expected beat into place. A clean glass panel displays the final offbeat flash with a glowing green and cyan checkmark indicator. Apple editorial aesthetic, dark-blue canvas, subtle dotted grid texture, 40% negative space.
-Headline accent: asks for attention
-Support accent: highlight important transitions
+Headline accent: [asks for attention]
+Support accent: [syncopation to]
 Motion cue: A green checkmark pulses next to the corrected path on the syncopated hit flashing off the expected beat diagram.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006
 
 ### Prompt 10, THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before quantizing your next beat
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before quantizing your next beat
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-end minimalist closing frame. A dark-titanium plaque with glowing cyan accents is set against a dark-blue canvas. A clean, plain-text call to action is centered on the panel. Apple editorial aesthetic, subtle dotted grid texture, 35% negative space.
-Headline accent: Save this before
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: The central call to action text fades in slowly with an ambient cyan glow.
-Reference line: Refs: MIT OCW accessed 2026 | Huron 2006
+Reference line: Refs: MIT OCW 2016 | Huron 2006

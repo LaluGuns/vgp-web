@@ -17,7 +17,7 @@ const products = [
         description: 'The foundational blueprint for professional music production.',
         price: '$29',
         tag: 'BESTSELLER',
-        icon: 'ðŸ“˜',
+        icon: '01',
     },
     {
         id: 2,
@@ -25,7 +25,7 @@ const products = [
         description: 'Build faster sessions, cleaner decisions, and repeatable production systems.',
         price: '$39',
         tag: 'NEW',
-        icon: 'ðŸ¤–',
+        icon: '02',
     },
     {
         id: 3,
@@ -33,7 +33,7 @@ const products = [
         description: 'Deep-dive into synthesis and sound design.',
         price: '$49',
         tag: 'ADVANCED',
-        icon: 'ðŸ”Š',
+        icon: '03',
     },
 ];
 
@@ -63,7 +63,7 @@ export function DigitalArsenal() {
                                             {product.tag}
                                         </span>
                                     )}
-                                    <span className="text-5xl">{product.icon}</span>
+                                    <span className="text-4xl font-semibold text-sky-100/65">{product.icon}</span>
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
                                     <h3 className="text-lg font-semibold mb-2 tracking-tight">{product.title}</h3>

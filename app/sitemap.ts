@@ -2,7 +2,7 @@
 import { getAllSlugs } from '@/lib/blog-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://virzyguns.com';
+    const baseUrl = 'https://www.virzyguns.com';
 
     // 1. Static Routes
     const routes = [

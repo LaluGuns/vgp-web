@@ -32,12 +32,12 @@ Humanizer status: passed
 - European Broadcasting Union. EBU R 128 loudness normalisation and permitted maximum level.
   - URL: https://tech.ebu.ch/publications/r128/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: LUFS, loudness range, true peak descriptors
 - International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level.
   - URL: https://www.itu.int/rec/R-REC-BS.1770/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2006
   - Use: loudness measurement and true peak
 
 ## Visual design system
@@ -72,72 +72,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Streaming loudness myths waste masters
+Headline: Streaming loudness [myths waste masters]
 
-Support: Mastering to a single internet number can miss the song.
+Support: Mastering to a single internet number can [miss the song].
 
 Visual: A screen showing streaming normalization options with a warning flag.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Mixing for a specific platform target
+Headline: The trap: Mixing for a specific [platform target]
 
-Support: Deliberately targeting a low minus fourteen LUFS ceiling leaves excessive transient headroom, producing a master that lacks competitive saturation.
+Support: Deliberately targeting a low minus fourteen LUFS ceiling leaves excessive transient headroom, producing a master that lacks competitive [saturation].
 
 Visual: A dashboard with social media platform logos and rigid target lines marked in red.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Listeners hear dynamics not numbers
+Headline: The ear: Listeners hear [dynamics not numbers]
 
-Support: Human auditory perception scales with transient impact and transient clarity. Listeners adjust volume based on punch rather than integrated level.
+Support: Human auditory perception scales with [transient] impact and transient clarity. Listeners adjust volume based on punch rather than integrated level.
 
 Visual: A listener wearing headphones with a glowing sound wave pattern around them.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How streaming platforms scale volume
+Headline: How streaming platforms [scale volume]
 
-Support: Platform algorithms scale gain downward for files exceeding target thresholds, but cannot recover transient envelopes lost to aggressive limiting.
+Support: Platform algorithms scale gain downward for files exceeding target thresholds, but cannot recover transient envelopes lost to aggressive [limiting].
 
 Visual: A signal flow diagram showing a master volume fader automatically lowering an input signal.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Let the music dictate density
+Headline: Let the music [dictate density]
 
-Support: Vary target density based on genre expectations: high dynamic density for club sound systems, wide transient peaks for acoustic spaces.
+Support: Vary target density based on genre expectations: high dynamic density for club sound systems, wide [transient] peaks for acoustic spaces.
 
 Visual: Two waveforms side by side, one dense (electronic) and one dynamic (acoustic), both marked in cyan.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Master for translation and peaks
+Headline: Master for [translation and peaks]
 
-Support: Adjust peak limiters to establish a safe headroom ceiling, then optimize density until you reach the optimal transient balance.
+Support: Adjust peak limiters to establish a safe [headroom] ceiling, then optimize density until you reach the optimal transient balance.
 
 Visual: A peak limiter interface showing attenuation meters and peak markers.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Audition with player normalization active
+Headline: Audition with player [normalization active]
 
-Support: Enable platform-style normalization in your playback system when executing A/B comparisons with commercial reference tracks.
+Support: Enable platform-style normalization in your playback system when executing A/B comparisons with commercial [reference] tracks.
 
 Visual: A settings menu panel with the loudness normalization toggle highlighted in cyan.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Compare against recent releases
+Headline: Compare against [recent releases]
 
-Support: Compare your track against modern masters. If the low frequency weight collapses under normalization, recalibrate your compression.
+Support: Compare your track against modern masters. If the low frequency weight collapses under normalization, recalibrate your [compression].
 
 Visual: A player playlist screen showing your track next to commercial songs.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Priority goes to translation
+Headline: [Priority goes] to translation
 
-Support: The master is complete only when spectral balance and transient response translate across phone, car, and club playback systems.
+Support: The master is complete only when spectral balance and [transient response] translate across phone, car, and club playback systems.
 
 Visual: A block diagram showing translation paths branching to car speakers, phones, and clubs.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
+Headline: [Save this] before chasing another loudness number.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: streaming normalization switch lowering two loud masters. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -148,157 +148,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Streaming loudness myths waste masters
-- Mastering to a single internet number can miss the song.
+- Streaming loudness [myths waste masters]
+- Mastering to a single internet number can [miss the song].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of screen showing streaming normalization options with warning flag in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: myths waste masters
-Support accent: miss the song
+Headline accent: [myths waste masters]
+Support accent: [miss the song]
 Motion cue: Normalization switch toggling from on to off with a quick highlight.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Mixing for a specific platform target
-- Deliberately targeting a low minus fourteen LUFS ceiling leaves excessive transient headroom, producing a master that lacks competitive saturation.
+- The trap: Mixing for a specific [platform target]
+- Deliberately targeting a low minus fourteen LUFS ceiling leaves excessive transient headroom, producing a master that lacks competitive [saturation].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of dashboard with social mediplatform logos and rigid target lines marked in red with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: platform target
-Support accent: master sounding weak
+Headline accent: [platform target]
+Support accent: [saturation]
 Motion cue: Red target line flashes as a warning.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Listeners hear dynamics not numbers
-- Human auditory perception scales with transient impact and transient clarity. Listeners adjust volume based on punch rather than integrated level.
+- The ear: Listeners hear [dynamics not numbers]
+- Human auditory perception scales with [transient] impact and transient clarity. Listeners adjust volume based on punch rather than integrated level.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of listener wearing headphones with glowing sound wave pattern around them with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: dynamics not numbers
-Support accent: turns up volume
+Headline accent: [dynamics not numbers]
+Support accent: [transient]
 Motion cue: Sound waves pulse outward from headphones.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How streaming platforms scale volume
-- Platform algorithms scale gain downward for files exceeding target thresholds, but cannot recover transient envelopes lost to aggressive limiting.
+- How streaming platforms [scale volume]
+- Platform algorithms scale gain downward for files exceeding target thresholds, but cannot recover transient envelopes lost to aggressive [limiting].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Premium technical diagram of signal flow diagram showing master volume fader automatically lowering an input signal on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent: scale volume
-Support accent: do not add dynamics
+Headline accent: [scale volume]
+Support accent: [limiting]
 Motion cue: Signal blocks pass through the fader and shrink in size.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Let the music dictate density
-- Vary target density based on genre expectations: high dynamic density for club sound systems, wide transient peaks for acoustic spaces.
+- Let the music [dictate density]
+- Vary target density based on genre expectations: high dynamic density for club sound systems, wide [transient] peaks for acoustic spaces.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of waveforms side by side, one dense (electronic) and one dynamic (acoustic), both marked in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: dictate density
-Support accent: genre guide
+Headline accent: [dictate density]
+Support accent: [transient]
 Motion cue: Alternating highlight between the electronic wave and acoustic wave.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Master for translation and peaks
-- Adjust peak limiters to establish a safe headroom ceiling, then optimize density until you reach the optimal transient balance.
+- Master for [translation and peaks]
+- Adjust peak limiters to establish a safe [headroom] ceiling, then optimize density until you reach the optimal transient balance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of peak limiter interface showing attenuation meters and peak markers. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: translation and peaks
-Support accent: sounds cohesive
+Headline accent: [translation and peaks]
+Support accent: [headroom]
 Motion cue: Cursor adjusts peak limiter threshold, showing attenuation level.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Audition with player normalization active
-- Enable platform-style normalization in your playback system when executing A/B comparisons with commercial reference tracks.
+- Audition with player [normalization active]
+- Enable platform-style normalization in your playback system when executing A/B comparisons with commercial [reference] tracks.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of settings menu panel with the loudness normalization toggle highlighted in cyan. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: normalization active
-Support accent: commercial references
+Headline accent: [normalization active]
+Support accent: [reference]
 Motion cue: Toggle switch clicks on and off.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Compare against recent releases
-- Compare your track against modern masters. If the low frequency weight collapses under normalization, recalibrate your compression.
+- Compare against [recent releases]
+- Compare your track against modern masters. If the low frequency weight collapses under normalization, recalibrate your [compression].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of player playlist screen showing your track next to commercial songs. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: recent releases
-Support accent: master feels hollow
+Headline accent: [recent releases]
+Support accent: [compression]
 Motion cue: Playlist selector moves from your track to the reference.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Priority goes to translation
-- The master is complete only when spectral balance and transient response translate across phone, car, and club playback systems.
+- [Priority goes] to translation
+- The master is complete only when spectral balance and [transient response] translate across phone, car, and club playback systems.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of block diagram showing translation paths branching to car speakers, phones, and clubs with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: translation priority
-Support accent: translates correctly
+Headline accent: [Priority goes]
+Support accent: [transient response]
 Motion cue: Paths light up one by one in cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before chasing another loudness number.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before chasing another loudness number.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006

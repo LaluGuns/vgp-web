@@ -43,17 +43,17 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2013
   - Use: mastering judgment, dynamics, translation
 - TikTok Newsroom. How TikTok recommends videos #ForYou.
   - URL: https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
 
 ## Visual design system
@@ -88,45 +88,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: References reduce ego in the room
-Support: Ego hates the reference track because the reference does not lie.
+Headline: [References] reduce ego in the room
+Support: Ego hates the [reference] track because the reference does not lie.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The isolation bias
-Support: Mixing in isolation without a target reference leads to sensory drift. Your brain adapts to the build-up of mud or harshness, accepting it as normal.
+Headline: The [isolation bias]
+Support: Mixing in isolation without a target [reference] leads to sensory drift. Your brain adapts to the build-up of mud or harshness, accepting it as normal.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Auditory accommodation tricks you
-Support: Within minutes of listening, the human ear adjusts its frequency baseline. A mix that feels warm in isolation often sounds muddy when compared to commercial releases.
+Headline: [Auditory accommodation] tricks you
+Support: Within minutes of listening, the human ear adjusts its [frequency] baseline. A mix that feels warm in isolation often sounds muddy when compared to commercial releases.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Sensory anchoring is real
-Support: The brain requires an external frequency anchor to calibrate its auditory center. Using a reference track resets your target baseline, countering ear fatigue.
+Headline: [Sensory anchoring] is real
+Support: The brain requires an external [frequency] anchor to calibrate its auditory center. Using a reference track resets your target baseline, countering ear fatigue.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: References show the path
-Support: A reference track is not a blueprint to copy, but a safety rail. Use it to check the low-end volume limit while keeping your unique mid-range style.
+Headline: [References] show the path
+Support: A [reference] track is not a blueprint to copy, but a safety rail. Use it to check the low-end volume limit while keeping your unique mid-range style.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Match reference loudness to your session
-Support: Use a utility plugin to match the loudness of your reference track to your session average in LUFS. Bypassing loudness bias is the only way to hear frequency balance.
+Headline: Match [reference] loudness to your session
+Support: Use a utility plugin to match the loudness of your reference track to your [session] average in LUFS. Bypassing loudness bias is the only way to hear frequency balance.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The blind reference test
-Support: Use a matching tool to quickly switch between your mix and the reference with your eyes closed. Identify if the vocal presence matches the commercial target.
+Headline: The blind [reference] test
+Support: Use a matching tool to quickly switch between your mix and the [reference] with your eyes closed. Identify if the vocal presence matches the commercial target.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Compare dynamic ranges
-Support: Check the crest factor and peak-to-short-term LUFS ratio of both tracks. Ensure you have not crushed your transient dynamics in an attempt to match loudness.
+Headline: Compare [dynamic] ranges
+Support: Check the crest factor and peak-to-short-term [LUFS] ratio of both tracks. Ensure you have not crushed your transient dynamics in an attempt to match loudness.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Anchor your ears
-Support: Calibrate your listening system with a level-matched reference track every thirty minutes to prevent frequency drift.
+Headline: Anchor your [ears]
+Support: Calibrate your listening system with a level-matched reference track every thirty minutes to prevent [frequency] drift.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to calibrate your ears
+Headline: [Save this] to calibrate your ears
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -135,157 +135,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- References reduce ego in the room
-- Ego hates the reference track because the reference does not lie.
+- [References] reduce ego in the room
+- Ego hates the [reference] track because the reference does not lie.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. An audio spectrum comparison showing two overlapping curves. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: References
-Support accent: lie.
+Headline accent: [References]
+Support accent: [reference]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The isolation bias
-- Mixing in isolation without a target reference leads to sensory drift. Your brain adapts to the build-up of mud or harshness, accepting it as normal.
+- The [isolation bias]
+- Mixing in isolation without a target [reference] leads to sensory drift. Your brain adapts to the build-up of mud or harshness, accepting it as normal.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a speaker icon on a dark background, showing a soundwave that slowly fades into grey. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [isolation bias]
+Support accent: [reference]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Auditory accommodation tricks you
-- Within minutes of listening, the human ear adjusts its frequency baseline. A mix that feels warm in isolation often sounds muddy when compared to commercial releases.
+- [Auditory accommodation] tricks you
+- Within minutes of listening, the human ear adjusts its [frequency] baseline. A mix that feels warm in isolation often sounds muddy when compared to commercial releases.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass speaker panel showing the frequency response shifting from a skewed line to a flat reference line. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [Auditory accommodation]
+Support accent: [frequency]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Sensory anchoring is real
-- The brain requires an external frequency anchor to calibrate its auditory center. Using a reference track resets your target baseline, countering ear fatigue.
+- [Sensory anchoring] is real
+- The brain requires an external [frequency] anchor to calibrate its auditory center. Using a reference track resets your target baseline, countering ear fatigue.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of an anchor symbol made of light, holding a waveform steady on a dark grid. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [Sensory anchoring]
+Support accent: [frequency]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- References show the path
-- A reference track is not a blueprint to copy, but a safety rail. Use it to check the low-end volume limit while keeping your unique mid-range style.
+- [References] show the path
+- A [reference] track is not a blueprint to copy, but a safety rail. Use it to check the low-end volume limit while keeping your unique mid-range style.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a split highway display on a glass UI panel, showing two paths merging into a single lane. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [References]
+Support accent: [reference]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Match reference loudness to your session
-- Use a utility plugin to match the loudness of your reference track to your session average in LUFS. Bypassing loudness bias is the only way to hear frequency balance.
+- Match [reference] loudness to your session
+- Use a utility plugin to match the loudness of your reference track to your [session] average in LUFS. Bypassing loudness bias is the only way to hear frequency balance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Two level meters showing identical LUFS readouts on a glass console interface. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [reference]
+Support accent: [session]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The blind reference test
-- Use a matching tool to quickly switch between your mix and the reference with your eyes closed. Identify if the vocal presence matches the commercial target.
+- The blind [reference] test
+- Use a matching tool to quickly switch between your mix and the [reference] with your eyes closed. Identify if the vocal presence matches the commercial target.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a digital A/B switch on a sleek glass interface panel, surrounded by glowing cyan rings. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [reference]
+Support accent: [reference]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Compare dynamic ranges
-- Check the crest factor and peak-to-short-term LUFS ratio of both tracks. Ensure you have not crushed your transient dynamics in an attempt to match loudness.
+- Compare [dynamic] ranges
+- Check the crest factor and peak-to-short-term [LUFS] ratio of both tracks. Ensure you have not crushed your transient dynamics in an attempt to match loudness.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A comparison graph showing two dynamic range curves, with transient peaks glowing in cyan. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [dynamic]
+Support accent: [LUFS]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Anchor your ears
-- Calibrate your listening system with a level-matched reference track every thirty minutes to prevent frequency drift.
+- Anchor your [ears]
+- Calibrate your listening system with a level-matched reference track every thirty minutes to prevent [frequency] drift.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic showing a calibration tool calibrating a speaker response line. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [ears]
+Support accent: [frequency]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to calibrate your ears
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to calibrate your ears
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013

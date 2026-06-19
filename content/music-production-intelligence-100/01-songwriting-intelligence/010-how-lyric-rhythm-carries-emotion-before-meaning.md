@@ -91,72 +91,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Lyric rhythm sells emotion first
+Headline: [Lyric rhythm sells] emotion first
 
-Support: People feel the pocket before they decode the sentence.
+Support: [People feel] the pocket before they decode the sentence.
 
 Visual: 
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Prioritizing literal meaning over phonetics
+Headline: [Prioritizing literal meaning] over phonetics
 
-Support: Forcing deep lyrics into a melody without checking if the words actually sound good when sung creates a clunky groove.
+Support: [Forcing deep lyrics] into a melody without checking if the words actually sound good when sung creates a clunky groove.
 
 Visual: 
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear hears the sound before the word
+Headline: The [ear hears] the sound before the word
 
-Support: The human voice is an instrument first, and vowel shapes carry the emotional weight long before the brain decodes the text.
+Support: The [human voice] is an instrument first, and vowel shapes carry the emotional weight long before the brain decodes the text.
 
 Visual: 
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The emotional power of vocal phonetics
+Headline: The [emotional power] of vocal phonetics
 
-Support: Brain scans show that the acoustic properties of speech sounds evoke emotional responses before semantic processing begins.
+Support: [Brain scans] show that the acoustic properties of speech sounds evoke emotional responses before semantic processing begins.
 
 Visual: 
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: The mouth is a drum when the lyric is honest
+Headline: The [mouth] is a drum when the lyric is honest
 
-Support: Matching the brightness of your vowels to the height of your notes is a choice that makes the vocal feel effortless.
+Support: [Matching the brightness] of your vowels to the height of your notes is a choice that makes the vocal feel effortless.
 
 Visual: 
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Write the cadence before polishing the words
+Headline: Write the [cadence] before polishing the words
 
-Support: Choose words with open, bright vowels like 'ah' or 'oh' for the highest notes in your chorus.
+Support: [Choose words] with open, bright vowels like 'ah' or 'oh' for the highest notes in your chorus.
 
 Visual: 
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Speak the line on one note over the beat
+Headline: [Speak the line] on one note over the beat
 
-Support: Whisper or speak your lyrics in rhythm to make sure they flow naturally without any tongue-twisters.
+Support: [Whisper or speak] your lyrics in rhythm to make sure they flow naturally without any tongue-twisters.
 
 Visual: 
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check the vocal transient peaks
+Headline: Check the [vocal] transient peaks
 
-Support: Verify that the hard consonants of your lyrics align with the rhythm section to reinforce the groove.
+Support: [Verify] that the hard consonants of your lyrics align with the rhythm section to reinforce the groove.
 
 Visual: 
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The line starts moving the listener
+Headline: The [line starts] moving the listener
 
-Support: If a word is hard to sing or breaks the groove, change it, no matter how deep the meaning.
+Support: If a [word] is hard to sing or breaks the groove, change it, no matter how deep the meaning.
 
 Visual: 
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before writing the next hook.
+Headline: [Save this] before writing the next hook.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: vocal waveform with consonant rhythm blocks. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -167,14 +167,14 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Lyric rhythm sells emotion first
-- People feel the pocket before they decode the sentence.
+- [Lyric rhythm sells] emotion first
+- [People feel] the pocket before they decode the sentence.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Cold open. Tight editorial crop over a premium leather-bound notebook with handwritten lyrics in white ink. Next to it, a glowing smartphone showing a voice memo waveform in cyan. Moody blue side-lighting from the left casts long shadows. The vocal waveform with consonant rhythm blocks appears as a translucent cyan overlay floating above the notebook. The headline snaps in on the first beat. The support line fades in below. The hero object is the waveform blocks. Composition: notebook and phone occupy the lower third, waveform blocks float in the upper middle. Dark blue canvas with subtle dotted grid. 40% negative space for scroll-stop impact.
-Headline accent: Lyric rhythm sells
-Support accent: People feel the
+Headline accent: [Lyric rhythm sells]
+Support accent: [People feel]
 Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -183,14 +183,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Prioritizing literal meaning over phonetics
-- Forcing deep lyrics into a melody without checking if the words actually sound good when sung creates a clunky groove.
+- [Prioritizing literal meaning] over phonetics
+- [Forcing deep lyrics] into a melody without checking if the words actually sound good when sung creates a clunky groove.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Red pressure mark. Close-up of a DAW piano roll with overloaded faders and red neon warning lights. A single red glowing line cuts through a cluttered waveform, representing the false fix. The better path remains a clean cyan line on the right. The vocal waveform with consonant rhythm blocks is shown as a chaotic red mess on the left, with a single cyan block on the right. Composition: split frame, red left, cyan right. Dark blue canvas with dotted grid. Red accent reserved for the warning zone only.
-Headline accent: Prioritizing literal meaning
-Support accent: Forcing deep lyrics
+Headline accent: [Prioritizing literal meaning]
+Support accent: [Forcing deep lyrics]
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the lyric rhythm blocks.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -199,14 +199,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear hears the sound before the word
-- The human voice is an instrument first, and vowel shapes carry the emotional weight long before the brain decodes the text.
+- The [ear hears] the sound before the word
+- The [human voice] is an instrument first, and vowel shapes carry the emotional weight long before the brain decodes the text.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Auditory focus path. Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing through it. The vocal waveform with consonant rhythm blocks appears as a translucent cyan overlay on the diaphragm. The path draws itself from left to right. Composition: diaphragm fills the center, path cuts diagonally. Dark blue canvas with dotted grid. 30% negative space.
-Headline accent: The ear hears
-Support accent: The human voice
+Headline accent: [ear hears]
+Support accent: [human voice]
 Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the lyric rhythm blocks.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -215,14 +215,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- The emotional power of vocal phonetics
-- Brain scans show that the acoustic properties of speech sounds evoke emotional responses before semantic processing begins.
+- The [emotional power] of vocal phonetics
+- [Brain scans] show that the acoustic properties of speech sounds evoke emotional responses before semantic processing begins.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Node diagram. Abstract 3D signal flow with glowing glass nodes connected by thin cyan lines. Each node represents a phonetic property (vowel, consonant, pitch). The vocal waveform with consonant rhythm blocks is shown as a series of glass blocks along the path. Composition: nodes form a triangle, waveform blocks sit at the base. Dark blue canvas with dotted grid. No fake values or labels.
-Headline accent: The emotional power
-Support accent: Brain scans show
+Headline accent: [emotional power]
+Support accent: [Brain scans]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -231,14 +231,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- The mouth is a drum when the lyric is honest
-- Matching the brightness of your vowels to the height of your notes is a choice that makes the vocal feel effortless.
+- The [mouth] is a drum when the lyric is honest
+- [Matching the brightness] of your vowels to the height of your notes is a choice that makes the vocal feel effortless.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Taste moment. Single physical brass knob in sharp focus, with wood-grain keyboard key behind it. Warm amber spotlight from above illuminates the knob. The vocal waveform with consonant rhythm blocks appears as a faint cyan reflection on the brass surface. Composition: knob in lower center, keyboard key in upper left. Dark blue canvas with dotted grid. 30% negative space.
-Headline accent: The mouth is
-Support accent: Matching the brightness
+Headline accent: [mouth]
+Support accent: [Matching the brightness]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -247,14 +247,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Write the cadence before polishing the words
-- Choose words with open, bright vowels like 'ah' or 'oh' for the highest notes in your chorus.
+- Write the [cadence] before polishing the words
+- [Choose words] with open, bright vowels like 'ah' or 'oh' for the highest notes in your chorus.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: DAW action. Clean DAW interface showing a cursor hovering over a high-pass curve or stereo width slider. The vocal waveform with consonant rhythm blocks is shown as a cyan overlay on the waveform display. The cursor is a thin cyan line. Composition: DAW window fills the center, cursor at the top of the curve. Dark blue canvas with dotted grid. No extra UI elements.
-Headline accent: Write the cadence
-Support accent: Choose words with
+Headline accent: [cadence]
+Support accent: [Choose words]
 Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -263,14 +263,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Speak the line on one note over the beat
-- Whisper or speak your lyrics in rhythm to make sure they flow naturally without any tongue-twisters.
+- [Speak the line] on one note over the beat
+- [Whisper or speak] your lyrics in rhythm to make sure they flow naturally without any tongue-twisters.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Matched A/B test. Parallel glass toggle switches, one cyan ON, other grey OFF. Level-meters next to each switch show matched levels. The vocal waveform with consonant rhythm blocks is shown as a cyan line on the ON side, grey on the OFF side. Composition: switches in center, meters on the sides. Dark blue canvas with dotted grid. 30% negative space.
-Headline accent: Speak the line
-Support accent: Whisper or speak
+Headline accent: [Speak the line]
+Support accent: [Whisper or speak]
 Motion cue: Use a tap, mute, or device-swap action. The lyric rhythm blocks should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -279,14 +279,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check the vocal transient peaks
-- Verify that the hard consonants of your lyrics align with the rhythm section to reinforce the groove.
+- Check the [vocal] transient peaks
+- [Verify] that the hard consonants of your lyrics align with the rhythm section to reinforce the groove.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Speaker/translation context checks. Three small icons: laptop, car, mono speaker. Each icon has a cyan checkmark or red X. The vocal waveform with consonant rhythm blocks is shown as a cyan line passing through all three icons. Composition: icons in a row, waveform line above them. Dark blue canvas with dotted grid. 30% negative space.
-Headline accent: Check the vocal
-Support accent: Verify that the
+Headline accent: [vocal]
+Support accent: [Verify]
 Motion cue: Use a tap, mute, or device-swap action. The lyric rhythm blocks should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -295,14 +295,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The line starts moving the listener
-- If a word is hard to sing or breaks the groove, change it, no matter how deep the meaning.
+- The [line starts] moving the listener
+- If a [word] is hard to sing or breaks the groove, change it, no matter how deep the meaning.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Simple formula. Minimalist schematic layout with a bold cyan dividing line in the center. Thin glass borders frame the text. The vocal waveform with consonant rhythm blocks is shown as a single cyan block on the left, a red block on the right. Composition: dividing line vertical, blocks on either side. Dark blue canvas with dotted grid. 40% negative space.
-Headline accent: The line starts
-Support accent: If a word
+Headline accent: [line starts]
+Support accent: [word]
 Motion cue: Hold the frame longer. Let the lyric rhythm blocks settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990
 
@@ -311,13 +311,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before writing the next hook.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before writing the next hook.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Closing loop. Dark high-end closing frame. A premium smartphone displays looping plain text: "Lyric rhythm sells emotion first." The vocal waveform with consonant rhythm blocks is shown as a cyan line on the phone screen. Composition: phone in center, text on screen. Dark blue canvas with dotted grid. 30% negative space. No extra elements.
-Headline accent: Prioritize vowel sounds
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold the frame longer. Let the lyric rhythm blocks settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006 | Bregman 1990

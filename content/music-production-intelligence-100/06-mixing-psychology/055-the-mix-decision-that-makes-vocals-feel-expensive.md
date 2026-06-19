@@ -74,44 +74,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Expensive vocals sit in a pocket
-Support: The vocal feels pricey when the track protects its lane.
+Headline: [Expensive vocals sit] in a pocket
+Support: The vocal feels pricey when the track [protects its lane].
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Fighting the mix with raw volume
-Support: Carving a massive, static EQ hole in the backing track makes the mix sound empty.
+Headline: Fighting the mix with [raw volume]
+Support: Carving a massive, static EQ hole in the backing track makes the mix [sound] empty.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The brain rejects overlapping signals
-Support: The listener hears an unnatural separation between the vocal and the instrumental backing.
+Headline: The brain rejects [overlapping signals]
+Support: The listener hears an unnatural separation between the [vocal] and the instrumental backing.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Dynamic masking reduction resolves conflicts
-Support: Spectral masking occurs when strong instrumental frequencies overlap and drown out vocal formants.
+Headline: Dynamic masking reduction [resolves conflicts]
+Support: [Spectral masking] occurs when strong instrumental frequencies overlap and drown out vocal formants.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Expensive vocals are usually defended vocals
-Support: Attenuate masking frequencies only when the vocal is actively singing.
+Headline: Expensive vocals are usually [defended vocals]
+Support: Attenuate masking [frequencies] only when the vocal is actively singing.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Duck support elements only when the vocal speaks
-Support: Use a dynamic equalizer sidechained to the lead vocal to cut the mid-range of the backing track.
+Headline: [Duck support elements] only when the vocal speaks
+Support: Use a [dynamic] equalizer sidechained to the lead vocal to cut the mid-range of the backing track.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Sidechain a dynamic EQ and level match it
-Support: Bypass the sidechain EQ to check if the vocal sits cleanly in the pocket.
+Headline: Sidechain a dynamic EQ and [level match] it
+Support: Bypass the [sidechain] EQ to check if the vocal sits cleanly in the pocket.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Listen through a bandpass filter
-Support: Check the vocal level on low-volume mono speakers to ensure it stays balanced.
+Headline: Listen through a [bandpass filter]
+Support: Check the vocal level on low-volume mono [speakers] to ensure it stays balanced.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The words stay present
-Support: Carve space dynamically to keep the vocal and backing track integrated.
+Headline: The [words stay present]
+Support: Carve space dynamically to keep the [vocal] and backing track integrated.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next vocal mix session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next vocal mix session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: vocal pocket carved between instruments. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -122,14 +122,14 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Expensive vocals sit in a pocket
-- The vocal feels pricey when the track protects its lane.
+- [Expensive vocals sit] in a pocket
+- The vocal feels pricey when the track [protects its lane].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed vocal pocket carved between instruments, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: Expensive vocals sit
-Support accent: protects its lane
+Headline accent: [Expensive vocals sit]
+Support accent: [protects its lane]
 Motion cue: First 0.5 seconds: quick punch-in on the vocal pocket, then kinetic headline reveal.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -138,14 +138,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Fighting the mix with raw volume
-- Carving a massive, static EQ hole in the backing track makes the mix sound empty.
+- Fighting the mix with [raw volume]
+- Carving a massive, static EQ hole in the backing track makes the mix [sound] empty.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed vocal pocket carved between instruments is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: raw volume
-Support accent: fader just causes
+Headline accent: [raw volume]
+Support accent: [sound]
 Motion cue: A fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the vocal pocket.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -154,14 +154,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The brain rejects overlapping signals
-- The listener hears an unnatural separation between the vocal and the instrumental backing.
+- The brain rejects [overlapping signals]
+- The listener hears an unnatural separation between the [vocal] and the instrumental backing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed vocal pocket carved between instruments is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: overlapping signals
-Support accent: fight the vocal
+Headline accent: [overlapping signals]
+Support accent: [vocal]
 Motion cue: One signal path draws first, then the supporting detail fades in around it.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -170,14 +170,14 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Dynamic masking reduction resolves conflicts
-- Spectral masking occurs when strong instrumental frequencies overlap and drown out vocal formants.
+- Dynamic masking reduction [resolves conflicts]
+- [Spectral masking] occurs when strong instrumental frequencies overlap and drown out vocal formants.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed vocal pocket carved between instruments is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: resolves conflicts
-Support accent: active preserves instrument
+Headline accent: [resolves conflicts]
+Support accent: [Spectral masking]
 Motion cue: Science model builds one node at a time with no fake values.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -186,14 +186,14 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Expensive vocals are usually defended vocals
-- Attenuate masking frequencies only when the vocal is actively singing.
+- Expensive vocals are usually [defended vocals]
+- Attenuate masking [frequencies] only when the vocal is actively singing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed vocal pocket carved between instruments is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: defended vocals
-Support accent: carve them out
+Headline accent: [defended vocals]
+Support accent: [frequencies]
 Motion cue: Visual changes to highlight the spectrum gap with a soft bloom.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -202,14 +202,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Duck support elements only when the vocal speaks
-- Use a dynamic equalizer sidechained to the lead vocal to cut the mid-range of the backing track.
+- [Duck support elements] only when the vocal speaks
+- Use a [dynamic] equalizer sidechained to the lead vocal to cut the mid-range of the backing track.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed vocal pocket carved between instruments showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: Duck support elements
-Support accent: sidechain input
+Headline accent: [Duck support elements]
+Support accent: [dynamic]
 Motion cue: A clean indicator light pulses to show the dynamic EQ active and ducking.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -218,14 +218,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Sidechain a dynamic EQ and level match it
-- Bypass the sidechain EQ to check if the vocal sits cleanly in the pocket.
+- Sidechain a dynamic EQ and [level match] it
+- Bypass the [sidechain] EQ to check if the vocal sits cleanly in the pocket.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed vocal pocket carved between instruments showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: level match it
-Support accent: Bypass the dynamic
+Headline accent: [level match]
+Support accent: [sidechain]
 Motion cue: A/B mute switch toggles at matched level with the meters held honest.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -234,14 +234,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Listen through a bandpass filter
-- Check the vocal level on low-volume mono speakers to ensure it stays balanced.
+- Listen through a [bandpass filter]
+- Check the vocal level on low-volume mono [speakers] to ensure it stays balanced.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed vocal pocket carved between instruments is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: bandpass filter
-Support accent: confirm the vocal
+Headline accent: [bandpass filter]
+Support accent: [speakers]
 Motion cue: A single wave vector emerges showing the focused bandpass frequency area.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -250,14 +250,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The words stay present
-- Carve space dynamically to keep the vocal and backing track integrated.
+- The [words stay present]
+- Carve space dynamically to keep the [vocal] and backing track integrated.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed vocal pocket carved between instruments is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: words stay present
-Support accent: effortless to understand
+Headline accent: [words stay present]
+Support accent: [vocal]
 Motion cue: Hold the frame longer. Let the vocal pocket settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990
 
@@ -266,13 +266,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next vocal mix session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next vocal mix session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed vocal pocket carved between instruments is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Carve your vocal
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: The text fades in slowly, settling into a clean final frame.
 Reference line: Refs: Ronan et al. 2018 | Bregman 1990

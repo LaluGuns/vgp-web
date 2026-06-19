@@ -37,7 +37,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Bregman. Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press. 1990.
   - URL: https://mitpress.mit.edu/9780262521956/auditory-scene-analysis/
@@ -79,44 +79,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Doubling works when nobody notices
-Support: A double can add size without calling attention to itself.
+Headline: [Doubling works] when nobody notices
+Support: A double can add [size without calling attention] to itself.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Heavy doubles masking the lead
-Support: Visible vocal doubles can clutter the stereo field and mask the main vocal's frequency center.
+Headline: [Heavy doubles masking] the lead
+Support: Visible vocal doubles can clutter the stereo field and mask the main vocal's [frequency] center.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Finding cohesive vocal width
-Support: Listeners hear distinct pitch and timing discrepancies rather than a single cohesive performance.
+Headline: Finding [cohesive vocal width]
+Support: [Listeners hear] distinct pitch and timing discrepancies rather than a single cohesive performance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The psychology of auditory fusion
-Support: Auditory stream segregation occurs when time differences between vocal tracks exceed 15 milliseconds.
+Headline: The psychology of [auditory fusion]
+Support: [Auditory stream segregation] occurs when time differences between vocal tracks exceed 15 milliseconds.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Support vocals should melt in
-Support: Blend the double to support the lead vocal's timbre without drawing focus to itself.
+Headline: Support [vocals should melt] in
+Support: Blend the double to support the lead [vocal]'s timbre without drawing focus to itself.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Tuck doubles under the main take
-Support: Align vocal doubles using manual micro-timing adjustments and tight pitch-matching tools.
+Headline: [Tuck doubles] under the main take
+Support: Align [vocal] doubles using manual micro-timing adjustments and tight pitch-matching tools.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Test the hook without doubles
-Support: Mute the doubles to verify if the lead vocal loses thickness and core weight.
+Headline: Test the [hook without doubles]
+Support: Mute the doubles to verify if the lead [vocal] loses thickness and core weight.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Monitor the stereo image width
-Support: Verify the stereo vocal balance in mono to ensure phase cancellation does not occur.
+Headline: Monitor the [stereo image width]
+Support: Verify the stereo vocal balance in mono to ensure [phase cancellation] does not occur.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Keep subtle supporting tracks
-Support: Keep doubles low in the mix to reinforce lead density without creating audible clutter.
+Headline: Keep [subtle supporting tracks]
+Support: Keep doubles low in the [mix] to reinforce lead density without creating audible clutter.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next vocal mixing session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next vocal mixing session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: double take ghost lane behind a lead vocal. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -127,157 +127,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Doubling works when nobody notices
-- A double can add size without calling attention to itself.
+- [Doubling works] when nobody notices
+- A double can add [size without calling attention] to itself.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed double take ghost lane behind a lead vocal, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: Doubling works
-Support accent: size without calling attention
+Headline accent: [Doubling works]
+Support accent: [size without calling attention]
 Motion cue: First 0.5 seconds: quick punch-in on the ghost double, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Heavy doubles masking the lead
-- Visible vocal doubles can clutter the stereo field and mask the main vocal's frequency center.
+- [Heavy doubles masking] the lead
+- Visible vocal doubles can clutter the stereo field and mask the main vocal's [frequency] center.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: Heavy doubles masking
-Support accent: clutter the center image
+Headline accent: [Heavy doubles masking]
+Support accent: [frequency]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ghost double.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Finding cohesive vocal width
-- Listeners hear distinct pitch and timing discrepancies rather than a single cohesive performance.
+- Finding [cohesive vocal width]
+- [Listeners hear] distinct pitch and timing discrepancies rather than a single cohesive performance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: cohesive vocal width
-Support accent: distinct secondary voices
+Headline accent: [cohesive vocal width]
+Support accent: [Listeners hear]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ghost double.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- The psychology of auditory fusion
-- Auditory stream segregation occurs when time differences between vocal tracks exceed 15 milliseconds.
+- The psychology of [auditory fusion]
+- [Auditory stream segregation] occurs when time differences between vocal tracks exceed 15 milliseconds.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed double take ghost lane behind a lead vocal is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: auditory fusion
-Support accent: single wider sound source
+Headline accent: [auditory fusion]
+Support accent: [Auditory stream segregation]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Support vocals should melt in
-- Blend the double to support the lead vocal's timbre without drawing focus to itself.
+- Support [vocals should melt] in
+- Blend the double to support the lead [vocal]'s timbre without drawing focus to itself.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: vocals should melt
-Support accent: lock seamlessly
+Headline accent: [vocals should melt]
+Support accent: [vocal]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Tuck doubles under the main take
-- Align vocal doubles using manual micro-timing adjustments and tight pitch-matching tools.
+- [Tuck doubles] under the main take
+- Align [vocal] doubles using manual micro-timing adjustments and tight pitch-matching tools.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: Tuck doubles
-Support accent: only perceive it when
+Headline accent: [Tuck doubles]
+Support accent: [vocal]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Test the hook without doubles
-- Mute the doubles to verify if the lead vocal loses thickness and core weight.
+- Test the [hook without doubles]
+- Mute the doubles to verify if the lead [vocal] loses thickness and core weight.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: hook without doubles
-Support accent: chorus loses weight
+Headline accent: [hook without doubles]
+Support accent: [vocal]
 Motion cue: Use a tap or mute action. The ghost double changes visibly.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Monitor the stereo image width
-- Verify the stereo vocal balance in mono to ensure phase cancellation does not occur.
+- Monitor the [stereo image width]
+- Verify the stereo vocal balance in mono to ensure [phase cancellation] does not occur.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed double take ghost lane behind a lead vocal is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: stereo image width
-Support accent: no phase cancelation
+Headline accent: [stereo image width]
+Support accent: [phase cancellation]
 Motion cue: Use a tap or mute action. The ghost double changes visibly.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Keep subtle supporting tracks
-- Keep doubles low in the mix to reinforce lead density without creating audible clutter.
+- Keep [subtle supporting tracks]
+- Keep doubles low in the [mix] to reinforce lead density without creating audible clutter.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: subtle supporting tracks
-Support accent: larger without sounding messy
+Headline accent: [subtle supporting tracks]
+Support accent: [mix]
 Motion cue: Hold frame longer. Let the ghost double settle, then pulse the final accent.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next vocal mixing session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next vocal mixing session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed double take ghost lane behind a lead vocal is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Tuck vocal doubles
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold frame longer. Let the ghost double settle, then pulse the accent.
-Reference line: Refs: Moore 2012 | Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Moore 2012 | Senior 2011 | Bregman 1990

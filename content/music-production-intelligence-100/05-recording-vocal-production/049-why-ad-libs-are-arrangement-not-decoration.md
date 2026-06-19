@@ -32,7 +32,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Bregman. Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press. 1990.
   - URL: https://mitpress.mit.edu/9780262521956/auditory-scene-analysis/
@@ -74,44 +74,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Ad-libs are arrangement moves
-Support: Ad-libs can crowd the hook when they have no job.
+Headline: [Ad-libs are arrangement] moves
+Support: Ad-libs can [crowd the hook] when they have no job.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Crowding the main vocal
-Support: Cluttering the frequency center with ad-libs masks the lead vocal's core message.
+Headline: Crowding the main [vocal]
+Support: Cluttering the [frequency] center with ad-libs masks the lead vocal's core message.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The unfocused stereo field
-Support: The listener's attention is divided, causing the arrangement to sound chaotic and busy.
+Headline: The [unfocused stereo field]
+Support: The listener's attention is divided, causing the arrangement to [sound] chaotic and busy.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The science of stream segregation
-Support: Auditory scene analysis shows that overlapping frequencies in the center image compete for focus.
+Headline: The science of [stream segregation]
+Support: [Auditory scene analysis] shows that overlapping frequencies in the center image compete for focus.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Backing tracks must answer the lead
-Support: Pan and process ad-libs to sit in different spatial and frequency pockets from the lead.
+Headline: Backing tracks must [answer the lead]
+Support: Pan and process ad-libs to sit in different spatial and [frequency] pockets from the lead.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Edit ad-libs for strict placement
-Support: Apply aggressive high-pass and low-pass filtering to ad-lib tracks to separate them.
+Headline: Edit ad-libs for [strict placement]
+Support: [Apply aggressive] high-pass and low-pass filtering to ad-lib tracks to separate them.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Mute overlapping ad-libs
-Support: Mute the ad-libs to check if the lead vocal gains clarity and space.
+Headline: [Mute overlapping ad-libs]
+Support: Mute the ad-libs to check if the lead [vocal] gains clarity and space.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check vocal clutter in mono
-Support: Check the ad-lib balance in mono to verify spatial separation and phase issues.
+Headline: Check vocal [clutter in mono]
+Support: Check the ad-lib balance in mono to verify spatial separation and [phase] issues.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Clean vocal arrangement
-Support: Separate ad-libs from the lead vocal in frequency and stereo placement.
+Headline: [Clean vocal arrangement]
+Support: Separate ad-libs from the lead vocal in [frequency] and stereo placement.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next vocal arrangement session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next vocal arrangement session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: ad-lib lane answering the lead vocal like arrangement. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -122,157 +122,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Ad-libs are arrangement moves
-- Ad-libs can crowd the hook when they have no job.
+- [Ad-libs are arrangement] moves
+- Ad-libs can [crowd the hook] when they have no job.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed ad-lib lane answering the lead vocal like arrangement, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: Ad-libs are arrangement
-Support accent: crowd the hook
+Headline accent: [Ad-libs are arrangement]
+Support accent: [crowd the hook]
 Motion cue: First 0.5 seconds: quick punch-in on the ad-lib answer, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Crowding the main vocal
-- Cluttering the frequency center with ad-libs masks the lead vocal's core message.
+- Crowding the main [vocal]
+- Cluttering the [frequency] center with ad-libs masks the lead vocal's core message.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: Crowding main vocal
-Support accent: clutters the gaps
+Headline accent: [vocal]
+Support accent: [frequency]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ad-lib answer.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The unfocused stereo field
-- The listener's attention is divided, causing the arrangement to sound chaotic and busy.
+- The [unfocused stereo field]
+- The listener's attention is divided, causing the arrangement to [sound] chaotic and busy.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: unfocused stereo field
-Support accent: struggle to follow
+Headline accent: [unfocused stereo field]
+Support accent: [sound]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the ad-lib answer.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- The science of stream segregation
-- Auditory scene analysis shows that overlapping frequencies in the center image compete for focus.
+- The science of [stream segregation]
+- [Auditory scene analysis] shows that overlapping frequencies in the center image compete for focus.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed ad-lib lane answering the lead vocal like arrangement is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: stream segregation
-Support accent: separate streams
+Headline accent: [stream segregation]
+Support accent: [Auditory scene analysis]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Backing tracks must answer the lead
-- Pan and process ad-libs to sit in different spatial and frequency pockets from the lead.
+- Backing tracks must [answer the lead]
+- Pan and process ad-libs to sit in different spatial and [frequency] pockets from the lead.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: answer the lead
-Support accent: call and response
+Headline accent: [answer the lead]
+Support accent: [frequency]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Edit ad-libs for strict placement
-- Apply aggressive high-pass and low-pass filtering to ad-lib tracks to separate them.
+- Edit ad-libs for [strict placement]
+- [Apply aggressive] high-pass and low-pass filtering to ad-lib tracks to separate them.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: strict placement
-Support accent: empty spaces between
+Headline accent: [strict placement]
+Support accent: [Apply aggressive]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Mute overlapping ad-libs
-- Mute the ad-libs to check if the lead vocal gains clarity and space.
+- [Mute overlapping ad-libs]
+- Mute the ad-libs to check if the lead [vocal] gains clarity and space.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: Mute overlapping ad-libs
-Support accent: same time as main
+Headline accent: [Mute overlapping ad-libs]
+Support accent: [vocal]
 Motion cue: Use a tap or mute action. The ad-lib answer changes visibly.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check vocal clutter in mono
-- Check the ad-lib balance in mono to verify spatial separation and phase issues.
+- Check vocal [clutter in mono]
+- Check the ad-lib balance in mono to verify spatial separation and [phase] issues.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed ad-lib lane answering the lead vocal like arrangement is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: clutter in mono
-Support accent: do not mask
+Headline accent: [clutter in mono]
+Support accent: [phase]
 Motion cue: Use a tap or mute action. The ad-lib answer changes visibly.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Clean vocal arrangement
-- Separate ad-libs from the lead vocal in frequency and stereo placement.
+- [Clean vocal arrangement]
+- Separate ad-libs from the lead vocal in [frequency] and stereo placement.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: Clean vocal arrangement
-Support accent: structured and energetic
+Headline accent: [Clean vocal arrangement]
+Support accent: [frequency]
 Motion cue: Hold frame longer. Let the ad-lib answer settle, then pulse the final accent.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next vocal arrangement session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next vocal arrangement session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed ad-lib lane answering the lead vocal like arrangement is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Structure vocal ad-libs
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold frame longer. Let the ad-lib answer settle, then pulse the accent.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990

@@ -21,8 +21,8 @@ interface CategoryPageProps {
 
 const categoryColors: Record<string, string> = {
     'production-tips': 'text-primary',
-    'licensing-guide': 'text-[#ec4899]',
-    'genre-guides': 'text-[#00ff88]',
+    'licensing-guide': 'text-sky-200',
+    'genre-guides': 'text-cyan-200',
 };
 
 export function CategoryPage({ category, articles, allCategories }: CategoryPageProps) {
@@ -40,7 +40,7 @@ export function CategoryPage({ category, articles, allCategories }: CategoryPage
                             href="/blog"
                             className="mono-label text-dim-grey hover:text-white transition-colors mb-4 inline-block"
                         >
-                            ← BACK TO BLOG
+                            Back to blog
                         </Link>
                         <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-hero mb-4 ${categoryColors[category.slug]}`}>
                             {category.name}
@@ -102,7 +102,7 @@ export function CategoryPage({ category, articles, allCategories }: CategoryPage
                                         </p>
                                         <div className="flex items-center gap-3 text-xs text-dim-grey mt-auto pt-3 border-t border-white/5">
                                             <span>{article.readingTime} min</span>
-                                            <span>•</span>
+                                            <span>/</span>
                                             <span>{new Date(article.publishedAt).toLocaleDateString('en-US', {
                                                 month: 'short',
                                                 day: 'numeric'

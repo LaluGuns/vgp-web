@@ -37,7 +37,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 
 
@@ -74,44 +74,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Consonants carry hidden emotion
-Support: The vowel carries pitch, but consonants carry attitude.
+Headline: [Consonants carry hidden emotion]
+Support: The vowel carries pitch, but [consonants carry attitude].
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Drowning consonants in de-essers
-Support: Aggressive de-essing strips high-frequency transient bursts and degrades lyric intelligibility.
+Headline: [Drowning consonants] in de-essers
+Support: Aggressive de-essing strips high-frequency [transient] bursts and degrades lyric intelligibility.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The listener loses the message
-Support: The listener's brain struggles to decode words when initial consonant plosives are over-attenuated.
+Headline: The [listener loses] the message
+Support: The listener's [brain] struggles to decode words when initial consonant plosives are over-attenuated.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Transients drive speech recognition
-Support: Speech recognition relies on brief onset transients between 4 and 8 kilohertz to distinguish consonant boundaries.
+Headline: [Transients drive speech] recognition
+Support: Speech recognition relies on brief onset [transients] between 4 and 8 kilohertz to distinguish consonant boundaries.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Intimacy lives in the raw edges
-Support: Retain consonant transient spikes to preserve performance attitude and linguistic definition.
+Headline: Intimacy lives in the [raw edges]
+Support: Retain consonant [transient] spikes to preserve performance attitude and linguistic definition.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Safeguard transients before applying effects
-Support: Use manual volume automation on harsh sibilant clips instead of relying on global de-essing plugins.
+Headline: [Safeguard transients] before applying effects
+Support: Use [manual volume automation] on harsh sibilant clips instead of relying on global de-essing plugins.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Bypass de-essers to test clarity
-Support: Bypass the de-esser entirely and compare speech clarity in the full mix context.
+Headline: [Bypass de-essers] to test clarity
+Support: Bypass the [de-esser] entirely and compare speech clarity in the full mix context.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check sibilance on small speakers
-Support: Check the vocal intelligibility on low-volume band-limited speakers to verify clean transient delivery.
+Headline: Check [sibilance] on small speakers
+Support: Check the vocal intelligibility on low-volume band-limited speakers to verify clean [transient] delivery.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Balance smoothness with articulation
-Support: Limit de-esser gain reduction to 3 decibels to protect critical consonant articulation.
+Headline: [Balance smoothness] with articulation
+Support: Limit [de-esser] gain reduction to 3 decibels to protect critical consonant articulation.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next vocal editing session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next vocal editing session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: consonant spikes glowing inside a vocal waveform. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -122,157 +122,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Consonants carry hidden emotion
-- The vowel carries pitch, but consonants carry attitude.
+- [Consonants carry hidden emotion]
+- The vowel carries pitch, but [consonants carry attitude].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed consonant spikes glowing inside a vocal waveform, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: Consonants carry hidden emotion
-Support accent: consonants carry attitude
+Headline accent: [Consonants carry hidden emotion]
+Support accent: [consonants carry attitude]
 Motion cue: First 0.5 seconds: quick punch-in on the consonant spark, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Drowning consonants in de-essers
-- Aggressive de-essing strips high-frequency transient bursts and degrades lyric intelligibility.
+- [Drowning consonants] in de-essers
+- Aggressive de-essing strips high-frequency [transient] bursts and degrades lyric intelligibility.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: Drowning consonants
-Support accent: strip away articulation
+Headline accent: [Drowning consonants]
+Support accent: [transient]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the consonant spark.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The listener loses the message
-- The listener's brain struggles to decode words when initial consonant plosives are over-attenuated.
+- The [listener loses] the message
+- The listener's [brain] struggles to decode words when initial consonant plosives are over-attenuated.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: listener loses message
-Support accent: sound slurred
+Headline accent: [listener loses]
+Support accent: [brain]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the consonant spark.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Transients drive speech recognition
-- Speech recognition relies on brief onset transients between 4 and 8 kilohertz to distinguish consonant boundaries.
+- [Transients drive speech] recognition
+- Speech recognition relies on brief onset [transients] between 4 and 8 kilohertz to distinguish consonant boundaries.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed consonant spikes glowing inside a vocal waveform is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: Transients drive speech
-Support accent: cues for clarity
+Headline accent: [Transients drive speech]
+Support accent: [transients]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Intimacy lives in the raw edges
-- Retain consonant transient spikes to preserve performance attitude and linguistic definition.
+- Intimacy lives in the [raw edges]
+- Retain consonant [transient] spikes to preserve performance attitude and linguistic definition.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: raw edges
-Support accent: performance's attitude
+Headline accent: [raw edges]
+Support accent: [transient]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Safeguard transients before applying effects
-- Use manual volume automation on harsh sibilant clips instead of relying on global de-essing plugins.
+- [Safeguard transients] before applying effects
+- Use [manual volume automation] on harsh sibilant clips instead of relying on global de-essing plugins.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: Safeguard transients
-Support accent: manual volume automation
+Headline accent: [Safeguard transients]
+Support accent: [manual volume automation]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Bypass de-essers to test clarity
-- Bypass the de-esser entirely and compare speech clarity in the full mix context.
+- [Bypass de-essers] to test clarity
+- Bypass the [de-esser] entirely and compare speech clarity in the full mix context.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: Bypass de-essers
-Support accent: raw track
+Headline accent: [Bypass de-essers]
+Support accent: [de-esser]
 Motion cue: Use a tap or mute action. The consonant spark changes visibly.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check sibilance on small speakers
-- Check the vocal intelligibility on low-volume band-limited speakers to verify clean transient delivery.
+- Check [sibilance] on small speakers
+- Check the vocal intelligibility on low-volume band-limited speakers to verify clean [transient] delivery.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed consonant spikes glowing inside a vocal waveform is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: Check sibilance
-Support accent: low volume
+Headline accent: [sibilance]
+Support accent: [transient]
 Motion cue: Use a tap or mute action. The consonant spark changes visibly.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Balance smoothness with articulation
-- Limit de-esser gain reduction to 3 decibels to protect critical consonant articulation.
+- [Balance smoothness] with articulation
+- Limit [de-esser] gain reduction to 3 decibels to protect critical consonant articulation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: Balance smoothness
-Support accent: punchy and easy
+Headline accent: [Balance smoothness]
+Support accent: [de-esser]
 Motion cue: Hold frame longer. Let the consonant spark settle, then pulse the final accent.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next vocal editing session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next vocal editing session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed consonant spikes glowing inside a vocal waveform is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Protect vocal transients
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold frame longer. Let the consonant spark settle, then pulse the accent.
-Reference line: Refs: Moore 2012 | Senior accessed 2026
+Reference line: Refs: Moore 2012 | Senior 2011

@@ -20,7 +20,7 @@ export const siteNav = [
 
 export const studioNav = [
     { name: 'Studio Overview', href: '/studio' },
-    { name: 'Beatstore', href: '/studio/beats' },
+    { name: 'Beat Store', href: '/studio/beats' },
     { name: 'Masterclass', href: '/studio/masterclass' },
     { name: 'Books', href: '/book' },
 ];
@@ -51,7 +51,7 @@ export const ecosystemCards = [
         cta: 'Preview CADENZ',
         Icon: Activity,
         description:
-            'A cadence music app for runners and cyclists, now in pre-launch development.',
+            'A cadence music app with original VGP music for runners and cyclists, coming soon.',
     },
     {
         title: 'Masterclass',
@@ -87,53 +87,71 @@ export const ecosystemCards = [
         cta: 'Our Story',
         Icon: UserRound,
         description:
-            'Meet Virzy Guns, ranked top 10% songwriter and top 25% producer behind VGP.',
+            'Meet Virzy Guns, the founder shaping the studio, lab, products, and learning system behind VGP.',
     },
 ];
 
 export const cadenzHighlights = [
     'CADENZ by HealingWave Lab',
     'First HealingWave Product',
+    'Cadence music for running and cycling',
+    'VGP original music',
     'Coming soon',
-    'UI already built',
-    'Backend in progress',
 ];
 
 export const healingWaveModules = [
     {
         name: 'HealingWave Focus',
-        status: 'IN DEVELOPMENT',
         platform: 'Web Application',
         description:
             'A browser-based functional audio environment for deep work, focus sessions, and study listening.',
         features: ['Focus timers', 'Custom presets', 'Session modes', 'Study listening'],
-        progress: 75,
-        eta: 'Q2 2026',
+        note: 'Designed for quiet, repeatable listening sessions with fewer distractions.',
     },
     {
         name: 'CADENZ',
-        status: 'COMING SOON',
+        availability: 'Coming soon',
         platform: 'Running and Cycling',
         description:
-            'Tempo-matched cadence music for runners and cyclists. The interface is built, and backend work is in progress.',
+            'Tempo-matched cadence music with original VGP music for runners and cyclists.',
         features: ['Cadence targets', 'BPM based music', 'Motion flow', 'Training rhythm'],
-        progress: 65,
-        eta: 'First release coming soon',
+        note: 'Built to keep cadence targets clear while the music carries the session.',
     },
     {
         name: 'HealingWave Gym',
-        status: 'CONCEPT PHASE',
         platform: 'Strength Training',
         description:
             'A concept for workout-focused audio sessions that organize intensity, rhythm, and recovery cues into one listening system.',
         features: ['Workout modes', 'Tempo sets', 'Session logs', 'Sound presets'],
-        progress: 15,
-        eta: 'Exploration phase',
+        note: 'Explores how intensity, rhythm, and recovery can shape a focused workout session.',
     },
 ];
 
 export const founderStatement =
-    'Virzy Guns treats sound as craft, signal, rhythm, and architecture. VGP brings that work into beats, songs, functional audio, books, and producer education.';
+    'Virzy Guns founded VGP to connect music, technology, movement, and education under one deliberate creative system. Art leads; science makes the decisions sharper.';
 
 export const founderBio =
-    'Virzy Guns is a ranked top 10% songwriter and top 25% producer, beatmaker, and founder of Virzy Guns Production. His work connects songs, premium beats, functional audio, CADENZ, books, and producer education under one studio system.';
+    'Virzy Guns is the founder and creative director of Virzy Guns Production. He builds the bridge between songs, premium beats, functional audio, CADENZ, books, and producer education; his songwriting and production credentials support the work without defining its limits.';
+
+export const catalogCredentials = [
+    {
+        value: 'Top 10%',
+        label: 'Songwriter',
+        href: 'https://credits.muso.ai/profile/05214129-1310-4abc-a856-dc6bc450bf50',
+    },
+    {
+        value: 'Top 25%',
+        label: 'Producer',
+        href: 'https://credits.muso.ai/profile/05214129-1310-4abc-a856-dc6bc450bf50',
+    },
+    {
+        value: '550',
+        label: 'Primary artist credits',
+        href: 'https://credits.muso.ai/profile/05214129-1310-4abc-a856-dc6bc450bf50',
+    },
+    {
+        value: '526',
+        label: 'Producer credits',
+        href: 'https://credits.muso.ai/profile/05214129-1310-4abc-a856-dc6bc450bf50',
+    },
+] as const;

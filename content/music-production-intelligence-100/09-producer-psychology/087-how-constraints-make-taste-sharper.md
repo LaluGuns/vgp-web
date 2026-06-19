@@ -43,17 +43,17 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2013
   - Use: mastering judgment, dynamics, translation
 - TikTok Newsroom. How TikTok recommends videos #ForYou.
   - URL: https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
 
 ## Visual design system
@@ -88,45 +88,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Constraints make taste sharper
-Support: Limits force you to listen to the song instead of the library.
+Headline: [Constraints] make taste sharper
+Support: [Limits force] you to listen to the song instead of the library.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The infinite choice trap
-Support: Loading fifty tracks and hundreds of virtual instruments dilutes your creative focus. Choice paralysis leads to weak arrangements that rely on dense layers to sound full.
+Headline: The [infinite choice] trap
+Support: Loading fifty tracks and hundreds of virtual instruments dilutes your creative focus. Choice paralysis leads to weak arrangements that rely on dense [layers] to sound full.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Density masks bad decisions
-Support: Adding more tracks to a session makes it harder to identify frequency collisions. The ear hears a wall of mud instead of clear, individual instruments.
+Headline: [Density masks] bad decisions
+Support: Adding more tracks to a session makes it harder to identify [frequency] collisions. The ear hears a wall of mud instead of clear, individual instruments.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Choice overload and cognitive load
-Support: Cognitive processing efficiency drops as options increase. Restricting variables reduces the search space in working memory, allowing you to refine the parameters of each sound.
+Headline: Choice overload and [cognitive load]
+Support: Cognitive processing efficiency drops as options increase. Restricting variables reduces the search [space] in working memory, allowing you to refine the parameters of each sound.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Taste is defined by exclusion
-Support: A great arrangement is defined by the space between notes. Limiting yourself to five core sounds forces you to choose elements that carry real musical weight.
+Headline: [Taste] is defined by exclusion
+Support: A great arrangement is defined by the space between notes. [Limiting] yourself to five core sounds forces you to choose elements that carry real musical weight.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Limit the session to five active tracks
-Support: Mute everything except the kick, snare, bass, lead instrument, and lead vocal. Achieve a complete, energetic mix using only these five tracks before adding details.
+Headline: [Limit the] session to five active tracks
+Support: Mute everything except the kick, snare, bass, lead instrument, and lead [vocal]. Achieve a complete, energetic mix using only these five tracks before adding details.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The Arranger check
-Support: Listen to your five-track mix. If the song does not feel complete and moving without the background layers, the core arrangement is weak.
+Headline: The [Arranger check]
+Support: Listen to your five-track mix. If the song does not feel complete and moving without the background [layers], the core arrangement is weak.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Inspect frequency collisions
-Support: Ensure that none of the five core sounds overlap in the low-mid spectrum. Carve out clear space for the bass and vocals.
+Headline: Inspect [frequency] collisions
+Support: Ensure that none of the five core sounds overlap in the low-mid spectrum. Carve out clear space for the bass and [vocals].
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Restrict variables to improve focus
-Support: Limit your arrangement to five elements per section. A cleaner session leads to faster mixing decisions and a wider stereo field.
+Headline: [Restrict variables] to improve focus
+Support: Limit your arrangement to five elements per section. A cleaner session leads to faster mixing decisions and a wider [stereo] field.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to sharpen your taste
+Headline: [Save this] to sharpen your taste
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -135,157 +135,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Constraints make taste sharper
-- Limits force you to listen to the song instead of the library.
+- [Constraints] make taste sharper
+- [Limits force] you to listen to the song instead of the library.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. DAW timeline showing only 5 clean cyan tracks. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Constraints
-Support accent: library.
+Headline accent: [Constraints]
+Support accent: [Limits force]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The infinite choice trap
-- Loading fifty tracks and hundreds of virtual instruments dilutes your creative focus. Choice paralysis leads to weak arrangements that rely on dense layers to sound full.
+- The [infinite choice] trap
+- Loading fifty tracks and hundreds of virtual instruments dilutes your creative focus. Choice paralysis leads to weak arrangements that rely on dense [layers] to sound full.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a cascade of 50 MIDI regions glowing with a red warning outline. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [infinite choice]
+Support accent: [layers]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Density masks bad decisions
-- Adding more tracks to a session makes it harder to identify frequency collisions. The ear hears a wall of mud instead of clear, individual instruments.
+- [Density masks] bad decisions
+- Adding more tracks to a session makes it harder to identify [frequency] collisions. The ear hears a wall of mud instead of clear, individual instruments.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass screen showing a spectrogram with mid-range overlap and frequency collisions in red. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [Density masks]
+Support accent: [frequency]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Choice overload and cognitive load
-- Cognitive processing efficiency drops as options increase. Restricting variables reduces the search space in working memory, allowing you to refine the parameters of each sound.
+- Choice overload and [cognitive load]
+- Cognitive processing efficiency drops as options increase. Restricting variables reduces the search [space] in working memory, allowing you to refine the parameters of each sound.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of cognitive load showing a small working memory slot holding 5 items. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [cognitive load]
+Support accent: [space]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Taste is defined by exclusion
-- A great arrangement is defined by the space between notes. Limiting yourself to five core sounds forces you to choose elements that carry real musical weight.
+- [Taste] is defined by exclusion
+- A great arrangement is defined by the space between notes. [Limiting] yourself to five core sounds forces you to choose elements that carry real musical weight.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a single clean volume dial set to a specific notch. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [Taste]
+Support accent: [Limiting]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Limit the session to five active tracks
-- Mute everything except the kick, snare, bass, lead instrument, and lead vocal. Achieve a complete, energetic mix using only these five tracks before adding details.
+- [Limit the] session to five active tracks
+- Mute everything except the kick, snare, bass, lead instrument, and lead [vocal]. Achieve a complete, energetic mix using only these five tracks before adding details.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: 5 clean vertical console channels glowing with cyan indicator lights. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [Limit the]
+Support accent: [vocal]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The Arranger check
-- Listen to your five-track mix. If the song does not feel complete and moving without the background layers, the core arrangement is weak.
+- The [Arranger check]
+- Listen to your five-track mix. If the song does not feel complete and moving without the background [layers], the core arrangement is weak.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a clean glass UI panel displaying the number '5' in large cyan letters. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [Arranger check]
+Support accent: [layers]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Inspect frequency collisions
-- Ensure that none of the five core sounds overlap in the low-mid spectrum. Carve out clear space for the bass and vocals.
+- Inspect [frequency] collisions
+- Ensure that none of the five core sounds overlap in the low-mid spectrum. Carve out clear space for the bass and [vocals].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A frequency spectrum showing 5 non-overlapping instrument curves. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [frequency]
+Support accent: [vocals]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Restrict variables to improve focus
-- Limit your arrangement to five elements per section. A cleaner session leads to faster mixing decisions and a wider stereo field.
+- [Restrict variables] to improve focus
+- Limit your arrangement to five elements per section. A cleaner session leads to faster mixing decisions and a wider [stereo] field.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic showing a timeline ending in a solid lock symbol. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [Restrict variables]
+Support accent: [stereo]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to sharpen your taste
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to sharpen your taste
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013

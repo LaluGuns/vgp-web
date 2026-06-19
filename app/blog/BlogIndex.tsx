@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { m } from 'framer-motion';
 import { ArrowRight, Bell, BookOpen, Clock, FileText, ListFilter, Mail, Newspaper } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
+import { CinematicBackdrop } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
@@ -19,18 +19,18 @@ interface BlogIndexProps {
 const categoryStyles: Record<string, { label: string; badge: string; line: string }> = {
     'production-tips': {
         label: 'Production',
-        badge: 'bg-blue-50 text-blue-700 ring-blue-100',
-        line: 'bg-blue-500',
+        badge: 'bg-sky-100 text-sky-950 ring-sky-200',
+        line: 'bg-sky-300',
     },
     'licensing-guide': {
         label: 'Licensing',
-        badge: 'bg-amber-50 text-amber-700 ring-amber-100',
-        line: 'bg-amber-500',
+        badge: 'bg-slate-100 text-slate-900 ring-slate-200',
+        line: 'bg-slate-300',
     },
     'genre-guides': {
         label: 'Genre',
-        badge: 'bg-emerald-50 text-emerald-700 ring-emerald-100',
-        line: 'bg-emerald-500',
+        badge: 'bg-cyan-100 text-cyan-950 ring-cyan-200',
+        line: 'bg-cyan-300',
     },
 };
 
@@ -90,6 +90,7 @@ function CategoryButton({
     return (
         <button
             onClick={onClick}
+            aria-pressed={active}
             className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
                 active
                     ? 'border-white bg-white text-[#1d1d1f]'
@@ -219,19 +220,12 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
 
     return (
         <PageTransition>
-        <main className="relative max-w-full overflow-hidden bg-[#03040A] text-white">
+        <main className="editorial-shell relative max-w-full overflow-hidden text-white">
                 <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16">
-                    {/* Subtle gradient orbs — Blog theme */}
-                    <div className="pointer-events-none absolute top-[-10%] left-1/3 h-[400px] w-[400px] bg-[radial-gradient(circle,rgba(0,113,227,0.07)_0%,transparent_70%)] blur-[80px]" />
-                    <div className="pointer-events-none absolute bottom-0 right-1/4 h-[300px] w-[300px] bg-[radial-gradient(circle,rgba(0,212,255,0.04)_0%,transparent_70%)] blur-[80px]" />
+                    <CinematicBackdrop />
 
                     <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
                         <div className="relative max-w-3xl min-w-0">
-                            {/* Portal3DIcon — Background blog animation */}
-                            <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-20">
-                                <Portal3DIcon portalId="blog" color="#0071e3" size={380} />
-                            </div>
-
                             <m.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -241,17 +235,17 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                 <SoftLabel>VGP reading room</SoftLabel>
                                 <h1
                                     aria-label="Music Production Guide: Trap Edition"
-                                    className="mt-6 max-w-full break-words text-4xl font-semibold leading-[1.06] text-white sm:text-6xl lg:text-7xl"
+                                    className="mt-6 max-w-full break-words font-display text-4xl font-semibold leading-[1.06] text-white sm:text-6xl lg:text-7xl"
                                 >
                                     <span className="block">Music Production</span>
                                     <span className="block">Guide:</span>
                                     <span className="block text-white/45">Trap Edition</span>
                                 </h1>
-                                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/25">
+                                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/65">
                                     100% Art. 100% Science.
                                 </p>
-                                <p className="mt-6 max-w-[21.5rem] text-base leading-7 text-white/60 sm:max-w-2xl sm:text-xl sm:leading-9">
-                                    The physics, math, and engineering behind professional trap music. A practical guide for
+                                <p className="mt-6 max-w-[21.5rem] text-base leading-7 text-white/70 sm:max-w-2xl sm:text-xl sm:leading-9">
+                                    Rhythm, math, and production decisions behind professional trap music. A practical guide for
                                     turning creative instinct into repeatable systems for drums, 808s, vocals, mixing, and mastering.
                                 </p>
 
@@ -313,7 +307,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white/[0.05] text-sm font-semibold text-white/55 ring-1 ring-white/10">
                                         {String(index + 1).padStart(2, '0')}
                                     </span>
-                                    <span className="text-sm font-semibold text-white/82">{module}</span>
+                                    <span className="text-sm font-semibold text-white/80">{module}</span>
                                 </div>
                             ))}
                         </div>

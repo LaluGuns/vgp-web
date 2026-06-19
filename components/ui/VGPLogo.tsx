@@ -21,8 +21,8 @@ export const VGPLogo = ({
             <defs>
                 <linearGradient id="vgpGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#00E5FF" stopOpacity="1" />
-                    <stop offset="50%" stopColor="#7B68EE" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#E900FF" stopOpacity="1" />
+                    <stop offset="50%" stopColor="#7DD3FC" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#E5E7EB" stopOpacity="1" />
                 </linearGradient>
 
                 {hoverColor && (

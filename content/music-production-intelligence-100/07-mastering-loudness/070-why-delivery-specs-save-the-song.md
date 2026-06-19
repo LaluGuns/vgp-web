@@ -32,22 +32,22 @@ Humanizer status: passed
 - European Broadcasting Union. EBU R 128 loudness normalisation and permitted maximum level.
   - URL: https://tech.ebu.ch/publications/r128/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: LUFS, loudness range, true peak descriptors
 - International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level.
   - URL: https://www.itu.int/rec/R-REC-BS.1770/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2006
   - Use: loudness measurement and true peak
 - Spotify for Artists. Loudness normalization.
   - URL: https://artists.spotify.com/help/article/loudness-normalization
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: streaming loudness behavior
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: mastering judgment, dynamics, translation
 
 ## Visual design system
@@ -82,72 +82,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Delivery specs protect the record
+Headline: Delivery specs [protect the record]
 
-Support: Ignoring delivery specs can lead to platform transcoding errors.
+Support: Ignoring delivery specs can lead to platform [transcoding errors].
 
 Visual: A delivery specifications checklist on screen, with key items checked in cyan.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Delivering one master for everything
+Headline: The trap: [Delivering one master] for everything
 
-Support: Exporting a single master file for all distribution formats leads to conversion errors and playback distortion.
+Support: [Exporting a] single master file for all distribution formats leads to conversion errors and playback distortion.
 
 Visual: A single master file split into paths marked in warning red for different formats.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Listeners hear transcoding distortion
+Headline: The ear: Listeners hear [transcoding distortion]
 
-Support: Streaming codecs transcode files into lossy formats. If the master has no peak headroom, transcoding introduces distortion.
+Support: Streaming codecs transcode files into lossy formats. If the master has no peak [headroom], transcoding introduces distortion.
 
 Visual: A headphone speaker with digital conversion noise lines radiating in red.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How codec constraints affect audio
+Headline: How [codec constraints] affect audio
 
-Support: Lossy compression algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
+Support: Lossy [compression] algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
 
 Visual: A comparison bar graph showing bandwidth loss between raw WAV and MP3 files.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Delivery is part of the master
+Headline: Delivery is [part of the master]
 
-Support: Optimize your masters for the target medium, setting the peak headroom and integrated level to match the destination specs.
+Support: Optimize your masters for the target medium, setting the peak [headroom] and integrated level to match the destination specs.
 
 Visual: An export settings window with custom output format options highlighted in cyan.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Export formats matching specs
+Headline: Export formats [matching specs]
 
-Support: Prepare separate files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
+Support: [Prepare separate] files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
 
 Visual: A DAW export queue showing multiple files named for streaming, vinyl, and WAV.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Inspect true peak and LUFS logs
+Headline: Inspect [true peak] and LUFS logs
 
-Support: Analyze the export log files to verify that integrated loudness and true peak levels comply with your target guidelines.
+Support: Analyze the export log files to verify that integrated loudness and [true peak] levels comply with your target guidelines.
 
 Visual: An analysis log window showing measurements for LUFS and True Peak in green.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Test files with normalization active
+Headline: Test files with [normalization active]
 
-Support: Audition the final exported files with platform-style normalization active to ensure they remain clean under gain scaling.
+Support: Audition the final exported files with platform-style normalization active to ensure they remain clean under [gain] scaling.
 
 Visual: A virtual player with normalization toggle highlighted in cyan.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Conform to technical guidelines
+Headline: Conform to [technical guidelines]
 
-Support: Deliver files only when they meet the exact technical guidelines of the destination without exceeding peak limits.
+Support: [Deliver files] only when they meet the exact technical guidelines of the destination without exceeding peak limits.
 
 Visual: A document icon with a cyan seal representing compliance.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
+Headline: [Save this] before chasing another loudness number.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: delivery checklist protecting the final master file. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -158,157 +158,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Delivery specs protect the record
-- Ignoring delivery specs can lead to platform transcoding errors.
+- Delivery specs [protect the record]
+- Ignoring delivery specs can lead to platform [transcoding errors].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of delivery specifications checklist on screen, with key items checked in cyan in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: protect the record
-Support accent: transcoding errors
+Headline accent: [protect the record]
+Support accent: [transcoding errors]
 Motion cue: A checkmark appears next to the first specification on the list.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Delivering one master for everything
-- Exporting a single master file for all distribution formats leads to conversion errors and playback distortion.
+- The trap: [Delivering one master] for everything
+- [Exporting a] single master file for all distribution formats leads to conversion errors and playback distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of single master file split into paths marked in warning red for different formats with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: delivering one master
-Support accent: translation failures
+Headline accent: [Delivering one master]
+Support accent: [Exporting a]
 Motion cue: Split paths flash red to indicate errors.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Listeners hear transcoding distortion
-- Streaming codecs transcode files into lossy formats. If the master has no peak headroom, transcoding introduces distortion.
+- The ear: Listeners hear [transcoding distortion]
+- Streaming codecs transcode files into lossy formats. If the master has no peak [headroom], transcoding introduces distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of headphone speaker with digital conversion noise lines radiating in red with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: transcoding distortion
-Support accent: ruin the experience
+Headline accent: [transcoding distortion]
+Support accent: [headroom]
 Motion cue: Red noise lines flicker, then fade to a smooth wave when specifications are met.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How codec constraints affect audio
-- Lossy compression algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
+- How [codec constraints] affect audio
+- Lossy [compression] algorithms remove high-frequency phase detail. Clipped wav files cause encoder clipping and audible inter-sample distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent:
-Support accent:
-Motion cue:
-Reference line:
+Visual direction: Premium technical diagram of on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent: [codec constraints]
+Support accent: [compression]
+Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Reference line: Refs: European Broadcasting Union 2011 | URL: https://tech 2011 | Type: official standard 2011 | Year/access: 2011 | Use: LUFS, loudness range, true peak descriptors 2011 | International Telecommunication Union 2006 | URL: https://www 2006 | Type: official standard 2011 | Year/access: 2011 | Use: loudness measurement and true peak 2011 | Spotify for Artists 2020 | URL: https://artists 2020 | Type: official platform documentation 2011 | Year/access: 2011 | Use: streaming loudness behavior 2011 | Katz 2013 | URL: https://www 2006 | Type: named expert / established book 2011 | Year/access: 2011 | Use: mastering judgment, dynamics, translation 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Delivery is part of the master
-- Optimize your masters for the target medium, setting the peak headroom and integrated level to match the destination specs.
+- Delivery is [part of the master]
+- Optimize your masters for the target medium, setting the peak [headroom] and integrated level to match the destination specs.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of An export settings window with custom output format options highlighted in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: part of the master
-Support accent: custom output format
+Headline accent: [part of the master]
+Support accent: [headroom]
 Motion cue: Highlight moves down the export formats list.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Export formats matching specs
-- Prepare separate files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
+- Export formats [matching specs]
+- [Prepare separate] files for streaming platforms, vinyl pre-masters, and high-resolution archives, applying spec-specific ceilings.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of DAW export queue showing multiple files named for streaming, vinyl, and WAV. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: matching specs
-Support accent: distinct files
+Headline accent: [matching specs]
+Support accent: [Prepare separate]
 Motion cue: Files in the queue light up sequentially in cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Inspect true peak and LUFS logs
-- Analyze the export log files to verify that integrated loudness and true peak levels comply with your target guidelines.
+- Inspect [true peak] and LUFS logs
+- Analyze the export log files to verify that integrated loudness and [true peak] levels comply with your target guidelines.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of An analysis log window showing measurements for LUFS and True Peak in green. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: Inspect logs
-Support accent: measurements conform
+Headline accent: [true peak]
+Support accent: [true peak]
 Motion cue: Measurement numbers update on the log screen.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Test files with normalization active
-- Audition the final exported files with platform-style normalization active to ensure they remain clean under gain scaling.
+- Test files with [normalization active]
+- Audition the final exported files with platform-style normalization active to ensure they remain clean under [gain] scaling.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of virtual player with normalization toggle highlighted in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: normalization active
-Support accent: stays clean
+Headline accent: [normalization active]
+Support accent: [gain]
 Motion cue: Virtual player slider moves to normalized level.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Conform to technical guidelines
-- Deliver files only when they meet the exact technical guidelines of the destination without exceeding peak limits.
+- Conform to [technical guidelines]
+- [Deliver files] only when they meet the exact technical guidelines of the destination without exceeding peak limits.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of document icon with cyan seal representing compliance with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: technical guidelines
-Support accent: satisfy specifications
+Headline accent: [technical guidelines]
+Support accent: [Deliver files]
 Motion cue: Cyan seal glows on the document.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before chasing another loudness number.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before chasing another loudness number.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013

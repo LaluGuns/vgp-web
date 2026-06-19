@@ -41,7 +41,7 @@ export const categories: Category[] = [
     {
         slug: 'genre-guides',
         name: 'Genre Guides',
-        description: 'Deep dives into Trap, Cyberphonk, R&B, and more production styles.',
+        description: 'Deep dives into Trap, Phonk, R&B, and more production styles.',
     },
     {
         slug: 'songwriting',
@@ -141,7 +141,7 @@ Your natural flow and delivery style should align with the beat's tempo. Every a
 | **R&B / Soul** | 60-80 | Emotional, slow jams, vocal-heavy |
 | **Trap / Drill** | 130-150 | High energy, triplet flows, moshpit |
 | **Pop / Dance** | 100-128 | Upbeat, radio-friendly, catchy |
-| **Cyberphonk** | 130-160 | Aggressive, distorted, fast |
+| **Phonk** | 130-160 | Dark, distorted, high-motion |
 
 ## 2. Frequency Analysis: Does It Clash?
 
@@ -604,16 +604,16 @@ But the nuance between "Personal Use" and "Commercial Use" often confuses artist
 Personal Use means you are using the beat for **listening or practice purposes only**. No money is being made, and the song is not being distributed on major platforms.
 
 **Allowed:**
-- âœ… Writing lyrics and practicing at home.
-- âœ… Recording a demo to send to the producer (for feedback/collabs).
-- âœ… Sharing the file privately with friends.
-- âœ… Performing at a *free* non-profit show (e.g., school talent show).
+- Yes: Writing lyrics and practicing at home.
+- Yes: Recording a demo to send to the producer for feedback or collaborations.
+- Yes: Sharing the file privately with friends.
+- Yes: Performing at a free non-profit show, such as a school talent show.
 
 **Not Allowed:**
-- âŒ Uploading to Spotify, Apple Music, Tidal, etc.
-- âŒ Uploading to YouTube with monetization enabled.
-- âŒ Selling the song on Bandcamp or CD.
-- âŒ Performing at a paid venue (where tickets are sold).
+- No: Uploading to Spotify, Apple Music, Tidal, or other streaming platforms.
+- No: Uploading to YouTube with monetization enabled.
+- No: Selling the song on Bandcamp, CD, or any paid format.
+- No: Performing at a paid venue where tickets are sold.
 
 ## What is Commercial Use? (For-Profit)
 
@@ -816,16 +816,16 @@ Stop settling for weak bass.
         },
     },
     {
-        slug: 'cyberphonk-production-dark-melodies',
-        title: 'Cyberphonk Production: Dark Melodies and Distorted Bass',
-        excerpt: 'The aggressive cousin of phonk with industrial influences. Explore the sonic characteristics of cyberphonk.',
+        slug: 'phonk-production-dark-melodies',
+        title: 'Phonk Production: Dark Melodies and Distorted Bass',
+        excerpt: 'A grounded look at phonk, distorted bass, cowbell rhythm, and night-drive energy without turning the sound into clutter.',
         category: 'genre-guides',
         publishedAt: '2026-01-22',
         readingTime: 10,
         content: `
 ## Enter The Drift
 
-Cyberphonk (and Drift Phonk) exploded on TikTok, characterized by high-speed cowbells, distorted Memphis vocals, and aggressive compression. It's not just "loud" - it's texturally violent.
+Phonk and drift phonk exploded on short-form video, built around cowbell rhythm, distorted Memphis vocal textures, and heavy compression. The goal is motion, pressure, and attitude without turning the mix into noise.
 
 If you want to produce this genre, you need to break the traditional mixing rules.
 
@@ -848,7 +848,7 @@ The defining sound of the genre.
 
 ## 3. The "Wall of Sound" Mix
 
-In most genres, you want dynamics (loud and quiet parts). In Cyberphonk, you want **LOUD**.
+In most genres, you want wide dynamics. In phonk, you usually want controlled pressure.
 
 ### **The Master Bus Limiter**
 - **Threshold:** Lower it until you see -6dB to -10dB of gain reduction. Yes, really.
@@ -878,14 +878,14 @@ To keep it from sounding dry:
 - **Breakdown (0:50 - 1:10):** Remove drums. Introduce a secondary melody (Acidfied synth).
 - **Drop 2:** Same as drop 1 but with different vocal chop.
 
-## VGP Cyberphonk Standard
+## VGP Phonk Standard
 
-We specialize in this dirty, high-energy sound. Our Cyberphonk catalog is pre-clipped and mastered to -6 LUFS for maximum competitive loudness on streaming platforms.
+The VGP approach keeps the energy high while protecting the hook, vocal pocket, and low-end translation. Distortion is a decision, not a shortcut.
         `,
         seo: {
-            title: 'Cyberphonk Production Guide | VGP Studio',
-            description: 'Explore cyberphonk production: dark melodies, distorted bass, aggressive drums, and industrial influences.',
-            keywords: ['cyberphonk', 'phonk beats', 'dark phonk', 'drift phonk', 'phonk production', 'aggressive beats'],
+            title: 'Phonk Production Guide | VGP Studio',
+            description: 'Explore phonk production: dark melodies, distorted bass, cowbell rhythm, drums, and mix pressure.',
+            keywords: ['phonk beats', 'dark phonk', 'drift phonk', 'phonk production', 'aggressive beats'],
         },
     },
     // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

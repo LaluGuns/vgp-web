@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Beatstore Section - Terminal-wrapped Beatstars Integration
+ * Beat Store section
  */
 
 import { m } from 'framer-motion';
@@ -15,7 +15,7 @@ export function Beatstore() {
 
             <div className="max-w-5xl mx-auto">
                 <SectionHeader
-                    label="VGP BEATSTORE"
+                    label="VGP BEAT STORE"
                     title="Premium Instrumentals"
                     description="Curated beats for artists, creators, and producers."
                 />
@@ -30,13 +30,13 @@ export function Beatstore() {
                     {/* Terminal Header */}
                     <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/30">
                         <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                            <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                            <div className="h-3 w-3 rounded-full bg-sky-200/45" />
+                            <div className="h-3 w-3 rounded-full bg-cyan-300/35" />
+                            <div className="h-3 w-3 rounded-full bg-white/[0.18]" />
                         </div>
                         <div className="flex items-center gap-3">
                             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                            <span className="terminal-text text-white/70">VGP://BEATSTORE</span>
+                            <span className="terminal-text text-white/70">VGP://BEAT-STORE</span>
                         </div>
                         <div className="w-16" />
                     </div>
@@ -51,7 +51,7 @@ export function Beatstore() {
                         <div className="terminal-text text-white/40">POWERED BY BEATSTARS</div>
                     </div>
 
-                    {/* Beatstars Player Embed */}
+                    {/* BeatStars player embed */}
                     <div className="relative bg-black/20">
                         <iframe
                             src="https://player.beatstars.com/?storeId=122437"
@@ -59,15 +59,15 @@ export function Beatstore() {
                             height="600"
                             style={{ border: 'none', display: 'block' }}
                             allow="autoplay; clipboard-write"
-                            title="VGP Beatstore"
+                            title="VGP Beat Store"
                         />
                     </div>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between px-6 py-3 bg-black/50 border-t border-white/5">
                         <div className="flex items-center gap-4 terminal-text">
-                            <span className="text-white/40">◈ SECURE CONNECTION</span>
-                            <span className="text-white/40">◈ INSTANT DELIVERY</span>
+                            <span className="text-white/40">SECURE CHECKOUT</span>
+                            <span className="text-white/40">INSTANT DELIVERY</span>
                         </div>
                         <div className="terminal-text text-primary/50">VGP.SYSTEM.v1.0</div>
                     </div>

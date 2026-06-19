@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
@@ -10,7 +11,7 @@ const footerGroups = [
         title: 'Studio',
         links: [
             { name: 'Studio Overview', href: '/studio' },
-            { name: 'Beatstore', href: '/studio/beats' },
+            { name: 'Beat Store', href: '/studio/beats' },
             { name: 'Custom Production', href: '/studio/beats' },
         ],
     },
@@ -54,6 +55,14 @@ export function Footer() {
             >
                 <div className="grid gap-12 lg:grid-cols-[1.1fr_1.4fr]">
                     <div>
+                        <Image
+                            src="/branding/vgp-logo-chrome-full.png"
+                            alt="Virzy Guns Production"
+                            width={280}
+                            height={280}
+                            className="mb-8 h-auto w-44 opacity-80 saturate-[0.82] sm:w-52"
+                            sizes="208px"
+                        />
                         <h2 className="font-display text-4xl font-normal leading-none text-white sm:text-5xl">
                             100% Art.
                             <br />

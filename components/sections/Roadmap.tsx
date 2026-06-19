@@ -14,7 +14,7 @@ const modules = [
         id: 'healingwave',
         title: 'HealingWave Focus',
         description: 'Browser-based functional audio for deep work and flow states.',
-        icon: 'ðŸ§ ',
+        icon: '01',
         status: 'IN DEVELOPMENT',
         progress: 65,
     },
@@ -22,7 +22,7 @@ const modules = [
         id: 'cadenz',
         title: 'CADENZ',
         description: 'Coming-soon cadence music app by HealingWave Lab.',
-        icon: 'ðŸƒ',
+        icon: '02',
         status: 'COMING Q3 2026',
         progress: 30,
     },
@@ -30,7 +30,7 @@ const modules = [
         id: 'gym',
         title: 'VGP Gym',
         description: 'Fitness-focused audio performance app.',
-        icon: 'ðŸ’ª',
+        icon: '03',
         status: 'CONCEPT',
         progress: 10,
     },
@@ -65,7 +65,7 @@ export function Roadmap() {
                                 </div>
                                 <div className="absolute inset-0 bg-black/20 pointer-events-none" />
                                 <div className="relative">
-                                    <div className="text-4xl mb-4">{module.icon}</div>
+                                    <div className="mb-4 text-4xl font-semibold text-sky-100/65">{module.icon}</div>
                                     <h3 className="text-xl font-semibold mb-2">{module.title}</h3>
                                     <p className="text-white/50 text-sm mb-6">{module.description}</p>
                                     <div className="mt-auto">

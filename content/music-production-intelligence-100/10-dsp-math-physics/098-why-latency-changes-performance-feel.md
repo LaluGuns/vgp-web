@@ -43,12 +43,12 @@ Humanizer status: passed
 - Smith. Spectral Audio Signal Processing. CCRMA, Stanford.
   - URL: https://ccrma.stanford.edu/~jos/sasp/
   - Type: open textbook
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: FFT, STFT, filters, spectral analysis
 - Smith. Introduction to Digital Filters with Audio Applications. CCRMA, Stanford.
   - URL: https://ccrma.stanford.edu/~jos/filters/
   - Type: open textbook
-  - Year/access: accessed 2026
+  - Year/access: 2007
   - Use: filters, resonance, phase response
 
 ## Visual design system
@@ -83,45 +83,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Latency changes the player body
-Support: Monitoring lag ruins the performance swing. Reduce buffers.
+Headline: [Latency] changes the player body
+Support: [Monitoring lag] ruins the performance swing. Reduce buffers.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Tracking with high buffers
-Support: Recording vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
+Headline: [Tracking with] high buffers
+Support: [Recording] vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Auditory motor loop disruption
-Support: The brain coordinates physical playing with immediate acoustic feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
+Headline: [Auditory motor] loop disruption
+Support: The brain coordinates physical playing with immediate [acoustic] feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Propagation delay
-Support: Buffer size determines the block size of samples processed by the CPU. Large buffers delay the round-trip signal, creating a timing offset between performance and monitor.
+Headline: Propagation [delay]
+Support: Buffer size determines the block size of samples processed by the CPU. Large buffers [delay] the round-trip signal, creating a timing offset between performance and monitor.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Monitor response dictates energy
-Support: A musician performs best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
+Headline: Monitor response dictates [energy]
+Support: A [musician performs] best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Set DAW buffer to 64 samples
-Support: Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip delay.
+Headline: Set [DAW buffer] to 64 samples
+Support: Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip [delay].
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The monitoring delay test
-Support: Record a guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
+Headline: The monitoring [delay] test
+Support: [Record a] guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check round trip sample latency
-Support: Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total delay remains under 10 ms.
+Headline: Check [round trip] sample latency
+Support: Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total [delay] remains under 10 ms.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Track low and mix high
-Support: Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during mixing to free up CPU power.
+Headline: Track low and [mix] high
+Support: Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during [mixing] to free up CPU power.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to eliminate monitoring lag
+Headline: [Save this] to eliminate monitoring lag
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -130,157 +130,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Latency changes the player body
-- Monitoring lag ruins the performance swing. Reduce buffers.
+- [Latency] changes the player body
+- [Monitoring lag] ruins the performance swing. Reduce buffers.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A timeline wave showing two paths, with a red timing delay offset indicator. Soft ambient side-lighting in dark teal, dramatic shadows on matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Latency
-Support accent: buffers.
+Headline accent: [Latency]
+Support accent: [Monitoring lag]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Tracking with high buffers
-- Recording vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
+- [Tracking with] high buffers
+- [Recording] vocals or instruments with a high buffer size introduces monitoring delay. The performer fights the lag, resulting in stiff, rushed timing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of an audio interface panel showing a 1024 sample buffer selected, with a red warning glow. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [Tracking with]
+Support accent: [Recording]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Auditory motor loop disruption
-- The brain coordinates physical playing with immediate acoustic feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
+- [Auditory motor] loop disruption
+- The brain coordinates physical playing with immediate [acoustic] feedback. Even a 15 ms delay disrupts this loop, forcing the player to compensate.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass screen showing a schematic of the auditory motor loop showing delay between a playing hand and an ear icon. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [Auditory motor]
+Support accent: [acoustic]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Propagation delay
-- Buffer size determines the block size of samples processed by the CPU. Large buffers delay the round-trip signal, creating a timing offset between performance and monitor.
+- Propagation [delay]
+- Buffer size determines the block size of samples processed by the CPU. Large buffers [delay] the round-trip signal, creating a timing offset between performance and monitor.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of the CPU buffer block diagram showing sample block queues. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [delay]
+Support accent: [delay]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Monitor response dictates energy
-- A musician performs best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
+- Monitor response dictates [energy]
+- A [musician performs] best when the monitoring feels immediate. Lower the latency to capture the natural swing and micro-timing variations.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a clean timeline showing tight, aligned audio regions. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [energy]
+Support accent: [musician performs]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Set DAW buffer to 64 samples
-- Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip delay.
+- Set [DAW buffer] to 64 samples
+- Reduce your DAW buffer to 64 samples or less during tracking. Disable all high-latency master bus plugins to minimize round-trip [delay].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Audio interface driver panel displaying '64 samples' selected in bright cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [DAW buffer]
+Support accent: [delay]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The monitoring delay test
-- Record a guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
+- The monitoring [delay] test
+- [Record a] guitar track at a 1024 sample buffer, then at 64 samples. Compare the timing alignment against the grid to see the latency compensation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of two recorded guitar waveforms showing a timing offset compared to grid lines. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [delay]
+Support accent: [Record a]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check round trip sample latency
-- Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total delay remains under 10 ms.
+- Check [round trip] sample latency
+- Open your audio interface driver panel. Verify the round-trip latency in milliseconds. Ensure the total [delay] remains under 10 ms.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Round-trip latency readout showing '4.2 ms' in glowing cyan on a dark screen. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [round trip]
+Support accent: [delay]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Track low and mix high
-- Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during mixing to free up CPU power.
+- Track low and [mix] high
+- Always record at the lowest stable buffer size to protect the performance. Increase the buffer only during [mixing] to free up CPU power.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic showing a timeline ending in a solid lock symbol. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [mix]
+Support accent: [mixing]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to eliminate monitoring lag
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to eliminate monitoring lag
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: MIT OCW 2016
+Reference line: Refs: MIT OCW 2011

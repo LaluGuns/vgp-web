@@ -3,14 +3,14 @@ import BeatsClient from './BeatsClient';
 
 export const metadata: Metadata = {
     title: 'Beats by Virzy Guns | VGP Studio Beat Store',
-    description: 'Browse premium beats by Virzy Guns across trap, cyberphonk, synthwave, R&B, drill, custom production, mixing, mastering, and sound design.',
+    description: 'Browse premium beats by Virzy Guns across trap, phonk, synthwave, R&B, drill, custom production, mixing, mastering, and sound design.',
     keywords: [
         'beats by Virzy Guns',
         'Virzy Guns beats',
-        'VGP beat store',
+        'VGP Beat Store',
         'buy beats online',
         'trap beats',
-        'cyberphonk beats',
+        'phonk beats',
         'synthwave beats',
         'R&B beats',
         'drill beats',

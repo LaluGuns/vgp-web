@@ -43,12 +43,12 @@ Humanizer status: passed
 - Smith. Introduction to Digital Filters with Audio Applications. CCRMA, Stanford.
   - URL: https://ccrma.stanford.edu/~jos/filters/
   - Type: open textbook
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: filters, resonance, phase response
 - MIT OpenCourseWare. Signals and Systems.
   - URL: https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/
   - Type: official course material
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: systems, convolution, frequency response
 
 ## Visual design system
@@ -83,45 +83,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Fourier shows the ingredients
-Support: Your eyes are not mixing tools. Trust the acoustic field.
+Headline: [Fourier] shows the ingredients
+Support: Your eyes are not mixing tools. Trust the [acoustic] field.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Staring at the spectrum analyzer
-Support: Mixing based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
+Headline: [Staring at] the spectrum analyzer
+Support: [Mixing] based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear evaluates time and phase
-Support: The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides phase correlation.
+Headline: The [ear] evaluates time and phase
+Support: The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides [phase correlation].
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Fast Fourier Transform
-Support: The Fourier transform converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
+Headline: Fast [Fourier Transform]
+Support: The [Fourier transform] converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Let reference guides remain guidelines
-Support: Use spectrum analyzers to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
+Headline: Let [reference] guides remain guidelines
+Support: Use [spectrum analyzers] to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Match analyzer settings to human hearing
-Support: Set your analyzer block size to 4096 samples and use a Hann window. This balances time and frequency resolution for low-end checking.
+Headline: [Match analyzer] settings to human hearing
+Support: Set your analyzer block size to 4096 samples and use a Hann window. This balances time and [frequency] resolution for low-end checking.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The blind frequency sweep
-Support: Close your eyes and adjust an EQ band. Once the sound is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
+Headline: The blind [frequency] sweep
+Support: Close your eyes and adjust an EQ band. Once the [sound] is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify low-end masking
-Support: Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same frequency bin.
+Headline: [Verify] low-end masking
+Support: Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same [frequency] bin.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Measure for diagnostic checks
-Support: Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your ears.
+Headline: [Measure for] diagnostic checks
+Support: Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your [ears].
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to understand spectral analyzers
+Headline: [Save this] to understand spectral analyzers
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -130,157 +130,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Fourier shows the ingredients
-- Your eyes are not mixing tools. Trust the acoustic field.
+- [Fourier] shows the ingredients
+- Your eyes are not mixing tools. Trust the [acoustic] field.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark glass UI panel with a subtle dotted grid canvas texture. A complex audio wave decomposed into three individual sine waves glowing in cyan. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Fourier
-Support accent: field.
+Headline accent: [Fourier]
+Support accent: [acoustic]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Staring at the spectrum analyzer
-- Mixing based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
+- [Staring at] the spectrum analyzer
+- [Mixing] based on visual spectrum curves leads to poor balance decisions. A flat visual analyzer does not guarantee a balanced mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a producer's eyes staring at a large glowing spectrum analyzer on a dark desk. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [Staring at]
+Support accent: [Mixing]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear evaluates time and phase
-- The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides phase correlation.
+- The [ear] evaluates time and phase
+- The brain processes sound through transient timing and phase alignment. A visual analyzer displays average frequency amplitude but hides [phase correlation].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass screen showing an audio waveform displaying a red phase offset indicator. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [ear]
+Support accent: [phase correlation]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Fast Fourier Transform
-- The Fourier transform converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
+- Fast [Fourier Transform]
+- The [Fourier transform] converts a time-domain wave signal into its frequency-domain components. It calculates amplitude and phase across discrete frequency bins.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of the Fourier mathematical transformation formula glowing on a sleek glass blackboard. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [Fourier Transform]
+Support accent: [Fourier transform]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Let reference guides remain guidelines
-- Use spectrum analyzers to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
+- Let [reference] guides remain guidelines
+- Use [spectrum analyzers] to check low-end limits or identify resonant peaks. Rely on your calibrated listening room for final balance decisions.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a frequency spectrum bar chart displaying individual frequency bins in cyan and white. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [reference]
+Support accent: [spectrum analyzers]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Match analyzer settings to human hearing
-- Set your analyzer block size to 4096 samples and use a Hann window. This balances time and frequency resolution for low-end checking.
+- [Match analyzer] settings to human hearing
+- Set your analyzer block size to 4096 samples and use a Hann window. This balances time and [frequency] resolution for low-end checking.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A spectrum analyzer display set to 4096 window size with Hann window selection illuminated. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [Match analyzer]
+Support accent: [frequency]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The blind frequency sweep
-- Close your eyes and adjust an EQ band. Once the sound is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
+- The blind [frequency] sweep
+- Close your eyes and adjust an EQ band. Once the [sound] is correct, open your eyes to check the analyzer. Note how visual feedback overrides hearing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a hand turning an EQ frequency knob on a dark console. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [frequency]
+Support accent: [sound]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify low-end masking
-- Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same frequency bin.
+- [Verify] low-end masking
+- Look at the 20 Hz to 200 Hz region on the analyzer. Ensure that the kick and bass are not fighting for the exact same [frequency] bin.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A split spectrum view showing kick and bass frequency curves colliding in a red zone. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [Verify]
+Support accent: [frequency]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Measure for diagnostic checks
-- Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your ears.
+- [Measure for] diagnostic checks
+- Use visual analyzers only to troubleshoot specific resonances or low-end collisions. Make balance decisions with your [ears].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic showing a diagnostic checkbox panel on a sleek glass interface. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [Measure for]
+Support accent: [ears]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to understand spectral analyzers
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to understand spectral analyzers
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Smith 2026 | MIT OCW 2011
+Reference line: Refs: Smith 2007 | MIT OCW 2011

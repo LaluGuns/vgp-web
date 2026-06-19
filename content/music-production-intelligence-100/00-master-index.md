@@ -7,7 +7,7 @@ This folder contains 100 complete English content files for Instagram and TikTok
 - Hooks use pain, contradiction, myth, DAW-test, before-after, confession, and emotional-truth patterns without repeated Your, Why, or How openings.
 - Each content file has its own visual identity, hero object, motif, camera direction, motion plan, and CTA.
 - Prompt text uses Apple SF Pro typography guidance, separate headline and support accents, and platform-safe composition for TikTok and Instagram UI overlays.
-- Platform notes come from TikTok Newsroom 2020, TikTok Business Help Center 2026, TikTok Creative Center, and Instagram creator guidance reporting. They guide creative decisions, not reach promises.
+- Platform notes come from TikTok Newsroom 2020, TikTok Business Help Center 2023, TikTok Creative Center, and Instagram creator guidance reporting. They guide creative decisions, not reach promises.
 
 ## Index
 

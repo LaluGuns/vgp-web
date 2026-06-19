@@ -5,7 +5,6 @@ import { m } from 'framer-motion';
 import { Activity, CheckCircle2, Clock, FileText, Gauge, Link as LinkIcon, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
-    AudioLine,
     CinematicBackdrop,
     EditorialButton,
     SectionShell,
@@ -16,7 +15,7 @@ import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 const heroSignals = [
     'Adaptive music for running and cycling',
     'VGP original music',
-    'UI built. Backend in progress',
+    'Coming soon',
 ];
 
 const motionStory = [
@@ -53,7 +52,7 @@ const cadenceModes = [
     },
     {
         title: 'Adaptive target',
-        description: 'The product direction is cadence-first: simple controls, clear movement intent, and VGP music at the center.',
+        description: 'Simple controls keep the movement intent clear and VGP original music at the center.',
         Icon: Clock,
     },
 ];
@@ -111,10 +110,10 @@ export default function CadenzClient() {
                                     priority
                                 />
                                 <div>
-                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
                                         CADENZ by HealingWave Lab
                                     </p>
-                                    <p className="mt-1 text-sm font-semibold text-white/55">
+                                    <p className="mt-1 text-sm font-semibold text-white/70">
                                         First VGP functional audio product
                                     </p>
                                 </div>
@@ -129,8 +128,8 @@ export default function CadenzClient() {
                                 <span className="text-sky-200">cadence.</span>
                             </m.h1>
 
-                            <m.p variants={staggerChild} className="mt-7 max-w-2xl text-base leading-8 text-white/62 sm:text-xl sm:leading-9">
-                                CADENZ is a cadence music app for running and cycling. It brings VGP original music into a movement-first product: 100% Art. 100% Science.
+                            <m.p variants={staggerChild} className="mt-7 max-w-2xl text-base leading-8 text-white/75 sm:text-xl sm:leading-9">
+                                CADENZ is a cadence music app for running and cycling, bringing VGP original music into a movement-first experience. Coming soon.
                             </m.p>
 
                             <m.div variants={staggerChild} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -142,7 +141,7 @@ export default function CadenzClient() {
                                 {heroSignals.map((signal) => (
                                     <div key={signal} className="liquid-glass-soft rounded-lg px-4 py-3">
                                         <CheckCircle2 className="mb-3 h-4 w-4 text-sky-200/75" aria-hidden="true" />
-                                        <p className="text-sm font-semibold leading-6 text-white/62">{signal}</p>
+                                        <p className="text-sm font-semibold leading-6 text-white/75">{signal}</p>
                                     </div>
                                 ))}
                             </m.div>
@@ -155,16 +154,15 @@ export default function CadenzClient() {
                             className="relative"
                         >
                             <div className="absolute -inset-10 rounded-full bg-sky-300/10 blur-3xl" aria-hidden="true" />
-                            <div className="relative mx-auto aspect-[3/4] w-full max-w-[30rem] overflow-hidden rounded-lg border border-sky-200/[0.16] bg-[#02070c] shadow-[0_40px_140px_rgba(0,0,0,0.5)] lg:mr-0">
+                            <div className="relative mx-auto aspect-[575/1024] w-full max-w-[25rem] overflow-hidden rounded-lg border border-sky-200/[0.16] bg-[#02070c] shadow-[0_40px_140px_rgba(0,0,0,0.5)] lg:mr-0">
                                 <Image
                                     src="/images/CADENZ_POSTER.jpg"
                                     alt="CADENZ promotional image with Virzy Guns and a bicycle"
                                     fill
-                                    sizes="(min-width: 1024px) 480px, 92vw"
-                                    className="object-cover object-top"
+                                    sizes="(min-width: 1024px) 400px, 88vw"
+                                    className="object-contain"
                                     priority
                                 />
-                                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,0)_0%,rgba(3,4,5,0)_62%,rgba(3,4,5,0.34)_100%)]" />
                             </div>
                         </m.div>
                     </div>
@@ -172,7 +170,7 @@ export default function CadenzClient() {
 
                 <SectionShell className="pt-10">
                     <div className="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
                             100% Art. 100% Science.
                         </p>
                         <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-6xl">
@@ -193,11 +191,11 @@ export default function CadenzClient() {
                                 <div className="mb-8 flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
                                     <item.Icon className="h-5 w-5" aria-hidden="true" />
                                 </div>
-                                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/50">
+                                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">
                                     {item.label}
                                 </p>
                                 <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                                <p className="mt-4 text-sm leading-7 text-white/50">{item.body}</p>
+                                <p className="mt-4 text-sm leading-7 text-white/70">{item.body}</p>
                             </m.article>
                         ))}
                     </div>
@@ -226,14 +224,14 @@ export default function CadenzClient() {
                         </m.div>
 
                         <div>
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
-                                Product flow
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/70">
+                                The experience
                             </p>
                             <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-5xl">
                                 From pace to playlist, the app keeps the session simple.
                             </h2>
-                            <p className="mt-5 max-w-2xl text-base leading-8 text-white/60">
-                                CADENZ is being shaped as a calm music-tech product, not a busy fitness dashboard. The listener sets the movement intent, the music supports the rhythm, and the session stays focused.
+                            <p className="mt-5 max-w-2xl text-base leading-8 text-white/75">
+                                CADENZ keeps the experience calm instead of turning it into a busy fitness dashboard. The listener sets the movement intent, the music supports the rhythm, and the session stays focused.
                             </p>
 
                             <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -250,7 +248,7 @@ export default function CadenzClient() {
                                             <mode.Icon className="h-4 w-4" aria-hidden="true" />
                                         </div>
                                         <h3 className="text-lg font-semibold text-white">{mode.title}</h3>
-                                        <p className="mt-3 text-sm leading-7 text-white/50">{mode.description}</p>
+                                        <p className="mt-3 text-sm leading-7 text-white/70">{mode.description}</p>
                                     </m.div>
                                 ))}
                             </div>
@@ -261,13 +259,13 @@ export default function CadenzClient() {
                 <SectionShell>
                     <div className="liquid-glass-strong rounded-lg p-6 sm:p-8">
                         <div className="mb-8 max-w-3xl">
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
+                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/70">
                                 Research base
                             </p>
                             <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-5xl">
                                 Rhythm, exercise, and auditory cue research inform the thesis.
                             </h2>
-                            <p className="mt-5 text-base leading-8 text-white/60">
+                            <p className="mt-5 text-base leading-8 text-white/75">
                                 These papers support the product direction. CADENZ does not turn them into medical claims. It uses them to keep the idea grounded: tempo, preference, rhythm, and movement timing matter.
                             </p>
                         </div>
@@ -285,13 +283,13 @@ export default function CadenzClient() {
                                         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
                                             <FileText className="h-4 w-4" aria-hidden="true" />
                                         </div>
-                                        <LinkIcon className="h-4 w-4 text-white/35 transition group-hover:text-sky-100" aria-hidden="true" />
+                                        <LinkIcon className="h-4 w-4 text-white/55 transition group-hover:text-sky-100" aria-hidden="true" />
                                     </div>
-                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/45">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/70">
                                         {paper.journal}
                                     </p>
                                     <h3 className="mt-3 text-lg font-semibold leading-snug text-white">{paper.title}</h3>
-                                    <p className="mt-3 text-sm leading-7 text-white/50">{paper.note}</p>
+                                    <p className="mt-3 text-sm leading-7 text-white/70">{paper.note}</p>
                                 </a>
                             ))}
                         </div>
@@ -300,23 +298,22 @@ export default function CadenzClient() {
 
                 <SectionShell className="pb-24">
                     <div className="liquid-glass-strong rounded-lg p-6 sm:p-8">
-                        <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+                        <div className="max-w-4xl">
                             <div>
-                                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
-                                    Release status
+                                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
+                                    Coming soon
                                 </p>
                                 <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-5xl">
-                                    The first HealingWave product is moving toward release.
+                                    CADENZ is getting ready to move with you.
                                 </h2>
-                                <p className="mt-5 max-w-2xl text-base leading-8 text-white/60">
-                                    The CADENZ interface is built. Backend work is in progress. The next step is making the experience stable enough for its first public release.
+                                <p className="mt-5 max-w-2xl text-base leading-8 text-white/75">
+                                    Join the waitlist for release news and a first look at cadence-first listening for running and cycling.
                                 </p>
                                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                     <EditorialButton onClick={openPopup}>Join Waitlist</EditorialButton>
                                     <EditorialButton href="/blog" variant="ghost">Read VGP Notes</EditorialButton>
                                 </div>
                             </div>
-                            <AudioLine className="justify-start lg:justify-end" />
                         </div>
                     </div>
                 </SectionShell>

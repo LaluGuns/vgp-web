@@ -86,72 +86,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Make the chorus bigger without volume
+Headline: Make the [chorus] bigger without volume
 
-Support: The hook feels flat because the verse already gave away the whole ceiling.
+Support: The [hook feels] flat because the verse already gave away the whole ceiling.
 
 Visual: 
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Pushing the faders to the ceiling
+Headline: Pushing the [faders] to the ceiling
 
-Support: Simply making the chorus louder just causes ear fatigue and triggers automatic compression.
+Support: Simply making the chorus louder just causes ear fatigue and triggers automatic [compression].
 
 Visual: 
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear responds to relative size
+Headline: The [ear responds] to relative size
 
-Support: A chorus only feels huge if the verse before it feels narrow and intimate.
+Support: A [chorus] only feels huge if the verse before it feels narrow and intimate.
 
 Visual: 
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: The perceptual power of contrast
+Headline: The [perceptual power] of contrast
 
-Support: Our auditory system measures energy changes over time, so prep the ear with a smaller space first.
+Support: Our [auditory system] measures energy changes over time, so prep the ear with a smaller space first.
 
 Visual: 
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Size is often a before-and-after illusion
+Headline: [Size] is often a before-and-after illusion
 
-Support: Creating the illusion of size is about holding back elements in the verse so the chorus can expand.
+Support: [Creating the illusion] of size is about holding back elements in the verse so the chorus can expand.
 
 Visual: 
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Make the verse narrower before the chorus arrives
+Headline: Make the [verse] narrower before the chorus arrives
 
-Support: Narrowing the stereo width or filtering the low end in the verse makes the chorus hit like an explosion.
+Support: [Narrowing the stereo] width or filtering the low end in the verse makes the chorus hit like an explosion.
 
 Visual: 
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Mute one verse layer and replay the hook
+Headline: [Mute one verse] layer and replay the hook
 
-Support: Mute one key rhythm or pad layer in the verse to see if the chorus impact increases.
+Support: [Mute one key] rhythm or pad layer in the verse to see if the chorus impact increases.
 
 Visual: 
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Listen to the transition in mono
+Headline: Listen to the transition in [mono]
 
-Support: If the contrast between sections disappears in mono, your stereo widening is masking the true energy jump.
+Support: If the [contrast] between sections disappears in mono, your stereo widening is masking the true energy jump.
 
 Visual: 
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: The chorus feels taller
+Headline: The [chorus feels] taller
 
-Support: A great chorus does not need more volume when the verse creates the perfect runway.
+Support: A [great chorus] does not need more volume when the verse creates the perfect runway.
 
 Visual: 
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before writing the next hook.
+Headline: [Save this] before writing the next hook.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: chorus lyric line under an unchanged volume meter. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -162,15 +162,15 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Make the chorus bigger without volume
-- The hook feels flat because the verse already gave away the whole ceiling.
+- Make the [chorus] bigger without volume
+- The [hook feels] flat because the verse already gave away the whole ceiling.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Cold open. A premium leather-bound notebook lies open on a dark wood desk, handwritten hook lyrics in white ink on the left page. Beside it, a glowing smartphone screen shows a voice memo waveform paused at the chorus. A single cyan path of light traces from the verse lyric to the chorus lyric, highlighting the energy gap. Side-lighting from a warm amber lamp casts long shadows. The headline snaps in on the first beat with a kinetic reveal on "Make the chorus". The support line fades in below with "The hook feels" in ice-blue. The dotted grid canvas is barely visible in the deep black-blue background. Shot type: tight editorial crop, 50mm lens, shallow depth of field. Materials: leather, paper, glass, metal. Composition: notebook and phone occupy the lower two-thirds, headline and support float in the upper third. Motion cue: quick punch-in on the hero object in the first 0.5 seconds, then kinetic headline reveal on the accented phrase.
-Headline accent: Make the chorus
-Support accent: The hook feels
-Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Visual direction: Cold open. A premium leather-bound notebook lies open on a dark wood desk, handwritten hook lyrics in white ink on the left page. Beside it, a glowing smartphone screen shows a voice memo waveform paused at the chorus. A single cyan path of light traces from the verse lyric to the chorus lyric, highlighting the energy gap. Side-lighting from a warm amber lamp casts long shadows. The headline snaps in on the first beat with a kinetic reveal on "Make the chorus". The support line fades in below with "The hook feels" in ice-blue. The dotted grid canvas is barely visible in the deep black-blue background. Shot type: tight editorial crop, 50mm lens, shallow depth of field. Materials: leather, paper, glass, metal. Composition: notebook and phone occupy the lower two-thirds, headline and support float in the upper third.
+Headline accent: [chorus]
+Support accent: [hook feels]
+Motion cue: quick punch-in on the hero object in the first 0.5 seconds, then kinetic headline reveal on the accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 2 - THE TRAP
@@ -178,15 +178,15 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Pushing the faders to the ceiling
-- Simply making the chorus louder just causes ear fatigue and triggers automatic compression.
+- Pushing the [faders] to the ceiling
+- Simply making the chorus louder just causes ear fatigue and triggers automatic [compression].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: A DAW mixer view with overloaded faders pushed to the red. A hot red warning light pulses on the master channel. The chorus doorway is marked in cyan, but a red pressure mark covers the false fix path. The better path stays cyan and clean. The headline "Pushing the faders" appears in red, then the support line "Simply making the" fades in with a red underline. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the mixer section, 35mm lens, high contrast. Materials: glass faders, metal rails, glowing LEDs. Composition: faders dominate the frame, headline and support float in the upper third. Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
-Headline accent: Pushing the faders
-Support accent: Simply making the
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
+Visual direction: A DAW mixer view with overloaded faders pushed to the red. A hot red warning light pulses on the master channel. The chorus doorway is marked in cyan, but a red pressure mark covers the false fix path. The better path stays cyan and clean. The headline "Pushing the faders" appears in red, then the support line "Simply making the" fades in with a red underline. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the mixer section, 35mm lens, high contrast. Materials: glass faders, metal rails, glowing LEDs. Composition: faders dominate the frame, headline and support float in the upper third.
+Headline accent: [faders]
+Support accent: [compression]
+Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 3 - THE EAR
@@ -194,15 +194,15 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear responds to relative size
-- A chorus only feels huge if the verse before it feels narrow and intimate.
+- The [ear responds] to relative size
+- A [chorus] only feels huge if the verse before it feels narrow and intimate.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing the auditory focus path. The path starts narrow and intimate (verse) then expands wide and bright (chorus). The headline "The ear responds" appears in white with "responds" in cyan. The support line "A chorus only" fades in with "only" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 100mm lens, extreme shallow depth of field. Materials: metal mesh, plastic housing, copper wire. Composition: diaphragm fills the lower two-thirds, headline and support float in the upper third. Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
-Headline accent: The ear responds
-Support accent: A chorus only
-Motion cue: Use a fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
+Visual direction: Extreme close-up of a headphone diaphragm with a single glowing cyan path of light tracing the auditory focus path. The path starts narrow and intimate (verse) then expands wide and bright (chorus). The headline "The ear responds" appears in white with "responds" in cyan. The support line "A chorus only" fades in with "only" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 100mm lens, extreme shallow depth of field. Materials: metal mesh, plastic housing, copper wire. Composition: diaphragm fills the lower two-thirds, headline and support float in the upper third.
+Headline accent: [ear responds]
+Support accent: [chorus]
+Motion cue: fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the chorus doorway.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 4 - THE SCIENCE
@@ -210,15 +210,15 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- The perceptual power of contrast
-- Our auditory system measures energy changes over time, so prep the ear with a smaller space first.
+- The [perceptual power] of contrast
+- Our [auditory system] measures energy changes over time, so prep the ear with a smaller space first.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Abstract 3D signal flow diagram with glowing glass nodes connected by thin cyan lines. One node labeled "Verse" is small and dim, another labeled "Chorus" is large and bright. The path between them shows a clear energy gradient. The headline "The perceptual power" appears in white with "power" in cyan. The support line "Our auditory system" fades in with "auditory system" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 24mm lens, clean lines. Materials: glass, light, wire. Composition: diagram occupies the center, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Headline accent: The perceptual power
-Support accent: Our auditory system
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Abstract 3D signal flow diagram with glowing glass nodes connected by thin cyan lines. One node labeled "Verse" is small and dim, another labeled "Chorus" is large and bright. The path between them shows a clear energy gradient. The headline "The perceptual power" appears in white with "power" in cyan. The support line "Our auditory system" fades in with "auditory system" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 24mm lens, clean lines. Materials: glass, light, wire. Composition: diagram occupies the center, headline and support float in the upper third.
+Headline accent: [perceptual power]
+Support accent: [auditory system]
+Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 5 - THE ART
@@ -226,15 +226,15 @@ Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Size is often a before-and-after illusion
-- Creating the illusion of size is about holding back elements in the verse so the chorus can expand.
+- [Size] is often a before-and-after illusion
+- [Creating the illusion] of size is about holding back elements in the verse so the chorus can expand.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Single physical brass knob on a vintage audio console, in sharp focus. A wood-grain keyboard key sits beside it. A warm amber spotlight illuminates the knob, casting a soft glow. The headline "Size is often" appears in white with "often" in warm amber. The support line "Creating the illusion" fades in with "illusion" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 85mm lens, shallow depth of field. Materials: brass, wood, metal. Composition: knob and key occupy the lower two-thirds, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Headline accent: Size is often
-Support accent: Creating the illusion
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Single physical brass knob on a vintage audio console, in sharp focus. A wood-grain keyboard key sits beside it. A warm amber spotlight illuminates the knob, casting a soft glow. The headline "Size is often" appears in white with "often" in warm amber. The support line "Creating the illusion" fades in with "illusion" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: macro close-up, 85mm lens, shallow depth of field. Materials: brass, wood, metal. Composition: knob and key occupy the lower two-thirds, headline and support float in the upper third.
+Headline accent: [Size]
+Support accent: [Creating the illusion]
+Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 6 - THE MOVE
@@ -242,15 +242,15 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Make the verse narrower before the chorus arrives
-- Narrowing the stereo width or filtering the low end in the verse makes the chorus hit like an explosion.
+- Make the [verse] narrower before the chorus arrives
+- [Narrowing the stereo] width or filtering the low end in the verse makes the chorus hit like an explosion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Clean DAW interface showing a cursor hovering over a high-pass filter curve or stereo width slider. The verse track is highlighted with a narrow stereo field indicator, while the chorus track shows a wide field. The headline "Make the verse" appears in white with "verse" in cyan. The support line "Narrowing the stereo" fades in with "stereo" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the DAW interface, 50mm lens, clean UI. Materials: glass screen, metal body. Composition: DAW interface fills the frame, headline and support float in the upper third. Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
-Headline accent: Make the verse
-Support accent: Narrowing the stereo
-Motion cue: Animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
+Visual direction: Clean DAW interface showing a cursor hovering over a high-pass filter curve or stereo width slider. The verse track is highlighted with a narrow stereo field indicator, while the chorus track shows a wide field. The headline "Make the verse" appears in white with "verse" in cyan. The support line "Narrowing the stereo" fades in with "stereo" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the DAW interface, 50mm lens, clean UI. Materials: glass screen, metal body. Composition: DAW interface fills the frame, headline and support float in the upper third.
+Headline accent: [verse]
+Support accent: [Narrowing the stereo]
+Motion cue: animate one clean path only: text snaps in on the first beat, then the melody or lyric path draws itself. Keep small labels still so the frame stays readable.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 7 - THE TEST
@@ -258,15 +258,15 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Mute one verse layer and replay the hook
-- Mute one key rhythm or pad layer in the verse to see if the chorus impact increases.
+- [Mute one verse] layer and replay the hook
+- [Mute one key] rhythm or pad layer in the verse to see if the chorus impact increases.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Parallel glass toggle switches on a mixing console. One switch is cyan and ON, the other is grey and OFF. Level-meters beside them show a clear difference in energy. The headline "Mute one verse" appears in white with "verse" in cyan. The support line "Mute one key" fades in with "key" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the switches, 50mm lens, clean lines. Materials: glass, metal, plastic. Composition: switches and meters occupy the lower two-thirds, headline and support float in the upper third. Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
-Headline accent: Mute one verse
-Support accent: Mute one key
-Motion cue: Use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
+Visual direction: Parallel glass toggle switches on a mixing console. One switch is cyan and ON, the other is grey and OFF. Level-meters beside them show a clear difference in energy. The headline "Mute one verse" appears in white with "verse" in cyan. The support line "Mute one key" fades in with "key" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the switches, 50mm lens, clean lines. Materials: glass, metal, plastic. Composition: switches and meters occupy the lower two-thirds, headline and support float in the upper third.
+Headline accent: [Mute one verse]
+Support accent: [Mute one key]
+Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 8 - THE CHECK
@@ -274,15 +274,15 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Listen to the transition in mono
-- If the contrast between sections disappears in mono, your stereo widening is masking the true energy jump.
+- Listen to the transition in [mono]
+- If the [contrast] between sections disappears in mono, your stereo widening is masking the true energy jump.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Three listening contexts shown as separate checks: a laptop speaker, a car dashboard, and a mono speaker icon. Each is rendered in thin cyan outlines on a dark background. The headline "Listen to the" appears in white with "Listen" in cyan. The support line "If the contrast" fades in with "contrast" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 35mm lens, clean icons. Materials: glass, metal, plastic. Composition: three icons arranged in a row in the center, headline and support float in the upper third. Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
-Headline accent: Listen to the
-Support accent: If the contrast
-Motion cue: Use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
+Visual direction: Three listening contexts shown as separate checks: a laptop speaker, a car dashboard, and a mono speaker icon. Each is rendered in thin cyan outlines on a dark background. The headline "Listen to the" appears in white with "Listen" in cyan. The support line "If the contrast" fades in with "contrast" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: isometric view, 35mm lens, clean icons. Materials: glass, metal, plastic. Composition: three icons arranged in a row in the center, headline and support float in the upper third.
+Headline accent: [mono]
+Support accent: [contrast]
+Motion cue: use a tap, mute, or device-swap action. The chorus doorway should change visibly without adding extra on-screen words.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 9 - THE RULE
@@ -290,15 +290,15 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- The chorus feels taller
-- A great chorus does not need more volume when the verse creates the perfect runway.
+- The [chorus feels] taller
+- A [great chorus] does not need more volume when the verse creates the perfect runway.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Minimalist schematic layout with a bold cyan dividing line separating a narrow verse section (left) from a tall chorus section (right). Thin glass borders frame each section. The headline "The chorus feels" appears in white with "feels" in cyan. The support line "A great chorus" fades in with "great" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: flat lay, 50mm lens, clean lines. Materials: glass, light, wire. Composition: schematic occupies the center, headline and support float in the upper third. Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
-Headline accent: The chorus feels
-Support accent: A great chorus
-Motion cue: Hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Minimalist schematic layout with a bold cyan dividing line separating a narrow verse section (left) from a tall chorus section (right). Thin glass borders frame each section. The headline "The chorus feels" appears in white with "feels" in cyan. The support line "A great chorus" fades in with "great" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: flat lay, 50mm lens, clean lines. Materials: glass, light, wire. Composition: schematic occupies the center, headline and support float in the upper third.
+Headline accent: [chorus feels]
+Support accent: [great chorus]
+Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006
 
 ### Prompt 10 - THE TAKEAWAY
@@ -306,13 +306,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before writing the next hook.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before writing the next hook.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Dark high-end closing frame. A premium smartphone displays looping plain text: "Save this before writing the next hook." The phone sits on a dark surface with a subtle cyan glow around it. The headline "Save this before" appears in white with "Save" in cyan. The support line "Follow for daily" fades in with "daily" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the phone screen, 50mm lens, clean lines. Materials: glass, metal, dark surface. Composition: phone occupies the center, headline and support float in the upper third. Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
-Headline accent: Build size through
-Support accent: Follow for daily
-Motion cue: Hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
+Visual direction: Dark high-end closing frame. A premium smartphone displays looping plain text: "Save this before writing the next hook." The phone sits on a dark surface with a subtle cyan glow around it. The headline "Save this before" appears in white with "Save" in cyan. The support line "Follow for daily" fades in with "daily" in ice-blue. The dotted grid canvas is visible in the deep black-blue background. Shot type: close-up on the phone screen, 50mm lens, clean lines. Materials: glass, metal, dark surface. Composition: phone occupies the center, headline and support float in the upper third.
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
+Motion cue: hold the frame longer. Let the chorus doorway settle, then use a small cyan pulse on the final accented phrase.
 Reference line: Refs: Juslin and Vastfjall 2008 | Huron 2006

@@ -32,7 +32,7 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Bregman. Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press. 1990.
   - URL: https://mitpress.mit.edu/9780262521956/auditory-scene-analysis/
@@ -74,44 +74,44 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Pitch correction changes confidence
-Support: Pitch correction can make a vocal feel focused or lifeless.
+Headline: [Pitch correction changes] confidence
+Support: Pitch correction can make a vocal feel [focused or lifeless].
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: Over-tuning vocal details
-Support: Aggressive pitch tuning creates synthetic artifacts and flattens the singer's emotional delivery.
+Headline: [Over-tuning vocal] details
+Support: [Aggressive pitch] tuning creates synthetic artifacts and flattens the singer's emotional delivery.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The listeners sense the machine
-Support: Listeners associate perfectly static pitch with artificial correction, reducing perceived emotional authenticity.
+Headline: The listeners [sense the machine]
+Support: [Listeners associate] perfectly static pitch with artificial correction, reducing perceived emotional authenticity.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Auditory science of pitch perception
-Support: Natural vocal expression relies on micro-pitch glides and intentional vibrato variations to convey confidence.
+Headline: Auditory science of [pitch perception]
+Support: Natural [vocal] expression relies on micro-pitch glides and intentional vibrato variations to convey confidence.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Tuning must support the story
-Support: Retain micro-pitch variations that add human character while correcting distracting tuning errors.
+Headline: Tuning must [support the story]
+Support: [Retain micro-pitch] variations that add human character while correcting distracting tuning errors.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Adjust the retune speed setting
-Support: Set slow retune speeds and preserve natural vibrato when configuring pitch correction software.
+Headline: Adjust the [retune speed] setting
+Support: Set slow retune speeds and preserve natural vibrato when configuring [pitch correction] software.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Slow down the correction speed
-Support: Bypass the pitch correction plugin to verify if the vocal loses its emotional drive.
+Headline: Slow down the [correction speed]
+Support: Bypass the [pitch correction] plugin to verify if the vocal loses its emotional drive.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Monitor the processing artifacts
-Support: Listen to the tuned vocal in mono to check for phase correlation issues.
+Headline: Monitor the [processing artifacts]
+Support: Listen to the tuned vocal in mono to check for [phase correlation] issues.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Retain the singer's vocal character
-Support: Tune only the notes that distract the ear, leaving natural glides untouched.
+Headline: Retain the singer's [vocal character]
+Support: Tune only the notes that distract the [ear], leaving natural glides untouched.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this for your next vocal tuning session
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Headline: [Save this] for your next vocal tuning session
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 Visual: pitch correction lane bending confidence in small steps. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
 
@@ -122,157 +122,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Pitch correction changes confidence
-- Pitch correction can make a vocal feel focused or lifeless.
+- [Pitch correction changes] confidence
+- Pitch correction can make a vocal feel [focused or lifeless].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas with glowing cyan accents. The hero object is a detailed pitch correction lane bending confidence in small steps, rendered in matte-black and brushed-titanium materials. Dotted grid texture overlay, clean cyan neon edge lighting, subtle warm amber ambient glow. Shallow depth of field, minimalist composition, 35% negative space.
-Headline accent: Pitch correction changes
-Support accent: focused or lifeless
+Headline accent: [Pitch correction changes]
+Support accent: [focused or lifeless]
 Motion cue: First 0.5 seconds: quick punch-in on the pitch confidence, then kinetic headline reveal on the accented phrase.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- Over-tuning vocal details
-- Aggressive pitch tuning creates synthetic artifacts and flattens the singer's emotional delivery.
+- [Over-tuning vocal] details
+- [Aggressive pitch] tuning creates synthetic artifacts and flattens the singer's emotional delivery.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps is shown with a red warning overlay. Sharp red neon highlights cut across a matte-black glass panel, showing a phase conflict or problem area. Dotted grid texture, cold cyan side-lighting creating dramatic shadows. Deep contrast, 30% negative space.
-Headline accent: Over-tuning vocal
-Support accent: flattens micro-tonal expressions
+Headline accent: [Over-tuning vocal]
+Support accent: [Aggressive pitch]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the pitch confidence.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The listeners sense the machine
-- Listeners associate perfectly static pitch with artificial correction, reducing perceived emotional authenticity.
+- The listeners [sense the machine]
+- [Listeners associate] perfectly static pitch with artificial correction, reducing perceived emotional authenticity.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps is viewed through an elegant ice-blue focus path representing the listener's ear canal. Soft glowing cyan accents trace the auditory stream on a floating matte-glass panel. Dotted grid texture, clean studio lighting, shallow depth of field, 35% negative space.
-Headline accent: sense the machine
-Support accent: perceived emotional honesty
+Headline accent: [sense the machine]
+Support accent: [Listeners associate]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back to the pitch confidence.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Auditory science of pitch perception
-- Natural vocal expression relies on micro-pitch glides and intentional vibrato variations to convey confidence.
+- Auditory science of [pitch perception]
+- Natural [vocal] expression relies on micro-pitch glides and intentional vibrato variations to convey confidence.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Technical 3D schematic diagram on a dark-blue canvas. A highly detailed pitch correction lane bending confidence in small steps is structured as a scientific model with clean glowing cyan vector lines and ice-blue frequency nodes on a semi-transparent glass panel. Apple editorial aesthetic, subtle dotted grid texture, sharp details, clean orthographic projection, 30% negative space.
-Headline accent: pitch perception
-Support accent: decode performer emotion
+Headline accent: [pitch perception]
+Support accent: [vocal]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Tuning must support the story
-- Retain micro-pitch variations that add human character while correcting distracting tuning errors.
+- Tuning must [support the story]
+- [Retain micro-pitch] variations that add human character while correcting distracting tuning errors.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps is highlighted by a soft, warm amber spot beam. An elegant matte-black dial with cyan markings represents the artist's hand-calibration. Dotted grid texture, moody cinematic side-lighting, shallow depth of field, 30% negative space.
-Headline accent: support the story
-Support accent: protect natural pitch
+Headline accent: [support the story]
+Support accent: [Retain micro-pitch]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Adjust the retune speed setting
-- Set slow retune speeds and preserve natural vibrato when configuring pitch correction software.
+- Adjust the [retune speed] setting
+- Set slow retune speeds and preserve natural vibrato when configuring [pitch correction] software.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps showing the dynamic session move. A sleek titanium pointer knob adjusting a cyan-glowing parameter on a matte-glass interface panel. Dotted grid texture, clean studio edge-lighting, shallow depth of field, 35% negative space.
-Headline accent: retune speed setting
-Support accent: leaves glides alone
+Headline accent: [retune speed]
+Support accent: [pitch correction]
 Motion cue: Vocal waveform breathes while small markers appear on the emotional detail. Keep small labels still.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Slow down the correction speed
-- Bypass the pitch correction plugin to verify if the vocal loses its emotional drive.
+- Slow down the [correction speed]
+- Bypass the [pitch correction] plugin to verify if the vocal loses its emotional drive.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a dark Apple-style editorial layout on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps showing an A/B toggle switch. Two overlapping matte-glass panels: one is active with a glowing cyan border, the other is bypassed with a muted ice-blue outline. Dotted grid texture, clean lighting, 30% negative space.
-Headline accent: correction speed
-Support accent: vibrato sound natural
+Headline accent: [correction speed]
+Support accent: [pitch correction]
 Motion cue: Use a tap or mute action. The pitch confidence changes visibly.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Monitor the processing artifacts
-- Listen to the tuned vocal in mono to check for phase correlation issues.
+- Monitor the [processing artifacts]
+- Listen to the tuned vocal in mono to check for [phase correlation] issues.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of multiple devices on a matte-black surface with a dark-blue canvas backdrop. A detailed pitch correction lane bending confidence in small steps is mirrored across the screens of a dark-titanium smartphone, a laptop, and a studio monitor. Soft cyan edge-glow outlines each device. Apple editorial aesthetic, subtle dotted grid texture, moody studio lighting, 30% negative space.
-Headline accent: processing artifacts
-Support accent: no robotic artifacts
+Headline accent: [processing artifacts]
+Support accent: [phase correlation]
 Motion cue: Use a tap or mute action. The pitch confidence changes visibly.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Retain the singer's vocal character
-- Tune only the notes that distract the ear, leaving natural glides untouched.
+- Retain the singer's [vocal character]
+- Tune only the notes that distract the [ear], leaving natural glides untouched.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist technical blueprint diagram on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps is locked into a clean geometric framework of thin cyan vector lines and ice-blue labels on a matte-glass panel. Apple editorial aesthetic, subtle dotted grid texture, structured grid lines, 35% negative space.
-Headline accent: vocal character
-Support accent: organic charm
+Headline accent: [vocal character]
+Support accent: [ear]
 Motion cue: Hold frame longer. Let the pitch confidence settle, then pulse the final accent.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this for your next vocal tuning session
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] for your next vocal tuning session
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist studio photograph of a floating sleek dark-blue glass card on a dark-blue canvas. A detailed pitch correction lane bending confidence in small steps is etched into the glass card with a glowing cyan laser-line. Bold cyan neon backdrop glow. Apple editorial aesthetic, subtle dotted grid texture, clean composition, 40% negative space.
-Headline accent: Adjust retune speed
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Hold frame longer. Let the pitch confidence settle, then pulse the accent.
-Reference line: Refs: Senior accessed 2026 | Bregman 1990
+Reference line: Refs: Senior 2011 | Bregman 1990

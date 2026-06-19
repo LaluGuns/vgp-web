@@ -27,7 +27,9 @@ export function MobileBottomNav() {
         >
             <div className="mx-auto grid w-full max-w-full grid-cols-5 items-center">
                 {navItems.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(item.href !== '/' ? item.href : '/___impossible');
+                    const isActive = item.name === 'Studio'
+                        ? pathname.startsWith('/studio')
+                        : pathname === item.href || pathname.startsWith(item.href !== '/' ? item.href : '/___impossible');
                     const Icon = item.icon;
                     return (
                         <Link

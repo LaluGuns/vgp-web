@@ -3,7 +3,7 @@
 /**
  * Article Page Client Component
  * Full article view with premium reading experience
- * Enhanced with Y3K visual polish
+ * Editorial long-form article experience
  */
 
 import { useState, useEffect } from 'react';
@@ -29,32 +29,32 @@ const categoryColors: Record<string, { text: string; bg: string; glow: string; g
         hex: '#00e5ff',
     },
     'licensing-guide': {
-        text: 'text-[#ec4899]',
-        bg: 'bg-[#ec4899]/10',
-        glow: 'shadow-[0_0_20px_rgba(236,72,153,0.3)]',
-        gradient: 'from-[#ec4899]/20 via-transparent to-transparent',
-        hex: '#ec4899',
+        text: 'text-sky-200',
+        bg: 'bg-sky-300/10',
+        glow: 'shadow-[0_0_20px_rgba(56,189,248,0.22)]',
+        gradient: 'from-sky-300/20 via-transparent to-transparent',
+        hex: '#38bdf8',
     },
     'genre-guides': {
-        text: 'text-[#00ff88]',
-        bg: 'bg-[#00ff88]/10',
-        glow: 'shadow-[0_0_20px_rgba(0,255,136,0.3)]',
-        gradient: 'from-[#00ff88]/20 via-transparent to-transparent',
-        hex: '#00ff88',
+        text: 'text-cyan-200',
+        bg: 'bg-cyan-300/10',
+        glow: 'shadow-[0_0_20px_rgba(103,232,249,0.2)]',
+        gradient: 'from-cyan-300/20 via-transparent to-transparent',
+        hex: '#67e8f9',
     },
     'songwriting': {
-        text: 'text-[#f59e0b]',
-        bg: 'bg-[#f59e0b]/10',
-        glow: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]',
-        gradient: 'from-[#f59e0b]/20 via-transparent to-transparent',
-        hex: '#f59e0b',
+        text: 'text-blue-200',
+        bg: 'bg-blue-300/10',
+        glow: 'shadow-[0_0_20px_rgba(147,197,253,0.18)]',
+        gradient: 'from-blue-300/20 via-transparent to-transparent',
+        hex: '#93c5fd',
     },
     'arrangement-groove': {
-        text: 'text-[#a855f7]',
-        bg: 'bg-[#a855f7]/10',
-        glow: 'shadow-[0_0_20px_rgba(168,85,247,0.3)]',
-        gradient: 'from-[#a855f7]/20 via-transparent to-transparent',
-        hex: '#a855f7',
+        text: 'text-sky-200',
+        bg: 'bg-sky-300/10',
+        glow: 'shadow-[0_0_20px_rgba(14,165,233,0.2)]',
+        gradient: 'from-sky-400/20 via-transparent to-transparent',
+        hex: '#0ea5e9',
     },
     'sound-design': {
         text: 'text-[#10b981]',
@@ -64,11 +64,11 @@ const categoryColors: Record<string, { text: string; bg: string; glow: string; g
         hex: '#10b981',
     },
     'vocal-production': {
-        text: 'text-[#f43f5e]',
-        bg: 'bg-[#f43f5e]/10',
-        glow: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]',
-        gradient: 'from-[#f43f5e]/20 via-transparent to-transparent',
-        hex: '#f43f5e',
+        text: 'text-sky-100',
+        bg: 'bg-sky-200/10',
+        glow: 'shadow-[0_0_20px_rgba(125,211,252,0.18)]',
+        gradient: 'from-sky-200/20 via-transparent to-transparent',
+        hex: '#7dd3fc',
     },
     'mixing-mastering': {
         text: 'text-[#06b6d4]',
@@ -78,11 +78,11 @@ const categoryColors: Record<string, { text: string; bg: string; glow: string; g
         hex: '#06b6d4',
     },
     'producer-psychology': {
-        text: 'text-[#eab308]',
-        bg: 'bg-[#eab308]/10',
-        glow: 'shadow-[0_0_20px_rgba(234,179,8,0.3)]',
-        gradient: 'from-[#eab308]/20 via-transparent to-transparent',
-        hex: '#eab308',
+        text: 'text-slate-200',
+        bg: 'bg-slate-300/10',
+        glow: 'shadow-[0_0_20px_rgba(203,213,225,0.15)]',
+        gradient: 'from-slate-300/20 via-transparent to-transparent',
+        hex: '#cbd5e1',
     },
     'audio-science': {
         text: 'text-[#3b82f6]',
@@ -349,9 +349,9 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.45 }}
-                            className="mt-12 p-5 rounded-xl border border-amber-500/20 bg-amber-500/[0.02] text-xs text-cool-grey leading-relaxed text-justify"
+                            className="mt-12 rounded-lg border border-sky-300/20 bg-sky-300/[0.035] p-5 text-xs leading-relaxed text-cool-grey text-justify"
                         >
-                            <strong className="text-amber-400 block mb-1 font-semibold uppercase tracking-wider">Educational & Hearing Safety Disclaimer</strong>
+                            <strong className="mb-1 block font-semibold uppercase tracking-wider text-sky-200">Educational & Hearing Safety Disclaimer</strong>
                             The psychological, physiological, neurobiological, and acoustic safety concepts discussed in this article (such as dopamine responses, cognitive habituation, ear fatigue, acoustic reflexes, and sound pressure levels) are intended solely for educational, creative, and music production research. This content does not substitute for professional medical advice, clinical diagnosis, or treatment. Loud monitoring and prolonged exposure can cause permanent hearing damage, tinnitus, or auditory fatigue. Always practice safe monitoring levels (recommended below 80-85 dB SPL) and take regular ear breaks. If you experience hearing discomfort, persistent ringing, or severe mental fatigue, consult a licensed medical professional.
                         </motion.div>
                     )}
@@ -509,7 +509,7 @@ function formatContent(content: string, accentColor: string): string {
         `;
 
         return `
-            <div class="overflow-x-auto my-8 rounded-xl border border-white/10 bg-white/[0.02] shadow-sm">
+            <div class="overflow-x-auto my-8 rounded-lg border border-white/10 bg-white/[0.02] shadow-sm">
                 <table class="w-full text-left border-collapse min-w-[600px]">
                     ${headerHtml}
                     ${bodyHtml}
@@ -545,7 +545,7 @@ function formatContent(content: string, accentColor: string): string {
         `)
         // Quick Guide / Tips blocks
         .replace(/\*\*(Quick Guide|Tip|Note|Important):\*\*/g, `
-            <div class="my-6 p-5 rounded-xl border border-white/10 bg-gradient-to-r from-white/[0.03] to-transparent border-accent-left">
+            <div class="my-6 p-5 rounded-lg border border-white/10 bg-gradient-to-r from-white/[0.03] to-transparent border-accent-left">
                 <p class="text-xs font-bold tracking-wider mb-2 text-accent">$1</p>
             `)
         // Numbered lists

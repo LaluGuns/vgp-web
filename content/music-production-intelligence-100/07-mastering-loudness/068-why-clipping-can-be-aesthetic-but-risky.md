@@ -32,12 +32,12 @@ Humanizer status: passed
 - European Broadcasting Union. EBU R 128 loudness normalisation and permitted maximum level.
   - URL: https://tech.ebu.ch/publications/r128/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: LUFS, loudness range, true peak descriptors
 - International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level.
   - URL: https://www.itu.int/rec/R-REC-BS.1770/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2006
   - Use: loudness measurement and true peak
 
 ## Visual design system
@@ -72,72 +72,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Clipping can work. It can also cost you
+Headline: [Clipping can work]. It can also cost you
 
-Support: Shaving peaks gives you headroom, but too much clipping destroys the master.
+Support: Shaving peaks gives you headroom, but too much clipping [destroys the master].
 
 Visual: A peak clipper waveform showing clipped tops marked in cyan.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Using clipping as a volume knob
+Headline: The trap: Using clipping as a [volume knob]
 
-Support: Treating a clipper as a simple gain stage introduces high-frequency clipping distortion that destroys low-end solidity.
+Support: Treating a clipper as a simple gain stage introduces high-frequency [clipping] distortion that destroys low-end solidity.
 
 Visual: A clipper dial turned to max with red warning indicators flashing.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Harmonic distortion ruins clarity
+Headline: The ear: Harmonic distortion [ruins clarity]
 
-Support: Audible harmonic distortion manifests as high-frequency fuzz and midrange mud, stripping the master of its separation and depth.
+Support: Audible harmonic distortion manifests as high-[frequency] fuzz and midrange mud, stripping the master of its separation and depth.
 
 Visual: A sound wave showing harmonic sidebands radiating in warning red.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How nonlinear distortion generates
+Headline: How [nonlinear distortion] generates
 
-Support: Clipping truncates waveform peaks, converting transient energy into odd-order harmonics and introducing aliasing in the high frequencies.
+Support: Clipping truncates waveform peaks, converting transient energy into odd-order [harmonics] and introducing aliasing in the high frequencies.
 
 Visual: A sine wave with squared off tops next to a frequency spectrum showing harmonic spikes.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Use the clipper like a scalpel
+Headline: Use the clipper [like a scalpel]
 
-Support: Apply clipping only to the shortest, highest-amplitude transient peaks, leaving the body of the waveform unclipped.
+Support: Apply [clipping] only to the shortest, highest-amplitude transient peaks, leaving the body of the waveform unclipped.
 
 Visual: A waveform showing a thin horizontal ceiling slicing only the highest peak tips in cyan.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Clip peaks to gain headroom
+Headline: Clip peaks to [gain headroom]
 
-Support: Clip the transient peaks by one decibel before they hit the limiter to increase headroom, letting the limiter work cleaner.
+Support: Clip the transient peaks by one decibel before they hit the limiter to increase [headroom], letting the limiter work cleaner.
 
 Visual: A signal chain diagram showing a clipper placed before a limiter.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Audition on low quality speakers
+Headline: Audition on [low quality speakers]
 
-Support: Audition the clipped master on single-driver consumer speakers. Listen for high-frequency crackle and midrange distortion.
+Support: Audition the clipped master on single-driver consumer speakers. Listen for high-[frequency] crackle and midrange distortion.
 
 Visual: A consumer smart speaker with distorted sound waves emerging.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Check distortion on sub bass
+Headline: Check distortion on [sub bass]
 
-Support: Solo the sub-bass frequencies below eighty Hertz. If you hear harmonic fuzz, the clipper threshold is too low.
+Support: Solo the [sub-bass] frequencies below eighty Hertz. If you hear harmonic fuzz, the clipper threshold is too low.
 
 Visual: A frequency analyzer screen highlighting the sub bass region in cyan.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Clipping must remain transparent
+Headline: Clipping must [remain transparent]
 
-Support: Keep the clipper settings only if the master gains average level without adding audible harmonic distortion.
+Support: Keep the [clipper settings] only if the master gains average level without adding audible harmonic distortion.
 
 Visual: A clean wave graphic showing a checkmark in cyan.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
+Headline: [Save this] before chasing another loudness number.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: clipper ceiling glowing red at the edge of taste. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -148,157 +148,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Clipping can work. It can also cost you
-- Shaving peaks gives you headroom, but too much clipping destroys the master.
+- [Clipping can work]. It can also cost you
+- Shaving peaks gives you headroom, but too much clipping [destroys the master].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of peak clipper waveform showing clipped tops marked in cyan in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: Clipping can work
-Support accent: destroys the master
+Headline accent: [Clipping can work]
+Support accent: [destroys the master]
 Motion cue: Quick flash on clipped waveform peaks.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Using clipping as a volume knob
-- Treating a clipper as a simple gain stage introduces high-frequency clipping distortion that destroys low-end solidity.
+- The trap: Using clipping as a [volume knob]
+- Treating a clipper as a simple gain stage introduces high-frequency [clipping] distortion that destroys low-end solidity.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of clipper dial turned to max with red warning indicators flashing with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: volume knob
-Support accent: harsh distortion
+Headline accent: [volume knob]
+Support accent: [clipping]
 Motion cue: Clipper dial rotates past safe levels, flashing red.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Harmonic distortion ruins clarity
-- Audible harmonic distortion manifests as high-frequency fuzz and midrange mud, stripping the master of its separation and depth.
+- The ear: Harmonic distortion [ruins clarity]
+- Audible harmonic distortion manifests as high-[frequency] fuzz and midrange mud, stripping the master of its separation and depth.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of sound wave showing harmonic sidebands radiating in warning red with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: ruins clarity
-Support accent: turns to mush
+Headline accent: [ruins clarity]
+Support accent: [frequency]
 Motion cue: Red harmonic sidebands spread outward from the main wave.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How nonlinear distortion generates
-- Clipping truncates waveform peaks, converting transient energy into odd-order harmonics and introducing aliasing in the high frequencies.
+- How [nonlinear distortion] generates
+- Clipping truncates waveform peaks, converting transient energy into odd-order [harmonics] and introducing aliasing in the high frequencies.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent:
-Support accent:
-Motion cue:
-Reference line:
+Visual direction: Premium technical diagram of on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent: [nonlinear distortion]
+Support accent: [harmonics]
+Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Reference line: Refs: European Broadcasting Union 2011 | URL: https://tech 2011 | Type: official standard 2011 | Year/access: 2011 | Use: LUFS, loudness range, true peak descriptors 2011 | International Telecommunication Union 2006 | URL: https://www 2006 | Type: official standard 2011 | Year/access: 2011 | Use: loudness measurement and true peak 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Use the clipper like a scalpel
-- Apply clipping only to the shortest, highest-amplitude transient peaks, leaving the body of the waveform unclipped.
+- Use the clipper [like a scalpel]
+- Apply [clipping] only to the shortest, highest-amplitude transient peaks, leaving the body of the waveform unclipped.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of waveform showing thin horizontal ceiling slicing only the highest peak tips in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: like a scalpel
-Support accent: shortest transients
+Headline accent: [like a scalpel]
+Support accent: [clipping]
 Motion cue: A ceiling line moves down slightly, slicing the peak tips.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Clip peaks to gain headroom
-- Clip the transient peaks by one decibel before they hit the limiter to increase headroom, letting the limiter work cleaner.
+- Clip peaks to [gain headroom]
+- Clip the transient peaks by one decibel before they hit the limiter to increase [headroom], letting the limiter work cleaner.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of signal chain diagram showing clipper placed before limiter. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: gain headroom
-Support accent: clipper before limiter
+Headline accent: [gain headroom]
+Support accent: [headroom]
 Motion cue: A signal path lights up through the clipper, then the limiter.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Audition on low quality speakers
-- Audition the clipped master on single-driver consumer speakers. Listen for high-frequency crackle and midrange distortion.
+- Audition on [low quality speakers]
+- Audition the clipped master on single-driver consumer speakers. Listen for high-[frequency] crackle and midrange distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of consumer smart speaker with distorted sound waves emerging. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: low quality speakers
-Support accent: distortion obvious
+Headline accent: [low quality speakers]
+Support accent: [frequency]
 Motion cue: Smart speaker waves pulse in red, then turn cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Check distortion on sub bass
-- Solo the sub-bass frequencies below eighty Hertz. If you hear harmonic fuzz, the clipper threshold is too low.
+- Check distortion on [sub bass]
+- Solo the [sub-bass] frequencies below eighty Hertz. If you hear harmonic fuzz, the clipper threshold is too low.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of frequency analyzer screen highlighting the sub bass region in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: sub bass
-Support accent: threshold too low
+Headline accent: [sub bass]
+Support accent: [sub-bass]
 Motion cue: Sub bass region pulses in cyan, turning red on peaks.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Clipping must remain transparent
-- Keep the clipper settings only if the master gains average level without adding audible harmonic distortion.
+- Clipping must [remain transparent]
+- Keep the [clipper settings] only if the master gains average level without adding audible harmonic distortion.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of clean wave graphic showing checkmark in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: remain transparent
-Support accent: without distortion
+Headline accent: [remain transparent]
+Support accent: [clipper settings]
 Motion cue: Checkmark pulses next to the clean wave.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before chasing another loudness number.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before chasing another loudness number.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006

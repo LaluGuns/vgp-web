@@ -70,7 +70,7 @@ export default function StudioPage() {
                                 <service.Icon className="h-5 w-5" aria-hidden="true" />
                             </div>
                             <h2 className="text-xl font-semibold text-white">{service.title}</h2>
-                            <p className="mt-4 text-sm leading-7 text-white/50">{service.description}</p>
+                            <p className="mt-4 text-sm leading-7 text-white/65">{service.description}</p>
                             <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-sky-100/80 transition group-hover:text-white">
                                 Explore
                                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

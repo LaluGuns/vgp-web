@@ -82,72 +82,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Familiar sounds can wake memory fast
+Headline: Familiar sounds can [wake memory fast]
 
-Support: A single nostalgic texture can capture a listener faster than a melody.
+Support: A single [nostalgic texture] can capture a listener faster than a melody.
 
 Visual: A memory trace lighting up on a timeline grid when a specific sound wave plays.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Piling on vintage filters
+Headline: The trap: Piling on [vintage filters]
 
-Support: Applying vintage filters across the entire stereo mix creates high-frequency fatigue and reduces the depth of the soundstage.
+Support: Applying vintage filters across the entire stereo mix creates high-[frequency] fatigue and reduces the depth of the soundstage.
 
 Visual: A harsh filter curve cutting treble and bass, marked in warning red.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Brains love familiar schemas
+Headline: The ear: Brains love [familiar schemas]
 
-Support: The auditory system matches incoming sounds with learned mental schemas. Analog textures make new tracks feel familiar and safe.
+Support: The auditory system matches incoming [sounds] with learned mental schemas. Analog textures make new tracks feel familiar and safe.
 
 Visual: An icon of a brain connecting a music track block to a classic cassette tape silhouette.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How schemas trigger memory
+Headline: How [schemas trigger] memory
 
-Support: Cognitive schema theory shows that familiar acoustic characteristics trigger memory networks, evoking emotional states linked to specific eras.
+Support: Cognitive schema theory shows that familiar [acoustic] characteristics trigger memory networks, evoking emotional states linked to specific eras.
 
 Visual: A schema node diagram showing connection paths lighting up between sound and memory.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Nostalgia needs a single detail
+Headline: Nostalgia needs a [single detail]
 
-Support: Create a compelling contrast by placing a modern, ultra-clean lead vocal over a low-level analog tape noise loop.
+Support: Create a [compelling contrast] by placing a modern, ultra-clean lead vocal over a low-level analog tape noise loop.
 
 Visual: A clean vocal waveform floating above a dense, low-level texture lane in cyan.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Embed analog noise and textures
+Headline: Embed [analog noise] and textures
 
-Support: Blend low-level vinyl crackle or tape noise behind digital tracks, sidechaining the noise to duck when the lead vocal enters.
+Support: Blend low-level vinyl crackle or tape noise behind digital tracks, sidechaining the noise to duck when the lead [vocal] enters.
 
 Visual: A compressor plugin showing sidechain routing from vocal track to noise channel.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Audit the mix on low quality speakers
+Headline: Audit the mix on [low quality] speakers
 
-Support: Check the mix on single-driver consumer speakers, verifying that the noise loop does not clutter the critical vocal frequencies.
+Support: Check the mix on single-driver consumer speakers, verifying that the noise loop does not clutter the critical vocal [frequencies].
 
 Visual: A small speaker icon next to a frequency display showing vocal clearance.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Verify texture level in the gaps
+Headline: Verify [texture level] in the gaps
 
-Support: Evaluate the texture levels during introductory and outro sections to ensure the noise feels like space, not static hiss.
+Support: Evaluate the texture levels during introductory and [outro] sections to ensure the noise feels like space, not static hiss.
 
 Visual: Timeline view of song intro with noise wave highlighted in cyan.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Nostalgia must support the song
+Headline: Nostalgia must [support the song]
 
-Support: Utilize historical textures only when they deepen the emotional atmosphere without distracting from the primary melody.
+Support: Utilize historical textures only when they deepen the [emotional atmosphere] without distracting from the primary melody.
 
 Visual: A classic record player icon next to a checkmark in cyan.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before forcing emotion into the track.
+Headline: [Save this] before forcing emotion into the track.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: old speaker waking a memory fragment in the room. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -158,14 +158,14 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Familiar sounds can wake memory fast
-- A single nostalgic texture can capture a listener faster than a melody.
+- Familiar sounds can [wake memory fast]
+- A single [nostalgic texture] can capture a listener faster than a melody.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of memory trace lighting up on timeline grid when specific sound wave plays in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: wake memory fast
-Support accent: nostalgic texture
+Headline accent: [wake memory fast]
+Support accent: [nostalgic texture]
 Motion cue: A single dot on the timeline glows in cyan, sending waves across the grid.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -174,14 +174,14 @@ Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Piling on vintage filters
-- Applying vintage filters across the entire stereo mix creates high-frequency fatigue and reduces the depth of the soundstage.
+- The trap: Piling on [vintage filters]
+- Applying vintage filters across the entire stereo mix creates high-[frequency] fatigue and reduces the depth of the soundstage.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of harsh filter curve cutting treble and bass, marked in warning red with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: vintage filters
-Support accent: fatiguing to listen
+Headline accent: [vintage filters]
+Support accent: [frequency]
 Motion cue: Treble and bass regions on a spectrum turn red and drop down.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -190,14 +190,14 @@ Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Brains love familiar schemas
-- The auditory system matches incoming sounds with learned mental schemas. Analog textures make new tracks feel familiar and safe.
+- The ear: Brains love [familiar schemas]
+- The auditory system matches incoming [sounds] with learned mental schemas. Analog textures make new tracks feel familiar and safe.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of An icon of brain connecting music track block to classic cassette tape silhouette with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: familiar schemas
-Support accent: Vintage texture
+Headline accent: [familiar schemas]
+Support accent: [sounds]
 Motion cue: Connection line between track and cassette lights up in cyan.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -206,30 +206,30 @@ Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How schemas trigger memory
-- Cognitive schema theory shows that familiar acoustic characteristics trigger memory networks, evoking emotional states linked to specific eras.
+- How [schemas trigger] memory
+- Cognitive schema theory shows that familiar [acoustic] characteristics trigger memory networks, evoking emotional states linked to specific eras.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent:
-Support accent:
-Motion cue:
-Reference line:
+Visual direction: Premium technical diagram of on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent: [schemas trigger]
+Support accent: [acoustic]
+Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Reference line: Refs: Juslin and Vastfjall 2008 | URL: https://doi 2011 | Type: peer-reviewed music psychology 2011 | Year: 2008 2011 | Use: mechanisms behind musical emotion 2011 | Koelsch 2014 | URL: https://doi 2011 | Type: peer-reviewed neuroscience review 2011 | Year: 2014 2011 | Use: music, emotion, reward, brain response 2011 | Huron 2006 | URL: https://mitpress 2011 | Type: established textbook 2011 | Year: 2006 2011 | Use: expectation, tension, surprise 2011 | Bregman 1990 | URL: https://mitpress 2011 | Type: established textbook 2011 | Year: 1990 2011 | Use: source separation, auditory grouping, listener attention 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Nostalgia needs a single detail
-- Create a compelling contrast by placing a modern, ultra-clean lead vocal over a low-level analog tape noise loop.
+- Nostalgia needs a [single detail]
+- Create a [compelling contrast] by placing a modern, ultra-clean lead vocal over a low-level analog tape noise loop.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of clean vocal waveform floating above dense, low-level texture lane in cyan. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: single detail
-Support accent: compelling contrast
+Headline accent: [single detail]
+Support accent: [compelling contrast]
 Motion cue: Vocal wave pulses in cyan while the texture lane stays constant.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -238,14 +238,14 @@ Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Embed analog noise and textures
-- Blend low-level vinyl crackle or tape noise behind digital tracks, sidechaining the noise to duck when the lead vocal enters.
+- Embed [analog noise] and textures
+- Blend low-level vinyl crackle or tape noise behind digital tracks, sidechaining the noise to duck when the lead [vocal] enters.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of compressor plugin showing sidechain routing from vocal track to noise channel. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: analog noise
-Support accent: sidechain to duck
+Headline accent: [analog noise]
+Support accent: [vocal]
 Motion cue: Sidechain route line flashes cyan, showing volume reduction on the noise lane.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -254,14 +254,14 @@ Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Audit the mix on low quality speakers
-- Check the mix on single-driver consumer speakers, verifying that the noise loop does not clutter the critical vocal frequencies.
+- Audit the mix on [low quality] speakers
+- Check the mix on single-driver consumer speakers, verifying that the noise loop does not clutter the critical vocal [frequencies].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of small speaker icon next to frequency display showing vocal clearance. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: low quality
-Support accent: vocal clearance
+Headline accent: [low quality]
+Support accent: [frequencies]
 Motion cue: Highlight sweeps the clean vocal frequencies on the display.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -270,14 +270,14 @@ Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Verify texture level in the gaps
-- Evaluate the texture levels during introductory and outro sections to ensure the noise feels like space, not static hiss.
+- Verify [texture level] in the gaps
+- Evaluate the texture levels during introductory and [outro] sections to ensure the noise feels like space, not static hiss.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of Timeline view of song intro with noise wave highlighted in cyan. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: texture level
-Support accent: background space
+Headline accent: [texture level]
+Support accent: [outro]
 Motion cue: Playhead sweeps through the intro, showing the noise wave at low amplitude.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -286,14 +286,14 @@ Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Nostalgia must support the song
-- Utilize historical textures only when they deepen the emotional atmosphere without distracting from the primary melody.
+- Nostalgia must [support the song]
+- Utilize historical textures only when they deepen the [emotional atmosphere] without distracting from the primary melody.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of classic record player icon next to checkmark in cyan with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: support the song
-Support accent: emotional atmosphere
+Headline accent: [support the song]
+Support accent: [emotional atmosphere]
 Motion cue: Checkmark pulses next to the record player icon.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990
 
@@ -302,13 +302,13 @@ Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before forcing emotion into the track.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before forcing emotion into the track.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
 Reference line: Refs: Juslin and Vastfjall 2008 | Koelsch 2014 | Huron 2006 | Bregman 1990

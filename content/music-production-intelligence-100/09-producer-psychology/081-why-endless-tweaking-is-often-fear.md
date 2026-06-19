@@ -43,17 +43,17 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2013
   - Use: mastering judgment, dynamics, translation
 - TikTok Newsroom. How TikTok recommends videos #ForYou.
   - URL: https://newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: recommendation inputs such as captions, sounds, hashtags, and interactions
 
 ## Visual design system
@@ -88,45 +88,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Endless tweaks often mean fear
-Support: The session keeps changing because the decision feels scary.
+Headline: [Endless] tweaks often mean fear
+Support: The [session keeps] changing because the decision feels scary.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The illusion of progress
-Support: Repeatedly adjusting a fader by 0.2 dB back and forth triggers rapid sensory adaptation. Your brain loses the reference point and accepts the sound out of fatigue, not preference.
+Headline: The [illusion of] progress
+Support: Repeatedly adjusting a fader by 0.2 dB back and forth triggers rapid [sensory adaptation]. Your brain loses the reference point and accepts the sound out of fatigue, not preference.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The listener only hears macro dynamics
-Support: The human ear detects macro-dynamic contrasts and spectral balance, not micro-level fader changes. Over-tweaking smooths out the transient details.
+Headline: The listener only hears macro [dynamics]
+Support: The human ear detects macro-dynamic contrasts and spectral balance, not micro-level fader changes. Over-tweaking smooths out the [transient] details.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Decision fatigue is a physical limit
-Support: Prefrontal cortex resources deplete with every minor adjustment. As cognitive load rises, the brain defaults to passive listening, destroying objective mixing decisions.
+Headline: [Decision fatigue] is a physical limit
+Support: Prefrontal cortex resources deplete with every minor adjustment. As [cognitive load] rises, the brain defaults to passive listening, destroying objective mixing decisions.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Constraints define the mix
-Support: Technical targets provide frequency boundaries, but human taste requires committing to a hierarchy. You must choose which element carries the main emotional weight.
+Headline: Constraints define the [mix]
+Support: Technical targets provide [frequency] boundaries, but human taste requires committing to a hierarchy. You must choose which element carries the main emotional weight.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Separate creative passes from repair passes
-Support: Segment your session into distinct tracking, editing, and mixing phases. Close all editor windows and disable network access during the final mixdown.
+Headline: [Separate creative] passes from repair passes
+Support: Segment your [session] into distinct tracking, editing, and mixing phases. Close all editor windows and disable network access during the final mixdown.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The Matched Loudness A/B check
-Support: Print your mix, wait ten minutes, then A/B it against the rough demo at equal loudness. If the rough demo feels more urgent, your tweaks are damaging the transients.
+Headline: The [Matched Loudness] A/B check
+Support: Print your mix, wait ten minutes, then A/B it against the rough demo at equal loudness. If the rough demo feels more urgent, your tweaks are damaging the [transients].
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Test on restricted systems
-Support: Play the mix through a mono phone speaker. Verify if the lead vocal remains intelligible over the mid-range instrument clash without stereo separation.
+Headline: Test on [restricted systems]
+Support: Play the mix through a mono phone [speaker]. Verify if the lead vocal remains intelligible over the mid-range instrument clash without stereo separation.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Stop editing at translation
-Support: Commit to the bounce the moment the emotional impact is clear and the spectral balance translates across three reference systems.
+Headline: Stop [editing at] translation
+Support: Commit to the bounce the moment the emotional impact is clear and the spectral balance translates across three [reference] systems.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to stop over-tweaking your next mix
+Headline: [Save this] to stop over-tweaking your next mix
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -135,157 +135,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Endless tweaks often mean fear
-- The session keeps changing because the decision feels scary.
+- [Endless] tweaks often mean fear
+- The [session keeps] changing because the decision feels scary.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. A glowing cyan timeline waveform displays a circular loop path. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Endless
-Support accent: scary.
+Headline accent: [Endless]
+Support accent: [session keeps]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The illusion of progress
-- Repeatedly adjusting a fader by 0.2 dB back and forth triggers rapid sensory adaptation. Your brain loses the reference point and accepts the sound out of fatigue, not preference.
+- The [illusion of] progress
+- Repeatedly adjusting a fader by 0.2 dB back and forth triggers rapid [sensory adaptation]. Your brain loses the reference point and accepts the sound out of fatigue, not preference.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a single physical console fader illuminated by a red warning glow. Curved glass panel, subtle dotted grid canvas texture. Dark-blue canvas background, glowing cyan accents, dramatic shadows, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [illusion of]
+Support accent: [sensory adaptation]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The listener only hears macro dynamics
-- The human ear detects macro-dynamic contrasts and spectral balance, not micro-level fader changes. Over-tweaking smooths out the transient details.
+- The listener only hears macro [dynamics]
+- The human ear detects macro-dynamic contrasts and spectral balance, not micro-level fader changes. Over-tweaking smooths out the [transient] details.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a soundwave graphic transitioning from chaotic lines to a single high-energy wave on a dark screen. Curved glass panel, subtle dotted grid canvas texture. Dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [dynamics]
+Support accent: [transient]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Decision fatigue is a physical limit
-- Prefrontal cortex resources deplete with every minor adjustment. As cognitive load rises, the brain defaults to passive listening, destroying objective mixing decisions.
+- [Decision fatigue] is a physical limit
+- Prefrontal cortex resources deplete with every minor adjustment. As [cognitive load] rises, the brain defaults to passive listening, destroying objective mixing decisions.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of a neural branching node network fading to grey, leaving one bright cyan path active. Curved glass panel, subtle dotted grid canvas texture. Dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [Decision fatigue]
+Support accent: [cognitive load]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Constraints define the mix
-- Technical targets provide frequency boundaries, but human taste requires committing to a hierarchy. You must choose which element carries the main emotional weight.
+- Constraints define the [mix]
+- Technical targets provide [frequency] boundaries, but human taste requires committing to a hierarchy. You must choose which element carries the main emotional weight.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a physical metal volume dial on a glass control panel setting a specific value, surrounded by soft cyan light. Dotted grid canvas texture, dark-blue background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [mix]
+Support accent: [frequency]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Separate creative passes from repair passes
-- Segment your session into distinct tracking, editing, and mixing phases. Close all editor windows and disable network access during the final mixdown.
+- [Separate creative] passes from repair passes
+- Segment your [session] into distinct tracking, editing, and mixing phases. Close all editor windows and disable network access during the final mixdown.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a digital audio workstation timeline with blue and grey blocks representing audio regions. Curved glass panel, subtle dotted grid canvas texture. Dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [Separate creative]
+Support accent: [session]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The Matched Loudness A/B check
-- Print your mix, wait ten minutes, then A/B it against the rough demo at equal loudness. If the rough demo feels more urgent, your tweaks are damaging the transients.
+- The [Matched Loudness] A/B check
+- Print your mix, wait ten minutes, then A/B it against the rough demo at equal loudness. If the rough demo feels more urgent, your tweaks are damaging the [transients].
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a digital countdown timer displaying zero on a sleek glass interface panel. Subtle dotted grid canvas texture, dark-blue canvas, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [Matched Loudness]
+Support accent: [transients]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Test on restricted systems
-- Play the mix through a mono phone speaker. Verify if the lead vocal remains intelligible over the mid-range instrument clash without stereo separation.
+- Test on [restricted systems]
+- Play the mix through a mono phone [speaker]. Verify if the lead vocal remains intelligible over the mid-range instrument clash without stereo separation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Wireframe drawings of a smartphone, a car dashboard, and a studio monitor connected by clean cyan signal paths. Curved glass panel, subtle dotted grid canvas texture, dark-blue background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [restricted systems]
+Support accent: [speaker]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Stop editing at translation
-- Commit to the bounce the moment the emotional impact is clear and the spectral balance translates across three reference systems.
+- Stop [editing at] translation
+- Commit to the bounce the moment the emotional impact is clear and the spectral balance translates across three [reference] systems.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic diagram showing a timeline ending in a solid lock symbol, surrounded by a subtle dotted grid canvas texture. Dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [editing at]
+Support accent: [reference]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to stop over-tweaking your next mix
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to stop over-tweaking your next mix
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Senior 2026 | Katz 2026 | TikTok Newsroom 2026
+Reference line: Refs: Senior 2011 | Katz 2013 | TikTok Newsroom 2020

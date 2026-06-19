@@ -43,12 +43,12 @@ Humanizer status: passed
 - Senior. Mixing Secrets for the Small Studio. Routledge.
   - URL: https://www.routledge.com/Mixing-Secrets-for-the-Small-Studio/Senior/p/book/9780415716709
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: small studio mixing practice
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2013
   - Use: mastering judgment, dynamics, translation
 
 ## Visual design system
@@ -83,45 +83,45 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Vibe still needs decisions
-Support: Intuition sets the target, but science hits it.
+Headline: [Vibe] still needs decisions
+Support: [Intuition sets] the target, but science hits it.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The mystery vibe trap
-Support: Relying on vibe as a vague feeling stops you from identifying concrete technical problems. You cannot fix a muddy low-end by chasing a subjective mood.
+Headline: The [mystery vibe] trap
+Support: [Relying on] vibe as a vague feeling stops you from identifying concrete technical problems. You cannot fix a muddy low-end by chasing a subjective mood.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: Subjective terms lack accuracy
-Support: The brain uses words like warmth or air to describe complex acoustic interactions. Without technical calibration, you make random adjustments that ruin the mix balance.
+Headline: [Subjective terms] lack accuracy
+Support: The brain uses words like warmth or air to describe complex [acoustic] interactions. Without technical calibration, you make random adjustments that ruin the mix balance.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: Dual process theory in audio
-Support: Psychology shows that intuitive System 1 thinking identifies the emotional target of the track, while analytical System 2 thinking executes the quantitative calibration. You need both.
+Headline: [Dual process] theory in audio
+Support: [Psychology shows] that intuitive System 1 thinking identifies the emotional target of the track, while analytical System 2 thinking executes the quantitative calibration. You need both.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Vibe is calibrated science
-Support: Warmth is even-harmonic distortion. Air is high-frequency shelf boosting. Translate your artistic desires into precise digital signal processing values.
+Headline: [Vibe is] calibrated science
+Support: Warmth is even-harmonic distortion. Air is high-[frequency] shelf boosting. Translate your artistic desires into precise digital signal processing values.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Translate feelings to parameters
-Support: When a track needs warmth, apply a saturator at 200 Hz. When it needs air, use a high-shelf EQ at 12 kHz. Target specific frequencies instead of guessing.
+Headline: [Translate feelings] to parameters
+Support: When a track needs warmth, apply a saturator at 200 Hz. When it needs air, use a high-shelf EQ at 12 kHz. Target specific [frequencies] instead of guessing.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: The dynamic range verify
-Support: Measure the short-term loudness and crest factor of the mix. Ensure the vibe of your saturation has not destroyed the transient punch.
+Headline: The [dynamic range] verify
+Support: Measure the short-term loudness and crest factor of the mix. Ensure the vibe of your [saturation] has not destroyed the transient punch.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Sum the mix to mono
-Support: Check if the stereo depth of your effects survives mono summing. Verify that phase cancellation does not wash out the lead vocal.
+Headline: Sum the mix to [mono]
+Support: Check if the stereo depth of your effects survives mono summing. Verify that [phase cancellation] does not wash out the lead vocal.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Calibrate parameters to secure vibe
-Support: Never leave a mixing decision to a feeling. Calibrate your levels, phase, and frequencies to make your creative ideas repeatable.
+Headline: [Calibrate parameters] to secure vibe
+Support: Never leave a mixing decision to a feeling. Calibrate your levels, phase, and [frequencies] to make your creative ideas repeatable.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this to ground your intuition
+Headline: [Save this] to ground your intuition
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 ## 10-slide image prompts
 
@@ -130,157 +130,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Vibe still needs decisions
-- Intuition sets the target, but science hits it.
+- [Vibe] still needs decisions
+- [Intuition sets] the target, but science hits it.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a curved glass UI panel with a subtle dotted grid canvas texture. High-contrast schematic showing a bridge connecting a brain icon to a fader console. Soft ambient side-lighting in dark teal casts dramatic shadows on a matte black textured slate surface. Premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Vibe
-Support accent: it.
+Headline accent: [Vibe]
+Support accent: [Intuition sets]
 Motion cue: Quick zoom on the hero object, then kinetic headline fade-in over 0.5 seconds.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The mystery vibe trap
-- Relying on vibe as a vague feeling stops you from identifying concrete technical problems. You cannot fix a muddy low-end by chasing a subjective mood.
+- The [mystery vibe] trap
+- [Relying on] vibe as a vague feeling stops you from identifying concrete technical problems. You cannot fix a muddy low-end by chasing a subjective mood.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of a glowing cloud icon labeled 'Vibe' crossed with a red warning circle. Curved glass panel, subtle dotted grid canvas texture, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Warning
-Support accent: Problem
+Headline accent: [mystery vibe]
+Support accent: [Relying on]
 Motion cue: Fast A/B wipe. Red problem detail appears for one beat, then cyan guide line pulls the eye back.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- Subjective terms lack accuracy
-- The brain uses words like warmth or air to describe complex acoustic interactions. Without technical calibration, you make random adjustments that ruin the mix balance.
+- [Subjective terms] lack accuracy
+- The brain uses words like warmth or air to describe complex [acoustic] interactions. Without technical calibration, you make random adjustments that ruin the mix balance.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio product photograph of a clean, sleek glass screen showing a spectrum analyzer with a muddy low-end build-up. Dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Ear
-Support accent: Response
+Headline accent: [Subjective terms]
+Support accent: [acoustic]
 Motion cue: Fast wave sweep showing chaotic noise resolving into a clean signal line.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- Dual process theory in audio
-- Psychology shows that intuitive System 1 thinking identifies the emotional target of the track, while analytical System 2 thinking executes the quantitative calibration. You need both.
+- [Dual process] theory in audio
+- [Psychology shows] that intuitive System 1 thinking identifies the emotional target of the track, while analytical System 2 thinking executes the quantitative calibration. You need both.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Schematic diagram of dual-process theory: intuitive System 1 vs analytical System 2 in cyan. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Science
-Support accent: Mechanism
+Headline accent: [Dual process]
+Support accent: [Psychology shows]
 Motion cue: Node lines slowly fade to dim grey, leaving only one bright path active.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Vibe is calibrated science
-- Warmth is even-harmonic distortion. Air is high-frequency shelf boosting. Translate your artistic desires into precise digital signal processing values.
+- [Vibe is] calibrated science
+- Warmth is even-harmonic distortion. Air is high-[frequency] shelf boosting. Translate your artistic desires into precise digital signal processing values.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro photograph of a saturation curve display showing even-order harmonics in cyan. Dotted grid canvas texture, dark-blue background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Taste
-Support accent: Choice
+Headline accent: [Vibe is]
+Support accent: [frequency]
 Motion cue: Glass panel glows as a single dial locks firmly into position.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Translate feelings to parameters
-- When a track needs warmth, apply a saturator at 200 Hz. When it needs air, use a high-shelf EQ at 12 kHz. Target specific frequencies instead of guessing.
+- [Translate feelings] to parameters
+- When a track needs warmth, apply a saturator at 200 Hz. When it needs air, use a high-shelf EQ at 12 kHz. Target specific [frequencies] instead of guessing.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A parametric EQ showing a 12 kHz high-shelf boost on a glass screen. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Action
-Support accent: Session
+Headline accent: [Translate feelings]
+Support accent: [frequencies]
 Motion cue: A vertical divider line slides across the screen, separating the tracks into neat groups.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- The dynamic range verify
-- Measure the short-term loudness and crest factor of the mix. Ensure the vibe of your saturation has not destroyed the transient punch.
+- The [dynamic range] verify
+- Measure the short-term loudness and crest factor of the mix. Ensure the vibe of your [saturation] has not destroyed the transient punch.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up of a level-matched saturation sweep dial glowing cyan on a sleek glass interface panel. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Test
-Support accent: Signal
+Headline accent: [dynamic range]
+Support accent: [saturation]
 Motion cue: Digital timer countdown flashes once as it hits zero, triggering a glowing bounce progress bar.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Sum the mix to mono
-- Check if the stereo depth of your effects survives mono summing. Verify that phase cancellation does not wash out the lead vocal.
+- Sum the mix to [mono]
+- Check if the stereo depth of your effects survives mono summing. Verify that [phase cancellation] does not wash out the lead vocal.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A correlation phase meter showing a positive +1 alignment. Subtle dotted grid canvas texture, dark-blue canvas, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Verify
-Support accent: System
+Headline accent: [mono]
+Support accent: [phase cancellation]
 Motion cue: Pulse animation travels from the studio monitor to the phone and car symbols.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Calibrate parameters to secure vibe
-- Never leave a mixing decision to a feeling. Calibrate your levels, phase, and frequencies to make your creative ideas repeatable.
+- [Calibrate parameters] to secure vibe
+- Never leave a mixing decision to a feeling. Calibrate your levels, phase, and [frequencies] to make your creative ideas repeatable.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: A clean schematic showing calibrated parameters board with decibel, hertz, and phase numbers. Curved glass panel, subtle dotted grid canvas texture, dark-blue canvas background, glowing cyan accents, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Rule
-Support accent: Lock
+Headline accent: [Calibrate parameters]
+Support accent: [frequencies]
 Motion cue: Lock symbol blinks and glows solid cyan.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this to ground your intuition
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] to ground your intuition
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of a dark glass UI panel displaying the call to action in large white typography. Subtle dotted grid canvas texture, dark-blue canvas background, soft glowing cyan ambient side-lighting, premium dark Apple editorial aesthetic, 30% negative space.
-Headline accent: Save
-Support accent: Follow
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Glowing pulse fades in around the CTA text.
-Reference line: Refs: Senior 2026 | Katz 2026
+Reference line: Refs: Senior 2011 | Katz 2013

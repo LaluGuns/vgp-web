@@ -2,7 +2,7 @@
 
 /**
  * Hero Section - VIRZY GUNS PRODUCTION
- * Apple-style massive typography with Y3K animated gradient
+ * Premium typography and VGP brand thesis
  */
 
 import { m } from 'framer-motion';
@@ -22,7 +22,7 @@ export function Hero() {
                 animate="visible"
             >
                 <m.p className="mono-label text-primary mb-8" variants={staggerChild}>
-                    ENGINEERING SOUND FOR THE DIGITAL ERA
+                    100% ART. 100% SCIENCE.
                 </m.p>
 
                 <m.h1

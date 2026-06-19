@@ -32,8 +32,8 @@ export function GlassCard({
 }: GlassCardProps) {
     const glowStyles = {
         cyan: 'hover:border-[rgba(0,212,255,0.15)] hover:shadow-[0_0_30px_rgba(0,212,255,0.06),inset_0_1px_0_rgba(255,255,255,0.03)]',
-        studio: 'hover:border-[rgba(255,60,172,0.15)] hover:shadow-[0_0_30px_rgba(255,60,172,0.06),inset_0_1px_0_rgba(255,255,255,0.03)]',
-        lab: 'hover:border-[rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.06),inset_0_1px_0_rgba(255,255,255,0.03)]',
+        studio: 'hover:border-[rgba(56,189,248,0.18)] hover:shadow-[0_0_30px_rgba(56,189,248,0.07),inset_0_1px_0_rgba(255,255,255,0.03)]',
+        lab: 'hover:border-[rgba(103,232,249,0.18)] hover:shadow-[0_0_30px_rgba(103,232,249,0.07),inset_0_1px_0_rgba(255,255,255,0.03)]',
         none: 'hover:border-[rgba(200,204,212,0.08)]',
     };
 

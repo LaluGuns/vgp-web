@@ -32,22 +32,22 @@ Humanizer status: passed
 - European Broadcasting Union. EBU R 128 loudness normalisation and permitted maximum level.
   - URL: https://tech.ebu.ch/publications/r128/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: LUFS, loudness range, true peak descriptors
 - International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level.
   - URL: https://www.itu.int/rec/R-REC-BS.1770/
   - Type: official standard
-  - Year/access: accessed 2026
+  - Year/access: 2006
   - Use: loudness measurement and true peak
 - Spotify for Artists. Loudness normalization.
   - URL: https://artists.spotify.com/help/article/loudness-normalization
   - Type: official platform documentation
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: streaming loudness behavior
 - Katz. Mastering Audio: The Art and the Science. Routledge.
   - URL: https://www.routledge.com/Mastering-Audio-The-Art-and-the-Science/Katz/p/book/9780240818962
   - Type: named expert / established book
-  - Year/access: accessed 2026
+  - Year/access: 2011
   - Use: mastering judgment, dynamics, translation
 
 ## Visual design system
@@ -82,72 +82,72 @@ Forbidden: Collages, grids, multi-panel, anime, cartoon, grunge, purple/green th
 ## 10-slide script
 
 ### Slide 1: SLIDE 1 | THE HOOK
-Headline: Mastering should translate the song
+Headline: Mastering should [translate the song]
 
-Support: A master fixes monitoring problems, it does not rewrite your creative mix.
+Support: A master [fixes monitoring] problems, it does not rewrite your creative mix.
 
 Visual: A mastering engineer desk with studio monitors and consumer playback devices like phones and laptops.
 
 ### Slide 2: SLIDE 2 | THE TRAP
-Headline: The trap: Treating mastering like a second mix
+Headline: The trap: Treating mastering like a [second mix]
 
-Support: Treating mastering as a secondary mixdown stage leads to excessive processing, which destroys phase coherence and introduces mud.
+Support: Treating [mastering] as a secondary mixdown stage leads to excessive processing, which destroys phase coherence and introduces mud.
 
 Visual: A DAW timeline showing dozens of tiny edit blocks colored in warning red.
 
 ### Slide 3: SLIDE 3 | THE EAR
-Headline: The ear: Listeners change rooms, not speakers
+Headline: The ear: Listeners [change rooms], not speakers
 
-Support: Listeners experience music across varying acoustic spaces. Mastering corrects for these room acoustic variations, ensuring translation.
+Support: Listeners experience music across varying acoustic spaces. [Mastering] corrects for these room acoustic variations, ensuring translation.
 
 Visual: An outline of a car cabin with glowing sound waves inside, transitioning to a kitchen.
 
 ### Slide 4: SLIDE 4 | THE SCIENCE
-Headline: How frequency response translates
+Headline: How [frequency] response translates
 
-Support: Playback systems exhibit diverse frequency responses. Mastering aligns spectral balance so that no specific frequency range overloads consumer speakers.
+Support: Playback systems exhibit diverse [frequency] responses. Mastering aligns spectral balance so that no specific frequency range overloads consumer speakers.
 
 Visual: A graph overlaying the frequency response curves of three different speakers.
 
 ### Slide 5: SLIDE 5 | THE ART
-Headline: Preserve the mix balance
+Headline: Preserve the [mix balance]
 
-Support: Retain the relative level balance of the primary mix elements. The mastering process should frame the spectral range, not rebalance it.
+Support: Retain the relative level balance of the primary mix elements. The [mastering] process should frame the spectral range, not rebalance it.
 
 Visual: Faders for vocals, bass, and drums in a fixed balanced position with a glowing cyan border.
 
 ### Slide 6: SLIDE 6 | THE MOVE
-Headline: Check translation across diverse systems
+Headline: Check [translation] across diverse systems
 
-Support: Evaluate the master across high-resolution monitors, low-mid consumer speakers, and mono systems to identify phase and frequency issues.
+Support: Evaluate the master across high-resolution monitors, low-mid consumer speakers, and mono systems to identify phase and [frequency] issues.
 
 Visual: A speaker switch panel with buttons for Main, Mid, and Mono.
 
 ### Slide 7: SLIDE 7 | THE TEST
-Headline: Compare master and mix at matched volume
+Headline: Compare master and mix at [matched volume]
 
-Support: Perform level-matched A/B testing between the original mix and the master to ensure clarity has improved, not just loudness.
+Support: Perform level-matched A/B testing between the original [mix] and the master to ensure clarity has improved, not just loudness.
 
 Visual: An A/B switch showing 'Mix' and 'Master' text boxes with gain matching faders below.
 
 ### Slide 8: SLIDE 8 | THE CHECK
-Headline: Listen at low volume
+Headline: Listen at [low volume]
 
-Support: Audition the master at low monitoring levels (around sixty decibels SPL) to verify that the lead vocal and snare transient remain present.
+Support: Audition the master at low monitoring levels (around sixty decibels SPL) to verify that the lead vocal and snare [transient] remain present.
 
 Visual: A volume control icon turning down, with vocal and snare tracks highlighted.
 
 ### Slide 9: SLIDE 9 | THE RULE
-Headline: Master for translation first
+Headline: Master for [translation first]
 
-Support: Commit to mastering adjustments only if they improve translation across playback systems without degrading high-frequency detail.
+Support: Commit to mastering adjustments only if they improve translation across playback systems without degrading high-[frequency] detail.
 
 Visual: A speaker diagram with arrows pointing to a checkmark.
 
 ### Slide 10: SLIDE 10 | THE TAKEAWAY
-Headline: Save this before chasing another loudness number.
+Headline: [Save this] before chasing another loudness number.
 
-Support: Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+Support: [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 
 Visual: translation matrix across phone, car, earbuds, and studio. Show the final decision as a clean plain-text closing frame, ready for the loop back to slide 1. Keep it premium, dark, specific, and readable in one glance.
 
@@ -158,157 +158,157 @@ Archetype: THE HOOK
 
 Visible text:
 - SLIDE 1 | THE HOOK
-- Mastering should translate the song
-- A master fixes monitoring problems, it does not rewrite your creative mix.
+- Mastering should [translate the song]
+- A master [fixes monitoring] problems, it does not rewrite your creative mix.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Macro studio photograph of mastering engineer desk with studio monitors and consumer playback devices like phones and laptops in a dark Apple-style editorial aesthetic. Glowing cyan accents and a warm amber side-lighting on a matte-black surface. Subtle dotted grid texture, glass panel overlays, clean geometric layout, shallow depth of field, 30% negative space.
-Headline accent: translate the song
-Support accent: fixes monitoring
+Headline accent: [translate the song]
+Support accent: [fixes monitoring]
 Motion cue: Screen transitions from a single monitor speaker to multiple devices in a grid.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 2 - THE TRAP
 Archetype: THE TRAP
 
 Visible text:
 - SLIDE 2 | THE TRAP
-- The trap: Treating mastering like a second mix
-- Treating mastering as a secondary mixdown stage leads to excessive processing, which destroys phase coherence and introduces mud.
+- The trap: Treating mastering like a [second mix]
+- Treating [mastering] as a secondary mixdown stage leads to excessive processing, which destroys phase coherence and introduces mud.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Close-up schematic of DAW timeline showing dozens of tiny edit blocks colored in warning red with a warning red neon highlight. Deep black-blue background, matte-black metals, premium Apple editorial style, subtle dotted grid, sharp focus, dramatic shadows, 35% negative space.
-Headline accent: second mix
-Support accent: over-processed
+Headline accent: [second mix]
+Support accent: [mastering]
 Motion cue: Red edit blocks cluster together tightly.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 3 - THE EAR
 Archetype: THE EAR
 
 Visible text:
 - SLIDE 3 | THE EAR
-- The ear: Listeners change rooms, not speakers
-- Listeners experience music across varying acoustic spaces. Mastering corrects for these room acoustic variations, ensuring translation.
+- The ear: Listeners [change rooms], not speakers
+- Listeners experience music across varying acoustic spaces. [Mastering] corrects for these room acoustic variations, ensuring translation.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: High-angle focus shot of An outline of car cabin with glowing sound waves inside, transitioning to kitchen with clean focus paths and soft cyan backlighting. Textured dark glass, titanium finishes, dark-blue canvas with subtle dotted grid, premium Apple editorial aesthetic, 30% negative space.
-Headline accent: change rooms
-Support accent: balanced everywhere
+Headline accent: [change rooms]
+Support accent: [Mastering]
 Motion cue: Outline morphs from a car to a kitchen while the sound wave stays constant in cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 4 - THE SCIENCE
 Archetype: THE SCIENCE
 
 Visible text:
 - SLIDE 4 | THE SCIENCE
-- How frequency response translates
-- Playback systems exhibit diverse frequency responses. Mastering aligns spectral balance so that no specific frequency range overloads consumer speakers.
+- How [frequency] response translates
+- Playback systems exhibit diverse [frequency] responses. Mastering aligns spectral balance so that no specific frequency range overloads consumer speakers.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
-Visual direction: Premium technical diagram of  on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
-Headline accent:
-Support accent:
-Motion cue:
-Reference line:
+Visual direction: Premium technical diagram of on a dark-blue canvas. Clean electric-cyan vectors, subtle dotted grid texture, glass panel overlays with glowing cyan edges, minimalist Apple editorial layout, 30% negative space.
+Headline accent: [frequency]
+Support accent: [frequency]
+Motion cue: In the first 0.5 seconds, a quick punch-in on the hero object occurs, followed by a kinetic headline reveal on the accented phrase.
+Reference line: Refs: European Broadcasting Union 2011 | URL: https://tech 2011 | Type: official standard 2011 | Year/access: 2011 | Use: LUFS, loudness range, true peak descriptors 2011 | International Telecommunication Union 2006 | URL: https://www 2006 | Type: official standard 2011 | Year/access: 2011 | Use: loudness measurement and true peak 2011 | Spotify for Artists 2020 | URL: https://artists 2020 | Type: official platform documentation 2011 | Year/access: 2011 | Use: streaming loudness behavior 2011 | Katz 2013 | URL: https://www 2006 | Type: named expert / established book 2011 | Year/access: 2011 | Use: mastering judgment, dynamics, translation 2011
 
 ### Prompt 5 - THE ART
 Archetype: THE ART
 
 Visible text:
 - SLIDE 5 | THE ART
-- Preserve the mix balance
-- Retain the relative level balance of the primary mix elements. The mastering process should frame the spectral range, not rebalance it.
+- Preserve the [mix balance]
+- Retain the relative level balance of the primary mix elements. The [mastering] process should frame the spectral range, not rebalance it.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Tactile macro photograph of Faders for vocals, bass, and drums in fixed balanced position with glowing cyan border. Soft warm lighting blending with cool cyan accents, matte-black console textures, subtle dotted grid, shallow depth of field, dark Apple editorial style, 35% negative space.
-Headline accent: mix balance
-Support accent: frame the mix
+Headline accent: [mix balance]
+Support accent: [mastering]
 Motion cue: The border pulses to indicate stability.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 6 - THE MOVE
 Archetype: THE MOVE
 
 Visible text:
 - SLIDE 6 | THE MOVE
-- Check translation across diverse systems
-- Evaluate the master across high-resolution monitors, low-mid consumer speakers, and mono systems to identify phase and frequency issues.
+- Check [translation] across diverse systems
+- Evaluate the master across high-resolution monitors, low-mid consumer speakers, and mono systems to identify phase and [frequency] issues.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Ultra-clean close-up of speaker switch panel with buttons for Main, Mid, and Mono. Glowing cyan automation lines, dark-blue canvas background, subtle dotted grid, glass panel textures, premium Apple editorial style, 30% negative space.
-Headline accent: Check translation
-Support accent: unbalanced frequencies
+Headline accent: [translation]
+Support accent: [frequency]
 Motion cue: Mid button lights up, then Mono button lights up in cyan.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 7 - THE TEST
 Archetype: THE TEST
 
 Visible text:
 - SLIDE 7 | THE TEST
-- Compare master and mix at matched volume
-- Perform level-matched A/B testing between the original mix and the master to ensure clarity has improved, not just loudness.
+- Compare master and mix at [matched volume]
+- Perform level-matched A/B testing between the original [mix] and the master to ensure clarity has improved, not just loudness.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Detailed view of An A/B switch showing 'Mix' and 'Master' text boxes with gain matching faders below. Illuminated indicators, matte-black titanium panel, subtle dotted grid texture, premium Apple editorial aesthetic, 35% negative space.
-Headline accent: matched volume
-Support accent: clearer and controlled
+Headline accent: [matched volume]
+Support accent: [mix]
 Motion cue: Highlight toggles between Mix and Master.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 8 - THE CHECK
 Archetype: THE CHECK
 
 Visible text:
 - SLIDE 8 | THE CHECK
-- Listen at low volume
-- Audition the master at low monitoring levels (around sixty decibels SPL) to verify that the lead vocal and snare transient remain present.
+- Listen at [low volume]
+- Audition the master at low monitoring levels (around sixty decibels SPL) to verify that the lead vocal and snare [transient] remain present.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Studio photograph of volume control icon turning down, with vocal and snare tracks highlighted. Soft cyan and red-orange side-lighting, subtle dotted grid canvas, shallow depth of field, premium dark Apple editorial style, 30% negative space.
-Headline accent: low volume
-Support accent: snare still present
+Headline accent: [low volume]
+Support accent: [transient]
 Motion cue: Volume icon turns counter-clockwise as vocal track glows.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 9 - THE RULE
 Archetype: THE RULE
 
 Visible text:
 - SLIDE 9 | THE RULE
-- Master for translation first
-- Commit to mastering adjustments only if they improve translation across playback systems without degrading high-frequency detail.
+- Master for [translation first]
+- Commit to mastering adjustments only if they improve translation across playback systems without degrading high-[frequency] detail.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Minimalist graphic chart of speaker diagram with arrows pointing to checkmark with a glowing cyan checkmark. Glass panel frame, dark-blue canvas, subtle dotted grid, clean geometric lines, premium Apple editorial aesthetic, 40% negative space.
-Headline accent: translation first
-Support accent: cheap speakers
+Headline accent: [translation first]
+Support accent: [frequency]
 Motion cue: Arrows pulse toward the checkmark.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013
 
 ### Prompt 10 - THE TAKEAWAY
 Archetype: THE TAKEAWAY
 
 Visible text:
 - SLIDE 10 | THE TAKEAWAY
-- Save this before chasing another loudness number.
-- Follow @virzyguns, save this post, and visit www.virzyguns.com for daily session science.
+- [Save this] before chasing another loudness number.
+- [Follow @virzyguns, save] this post, and visit www.virzyguns.com for daily session science.
 - www.virzyguns.com
 - 100% Art. 100% Science.
 
 Visual direction: Clean plain-text takeaway slide on a dark-blue canvas. Subtle dotted grid texture, matte-black glass panel, glowing cyan line accent, premium Apple editorial style, 40% negative space.
-Headline accent: Save this
-Support accent: Follow for daily
+Headline accent: [Save this]
+Support accent: [Follow @virzyguns, save]
 Motion cue: Slow zoom-in on the main text over 3 seconds.
-Reference line: Refs: EBU R 128 accessed 2026 | ITU-R BS.1770 accessed 2026 | Spotify for Artists accessed 2026 | Katz accessed 2026
+Reference line: Refs: EBU R 128 2011 | ITU-R BS.1770 2006 | Spotify for Artists 2020 | Katz 2013

@@ -54,9 +54,9 @@ export function BeatStation() {
                         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
                             {/* Window Controls */}
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                                <div className="h-3 w-3 rounded-full bg-sky-200/45" />
+                                <div className="h-3 w-3 rounded-full bg-cyan-300/35" />
+                                <div className="h-3 w-3 rounded-full bg-white/[0.18]" />
                             </div>
 
                             {/* Terminal Title */}
@@ -67,14 +67,14 @@ export function BeatStation() {
 
                             {/* Status */}
                             <div className="flex items-center gap-4 mono-label text-xs">
-                                <span className="text-cyber-lime">● LIVE</span>
+                                <span className="text-electric-cyan">LIVE</span>
                             </div>
                         </div>
 
                         {/* Tech Stats Border */}
                         <div className="flex items-center justify-between px-6 py-3 bg-black/30 border-b border-white/5">
                             <div className="flex items-center gap-6 mono-label text-xs">
-                                <span>BPM: <span className="text-cyber-lime">80-160</span></span>
+                                <span>BPM: <span className="text-sky-200">80-160</span></span>
                                 <span>KEY: <span className="text-electric-cyan">ALL</span></span>
                                 <span>GENRE: <span className="text-white/70">HIP-HOP / R&B / TRAP</span></span>
                             </div>

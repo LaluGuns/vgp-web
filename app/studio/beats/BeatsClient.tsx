@@ -1,91 +1,53 @@
-﻿'use client';
+'use client';
 
-/**
- * Beats Page - Premium Instrumentals for Artists
- * With Stitch-designed Y3K genre icons + Smart Copy Feature
- */
-
-import { useState, useEffect } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { m } from 'framer-motion';
 import { Check, ExternalLink } from 'lucide-react';
-import { Portal3DIcon } from '@/components/ui/Portal3DIcon';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { staggerParent, staggerChild, revealUp } from '@/lib/motion-presets';
+import {
+    PageHeader,
+    SectionShell,
+} from '@/components/editorial/EditorialPrimitives';
+import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
+import { catalogCredentials } from '@/lib/vgp-ecosystem';
 
-// Stitch-designed Y3K Genre Icons
-const TrapIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="8" />
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 4v2M12 18v2M4 12h2M18 12h2" strokeLinecap="round" />
-    </svg>
-);
-
-const CyberphonkIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="5" y="5" width="14" height="14" rx="2" />
-        <path d="M5 9h3M16 9h3M9 5v3M9 16v3M15 5v3M15 16v3" strokeLinecap="round" />
-    </svg>
-);
-
-const SynthwaveIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 19a7 7 0 1 0 0-14" strokeLinecap="round" />
-        <path d="M5 19h14" strokeLinecap="round" />
-        <path d="M7 16h10M9 13h6" strokeLinecap="round" />
-    </svg>
-);
-
-const RnBIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M2 12c3-4 6 0 10-2s6 4 10 0" strokeLinecap="round" />
-        <path d="M2 16c3-4 6 0 10-2s6 4 10 0" strokeLinecap="round" opacity="0.5" />
-    </svg>
-);
-
-const SynthpopIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="4" y="6" width="16" height="12" rx="2" />
-        <circle cx="8" cy="12" r="2" />
-        <circle cx="16" cy="12" r="2" />
-        <path d="M11 9h2v6h-2" strokeLinecap="round" />
-    </svg>
-);
-
-const ClubIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="8" />
-        <circle cx="12" cy="12" r="3" />
-        <path d="M12 4v1M12 19v1M4 12h1M19 12h1M6.3 6.3l.7.7M17 17l.7.7M6.3 17.7l.7-.7M17 7l.7-.7" strokeLinecap="round" />
-    </svg>
-);
-
-const DeepHouseIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M3 12l9-8 9 8" />
-        <path d="M5 10v10h14V10" />
-        <path d="M9 15c1-1 2 1 3 0s2 1 3 0" strokeLinecap="round" />
-    </svg>
-);
-
-const DrillIcon = () => (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2L6 12l6 10 6-10L12 2z" strokeLinejoin="round" />
-        <path d="M12 7l-3 5 3 5 3-5-3-5z" strokeLinejoin="round" />
-    </svg>
-);
-
-const genres = [
-    { name: 'Trap', Icon: TrapIcon, color: '#ef4444', glow: 'rgba(239, 68, 68, 0.5)' },
-    { name: 'Cyberphonk', Icon: CyberphonkIcon, color: '#a855f7', glow: 'rgba(168, 85, 247, 0.5)' },
-    { name: 'Synthwave', Icon: SynthwaveIcon, color: '#ec4899', glow: 'rgba(236, 72, 153, 0.5)' },
-    { name: 'R&B', Icon: RnBIcon, color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.5)' },
-    { name: 'Synthpop', Icon: SynthpopIcon, color: '#06b6d4', glow: 'rgba(6, 182, 212, 0.5)' },
-    { name: 'Club', Icon: ClubIcon, color: '#eab308', glow: 'rgba(234, 179, 8, 0.5)' },
-    { name: 'Deep House', Icon: DeepHouseIcon, color: '#22c55e', glow: 'rgba(34, 197, 94, 0.5)' },
-    { name: 'Drill', Icon: DrillIcon, color: '#f97316', glow: 'rgba(249, 115, 22, 0.5)' },
+const catalogStyles = [
+    {
+        name: 'All styles',
+        description: 'The complete Virzy Guns catalog across rap, electronic, R&B, and club production.',
+    },
+    {
+        name: 'Trap',
+        description: 'Heavy 808s, sharp drum movement, and open arrangements built for vocal performance.',
+    },
+    {
+        name: 'Phonk',
+        description: 'Distorted low end, chopped textures, and hard-edged rhythm with underground character.',
+    },
+    {
+        name: 'Synthwave',
+        description: 'Cinematic synths, driving basslines, and widescreen retro-futurist atmosphere.',
+    },
+    {
+        name: 'R&B',
+        description: 'Spacious drums, melodic harmony, and warm pockets designed around the voice.',
+    },
+    {
+        name: 'Synthpop',
+        description: 'Hook-forward electronic production with polished drums and bright melodic detail.',
+    },
+    {
+        name: 'Club',
+        description: 'Direct, energetic records built around movement, impact, and repeatable hooks.',
+    },
+    {
+        name: 'Deep House',
+        description: 'Deep grooves, restrained percussion, and immersive late-night electronic textures.',
+    },
+    {
+        name: 'Drill',
+        description: 'Sliding bass, tense melodies, and syncopated drums with space for commanding vocals.',
+    },
 ];
 
 const nonExclusiveLicenses = [
@@ -93,259 +55,294 @@ const nonExclusiveLicenses = [
         name: 'Basic MP3',
         price: '$15',
         copies: '2,000 Copies',
-        streams: '100K Streams',
+        streams: '100K',
         features: ['MP3 File', '1 Music Video'],
     },
     {
         name: 'Basic Pro',
         price: '$25',
         copies: '10,000 Copies',
-        streams: '500K Streams',
+        streams: '500K',
         features: ['MP3 + WAV', '1 Music Video', 'For-Profit Performances'],
     },
     {
         name: 'Premium',
         price: '$50',
         copies: '50,000 Copies',
-        streams: '1M Streams',
+        streams: '1M',
         features: ['MP3 + WAV', '1 Music Video', 'For-Profit', 'Radio (2 Stations)'],
     },
     {
         name: 'Unlimited',
         price: '$100',
-        copies: 'UNLIMITED',
-        streams: 'UNLIMITED',
+        copies: 'Unlimited',
+        streams: 'Unlimited',
         features: ['MP3 + WAV + Stems', '2 Music Videos', 'For-Profit', 'Radio (2 Stations)'],
     },
 ];
 
+const beatstarsProfileUrl = 'https://www.beatstars.com/virzyguns';
+const beatstarsTracksUrl = 'https://www.beatstars.com/virzyguns/tracks';
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 
-export default function BeatsClient() {
-    const [activeGenre, setActiveGenre] = useState<string | null>(null);
+const getVirzyGunsCatalogUrl = (genreName: string) => {
+    if (genreName === 'All styles') return beatstarsTracksUrl;
+    return `${beatstarsTracksUrl}?q=${encodeURIComponent(genreName)}`;
+};
 
-    const handleGenreClick = (genreName: string) => {
-        setActiveGenre(activeGenre === genreName ? null : genreName);
-    };
+export default function BeatsClient() {
+    const [activeGenre, setActiveGenre] = useState(catalogStyles[0].name);
+    const activeCatalog = catalogStyles.find((genre) => genre.name === activeGenre) ?? catalogStyles[0];
 
     return (
         <PageTransition>
+            <article className="editorial-shell min-h-screen text-white">
+                <PageHeader
+                    eyebrow="VGP Studio / Beats"
+                    title="Premium beats"
+                    mutedTitle="for working artists."
+                    description="Beats by Virzy Guns, plus custom production, mixing, mastering, and sound design."
+                />
 
-            {/* Hero */}
-            <section className="relative py-20 sm:py-28 px-4 sm:px-6 text-center overflow-hidden">
-                {/* Gradient orbs  -  Studio pink theme */}
-                <div className="absolute top-[-10%] left-1/3 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,60,172,0.06)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
-                <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(180,74,255,0.04)_0%,transparent_70%)] blur-[80px] pointer-events-none" />
+                <SectionShell id="credentials" className="border-y border-white/[0.08] bg-white/[0.012] py-12 sm:py-14">
+                    <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
+                                Verified track record
+                            </p>
+                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
+                                Production proof behind the catalog.
+                            </h2>
+                            <p className="mt-4 max-w-md text-sm leading-7 text-white/55">
+                                Independent credits verified through MUSO.AI, placed here where the production record matters most.
+                            </p>
+                        </div>
 
-                <div className="max-w-3xl mx-auto relative">
-                    {/* Immersive Background Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-25">
-                        <Portal3DIcon portalId="studio" color="#FF3CAC" size={350} />
-                    </div>
-
-                    <m.div
-                        initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                        transition={{ type: 'spring', stiffness: 60, damping: 18 }}
-                        className="relative z-10"
-                    >
-                        <p className="font-mono text-[0.55rem] tracking-[0.4em] text-[#7dd3fc]/60 mb-5 uppercase">VGP STUDIO</p>
-                        <h1
-                            aria-label="Premium Instrumentals for Artists"
-                            className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.05] tracking-tight mb-2"
-                        >
-                            <span className="block text-white">Premium beats</span>
-                            <span className="block text-white/35">and audio services.</span>
-                        </h1>
-                        <p className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#7dd3fc]/60 mb-6">100% Art. 100% Science.</p>
-                        <p className="text-[#565B66] text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
-                            Beats by Virzy Guns across trap, drill, R&B, synthwave, cyberphonk, and more, plus custom production, mixing, mastering, and sound design.
-                        </p>
-                    </m.div>
-                </div>
-            </section>
-
-            {/* Genre Icons */}
-            <section className="py-8 px-4 sm:px-6">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-                        {genres.map((genre) => {
-                            const isActive = activeGenre === genre.name;
-                            return (
-                                <button
-                                    key={genre.name}
-                                    onClick={() => handleGenreClick(genre.name)}
-                                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border bg-[var(--carbon)] border-[rgba(200,204,212,0.05)] text-[var(--dim-grey)] transition-all duration-200 hover:-translate-y-1 hover:scale-105 active:scale-95"
-                                    style={{
-                                        backgroundColor: isActive ? genre.color + '1A' : undefined,
-                                        borderColor: isActive ? genre.color : 'rgba(255,255,255,0.05)',
-                                        boxShadow: isActive ? `0 0 20px ${genre.glow}` : 'none',
-                                        color: isActive ? genre.color : undefined,
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        if (!isActive) {
-                                            e.currentTarget.style.borderColor = genre.color;
-                                            e.currentTarget.style.color = genre.color;
-                                            e.currentTarget.style.boxShadow = `0 6px 20px ${genre.glow}`;
-                                        }
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        if (!isActive) {
-                                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
-                                            e.currentTarget.style.color = '';
-                                            e.currentTarget.style.boxShadow = 'none';
-                                        }
-                                    }}
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4">
+                            {catalogCredentials.map((item) => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group border-t border-white/[0.1] pt-4 transition hover:border-sky-200/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
                                 >
-                                    <genre.Icon />
-                                    <span className="text-sm font-medium">{genre.name}</span>
-                                </button>
-                            );
-                        })}
+                                    <p className="text-2xl font-semibold leading-none text-white">{item.value}</p>
+                                    <p className="mt-2 flex items-center gap-1.5 text-xs leading-5 text-white/55 transition group-hover:text-sky-100">
+                                        {item.label}
+                                        <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </SectionShell>
 
-            {/* Beatstore Embed */}
-            <section className="py-8 sm:py-12 px-4 sm:px-6">
-                <div className="max-w-5xl mx-auto">
-                    <SectionHeader
-                        label="BROWSE"
-                        title="Select Your Beat"
-                        description="Preview, license, and download instantly."
-                    />
-
-                    <m.div
-                        className="obsidian-glass overflow-hidden rounded-lg"
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {/* Terminal Header */}
-                        <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-[rgba(255,255,255,0.05)] bg-[#0A0A0A]/40">
-                            <div className="flex items-center gap-1.5 sm:gap-2">
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
-                                <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[rgba(200,204,212,0.12)]" />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
-                                <span className="terminal-text text-[var(--chrome-dim)] text-xs">VGP BEAT STORE</span>
-                            </div>
-                            <div className="w-12" />
+                <SectionShell id="catalog-focus" className="pb-10 pt-2 sm:pb-12">
+                    <div className="mx-auto max-w-5xl">
+                        <div className="max-w-2xl">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">Catalog focus</p>
+                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">Find the right production lane.</h2>
+                            <p className="mt-4 text-sm leading-7 text-white/70 sm:text-base">
+                                Choose a style and the Virzy Guns BeatStars catalog opens with that search already applied. The full catalog stays embedded below.
+                            </p>
                         </div>
 
-                        {/* Beatstars Embed */}
-                        <div className="bg-[#03040A] flex justify-center" id="beatstore-player">
-                            <iframe
-                                src="https://player.beatstars.com/?storeId=122437"
-                                width="100%"
-                                height="800"
-                                style={{ border: 'none', display: 'block', maxWidth: '1024px' }}
-                                allow="autoplay; clipboard-write"
-                                title="VGP Beatstore"
-                                loading="lazy"
-                            />
+                        <div className="mt-8 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" role="group" aria-label="Catalog focus">
+                            {catalogStyles.map((genre) => {
+                                const isActive = activeGenre === genre.name;
+
+                                return (
+                                    <a
+                                        key={genre.name}
+                                        href={getVirzyGunsCatalogUrl(genre.name)}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-current={isActive ? 'true' : undefined}
+                                        onClick={() => setActiveGenre(genre.name)}
+                                        className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405] sm:px-4 ${
+                                            isActive
+                                                ? 'border-sky-200/45 bg-sky-300/[0.12] text-sky-100'
+                                                : 'border-white/10 bg-white/[0.025] text-white/70 hover:border-white/25 hover:bg-white/[0.05] hover:text-white'
+                                        }`}
+                                    >
+                                        {genre.name}
+                                        <ExternalLink className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
+                                    </a>
+                                );
+                            })}
                         </div>
 
-                        {/* Footer */}
-                        <div className="flex items-center justify-between px-4 sm:px-5 py-2.5 bg-carbon border-t border-white/5">
-                            <div className="flex items-center gap-4 terminal-text text-xs text-white/40">
-                                <span>SECURE CHECKOUT</span>
-                                <span className="hidden sm:inline">INSTANT DELIVERY</span>
+                        <div
+                            className="mt-6 border-y border-white/[0.08] py-5 sm:flex sm:items-start sm:justify-between sm:gap-8"
+                            role="status"
+                            aria-live="polite"
+                            aria-atomic="true"
+                        >
+                            <div className="shrink-0">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/60">Last BeatStars search</p>
+                                <p className="mt-2 text-lg font-semibold text-white">{activeCatalog.name}</p>
                             </div>
-                            <a href="https://www.beatstars.com/virzyguns" target="_blank" rel="noopener noreferrer" className="terminal-text text-primary/50 hover:text-primary text-xs transition-colors">POWERED BY BEATSTARS</a>
+                            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/70 sm:mt-0 sm:text-right">
+                                {activeCatalog.description}
+                            </p>
                         </div>
-                    </m.div>
-                </div>
-            </section>
+                    </div>
+                </SectionShell>
 
-            {/* Non-Exclusive Licensing */}
-            <section className="py-12 sm:py-20 px-4 sm:px-6 bg-[var(--carbon)]">
-                <div className="max-w-5xl mx-auto">
-                    <SectionHeader
-                        label="NON-EXCLUSIVE LICENSES"
-                        title="Choose Your License"
-                        description="Virzy Guns maintains ownership. Must credit 'Prod. By Virzy Guns'."
-                    />
+                <SectionShell id="beat-catalog" className="pt-8">
+                    <div className="mx-auto max-w-5xl">
+                        <m.div
+                            className="overflow-hidden rounded-lg border border-white/[0.1] bg-black/20"
+                            variants={revealUp}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
+                            <div className="flex flex-col gap-3 border-b border-white/[0.08] px-4 py-4 sm:flex-row sm:items-end sm:justify-between sm:px-5">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/60">BeatStars catalog</p>
+                                    <h2 className="mt-1 text-lg font-semibold text-white">Embedded VGP catalog</h2>
+                                </div>
+                                <a
+                                    href={beatstarsProfileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex min-h-11 items-center gap-2 self-start rounded-lg border border-white/10 px-3 py-2 text-sm font-semibold text-white/70 transition hover:border-sky-200/35 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60 sm:min-h-0 sm:self-auto"
+                                >
+                                    Open full catalog
+                                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                                </a>
+                            </div>
 
-                    <m.div
-                        className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
-                        variants={staggerParent}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {nonExclusiveLicenses.map((license) => (
-                            <m.div key={license.name} variants={staggerChild}>
-                                <GlassCard className="h-full" padding="md" hover>
-                                    <p className="mono-label text-primary mb-3 text-xs">{license.name}</p>
-                                    <p className="text-3xl font-bold mb-1">{license.price}</p>
-                                    <p className="text-xs text-dim-grey mb-1">{license.copies}</p>
-                                    <p className="text-xs text-dim-grey mb-4">{license.streams} Streams</p>
-                                    <div className="space-y-1.5 pt-3 border-t border-white/5">
-                                        {license.features.map((f) => (
-                                            <div key={f} className="flex items-center gap-2 text-xs text-cool-grey">
-                                                <Check className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
-                                                <span>{f}</span>
+                            <div className="bg-[#030405]" id="beatstore-player">
+                                <iframe
+                                    src="https://player.beatstars.com/?storeId=122437"
+                                    className="block h-[680px] w-full sm:h-[760px] lg:h-[800px]"
+                                    allow="autoplay; clipboard-write"
+                                    title="VGP Beat Store catalog on BeatStars"
+                                    loading="lazy"
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-1 border-t border-white/[0.08] px-4 py-3 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+                                <span>Secure checkout and instant delivery</span>
+                                <span>Powered by BeatStars</span>
+                            </div>
+                        </m.div>
+                    </div>
+                </SectionShell>
+
+                <SectionShell className="border-y border-white/[0.08] bg-white/[0.015]">
+                    <div className="mx-auto max-w-5xl">
+                        <div className="max-w-2xl">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">Non-exclusive licenses</p>
+                            <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">Choose a release tier.</h2>
+                            <p className="mt-4 text-sm leading-7 text-white/70 sm:text-base">
+                                Virzy Guns maintains ownership. Credit must read &quot;Prod. By Virzy Guns&quot;.
+                            </p>
+                        </div>
+
+                        <m.div
+                            className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+                            variants={staggerParent}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                        >
+                            {nonExclusiveLicenses.map((license) => (
+                                <m.article
+                                    key={license.name}
+                                    variants={staggerChild}
+                                    className="flex h-full flex-col rounded-lg border border-white/[0.1] bg-white/[0.025] p-5"
+                                >
+                                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-200/70">{license.name}</p>
+                                    <p className="mt-4 text-3xl font-semibold text-white">{license.price}</p>
+                                    <div className="mt-4 space-y-1 text-sm text-white/60">
+                                        <p>{license.copies}</p>
+                                        <p>{license.streams} streams</p>
+                                    </div>
+                                    <div className="mt-5 flex-1 space-y-2 border-t border-white/[0.08] pt-4">
+                                        {license.features.map((feature) => (
+                                            <div key={feature} className="flex items-start gap-2 text-sm leading-6 text-white/70">
+                                                <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-sky-200" aria-hidden="true" />
+                                                <span>{feature}</span>
                                             </div>
                                         ))}
                                     </div>
-                                </GlassCard>
-                            </m.div>
-                        ))}
-                    </m.div>
-                </div>
-            </section>
+                                    <a
+                                        href={beatstarsTracksUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={`Choose a beat for the ${license.name} license on BeatStars`}
+                                        className="mt-6 inline-flex min-h-11 items-center justify-between gap-2 rounded-lg border border-sky-200/25 bg-sky-300/[0.07] px-3 py-2 text-sm font-semibold text-sky-100 transition hover:border-sky-200/45 hover:bg-sky-300/[0.11] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
+                                    >
+                                        Choose on BeatStars
+                                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                                    </a>
+                                </m.article>
+                            ))}
+                        </m.div>
+                    </div>
+                </SectionShell>
 
-            {/* Exclusive License */}
-            <section className="py-12 sm:py-20 px-4 sm:px-6">
-                <div className="max-w-3xl mx-auto">
+                <SectionShell id="private-commissions">
                     <m.div
+                        className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start"
                         variants={revealUp}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        <GlassCard padding="lg" glow="cyan" className="text-center">
-                            <p className="mono-label text-primary mb-3">EXCLUSIVE LICENSE</p>
-                            <h3 className="text-2xl sm:text-3xl font-bold mb-2">Full Rights Package</h3>
-                            <p className="text-dim-grey mb-6">Negotiable / Make an Offer</p>
-
-                            <div className="grid sm:grid-cols-2 gap-4 text-left mb-6">
-                                {[
-                                    'Untagged MP3 + WAV + STEMS',
-                                    'Unlimited Sale Units',
-                                    'Unlimited Streams',
-                                    'For-Profit Performances',
-                                    'Unlimited Radio Use',
-                                    'YouTube Monetization',
-                                    'SoundCloud Monetization',
-                                    'Content ID Registration',
-                                    'Full Exclusive Rights',
-                                    'Beat removed from public store',
-                                ].map((item) => (
-                                    <div key={item} className="flex items-center gap-2 text-sm text-cool-grey">
-                                        <Check className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                                        <span>{item}</span>
-                                    </div>
-                                ))}
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">Private commissions</p>
+                            <h2 className="mt-3 font-display text-3xl font-semibold text-white sm:text-4xl">Exclusive rights or a custom record.</h2>
+                            <p className="mt-4 text-base leading-7 text-white/70">Use DM only for work that needs a direct conversation: exclusive ownership or production built from scratch.</p>
+                            <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
+                                <a
+                                    href={instagramDmUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-sky-200/30 bg-sky-300/[0.08] px-4 py-2.5 text-sm font-semibold text-sky-100 transition hover:border-sky-200/50 hover:bg-sky-300/[0.13] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405]"
+                                >
+                                    DM for exclusive rights
+                                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                                </a>
+                                <a
+                                    href={instagramDmUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-white/75 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405]"
+                                >
+                                    DM for a custom beat
+                                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                                </a>
                             </div>
+                        </div>
 
-                            <a
-                                href={instagramDmUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 rounded-xl border border-primary/50 bg-primary/10 px-6 py-3 font-semibold text-primary transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405]"
-                            >
-                                <span>DM for Exclusive License</span>
-                                <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                            </a>
-                        </GlassCard>
+                        <div className="grid gap-x-6 gap-y-3 border-t border-white/[0.08] pt-6 sm:grid-cols-2 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+                            <p className="sm:col-span-2 text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/55">Exclusive package includes</p>
+                            {[
+                                'Untagged MP3 + WAV + STEMS',
+                                'Unlimited Sale Units',
+                                'Unlimited Streams',
+                                'For-Profit Performances',
+                                'Unlimited Radio Use',
+                                'YouTube Monetization',
+                                'SoundCloud Monetization',
+                                'Content ID Registration',
+                                'Full Exclusive Rights',
+                                'Beat removed from public store',
+                            ].map((item) => (
+                                <div key={item} className="flex items-start gap-2 text-sm leading-6 text-white/70">
+                                    <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-sky-200" aria-hidden="true" />
+                                    <span>{item}</span>
+                                </div>
+                            ))}
+                        </div>
                     </m.div>
-                </div>
-            </section>
+                </SectionShell>
+            </article>
         </PageTransition>
     );
 }

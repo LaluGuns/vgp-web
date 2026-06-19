@@ -44,13 +44,11 @@ export const springSmooth: Transition = {
 export const revealUp: Variants = {
     hidden: {
         opacity: 0,
-        y: 60,
-        filter: 'blur(8px)',
+        y: 24,
     },
     visible: {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         transition: springPreset,
     },
 };
@@ -58,13 +56,11 @@ export const revealUp: Variants = {
 export const revealScale: Variants = {
     hidden: {
         opacity: 0,
-        scale: 0.92,
-        filter: 'blur(6px)',
+        scale: 0.97,
     },
     visible: {
         opacity: 1,
         scale: 1,
-        filter: 'blur(0px)',
         transition: springPreset,
     },
 };
@@ -113,18 +109,17 @@ export const staggerParent: Variants = {
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.08,
-            delayChildren: 0.1,
+            staggerChildren: 0.055,
+            delayChildren: 0.04,
         },
     },
 };
 
 export const staggerChild: Variants = {
-    hidden: { opacity: 0, y: 24, filter: 'blur(4px)' },
+    hidden: { opacity: 0, y: 16 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
         transition: springPreset,
     },
 };
@@ -195,8 +190,8 @@ export const glowHoverCyan = {
 };
 
 export const glowHoverStudio = {
-    boxShadow: '0 0 30px rgba(255, 60, 172, 0.4), 0 0 60px rgba(255, 60, 172, 0.15)',
-    borderColor: 'rgba(255, 60, 172, 0.5)',
+    boxShadow: '0 0 30px rgba(56, 189, 248, 0.34), 0 0 60px rgba(14, 165, 233, 0.12)',
+    borderColor: 'rgba(125, 211, 252, 0.45)',
     transition: { duration: 0.3 },
 };
 
@@ -211,18 +206,16 @@ export const glowHoverLab = {
 // ════════════════════════════════════════════════
 
 export const pageSlideIn: Variants = {
-    hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+    hidden: { opacity: 0, y: 12 },
     visible: {
         opacity: 1,
         y: 0,
-        filter: 'blur(0px)',
-        transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+        transition: { duration: 0.32, ease: [0.25, 0.46, 0.45, 0.94] },
     },
     exit: {
         opacity: 0,
-        y: -10,
-        filter: 'blur(2px)',
-        transition: { duration: 0.3 },
+        y: -6,
+        transition: { duration: 0.18 },
     },
 };
 
