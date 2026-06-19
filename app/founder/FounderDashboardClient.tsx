@@ -188,42 +188,6 @@ export default function FounderDashboardClient() {
         checkSession();
     }, []);
 
-    // 7. Load Data on Auth
-    useEffect(() => {
-        if (isAuthenticated) {
-            loadSubscribers();
-            loadCampaigns();
-            loadPerformance();
-        }
-    }, [isAuthenticated]);
-
-    // Periodically fetch progress for the monitored campaign
-    useEffect(() => {
-        if (!monitoringCampaignId || !isAuthenticated) return;
-
-        const fetchProgress = async () => {
-            try {
-                const res = await fetch(`/api/founder/campaigns/${monitoringCampaignId}/progress`);
-                if (res.ok) {
-                    const data = await res.json();
-                    setCampaignProgress(data);
-                    // Refresh campaign list status too
-                    loadCampaigns();
-                    // Stop monitoring if finished
-                    if (data.campaign.status === 'completed' || data.campaign.status === 'cancelled' || data.campaign.status === 'failed') {
-                        setMonitoringCampaignId(null);
-                    }
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
-
-        fetchProgress();
-        const interval = setInterval(fetchProgress, 5000); // Poll every 5s
-        return () => clearInterval(interval);
-    }, [monitoringCampaignId, isAuthenticated]);
-
     // Data Loaders
     const loadSubscribers = async () => {
         setSubsLoading(true);
@@ -275,6 +239,46 @@ export default function FounderDashboardClient() {
             setAuditLoading(false);
         }
     };
+
+    // 7. Load Data on Auth
+    useEffect(() => {
+        if (isAuthenticated) {
+            const timer = setTimeout(() => {
+                loadSubscribers();
+                loadCampaigns();
+                loadPerformance();
+            }, 0);
+            return () => clearTimeout(timer);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated]);
+
+    // Periodically fetch progress for the monitored campaign
+    useEffect(() => {
+        if (!monitoringCampaignId || !isAuthenticated) return;
+
+        const fetchProgress = async () => {
+            try {
+                const res = await fetch(`/api/founder/campaigns/${monitoringCampaignId}/progress`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setCampaignProgress(data);
+                    // Refresh campaign list status too
+                    loadCampaigns();
+                    // Stop monitoring if finished
+                    if (data.campaign.status === 'completed' || data.campaign.status === 'cancelled' || data.campaign.status === 'failed') {
+                        setMonitoringCampaignId(null);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchProgress();
+        const interval = setInterval(fetchProgress, 5000); // Poll every 5s
+        return () => clearInterval(interval);
+    }, [monitoringCampaignId, isAuthenticated]);
 
     // Form handlers
     const handleLogin = async (e: React.FormEvent) => {
@@ -847,7 +851,7 @@ export default function FounderDashboardClient() {
                                     </div>
                                 ) : campaigns.length === 0 ? (
                                     <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-12 text-center font-mono text-zinc-500 text-sm">
-                                        No campaigns created. Click "+ Create Broadcast" to generate your first draft.
+                                        No campaigns created. Click &quot;+ Create Broadcast&quot; to generate your first draft.
                                     </div>
                                 ) : (
                                     campaigns.map((camp) => (

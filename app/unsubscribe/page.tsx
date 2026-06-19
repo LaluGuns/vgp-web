@@ -8,16 +8,18 @@ function UnsubscribeContent() {
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
     
-    const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-    const [message, setMessage] = useState('Verifying your unsubscribe request...');
+    const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
+        token ? 'loading' : 'error'
+    );
+    const [message, setMessage] = useState(
+        token
+            ? 'Verifying your unsubscribe request...'
+            : 'Missing unsubscribe token. If you want to unsubscribe, please click the link at the bottom of our emails.'
+    );
     const [email, setEmail] = useState('');
 
     useEffect(() => {
-        if (!token) {
-            setStatus('error');
-            setMessage('Missing unsubscribe token. If you want to unsubscribe, please click the link at the bottom of our emails.');
-            return;
-        }
+        if (!token) return;
 
         const runUnsubscribe = async () => {
             try {
@@ -68,7 +70,7 @@ function UnsubscribeContent() {
                         {email && <p className="text-gray-500 text-xs font-mono bg-zinc-900 py-1 px-3 rounded-md inline-block">{email}</p>}
                     </div>
                     <p className="text-gray-400 text-sm leading-relaxed">
-                        You have been removed from our Inner Circle mailing list. We're sorry to see you go.
+                        You have been removed from our Inner Circle mailing list. We&apos;re sorry to see you go.
                     </p>
                     <div className="pt-4">
                         <Link 
