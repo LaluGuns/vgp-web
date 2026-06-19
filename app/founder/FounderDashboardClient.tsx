@@ -635,6 +635,14 @@ export default function FounderDashboardClient() {
                                 <div className="p-4 rounded-xl border border-white/5 bg-zinc-900/20">
                                     <p className="text-zinc-500 uppercase">SMTP configuration</p>
                                     <p className="text-cyan-400 font-bold mt-2">VERIFIED (smtp.hostinger.com:465 SSL)</p>
+                                    <a
+                                        href="https://mail.hostinger.com/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex mt-4 px-3 py-2 rounded-lg border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 hover:border-cyan-400/40 hover:bg-cyan-400/10 transition-colors"
+                                    >
+                                        OPEN HOSTINGER MAIL
+                                    </a>
                                 </div>
                                 <div className="p-4 rounded-xl border border-white/5 bg-zinc-900/20">
                                     <p className="text-zinc-500 uppercase">Daily performance cron</p>

@@ -3,6 +3,8 @@ import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
 
 export async function GET(request: NextRequest) {
+    let reportClaimed = false;
+
     try {
         // 1. Cron Secret Authorization check
         const cronSecret = process.env.CRON_SECRET;
@@ -14,24 +16,35 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // 2. Prevent duplicate daily report delivery (Deduplication)
-        const dateCheck = await pool.query(
-            `SELECT status FROM vgp_daily_report_logs WHERE report_date = CURRENT_DATE`
+        // 2. Atomically claim today's report. A failed or stale pending attempt
+        // may be retried, while concurrent healthy invocations are deduplicated.
+        const claimResult = await pool.query(
+            `INSERT INTO vgp_daily_report_logs (report_date, status)
+             VALUES (CURRENT_DATE, 'pending')
+             ON CONFLICT (report_date) DO UPDATE
+             SET status = 'pending', sent_at = CURRENT_TIMESTAMP
+             WHERE vgp_daily_report_logs.status = 'failed'
+                OR (
+                    vgp_daily_report_logs.status = 'pending'
+                    AND vgp_daily_report_logs.sent_at < CURRENT_TIMESTAMP - INTERVAL '15 minutes'
+                )
+             RETURNING status`
         );
 
-        if (dateCheck.rowCount !== null && dateCheck.rowCount > 0 && dateCheck.rows[0].status === 'sent') {
+        if (claimResult.rowCount === 0 || claimResult.rowCount === null) {
+            const dateCheck = await pool.query(
+                `SELECT status FROM vgp_daily_report_logs WHERE report_date = CURRENT_DATE`
+            );
+            const status = dateCheck.rows[0]?.status;
             return NextResponse.json({
                 success: true,
-                message: 'Daily performance email report already sent today.'
+                message: status === 'sent'
+                    ? 'Daily performance email report already sent today.'
+                    : 'Daily performance email report is already being processed.'
             });
         }
 
-        // Upsert log as pending to lock the date slot
-        await pool.query(
-            `INSERT INTO vgp_daily_report_logs (report_date, status)
-             VALUES (CURRENT_DATE, 'pending')
-             ON CONFLICT (report_date) DO NOTHING`
-        );
+        reportClaimed = true;
 
         console.log('Generating daily founder performance report...');
 
@@ -245,19 +258,21 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
         console.error('Daily Report Cron Error:', error);
         
-        // Mark today's report log as failed
-        try {
-            await pool.query(
-                `UPDATE vgp_daily_report_logs
-                 SET status = 'failed', sent_at = CURRENT_TIMESTAMP
-                 WHERE report_date = CURRENT_DATE`
-            );
-        } catch (dbErr) {
-            console.error('Failed to log report failure in DB:', dbErr);
+        // Only the invocation that claimed today's slot may mark it failed.
+        if (reportClaimed) {
+            try {
+                await pool.query(
+                    `UPDATE vgp_daily_report_logs
+                     SET status = 'failed', sent_at = CURRENT_TIMESTAMP
+                     WHERE report_date = CURRENT_DATE AND status = 'pending'`
+                );
+            } catch (dbErr) {
+                console.error('Failed to log report failure in DB:', dbErr);
+            }
         }
 
         return NextResponse.json(
-            { error: 'Internal daily report cron crash.', details: error.message },
+            { error: 'Internal daily report cron crash.' },
             { status: 500 }
         );
     }

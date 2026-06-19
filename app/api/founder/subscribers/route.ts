@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
-import { checkFounderSession } from '@/lib/auth';
+import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
     try {
@@ -74,12 +74,7 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const origin = request.headers.get('origin');
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
-
-        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        if (!hasValidRequestOrigin(request)) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
@@ -122,12 +117,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const origin = request.headers.get('origin');
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
-
-        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        if (!hasValidRequestOrigin(request)) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 

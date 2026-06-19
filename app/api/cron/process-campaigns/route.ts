@@ -111,6 +111,25 @@ export async function GET(request: NextRequest) {
         const protocol = request.headers.get('x-forwarded-proto') || 'https';
         const baseUrl = `${protocol}://${host}`;
 
+        const smtpUser = process.env.SMTP_USER;
+        const smtpPass = process.env.SMTP_PASS;
+
+        if (!smtpUser || !smtpPass) {
+            throw new Error('CRITICAL ENVIRONMENT ERROR: SMTP credentials (SMTP_USER/SMTP_PASS) are missing.');
+        }
+
+        // Validate configuration before claiming queue rows so a missing SMTP
+        // credential does not leave fresh jobs waiting for the stale-lock timeout.
+        const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+            port: parseInt(process.env.SMTP_PORT || '465'),
+            secure: true,
+            auth: {
+                user: smtpUser,
+                pass: smtpPass,
+            },
+        });
+
         // 2. Select and lock recipient log rows inside a short transaction
         interface Job {
             id: number;
@@ -122,11 +141,44 @@ export async function GET(request: NextRequest) {
             template_type: string;
             body_content: string;
             attempts: number;
+            max_attempts: number;
         }
 
         let jobs: Job[] = [];
 
         await withTransaction(async (client) => {
+            // Terminalize exhausted work so a stale final attempt cannot leave
+            // its parent campaign permanently in the sending state.
+            await client.query(
+                `UPDATE vgp_recipient_logs
+                 SET status = 'failed', locked_at = NULL, next_attempt_at = NULL,
+                     last_error = COALESCE(last_error, 'Maximum delivery attempts exhausted'),
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE attempts >= max_attempts
+                   AND (
+                     status IN ('pending', 'failed')
+                     OR (status = 'sending' AND locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
+                   )`
+            );
+
+            // Suppress queue rows that can no longer be delivered. Without this,
+            // an unsubscribed recipient would remain pending and block completion.
+            await client.query(
+                `UPDATE vgp_recipient_logs rl
+                 SET status = 'skipped', locked_at = NULL,
+                     last_error = 'Subscriber is no longer subscribed',
+                     updated_at = CURRENT_TIMESTAMP
+                 FROM vgp_subscribers s, vgp_campaigns c
+                 WHERE s.id = rl.subscriber_id
+                   AND c.id = rl.campaign_id
+                   AND c.status IN ('queued', 'sending')
+                   AND s.status <> 'subscribed'
+                   AND (
+                     rl.status IN ('pending', 'failed')
+                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
+                   )`
+            );
+
             // Select up to BATCH_SIZE pending/retriable jobs
             // Using OF rl locks ONLY the logs, not campaign/subscriber tables.
             // SKIP LOCKED avoids blockages if multiple cron workers run concurrently.
@@ -136,6 +188,7 @@ export async function GET(request: NextRequest) {
                     rl.campaign_id, 
                     rl.subscriber_id, 
                     rl.attempts,
+                    rl.max_attempts,
                     s.email, 
                     s.name, 
                     c.subject, 
@@ -146,10 +199,13 @@ export async function GET(request: NextRequest) {
                  JOIN vgp_subscribers s ON s.id = rl.subscriber_id
                  WHERE c.status IN ('queued', 'sending')
                    AND s.status = 'subscribed'
+                   AND rl.attempts < rl.max_attempts
                    AND (
-                     (rl.status IN ('pending', 'failed') AND rl.next_attempt_at <= CURRENT_TIMESTAMP)
-                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '10 minutes')
+                     rl.status = 'pending'
+                     OR (rl.status = 'failed' AND rl.next_attempt_at <= CURRENT_TIMESTAMP)
+                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
                    )
+                 ORDER BY rl.next_attempt_at ASC, rl.id ASC
                  LIMIT $1
                  FOR UPDATE OF rl SKIP LOCKED`,
                 [BATCH_SIZE]
@@ -166,6 +222,9 @@ export async function GET(request: NextRequest) {
                      WHERE id = ANY($1)`,
                     [jobIds]
                 );
+
+                // Keep the in-memory attempt count aligned with the committed row.
+                jobs = jobs.map(job => ({ ...job, attempts: job.attempts + 1 }));
 
                 // Ensure campaigns are marked as 'sending' if they were 'queued'
                 const campaignIds = Array.from(new Set(jobs.map(j => j.campaign_id)));
@@ -187,7 +246,14 @@ export async function GET(request: NextRequest) {
                    AND NOT EXISTS (
                      SELECT 1 FROM vgp_recipient_logs rl
                      WHERE rl.campaign_id = c.id
-                       AND rl.status IN ('pending', 'sending', 'failed')
+                       AND (
+                         rl.status IN ('pending', 'sending')
+                         OR (
+                           rl.status = 'failed'
+                           AND rl.attempts < rl.max_attempts
+                           AND rl.next_attempt_at IS NOT NULL
+                         )
+                       )
                    )
                  RETURNING id`
             );
@@ -198,24 +264,6 @@ export async function GET(request: NextRequest) {
             });
         }
 
-        const smtpUser = process.env.SMTP_USER;
-        const smtpPass = process.env.SMTP_PASS;
-
-        if (!smtpUser || !smtpPass) {
-            throw new Error('CRITICAL ENVIRONMENT ERROR: SMTP credentials (SMTP_USER/SMTP_PASS) are missing.');
-        }
-
-        // 3. Configure Transporter
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-            port: parseInt(process.env.SMTP_PORT || '465'),
-            secure: true,
-            auth: {
-                user: smtpUser,
-                pass: smtpPass,
-            },
-        });
-
         const results = {
             successCount: 0,
             failCount: 0,
@@ -225,6 +273,58 @@ export async function GET(request: NextRequest) {
         // 4. Send SMTP emails OUTSIDE the database transaction
         for (const job of jobs) {
             try {
+                // Re-check mutable state immediately before delivery. This closes
+                // the normal unsubscribe/pause window without holding a DB
+                // transaction open while SMTP is in flight.
+                const currentState = await pool.query(
+                    `SELECT rl.status AS job_status,
+                            s.status AS subscriber_status,
+                            c.status AS campaign_status
+                     FROM vgp_recipient_logs rl
+                     JOIN vgp_subscribers s ON s.id = rl.subscriber_id
+                     JOIN vgp_campaigns c ON c.id = rl.campaign_id
+                     WHERE rl.id = $1`,
+                    [job.id]
+                );
+
+                if (currentState.rowCount === 0 || currentState.rowCount === null) {
+                    results.processedJobs.push({ jobId: job.id, status: 'missing' });
+                    continue;
+                }
+
+                const state = currentState.rows[0];
+                if (state.job_status !== 'sending') {
+                    results.processedJobs.push({ jobId: job.id, status: state.job_status });
+                    continue;
+                }
+
+                if (state.subscriber_status !== 'subscribed') {
+                    await pool.query(
+                        `UPDATE vgp_recipient_logs
+                         SET status = 'skipped', locked_at = NULL,
+                             last_error = 'Subscriber is no longer subscribed',
+                             updated_at = CURRENT_TIMESTAMP
+                         WHERE id = $1 AND status = 'sending'`,
+                        [job.id]
+                    );
+                    results.processedJobs.push({ jobId: job.id, status: 'skipped' });
+                    continue;
+                }
+
+                if (!['queued', 'sending'].includes(state.campaign_status)) {
+                    await pool.query(
+                        `UPDATE vgp_recipient_logs
+                         SET status = 'pending', locked_at = NULL,
+                             attempts = GREATEST(attempts - 1, 0),
+                             next_attempt_at = CURRENT_TIMESTAMP,
+                             updated_at = CURRENT_TIMESTAMP
+                         WHERE id = $1 AND status = 'sending'`,
+                        [job.id]
+                    );
+                    results.processedJobs.push({ jobId: job.id, status: 'deferred' });
+                    continue;
+                }
+
                 // Generate a fresh, secure signed unsubscribe token for this user
                 const unsubscribeToken = signToken({
                     subscriber_id: job.subscriber_id,
@@ -255,7 +355,7 @@ export async function GET(request: NextRequest) {
                 await pool.query(
                     `UPDATE vgp_recipient_logs
                      SET status = 'sent', sent_at = CURRENT_TIMESTAMP, message_id = $2, locked_at = NULL, last_error = NULL, updated_at = CURRENT_TIMESTAMP
-                     WHERE id = $1`,
+                     WHERE id = $1 AND status = 'sending'`,
                     [job.id, mailRes.messageId || 'unknown']
                 );
 
@@ -263,16 +363,16 @@ export async function GET(request: NextRequest) {
                 results.processedJobs.push({ jobId: job.id, status: 'sent' });
             } catch (err: any) {
                 console.error(`Failed to send email job ID ${job.id} to ${job.email}:`, err);
-                const isFinalFailure = job.attempts >= 3; // Max 3 attempts
-                const nextAttemptAt = new Date(Date.now() + 5 * 60 * 1000 * job.attempts); // Exponential retry backoff: 5, 10, 15 mins
-                const nextStatus = isFinalFailure ? 'failed' : 'failed'; // Maintain 'failed' state but schedule next retry or cap
+                const isFinalFailure = job.attempts >= job.max_attempts;
+                const retryDelayMinutes = Math.min(60, 5 * (2 ** Math.max(0, job.attempts - 1)));
+                const nextAttemptAt = new Date(Date.now() + retryDelayMinutes * 60 * 1000);
 
                 // Update database job status to 'failed' with error log
                 await pool.query(
                     `UPDATE vgp_recipient_logs
-                     SET status = $2, last_error = $3, locked_at = NULL, next_attempt_at = $4, updated_at = CURRENT_TIMESTAMP
-                     WHERE id = $1`,
-                    [job.id, nextStatus, err.message || 'Unknown SMTP error', isFinalFailure ? null : nextAttemptAt]
+                     SET status = 'failed', last_error = $2, locked_at = NULL, next_attempt_at = $3, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1 AND status = 'sending'`,
+                    [job.id, err.message || 'Unknown SMTP error', isFinalFailure ? null : nextAttemptAt]
                 );
 
                 results.failCount++;
@@ -288,7 +388,14 @@ export async function GET(request: NextRequest) {
                AND NOT EXISTS (
                  SELECT 1 FROM vgp_recipient_logs rl
                  WHERE rl.campaign_id = c.id
-                   AND rl.status IN ('pending', 'sending', 'failed')
+                   AND (
+                     rl.status IN ('pending', 'sending')
+                     OR (
+                       rl.status = 'failed'
+                       AND rl.attempts < rl.max_attempts
+                       AND rl.next_attempt_at IS NOT NULL
+                     )
+                   )
                )
              RETURNING id`
         );
@@ -304,7 +411,7 @@ export async function GET(request: NextRequest) {
     } catch (error: any) {
         console.error('Batch Queue Processor Cron Error:', error);
         return NextResponse.json(
-            { error: 'Internal queue processor crash.', details: error.message },
+            { error: 'Internal queue processor crash.' },
             { status: 500 }
         );
     }

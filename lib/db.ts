@@ -1,7 +1,25 @@
 import { Pool, PoolClient } from 'pg';
+import fs from 'fs';
+import path from 'path';
 
 // Prevent hot-reload in development from creating multiple pools
 const globalForDb = global as unknown as { pool: Pool };
+
+let supabaseCa: string | null = null;
+
+function getSslConfig(connectionString: string) {
+    const hostname = new URL(connectionString).hostname;
+    if (!hostname.endsWith('.supabase.com')) return undefined;
+
+    if (!supabaseCa) {
+        supabaseCa = fs.readFileSync(
+            path.join(process.cwd(), 'supabase-prod-ca-2021.crt'),
+            'utf8'
+        );
+    }
+
+    return { ca: supabaseCa, rejectUnauthorized: true };
+}
 
 function getPool(): Pool {
     const connectionString = process.env.DATABASE_URL;
@@ -12,6 +30,7 @@ function getPool(): Pool {
     if (!globalForDb.pool) {
         globalForDb.pool = new Pool({
             connectionString,
+            ssl: getSslConfig(connectionString),
             // Optimal configurations for serverless environment
             max: 8, // Low pool size to prevent exceeding database connection limits under serverless scale
             idleTimeoutMillis: 15000, // Close idle clients quickly to release resources

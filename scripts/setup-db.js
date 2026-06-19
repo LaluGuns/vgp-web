@@ -39,6 +39,14 @@ if (!dbUrl) {
     process.exit(1);
 }
 
+const databaseHostname = new URL(dbUrl).hostname;
+const ssl = databaseHostname.endsWith('.supabase.com')
+    ? {
+        ca: fs.readFileSync(path.join(__dirname, '../supabase-prod-ca-2021.crt'), 'utf8'),
+        rejectUnauthorized: true,
+    }
+    : undefined;
+
 const sql = `
 -- 1. Create Subscribers Table
 CREATE TABLE IF NOT EXISTS vgp_subscribers (
@@ -105,15 +113,28 @@ CREATE TABLE IF NOT EXISTS vgp_daily_report_logs (
 
 const setup = async () => {
     console.log('Connecting to database...');
-    const client = new Client({ connectionString: dbUrl });
+    const client = new Client({ connectionString: dbUrl, ssl });
+    let transactionStarted = false;
     
     try {
         await client.connect();
         console.log('Connected! Executing schema DDL...');
+        await client.query('BEGIN');
+        transactionStarted = true;
         await client.query(sql);
+        await client.query('COMMIT');
+        transactionStarted = false;
         console.log('Database tables and indexes created successfully!');
     } catch (error) {
+        if (transactionStarted) {
+            try {
+                await client.query('ROLLBACK');
+            } catch (rollbackError) {
+                console.error('Database rollback failed:', rollbackError);
+            }
+        }
         console.error('Database migration failed:', error);
+        process.exitCode = 1;
     } finally {
         await client.end();
     }

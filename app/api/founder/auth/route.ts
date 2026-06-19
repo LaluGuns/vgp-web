@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import pool from '@/lib/db';
 import { signToken } from '@/lib/tokens';
+import { hasValidRequestOrigin } from '@/lib/auth';
 import crypto from 'crypto';
 
-const FOUNDER_PASSCODE = process.env.FOUNDER_PASSCODE as string;
-
-if (!FOUNDER_PASSCODE) {
-    throw new Error('CRITICAL ENVIRONMENT ERROR: FOUNDER_PASSCODE is not configured in environment variables.');
+function getFounderPasscode(): string {
+    const passcode = process.env.FOUNDER_PASSCODE;
+    if (!passcode) {
+        throw new Error('CRITICAL ENVIRONMENT ERROR: FOUNDER_PASSCODE is not configured in environment variables.');
+    }
+    return passcode;
 }
 
 const MAX_FAILED_ATTEMPTS = 5;
@@ -26,12 +29,7 @@ export async function POST(request: NextRequest) {
 
     try {
         // CSRF check
-        const origin = request.headers.get('origin');
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
-
-        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        if (!hasValidRequestOrigin(request)) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
@@ -74,7 +72,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 3. Timing-safe verification
-        const isValid = safeCompare(passcode, FOUNDER_PASSCODE);
+        const isValid = safeCompare(passcode, getFounderPasscode());
 
         if (isValid) {
             // Successful Login: Reset rate limits

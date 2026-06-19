@@ -3,6 +3,21 @@ import { cookies } from 'next/headers';
 import { verifyToken } from './tokens';
 
 /**
+ * Require browser mutations to come from the exact origin serving this route.
+ * A missing or malformed Origin is rejected rather than treated as same-origin.
+ */
+export function hasValidRequestOrigin(request: NextRequest): boolean {
+    const origin = request.headers.get('origin');
+    if (!origin) return false;
+
+    try {
+        return new URL(origin).origin === request.nextUrl.origin;
+    } catch {
+        return false;
+    }
+}
+
+/**
  * Verifies if the request or current session has a valid founder session cookie.
  */
 export async function checkFounderSession(request?: NextRequest): Promise<boolean> {
