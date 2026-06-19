@@ -1,0 +1,311 @@
+import { NextRequest, NextResponse } from 'next/server';
+import pool, { withTransaction } from '@/lib/db';
+import nodemailer from 'nodemailer';
+import { signToken } from '@/lib/tokens';
+
+// Max emails to process in a single batch run
+const BATCH_SIZE = 10;
+
+// Email HTML Template Generator
+function getEmailHtml(
+    name: string,
+    subject: string,
+    templateType: string,
+    bodyContent: string,
+    unsubscribeUrl: string,
+    baseUrl: string
+): string {
+    const title = subject.toUpperCase();
+    const currentYear = new Date().getFullYear();
+
+    let mainContentHtml = '';
+
+    if (templateType === 'beat_promo') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #00E5FF; color: #000000; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">BEAT PROMO</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Hey ${name},
+            </p>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+                ${bodyContent || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="${baseUrl}/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
+                    LISTEN & SECURE LICENSE
+                </a>
+            </div>
+        `;
+    } else if (templateType === 'cadenz_update') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #7000FF; color: #ffffff; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">CADENZ R&D</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Dear ${name},
+            </p>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+                ${bodyContent || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="${baseUrl}/cadenz" style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);">
+                    READ DEVELOPMENT LOG
+                </a>
+            </div>
+        `;
+    } else { // inner_circle
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #333; color: #00E5FF; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px; border: 1px solid #00E5FF;">INNER CIRCLE</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Greetings ${name},
+            </p>
+            <div style="font-size: 15px; line-height: 1.7; color: #b5b5b5; margin-bottom: 30px; white-space: pre-line;">
+                ${bodyContent}
+            </div>
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="${baseUrl}" style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px;">
+                    ACCESS PRIVATE PORTAL
+                </a>
+            </div>
+        `;
+    }
+
+    return `
+        <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 40px 20px; min-height: 100%;">
+            <div style="max-w-xl mx-auto border border-zinc-800 p-8 rounded-lg background-color: #050505;">
+                <h1 style="color: #00E5FF; text-align: center; letter-spacing: 3px; margin-bottom: 10px; font-size: 20px;">VIRZY GUNS PRODUCTION</h1>
+                <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px;">Creative Sound Lab & Audio Solutions</p>
+                
+                <hr style="border-color: #1a1a1a; margin-bottom: 30px;">
+                
+                ${mainContentHtml}
+                
+                <hr style="border-color: #1a1a1a; margin-top: 50px; margin-bottom: 20px;">
+                
+                <div style="text-align: center; font-size: 11px; color: #444;">
+                    © ${currentYear} Virzy Guns Production. All rights reserved.<br>
+                    You are receiving this because you are part of the VGP Inner Circle.<br><br>
+                    To stop receiving these emails, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline;">unsubscribe here</a>.
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+export async function GET(request: NextRequest) {
+    try {
+        // 1. Cron Secret Authorization check
+        const cronSecret = process.env.CRON_SECRET;
+        if (!cronSecret) {
+            throw new Error('CRITICAL ENVIRONMENT ERROR: CRON_SECRET is not configured.');
+        }
+        const authHeader = request.headers.get('authorization');
+        if (authHeader !== `Bearer ${cronSecret}`) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const host = request.headers.get('host') || 'www.virzyguns.com';
+        const protocol = request.headers.get('x-forwarded-proto') || 'https';
+        const baseUrl = `${protocol}://${host}`;
+
+        // 2. Select and lock recipient log rows inside a short transaction
+        interface Job {
+            id: number;
+            campaign_id: number;
+            subscriber_id: number;
+            email: string;
+            name: string;
+            subject: string;
+            template_type: string;
+            body_content: string;
+            attempts: number;
+        }
+
+        let jobs: Job[] = [];
+
+        await withTransaction(async (client) => {
+            // Select up to BATCH_SIZE pending/retriable jobs
+            // Using OF rl locks ONLY the logs, not campaign/subscriber tables.
+            // SKIP LOCKED avoids blockages if multiple cron workers run concurrently.
+            const queryRes = await client.query(
+                `SELECT 
+                    rl.id, 
+                    rl.campaign_id, 
+                    rl.subscriber_id, 
+                    rl.attempts,
+                    s.email, 
+                    s.name, 
+                    c.subject, 
+                    c.template_type, 
+                    c.body_content
+                 FROM vgp_recipient_logs rl
+                 JOIN vgp_campaigns c ON c.id = rl.campaign_id
+                 JOIN vgp_subscribers s ON s.id = rl.subscriber_id
+                 WHERE c.status IN ('queued', 'sending')
+                   AND s.status = 'subscribed'
+                   AND (
+                     (rl.status IN ('pending', 'failed') AND rl.next_attempt_at <= CURRENT_TIMESTAMP)
+                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '10 minutes')
+                   )
+                 LIMIT $1
+                 FOR UPDATE OF rl SKIP LOCKED`,
+                [BATCH_SIZE]
+            );
+
+            jobs = queryRes.rows;
+
+            if (jobs.length > 0) {
+                const jobIds = jobs.map(j => j.id);
+                // Atomically mark them as sending and increment attempts, record locked time
+                await client.query(
+                    `UPDATE vgp_recipient_logs
+                     SET status = 'sending', locked_at = CURRENT_TIMESTAMP, attempts = attempts + 1, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = ANY($1)`,
+                    [jobIds]
+                );
+
+                // Ensure campaigns are marked as 'sending' if they were 'queued'
+                const campaignIds = Array.from(new Set(jobs.map(j => j.campaign_id)));
+                await client.query(
+                    `UPDATE vgp_campaigns
+                     SET status = 'sending', updated_at = CURRENT_TIMESTAMP
+                     WHERE id = ANY($1) AND status = 'queued'`,
+                    [campaignIds]
+                );
+            }
+        });
+
+        if (jobs.length === 0) {
+            // No jobs to process, check if any campaigns should be completed
+            const compResult = await pool.query(
+                `UPDATE vgp_campaigns c
+                 SET status = 'completed', completed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+                 WHERE c.status IN ('queued', 'sending')
+                   AND NOT EXISTS (
+                     SELECT 1 FROM vgp_recipient_logs rl
+                     WHERE rl.campaign_id = c.id
+                       AND rl.status IN ('pending', 'sending', 'failed')
+                   )
+                 RETURNING id`
+            );
+            return NextResponse.json({
+                success: true,
+                message: 'Queue idle. No jobs processed.',
+                completedCampaigns: compResult.rows.map(r => r.id)
+            });
+        }
+
+        const smtpUser = process.env.SMTP_USER;
+        const smtpPass = process.env.SMTP_PASS;
+
+        if (!smtpUser || !smtpPass) {
+            throw new Error('CRITICAL ENVIRONMENT ERROR: SMTP credentials (SMTP_USER/SMTP_PASS) are missing.');
+        }
+
+        // 3. Configure Transporter
+        const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+            port: parseInt(process.env.SMTP_PORT || '465'),
+            secure: true,
+            auth: {
+                user: smtpUser,
+                pass: smtpPass,
+            },
+        });
+
+        const results = {
+            successCount: 0,
+            failCount: 0,
+            processedJobs: [] as { jobId: number; status: string; error?: string }[]
+        };
+
+        // 4. Send SMTP emails OUTSIDE the database transaction
+        for (const job of jobs) {
+            try {
+                // Generate a fresh, secure signed unsubscribe token for this user
+                const unsubscribeToken = signToken({
+                    subscriber_id: job.subscriber_id,
+                    email: job.email,
+                    purpose: 'unsubscribe'
+                });
+
+                const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
+
+                const emailHtml = getEmailHtml(
+                    job.name,
+                    job.subject,
+                    job.template_type,
+                    job.body_content,
+                    unsubscribeUrl,
+                    baseUrl
+                );
+
+                const mailRes = await transporter.sendMail({
+                    from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
+                    to: job.email,
+                    subject: job.subject,
+                    text: `${job.subject}\n\nGreetings ${job.name},\n\n${job.body_content}\n\nTo unsubscribe: ${unsubscribeUrl}`,
+                    html: emailHtml
+                });
+
+                // Update database job status to 'sent'
+                await pool.query(
+                    `UPDATE vgp_recipient_logs
+                     SET status = 'sent', sent_at = CURRENT_TIMESTAMP, message_id = $2, locked_at = NULL, last_error = NULL, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1`,
+                    [job.id, mailRes.messageId || 'unknown']
+                );
+
+                results.successCount++;
+                results.processedJobs.push({ jobId: job.id, status: 'sent' });
+            } catch (err: any) {
+                console.error(`Failed to send email job ID ${job.id} to ${job.email}:`, err);
+                const isFinalFailure = job.attempts >= 3; // Max 3 attempts
+                const nextAttemptAt = new Date(Date.now() + 5 * 60 * 1000 * job.attempts); // Exponential retry backoff: 5, 10, 15 mins
+                const nextStatus = isFinalFailure ? 'failed' : 'failed'; // Maintain 'failed' state but schedule next retry or cap
+
+                // Update database job status to 'failed' with error log
+                await pool.query(
+                    `UPDATE vgp_recipient_logs
+                     SET status = $2, last_error = $3, locked_at = NULL, next_attempt_at = $4, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1`,
+                    [job.id, nextStatus, err.message || 'Unknown SMTP error', isFinalFailure ? null : nextAttemptAt]
+                );
+
+                results.failCount++;
+                results.processedJobs.push({ jobId: job.id, status: 'failed', error: err.message });
+            }
+        }
+
+        // 5. Complete campaigns that are fully finished
+        const compResult = await pool.query(
+            `UPDATE vgp_campaigns c
+             SET status = 'completed', completed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
+             WHERE c.status IN ('queued', 'sending')
+               AND NOT EXISTS (
+                 SELECT 1 FROM vgp_recipient_logs rl
+                 WHERE rl.campaign_id = c.id
+                   AND rl.status IN ('pending', 'sending', 'failed')
+               )
+             RETURNING id`
+        );
+
+        return NextResponse.json({
+            success: true,
+            batchSize: jobs.length,
+            successCount: results.successCount,
+            failCount: results.failCount,
+            processedJobs: results.processedJobs,
+            completedCampaigns: compResult.rows.map(r => r.id)
+        });
+    } catch (error: any) {
+        console.error('Batch Queue Processor Cron Error:', error);
+        return NextResponse.json(
+            { error: 'Internal queue processor crash.', details: error.message },
+            { status: 500 }
+        );
+    }
+}

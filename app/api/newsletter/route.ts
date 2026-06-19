@@ -1,36 +1,63 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
+import { signToken } from '@/lib/tokens';
 
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
-const RATE_LIMIT_MAX = 5;
-const submissions = new Map<string, { count: number; resetAt: number }>();
+// In-memory rate limiting map for newsletter signups (basic protection)
+const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 3;      // Max 3 signups per IP per minute
 
-function escapeHtml(value: string) {
-    return value
+function isRateLimited(ip: string): boolean {
+    const now = Date.now();
+    const clientData = rateLimitMap.get(ip);
+
+    if (!clientData) {
+        rateLimitMap.set(ip, { count: 1, lastReset: now });
+        return false;
+    }
+
+    if (now - clientData.lastReset > RATE_LIMIT_WINDOW_MS) {
+        clientData.count = 1;
+        clientData.lastReset = now;
+        return false;
+    }
+
+    if (clientData.count >= RATE_LIMIT_MAX_REQUESTS) {
+        return true;
+    }
+
+    clientData.count++;
+    return false;
+}
+
+function escapeHtml(unsafe: string): string {
+    return unsafe
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/'/g, '&#039;');
 }
 
-function isRateLimited(key: string) {
-    const now = Date.now();
-    const current = submissions.get(key);
-
-    if (!current || current.resetAt <= now) {
-        submissions.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-        return false;
-    }
-
-    current.count += 1;
-    return current.count > RATE_LIMIT_MAX;
-}
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
     try {
-        if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-            console.error('Newsletter API Error: missing SMTP credentials');
+        // CSRF check: verify Origin header matches this domain
+        const origin = request.headers.get('origin');
+        const host = request.headers.get('host') || 'www.virzyguns.com';
+        const protocol = request.headers.get('x-forwarded-proto') || 'https';
+        const baseUrl = `${protocol}://${host}`;
+
+        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+            return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
+        }
+
+        // Test database pool connection first
+        try {
+            const client = await pool.connect();
+            client.release();
+        } catch (dbError) {
+            console.error('Database connection test failed:', dbError);
             return NextResponse.json(
                 { error: 'Newsletter is temporarily unavailable.' },
                 { status: 503 }
@@ -71,23 +98,59 @@ export async function POST(request: Request) {
         const subscriberName = escapeHtml(rawName.trim().slice(0, 80) || 'Producer');
         const subscriberEmail = escapeHtml(normalizedEmail);
 
+        // 3. Database Insertion (handling upsert/re-subscribe)
+        let subscriberId: number;
+        try {
+            const result = await pool.query(
+                `INSERT INTO vgp_subscribers (name, email, status, unsubscribed_at)
+                 VALUES ($1, $2, 'subscribed', NULL)
+                 ON CONFLICT (email)
+                 DO UPDATE SET status = 'subscribed', name = EXCLUDED.name, unsubscribed_at = NULL
+                 RETURNING id`,
+                [subscriberName, subscriberEmail]
+            );
+            subscriberId = result.rows[0].id;
+        } catch (dbInsertError) {
+            console.error('Database subscriber insert failed:', dbInsertError);
+            return NextResponse.json(
+                { error: 'Failed to record subscription. Please try again.' },
+                { status: 500 }
+            );
+        }
+
+        // 4. Generate secure signed unsubscribe token
+        const unsubscribeToken = signToken({
+            subscriber_id: subscriberId,
+            email: normalizedEmail,
+            purpose: 'unsubscribe'
+        });
+
+        const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
+
+        const smtpUser = process.env.SMTP_USER;
+        const smtpPass = process.env.SMTP_PASS;
+
+        if (!smtpUser || !smtpPass) {
+            throw new Error('CRITICAL ENVIRONMENT ERROR: SMTP credentials (SMTP_USER/SMTP_PASS) are missing.');
+        }
+
         // Configure Hostinger SMTP Transporter
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST || 'smtp.hostinger.com',
             port: parseInt(process.env.SMTP_PORT || '465'),
             secure: true,
             auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
+                user: smtpUser,
+                pass: smtpPass,
             },
         });
 
-        // 1. Send Notification to Admin (You)
+        // 1. Send Notification to Admin
         await transporter.sendMail({
             from: `"VGP System" <${process.env.SMTP_USER}>`,
             to: process.env.SMTP_USER,
             subject: `New Subscriber: ${subscriberName}`,
-            text: `Name: ${rawName.trim().slice(0, 80) || 'Producer'}\nEmail: ${normalizedEmail}\nDate: ${new Date().toLocaleString()}`,
+            text: `Name: ${subscriberName}\nEmail: ${normalizedEmail}\nDate: ${new Date().toLocaleString()}`,
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #333; background: #111; color: #fff; border-radius: 8px;">
                     <h2 style="color: #00E5FF;">New VGP Subscriber! 🚀</h2>
@@ -103,7 +166,7 @@ export async function POST(request: Request) {
             from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
             to: normalizedEmail,
             subject: `Welcome to the Inner Circle 🛡️`,
-            text: `Welcome to VGP, ${subscriberName}. You're now on the list for exclusive beats and updates.`,
+            text: `Welcome to VGP, ${subscriberName}. You're now on the list for exclusive beats and updates. Unsubscribe here: ${unsubscribeUrl}`,
             html: `
                 <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 40px 20px;">
                     <div style="max-w-md mx-auto border border-gray-800 p-8 rounded-lg" style="border: 1px solid #333;">
@@ -124,7 +187,7 @@ export async function POST(request: Request) {
                         </ul>
                         
                         <div style="text-align: center; margin-top: 40px;">
-                            <a href="https://www.virzyguns.com/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block;">
+                            <a href="${baseUrl}/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block;">
                                 BROWSE STUDIO
                             </a>
                         </div>
@@ -133,7 +196,7 @@ export async function POST(request: Request) {
                         
                         <div style="text-align: center; font-size: 11px; color: #555555;">
                             © ${new Date().getFullYear()} Virzy Guns Production.<br>
-                            To unsubscribe, reply "UNSUBSCRIBE" to this email.
+                            To unsubscribe, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline;">click here</a>.
                         </div>
                     </div>
                 </div>
@@ -144,7 +207,7 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error('Newsletter API Error:', error);
         return NextResponse.json(
-            { error: 'Failed to send email. Please try again later.' },
+            { error: 'Failed to send welcome email. Please try again later.' },
             { status: 500 }
         );
     }
