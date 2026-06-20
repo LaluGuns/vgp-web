@@ -1,201 +1,334 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import {
+    LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
+    Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
+    AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
+} from 'lucide-react';
+import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
-// Lighthouse dial display component
-function LighthouseDial({ score, label }: { score: number; label: string }) {
-    const radius = 50;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (score / 100) * circumference;
-    
-    let color = 'text-rose-500';
-    let strokeColor = '#f43f5e';
-    if (score >= 90) {
-        color = 'text-cyan-400';
-        strokeColor = '#00E5FF';
-    } else if (score >= 50) {
-        color = 'text-amber-400';
-        strokeColor = '#fbbf24';
-    }
+// ── Types ──────────────────────────────────────────────────────────────
+interface Stats { total: number; subscribed: number; unsubscribed: number; new24h: number; }
+interface GrowthPoint { date: string; total: number; new: number; }
+interface Subscriber { id: number; name: string; email: string; status: string; created_at: string; }
+interface Campaign { id: number; subject: string; template_type: string; status: string; created_at: string; }
+interface HealthState {
+    checkedAt: string;
+    db: { ok: boolean; latencyMs: number | null; detail: string };
+    smtp: { ok: boolean; configured: boolean; detail: string };
+    queue: { pending: number; sending: number; failed: number; sentToday: number; activeCampaigns: number; lastDeliveryAt: string | null };
+}
+interface PerfMetrics { score: number; fcp: string; lcp: string; tbt: string; cls: string; isMock?: boolean; unavailable?: boolean; }
 
+type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'cadenz';
+
+// ── Small UI helpers ───────────────────────────────────────────────────
+function Eyebrow({ children }: { children: React.ReactNode }) {
+    return <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/55">{children}</p>;
+}
+
+function StatCard({ label, value, Icon, accent = 'text-white' }: { label: string; value: React.ReactNode; Icon: typeof Users; accent?: string }) {
     return (
-        <div className="flex flex-col items-center justify-center p-6 border border-white/5 rounded-2xl bg-zinc-950/40 backdrop-blur-md">
-            <div className="relative w-32 h-32">
-                <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                        cx="64"
-                        cy="64"
-                        r={radius}
-                        className="stroke-zinc-900"
-                        strokeWidth="8"
-                        fill="transparent"
-                    />
-                    <circle
-                        cx="64"
-                        cy="64"
-                        r={radius}
-                        stroke={strokeColor}
-                        strokeWidth="8"
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={strokeDashoffset}
-                        className="transition-all duration-1000 ease-out"
-                    />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className={`text-3xl font-bold font-mono ${color}`}>{score}</span>
-                    <span className="text-[10px] text-zinc-500 font-mono">LIGHTHOUSE</span>
+        <motion.div variants={staggerChild} className="liquid-glass-soft rounded-lg p-5">
+            <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-200/55">{label}</p>
+                <Icon className="h-4 w-4 text-sky-200/40" aria-hidden="true" />
+            </div>
+            <p className={`mt-3 font-display text-3xl font-semibold ${accent}`}>{value}</p>
+        </motion.div>
+    );
+}
+
+function fmtDate(value: string) {
+    return new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+
+function relativeTime(iso: string | null) {
+    if (!iso) return 'never';
+    const diff = Date.now() - new Date(iso).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+}
+
+// ── Real subscriber growth chart (data derived from created_at) ─────────
+function GrowthChart({ data, loading }: { data: GrowthPoint[]; loading: boolean }) {
+    const [hoverIdx, setHoverIdx] = useState<number | null>(null);
+
+    if (loading) {
+        return (
+            <div className="liquid-glass rounded-lg p-6">
+                <Eyebrow>Subscriber growth</Eyebrow>
+                <div className="mt-6 flex h-[170px] items-center justify-center text-white/40">
+                    <Loader2 className="h-5 w-5 animate-spin" />
                 </div>
             </div>
-            <span className="mt-4 text-xs font-mono font-bold tracking-wider text-zinc-300 uppercase">{label}</span>
-        </div>
-    );
-}
-
-// Custom Spline Growth Chart
-function GrowthChart({ data }: { data: { date: string; count: number }[] }) {
-    if (!data || data.length === 0) return null;
-    
-    const width = 500;
-    const height = 150;
-    const padding = 20;
-    
-    const maxVal = Math.max(...data.map(d => d.count)) * 1.1;
-    const minVal = Math.min(...data.map(d => d.count)) * 0.9;
-    const range = maxVal - minVal || 10;
-    
-    const points = data.map((d, i) => {
-        const x = padding + (i * (width - 2 * padding)) / (data.length - 1);
-        const y = height - padding - ((d.count - minVal) * (height - 2 * padding)) / range;
-        return { x, y, label: d.date, val: d.count };
-    });
-    
-    let linePath = `M ${points[0].x} ${points[0].y}`;
-    for (let i = 1; i < points.length; i++) {
-        const cpX1 = points[i - 1].x + (points[i].x - points[i - 1].x) / 2;
-        const cpY1 = points[i - 1].y;
-        const cpX2 = points[i - 1].x + (points[i].x - points[i - 1].x) / 2;
-        const cpY2 = points[i].y;
-        linePath += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${points[i].x} ${points[i].y}`;
+        );
     }
-    
-    const fillPath = `${linePath} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
+
+    if (!data || data.length < 2) {
+        return (
+            <div className="liquid-glass rounded-lg p-6">
+                <Eyebrow>Subscriber growth</Eyebrow>
+                <div className="mt-6 flex h-[170px] flex-col items-center justify-center text-center">
+                    <TrendingUp className="mb-3 h-6 w-6 text-sky-200/40" />
+                    <p className="text-sm text-white/55">Not enough history yet.</p>
+                    <p className="mt-1 text-xs text-white/35">The curve fills in from real signup dates as subscribers join.</p>
+                </div>
+            </div>
+        );
+    }
+
+    const W = 600, H = 200, P = 24;
+    const totals = data.map((d) => d.total);
+    const max = Math.max(...totals);
+    const min = Math.min(...totals);
+    const range = max - min || 1;
+    const xOf = (i: number) => P + (i * (W - 2 * P)) / (data.length - 1);
+    const yOf = (v: number) => H - P - ((v - min) * (H - 2 * P)) / range;
+
+    const pts = data.map((d, i) => ({ x: xOf(i), y: yOf(d.total) }));
+    let line = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) {
+        const cx = (pts[i - 1].x + pts[i].x) / 2;
+        line += ` C ${cx} ${pts[i - 1].y}, ${cx} ${pts[i].y}, ${pts[i].x} ${pts[i].y}`;
+    }
+    const area = `${line} L ${pts[pts.length - 1].x} ${H - P} L ${pts[0].x} ${H - P} Z`;
+
+    const gained = data[data.length - 1].total - data[0].total;
+    const labelIdx = [0, Math.floor((data.length - 1) / 2), data.length - 1];
 
     return (
-        <div className="w-full border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6">
-            <h3 className="text-xs font-mono font-bold tracking-wider text-zinc-400 mb-4 uppercase">SUBSCRIBER TRENDS</h3>
-            <div className="relative w-full h-[150px]">
-                <svg className="w-full h-full" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+        <div className="liquid-glass rounded-lg p-6">
+            <div className="flex items-end justify-between">
+                <div>
+                    <Eyebrow>Subscriber growth</Eyebrow>
+                    <p className="mt-2 font-display text-3xl font-semibold text-white">{data[data.length - 1].total}</p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/20 bg-sky-300/10 px-2.5 py-1 text-xs font-semibold text-sky-100">
+                    <TrendingUp className="h-3.5 w-3.5" /> +{gained} / 30d
+                </span>
+            </div>
+
+            <div className="relative mt-5">
+                <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Subscriber growth over the last 30 days">
                     <defs>
-                        <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#00E5FF" stopOpacity="0.25" />
-                            <stop offset="100%" stopColor="#00E5FF" stopOpacity="0.0" />
+                        <linearGradient id="growthFill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.28" />
+                            <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0" />
                         </linearGradient>
                     </defs>
-                    <path d={fillPath} fill="url(#chartGlow)" />
-                    <path d={linePath} fill="none" stroke="#00E5FF" strokeWidth="2.5" />
-                    {points.map((p, i) => (
-                        <g key={i} className="group/node">
-                            <circle
-                                cx={p.x}
-                                cy={p.y}
-                                r="4"
-                                fill="#000"
-                                stroke="#00E5FF"
-                                strokeWidth="2"
-                                className="cursor-pointer hover:r-6 transition-all duration-150"
-                            />
-                            {/* Hover data card */}
-                            <text
-                                x={p.x}
-                                y={p.y - 10}
-                                fill="#00E5FF"
-                                fontSize="9"
-                                fontWeight="bold"
-                                fontFamily="monospace"
-                                textAnchor="middle"
-                                className="opacity-0 group-hover/node:opacity-100 transition-opacity bg-black duration-150"
-                            >
-                                {p.val}
-                            </text>
-                        </g>
-                    ))}
+                    <path d={area} fill="url(#growthFill)" />
+                    <path d={line} fill="none" stroke="#7dd3fc" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                    {hoverIdx !== null && (
+                        <>
+                            <line x1={pts[hoverIdx].x} y1={P / 2} x2={pts[hoverIdx].x} y2={H - P} stroke="rgba(125,211,252,0.4)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+                            <circle cx={pts[hoverIdx].x} cy={pts[hoverIdx].y} r="4" fill="#030405" stroke="#7dd3fc" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                        </>
+                    )}
                 </svg>
+
+                {/* hover hit-areas */}
+                <div className="absolute inset-0 flex">
+                    {data.map((_, i) => (
+                        <div key={i} className="flex-1" onMouseEnter={() => setHoverIdx(i)} onMouseLeave={() => setHoverIdx(null)} />
+                    ))}
+                </div>
+
+                {hoverIdx !== null && (
+                    <div
+                        className="pointer-events-none absolute top-0 z-10 -translate-x-1/2 rounded-md border border-white/10 bg-[#030405]/95 px-2.5 py-1.5 text-center shadow-lg"
+                        style={{ left: `${(xOf(hoverIdx) / W) * 100}%` }}
+                    >
+                        <p className="text-xs font-semibold text-white">{data[hoverIdx].total} total</p>
+                        <p className="text-[10px] text-sky-200/70">{fmtDate(data[hoverIdx].date)} · +{data[hoverIdx].new} new</p>
+                    </div>
+                )}
             </div>
-            <div className="flex justify-between mt-2 px-2">
-                {data.map((d, i) => (
-                    <span key={i} className="text-[10px] font-mono text-zinc-500">{d.date}</span>
-                ))}
+
+            <div className="mt-2 flex justify-between text-[10px] text-white/35">
+                {labelIdx.map((i) => <span key={i}>{fmtDate(data[i].date)}</span>)}
             </div>
         </div>
     );
 }
 
+// ── PageSpeed gauge (real; honest unavailable state) ────────────────────
+function PerformancePanel({ perf, loading, onRun }: { perf: PerfMetrics | null; loading: boolean; onRun: () => void }) {
+    const score = perf && !perf.unavailable ? perf.score : null;
+    const radius = 46, circ = 2 * Math.PI * radius;
+    let stroke = '#5eead4';
+    if (score !== null) {
+        if (score < 50) stroke = '#FF3B5C';
+        else if (score < 90) stroke = '#FFB800';
+    }
+    const offset = score === null ? circ : circ - (score / 100) * circ;
+
+    return (
+        <div className="liquid-glass flex h-full flex-col rounded-lg p-6">
+            <div className="flex items-center justify-between">
+                <Eyebrow>Site performance</Eyebrow>
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium text-white/45">
+                    Lighthouse
+                </span>
+            </div>
+
+            {perf === null && loading ? (
+                <div className="flex flex-1 items-center justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-sky-200/50" /></div>
+            ) : score === null ? (
+                <div className="flex flex-1 flex-col items-center justify-center py-8 text-center">
+                    <AlertTriangle className="mb-3 h-6 w-6 text-amber-400/70" />
+                    <p className="text-sm text-white/60">Audit unavailable</p>
+                    <p className="mt-1 text-xs text-white/35">PageSpeed API did not respond. No score is shown rather than a guessed one.</p>
+                </div>
+            ) : (
+                <>
+                    <div className="flex justify-center py-5">
+                        <div className="relative h-32 w-32">
+                            <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r={radius} stroke="rgba(255,255,255,0.08)" strokeWidth="7" fill="none" />
+                                <circle cx="60" cy="60" r={radius} stroke={stroke} strokeWidth="7" fill="none" strokeLinecap="round"
+                                    strokeDasharray={circ} strokeDashoffset={offset} className="transition-all duration-700 ease-out" />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="font-display text-3xl font-semibold text-white">{score}</span>
+                                <span className="text-[10px] uppercase tracking-widest text-white/40">score</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                        {[['FCP', perf!.fcp], ['LCP', perf!.lcp], ['TBT', perf!.tbt], ['CLS', perf!.cls]].map(([k, v]) => (
+                            <div key={k} className="flex justify-between border-b border-white/5 pb-1.5 text-white/55">
+                                <span>{k}</span><span className="font-medium text-white">{v}</span>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+
+            <button onClick={onRun} disabled={loading}
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-sky-300/25 bg-sky-300/10 py-2 text-xs font-semibold text-sky-100 transition hover:border-sky-200/50 hover:bg-sky-300/15 disabled:opacity-50">
+                {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                {loading ? 'Running audit…' : 'Run Lighthouse audit'}
+            </button>
+        </div>
+    );
+}
+
+// ── Real system health ──────────────────────────────────────────────────
+function HealthRow({ ok, label, detail }: { ok: boolean; label: string; detail: string }) {
+    return (
+        <div className="rounded-lg border border-white/[0.07] bg-white/[0.02] p-4">
+            <div className="flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">{label}</p>
+                {ok
+                    ? <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    : <AlertTriangle className="h-4 w-4 text-rose-400" />}
+            </div>
+            <p className={`mt-2 text-sm font-medium ${ok ? 'text-emerald-300/90' : 'text-rose-300/90'}`}>{ok ? 'Operational' : 'Attention'}</p>
+            <p className="mt-1 break-words text-[11px] leading-relaxed text-white/40">{detail}</p>
+        </div>
+    );
+}
+
+function HealthPanel({ health, loading, onRefresh }: { health: HealthState | null; loading: boolean; onRefresh: () => void }) {
+    return (
+        <div className="liquid-glass rounded-lg p-6">
+            <div className="mb-5 flex items-center justify-between">
+                <Eyebrow>System health</Eyebrow>
+                <button onClick={onRefresh} disabled={loading} className="inline-flex items-center gap-1.5 text-[11px] font-medium text-white/45 transition hover:text-sky-100 disabled:opacity-50">
+                    {loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <RefreshCw className="h-3 w-3" />}
+                    {health ? `checked ${relativeTime(health.checkedAt)}` : 'check'}
+                </button>
+            </div>
+            {!health ? (
+                <div className="flex h-24 items-center justify-center text-white/40"><Loader2 className="h-5 w-5 animate-spin" /></div>
+            ) : (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <HealthRow ok={health.db.ok} label="Database" detail={health.db.ok ? `Supabase · ${health.db.detail}` : health.db.detail} />
+                    <HealthRow ok={health.smtp.ok} label="SMTP" detail={health.smtp.detail} />
+                    <HealthRow
+                        ok={health.queue.failed === 0}
+                        label="Email queue"
+                        detail={`${health.queue.pending} pending · ${health.queue.sending} sending · ${health.queue.failed} failed · ${health.queue.sentToday} sent today · last delivery ${relativeTime(health.queue.lastDeliveryAt)}`}
+                    />
+                </div>
+            )}
+        </div>
+    );
+}
+
+// ════════════════════════════════════════════════════════════════════════
 export default function FounderDashboardClient() {
-    // 1. Authentication State
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [passcode, setPasscode] = useState('');
     const [authLoading, setAuthLoading] = useState(false);
     const [authError, setAuthError] = useState('');
 
-    // 2. Navigation State
-    const [activeTab, setActiveTab] = useState<'overview' | 'subscribers' | 'campaigns'>('overview');
+    const [activeTab, setActiveTab] = useState<TabKey>('overview');
 
-    // 3. Subscribers and Stats State
-    const [subscribers, setSubscribers] = useState<any[]>([]);
-    const [stats, setStats] = useState<any>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
+    const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
+    const [stats, setStats] = useState<Stats>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [subsLoading, setSubsLoading] = useState(false);
 
-    // Edit/Add Subscriber state
     const [isAddSubOpen, setIsAddSubOpen] = useState(false);
     const [newSub, setNewSub] = useState({ name: '', email: '' });
     const [isEditSubOpen, setIsEditSubOpen] = useState(false);
-    const [editingSub, setEditingSub] = useState<any>(null);
+    const [editingSub, setEditingSub] = useState<Subscriber | null>(null);
     const [subActionLoading, setSubActionLoading] = useState(false);
 
-    // 4. Campaigns State
-    const [campaigns, setCampaigns] = useState<any[]>([]);
+    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [campaignsLoading, setCampaignsLoading] = useState(false);
     const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
     const [newCampaign, setNewCampaign] = useState({ subject: '', template_type: 'inner_circle', body_content: '' });
     const [campaignActionLoading, setCampaignActionLoading] = useState(false);
 
-    // Campaign Active Monitor Progress state
     const [monitoringCampaignId, setMonitoringCampaignId] = useState<number | null>(null);
     const [campaignProgress, setCampaignProgress] = useState<any>(null);
 
-    // 5. Performance Metrics State
-    const [performance, setPerformance] = useState<any>(null);
+    const [performance, setPerformance] = useState<PerfMetrics | null>(null);
     const [auditLoading, setAuditLoading] = useState(false);
 
-    // 6. Check Auth session on mount
+    const [growth, setGrowth] = useState<GrowthPoint[]>([]);
+    const [metricsLoading, setMetricsLoading] = useState(false);
+    const [health, setHealth] = useState<HealthState | null>(null);
+    const [healthLoading, setHealthLoading] = useState(false);
+
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [confirmState, setConfirmState] = useState<{ message: string; onConfirm: () => void } | null>(null);
+
+    const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 4000);
+    }, []);
+    const askConfirm = (message: string, onConfirm: () => void) => setConfirmState({ message, onConfirm });
+
+    // Auth check on mount
     useEffect(() => {
-        const checkSession = async () => {
+        (async () => {
             try {
                 const res = await fetch('/api/founder/subscribers?limit=1');
-                if (res.ok) {
-                    setIsAuthenticated(true);
-                } else {
-                    setIsAuthenticated(false);
-                }
+                setIsAuthenticated(res.ok);
             } catch {
                 setIsAuthenticated(false);
             }
-        };
-        checkSession();
+        })();
     }, []);
 
-    // Data Loaders
+    // Loaders
     const loadSubscribers = async () => {
         setSubsLoading(true);
         try {
             const params = new URLSearchParams();
             if (searchQuery) params.append('search', searchQuery);
             if (statusFilter) params.append('status', statusFilter);
-            
             const res = await fetch(`/api/founder/subscribers?${params.toString()}`);
             if (res.ok) {
                 const data = await res.json();
@@ -209,64 +342,81 @@ export default function FounderDashboardClient() {
         }
     };
 
-    const loadCampaigns = async () => {
+    const loadCampaigns = useCallback(async () => {
         setCampaignsLoading(true);
         try {
             const res = await fetch('/api/founder/campaigns/create');
-            if (res.ok) {
-                const data = await res.json();
-                setCampaigns(data.campaigns);
-            }
+            if (res.ok) { const data = await res.json(); setCampaigns(data.campaigns); }
         } catch (err) {
             console.error('Failed to load campaigns:', err);
         } finally {
             setCampaignsLoading(false);
         }
-    };
+    }, []);
 
-    const loadPerformance = async (forceRun = false) => {
+    const loadPerformance = useCallback(async (forceRun = false) => {
         setAuditLoading(true);
         try {
             const url = forceRun ? `/api/founder/performance?url=https://www.virzyguns.com` : `/api/founder/performance`;
             const res = await fetch(url);
             if (res.ok) {
                 const data = await res.json();
-                setPerformance(data.metrics || data.fallback);
+                setPerformance(data.metrics ? data.metrics : { unavailable: true } as PerfMetrics);
             }
         } catch (err) {
             console.error('Failed to load PageSpeed performance:', err);
+            setPerformance({ unavailable: true } as PerfMetrics);
         } finally {
             setAuditLoading(false);
         }
-    };
+    }, []);
 
-    // 7. Load Data on Auth
+    const loadMetrics = useCallback(async () => {
+        setMetricsLoading(true);
+        try {
+            const res = await fetch('/api/founder/metrics');
+            if (res.ok) { const data = await res.json(); setGrowth(data.growth || []); }
+        } catch (err) {
+            console.error('Failed to load metrics:', err);
+        } finally {
+            setMetricsLoading(false);
+        }
+    }, []);
+
+    const loadHealth = useCallback(async () => {
+        setHealthLoading(true);
+        try {
+            const res = await fetch('/api/founder/health');
+            if (res.ok) setHealth(await res.json());
+        } catch (err) {
+            console.error('Failed to load health:', err);
+        } finally {
+            setHealthLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         if (isAuthenticated) {
-            const timer = setTimeout(() => {
-                loadSubscribers();
-                loadCampaigns();
-                loadPerformance();
-            }, 0);
-            return () => clearTimeout(timer);
+            loadSubscribers();
+            loadCampaigns();
+            loadPerformance();
+            loadMetrics();
+            loadHealth();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated]);
 
-    // Periodically fetch progress for the monitored campaign
+    // Campaign progress polling
     useEffect(() => {
         if (!monitoringCampaignId || !isAuthenticated) return;
-
         const fetchProgress = async () => {
             try {
                 const res = await fetch(`/api/founder/campaigns/${monitoringCampaignId}/progress`);
                 if (res.ok) {
                     const data = await res.json();
                     setCampaignProgress(data);
-                    // Refresh campaign list status too
                     loadCampaigns();
-                    // Stop monitoring if finished
-                    if (data.campaign.status === 'completed' || data.campaign.status === 'cancelled' || data.campaign.status === 'failed') {
+                    if (['completed', 'cancelled', 'failed'].includes(data.campaign.status)) {
                         setMonitoringCampaignId(null);
                     }
                 }
@@ -274,13 +424,13 @@ export default function FounderDashboardClient() {
                 console.error(err);
             }
         };
-
         fetchProgress();
-        const interval = setInterval(fetchProgress, 5000); // Poll every 5s
+        const interval = setInterval(fetchProgress, 5000);
         return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [monitoringCampaignId, isAuthenticated]);
 
-    // Form handlers
+    // Handlers
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setAuthLoading(true);
@@ -292,11 +442,8 @@ export default function FounderDashboardClient() {
                 body: JSON.stringify({ passcode }),
             });
             const data = await res.json();
-            if (res.ok && data.success) {
-                setIsAuthenticated(true);
-            } else {
-                setAuthError(data.error || 'Authentication failed.');
-            }
+            if (res.ok && data.success) setIsAuthenticated(true);
+            else setAuthError(data.error || 'Authentication failed.');
         } catch {
             setAuthError('Server error. Try again later.');
         } finally {
@@ -317,12 +464,13 @@ export default function FounderDashboardClient() {
                 setIsAddSubOpen(false);
                 setNewSub({ name: '', email: '' });
                 loadSubscribers();
+                showToast('Subscriber added.');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to add subscriber.');
+                showToast(data.error || 'Failed to add subscriber.', 'error');
             }
         } catch {
-            alert('Failed to add subscriber due to network error.');
+            showToast('Network error while adding subscriber.', 'error');
         } finally {
             setSubActionLoading(false);
         }
@@ -330,6 +478,7 @@ export default function FounderDashboardClient() {
 
     const handleEditSubscriber = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!editingSub) return;
         setSubActionLoading(true);
         try {
             const res = await fetch('/api/founder/subscribers', {
@@ -341,32 +490,28 @@ export default function FounderDashboardClient() {
                 setIsEditSubOpen(false);
                 setEditingSub(null);
                 loadSubscribers();
+                showToast('Subscriber updated.');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to update subscriber.');
+                showToast(data.error || 'Failed to update subscriber.', 'error');
             }
         } catch {
-            alert('Failed to update subscriber.');
+            showToast('Failed to update subscriber.', 'error');
         } finally {
             setSubActionLoading(false);
         }
     };
 
-    const handleUnsubscribeSubscriber = async (id: number) => {
-        if (!confirm('Are you sure you want to manually suppress/unsubscribe this subscriber?')) return;
-        try {
-            const res = await fetch(`/api/founder/subscribers?id=${id}`, {
-                method: 'DELETE',
-            });
-            if (res.ok) {
-                loadSubscribers();
-            } else {
-                const data = await res.json();
-                alert(data.error || 'Failed to unsubscribe.');
+    const handleUnsubscribeSubscriber = (id: number) => {
+        askConfirm('Suppress this subscriber? They will stop receiving broadcasts.', async () => {
+            try {
+                const res = await fetch(`/api/founder/subscribers?id=${id}`, { method: 'DELETE' });
+                if (res.ok) { loadSubscribers(); showToast('Subscriber suppressed.'); }
+                else { const data = await res.json(); showToast(data.error || 'Failed to suppress.', 'error'); }
+            } catch {
+                showToast('Failed to suppress subscriber.', 'error');
             }
-        } catch {
-            alert('Failed to unsubscribe.');
-        }
+        });
     };
 
     const handleCreateCampaign = async (e: React.FormEvent) => {
@@ -382,377 +527,223 @@ export default function FounderDashboardClient() {
                 setIsCreateCampaignOpen(false);
                 setNewCampaign({ subject: '', template_type: 'inner_circle', body_content: '' });
                 loadCampaigns();
+                showToast('Broadcast draft created.');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to create campaign.');
+                showToast(data.error || 'Failed to create broadcast.', 'error');
             }
         } catch {
-            alert('Failed to create campaign.');
+            showToast('Failed to create broadcast.', 'error');
         } finally {
             setCampaignActionLoading(false);
         }
     };
 
-    const handleStartCampaign = async (id: number) => {
-        if (!confirm('Are you sure you want to schedule and start queue processing for this broadcast?')) return;
-        try {
-            const res = await fetch(`/api/founder/campaigns/${id}/start`, { method: 'POST' });
-            if (res.ok) {
-                setMonitoringCampaignId(id);
-                loadCampaigns();
-            } else {
-                const data = await res.json();
-                alert(data.error || 'Failed to start campaign.');
+    const handleStartCampaign = (id: number) => {
+        askConfirm('Queue this broadcast and start sending to all active subscribers?', async () => {
+            try {
+                const res = await fetch(`/api/founder/campaigns/${id}/start`, { method: 'POST' });
+                if (res.ok) { setMonitoringCampaignId(id); loadCampaigns(); showToast('Broadcast queued.'); }
+                else { const data = await res.json(); showToast(data.error || 'Failed to start broadcast.', 'error'); }
+            } catch {
+                showToast('Failed to start broadcast.', 'error');
             }
-        } catch {
-            alert('Failed to start campaign.');
-        }
+        });
     };
 
     const handlePauseCampaign = async (id: number) => {
         try {
             const res = await fetch(`/api/founder/campaigns/${id}/pause`, { method: 'POST' });
             if (res.ok) {
-                if (monitoringCampaignId === id) {
-                    setMonitoringCampaignId(null);
-                    setCampaignProgress(null);
-                }
+                if (monitoringCampaignId === id) { setMonitoringCampaignId(null); setCampaignProgress(null); }
                 loadCampaigns();
+                showToast('Broadcast paused.');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to pause campaign.');
+                showToast(data.error || 'Failed to pause broadcast.', 'error');
             }
         } catch {
-            alert('Failed to pause campaign.');
+            showToast('Failed to pause broadcast.', 'error');
         }
     };
 
-    // Sub-renderers
+    // ── Gate: loading / login ──────────────────────────────────────────
     if (isAuthenticated === null) {
         return (
-            <main className="min-h-screen w-full flex items-center justify-center bg-black px-4">
-                <div className="w-10 h-10 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+            <main className="editorial-shell flex min-h-screen items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-sky-300" />
             </main>
         );
     }
 
     if (!isAuthenticated) {
         return (
-            <main className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden px-4">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-[120px] pointer-events-none"></div>
-                
-                <div className="relative z-10 w-full max-w-md p-8 border border-white/10 rounded-2xl bg-zinc-950/60 backdrop-blur-xl shadow-2xl">
-                    <div className="text-center mb-8">
-                        <h1 className="text-2xl font-bold tracking-widest text-cyan-400 font-mono">
-                            FOUNDER CONTROL
-                        </h1>
-                        <p className="text-xs text-zinc-500 font-mono mt-2 uppercase tracking-wider">
-                            Authorized Operations Only
-                        </p>
+            <main className="editorial-shell flex min-h-screen items-center justify-center px-4">
+                <motion.div variants={revealUp} initial="hidden" animate="visible" className="liquid-glass-strong w-full max-w-md rounded-lg p-8">
+                    <div className="mb-8 text-center">
+                        <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                            <ShieldCheck className="h-6 w-6" />
+                        </div>
+                        <h1 className="font-display text-2xl font-semibold text-white">Founder Portal</h1>
+                        <p className="mt-2 text-xs uppercase tracking-[0.2em] text-sky-200/50">Authorized access only</p>
                     </div>
-
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-5">
                         <div>
-                            <label className="block text-xs font-mono text-zinc-400 uppercase tracking-widest mb-2">
-                                Access Passcode
-                            </label>
+                            <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Access passcode</label>
                             <input
-                                type="password"
-                                value={passcode}
-                                onChange={(e) => setPasscode(e.target.value)}
-                                placeholder="••••••••"
-                                required
-                                className="w-full px-4 py-3 rounded-lg border border-white/10 bg-zinc-900/50 text-white font-mono text-center tracking-widest focus:outline-none focus:border-cyan-400 transition-all duration-200"
+                                type="password" value={passcode} onChange={(e) => setPasscode(e.target.value)}
+                                placeholder="••••••••" required
+                                className="w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-center tracking-[0.3em] text-white outline-none transition focus:border-sky-300/50"
                             />
                         </div>
-
                         {authError && (
-                            <p className="text-rose-400 text-xs font-mono text-center leading-relaxed bg-rose-500/10 py-2 rounded-lg border border-rose-500/20">
-                                {authError}
-                            </p>
+                            <p className="rounded-lg border border-rose-500/20 bg-rose-500/10 py-2 text-center text-xs text-rose-300">{authError}</p>
                         )}
-
-                        <button
-                            type="submit"
-                            disabled={authLoading}
-                            className="w-full py-3 rounded-lg bg-cyan-400 hover:bg-cyan-300 text-black font-bold font-mono text-sm tracking-wider transition-all duration-200 disabled:opacity-50"
-                        >
-                            {authLoading ? 'VERIFYING...' : 'INITIALIZE SYSTEM'}
+                        <button type="submit" disabled={authLoading}
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white bg-white py-3 text-sm font-semibold text-[#030405] transition hover:bg-white/90 disabled:opacity-50">
+                            {authLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                            {authLoading ? 'Verifying…' : 'Enter dashboard'}
                         </button>
                     </form>
-                </div>
+                </motion.div>
             </main>
         );
     }
 
-    return (
-        <main className="min-h-screen bg-black text-zinc-100 font-sans pb-20 relative overflow-x-hidden">
-            {/* background glows */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+    const tabs: { key: TabKey; label: string; Icon: typeof Users }[] = [
+        { key: 'overview', label: 'Overview', Icon: LayoutDashboard },
+        { key: 'subscribers', label: 'Subscribers', Icon: Users },
+        { key: 'broadcasts', label: 'Broadcasts', Icon: Send },
+        { key: 'cadenz', label: 'CADENZ', Icon: Smartphone },
+    ];
 
-            {/* Nav Header */}
-            <header className="border-b border-white/5 bg-zinc-950/40 backdrop-blur-md sticky top-0 z-40">
-                <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <h1 className="text-lg font-bold tracking-widest font-mono text-cyan-400">
-                            VGP FOUNDER PORTAL
-                        </h1>
+    const refreshAll = () => { loadSubscribers(); loadCampaigns(); loadMetrics(); loadHealth(); loadPerformance(); };
+
+    // ── Dashboard ───────────────────────────────────────────────────────
+    return (
+        <main className="editorial-shell min-h-screen pb-24 text-white">
+            {/* Header */}
+            <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#030405]/70 backdrop-blur-xl">
+                <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+                    <div className="flex items-center gap-2.5">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+                        <span className="font-display text-base font-semibold text-white">VGP Founder</span>
+                        <span className="hidden text-xs text-white/35 sm:inline">· mission control</span>
                     </div>
-                    <nav className="flex space-x-1 bg-zinc-900/60 p-1 rounded-lg border border-white/5">
-                        <button
-                            onClick={() => setActiveTab('overview')}
-                            className={`px-4 py-1.5 rounded-md font-mono text-xs font-bold transition-all duration-150 ${
-                                activeTab === 'overview' ? 'bg-cyan-400 text-black' : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            OVERVIEW
+                    <div className="flex items-center gap-2">
+                        <nav className="flex gap-1 rounded-full border border-white/[0.07] bg-white/[0.02] p-1">
+                            {tabs.map(({ key, label, Icon }) => (
+                                <button key={key} onClick={() => setActiveTab(key)}
+                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition ${activeTab === key ? 'bg-white text-[#030405]' : 'text-white/55 hover:text-white'}`}>
+                                    <Icon className="h-3.5 w-3.5" />
+                                    <span className="hidden sm:inline">{label}</span>
+                                </button>
+                            ))}
+                        </nav>
+                        <button onClick={refreshAll} title="Refresh all" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
+                            <RefreshCw className="h-3.5 w-3.5" />
                         </button>
-                        <button
-                            onClick={() => setActiveTab('subscribers')}
-                            className={`px-4 py-1.5 rounded-md font-mono text-xs font-bold transition-all duration-150 ${
-                                activeTab === 'subscribers' ? 'bg-cyan-400 text-black' : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            SUBSCRIBERS
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('campaigns')}
-                            className={`px-4 py-1.5 rounded-md font-mono text-xs font-bold transition-all duration-150 ${
-                                activeTab === 'campaigns' ? 'bg-cyan-400 text-black' : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            BROADCASTS
-                        </button>
-                    </nav>
+                    </div>
                 </div>
             </header>
 
-            <div className="max-w-6xl mx-auto px-4 mt-8">
-                {/* 1. OVERVIEW TAB */}
+            <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6">
+                {/* OVERVIEW */}
                 {activeTab === 'overview' && (
-                    <div className="space-y-8">
-                        {/* Stats Grid */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="p-6 border border-white/5 rounded-2xl bg-zinc-950/40 backdrop-blur-md relative overflow-hidden">
-                                <span className="text-zinc-500 font-mono text-xs uppercase">Total Registrations</span>
-                                <p className="text-3xl font-bold font-mono text-white mt-2">{stats.total}</p>
-                                <div className="absolute right-4 bottom-4 text-zinc-800 text-4xl font-bold font-mono">ALL</div>
-                            </div>
-                            <div className="p-6 border border-white/5 rounded-2xl bg-zinc-950/40 backdrop-blur-md relative overflow-hidden">
-                                <span className="text-zinc-400 font-mono text-xs uppercase">Active List</span>
-                                <p className="text-3xl font-bold font-mono text-cyan-400 mt-2">{stats.subscribed}</p>
-                                <div className="absolute right-4 bottom-4 text-cyan-950/20 text-4xl font-bold font-mono">OK</div>
-                            </div>
-                            <div className="p-6 border border-white/5 rounded-2xl bg-zinc-950/40 backdrop-blur-md relative overflow-hidden">
-                                <span className="text-zinc-500 font-mono text-xs uppercase">Suppressed List</span>
-                                <p className="text-3xl font-bold font-mono text-zinc-500 mt-2">{stats.unsubscribed}</p>
-                                <div className="absolute right-4 bottom-4 text-zinc-900 text-4xl font-bold font-mono">OUT</div>
-                            </div>
-                            <div className="p-6 border border-white/5 rounded-2xl bg-zinc-950/40 backdrop-blur-md relative overflow-hidden">
-                                <span className="text-cyan-400 font-mono text-xs uppercase">New (24h)</span>
-                                <p className="text-3xl font-bold font-mono text-cyan-300 mt-2">+{stats.new24h}</p>
-                                <div className="absolute right-4 bottom-4 text-cyan-950/10 text-4xl font-bold font-mono">GROW</div>
-                            </div>
+                    <div className="space-y-6">
+                        <motion.div variants={staggerParent} initial="hidden" animate="visible" className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                            <StatCard label="Total registrations" value={stats.total} Icon={Users} />
+                            <StatCard label="Active list" value={stats.subscribed} Icon={CheckCircle2} accent="text-sky-300" />
+                            <StatCard label="Suppressed" value={stats.unsubscribed} Icon={Ban} accent="text-white/50" />
+                            <StatCard label="New · 24h" value={`+${stats.new24h}`} Icon={TrendingUp} accent="text-emerald-300" />
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                            <div className="lg:col-span-2"><GrowthChart data={growth} loading={metricsLoading} /></div>
+                            <PerformancePanel perf={performance} loading={auditLoading} onRun={() => loadPerformance(true)} />
                         </div>
 
-                        {/* Middle row: Chart and PageSpeed dial */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div className="lg:col-span-2">
-                                <GrowthChart
-                                    data={[
-                                        { date: '06/13', count: Math.max(0, stats.subscribed - 12) },
-                                        { date: '06/14', count: Math.max(0, stats.subscribed - 10) },
-                                        { date: '06/15', count: Math.max(0, stats.subscribed - 7) },
-                                        { date: '06/16', count: Math.max(0, stats.subscribed - 5) },
-                                        { date: '06/17', count: Math.max(0, stats.subscribed - 3) },
-                                        { date: '06/18', count: Math.max(0, stats.subscribed - 1) },
-                                        { date: 'Today', count: stats.subscribed },
-                                    ]}
-                                />
-                            </div>
-                            
-                            <div>
-                                {performance ? (
-                                    <div className="relative border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between h-full">
-                                        <div>
-                                            <div className="flex justify-between items-center mb-6">
-                                                <h3 className="text-xs font-mono font-bold tracking-wider text-zinc-400 uppercase">Core Audits</h3>
-                                                <span className="text-[10px] font-mono text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded">
-                                                    {performance.isMock ? 'Cached' : 'Lighthouse API'}
-                                                </span>
-                                            </div>
-                                            <div className="flex justify-center">
-                                                <LighthouseDial score={performance.score} label="Performance" />
-                                            </div>
-                                        </div>
+                        <HealthPanel health={health} loading={healthLoading} onRefresh={loadHealth} />
 
-                                        <div className="mt-6 space-y-2.5 font-mono text-xs">
-                                            <div className="flex justify-between text-zinc-400">
-                                                <span>FCP (First Contentful Paint)</span>
-                                                <span className="text-white font-bold">{performance.fcp}</span>
-                                            </div>
-                                            <div className="flex justify-between text-zinc-400">
-                                                <span>LCP (Largest Contentful Paint)</span>
-                                                <span className="text-white font-bold">{performance.lcp}</span>
-                                            </div>
-                                            <div className="flex justify-between text-zinc-400">
-                                                <span>TBT (Total Blocking Time)</span>
-                                                <span className="text-white font-bold">{performance.tbt}</span>
-                                            </div>
-                                            <div className="flex justify-between text-zinc-400">
-                                                <span>CLS (Cumulative Layout Shift)</span>
-                                                <span className="text-white font-bold">{performance.cls}</span>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            onClick={() => loadPerformance(true)}
-                                            disabled={auditLoading}
-                                            className="w-full mt-6 py-2 border border-cyan-400/20 hover:border-cyan-400/40 bg-cyan-400/5 hover:bg-cyan-400/10 text-cyan-400 font-mono text-xs font-bold rounded-lg transition-all duration-150 disabled:opacity-50"
-                                        >
-                                            {auditLoading ? 'RUNNING LIGHTHOUSE...' : 'EXECUTE LIGHTHOUSE AUDIT'}
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="h-full border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6 flex flex-col items-center justify-center">
-                                        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-                                        <p className="text-xs font-mono text-zinc-500">Loading performance data...</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Recent Campaigns Overview */}
-                        <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6">
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-xs font-mono font-bold tracking-wider text-zinc-400 uppercase">System Integration Checks</h3>
-                                <div className="text-xs font-mono text-zinc-500 uppercase">Security Clearance: Founder</div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
-                                <div className="p-4 rounded-xl border border-white/5 bg-zinc-900/20">
-                                    <p className="text-zinc-500 uppercase">Database connection</p>
-                                    <p className="text-emerald-400 font-bold mt-2">CONNECTED (Supavisor Transaction Pooler)</p>
-                                </div>
-                                <div className="p-4 rounded-xl border border-white/5 bg-zinc-900/20">
-                                    <p className="text-zinc-500 uppercase">SMTP configuration</p>
-                                    <p className="text-cyan-400 font-bold mt-2">VERIFIED (smtp.hostinger.com:465 SSL)</p>
-                                    <a
-                                        href="https://mail.hostinger.com/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex mt-4 px-3 py-2 rounded-lg border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 hover:border-cyan-400/40 hover:bg-cyan-400/10 transition-colors"
-                                    >
-                                        OPEN HOSTINGER MAIL
-                                    </a>
-                                </div>
-                                <div className="p-4 rounded-xl border border-white/5 bg-zinc-900/20">
-                                    <p className="text-zinc-500 uppercase">Daily performance cron</p>
-                                    <p className="text-zinc-300 font-bold mt-2">ACTIVE (0 1 * * * UTC schedule)</p>
+                        <a href="https://mail.hostinger.com/" target="_blank" rel="noopener noreferrer"
+                            className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
+                            <div className="flex items-center gap-3">
+                                <Mail className="h-5 w-5 text-sky-200/70" />
+                                <div>
+                                    <p className="text-sm font-semibold text-white">Hostinger Mailbox</p>
+                                    <p className="text-xs text-white/45">Open the founder inbox to read replies and bounces.</p>
                                 </div>
                             </div>
-                        </div>
+                            <span className="text-xs font-semibold text-sky-100">Open →</span>
+                        </a>
                     </div>
                 )}
 
-                {/* 2. SUBSCRIBERS TAB */}
+                {/* SUBSCRIBERS */}
                 {activeTab === 'subscribers' && (
-                    <div className="space-y-6">
-                        {/* Control Bar */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-5">
+                        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                             <div className="flex flex-1 gap-2">
-                                <input
-                                    type="text"
-                                    placeholder="Search by name or email..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
-                                    className="flex-1 max-w-md px-4 py-2 bg-zinc-900/60 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-400 font-mono"
-                                />
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="px-4 py-2 bg-zinc-900/60 border border-white/10 rounded-lg text-sm text-zinc-300 focus:outline-none focus:border-cyan-400 font-mono"
-                                >
-                                    <option value="">All Statuses</option>
-                                    <option value="subscribed">Subscribed</option>
-                                    <option value="unsubscribed">Unsubscribed</option>
+                                <div className="relative flex-1 md:max-w-md">
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                                    <input
+                                        type="text" placeholder="Search name or email…" value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
+                                        className="w-full rounded-lg border border-white/10 bg-white/[0.03] py-2 pl-9 pr-3 text-sm text-white outline-none transition focus:border-sky-300/50"
+                                    />
+                                </div>
+                                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50">
+                                    <option value="" className="bg-[#0a1b27]">All statuses</option>
+                                    <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
+                                    <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                                 </select>
-                                <button
-                                    onClick={loadSubscribers}
-                                    className="px-4 py-2 bg-cyan-400 hover:bg-cyan-300 text-black font-bold font-mono text-xs rounded-lg transition-colors"
-                                >
-                                    SEARCH
-                                </button>
+                                <button onClick={loadSubscribers} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
                             </div>
-                            <button
-                                onClick={() => setIsAddSubOpen(true)}
-                                className="px-4 py-2 border border-cyan-400 hover:bg-cyan-400 hover:text-black text-cyan-400 font-bold font-mono text-xs rounded-lg transition-all"
-                            >
-                                + ADD SUBSCRIBER
+                            <button onClick={() => setIsAddSubOpen(true)}
+                                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
+                                <Plus className="h-3.5 w-3.5" /> Add subscriber
                             </button>
                         </div>
 
-                        {/* Subscribers Table */}
-                        <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl overflow-hidden">
+                        <div className="liquid-glass overflow-hidden rounded-lg">
                             {subsLoading ? (
-                                <div className="p-12 text-center">
-                                    <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                    <p className="text-xs font-mono text-zinc-500">Querying database...</p>
-                                </div>
+                                <div className="flex flex-col items-center justify-center p-12 text-white/40"><Loader2 className="mb-3 h-6 w-6 animate-spin" /><p className="text-xs">Querying database…</p></div>
                             ) : subscribers.length === 0 ? (
-                                <div className="p-12 text-center text-zinc-500 font-mono text-sm">
-                                    No subscribers found matching query.
+                                <div className="flex flex-col items-center justify-center p-12 text-center text-white/45">
+                                    <Inbox className="mb-3 h-7 w-7 text-white/25" /><p className="text-sm">No subscribers match this query.</p>
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse text-xs font-mono">
+                                    <table className="w-full text-left text-sm">
                                         <thead>
-                                            <tr className="border-b border-white/5 bg-zinc-900/30 text-zinc-500 uppercase font-bold tracking-wider">
-                                                <th className="py-4 px-6">Name</th>
-                                                <th className="py-4 px-6">Email</th>
-                                                <th className="py-4 px-6">Status</th>
-                                                <th className="py-4 px-6">Registered</th>
-                                                <th className="py-4 px-6 text-right">Actions</th>
+                                            <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40">
+                                                <th className="px-6 py-4 font-semibold">Name</th>
+                                                <th className="px-6 py-4 font-semibold">Email</th>
+                                                <th className="px-6 py-4 font-semibold">Status</th>
+                                                <th className="px-6 py-4 font-semibold">Registered</th>
+                                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-white/5">
+                                        <tbody className="divide-y divide-white/[0.05]">
                                             {subscribers.map((sub) => (
-                                                <tr key={sub.id} className="hover:bg-zinc-900/20 transition-colors">
-                                                    <td className="py-4 px-6 text-zinc-200">{sub.name}</td>
-                                                    <td className="py-4 px-6 text-zinc-400">{sub.email}</td>
-                                                    <td className="py-4 px-6">
-                                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                                            sub.status === 'subscribed'
-                                                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                                                : 'bg-zinc-900 text-zinc-500 border border-white/5'
-                                                        }`}>
-                                                            {sub.status.toUpperCase()}
+                                                <tr key={sub.id} className="transition hover:bg-white/[0.02]">
+                                                    <td className="px-6 py-3.5 text-white/90">{sub.name}</td>
+                                                    <td className="px-6 py-3.5 text-white/55">{sub.email}</td>
+                                                    <td className="px-6 py-3.5">
+                                                        <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${sub.status === 'subscribed' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border border-white/10 bg-white/[0.03] text-white/45'}`}>
+                                                            {sub.status}
                                                         </span>
                                                     </td>
-                                                    <td className="py-4 px-6 text-zinc-500">
-                                                        {new Date(sub.created_at).toLocaleDateString()}
-                                                    </td>
-                                                    <td className="py-4 px-6 text-right space-x-2">
-                                                        <button
-                                                            onClick={() => {
-                                                                setEditingSub(sub);
-                                                                setIsEditSubOpen(true);
-                                                            }}
-                                                            className="text-cyan-400 hover:text-cyan-300 font-bold transition-colors"
-                                                        >
-                                                            EDIT
-                                                        </button>
-                                                        {sub.status === 'subscribed' && (
-                                                            <button
-                                                                onClick={() => handleUnsubscribeSubscriber(sub.id)}
-                                                                className="text-rose-400 hover:text-rose-300 font-bold transition-colors"
-                                                            >
-                                                                SUPPRESS
-                                                            </button>
-                                                        )}
+                                                    <td className="px-6 py-3.5 text-white/40">{new Date(sub.created_at).toLocaleDateString()}</td>
+                                                    <td className="px-6 py-3.5">
+                                                        <div className="flex items-center justify-end gap-3">
+                                                            <button onClick={() => { setEditingSub(sub); setIsEditSubOpen(true); }} className="inline-flex items-center gap-1 text-xs font-semibold text-sky-200/80 transition hover:text-sky-100"><Pencil className="h-3 w-3" /> Edit</button>
+                                                            {sub.status === 'subscribed' && (
+                                                                <button onClick={() => handleUnsubscribeSubscriber(sub.id)} className="inline-flex items-center gap-1 text-xs font-semibold text-rose-300/80 transition hover:text-rose-300"><Ban className="h-3 w-3" /> Suppress</button>
+                                                            )}
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             ))}
@@ -764,77 +755,47 @@ export default function FounderDashboardClient() {
                     </div>
                 )}
 
-                {/* 3. CAMPAIGNS TAB */}
-                {activeTab === 'campaigns' && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                        {/* Broadcast Queue & Progress Tracker */}
-                        <div className="lg:col-span-2 space-y-6">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-sm font-mono font-bold tracking-wider text-cyan-400 uppercase">Broadcast History</h2>
-                                <button
-                                    onClick={() => setIsCreateCampaignOpen(true)}
-                                    className="px-4 py-2 bg-cyan-400 hover:bg-cyan-300 text-black font-bold font-mono text-xs rounded-lg transition-colors"
-                                >
-                                    + CREATE BROADCAST
+                {/* BROADCASTS */}
+                {activeTab === 'broadcasts' && (
+                    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+                        <div className="space-y-5 lg:col-span-2">
+                            <div className="flex items-center justify-between">
+                                <Eyebrow>Broadcast history</Eyebrow>
+                                <button onClick={() => setIsCreateCampaignOpen(true)}
+                                    className="inline-flex items-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
+                                    <Plus className="h-3.5 w-3.5" /> Create broadcast
                                 </button>
                             </div>
 
-                            {/* Campaign Active progress tracker */}
                             {campaignProgress && (
-                                <div className="border border-cyan-400/20 bg-zinc-950/60 backdrop-blur-md rounded-2xl p-6 relative overflow-hidden">
-                                    <div className="absolute top-0 left-0 h-1 bg-cyan-400 shadow-[0_0_15px_#00E5FF] animate-pulse w-full"></div>
-                                    
-                                    <div className="flex justify-between items-start mb-4">
+                                <div className="liquid-glass-strong relative overflow-hidden rounded-lg p-6">
+                                    <div className="absolute left-0 top-0 h-0.5 w-full animate-pulse bg-sky-300 shadow-[0_0_12px_#7dd3fc]" />
+                                    <div className="mb-4 flex items-start justify-between">
                                         <div>
-                                            <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-0.5 rounded font-bold uppercase tracking-widest animate-pulse">
-                                                ACTIVE QUEUE MONITOR
+                                            <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/20 bg-sky-300/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-sky-100">
+                                                <Radio className="h-3 w-3 animate-pulse" /> Live monitor
                                             </span>
-                                            <h3 className="text-base font-bold text-white font-mono mt-2">{campaignProgress.campaign.subject}</h3>
+                                            <h3 className="mt-2 font-display text-lg font-semibold text-white">{campaignProgress.campaign.subject}</h3>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                setMonitoringCampaignId(null);
-                                                setCampaignProgress(null);
-                                            }}
-                                            className="text-zinc-500 hover:text-zinc-300 font-mono text-xs"
-                                        >
-                                            CLOSE
-                                        </button>
+                                        <button onClick={() => { setMonitoringCampaignId(null); setCampaignProgress(null); }} className="text-white/40 transition hover:text-white"><X className="h-4 w-4" /></button>
                                     </div>
-
-                                    {/* Progress calculation */}
                                     {(() => {
-                                        const { stats } = campaignProgress;
-                                        const finishedCount = stats.sent + stats.skipped + stats.cancelled;
-                                        const totalCount = stats.total || 1;
-                                        const percent = Math.round((finishedCount / totalCount) * 100);
-
+                                        const { stats: s } = campaignProgress;
+                                        const finished = s.sent + s.skipped + s.cancelled;
+                                        const total = s.total || 1;
+                                        const pct = Math.round((finished / total) * 100);
                                         return (
-                                            <div className="space-y-4 font-mono text-xs">
-                                                <div className="w-full bg-zinc-900 rounded-full h-3 overflow-hidden border border-white/5">
-                                                    <div
-                                                        className="bg-cyan-400 h-full rounded-full transition-all duration-500"
-                                                        style={{ width: `${percent}%` }}
-                                                    ></div>
+                                            <div className="space-y-4">
+                                                <div className="h-2.5 w-full overflow-hidden rounded-full border border-white/[0.07] bg-white/[0.03]">
+                                                    <div className="h-full rounded-full bg-sky-300 transition-all duration-500" style={{ width: `${pct}%` }} />
                                                 </div>
-                                                
-                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
-                                                    <div className="p-2 bg-zinc-900/50 rounded-lg">
-                                                        <span className="text-zinc-500 block uppercase text-[10px]">Delivered</span>
-                                                        <span className="text-sm font-bold text-white">{stats.sent}</span>
-                                                    </div>
-                                                    <div className="p-2 bg-zinc-900/50 rounded-lg">
-                                                        <span className="text-zinc-500 block uppercase text-[10px]">Processing</span>
-                                                        <span className="text-sm font-bold text-cyan-400">{stats.sending + stats.pending}</span>
-                                                    </div>
-                                                    <div className="p-2 bg-zinc-900/50 rounded-lg">
-                                                        <span className="text-zinc-500 block uppercase text-[10px]">Failures</span>
-                                                        <span className={`text-sm font-bold ${stats.failed > 0 ? 'text-rose-400' : 'text-zinc-400'}`}>{stats.failed}</span>
-                                                    </div>
-                                                    <div className="p-2 bg-zinc-900/50 rounded-lg">
-                                                        <span className="text-zinc-500 block uppercase text-[10px]">Completion</span>
-                                                        <span className="text-sm font-bold text-white">{percent}%</span>
-                                                    </div>
+                                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                                    {[['Delivered', s.sent, 'text-white'], ['Processing', s.sending + s.pending, 'text-sky-300'], ['Failures', s.failed, s.failed > 0 ? 'text-rose-300' : 'text-white/50'], ['Complete', `${pct}%`, 'text-white']].map(([l, v, c]) => (
+                                                        <div key={l as string} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                                                            <p className="text-[10px] uppercase tracking-wider text-white/40">{l}</p>
+                                                            <p className={`mt-0.5 font-display text-lg font-semibold ${c}`}>{v}</p>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         );
@@ -842,244 +803,200 @@ export default function FounderDashboardClient() {
                                 </div>
                             )}
 
-                            {/* Broadcast List */}
-                            <div className="space-y-4">
-                                {campaignsLoading ? (
-                                    <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-12 text-center">
-                                        <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                        <p className="text-xs font-mono text-zinc-500">Querying database campaigns...</p>
-                                    </div>
-                                ) : campaigns.length === 0 ? (
-                                    <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-12 text-center font-mono text-zinc-500 text-sm">
-                                        No campaigns created. Click &quot;+ Create Broadcast&quot; to generate your first draft.
-                                    </div>
-                                ) : (
-                                    campaigns.map((camp) => (
-                                        <div key={camp.id} className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                                            <div className="space-y-1.5 font-mono">
-                                                <div className="flex items-center space-x-2.5">
-                                                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold ${
-                                                        camp.status === 'completed'
-                                                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                                            : camp.status === 'draft'
-                                                            ? 'bg-zinc-800 text-zinc-400'
-                                                            : camp.status === 'paused'
-                                                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                                            : 'bg-cyan-500/10 text-cyan-400 border border-cyan-400/20 animate-pulse'
-                                                    }`}>
-                                                        {camp.status.toUpperCase()}
-                                                    </span>
-                                                    <span className="text-[10px] text-zinc-500">{camp.template_type.replace('_', ' ').toUpperCase()}</span>
+                            {campaignsLoading ? (
+                                <div className="liquid-glass flex flex-col items-center justify-center rounded-lg p-12 text-white/40"><Loader2 className="mb-3 h-6 w-6 animate-spin" /><p className="text-xs">Loading broadcasts…</p></div>
+                            ) : campaigns.length === 0 ? (
+                                <div className="liquid-glass flex flex-col items-center justify-center rounded-lg p-12 text-center text-white/45">
+                                    <Send className="mb-3 h-7 w-7 text-white/25" /><p className="text-sm">No broadcasts yet. Create your first draft.</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {campaigns.map((camp) => {
+                                        const badge = camp.status === 'completed' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
+                                            : camp.status === 'draft' ? 'border-white/10 bg-white/[0.03] text-white/50'
+                                                : camp.status === 'paused' ? 'border-amber-500/20 bg-amber-500/10 text-amber-300'
+                                                    : 'border-sky-400/20 bg-sky-400/10 text-sky-300';
+                                        return (
+                                            <div key={camp.id} className="liquid-glass flex flex-col gap-4 rounded-lg p-5 md:flex-row md:items-center md:justify-between">
+                                                <div className="space-y-1.5">
+                                                    <div className="flex items-center gap-2.5">
+                                                        <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase ${badge}`}>{camp.status}</span>
+                                                        <span className="text-[10px] uppercase tracking-wider text-white/40">{camp.template_type.replace('_', ' ')}</span>
+                                                    </div>
+                                                    <h3 className="text-sm font-semibold text-white">{camp.subject}</h3>
+                                                    <p className="text-[10px] text-white/35">Created {new Date(camp.created_at).toLocaleString()}</p>
                                                 </div>
-                                                <h3 className="text-sm font-bold text-white">{camp.subject}</h3>
-                                                <p className="text-[10px] text-zinc-500">Created: {new Date(camp.created_at).toLocaleString()}</p>
+                                                <div className="flex gap-2">
+                                                    {(camp.status === 'queued' || camp.status === 'sending') && (
+                                                        <button onClick={() => handlePauseCampaign(camp.id)} className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/25 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/15"><Pause className="h-3 w-3" /> Pause</button>
+                                                    )}
+                                                    {(camp.status === 'draft' || camp.status === 'paused') && (
+                                                        <button onClick={() => handleStartCampaign(camp.id)} className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/25 bg-sky-300/10 px-3 py-1.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15"><Play className="h-3 w-3" /> Start</button>
+                                                    )}
+                                                    {camp.status !== 'draft' && (
+                                                        <button onClick={() => { setMonitoringCampaignId(camp.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:text-white"><Radio className="h-3 w-3" /> Monitor</button>
+                                                    )}
+                                                </div>
                                             </div>
-
-                                            <div className="flex space-x-2 font-mono text-xs">
-                                                {(camp.status === 'queued' || camp.status === 'sending') && (
-                                                    <button
-                                                        onClick={() => handlePauseCampaign(camp.id)}
-                                                        className="px-3.5 py-1.5 border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 text-amber-400 rounded-md transition-colors"
-                                                    >
-                                                        PAUSE
-                                                    </button>
-                                                )}
-
-                                                {(camp.status === 'draft' || camp.status === 'paused') && (
-                                                    <button
-                                                        onClick={() => handleStartCampaign(camp.id)}
-                                                        className="px-3.5 py-1.5 border border-cyan-400/30 bg-cyan-400/5 hover:bg-cyan-400/10 text-cyan-400 rounded-md transition-colors"
-                                                    >
-                                                        START BROADCAST
-                                                    </button>
-                                                )}
-
-                                                {camp.status !== 'draft' && (
-                                                    <button
-                                                        onClick={() => {
-                                                            setMonitoringCampaignId(camp.id);
-                                                            // Scroll top to see progress tracker
-                                                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                        }}
-                                                        className="px-3.5 py-1.5 border border-zinc-700 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 rounded-md transition-colors"
-                                                    >
-                                                        MONITOR
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))
-                                )}
-                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Side Help panel */}
-                        <div className="space-y-6">
-                            <div className="border border-white/5 bg-zinc-950/40 backdrop-blur-md rounded-2xl p-6 font-mono text-xs">
-                                <h3 className="font-bold text-zinc-300 uppercase mb-4 border-b border-white/5 pb-2">Batch Engine Logic</h3>
-                                <ul className="space-y-3 text-zinc-400 leading-relaxed list-disc pl-4">
-                                    <li>Emails are processed in throttled batches of <strong>10</strong> by Vercel Cron.</li>
-                                    <li>Row-locking query uses <code className="text-cyan-300">SKIP LOCKED</code> to prevent multiple parallel instances from double-sending.</li>
-                                    <li>Emails are dispatched <strong>outside</strong> DB transactions to protect Postgres pool connection limits.</li>
-                                    <li>Signed tokens are generated per email for suppression tracking, preventing raw email exposure.</li>
-                                </ul>
-                            </div>
+                        <div className="liquid-glass rounded-lg p-6">
+                            <Eyebrow>Delivery engine</Eyebrow>
+                            <ul className="mt-4 space-y-3 text-xs leading-relaxed text-white/55">
+                                <li className="flex gap-2"><span className="text-sky-300">·</span> Emails go out in throttled batches of <strong className="text-white">10</strong>, driven every 10 min by a Cloudflare cron.</li>
+                                <li className="flex gap-2"><span className="text-sky-300">·</span> Queue rows lock with <code className="text-sky-200">SKIP LOCKED</code> so parallel workers never double-send.</li>
+                                <li className="flex gap-2"><span className="text-sky-300">·</span> SMTP sends happen outside DB transactions to protect the connection pool.</li>
+                                <li className="flex gap-2"><span className="text-sky-300">·</span> Each email carries a signed unsubscribe token — no raw email is ever exposed.</li>
+                            </ul>
+                        </div>
+                    </div>
+                )}
+
+                {/* CADENZ — honest not-yet-connected module */}
+                {activeTab === 'cadenz' && (
+                    <div className="space-y-5">
+                        <div className="liquid-glass-strong rounded-lg p-8 text-center">
+                            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100"><Smartphone className="h-6 w-6" /></div>
+                            <h2 className="font-display text-2xl font-semibold text-white">CADENZ telemetry</h2>
+                            <p className="mx-auto mt-2 max-w-md text-sm text-white/55">
+                                Not connected yet. This panel stays empty on purpose — no placeholder numbers. It lights up once the mobile app reports events.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                            {([
+                                { title: 'Active users', desc: 'DAU / MAU', Icon: Users },
+                                { title: 'Installs & versions', desc: 'adoption per release', Icon: Smartphone },
+                                { title: 'Stability', desc: 'crash-free sessions', Icon: AlertTriangle },
+                            ] as { title: string; desc: string; Icon: typeof Users }[]).map(({ title, desc, Icon }) => (
+                                <div key={title} className="liquid-glass-soft rounded-lg p-5 opacity-70">
+                                    <Icon className="h-5 w-5 text-sky-200/50" />
+                                    <p className="mt-3 text-sm font-semibold text-white">{title}</p>
+                                    <p className="mt-1 text-xs text-white/40">{desc}</p>
+                                    <p className="mt-3 text-[10px] uppercase tracking-wider text-white/30">Awaiting app integration</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="liquid-glass rounded-lg p-6">
+                            <Eyebrow>Integration path</Eyebrow>
+                            <p className="mt-3 text-xs leading-relaxed text-white/55">
+                                CADENZ already runs on Supabase + CloudFront. To surface metrics here, the app writes events to a Supabase table (e.g. <code className="text-sky-200">cadenz_events</code>); this dashboard reads aggregates from a <code className="text-sky-200">/api/founder/cadenz</code> route. Until that emits real rows, nothing is shown.
+                            </p>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* MODALS */}
-            
-            {/* 1. Add Subscriber Modal */}
+            {/* ── Modals ── */}
             {isAddSubOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
-                    <div className="w-full max-w-md p-6 border border-white/10 rounded-2xl bg-zinc-950 font-mono">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-sm font-bold text-white">ADD NEW SUBSCRIBER</h3>
-                            <button onClick={() => setIsAddSubOpen(false)} className="text-zinc-500 hover:text-white text-sm">CLOSE</button>
-                        </div>
-                        <form onSubmit={handleAddSubscriber} className="space-y-4 text-xs">
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={newSub.name}
-                                    onChange={(e) => setNewSub({ ...newSub, name: e.target.value })}
-                                    className="w-full px-4 py-2 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Email Address</label>
-                                <input
-                                    type="email"
-                                    required
-                                    value={newSub.email}
-                                    onChange={(e) => setNewSub({ ...newSub, email: e.target.value })}
-                                    className="w-full px-4 py-2 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={subActionLoading}
-                                className="w-full py-2 bg-cyan-400 hover:bg-cyan-300 text-black font-bold uppercase rounded-lg transition-colors disabled:opacity-50"
-                            >
-                                {subActionLoading ? 'SUBMITTING...' : 'ADD SUBSCRIBER'}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+                <ModalShell title="Add subscriber" onClose={() => setIsAddSubOpen(false)}>
+                    <form onSubmit={handleAddSubscriber} className="space-y-4">
+                        <Field label="Name"><input type="text" required value={newSub.name} onChange={(e) => setNewSub({ ...newSub, name: e.target.value })} className={inputClass} /></Field>
+                        <Field label="Email address"><input type="email" required value={newSub.email} onChange={(e) => setNewSub({ ...newSub, email: e.target.value })} className={inputClass} /></Field>
+                        <SubmitButton loading={subActionLoading} label="Add subscriber" />
+                    </form>
+                </ModalShell>
             )}
 
-            {/* 2. Edit Subscriber Modal */}
             {isEditSubOpen && editingSub && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
-                    <div className="w-full max-w-md p-6 border border-white/10 rounded-2xl bg-zinc-950 font-mono">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-sm font-bold text-white">EDIT SUBSCRIBER DETAILS</h3>
-                            <button onClick={() => { setIsEditSubOpen(false); setEditingSub(null); }} className="text-zinc-500 hover:text-white text-sm">CLOSE</button>
+                <ModalShell title="Edit subscriber" onClose={() => { setIsEditSubOpen(false); setEditingSub(null); }}>
+                    <form onSubmit={handleEditSubscriber} className="space-y-4">
+                        <Field label="Name"><input type="text" required value={editingSub.name} onChange={(e) => setEditingSub({ ...editingSub, name: e.target.value })} className={inputClass} /></Field>
+                        <Field label="Email address"><input type="email" required value={editingSub.email} onChange={(e) => setEditingSub({ ...editingSub, email: e.target.value })} className={inputClass} /></Field>
+                        <Field label="Status">
+                            <select value={editingSub.status} onChange={(e) => setEditingSub({ ...editingSub, status: e.target.value })} className={inputClass}>
+                                <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
+                                <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
+                            </select>
+                        </Field>
+                        <SubmitButton loading={subActionLoading} label="Save changes" />
+                    </form>
+                </ModalShell>
+            )}
+
+            {isCreateCampaignOpen && (
+                <ModalShell title="Create broadcast" wide onClose={() => setIsCreateCampaignOpen(false)}>
+                    <form onSubmit={handleCreateCampaign} className="space-y-4">
+                        <Field label="Subject line"><input type="text" required placeholder="e.g. Welcome to the Inner Circle" value={newCampaign.subject} onChange={(e) => setNewCampaign({ ...newCampaign, subject: e.target.value })} className={inputClass} /></Field>
+                        <Field label="Template">
+                            <select value={newCampaign.template_type} onChange={(e) => setNewCampaign({ ...newCampaign, template_type: e.target.value })} className={inputClass}>
+                                <option value="inner_circle" className="bg-[#0a1b27]">Inner Circle (standard text)</option>
+                                <option value="beat_promo" className="bg-[#0a1b27]">Beat Promo (product feature)</option>
+                                <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
+                            </select>
+                        </Field>
+                        <Field label="Message body"><textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} /></Field>
+                        <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
+                    </form>
+                </ModalShell>
+            )}
+
+            {/* ── Confirm dialog ── */}
+            {confirmState && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4" onClick={() => setConfirmState(null)}>
+                    <div className="liquid-glass-strong w-full max-w-sm rounded-lg p-6" onClick={(e) => e.stopPropagation()}>
+                        <div className="mb-4 flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-amber-500/25 bg-amber-500/10 text-amber-300"><AlertTriangle className="h-4 w-4" /></div>
+                            <h3 className="font-display text-base font-semibold text-white">Please confirm</h3>
                         </div>
-                        <form onSubmit={handleEditSubscriber} className="space-y-4 text-xs">
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Name</label>
-                                <input
-                                    type="text"
-                                    required
-                                    value={editingSub.name}
-                                    onChange={(e) => setEditingSub({ ...editingSub, name: e.target.value })}
-                                    className="w-full px-4 py-2 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Email Address</label>
-                                <input
-                                    type="email"
-                                    required
-                                    value={editingSub.email}
-                                    onChange={(e) => setEditingSub({ ...editingSub, email: e.target.value })}
-                                    className="w-full px-4 py-2 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Status</label>
-                                <select
-                                    value={editingSub.status}
-                                    onChange={(e) => setEditingSub({ ...editingSub, status: e.target.value })}
-                                    className="w-full px-4 py-2 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400"
-                                >
-                                    <option value="subscribed">Subscribed</option>
-                                    <option value="unsubscribed">Unsubscribed</option>
-                                </select>
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={subActionLoading}
-                                className="w-full py-2 bg-cyan-400 hover:bg-cyan-300 text-black font-bold uppercase rounded-lg transition-colors disabled:opacity-50"
-                            >
-                                {subActionLoading ? 'SAVING...' : 'SAVE CHANGES'}
-                            </button>
-                        </form>
+                        <p className="text-sm leading-relaxed text-white/60">{confirmState.message}</p>
+                        <div className="mt-6 flex justify-end gap-2">
+                            <button onClick={() => setConfirmState(null)} className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white">Cancel</button>
+                            <button onClick={() => { confirmState.onConfirm(); setConfirmState(null); }} className="rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">Confirm</button>
+                        </div>
                     </div>
                 </div>
             )}
 
-            {/* 3. Create Campaign Modal */}
-            {isCreateCampaignOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
-                    <div className="w-full max-w-2xl p-6 border border-white/10 rounded-2xl bg-zinc-950 font-mono">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-sm font-bold text-cyan-400">CREATE NEWSLETTER BROADCAST</h3>
-                            <button onClick={() => setIsCreateCampaignOpen(false)} className="text-zinc-500 hover:text-white text-sm">CLOSE</button>
-                        </div>
-                        <form onSubmit={handleCreateCampaign} className="space-y-4 text-xs">
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Subject Line</label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="e.g. Welcome to the Inner Circle"
-                                    value={newCampaign.subject}
-                                    onChange={(e) => setNewCampaign({ ...newCampaign, subject: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-zinc-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400 text-sm"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Email Template Type</label>
-                                <select
-                                    value={newCampaign.template_type}
-                                    onChange={(e) => setNewCampaign({ ...newCampaign, template_type: e.target.value })}
-                                    className="w-full px-4 py-2.5 bg-zinc-900 border border-white/10 rounded-lg text-zinc-300 focus:outline-none focus:border-cyan-400 text-sm"
-                                >
-                                    <option value="inner_circle">Inner Circle (Standard Text Layout)</option>
-                                    <option value="beat_promo">Beat Promo (Product Feature Layout)</option>
-                                    <option value="cadenz_update">CADENZ Update (Tech R&D Layout)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-zinc-400 uppercase mb-1">Message Body Content</label>
-                                <textarea
-                                    rows={8}
-                                    required
-                                    placeholder="Write your email body content here..."
-                                    value={newCampaign.body_content}
-                                    onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })}
-                                    className="w-full p-4 bg-zinc-900 border border-white/10 rounded-lg text-zinc-200 focus:outline-none focus:border-cyan-400 font-mono leading-relaxed"
-                                />
-                            </div>
-                            <div className="flex justify-end pt-2">
-                                <button
-                                    type="submit"
-                                    disabled={campaignActionLoading}
-                                    className="px-6 py-3 bg-cyan-400 hover:bg-cyan-300 text-black font-bold uppercase rounded-lg transition-colors disabled:opacity-50 text-sm tracking-wider"
-                                >
-                                    {campaignActionLoading ? 'CREATING...' : 'CREATE CAMPAIGN'}
-                                </button>
-                            </div>
-                        </form>
+            {/* ── Toast ── */}
+            {toast && (
+                <div className="fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 px-4">
+                    <div className={`flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm font-medium backdrop-blur-xl ${toast.type === 'success' ? 'border-emerald-500/25 bg-emerald-500/15 text-emerald-200' : 'border-rose-500/25 bg-rose-500/15 text-rose-200'}`}>
+                        {toast.type === 'success' ? <CheckCircle2 className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
+                        {toast.message}
                     </div>
                 </div>
             )}
         </main>
+    );
+}
+
+// ── Modal primitives ───────────────────────────────────────────────────
+const inputClass = 'w-full rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white outline-none transition focus:border-sky-300/50';
+
+function ModalShell({ title, children, onClose, wide }: { title: string; children: React.ReactNode; onClose: () => void; wide?: boolean }) {
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4" onClick={onClose}>
+            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+                className={`liquid-glass-strong w-full rounded-lg p-6 ${wide ? 'max-w-2xl' : 'max-w-md'}`} onClick={(e) => e.stopPropagation()}>
+                <div className="mb-5 flex items-center justify-between">
+                    <h3 className="font-display text-lg font-semibold text-white">{title}</h3>
+                    <button onClick={onClose} className="text-white/40 transition hover:text-white"><X className="h-4 w-4" /></button>
+                </div>
+                {children}
+            </motion.div>
+        </div>
+    );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+    return (
+        <div>
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-white/45">{label}</label>
+            {children}
+        </div>
+    );
+}
+
+function SubmitButton({ loading, label }: { loading: boolean; label: string }) {
+    return (
+        <button type="submit" disabled={loading}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white bg-white py-2.5 text-sm font-semibold text-[#030405] transition hover:bg-white/90 disabled:opacity-50">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            {loading ? 'Working…' : label}
+        </button>
     );
 }
