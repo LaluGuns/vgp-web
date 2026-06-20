@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import { motion } from 'framer-motion';
 import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
@@ -13,7 +13,23 @@ import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 // ── Types ──────────────────────────────────────────────────────────────
 interface Stats { total: number; subscribed: number; unsubscribed: number; new24h: number; }
 interface GrowthPoint { date: string; total: number; new: number; }
-interface Subscriber { id: number; name: string; email: string; status: string; created_at: string; tags?: string[]; }
+interface Subscriber {
+    id: number;
+    name: string;
+    email: string;
+    status: string;
+    created_at: string;
+    tags?: string[];
+    first_name?: string;
+    last_name?: string;
+    account_type?: string;
+    username?: string;
+    user_profile?: string;
+    location?: string;
+    product_type?: string;
+    license_name?: string;
+    product_title?: string;
+}
 interface Campaign {
     id: number;
     subject: string;
@@ -682,6 +698,7 @@ export default function FounderDashboardClient() {
     const [subsLoading, setSubsLoading] = useState(false);
     const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'created_at', direction: 'desc' });
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [expandedSubId, setExpandedSubId] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [filteredCount, setFilteredCount] = useState(0);
     const [pageSize, setPageSize] = useState(50);
@@ -700,7 +717,22 @@ export default function FounderDashboardClient() {
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [importLoading, setImportLoading] = useState(false);
     const [importCategory, setImportCategory] = useState('');
-    const [importPreviewData, setImportPreviewData] = useState<{name: string; email: string; tags: string[]; quality: 'valid' | 'warning' | 'invalid'; reason: string}[]>([]);
+    const [importPreviewData, setImportPreviewData] = useState<{
+        name: string;
+        email: string;
+        tags: string[];
+        quality: 'valid' | 'warning' | 'invalid';
+        reason: string;
+        firstName?: string;
+        lastName?: string;
+        accountType?: string;
+        username?: string;
+        userProfile?: string;
+        location?: string;
+        productType?: string;
+        licenseName?: string;
+        productTitle?: string;
+    }[]>([]);
     const [importStep, setImportStep] = useState<1 | 2>(1);
     const [excludeWarnings, setExcludeWarnings] = useState(false);
     const [audienceSubTab, setAudienceSubTab] = useState<string>('all');
@@ -723,12 +755,27 @@ export default function FounderDashboardClient() {
     const [seoConnected, setSeoConnected] = useState<boolean | null>(null);
     const [seoClientEmail, setSeoClientEmail] = useState<string | null>(null);
 
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [toast, setToast] = useState<{
+        message: string;
+        type: 'success' | 'error';
+        action?: { label: string; onClick: () => void | Promise<void> };
+    } | null>(null);
     const [confirmState, setConfirmState] = useState<{ message: string; onConfirm: () => void } | null>(null);
 
-    const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
-        setToast({ message, type });
-        setTimeout(() => setToast(null), 4000);
+    const showToast = useCallback((
+        message: string,
+        type: 'success' | 'error' = 'success',
+        action?: { label: string; onClick: () => void | Promise<void> },
+        duration = 4000
+    ) => {
+        setToast({ message, type, action });
+        const timer = setTimeout(() => {
+            setToast(prev => {
+                if (prev?.message === message) return null;
+                return prev;
+            });
+        }, duration);
+        return timer;
     }, []);
     const askConfirm = (message: string, onConfirm: () => void) => setConfirmState({ message, onConfirm });
 
@@ -1087,6 +1134,7 @@ export default function FounderDashboardClient() {
                 let productTitleIdx = -1;
                 let accountTypeIdx = -1;
                 let usernameIdx = -1;
+                let userProfileIdx = -1;
 
                 if (hasHeader && parsedLines.length > 0) {
                     const headers = parsedLines[0].map(h => h.trim().replace(/^["']|["']$/g, '').toLowerCase());
@@ -1105,6 +1153,7 @@ export default function FounderDashboardClient() {
                     productTitleIdx = headers.findIndex(h => h === 'product title' || h === 'product_title' || h === 'product');
                     accountTypeIdx = headers.findIndex(h => h === 'account type' || h === 'account_type');
                     usernameIdx = headers.findIndex(h => h === 'user username' || h === 'user_username' || h === 'username' || h.includes('username'));
+                    userProfileIdx = headers.findIndex(h => h === 'user profile' || h === 'user_profile' || h === 'profile');
                 }
 
                 const previewRows: typeof importPreviewData = [];
@@ -1116,48 +1165,83 @@ export default function FounderDashboardClient() {
                     let name = '';
                     let email = '';
                     let tags: string[] = [];
+                    let firstName = '';
+                    let lastName = '';
+                    let accountType = '';
+                    let username = '';
+                    let userProfile = '';
+                    let location = '';
+                    let productType = '';
+                    let licenseName = '';
+                    let productTitle = '';
 
                     if (hasHeader && (emailIdx !== -1 || nameIdx !== -1)) {
                         if (emailIdx !== -1) email = cleanCols[emailIdx] || '';
-                        if (nameIdx !== -1) name = cleanCols[nameIdx] || '';
+                        if (nameIdx !== -1) {
+                            name = cleanCols[nameIdx] || '';
+                            firstName = name;
+                        }
                         if (lastNameIdx !== -1 && cleanCols[lastNameIdx]) {
-                            name = name ? `${name} ${cleanCols[lastNameIdx]}` : cleanCols[lastNameIdx];
+                            lastName = cleanCols[lastNameIdx] || '';
+                            name = name ? `${name} ${lastName}` : lastName;
                         }
                         if (tagsIdx !== -1 && cleanCols[tagsIdx]) {
                             tags = cleanCols[tagsIdx].split(/[;|]/).map(t => t.trim()).filter(Boolean);
                         }
 
-                        // Extract metadata columns as tags
+                        if (accountTypeIdx !== -1 && cleanCols[accountTypeIdx]) {
+                            accountType = cleanCols[accountTypeIdx].trim();
+                        }
+                        if (usernameIdx !== -1 && cleanCols[usernameIdx]) {
+                            username = cleanCols[usernameIdx].trim();
+                        }
+                        if (userProfileIdx !== -1 && cleanCols[userProfileIdx]) {
+                            userProfile = cleanCols[userProfileIdx].trim();
+                        }
                         if (locationIdx !== -1 && cleanCols[locationIdx]) {
-                            const val = cleanCols[locationIdx].trim();
+                            location = cleanCols[locationIdx].trim();
+                        }
+                        if (productTypeIdx !== -1 && cleanCols[productTypeIdx]) {
+                            productType = cleanCols[productTypeIdx].trim();
+                        }
+                        if (licenseNameIdx !== -1 && cleanCols[licenseNameIdx]) {
+                            licenseName = cleanCols[licenseNameIdx].trim();
+                        }
+                        if (productTitleIdx !== -1 && cleanCols[productTitleIdx]) {
+                            productTitle = cleanCols[productTitleIdx].trim();
+                        }
+
+                        // Extract metadata columns as tags (for backwards compatibility/easy segmentation)
+                        if (location) {
+                            const val = location;
                             if (val && val.toLowerCase() !== 'unknown' && val.toLowerCase() !== 'null') {
                                 const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
                                 if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
                             }
                         }
-                        if (productTypeIdx !== -1 && cleanCols[productTypeIdx]) {
-                            const val = cleanCols[productTypeIdx].trim();
+                        if (productType) {
+                            const val = productType;
                             if (val) {
                                 const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
                                 if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
                             }
                         }
-                        if (licenseNameIdx !== -1 && cleanCols[licenseNameIdx]) {
-                            const val = cleanCols[licenseNameIdx].trim();
+                        if (licenseName) {
+                            const val = licenseName;
                             if (val) {
                                 const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
                                 if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
                             }
                         }
-                        if (productTitleIdx !== -1 && cleanCols[productTitleIdx]) {
-                            const val = cleanCols[productTitleIdx].trim();
+                        if (productTitle) {
+                            const val = productTitle;
                             if (val) {
                                 const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
                                 if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
                             }
                         }
-                        if (accountTypeIdx !== -1 && cleanCols[accountTypeIdx]) {
-                            const val = cleanCols[accountTypeIdx].trim();
+                        if (accountType) {
+                            const val = accountType;
                             if (val && val.toUpperCase() !== 'GUEST' && val.toUpperCase() !== 'ADMIN' && val.toUpperCase() !== 'PRODUCER') {
                                 const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
                                 if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
@@ -1166,23 +1250,20 @@ export default function FounderDashboardClient() {
 
                         // Fallback username check (using header index to avoid locations/products)
                         if (!name.trim()) {
-                            if (usernameIdx !== -1 && cleanCols[usernameIdx]) {
-                                const val = cleanCols[usernameIdx].trim();
-                                if (val && !val.toLowerCase().includes('http://') && !val.toLowerCase().includes('https://')) {
-                                    name = val;
+                            if (username) {
+                                if (!username.toLowerCase().includes('http://') && !username.toLowerCase().includes('https://')) {
+                                    name = username;
                                 }
                             }
-                            // If still empty, check the accountTypeIdx column (Column D) because Voloco shifts username here when name is empty
-                            if (!name.trim() && accountTypeIdx !== -1 && cleanCols[accountTypeIdx]) {
-                                const val = cleanCols[accountTypeIdx].trim();
-                                if (val && 
-                                    !val.toLowerCase().includes('http://') && 
-                                    !val.toLowerCase().includes('https://') &&
-                                    val.toUpperCase() !== 'GUEST' &&
-                                    val.toUpperCase() !== 'ADMIN' &&
-                                    val.toUpperCase() !== 'PRODUCER'
+                            // If still empty, check the accountType column because Voloco shifts username here when name is empty
+                            if (!name.trim() && accountType) {
+                                if (!accountType.toLowerCase().includes('http://') && 
+                                    !accountType.toLowerCase().includes('https://') &&
+                                    accountType.toUpperCase() !== 'GUEST' &&
+                                    accountType.toUpperCase() !== 'ADMIN' &&
+                                    accountType.toUpperCase() !== 'PRODUCER'
                                 ) {
-                                    name = val;
+                                    name = accountType;
                                 }
                             }
                         }
@@ -1240,7 +1321,16 @@ export default function FounderDashboardClient() {
                         email: normalizedEmail,
                         tags,
                         quality,
-                        reason
+                        reason,
+                        firstName,
+                        lastName,
+                        accountType,
+                        username,
+                        userProfile,
+                        location,
+                        productType,
+                        licenseName,
+                        productTitle
                     });
                 }
 
@@ -1278,7 +1368,22 @@ export default function FounderDashboardClient() {
             const res = await fetch('/api/founder/subscribers/import', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subscribers: rowsToImport.map(r => ({ name: r.name, email: r.email, tags: r.tags })) }),
+                body: JSON.stringify({
+                    subscribers: rowsToImport.map(r => ({
+                        name: r.name,
+                        email: r.email,
+                        tags: r.tags,
+                        first_name: r.firstName,
+                        last_name: r.lastName,
+                        account_type: r.accountType,
+                        username: r.username,
+                        user_profile: r.userProfile,
+                        location: r.location,
+                        product_type: r.productType,
+                        license_name: r.licenseName,
+                        product_title: r.productTitle
+                    }))
+                }),
             });
 
             if (res.ok) {
@@ -1312,17 +1417,57 @@ export default function FounderDashboardClient() {
         });
     };
 
+    const handleUndoDelete = async (batchId: string) => {
+        try {
+            const res = await fetch('/api/founder/subscribers/restore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ deleted_batch_id: batchId })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                loadSubscribers();
+                showToast(`Restored ${data.restored_count || ''} subscriber(s) successfully!`);
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Failed to undo deletion.', 'error');
+            }
+        } catch {
+            showToast('Failed to undo deletion.', 'error');
+        }
+    };
+
     const handleDeleteAll = () => {
-        askConfirm('Are you absolutely sure you want to DELETE ALL subscribers in the database? This action cannot be undone.', async () => {
+        const filterText = tagFilter ? `in category "${tagLabelMap[tagFilter] || tagFilter}"` : 'in the database';
+        askConfirm(`Are you absolutely sure you want to DELETE ALL subscribers ${filterText}?`, async () => {
             setSubActionLoading(true);
             try {
-                const res = await fetch(`/api/founder/subscribers?all=true`, { method: 'DELETE' });
-                if (res.ok) { 
-                    loadSubscribers(); 
-                    showToast('All subscribers deleted.'); 
-                } else { 
-                    const data = await res.json(); 
-                    showToast(data.error || 'Failed to delete all.', 'error'); 
+                const params = new URLSearchParams();
+                params.append('all', 'true');
+                if (searchQuery) params.append('search', searchQuery);
+                if (statusFilter) params.append('status', statusFilter);
+                if (tagFilter) params.append('tag', tagFilter);
+
+                const res = await fetch(`/api/founder/subscribers?${params.toString()}`, { method: 'DELETE' });
+                if (res.ok) {
+                    const data = await res.json();
+                    loadSubscribers();
+                    if (data.deleted_batch_id && data.count > 0) {
+                        showToast(
+                            `Deleted ${data.count} subscriber(s).`,
+                            'success',
+                            {
+                                label: 'Undo',
+                                onClick: () => handleUndoDelete(data.deleted_batch_id)
+                            },
+                            8000
+                        );
+                    } else {
+                        showToast('All matching subscribers deleted.');
+                    }
+                } else {
+                    const data = await res.json();
+                    showToast(data.error || 'Failed to delete all.', 'error');
                 }
             } catch {
                 showToast('Failed to delete all.', 'error');
@@ -1349,10 +1494,29 @@ export default function FounderDashboardClient() {
         askConfirm(`Are you sure you want to completely DELETE ${selectedIds.length} selected subscriber(s)?`, async () => {
             setSubActionLoading(true);
             try {
-                await Promise.all(selectedIds.map(id => fetch(`/api/founder/subscribers?id=${id}&hard=true`, { method: 'DELETE' })));
-                loadSubscribers();
-                showToast(`Deleted ${selectedIds.length} subscriber(s).`);
-                setSelectedIds([]);
+                const idParam = selectedIds.join(',');
+                const res = await fetch(`/api/founder/subscribers?id=${idParam}&hard=true`, { method: 'DELETE' });
+                if (res.ok) {
+                    const data = await res.json();
+                    loadSubscribers();
+                    setSelectedIds([]);
+                    if (data.deleted_batch_id && data.count > 0) {
+                        showToast(
+                            `Deleted ${data.count} subscriber(s).`,
+                            'success',
+                            {
+                                label: 'Undo',
+                                onClick: () => handleUndoDelete(data.deleted_batch_id)
+                            },
+                            8000
+                        );
+                    } else {
+                        showToast(`Deleted ${selectedIds.length} subscriber(s).`);
+                    }
+                } else {
+                    const data = await res.json();
+                    showToast(data.error || 'Failed to delete selected.', 'error');
+                }
             } catch {
                 showToast('Failed to delete selected subscribers.', 'error');
             } finally {
@@ -1923,45 +2087,131 @@ export default function FounderDashboardClient() {
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-white/[0.05]">
-                                                {subscribers.map((sub) => (
-                                                <tr key={sub.id} className={`transition hover:bg-white/[0.02] ${selectedIds.includes(sub.id) ? 'bg-sky-400/5' : ''}`}>
-                                                    <td className="px-6 py-3.5">
-                                                        <input 
-                                                            type="checkbox" 
-                                                            checked={selectedIds.includes(sub.id)}
-                                                            onChange={() => toggleSelect(sub.id)}
-                                                            className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
-                                                        />
-                                                    </td>
-                                                    <td className="px-6 py-3.5 text-white/90">
-                                                        <div>{sub.name}</div>
-                                                        {sub.tags && sub.tags.length > 0 && (
-                                                            <div className="flex flex-wrap gap-1 mt-1">
-                                                                {sub.tags.map(t => (
-                                                                    <span key={t} className="rounded bg-sky-400/10 border border-sky-400/20 px-1.5 py-0.5 text-[9px] font-semibold text-sky-300">
-                                                                        {t}
+                                                {subscribers.map((sub) => {
+                                                    const isExpanded = expandedSubId === sub.id;
+                                                    const hasDetails = !!(
+                                                        sub.first_name || sub.last_name || sub.account_type || 
+                                                        sub.username || sub.user_profile || sub.location || 
+                                                        sub.product_type || sub.license_name || sub.product_title
+                                                    );
+
+                                                    return (
+                                                        <Fragment key={sub.id}>
+                                                            <tr className={`transition hover:bg-white/[0.02] ${selectedIds.includes(sub.id) ? 'bg-sky-400/5' : ''} ${hasDetails ? 'cursor-pointer' : ''}`} onClick={() => {
+                                                                if (hasDetails) {
+                                                                    setExpandedSubId(isExpanded ? null : sub.id);
+                                                                }
+                                                            }}>
+                                                                <td className="px-6 py-3.5" onClick={(e) => e.stopPropagation()}>
+                                                                    <input 
+                                                                        type="checkbox" 
+                                                                        checked={selectedIds.includes(sub.id)}
+                                                                        onChange={() => toggleSelect(sub.id)}
+                                                                        className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
+                                                                    />
+                                                                </td>
+                                                                <td className="px-6 py-3.5 text-white/90">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span>{sub.name}</span>
+                                                                        {hasDetails && (
+                                                                            <span className="text-white/25 hover:text-white/50 transition" title="Click to view detailed data">
+                                                                                <Eye className={`h-3.5 w-3.5 ${isExpanded ? 'text-sky-400' : ''}`} />
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    {sub.tags && sub.tags.length > 0 && (
+                                                                        <div className="flex flex-wrap gap-1 mt-1">
+                                                                            {sub.tags.map(t => (
+                                                                                <span key={t} className="rounded bg-sky-400/10 border border-sky-400/20 px-1.5 py-0.5 text-[9px] font-semibold text-sky-300">
+                                                                                    {t}
+                                                                                </span>
+                                                                            ))}
+                                                                        </div>
+                                                                    )}
+                                                                </td>
+                                                                <td className="px-6 py-3.5 text-white/55">{sub.email}</td>
+                                                                <td className="px-6 py-3.5">
+                                                                    <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${sub.status === 'subscribed' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border border-white/10 bg-white/[0.03] text-white/45'}`}>
+                                                                        {sub.status}
                                                                     </span>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </td>
-                                                    <td className="px-6 py-3.5 text-white/55">{sub.email}</td>
-                                                    <td className="px-6 py-3.5">
-                                                        <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${sub.status === 'subscribed' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border border-white/10 bg-white/[0.03] text-white/45'}`}>
-                                                            {sub.status}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-3.5 text-white/40">{new Date(sub.created_at).toLocaleDateString()}</td>
-                                                    <td className="px-6 py-3.5">
-                                                        <div className="flex items-center justify-end gap-3">
-                                                            <button onClick={() => { setEditingSub(sub); setIsEditSubOpen(true); }} className="inline-flex items-center gap-1 text-xs font-semibold text-sky-200/80 transition hover:text-sky-100"><Pencil className="h-3 w-3" /> Edit</button>
-                                                            {sub.status === 'subscribed' && (
-                                                                <button onClick={() => handleUnsubscribeSubscriber(sub.id)} className="inline-flex items-center gap-1 text-xs font-semibold text-rose-300/80 transition hover:text-rose-300"><Ban className="h-3 w-3" /> Suppress</button>
+                                                                </td>
+                                                                <td className="px-6 py-3.5 text-white/40">{new Date(sub.created_at).toLocaleDateString()}</td>
+                                                                <td className="px-6 py-3.5" onClick={(e) => e.stopPropagation()}>
+                                                                    <div className="flex items-center justify-end gap-3">
+                                                                        <button onClick={() => { setEditingSub(sub); setIsEditSubOpen(true); }} className="inline-flex items-center gap-1 text-xs font-semibold text-sky-200/80 transition hover:text-sky-100"><Pencil className="h-3 w-3" /> Edit</button>
+                                                                        {sub.status === 'subscribed' && (
+                                                                            <button onClick={() => handleUnsubscribeSubscriber(sub.id)} className="inline-flex items-center gap-1 text-xs font-semibold text-rose-300/80 transition hover:text-rose-300"><Ban className="h-3 w-3" /> Suppress</button>
+                                                                        )}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            {isExpanded && hasDetails && (
+                                                                <tr className="bg-[#030712]/40 border-b border-white/[0.04]">
+                                                                    <td colSpan={6} className="px-10 py-5 bg-sky-500/[0.01]">
+                                                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 text-xs">
+                                                                            {sub.first_name && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">First Name</span>
+                                                                                    <span className="text-white/80 font-medium">{sub.first_name}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.last_name && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Last Name</span>
+                                                                                    <span className="text-white/80 font-medium">{sub.last_name}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.username && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Username</span>
+                                                                                    <span className="text-sky-300 font-mono">@{sub.username}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.account_type && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Account Type</span>
+                                                                                    <span className="text-white/80 font-medium">{sub.account_type}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.location && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Location</span>
+                                                                                    <span className="text-white/80 font-medium">{sub.location}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.product_type && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Product Type</span>
+                                                                                    <span className="text-white/80 font-medium">{sub.product_type}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.license_name && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">License</span>
+                                                                                    <span className="text-amber-400 font-semibold">{sub.license_name}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.product_title && (
+                                                                                <div>
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Product Purchased</span>
+                                                                                    <span className="text-sky-200 font-medium italic">"{sub.product_title}"</span>
+                                                                                </div>
+                                                                            )}
+                                                                            {sub.user_profile && (
+                                                                                <div className="col-span-2 sm:col-span-4 border-t border-white/[0.04] pt-3 mt-1">
+                                                                                    <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-1 font-bold">Profile Link</span>
+                                                                                    <a href={sub.user_profile} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 hover:underline font-medium break-all transition">
+                                                                                        {sub.user_profile} <Globe className="h-3 w-3" />
+                                                                                    </a>
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
                                                             )}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                ))}
+                                                        </Fragment>
+                                                    );
+                                                })}
                                             </tbody>
                                         </table>
                                     </div>
@@ -2739,9 +2989,20 @@ export default function FounderDashboardClient() {
             {/* ── Toast ── */}
             {toast && (
                 <div className="fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 px-4">
-                    <div className={`flex items-center gap-2.5 rounded-full border px-4 py-2.5 text-sm font-medium backdrop-blur-xl ${toast.type === 'success' ? 'border-emerald-500/25 bg-emerald-500/15 text-emerald-200' : 'border-rose-500/25 bg-rose-500/15 text-rose-200'}`}>
-                        {toast.type === 'success' ? <CheckCircle2 className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
-                        {toast.message}
+                    <div className={`flex items-center gap-3.5 rounded-full border px-5 py-3 text-sm font-medium backdrop-blur-xl ${toast.type === 'success' ? 'border-sky-500/35 bg-[#0b1b2b]/95 text-sky-200 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'border-rose-500/25 bg-rose-500/15 text-rose-200'}`}>
+                        {toast.type === 'success' ? <CheckCircle2 className="h-4 w-4 text-sky-400" /> : <AlertTriangle className="h-4 w-4" />}
+                        <span>{toast.message}</span>
+                        {toast.action && (
+                            <button
+                                onClick={async () => {
+                                    await toast.action?.onClick();
+                                    setToast(null);
+                                }}
+                                className="ml-2 rounded-full bg-sky-400 px-3.5 py-1 text-xs font-bold text-black transition hover:bg-sky-300 hover:scale-105 active:scale-95"
+                            >
+                                {toast.action.label}
+                            </button>
+                        )}
                     </div>
                 </div>
             )}

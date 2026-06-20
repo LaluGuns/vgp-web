@@ -87,7 +87,9 @@ export async function GET(request: NextRequest) {
         const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'created_at';
 
         let queryText = `
-            SELECT id, name, email, status, unsubscribed_at, created_at, tags 
+            SELECT id, name, email, status, unsubscribed_at, created_at, tags,
+                   first_name, last_name, account_type, username, user_profile, 
+                   location, product_type, license_name, product_title
             FROM vgp_subscribers
             ${baseFilter}
             ORDER BY ${validSortBy} ${sortDir}
@@ -211,38 +213,151 @@ export async function DELETE(request: NextRequest) {
         const all = searchParams.get('all') === 'true';
         const hard = searchParams.get('hard') === 'true';
 
-        if (all) {
-            // Hard delete all subscribers
-            await pool.query('DELETE FROM vgp_subscribers');
-            return NextResponse.json({ success: true, message: 'All subscribers deleted' });
-        }
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
 
-        if (!id) {
-            return NextResponse.json({ error: 'Subscriber ID is required' }, { status: 400 });
-        }
+            // 1. Ensure trash table exists
+            await client.query(`
+                CREATE TABLE IF NOT EXISTS vgp_subscribers_trash (
+                    id SERIAL PRIMARY KEY,
+                    deleted_batch_id VARCHAR(255) NOT NULL,
+                    name VARCHAR(255),
+                    email VARCHAR(255) NOT NULL,
+                    status VARCHAR(50),
+                    tags TEXT[],
+                    created_at TIMESTAMP,
+                    unsubscribed_at TIMESTAMP,
+                    deleted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    first_name VARCHAR(255),
+                    last_name VARCHAR(255),
+                    account_type VARCHAR(100),
+                    username VARCHAR(255),
+                    user_profile VARCHAR(500),
+                    location VARCHAR(255),
+                    product_type VARCHAR(100),
+                    license_name VARCHAR(100),
+                    product_title VARCHAR(255)
+                )
+            `);
 
-        if (hard) {
-            const result = await pool.query('DELETE FROM vgp_subscribers WHERE id = $1 RETURNING id', [id]);
+            // 2. Automatically clean up records older than 24h
+            await client.query("DELETE FROM vgp_subscribers_trash WHERE deleted_at < NOW() - INTERVAL '24 hours'");
+
+            const deletedBatchId = `batch_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+
+            if (all) {
+                // Read filters
+                const search = searchParams.get('search')?.trim().toLowerCase() || '';
+                const status = searchParams.get('status') || '';
+                const tag = searchParams.get('tag')?.trim().toLowerCase() || '';
+
+                let baseFilter = ' WHERE 1=1';
+                const filterParams: any[] = [];
+                let paramCount = 1;
+
+                if (search) {
+                    baseFilter += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
+                    filterParams.push(`%${search}%`);
+                    paramCount++;
+                }
+
+                if (status) {
+                    baseFilter += ` AND status = $${paramCount}`;
+                    filterParams.push(status);
+                    paramCount++;
+                }
+
+                if (tag) {
+                    baseFilter += ` AND $${paramCount} = ANY(tags)`;
+                    filterParams.push(tag);
+                    paramCount++;
+                }
+
+                // Copy to trash
+                const copyRes = await client.query(
+                    `INSERT INTO vgp_subscribers_trash (
+                        deleted_batch_id, name, email, status, tags, created_at, unsubscribed_at,
+                        first_name, last_name, account_type, username, user_profile, 
+                        location, product_type, license_name, product_title
+                     )
+                     SELECT $1, name, email, status, tags, created_at, unsubscribed_at,
+                            first_name, last_name, account_type, username, user_profile, 
+                            location, product_type, license_name, product_title
+                     FROM vgp_subscribers
+                     ${baseFilter}
+                     RETURNING email`,
+                    [deletedBatchId, ...filterParams]
+                );
+                const count = copyRes.rowCount || 0;
+
+                if (count > 0) {
+                    await client.query(`DELETE FROM vgp_subscribers ${baseFilter}`, filterParams);
+                }
+
+                await client.query('COMMIT');
+                return NextResponse.json({ success: true, count, deleted_batch_id: deletedBatchId });
+            }
+
+            if (!id) {
+                await client.query('ROLLBACK');
+                return NextResponse.json({ error: 'Subscriber ID is required' }, { status: 400 });
+            }
+
+            const ids = id.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+            if (ids.length === 0) {
+                await client.query('ROLLBACK');
+                return NextResponse.json({ error: 'Invalid subscriber ID format' }, { status: 400 });
+            }
+
+            if (hard) {
+                // Copy to trash
+                const copyRes = await client.query(
+                    `INSERT INTO vgp_subscribers_trash (
+                        deleted_batch_id, name, email, status, tags, created_at, unsubscribed_at,
+                        first_name, last_name, account_type, username, user_profile, 
+                        location, product_type, license_name, product_title
+                     )
+                     SELECT $1, name, email, status, tags, created_at, unsubscribed_at,
+                            first_name, last_name, account_type, username, user_profile, 
+                            location, product_type, license_name, product_title
+                     FROM vgp_subscribers
+                     WHERE id = ANY($2)
+                     RETURNING email`,
+                    [deletedBatchId, ids]
+                );
+                const count = copyRes.rowCount || 0;
+
+                if (count > 0) {
+                    await client.query('DELETE FROM vgp_subscribers WHERE id = ANY($1)', [ids]);
+                }
+
+                await client.query('COMMIT');
+                return NextResponse.json({ success: true, count, deleted_batch_id: deletedBatchId });
+            }
+
+            // Soft delete: update status to unsubscribed (only supports first ID for single operation)
+            const result = await client.query(
+                `UPDATE vgp_subscribers
+                 SET status = 'unsubscribed', unsubscribed_at = CURRENT_TIMESTAMP
+                 WHERE id = $1
+                 RETURNING id, name, email, status`,
+                [ids[0]]
+            );
+
             if (result.rowCount === 0 || result.rowCount === null) {
+                await client.query('ROLLBACK');
                 return NextResponse.json({ error: 'Subscriber not found' }, { status: 404 });
             }
-            return NextResponse.json({ success: true, message: 'Subscriber hard deleted' });
+
+            await client.query('COMMIT');
+            return NextResponse.json({ success: true, subscriber: result.rows[0] });
+        } catch (txError) {
+            await client.query('ROLLBACK');
+            throw txError;
+        } finally {
+            client.release();
         }
-
-        // Soft delete: update status to unsubscribed
-        const result = await pool.query(
-            `UPDATE vgp_subscribers
-             SET status = 'unsubscribed', unsubscribed_at = CURRENT_TIMESTAMP
-             WHERE id = $1
-             RETURNING id, name, email, status`,
-            [id]
-        );
-
-        if (result.rowCount === 0 || result.rowCount === null) {
-            return NextResponse.json({ error: 'Subscriber not found' }, { status: 404 });
-        }
-
-        return NextResponse.json({ success: true, subscriber: result.rows[0] });
     } catch (error) {
         console.error('Admin Subscribers DELETE Error:', error);
         return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });

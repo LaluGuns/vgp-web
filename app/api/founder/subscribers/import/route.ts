@@ -74,15 +74,41 @@ export async function POST(request: NextRequest) {
 
                 try {
                     await client.query(
-                        `INSERT INTO vgp_subscribers (name, email, tags, status)
-                         VALUES ($1, $2, $3, 'subscribed')
+                        `INSERT INTO vgp_subscribers (
+                            name, email, tags, status,
+                            first_name, last_name, account_type, username, 
+                            user_profile, location, product_type, license_name, product_title
+                         )
+                         VALUES ($1, $2, $3, 'subscribed', $4, $5, $6, $7, $8, $9, $10, $11, $12)
                          ON CONFLICT (email)
                          DO UPDATE SET 
                             name = EXCLUDED.name, 
                             tags = ARRAY(SELECT DISTINCT unnest(COALESCE(vgp_subscribers.tags, '{}') || EXCLUDED.tags)), 
                             status = 'subscribed', 
-                            unsubscribed_at = NULL`,
-                        [cleanName, normalizedEmail, parsedTags]
+                            unsubscribed_at = NULL,
+                            first_name = EXCLUDED.first_name,
+                            last_name = EXCLUDED.last_name,
+                            account_type = EXCLUDED.account_type,
+                            username = EXCLUDED.username,
+                            user_profile = EXCLUDED.user_profile,
+                            location = EXCLUDED.location,
+                            product_type = EXCLUDED.product_type,
+                            license_name = EXCLUDED.license_name,
+                            product_title = EXCLUDED.product_title`,
+                        [
+                            cleanName, 
+                            normalizedEmail, 
+                            parsedTags,
+                            sub.first_name || null,
+                            sub.last_name || null,
+                            sub.account_type || null,
+                            sub.username || null,
+                            sub.user_profile || null,
+                            sub.location || null,
+                            sub.product_type || null,
+                            sub.license_name || null,
+                            sub.product_title || null
+                        ]
                     );
                     successCount++;
                 } catch (dbErr: any) {
