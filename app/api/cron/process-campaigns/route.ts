@@ -3,6 +3,11 @@ import pool, { withTransaction } from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
 
+// Vercel Hobby caps function duration at 10s by default; sending a batch of
+// SMTP emails serially can exceed that. Hobby allows up to 60s when set.
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 // Max emails to process in a single batch run
 const BATCH_SIZE = 10;
 

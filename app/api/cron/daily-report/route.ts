@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
 
+// Allow up to 60s on Vercel Hobby (default 10s): this cron calls PageSpeed and
+// sends an email, which can be slow.
+export const maxDuration = 60;
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
     let reportClaimed = false;
 
