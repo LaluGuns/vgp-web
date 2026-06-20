@@ -1081,9 +1081,15 @@ export default function FounderDashboardClient() {
                 let nameIdx = -1;
                 let lastNameIdx = -1;
                 let tagsIdx = -1;
+                let locationIdx = -1;
+                let productTypeIdx = -1;
+                let licenseNameIdx = -1;
+                let productTitleIdx = -1;
+                let accountTypeIdx = -1;
+                let usernameIdx = -1;
 
                 if (hasHeader && parsedLines.length > 0) {
-                    const headers = parsedLines[0].map(h => h.toLowerCase());
+                    const headers = parsedLines[0].map(h => h.trim().replace(/^["']|["']$/g, '').toLowerCase());
                     emailIdx = headers.findIndex(h => h === 'email' || h === 'email address');
                     if (emailIdx === -1) emailIdx = headers.findIndex(h => h.includes('email'));
                     
@@ -1092,6 +1098,13 @@ export default function FounderDashboardClient() {
                     
                     lastNameIdx = headers.findIndex(h => h === 'last name' || h === 'last_name' || h === 'surname');
                     tagsIdx = headers.findIndex(h => h.includes('tag') || h.includes('group') || h.includes('category') || h.includes('segment'));
+
+                    locationIdx = headers.findIndex(h => h === 'location' || h === 'country' || h === 'city');
+                    productTypeIdx = headers.findIndex(h => h === 'product type' || h === 'product_type');
+                    licenseNameIdx = headers.findIndex(h => h === 'license name' || h === 'license_name' || h === 'license');
+                    productTitleIdx = headers.findIndex(h => h === 'product title' || h === 'product_title' || h === 'product');
+                    accountTypeIdx = headers.findIndex(h => h === 'account type' || h === 'account_type');
+                    usernameIdx = headers.findIndex(h => h === 'user username' || h === 'user_username' || h === 'username' || h.includes('username'));
                 }
 
                 const previewRows: typeof importPreviewData = [];
@@ -1112,6 +1125,66 @@ export default function FounderDashboardClient() {
                         }
                         if (tagsIdx !== -1 && cleanCols[tagsIdx]) {
                             tags = cleanCols[tagsIdx].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                        }
+
+                        // Extract metadata columns as tags
+                        if (locationIdx !== -1 && cleanCols[locationIdx]) {
+                            const val = cleanCols[locationIdx].trim();
+                            if (val && val.toLowerCase() !== 'unknown' && val.toLowerCase() !== 'null') {
+                                const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
+                                if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
+                            }
+                        }
+                        if (productTypeIdx !== -1 && cleanCols[productTypeIdx]) {
+                            const val = cleanCols[productTypeIdx].trim();
+                            if (val) {
+                                const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
+                                if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
+                            }
+                        }
+                        if (licenseNameIdx !== -1 && cleanCols[licenseNameIdx]) {
+                            const val = cleanCols[licenseNameIdx].trim();
+                            if (val) {
+                                const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
+                                if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
+                            }
+                        }
+                        if (productTitleIdx !== -1 && cleanCols[productTitleIdx]) {
+                            const val = cleanCols[productTitleIdx].trim();
+                            if (val) {
+                                const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
+                                if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
+                            }
+                        }
+                        if (accountTypeIdx !== -1 && cleanCols[accountTypeIdx]) {
+                            const val = cleanCols[accountTypeIdx].trim();
+                            if (val && val.toUpperCase() !== 'GUEST' && val.toUpperCase() !== 'ADMIN' && val.toUpperCase() !== 'PRODUCER') {
+                                const cleanTag = val.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 30);
+                                if (cleanTag && !tags.includes(cleanTag)) tags.push(cleanTag);
+                            }
+                        }
+
+                        // Fallback username check (using header index to avoid locations/products)
+                        if (!name.trim()) {
+                            if (usernameIdx !== -1 && cleanCols[usernameIdx]) {
+                                const val = cleanCols[usernameIdx].trim();
+                                if (val && !val.toLowerCase().includes('http://') && !val.toLowerCase().includes('https://')) {
+                                    name = val;
+                                }
+                            }
+                            // If still empty, check the accountTypeIdx column (Column D) because Voloco shifts username here when name is empty
+                            if (!name.trim() && accountTypeIdx !== -1 && cleanCols[accountTypeIdx]) {
+                                const val = cleanCols[accountTypeIdx].trim();
+                                if (val && 
+                                    !val.toLowerCase().includes('http://') && 
+                                    !val.toLowerCase().includes('https://') &&
+                                    val.toUpperCase() !== 'GUEST' &&
+                                    val.toUpperCase() !== 'ADMIN' &&
+                                    val.toUpperCase() !== 'PRODUCER'
+                                ) {
+                                    name = val;
+                                }
+                            }
                         }
                     } else {
                         // fallback logic
@@ -1139,24 +1212,6 @@ export default function FounderDashboardClient() {
                     if (importCategory) {
                         if (!tags.includes(importCategory)) {
                             tags.push(importCategory);
-                        }
-                    }
-
-                    // Fallback username check: if name is empty, scan columns starting from index 3 (Column D) for a suitable string
-                    if (!name.trim()) {
-                        for (let colIdx = 3; colIdx < cleanCols.length; colIdx++) {
-                            const val = (cleanCols[colIdx] || '').trim();
-                            if (val && 
-                                !val.toLowerCase().includes('http://') && 
-                                !val.toLowerCase().includes('https://') && 
-                                val.toUpperCase() !== 'GUEST' && 
-                                val.toUpperCase() !== 'ADMIN' && 
-                                val.toUpperCase() !== 'PRODUCER' &&
-                                val.length < 50
-                            ) {
-                                name = val;
-                                break;
-                            }
                         }
                     }
 
