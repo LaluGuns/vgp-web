@@ -3,6 +3,18 @@ import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
 
+function getDefaultNameFromEmail(email: string): string {
+    if (!email || typeof email !== 'string') return 'Producer';
+    const parts = email.split('@');
+    if (parts.length < 2) return 'Producer';
+    const username = parts[0];
+    const cleanUsername = username.replace(/[._-]/g, ' ').trim();
+    return cleanUsername
+        .split(/\s+/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ') || 'Producer';
+}
+
 // In-memory rate limiting map for newsletter signups (basic protection)
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
@@ -94,8 +106,9 @@ export async function POST(request: NextRequest) {
         }
 
         // 2. Sanitization
-        const rawName = name && typeof name === 'string' ? name : 'Producer';
-        const subscriberName = escapeHtml(rawName.trim().slice(0, 80) || 'Producer');
+        const rawNameInput = name && typeof name === 'string' ? name.trim() : '';
+        const rawName = rawNameInput && rawNameInput !== 'Producer' ? rawNameInput : getDefaultNameFromEmail(normalizedEmail);
+        const subscriberName = escapeHtml(rawName.slice(0, 80));
         const subscriberEmail = escapeHtml(normalizedEmail);
 
         const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];

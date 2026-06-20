@@ -65,10 +65,24 @@ const tagLabelMap: Record<string, string> = {
 
 type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
 
-function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string): string {
+function getDefaultNameFromEmail(email: string): string {
+    if (!email || typeof email !== 'string') return 'Producer';
+    const parts = email.split('@');
+    if (parts.length < 2) return 'Producer';
+    const username = parts[0];
+    const cleanUsername = username.replace(/[._-]/g, ' ').trim();
+    return cleanUsername
+        .split(/\s+/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ') || 'Producer';
+}
+
+function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string, email: string = ''): string {
     const title = (subject || 'VGP BROADCAST').toUpperCase();
     const currentYear = new Date().getFullYear();
-    const cleanName = name && name.trim() ? name : 'Producer';
+    const cleanName = name && name.trim() && name !== 'Producer'
+        ? name.trim() 
+        : (email ? getDefaultNameFromEmail(email) : 'Producer');
     let defaultBody = 'Write your email body…';
     if (!bodyContent || bodyContent.trim() === '') {
         if (templateType === 'beat_promo') {
@@ -177,7 +191,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                     <td style="padding: 30px 25px; background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.04), transparent 75%);">
                         <div style="text-align: center; margin-bottom: 25px;">
                             <div style="margin-bottom: 12px;">
-                                <img src="/branding/logo-tg.png" alt="VGP" style="height: 48px; width: 48px; border-radius: 50%; border: 2px solid rgba(0, 229, 255, 0.2); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); display: inline-block;" />
+                                <img src="/branding/logo-tg.png" alt="VGP" style="height: 48px; width: auto; max-width: 120px; object-fit: contain; display: inline-block;" />
                             </div>
                             <h1 style="color: #ffffff; font-size: 18px; font-weight: 800; letter-spacing: 3px; margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
                             <div style="color: #00E5FF; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">100% Art. 100% Science.</div>
@@ -688,6 +702,7 @@ export default function FounderDashboardClient() {
     const [importCategory, setImportCategory] = useState('');
     const [importPreviewData, setImportPreviewData] = useState<{name: string; email: string; tags: string[]; quality: 'valid' | 'warning' | 'invalid'; reason: string}[]>([]);
     const [importStep, setImportStep] = useState<1 | 2>(1);
+    const [excludeWarnings, setExcludeWarnings] = useState(false);
     const [audienceSubTab, setAudienceSubTab] = useState<string>('all');
     const [campaignActionLoading, setCampaignActionLoading] = useState(false);
 
@@ -1139,16 +1154,16 @@ export default function FounderDashboardClient() {
                         const domain = normalizedEmail.split('@')[1]?.toLowerCase();
                         if (!cleanName || cleanName === 'Producer') {
                             quality = 'warning';
-                            reason = 'Missing name (will default to "Producer")';
+                            reason = `Missing name (will default to "${getDefaultNameFromEmail(normalizedEmail)}")`;
                         }
                         if (domain && suspiciousDomains.includes(domain)) {
                             quality = 'warning';
-                            reason = `Suspicious domain (@${domain})`;
+                            reason = reason ? `${reason}, Suspicious domain (@${domain})` : `Suspicious domain (@${domain})`;
                         }
                     }
 
                     previewRows.push({
-                        name: cleanName || 'Producer',
+                        name: cleanName && cleanName !== 'Producer' ? cleanName : getDefaultNameFromEmail(normalizedEmail),
                         email: normalizedEmail,
                         tags,
                         quality,
@@ -1176,8 +1191,12 @@ export default function FounderDashboardClient() {
     };
 
     const handleConfirmImport = async () => {
-        const validRows = importPreviewData.filter(r => r.quality !== 'invalid');
-        if (validRows.length === 0) {
+        const rowsToImport = importPreviewData.filter(r => {
+            if (r.quality === 'invalid') return false;
+            if (excludeWarnings && r.quality === 'warning') return false;
+            return true;
+        });
+        if (rowsToImport.length === 0) {
             showToast('No valid rows to import.', 'error');
             return;
         }
@@ -1186,7 +1205,7 @@ export default function FounderDashboardClient() {
             const res = await fetch('/api/founder/subscribers/import', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subscribers: validRows.map(r => ({ name: r.name, email: r.email, tags: r.tags })) }),
+                body: JSON.stringify({ subscribers: rowsToImport.map(r => ({ name: r.name, email: r.email, tags: r.tags })) }),
             });
 
             if (res.ok) {
@@ -2350,6 +2369,19 @@ export default function FounderDashboardClient() {
                                     </div>
                                 </div>
 
+                                <div className="flex items-center gap-3 rounded-lg border border-amber-500/10 bg-[#0c0a09]/30 p-3 transition hover:bg-amber-500/[0.04]">
+                                    <input 
+                                        type="checkbox" 
+                                        id="excludeWarnings"
+                                        checked={excludeWarnings}
+                                        onChange={(e) => setExcludeWarnings(e.target.checked)}
+                                        className="h-4 w-4 rounded border-white/20 bg-black text-sky-400 focus:ring-sky-400/50 focus:ring-2 accent-sky-400 cursor-pointer"
+                                    />
+                                    <label htmlFor="excludeWarnings" className="cursor-pointer text-xs font-medium text-white/80 select-none">
+                                        Exclude rows with warnings (e.g. missing name or suspicious domain)
+                                    </label>
+                                </div>
+
                                 <div className="max-h-60 overflow-y-auto border border-white/[0.08] rounded-lg">
                                     <table className="w-full text-left text-xs">
                                         <thead className="bg-white/[0.02] border-b border-white/[0.08] text-white/40 sticky top-0 z-10">
@@ -2362,46 +2394,49 @@ export default function FounderDashboardClient() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-white/[0.04]">
-                                            {importPreviewData.map((row, idx) => (
-                                                <tr key={idx} className="hover:bg-white/[0.01]">
-                                                    <td className="px-4 py-2 font-medium text-white/80">{row.name}</td>
-                                                    <td className="px-4 py-2 text-white/70">{row.email}</td>
-                                                    <td className="px-4 py-2">
-                                                        <div className="flex flex-wrap gap-1">
-                                                            {row.tags.length > 0 ? (
-                                                                row.tags.map(t => (
-                                                                    <span key={t} className="rounded bg-sky-400/10 px-1 py-0.5 text-[10px] text-sky-300 font-semibold">{t}</span>
-                                                                ))
-                                                            ) : (
-                                                                <span className="text-white/20 font-light italic">None</span>
+                                            {importPreviewData.map((row, idx) => {
+                                                const isExcluded = excludeWarnings && row.quality === 'warning';
+                                                return (
+                                                    <tr key={idx} className={`hover:bg-white/[0.01] transition-opacity duration-200 ${isExcluded ? 'opacity-35 line-through decoration-white/10' : ''}`}>
+                                                        <td className="px-4 py-2 font-medium text-white/80">{row.name}</td>
+                                                        <td className="px-4 py-2 text-white/70">{row.email}</td>
+                                                        <td className="px-4 py-2">
+                                                            <div className="flex flex-wrap gap-1">
+                                                                {row.tags.length > 0 ? (
+                                                                    row.tags.map(t => (
+                                                                        <span key={t} className="rounded bg-sky-400/10 px-1 py-0.5 text-[10px] text-sky-300 font-semibold">{t}</span>
+                                                                    ))
+                                                                ) : (
+                                                                    <span className="text-white/20 font-light italic">None</span>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-4 py-2">
+                                                            {row.quality === 'valid' && (
+                                                                <span className="inline-flex items-center gap-1 rounded bg-emerald-400/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                                                                    Valid
+                                                                </span>
                                                             )}
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-4 py-2">
-                                                        {row.quality === 'valid' && (
-                                                            <span className="inline-flex items-center gap-1 rounded bg-emerald-400/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400">
-                                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                                                                Valid
-                                                            </span>
-                                                        )}
-                                                        {row.quality === 'warning' && (
-                                                            <span className="inline-flex items-center gap-1 rounded bg-amber-400/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
-                                                                <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                                                                Warning
-                                                            </span>
-                                                        )}
-                                                        {row.quality === 'invalid' && (
-                                                            <span className="inline-flex items-center gap-1 rounded bg-rose-400/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-400">
-                                                                <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
-                                                                Invalid
-                                                            </span>
-                                                        )}
-                                                    </td>
-                                                    <td className="px-4 py-2 text-white/45 truncate max-w-[150px]" title={row.reason}>
-                                                        {row.reason || <span className="text-white/20">—</span>}
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                                            {row.quality === 'warning' && (
+                                                                <span className="inline-flex items-center gap-1 rounded bg-amber-400/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
+                                                                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                                                                    Warning
+                                                                </span>
+                                                            )}
+                                                            {row.quality === 'invalid' && (
+                                                                <span className="inline-flex items-center gap-1 rounded bg-rose-400/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-400">
+                                                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
+                                                                    Invalid
+                                                                </span>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-4 py-2 text-white/45 truncate max-w-[150px]" title={row.reason}>
+                                                            {row.reason || <span className="text-white/20">—</span>}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
@@ -2414,12 +2449,25 @@ export default function FounderDashboardClient() {
                                         Back
                                     </button>
                                     <button
-                                        disabled={importLoading || importPreviewData.filter(r => r.quality !== 'invalid').length === 0}
+                                        disabled={
+                                            importLoading || 
+                                            importPreviewData.filter(r => {
+                                                if (r.quality === 'invalid') return false;
+                                                if (excludeWarnings && r.quality === 'warning') return false;
+                                                return true;
+                                            }).length === 0
+                                        }
                                         onClick={handleConfirmImport}
                                         className="inline-flex items-center justify-center gap-1.5 rounded-full bg-sky-400 px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-sky-300 disabled:opacity-50"
                                     >
                                         {importLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-                                        Import {importPreviewData.filter(r => r.quality !== 'invalid').length} Subscribers
+                                        Import {
+                                            importPreviewData.filter(r => {
+                                                if (r.quality === 'invalid') return false;
+                                                if (excludeWarnings && r.quality === 'warning') return false;
+                                                return true;
+                                            }).length
+                                        } Subscribers
                                     </button>
                                 </div>
                             </>
@@ -2445,7 +2493,8 @@ export default function FounderDashboardClient() {
                                             newCampaign.subject, 
                                             newCampaign.template_type, 
                                             newCampaign.body_content, 
-                                            subscribers.length > 0 && subscribers[0].name ? subscribers[0].name : 'Producer'
+                                            subscribers.length > 0 && subscribers[0].name ? subscribers[0].name : '',
+                                            subscribers.length > 0 ? subscribers[0].email : ''
                                         )} 
                                         className="w-full h-full border-0 bg-[#050505]" 
                                     />

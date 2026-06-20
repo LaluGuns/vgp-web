@@ -2,6 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool, { withTransaction } from '@/lib/db';
 import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
 
+function getDefaultNameFromEmail(email: string): string {
+    if (!email || typeof email !== 'string') return 'Producer';
+    const parts = email.split('@');
+    if (parts.length < 2) return 'Producer';
+    const username = parts[0];
+    const cleanUsername = username.replace(/[._-]/g, ' ').trim();
+    return cleanUsername
+        .split(/\s+/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ') || 'Producer';
+}
+
 export async function POST(request: NextRequest) {
     try {
         const isAuthorized = await checkFounderSession(request);
@@ -40,7 +52,10 @@ export async function POST(request: NextRequest) {
                     continue;
                 }
 
-                const cleanName = String(name || 'Producer').trim();
+                const rawName = String(name || '').trim();
+                const cleanName = rawName && rawName !== 'Producer'
+                    ? rawName
+                    : getDefaultNameFromEmail(normalizedEmail);
                 const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
                 const parsedTags: string[] = [];
                 for (const t of rawTags) {

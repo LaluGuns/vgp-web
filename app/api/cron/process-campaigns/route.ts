@@ -3,6 +3,18 @@ import pool, { withTransaction } from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
 
+function getDefaultNameFromEmail(email: string): string {
+    if (!email || typeof email !== 'string') return 'Producer';
+    const parts = email.split('@');
+    if (parts.length < 2) return 'Producer';
+    const username = parts[0];
+    const cleanUsername = username.replace(/[._-]/g, ' ').trim();
+    return cleanUsername
+        .split(/\s+/)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ') || 'Producer';
+}
+
 // Vercel Hobby caps function duration at 10s by default; sending a batch of
 // SMTP emails serially can exceed that. Hobby allows up to 60s when set.
 export const maxDuration = 60;
@@ -136,7 +148,7 @@ function getEmailHtml(
                         <!-- Logo Section -->
                         <div style="text-align: center; margin-bottom: 30px;">
                             <div style="margin-bottom: 12px;">
-                                <img src="${baseUrl}/branding/logo-tg.png" alt="VGP" style="height: 48px; width: 48px; border-radius: 50%; border: 2px solid rgba(0, 229, 255, 0.2); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); display: inline-block;" />
+                                <img src="${baseUrl}/branding/logo-tg.png" alt="VGP" style="height: 48px; width: auto; max-width: 120px; object-fit: contain; display: inline-block;" />
                             </div>
                             <h1 style="color: #ffffff; font-size: 18px; font-weight: 800; letter-spacing: 3px; margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
                             <div style="color: #00E5FF; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">100% Art. 100% Science.</div>
@@ -402,7 +414,10 @@ export async function GET(request: NextRequest) {
 
                 const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
 
-                const recipientName = job.name && job.name.trim() ? job.name : 'Producer';
+                const jobNameClean = job.name && job.name.trim() ? job.name.trim() : '';
+                const recipientName = jobNameClean && jobNameClean !== 'Producer'
+                    ? jobNameClean
+                    : getDefaultNameFromEmail(job.email);
                 const bodyTextWithPlaceholders = job.body_content
                     .replace(/\{\{name\}\}/gi, recipientName)
                     .replace(/\[Name\]/gi, recipientName);
