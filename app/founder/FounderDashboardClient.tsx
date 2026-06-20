@@ -69,7 +69,20 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
     const title = (subject || 'VGP BROADCAST').toUpperCase();
     const currentYear = new Date().getFullYear();
     const cleanName = name && name.trim() ? name : 'Producer';
-    const cleanBody = (bodyContent || 'Write your email body…')
+    let defaultBody = 'Write your email body…';
+    if (!bodyContent || bodyContent.trim() === '') {
+        if (templateType === 'beat_promo') {
+            defaultBody = 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.';
+        } else if (templateType === 'cadenz_update') {
+            defaultBody = 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.';
+        } else if (templateType === 'book_reader') {
+            defaultBody = 'The new production guide is ready. No fluff — just real technique and workflow breakdowns straight from the studio.';
+        }
+    } else {
+        defaultBody = bodyContent;
+    }
+
+    const cleanBody = defaultBody
         .replace(/\{\{name\}\}/gi, cleanName)
         .replace(/\[Name\]/gi, cleanName);
 
@@ -1318,7 +1331,7 @@ export default function FounderDashboardClient() {
                 {/* Header */}
                 <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#030405]/70 backdrop-blur-xl">
                     {/* Desktop Header */}
-                    <div className="hidden md:flex mx-auto max-w-7xl items-center justify-between px-6 py-4">
+                    <div className="hidden md:flex w-full items-center justify-between px-6 py-4">
                         <div className="flex items-center gap-4">
                             <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
                             <h1 className="font-display text-lg font-bold tracking-tight text-white flex items-center gap-2">
@@ -1429,7 +1442,7 @@ export default function FounderDashboardClient() {
                     </div>
                 </header>
 
-                <div className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 md:px-8 flex-1">
+                <div className="w-full px-4 pt-8 sm:px-6 md:px-8 flex-1">
                 {/* OVERVIEW */}
                 {activeTab === 'overview' && (
                     <div className="space-y-6">
