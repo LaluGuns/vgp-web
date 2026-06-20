@@ -79,7 +79,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 ${cleanBody}
             </div>
             <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <span style="background-color: #00E5FF; background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     LISTEN & SECURE LICENSE
                 </span>
             </div>
@@ -98,7 +98,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 ${cleanBody}
             </div>
             <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <span style="background-color: #7000FF; background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     READ DEVELOPMENT LOG
                 </span>
             </div>
@@ -117,7 +117,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 ${cleanBody}
             </div>
             <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background-color: #0b0f19; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.5); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                <span style="background-color: #0c1220; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.05); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     ACCESS PRIVATE PORTAL
                 </span>
             </div>
@@ -126,19 +126,26 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
 
     return `
         <div style="background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px 10px; min-height: 100%; box-sizing: border-box;">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #0b0f19; border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #060b13; border: 1px solid rgba(56, 189, 248, 0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); margin-top: 20px;">
+                <!-- Glowing top border -->
                 <tr>
-                    <td style="padding: 30px 25px;">
+                    <td height="4" style="background: linear-gradient(90deg, #00E5FF 0%, #7000FF 100%); line-height: 4px; font-size: 0px;">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="padding: 30px 25px; background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.04), transparent 75%);">
                         <div style="text-align: center; margin-bottom: 25px;">
-                            <h1 style="color: #00E5FF; font-size: 18px; font-weight: 800; letter-spacing: 4px; margin: 0 0 5px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
-                            <div style="color: #64748b; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">Creative Sound Lab & Audio Solutions</div>
+                            <div style="margin-bottom: 12px;">
+                                <img src="/branding/logo-tg.png" alt="VGP" style="height: 48px; width: 48px; border-radius: 50%; border: 2px solid rgba(0, 229, 255, 0.2); box-shadow: 0 0 15px rgba(0, 229, 255, 0.15); display: inline-block;" />
+                            </div>
+                            <h1 style="color: #ffffff; font-size: 18px; font-weight: 800; letter-spacing: 3px; margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
+                            <div style="color: #00E5FF; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">100% Art. 100% Science.</div>
                         </div>
                         
-                        <div style="border-top: 1px solid #1f2937; margin-bottom: 25px; height: 1px;"></div>
+                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-bottom: 25px; height: 1px;"></div>
                         
                         ${mainContentHtml}
                         
-                        <div style="border-top: 1px solid #1f2937; margin-top: 30px; margin-bottom: 20px; height: 1px;"></div>
+                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-top: 30px; margin-bottom: 20px; height: 1px;"></div>
                         
                         <div style="text-align: center; font-size: 10px; color: #475569; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                             © ${currentYear} Virzy Guns Production. All rights reserved.<br>
