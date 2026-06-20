@@ -62,7 +62,11 @@ export async function POST(request: NextRequest) {
                         `INSERT INTO vgp_subscribers (name, email, tags, status)
                          VALUES ($1, $2, $3, 'subscribed')
                          ON CONFLICT (email)
-                         DO UPDATE SET name = EXCLUDED.name, tags = EXCLUDED.tags, status = 'subscribed', unsubscribed_at = NULL`,
+                         DO UPDATE SET 
+                            name = EXCLUDED.name, 
+                            tags = ARRAY(SELECT DISTINCT unnest(COALESCE(vgp_subscribers.tags, '{}') || EXCLUDED.tags)), 
+                            status = 'subscribed', 
+                            unsubscribed_at = NULL`,
                         [cleanName, normalizedEmail, parsedTags]
                     );
                     successCount++;

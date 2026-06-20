@@ -32,7 +32,8 @@ export async function GET(request: NextRequest) {
         const search = searchParams.get('search')?.trim().toLowerCase() || '';
         const status = searchParams.get('status') || ''; // 'subscribed' or 'unsubscribed'
         const tag = searchParams.get('tag')?.trim().toLowerCase() || '';
-        const limit = parseInt(searchParams.get('limit') || '50');
+        const limitParam = searchParams.get('limit');
+        const limit = limitParam === 'all' ? 1000000 : parseInt(limitParam || '50');
         const offset = parseInt(searchParams.get('offset') || '0');
 
         // 1. Get stats
@@ -51,34 +52,41 @@ export async function GET(request: NextRequest) {
             new24h: parseInt(statsRes.rows[0].new_24h || '0')
         };
 
-        // 2. Build list query
-        let queryText = `
-            SELECT id, name, email, status, unsubscribed_at, created_at, tags 
-            FROM vgp_subscribers
-            WHERE 1=1
-        `;
+        // 2. Build filter clause
+        let baseFilter = ' WHERE 1=1';
         const params: any[] = [];
         let paramCount = 1;
 
         if (search) {
-            queryText += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
+            baseFilter += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
             params.push(`%${search}%`);
             paramCount++;
         }
 
         if (status) {
-            queryText += ` AND status = $${paramCount}`;
+            baseFilter += ` AND status = $${paramCount}`;
             params.push(status);
             paramCount++;
         }
 
         if (tag) {
-            queryText += ` AND $${paramCount} = ANY(tags)`;
+            baseFilter += ` AND $${paramCount} = ANY(tags)`;
             params.push(tag);
             paramCount++;
         }
 
-        queryText += ` ORDER BY created_at DESC LIMIT $${paramCount} OFFSET $${paramCount + 1}`;
+        // 3. Get filtered total count
+        const countRes = await pool.query(`SELECT COUNT(*) as count FROM vgp_subscribers ${baseFilter}`, params);
+        const filteredCount = parseInt(countRes.rows[0].count || '0');
+
+        // 4. Build list query with ordering, limit and offset
+        let queryText = `
+            SELECT id, name, email, status, unsubscribed_at, created_at, tags 
+            FROM vgp_subscribers
+            ${baseFilter}
+            ORDER BY created_at DESC
+            LIMIT $${paramCount} OFFSET $${paramCount + 1}
+        `;
         params.push(limit, offset);
 
         const listRes = await pool.query(queryText, params);
@@ -86,6 +94,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             stats,
+            filteredCount,
             subscribers: listRes.rows
         });
     } catch (error) {

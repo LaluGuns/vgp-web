@@ -666,8 +666,11 @@ export default function FounderDashboardClient() {
     const [tagFilter, setTagFilter] = useState('');
     const [predefinedTagFilter, setPredefinedTagFilter] = useState('');
     const [subsLoading, setSubsLoading] = useState(false);
-    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' }>({ key: 'created_at', direction: 'desc' });
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filteredCount, setFilteredCount] = useState(0);
+    const [pageSize, setPageSize] = useState(50);
 
     const [isAddSubOpen, setIsAddSubOpen] = useState(false);
     const [newSub, setNewSub] = useState({ name: '', email: '', tags: [] as string[] });
@@ -727,17 +730,31 @@ export default function FounderDashboardClient() {
     }, []);
 
     // Loaders
-    const loadSubscribers = async () => {
+    const loadSubscribers = async (
+        pageOverride?: number, 
+        sortOverride?: { key: string; direction: 'asc' | 'desc' },
+        pageSizeOverride?: number
+    ) => {
         setSubsLoading(true);
         try {
+            const page = pageOverride !== undefined ? pageOverride : currentPage;
+            const sort = sortOverride || sortConfig || { key: 'created_at', direction: 'desc' };
+            const size = pageSizeOverride !== undefined ? pageSizeOverride : pageSize;
+
             const params = new URLSearchParams();
             if (searchQuery) params.append('search', searchQuery);
             if (statusFilter) params.append('status', statusFilter);
             if (tagFilter) params.append('tag', tagFilter);
+            params.append('limit', String(size));
+            params.append('offset', String((page - 1) * size));
+            params.append('sortBy', sort.key);
+            params.append('sortDir', sort.direction);
+
             const res = await fetch(`/api/founder/subscribers?${params.toString()}`);
             if (res.ok) {
                 const data = await res.json();
-                setSubscribers(data.subscribers);
+                setSubscribers(data.subscribers || []);
+                setFilteredCount(data.filteredCount || 0);
                 if (data.stats) setStats(data.stats);
                 setSelectedIds([]);
             }
@@ -823,7 +840,7 @@ export default function FounderDashboardClient() {
             loadSubscribers();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuthenticated, statusFilter, tagFilter]);
+    }, [isAuthenticated, statusFilter, tagFilter, currentPage, pageSize]);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -952,28 +969,55 @@ export default function FounderDashboardClient() {
         }
     };
 
-    const handleExportCSV = () => {
-        if (subscribers.length === 0) {
+    const handleExportCSV = async () => {
+        if (filteredCount === 0) {
             showToast('No subscribers to export.', 'error');
             return;
         }
-        const headers = ['Name', 'Email', 'Status', 'Registered', 'Tags'];
-        const rows = subscribers.map(sub => [
-            sub.name,
-            sub.email,
-            sub.status,
-            new Date(sub.created_at).toLocaleDateString(),
-            (sub.tags || []).join(';')
-        ]);
-        const csvContent = "\ufeff" + [headers.join(','), ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.setAttribute("href", url);
-        link.setAttribute("download", `vgp_subscribers_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        setSubActionLoading(true);
+        try {
+            const params = new URLSearchParams();
+            if (searchQuery) params.append('search', searchQuery);
+            if (statusFilter) params.append('status', statusFilter);
+            if (tagFilter) params.append('tag', tagFilter);
+            params.append('limit', 'all');
+            if (sortConfig) {
+                params.append('sortBy', sortConfig.key);
+                params.append('sortDir', sortConfig.direction);
+            }
+
+            const res = await fetch(`/api/founder/subscribers?${params.toString()}`);
+            if (!res.ok) {
+                showToast('Failed to fetch data for export.', 'error');
+                return;
+            }
+            const data = await res.json();
+            const allSubs: Subscriber[] = data.subscribers || [];
+
+            const headers = ['Name', 'Email', 'Status', 'Registered', 'Tags'];
+            const rows = allSubs.map(sub => [
+                sub.name,
+                sub.email,
+                sub.status,
+                new Date(sub.created_at).toLocaleDateString(),
+                (sub.tags || []).join(';')
+            ]);
+            const csvContent = "\ufeff" + [headers.join(','), ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `vgp_subscribers_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast(`Exported ${allSubs.length} subscribers successfully!`);
+        } catch (err) {
+            console.error('Failed to export:', err);
+            showToast('Failed to export subscribers.', 'error');
+        } finally {
+            setSubActionLoading(false);
+        }
     };
 
     const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1231,6 +1275,8 @@ export default function FounderDashboardClient() {
             direction = 'asc';
         }
         setSortConfig({ key, direction });
+        setCurrentPage(1);
+        loadSubscribers(1, { key, direction });
     };
 
     const SortIcon = ({ columnKey }: { columnKey: string }) => {
@@ -1614,6 +1660,7 @@ export default function FounderDashboardClient() {
                                     key={key}
                                     onClick={() => {
                                         setAudienceSubTab(key);
+                                        setCurrentPage(1);
                                         if (key === 'all') {
                                             setPredefinedTagFilter('');
                                             setTagFilter('');
@@ -1640,11 +1687,16 @@ export default function FounderDashboardClient() {
                                     <input
                                         type="text" placeholder="Search name or email…" value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                setCurrentPage(1);
+                                                loadSubscribers(1);
+                                            }
+                                        }}
                                         className="w-full rounded-lg border border-white/10 bg-white/[0.03] py-2 pl-9 pr-3 text-sm text-white outline-none transition focus:border-sky-300/50"
                                     />
                                 </div>
-                                <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+                                <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
                                     className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50">
                                     <option value="" className="bg-[#0a1b27]">All statuses</option>
                                     <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
@@ -1656,6 +1708,7 @@ export default function FounderDashboardClient() {
                                         onChange={(e) => {
                                             const val = e.target.value;
                                             setPredefinedTagFilter(val);
+                                            setCurrentPage(1);
                                             if (val !== 'custom') {
                                                 setTagFilter(val);
                                             } else {
@@ -1675,11 +1728,16 @@ export default function FounderDashboardClient() {
                                     <input
                                         type="text" placeholder="Enter tag…" value={tagFilter}
                                         onChange={(e) => setTagFilter(e.target.value)}
-                                        onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                setCurrentPage(1);
+                                                loadSubscribers(1);
+                                            }
+                                        }}
                                         className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
                                     />
                                 )}
-                                <button onClick={loadSubscribers} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
+                                <button onClick={() => { setCurrentPage(1); loadSubscribers(1); }} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
                             </div>
                             <div className="flex gap-2">
                                 <button onClick={handleExportCSV} title="Export current list to CSV"
@@ -1715,51 +1773,28 @@ export default function FounderDashboardClient() {
                                     <Inbox className="mb-3 h-7 w-7 text-white/25" /><p className="text-sm">No subscribers match this query.</p>
                                 </div>
                             ) : (
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left text-sm">
-                                        <thead>
-                                            <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40 select-none">
-                                                <th className="px-6 py-4">
-                                                    <input 
-                                                        type="checkbox" 
-                                                        checked={subscribers.length > 0 && selectedIds.length === subscribers.length}
-                                                        onChange={toggleSelectAll}
-                                                        className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
-                                                    />
-                                                </th>
-                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('name')}>Name <SortIcon columnKey="name" /></th>
-                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('email')}>Email <SortIcon columnKey="email" /></th>
-                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('status')}>Status <SortIcon columnKey="status" /></th>
-                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('created_at')}>Registered <SortIcon columnKey="created_at" /></th>
-                                                <th className="px-6 py-4 text-right font-semibold">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-white/[0.05]">
-                                            {(() => {
-                                                let sortedSubscribers = [...subscribers];
-                                                if (sortConfig !== null) {
-                                                    sortedSubscribers.sort((a, b) => {
-                                                        let aVal = '';
-                                                        let bVal = '';
-                                                        if (sortConfig.key === 'name') {
-                                                            aVal = (a.name || '').toLowerCase();
-                                                            bVal = (b.name || '').toLowerCase();
-                                                        } else if (sortConfig.key === 'email') {
-                                                            aVal = (a.email || '').toLowerCase();
-                                                            bVal = (b.email || '').toLowerCase();
-                                                        } else if (sortConfig.key === 'created_at') {
-                                                            aVal = a.created_at || '';
-                                                            bVal = b.created_at || '';
-                                                        } else if (sortConfig.key === 'status') {
-                                                            aVal = a.status || '';
-                                                            bVal = b.status || '';
-                                                        }
-                                                        if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
-                                                        if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
-                                                        return 0;
-                                                    });
-                                                }
-                                                return sortedSubscribers.map((sub) => (
+                                <>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40 select-none">
+                                                    <th className="px-6 py-4">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            checked={subscribers.length > 0 && selectedIds.length === subscribers.length}
+                                                            onChange={toggleSelectAll}
+                                                            className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
+                                                        />
+                                                    </th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('name')}>Name <SortIcon columnKey="name" /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('email')}>Email <SortIcon columnKey="email" /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('status')}>Status <SortIcon columnKey="status" /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('created_at')}>Registered <SortIcon columnKey="created_at" /></th>
+                                                    <th className="px-6 py-4 text-right font-semibold">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-white/[0.05]">
+                                                {subscribers.map((sub) => (
                                                 <tr key={sub.id} className={`transition hover:bg-white/[0.02] ${selectedIds.includes(sub.id) ? 'bg-sky-400/5' : ''}`}>
                                                     <td className="px-6 py-3.5">
                                                         <input 
@@ -1797,11 +1832,71 @@ export default function FounderDashboardClient() {
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                ));
-                                            })()}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Pagination Controls */}
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-white/[0.07] px-6 py-4 bg-white/[0.01]">
+                                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center gap-4 text-xs text-white/45">
+                                            <span>
+                                                Showing <span className="font-semibold text-white">{filteredCount === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span> to{' '}
+                                                <span className="font-semibold text-white">{Math.min(filteredCount, currentPage * pageSize)}</span> of{' '}
+                                                <span className="font-semibold text-white">{filteredCount}</span> subscribers
+                                            </span>
+                                            <div className="flex items-center gap-1.5 border-l border-white/10 pl-4">
+                                                <span>Show</span>
+                                                <select
+                                                    value={pageSize}
+                                                    onChange={(e) => {
+                                                        const newSize = parseInt(e.target.value);
+                                                        setPageSize(newSize);
+                                                        setCurrentPage(1);
+                                                        loadSubscribers(1, undefined, newSize);
+                                                    }}
+                                                    className="rounded border border-white/10 bg-[#050505] px-1.5 py-0.5 text-xs text-white outline-none focus:border-sky-300/50 cursor-pointer"
+                                                >
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                </select>
+                                                <span>entries</span>
+                                            </div>
+                                        </div>
+                                        {filteredCount > pageSize && (
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    disabled={currentPage === 1 || subsLoading}
+                                                    onClick={() => {
+                                                        const newPage = currentPage - 1;
+                                                        setCurrentPage(newPage);
+                                                        loadSubscribers(newPage);
+                                                    }}
+                                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none"
+                                                >
+                                                    Previous
+                                                </button>
+                                                <div className="text-xs text-white/50 px-1">
+                                                    Page <span className="font-semibold text-white">{currentPage}</span> of{' '}
+                                                    <span className="font-semibold text-white">{Math.ceil(filteredCount / pageSize)}</span>
+                                                </div>
+                                                <button
+                                                    disabled={currentPage >= Math.ceil(filteredCount / pageSize) || subsLoading}
+                                                    onClick={() => {
+                                                        const newPage = currentPage + 1;
+                                                        setCurrentPage(newPage);
+                                                        loadSubscribers(newPage);
+                                                    }}
+                                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/[0.06] disabled:opacity-30 disabled:pointer-events-none"
+                                                >
+                                                    Next
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
