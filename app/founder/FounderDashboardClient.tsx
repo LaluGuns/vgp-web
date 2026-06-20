@@ -6,7 +6,7 @@ import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
     Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
     AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
-    Bell, User, LogOut
+    Bell, User, LogOut, Globe, Eye, Upload
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
@@ -83,7 +83,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Hey ${cleanName},
+                Yo ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -102,7 +102,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Dear ${cleanName},
+                ${cleanName} — quick CADENZ update.
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -110,6 +110,25 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
             <div style="text-align: center; margin: 35px 0 15px 0;">
                 <span style="background-color: #7000FF; background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     READ DEVELOPMENT LOG
+                </span>
+            </div>
+        `;
+    } else if (templateType === 'book_reader') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    VGP LIBRARY
+                </span>
+            </div>
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                What's good ${cleanName},
+            </p>
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                ${cleanBody}
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <span style="background-color: #f59e0b; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                    READ THE GUIDE
                 </span>
             </div>
         `;
@@ -121,7 +140,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Greetings ${cleanName},
+                ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -506,6 +525,89 @@ function HealthPanel({ health, loading, onRefresh }: { health: HealthState | nul
     );
 }
 
+interface SpamAnalysis {
+    score: number;
+    triggers: string[];
+    risk: 'low' | 'medium' | 'high';
+}
+
+function analyzeSpamScore(body: string): SpamAnalysis {
+    const triggers: string[] = [];
+    let score = 0;
+    
+    if (!body || body.trim() === '') {
+        return { score: 0, triggers: [], risk: 'low' };
+    }
+
+    const cleanBody = body.trim();
+
+    // 1. Check ALL CAPS words count (at least 3 words, and more than 30% of words are CAPS)
+    const words = cleanBody.split(/\s+/).filter(w => w.length > 1);
+    if (words.length >= 3) {
+        const capsWords = words.filter(w => /^[A-Z!@#$%^&*()_+={}\[\]|\\:;"'<>,.?/-]+$/.test(w) && /[A-Z]/.test(w));
+        if (capsWords.length / words.length > 0.3) {
+            score += 2;
+            triggers.push('Excessive ALL CAPS words');
+        }
+    }
+
+    // 2. Excessive exclamation marks
+    if (/!!!|!{4,}/.test(cleanBody)) {
+        score += 1.5;
+        triggers.push('Excessive exclamation marks (e.g. "!!!")');
+    }
+
+    // 3. Known spam trigger phrases
+    const spamPhrases = [
+        "free", "buy now", "limited time", "act now", "click here", 
+        "congratulations", "winner", "guaranteed", "no obligation", 
+        "make money", "get paid", "earn cash", "special offer", "risk free"
+    ];
+    let foundPhrasesCount = 0;
+    const bodyLower = cleanBody.toLowerCase();
+    spamPhrases.forEach(phrase => {
+        const regex = new RegExp(`\\b${phrase}\\b`, 'gi');
+        if (regex.test(bodyLower)) {
+            foundPhrasesCount++;
+        }
+    });
+    if (foundPhrasesCount > 0) {
+        score += foundPhrasesCount * 1;
+        const matched = spamPhrases.filter(p => new RegExp(`\\b${p}\\b`, 'gi').test(bodyLower));
+        triggers.push(`Contains spam trigger phrase(s): ${matched.join(', ')}`);
+    }
+
+    // 4. Missing personalization
+    if (!/\{\{\s*name\s*\}\}/i.test(cleanBody) && !/\[\s*Name\s*\]/i.test(cleanBody)) {
+        score += 2;
+        triggers.push('Missing {{name}} or [Name] personalization tag');
+    }
+
+    // 5. Very short body (< 50 chars)
+    if (cleanBody.length < 50) {
+        score += 1;
+        triggers.push('Very short email content (< 50 characters)');
+    }
+
+    // 6. Body contains only links
+    const linkRegex = /https?:\/\/[^\s]+/g;
+    const links = cleanBody.match(linkRegex) || [];
+    const textWithoutLinks = cleanBody.replace(linkRegex, '').replace(/\s+/g, '').trim();
+    if (links.length > 0 && textWithoutLinks.length < 15) {
+        score += 3;
+        triggers.push('Email contains mostly/only links');
+    }
+
+    let risk: 'low' | 'medium' | 'high' = 'low';
+    if (score >= 6) {
+        risk = 'high';
+    } else if (score >= 3) {
+        risk = 'medium';
+    }
+
+    return { score, triggers, risk };
+}
+
 // ════════════════════════════════════════════════════════════════════════
 export default function FounderDashboardClient() {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -565,6 +667,9 @@ export default function FounderDashboardClient() {
     const [previewActive, setPreviewActive] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [importLoading, setImportLoading] = useState(false);
+    const [importPreviewData, setImportPreviewData] = useState<{name: string; email: string; tags: string[]; quality: 'valid' | 'warning' | 'invalid'; reason: string}[]>([]);
+    const [importStep, setImportStep] = useState<1 | 2>(1);
+    const [audienceSubTab, setAudienceSubTab] = useState<string>('all');
     const [campaignActionLoading, setCampaignActionLoading] = useState(false);
 
     const [monitoringCampaignId, setMonitoringCampaignId] = useState<number | null>(null);
@@ -868,10 +973,12 @@ export default function FounderDashboardClient() {
                     setImportLoading(false);
                     return;
                 }
-                const importedSubs = [];
+                const previewRows: typeof importPreviewData = [];
                 const firstLine = lines[0].toLowerCase();
                 const hasHeader = firstLine.includes('email') || firstLine.includes('name');
                 const startIdx = hasHeader ? 1 : 0;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const suspiciousDomains = ['test.com', 'example.com', 'fake.com', 'asdf.com', 'temp-mail.org', 'mailinator.com', 'guerrillamail.com', 'throwaway.email'];
 
                 for (let i = startIdx; i < lines.length; i++) {
                     const line = lines[i];
@@ -892,67 +999,109 @@ export default function FounderDashboardClient() {
                     cols.push(current.trim());
 
                     const cleanCols = cols.map(c => c.replace(/^["']|["']$/g, ''));
-                    if (cleanCols.length > 0 && cleanCols[0]) {
-                        let name = 'Producer';
-                        let email = '';
-                        let tags: string[] = [];
+                    let name = '';
+                    let email = '';
+                    let tags: string[] = [];
 
-                        if (cleanCols.length === 1) {
+                    if (cleanCols.length === 1) {
+                        email = cleanCols[0];
+                    } else if (cleanCols.length >= 2) {
+                        if (cleanCols[1].includes('@')) {
+                            name = cleanCols[0];
+                            email = cleanCols[1];
+                            if (cleanCols.length >= 5) {
+                                tags = cleanCols[4].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                            } else if (cleanCols.length >= 3 && !cleanCols[2].includes('sub')) {
+                                tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                            }
+                        } else if (cleanCols[0].includes('@')) {
                             email = cleanCols[0];
-                        } else if (cleanCols.length >= 2) {
-                            if (cleanCols[1].includes('@')) {
-                                name = cleanCols[0] || 'Producer';
-                                email = cleanCols[1];
-                                if (cleanCols.length >= 5) {
-                                    tags = cleanCols[4].split(/[;|]/).map(t => t.trim()).filter(Boolean);
-                                } else if (cleanCols.length >= 3 && !cleanCols[2].includes('sub')) {
-                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
-                                }
-                            } else if (cleanCols[0].includes('@')) {
-                                email = cleanCols[0];
-                                name = cleanCols[1] || 'Producer';
-                                if (cleanCols.length >= 3) {
-                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
-                                }
+                            name = cleanCols[1];
+                            if (cleanCols.length >= 3) {
+                                tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
                             }
                         }
+                    }
 
-                        if (email && email.includes('@')) {
-                            importedSubs.push({ name, email, tags });
+                    const normalizedEmail = email.trim();
+                    const cleanName = name.trim();
+                    let quality: 'valid' | 'warning' | 'invalid' = 'valid';
+                    let reason = '';
+
+                    if (!normalizedEmail || !emailRegex.test(normalizedEmail)) {
+                        quality = 'invalid';
+                        reason = !normalizedEmail ? 'Missing email' : 'Malformed email address';
+                    } else {
+                        const domain = normalizedEmail.split('@')[1]?.toLowerCase();
+                        if (!cleanName || cleanName === 'Producer') {
+                            quality = 'warning';
+                            reason = 'Missing name (will default to "Producer")';
+                        }
+                        if (domain && suspiciousDomains.includes(domain)) {
+                            quality = 'warning';
+                            reason = `Suspicious domain (@${domain})`;
                         }
                     }
+
+                    previewRows.push({
+                        name: cleanName || 'Producer',
+                        email: normalizedEmail,
+                        tags,
+                        quality,
+                        reason
+                    });
                 }
 
-                if (importedSubs.length === 0) {
-                    showToast('No valid email rows found to import.', 'error');
+                if (previewRows.length === 0) {
+                    showToast('No subscriber rows found in CSV.', 'error');
                     setImportLoading(false);
                     return;
                 }
 
-                const res = await fetch('/api/founder/subscribers/import', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ subscribers: importedSubs }),
-                });
-
-                if (res.ok) {
-                    const data = await res.json();
-                    loadSubscribers();
-                    showToast(`Imported ${data.imported} subscribers successfully! (${data.failed} failed)`);
-                    setIsImportModalOpen(false);
-                } else {
-                    const data = await res.json();
-                    showToast(data.error || 'Failed to import subscribers.', 'error');
-                }
+                setImportPreviewData(previewRows);
+                setImportStep(2);
             } catch (err) {
                 console.error(err);
-                showToast('Error parsing or uploading CSV file.', 'error');
+                showToast('Error parsing CSV file.', 'error');
             } finally {
                 setImportLoading(false);
                 e.target.value = '';
             }
         };
         reader.readAsText(file);
+    };
+
+    const handleConfirmImport = async () => {
+        const validRows = importPreviewData.filter(r => r.quality !== 'invalid');
+        if (validRows.length === 0) {
+            showToast('No valid rows to import.', 'error');
+            return;
+        }
+        setImportLoading(true);
+        try {
+            const res = await fetch('/api/founder/subscribers/import', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ subscribers: validRows.map(r => ({ name: r.name, email: r.email, tags: r.tags })) }),
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                loadSubscribers();
+                showToast(`Imported ${data.imported} subscribers successfully! (${data.failed} failed)`);
+                setIsImportModalOpen(false);
+                setImportPreviewData([]);
+                setImportStep(1);
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Failed to import subscribers.', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Error uploading subscribers.', 'error');
+        } finally {
+            setImportLoading(false);
+        }
     };
 
     const handleUnsubscribeSubscriber = (id: number) => {
@@ -1088,7 +1237,7 @@ export default function FounderDashboardClient() {
 
     const tabs: { key: TabKey; label: string; Icon: typeof Users }[] = [
         { key: 'overview', label: 'Overview', Icon: LayoutDashboard },
-        { key: 'subscribers', label: 'Subscribers', Icon: Users },
+        { key: 'subscribers', label: 'Audience', Icon: Users },
         { key: 'broadcasts', label: 'Broadcasts', Icon: Send },
         { key: 'seo', label: 'SEO', Icon: Search },
         { key: 'cadenz', label: 'CADENZ', Icon: Smartphone },
@@ -1138,6 +1287,15 @@ export default function FounderDashboardClient() {
 
                 {/* Bottom utilities */}
                 <div className="flex flex-col items-center gap-3.5 w-full">
+                    <a
+                        href="https://www.virzyguns.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Go to website"
+                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-white/50 transition-all hover:bg-white/[0.06] hover:text-white hover:scale-105"
+                    >
+                        <Globe className="h-4 w-4" />
+                    </a>
                     <button
                         onClick={refreshAll}
                         title="Refresh all data"
@@ -1248,6 +1406,9 @@ export default function FounderDashboardClient() {
                                 <span className="text-2xs text-white/35">· mission control</span>
                             </div>
                             <div className="flex items-center gap-2">
+                                <a href="https://www.virzyguns.com" target="_blank" rel="noopener noreferrer" title="Go to website" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
+                                    <Globe className="h-3 w-3" />
+                                </a>
                                 <button onClick={refreshAll} title="Refresh all" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
                                     <RefreshCw className="h-3 w-3" />
                                 </button>
@@ -1317,6 +1478,37 @@ export default function FounderDashboardClient() {
                 {/* SUBSCRIBERS */}
                 {activeTab === 'subscribers' && (
                     <div className="space-y-5">
+                        {/* Audience Sub-Tabs */}
+                        <div className="flex items-center gap-1.5 rounded-full border border-white/[0.07] bg-white/[0.02] p-1 w-fit">
+                            {([
+                                { key: 'all', label: 'All' },
+                                { key: 'cadenz', label: 'CADENZ' },
+                                { key: 'book_buyer', label: 'Book Buyer' },
+                                { key: 'beat_buyer', label: 'Beat Buyer' },
+                            ] as { key: string; label: string }[]).map(({ key, label }) => (
+                                <button
+                                    key={key}
+                                    onClick={() => {
+                                        setAudienceSubTab(key);
+                                        if (key === 'all') {
+                                            setPredefinedTagFilter('');
+                                            setTagFilter('');
+                                        } else {
+                                            setPredefinedTagFilter(key);
+                                            setTagFilter(key);
+                                        }
+                                    }}
+                                    className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+                                        audienceSubTab === key
+                                            ? 'bg-white text-[#030405] shadow-sm'
+                                            : 'text-white/55 hover:text-white hover:bg-white/[0.04]'
+                                    }`}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+
                         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                             <div className="flex flex-1 gap-2 flex-wrap">
                                 <div className="relative flex-1 md:max-w-md min-w-[200px]">
@@ -1334,26 +1526,28 @@ export default function FounderDashboardClient() {
                                     <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
                                     <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                                 </select>
-                                <select 
-                                    value={predefinedTagFilter} 
-                                    onChange={(e) => {
-                                        const val = e.target.value;
-                                        setPredefinedTagFilter(val);
-                                        if (val !== 'custom') {
-                                            setTagFilter(val);
-                                        } else {
-                                            setTagFilter('');
-                                        }
-                                    }}
-                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50"
-                                >
-                                    <option value="" className="bg-[#0a1b27]">All segments</option>
-                                    <option value="cadenz" className="bg-[#0a1b27]">CADENZ</option>
-                                    <option value="beat_buyer" className="bg-[#0a1b27]">Beat Buyer</option>
-                                    <option value="book_buyer" className="bg-[#0a1b27]">Book Buyer</option>
-                                    <option value="custom" className="bg-[#0a1b27]">Other Tag...</option>
-                                </select>
-                                {predefinedTagFilter === 'custom' && (
+                                {audienceSubTab === 'all' && (
+                                    <select 
+                                        value={predefinedTagFilter} 
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setPredefinedTagFilter(val);
+                                            if (val !== 'custom') {
+                                                setTagFilter(val);
+                                            } else {
+                                                setTagFilter('');
+                                            }
+                                        }}
+                                        className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50"
+                                    >
+                                        <option value="" className="bg-[#0a1b27]">All segments</option>
+                                        <option value="cadenz" className="bg-[#0a1b27]">CADENZ</option>
+                                        <option value="beat_buyer" className="bg-[#0a1b27]">Beat Buyer</option>
+                                        <option value="book_buyer" className="bg-[#0a1b27]">Book Buyer</option>
+                                        <option value="custom" className="bg-[#0a1b27]">Other Tag...</option>
+                                    </select>
+                                )}
+                                {audienceSubTab === 'all' && predefinedTagFilter === 'custom' && (
                                     <input
                                         type="text" placeholder="Enter tag…" value={tagFilter}
                                         onChange={(e) => setTagFilter(e.target.value)}
@@ -1819,34 +2013,138 @@ export default function FounderDashboardClient() {
             )}
 
             {isImportModalOpen && (
-                <ModalShell title="Import subscribers from CSV" onClose={() => setIsImportModalOpen(false)}>
+                <ModalShell 
+                    title="Import subscribers from CSV" 
+                    wide={importStep === 2} 
+                    onClose={() => { setIsImportModalOpen(false); setImportStep(1); setImportPreviewData([]); }}
+                >
                     <div className="space-y-4">
-                        <p className="text-xs text-white/50 leading-relaxed">
-                            Upload a CSV file containing your subscriber list. The system supports column formats like 
-                            <code className="text-sky-200"> Name, Email, Tags</code> or just <code className="text-sky-200">Email</code>. 
-                            Multiple tags can be separated by semicolons (<code className="text-sky-200">;</code>) or pipe characters (<code className="text-sky-200">|</code>).
-                        </p>
-                        <div className="rounded-lg border border-dashed border-white/20 p-8 text-center bg-white/[0.01]">
-                            {importLoading ? (
-                                <div className="flex flex-col items-center justify-center py-4 text-white/40">
-                                    <Loader2 className="mb-3 h-6 w-6 animate-spin text-sky-300" />
-                                    <p className="text-xs">Parsing and importing database records...</p>
+                        {importStep === 1 ? (
+                            <>
+                                <p className="text-xs text-white/50 leading-relaxed">
+                                    Upload a CSV file containing your subscriber list. The system supports column formats like 
+                                    <code className="text-sky-200"> Name, Email, Tags</code> or just <code className="text-sky-200">Email</code>. 
+                                    Multiple tags can be separated by semicolons (<code className="text-sky-200">;</code>) or pipe characters (<code className="text-sky-200">|</code>).
+                                </p>
+                                <div className="rounded-lg border border-dashed border-white/20 p-8 text-center bg-white/[0.01]">
+                                    {importLoading ? (
+                                        <div className="flex flex-col items-center justify-center py-4 text-white/40">
+                                            <Loader2 className="mb-3 h-6 w-6 animate-spin text-sky-300" />
+                                            <p className="text-xs">Parsing database records...</p>
+                                        </div>
+                                    ) : (
+                                        <label className="cursor-pointer block">
+                                            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.05] text-white/70">
+                                                <Plus className="h-5 w-5" />
+                                            </div>
+                                            <span className="text-xs font-semibold text-white">Choose CSV File</span>
+                                            <input 
+                                                type="file" 
+                                                accept=".csv" 
+                                                onChange={handleImportCSV} 
+                                                className="hidden" 
+                                            />
+                                        </label>
+                                    )}
                                 </div>
-                            ) : (
-                                <label className="cursor-pointer block">
-                                    <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.05] text-white/70">
-                                        <Plus className="h-5 w-5" />
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="rounded-lg border border-emerald-500/25 bg-emerald-500/5 p-3 text-center">
+                                        <span className="text-2xs font-semibold uppercase tracking-wider text-emerald-400">Valid</span>
+                                        <p className="mt-0.5 text-lg font-bold text-emerald-300">
+                                            {importPreviewData.filter(r => r.quality === 'valid').length}
+                                        </p>
                                     </div>
-                                    <span className="text-xs font-semibold text-white">Choose CSV File</span>
-                                    <input 
-                                        type="file" 
-                                        accept=".csv" 
-                                        onChange={handleImportCSV} 
-                                        className="hidden" 
-                                    />
-                                </label>
-                            )}
-                        </div>
+                                    <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 p-3 text-center">
+                                        <span className="text-2xs font-semibold uppercase tracking-wider text-amber-400">Warnings</span>
+                                        <p className="mt-0.5 text-lg font-bold text-amber-300">
+                                            {importPreviewData.filter(r => r.quality === 'warning').length}
+                                        </p>
+                                    </div>
+                                    <div className="rounded-lg border border-rose-500/25 bg-rose-500/5 p-3 text-center">
+                                        <span className="text-2xs font-semibold uppercase tracking-wider text-rose-400">Invalid</span>
+                                        <p className="mt-0.5 text-lg font-bold text-rose-300">
+                                            {importPreviewData.filter(r => r.quality === 'invalid').length}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="max-h-60 overflow-y-auto border border-white/[0.08] rounded-lg">
+                                    <table className="w-full text-left text-xs">
+                                        <thead className="bg-white/[0.02] border-b border-white/[0.08] text-white/40 sticky top-0 z-10">
+                                            <tr>
+                                                <th className="px-4 py-2 font-semibold">Name</th>
+                                                <th className="px-4 py-2 font-semibold">Email</th>
+                                                <th className="px-4 py-2 font-semibold">Tags</th>
+                                                <th className="px-4 py-2 font-semibold">Quality</th>
+                                                <th className="px-4 py-2 font-semibold">Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/[0.04]">
+                                            {importPreviewData.map((row, idx) => (
+                                                <tr key={idx} className="hover:bg-white/[0.01]">
+                                                    <td className="px-4 py-2 font-medium text-white/80">{row.name}</td>
+                                                    <td className="px-4 py-2 text-white/70">{row.email}</td>
+                                                    <td className="px-4 py-2">
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {row.tags.length > 0 ? (
+                                                                row.tags.map(t => (
+                                                                    <span key={t} className="rounded bg-sky-400/10 px-1 py-0.5 text-[10px] text-sky-300 font-semibold">{t}</span>
+                                                                ))
+                                                            ) : (
+                                                                <span className="text-white/20 font-light italic">None</span>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-4 py-2">
+                                                        {row.quality === 'valid' && (
+                                                            <span className="inline-flex items-center gap-1 rounded bg-emerald-400/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                                                                Valid
+                                                            </span>
+                                                        )}
+                                                        {row.quality === 'warning' && (
+                                                            <span className="inline-flex items-center gap-1 rounded bg-amber-400/10 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                                                                Warning
+                                                            </span>
+                                                        )}
+                                                        {row.quality === 'invalid' && (
+                                                            <span className="inline-flex items-center gap-1 rounded bg-rose-400/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-400">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-rose-400" />
+                                                                Invalid
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="px-4 py-2 text-white/45 truncate max-w-[150px]" title={row.reason}>
+                                                        {row.reason || <span className="text-white/20">—</span>}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="flex items-center justify-end gap-2 pt-2">
+                                    <button
+                                        onClick={() => { setImportStep(1); setImportPreviewData([]); }}
+                                        className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+                                    >
+                                        Back
+                                    </button>
+                                    <button
+                                        disabled={importLoading || importPreviewData.filter(r => r.quality !== 'invalid').length === 0}
+                                        onClick={handleConfirmImport}
+                                        className="inline-flex items-center justify-center gap-1.5 rounded-full bg-sky-400 px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-sky-300 disabled:opacity-50"
+                                    >
+                                        {importLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
+                                        Import {importPreviewData.filter(r => r.quality !== 'invalid').length} Subscribers
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </ModalShell>
             )}
@@ -1886,6 +2184,7 @@ export default function FounderDashboardClient() {
                                         <option value="inner_circle" className="bg-[#0a1b27]">Inner Circle (standard text)</option>
                                         <option value="beat_promo" className="bg-[#0a1b27]">Beat Promo (product feature)</option>
                                         <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
+                                        <option value="book_reader" className="bg-[#0a1b27]">Book / Guide (VGP Library)</option>
                                     </select>
                                 </Field>
                                 <div>
@@ -1933,7 +2232,48 @@ export default function FounderDashboardClient() {
                                 <Field label="Schedule sending (optional, leave blank to send immediately)">
                                     <input type="datetime-local" value={newCampaign.scheduled_for} onChange={(e) => setNewCampaign({ ...newCampaign, scheduled_for: e.target.value })} className={inputClass} />
                                 </Field>
-                                <Field label="Message body"><textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} /></Field>
+                                <Field label="Message body">
+                                    <textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} />
+                                    {(() => {
+                                        const analysis = analyzeSpamScore(newCampaign.body_content);
+                                        if (!newCampaign.body_content.trim()) return null;
+                                        return (
+                                            <div className="mt-3 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-1.5">
+                                                        <span className="text-2xs font-semibold uppercase tracking-wider text-white/45">Spam Potential Score</span>
+                                                        {analysis.risk === 'low' && <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-3xs font-bold text-emerald-400">Low Risk</span>}
+                                                        {analysis.risk === 'medium' && <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-3xs font-bold text-amber-400">Medium Risk</span>}
+                                                        {analysis.risk === 'high' && <span className="rounded bg-rose-500/10 px-1.5 py-0.5 text-3xs font-bold text-rose-400">High Risk</span>}
+                                                    </div>
+                                                    <span className="text-xs font-mono font-bold text-white/80">Score: {analysis.score.toFixed(1)}</span>
+                                                </div>
+                                                
+                                                {/* Score Bar */}
+                                                <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+                                                    <div 
+                                                        className={`h-full transition-all duration-300 ${
+                                                            analysis.risk === 'low' ? 'bg-emerald-400' :
+                                                            analysis.risk === 'medium' ? 'bg-amber-400' : 'bg-rose-400'
+                                                        }`}
+                                                        style={{ width: `${Math.min((analysis.score / 8) * 100, 100)}%` }}
+                                                    />
+                                                </div>
+
+                                                {analysis.triggers.length > 0 && (
+                                                    <div className="space-y-1">
+                                                        <span className="text-3xs font-semibold uppercase tracking-wider text-white/30">Triggered Rules:</span>
+                                                        <ul className="list-inside list-disc text-3xs text-white/50 space-y-0.5">
+                                                            {analysis.triggers.map((t, idx) => (
+                                                                <li key={idx}>{t}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
+                                </Field>
                                 <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
                             </>
                         )}

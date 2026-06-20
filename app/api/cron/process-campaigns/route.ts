@@ -54,7 +54,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Hey ${cleanName},
+                Yo ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
@@ -73,7 +73,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Dear ${cleanName},
+                ${cleanName} — quick CADENZ update.
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
@@ -81,6 +81,25 @@ function getEmailHtml(
             <div style="text-align: center; margin: 35px 0 15px 0;">
                 <a href="${trackLink(`${baseUrl}/cadenz`)}" style="background-color: #7000FF; background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     READ DEVELOPMENT LOG
+                </a>
+            </div>
+        `;
+    } else if (templateType === 'book_reader') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    VGP LIBRARY
+                </span>
+            </div>
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                What's good ${cleanName},
+            </p>
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                ${trackedBody || 'The new production guide is ready. No fluff — just real technique and workflow breakdowns straight from the studio.'}
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <a href="${trackLink(`${baseUrl}/books`)}" style="background-color: #f59e0b; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                    READ THE GUIDE
                 </a>
             </div>
         `;
@@ -92,7 +111,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Greetings ${cleanName},
+                ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody}
