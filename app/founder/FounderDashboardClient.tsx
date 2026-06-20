@@ -56,12 +56,22 @@ interface PerfMetrics {
     cls?: string;
 }
 
+const standardTags = ['cadenz', 'beat_buyer', 'book_buyer'];
+const tagLabelMap: Record<string, string> = {
+    cadenz: 'CADENZ',
+    beat_buyer: 'Pembeli Beat',
+    book_buyer: 'Pembeli Buku'
+};
+
 type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
 
 function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string): string {
     const title = (subject || 'VGP BROADCAST').toUpperCase();
     const currentYear = new Date().getFullYear();
-    const cleanBody = (bodyContent || 'Write your email body…');
+    const cleanName = name && name.trim() ? name : 'Producer';
+    const cleanBody = (bodyContent || 'Write your email body…')
+        .replace(/\{\{name\}\}/gi, cleanName)
+        .replace(/\[Name\]/gi, cleanName);
 
     let mainContentHtml = '';
 
@@ -539,6 +549,7 @@ export default function FounderDashboardClient() {
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [tagFilter, setTagFilter] = useState('');
+    const [predefinedTagFilter, setPredefinedTagFilter] = useState('');
     const [subsLoading, setSubsLoading] = useState(false);
 
     const [isAddSubOpen, setIsAddSubOpen] = useState(false);
@@ -687,8 +698,14 @@ export default function FounderDashboardClient() {
 
     useEffect(() => {
         if (isAuthenticated) {
+            loadSubscribers();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuthenticated, statusFilter, tagFilter]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
             const timer = setTimeout(() => {
-                loadSubscribers();
                 loadCampaigns();
                 loadPerformance();
                 loadMetrics();
@@ -1317,12 +1334,33 @@ export default function FounderDashboardClient() {
                                     <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
                                     <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                                 </select>
-                                <input
-                                    type="text" placeholder="Filter by tag…" value={tagFilter}
-                                    onChange={(e) => setTagFilter(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
-                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
-                                />
+                                <select 
+                                    value={predefinedTagFilter} 
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setPredefinedTagFilter(val);
+                                        if (val !== 'custom') {
+                                            setTagFilter(val);
+                                        } else {
+                                            setTagFilter('');
+                                        }
+                                    }}
+                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50"
+                                >
+                                    <option value="" className="bg-[#0a1b27]">All segments</option>
+                                    <option value="cadenz" className="bg-[#0a1b27]">CADENZ</option>
+                                    <option value="beat_buyer" className="bg-[#0a1b27]">Pembeli Beat</option>
+                                    <option value="book_buyer" className="bg-[#0a1b27]">Pembeli Buku</option>
+                                    <option value="custom" className="bg-[#0a1b27]">Other Tag...</option>
+                                </select>
+                                {predefinedTagFilter === 'custom' && (
+                                    <input
+                                        type="text" placeholder="Enter tag…" value={tagFilter}
+                                        onChange={(e) => setTagFilter(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
+                                        className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
+                                    />
+                                )}
                                 <button onClick={loadSubscribers} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
                             </div>
                             <div className="flex gap-2">
@@ -1675,7 +1713,47 @@ export default function FounderDashboardClient() {
                     <form onSubmit={handleAddSubscriber} className="space-y-4">
                         <Field label="Name"><input type="text" required value={newSub.name} onChange={(e) => setNewSub({ ...newSub, name: e.target.value })} className={inputClass} /></Field>
                         <Field label="Email address"><input type="email" required value={newSub.email} onChange={(e) => setNewSub({ ...newSub, email: e.target.value })} className={inputClass} /></Field>
-                        <Field label="Tags (comma-separated)"><input type="text" placeholder="e.g. artist, beat-buyer" value={newSub.tags.join(', ')} onChange={(e) => setNewSub({ ...newSub, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
+                        <div>
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Audience Segments</label>
+                            <div className="grid grid-cols-3 gap-2 mb-3">
+                                {standardTags.map(tag => {
+                                    const isChecked = newSub.tags.includes(tag);
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={tag}
+                                            onClick={() => {
+                                                const next = isChecked 
+                                                    ? newSub.tags.filter(t => t !== tag)
+                                                    : [...newSub.tags, tag];
+                                                setNewSub({ ...newSub, tags: next });
+                                            }}
+                                            className={`flex flex-col items-center justify-center rounded-lg border py-2 px-1 text-center transition ${
+                                                isChecked 
+                                                    ? 'border-sky-400 bg-sky-400/10 text-sky-200 shadow-[0_0_12px_rgba(56,189,248,0.15)]' 
+                                                    : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/[0.05] hover:text-white'
+                                            }`}
+                                        >
+                                            <span className="text-xs font-semibold">{tagLabelMap[tag]}</span>
+                                            <span className="text-[9px] opacity-60 mt-0.5">{tag}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        <Field label="Other Custom Tags (comma-separated)">
+                            <input 
+                                type="text" 
+                                placeholder="e.g. artist, vip" 
+                                value={newSub.tags.filter(t => !standardTags.includes(t)).join(', ')} 
+                                onChange={(e) => {
+                                    const activeStandards = newSub.tags.filter(t => standardTags.includes(t));
+                                    const newCustoms = e.target.value.split(',').map(t => t.trim().toLowerCase()).filter(t => t && !standardTags.includes(t));
+                                    setNewSub({ ...newSub, tags: Array.from(new Set([...activeStandards, ...newCustoms])) });
+                                }} 
+                                className={inputClass} 
+                            />
+                        </Field>
                         <SubmitButton loading={subActionLoading} label="Add subscriber" />
                     </form>
                 </ModalShell>
@@ -1692,7 +1770,49 @@ export default function FounderDashboardClient() {
                                 <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                             </select>
                         </Field>
-                        <Field label="Tags (comma-separated)"><input type="text" placeholder="e.g. artist, beat-buyer" value={(editingSub.tags || []).join(', ')} onChange={(e) => setEditingSub({ ...editingSub, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
+                        <div>
+                            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Audience Segments</label>
+                            <div className="grid grid-cols-3 gap-2 mb-3">
+                                {standardTags.map(tag => {
+                                    const current = editingSub.tags || [];
+                                    const isChecked = current.includes(tag);
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={tag}
+                                            onClick={() => {
+                                                const next = isChecked 
+                                                    ? current.filter(t => t !== tag)
+                                                    : [...current, tag];
+                                                setEditingSub({ ...editingSub, tags: next });
+                                            }}
+                                            className={`flex flex-col items-center justify-center rounded-lg border py-2 px-1 text-center transition ${
+                                                isChecked 
+                                                    ? 'border-sky-400 bg-sky-400/10 text-sky-200 shadow-[0_0_12px_rgba(56,189,248,0.15)]' 
+                                                    : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/[0.05] hover:text-white'
+                                            }`}
+                                        >
+                                            <span className="text-xs font-semibold">{tagLabelMap[tag]}</span>
+                                            <span className="text-[9px] opacity-60 mt-0.5">{tag}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        <Field label="Other Custom Tags (comma-separated)">
+                            <input 
+                                type="text" 
+                                placeholder="e.g. artist, vip" 
+                                value={(editingSub.tags || []).filter(t => !standardTags.includes(t)).join(', ')} 
+                                onChange={(e) => {
+                                    const current = editingSub.tags || [];
+                                    const activeStandards = current.filter(t => standardTags.includes(t));
+                                    const newCustoms = e.target.value.split(',').map(t => t.trim().toLowerCase()).filter(t => t && !standardTags.includes(t));
+                                    setEditingSub({ ...editingSub, tags: Array.from(new Set([...activeStandards, ...newCustoms])) });
+                                }} 
+                                className={inputClass} 
+                            />
+                        </Field>
                         <SubmitButton loading={subActionLoading} label="Save changes" />
                     </form>
                 </ModalShell>
@@ -1763,7 +1883,48 @@ export default function FounderDashboardClient() {
                                         <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
                                     </select>
                                 </Field>
-                                <Field label="Target tags (comma-separated, leave blank to send to all)"><input type="text" placeholder="e.g. artist, vip" value={newCampaign.target_tags.join(', ')} onChange={(e) => setNewCampaign({ ...newCampaign, target_tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
+                                <div>
+                                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Target Audience segments</label>
+                                    <div className="grid grid-cols-3 gap-2 mb-3">
+                                        {standardTags.map(tag => {
+                                            const isChecked = newCampaign.target_tags.includes(tag);
+                                            return (
+                                                <button
+                                                    type="button"
+                                                    key={tag}
+                                                    onClick={() => {
+                                                        const next = isChecked 
+                                                            ? newCampaign.target_tags.filter(t => t !== tag)
+                                                            : [...newCampaign.target_tags, tag];
+                                                        setNewCampaign({ ...newCampaign, target_tags: next });
+                                                    }}
+                                                    className={`flex flex-col items-center justify-center rounded-lg border py-2 px-1 text-center transition ${
+                                                        isChecked 
+                                                            ? 'border-sky-400 bg-sky-400/10 text-sky-200 shadow-[0_0_12px_rgba(56,189,248,0.15)]' 
+                                                            : 'border-white/10 bg-white/[0.02] text-white/50 hover:bg-white/[0.05] hover:text-white'
+                                                    }`}
+                                                >
+                                                    <span className="text-xs font-semibold">{tagLabelMap[tag]}</span>
+                                                    <span className="text-[9px] opacity-60 mt-0.5">{tag}</span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                                <Field label="Other Custom Target Tags (comma-separated)">
+                                    <input 
+                                        type="text" 
+                                        placeholder="e.g. artist, vip" 
+                                        value={newCampaign.target_tags.filter(t => !standardTags.includes(t)).join(', ')} 
+                                        onChange={(e) => {
+                                            const activeStandards = newCampaign.target_tags.filter(t => standardTags.includes(t));
+                                            const newCustoms = e.target.value.split(',').map(t => t.trim().toLowerCase()).filter(t => t && !standardTags.includes(t));
+                                            setNewCampaign({ ...newCampaign, target_tags: Array.from(new Set([...activeStandards, ...newCustoms])) });
+                                        }} 
+                                        className={inputClass} 
+                                    />
+                                    <p className="mt-1 text-[10px] text-white/40">Leave segments unselected and custom tags blank to broadcast to all subscribers.</p>
+                                </Field>
                                 <Field label="Schedule sending (optional, leave blank to send immediately)">
                                     <input type="datetime-local" value={newCampaign.scheduled_for} onChange={(e) => setNewCampaign({ ...newCampaign, scheduled_for: e.target.value })} className={inputClass} />
                                 </Field>

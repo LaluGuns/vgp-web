@@ -38,7 +38,11 @@ function getEmailHtml(
         });
     };
 
-    const trackedBody = rewriteTextLinks(bodyContent);
+    const cleanName = name && name.trim() ? name : 'Producer';
+    const bodyWithPlaceholders = bodyContent
+        .replace(/\{\{name\}\}/gi, cleanName)
+        .replace(/\[Name\]/gi, cleanName);
+    const trackedBody = rewriteTextLinks(bodyWithPlaceholders);
 
     let mainContentHtml = '';
 
@@ -379,8 +383,13 @@ export async function GET(request: NextRequest) {
 
                 const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${unsubscribeToken}`;
 
+                const recipientName = job.name && job.name.trim() ? job.name : 'Producer';
+                const bodyTextWithPlaceholders = job.body_content
+                    .replace(/\{\{name\}\}/gi, recipientName)
+                    .replace(/\[Name\]/gi, recipientName);
+
                 const emailHtml = getEmailHtml(
-                    job.name,
+                    recipientName,
                     job.subject,
                     job.template_type,
                     job.body_content,
@@ -393,7 +402,7 @@ export async function GET(request: NextRequest) {
                     from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
                     to: job.email,
                     subject: job.subject,
-                    text: `${job.subject}\n\nGreetings ${job.name},\n\n${job.body_content}\n\nTo unsubscribe: ${unsubscribeUrl}`,
+                    text: `${job.subject}\n\nGreetings ${recipientName},\n\n${bodyTextWithPlaceholders}\n\nTo unsubscribe: ${unsubscribeUrl}`,
                     html: emailHtml
                 });
 

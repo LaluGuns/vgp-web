@@ -41,7 +41,21 @@ export async function POST(request: NextRequest) {
                 }
 
                 const cleanName = String(name || 'Producer').trim();
-                const parsedTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+                const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+                const parsedTags: string[] = [];
+                for (const t of rawTags) {
+                    let clean = t;
+                    if (clean === 'cadenz' || clean.includes('cadenz')) {
+                        clean = 'cadenz';
+                    } else if (clean === 'pembeli beat' || clean === 'beat buyer' || clean === 'beat-buyer' || clean === 'beat_buyer') {
+                        clean = 'beat_buyer';
+                    } else if (clean === 'pembeli buku' || clean === 'book buyer' || clean === 'book-buyer' || clean === 'book_buyer') {
+                        clean = 'book_buyer';
+                    }
+                    if (clean && !parsedTags.includes(clean)) {
+                        parsedTags.push(clean);
+                    }
+                }
 
                 try {
                     await client.query(

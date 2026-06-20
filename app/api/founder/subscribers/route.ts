@@ -2,6 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
 
+function normalizeTags(tags: any): string[] {
+    const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+    const parsedTags: string[] = [];
+    for (const t of rawTags) {
+        let clean = t;
+        if (clean === 'cadenz' || clean.includes('cadenz')) {
+            clean = 'cadenz';
+        } else if (clean === 'pembeli beat' || clean === 'beat buyer' || clean === 'beat-buyer' || clean === 'beat_buyer') {
+            clean = 'beat_buyer';
+        } else if (clean === 'pembeli buku' || clean === 'book buyer' || clean === 'book-buyer' || clean === 'book_buyer') {
+            clean = 'book_buyer';
+        }
+        if (clean && !parsedTags.includes(clean)) {
+            parsedTags.push(clean);
+        }
+    }
+    return parsedTags;
+}
+
 export async function GET(request: NextRequest) {
     try {
         const isAuthorized = await checkFounderSession(request);
@@ -98,7 +117,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
         }
 
-        const parsedTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+        const parsedTags = normalizeTags(tags);
 
         const result = await pool.query(
             `INSERT INTO vgp_subscribers (name, email, status, tags)
@@ -140,7 +159,7 @@ export async function PUT(request: NextRequest) {
         }
 
         const unsubscribedAt = status === 'unsubscribed' ? 'CURRENT_TIMESTAMP' : 'NULL';
-        const parsedTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+        const parsedTags = normalizeTags(tags);
 
         const result = await pool.query(
             `UPDATE vgp_subscribers
