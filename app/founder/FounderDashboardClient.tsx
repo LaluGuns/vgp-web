@@ -829,17 +829,31 @@ export default function FounderDashboardClient() {
 
                         <HealthPanel health={health} loading={healthLoading} onRefresh={loadHealth} />
 
-                        <a href="https://mail.hostinger.com/" target="_blank" rel="noopener noreferrer"
-                            className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
-                            <div className="flex items-center gap-3">
-                                <Mail className="h-5 w-5 text-sky-200/70" />
-                                <div>
-                                    <p className="text-sm font-semibold text-white">Hostinger Mailbox</p>
-                                    <p className="text-xs text-white/45">Open the founder inbox to read replies and bounces.</p>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <a href="https://mail.hostinger.com/" target="_blank" rel="noopener noreferrer"
+                                className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
+                                <div className="flex items-center gap-3">
+                                    <Mail className="h-5 w-5 text-sky-200/70" />
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">Hostinger Mailbox</p>
+                                        <p className="text-xs text-white/45">Open the founder inbox to read replies and bounces.</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <span className="text-xs font-semibold text-sky-100">Open →</span>
-                        </a>
+                                <span className="text-xs font-semibold text-sky-100">Open &rarr;</span>
+                            </a>
+
+                            <a href="https://studio.beatstars.com/dashboard" target="_blank" rel="noopener noreferrer"
+                                className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
+                                <div className="flex items-center gap-3">
+                                    <Radio className="h-5 w-5 text-sky-200/70" />
+                                    <div>
+                                        <p className="text-sm font-semibold text-white">BeatStars Studio</p>
+                                        <p className="text-xs text-white/45">Manage your beats, track sales, and view play telemetry.</p>
+                                    </div>
+                                </div>
+                                <span className="text-xs font-semibold text-sky-100">Open &rarr;</span>
+                            </a>
+                        </div>
                     </div>
                 )}
 
