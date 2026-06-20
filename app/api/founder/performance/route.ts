@@ -13,39 +13,56 @@ export async function GET(request: NextRequest) {
         const targetUrl = searchParams.get('url') || 'https://www.virzyguns.com';
         
         const key = process.env.PAGESPEED_API_KEY || '';
-        const apiUrl = `https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
-            targetUrl
-        )}&category=performance${key ? `&key=${key}` : ''}`;
 
-        console.log(`Running PageSpeed audit for ${targetUrl}...`);
+        const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
+        const categoryParams = categories.map(c => `category=${c}`).join('&');
 
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-            },
-            next: { revalidate: 3600 } // Cache results for 1 hour on Next.js side
-        });
+        const makeApiUrl = (strategy: 'desktop' | 'mobile') =>
+            `https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(
+                targetUrl
+            )}&strategy=${strategy}&${categoryParams}${key ? `&key=${key}` : ''}`;
 
-        if (!response.ok) {
-            const errText = await response.text();
-            console.error('PageSpeed API Error response:', errText);
-            throw new Error(`Google PageSpeed API returned status ${response.status}`);
-        }
+        const fetchStrategy = async (strategy: 'desktop' | 'mobile') => {
+            console.log(`Running PageSpeed ${strategy} audit for ${targetUrl}...`);
+            const response = await fetch(makeApiUrl(strategy), {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                },
+                next: { revalidate: 3600 } // Cache results for 1 hour on Next.js side
+            });
 
-        const data = await response.json();
-        
-        const lh = data.lighthouseResult;
-        const score = Math.round((lh.categories.performance.score || 0) * 100);
-        
+            if (!response.ok) {
+                const errText = await response.text();
+                console.error(`PageSpeed ${strategy} API Error response:`, errText);
+                throw new Error(`Google PageSpeed API (${strategy}) returned status ${response.status}`);
+            }
+
+            const data = await response.json();
+            const lh = data.lighthouseResult;
+
+            return {
+                performance: Math.round((lh.categories.performance?.score || 0) * 100),
+                accessibility: Math.round((lh.categories.accessibility?.score || 0) * 100),
+                bestPractices: Math.round((lh.categories['best-practices']?.score || 0) * 100),
+                seo: Math.round((lh.categories.seo?.score || 0) * 100),
+                fcp: lh.audits['first-contentful-paint']?.displayValue || 'N/A',
+                lcp: lh.audits['largest-contentful-paint']?.displayValue || 'N/A',
+                tbt: lh.audits['total-blocking-time']?.displayValue || 'N/A',
+                cls: lh.audits['cumulative-layout-shift']?.displayValue || 'N/A',
+                speedIndex: lh.audits['speed-index']?.displayValue || 'N/A',
+            };
+        };
+
+        const [desktop, mobile] = await Promise.all([
+            fetchStrategy('desktop'),
+            fetchStrategy('mobile')
+        ]);
+
         const metrics = {
             url: targetUrl,
-            score,
-            fcp: lh.audits['first-contentful-paint']?.displayValue || 'N/A',
-            lcp: lh.audits['largest-contentful-paint']?.displayValue || 'N/A',
-            tbt: lh.audits['total-blocking-time']?.displayValue || 'N/A',
-            cls: lh.audits['cumulative-layout-shift']?.displayValue || 'N/A',
-            speedIndex: lh.audits['speed-index']?.displayValue || 'N/A',
+            desktop,
+            mobile,
             auditTime: new Date().toISOString()
         };
 

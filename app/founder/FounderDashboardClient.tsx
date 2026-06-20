@@ -20,7 +20,29 @@ interface HealthState {
     smtp: { ok: boolean; configured: boolean; detail: string };
     queue: { pending: number; sending: number; failed: number; sentToday: number; activeCampaigns: number; lastDeliveryAt: string | null };
 }
-interface PerfMetrics { score: number; fcp: string; lcp: string; tbt: string; cls: string; isMock?: boolean; unavailable?: boolean; }
+interface MetricSet {
+    performance: number;
+    accessibility: number;
+    bestPractices: number;
+    seo: number;
+    fcp: string;
+    lcp: string;
+    tbt: string;
+    cls: string;
+    speedIndex: string;
+}
+interface PerfMetrics {
+    desktop: MetricSet | null;
+    mobile: MetricSet | null;
+    auditTime?: string;
+    isMock?: boolean;
+    unavailable?: boolean;
+    score?: number;
+    fcp?: string;
+    lcp?: string;
+    tbt?: string;
+    cls?: string;
+}
 
 type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'cadenz';
 
@@ -158,29 +180,94 @@ function GrowthChart({ data, loading }: { data: GrowthPoint[]; loading: boolean 
     );
 }
 
+// ── Small ScoreGauge UI helper ─────────────────────────────────────────
+function ScoreGauge({ score, label }: { score: number; label: string }) {
+    const radius = 20;
+    const circ = 2 * Math.PI * radius;
+    let stroke = '#10b981'; // emerald-500
+    if (score < 50) stroke = '#FF3B5C'; // red-500
+    else if (score < 90) stroke = '#FFB800'; // amber-500
+    const offset = circ - (score / 100) * circ;
+
+    return (
+        <div className="flex flex-col items-center gap-1.5">
+            <div className="relative h-12 w-12">
+                <svg className="h-full w-full -rotate-90" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r={radius} stroke="rgba(255,255,255,0.08)" strokeWidth="4.5" fill="none" />
+                    <circle cx="25" cy="25" r={radius} stroke={stroke} strokeWidth="4.5" fill="none" strokeLinecap="round"
+                        strokeDasharray={circ} strokeDashoffset={offset} className="transition-all duration-700 ease-out" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="font-display text-[11px] font-semibold text-white">{score}</span>
+                </div>
+            </div>
+            <span className="text-[9px] font-medium tracking-tight text-white/55 text-center leading-tight whitespace-nowrap">{label}</span>
+        </div>
+    );
+}
+
 // ── PageSpeed gauge (real; honest unavailable state) ────────────────────
 function PerformancePanel({ perf, loading, onRun }: { perf: PerfMetrics | null; loading: boolean; onRun: () => void }) {
-    const score = perf && !perf.unavailable ? perf.score : null;
-    const radius = 46, circ = 2 * Math.PI * radius;
-    let stroke = '#5eead4';
-    if (score !== null) {
-        if (score < 50) stroke = '#FF3B5C';
-        else if (score < 90) stroke = '#FFB800';
+    const [strategy, setStrategy] = useState<'desktop' | 'mobile'>('desktop');
+    
+    // Support legacy/fallback metrics format if we have old data
+    const isLegacy = perf && (perf as any).score !== undefined;
+    
+    let activeMetrics: any = null;
+    let unavailable = perf ? !!perf.unavailable : false;
+
+    if (perf && !perf.unavailable) {
+        if (isLegacy) {
+            activeMetrics = {
+                performance: (perf as any).score || 0,
+                accessibility: 100,
+                bestPractices: 100,
+                seo: 100,
+                fcp: (perf as any).fcp || 'N/A',
+                lcp: (perf as any).lcp || 'N/A',
+                tbt: (perf as any).tbt || 'N/A',
+                cls: (perf as any).cls || 'N/A',
+                speedIndex: 'N/A'
+            };
+        } else {
+            const set = strategy === 'desktop' ? perf.desktop : perf.mobile;
+            if (set) {
+                activeMetrics = set;
+            } else {
+                unavailable = true;
+            }
+        }
     }
-    const offset = score === null ? circ : circ - (score / 100) * circ;
 
     return (
         <div className="liquid-glass flex h-full flex-col rounded-lg p-6">
             <div className="flex items-center justify-between">
                 <Eyebrow>Site performance</Eyebrow>
-                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium text-white/45">
-                    Lighthouse
-                </span>
+                {perf && !unavailable && (
+                    <div className="flex gap-1 rounded-lg border border-white/[0.07] bg-white/[0.02] p-0.5">
+                        <button
+                            onClick={() => setStrategy('desktop')}
+                            className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition ${
+                                strategy === 'desktop' ? 'bg-white/10 text-white' : 'text-white/45 hover:text-white'
+                            }`}
+                        >
+                            Desktop
+                        </button>
+                        <button
+                            onClick={() => setStrategy('mobile')}
+                            className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition ${
+                                strategy === 'mobile' ? 'bg-white/10 text-white' : 'text-white/45 hover:text-white'
+                            }`}
+                        >
+                            Mobile
+                        </button>
+                    </div>
+                )}
             </div>
 
             {perf === null && loading ? (
                 <div className="flex flex-1 items-center justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-sky-200/50" /></div>
-            ) : score === null ? (
+            ) : unavailable || !activeMetrics ? (
                 <div className="flex flex-1 flex-col items-center justify-center py-8 text-center">
                     <AlertTriangle className="mb-3 h-6 w-6 text-amber-400/70" />
                     <p className="text-sm text-white/60">Audit unavailable</p>
@@ -188,21 +275,20 @@ function PerformancePanel({ perf, loading, onRun }: { perf: PerfMetrics | null; 
                 </div>
             ) : (
                 <>
-                    <div className="flex justify-center py-5">
-                        <div className="relative h-32 w-32">
-                            <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r={radius} stroke="rgba(255,255,255,0.08)" strokeWidth="7" fill="none" />
-                                <circle cx="60" cy="60" r={radius} stroke={stroke} strokeWidth="7" fill="none" strokeLinecap="round"
-                                    strokeDasharray={circ} strokeDashoffset={offset} className="transition-all duration-700 ease-out" />
-                            </svg>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="font-display text-3xl font-semibold text-white">{score}</span>
-                                <span className="text-[10px] uppercase tracking-widest text-white/40">score</span>
-                            </div>
-                        </div>
+                    <div className="grid grid-cols-4 gap-2 py-5 justify-items-center">
+                        <ScoreGauge score={activeMetrics.performance} label="Performance" />
+                        <ScoreGauge score={activeMetrics.accessibility} label="Accessibility" />
+                        <ScoreGauge score={activeMetrics.bestPractices} label="Best Practices" />
+                        <ScoreGauge score={activeMetrics.seo} label="SEO" />
                     </div>
                     <div className="space-y-2 text-xs">
-                        {[['FCP', perf!.fcp], ['LCP', perf!.lcp], ['TBT', perf!.tbt], ['CLS', perf!.cls]].map(([k, v]) => (
+                        {[
+                            ['FCP', activeMetrics.fcp],
+                            ['LCP', activeMetrics.lcp],
+                            ['TBT', activeMetrics.tbt],
+                            ['CLS', activeMetrics.cls],
+                            ['Speed Index', activeMetrics.speedIndex]
+                        ].map(([k, v]) => (
                             <div key={k} className="flex justify-between border-b border-white/5 pb-1.5 text-white/55">
                                 <span>{k}</span><span className="font-medium text-white">{v}</span>
                             </div>
