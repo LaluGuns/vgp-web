@@ -6,7 +6,7 @@ import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
     Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
     AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
-    Bell, User
+    Bell, User, LogOut
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
@@ -525,6 +525,8 @@ export default function FounderDashboardClient() {
 
     const { greeting, timeString } = getGreetingAndClock();
 
+    const [showNotifications, setShowNotifications] = useState(false);
+
     const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
     const [stats, setStats] = useState<Stats>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
     const [searchQuery, setSearchQuery] = useState('');
@@ -733,6 +735,23 @@ export default function FounderDashboardClient() {
             setAuthError('Server error. Try again later.');
         } finally {
             setAuthLoading(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        try {
+            const res = await fetch('/api/founder/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (res.ok) {
+                setIsAuthenticated(false);
+                showToast('Logged out successfully.');
+            } else {
+                showToast('Failed to log out.', 'error');
+            }
+        } catch {
+            showToast('Network error while logging out.', 'error');
         }
     };
 
@@ -1060,8 +1079,8 @@ export default function FounderDashboardClient() {
             <aside className="hidden md:flex w-20 flex-col items-center justify-between border-r border-white/[0.06] bg-[#030405]/50 backdrop-blur-xl py-6 sticky top-0 h-screen z-50 shrink-0">
                 <div className="flex flex-col items-center gap-8 w-full">
                     {/* Logo/Icon */}
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.3)]">
-                        <span className="text-xs font-black tracking-tighter text-white">VGP</span>
+                    <div className="h-10 w-10 rounded-full overflow-hidden border border-white/10 flex items-center justify-center bg-black/40">
+                        <img src="/branding/logo-tg.png" alt="VGP Logo" className="h-full w-full object-cover" />
                     </div>
 
                     {/* Navigation Items */}
@@ -1094,13 +1113,20 @@ export default function FounderDashboardClient() {
                 </div>
 
                 {/* Bottom utilities */}
-                <div className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-3.5 w-full">
                     <button
                         onClick={refreshAll}
                         title="Refresh all data"
                         className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-white/50 transition-all hover:bg-white/[0.06] hover:text-white hover:scale-105"
                     >
                         <RefreshCw className="h-4 w-4" />
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        title="Sign out"
+                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-rose-400/70 transition-all hover:bg-rose-500/10 hover:text-rose-300 hover:scale-105"
+                    >
+                        <LogOut className="h-4 w-4" />
                     </button>
                 </div>
             </aside>
@@ -1127,12 +1153,64 @@ export default function FounderDashboardClient() {
                             >
                                 <RefreshCw className="h-4 w-4" />
                             </button>
-                            <button className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]">
-                                <Bell className="h-4 w-4" />
-                                <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400" />
-                            </button>
-                            <div className="h-8 w-8 rounded-full border border-white/[0.1] bg-white/[0.05] overflow-hidden flex items-center justify-center text-xs font-semibold text-white">
-                                VG
+                            <div className="relative">
+                                <button 
+                                    onClick={() => setShowNotifications(!showNotifications)}
+                                    className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+                                >
+                                    <Bell className="h-4 w-4" />
+                                    {/* Show warning/alert dot if queue failed or campaigns sending */}
+                                    {(((health?.queue.failed ?? 0) > 0) || campaigns.some(c => ['sending', 'queued'].includes(c.status))) && (
+                                        <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                                    )}
+                                </button>
+                                {showNotifications && (
+                                    <div className="absolute right-0 mt-2.5 w-80 rounded-xl border border-white/[0.08] bg-[#07090e]/95 backdrop-blur-xl p-4 shadow-2xl z-50 text-left">
+                                        <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
+                                            <span className="text-xs font-semibold uppercase tracking-wider text-sky-200">Alerts & Logs</span>
+                                            <button onClick={() => setShowNotifications(false)} className="text-white/30 hover:text-white text-2xs">&times;</button>
+                                        </div>
+                                        <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                                            {/* Campaign logs */}
+                                            {campaigns.filter(c => ['sending', 'queued'].includes(c.status)).map(c => (
+                                                <div key={c.id} className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="font-semibold text-white/90">Campaign dispatching</p>
+                                                        <p className="text-white/50 text-2xs mt-0.5 truncate">{c.subject}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {/* Queue issues */}
+                                            {health && health.queue.failed > 0 && (
+                                                <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                                                    <div>
+                                                        <p className="font-semibold text-rose-300">Delivery Alert</p>
+                                                        <p className="text-white/50 text-2xs mt-0.5">{health.queue.failed} failures in dispatch queue.</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {/* Success dispatches */}
+                                            {health && health.queue.sentToday > 0 && (
+                                                <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
+                                                    <div>
+                                                        <p className="font-semibold text-cyan-300">Queue Active</p>
+                                                        <p className="text-white/50 text-2xs mt-0.5">{health.queue.sentToday} emails sent successfully today.</p>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {/* Fallback */}
+                                            {(!health || (health.queue.failed === 0 && health.queue.sentToday === 0 && !campaigns.some(c => ['sending', 'queued'].includes(c.status)))) && (
+                                                <p className="text-2xs text-white/40 text-center py-2">All services operational. No active alerts.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="h-8 w-8 rounded-full border border-white/[0.1] overflow-hidden flex items-center justify-center bg-black/40">
+                                <img src="/branding/logo-tg.png" alt="VGP Admin" className="h-full w-full object-cover" />
                             </div>
                         </div>
                     </div>
@@ -1148,6 +1226,9 @@ export default function FounderDashboardClient() {
                             <div className="flex items-center gap-2">
                                 <button onClick={refreshAll} title="Refresh all" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
                                     <RefreshCw className="h-3 w-3" />
+                                </button>
+                                <button onClick={handleLogout} title="Sign out" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-rose-400/70 transition hover:bg-rose-500/10 hover:text-rose-300">
+                                    <LogOut className="h-3 w-3" />
                                 </button>
                             </div>
                         </div>
