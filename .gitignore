@@ -13,3 +13,11 @@ yarn-error.log
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 
+# Heavy blog source working material (raw AI images, ~109MB).
+# Not served by the app and not referenced in code — kept local only,
+# never committed/deployed. Archive to Supabase/CloudFront if needed.
+content/**/*.png
+content/**/*.jpg
+content/**/*.jpeg
+content/**/*.webp
+
