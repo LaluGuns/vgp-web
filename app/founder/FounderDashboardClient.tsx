@@ -1142,6 +1142,24 @@ export default function FounderDashboardClient() {
                         }
                     }
 
+                    // Fallback username check: if name is empty, scan columns starting from index 3 (Column D) for a suitable string
+                    if (!name.trim()) {
+                        for (let colIdx = 3; colIdx < cleanCols.length; colIdx++) {
+                            const val = (cleanCols[colIdx] || '').trim();
+                            if (val && 
+                                !val.toLowerCase().includes('http://') && 
+                                !val.toLowerCase().includes('https://') && 
+                                val.toUpperCase() !== 'GUEST' && 
+                                val.toUpperCase() !== 'ADMIN' && 
+                                val.toUpperCase() !== 'PRODUCER' &&
+                                val.length < 50
+                            ) {
+                                name = val;
+                                break;
+                            }
+                        }
+                    }
+
                     const normalizedEmail = email.trim();
                     const cleanName = name.trim();
                     let quality: 'valid' | 'warning' | 'invalid' = 'valid';
