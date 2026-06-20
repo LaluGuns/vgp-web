@@ -682,6 +682,7 @@ export default function FounderDashboardClient() {
     const [previewActive, setPreviewActive] = useState(false);
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [importLoading, setImportLoading] = useState(false);
+    const [importCategory, setImportCategory] = useState('');
     const [importPreviewData, setImportPreviewData] = useState<{name: string; email: string; tags: string[]; quality: 'valid' | 'warning' | 'invalid'; reason: string}[]>([]);
     const [importStep, setImportStep] = useState<1 | 2>(1);
     const [audienceSubTab, setAudienceSubTab] = useState<string>('all');
@@ -1076,6 +1077,12 @@ export default function FounderDashboardClient() {
                         }
                     }
 
+                    if (importCategory) {
+                        if (!tags.includes(importCategory)) {
+                            tags.push(importCategory);
+                        }
+                    }
+
                     const normalizedEmail = email.trim();
                     const cleanName = name.trim();
                     let quality: 'valid' | 'warning' | 'invalid' = 'valid';
@@ -1369,8 +1376,8 @@ export default function FounderDashboardClient() {
             <aside className="hidden md:flex w-20 flex-col items-center justify-between border-r border-white/[0.06] bg-[#030405]/50 backdrop-blur-xl py-6 sticky top-0 h-screen z-50 shrink-0">
                 <div className="flex flex-col items-center gap-8 w-full">
                     {/* Logo/Icon */}
-                    <div className="h-10 w-10 rounded-full overflow-hidden border border-white/10 flex items-center justify-center bg-black/40">
-                        <img src="/branding/logo-tg.png" alt="VGP Logo" className="h-full w-full object-cover" />
+                    <div className="h-10 w-10 flex items-center justify-center">
+                        <img src="/branding/logo-tg.png" alt="VGP Logo" className="h-full w-full object-contain opacity-90" />
                     </div>
 
                     {/* Navigation Items */}
@@ -1508,8 +1515,8 @@ export default function FounderDashboardClient() {
                                     </div>
                                 )}
                             </div>
-                            <div className="h-8 w-8 rounded-full border border-white/[0.1] overflow-hidden flex items-center justify-center bg-black/40">
-                                <img src="/branding/logo-tg.png" alt="VGP Admin" className="h-full w-full object-cover" />
+                            <div className="h-8 w-8 flex items-center justify-center">
+                                <img src="/branding/logo-tg.png" alt="VGP Admin" className="h-full w-full object-contain opacity-90" />
                             </div>
                         </div>
                     </div>
@@ -2189,6 +2196,15 @@ export default function FounderDashboardClient() {
                     <div className="space-y-4">
                         {importStep === 1 ? (
                             <>
+                                <div>
+                                    <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Apply Category (Optional)</label>
+                                    <select value={importCategory} onChange={(e) => setImportCategory(e.target.value)} className="w-full rounded-lg border border-white/10 bg-[#050505] p-3 text-sm text-white outline-none focus:border-sky-300/50 mb-4">
+                                        <option value="">Detect from CSV (or None)</option>
+                                        <option value="cadenz">CADENZ</option>
+                                        <option value="beat_buyer">Beat Buyer</option>
+                                        <option value="book_buyer">Book Buyer</option>
+                                    </select>
+                                </div>
                                 <p className="text-xs text-white/50 leading-relaxed">
                                     Upload a CSV file containing your subscriber list. The system supports column formats like 
                                     <code className="text-sky-200"> Name, Email, Tags</code> or just <code className="text-sky-200">Email</code>. 

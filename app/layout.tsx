@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { AppFrame } from '@/components/AppFrame';
-import { Footer } from '@/components/sections/Footer';
-import { SubscribePopup } from '@/components/SubscribePopup';
-import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import './globals.css';
 
@@ -159,9 +156,6 @@ export default function RootLayout({
                             <AppFrame>
                                 {children}
                             </AppFrame>
-                            <Footer />
-                            <SubscribePopup />
-                            <MobileBottomNav />
                         </LazyMotion>
                     </SmoothScrollProvider>
                 </NewsletterProvider>
