@@ -397,11 +397,14 @@ export default function FounderDashboardClient() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            loadSubscribers();
-            loadCampaigns();
-            loadPerformance();
-            loadMetrics();
-            loadHealth();
+            const timer = setTimeout(() => {
+                loadSubscribers();
+                loadCampaigns();
+                loadPerformance();
+                loadMetrics();
+                loadHealth();
+            }, 0);
+            return () => clearTimeout(timer);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated]);
