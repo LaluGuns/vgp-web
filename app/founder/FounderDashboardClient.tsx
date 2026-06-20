@@ -23,6 +23,7 @@ interface Campaign {
     sent_recipients?: number;
     opened_recipients?: number;
     clicked_recipients?: number;
+    scheduled_for?: string | null;
 }
 interface HealthState {
     checkedAt: string;
@@ -55,6 +56,88 @@ interface PerfMetrics {
 }
 
 type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
+
+function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string): string {
+    const title = (subject || 'VGP BROADCAST').toUpperCase();
+    const currentYear = new Date().getFullYear();
+    const cleanBody = (bodyContent || 'Write your email body…').replace(/\n/g, '<br />');
+
+    let mainContentHtml = '';
+
+    if (templateType === 'beat_promo') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #00E5FF; color: #000000; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">BEAT PROMO</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Hey ${name},
+            </p>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+                ${cleanBody}
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+                <span style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); cursor: pointer;">
+                    LISTEN & SECURE LICENSE
+                </span>
+            </div>
+        `;
+    } else if (templateType === 'cadenz_update') {
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #7000FF; color: #ffffff; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">CADENZ R&D</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Dear ${name},
+            </p>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+                ${cleanBody}
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+                <span style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4); cursor: pointer;">
+                    READ DEVELOPMENT LOG
+                </span>
+            </div>
+        `;
+    } else { // inner_circle
+        mainContentHtml = `
+            <div style="text-align: center; margin-bottom: 30px;">
+                <span style="font-size: 11px; background-color: #333; color: #00E5FF; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px; border: 1px solid #00E5FF;">INNER CIRCLE</span>
+            </div>
+            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+                Greetings ${name},
+            </p>
+            <div style="font-size: 15px; line-height: 1.7; color: #b5b5b5; margin-bottom: 30px;">
+                ${cleanBody}
+            </div>
+            <div style="text-align: center; margin: 40px 0;">
+                <span style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; cursor: pointer;">
+                    ACCESS PRIVATE PORTAL
+                </span>
+            </div>
+        `;
+    }
+
+    return `
+        <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 20px 10px; min-height: 100%; box-sizing: border-box;">
+            <div style="max-w-xl mx-auto border border-zinc-800 p-6 rounded-lg bg-color: #050505; background: #050505;">
+                <h1 style="color: #00E5FF; text-align: center; letter-spacing: 3px; margin-bottom: 5px; font-size: 18px;">VIRZY GUNS PRODUCTION</h1>
+                <p style="color: #666; text-align: center; font-size: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Creative Sound Lab & Audio Solutions</p>
+                
+                <hr style="border: 0; border-top: 1px solid #1a1a1a; margin-bottom: 20px;">
+                
+                ${mainContentHtml}
+                
+                <hr style="border: 0; border-top: 1px solid #1a1a1a; margin-top: 30px; margin-bottom: 15px;">
+                
+                <div style="text-align: center; font-size: 10px; color: #444;">
+                    © ${currentYear} Virzy Guns Production. All rights reserved.<br>
+                    You are receiving this because you are part of the VGP Inner Circle.<br><br>
+                    To stop receiving these emails, <span style="color: #00E5FF; text-decoration: underline; cursor: pointer;">unsubscribe here</span>.
+                </div>
+            </div>
+        </div>
+    `;
+}
 
 // ── Small UI helpers ───────────────────────────────────────────────────
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -418,7 +501,10 @@ export default function FounderDashboardClient() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [campaignsLoading, setCampaignsLoading] = useState(false);
     const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
-    const [newCampaign, setNewCampaign] = useState({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [] as string[] });
+    const [newCampaign, setNewCampaign] = useState({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [] as string[], scheduled_for: '' });
+    const [previewActive, setPreviewActive] = useState(false);
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+    const [importLoading, setImportLoading] = useState(false);
     const [campaignActionLoading, setCampaignActionLoading] = useState(false);
 
     const [monitoringCampaignId, setMonitoringCampaignId] = useState<number | null>(null);
@@ -661,6 +747,131 @@ export default function FounderDashboardClient() {
         }
     };
 
+    const handleExportCSV = () => {
+        if (subscribers.length === 0) {
+            showToast('No subscribers to export.', 'error');
+            return;
+        }
+        const headers = ['Name', 'Email', 'Status', 'Registered', 'Tags'];
+        const rows = subscribers.map(sub => [
+            sub.name,
+            sub.email,
+            sub.status,
+            new Date(sub.created_at).toLocaleDateString(),
+            (sub.tags || []).join(';')
+        ]);
+        const csvContent = "\ufeff" + [headers.join(','), ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `vgp_subscribers_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleImportCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setImportLoading(true);
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            try {
+                const text = event.target?.result as string;
+                const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+                if (lines.length === 0) {
+                    showToast('The CSV file is empty.', 'error');
+                    setImportLoading(false);
+                    return;
+                }
+                const importedSubs = [];
+                const firstLine = lines[0].toLowerCase();
+                const hasHeader = firstLine.includes('email') || firstLine.includes('name');
+                const startIdx = hasHeader ? 1 : 0;
+
+                for (let i = startIdx; i < lines.length; i++) {
+                    const line = lines[i];
+                    const cols: string[] = [];
+                    let current = '';
+                    let inQuotes = false;
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            cols.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    cols.push(current.trim());
+
+                    const cleanCols = cols.map(c => c.replace(/^["']|["']$/g, ''));
+                    if (cleanCols.length > 0 && cleanCols[0]) {
+                        let name = 'Producer';
+                        let email = '';
+                        let tags: string[] = [];
+
+                        if (cleanCols.length === 1) {
+                            email = cleanCols[0];
+                        } else if (cleanCols.length >= 2) {
+                            if (cleanCols[1].includes('@')) {
+                                name = cleanCols[0] || 'Producer';
+                                email = cleanCols[1];
+                                if (cleanCols.length >= 5) {
+                                    tags = cleanCols[4].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                } else if (cleanCols.length >= 3 && !cleanCols[2].includes('sub')) {
+                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                }
+                            } else if (cleanCols[0].includes('@')) {
+                                email = cleanCols[0];
+                                name = cleanCols[1] || 'Producer';
+                                if (cleanCols.length >= 3) {
+                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                }
+                            }
+                        }
+
+                        if (email && email.includes('@')) {
+                            importedSubs.push({ name, email, tags });
+                        }
+                    }
+                }
+
+                if (importedSubs.length === 0) {
+                    showToast('No valid email rows found to import.', 'error');
+                    setImportLoading(false);
+                    return;
+                }
+
+                const res = await fetch('/api/founder/subscribers/import', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subscribers: importedSubs }),
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    loadSubscribers();
+                    showToast(`Imported ${data.imported} subscribers successfully! (${data.failed} failed)`);
+                    setIsImportModalOpen(false);
+                } else {
+                    const data = await res.json();
+                    showToast(data.error || 'Failed to import subscribers.', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                showToast('Error parsing or uploading CSV file.', 'error');
+            } finally {
+                setImportLoading(false);
+                e.target.value = '';
+            }
+        };
+        reader.readAsText(file);
+    };
+
     const handleUnsubscribeSubscriber = (id: number) => {
         askConfirm('Suppress this subscriber? They will stop receiving broadcasts.', async () => {
             try {
@@ -684,7 +895,8 @@ export default function FounderDashboardClient() {
             });
             if (res.ok) {
                 setIsCreateCampaignOpen(false);
-                setNewCampaign({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [] });
+                setNewCampaign({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [], scheduled_for: '' });
+                setPreviewActive(false);
                 loadCampaigns();
                 showToast('Broadcast draft created.');
             } else {
@@ -728,6 +940,24 @@ export default function FounderDashboardClient() {
         } catch {
             showToast('Failed to pause broadcast.', 'error');
         }
+    };
+
+    const handleAbortCampaign = (id: number) => {
+        askConfirm('Abort this campaign? All unsent recipient emails will be permanently cancelled.', async () => {
+            try {
+                const res = await fetch(`/api/founder/campaigns/${id}/abort`, { method: 'POST' });
+                if (res.ok) {
+                    if (monitoringCampaignId === id) { setMonitoringCampaignId(null); setCampaignProgress(null); }
+                    loadCampaigns();
+                    showToast('Campaign aborted and queue cancelled.');
+                } else {
+                    const data = await res.json();
+                    showToast(data.error || 'Failed to abort campaign.', 'error');
+                }
+            } catch {
+                showToast('Failed to abort campaign.', 'error');
+            }
+        });
     };
 
     // ── Gate: loading / login ──────────────────────────────────────────
@@ -885,10 +1115,20 @@ export default function FounderDashboardClient() {
                                 />
                                 <button onClick={loadSubscribers} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
                             </div>
-                            <button onClick={() => setIsAddSubOpen(true)}
-                                className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
-                                <Plus className="h-3.5 w-3.5" /> Add subscriber
-                            </button>
+                            <div className="flex gap-2">
+                                <button onClick={handleExportCSV} title="Export current list to CSV"
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]">
+                                    Export CSV
+                                </button>
+                                <button onClick={() => setIsImportModalOpen(true)} title="Import subscribers from CSV"
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]">
+                                    Import CSV
+                                </button>
+                                <button onClick={() => setIsAddSubOpen(true)}
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
+                                    <Plus className="h-3.5 w-3.5" /> Add subscriber
+                                </button>
+                            </div>
                         </div>
 
                         <div className="liquid-glass overflow-hidden rounded-lg">
@@ -1007,15 +1247,18 @@ export default function FounderDashboardClient() {
                             ) : (
                                 <div className="space-y-3">
                                     {campaigns.map((camp) => {
-                                        const badge = camp.status === 'completed' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
-                                            : camp.status === 'draft' ? 'border-white/10 bg-white/[0.03] text-white/50'
-                                                : camp.status === 'paused' ? 'border-amber-500/20 bg-amber-500/10 text-amber-300'
-                                                    : 'border-sky-400/20 bg-sky-400/10 text-sky-300';
+                                        const isScheduled = camp.status === 'queued' && camp.scheduled_for && new Date(camp.scheduled_for) > new Date();
+                                        const statusText = isScheduled ? 'scheduled' : camp.status;
+                                        const badge = isScheduled ? 'border-amber-500/20 bg-amber-500/10 text-amber-300'
+                                            : camp.status === 'completed' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300'
+                                                : camp.status === 'draft' ? 'border-white/10 bg-white/[0.03] text-white/50'
+                                                    : camp.status === 'paused' ? 'border-amber-500/20 bg-amber-500/10 text-amber-300'
+                                                        : 'border-sky-400/20 bg-sky-400/10 text-sky-300';
                                         return (
                                             <div key={camp.id} className="liquid-glass flex flex-col gap-4 rounded-lg p-5 md:flex-row md:items-center md:justify-between">
                                                 <div className="space-y-1.5 flex-1">
                                                     <div className="flex items-center gap-2.5">
-                                                        <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase ${badge}`}>{camp.status}</span>
+                                                        <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase ${badge}`}>{statusText}</span>
                                                         <span className="text-[10px] uppercase tracking-wider text-white/40">{camp.template_type.replace('_', ' ')}</span>
                                                     </div>
                                                     <h3 className="text-sm font-semibold text-white">{camp.subject}</h3>
@@ -1036,7 +1279,12 @@ export default function FounderDashboardClient() {
                                                             <span>Clicks: <strong className="text-white">{Math.round((camp.clicked_recipients || 0) / camp.sent_recipients * 100)}%</strong> ({camp.clicked_recipients})</span>
                                                         </div>
                                                     )}
-                                                    <p className="text-[10px] text-white/35">Created {new Date(camp.created_at).toLocaleString()}</p>
+                                                    <div className="flex items-center gap-2 text-[10px] text-white/35 flex-wrap">
+                                                        <span>Created {new Date(camp.created_at).toLocaleString()}</span>
+                                                        {isScheduled && camp.scheduled_for && (
+                                                            <span className="text-amber-300/80 font-medium">· Scheduled for {new Date(camp.scheduled_for).toLocaleString()}</span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                                 <div className="flex gap-2">
                                                     {(camp.status === 'queued' || camp.status === 'sending') && (
@@ -1044,6 +1292,9 @@ export default function FounderDashboardClient() {
                                                     )}
                                                     {(camp.status === 'draft' || camp.status === 'paused') && (
                                                         <button onClick={() => handleStartCampaign(camp.id)} className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/25 bg-sky-300/10 px-3 py-1.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15"><Play className="h-3 w-3" /> Start</button>
+                                                    )}
+                                                    {(camp.status === 'queued' || camp.status === 'sending' || camp.status === 'paused') && (
+                                                        <button onClick={() => handleAbortCampaign(camp.id)} className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/25 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/15"><X className="h-3 w-3" /> Cancel</button>
                                                     )}
                                                     {camp.status !== 'draft' && (
                                                         <button onClick={() => { setMonitoringCampaignId(camp.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:text-white"><Radio className="h-3 w-3" /> Monitor</button>
@@ -1237,20 +1488,79 @@ export default function FounderDashboardClient() {
                 </ModalShell>
             )}
 
+            {isImportModalOpen && (
+                <ModalShell title="Import subscribers from CSV" onClose={() => setIsImportModalOpen(false)}>
+                    <div className="space-y-4">
+                        <p className="text-xs text-white/50 leading-relaxed">
+                            Upload a CSV file containing your subscriber list. The system supports column formats like 
+                            <code className="text-sky-200"> Name, Email, Tags</code> or just <code className="text-sky-200">Email</code>. 
+                            Multiple tags can be separated by semicolons (<code className="text-sky-200">;</code>) or pipe characters (<code className="text-sky-200">|</code>).
+                        </p>
+                        <div className="rounded-lg border border-dashed border-white/20 p-8 text-center bg-white/[0.01]">
+                            {importLoading ? (
+                                <div className="flex flex-col items-center justify-center py-4 text-white/40">
+                                    <Loader2 className="mb-3 h-6 w-6 animate-spin text-sky-300" />
+                                    <p className="text-xs">Parsing and importing database records...</p>
+                                </div>
+                            ) : (
+                                <label className="cursor-pointer block">
+                                    <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.05] text-white/70">
+                                        <Plus className="h-5 w-5" />
+                                    </div>
+                                    <span className="text-xs font-semibold text-white">Choose CSV File</span>
+                                    <input 
+                                        type="file" 
+                                        accept=".csv" 
+                                        onChange={handleImportCSV} 
+                                        className="hidden" 
+                                    />
+                                </label>
+                            )}
+                        </div>
+                    </div>
+                </ModalShell>
+            )}
+
             {isCreateCampaignOpen && (
                 <ModalShell title="Create broadcast" wide onClose={() => setIsCreateCampaignOpen(false)}>
+                    <div className="flex border-b border-white/10 mb-4">
+                        <button type="button" onClick={() => setPreviewActive(false)} className={`px-4 py-2 text-xs font-semibold border-b-2 transition ${!previewActive ? 'border-sky-300 text-sky-200' : 'border-transparent text-white/50 hover:text-white'}`}>Editor</button>
+                        <button type="button" onClick={() => setPreviewActive(true)} className={`px-4 py-2 text-xs font-semibold border-b-2 transition ${previewActive ? 'border-sky-300 text-sky-200' : 'border-transparent text-white/50 hover:text-white'}`}>Live Preview</button>
+                    </div>
+
                     <form onSubmit={handleCreateCampaign} className="space-y-4">
-                        <Field label="Subject line"><input type="text" required placeholder="e.g. Welcome to the Inner Circle" value={newCampaign.subject} onChange={(e) => setNewCampaign({ ...newCampaign, subject: e.target.value })} className={inputClass} /></Field>
-                        <Field label="Template">
-                            <select value={newCampaign.template_type} onChange={(e) => setNewCampaign({ ...newCampaign, template_type: e.target.value })} className={inputClass}>
-                                <option value="inner_circle" className="bg-[#0a1b27]">Inner Circle (standard text)</option>
-                                <option value="beat_promo" className="bg-[#0a1b27]">Beat Promo (product feature)</option>
-                                <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
-                            </select>
-                        </Field>
-                        <Field label="Target tags (comma-separated, leave blank to send to all)"><input type="text" placeholder="e.g. artist, vip" value={newCampaign.target_tags.join(', ')} onChange={(e) => setNewCampaign({ ...newCampaign, target_tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
-                        <Field label="Message body"><textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} /></Field>
-                        <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
+                        {previewActive ? (
+                            <div className="space-y-4">
+                                <div className="rounded-lg border border-white/10 overflow-hidden bg-black h-[400px]">
+                                    <iframe 
+                                        title="Email Preview"
+                                        srcDoc={getEmailPreviewHtml(newCampaign.subject, newCampaign.template_type, newCampaign.body_content, 'Producer')} 
+                                        className="w-full h-full border-0 bg-[#050505]" 
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                    <button type="button" onClick={() => setPreviewActive(false)} className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white">Back to Editor</button>
+                                    <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
+                                </div>
+                            </div>
+                        ) : (
+                            <>
+                                <Field label="Subject line"><input type="text" required placeholder="e.g. Welcome to the Inner Circle" value={newCampaign.subject} onChange={(e) => setNewCampaign({ ...newCampaign, subject: e.target.value })} className={inputClass} /></Field>
+                                <Field label="Template">
+                                    <select value={newCampaign.template_type} onChange={(e) => setNewCampaign({ ...newCampaign, template_type: e.target.value })} className={inputClass}>
+                                        <option value="inner_circle" className="bg-[#0a1b27]">Inner Circle (standard text)</option>
+                                        <option value="beat_promo" className="bg-[#0a1b27]">Beat Promo (product feature)</option>
+                                        <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
+                                    </select>
+                                </Field>
+                                <Field label="Target tags (comma-separated, leave blank to send to all)"><input type="text" placeholder="e.g. artist, vip" value={newCampaign.target_tags.join(', ')} onChange={(e) => setNewCampaign({ ...newCampaign, target_tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
+                                <Field label="Schedule sending (optional, leave blank to send immediately)">
+                                    <input type="datetime-local" value={newCampaign.scheduled_for} onChange={(e) => setNewCampaign({ ...newCampaign, scheduled_for: e.target.value })} className={inputClass} />
+                                </Field>
+                                <Field label="Message body"><textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} /></Field>
+                                <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
+                            </>
+                        )}
                     </form>
                 </ModalShell>
             )}

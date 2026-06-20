@@ -222,7 +222,7 @@ export async function GET(request: NextRequest) {
                  FROM vgp_recipient_logs rl
                  JOIN vgp_campaigns c ON c.id = rl.campaign_id
                  JOIN vgp_subscribers s ON s.id = rl.subscriber_id
-                 WHERE c.status IN ('queued', 'sending')
+                 WHERE (c.status = 'sending' OR (c.status = 'queued' AND (c.scheduled_for IS NULL OR c.scheduled_for <= CURRENT_TIMESTAMP)))
                    AND s.status = 'subscribed'
                    AND rl.attempts < rl.max_attempts
                    AND (
@@ -267,7 +267,7 @@ export async function GET(request: NextRequest) {
             const compResult = await pool.query(
                 `UPDATE vgp_campaigns c
                  SET status = 'completed', completed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-                 WHERE c.status IN ('queued', 'sending')
+                 WHERE (c.status = 'sending' OR (c.status = 'queued' AND (c.scheduled_for IS NULL OR c.scheduled_for <= CURRENT_TIMESTAMP)))
                    AND NOT EXISTS (
                      SELECT 1 FROM vgp_recipient_logs rl
                      WHERE rl.campaign_id = c.id
@@ -410,7 +410,7 @@ export async function GET(request: NextRequest) {
         const compResult = await pool.query(
             `UPDATE vgp_campaigns c
              SET status = 'completed', completed_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP
-             WHERE c.status IN ('queued', 'sending')
+             WHERE (c.status = 'sending' OR (c.status = 'queued' AND (c.scheduled_for IS NULL OR c.scheduled_for <= CURRENT_TIMESTAMP)))
                AND NOT EXISTS (
                  SELECT 1 FROM vgp_recipient_logs rl
                  WHERE rl.campaign_id = c.id

@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
                 c.updated_at, 
                 c.completed_at, 
                 c.target_tags,
+                c.scheduled_for,
                 COUNT(rl.id)::int AS total_recipients,
                 COUNT(CASE WHEN rl.status = 'sent' THEN 1 END)::int AS sent_recipients,
                 COUNT(CASE WHEN rl.opened_at IS NOT NULL THEN 1 END)::int AS opened_recipients,
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { subject, template_type, body_content, target_tags } = await request.json();
+        const { subject, template_type, body_content, target_tags, scheduled_for } = await request.json();
 
         if (!subject || !template_type) {
             return NextResponse.json({ error: 'Subject and template type are required.' }, { status: 400 });
@@ -63,12 +64,13 @@ export async function POST(request: NextRequest) {
         }
 
         const parsedTargetTags = Array.isArray(target_tags) ? target_tags.map(t => String(t).trim().toLowerCase()) : [];
+        const parsedScheduledFor = scheduled_for ? new Date(scheduled_for) : null;
 
         const result = await pool.query(
-            `INSERT INTO vgp_campaigns (subject, template_type, body_content, status, target_tags)
-             VALUES ($1, $2, $3, 'draft', $4)
-             RETURNING id, subject, template_type, status, created_at, target_tags`,
-            [subject.trim(), template_type, body_content || '', parsedTargetTags]
+            `INSERT INTO vgp_campaigns (subject, template_type, body_content, status, target_tags, scheduled_for)
+             VALUES ($1, $2, $3, 'draft', $4, $5)
+             RETURNING id, subject, template_type, status, created_at, target_tags, scheduled_for`,
+            [subject.trim(), template_type, body_content || '', parsedTargetTags, parsedScheduledFor]
         );
 
         return NextResponse.json({
