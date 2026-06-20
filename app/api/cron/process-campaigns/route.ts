@@ -21,7 +21,6 @@ function getEmailHtml(
     baseUrl: string,
     logId: number
 ): string {
-    const title = subject.toUpperCase();
     const currentYear = new Date().getFullYear();
 
     // Helper to rewrite text links for click tracking
@@ -45,51 +44,57 @@ function getEmailHtml(
 
     if (templateType === 'beat_promo') {
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #00E5FF; color: #000000; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">BEAT PROMO</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(0, 229, 255, 0.12); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    BEAT PROMO
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Hey ${name},
             </p>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
-            </p>
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="${trackLink(`${baseUrl}/studio/beats`)}" style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <a href="${trackLink(`${baseUrl}/studio/beats`)}" style="background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     LISTEN & SECURE LICENSE
                 </a>
             </div>
         `;
     } else if (templateType === 'cadenz_update') {
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #7000FF; color: #ffffff; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">CADENZ R&D</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(112, 0, 255, 0.12); color: #a855f7; border: 1px solid rgba(112, 0, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    CADENZ R&D
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Dear ${name},
             </p>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
-            </p>
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="${trackLink(`${baseUrl}/cadenz`)}" style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);">
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <a href="${trackLink(`${baseUrl}/cadenz`)}" style="background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     READ DEVELOPMENT LOG
                 </a>
             </div>
         `;
     } else { // inner_circle
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #333; color: #00E5FF; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px; border: 1px solid #00E5FF;">INNER CIRCLE</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(255, 255, 255, 0.05); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    INNER CIRCLE
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Greetings ${name},
             </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #b5b5b5; margin-bottom: 30px; white-space: pre-line;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody}
             </div>
-            <div style="text-align: center; margin: 40px 0;">
-                <a href="${trackLink(baseUrl)}" style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px;">
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <a href="${trackLink(baseUrl)}" style="background-color: #0b0f19; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.5); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     ACCESS PRIVATE PORTAL
                 </a>
             </div>
@@ -97,23 +102,31 @@ function getEmailHtml(
     }
 
     return `
-        <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 40px 20px; min-height: 100%;">
-            <div style="max-w-xl mx-auto border border-zinc-800 p-8 rounded-lg background-color: #050505;">
-                <h1 style="color: #00E5FF; text-align: center; letter-spacing: 3px; margin-bottom: 10px; font-size: 20px;">VIRZY GUNS PRODUCTION</h1>
-                <p style="color: #666; text-align: center; font-size: 11px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px;">Creative Sound Lab & Audio Solutions</p>
-                
-                <hr style="border-color: #1a1a1a; margin-bottom: 30px;">
-                
-                ${mainContentHtml}
-                
-                <hr style="border-color: #1a1a1a; margin-top: 50px; margin-bottom: 20px;">
-                
-                <div style="text-align: center; font-size: 11px; color: #444;">
-                    © ${currentYear} Virzy Guns Production. All rights reserved.<br>
-                    You are receiving this because you are part of the VGP Inner Circle.<br><br>
-                    To stop receiving these emails, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline;">unsubscribe here</a>.
-                </div>
-            </div>
+        <div style="background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 40px 20px; min-height: 100%; box-sizing: border-box;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #0b0f19; border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <tr>
+                    <td style="padding: 40px 35px;">
+                        <!-- Logo Section -->
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="color: #00E5FF; font-size: 20px; font-weight: 800; letter-spacing: 4px; margin: 0 0 5px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
+                            <div style="color: #64748b; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">Creative Sound Lab & Audio Solutions</div>
+                        </div>
+                        
+                        <div style="border-top: 1px solid #1f2937; margin-bottom: 30px; height: 1px;"></div>
+                        
+                        ${mainContentHtml}
+                        
+                        <div style="border-top: 1px solid #1f2937; margin-top: 40px; margin-bottom: 25px; height: 1px;"></div>
+                        
+                        <!-- Footer -->
+                        <div style="text-align: center; font-size: 11px; color: #475569; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                            © ${currentYear} Virzy Guns Production. All rights reserved.<br>
+                            You are receiving this because you are part of the VGP Inner Circle.<br><br>
+                            To stop receiving these emails, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline; font-weight: 600;">unsubscribe here</a>.
+                        </div>
+                    </td>
+                </tr>
+            </table>
             <!-- Open Tracking Pixel -->
             <img src="${baseUrl}/api/newsletter/track/open?logId=${logId}" width="1" height="1" style="display:none;" />
         </div>

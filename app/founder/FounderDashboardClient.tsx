@@ -6,6 +6,7 @@ import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
     Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
     AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
+    Bell, User
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
@@ -60,57 +61,63 @@ type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
 function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string): string {
     const title = (subject || 'VGP BROADCAST').toUpperCase();
     const currentYear = new Date().getFullYear();
-    const cleanBody = (bodyContent || 'Write your email body…').replace(/\n/g, '<br />');
+    const cleanBody = (bodyContent || 'Write your email body…');
 
     let mainContentHtml = '';
 
     if (templateType === 'beat_promo') {
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #00E5FF; color: #000000; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">BEAT PROMO</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(0, 229, 255, 0.12); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    BEAT PROMO
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Hey ${name},
             </p>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
-            </p>
-            <div style="text-align: center; margin: 40px 0;">
-                <span style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); cursor: pointer;">
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <span style="background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     LISTEN & SECURE LICENSE
                 </span>
             </div>
         `;
     } else if (templateType === 'cadenz_update') {
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #7000FF; color: #ffffff; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px;">CADENZ R&D</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(112, 0, 255, 0.12); color: #a855f7; border: 1px solid rgba(112, 0, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    CADENZ R&D
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Dear ${name},
             </p>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
-            </p>
-            <div style="text-align: center; margin: 40px 0;">
-                <span style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4); cursor: pointer;">
+            </div>
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <span style="background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     READ DEVELOPMENT LOG
                 </span>
             </div>
         `;
     } else { // inner_circle
         mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <span style="font-size: 11px; background-color: #333; color: #00E5FF; padding: 4px 10px; font-weight: bold; letter-spacing: 2px; border-radius: 2px; border: 1px solid #00E5FF;">INNER CIRCLE</span>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <span style="font-size: 10px; background-color: rgba(255, 255, 255, 0.05); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
+                    INNER CIRCLE
+                </span>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 20px;">
+            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Greetings ${name},
             </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #b5b5b5; margin-bottom: 30px;">
+            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
             </div>
-            <div style="text-align: center; margin: 40px 0;">
-                <span style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; cursor: pointer;">
+            <div style="text-align: center; margin: 35px 0 15px 0;">
+                <span style="background-color: #0b0f19; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.5); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.1); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                     ACCESS PRIVATE PORTAL
                 </span>
             </div>
@@ -118,23 +125,29 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
     }
 
     return `
-        <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 20px 10px; min-height: 100%; box-sizing: border-box;">
-            <div style="max-w-xl mx-auto border border-zinc-800 p-6 rounded-lg bg-color: #050505; background: #050505;">
-                <h1 style="color: #00E5FF; text-align: center; letter-spacing: 3px; margin-bottom: 5px; font-size: 18px;">VIRZY GUNS PRODUCTION</h1>
-                <p style="color: #666; text-align: center; font-size: 10px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Creative Sound Lab & Audio Solutions</p>
-                
-                <hr style="border: 0; border-top: 1px solid #1a1a1a; margin-bottom: 20px;">
-                
-                ${mainContentHtml}
-                
-                <hr style="border: 0; border-top: 1px solid #1a1a1a; margin-top: 30px; margin-bottom: 15px;">
-                
-                <div style="text-align: center; font-size: 10px; color: #444;">
-                    © ${currentYear} Virzy Guns Production. All rights reserved.<br>
-                    You are receiving this because you are part of the VGP Inner Circle.<br><br>
-                    To stop receiving these emails, <span style="color: #00E5FF; text-decoration: underline; cursor: pointer;">unsubscribe here</span>.
-                </div>
-            </div>
+        <div style="background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px 10px; min-height: 100%; box-sizing: border-box;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #0b0f19; border: 1px solid #1f2937; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <tr>
+                    <td style="padding: 30px 25px;">
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <h1 style="color: #00E5FF; font-size: 18px; font-weight: 800; letter-spacing: 4px; margin: 0 0 5px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
+                            <div style="color: #64748b; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">Creative Sound Lab & Audio Solutions</div>
+                        </div>
+                        
+                        <div style="border-top: 1px solid #1f2937; margin-bottom: 25px; height: 1px;"></div>
+                        
+                        ${mainContentHtml}
+                        
+                        <div style="border-top: 1px solid #1f2937; margin-top: 30px; margin-bottom: 20px; height: 1px;"></div>
+                        
+                        <div style="text-align: center; font-size: 10px; color: #475569; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                            © ${currentYear} Virzy Guns Production. All rights reserved.<br>
+                            You are receiving this because you are part of the VGP Inner Circle.<br><br>
+                            To stop receiving these emails, <span style="color: #00E5FF; text-decoration: underline; cursor: pointer; font-weight: 600;">unsubscribe here</span>.
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     `;
 }
@@ -484,6 +497,33 @@ export default function FounderDashboardClient() {
     const [authError, setAuthError] = useState('');
 
     const [activeTab, setActiveTab] = useState<TabKey>('overview');
+
+    const [currentTime, setCurrentTime] = useState<Date | null>(null);
+
+    useEffect(() => {
+        setCurrentTime(new Date());
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const getGreetingAndClock = () => {
+        if (!currentTime) return { greeting: 'Good-morning', timeString: '--:-- --/--' };
+        const hours = currentTime.getHours();
+        let greeting = 'Good-morning';
+        if (hours >= 12 && hours < 18) {
+            greeting = 'Good-afternoon';
+        } else if (hours >= 18 || hours < 5) {
+            greeting = 'Good-evening';
+        }
+
+        const timeStr = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        const dateStr = currentTime.toLocaleDateString([], { month: '2-digit', day: '2-digit' });
+        return { greeting, timeString: `${timeStr} ${dateStr}` };
+    };
+
+    const { greeting, timeString } = getGreetingAndClock();
 
     const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
     const [stats, setStats] = useState<Stats>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
@@ -1015,33 +1055,115 @@ export default function FounderDashboardClient() {
 
     // ── Dashboard ───────────────────────────────────────────────────────
     return (
-        <main className="editorial-shell min-h-screen pb-24 text-white">
-            {/* Header */}
-            <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#030405]/70 backdrop-blur-xl">
-                <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-                    <div className="flex items-center gap-2.5">
-                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
-                        <span className="font-display text-base font-semibold text-white">VGP Founder</span>
-                        <span className="hidden text-xs text-white/35 sm:inline">· mission control</span>
+        <main className="editorial-shell min-h-screen text-white md:flex">
+            {/* Desktop Left Sidebar */}
+            <aside className="hidden md:flex w-20 flex-col items-center justify-between border-r border-white/[0.06] bg-[#030405]/50 backdrop-blur-xl py-6 sticky top-0 h-screen z-50 shrink-0">
+                <div className="flex flex-col items-center gap-8 w-full">
+                    {/* Logo/Icon */}
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+                        <span className="text-xs font-black tracking-tighter text-white">VGP</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <nav className="flex gap-1 rounded-full border border-white/[0.07] bg-white/[0.02] p-1">
+
+                    {/* Navigation Items */}
+                    <nav className="flex flex-col gap-4 w-full items-center">
+                        {tabs.map(({ key, label, Icon }) => {
+                            const isActive = activeTab === key;
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => setActiveTab(key)}
+                                    className={`group relative flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 ${
+                                        isActive
+                                            ? 'bg-white text-[#030405] shadow-[0_0_15px_rgba(255,255,255,0.15)] scale-105'
+                                            : 'text-white/55 hover:bg-white/[0.04] hover:text-white hover:scale-105'
+                                    }`}
+                                >
+                                    <Icon className="h-5 w-5" />
+                                    {/* Premium Tooltip */}
+                                    <span className="absolute left-16 z-50 scale-0 rounded-md border border-white/[0.08] bg-[#07090e]/95 px-2.5 py-1 text-xs font-medium text-white shadow-xl transition-all duration-200 group-hover:scale-100 whitespace-nowrap pointer-events-none">
+                                        {label}
+                                    </span>
+                                    {/* Active border bar */}
+                                    {isActive && (
+                                        <span className="absolute -left-1 h-5 w-1 rounded-r-full bg-cyan-400" />
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </nav>
+                </div>
+
+                {/* Bottom utilities */}
+                <div className="flex flex-col items-center gap-4">
+                    <button
+                        onClick={refreshAll}
+                        title="Refresh all data"
+                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-white/50 transition-all hover:bg-white/[0.06] hover:text-white hover:scale-105"
+                    >
+                        <RefreshCw className="h-4 w-4" />
+                    </button>
+                </div>
+            </aside>
+
+            {/* Main Content Area */}
+            <div className="flex-1 min-w-0 flex flex-col min-h-screen">
+                {/* Header */}
+                <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-[#030405]/70 backdrop-blur-xl">
+                    {/* Desktop Header */}
+                    <div className="hidden md:flex mx-auto max-w-7xl items-center justify-between px-6 py-4">
+                        <div className="flex items-center gap-4">
+                            <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+                            <h1 className="font-display text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                                <span>{greeting}</span>
+                                <span className="text-white/30 font-light">/</span>
+                                <span className="text-sm font-mono text-white/60 tracking-wider font-semibold">{timeString}</span>
+                            </h1>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <button 
+                                onClick={refreshAll}
+                                title="Refresh all data"
+                                className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+                            >
+                                <RefreshCw className="h-4 w-4" />
+                            </button>
+                            <button className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]">
+                                <Bell className="h-4 w-4" />
+                                <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                            </button>
+                            <div className="h-8 w-8 rounded-full border border-white/[0.1] bg-white/[0.05] overflow-hidden flex items-center justify-center text-xs font-semibold text-white">
+                                VG
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile Header */}
+                    <div className="md:hidden mx-auto flex flex-col gap-3 px-4 py-3 sm:px-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+                                <span className="font-display text-sm font-semibold text-white">VGP Founder</span>
+                                <span className="text-2xs text-white/35">· mission control</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button onClick={refreshAll} title="Refresh all" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
+                                    <RefreshCw className="h-3 w-3" />
+                                </button>
+                            </div>
+                        </div>
+                        <nav className="flex gap-1 overflow-x-auto no-scrollbar rounded-full border border-white/[0.07] bg-white/[0.02] p-1">
                             {tabs.map(({ key, label, Icon }) => (
                                 <button key={key} onClick={() => setActiveTab(key)}
-                                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition ${activeTab === key ? 'bg-white text-[#030405]' : 'text-white/55 hover:text-white'}`}>
+                                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-2xs font-semibold transition whitespace-nowrap ${activeTab === key ? 'bg-white text-[#030405]' : 'text-white/55 hover:text-white'}`}>
                                     <Icon className="h-3.5 w-3.5" />
-                                    <span className="hidden sm:inline">{label}</span>
+                                    <span>{label}</span>
                                 </button>
                             ))}
                         </nav>
-                        <button onClick={refreshAll} title="Refresh all" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
-                            <RefreshCw className="h-3.5 w-3.5" />
-                        </button>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6">
+                <div className="mx-auto w-full max-w-7xl px-4 pt-8 sm:px-6 md:px-8 flex-1">
                 {/* OVERVIEW */}
                 {activeTab === 'overview' && (
                     <div className="space-y-6">
@@ -1591,6 +1713,7 @@ export default function FounderDashboardClient() {
                     </div>
                 </div>
             )}
+            </div>
         </main>
     );
 }
