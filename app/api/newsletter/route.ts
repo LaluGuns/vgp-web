@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const { email, name, website } = await request.json();
+        const { email, name, website, tags } = await request.json();
 
         // Honeypot field for simple bot submissions.
         if (website) {
@@ -98,16 +98,36 @@ export async function POST(request: NextRequest) {
         const subscriberName = escapeHtml(rawName.trim().slice(0, 80) || 'Producer');
         const subscriberEmail = escapeHtml(normalizedEmail);
 
+        const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+        const parsedTags: string[] = [];
+        for (const t of rawTags) {
+            let clean = t;
+            if (clean === 'cadenz' || clean.includes('cadenz')) {
+                clean = 'cadenz';
+            } else if (clean === 'pembeli beat' || clean === 'beat buyer' || clean === 'beat-buyer' || clean === 'beat_buyer') {
+                clean = 'beat_buyer';
+            } else if (clean === 'pembeli buku' || clean === 'book buyer' || clean === 'book-buyer' || clean === 'book_buyer') {
+                clean = 'book_buyer';
+            }
+            if (clean && !parsedTags.includes(clean)) {
+                parsedTags.push(clean);
+            }
+        }
+
         // 3. Database Insertion (handling upsert/re-subscribe)
         let subscriberId: number;
         try {
             const result = await pool.query(
-                `INSERT INTO vgp_subscribers (name, email, status, unsubscribed_at)
-                 VALUES ($1, $2, 'subscribed', NULL)
+                `INSERT INTO vgp_subscribers (name, email, status, tags, unsubscribed_at)
+                 VALUES ($1, $2, 'subscribed', $3, NULL)
                  ON CONFLICT (email)
-                 DO UPDATE SET status = 'subscribed', name = EXCLUDED.name, unsubscribed_at = NULL
+                 DO UPDATE SET 
+                    status = 'subscribed', 
+                    name = EXCLUDED.name, 
+                    tags = ARRAY(SELECT DISTINCT unnest(COALESCE(vgp_subscribers.tags, '{}') || EXCLUDED.tags)), 
+                    unsubscribed_at = NULL
                  RETURNING id`,
-                [subscriberName, subscriberEmail]
+                [subscriberName, subscriberEmail, parsedTags]
             );
             subscriberId = result.rows[0].id;
         } catch (dbInsertError) {

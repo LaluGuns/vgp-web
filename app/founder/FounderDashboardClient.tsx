@@ -59,8 +59,8 @@ interface PerfMetrics {
 const standardTags = ['cadenz', 'beat_buyer', 'book_buyer'];
 const tagLabelMap: Record<string, string> = {
     cadenz: 'CADENZ',
-    beat_buyer: 'Pembeli Beat',
-    book_buyer: 'Pembeli Buku'
+    beat_buyer: 'Beat Buyer',
+    book_buyer: 'Book Buyer'
 };
 
 type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
@@ -83,7 +83,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Hey ${name},
+                Hey ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -102,7 +102,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Dear ${name},
+                Dear ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -121,7 +121,7 @@ function getEmailPreviewHtml(subject: string, templateType: string, bodyContent:
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Greetings ${name},
+                Greetings ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${cleanBody}
@@ -1349,8 +1349,8 @@ export default function FounderDashboardClient() {
                                 >
                                     <option value="" className="bg-[#0a1b27]">All segments</option>
                                     <option value="cadenz" className="bg-[#0a1b27]">CADENZ</option>
-                                    <option value="beat_buyer" className="bg-[#0a1b27]">Pembeli Beat</option>
-                                    <option value="book_buyer" className="bg-[#0a1b27]">Pembeli Buku</option>
+                                    <option value="beat_buyer" className="bg-[#0a1b27]">Beat Buyer</option>
+                                    <option value="book_buyer" className="bg-[#0a1b27]">Book Buyer</option>
                                     <option value="custom" className="bg-[#0a1b27]">Other Tag...</option>
                                 </select>
                                 {predefinedTagFilter === 'custom' && (
@@ -1864,7 +1864,12 @@ export default function FounderDashboardClient() {
                                 <div className="rounded-lg border border-white/10 overflow-hidden bg-black h-[400px]">
                                     <iframe 
                                         title="Email Preview"
-                                        srcDoc={getEmailPreviewHtml(newCampaign.subject, newCampaign.template_type, newCampaign.body_content, 'Producer')} 
+                                        srcDoc={getEmailPreviewHtml(
+                                            newCampaign.subject, 
+                                            newCampaign.template_type, 
+                                            newCampaign.body_content, 
+                                            subscribers.length > 0 && subscribers[0].name ? subscribers[0].name : 'Producer'
+                                        )} 
                                         className="w-full h-full border-0 bg-[#050505]" 
                                     />
                                 </div>

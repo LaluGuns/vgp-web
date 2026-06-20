@@ -54,7 +54,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Hey ${name},
+                Hey ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
@@ -73,7 +73,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Dear ${name},
+                Dear ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
@@ -92,7 +92,7 @@ function getEmailHtml(
                 </span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Greetings ${name},
+                Greetings ${cleanName},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 ${trackedBody}

@@ -26,6 +26,7 @@ export function SubscribePopup() {
                     'Get CADENZ release news, HealingWave notes, and VGP music-tech updates. No spam, no hard selling.',
                 button: 'Join CADENZ waitlist',
                 subscriberName: 'CADENZ Waitlist',
+                tags: ['cadenz'],
             };
         }
 
@@ -37,6 +38,7 @@ export function SubscribePopup() {
                     'Get CADENZ news, functional audio notes, and release updates from VGP. No spam, no hard selling.',
                 button: 'Join updates',
                 subscriberName: 'HealingWave Subscriber',
+                tags: ['cadenz'],
             };
         }
 
@@ -48,6 +50,7 @@ export function SubscribePopup() {
                     'Get the launch note for the Trap Edition guide, plus practical production articles from VGP. No spam, no hard selling.',
                 button: 'Join book waitlist',
                 subscriberName: 'Book Waitlist',
+                tags: ['book_buyer'],
             };
         }
 
@@ -59,6 +62,7 @@ export function SubscribePopup() {
                     'Get practical production notes, CADENZ updates, and new VGP articles. No spam, no hard selling.',
                 button: 'Join reading updates',
                 subscriberName: 'VGP Blog Subscriber',
+                tags: [] as string[],
             };
         }
 
@@ -69,6 +73,7 @@ export function SubscribePopup() {
                 'Get CADENZ release notes, new beats, books, and practical production updates from Virzy Guns. No spam, no hard selling.',
             button: 'Join updates',
             subscriberName: 'VGP Subscriber',
+            tags: [] as string[],
         };
     })();
 
@@ -170,12 +175,11 @@ export function SubscribePopup() {
                     name: popupCopy.subscriberName,
                     email,
                     website: '',
+                    tags: popupCopy.tags,
                 }),
                 signal: controller.signal,
             });
-
             const data = await response.json();
-
             if (response.ok) {
                 setStatus('success');
                 localStorage.setItem('vgp_newsletter_subscribed_v2', 'true');
