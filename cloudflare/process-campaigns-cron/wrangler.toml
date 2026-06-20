@@ -1,0 +1,25 @@
+# Cloudflare Worker — drives the VGP email queue every 10 minutes.
+#
+# Why this exists: the Vercel Hobby plan only allows cron jobs that run once
+# per day, so the every-10-minute queue processor cannot live in vercel.json.
+# This Worker calls the same Next.js endpoint on a Cloudflare Cron Trigger
+# (free) using the shared CRON_SECRET.
+#
+# Deploy:
+#   cd cloudflare/process-campaigns-cron
+#   npx wrangler deploy
+#   npx wrangler secret put CRON_SECRET   # paste the SAME value as Vercel's CRON_SECRET
+#
+# Tail logs:  npx wrangler tail
+
+name = "vgp-process-campaigns-cron"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+# Public production endpoint — use the live custom domain, NOT the *.vercel.app
+# preview URL, so Vercel deployment protection does not block the request.
+PROCESS_URL = "https://www.virzyguns.com/api/cron/process-campaigns"
