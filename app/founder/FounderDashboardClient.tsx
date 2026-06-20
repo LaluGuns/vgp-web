@@ -666,6 +666,8 @@ export default function FounderDashboardClient() {
     const [tagFilter, setTagFilter] = useState('');
     const [predefinedTagFilter, setPredefinedTagFilter] = useState('');
     const [subsLoading, setSubsLoading] = useState(false);
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
     const [isAddSubOpen, setIsAddSubOpen] = useState(false);
     const [newSub, setNewSub] = useState({ name: '', email: '', tags: [] as string[] });
@@ -736,6 +738,7 @@ export default function FounderDashboardClient() {
                 const data = await res.json();
                 setSubscribers(data.subscribers);
                 if (data.stats) setStats(data.stats);
+                setSelectedIds([]);
             }
         } catch (err) {
             console.error('Failed to load subscribers:', err);
@@ -986,14 +989,9 @@ export default function FounderDashboardClient() {
                     setImportLoading(false);
                     return;
                 }
-                const previewRows: typeof importPreviewData = [];
-                const firstLine = lines[0].toLowerCase();
-                const hasHeader = firstLine.includes('email') || firstLine.includes('name');
-                const startIdx = hasHeader ? 1 : 0;
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const suspiciousDomains = ['test.com', 'example.com', 'fake.com', 'asdf.com', 'temp-mail.org', 'mailinator.com', 'guerrillamail.com', 'throwaway.email'];
 
-                for (let i = startIdx; i < lines.length; i++) {
+                const parsedLines = [];
+                for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
                     const cols: string[] = [];
                     let current = '';
@@ -1010,28 +1008,70 @@ export default function FounderDashboardClient() {
                         }
                     }
                     cols.push(current.trim());
+                    parsedLines.push(cols.map(c => c.replace(/^["']|["']$/g, '')));
+                }
 
-                    const cleanCols = cols.map(c => c.replace(/^["']|["']$/g, ''));
+                const firstLineStr = lines[0].toLowerCase();
+                const hasHeader = firstLineStr.includes('email') || firstLineStr.includes('name');
+                const startIdx = hasHeader ? 1 : 0;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const suspiciousDomains = ['test.com', 'example.com', 'fake.com', 'asdf.com', 'temp-mail.org', 'mailinator.com', 'guerrillamail.com', 'throwaway.email'];
+
+                let emailIdx = -1;
+                let nameIdx = -1;
+                let lastNameIdx = -1;
+                let tagsIdx = -1;
+
+                if (hasHeader && parsedLines.length > 0) {
+                    const headers = parsedLines[0].map(h => h.toLowerCase());
+                    emailIdx = headers.findIndex(h => h === 'email' || h === 'email address');
+                    if (emailIdx === -1) emailIdx = headers.findIndex(h => h.includes('email'));
+                    
+                    nameIdx = headers.findIndex(h => h === 'name' || h === 'first name' || h === 'first_name');
+                    if (nameIdx === -1) nameIdx = headers.findIndex(h => h.includes('name') && !h.includes('last'));
+                    
+                    lastNameIdx = headers.findIndex(h => h === 'last name' || h === 'last_name' || h === 'surname');
+                    tagsIdx = headers.findIndex(h => h.includes('tag') || h.includes('group') || h.includes('category') || h.includes('segment'));
+                }
+
+                const previewRows: typeof importPreviewData = [];
+
+                for (let i = startIdx; i < parsedLines.length; i++) {
+                    const cleanCols = parsedLines[i];
+                    if (cleanCols.length === 0 || (cleanCols.length === 1 && !cleanCols[0])) continue;
+
                     let name = '';
                     let email = '';
                     let tags: string[] = [];
 
-                    if (cleanCols.length === 1) {
-                        email = cleanCols[0];
-                    } else if (cleanCols.length >= 2) {
-                        if (cleanCols[1].includes('@')) {
-                            name = cleanCols[0];
-                            email = cleanCols[1];
-                            if (cleanCols.length >= 5) {
-                                tags = cleanCols[4].split(/[;|]/).map(t => t.trim()).filter(Boolean);
-                            } else if (cleanCols.length >= 3 && !cleanCols[2].includes('sub')) {
-                                tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
-                            }
-                        } else if (cleanCols[0].includes('@')) {
+                    if (hasHeader && (emailIdx !== -1 || nameIdx !== -1)) {
+                        if (emailIdx !== -1) email = cleanCols[emailIdx] || '';
+                        if (nameIdx !== -1) name = cleanCols[nameIdx] || '';
+                        if (lastNameIdx !== -1 && cleanCols[lastNameIdx]) {
+                            name = name ? `${name} ${cleanCols[lastNameIdx]}` : cleanCols[lastNameIdx];
+                        }
+                        if (tagsIdx !== -1 && cleanCols[tagsIdx]) {
+                            tags = cleanCols[tagsIdx].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                        }
+                    } else {
+                        // fallback logic
+                        if (cleanCols.length === 1) {
                             email = cleanCols[0];
-                            name = cleanCols[1];
-                            if (cleanCols.length >= 3) {
-                                tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                        } else if (cleanCols.length >= 2) {
+                            if (cleanCols[1].includes('@')) {
+                                name = cleanCols[0];
+                                email = cleanCols[1];
+                                if (cleanCols.length >= 5) {
+                                    tags = cleanCols[4].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                } else if (cleanCols.length >= 3 && !cleanCols[2].includes('sub')) {
+                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                }
+                            } else if (cleanCols[0].includes('@')) {
+                                email = cleanCols[0];
+                                name = cleanCols[1];
+                                if (cleanCols.length >= 3) {
+                                    tags = cleanCols[2].split(/[;|]/).map(t => t.trim()).filter(Boolean);
+                                }
                             }
                         }
                     }
@@ -1127,6 +1167,70 @@ export default function FounderDashboardClient() {
                 showToast('Failed to suppress subscriber.', 'error');
             }
         });
+    };
+
+    const handleDeleteAll = () => {
+        askConfirm('Are you absolutely sure you want to DELETE ALL subscribers in the database? This action cannot be undone.', async () => {
+            setSubActionLoading(true);
+            try {
+                const res = await fetch(`/api/founder/subscribers?all=true`, { method: 'DELETE' });
+                if (res.ok) { 
+                    loadSubscribers(); 
+                    showToast('All subscribers deleted.'); 
+                } else { 
+                    const data = await res.json(); 
+                    showToast(data.error || 'Failed to delete all.', 'error'); 
+                }
+            } catch {
+                showToast('Failed to delete all.', 'error');
+            } finally {
+                setSubActionLoading(false);
+            }
+        });
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === subscribers.length && subscribers.length > 0) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(subscribers.map(s => s.id));
+        }
+    };
+
+    const toggleSelect = (id: number) => {
+        setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+    };
+
+    const handleDeleteSelected = () => {
+        if (selectedIds.length === 0) return;
+        askConfirm(`Are you sure you want to completely DELETE ${selectedIds.length} selected subscriber(s)?`, async () => {
+            setSubActionLoading(true);
+            try {
+                await Promise.all(selectedIds.map(id => fetch(`/api/founder/subscribers?id=${id}&hard=true`, { method: 'DELETE' })));
+                loadSubscribers();
+                showToast(`Deleted ${selectedIds.length} subscriber(s).`);
+                setSelectedIds([]);
+            } catch {
+                showToast('Failed to delete selected subscribers.', 'error');
+            } finally {
+                setSubActionLoading(false);
+            }
+        });
+    };
+
+    const requestSort = (key: string) => {
+        let direction: 'asc' | 'desc' = 'desc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'desc') {
+            direction = 'asc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const SortIcon = ({ columnKey }: { columnKey: string }) => {
+        if (!sortConfig || sortConfig.key !== columnKey) {
+            return <span className="ml-1 inline-block text-white/20 font-sans">↕</span>;
+        }
+        return <span className="ml-1 inline-block text-sky-300 font-sans">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>;
     };
 
     const handleCreateCampaign = async (e: React.FormEvent) => {
@@ -1579,6 +1683,16 @@ export default function FounderDashboardClient() {
                                     className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]">
                                     Import CSV
                                 </button>
+                                {selectedIds.length > 0 && (
+                                    <button onClick={handleDeleteSelected} disabled={subActionLoading} title={`Delete ${selectedIds.length} selected`}
+                                        className="inline-flex items-center justify-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50">
+                                        <Ban className="h-3.5 w-3.5" /> Delete {selectedIds.length}
+                                    </button>
+                                )}
+                                <button onClick={handleDeleteAll} disabled={subActionLoading} title="Delete ALL subscribers"
+                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50">
+                                    <Ban className="h-3.5 w-3.5" /> Delete All
+                                </button>
                                 <button onClick={() => setIsAddSubOpen(true)}
                                     className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
                                     <Plus className="h-3.5 w-3.5" /> Add subscriber
@@ -1597,17 +1711,57 @@ export default function FounderDashboardClient() {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left text-sm">
                                         <thead>
-                                            <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40">
-                                                <th className="px-6 py-4 font-semibold">Name</th>
-                                                <th className="px-6 py-4 font-semibold">Email</th>
-                                                <th className="px-6 py-4 font-semibold">Status</th>
-                                                <th className="px-6 py-4 font-semibold">Registered</th>
+                                            <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40 select-none">
+                                                <th className="px-6 py-4">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={subscribers.length > 0 && selectedIds.length === subscribers.length}
+                                                        onChange={toggleSelectAll}
+                                                        className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
+                                                    />
+                                                </th>
+                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('name')}>Name <SortIcon columnKey="name" /></th>
+                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('email')}>Email <SortIcon columnKey="email" /></th>
+                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('status')}>Status <SortIcon columnKey="status" /></th>
+                                                <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('created_at')}>Registered <SortIcon columnKey="created_at" /></th>
                                                 <th className="px-6 py-4 text-right font-semibold">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-white/[0.05]">
-                                            {subscribers.map((sub) => (
-                                                <tr key={sub.id} className="transition hover:bg-white/[0.02]">
+                                            {(() => {
+                                                let sortedSubscribers = [...subscribers];
+                                                if (sortConfig !== null) {
+                                                    sortedSubscribers.sort((a, b) => {
+                                                        let aVal = '';
+                                                        let bVal = '';
+                                                        if (sortConfig.key === 'name') {
+                                                            aVal = (a.name || '').toLowerCase();
+                                                            bVal = (b.name || '').toLowerCase();
+                                                        } else if (sortConfig.key === 'email') {
+                                                            aVal = (a.email || '').toLowerCase();
+                                                            bVal = (b.email || '').toLowerCase();
+                                                        } else if (sortConfig.key === 'created_at') {
+                                                            aVal = a.created_at || '';
+                                                            bVal = b.created_at || '';
+                                                        } else if (sortConfig.key === 'status') {
+                                                            aVal = a.status || '';
+                                                            bVal = b.status || '';
+                                                        }
+                                                        if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+                                                        if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+                                                        return 0;
+                                                    });
+                                                }
+                                                return sortedSubscribers.map((sub) => (
+                                                <tr key={sub.id} className={`transition hover:bg-white/[0.02] ${selectedIds.includes(sub.id) ? 'bg-sky-400/5' : ''}`}>
+                                                    <td className="px-6 py-3.5">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            checked={selectedIds.includes(sub.id)}
+                                                            onChange={() => toggleSelect(sub.id)}
+                                                            className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
+                                                        />
+                                                    </td>
                                                     <td className="px-6 py-3.5 text-white/90">
                                                         <div>{sub.name}</div>
                                                         {sub.tags && sub.tags.length > 0 && (
@@ -1636,7 +1790,8 @@ export default function FounderDashboardClient() {
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            ))}
+                                                ));
+                                            })()}
                                         </tbody>
                                     </table>
                                 </div>

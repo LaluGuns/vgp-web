@@ -193,9 +193,25 @@ export async function DELETE(request: NextRequest) {
 
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
+        const all = searchParams.get('all') === 'true';
+        const hard = searchParams.get('hard') === 'true';
+
+        if (all) {
+            // Hard delete all subscribers
+            await pool.query('DELETE FROM vgp_subscribers');
+            return NextResponse.json({ success: true, message: 'All subscribers deleted' });
+        }
 
         if (!id) {
             return NextResponse.json({ error: 'Subscriber ID is required' }, { status: 400 });
+        }
+
+        if (hard) {
+            const result = await pool.query('DELETE FROM vgp_subscribers WHERE id = $1 RETURNING id', [id]);
+            if (result.rowCount === 0 || result.rowCount === null) {
+                return NextResponse.json({ error: 'Subscriber not found' }, { status: 404 });
+            }
+            return NextResponse.json({ success: true, message: 'Subscriber hard deleted' });
         }
 
         // Soft delete: update status to unsubscribed
