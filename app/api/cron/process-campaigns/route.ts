@@ -18,10 +18,28 @@ function getEmailHtml(
     templateType: string,
     bodyContent: string,
     unsubscribeUrl: string,
-    baseUrl: string
+    baseUrl: string,
+    logId: number
 ): string {
     const title = subject.toUpperCase();
     const currentYear = new Date().getFullYear();
+
+    // Helper to rewrite text links for click tracking
+    const trackLink = (url: string) => {
+        return `${baseUrl}/api/newsletter/track/click?logId=${logId}&url=${encodeURIComponent(url)}`;
+    };
+
+    const rewriteTextLinks = (text: string): string => {
+        const urlRegex = /(https?:\/\/[^\s<]+)/g;
+        return text.replace(urlRegex, (url) => {
+            if (url.includes('/api/newsletter/track') || url.includes('/unsubscribe')) {
+                return url;
+            }
+            return trackLink(url);
+        });
+    };
+
+    const trackedBody = rewriteTextLinks(bodyContent);
 
     let mainContentHtml = '';
 
@@ -34,10 +52,10 @@ function getEmailHtml(
                 Hey ${name},
             </p>
             <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
-                ${bodyContent || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
+                ${trackedBody || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
             </p>
             <div style="text-align: center; margin: 40px 0;">
-                <a href="${baseUrl}/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
+                <a href="${trackLink(`${baseUrl}/studio/beats`)}" style="background-color: #00E5FF; color: #000000; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);">
                     LISTEN & SECURE LICENSE
                 </a>
             </div>
@@ -51,10 +69,10 @@ function getEmailHtml(
                 Dear ${name},
             </p>
             <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin-bottom: 25px;">
-                ${bodyContent || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
+                ${trackedBody || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
             </p>
             <div style="text-align: center; margin: 40px 0;">
-                <a href="${baseUrl}/cadenz" style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);">
+                <a href="${trackLink(`${baseUrl}/cadenz`)}" style="background-color: #7000FF; color: #ffffff; padding: 15px 35px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px; box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);">
                     READ DEVELOPMENT LOG
                 </a>
             </div>
@@ -68,10 +86,10 @@ function getEmailHtml(
                 Greetings ${name},
             </p>
             <div style="font-size: 15px; line-height: 1.7; color: #b5b5b5; margin-bottom: 30px; white-space: pre-line;">
-                ${bodyContent}
+                ${trackedBody}
             </div>
             <div style="text-align: center; margin: 40px 0;">
-                <a href="${baseUrl}" style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px;">
+                <a href="${trackLink(baseUrl)}" style="background-color: #111; color: #00E5FF; border: 1px solid #00E5FF; padding: 12px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block; letter-spacing: 1px;">
                     ACCESS PRIVATE PORTAL
                 </a>
             </div>
@@ -96,6 +114,8 @@ function getEmailHtml(
                     To stop receiving these emails, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline;">unsubscribe here</a>.
                 </div>
             </div>
+            <!-- Open Tracking Pixel -->
+            <img src="${baseUrl}/api/newsletter/track/open?logId=${logId}" width="1" height="1" style="display:none;" />
         </div>
     `;
 }
@@ -345,7 +365,8 @@ export async function GET(request: NextRequest) {
                     job.template_type,
                     job.body_content,
                     unsubscribeUrl,
-                    baseUrl
+                    baseUrl,
+                    job.id
                 );
 
                 const mailRes = await transporter.sendMail({

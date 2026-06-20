@@ -12,8 +12,18 @@ import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 // ── Types ──────────────────────────────────────────────────────────────
 interface Stats { total: number; subscribed: number; unsubscribed: number; new24h: number; }
 interface GrowthPoint { date: string; total: number; new: number; }
-interface Subscriber { id: number; name: string; email: string; status: string; created_at: string; }
-interface Campaign { id: number; subject: string; template_type: string; status: string; created_at: string; }
+interface Subscriber { id: number; name: string; email: string; status: string; created_at: string; tags?: string[]; }
+interface Campaign {
+    id: number;
+    subject: string;
+    template_type: string;
+    status: string;
+    created_at: string;
+    target_tags?: string[];
+    sent_recipients?: number;
+    opened_recipients?: number;
+    clicked_recipients?: number;
+}
 interface HealthState {
     checkedAt: string;
     db: { ok: boolean; latencyMs: number | null; detail: string };
@@ -44,7 +54,7 @@ interface PerfMetrics {
     cls?: string;
 }
 
-type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'cadenz';
+type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
 
 // ── Small UI helpers ───────────────────────────────────────────────────
 function Eyebrow({ children }: { children: React.ReactNode }) {
@@ -176,6 +186,40 @@ function GrowthChart({ data, loading }: { data: GrowthPoint[]; loading: boolean 
             <div className="mt-2 flex justify-between text-[10px] text-white/35">
                 {labelIdx.map((i) => <span key={i}>{fmtDate(data[i].date)}</span>)}
             </div>
+        </div>
+    );
+}
+
+function SeoChart({ data }: { data: any[] }) {
+    if (!data || data.length < 2) return null;
+    const W = 600, H = 100, P = 12;
+    const clicks = data.map(d => d.clicks);
+    const maxClicks = Math.max(...clicks);
+    const minClicks = Math.min(...clicks);
+    const rangeClicks = maxClicks - minClicks || 1;
+    const xOf = (i: number) => P + (i * (W - 2 * P)) / (data.length - 1);
+    const yOf = (v: number) => H - P - ((v - minClicks) * (H - 2 * P)) / rangeClicks;
+
+    const pts = data.map((d, i) => ({ x: xOf(i), y: yOf(d.clicks) }));
+    let line = `M ${pts[0].x} ${pts[0].y}`;
+    for (let i = 1; i < pts.length; i++) {
+        const cx = (pts[i - 1].x + pts[i].x) / 2;
+        line += ` C ${cx} ${pts[i - 1].y}, ${cx} ${pts[i].y}, ${pts[i].x} ${pts[i].y}`;
+    }
+    const area = `${line} L ${pts[pts.length - 1].x} ${H - P} L ${pts[0].x} ${H - P} Z`;
+
+    return (
+        <div className="relative mt-2 h-[100px]">
+            <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" role="img" aria-label="SEO Click growth over 30 days" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="seoFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                    </linearGradient>
+                </defs>
+                <path d={area} fill="url(#seoFill)" />
+                <path d={line} fill="none" stroke="#38bdf8" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+            </svg>
         </div>
     );
 }
@@ -362,10 +406,11 @@ export default function FounderDashboardClient() {
     const [stats, setStats] = useState<Stats>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
+    const [tagFilter, setTagFilter] = useState('');
     const [subsLoading, setSubsLoading] = useState(false);
 
     const [isAddSubOpen, setIsAddSubOpen] = useState(false);
-    const [newSub, setNewSub] = useState({ name: '', email: '' });
+    const [newSub, setNewSub] = useState({ name: '', email: '', tags: [] as string[] });
     const [isEditSubOpen, setIsEditSubOpen] = useState(false);
     const [editingSub, setEditingSub] = useState<Subscriber | null>(null);
     const [subActionLoading, setSubActionLoading] = useState(false);
@@ -373,7 +418,7 @@ export default function FounderDashboardClient() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [campaignsLoading, setCampaignsLoading] = useState(false);
     const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
-    const [newCampaign, setNewCampaign] = useState({ subject: '', template_type: 'inner_circle', body_content: '' });
+    const [newCampaign, setNewCampaign] = useState({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [] as string[] });
     const [campaignActionLoading, setCampaignActionLoading] = useState(false);
 
     const [monitoringCampaignId, setMonitoringCampaignId] = useState<number | null>(null);
@@ -386,6 +431,12 @@ export default function FounderDashboardClient() {
     const [metricsLoading, setMetricsLoading] = useState(false);
     const [health, setHealth] = useState<HealthState | null>(null);
     const [healthLoading, setHealthLoading] = useState(false);
+
+    // SEO States
+    const [seoMetrics, setSeoMetrics] = useState<any>(null);
+    const [seoLoading, setSeoLoading] = useState(false);
+    const [seoConnected, setSeoConnected] = useState<boolean | null>(null);
+    const [seoClientEmail, setSeoClientEmail] = useState<string | null>(null);
 
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
     const [confirmState, setConfirmState] = useState<{ message: string; onConfirm: () => void } | null>(null);
@@ -415,6 +466,7 @@ export default function FounderDashboardClient() {
             const params = new URLSearchParams();
             if (searchQuery) params.append('search', searchQuery);
             if (statusFilter) params.append('status', statusFilter);
+            if (tagFilter) params.append('tag', tagFilter);
             const res = await fetch(`/api/founder/subscribers?${params.toString()}`);
             if (res.ok) {
                 const data = await res.json();
@@ -481,6 +533,23 @@ export default function FounderDashboardClient() {
         }
     }, []);
 
+    const loadSeo = useCallback(async () => {
+        setSeoLoading(true);
+        try {
+            const res = await fetch('/api/founder/seo');
+            if (res.ok) {
+                const data = await res.json();
+                setSeoConnected(data.connected);
+                setSeoMetrics(data.metrics);
+                setSeoClientEmail(data.clientEmail);
+            }
+        } catch (err) {
+            console.error('Failed to load SEO analytics:', err);
+        } finally {
+            setSeoLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         if (isAuthenticated) {
             const timer = setTimeout(() => {
@@ -489,6 +558,7 @@ export default function FounderDashboardClient() {
                 loadPerformance();
                 loadMetrics();
                 loadHealth();
+                loadSeo();
             }, 0);
             return () => clearTimeout(timer);
         }
@@ -544,14 +614,14 @@ export default function FounderDashboardClient() {
         e.preventDefault();
         setSubActionLoading(true);
         try {
-            const res = await fetch('/api/newsletter', {
+            const res = await fetch('/api/founder/subscribers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: newSub.name, email: newSub.email }),
+                body: JSON.stringify({ name: newSub.name, email: newSub.email, status: 'subscribed', tags: newSub.tags }),
             });
             if (res.ok) {
                 setIsAddSubOpen(false);
-                setNewSub({ name: '', email: '' });
+                setNewSub({ name: '', email: '', tags: [] });
                 loadSubscribers();
                 showToast('Subscriber added.');
             } else {
@@ -614,7 +684,7 @@ export default function FounderDashboardClient() {
             });
             if (res.ok) {
                 setIsCreateCampaignOpen(false);
-                setNewCampaign({ subject: '', template_type: 'inner_circle', body_content: '' });
+                setNewCampaign({ subject: '', template_type: 'inner_circle', body_content: '', target_tags: [] });
                 loadCampaigns();
                 showToast('Broadcast draft created.');
             } else {
@@ -629,7 +699,11 @@ export default function FounderDashboardClient() {
     };
 
     const handleStartCampaign = (id: number) => {
-        askConfirm('Queue this broadcast and start sending to all active subscribers?', async () => {
+        const campaign = campaigns.find(c => c.id === id);
+        const targetDesc = campaign?.target_tags && campaign.target_tags.length > 0 
+            ? `subscribers matching tags: ${campaign.target_tags.join(', ')}`
+            : 'all active subscribers';
+        askConfirm(`Queue this broadcast and start sending to ${targetDesc}?`, async () => {
             try {
                 const res = await fetch(`/api/founder/campaigns/${id}/start`, { method: 'POST' });
                 if (res.ok) { setMonitoringCampaignId(id); loadCampaigns(); showToast('Broadcast queued.'); }
@@ -703,10 +777,11 @@ export default function FounderDashboardClient() {
         { key: 'overview', label: 'Overview', Icon: LayoutDashboard },
         { key: 'subscribers', label: 'Subscribers', Icon: Users },
         { key: 'broadcasts', label: 'Broadcasts', Icon: Send },
+        { key: 'seo', label: 'SEO', Icon: Search },
         { key: 'cadenz', label: 'CADENZ', Icon: Smartphone },
     ];
 
-    const refreshAll = () => { loadSubscribers(); loadCampaigns(); loadMetrics(); loadHealth(); loadPerformance(); };
+    const refreshAll = () => { loadSubscribers(); loadCampaigns(); loadMetrics(); loadHealth(); loadPerformance(); loadSeo(); };
 
     // ── Dashboard ───────────────────────────────────────────────────────
     return (
@@ -772,8 +847,8 @@ export default function FounderDashboardClient() {
                 {activeTab === 'subscribers' && (
                     <div className="space-y-5">
                         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                            <div className="flex flex-1 gap-2">
-                                <div className="relative flex-1 md:max-w-md">
+                            <div className="flex flex-1 gap-2 flex-wrap">
+                                <div className="relative flex-1 md:max-w-md min-w-[200px]">
                                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
                                     <input
                                         type="text" placeholder="Search name or email…" value={searchQuery}
@@ -788,6 +863,12 @@ export default function FounderDashboardClient() {
                                     <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
                                     <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                                 </select>
+                                <input
+                                    type="text" placeholder="Filter by tag…" value={tagFilter}
+                                    onChange={(e) => setTagFilter(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && loadSubscribers()}
+                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
+                                />
                                 <button onClick={loadSubscribers} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
                             </div>
                             <button onClick={() => setIsAddSubOpen(true)}
@@ -818,7 +899,18 @@ export default function FounderDashboardClient() {
                                         <tbody className="divide-y divide-white/[0.05]">
                                             {subscribers.map((sub) => (
                                                 <tr key={sub.id} className="transition hover:bg-white/[0.02]">
-                                                    <td className="px-6 py-3.5 text-white/90">{sub.name}</td>
+                                                    <td className="px-6 py-3.5 text-white/90">
+                                                        <div>{sub.name}</div>
+                                                        {sub.tags && sub.tags.length > 0 && (
+                                                            <div className="flex flex-wrap gap-1 mt-1">
+                                                                {sub.tags.map(t => (
+                                                                    <span key={t} className="rounded bg-sky-400/10 border border-sky-400/20 px-1.5 py-0.5 text-[9px] font-semibold text-sky-300">
+                                                                        {t}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </td>
                                                     <td className="px-6 py-3.5 text-white/55">{sub.email}</td>
                                                     <td className="px-6 py-3.5">
                                                         <span className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${sub.status === 'subscribed' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border border-white/10 bg-white/[0.03] text-white/45'}`}>
@@ -907,12 +999,29 @@ export default function FounderDashboardClient() {
                                                     : 'border-sky-400/20 bg-sky-400/10 text-sky-300';
                                         return (
                                             <div key={camp.id} className="liquid-glass flex flex-col gap-4 rounded-lg p-5 md:flex-row md:items-center md:justify-between">
-                                                <div className="space-y-1.5">
+                                                <div className="space-y-1.5 flex-1">
                                                     <div className="flex items-center gap-2.5">
                                                         <span className={`rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase ${badge}`}>{camp.status}</span>
                                                         <span className="text-[10px] uppercase tracking-wider text-white/40">{camp.template_type.replace('_', ' ')}</span>
                                                     </div>
                                                     <h3 className="text-sm font-semibold text-white">{camp.subject}</h3>
+                                                    {camp.target_tags && camp.target_tags.length > 0 && (
+                                                        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                                                            <span className="text-[9px] text-white/40">Target:</span>
+                                                            {camp.target_tags.map(t => (
+                                                                <span key={t} className="rounded bg-sky-400/10 border border-sky-400/20 px-1.5 py-0.5 text-[8px] font-semibold text-sky-300">
+                                                                    {t}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    {camp.status !== 'draft' && camp.sent_recipients !== undefined && camp.sent_recipients > 0 && (
+                                                        <div className="text-[10px] text-white/50 flex flex-wrap gap-x-3 gap-y-1 mt-1">
+                                                            <span>Delivered: <strong className="text-white">{camp.sent_recipients}</strong></span>
+                                                            <span>Opens: <strong className="text-white">{Math.round((camp.opened_recipients || 0) / camp.sent_recipients * 100)}%</strong> ({camp.opened_recipients})</span>
+                                                            <span>Clicks: <strong className="text-white">{Math.round((camp.clicked_recipients || 0) / camp.sent_recipients * 100)}%</strong> ({camp.clicked_recipients})</span>
+                                                        </div>
+                                                    )}
                                                     <p className="text-[10px] text-white/35">Created {new Date(camp.created_at).toLocaleString()}</p>
                                                 </div>
                                                 <div className="flex gap-2">
@@ -942,6 +1051,112 @@ export default function FounderDashboardClient() {
                                 <li className="flex gap-2"><span className="text-sky-300">·</span> Each email carries a signed unsubscribe token — no raw email is ever exposed.</li>
                             </ul>
                         </div>
+                    </div>
+                )}
+
+                {/* SEO Tab — Google Search Console integration */}
+                {activeTab === 'seo' && (
+                    <div className="space-y-6">
+                        {seoLoading && !seoMetrics ? (
+                            <div className="flex justify-center items-center py-20">
+                                <Loader2 className="h-8 w-8 animate-spin text-sky-300" />
+                            </div>
+                        ) : !seoMetrics ? (
+                            <div className="liquid-glass-strong rounded-lg p-8 text-center">
+                                <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-amber-500/80" />
+                                <h2 className="font-display text-2xl font-semibold text-white">SEO Telemetry Unavailable</h2>
+                                <p className="mx-auto mt-2 max-w-md text-sm text-white/55">
+                                    Could not connect to Google Search Console. Check your backend logs.
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                {/* Banner for Demo Mode / Setup Guide */}
+                                {!seoConnected && (
+                                    <div className="liquid-glass-strong border border-amber-500/20 bg-amber-500/5 rounded-lg p-6">
+                                        <div className="flex items-start gap-4">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300">
+                                                <AlertTriangle className="h-5 w-5" />
+                                            </div>
+                                            <div className="flex-1 space-y-3">
+                                                <div>
+                                                    <h3 className="font-display text-base font-semibold text-amber-200">Running in Setup / Demo Mode</h3>
+                                                    <p className="mt-1 text-xs text-white/55 leading-relaxed">
+                                                        Showing simulated data for <strong className="text-white">virzyguns.com</strong>. Connect your real Google Search Console property by following these steps:
+                                                    </p>
+                                                </div>
+                                                <ol className="list-decimal list-inside text-[11px] space-y-2 text-white/50 leading-relaxed pl-1">
+                                                    <li>Go to the <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Cloud Console</a> and enable the <strong>Google Search Console API</strong>.</li>
+                                                    <li>Create a <strong>Service Account</strong> in IAM & Admin &rarr; Service Accounts. Generate and download a key in <strong>JSON</strong> format.</li>
+                                                    <li>Go to your <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Search Console</a>, select the property <strong>sc-domain:virzyguns.com</strong>.</li>
+                                                    <li>Under Settings &rarr; Users and Permissions, add the Service Account's email (e.g., <code className="text-sky-200">my-account@...gserviceaccount.com</code>) as a user with <strong>Restricted (Read-only)</strong> permissions.</li>
+                                                    <li>Add the environment variable <strong>`GOOGLE_SERVICE_ACCOUNT_JSON`</strong> in Vercel. Set its value to the exact raw text of the downloaded JSON key file, then redeploy.</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {seoConnected && (
+                                    <div className="liquid-glass border border-emerald-500/20 bg-emerald-500/5 rounded-lg p-4 flex items-center gap-3">
+                                        <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+                                        <p className="text-xs text-emerald-200">
+                                            Connected successfully via Service Account: <strong className="text-white">{seoClientEmail}</strong>
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Key Metrics Cards */}
+                                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                                    <StatCard label="Total Clicks" value={seoMetrics.clicks} Icon={Search} />
+                                    <StatCard label="Total Impressions" value={seoMetrics.impressions} Icon={Users} accent="text-sky-300" />
+                                    <StatCard label="Average CTR" value={seoMetrics.ctr} Icon={TrendingUp} accent="text-emerald-300" />
+                                    <StatCard label="Average Position" value={seoMetrics.position} Icon={LayoutDashboard} accent="text-amber-300" />
+                                </div>
+
+                                {/* Graph / Chart */}
+                                <div className="liquid-glass rounded-lg p-6">
+                                    <Eyebrow>Organic search performance (30 days)</Eyebrow>
+                                    <SeoChart data={seoMetrics.chart} />
+                                    <div className="mt-3 flex justify-between text-[10px] text-white/35">
+                                        <span>30 days ago</span>
+                                        <span>Clicks Trend</span>
+                                        <span>3 days ago</span>
+                                    </div>
+                                </div>
+
+                                {/* Top Keywords Table */}
+                                <div className="liquid-glass overflow-hidden rounded-lg">
+                                    <div className="border-b border-white/[0.07] px-6 py-4">
+                                        <Eyebrow>Top Search Queries</Eyebrow>
+                                    </div>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-sm">
+                                            <thead>
+                                                <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40">
+                                                    <th className="px-6 py-3 font-semibold">Search query</th>
+                                                    <th className="px-6 py-3 font-semibold">Clicks</th>
+                                                    <th className="px-6 py-3 font-semibold">Impressions</th>
+                                                    <th className="px-6 py-3 font-semibold">CTR</th>
+                                                    <th className="px-6 py-3 font-semibold">Position</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-white/[0.05] text-white/80">
+                                                {seoMetrics.queries?.map((q: any) => (
+                                                    <tr key={q.query} className="transition hover:bg-white/[0.02]">
+                                                        <td className="px-6 py-3 text-white font-medium">{q.query}</td>
+                                                        <td className="px-6 py-3">{q.clicks}</td>
+                                                        <td className="px-6 py-3 text-white/55">{q.impressions}</td>
+                                                        <td className="px-6 py-3 text-sky-200">{q.ctr}</td>
+                                                        <td className="px-6 py-3 text-amber-200">{q.position}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
 
@@ -985,6 +1200,7 @@ export default function FounderDashboardClient() {
                     <form onSubmit={handleAddSubscriber} className="space-y-4">
                         <Field label="Name"><input type="text" required value={newSub.name} onChange={(e) => setNewSub({ ...newSub, name: e.target.value })} className={inputClass} /></Field>
                         <Field label="Email address"><input type="email" required value={newSub.email} onChange={(e) => setNewSub({ ...newSub, email: e.target.value })} className={inputClass} /></Field>
+                        <Field label="Tags (comma-separated)"><input type="text" placeholder="e.g. artist, beat-buyer" value={newSub.tags.join(', ')} onChange={(e) => setNewSub({ ...newSub, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
                         <SubmitButton loading={subActionLoading} label="Add subscriber" />
                     </form>
                 </ModalShell>
@@ -1001,6 +1217,7 @@ export default function FounderDashboardClient() {
                                 <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
                             </select>
                         </Field>
+                        <Field label="Tags (comma-separated)"><input type="text" placeholder="e.g. artist, beat-buyer" value={(editingSub.tags || []).join(', ')} onChange={(e) => setEditingSub({ ...editingSub, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
                         <SubmitButton loading={subActionLoading} label="Save changes" />
                     </form>
                 </ModalShell>
@@ -1017,6 +1234,7 @@ export default function FounderDashboardClient() {
                                 <option value="cadenz_update" className="bg-[#0a1b27]">CADENZ Update (R&D)</option>
                             </select>
                         </Field>
+                        <Field label="Target tags (comma-separated, leave blank to send to all)"><input type="text" placeholder="e.g. artist, vip" value={newCampaign.target_tags.join(', ')} onChange={(e) => setNewCampaign({ ...newCampaign, target_tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) })} className={inputClass} /></Field>
                         <Field label="Message body"><textarea rows={8} required placeholder="Write your email body…" value={newCampaign.body_content} onChange={(e) => setNewCampaign({ ...newCampaign, body_content: e.target.value })} className={`${inputClass} leading-relaxed`} /></Field>
                         <SubmitButton loading={campaignActionLoading} label="Create broadcast" />
                     </form>

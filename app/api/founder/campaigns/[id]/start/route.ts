@@ -58,12 +58,18 @@ export async function POST(
                 [campaignId]
             );
 
-            // 2. Populate queue for active subscribers (skipping existing logs to prevent duplicates on resume)
+            // 2. Populate queue for active subscribers (filtering by target_tags if defined, skipping duplicates on resume)
             await client.query(
                 `INSERT INTO vgp_recipient_logs (campaign_id, subscriber_id, status)
-                 SELECT $1, id, 'pending'
-                 FROM vgp_subscribers
-                 WHERE status = 'subscribed'
+                 SELECT $1, s.id, 'pending'
+                 FROM vgp_subscribers s
+                 JOIN vgp_campaigns c ON c.id = $1
+                 WHERE s.status = 'subscribed'
+                   AND (
+                     c.target_tags = '{}' 
+                     OR c.target_tags IS NULL 
+                     OR s.tags && c.target_tags
+                   )
                  ON CONFLICT (campaign_id, subscriber_id) DO NOTHING`,
                 [campaignId]
             );

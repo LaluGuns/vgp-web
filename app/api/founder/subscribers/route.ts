@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url);
         const search = searchParams.get('search')?.trim().toLowerCase() || '';
         const status = searchParams.get('status') || ''; // 'subscribed' or 'unsubscribed'
+        const tag = searchParams.get('tag')?.trim().toLowerCase() || '';
         const limit = parseInt(searchParams.get('limit') || '50');
         const offset = parseInt(searchParams.get('offset') || '0');
 
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
 
         // 2. Build list query
         let queryText = `
-            SELECT id, name, email, status, unsubscribed_at, created_at 
+            SELECT id, name, email, status, unsubscribed_at, created_at, tags 
             FROM vgp_subscribers
             WHERE 1=1
         `;
@@ -49,6 +50,12 @@ export async function GET(request: NextRequest) {
         if (status) {
             queryText += ` AND status = $${paramCount}`;
             params.push(status);
+            paramCount++;
+        }
+
+        if (tag) {
+            queryText += ` AND $${paramCount} = ANY(tags)`;
+            params.push(tag);
             paramCount++;
         }
 
@@ -68,6 +75,47 @@ export async function GET(request: NextRequest) {
     }
 }
 
+export async function POST(request: NextRequest) {
+    try {
+        const isAuthorized = await checkFounderSession(request);
+        if (!isAuthorized) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        if (!hasValidRequestOrigin(request)) {
+            return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
+        }
+
+        const { name, email, status, tags } = await request.json();
+
+        if (!name || !email) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
+        const activeStatus = status || 'subscribed';
+        if (activeStatus !== 'subscribed' && activeStatus !== 'unsubscribed') {
+            return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+        }
+
+        const parsedTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+
+        const result = await pool.query(
+            `INSERT INTO vgp_subscribers (name, email, status, tags)
+             VALUES ($1, $2, $3, $4)
+             ON CONFLICT (email)
+             DO UPDATE SET name = EXCLUDED.name, status = EXCLUDED.status, tags = EXCLUDED.tags, unsubscribed_at = CASE WHEN EXCLUDED.status = 'unsubscribed' THEN CURRENT_TIMESTAMP ELSE NULL END
+             RETURNING id, name, email, status, tags, created_at`,
+            [name.trim(), normalizedEmail, activeStatus, parsedTags]
+        );
+
+        return NextResponse.json({ success: true, subscriber: result.rows[0] });
+    } catch (error) {
+        console.error('Admin Subscribers POST Error:', error);
+        return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
+    }
+}
+
 export async function PUT(request: NextRequest) {
     try {
         // Authenticate request and verify origin
@@ -80,7 +128,7 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { id, name, email, status } = await request.json();
+        const { id, name, email, status, tags } = await request.json();
 
         if (!id || !name || !email || !status) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -92,13 +140,14 @@ export async function PUT(request: NextRequest) {
         }
 
         const unsubscribedAt = status === 'unsubscribed' ? 'CURRENT_TIMESTAMP' : 'NULL';
+        const parsedTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
 
         const result = await pool.query(
             `UPDATE vgp_subscribers
-             SET name = $1, email = $2, status = $3, unsubscribed_at = ${unsubscribedAt === 'NULL' ? 'NULL' : 'CURRENT_TIMESTAMP'}
-             WHERE id = $4
-             RETURNING id, name, email, status, unsubscribed_at`,
-            [name.trim(), normalizedEmail, status, id]
+             SET name = $1, email = $2, status = $3, unsubscribed_at = ${unsubscribedAt === 'NULL' ? 'NULL' : 'CURRENT_TIMESTAMP'}, tags = $4
+             WHERE id = $5
+             RETURNING id, name, email, status, unsubscribed_at, tags`,
+            [name.trim(), normalizedEmail, status, parsedTags, id]
         );
 
         if (result.rowCount === 0 || result.rowCount === null) {

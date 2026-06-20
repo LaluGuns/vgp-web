@@ -10,9 +10,24 @@ export async function GET(request: NextRequest) {
         }
 
         const result = await pool.query(
-            `SELECT id, subject, template_type, body_content, status, created_at, updated_at, completed_at
-             FROM vgp_campaigns
-             ORDER BY created_at DESC`
+            `SELECT 
+                c.id, 
+                c.subject, 
+                c.template_type, 
+                c.body_content, 
+                c.status, 
+                c.created_at, 
+                c.updated_at, 
+                c.completed_at, 
+                c.target_tags,
+                COUNT(rl.id)::int AS total_recipients,
+                COUNT(CASE WHEN rl.status = 'sent' THEN 1 END)::int AS sent_recipients,
+                COUNT(CASE WHEN rl.opened_at IS NOT NULL THEN 1 END)::int AS opened_recipients,
+                COUNT(CASE WHEN rl.clicked_at IS NOT NULL THEN 1 END)::int AS clicked_recipients
+             FROM vgp_campaigns c
+             LEFT JOIN vgp_recipient_logs rl ON rl.campaign_id = c.id
+             GROUP BY c.id
+             ORDER BY c.created_at DESC`
         );
 
         return NextResponse.json({
@@ -36,7 +51,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { subject, template_type, body_content } = await request.json();
+        const { subject, template_type, body_content, target_tags } = await request.json();
 
         if (!subject || !template_type) {
             return NextResponse.json({ error: 'Subject and template type are required.' }, { status: 400 });
@@ -47,11 +62,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid template type.' }, { status: 400 });
         }
 
+        const parsedTargetTags = Array.isArray(target_tags) ? target_tags.map(t => String(t).trim().toLowerCase()) : [];
+
         const result = await pool.query(
-            `INSERT INTO vgp_campaigns (subject, template_type, body_content, status)
-             VALUES ($1, $2, $3, 'draft')
-             RETURNING id, subject, template_type, status, created_at`,
-            [subject.trim(), template_type, body_content || '']
+            `INSERT INTO vgp_campaigns (subject, template_type, body_content, status, target_tags)
+             VALUES ($1, $2, $3, 'draft', $4)
+             RETURNING id, subject, template_type, status, created_at, target_tags`,
+            [subject.trim(), template_type, body_content || '', parsedTargetTags]
         );
 
         return NextResponse.json({
