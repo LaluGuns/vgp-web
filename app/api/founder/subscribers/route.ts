@@ -36,6 +36,9 @@ export async function GET(request: NextRequest) {
         const limit = limitParam === 'all' ? 1000000 : parseInt(limitParam || '50');
         const offset = parseInt(searchParams.get('offset') || '0');
 
+        const sortBy = searchParams.get('sortBy') || 'created_at';
+        const sortDir = (searchParams.get('sortDir') || 'desc').toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+
         // 1. Get stats
         const statsRes = await pool.query(`
             SELECT
@@ -80,11 +83,14 @@ export async function GET(request: NextRequest) {
         const filteredCount = parseInt(countRes.rows[0].count || '0');
 
         // 4. Build list query with ordering, limit and offset
+        const allowedSortColumns = ['name', 'email', 'status', 'created_at'];
+        const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'created_at';
+
         let queryText = `
             SELECT id, name, email, status, unsubscribed_at, created_at, tags 
             FROM vgp_subscribers
             ${baseFilter}
-            ORDER BY created_at DESC
+            ORDER BY ${validSortBy} ${sortDir}
             LIMIT $${paramCount} OFFSET $${paramCount + 1}
         `;
         params.push(limit, offset);

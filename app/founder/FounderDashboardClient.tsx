@@ -1475,7 +1475,35 @@ export default function FounderDashboardClient() {
                 </div>
 
                 {/* Bottom utilities */}
-                <div className="flex flex-col items-center gap-3.5 w-full">
+                <div className="flex flex-col items-center gap-3.5 w-full border-t border-white/[0.06] pt-5">
+                    {/* Hostinger Mailbox */}
+                    <a
+                        href="https://mail.hostinger.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-sky-400 transition-all hover:bg-sky-400/10 hover:text-sky-300 hover:scale-105"
+                    >
+                        <Mail className="h-4.5 w-4.5" />
+                        <span className="absolute left-16 z-50 scale-0 rounded-md border border-white/[0.08] bg-[#07090e]/95 px-2.5 py-1 text-xs font-medium text-white shadow-xl transition-all duration-200 group-hover:scale-100 whitespace-nowrap pointer-events-none">
+                            Hostinger Mailbox
+                        </span>
+                    </a>
+
+                    {/* BeatStars Studio */}
+                    <a
+                        href="https://studio.beatstars.com/dashboard"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-amber-400 transition-all hover:bg-amber-400/10 hover:text-amber-300 hover:scale-105"
+                    >
+                        <Radio className="h-4.5 w-4.5" />
+                        <span className="absolute left-16 z-50 scale-0 rounded-md border border-white/[0.08] bg-[#07090e]/95 px-2.5 py-1 text-xs font-medium text-white shadow-xl transition-all duration-200 group-hover:scale-100 whitespace-nowrap pointer-events-none">
+                            BeatStars Studio
+                        </span>
+                    </a>
+
+                    <div className="w-6 h-px bg-white/[0.06] my-1" />
+
                     <a
                         href="https://www.virzyguns.com"
                         target="_blank"
@@ -1595,6 +1623,13 @@ export default function FounderDashboardClient() {
                                 <span className="text-2xs text-white/35">· mission control</span>
                             </div>
                             <div className="flex items-center gap-2">
+                                <a href="https://mail.hostinger.com" target="_blank" rel="noopener noreferrer" title="Hostinger Mailbox" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-sky-300 transition hover:text-sky-200">
+                                    <Mail className="h-3 w-3" />
+                                </a>
+                                <a href="https://studio.beatstars.com/dashboard" target="_blank" rel="noopener noreferrer" title="BeatStars Studio" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-amber-300 transition hover:text-amber-200">
+                                    <Radio className="h-3 w-3" />
+                                </a>
+                                <div className="h-4 w-px bg-white/[0.08]" />
                                 <a href="https://www.virzyguns.com" target="_blank" rel="noopener noreferrer" title="Go to website" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/50 transition hover:text-sky-100">
                                     <Globe className="h-3 w-3" />
                                 </a>
@@ -1635,32 +1670,6 @@ export default function FounderDashboardClient() {
                         </div>
 
                         <HealthPanel health={health} loading={healthLoading} onRefresh={loadHealth} />
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <a href="https://mail.hostinger.com/" target="_blank" rel="noopener noreferrer"
-                                className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
-                                <div className="flex items-center gap-3">
-                                    <Mail className="h-5 w-5 text-sky-200/70" />
-                                    <div>
-                                        <p className="text-sm font-semibold text-white">Hostinger Mailbox</p>
-                                        <p className="text-xs text-white/45">Open the founder inbox to read replies and bounces.</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold text-sky-100">Open &rarr;</span>
-                            </a>
-
-                            <a href="https://studio.beatstars.com/dashboard" target="_blank" rel="noopener noreferrer"
-                                className="liquid-glass-soft flex items-center justify-between rounded-lg p-5 transition hover:border-sky-200/30">
-                                <div className="flex items-center gap-3">
-                                    <Radio className="h-5 w-5 text-sky-200/70" />
-                                    <div>
-                                        <p className="text-sm font-semibold text-white">BeatStars Studio</p>
-                                        <p className="text-xs text-white/45">Manage your beats, track sales, and view play telemetry.</p>
-                                    </div>
-                                </div>
-                                <span className="text-xs font-semibold text-sky-100">Open &rarr;</span>
-                            </a>
-                        </div>
                     </div>
                 )}
 
@@ -1699,12 +1708,14 @@ export default function FounderDashboardClient() {
                             ))}
                         </div>
 
-                        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                            <div className="flex flex-1 gap-2 flex-wrap">
-                                <div className="relative flex-1 md:max-w-md min-w-[200px]">
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                            <div className="flex flex-wrap gap-2 items-center flex-1">
+                                <div className="relative flex-1 max-w-sm min-w-[200px]">
                                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
                                     <input
-                                        type="text" placeholder="Search name or email…" value={searchQuery}
+                                        type="text" 
+                                        placeholder="Search name or email…" 
+                                        value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
@@ -1712,14 +1723,17 @@ export default function FounderDashboardClient() {
                                                 loadSubscribers(1);
                                             }
                                         }}
-                                        className="w-full rounded-lg border border-white/10 bg-white/[0.03] py-2 pl-9 pr-3 text-sm text-white outline-none transition focus:border-sky-300/50"
+                                        className="w-full h-10 rounded-lg border border-white/10 bg-white/[0.03] pl-9 pr-3 text-sm text-white outline-none transition focus:border-sky-300/50"
                                     />
                                 </div>
-                                <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                                    className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50">
-                                    <option value="" className="bg-[#0a1b27]">All statuses</option>
-                                    <option value="subscribed" className="bg-[#0a1b27]">Subscribed</option>
-                                    <option value="unsubscribed" className="bg-[#0a1b27]">Unsubscribed</option>
+                                <select 
+                                    value={statusFilter} 
+                                    onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
+                                    className="h-10 rounded-lg border border-white/10 bg-[#050505] px-3 text-sm text-white/70 outline-none focus:border-sky-300/50 cursor-pointer"
+                                >
+                                    <option value="" className="bg-[#050505]">All statuses</option>
+                                    <option value="subscribed" className="bg-[#050505]">Subscribed</option>
+                                    <option value="unsubscribed" className="bg-[#050505]">Unsubscribed</option>
                                 </select>
                                 {audienceSubTab === 'all' && (
                                     <select 
@@ -1734,18 +1748,20 @@ export default function FounderDashboardClient() {
                                                 setTagFilter('');
                                             }
                                         }}
-                                        className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white/70 outline-none focus:border-sky-300/50"
+                                        className="h-10 rounded-lg border border-white/10 bg-[#050505] px-3 text-sm text-white/70 outline-none focus:border-sky-300/50 cursor-pointer"
                                     >
-                                        <option value="" className="bg-[#0a1b27]">All segments</option>
-                                        <option value="cadenz" className="bg-[#0a1b27]">CADENZ</option>
-                                        <option value="beat_buyer" className="bg-[#0a1b27]">Beat Buyer</option>
-                                        <option value="book_buyer" className="bg-[#0a1b27]">Book Buyer</option>
-                                        <option value="custom" className="bg-[#0a1b27]">Other Tag...</option>
+                                        <option value="" className="bg-[#050505]">All segments</option>
+                                        <option value="cadenz" className="bg-[#050505]">CADENZ</option>
+                                        <option value="beat_buyer" className="bg-[#050505]">Beat Buyer</option>
+                                        <option value="book_buyer" className="bg-[#050505]">Book Buyer</option>
+                                        <option value="custom" className="bg-[#050505]">Other Tag...</option>
                                     </select>
                                 )}
                                 {audienceSubTab === 'all' && predefinedTagFilter === 'custom' && (
                                     <input
-                                        type="text" placeholder="Enter tag…" value={tagFilter}
+                                        type="text" 
+                                        placeholder="Enter tag…" 
+                                        value={tagFilter}
                                         onChange={(e) => setTagFilter(e.target.value)}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
@@ -1753,32 +1769,53 @@ export default function FounderDashboardClient() {
                                                 loadSubscribers(1);
                                             }
                                         }}
-                                        className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
+                                        className="h-10 rounded-lg border border-white/10 bg-white/[0.03] px-3 text-sm text-white outline-none focus:border-sky-300/50 max-w-[140px]"
                                     />
                                 )}
-                                <button onClick={() => { setCurrentPage(1); loadSubscribers(1); }} className="rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15">Search</button>
+                                <button 
+                                    onClick={() => { setCurrentPage(1); loadSubscribers(1); }} 
+                                    className="h-10 rounded-lg border border-sky-300/25 bg-sky-300/10 px-4 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/15"
+                                >
+                                    Search
+                                </button>
                             </div>
-                            <div className="flex gap-2">
-                                <button onClick={handleExportCSV} title="Export current list to CSV"
-                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]">
+                            <div className="flex gap-2 flex-wrap items-center">
+                                <button 
+                                    onClick={handleExportCSV} 
+                                    title="Export current list to CSV"
+                                    className="h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-4 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+                                >
                                     Export CSV
                                 </button>
-                                <button onClick={() => setIsImportModalOpen(true)} title="Import subscribers from CSV"
-                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]">
+                                <button 
+                                    onClick={() => setIsImportModalOpen(true)} 
+                                    title="Import subscribers from CSV"
+                                    className="h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-4 text-xs font-semibold text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+                                >
                                     Import CSV
                                 </button>
                                 {selectedIds.length > 0 && (
-                                    <button onClick={handleDeleteSelected} disabled={subActionLoading} title={`Delete ${selectedIds.length} selected`}
-                                        className="inline-flex items-center justify-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50">
+                                    <button 
+                                        onClick={handleDeleteSelected} 
+                                        disabled={subActionLoading} 
+                                        title={`Delete ${selectedIds.length} selected`}
+                                        className="h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 text-xs font-semibold text-amber-300 transition hover:bg-amber-500/20 disabled:opacity-50"
+                                    >
                                         <Ban className="h-3.5 w-3.5" /> Delete {selectedIds.length}
                                     </button>
                                 )}
-                                <button onClick={handleDeleteAll} disabled={subActionLoading} title="Delete ALL subscribers"
-                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-4 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50">
+                                <button 
+                                    onClick={handleDeleteAll} 
+                                    disabled={subActionLoading} 
+                                    title="Delete ALL subscribers"
+                                    className="h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 px-4 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50"
+                                >
                                     <Ban className="h-3.5 w-3.5" /> Delete All
                                 </button>
-                                <button onClick={() => setIsAddSubOpen(true)}
-                                    className="inline-flex items-center justify-center gap-1.5 rounded-full border border-white bg-white px-4 py-2 text-xs font-semibold text-[#030405] transition hover:bg-white/90">
+                                <button 
+                                    onClick={() => setIsAddSubOpen(true)}
+                                    className="h-10 inline-flex items-center justify-center gap-1.5 rounded-lg border border-white bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90"
+                                >
                                     <Plus className="h-3.5 w-3.5" /> Add subscriber
                                 </button>
                             </div>
