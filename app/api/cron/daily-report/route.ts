@@ -84,9 +84,10 @@ export async function GET(request: NextRequest) {
             active: parseInt(campaignStatsRes.rows[0].active || '0')
         };
 
-        // PageSpeed insights metric
-        let pageSpeedScore = 94; // fallback high quality score
-        let pageSpeedMetricsText = 'Audited: https://www.virzyguns.com (Cached metrics)';
+        // PageSpeed insights metric. Null means the audit was unavailable today;
+        // we report that honestly rather than substituting a fabricated score.
+        let pageSpeedScore: number | null = null;
+        let pageSpeedMetricsText = 'Performance audit unavailable today (PageSpeed API did not respond).';
         try {
             const key = process.env.PAGESPEED_API_KEY || '';
             const apiRes = await fetch(
@@ -110,7 +111,37 @@ export async function GET(request: NextRequest) {
                 }
             }
         } catch (lhErr) {
-            console.warn('PageSpeed API call failed during daily report, utilizing fallback values:', lhErr);
+            console.warn('PageSpeed API call failed during daily report; reporting as unavailable:', lhErr);
+        }
+
+        // Persist a daily metric snapshot (real values) for historical trends.
+        // Best-effort: a snapshot failure must not block the report email.
+        try {
+            const sentRes = await pool.query(
+                `SELECT COUNT(*) AS sent FROM vgp_recipient_logs
+                 WHERE status = 'sent' AND sent_at >= NOW() - INTERVAL '24 hours'`
+            );
+            const emailsSent24h = parseInt(sentRes.rows[0].sent || '0');
+
+            await pool.query(
+                `INSERT INTO vgp_metric_snapshots
+                    (snapshot_date, total_subscribers, active_subscribers, unsubscribed, new_24h,
+                     campaigns_total, campaigns_completed, emails_sent_24h, pagespeed_score)
+                 VALUES (CURRENT_DATE, $1, $2, $3, $4, $5, $6, $7, $8)
+                 ON CONFLICT (snapshot_date) DO UPDATE SET
+                    total_subscribers = EXCLUDED.total_subscribers,
+                    active_subscribers = EXCLUDED.active_subscribers,
+                    unsubscribed = EXCLUDED.unsubscribed,
+                    new_24h = EXCLUDED.new_24h,
+                    campaigns_total = EXCLUDED.campaigns_total,
+                    campaigns_completed = EXCLUDED.campaigns_completed,
+                    emails_sent_24h = EXCLUDED.emails_sent_24h,
+                    pagespeed_score = EXCLUDED.pagespeed_score`,
+                [stats.total, stats.subscribed, stats.unsubscribed, stats.new24h,
+                 campaigns.total, campaigns.completed, emailsSent24h, pageSpeedScore]
+            );
+        } catch (snapErr) {
+            console.warn('Failed to persist metric snapshot (run scripts/setup-db.js to create the table):', snapErr);
         }
 
         const smtpUser = process.env.SMTP_USER;
@@ -139,7 +170,10 @@ export async function GET(request: NextRequest) {
             day: 'numeric'
         });
 
-        const performanceGlowColor = pageSpeedScore >= 90 ? '#00E5FF' : pageSpeedScore >= 50 ? '#FFB300' : '#FF1744';
+        const scoreDisplay = pageSpeedScore === null ? 'N/A' : String(pageSpeedScore);
+        const performanceGlowColor = pageSpeedScore === null
+            ? '#888888'
+            : pageSpeedScore >= 90 ? '#00E5FF' : pageSpeedScore >= 50 ? '#FFB300' : '#FF1744';
 
         const reportHtml = `
             <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 40px 20px;">
@@ -156,7 +190,7 @@ export async function GET(request: NextRequest) {
                             <tr>
                                 <td>
                                     <span style="font-size: 12px; color: #888;">Lighthouse Score</span><br>
-                                    <span style="font-size: 32px; font-weight: bold; color: ${performanceGlowColor};">${pageSpeedScore}</span><span style="font-size: 14px; color: #555;">/100</span>
+                                    <span style="font-size: 32px; font-weight: bold; color: ${performanceGlowColor};">${scoreDisplay}</span>${pageSpeedScore === null ? '' : '<span style="font-size: 14px; color: #555;">/100</span>'}
                                 </td>
                                 <td style="text-align: right; font-size: 11px; color: #888; line-height: 1.6; white-space: pre-line;">
                                     ${pageSpeedMetricsText}
@@ -230,7 +264,7 @@ export async function GET(request: NextRequest) {
             text: `VGP Daily Performance Report\n` +
                 `=============================\n` +
                 `Date: ${reportDateString}\n` +
-                `Lighthouse Score: ${pageSpeedScore}/100\n\n` +
+                `Lighthouse Score: ${scoreDisplay}${pageSpeedScore === null ? '' : '/100'}\n\n` +
                 `Subscribers:\n` +
                 `- Total: ${stats.total}\n` +
                 `- Active: ${stats.subscribed}\n` +

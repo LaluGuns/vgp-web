@@ -17,16 +17,18 @@ export async function GET(request: NextRequest) {
 
         // 1. Get stats
         const statsRes = await pool.query(`
-            SELECT 
+            SELECT
                 COUNT(*) as total,
                 COUNT(CASE WHEN status = 'subscribed' THEN 1 END) as subscribed,
-                COUNT(CASE WHEN status = 'unsubscribed' THEN 1 END) as unsubscribed
+                COUNT(CASE WHEN status = 'unsubscribed' THEN 1 END) as unsubscribed,
+                COUNT(CASE WHEN created_at >= NOW() - INTERVAL '24 hours' THEN 1 END) as new_24h
             FROM vgp_subscribers
         `);
         const stats = {
             total: parseInt(statsRes.rows[0].total || '0'),
             subscribed: parseInt(statsRes.rows[0].subscribed || '0'),
-            unsubscribed: parseInt(statsRes.rows[0].unsubscribed || '0')
+            unsubscribed: parseInt(statsRes.rows[0].unsubscribed || '0'),
+            new24h: parseInt(statsRes.rows[0].new_24h || '0')
         };
 
         // 2. Build list query

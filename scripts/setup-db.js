@@ -109,6 +109,23 @@ CREATE TABLE IF NOT EXISTS vgp_daily_report_logs (
     sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(50) DEFAULT 'pending' CONSTRAINT check_report_status CHECK (status IN ('pending', 'sent', 'failed'))
 );
+
+-- 6. Create Metric Snapshots Table (daily historical trends)
+-- Captured once per day by the daily-report cron. Powers honest trend charts
+-- for metrics that cannot be reconstructed later (e.g. PageSpeed score history).
+-- pagespeed_score is nullable: NULL means the audit was unavailable that day.
+CREATE TABLE IF NOT EXISTS vgp_metric_snapshots (
+    snapshot_date DATE PRIMARY KEY DEFAULT CURRENT_DATE,
+    total_subscribers INT NOT NULL DEFAULT 0,
+    active_subscribers INT NOT NULL DEFAULT 0,
+    unsubscribed INT NOT NULL DEFAULT 0,
+    new_24h INT NOT NULL DEFAULT 0,
+    campaigns_total INT NOT NULL DEFAULT 0,
+    campaigns_completed INT NOT NULL DEFAULT 0,
+    emails_sent_24h INT NOT NULL DEFAULT 0,
+    pagespeed_score INT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
 `;
 
 const setup = async () => {

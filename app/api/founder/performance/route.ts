@@ -52,23 +52,14 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ success: true, metrics });
     } catch (error: any) {
         console.error('PageSpeed Audit API Error:', error);
-        
-        // Return a mock fallback if API fails due to rate limits or invalid target URL
-        // so that the dashboard UI doesn't crash during presentation
+
+        // Report unavailability honestly instead of substituting fabricated
+        // metrics. The dashboard renders a clear "unavailable / retry" state.
         return NextResponse.json({
             success: false,
+            available: false,
+            metrics: null,
             error: error.message || 'Failed to query PageSpeed API',
-            fallback: {
-                url: 'https://www.virzyguns.com',
-                score: 94,
-                fcp: '1.2s',
-                lcp: '2.1s',
-                tbt: '140ms',
-                cls: '0.04',
-                speedIndex: '1.5s',
-                auditTime: new Date().toISOString(),
-                isMock: true
-            }
-        });
+        }, { status: 200 });
     }
 }
