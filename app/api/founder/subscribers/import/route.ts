@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool, { withTransaction } from '@/lib/db';
 import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
+import { z } from 'zod';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -14,6 +15,24 @@ function getDefaultNameFromEmail(email: string): string {
         .join(' ') || 'Producer';
 }
 
+// Zod schemas for validation
+const subscriberImportRowSchema = z.object({
+    email: z.string().trim().email("Invalid email format").max(254),
+    name: z.string().trim().max(80).optional().nullable(),
+    tags: z.array(z.string().trim()).optional().default([]),
+    first_name: z.string().trim().max(255).optional().nullable(),
+    last_name: z.string().trim().max(255).optional().nullable(),
+    account_type: z.string().trim().max(100).optional().nullable(),
+    username: z.string().trim().max(255).optional().nullable(),
+    user_profile: z.string().trim().max(500).optional().nullable(),
+    location: z.string().trim().max(255).optional().nullable(),
+    product_type: z.string().trim().max(100).optional().nullable(),
+    license_name: z.string().trim().max(100).optional().nullable(),
+    product_title: z.string().trim().max(255).optional().nullable(),
+});
+
+const MAX_IMPORT_BATCH_SIZE = 500;
+
 export async function POST(request: NextRequest) {
     try {
         const isAuthorized = await checkFounderSession(request);
@@ -25,13 +44,24 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { subscribers } = await request.json();
+        let body: any;
+        try {
+            body = await request.json();
+        } catch (jsonErr) {
+            return NextResponse.json({ error: 'Malformed JSON payload.' }, { status: 400 });
+        }
 
-        if (!Array.isArray(subscribers)) {
+        // Validate payload structure
+        const payloadResult = z.object({
+            subscribers: z.array(z.any()),
+        }).safeParse(body);
+
+        if (!payloadResult.success) {
             return NextResponse.json({ error: 'Invalid payload. Expected an array of subscribers.' }, { status: 400 });
         }
 
-        const MAX_IMPORT_BATCH_SIZE = 500;
+        const { subscribers } = payloadResult.data;
+
         if (subscribers.length > MAX_IMPORT_BATCH_SIZE) {
             return NextResponse.json({ 
                 error: `Batch size too large. Maximum allowed is ${MAX_IMPORT_BATCH_SIZE} subscribers per request.` 
@@ -43,27 +73,38 @@ export async function POST(request: NextRequest) {
         const errors: string[] = [];
 
         await withTransaction(async (client) => {
-            for (const sub of subscribers) {
-                const { name, email, tags } = sub;
-                if (!email) {
+            for (let i = 0; i < subscribers.length; i++) {
+                const sub = subscribers[i];
+                
+                // Parse individual subscriber rows
+                const rowResult = subscriberImportRowSchema.safeParse(sub);
+                if (!rowResult.success) {
                     errorCount++;
-                    errors.push('Row missing email address.');
+                    const rowEmail = sub && typeof sub === 'object' && 'email' in sub ? String(sub.email).trim() : 'Unknown';
+                    errors.push(`Validation failed for ${rowEmail}: ${rowResult.error.issues[0].message}`);
                     continue;
                 }
 
-                const normalizedEmail = String(email).trim().toLowerCase();
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(normalizedEmail)) {
-                    errorCount++;
-                    errors.push(`Invalid email format: ${normalizedEmail}`);
-                    continue;
-                }
+                const {
+                    email,
+                    name,
+                    tags,
+                    first_name,
+                    last_name,
+                    account_type,
+                    username,
+                    user_profile,
+                    location,
+                    product_type,
+                    license_name,
+                    product_title
+                } = rowResult.data;
 
-                const rawName = String(name || '').trim();
-                const cleanName = rawName && rawName !== 'Producer'
-                    ? rawName
-                    : getDefaultNameFromEmail(normalizedEmail);
-                const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+                const normalizedEmail = email.toLowerCase();
+                const rawName = name && name !== 'Producer' ? name : getDefaultNameFromEmail(normalizedEmail);
+                const cleanName = rawName.slice(0, 80);
+
+                const rawTags = tags.map(t => t.toLowerCase());
                 const parsedTags: string[] = [];
                 for (const t of rawTags) {
                     let clean = t;
@@ -78,6 +119,10 @@ export async function POST(request: NextRequest) {
                         parsedTags.push(clean);
                     }
                 }
+
+                // Wrap individual row in a Postgres savepoint to support recovery
+                const savepointName = `row_import_${i}`;
+                await client.query(`SAVEPOINT ${savepointName}`);
 
                 try {
                     await client.query(
@@ -106,19 +151,21 @@ export async function POST(request: NextRequest) {
                             cleanName, 
                             normalizedEmail, 
                             parsedTags,
-                            sub.first_name || null,
-                            sub.last_name || null,
-                            sub.account_type || null,
-                            sub.username || null,
-                            sub.user_profile || null,
-                            sub.location || null,
-                            sub.product_type || null,
-                            sub.license_name || null,
-                            sub.product_title || null
+                            first_name || null,
+                            last_name || null,
+                            account_type || null,
+                            username || null,
+                            user_profile || null,
+                            location || null,
+                            product_type || null,
+                            license_name || null,
+                            product_title || null
                         ]
                     );
+                    await client.query(`RELEASE SAVEPOINT ${savepointName}`);
                     successCount++;
                 } catch (dbErr: any) {
+                    await client.query(`ROLLBACK TO SAVEPOINT ${savepointName}`);
                     console.error('Failed to import row:', sub, dbErr);
                     errorCount++;
                     errors.push(`Database error for ${normalizedEmail}: ${dbErr.message}`);

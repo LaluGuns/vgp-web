@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { verifyToken } from '@/lib/tokens';
 import { hasValidRequestOrigin } from '@/lib/auth';
+import { z } from 'zod';
+
+const unsubscribeSchema = z.object({
+    token: z.string().trim().min(1, "Unsubscribe token is required."),
+});
 
 export async function POST(request: NextRequest) {
     try {
@@ -10,11 +15,22 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { token } = await request.json();
-
-        if (!token || typeof token !== 'string') {
-            return NextResponse.json({ error: 'Unsubscribe token is required.' }, { status: 400 });
+        let body: any;
+        try {
+            body = await request.json();
+        } catch (jsonErr) {
+            return NextResponse.json({ error: 'Malformed JSON payload.' }, { status: 400 });
         }
+
+        const parseResult = unsubscribeSchema.safeParse(body);
+        if (!parseResult.success) {
+            return NextResponse.json(
+                { error: parseResult.error.issues[0].message },
+                { status: 400 }
+            );
+        }
+
+        const { token } = parseResult.data;
 
         // Verify the token signature and expiration
         const decoded = await verifyToken(token);

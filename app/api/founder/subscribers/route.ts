@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
+import { z } from 'zod';
 
 function normalizeTags(tags: any): string[] {
     const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
@@ -21,6 +22,47 @@ function normalizeTags(tags: any): string[] {
     return parsedTags;
 }
 
+// Zod schemas for request validation
+const subscribersGetQuerySchema = z.object({
+    search: z.string().default(''),
+    status: z.enum(['', 'subscribed', 'unsubscribed']).default(''),
+    tag: z.string().default(''),
+    limit: z.preprocess(
+        (val) => (val === 'all' ? 1000000 : val === null || val === undefined ? 50 : parseInt(String(val), 10)),
+        z.number().int().min(1).catch(50)
+    ),
+    offset: z.preprocess(
+        (val) => (val === null || val === undefined ? 0 : parseInt(String(val), 10)),
+        z.number().int().min(0).catch(0)
+    ),
+    sortBy: z.enum(['name', 'email', 'status', 'created_at']).default('created_at'),
+    sortDir: z.enum(['ASC', 'DESC']).catch('DESC'),
+});
+
+const subscriberPostSchema = z.object({
+    name: z.string().trim().min(1, "Name is required").max(80),
+    email: z.string().trim().email("Invalid email format").max(254),
+    status: z.enum(['subscribed', 'unsubscribed']).optional().default('subscribed'),
+    tags: z.array(z.string().trim()).optional().default([]),
+});
+
+const subscriberPutSchema = z.object({
+    id: z.number().int().positive("Invalid subscriber ID"),
+    name: z.string().trim().min(1, "Name is required").max(80),
+    email: z.string().trim().email("Invalid email format").max(254),
+    status: z.enum(['subscribed', 'unsubscribed']),
+    tags: z.array(z.string().trim()).optional().default([]),
+});
+
+const subscribersDeleteQuerySchema = z.object({
+    id: z.string().optional().nullable(),
+    all: z.preprocess((val) => val === 'true', z.boolean()).default(false),
+    hard: z.preprocess((val) => val === 'true', z.boolean()).default(false),
+    search: z.string().default(''),
+    status: z.string().default(''),
+    tag: z.string().default(''),
+});
+
 export async function GET(request: NextRequest) {
     try {
         const isAuthorized = await checkFounderSession(request);
@@ -29,15 +71,26 @@ export async function GET(request: NextRequest) {
         }
 
         const { searchParams } = new URL(request.url);
-        const search = searchParams.get('search')?.trim().toLowerCase() || '';
-        const status = searchParams.get('status') || ''; // 'subscribed' or 'unsubscribed'
-        const tag = searchParams.get('tag')?.trim().toLowerCase() || '';
-        const limitParam = searchParams.get('limit');
-        const limit = limitParam === 'all' ? 1000000 : parseInt(limitParam || '50');
-        const offset = parseInt(searchParams.get('offset') || '0');
+        const queryObj = {
+            search: searchParams.get('search')?.trim() ?? undefined,
+            status: searchParams.get('status') ?? undefined,
+            tag: searchParams.get('tag')?.trim() ?? undefined,
+            limit: searchParams.get('limit') ?? undefined,
+            offset: searchParams.get('offset') ?? undefined,
+            sortBy: searchParams.get('sortBy') ?? undefined,
+            sortDir: searchParams.get('sortDir')?.toUpperCase() ?? undefined,
+        };
 
-        const sortBy = searchParams.get('sortBy') || 'created_at';
-        const sortDir = (searchParams.get('sortDir') || 'desc').toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+        const parseResult = subscribersGetQuerySchema.safeParse(queryObj);
+        const query = parseResult.success ? parseResult.data : {
+            search: '',
+            status: '' as const,
+            tag: '',
+            limit: 50,
+            offset: 0,
+            sortBy: 'created_at' as const,
+            sortDir: 'DESC' as const,
+        };
 
         // 1. Get stats
         const statsRes = await pool.query(`
@@ -60,21 +113,21 @@ export async function GET(request: NextRequest) {
         const params: any[] = [];
         let paramCount = 1;
 
-        if (search) {
+        if (query.search) {
             baseFilter += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
-            params.push(`%${search}%`);
+            params.push(`%${query.search.toLowerCase()}%`);
             paramCount++;
         }
 
-        if (status) {
+        if (query.status) {
             baseFilter += ` AND status = $${paramCount}`;
-            params.push(status);
+            params.push(query.status);
             paramCount++;
         }
 
-        if (tag) {
+        if (query.tag) {
             baseFilter += ` AND $${paramCount} = ANY(tags)`;
-            params.push(tag);
+            params.push(query.tag.toLowerCase());
             paramCount++;
         }
 
@@ -84,18 +137,18 @@ export async function GET(request: NextRequest) {
 
         // 4. Build list query with ordering, limit and offset
         const allowedSortColumns = ['name', 'email', 'status', 'created_at'];
-        const validSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'created_at';
+        const validSortBy = allowedSortColumns.includes(query.sortBy) ? query.sortBy : 'created_at';
 
-        let queryText = `
+        const queryText = `
             SELECT id, name, email, status, unsubscribed_at, created_at, tags,
                    first_name, last_name, account_type, username, user_profile, 
                    location, product_type, license_name, product_title
             FROM vgp_subscribers
             ${baseFilter}
-            ORDER BY ${validSortBy} ${sortDir}
+            ORDER BY ${validSortBy} ${query.sortDir}
             LIMIT $${paramCount} OFFSET $${paramCount + 1}
         `;
-        params.push(limit, offset);
+        params.push(query.limit, query.offset);
 
         const listRes = await pool.query(queryText, params);
 
@@ -122,18 +175,20 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { name, email, status, tags } = await request.json();
-
-        if (!name || !email) {
-            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        let body: any;
+        try {
+            body = await request.json();
+        } catch (jsonErr) {
+            return NextResponse.json({ error: 'Malformed JSON payload.' }, { status: 400 });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
-        const activeStatus = status || 'subscribed';
-        if (activeStatus !== 'subscribed' && activeStatus !== 'unsubscribed') {
-            return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+        const parseResult = subscriberPostSchema.safeParse(body);
+        if (!parseResult.success) {
+            return NextResponse.json({ error: parseResult.error.issues[0].message }, { status: 400 });
         }
 
+        const { name, email, status, tags } = parseResult.data;
+        const normalizedEmail = email.toLowerCase();
         const parsedTags = normalizeTags(tags);
 
         const result = await pool.query(
@@ -142,7 +197,7 @@ export async function POST(request: NextRequest) {
              ON CONFLICT (email)
              DO UPDATE SET name = EXCLUDED.name, status = EXCLUDED.status, tags = EXCLUDED.tags, unsubscribed_at = CASE WHEN EXCLUDED.status = 'unsubscribed' THEN CURRENT_TIMESTAMP ELSE NULL END
              RETURNING id, name, email, status, tags, created_at`,
-            [name.trim(), normalizedEmail, activeStatus, parsedTags]
+            [name, normalizedEmail, status, parsedTags]
         );
 
         return NextResponse.json({ success: true, subscriber: result.rows[0] });
@@ -154,7 +209,6 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        // Authenticate request and verify origin
         const isAuthorized = await checkFounderSession(request);
         if (!isAuthorized) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -164,26 +218,28 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 
-        const { id, name, email, status, tags } = await request.json();
-
-        if (!id || !name || !email || !status) {
-            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        let body: any;
+        try {
+            body = await request.json();
+        } catch (jsonErr) {
+            return NextResponse.json({ error: 'Malformed JSON payload.' }, { status: 400 });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
-        if (status !== 'subscribed' && status !== 'unsubscribed') {
-            return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+        const parseResult = subscriberPutSchema.safeParse(body);
+        if (!parseResult.success) {
+            return NextResponse.json({ error: parseResult.error.issues[0].message }, { status: 400 });
         }
 
-        const unsubscribedAt = status === 'unsubscribed' ? 'CURRENT_TIMESTAMP' : 'NULL';
+        const { id, name, email, status, tags } = parseResult.data;
+        const normalizedEmail = email.toLowerCase();
         const parsedTags = normalizeTags(tags);
 
         const result = await pool.query(
             `UPDATE vgp_subscribers
-             SET name = $1, email = $2, status = $3, unsubscribed_at = ${unsubscribedAt === 'NULL' ? 'NULL' : 'CURRENT_TIMESTAMP'}, tags = $4
+             SET name = $1, email = $2, status = $3, unsubscribed_at = CASE WHEN $3 = 'unsubscribed' THEN CURRENT_TIMESTAMP ELSE NULL END, tags = $4
              WHERE id = $5
              RETURNING id, name, email, status, unsubscribed_at, tags`,
-            [name.trim(), normalizedEmail, status, parsedTags, id]
+            [name, normalizedEmail, status, parsedTags, id]
         );
 
         if (result.rowCount === 0 || result.rowCount === null) {
@@ -209,9 +265,16 @@ export async function DELETE(request: NextRequest) {
         }
 
         const { searchParams } = new URL(request.url);
-        const id = searchParams.get('id');
-        const all = searchParams.get('all') === 'true';
-        const hard = searchParams.get('hard') === 'true';
+        const queryObj = {
+            id: searchParams.get('id'),
+            all: searchParams.get('all'),
+            hard: searchParams.get('hard'),
+            search: searchParams.get('search')?.trim() ?? undefined,
+            status: searchParams.get('status') ?? undefined,
+            tag: searchParams.get('tag')?.trim() ?? undefined,
+        };
+
+        const deleteQuery = subscribersDeleteQuerySchema.parse(queryObj);
 
         const client = await pool.connect();
         try {
@@ -246,31 +309,26 @@ export async function DELETE(request: NextRequest) {
 
             const deletedBatchId = `batch_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 
-            if (all) {
-                // Read filters
-                const search = searchParams.get('search')?.trim().toLowerCase() || '';
-                const status = searchParams.get('status') || '';
-                const tag = searchParams.get('tag')?.trim().toLowerCase() || '';
-
+            if (deleteQuery.all) {
                 let baseFilter = ' WHERE 1=1';
                 const filterParams: any[] = [];
                 let paramCount = 1;
 
-                if (search) {
+                if (deleteQuery.search) {
                     baseFilter += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
-                    filterParams.push(`%${search}%`);
+                    filterParams.push(`%${deleteQuery.search.toLowerCase()}%`);
                     paramCount++;
                 }
 
-                if (status) {
+                if (deleteQuery.status) {
                     baseFilter += ` AND status = $${paramCount}`;
-                    filterParams.push(status);
+                    filterParams.push(deleteQuery.status);
                     paramCount++;
                 }
 
-                if (tag) {
+                if (deleteQuery.tag) {
                     baseFilter += ` AND $${paramCount} = ANY(tags)`;
-                    filterParams.push(tag);
+                    filterParams.push(deleteQuery.tag.toLowerCase());
                     paramCount++;
                 }
 
@@ -299,18 +357,18 @@ export async function DELETE(request: NextRequest) {
                 return NextResponse.json({ success: true, count, deleted_batch_id: deletedBatchId });
             }
 
-            if (!id) {
+            if (!deleteQuery.id) {
                 await client.query('ROLLBACK');
                 return NextResponse.json({ error: 'Subscriber ID is required' }, { status: 400 });
             }
 
-            const ids = id.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+            const ids = deleteQuery.id.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
             if (ids.length === 0) {
                 await client.query('ROLLBACK');
                 return NextResponse.json({ error: 'Invalid subscriber ID format' }, { status: 400 });
             }
 
-            if (hard) {
+            if (deleteQuery.hard) {
                 // Copy to trash
                 const copyRes = await client.query(
                     `INSERT INTO vgp_subscribers_trash (

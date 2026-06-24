@@ -3,6 +3,8 @@ import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
 import { getAppBaseUrl, hasValidRequestOrigin } from '@/lib/auth';
+import redis from '@/lib/redis';
+import { z } from 'zod';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -16,31 +18,76 @@ function getDefaultNameFromEmail(email: string): string {
         .join(' ') || 'Producer';
 }
 
-// In-memory rate limiting map for newsletter signups (basic protection)
-const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const RATE_LIMIT_MAX_REQUESTS = 3;      // Max 3 signups per IP per minute
+// Zod schema validation for input data
+const newsletterPostSchema = z.object({
+    email: z.string().trim().email("Invalid email format").max(254),
+    name: z.string().trim().max(80).optional().nullable(),
+    website: z.string().optional().nullable(), // Honeypot field
+    tags: z.array(z.string().trim()).optional().default([]),
+});
 
-function isRateLimited(ip: string): boolean {
+// Production-grade Rate Limiting
+const RATE_LIMIT_WINDOW_SECONDS = 60;
+const RATE_LIMIT_MAX_REQUESTS = 3;
+
+// Memory-bounded fallback map to prevent memory leaks if Redis is not configured
+const fallbackCache = new Map<string, { count: number; expiresAt: number }>();
+
+function pruneFallbackCache() {
     const now = Date.now();
-    const clientData = rateLimitMap.get(ip);
+    for (const [ip, data] of fallbackCache.entries()) {
+        if (now > data.expiresAt) {
+            fallbackCache.delete(ip);
+        }
+    }
+}
 
-    if (!clientData) {
-        rateLimitMap.set(ip, { count: 1, lastReset: now });
+async function isRateLimited(ip: string): Promise<boolean> {
+    if (redis) {
+        const key = `ratelimit:newsletter:${ip}`;
+        try {
+            const current = await redis.get(key);
+            if (current !== null) {
+                const count = parseInt(current, 10);
+                if (count >= RATE_LIMIT_MAX_REQUESTS) {
+                    return true;
+                }
+                await redis.incr(key);
+            } else {
+                await redis.set(key, '1', 'EX', RATE_LIMIT_WINDOW_SECONDS);
+            }
+            return false;
+        } catch (redisError) {
+            console.warn('Redis rate-limiting failed, falling back to local memory rate-limiter:', redisError);
+        }
+    }
+
+    // In-memory rate limiting fallback with leak prevention
+    if (fallbackCache.size > 1000) {
+        pruneFallbackCache();
+        if (fallbackCache.size > 2000) {
+            // Drop oldest entry if still overflowing
+            const oldestKey = fallbackCache.keys().next().value;
+            if (oldestKey) fallbackCache.delete(oldestKey);
+        }
+    }
+
+    const now = Date.now();
+    const cached = fallbackCache.get(ip);
+
+    if (!cached || now > cached.expiresAt) {
+        fallbackCache.set(ip, {
+            count: 1,
+            expiresAt: now + RATE_LIMIT_WINDOW_SECONDS * 1000,
+        });
         return false;
     }
 
-    if (now - clientData.lastReset > RATE_LIMIT_WINDOW_MS) {
-        clientData.count = 1;
-        clientData.lastReset = now;
-        return false;
-    }
-
-    if (clientData.count >= RATE_LIMIT_MAX_REQUESTS) {
+    if (cached.count >= RATE_LIMIT_MAX_REQUESTS) {
         return true;
     }
 
-    clientData.count++;
+    cached.count++;
     return false;
 }
 
@@ -77,38 +124,47 @@ export async function POST(request: NextRequest) {
             || request.headers.get('x-real-ip')
             || 'unknown';
 
-        if (isRateLimited(ip)) {
+        if (await isRateLimited(ip)) {
             return NextResponse.json(
                 { error: 'Too many requests. Please try again later.' },
                 { status: 429 }
             );
         }
 
-        const { email, name, website, tags } = await request.json();
+        // Parse JSON safely to prevent 500 crash on malformed payloads
+        let body: any;
+        try {
+            body = await request.json();
+        } catch (jsonErr) {
+            return NextResponse.json({ error: 'Malformed JSON payload.' }, { status: 400 });
+        }
 
-        // Honeypot field for simple bot submissions.
+        // Validate using Zod schema
+        const parseResult = newsletterPostSchema.safeParse(body);
+        if (!parseResult.success) {
+            return NextResponse.json(
+                { error: parseResult.error.issues[0].message },
+                { status: 400 }
+            );
+        }
+
+        const { email, name, website, tags } = parseResult.data;
+
+        // Honeypot field for bot submissions
         if (website) {
             return NextResponse.json({ success: true });
         }
 
-        // 1. Basic validation
-        if (!email || typeof email !== 'string') {
-            return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
-        }
+        const normalizedEmail = email.toLowerCase();
+        
+        // Clean name resolving
+        const rawName = name && name !== 'Producer' ? name : getDefaultNameFromEmail(normalizedEmail);
+        
+        // Store RAW data in the database (no pre-escaping, only length limit)
+        const subscriberName = rawName.slice(0, 80);
+        const subscriberEmail = normalizedEmail;
 
-        const normalizedEmail = email.trim().toLowerCase();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 254) {
-            return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
-        }
-
-        // 2. Sanitization
-        const rawNameInput = name && typeof name === 'string' ? name.trim() : '';
-        const rawName = rawNameInput && rawNameInput !== 'Producer' ? rawNameInput : getDefaultNameFromEmail(normalizedEmail);
-        const subscriberName = escapeHtml(rawName.slice(0, 80));
-        const subscriberEmail = escapeHtml(normalizedEmail);
-
-        const rawTags = Array.isArray(tags) ? tags.map(t => String(t).trim().toLowerCase()) : [];
+        const rawTags = tags.map(t => t.toLowerCase());
         const parsedTags: string[] = [];
         for (const t of rawTags) {
             let clean = t;
@@ -124,7 +180,7 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // 3. Database Insertion (handling upsert/re-subscribe)
+        // Database Insertion (handling upsert/re-subscribe)
         let subscriberId: number;
         try {
             const result = await pool.query(
@@ -148,10 +204,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 4. Generate secure signed unsubscribe token
+        // Generate secure signed unsubscribe token
         const unsubscribeToken = signToken({
             subscriber_id: subscriberId,
-            email: normalizedEmail,
+            email: subscriberEmail,
             purpose: 'unsubscribe'
         });
 
@@ -175,17 +231,21 @@ export async function POST(request: NextRequest) {
             },
         });
 
+        // HTML escaping is performed exclusively during email composition (presentation layer)
+        const escapedName = escapeHtml(subscriberName);
+        const escapedEmail = escapeHtml(subscriberEmail);
+
         // 1. Send Notification to Admin
         await transporter.sendMail({
             from: `"VGP System" <${process.env.SMTP_USER}>`,
             to: process.env.SMTP_USER,
-            subject: `New Subscriber: ${subscriberName}`,
-            text: `Name: ${subscriberName}\nEmail: ${normalizedEmail}\nDate: ${new Date().toLocaleString()}`,
+            subject: `New Subscriber: ${escapedName}`,
+            text: `Name: ${subscriberName}\nEmail: ${subscriberEmail}\nDate: ${new Date().toLocaleString()}`,
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #333; background: #111; color: #fff; border-radius: 8px;">
                     <h2 style="color: #00E5FF;">New VGP Subscriber! 🚀</h2>
-                    <p><strong>Name:</strong> ${subscriberName}</p>
-                    <p><strong>Email:</strong> <a href="mailto:${subscriberEmail}" style="color: #00E5FF;">${subscriberEmail}</a></p>
+                    <p><strong>Name:</strong> ${escapedName}</p>
+                    <p><strong>Email:</strong> <a href="mailto:${escapedEmail}" style="color: #00E5FF;">${escapedEmail}</a></p>
                     <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
                 </div>
             `,
@@ -194,7 +254,7 @@ export async function POST(request: NextRequest) {
         // 2. Send Welcome Email to Subscriber
         await transporter.sendMail({
             from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
-            to: normalizedEmail,
+            to: subscriberEmail,
             subject: `Welcome to the Inner Circle 🛡️`,
             text: `Welcome to VGP, ${subscriberName}. You're now on the list for exclusive beats and updates. Unsubscribe here: ${unsubscribeUrl}`,
             html: `
@@ -203,7 +263,7 @@ export async function POST(request: NextRequest) {
                         <h1 style="color: #00E5FF; text-align: center; letter-spacing: 2px; margin-bottom: 30px;">VIRZY GUNS PRODUCTION</h1>
                         
                         <p style="font-size: 16px; line-height: 1.6; color: #cccccc;">
-                            Welcome, <strong>${subscriberName}</strong>.
+                            Welcome, <strong>${escapedName}</strong>.
                         </p>
                         
                         <p style="font-size: 16px; line-height: 1.6; color: #cccccc;">
