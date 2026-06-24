@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import pool from '@/lib/db';
 import { signToken } from '@/lib/tokens';
-import { hasValidRequestOrigin } from '@/lib/auth';
+import { hasValidRequestOrigin, SESSION_COOKIE_NAME } from '@/lib/auth';
 import crypto from 'crypto';
 
 function getFounderPasscode(): string {
@@ -91,10 +91,11 @@ export async function POST(request: NextRequest) {
 
             // Set cookie securely
             const cookieStore = await cookies();
-            cookieStore.set('founder_session', token, {
+            const isProd = process.env.NODE_ENV === 'production';
+            cookieStore.set(SESSION_COOKIE_NAME, token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                secure: isProd, // Must be true in production when using __Host- prefix
+                sameSite: 'strict', // Change from lax to strict for admin dashboard access
                 path: '/',
                 maxAge: sessionDurationSeconds,
             });

@@ -28,12 +28,19 @@ export async function GET(request: NextRequest) {
     if (targetUrl) {
         try {
             // Validate that it's a valid URL
-            new URL(targetUrl);
-            redirectUrl = targetUrl;
+            const parsedUrl = new URL(targetUrl);
+            const allowedHosts = ['www.virzyguns.com', 'virzyguns.com'];
+            const isAllowed = allowedHosts.some(host => 
+                parsedUrl.hostname === host || parsedUrl.hostname.endsWith('.' + host)
+            );
+            
+            if (isAllowed) {
+                redirectUrl = targetUrl;
+            }
         } catch (e) {
-            // If relative path, resolve against the request origin
+            // If relative path, resolve against the request origin (ensure no protocol-relative redirect like //evil.com)
             const origin = request.nextUrl.origin;
-            if (targetUrl.startsWith('/')) {
+            if (targetUrl.startsWith('/') && !targetUrl.startsWith('//')) {
                 redirectUrl = `${origin}${targetUrl}`;
             }
         }

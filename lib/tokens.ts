@@ -47,7 +47,11 @@ export function verifyToken(token: string): any {
         const signatureBuffer = Buffer.from(signature, 'base64url');
         const expectedBuffer = Buffer.from(expectedSignature, 'base64url');
         
-        if (signatureBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(signatureBuffer, expectedBuffer)) {
+        // Hash the buffers first to ensure equal length for timingSafeEqual, avoiding throw
+        const sigHash = crypto.createHash('sha256').update(signatureBuffer).digest();
+        const expHash = crypto.createHash('sha256').update(expectedBuffer).digest();
+        
+        if (!crypto.timingSafeEqual(sigHash, expHash) || signatureBuffer.length !== expectedBuffer.length) {
             return null;
         }
         

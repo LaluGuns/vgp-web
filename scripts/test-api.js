@@ -79,9 +79,9 @@ async function main() {
         if (loginRes && loginRes.status === 200) {
             console.log('\n--- Login successful, testing authenticated routes ---');
 
-            // Extract the session cookie from Set-Cookie header
+            // Extract the session cookie from Set-Cookie header (support both standard and hardened prefixes)
             const sessionCookie = (loginRes.setCookies || [])
-                .find(c => c.startsWith('founder_session='));
+                .find(c => c.startsWith('founder_session=') || c.startsWith('__Host-founder_session='));
             const cookieValue = sessionCookie ? sessionCookie.split(';')[0] : '';
             console.log('Cookie extracted:', cookieValue ? 'yes (' + cookieValue.substring(0, 30) + '...)' : 'no');
 

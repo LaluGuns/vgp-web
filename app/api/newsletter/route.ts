@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
+import { getAppBaseUrl, hasValidRequestOrigin } from '@/lib/auth';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -54,15 +55,11 @@ function escapeHtml(unsafe: string): string {
 
 export async function POST(request: NextRequest) {
     try {
-        // CSRF check: verify Origin header matches this domain
-        const origin = request.headers.get('origin');
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
-
-        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        // CSRF check & secure baseUrl resolution
+        if (!hasValidRequestOrigin(request)) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
+        const baseUrl = getAppBaseUrl(request);
 
         // Test database pool connection first
         try {

@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { verifyToken } from '@/lib/tokens';
+import { hasValidRequestOrigin } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
     try {
         // CSRF check
-        const origin = request.headers.get('origin');
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
-
-        if (origin && origin !== baseUrl && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        if (!hasValidRequestOrigin(request)) {
             return NextResponse.json({ error: 'Forbidden cross-origin request' }, { status: 403 });
         }
 

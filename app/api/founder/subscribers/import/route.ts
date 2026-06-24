@@ -31,6 +31,13 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid payload. Expected an array of subscribers.' }, { status: 400 });
         }
 
+        const MAX_IMPORT_BATCH_SIZE = 500;
+        if (subscribers.length > MAX_IMPORT_BATCH_SIZE) {
+            return NextResponse.json({ 
+                error: `Batch size too large. Maximum allowed is ${MAX_IMPORT_BATCH_SIZE} subscribers per request.` 
+            }, { status: 400 });
+        }
+
         let successCount = 0;
         let errorCount = 0;
         const errors: string[] = [];

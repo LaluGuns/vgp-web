@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool, { withTransaction } from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
+import { getAppBaseUrl } from '@/lib/auth';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -187,9 +188,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const host = request.headers.get('host') || 'www.virzyguns.com';
-        const protocol = request.headers.get('x-forwarded-proto') || 'https';
-        const baseUrl = `${protocol}://${host}`;
+        const baseUrl = getAppBaseUrl(request);
 
         const smtpUser = process.env.SMTP_USER;
         const smtpPass = process.env.SMTP_PASS;
