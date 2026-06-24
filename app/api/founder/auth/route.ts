@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         );
 
         if (rateLimitRes.rowCount !== null && rateLimitRes.rowCount > 0) {
-            const { attempts, window_start, blocked_until } = rateLimitRes.rows[0];
+            const { blocked_until } = rateLimitRes.rows[0];
             const now = new Date();
 
             if (blocked_until && new Date(blocked_until) > now) {
@@ -51,15 +51,6 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json(
                     { error: `Too many failed login attempts. Locked out. Please try again in ${waitMinutes} minutes.` },
                     { status: 429 }
-                );
-            }
-
-            // Reset attempts if the rate limit window has expired (e.g. 15 mins since start)
-            const windowStartMs = new Date(window_start).getTime();
-            if (now.getTime() - windowStartMs > BLOCK_DURATION_MINUTES * 60 * 1000) {
-                await pool.query(
-                    `DELETE FROM vgp_login_attempts WHERE ip_address = $1`,
-                    [ip]
                 );
             }
         }
@@ -102,42 +93,40 @@ export async function POST(request: NextRequest) {
 
             return NextResponse.json({ success: true });
         } else {
-            // Failed Login: Record/increment attempt
-            const rateLimitCheck = await pool.query(
-                `SELECT attempts, window_start FROM vgp_login_attempts WHERE ip_address = $1`,
-                [ip]
+            // Failed Login: Record/increment attempt atomik
+            await pool.query(
+                `INSERT INTO vgp_login_attempts (ip_address, attempts, window_start, last_attempt_at, blocked_until)
+                 VALUES ($1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL)
+                 ON CONFLICT (ip_address)
+                 DO UPDATE SET
+                     attempts = CASE 
+                         -- Reset attempts if block has expired or window has expired
+                         WHEN (vgp_login_attempts.blocked_until IS NOT NULL AND CURRENT_TIMESTAMP > vgp_login_attempts.blocked_until) THEN 1
+                         WHEN (vgp_login_attempts.blocked_until IS NULL AND CURRENT_TIMESTAMP - vgp_login_attempts.window_start > $3 * INTERVAL '1 minute') THEN 1
+                         ELSE vgp_login_attempts.attempts + 1
+                     END,
+                     window_start = CASE 
+                         WHEN (vgp_login_attempts.blocked_until IS NOT NULL AND CURRENT_TIMESTAMP > vgp_login_attempts.blocked_until) THEN CURRENT_TIMESTAMP
+                         WHEN (vgp_login_attempts.blocked_until IS NULL AND CURRENT_TIMESTAMP - vgp_login_attempts.window_start > $3 * INTERVAL '1 minute') THEN CURRENT_TIMESTAMP
+                         ELSE vgp_login_attempts.window_start
+                     END,
+                     blocked_until = CASE 
+                         -- Clear block if expired
+                         WHEN (vgp_login_attempts.blocked_until IS NOT NULL AND CURRENT_TIMESTAMP > vgp_login_attempts.blocked_until) THEN NULL
+                         WHEN (vgp_login_attempts.blocked_until IS NULL AND CURRENT_TIMESTAMP - vgp_login_attempts.window_start > $3 * INTERVAL '1 minute') THEN NULL
+                         -- Set new block if attempts threshold is reached
+                         WHEN (
+                             CASE 
+                                 WHEN (vgp_login_attempts.blocked_until IS NOT NULL AND CURRENT_TIMESTAMP > vgp_login_attempts.blocked_until) THEN 1
+                                 WHEN (vgp_login_attempts.blocked_until IS NULL AND CURRENT_TIMESTAMP - vgp_login_attempts.window_start > $3 * INTERVAL '1 minute') THEN 1
+                                 ELSE vgp_login_attempts.attempts + 1
+                             END
+                         ) >= $2 THEN CURRENT_TIMESTAMP + ($3 * INTERVAL '1 minute')
+                         ELSE vgp_login_attempts.blocked_until
+                     END,
+                     last_attempt_at = CURRENT_TIMESTAMP`,
+                [ip, MAX_FAILED_ATTEMPTS, BLOCK_DURATION_MINUTES]
             );
-
-            if (rateLimitCheck.rowCount === 0 || rateLimitCheck.rowCount === null) {
-                // First failed attempt: insert record
-                await pool.query(
-                    `INSERT INTO vgp_login_attempts (ip_address, attempts, window_start, last_attempt_at)
-                     VALUES ($1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-                    [ip]
-                );
-            } else {
-                const currentAttempts = rateLimitCheck.rows[0].attempts;
-                const nextAttempts = currentAttempts + 1;
-
-                if (nextAttempts >= MAX_FAILED_ATTEMPTS) {
-                    // Block client
-                    const blockedUntil = new Date(Date.now() + BLOCK_DURATION_MINUTES * 60 * 1000);
-                    await pool.query(
-                        `UPDATE vgp_login_attempts
-                         SET attempts = $2, last_attempt_at = CURRENT_TIMESTAMP, blocked_until = $3
-                         WHERE ip_address = $1`,
-                        [ip, nextAttempts, blockedUntil]
-                    );
-                } else {
-                    // Increment count
-                    await pool.query(
-                        `UPDATE vgp_login_attempts
-                         SET attempts = $2, last_attempt_at = CURRENT_TIMESTAMP
-                         WHERE ip_address = $1`,
-                        [ip, nextAttempts]
-                    );
-                }
-            }
 
             return NextResponse.json({ error: 'Invalid passcode.' }, { status: 401 });
         }

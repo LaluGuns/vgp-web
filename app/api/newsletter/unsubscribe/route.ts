@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Verify the token signature and expiration
-        const decoded = verifyToken(token);
+        const decoded = await verifyToken(token);
 
         if (!decoded || decoded.purpose !== 'unsubscribe' || !decoded.subscriber_id || !decoded.email) {
             return NextResponse.json(

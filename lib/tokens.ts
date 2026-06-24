@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import redis from './redis';
 
 export interface UnsubscribePayload {
     subscriber_id: number;
@@ -29,14 +30,22 @@ export function signToken(payload: any): string {
 }
 
 /**
- * Verifies a token's signature and returns the decoded payload, or null if invalid.
+ * Verifies a token's signature and returns the decoded payload, or null if invalid or expired.
  */
-export function verifyToken(token: string): any {
+export async function verifyToken(token: string): Promise<any> {
     try {
         const secret = getJwtSecret();
         const parts = token.split('.');
         if (parts.length !== 3) return null;
         const [header, body, signature] = parts;
+        
+        // 1. Check if token is blacklisted in Redis
+        if (redis) {
+            const isBlacklisted = await redis.get(`bl:${signature}`);
+            if (isBlacklisted) {
+                return null;
+            }
+        }
         
         const expectedSignature = crypto
             .createHmac('sha256', secret)
@@ -56,6 +65,15 @@ export function verifyToken(token: string): any {
         }
         
         const decodedBody = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
+        
+        // 2. Centralized expiration check
+        if (decodedBody.exp) {
+            const now = Math.floor(Date.now() / 1000);
+            if (decodedBody.exp < now) {
+                return null;
+            }
+        }
+        
         return decodedBody;
     } catch (e) {
         return null;

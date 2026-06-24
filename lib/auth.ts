@@ -17,7 +17,12 @@ export function getAppBaseUrl(request?: NextRequest): string {
         const protocol = request.headers.get('x-forwarded-proto') || 'https';
         
         // Validate if host is trusted to prevent Host Header Injection
-        const isTrusted = TRUSTED_HOSTS.some(trusted => host.includes(trusted));
+        const isTrusted = TRUSTED_HOSTS.some(trusted => {
+            if (trusted.includes(':')) {
+                return host === trusted;
+            }
+            return host === trusted || host.endsWith('.' + trusted);
+        });
         if (isTrusted) {
             return `${protocol}://${host}`;
         }
@@ -60,12 +65,8 @@ export async function checkFounderSession(request?: NextRequest): Promise<boolea
 
         if (!token) return false;
 
-        const decoded = verifyToken(token);
+        const decoded = await verifyToken(token);
         if (!decoded || decoded.role !== 'founder') return false;
-
-        // Verify expiration
-        const now = Math.floor(Date.now() / 1000);
-        if (decoded.exp && decoded.exp < now) return false;
 
         return true;
     } catch (e) {

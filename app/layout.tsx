@@ -3,6 +3,7 @@ import { LazyMotion, domAnimation } from 'framer-motion';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { AppFrame } from '@/components/AppFrame';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
+import { headers } from 'next/headers';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -100,11 +101,13 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const nonce = (await headers()).get('x-nonce') || undefined;
+
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
@@ -139,10 +142,12 @@ export default function RootLayout({
         <html lang="en" className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
             <head>
                 <script
+                    nonce={nonce}
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
                 <script
+                    nonce={nonce}
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
                 />
