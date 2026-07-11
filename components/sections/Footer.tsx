@@ -34,7 +34,6 @@ const footerGroups = [
         title: 'Company',
         links: [
             { name: 'About', href: '/about' },
-            { name: 'Penerbit', href: '/publisher' },
             { name: 'Contact', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com' },
         ],
     },

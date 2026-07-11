@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/lab/healingwave',
         '/cadenz',
         '/book',
-        '/publisher',
         '/blog',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
