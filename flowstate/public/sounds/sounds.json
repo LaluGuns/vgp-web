@@ -1,0 +1,86 @@
+[
+  {
+    "id": "rain",
+    "name": "Rain",
+    "icon": "cloud-rain",
+    "fileUrl": "/sounds/rain.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "fire",
+    "name": "Fireplace",
+    "icon": "flame",
+    "fileUrl": "/sounds/fire.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "ocean",
+    "name": "Ocean",
+    "icon": "waves",
+    "fileUrl": "/sounds/ocean.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "forest",
+    "name": "Forest",
+    "icon": "tree-pine",
+    "fileUrl": "/sounds/forest.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "birds",
+    "name": "Birds",
+    "icon": "bird",
+    "fileUrl": "/sounds/birds.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "cafe",
+    "name": "Cafe",
+    "icon": "coffee",
+    "fileUrl": "/sounds/cafe.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "wind",
+    "name": "Windchimes",
+    "icon": "wind",
+    "fileUrl": "/sounds/wind.mp3",
+    "isPremium": false
+  },
+  {
+    "id": "fire-rain",
+    "name": "Fire & Rain",
+    "icon": "flame",
+    "fileUrl": "/sounds/fire-rain.mp3",
+    "isPremium": true
+  },
+  {
+    "id": "river",
+    "name": "River",
+    "icon": "droplets",
+    "fileUrl": "/sounds/river.mp3",
+    "isPremium": true
+  },
+  {
+    "id": "waterfall",
+    "name": "Waterfall",
+    "icon": "droplets",
+    "fileUrl": "/sounds/waterfall.mp3",
+    "isPremium": true
+  },
+  {
+    "id": "city",
+    "name": "City",
+    "icon": "building",
+    "fileUrl": "/sounds/city.mp3",
+    "isPremium": true
+  },
+  {
+    "id": "vinyl",
+    "name": "Vinyl",
+    "icon": "disc",
+    "fileUrl": "/sounds/vinyl.mp3",
+    "isPremium": true
+  }
+]

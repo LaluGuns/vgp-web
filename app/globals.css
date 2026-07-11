@@ -59,12 +59,12 @@
   --lab-secondary: #38BDF8;
   --lab-glow: rgba(103, 232, 249, 0.22);
 
-  /* â”€â”€ Typography â”€â”€ */
+  /* ── Typography ── */
   --white: #FFFFFF;
   --cool-grey: #BFC3C9;
   --dim-grey: #6B7080;
 
-  /* â”€â”€ Semantic â”€â”€ */
+  /* ── Semantic ── */
   --success: #5EEAD4;
   --warning: #FFB800;
   --danger: #FF3B5C;
@@ -81,9 +81,9 @@
   --primary-glow: var(--lab-glow);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    BASE STYLES
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 html {
   scroll-behavior: smooth;
@@ -109,9 +109,9 @@ body {
   color: var(--void);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    NOISE OVERLAY (Film grain texture)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 body::before {
   content: '';
@@ -131,35 +131,47 @@ body::before {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    Y3K GLASS SYSTEM 2.0
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 @layer utilities {
 
   /* Ultra Glass  -  Deep blur, chrome edge */
   .y3k-glass {
     background: rgba(12, 14, 20, 0.7);
-    backdrop-filter: blur(40px) saturate(1.2);
-    -webkit-backdrop-filter: blur(40px) saturate(1.2);
+    backdrop-filter: blur(40px) saturate(1.3);
+    -webkit-backdrop-filter: blur(40px) saturate(1.3);
     border: 1px solid rgba(200, 204, 212, 0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+      0 12px 32px rgba(0, 0, 0, 0.35);
   }
 
   /* Glass Card  -  Solid surface */
   .glass {
     background: rgba(24, 27, 36, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
     border: 1px solid rgba(200, 204, 212, 0.05);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+      0 8px 24px rgba(0, 0, 0, 0.28);
   }
 
   /* Polished Obsidian Glass  -  Apple Y3K Heavy Blur */
   .obsidian-glass {
     background: rgba(10, 10, 10, 0.5);
-    backdrop-filter: blur(60px) saturate(150%);
-    -webkit-backdrop-filter: blur(60px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(64px) saturate(1.6);
+    -webkit-backdrop-filter: blur(64px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 1px 12px rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+      0 24px 50px rgba(0, 0, 0, 0.55);
   }
 
   /* Titanium Text */
@@ -177,13 +189,20 @@ body::before {
 
   .glass-card {
     background: var(--carbon);
-    border: 1px solid rgba(200, 204, 212, 0.05);
-    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    border: 1px solid rgba(200, 204, 212, 0.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+      0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
   }
 
   .glass-card:hover {
-    border-color: rgba(0, 212, 255, 0.15);
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    border-color: rgba(0, 212, 255, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+      0 12px 30px rgba(0, 212, 255, 0.08);
   }
 
   /* Chrome Border  -  Rainbow gradient on hover */
@@ -198,19 +217,19 @@ body::before {
 
   /* Y3K Glow Effects */
   .y3k-glow {
-    box-shadow: 0 0 24px var(--cyan-glow), 0 0 60px rgba(0, 212, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 24px var(--cyan-glow), 0 0 60px rgba(0, 212, 255, 0.08);
   }
 
   .y3k-glow-subtle {
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.12);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22), 0 0 15px rgba(0, 212, 255, 0.12);
   }
 
   .y3k-glow-studio {
-    box-shadow: 0 0 24px var(--studio-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 24px var(--studio-glow);
   }
 
   .y3k-glow-lab {
-    box-shadow: 0 0 24px var(--lab-glow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), 0 0 24px var(--lab-glow);
   }
 
   /* Premium Shadow Stack */
@@ -276,9 +295,9 @@ body::before {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    BUTTON SYSTEM  -  Y3K Chrome
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 .btn-primary {
   position: relative;
@@ -345,9 +364,9 @@ body::before {
   transform: translateY(0) scale(0.98);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    ANIMATIONS  -  Y3K Ambient
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 /* Chrome Shimmer  -  horizontal light sweep */
 @keyframes chrome-shimmer {
@@ -480,9 +499,9 @@ body::before {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    TERMINAL STYLES
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 .terminal-text {
   font-family: var(--font-jetbrains), monospace;
@@ -496,9 +515,9 @@ body::before {
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• 
    RADIAL GLOWS
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 .bg-radial-glow {
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0, 212, 255, 0.04) 0%, transparent 70%);
@@ -506,245 +525,6 @@ body::before {
 
 .bg-radial-glow-studio {
   background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(56, 189, 248, 0.045) 0%, transparent 70%);
-}
-
-.bg-radial-glow-lab {
-  background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0, 255, 163, 0.04) 0%, transparent 70%);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   CUSTOM SCROLLBAR  -  Chrome Thin
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-::-webkit-scrollbar {
-  width: 2px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.15);
-  border-radius: 2px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--cyan);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   HERO GRADIENT
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-.hero-gradient {
-  background: linear-gradient(180deg, var(--void-deep) 0%, var(--void) 60%, var(--graphite) 100%);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   COLOR CLASSES
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-.text-primary {
-  color: var(--cyan);
-}
-
-.text-secondary {
-  color: var(--cyan-soft);
-}
-
-.text-cool-grey {
-  color: var(--cool-grey);
-}
-
-.text-dim-grey {
-  color: var(--dim-grey);
-}
-
-.bg-obsidian {
-  background: var(--void);
-}
-
-.bg-graphite {
-  background: var(--graphite);
-}
-
-.bg-carbon {
-  background: var(--carbon);
-}
-
-.bg-titanium {
-  background: var(--chrome-dark);
-}
-
-.border-cyan {
-  border-color: var(--cyan);
-}
-
-.border-subtle {
-  border-color: rgba(200, 204, 212, 0.05);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   MOBILE-FIRST APP FEEL
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-@media (max-width: 768px) {
-
-  /* Larger touch targets (exclude small inline elements) */
-  button,
-  [role="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Native app-like spacing */
-  .mobile-container {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  /* Scroll snap for horizontal carousels */
-  .mobile-scroll-snap {
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .mobile-scroll-snap>* {
-    scroll-snap-align: center;
-  }
-}
-
-/* Safe area for mobile bottom tab bar */
-.safe-area-bottom {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   REDUCED MOTION
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   WAVE PHYSICS BACKGROUND (Compat)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-.wave-physics-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 255, 0.03) 0%, transparent 60%);
-}
-
-/* Glass-heavy compat */
-.glass-heavy {
-  background: rgba(12, 14, 20, 0.85);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(200, 204, 212, 0.06);
-}
-
-/* Status freq */
-.status-freq {
-  color: var(--lab-accent);
-  text-shadow: 0 0 8px rgba(0, 255, 163, 0.4);
-}
-
-/* Radial glow compat */
-.bg-radial-glow-cyan {
-  background: radial-gradient(ellipse 50% 30% at 50% 50%, rgba(0, 212, 255, 0.04) 0%, transparent 70%);
-}
-
-.bg-radial-glow-lime {
-  background: radial-gradient(ellipse 50% 30% at 50% 50%, rgba(0, 255, 163, 0.04) 0%, transparent 70%);
-}
-
-/* Neon shadow compat */
-.shadow-neon-lime {
-  box-shadow: 0 0 20px rgba(0, 255, 163, 0.3);
-}
-
-.border-cyber-lime\/50 {
-  border-color: rgba(0, 255, 163, 0.5);
-}
-
-/* Electric colors compat */
-.text-electric-cyan {
-  color: var(--cyan);
-}
-
-.text-cyber-lime {
-  color: var(--lab-accent);
-}
-
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Y3K EXTENSIONS (Phase 2)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-/* flowing gradient text */
-@keyframes gradient-flow {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-gradient-text {
-  background-size: 200% auto;
-  animation: gradient-flow 3s linear infinite;
-}
-
-/* starfield particles (CSS only) */
-.starfield-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
-    radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
-    radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
-    radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
-    radial-gradient(1.5px 1.5px at 130px 80px, #ffffff, rgba(0, 0, 0, 0)),
-    radial-gradient(1.5px 1.5px at 160px 120px, #ffffff, rgba(0, 0, 0, 0));
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  opacity: 0.07;
-  animation: particle-drift 100s linear infinite;
-}
-
-.glass-pill-nav {
-  background: rgba(12, 14, 20, 0.65);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-}
-
-/* â•â•â• Portal 3D Icon Animations â•â•â• */
-
-.portal-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;

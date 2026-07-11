@@ -1,0 +1,9 @@
+# Audio masters never ship to Vercel — they stream from R2 via the
+# flowstate-audio-delivery worker (see docs/ADR-001). catalog.json stays.
+public/tracks/**/*.mp3
+public/tracks/**/*.wav
+public/sounds/**/*.mp3
+public/sounds/**/*.wav
+.removed-tracks
+worker
+scripts/*.log

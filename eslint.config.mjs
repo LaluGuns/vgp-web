@@ -5,6 +5,8 @@ const eslintConfig = [
     {
         ignores: [
             '.next/**',
+            'flowstate/**',
+            'scratch/**',
             'node_modules/**',
             'out/**',
             'next-env.d.ts',

@@ -1,0 +1,23 @@
+name = "flowstate-audio-delivery"
+main = "src/index.js"
+compatibility_date = "2026-06-01"
+
+# R2 binding — bucket already exists and is fully synced (keys mirror `tracks/...`).
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "flowstate-audio"
+
+[vars]
+# Comma-separated origins allowed to call this worker (CORS).
+ALLOWED_ORIGINS = "https://flow.virzyguns.com,http://localhost:3000"
+# Signed URL lifetime for full tracks (seconds).
+FULL_TTL_SECONDS = "900"
+# Pre-launch promo: "1" = every track issuable without auth (mirror of
+# NEXT_PUBLIC_PREMIUM_PROMO in the app). Flip to "0" when checkout goes live.
+PREMIUM_PROMO = "1"
+
+# Secrets — set via `wrangler secret put <NAME>` (NEVER in this file):
+#   URL_SIGNING_SECRET        — long random string; HMAC key for stream URLs
+#   SUPABASE_URL              — https://<project>.supabase.co
+#   SUPABASE_ANON_KEY         — public anon key (JWT verification)
+#   SUPABASE_SERVICE_ROLE_KEY — service role (reads flowstate_profiles.plan)

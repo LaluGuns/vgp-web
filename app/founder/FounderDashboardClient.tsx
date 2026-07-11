@@ -9,6 +9,7 @@ import {
     Bell, User, LogOut, Globe, Eye, Upload
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
+import { renderCampaignEmail } from '@/lib/founder/campaign-email';
 
 // ── Types ──────────────────────────────────────────────────────────────
 interface Stats { total: number; subscribed: number; unsubscribed: number; new24h: number; }
@@ -94,141 +95,14 @@ function getDefaultNameFromEmail(email: string): string {
 }
 
 function getEmailPreviewHtml(subject: string, templateType: string, bodyContent: string, name: string, email: string = ''): string {
-    const title = (subject || 'VGP BROADCAST').toUpperCase();
-    const currentYear = new Date().getFullYear();
-    const cleanName = name && name.trim() && name !== 'Producer'
-        ? name.trim() 
-        : (email ? getDefaultNameFromEmail(email) : 'Producer');
-    let defaultBody = 'Write your email body…';
-    if (!bodyContent || bodyContent.trim() === '') {
-        if (templateType === 'beat_promo') {
-            defaultBody = 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.';
-        } else if (templateType === 'cadenz_update') {
-            defaultBody = 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.';
-        } else if (templateType === 'book_reader') {
-            defaultBody = 'The new production guide is ready. No fluff — just real technique and workflow breakdowns straight from the studio.';
-        }
-    } else {
-        defaultBody = bodyContent;
-    }
-
-    const cleanBody = defaultBody
-        .replace(/\{\{name\}\}/gi, cleanName)
-        .replace(/\[Name\]/gi, cleanName);
-
-    let mainContentHtml = '';
-
-    if (templateType === 'beat_promo') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(0, 229, 255, 0.12); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    BEAT PROMO
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Yo ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanBody}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background-color: #00E5FF; background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    LISTEN & SECURE LICENSE
-                </span>
-            </div>
-        `;
-    } else if (templateType === 'cadenz_update') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(112, 0, 255, 0.12); color: #a855f7; border: 1px solid rgba(112, 0, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    CADENZ R&D
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanName} — quick CADENZ update.
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanBody}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background-color: #7000FF; background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    READ DEVELOPMENT LOG
-                </span>
-            </div>
-        `;
-    } else if (templateType === 'book_reader') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    VGP LIBRARY
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                What's good ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanBody}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background-color: #f59e0b; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    READ THE GUIDE
-                </span>
-            </div>
-        `;
-    } else { // inner_circle
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(255, 255, 255, 0.05); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    INNER CIRCLE
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanBody}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <span style="background-color: #0c1220; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.05); cursor: pointer; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    ACCESS PRIVATE PORTAL
-                </span>
-            </div>
-        `;
-    }
-
-    return `
-        <div style="background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px 10px; min-height: 100%; box-sizing: border-box;">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #060b13; border: 1px solid rgba(56, 189, 248, 0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); margin-top: 20px;">
-                <!-- Glowing top border -->
-                <tr>
-                    <td height="4" style="background: linear-gradient(90deg, #00E5FF 0%, #7000FF 100%); line-height: 4px; font-size: 0px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="padding: 30px 25px; background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.04), transparent 75%);">
-                        <div style="text-align: center; margin-bottom: 25px;">
-                            <div style="margin-bottom: 12px;">
-                                <img src="/branding/logo-tg.png" alt="VGP" style="height: 48px; width: auto; max-width: 120px; object-fit: contain; display: inline-block;" />
-                            </div>
-                            <h1 style="color: #ffffff; font-size: 18px; font-weight: 800; letter-spacing: 3px; margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
-                            <div style="color: #00E5FF; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">100% Art. 100% Science.</div>
-                        </div>
-                        
-                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-bottom: 25px; height: 1px;"></div>
-                        
-                        ${mainContentHtml}
-                        
-                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-top: 30px; margin-bottom: 20px; height: 1px;"></div>
-                        
-                        <div style="text-align: center; font-size: 10px; color: #475569; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                            © ${currentYear} Virzy Guns Production. All rights reserved.<br>
-                            You are receiving this because you are part of the VGP Inner Circle.<br><br>
-                            To stop receiving these emails, <span style="color: #00E5FF; text-decoration: underline; cursor: pointer; font-weight: 600;">unsubscribe here</span>.
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    `;
+    return renderCampaignEmail({
+        recipientName: name,
+        recipientEmail: email,
+        subject,
+        templateType,
+        bodyContent,
+        baseUrl: '',
+    }).html;
 }
 
 // ── Small UI helpers ───────────────────────────────────────────────────
@@ -652,6 +526,13 @@ function analyzeSpamScore(body: string): SpamAnalysis {
 }
 
 // ════════════════════════════════════════════════════════════════════════
+function SortIcon({ columnKey, activeKey, direction }: { columnKey: string; activeKey: string; direction: 'asc' | 'desc' }) {
+    if (activeKey !== columnKey) {
+        return <span className="ml-1 inline-block text-white/20 font-sans">↕</span>;
+    }
+    return <span className="ml-1 inline-block text-sky-300 font-sans">{direction === 'asc' ? '↑' : '↓'}</span>;
+}
+
 export default function FounderDashboardClient() {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [passcode, setPasscode] = useState('');

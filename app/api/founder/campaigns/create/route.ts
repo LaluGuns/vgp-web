@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { checkFounderSession, hasValidRequestOrigin } from '@/lib/auth';
+import { CAMPAIGN_TEMPLATE_TYPES } from '@/lib/founder/campaign-email';
 import { z } from 'zod';
 
 const campaignCreateSchema = z.object({
     subject: z.string().trim().min(1, "Subject is required").max(255),
-    template_type: z.enum(['beat_promo', 'cadenz_update', 'inner_circle']),
+    template_type: z.enum(CAMPAIGN_TEMPLATE_TYPES),
     body_content: z.string().trim().optional().default(''),
     target_tags: z.array(z.string().trim()).optional().default([]),
     scheduled_for: z.preprocess(

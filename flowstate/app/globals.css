@@ -1,0 +1,852 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ─────────────────────────────────────────────────────────────
+     THEME: Dynamic Glass (default) — dark glassmorphism + cyan.
+     --primary is 199 100% 67% (= #58c4ff), matching the historical
+     scene-accent so the default look is pixel-equivalent to before.
+     ───────────────────────────────────────────────────────────── */
+  :root,
+  [data-theme="glass"] {
+    --background: 270 70% 3%;
+    --foreground: 215 15% 92%;
+    --card: 270 65% 5%;
+    --card-foreground: 0 0% 100%;
+    --primary: 199 100% 67%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 191 100% 40%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 270 40% 8%;
+    --muted-foreground: 213 10% 65%;
+    --accent: 199 100% 67%;
+    --accent-foreground: 199 100% 67%;
+    --border: 270 20% 12%;
+    --ring: 199 100% 67%;
+    --radius: 1.5rem; /* ~24px matching mockup's highly rounded corners */
+
+    /* ── Apple Liquid Glass tokens (iOS 26 / macOS Tahoe) ── */
+    --glass-bg: rgba(14, 18, 44, 0.48);
+    --glass-bg-hover: rgba(22, 28, 64, 0.58);
+    --glass-border: rgba(255, 255, 255, 0.30);
+    --glass-border-top: rgba(255, 255, 255, 0.70);
+    --glass-border-left: rgba(255, 255, 255, 0.50);
+    --glass-inner-glow: rgba(255, 255, 255, 0.22);
+    --glass-shadow: rgba(0, 0, 0, 0.65);
+    --glass-blur: 26px;
+    --glass-saturate: 2.2;
+  }
+
+  .dark {
+    --background: 270 70% 3%;
+    --foreground: 215 15% 92%;
+    --card: 270 65% 5%;
+    --card-foreground: 0 0% 100%;
+    --primary: 199 100% 67%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 191 100% 40%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 270 40% 8%;
+    --muted-foreground: 213 10% 65%;
+    --accent: 199 100% 67%;
+    --accent-foreground: 199 100% 67%;
+    --border: 270 20% 12%;
+    --ring: 199 100% 67%;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     THEME: Analog Studio — warm hi-fi instrument aesthetic.
+     Deep espresso surfaces, cream foreground, brass/amber accent,
+     burnt-orange secondary, warm smoked glass, slightly tighter radius.
+     ───────────────────────────────────────────────────────────── */
+  [data-theme="studio"] {
+    --background: 26 28% 7%;
+    --foreground: 40 30% 90%;
+    --card: 26 26% 9%;
+    --card-foreground: 40 32% 95%;
+    --primary: 38 88% 56%;
+    --primary-foreground: 30 45% 8%;
+    --secondary: 24 62% 46%;
+    --secondary-foreground: 40 30% 95%;
+    --muted: 26 18% 14%;
+    --muted-foreground: 34 16% 62%;
+    --accent: 38 88% 56%;
+    --accent-foreground: 38 88% 56%;
+    --border: 28 22% 18%;
+    --ring: 38 88% 56%;
+    --radius: 1.125rem; /* ~18px */
+
+    /* Light smoked glass: near-opaque warm espresso, gentle blur (≤8px),
+       brass-tinted hairlines, warm (never white) inner glow. */
+    --glass-bg: rgba(40, 29, 18, 0.85);
+    --glass-bg-hover: rgba(50, 37, 24, 0.90);
+    --glass-border: hsl(38 88% 56% / 0.15);
+    --glass-border-top: hsl(38 82% 62% / 0.24);
+    --glass-border-left: hsl(38 84% 58% / 0.18);
+    --glass-inner-glow: rgba(255, 218, 168, 0.10);
+    --glass-shadow: rgba(0, 0, 0, 0.55);
+    --glass-blur: 8px;
+    --glass-saturate: 1.05;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     THEME: Editorial — print / ink-on-dark-paper.
+     Very dark warm gray, high-contrast off-white, one vermilion accent,
+     cool-gray secondary, near-flat panels with hairline borders, sharper radius.
+     ───────────────────────────────────────────────────────────── */
+  [data-theme="editorial"] {
+    --background: 30 8% 8%;
+    --foreground: 40 14% 94%;
+    --card: 30 8% 10%;
+    --card-foreground: 40 14% 96%;
+    --primary: 16 90% 55%;
+    --primary-foreground: 30 12% 8%;
+    --secondary: 220 8% 55%;
+    --secondary-foreground: 40 14% 94%;
+    --muted: 30 6% 15%;
+    --muted-foreground: 32 7% 60%;
+    --accent: 16 90% 55%;
+    --accent-foreground: 16 90% 55%;
+    --border: 30 7% 20%;
+    --ring: 16 90% 55%;
+    --radius: 0.6875rem; /* ~11px */
+
+    /* Fully opaque dark-paper panels: no blur, neutral hairlines,
+       no white glass highlights. */
+    --glass-bg: hsl(30 8% 11%);
+    --glass-bg-hover: hsl(30 8% 13%);
+    --glass-border: hsl(var(--foreground) / 0.12);
+    --glass-border-top: hsl(var(--foreground) / 0.12);
+    --glass-border-left: hsl(var(--foreground) / 0.12);
+    --glass-inner-glow: transparent;
+    --glass-shadow: rgba(0, 0, 0, 0.30);
+    --glass-blur: 0px;
+    --glass-saturate: 1;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     THEME: Instrument Panel — single phosphor-green accent, mono-first.
+     Very dark neutral, dim foreground, accent reserved for data/values,
+     flat panels with 1px accent-tinted borders, small radius.
+     ───────────────────────────────────────────────────────────── */
+  [data-theme="terminal"] {
+    --background: 160 12% 5%;
+    --foreground: 150 10% 72%;
+    --card: 160 14% 7%;
+    --card-foreground: 140 22% 88%;
+    --primary: 140 90% 55%;
+    --primary-foreground: 140 45% 6%;
+    --secondary: 140 28% 42%;
+    --secondary-foreground: 140 30% 88%;
+    --muted: 160 12% 12%;
+    --muted-foreground: 150 9% 55%;
+    --accent: 140 90% 55%;
+    --accent-foreground: 140 90% 55%;
+    --border: 150 16% 16%;
+    --ring: 140 90% 55%;
+    --radius: 0.5rem; /* 8px */
+
+    /* Fully opaque instrument panels: no blur, phosphor-tinted hairlines,
+       no glass highlights at all. */
+    --glass-bg: hsl(160 10% 7%);
+    --glass-bg-hover: hsl(160 11% 9%);
+    --glass-border: hsl(var(--primary) / 0.18);
+    --glass-border-top: hsl(var(--primary) / 0.18);
+    --glass-border-left: hsl(var(--primary) / 0.18);
+    --glass-inner-glow: transparent;
+    --glass-shadow: rgba(0, 0, 0, 0.35);
+    --glass-blur: 0px;
+    --glass-saturate: 1;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  /* Apple system font for sans; keep var(--font-mono) working for mono utility. */
+  body {
+    background: transparent !important;
+    @apply text-foreground antialiased font-sans;
+    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+      "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
+  }
+  html {
+    background-color: #060216; /* Deep dark cosmic violet base */
+  }
+  /* Per-theme base canvas colour (shows behind/around the WebGL scene). */
+  html[data-theme="studio"] { background-color: #140d06; }
+  html[data-theme="editorial"] { background-color: #141311; }
+  html[data-theme="terminal"] { background-color: #050906; }
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  /* Instrument Panel is mono-first. */
+  [data-theme="terminal"] body {
+    font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  }
+}
+
+@layer utilities {
+
+  /* ─── Top-level translucent surface ─── */
+  .glass {
+    background: linear-gradient(145deg, rgba(14, 18, 44, 0.45) 0%, rgba(6, 8, 20, 0.6) 100%);
+    border: 2px solid var(--glass-border);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+      inset 0 0 12px rgba(255, 255, 255, 0.08),
+      0 24px 60px -12px var(--glass-shadow);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+
+  /* ─── Apple Liquid Glass Card ───
+     True frosted glass: translucent so the cosmic background shows through,
+     luminous thick borders on top/left edges like real glass catching light,
+     strong backdrop-filter blur for the frosted look, deep layered shadows. */
+  .glass-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px) saturate(1.4) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.35),
+      0 0 20px hsl(var(--primary) / 0.03),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    border-radius: var(--radius);
+    transition:
+      border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateZ(0);
+    will-change: transform;
+    isolation: isolate;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.03) 30%, transparent 60%) !important;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1 !important;
+    border-radius: inherit;
+  }
+
+  .glass-card > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow:
+      0 16px 50px rgba(0, 0, 0, 0.45),
+      0 0 30px hsl(var(--primary) / 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .glass-dome {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: radial-gradient(
+      circle at 35% 25%,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.04) 50%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    box-shadow:
+      /* Liquid Glass Top Inner Specular */
+      inset 0 16px 20px rgba(255, 255, 255, 0.22),
+      /* Light bottom shadow instead of heavy black */
+      inset 0 -8px 12px rgba(0, 0, 0, 0.20),
+      /* Active dynamic theme color glow inside the glass */
+      inset 0 0 20px hsl(var(--primary) / 0.18),
+      /* Crisp rim highlight */
+      inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+      /* Subtle outer glow matching primary theme */
+      0 0 30px hsl(var(--primary) / 0.08);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  }
+
+  .glass-dome-sm {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: radial-gradient(
+      circle at 35% 25%,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    box-shadow:
+      /* Liquid Glass Top Inner Specular */
+      inset 0 6px 8px rgba(255, 255, 255, 0.18),
+      /* Light bottom shadow */
+      inset 0 -3px 6px rgba(0, 0, 0, 0.15),
+      /* Active dynamic theme color glow inside the glass */
+      inset 0 0 10px hsl(var(--primary) / 0.15),
+      /* Crisp rim highlight */
+      inset 0 0 0 1px rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  }
+
+  .glass-sheen {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    height: 50%;
+    border-radius: 9999px 9999px 0 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0.10) 30%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    filter: blur(1px);
+    transform: scaleX(0.92) translateY(2px);
+  }
+
+  .glass-reflection {
+    position: absolute;
+    bottom: 4px;
+    left: 10%;
+    right: 10%;
+    height: 25%;
+    border-radius: 0 0 9999px 9999px;
+    background: linear-gradient(
+      to top,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    filter: blur(2px);
+  }
+
+  /* 3D Liquid Glass Pill (for buttons, input bars, tabs) */
+  .glass-pill {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+      0 8px 24px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(28px) saturate(2.2);
+    -webkit-backdrop-filter: blur(28px) saturate(2.2);
+  }
+
+  /* ─── Faux-glass for nested/repeated elements ───
+     Lighter version — no backdrop-filter for performance.
+     Still gives glass-like appearance via borders + gradient. */
+  .glass-tile {
+    position: relative;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.025) 60%,
+      rgba(120, 140, 255, 0.015) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-top-color: rgba(255, 255, 255, 0.20);
+    border-left-color: rgba(255, 255, 255, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+      0 3px 12px -4px rgba(0, 0, 0, 0.45);
+    border-radius: calc(var(--radius) - 0.25rem);
+    transition:
+      border-color 0.4s ease,
+      background 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  /* Position utilities must beat the implicit `position: relative` baked into the
+     glass surfaces above. Without these, `absolute`/`fixed` glass tooltips, the
+     account dropdown, and the mobile nav silently render in-flow (they did —
+     giant tooltip box over the heatmap, clipped chart tooltips). */
+  .glass.absolute, .glass-card.absolute, .glass-tile.absolute, .glass-pill.absolute, .glass-dome.absolute {
+    position: absolute;
+  }
+  .glass.fixed, .glass-card.fixed, .glass-tile.fixed, .glass-pill.fixed, .glass-dome.fixed {
+    position: fixed;
+  }
+
+  .glass-tile:hover {
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.09) 0%,
+      rgba(255, 255, 255, 0.035) 100%
+    );
+    border-top-color: rgba(255, 255, 255, 0.28);
+    border-left-color: rgba(255, 255, 255, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.20),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+      0 6px 18px -4px rgba(0, 0, 0, 0.55);
+  }
+
+  .dot-grid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1.2px, transparent 1.2px);
+    background-size: 28px 28px;
+  }
+
+  /* ─── Phase glow borders ─── */
+  .border-glow-focus {
+    border-color: hsl(var(--primary) / 0.30) !important;
+    box-shadow:
+      0 0 30px hsl(var(--primary) / 0.08),
+      0 0 60px hsl(var(--primary) / 0.03),
+      inset 0 1px 1px hsl(var(--primary) / 0.12),
+      inset 0 0 30px hsl(var(--primary) / 0.04);
+  }
+  .border-glow-break {
+    border-color: rgba(16, 185, 129, 0.30) !important;
+    box-shadow:
+      0 0 30px rgba(16, 185, 129, 0.08),
+      0 0 60px rgba(16, 185, 129, 0.03),
+      inset 0 1px 1px rgba(16, 185, 129, 0.12),
+      inset 0 0 30px rgba(16, 185, 129, 0.04);
+  }
+
+  /* ─── Glow effects ─── */
+  .glow-primary {
+    box-shadow: 0 0 18px hsl(var(--primary) / 0.22), 0 0 40px hsl(var(--primary) / 0.08);
+  }
+  .glow-text-primary {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.5), 0 0 24px hsl(var(--primary) / 0.18);
+  }
+  .glow-text-focus {
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.45), 0 0 24px rgba(0, 229, 255, 0.15);
+  }
+  .glow-text-break {
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.45), 0 0 24px rgba(16, 185, 129, 0.15);
+  }
+
+  /* ─── Ambient glow orbs (smooth, slow) ─── */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(130px);
+    opacity: 0.85;
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+    will-change: transform;
+    animation: orb-float 28s ease-in-out infinite alternate;
+  }
+  .ambient-active .glow-orb {
+    opacity: 0.95;
+    animation-duration: 14s;
+  }
+
+  .tilt-container {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+  }
+}
+
+/* ─── Legal / long-form prose ─── */
+.legal-prose h2 {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+.legal-prose h2:first-child { margin-top: 0; }
+.legal-prose p { margin: 0; }
+.legal-prose a { color: rgba(0, 229, 255, 0.8); }
+.legal-prose a:hover { color: rgba(0, 229, 255, 1); }
+.legal-prose strong { color: rgba(255, 255, 255, 0.9); font-weight: 600; }
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.legal-prose li::marker { color: rgba(0, 229, 255, 0.4); }
+
+/* Hide scrollbar but keep scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Animations ─── */
+
+@keyframes orb-float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -35px) scale(1.08); }
+  100% { transform: translate(-20px, 20px) scale(0.94); }
+}
+
+@keyframes checkmark-draw {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-check {
+  animation: checkmark-draw 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+@keyframes ripple-wave {
+  0% { transform: scale(0.88); opacity: 0; }
+  50% { opacity: 0.08; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+.animate-ripple { animation: ripple-wave 3.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; }
+.animate-ripple-delayed { animation: ripple-wave 3.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite; animation-delay: 1.75s; }
+
+@keyframes eq-bar-1 {
+  0%, 100% { height: 3px; }
+  50% { height: 11px; }
+}
+@keyframes eq-bar-2 {
+  0%, 100% { height: 9px; }
+  50% { height: 2px; }
+}
+@keyframes eq-bar-3 {
+  0%, 100% { height: 5px; }
+  50% { height: 11px; }
+}
+.animate-eq-1 { animation: eq-bar-1 0.8s ease-in-out infinite; }
+.animate-eq-2 { animation: eq-bar-2 0.6s ease-in-out infinite; }
+.animate-eq-3 { animation: eq-bar-3 0.7s ease-in-out infinite; }
+
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-left { animation: slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ─── Ambient edge glow (gentler breathing) ─── */
+.ambient-edge-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: inset 0 0 100px hsl(var(--primary) / 0.10);
+}
+.ambient-active-edge {
+  animation: edge-opacity 6s ease-in-out infinite;
+}
+@keyframes edge-opacity {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* ─── Active card glow ─── */
+.card-glow-active {
+  border-color: hsl(var(--primary) / 0.30) !important;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.06),
+    inset 0 0 30px hsl(var(--primary) / 0.04),
+    0 12px 48px -8px rgba(0, 0, 0, 0.5),
+    0 0 24px hsl(var(--primary) / 0.10);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+  50% { box-shadow: 0 0 30px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.15); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+/* ─── Respect reduced-motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .glow-orb,
+  .ambient-active-edge,
+  .animate-ripple,
+  .animate-ripple-delayed,
+  .animate-slide-in-left {
+    animation: none !important;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Prevent selection and drag on media elements to secure files */
+img, audio, video {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  user-select: none;
+}
+
+/* ─── Premium Apple-style Scrollbar ─── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── Premium Apple-style Active Springs and Motion ─── */
+.ease-apple {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Tactile Spring compression on click/tap */
+button,
+a,
+.clickable-item {
+  transition: transform 0.4s cubic-bezier(0.15, 0.85, 0.3, 1.1), opacity 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+button:active,
+a:active,
+.clickable-item:active {
+  transform: scale(0.95) translateY(0.5px);
+  opacity: 0.88;
+}
+
+/* Specific exceptions to prevent double-scaling or distortion */
+.no-spring,
+.no-spring:active,
+.no-spring button:active {
+  transform: none !important;
+}
+
+/* Beautiful hover glassmorphic glow shift */
+.glass-hover-shine {
+  position: relative;
+  overflow: hidden;
+}
+.glass-hover-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-hover-shine:hover::after {
+  left: 150%;
+}
+
+/* iOS-style loading sweep (accelerate-decelerate spin) */
+@keyframes ios-sweep {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(180deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-apple-loader {
+  animation: ios-sweep 1.2s cubic-bezier(0.4, 0.08, 0.15, 1) infinite !important;
+}
+
+/* ─── Premium Liquid Melt Transition ─── */
+.liquid-tab-panel {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), 
+              filter 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  will-change: transform, opacity, filter;
+}
+
+/* Blur + high contrast metaball style liquid glass melting */
+.liquid-melting {
+  filter: blur(8px) contrast(150%) brightness(1.05) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PER-THEME STATIC BACKDROP
+   Rendered by WebGLBackground in place of the animated GL canvas
+   whenever theme !== "glass". Same stacking slot the canvas used
+   (fixed, full viewport, -z-20, non-interactive). Each theme's
+   backdrop is deliberately quiet — this is a focus app.
+   ═══════════════════════════════════════════════════════════════ */
+.theme-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -20;
+  pointer-events: none;
+}
+
+/* Analog Studio: deep espresso, a warm lamp glow off the top-left (like a
+   desk lamp over a mixing console), soft horizontal vignette. */
+[data-theme="studio"] .theme-backdrop {
+  background:
+    /* warm lamp glow, offset top-left */
+    radial-gradient(110% 85% at 16% 10%, hsl(32 48% 16% / 0.95) 0%, hsl(28 38% 10% / 0.4) 42%, transparent 68%),
+    /* faint horizontal vignette framing the desk */
+    linear-gradient(to right, rgba(0, 0, 0, 0.38) 0%, transparent 16%, transparent 84%, rgba(0, 0, 0, 0.38) 100%),
+    /* espresso base */
+    #140d06;
+}
+/* Ultra-subtle analog film grain (inline SVG feTurbulence, ~2.5% opacity). */
+[data-theme="studio"] .theme-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  background-repeat: repeat;
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+/* Editorial: matte dark-paper. A whisper of a top-lit vignette, nothing else —
+   the stray vertical margin rule read as a glitch in-app, so it's gone. */
+[data-theme="editorial"] .theme-backdrop {
+  background:
+    radial-gradient(125% 85% at 50% -12%, hsl(30 10% 13%) 0%, transparent 62%),
+    #141311;
+}
+
+/* Instrument Panel: near-black with a barely-visible phosphor grid
+   (1px lines every 48px at ~2.5% accent opacity) and a faint top-edge
+   glow. Static — no scanline animation (distraction + battery). */
+[data-theme="terminal"] .theme-backdrop {
+  background:
+    radial-gradient(85% 26% at 50% 0%, hsl(var(--primary) / 0.06) 0%, transparent 75%),
+    repeating-linear-gradient(to right, hsl(var(--primary) / 0.025) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(to bottom, hsl(var(--primary) / 0.025) 0 1px, transparent 1px 48px),
+    #050906;
+}
+
+/* Ambient glow blobs (insights page): recolored by theme tokens in the
+   component; flat themes get no ambient bloom at all. */
+[data-theme="editorial"] .ambient-blob,
+[data-theme="terminal"] .ambient-blob {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PER-THEME SURFACE TREATMENTS
+   The glass utility classes hardcode white translucency, so re-skin
+   them per theme using each theme's --glass-* tokens. Glass theme is
+   left untouched above (pixel-identical to the original look).
+   NOTE on !important: the base .glass-card rules above use !important
+   on background / backdrop-filter / border / box-shadow, so every
+   per-theme override of those properties must also carry !important
+   or it silently loses. That is the only reason it appears here.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Analog Studio: warm smoked glass (still translucent, warmer, softer) ── */
+[data-theme="studio"] .glass-card,
+[data-theme="studio"] .glass {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top: 1.5px solid var(--glass-border-top) !important;
+  border-left: 1.5px solid var(--glass-border-left) !important;
+  box-shadow:
+    0 14px 40px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-inner-glow) !important;
+}
+[data-theme="studio"] .glass-card::before { opacity: 0.4 !important; background: linear-gradient(135deg, rgba(255, 220, 170, 0.10) 0%, transparent 55%) !important; }
+[data-theme="studio"] .glass-tile {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top-color: var(--glass-border-top) !important;
+  border-left-color: var(--glass-border-left) !important;
+  box-shadow: inset 0 1px 0 var(--glass-inner-glow), 0 3px 12px -4px var(--glass-shadow) !important;
+}
+[data-theme="studio"] .glass-pill {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate)) !important;
+  box-shadow: inset 0 1px 0 var(--glass-inner-glow), 0 8px 24px var(--glass-shadow) !important;
+}
+
+/* ── Editorial & Instrument Panel: genuinely NON-glass.
+      Opaque solid panels, zero blur, uniform hairline borders, small flat
+      shadows, and no white top-highlight / inner-glow of any kind. ── */
+[data-theme="editorial"] .glass-card,
+[data-theme="editorial"] .glass,
+[data-theme="terminal"] .glass-card,
+[data-theme="terminal"] .glass {
+  background: var(--glass-bg) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top: 1px solid var(--glass-border-top) !important;
+  border-left: 1px solid var(--glass-border-left) !important;
+  box-shadow: 0 1px 2px var(--glass-shadow) !important;
+}
+[data-theme="editorial"] .glass-card::before,
+[data-theme="terminal"] .glass-card::before {
+  display: none !important;
+}
+[data-theme="editorial"] .glass-card:hover,
+[data-theme="terminal"] .glass-card:hover {
+  border-color: hsl(var(--primary) / 0.35) !important;
+  box-shadow: 0 2px 6px var(--glass-shadow) !important;
+}
+[data-theme="editorial"] .glass-tile,
+[data-theme="terminal"] .glass-tile {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-top-color: var(--glass-border-top) !important;
+  border-left-color: var(--glass-border-left) !important;
+  box-shadow: none !important;
+}
+[data-theme="editorial"] .glass-tile:hover,
+[data-theme="terminal"] .glass-tile:hover {
+  background: var(--glass-bg-hover) !important;
+  border-color: hsl(var(--primary) / 0.30) !important;
+  box-shadow: none !important;
+}
+[data-theme="editorial"] .glass-pill,
+[data-theme="terminal"] .glass-pill {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 2px var(--glass-shadow) !important;
+}
+
+

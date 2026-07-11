@@ -1,0 +1,185 @@
+import { create } from "zustand";
+import { musicPlayer } from "@/lib/audio/hls-player";
+import { genrePlaylist } from "@/lib/catalog";
+
+export interface Track {
+  id: string;
+  title: string;
+  artist: string;
+  genre: string;
+  mood: string | null;
+  durationS: number;
+  hlsUrl: string;
+  coverUrl: string | null;
+  isPremium: boolean;
+}
+
+export interface Playlist {
+  id: string;
+  title: string;
+  slug: string;
+  genre: string | null;
+  coverUrl: string | null;
+  isPremium: boolean;
+  tracks: Track[];
+}
+
+interface PlayerState {
+  currentTrack: Track | null;
+  currentPlaylist: Playlist | null;
+  activeGenre: string;
+  isPlaying: boolean;
+  volume: number;
+  progress: number;
+  duration: number;
+  shuffle: boolean;
+  repeat: "none" | "one" | "all";
+  crossfadeDuration: number;
+
+  play: (track: Track, playlist?: Playlist) => void;
+  pause: () => void;
+  resume: () => void;
+  next: () => void;
+  previous: () => void;
+  setVolume: (volume: number) => void;
+  setProgress: (seconds: number) => void;
+  setDuration: (seconds: number) => void;
+  toggleShuffle: () => void;
+  cycleRepeat: () => void;
+  setPlaylist: (playlist: Playlist) => void;
+  setActiveGenre: (genre: string) => void;
+  playGenre: (genre: string) => void;
+  setCrossfadeDuration: (duration: number) => void;
+}
+
+export const usePlayerStore = create<PlayerState>()((set, get) => ({
+  currentTrack: null,
+  currentPlaylist: null,
+  activeGenre: "Lofi Chill", // Default genre tab
+  isPlaying: false,
+  volume: 0.8,
+  progress: 0,
+  duration: 0,
+  shuffle: false,
+  repeat: "all",
+  crossfadeDuration: 5,
+
+  play: (track, playlist) => {
+    set({
+      currentTrack: track,
+      isPlaying: true,
+      progress: 0,
+      ...(playlist ? { currentPlaylist: playlist } : {}),
+    });
+  },
+
+  pause: () => set({ isPlaying: false }),
+  resume: () => set({ isPlaying: true }),
+
+  next: () => {
+    const { currentTrack, currentPlaylist, shuffle, repeat, activeGenre } = get();
+    // Scope check: If no playlist is active, load the playlist of the currently active genre tab.
+    const playlist = currentPlaylist || genrePlaylist(activeGenre || "Lofi Chill");
+    const tracks = playlist.tracks;
+    if (tracks.length === 0) return;
+
+    if (shuffle) {
+      const randomIdx = Math.floor(Math.random() * tracks.length);
+      set({ 
+        currentTrack: tracks[randomIdx], 
+        isPlaying: true, 
+        progress: 0,
+        currentPlaylist: playlist
+      });
+      return;
+    }
+
+    const idx = currentTrack ? tracks.findIndex((t) => t.id === currentTrack.id) : -1;
+    const nextIdx = idx + 1;
+
+    if (nextIdx >= tracks.length || idx === -1) {
+      if (repeat === "all") {
+        set({ 
+          currentTrack: tracks[0], 
+          isPlaying: true, 
+          progress: 0,
+          currentPlaylist: playlist
+        });
+      } else {
+        set({ isPlaying: false });
+      }
+    } else {
+      set({ 
+        currentTrack: tracks[nextIdx], 
+        isPlaying: true, 
+        progress: 0,
+        currentPlaylist: playlist
+      });
+    }
+  },
+
+  previous: () => {
+    const { currentTrack, currentPlaylist, progress, activeGenre } = get();
+    // Scope check: If no playlist is active, load the playlist of the currently active genre tab.
+    const playlist = currentPlaylist || genrePlaylist(activeGenre || "Lofi Chill");
+    const tracks = playlist.tracks;
+    if (tracks.length === 0) return;
+
+    if (progress > 3) {
+      if (typeof window !== "undefined") {
+        musicPlayer.seek(0);
+      }
+      set({ progress: 0 });
+      return;
+    }
+
+    const idx = currentTrack ? tracks.findIndex((t) => t.id === currentTrack.id) : -1;
+    const prevIdx = idx > 0 ? idx - 1 : (idx === -1 ? 0 : tracks.length - 1);
+    set({ 
+      currentTrack: tracks[prevIdx], 
+      isPlaying: true, 
+      progress: 0,
+      currentPlaylist: playlist
+    });
+  },
+
+  setVolume: (volume) => set({ volume }),
+  setProgress: (seconds) => set({ progress: seconds }),
+  setDuration: (seconds) => set({ duration: seconds }),
+  toggleShuffle: () => set({ shuffle: !get().shuffle }),
+  cycleRepeat: () => {
+    const order: Array<"none" | "one" | "all"> = ["none", "one", "all"];
+    const idx = order.indexOf(get().repeat);
+    set({ repeat: order[(idx + 1) % order.length] });
+  },
+  setPlaylist: (playlist) => set({ currentPlaylist: playlist }),
+  setActiveGenre: (genre) => {
+    // Setting active genre tab scopes the playlist to this genre immediately
+    set({
+      activeGenre: genre,
+      currentPlaylist: genrePlaylist(genre)
+    });
+  },
+
+  // Select a genre AND start playing it (first track, or a random one when shuffle
+  // is on). Used by the genre picker so choosing a genre plays immediately.
+  playGenre: (genre) => {
+    const playlist = genrePlaylist(genre);
+    const tracks = playlist.tracks;
+    if (tracks.length === 0) {
+      set({ activeGenre: genre, currentPlaylist: playlist });
+      return;
+    }
+    const track = get().shuffle
+      ? tracks[Math.floor(Math.random() * tracks.length)]
+      : tracks[0];
+    set({
+      activeGenre: genre,
+      currentPlaylist: playlist,
+      currentTrack: track,
+      isPlaying: true,
+      progress: 0,
+    });
+  },
+  setCrossfadeDuration: (duration) => set({ crossfadeDuration: Math.max(0, Math.min(12, duration)) }),
+}));

@@ -55,7 +55,17 @@ CREATE TABLE IF NOT EXISTS vgp_subscribers (
     email VARCHAR(255) UNIQUE NOT NULL CONSTRAINT email_lowercase CHECK (email = LOWER(email)),
     status VARCHAR(50) DEFAULT 'subscribed' CONSTRAINT check_sub_status CHECK (status IN ('subscribed', 'unsubscribed')),
     unsubscribed_at TIMESTAMPTZ,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    tags TEXT[] DEFAULT '{}',
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    account_type VARCHAR(100),
+    username VARCHAR(255),
+    user_profile VARCHAR(500),
+    location VARCHAR(255),
+    product_type VARCHAR(100),
+    license_name VARCHAR(100),
+    product_title VARCHAR(255)
 );
 
 CREATE INDEX IF NOT EXISTS idx_subscribers_email ON vgp_subscribers(email);
@@ -64,12 +74,14 @@ CREATE INDEX IF NOT EXISTS idx_subscribers_email ON vgp_subscribers(email);
 CREATE TABLE IF NOT EXISTS vgp_campaigns (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     subject VARCHAR(255) NOT NULL,
-    template_type VARCHAR(50) NOT NULL CONSTRAINT check_template CHECK (template_type IN ('beat_promo', 'cadenz_update', 'inner_circle')),
+    template_type VARCHAR(50) NOT NULL CONSTRAINT check_template CHECK (template_type IN ('beat_promo', 'cadenz_update', 'inner_circle', 'book_reader')),
     body_content TEXT,
     status VARCHAR(50) DEFAULT 'draft' CONSTRAINT check_camp_status CHECK (status IN ('draft', 'queued', 'sending', 'paused', 'completed', 'cancelled', 'failed')),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    completed_at TIMESTAMPTZ
+    completed_at TIMESTAMPTZ,
+    target_tags TEXT[] DEFAULT '{}',
+    scheduled_for TIMESTAMPTZ
 );
 
 -- 3. Create Recipient Logs (Queue) Table

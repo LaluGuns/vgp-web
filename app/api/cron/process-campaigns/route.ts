@@ -3,6 +3,7 @@ import pool, { withTransaction } from '@/lib/db';
 import nodemailer from 'nodemailer';
 import { signToken } from '@/lib/tokens';
 import { getAppBaseUrl } from '@/lib/auth';
+import { renderCampaignEmail } from '@/lib/founder/campaign-email';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -23,158 +24,6 @@ export const dynamic = 'force-dynamic';
 
 // Max emails to process in a single batch run
 const BATCH_SIZE = 10;
-
-// Email HTML Template Generator
-function getEmailHtml(
-    name: string,
-    subject: string,
-    templateType: string,
-    bodyContent: string,
-    unsubscribeUrl: string,
-    baseUrl: string,
-    logId: number
-): string {
-    const currentYear = new Date().getFullYear();
-
-    // Helper to rewrite text links for click tracking
-    const trackLink = (url: string) => {
-        return `${baseUrl}/api/newsletter/track/click?logId=${logId}&url=${encodeURIComponent(url)}`;
-    };
-
-    const rewriteTextLinks = (text: string): string => {
-        const urlRegex = /(https?:\/\/[^\s<]+)/g;
-        return text.replace(urlRegex, (url) => {
-            if (url.includes('/api/newsletter/track') || url.includes('/unsubscribe')) {
-                return url;
-            }
-            return trackLink(url);
-        });
-    };
-
-    const cleanName = name && name.trim() ? name : 'Producer';
-    const bodyWithPlaceholders = bodyContent
-        .replace(/\{\{name\}\}/gi, cleanName)
-        .replace(/\[Name\]/gi, cleanName);
-    const trackedBody = rewriteTextLinks(bodyWithPlaceholders);
-
-    let mainContentHtml = '';
-
-    if (templateType === 'beat_promo') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(0, 229, 255, 0.12); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    BEAT PROMO
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                Yo ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${trackedBody || 'A new premium beat has just dropped in the studio. Get first access and special rates before public release.'}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <a href="${trackLink(`${baseUrl}/studio/beats`)}" style="background-color: #00E5FF; background: linear-gradient(135deg, #00E5FF 0%, #008cff 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    LISTEN & SECURE LICENSE
-                </a>
-            </div>
-        `;
-    } else if (templateType === 'cadenz_update') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(112, 0, 255, 0.12); color: #a855f7; border: 1px solid rgba(112, 0, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    CADENZ R&D
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanName} — quick CADENZ update.
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${trackedBody || 'We are pushing the boundaries of spatial audio and bio-resonance beat science. Check out our latest project logs.'}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <a href="${trackLink(`${baseUrl}/cadenz`)}" style="background-color: #7000FF; background: linear-gradient(135deg, #7000FF 0%, #a855f7 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(112, 0, 255, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    READ DEVELOPMENT LOG
-                </a>
-            </div>
-        `;
-    } else if (templateType === 'book_reader') {
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    VGP LIBRARY
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                What's good ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${trackedBody || 'The new production guide is ready. No fluff — just real technique and workflow breakdowns straight from the studio.'}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <a href="${trackLink(`${baseUrl}/books`)}" style="background-color: #f59e0b; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #030712; padding: 14px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.35); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    READ THE GUIDE
-                </a>
-            </div>
-        `;
-    } else { // inner_circle
-        mainContentHtml = `
-            <div style="text-align: center; margin-bottom: 25px;">
-                <span style="font-size: 10px; background-color: rgba(255, 255, 255, 0.05); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.3); padding: 5px 12px; font-weight: 800; letter-spacing: 2px; border-radius: 9999px; text-transform: uppercase; display: inline-block;">
-                    INNER CIRCLE
-                </span>
-            </div>
-            <p style="font-size: 15px; line-height: 1.7; color: #cbd5e1; margin-bottom: 20px; font-weight: 500; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${cleanName},
-            </p>
-            <div style="font-size: 15px; line-height: 1.7; color: #94a3b8; margin-bottom: 30px; white-space: pre-line; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                ${trackedBody}
-            </div>
-            <div style="text-align: center; margin: 35px 0 15px 0;">
-                <a href="${trackLink(baseUrl)}" style="background-color: #0c1220; color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.4); padding: 13px 32px; text-decoration: none; font-weight: 800; font-size: 13px; border-radius: 8px; display: inline-block; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0, 229, 255, 0.05); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                    ACCESS PRIVATE PORTAL
-                </a>
-            </div>
-        `;
-    }
-
-    return `
-        <div style="background-color: #030712; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 40px 20px; min-height: 100%; box-sizing: border-box;">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #060b13; border: 1px solid rgba(56, 189, 248, 0.12); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); margin-top: 20px;">
-                <!-- Glowing top border -->
-                <tr>
-                    <td height="4" style="background: linear-gradient(90deg, #00E5FF 0%, #7000FF 100%); line-height: 4px; font-size: 0px;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td style="padding: 40px 35px; background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.04), transparent 75%);">
-                        <!-- Logo Section -->
-                        <div style="text-align: center; margin-bottom: 30px;">
-                            <div style="margin-bottom: 12px;">
-                                <img src="${baseUrl}/branding/logo-tg.png" alt="VGP" style="height: 48px; width: auto; max-width: 120px; object-fit: contain; display: inline-block;" />
-                            </div>
-                            <h1 style="color: #ffffff; font-size: 18px; font-weight: 800; letter-spacing: 3px; margin: 0 0 4px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">VIRZY GUNS PRODUCTION</h1>
-                            <div style="color: #00E5FF; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">100% Art. 100% Science.</div>
-                        </div>
-                        
-                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-bottom: 30px; height: 1px;"></div>
-                        
-                        ${mainContentHtml}
-                        
-                        <div style="border-top: 1px solid rgba(56, 189, 248, 0.08); margin-top: 40px; margin-bottom: 25px; height: 1px;"></div>
-                        
-                        <!-- Footer -->
-                        <div style="text-align: center; font-size: 11px; color: #475569; line-height: 1.6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                            © ${currentYear} Virzy Guns Production. All rights reserved.<br>
-                            You are receiving this because you are part of the VGP Inner Circle.<br><br>
-                            To stop receiving these emails, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline; font-weight: 600;">unsubscribe here</a>.
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <!-- Open Tracking Pixel -->
-            <img src="${baseUrl}/api/newsletter/track/open?logId=${logId}" width="1" height="1" style="display:none;" />
-        </div>
-    `;
-}
 
 export async function GET(request: NextRequest) {
     try {
@@ -417,26 +266,25 @@ export async function GET(request: NextRequest) {
                 const recipientName = jobNameClean && jobNameClean !== 'Producer'
                     ? jobNameClean
                     : getDefaultNameFromEmail(job.email);
-                const bodyTextWithPlaceholders = job.body_content
-                    .replace(/\{\{name\}\}/gi, recipientName)
-                    .replace(/\[Name\]/gi, recipientName);
 
-                const emailHtml = getEmailHtml(
+                const renderedEmail = renderCampaignEmail({
                     recipientName,
-                    job.subject,
-                    job.template_type,
-                    job.body_content,
+                    recipientEmail: job.email,
+                    subject: job.subject,
+                    templateType: job.template_type,
+                    bodyContent: job.body_content,
                     unsubscribeUrl,
                     baseUrl,
-                    job.id
-                );
+                    logId: job.id,
+                    includeTrackingPixel: true,
+                });
 
                 const mailRes = await transporter.sendMail({
                     from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
                     to: job.email,
                     subject: job.subject,
-                    text: `${job.subject}\n\nGreetings ${recipientName},\n\n${bodyTextWithPlaceholders}\n\nTo unsubscribe: ${unsubscribeUrl}`,
-                    html: emailHtml
+                    text: renderedEmail.text,
+                    html: renderedEmail.html
                 });
 
                 // Update database job status to 'sent'
