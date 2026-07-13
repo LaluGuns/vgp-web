@@ -17,7 +17,7 @@ export function verifyLemonSqueezySignature(
   secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET
 ): boolean {
   if (!secret) throw new Error("LEMONSQUEEZY_WEBHOOK_SECRET is not set");
-  if (!signature) return false;
+  if (!/^[a-f0-9]{64}$/i.test(signature)) return false;
 
   const expected = crypto
     .createHmac("sha256", secret)

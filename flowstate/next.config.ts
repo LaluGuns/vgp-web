@@ -1,6 +1,4 @@
-import path from "path";
 import type { NextConfig } from "next";
-import { withSentryConfig } from "@sentry/nextjs";
 
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -88,9 +86,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: "standalone",
-  outputFileTracingRoot: path.join(__dirname),
+  // The repository has a parent lockfile; pin tracing to the Flowstate app root.
+  outputFileTracingRoot: process.cwd(),
   poweredByHeader: false,
+  devIndicators: false,
   images: {
     formats: ["image/avif", "image/webp"],
   },
@@ -114,10 +113,4 @@ const nextConfig: NextConfig = {
   ],
 };
 
-export default process.env.SENTRY_AUTH_TOKEN
-  ? withSentryConfig(nextConfig, {
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-      silent: true,
-    })
-  : nextConfig;
+export default nextConfig;

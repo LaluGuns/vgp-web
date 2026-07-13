@@ -114,7 +114,7 @@ export function HeroMachines() {
           this switcher, independent of whatever theme is set inside the app. */}
       <div
         data-theme={active.id}
-        className="rounded-[22px] p-5 sm:p-7 flex items-center justify-center min-h-[430px] border border-white/[0.07] shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
+        className="rounded-[22px] p-5 sm:p-7 flex items-center justify-center h-[480px] border border-white/[0.07] shadow-[0_30px_90px_rgba(0,0,0,0.6)]"
         style={{ background: active.bg } as React.CSSProperties}
       >
         {style === "glass" && (

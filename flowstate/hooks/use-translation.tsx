@@ -9,6 +9,15 @@ interface LocaleContextType {
   t: (key: string, fallback?: string) => string;
 }
 
+function resolveTranslation(dictionary: object, key: string): string | undefined {
+  let current: unknown = dictionary;
+  for (const part of key.split(".")) {
+    if (!current || typeof current !== "object" || !(part in current)) return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return typeof current === "string" ? current : undefined;
+}
+
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
@@ -35,19 +44,11 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string, fallback?: string): string => {
-    const dict = dictionaries[locale] as any;
-    if (!dict) return fallback || key;
+    const localized = resolveTranslation(dictionaries[locale], key);
+    if (localized !== undefined) return localized;
 
-    const parts = key.split(".");
-    let current = dict;
-    for (const part of parts) {
-      if (current && typeof current === "object" && part in current) {
-        current = current[part];
-      } else {
-        return fallback || key;
-      }
-    }
-    return typeof current === "string" ? current : fallback || key;
+    const english = resolveTranslation(dictionaries[DEFAULT_LOCALE], key);
+    return english ?? fallback ?? key;
   };
 
   return (

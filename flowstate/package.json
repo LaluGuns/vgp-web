@@ -6,7 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test \"scripts/release/*.test.mjs\" && node scripts/i18n/check-parity.cjs",
+    "predeploy": "npm run typecheck && npm run lint && npm test && npm run build",
+    "worker:sync-catalog": "npx wrangler r2 object put flowstate-audio/tracks/catalog.json --file public/tracks/catalog.json --content-type application/json --remote --force --config worker/wrangler.toml",
+    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",

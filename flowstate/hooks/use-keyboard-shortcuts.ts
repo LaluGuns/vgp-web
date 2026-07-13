@@ -5,7 +5,7 @@ import { useTimerStore } from "@/lib/stores/timer-store";
 import { usePlayerStore } from "@/lib/stores/player-store";
 import { useAppStore } from "@/lib/stores/app-store";
 import { useFocusSessionStore } from "@/lib/stores/focus-session-store";
-import { TRACKS, PLAYLIST, genrePlaylist } from "@/lib/catalog";
+import { genrePlaylist } from "@/lib/catalog";
 import { musicPlayer } from "@/lib/audio/hls-player";
 
 // Module-level variable to throttle global shortcuts across all hook instances (preventing duplicate execution)
@@ -78,6 +78,24 @@ export function useKeyboardShortcuts() {
       const fs = useFocusSessionStore.getState();
 
       const optimizerLocked = fs.autopilot && timer.status === "running" && timer.phase === "focus";
+      const startOrResumePlayer = () => {
+        musicPlayer.unlockAudio();
+        if (player.currentTrack) {
+          player.resume();
+          return;
+        }
+
+        const playlist = genrePlaylist(player.activeGenre || "Lofi Chill");
+        const tracks = app.isPremium
+          ? playlist.tracks
+          : playlist.tracks.filter((track) => !track.isPremium);
+        if (tracks.length === 0) return;
+
+        const track = player.shuffle
+          ? tracks[Math.floor(Math.random() * tracks.length)]
+          : tracks[0];
+        player.play(track, playlist);
+      };
 
       switch (e.code) {
         case "Space":
@@ -86,37 +104,13 @@ export function useKeyboardShortcuts() {
           
           if (timer.status === "idle") {
             timer.start();
-            if (!player.isPlaying) {
-              if (!player.currentTrack) {
-                const playlist = genrePlaylist(player.activeGenre || "Lofi Chill");
-                const tracks = playlist.tracks;
-                if (tracks.length > 0) {
-                  const track = player.shuffle
-                    ? tracks[Math.floor(Math.random() * tracks.length)]
-                    : tracks[0];
-                  player.play(track, playlist);
-                }
-              }
-              else player.resume();
-            }
+            if (!player.isPlaying) startOrResumePlayer();
           } else if (timer.status === "running") {
             timer.pause();
             if (player.isPlaying) player.pause();
           } else if (timer.status === "paused") {
             timer.resume();
-            if (!player.isPlaying) {
-              if (!player.currentTrack) {
-                const playlist = genrePlaylist(player.activeGenre || "Lofi Chill");
-                const tracks = playlist.tracks;
-                if (tracks.length > 0) {
-                  const track = player.shuffle
-                    ? tracks[Math.floor(Math.random() * tracks.length)]
-                    : tracks[0];
-                  player.play(track, playlist);
-                }
-              }
-              else player.resume();
-            }
+            if (!player.isPlaying) startOrResumePlayer();
           }
           break;
         case "KeyR":
@@ -137,7 +131,7 @@ export function useKeyboardShortcuts() {
         case "KeyP":
           if (optimizerLocked) return;
           if (player.isPlaying) player.pause();
-          else player.resume();
+          else startOrResumePlayer();
           break;
         case "BracketRight":
           if (optimizerLocked) return;

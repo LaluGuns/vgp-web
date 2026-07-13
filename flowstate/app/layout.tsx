@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AudioDriver } from "@/components/audio/audio-driver";
+import { UpgradePrompt } from "@/components/pricing/upgrade-prompt";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Flowstate — Get in the zone.",
     description:
-      "Deep work music + focus timer with original soundtrack by Virzy Guns.",
+      "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
     siteName: "Flowstate",
     type: "website",
   },
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Flowstate — Get in the zone.",
     description:
-      "Deep work music + focus timer with original soundtrack by Virzy Guns.",
+      "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
   },
   alternates: {
     canonical: "/",
@@ -78,6 +79,7 @@ export default function RootLayout({
         />
         <LocaleProvider>
           <AudioDriver />
+          <UpgradePrompt />
           <AnalyticsProvider />
           <ThemeProvider />
           {children}

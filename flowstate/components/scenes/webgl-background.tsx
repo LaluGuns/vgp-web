@@ -116,7 +116,6 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
     // Non-glass themes never boot the GL loop; when the user switches away
     // from glass this effect re-runs and the cleanup below tears the old
     // loop down (RAF cancelled, listeners removed, GL resources freed).
-    if (!isGlass) return;
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
@@ -347,15 +346,12 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
   // Non-glass skins: a static, per-theme CSS backdrop occupies the same
   // fixed -z-20 stacking slot the canvas used. All styling lives in
   // globals.css under [data-theme="…"] .theme-backdrop.
-  if (!isGlass) {
-    return <div className="theme-backdrop" aria-hidden />;
-  }
-
   return (
     <>
+      {!isGlass && <div className="theme-backdrop" aria-hidden />}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-full -z-20 pointer-events-none"
+        className={`fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700 ${isGlass ? "opacity-100" : "opacity-45"}`}
       />
       <div
         className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-70 mix-blend-screen transition-[background] duration-1000"

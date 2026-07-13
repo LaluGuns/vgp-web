@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useMixerStore, type AmbientChannel } from "@/lib/stores/mixer-store";
+import { useMixerStore } from "@/lib/stores/mixer-store";
 import { useAppStore } from "@/lib/stores/app-store";
+import { useUpgradePromptStore } from "@/lib/stores/upgrade-prompt-store";
 import { ambientEngine } from "@/lib/audio/audio-engine";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { resolveAudioUrl } from "@/lib/audio/signed-urls";
+import {
+  isWorkerConfigured,
+  refreshAudioUrl,
+  resolveAudioUrl,
+} from "@/lib/audio/signed-urls";
+import { AMBIENT_SOUNDS } from "@/lib/catalog";
 import { recordFidget, recordVolumeFidget } from "@/lib/optimizer/fidget";
 import { useTranslation } from "@/hooks/use-translation";
 import {
@@ -41,21 +47,6 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   building: Building2,
   disc: Disc3,
 };
-
-const DEFAULT_SOUNDS: AmbientChannel[] = [
-  { id: "rain", name: "Rain", slug: "rain", icon: "cloud-rain", category: "nature", fileUrl: "/sounds/rain.mp3", isPremium: false },
-  { id: "fire", name: "Fireplace", slug: "fire", icon: "flame", category: "nature", fileUrl: "/sounds/fire.mp3", isPremium: false },
-  { id: "ocean", name: "Ocean", slug: "ocean", icon: "waves", category: "nature", fileUrl: "/sounds/ocean.mp3", isPremium: false },
-  { id: "forest", name: "Forest", slug: "forest", icon: "tree-pine", category: "nature", fileUrl: "/sounds/forest.mp3", isPremium: false },
-  { id: "birds", name: "Birds", slug: "birds", icon: "bird", category: "nature", fileUrl: "/sounds/birds.mp3", isPremium: false },
-  { id: "cafe", name: "Cafe", slug: "cafe", icon: "coffee", category: "urban", fileUrl: "/sounds/cafe.mp3", isPremium: false },
-  { id: "wind", name: "Windchimes", slug: "wind", icon: "wind", category: "nature", fileUrl: "/sounds/wind.mp3", isPremium: false },
-  { id: "fire-rain", name: "Fire & Rain", slug: "fire-rain", icon: "flame", category: "nature", fileUrl: "/sounds/fire-rain.mp3", isPremium: true },
-  { id: "river", name: "River", slug: "river", icon: "droplets", category: "nature", fileUrl: "/sounds/river.mp3", isPremium: true },
-  { id: "waterfall", name: "Waterfall", slug: "waterfall", icon: "droplets", category: "nature", fileUrl: "/sounds/waterfall.mp3", isPremium: true },
-  { id: "city", name: "City", slug: "city", icon: "building", category: "urban", fileUrl: "/sounds/city.mp3", isPremium: true },
-  { id: "vinyl", name: "Vinyl", slug: "vinyl", icon: "disc", category: "texture", fileUrl: "/sounds/vinyl.mp3", isPremium: true },
-];
 
 interface VolumeSliderProps {
   value: number;
@@ -98,19 +89,34 @@ export function AmbientMixer() {
   const setMasterVolume = useMixerStore((s) => s.setMasterVolume);
   const availableSounds = useMixerStore((s) => s.availableSounds);
   const setSounds = useMixerStore((s) => s.setSounds);
+  const loadPreset = useMixerStore((s) => s.loadPreset);
 
   const isPremium = useAppStore((s) => s.isPremium);
+  const showUpgrade = useUpgradePromptStore((s) => s.show);
 
   const initializedRef = useRef(false);
 
   useEffect(() => {
     if (!initializedRef.current) {
-      setSounds(DEFAULT_SOUNDS);
+      setSounds(AMBIENT_SOUNDS);
       initializedRef.current = true;
     }
   }, [setSounds]);
 
-  const sounds = availableSounds.length > 0 ? availableSounds : DEFAULT_SOUNDS;
+  const sounds = availableSounds.length > 0 ? availableSounds : AMBIENT_SOUNDS;
+
+  // A persisted Pro preset must not keep playing after logout or downgrade.
+  useEffect(() => {
+    if (isPremium) return;
+    const premiumIds = new Set(sounds.filter((sound) => sound.isPremium).map((sound) => sound.id));
+    const allowed = activeChannels.filter((channel) => !premiumIds.has(channel.id));
+    if (allowed.length !== activeChannels.length) {
+      for (const channel of activeChannels) {
+        if (premiumIds.has(channel.id)) ambientEngine.stop(channel.id);
+      }
+      loadPreset(allowed);
+    }
+  }, [activeChannels, isPremium, loadPreset, sounds]);
 
   useEffect(() => {
     ambientEngine.setMasterVolume(masterVolume);
@@ -128,18 +134,27 @@ export function AmbientMixer() {
 
   useEffect(() => {
     for (const sound of sounds) {
-      const channel = activeChannelsRef.current.find((c) => c.id === sound.id);
+      const allowed = !sound.isPremium || isPremium;
+      const channel = allowed
+        ? activeChannelsRef.current.find((c) => c.id === sound.id)
+        : undefined;
       if (channel) {
         // Ambient loops resolve through the signed-URL provider (worker in prod,
         // /public in dev) — they are gitignored, so prod has no local copies.
-        resolveAudioUrl(sound.fileUrl)
-          .then((url) => {
-            // Re-check: the channel may have been toggled off while resolving.
-            if (activeChannelsRef.current.some((c) => c.id === sound.id)) {
-              ambientEngine.play(sound.id, url, channel.volume);
-            }
-          })
-          .catch((err) => console.error("Failed to resolve ambient URL:", err));
+        void (async () => {
+          try {
+            const url = await resolveAudioUrl(sound.fileUrl);
+            if (!activeChannelsRef.current.some((c) => c.id === sound.id)) return;
+            const played = await ambientEngine.play(sound.id, url, channel.volume);
+            if (played || !isWorkerConfigured()) return;
+
+            const refreshedUrl = await refreshAudioUrl(sound.fileUrl);
+            if (!activeChannelsRef.current.some((c) => c.id === sound.id)) return;
+            await ambientEngine.play(sound.id, refreshedUrl, channel.volume);
+          } catch (err) {
+            console.error("Failed to load ambient audio after signed-URL refresh:", err);
+          }
+        })();
       } else if (ambientEngine.isPlaying(sound.id)) {
         ambientEngine.stop(sound.id);
       }
@@ -151,7 +166,7 @@ export function AmbientMixer() {
         }
       }
     };
-  }, [activeIdsString, sounds]);
+  }, [activeIdsString, isPremium, sounds]);
 
   // Track previous volume settings to avoid redundant engine calls during slider updates
   const prevVolumesRef = useRef<Record<string, number>>({});
@@ -208,16 +223,12 @@ export function AmbientMixer() {
             <div 
               key={sound.id} 
               onClick={locked ? () => {
-                if (confirm(t("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?"))) {
-                  window.location.href = "/pricing";
-                }
+                showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?");
               } : undefined}
               onKeyDown={locked ? (e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  if (confirm(t("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?"))) {
-                    window.location.href = "/pricing";
-                  }
+                  showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?");
                 }
               } : undefined}
               tabIndex={locked ? 0 : undefined}

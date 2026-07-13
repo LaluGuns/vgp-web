@@ -108,7 +108,7 @@ export default function FlowstatePage() {
   const TOUR_STEPS = [
     {
       title: "Welcome to Flowstate",
-      desc: "A timer, music produced in-house by Virzy Guns, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through.",
+      desc: "A timer, music produced in-house by Virzy Guns Production, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through.",
       target: "workspace"
     },
     {
@@ -298,6 +298,16 @@ export default function FlowstatePage() {
   // other themes own their accent, so we don't let the Scene override it.
   const uiTheme = useThemeStore((s) => s.theme);
 
+  const activeColor = uiTheme !== "glass" ? uiTheme : scene;
+  const activeLogoClass =
+    activeColor === "studio" ? "logo-amber" :
+    activeColor === "editorial" ? "logo-red" :
+    activeColor === "terminal" ? "logo-green" :
+    activeColor === "synthwave" ? "logo-magenta" :
+    activeColor === "forest" ? "logo-emerald" :
+    activeColor === "sunset" ? "logo-orange" :
+    "logo-cyan";
+
   // 3D Parallax Tilt — subtle, Apple-like
   const { tiltProps: taskTilt } = use3dTilt(1.2);
   const { tiltProps: timerTilt } = use3dTilt(1.2);
@@ -401,7 +411,7 @@ export default function FlowstatePage() {
       >
         
         {/* Left SideNav Sidebar (Stitch premium theme spec) */}
-        <nav className="relative hidden md:flex flex-col h-full w-64 backdrop-blur-[45px] border-t border-l border-white/15 border-r border-b border-white/5 bg-white/[0.03] shadow-[0_24px_60px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[32px] py-8 shrink-0 z-20 overflow-hidden">
+        <nav className="relative hidden md:flex flex-col h-full w-64 backdrop-blur-[45px] border-t border-l border-white/15 border-r border-b border-white/5 bg-white/[0.03] shadow-[0_24px_60px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[32px] py-8 shrink-0 z-20 overflow-hidden">
           {/* Top specular reflection strip */}
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
           
@@ -411,7 +421,10 @@ export default function FlowstatePage() {
               alt="Flow"
               width={120}
               height={40}
-              className="h-8 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.22)]"
+              className={cn(
+                "h-8 w-auto object-contain theme-logo transition-all duration-500",
+                activeLogoClass
+              )}
               priority
             />
             <p className="text-[9px] font-mono text-white/40 uppercase tracking-widest mt-2.5 ml-0.5">{t("dashboard.deepWorkActive", "Deep Work Active")}</p>
@@ -420,7 +433,7 @@ export default function FlowstatePage() {
           <div className="flex-1 flex flex-col gap-1.5 px-3">
             <Link
               href="/app"
-              className="relative px-4 py-3 flex items-center gap-3 rounded-2xl bg-white/[0.07] border border-white/20 border-t-white/40 border-l-primary/60 shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-md font-mono text-[11px] font-bold uppercase tracking-wider text-primary drop-shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all duration-300 scale-[1.02]"
+              className="relative px-4 py-3 flex items-center gap-3 rounded-2xl bg-white/[0.07] border border-white/20 border-t-white/40 border-l-primary/60 shadow-[0_8px_20px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-md font-mono text-[11px] font-bold uppercase tracking-wider text-primary drop-shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all duration-300 scale-[1.02]"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
               <span>{t("dashboard.focus", "Focus")}</span>
@@ -534,7 +547,10 @@ export default function FlowstatePage() {
                 alt="Flow"
                 width={100}
                 height={32}
-                className="h-7 w-auto object-contain opacity-85 hover:opacity-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] drop-shadow-[0_0_12px_rgba(0,229,255,0.15)] group-hover:drop-shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all duration-500 ease-out"
+                className={cn(
+                  "h-7 w-auto object-contain opacity-85 hover:opacity-100 theme-logo transition-all duration-500",
+                  activeLogoClass
+                )}
                 priority
               />
             </div>
@@ -959,7 +975,7 @@ export default function FlowstatePage() {
       </div> {/* Left Sidebar Outer Wrapper End */}
 
       {/* Mobile Bottom Navigation Bar (Stitch premium mobile layout spec) */}
-      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm h-16 glass-pill flex items-center justify-around z-40 px-3 shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.4)] backdrop-blur-2xl border border-white/10 bg-black/40 rounded-full">
+      <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm h-16 glass-pill flex items-center justify-around z-40 px-3 shadow-[0_16px_40px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-2xl border border-white/10 bg-black/40 rounded-full">
         {/* Tasks Tab */}
         <button
           onClick={() => setMobileTab("tasks")}

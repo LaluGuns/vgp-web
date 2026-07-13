@@ -17,7 +17,9 @@ import type { SessionSummary } from "@/lib/stores/focus-session-store";
  * the app stays fully usable offline/logged-out.
  */
 
-const OUTBOX_KEY = "flowstate-session-outbox-v1";
+// v2 intentionally does not migrate the old ownerless queue. Those entries
+// cannot be attributed safely to whichever account happens to log in next.
+const OUTBOX_KEY = "flowstate-session-outbox-v2";
 const MAX_ATTEMPTS = 60; // ~2 months of daily retries before giving up
 const MAX_QUEUE = 200;
 
@@ -25,6 +27,7 @@ const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 
 interface OutboxEntry {
   clientId: string;
+  ownerId: string;
   row: Record<string, unknown>; // insert payload minus user_id (bound at flush time)
   attempts: number;
   enqueuedAt: number;
@@ -35,7 +38,16 @@ function readOutbox(): OutboxEntry[] {
     const raw = localStorage.getItem(OUTBOX_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (entry): entry is OutboxEntry =>
+        !!entry &&
+        typeof entry.clientId === "string" &&
+        typeof entry.ownerId === "string" &&
+        entry.ownerId.length > 0 &&
+        typeof entry.row === "object" &&
+        entry.row !== null
+    );
   } catch {
     return [];
   }
@@ -56,6 +68,10 @@ function newClientId(): string {
     // Very old browsers: timestamp + random fallback (still unique enough).
     return `${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 10)}`;
   }
+}
+
+function entryKey(entry: Pick<OutboxEntry, "ownerId" | "clientId">): string {
+  return `${entry.ownerId}:${entry.clientId}`;
 }
 
 let flushing = false;
@@ -80,38 +96,44 @@ export async function flushSessionOutbox(): Promise<void> {
     // Track outcomes by clientId, NOT by rewriting the snapshot: a session
     // finished (and enqueued) DURING this flush's awaits would otherwise be
     // clobbered when we write back — the exact data loss the outbox prevents.
+    const ownedQueue = queue.filter((entry) => entry.ownerId === user.id);
+    if (ownedQueue.length === 0) return;
+
     const processed = new Set<string>(); // delivered or permanently dropped
     const bumpAttempts = new Map<string, number>(); // clientId → new attempt count
 
-    for (const entry of queue) {
+    for (const entry of ownedQueue) {
       const { error } = await supabase
         .from("flowstate_focus_sessions")
-        .insert({ ...entry.row, user_id: user.id, client_id: entry.clientId });
+        .insert({ ...entry.row, user_id: entry.ownerId, client_id: entry.clientId });
 
       if (!error || error.code === "23505" /* unique_violation = already delivered */) {
-        processed.add(entry.clientId);
+        processed.add(entryKey(entry));
         continue;
       }
       // RLS/schema rejections will never succeed — drop after logging once.
       if (error.code === "42501" || error.code === "PGRST204") {
         console.error("Dropping undeliverable focus session:", error.message);
-        processed.add(entry.clientId);
+        processed.add(entryKey(entry));
         continue;
       }
       const attempts = entry.attempts + 1;
       if (attempts < MAX_ATTEMPTS) {
-        bumpAttempts.set(entry.clientId, attempts);
+        bumpAttempts.set(entryKey(entry), attempts);
       } else {
         console.error("Focus session exceeded retry budget, dropping:", entry.clientId);
-        processed.add(entry.clientId);
+        processed.add(entryKey(entry));
       }
     }
 
     // Re-read so entries enqueued mid-flush survive; drop the delivered/dropped
     // ones and update retry counts on the rest.
     const next = readOutbox()
-      .filter((e) => !processed.has(e.clientId))
-      .map((e) => (bumpAttempts.has(e.clientId) ? { ...e, attempts: bumpAttempts.get(e.clientId)! } : e));
+      .filter((e) => !processed.has(entryKey(e)))
+      .map((e) => {
+        const attempts = bumpAttempts.get(entryKey(e));
+        return attempts === undefined ? e : { ...e, attempts };
+      });
     writeOutbox(next);
   } catch (err) {
     console.error("Outbox flush failed (will retry):", err);
@@ -127,9 +149,24 @@ export async function persistSession(
   taskId?: string | null
 ) {
   if (typeof window === "undefined") return;
+  if (!isSupabaseConfigured()) return;
+
+  // This reads the locally persisted auth session, so an authenticated offline
+  // user can enqueue without assigning the row to a future, unrelated login.
+  let ownerId: string | undefined;
+  try {
+    const {
+      data: { session },
+    } = await createClient().auth.getSession();
+    ownerId = session?.user?.id;
+  } catch {
+    return;
+  }
+  if (!ownerId) return;
 
   const entry: OutboxEntry = {
     clientId: newClientId(),
+    ownerId,
     row: {
       mode,
       started_at: new Date(summary.startedAt).toISOString(),

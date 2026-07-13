@@ -1,3 +1,5 @@
+import { PREMIUM_AMBIENT_PATHS } from "../../lib/audio/ambient-catalog.ts";
+
 /**
  * flowstate-audio-delivery — signed, entitlement-gated audio streaming from R2.
  *
@@ -21,6 +23,8 @@
 const JSON_HEADERS = { "content-type": "application/json" };
 const CATALOG_TTL_MS = 5 * 60 * 1000;
 const MAX_ITEMS = 24; // one playlist page worth of URLs per request
+const MAX_BODY_BYTES = 16 * 1024;
+const MIN_SIGNING_SECRET_LENGTH = 32;
 
 export default {
   async fetch(request, env) {
@@ -107,13 +111,15 @@ async function getUser(request, env) {
   return user && user.id ? user : null;
 }
 
-async function isPremiumUser(env, userId) {
+async function isPremiumUser(env, userId, authorization) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/flowstate_profiles?id=eq.${userId}&select=plan`,
     {
       headers: {
-        apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-        authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        apikey: env.SUPABASE_ANON_KEY,
+        // Query through the user's JWT. RLS only permits reading their own
+        // profile, so the Worker never needs the Supabase service-role key.
+        authorization,
       },
     }
   );
@@ -155,7 +161,7 @@ async function resolveGrant(request, env) {
     grantCache.delete(hash);
     return null;
   }
-  const isPremium = await isPremiumUser(env, user.id);
+  const isPremium = await isPremiumUser(env, user.id, auth);
   const jwtMs = jwtExpMs(token);
   const expMs = jwtMs ? Math.min(now + GRANT_MAX_TTL_MS, jwtMs - 30_000) : now + GRANT_MAX_TTL_MS;
   if (expMs > now) grantCache.set(hash, { userId: user.id, isPremium, expMs });
@@ -177,6 +183,10 @@ async function hmacKey(secret) {
   );
 }
 
+function hasSigningSecret(env) {
+  return typeof env.URL_SIGNING_SECRET === "string" && env.URL_SIGNING_SECRET.length >= MIN_SIGNING_SECRET_LENGTH;
+}
+
 const b64url = (buf) =>
   btoa(String.fromCharCode(...new Uint8Array(buf)))
     .replace(/\+/g, "-")
@@ -184,6 +194,7 @@ const b64url = (buf) =>
     .replace(/=+$/, "");
 
 async function signToken(env, key, exp) {
+  if (!hasSigningSecret(env)) throw new Error("URL signing secret is not configured");
   const sig = await crypto.subtle.sign(
     "HMAC",
     await hmacKey(env.URL_SIGNING_SECRET),
@@ -193,21 +204,44 @@ async function signToken(env, key, exp) {
 }
 
 async function verifyToken(env, key, exp, sig) {
-  if (!key || !exp || !sig || Date.now() / 1000 > Number(exp)) return false;
-  const expected = await signToken(env, key, exp);
-  return expected.length === sig.length && expected === sig;
+  const expires = Number(exp);
+  if (!hasSigningSecret(env) || !key || !Number.isSafeInteger(expires) || !sig || Date.now() / 1000 > expires) {
+    return false;
+  }
+  try {
+    const normalized = sig.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const bytes = Uint8Array.from(atob(padded), (char) => char.charCodeAt(0));
+    return await crypto.subtle.verify(
+      "HMAC",
+      await hmacKey(env.URL_SIGNING_SECRET),
+      bytes,
+      enc.encode(`${key}|${expires}`)
+    );
+  } catch {
+    return false;
+  }
 }
 
 // ── POST /v1/urls ──────────────────────────────────────────────────────────
 
 // tracks/<category>/<file>.mp3  — music (catalog-gated)
-// sounds/<file>.mp3|wav         — ambient loops (always free, flat or one dir deep)
+// sounds/<file>.mp3|wav         — ambient loops (shared Free/Pro catalog, flat or one dir deep)
 const KEY_RE = /^(tracks\/[a-z0-9-]{1,60}\/[a-z0-9._-]{1,120}\.mp3|sounds\/(?:[a-z0-9._-]{1,60}\/)?[a-z0-9._-]{1,120}\.(?:mp3|wav|m4a))$/;
+const PREMIUM_SOUND_KEYS = new Set(PREMIUM_AMBIENT_PATHS);
 
 async function issueUrls(request, env, cors) {
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > MAX_BODY_BYTES) return json({ error: "request too large" }, 413, cors);
+  if (!hasSigningSecret(env)) return json({ error: "service unavailable" }, 503, cors);
+
   let body;
   try {
-    body = await request.json();
+    const rawBody = await request.text();
+    if (enc.encode(rawBody).byteLength > MAX_BODY_BYTES) {
+      return json({ error: "request too large" }, 413, cors);
+    }
+    body = JSON.parse(rawBody);
   } catch {
     return json({ error: "invalid json" }, 400, cors);
   }
@@ -230,7 +264,8 @@ async function issueUrls(request, env, cors) {
   }
 
   const origin = new URL(request.url).origin;
-  const ttl = Number(env.FULL_TTL_SECONDS || 900);
+  const configuredTtl = Number(env.FULL_TTL_SECONDS || 900);
+  const ttl = Number.isFinite(configuredTtl) ? Math.min(900, Math.max(60, Math.floor(configuredTtl))) : 900;
   const results = [];
 
   for (const raw of paths) {
@@ -240,8 +275,8 @@ async function issueUrls(request, env, cors) {
       continue;
     }
     const isTrack = key.startsWith("tracks/");
-    // Ambient sounds are always free; music must exist in the catalog.
-    const meta = isTrack ? catalog.get(key) : { isPremium: false };
+    // Music must exist in the R2 catalog; ambience uses the shared Pro catalog.
+    const meta = isTrack ? catalog.get(key) : { isPremium: PREMIUM_SOUND_KEYS.has(key) };
     if (!meta) {
       results.push({ path: raw, error: "not available" });
       continue;
@@ -294,10 +329,12 @@ async function stream(request, env, url, cors) {
   let start = 0;
   let end = null;
   if (rangeHeader) {
-    const m = /^bytes=(\d*)-(\d*)$/.exec(rangeHeader.trim());
-    if (m && (m[1] || m[2])) {
-      start = m[1] ? parseInt(m[1], 10) : 0;
+    const m = /^bytes=(\d+)-(\d*)$/.exec(rangeHeader.trim());
+    if (!m) return json({ error: "invalid range" }, 416, cors);
+    if (m) {
+      start = parseInt(m[1], 10);
       end = m[2] ? parseInt(m[2], 10) : null;
+      if (end !== null && end < start) return json({ error: "invalid range" }, 416, cors);
       r2Options = {
         range: end !== null ? { offset: start, length: end - start + 1 } : { offset: start },
       };

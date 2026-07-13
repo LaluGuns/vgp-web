@@ -15,7 +15,12 @@ export function LegalShell({
   active: string;
   children: React.ReactNode;
 }) {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
+  const lastUpdated = t("legal.last_updated", "Last updated: {date}").replace("{date}", updated);
+  const [contactBefore, contactAfter = ""] = t(
+    "legal.questions_contact",
+    "Questions? Contact {email}."
+  ).split("{email}");
 
   const legalNav = [
     { href: "/legal/terms", label: t("dashboard.terms", "Terms") },
@@ -38,7 +43,7 @@ export function LegalShell({
           <header className="space-y-3 border-b border-white/[0.06] pb-5">
             <h1 className="text-2xl font-bold text-white tracking-tight">{title}</h1>
             <p className="text-[11px] font-mono uppercase tracking-widest text-muted-foreground/50">
-              Last updated: {updated}
+              {lastUpdated}
             </p>
             <nav className="flex flex-wrap gap-1.5 pt-1">
               {legalNav.map((l) => (
@@ -63,14 +68,14 @@ export function LegalShell({
           </article>
 
           <footer className="pt-5 border-t border-white/[0.06] text-[11px] text-muted-foreground/50 leading-relaxed">
-            Questions? Contact{" "}
+            {contactBefore}
             <a
               href="mailto:founder@virzyguns.com"
               className="text-primary/80 hover:text-primary transition-colors"
             >
               founder@virzyguns.com
             </a>
-            .
+            {contactAfter}
           </footer>
         </div>
       </div>

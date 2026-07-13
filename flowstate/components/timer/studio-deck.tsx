@@ -321,7 +321,7 @@ export function StudioDeck({
 
   return (
     <div
-      className="w-full max-w-[560px] select-none"
+      className="w-full max-w-[440px] select-none"
       style={{ "--primary": accentHsl } as React.CSSProperties}
     >
       {/* ── Chassis ── */}
@@ -419,7 +419,14 @@ export function StudioDeck({
               {locked && <Lock className="h-2.5 w-2.5" />}
               {phaseLabel}
             </span>
-            <span className="mt-1.5 text-[9px] font-mono uppercase tracking-[0.25em]" style={{ color: "hsl(40 20% 52%)" }}>
+            <span
+              className="mt-1.5 text-[9.5px] font-mono uppercase tracking-[0.25em] px-2 py-0.5 rounded backdrop-blur-[2px]"
+              style={{
+                color: "hsl(40 20% 52%)",
+                background: "rgba(10, 8, 6, 0.65)",
+                border: "1px solid rgba(255, 218, 168, 0.05)"
+              }}
+            >
               {presetLabel}
             </span>
           </div>

@@ -4,7 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { X, Download, Copy, Check, Loader2, Share2, Smartphone, Monitor, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 import QRCode from "qrcode";
+import { useThemeStore, type ThemeId } from "@/lib/stores/theme-store";
+
+const SHARE_PALETTES: Record<ThemeId, { from: string; mid: string; to: string; accent: string; glow: string }> = {
+  glass: { from: "#080415", mid: "#12072b", to: "#04020a", accent: "#58c4ff", glow: "rgba(88,196,255,.24)" },
+  studio: { from: "#160e05", mid: "#2a1808", to: "#070401", accent: "#ee9b1f", glow: "rgba(238,155,31,.24)" },
+  editorial: { from: "#151310", mid: "#26150f", to: "#080604", accent: "#ef5a2b", glow: "rgba(239,90,43,.22)" },
+  terminal: { from: "#030806", mid: "#071b10", to: "#010302", accent: "#22e06b", glow: "rgba(34,224,107,.20)" },
+};
 
 // Custom premium brand icon for X (formerly Twitter)
 const XIcon = () => (
@@ -76,6 +85,25 @@ export interface ShareModalProps {
   sessionCount?: number;
   completionRate?: number;
 }
+
+type ShareCardCopy = {
+  weeklyAudit: string;
+  sessionAudit: string;
+  totalFocusTime: string;
+  deepFocusTime: string;
+  deepWorkLogged: string;
+  sessionComplete: string;
+  sessionLogged: string;
+  sessions: string;
+  completion: string;
+  fidgets: string;
+  status: string;
+  completed: string;
+  skipped: string;
+  firstTenMinutes: string;
+  scanToFocus: string;
+  everyTrack: string;
+};
 
 // Helper to asynchronously load image for canvas
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -182,6 +210,8 @@ export async function drawShareCard(
     sessionCount?: number;
     completionRate?: number;
     orientation: "landscape" | "portrait";
+    theme: ThemeId;
+    copy: ShareCardCopy;
   }
 ) {
   const ctx = canvas.getContext("2d");
@@ -189,6 +219,7 @@ export async function drawShareCard(
 
   const width = data.orientation === "landscape" ? 1200 : 1080;
   const height = data.orientation === "landscape" ? 630 : 1920;
+  const palette = SHARE_PALETTES[data.theme];
 
   const FONT_FAMILY = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
   const MONO_FAMILY = 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
@@ -206,9 +237,9 @@ export async function drawShareCard(
 
   // 1. Draw cosmic background gradient
   const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-  bgGrad.addColorStop(0, "#080415"); // Deep space dark blue/black
-  bgGrad.addColorStop(0.5, "#12072b"); // Deep purple
-  bgGrad.addColorStop(1, "#04020a"); // Ultra dark
+  bgGrad.addColorStop(0, palette.from);
+  bgGrad.addColorStop(0.5, palette.mid);
+  bgGrad.addColorStop(1, palette.to);
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, width, height);
 
@@ -222,7 +253,7 @@ export async function drawShareCard(
 
   // Blue glow bottom-right
   const blueGlow = ctx.createRadialGradient(width * 0.8, height * 0.8, 50, width * 0.8, height * 0.8, width * 0.4);
-  blueGlow.addColorStop(0, "rgba(88, 196, 255, 0.22)");
+  blueGlow.addColorStop(0, palette.glow);
   blueGlow.addColorStop(1, "rgba(88, 196, 255, 0)");
   ctx.fillStyle = blueGlow;
   ctx.fillRect(0, 0, width, height);
@@ -240,23 +271,23 @@ export async function drawShareCard(
 
   // 3. Setup core layout params
   const heroVal = `${data.focusMinutes}m`;
-  const heroColor = data.isSummary ? "#58c4ff" : data.completed ? "#34d399" : "#58c4ff";
-  const heroLabel = data.isSummary ? "TOTAL FOCUS TIME" : "DEEP FOCUS TIME";
+  const heroColor = data.completed && !data.isSummary ? "#34d399" : palette.accent;
+  const heroLabel = data.isSummary ? data.copy.totalFocusTime : data.copy.deepFocusTime;
   const tagline = data.isSummary
-    ? "» Deep work, logged."
+    ? data.copy.deepWorkLogged
     : data.completed
-      ? "» Session complete."
-      : "» Session logged.";
+      ? data.copy.sessionComplete
+      : data.copy.sessionLogged;
   const stats = data.isSummary
     ? [
-        { label: "SESSIONS", val: `${data.sessionCount ?? 0}` },
-        { label: "COMPLETION", val: `${data.completionRate ?? 0}%` },
-        { label: "FIDGETS", val: `${data.fidgetCount}` },
+        { label: data.copy.sessions, val: `${data.sessionCount ?? 0}` },
+        { label: data.copy.completion, val: `${data.completionRate ?? 0}%` },
+        { label: data.copy.fidgets, val: `${data.fidgetCount}` },
       ]
     : [
-        { label: "STATUS", val: data.completed ? "Completed" : "Skipped" },
-        { label: "FIDGETS", val: `${data.fidgetCount}` },
-        { label: "FIRST 10 MIN", val: `${data.firstTenFidgets ?? 0}` },
+        { label: data.copy.status, val: data.completed ? data.copy.completed : data.copy.skipped },
+        { label: data.copy.fidgets, val: `${data.fidgetCount}` },
+        { label: data.copy.firstTenMinutes, val: `${data.firstTenFidgets ?? 0}` },
       ];
 
   if (data.orientation === "landscape") {
@@ -303,7 +334,7 @@ export async function drawShareCard(
     ctx.fillStyle = "rgba(255, 255, 255, 0.45)";
     ctx.font = `600 11px ${MONO_FAMILY}`;
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "2px"; }
-    const typeLabel = data.isSummary ? "WEEKLY PERFORMANCE AUDIT" : "SESSION FOCUS AUDIT";
+    const typeLabel = data.isSummary ? data.copy.weeklyAudit : data.copy.sessionAudit;
     ctx.fillText(typeLabel, cardX + 60, cardY + 115);
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "normal"; }
 
@@ -369,7 +400,7 @@ export async function drawShareCard(
     ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
     ctx.font = `bold 11px ${MONO_FAMILY}`;
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "1px"; }
-    ctx.fillText("SCAN TO FOCUS", qrX - 15, qrY + 30);
+    ctx.fillText(data.copy.scanToFocus, qrX - 15, qrY + 30);
     ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
     ctx.font = `500 9px ${MONO_FAMILY}`;
     ctx.fillText("flow.virzyguns.com", qrX - 15, qrY + 48);
@@ -419,7 +450,7 @@ export async function drawShareCard(
     ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
     ctx.font = `600 16px ${MONO_FAMILY}`;
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "3px"; }
-    const typeLabel = data.isSummary ? "WEEKLY PERFORMANCE AUDIT" : "SESSION FOCUS AUDIT";
+    const typeLabel = data.isSummary ? data.copy.weeklyAudit : data.copy.sessionAudit;
     ctx.fillText(typeLabel, 540, cardY + 280);
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "normal"; }
 
@@ -473,7 +504,7 @@ export async function drawShareCard(
     ctx.fillStyle = "#ffffff";
     ctx.font = `bold 16px ${MONO_FAMILY}`;
     if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "3px"; }
-    ctx.fillText("SCAN TO FOCUS", 540, qrY + 215);
+    ctx.fillText(data.copy.scanToFocus, 540, qrY + 215);
 
     ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
     ctx.font = `500 13px ${MONO_FAMILY}`;
@@ -482,7 +513,7 @@ export async function drawShareCard(
     
     ctx.fillStyle = heroColor;
     ctx.font = `italic 500 16px ${FONT_FAMILY}`;
-    ctx.fillText("» Every track produced in-house", 540, qrY + 285);
+    ctx.fillText(data.copy.everyTrack, 540, qrY + 285);
   }
 }
 
@@ -497,6 +528,7 @@ export function ShareModal({
   sessionCount = 0,
   completionRate = 0,
 }: ShareModalProps) {
+  const { t, locale } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [caption, setCaption] = useState("");
   const [copied, setCopied] = useState(false);
@@ -504,19 +536,45 @@ export function ShareModal({
   const [platformToast, setPlatformToast] = useState<string | null>(null);
   const [rendering, setRendering] = useState(true);
   const [orientation, setOrientation] = useState<"landscape" | "portrait">("landscape");
+  const theme = useThemeStore((s) => s.theme);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const share = (key: string, fallback: string) => t(`shareModal.${key}`, fallback);
+  const format = (template: string, values: Record<string, string | number>) =>
+    Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{${key}}`, String(value)), template);
+  const cardCopy: ShareCardCopy = {
+    weeklyAudit: share("card.weeklyAudit", "Weekly focus report"),
+    sessionAudit: share("card.sessionAudit", "Focus session report"),
+    totalFocusTime: share("card.totalFocusTime", "Total focus time"),
+    deepFocusTime: share("card.deepFocusTime", "Deep focus time"),
+    deepWorkLogged: share("card.deepWorkLogged", "Deep work, logged."),
+    sessionComplete: share("card.sessionComplete", "Session complete."),
+    sessionLogged: share("card.sessionLogged", "Session logged."),
+    sessions: share("card.sessions", "Sessions"),
+    completion: share("card.completion", "Completion"),
+    fidgets: share("card.fidgets", "Adjustments"),
+    status: share("card.status", "Status"),
+    completed: share("card.completed", "Completed"),
+    skipped: share("card.skipped", "Skipped"),
+    firstTenMinutes: share("card.firstTenMinutes", "First 10 min"),
+    scanToFocus: share("card.scanToFocus", "Scan to focus"),
+    everyTrack: share("card.everyTrack", "Every track produced in-house"),
+  };
 
   // Generate initial caption pre-filled based on type of data
   useEffect(() => {
     if (isSummary) {
-      setCaption(
-        `${focusMinutes}m of deep work across ${sessionCount} sessions on Flowstate — ${completionRate}% completion. Every track produced by the person who built it: https://flow.virzyguns.com`
-      );
+      setCaption(format(share("captionSummary", "{minutes}m of deep work across {sessions} sessions on Flowstate. {completion}% completion. Every track is produced by the person who built it: https://flow.virzyguns.com"), {
+        minutes: focusMinutes,
+        sessions: sessionCount,
+        completion: completionRate,
+      }));
     } else {
-      setCaption(
-        `${focusMinutes} focused minutes on Flowstate. Music by the person who built the app: https://flow.virzyguns.com`
-      );
+      setCaption(format(share("captionSession", "{minutes} focused minutes on Flowstate. Music by the person who built the app: https://flow.virzyguns.com"), {
+        minutes: focusMinutes,
+      }));
     }
-  }, [isOpen, focusMinutes, fidgetCount, isSummary, sessionCount, completionRate]);
+  }, [isOpen, focusMinutes, fidgetCount, isSummary, sessionCount, completionRate, locale]);
 
   // Re-draw canvas card when stats or parameters change
   useEffect(() => {
@@ -525,70 +583,81 @@ export function ShareModal({
     setRendering(true);
     const timeoutId = setTimeout(async () => {
       const canvas = canvasRef.current;
-      if (canvas) {
-        await drawShareCard(canvas, {
-          focusMinutes,
-          fidgetCount,
-          completed,
-          firstTenFidgets,
-          isSummary,
-          sessionCount,
-          completionRate,
-          orientation,
-        });
+      try {
+        if (canvas) {
+          await drawShareCard(canvas, {
+            focusMinutes,
+            fidgetCount,
+            completed,
+            firstTenFidgets,
+            isSummary,
+            sessionCount,
+            completionRate,
+            orientation,
+            theme,
+            copy: cardCopy,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to render share card", err);
+      } finally {
+        setRendering(false);
       }
-      setRendering(false);
     }, 120);
 
     return () => clearTimeout(timeoutId);
-  }, [isOpen, focusMinutes, fidgetCount, completed, firstTenFidgets, isSummary, sessionCount, completionRate, orientation]);
+  }, [isOpen, focusMinutes, fidgetCount, completed, firstTenFidgets, isSummary, sessionCount, completionRate, orientation, locale, theme]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => dialogRef.current?.focus());
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      if (focusable.length === 0) {
+        event.preventDefault();
+        dialogRef.current.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previouslyFocusedRef.current?.focus();
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
-  // OS Native Share sheet for mobile devices (resolves "langsung pilih status or chat" request)
-  const handleNativeShare = async () => {
+  const canvasToBlob = (canvas: HTMLCanvasElement) =>
+    new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+
+  const handleDownload = (): boolean => {
+    if (rendering) return false;
     const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    try {
-      if (navigator.share && navigator.canShare) {
-        setRendering(true);
-        canvas.toBlob(async (blob) => {
-          if (!blob) {
-            setRendering(false);
-            return;
-          }
-          const file = new File([blob], isSummary ? "weekly-stats.png" : "session-stats.png", { type: "image/png" });
-          const shareData = {
-            text: caption,
-            files: [file],
-          };
-
-          if (navigator.canShare(shareData)) {
-            try {
-              await navigator.share(shareData);
-            } catch (shareErr) {
-              console.log("Native share dismissed or failed", shareErr);
-            }
-          } else {
-            // Fallback if files sharing is not supported by this browser
-            await navigator.share({ text: caption });
-          }
-          setRendering(false);
-        }, "image/png");
-      } else {
-        // Fallback for desktop: Copy to Clipboard and prompt user
-        handleCopy();
-      }
-    } catch (err) {
-      console.error("Native share error", err);
-      setRendering(false);
-    }
-  };
-
-  const handleDownload = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return false;
 
     try {
       const dataUrl = canvas.toDataURL("image/png");
@@ -600,69 +669,106 @@ export function ShareModal({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      return true;
     } catch (err) {
       console.error("Failed to download image", err);
+      return false;
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (rendering) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    if (!navigator.share) {
+      await copyCaptionToClipboard();
+      handleDownload();
+      return;
+    }
+
+    setRendering(true);
+    try {
+      const blob = await canvasToBlob(canvas);
+      if (!blob) throw new Error("share_card_unavailable");
+
+      const file = new File(
+        [blob],
+        isSummary ? "flowstate-weekly-stats.png" : "flowstate-session-stats.png",
+        { type: "image/png" }
+      );
+      const fileShare = { text: caption, files: [file] };
+      const canShareFile = typeof navigator.canShare === "function" && navigator.canShare(fileShare);
+      await navigator.share(canShareFile ? fileShare : { text: caption });
+    } catch (err) {
+      if (!(err instanceof DOMException && err.name === "AbortError")) {
+        await copyCaptionToClipboard();
+      }
+    } finally {
+      setRendering(false);
     }
   };
 
   const handleCopyImage = async () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
+    if (rendering) return;
+    setRendering(true);
     try {
-      setRendering(true);
-      canvas.toBlob(async (blob) => {
-        if (!blob) {
-          setRendering(false);
-          return;
-        }
-        try {
-          await navigator.clipboard.write([
-            new ClipboardItem({
-              "image/png": blob
-            })
-          ]);
-          setCopiedImage(true);
-          setTimeout(() => setCopiedImage(false), 2500);
-        } catch (clipErr) {
-          console.error("Clipboard image copy failed, falling back to download", clipErr);
-          handleDownload();
-        }
-        setRendering(false);
-      }, "image/png");
-    } catch (err) {
-      console.error("Failed to copy image", err);
+      if (await copyImageToClipboard()) {
+        setCopiedImage(true);
+        setTimeout(() => setCopiedImage(false), 2500);
+      } else {
+        handleDownload();
+      }
+    } finally {
       setRendering(false);
     }
   };
 
   const handleCopy = async () => {
+    await copyCaptionToClipboard();
+  };
+
+  const copyCaptionToClipboard = async (): Promise<boolean> => {
     try {
-      await navigator.clipboard.writeText(caption);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(caption);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = caption;
+        input.setAttribute("readonly", "");
+        input.style.cssText = "position:fixed;opacity:0";
+        document.body.appendChild(input);
+        input.select();
+        const copiedText = document.execCommand("copy");
+        document.body.removeChild(input);
+        if (!copiedText) return false;
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
+      return true;
     } catch (err) {
       console.error("Failed to copy caption", err);
+      return false;
     }
   };
 
   // Silently copy image blob to clipboard — returns true on success
   const copyImageToClipboard = async (): Promise<boolean> => {
     const canvas = canvasRef.current;
-    if (!canvas) return false;
-    return new Promise((resolve) => {
-      canvas.toBlob(async (blob) => {
-        if (!blob) { resolve(false); return; }
-        try {
-          await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
-          ]);
-          resolve(true);
-        } catch (_err) {
-          resolve(false);
-        }
-      }, "image/png");
-    });
+    if (!canvas || !navigator.clipboard?.write || typeof ClipboardItem === "undefined") return false;
+
+    const blob = await canvasToBlob(canvas);
+    if (!blob) return false;
+
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": blob }),
+      ]);
+      return true;
+    } catch (err) {
+      console.error("Failed to copy image", err);
+      return false;
+    }
   };
 
   // Universal platform share: open URL immediately (sync, avoids popup blocker),
@@ -672,24 +778,21 @@ export function ShareModal({
     url: string,
     opts?: { download?: boolean }
   ) => {
-    // Step 1: IMMEDIATELY open platform URL (must be synchronous from user click to avoid popup blocker)
-    if (!opts?.download) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
+    if (rendering) return;
+    // This must remain synchronous with the click so popup blockers do not win.
+    window.open(url, "_blank", "noopener,noreferrer");
 
-    // Step 2: Copy image to clipboard / download in background (async, non-blocking)
-    if (opts?.download) {
-      handleDownload();
-    } else {
-      copyImageToClipboard();
-    }
-
-    // Step 3: Show branded toast
-    const msg = opts?.download
-      ? `Card saved — open ${platformName} → Upload`
-      : `Image copied — paste it in your ${platformName} post`;
-    setPlatformToast(msg);
-    setTimeout(() => setPlatformToast(null), 3500);
+    void (async () => {
+      const copiedImage = !opts?.download && await copyImageToClipboard();
+      const savedCard = opts?.download || !copiedImage ? handleDownload() : false;
+      const msg = copiedImage
+        ? format(share("toastCopied", "Image copied. Paste it into your {platform} post."), { platform: platformName })
+        : savedCard
+          ? format(share("toastSaved", "Card saved. Open {platform} and upload it."), { platform: platformName })
+          : share("copyImage", "Copy image");
+      setPlatformToast(msg);
+      setTimeout(() => setPlatformToast(null), 3500);
+    })();
   };
 
   const handleShareTwitter = () => {
@@ -705,7 +808,7 @@ export function ShareModal({
   };
 
   const handleShareLinkedIn = () => {
-    shareViaPlatform("LinkedIn", `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent("https://flow.virzyguns.com")}&title=${encodeURIComponent("Flowstate focus report")}&summary=${encodeURIComponent(caption)}`);
+    shareViaPlatform("LinkedIn", `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent("https://flow.virzyguns.com")}&title=${encodeURIComponent(share("linkedInTitle", "Flowstate focus report"))}&summary=${encodeURIComponent(caption)}`);
   };
 
   const handleShareInstagram = () => {
@@ -721,20 +824,29 @@ export function ShareModal({
   };
 
   const handleShareEmail = () => {
-    const subject = isSummary ? "My Flowstate weekly focus stats" : "My Flowstate focus session";
+    const subject = isSummary
+      ? share("weeklyEmailSubject", "My Flowstate weekly focus stats")
+      : share("sessionEmailSubject", "My Flowstate focus session");
     shareViaPlatform("Email", `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(caption)}`);
   };
 
   const platformBtnClass = "h-9 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.05] hover:border-white/15 text-white/70 hover:text-white text-[9px] font-mono uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all duration-200";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in-0">
-      <div className="glass-card w-full max-w-lg p-6 space-y-5 animate-in zoom-in-95 relative max-h-[94vh] overflow-y-auto custom-scrollbar select-text">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in-0" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="share-modal-title"
+        tabIndex={-1}
+        className="glass-card w-full max-w-lg p-6 space-y-5 animate-in zoom-in-95 relative max-h-[94vh] overflow-y-auto custom-scrollbar select-text outline-none"
+      >
         {/* Floating Toast Bubbles */}
         {(copied || copiedImage) && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-[#34d399] text-black px-4 py-1.5 rounded-full font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-[0_4px_20px_rgba(52,211,153,0.4)] animate-in slide-in-from-top-3 fade-in duration-300">
             <Check className="h-3 w-3 stroke-[3]" />
-            {copied ? "Caption & link copied" : "Image card copied"}
+            {copied ? share("captionCopied", "Caption and link copied") : share("imageCopied", "Image card copied")}
           </div>
         )}
         {platformToast && (
@@ -745,12 +857,12 @@ export function ShareModal({
         )}
 
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
-            {isSummary ? "Weekly Metrics Audit" : "Focus Session Audit"}
+          <span id="share-modal-title" className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary">
+            {isSummary ? share("titleWeekly", "Weekly focus report") : share("titleSession", "Focus session report")}
           </span>
           <button
             onClick={onClose}
-            aria-label="Close Share Modal"
+            aria-label={share("close", "Close share modal")}
             className="text-muted-foreground/60 hover:text-white transition-colors p-1.5 hover:bg-white/5 rounded-lg"
           >
             <X className="h-4 w-4" />
@@ -759,7 +871,7 @@ export function ShareModal({
 
         {/* Dynamic Card Format / Orientation Selector Toggle */}
         <div className="flex items-center justify-between bg-white/[0.02] border border-white/5 rounded-xl p-1.5">
-          <span className="text-[10px] font-mono uppercase tracking-wider text-white/40 ml-2">Card Format:</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-white/40 ml-2">{share("format", "Card format")}:</span>
           <div className="flex gap-1">
             <button
               onClick={() => setOrientation("landscape")}
@@ -770,7 +882,7 @@ export function ShareModal({
                   : "text-white/40 hover:text-white hover:bg-white/5 border border-transparent"
               )}
             >
-              <Monitor className="h-3 w-3" /> Landscape (16:9)
+              <Monitor className="h-3 w-3" /> {share("landscape", "Landscape")} (16:9)
             </button>
             <button
               onClick={() => setOrientation("portrait")}
@@ -781,7 +893,7 @@ export function ShareModal({
                   : "text-white/40 hover:text-white hover:bg-white/5 border border-transparent"
               )}
             >
-              <Smartphone className="h-3 w-3" /> Portrait Story (9:16)
+              <Smartphone className="h-3 w-3" /> {share("portrait", "Portrait story")} (9:16)
             </button>
           </div>
         </div>
@@ -792,7 +904,7 @@ export function ShareModal({
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm gap-2">
               <Loader2 className="h-6 w-6 animate-apple-loader text-primary" />
               <span className="font-mono text-[9px] uppercase tracking-wider text-white/50 animate-pulse">
-                Generating layout...
+                {share("generating", "Generating card...")}
               </span>
             </div>
           )}
@@ -812,90 +924,91 @@ export function ShareModal({
         {/* Customizable Caption Area */}
         <div className="space-y-1.5">
           <label className="text-[9px] font-mono text-white/40 uppercase tracking-widest block">
-            Edit Caption
+            {share("captionLabel", "Edit caption")}
           </label>
           <textarea
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             rows={3}
             className="w-full bg-white/[0.02] border border-white/10 rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground/45 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/40 transition-all font-sans leading-relaxed resize-none custom-scrollbar"
-            placeholder="Type a custom caption..."
+            placeholder={share("captionPlaceholder", "Write a custom caption...")}
           />
         </div>
 
         {/* Primary Share Trigger (Direct OS Share Sheet — includes image file automatically on mobile) */}
         <Button
           onClick={handleNativeShare}
+          disabled={rendering}
           className="w-full h-11 text-[11px] font-mono uppercase tracking-[0.15em] bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-xl flex items-center justify-center gap-2 shadow-[0_4px_24px_rgba(0,229,255,0.25)] transition-all duration-300 hover:scale-[1.01]"
         >
           <Share2 className="h-4 w-4" />
-          Share with Image (All Apps)
+          {share("shareWithImage", "Share with image")}
         </Button>
 
         {/* Platform Grid — 8 platforms */}
-        <div className="space-y-2">
+        <div className="hidden">
           <span className="text-[9px] font-mono text-white/30 uppercase tracking-widest block text-center">
-            Quick Share
+            {share("quickShare", "Quick share")}
           </span>
           <div className="grid grid-cols-4 gap-2">
-            <button onClick={handleShareTwitter} className={platformBtnClass}>
+            <button onClick={handleShareTwitter} disabled={rendering} className={platformBtnClass}>
               <XIcon /> X
             </button>
-            <button onClick={handleShareWhatsApp} className={platformBtnClass}>
+            <button onClick={handleShareWhatsApp} disabled={rendering} className={platformBtnClass}>
               <WhatsAppIcon /> WA
             </button>
-            <button onClick={handleShareInstagram} className={platformBtnClass}>
+            <button onClick={handleShareInstagram} disabled={rendering} className={platformBtnClass}>
               <InstagramIcon /> IG
             </button>
-            <button onClick={handleShareTelegram} className={platformBtnClass}>
+            <button onClick={handleShareTelegram} disabled={rendering} className={platformBtnClass}>
               <TelegramIcon /> TG
             </button>
-            <button onClick={handleShareFacebook} className={platformBtnClass}>
+            <button onClick={handleShareFacebook} disabled={rendering} className={platformBtnClass}>
               <FacebookIcon /> FB
             </button>
-            <button onClick={handleShareLinkedIn} className={platformBtnClass}>
+            <button onClick={handleShareLinkedIn} disabled={rendering} className={platformBtnClass}>
               <LinkedInIcon /> LN
             </button>
-            <button onClick={handleShareReddit} className={platformBtnClass}>
+            <button onClick={handleShareReddit} disabled={rendering} className={platformBtnClass}>
               <RedditIcon /> Reddit
             </button>
-            <button onClick={handleShareEmail} className={platformBtnClass}>
+            <button onClick={handleShareEmail} disabled={rendering} className={platformBtnClass}>
               <MailIcon /> Email
             </button>
           </div>
         </div>
 
-        {/* Tips — ENGLISH */}
-        <div className="text-[9px] font-mono text-white/30 leading-relaxed text-center bg-white/[0.01] border border-white/5 rounded-xl p-2.5 space-y-1">
-          <p className="flex items-center justify-center gap-1.5"><Lightbulb className="h-3 w-3 shrink-0" /> <span><span className="text-white/60">Desktop:</span> Use <span className="text-primary">Copy Image</span> then paste (<span className="text-white/50">Ctrl+V</span>) directly into any chat or post.</span></p>
-          <p className="flex items-center justify-center gap-1.5"><Smartphone className="h-3 w-3 shrink-0" /> <span><span className="text-white/60">Mobile:</span> Tap <span className="text-primary">Share with Image</span> to send card + caption via any app.</span></p>
-        </div>
+        <p className="text-center text-[10px] leading-relaxed text-white/35">
+          {share("mobileTip", "Choose an app from your device share sheet. On desktop, the card downloads when native sharing is unavailable.")}
+        </p>
 
         {/* Footer Actions */}
         <div className="grid grid-cols-3 gap-2 pt-1">
           <Button
             onClick={handleDownload}
+            disabled={rendering}
             variant="outline"
             className="h-10 text-[9px] font-mono uppercase tracking-wider border border-white/10 hover:border-white/20 hover:bg-white/[0.04] text-white/80 rounded-xl flex items-center justify-center gap-1.5 px-1"
           >
             <Download className="h-3.5 w-3.5" />
-            Download
+            {share("download", "Download")}
           </Button>
 
           <Button
             onClick={handleCopyImage}
+            disabled={rendering}
             variant="outline"
             className="h-10 text-[9px] font-mono uppercase tracking-wider border border-white/10 hover:border-white/20 hover:bg-white/[0.04] text-white/80 rounded-xl flex items-center justify-center gap-1.5 px-1"
           >
             {copiedImage ? (
               <>
                 <Check className="h-3.5 w-3.5 text-[#34d399]" />
-                Copied
+                {share("copied", "Copied")}
               </>
             ) : (
               <>
                 <Copy className="h-3.5 w-3.5" />
-                Copy Image
+                {share("copyImage", "Copy image")}
               </>
             )}
           </Button>
@@ -908,12 +1021,12 @@ export function ShareModal({
             {copied ? (
               <>
                 <Check className="h-3.5 w-3.5 text-[#34d399]" />
-                Copied
+                {share("copied", "Copied")}
               </>
             ) : (
               <>
                 <Copy className="h-3.5 w-3.5" />
-                Copy Text
+                {share("copyText", "Copy text")}
               </>
             )}
           </Button>

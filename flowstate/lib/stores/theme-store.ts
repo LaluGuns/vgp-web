@@ -8,11 +8,11 @@ import { persist } from "zustand/middleware";
  */
 export type ThemeId = "glass" | "studio" | "editorial" | "terminal";
 
-export const THEMES: { id: ThemeId; nameKey: string; fallbackName: string }[] = [
-  { id: "glass", nameKey: "app.themes.glass", fallbackName: "Dynamic Glass" },
-  { id: "studio", nameKey: "app.themes.studio", fallbackName: "Analog Studio" },
-  { id: "editorial", nameKey: "app.themes.editorial", fallbackName: "Editorial" },
-  { id: "terminal", nameKey: "app.themes.terminal", fallbackName: "Instrument Panel" },
+export const THEMES: { id: ThemeId; nameKey: string; fallbackName: string; isPremium: boolean }[] = [
+  { id: "glass", nameKey: "app.themes.glass", fallbackName: "Aurora Glass", isPremium: false },
+  { id: "studio", nameKey: "app.themes.studio", fallbackName: "Tape Studio", isPremium: true },
+  { id: "editorial", nameKey: "app.themes.editorial", fallbackName: "Signal Press", isPremium: true },
+  { id: "terminal", nameKey: "app.themes.terminal", fallbackName: "Night Terminal", isPremium: true },
 ];
 
 const THEME_IDS: ThemeId[] = THEMES.map((t) => t.id);

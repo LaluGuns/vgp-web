@@ -6,6 +6,7 @@ import { useAppStore } from "@/lib/stores/app-store";
 import { TRACKS, PLAYLIST, GENRES, tracksByGenre, genrePlaylist } from "@/lib/catalog";
 import { useTranslation } from "@/hooks/use-translation";
 import { musicPlayer } from "@/lib/audio/hls-player";
+import { useUpgradePromptStore } from "@/lib/stores/upgrade-prompt-store";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { formatTime, cn } from "@/lib/utils";
@@ -27,7 +28,7 @@ import {
 export function MusicPlayer() {
   const { t } = useTranslation();
   const currentTrack = usePlayerStore((s) => s.currentTrack);
-  const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const storeIsPlaying = usePlayerStore((s) => s.isPlaying);
   const volume = usePlayerStore((s) => s.volume);
   const shuffle = usePlayerStore((s) => s.shuffle);
   const repeat = usePlayerStore((s) => s.repeat);
@@ -44,9 +45,14 @@ export function MusicPlayer() {
   const setActiveGenre = usePlayerStore((s) => s.setActiveGenre);
   const crossfadeDuration = usePlayerStore((s) => s.crossfadeDuration);
   const setCrossfadeDuration = usePlayerStore((s) => s.setCrossfadeDuration);
+  const showUpgrade = useUpgradePromptStore((s) => s.show);
+  const playbackError = usePlayerStore((s) => s.playbackError);
+  const retryPlayback = usePlayerStore((s) => s.retryPlayback);
 
   const [query, setQuery] = useState("");
   const isPremium = useAppStore((s) => s.isPremium);
+  // Never render a playing state unless there is an actual source to load.
+  const isPlaying = Boolean(currentTrack?.hlsUrl && storeIsPlaying);
 
   const visibleTracks = useMemo(() => {
     const list = tracksByGenre(activeGenre);
@@ -68,7 +74,7 @@ export function MusicPlayer() {
 
   function handlePlayPause() {
     musicPlayer.unlockAudio();
-    if (!currentTrack) {
+    if (!currentTrack?.hlsUrl) {
       const playlist = genrePlaylist(activeGenre);
       const tracks = playlist.tracks;
       if (tracks.length > 0) {
@@ -105,11 +111,29 @@ export function MusicPlayer() {
             {currentTrack?.title ?? t("dashboard.player.selectTrack", "Select a track")}
           </p>
           <p className="text-[11px] text-white/40 truncate font-mono">
-            {currentTrack?.artist ?? "Virzy Guns"}
+            {currentTrack?.artist ?? "Virzy Guns Production"}
             {currentTrack?.genre ? ` · ${currentTrack.genre}` : ""}
           </p>
         </div>
       </div>
+
+      {playbackError && (
+        <div role="alert" className="flex items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-400/[0.08] px-3 py-2">
+          <span className="text-[11px] text-white/65">
+            {t("insights.error.description", "Please check your connection and try again.")}
+          </span>
+          <button
+            type="button"
+            className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-primary hover:text-white"
+            onClick={() => {
+              musicPlayer.unlockAudio();
+              retryPlayback();
+            }}
+          >
+            {t("insights.error.retry", "Retry Connection")}
+          </button>
+        </div>
+      )}
 
       {/* Progress */}
       <PlayerProgress />
@@ -232,9 +256,7 @@ export function MusicPlayer() {
               onClick={() => {
                 musicPlayer.unlockAudio();
                 if (track.isPremium && !isPremium) {
-                  if (confirm(t("pricing.upgradeToUnlockTrack", "This track is Pro-only. Go Pro to play the full library?"))) {
-                    window.location.href = "/pricing";
-                  }
+                  showUpgrade("pricing.upgradeToUnlockTrack", "This track is Pro-only. Go Pro to play the full library?");
                   return;
                 }
                 play(track, genrePlaylist(activeGenre));

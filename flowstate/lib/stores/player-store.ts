@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { musicPlayer } from "@/lib/audio/hls-player";
 import { genrePlaylist } from "@/lib/catalog";
+import { useAppStore } from "@/lib/stores/app-store";
 
 export interface Track {
   id: string;
@@ -35,6 +36,8 @@ interface PlayerState {
   shuffle: boolean;
   repeat: "none" | "one" | "all";
   crossfadeDuration: number;
+  playbackError: boolean;
+  retryToken: number;
 
   play: (track: Track, playlist?: Playlist) => void;
   pause: () => void;
@@ -50,6 +53,8 @@ interface PlayerState {
   setActiveGenre: (genre: string) => void;
   playGenre: (genre: string) => void;
   setCrossfadeDuration: (duration: number) => void;
+  setPlaybackError: (hasError: boolean) => void;
+  retryPlayback: () => void;
 }
 
 export const usePlayerStore = create<PlayerState>()((set, get) => ({
@@ -62,25 +67,35 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
   duration: 0,
   shuffle: false,
   repeat: "all",
-  crossfadeDuration: 5,
+  // Users can opt into crossfade; the default must never sound like two
+  // unrelated tracks are playing at once.
+  crossfadeDuration: 0,
+  playbackError: false,
+  retryToken: 0,
 
   play: (track, playlist) => {
+    if (track.isPremium && !useAppStore.getState().isPremium) return;
     set({
       currentTrack: track,
       isPlaying: true,
+      playbackError: false,
       progress: 0,
       ...(playlist ? { currentPlaylist: playlist } : {}),
     });
   },
 
   pause: () => set({ isPlaying: false }),
-  resume: () => set({ isPlaying: true }),
+  resume: () => {
+    if (get().currentTrack) set({ isPlaying: true, playbackError: false });
+  },
 
   next: () => {
     const { currentTrack, currentPlaylist, shuffle, repeat, activeGenre } = get();
     // Scope check: If no playlist is active, load the playlist of the currently active genre tab.
     const playlist = currentPlaylist || genrePlaylist(activeGenre || "Lofi Chill");
-    const tracks = playlist.tracks;
+    const tracks = useAppStore.getState().isPremium
+      ? playlist.tracks
+      : playlist.tracks.filter((track) => !track.isPremium);
     if (tracks.length === 0) return;
 
     if (shuffle) {
@@ -122,7 +137,9 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     const { currentTrack, currentPlaylist, progress, activeGenre } = get();
     // Scope check: If no playlist is active, load the playlist of the currently active genre tab.
     const playlist = currentPlaylist || genrePlaylist(activeGenre || "Lofi Chill");
-    const tracks = playlist.tracks;
+    const tracks = useAppStore.getState().isPremium
+      ? playlist.tracks
+      : playlist.tracks.filter((track) => !track.isPremium);
     if (tracks.length === 0) return;
 
     if (progress > 3) {
@@ -165,7 +182,9 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
   // is on). Used by the genre picker so choosing a genre plays immediately.
   playGenre: (genre) => {
     const playlist = genrePlaylist(genre);
-    const tracks = playlist.tracks;
+    const tracks = useAppStore.getState().isPremium
+      ? playlist.tracks
+      : playlist.tracks.filter((track) => !track.isPremium);
     if (tracks.length === 0) {
       set({ activeGenre: genre, currentPlaylist: playlist });
       return;
@@ -182,4 +201,9 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     });
   },
   setCrossfadeDuration: (duration) => set({ crossfadeDuration: Math.max(0, Math.min(12, duration)) }),
+  setPlaybackError: (hasError) => set({ playbackError: hasError }),
+  retryPlayback: () => {
+    if (!get().currentTrack) return;
+    set({ playbackError: false, isPlaying: true, retryToken: get().retryToken + 1 });
+  },
 }));

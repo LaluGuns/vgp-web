@@ -60,13 +60,17 @@ export default function PrivacyPage() {
             const label = cleanLine.slice(0, colonIdx + 1);
             const val = cleanLine.slice(colonIdx + 1);
             
-            // Check if there is an anchor tag or link text to render for Lemon Squeezy
+            // The provider name stays unchanged in every locale, so the link
+            // does not depend on an English sentence fragment.
             if (cleanLine.toLowerCase().includes("lemon squeezy")) {
               return (
                 <li key={idx}>
-                  <strong>{label}</strong>
-                  {val.split("See")[0]}
-                  See <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener noreferrer">Lemon Squeezy&rsquo;s privacy policy</a> for details.
+                  <strong>
+                    <a href="https://www.lemonsqueezy.com/privacy" target="_blank" rel="noopener noreferrer">
+                      {label}
+                    </a>
+                  </strong>
+                  {val}
                 </li>
               );
             }
@@ -103,7 +107,7 @@ export default function PrivacyPage() {
 
       <h2>{t("legal.privacy.sec8_title")}</h2>
       <p>
-        {t("legal.privacy.sec8_text").split("contact")[0]}contact{" "}
+        {t("legal.privacy.sec8_text").split("founder@virzyguns.com")[0]}
         <a href="mailto:founder@virzyguns.com">founder@virzyguns.com</a>.
       </p>
     </LegalShell>

@@ -14,11 +14,12 @@ const ROOT = path.resolve(__dirname, "..");
 const OUT_ROOT = path.join(ROOT, "public", "tracks");
 const LOG = path.join(__dirname, "compress.log");
 const CATALOG = path.join(OUT_ROOT, "catalog.json");
+const FREE_TRACKS_PER_GENRE = 25;
 
 const SOURCES = [
   { dir: "F:/SYNTHWAVE CITY POP/WAV MASTERED CITY POP", category: "city-pop", genre: "City Pop" },
   { dir: "F:/Cyberpunk Synthwave JAZZ/WAV MASTERED JAZZ", category: "cyberpunk-jazz", genre: "Cyberpunk Jazz" },
-  { dir: "F:/chill synthwave new/WAV", category: "chill-synthwave", genre: "Chill Synthwave" },
+  { dir: "F:/chill synthwave new/WAV", category: "chill-synthwave", genre: "Neo Synthwave" },
   { dir: "F:/lofi and jazz/jazz", category: "lofi-jazz", genre: "Lofi Jazz" },
   { dir: "F:/lofi and jazz/lofi", category: "lofi-chill", genre: "Lofi Chill" },
 ];
@@ -163,7 +164,7 @@ function main() {
         category: src.category,
         durationS,
         hlsUrl: webPath,
-        isPremium: false,
+        isPremium: seq > FREE_TRACKS_PER_GENRE,
         source: "original",
       });
       fs.writeFileSync(CATALOG, JSON.stringify(catalog, null, 2));

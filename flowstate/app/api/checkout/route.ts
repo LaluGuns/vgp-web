@@ -1,4 +1,11 @@
 import { NextResponse } from "next/server";
+import {
+  checkoutUrlFromResponse,
+  checkoutPriceCents,
+  isAllowedRequestOrigin,
+  parseCheckoutInput,
+  resolveAppOrigin,
+} from "@/lib/security/checkout";
 import { rateLimit, clientIp } from "@/lib/security/rate-limit";
 import { createClient } from "@/lib/supabase/server";
 
@@ -12,36 +19,52 @@ export const dynamic = "force-dynamic";
  * attached so the webhook (app/api/webhooks/lemonsqueezy) links the subscription.
  */
 export async function POST(req: Request) {
+  if (!isAllowedRequestOrigin(req.headers.get("origin"), req.url)) {
+    return NextResponse.json({ error: "invalid_origin" }, { status: 403 });
+  }
+
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > 16_384) {
+    return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
+  }
+
   const ip = clientIp(req.headers);
   const rl = await rateLimit(`checkout:${ip}`, { limit: 20, windowMs: 60_000 });
   if (!rl.success) {
-    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers: { "Retry-After": String(Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000))) },
+      }
+    );
   }
 
-  let body: { interval?: string; amountUsdCents?: number; discountCode?: string };
+  let rawBody: unknown;
   try {
-    body = await req.json();
+    rawBody = await req.json();
   } catch {
     return NextResponse.json({ error: "bad_json" }, { status: 400 });
   }
 
-  const interval = body.interval === "yearly" ? "yearly" : "monthly";
+  const body = parseCheckoutInput(rawBody);
+  if (!body) {
+    return NextResponse.json({ error: "invalid_checkout_request" }, { status: 400 });
+  }
+
+  const { interval } = body;
   // Server-authoritative pricing: the client-sent amount is IGNORED (a client could
   // forge $1). Price is derived from interval + a server-validated promo code and
   // passed to Lemon Squeezy as custom_price. Keep in sync with the pricing page and
   // the Terms (legal.*.terms sec3). Promo (FLOWBRO) is an early-adopter price.
-  const promoApplied =
-    typeof body.discountCode === "string" &&
-    body.discountCode.trim().toUpperCase() === "FLOWBRO";
-  const PRICE_CENTS = {
-    monthly: promoApplied ? 499 : 999,
-    yearly: promoApplied ? 2999 : 5999,
-  } as const;
-  const amount = PRICE_CENTS[interval];
+  const amount = checkoutPriceCents(body);
 
   // Require a signed-in user so the subscription can be linked via the webhook.
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError) {
+    return NextResponse.json({ error: "auth_unavailable" }, { status: 503 });
+  }
   if (!user) {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
   }
@@ -60,7 +83,17 @@ export async function POST(req: Request) {
     );
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(req.url).origin;
+  const appUrl = resolveAppOrigin(
+    process.env.NEXT_PUBLIC_APP_URL,
+    req.url,
+    process.env.NODE_ENV === "production"
+  );
+  if (!appUrl) {
+    return NextResponse.json(
+      { error: "checkout_not_configured", message: "App URL is not configured." },
+      { status: 503 }
+    );
+  }
 
   const payload = {
     data: {
@@ -85,23 +118,36 @@ export async function POST(req: Request) {
     },
   };
 
-  const res = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/vnd.api+json",
-      Accept: "application/vnd.api+json",
-    },
-    body: JSON.stringify(payload),
-  });
+  let res: Response;
+  try {
+    res = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/vnd.api+json",
+        Accept: "application/vnd.api+json",
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(15_000),
+    });
+  } catch {
+    return NextResponse.json({ error: "checkout_unavailable" }, { status: 502 });
+  }
 
   if (!res.ok) {
     return NextResponse.json({ error: "checkout_failed" }, { status: 502 });
   }
 
-  const json = await res.json();
-  const url = json?.data?.attributes?.url;
-  if (!url) return NextResponse.json({ error: "no_url" }, { status: 502 });
+  let json: unknown;
+  try {
+    json = await res.json();
+  } catch {
+    return NextResponse.json({ error: "invalid_checkout_response" }, { status: 502 });
+  }
+  const url = checkoutUrlFromResponse(json);
+  if (!url) {
+    return NextResponse.json({ error: "invalid_checkout_url" }, { status: 502 });
+  }
 
   return NextResponse.json({ url });
 }

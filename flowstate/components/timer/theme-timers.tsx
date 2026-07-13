@@ -96,7 +96,7 @@ export function TerminalReadoutTimer({
   const volFilled = Math.round(Math.max(0, Math.min(1, volume)) * volCells);
 
   return (
-    <div className="relative w-full max-w-[420px] flex items-center justify-center shrink-0 select-none">
+    <div className="relative w-full max-w-[440px] flex items-center justify-center shrink-0 select-none">
       <div
         className="relative w-full rounded-lg px-5 pt-6 pb-4 flex flex-col items-center gap-3.5"
         style={{ background: "hsl(160 12% 6%)", border: "1px solid hsl(var(--primary) / 0.22)" }}
@@ -250,7 +250,7 @@ export function EditorialFolioTimer({
   const accent = isFocus ? "hsl(var(--primary))" : "#34d399";
 
   return (
-    <div className="relative w-full max-w-[340px] flex items-center justify-center shrink-0 select-none">
+    <div className="relative w-full max-w-[440px] flex items-center justify-center shrink-0 select-none">
       <div className="w-full flex flex-col gap-3">
         {/* Running header: phase left, progress folio right */}
         <div className="flex items-end justify-between border-b pb-2" style={{ borderColor: "hsl(var(--foreground) / 0.25)" }}>

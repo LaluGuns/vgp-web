@@ -40,6 +40,16 @@ interface CacheEntry {
 const cache = new Map<string, CacheEntry>();
 const inflight = new Map<string, Promise<string>>();
 
+/**
+ * Forget a previously issued stream URL after a playback request rejects it.
+ * This is intentionally path-scoped so one expired URL does not evict a whole
+ * prefetched playlist.
+ */
+export function invalidateAudioUrl(path: string): void {
+  cache.delete(path);
+  inflight.delete(path);
+}
+
 export function isWorkerConfigured(): boolean {
   return workerBase.length > 0;
 }
@@ -115,6 +125,21 @@ export async function resolveAudioUrl(path: string, prefetch: string[] = []): Pr
 
   inflight.set(path, promise);
   return promise;
+}
+
+/**
+ * Force a new signature for a path. Playback code uses this once after a
+ * failed stream fetch, covering expiry, clock skew, and a Worker key rotation
+ * without creating an unbounded retry loop.
+ */
+export async function refreshAudioUrl(path: string, prefetch: string[] = []): Promise<string> {
+  if (!path || !workerBase) return resolveAudioUrl(path, prefetch);
+  invalidateAudioUrl(path);
+  const signed = await requestSignedUrls([path, ...prefetch.filter((p) => p !== path)].slice(0, 24));
+  for (const [p, entry] of signed) cache.set(p, entry);
+  const entry = signed.get(path);
+  if (!entry) throw new Error(`no refreshed signed url for ${path}`);
+  return entry.url;
 }
 
 /** Warm the cache for upcoming tracks without blocking playback. */

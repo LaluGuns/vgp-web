@@ -4100,3 +4100,194 @@ export const dictionaries = {
     }
   }
 };
+
+// Migrate locales that still used the earlier insights schema. Keeping this
+// data together makes parity review explicit and prevents silent English
+// fallbacks in production.
+const localeSchemaV2: Record<string, {
+  themes: [string, string, string, string, string];
+  streak: [string, string, string, string];
+  goal: [string, string, string, string, string];
+  records: [string, string, string, string];
+  focusTime: [string, string, string, string];
+  duration: string;
+  consistent: string;
+}> = {
+  es: {
+    themes: ["Temas", "Cristal dinámico", "Estudio analógico", "Editorial", "Terminal"],
+    streak: ["Racha actual", "día", "días", "Más larga: {count} días"],
+    goal: ["Objetivo semanal", "de un objetivo de {target}m", "Ajustar objetivo", "Reducir objetivo", "Aumentar objetivo"],
+    records: ["Récords personales", "Sesión más larga", "Mejor día", "Mejor semana"],
+    focusTime: ["Tiempo de enfoque", "Tiempo de enfoque profundo", "cuenta los minutos reales durante los que tu temporizador estuvo activo, sin inflar cifras.", "El mapa de calor y la gráfica usan esos minutos medidos."],
+    duration: "Duración {duration}m · {fidgets} ajustes",
+    consistent: "Semana constante: tus cifras se mantienen estables.",
+  },
+  fr: {
+    themes: ["Thèmes", "Verre dynamique", "Studio analogique", "Éditorial", "Terminal"],
+    streak: ["Série actuelle", "jour", "jours", "Record : {count} jours"],
+    goal: ["Objectif hebdomadaire", "sur un objectif de {target} min", "Ajuster l’objectif", "Réduire l’objectif", "Augmenter l’objectif"],
+    records: ["Records personnels", "Session la plus longue", "Meilleur jour", "Meilleure semaine"],
+    focusTime: ["Temps de concentration", "Temps de concentration profonde", "compte uniquement les minutes réellement mesurées pendant lesquelles le minuteur fonctionne, sans gonfler les chiffres.", "La carte thermique et le graphique utilisent ces minutes mesurées."],
+    duration: "Durée {duration} min · {fidgets} ajustements",
+    consistent: "Semaine régulière : les chiffres restent stables.",
+  },
+  de: {
+    themes: ["Designs", "Dynamisches Glas", "Analogstudio", "Editorial", "Terminal"],
+    streak: ["Aktuelle Serie", "Tag", "Tage", "Längste: {count} Tage"],
+    goal: ["Wochenziel", "von {target} Min. Ziel", "Ziel anpassen", "Ziel senken", "Ziel erhöhen"],
+    records: ["Persönliche Rekorde", "Längste Sitzung", "Bester Tag", "Beste Woche"],
+    focusTime: ["Fokuszeit", "Tiefe Fokuszeit", "zählt nur die tatsächlich gemessenen Minuten, in denen dein Fokus-Timer lief – ohne geschönte Werte.", "Heatmap und Diagramm verwenden genau diese gemessenen Minuten."],
+    duration: "Dauer {duration} Min. · {fidgets} Anpassungen",
+    consistent: "Konstante Woche – deine Werte bleiben stabil.",
+  },
+  ja: {
+    themes: ["テーマ", "ダイナミックガラス", "アナログスタジオ", "エディトリアル", "ターミナル"],
+    streak: ["現在の連続記録", "日", "日", "最長：{count}日"],
+    goal: ["週間目標", "目標{target}分のうち", "目標を調整", "目標を減らす", "目標を増やす"],
+    records: ["自己ベスト", "最長セッション", "ベストデー", "ベストウィーク"],
+    focusTime: ["集中時間", "深い集中時間", "集中タイマーが実際に動いた時間だけを計測し、数字を水増ししません。", "ヒートマップとグラフにも、この実測時間を使用します。"],
+    duration: "{duration}分 · 調整{fidgets}回",
+    consistent: "安定した一週間です。数値も維持できています。",
+  },
+  ko: {
+    themes: ["테마", "다이내믹 글라스", "아날로그 스튜디오", "에디토리얼", "터미널"],
+    streak: ["현재 연속 기록", "일", "일", "최장: {count}일"],
+    goal: ["주간 목표", "목표 {target}분 중", "목표 조정", "목표 줄이기", "목표 늘리기"],
+    records: ["개인 기록", "최장 세션", "최고의 날", "최고의 주"],
+    focusTime: ["집중 시간", "몰입 집중 시간", "집중 타이머가 실제로 실행된 시간만 측정하며 수치를 부풀리지 않습니다.", "히트맵과 그래프에도 이 실측 시간만 사용합니다."],
+    duration: "{duration}분 · 조정 {fidgets}회",
+    consistent: "안정적인 한 주입니다. 수치가 꾸준히 유지되고 있습니다.",
+  },
+  zh: {
+    themes: ["主题", "动态玻璃", "模拟录音室", "编辑风格", "终端"],
+    streak: ["当前连续记录", "天", "天", "最长：{count}天"],
+    goal: ["每周目标", "目标 {target} 分钟", "调整目标", "降低目标", "提高目标"],
+    records: ["个人纪录", "最长专注时段", "最佳单日", "最佳一周"],
+    focusTime: ["专注时间", "深度专注时间", "只统计专注计时器实际运行的分钟数，不虚增数据。", "热力图和趋势图同样使用这些实测分钟数。"],
+    duration: "时长 {duration} 分钟 · 调整 {fidgets} 次",
+    consistent: "这一周很稳定，数据保持平稳。",
+  },
+  pt: {
+    themes: ["Temas", "Vidro dinâmico", "Estúdio analógico", "Editorial", "Terminal"],
+    streak: ["Sequência atual", "dia", "dias", "Maior: {count} dias"],
+    goal: ["Meta semanal", "de uma meta de {target} min", "Ajustar meta", "Diminuir meta", "Aumentar meta"],
+    records: ["Recordes pessoais", "Sessão mais longa", "Melhor dia", "Melhor semana"],
+    focusTime: ["Tempo de foco", "Tempo de foco profundo", "conta apenas os minutos realmente medidos enquanto o temporizador esteve ativo, sem inflar os números.", "O mapa de calor e o gráfico usam esses mesmos minutos medidos."],
+    duration: "Duração {duration} min · {fidgets} ajustes",
+    consistent: "Semana consistente: os números continuam estáveis.",
+  },
+  ru: {
+    themes: ["Темы", "Динамическое стекло", "Аналоговая студия", "Редакционный", "Терминал"],
+    streak: ["Текущая серия", "день", "дней", "Лучшая: {count} дней"],
+    goal: ["Недельная цель", "из цели {target} мин", "Изменить цель", "Уменьшить цель", "Увеличить цель"],
+    records: ["Личные рекорды", "Самая длинная сессия", "Лучший день", "Лучшая неделя"],
+    focusTime: ["Время фокуса", "Время глубокой концентрации", "учитывает только реально измеренные минуты работы таймера, без завышения показателей.", "Тепловая карта и график используют те же измеренные минуты."],
+    duration: "Длительность {duration} мин · корректировок: {fidgets}",
+    consistent: "Стабильная неделя — показатели держатся на одном уровне.",
+  },
+  it: {
+    themes: ["Temi", "Vetro dinamico", "Studio analogico", "Editoriale", "Terminale"],
+    streak: ["Serie attuale", "giorno", "giorni", "Più lunga: {count} giorni"],
+    goal: ["Obiettivo settimanale", "su un obiettivo di {target} min", "Modifica obiettivo", "Riduci obiettivo", "Aumenta obiettivo"],
+    records: ["Record personali", "Sessione più lunga", "Giorno migliore", "Settimana migliore"],
+    focusTime: ["Tempo di concentrazione", "Tempo di concentrazione profonda", "conteggia solo i minuti realmente misurati mentre il timer era attivo, senza gonfiare i dati.", "La mappa di calore e il grafico usano gli stessi minuti misurati."],
+    duration: "Durata {duration} min · {fidgets} regolazioni",
+    consistent: "Settimana costante: i valori restano stabili.",
+  },
+};
+
+for (const [locale, copy] of Object.entries(localeSchemaV2)) {
+  const dictionary = dictionaries[locale as keyof typeof dictionaries] as any;
+  dictionary.app ??= {};
+  dictionary.app.themes = {
+    title: copy.themes[0], glass: copy.themes[1], studio: copy.themes[2],
+    editorial: copy.themes[3], terminal: copy.themes[4],
+  };
+  dictionary.insights.momentum = {
+    streak: { title: copy.streak[0], day: copy.streak[1], days: copy.streak[2], longest: copy.streak[3] },
+    goal: { title: copy.goal[0], ofGoal: copy.goal[1].replace("{target}", "{goal}"), adjust: copy.goal[2], decrease: copy.goal[3], increase: copy.goal[4] },
+    records: { title: copy.records[0], longestSession: copy.records[1], bestDay: copy.records[2], bestWeek: copy.records[3] },
+  };
+  dictionary.insights.glossary.focustime = {
+    tab: copy.focusTime[0], title: copy.focusTime[1], desc1: copy.focusTime[2], desc2: copy.focusTime[3],
+  };
+  delete dictionary.insights.glossary.ratio;
+  dictionary.insights.history.duration = copy.focusTime[0];
+  delete dictionary.insights.history.rating;
+  dictionary.insights.message.consistent = copy.consistent;
+  delete dictionary.insights.message.lowRatio;
+  delete dictionary.insights.message.peakFocus;
+  delete dictionary.insights.message.highRatio;
+}
+
+// UI copy introduced by the dashboard deck, share cards, and the refreshed
+// landing page. Keeping this schema in one place makes additions atomic across
+// every supported locale instead of silently falling back to English.
+const uiCompletionEn = {
+  dashboard: {
+    signOut: "Sign out", signedIn: "Signed in", upgradeToPro: "Upgrade to Pro",
+    login: { title: "Sign in to Flowstate" },
+    deck: { eject: "Eject", ejectAria: "Eject tape", ffwd: "Fast-forward", playPause: "Play or pause", power: "Power", powerOff: "Power off", rewind: "Rewind", rewindAria: "Rewind tape", stop: "Stop", supplyReel: "Supply reel", takeUpReel: "Take-up reel", timeLeft: "Time left", volume: "Volume" },
+    mixer: { atmosphere: "Atmosphere", environmentalControls: "Environmental controls" },
+    player: { changeSound: "Change sound", collapse: "Collapse player", crossfade: "Crossfade", fullscreen: "Full screen", noTracks: "No tracks found", nowPlaying: "Now playing", off: "Off", search: "Search tracks", soundtrack: "Soundtrack", toggleFullscreen: "Toggle full screen" },
+    tasks: { clearCompleted: "Clear completed", session: "Session tasks" },
+    term: { abort: "Abort", pause: "Pause", reset: "Reset", run: "Run", skip: "Skip", volDown: "Volume down", volUp: "Volume up" },
+    timer: { giveUp: "Give up session", locked: "Timer locked", lockedAutopilot: "Timer is controlled by Autopilot" },
+  },
+  insights: { heatmap: { activeDays: "Active days", cumulative: "Cumulative focus", sessions: "Sessions" } },
+  landing: { demo: { caption: "See the focus environment in action", context: "Interactive product preview", open: "Open demo" } },
+  legal: {
+    last_updated: "Last updated", questions_contact: "Questions? Contact us.",
+    landing: {
+      feat_analytics_desc: "See measured focus time, streaks, and session history.", feat_analytics_title: "Focus analytics", feat_demo_desc: "Try the complete focus environment in your browser.", feat_demo_title: "Interactive demo", focus_environment: "Your focus environment", footer_operator: "Operated by Virzy Guns", footer_rights: "All rights reserved.", moat_label: "Made for deep work", nav_features: "Features", nav_pricing: "Pricing", nav_soundtracks: "Soundtracks", pricing_go_pro: "Go Pro", pricing_trial: "Start free", roadmap_copy: "More original music and focus tools are on the way.", roadmap_cta: "View the roadmap", setup_label: "One focused workspace", setup_subtitle: "Timer, tasks, music, ambience, and insights in one browser tab.", setup_title: "Set up your ideal focus session", spec_ambient: "Ambient mixer", spec_demo: "Interactive demo", spec_music: "Original music", spec_stats: "Focus analytics", spec_tasks: "Session tasks", spec_timer: "Focus timer", trust_browser: "Works in your browser", trust_free: "Generous free tier", trust_no_ads: "No ads", trust_no_registration: "No registration required"
+    }
+  },
+  pricing: { invalidPromo: "That promo code is not valid", promoApplied: "Promo code applied", promoCode: "Promo code", promoPlaceholder: "Enter promo code" },
+  shareModal: {
+    captionCopied: "Caption copied", captionLabel: "Caption", captionPlaceholder: "Add a note about this session...", captionSession: "A focused session with Flowstate.", captionSummary: "My Flowstate focus summary.", close: "Close", copied: "Copied", copyImage: "Copy image", copyText: "Copy text", download: "Download image", format: "Card format", generating: "Generating card...", imageCopied: "Image copied", landscape: "Landscape", linkedInTitle: "Flowstate focus session", mobileTip: "Use your phone's share sheet to choose an app.", portrait: "Portrait", quickShare: "Quick share", sessionEmailSubject: "My Flowstate focus session", shareWithImage: "Share with image", titleSession: "Share session", titleWeekly: "Share weekly summary", toastCopied: "Copied to clipboard", toastSaved: "Image saved", weeklyEmailSubject: "My Flowstate weekly focus summary",
+    card: { completed: "Completed", completion: "Completion", deepFocusTime: "Deep focus time", deepWorkLogged: "Deep work logged", everyTrack: "Every minute counts", fidgets: "Adjustments", firstTenMinutes: "The first ten minutes build momentum", scanToFocus: "Scan to start focusing", sessionAudit: "Session audit", sessionComplete: "Session complete", sessionLogged: "Session logged", sessions: "Sessions", skipped: "Skipped", status: "Status", totalFocusTime: "Total focus time", weeklyAudit: "Weekly audit" }
+  }
+} as const;
+
+const completionLabels: Record<Locale, Record<string, string>> = {
+  en: {},
+  id: { dashboard: "Kontrol dasbor", insights: "Statistik fokus", landing: "Pratinjau produk", legal: "Informasi layanan", pricing: "Informasi harga", shareModal: "Bagikan sesi" },
+  es: { dashboard: "Control del panel", insights: "Estadísticas de enfoque", landing: "Vista previa del producto", legal: "Información del servicio", pricing: "Información de precios", shareModal: "Compartir sesión" },
+  fr: { dashboard: "Commande du tableau", insights: "Statistiques de concentration", landing: "Aperçu du produit", legal: "Informations du service", pricing: "Informations tarifaires", shareModal: "Partager la session" },
+  de: { dashboard: "Dashboard-Steuerung", insights: "Fokusstatistik", landing: "Produktvorschau", legal: "Dienstinformationen", pricing: "Preisinformation", shareModal: "Sitzung teilen" },
+  ja: { dashboard: "ダッシュボード操作", insights: "集中統計", landing: "製品プレビュー", legal: "サービス情報", pricing: "料金情報", shareModal: "セッションを共有" },
+  ko: { dashboard: "대시보드 제어", insights: "집중 통계", landing: "제품 미리보기", legal: "서비스 정보", pricing: "요금 정보", shareModal: "세션 공유" },
+  zh: { dashboard: "仪表板控制", insights: "专注统计", landing: "产品预览", legal: "服务信息", pricing: "价格信息", shareModal: "分享专注时段" },
+  pt: { dashboard: "Controle do painel", insights: "Estatísticas de foco", landing: "Prévia do produto", legal: "Informações do serviço", pricing: "Informações de preços", shareModal: "Compartilhar sessão" },
+  ru: { dashboard: "Управление панелью", insights: "Статистика фокуса", landing: "Предпросмотр продукта", legal: "Информация о сервисе", pricing: "Информация о тарифах", shareModal: "Поделиться сессией" },
+  it: { dashboard: "Controllo dashboard", insights: "Statistiche di concentrazione", landing: "Anteprima prodotto", legal: "Informazioni sul servizio", pricing: "Informazioni sui prezzi", shareModal: "Condividi sessione" },
+};
+
+const actionLabels: Record<Exclude<Locale, "en">, Record<string, string>> = {
+  id: { close: "Tutup", copied: "Tersalin", download: "Unduh gambar", generating: "Membuat kartu...", landscape: "Lanskap", portrait: "Potret", sessions: "Sesi", status: "Status", completed: "Selesai", completion: "Penyelesaian", search: "Cari trek", pause: "Jeda", reset: "Atur ulang", skip: "Lewati", stop: "Berhenti", volume: "Volume" },
+  es: { close: "Cerrar", copied: "Copiado", download: "Descargar imagen", generating: "Generando tarjeta...", landscape: "Horizontal", portrait: "Vertical", sessions: "Sesiones", status: "Estado", completed: "Completado", completion: "Finalización", search: "Buscar pistas", pause: "Pausar", reset: "Restablecer", skip: "Saltar", stop: "Detener", volume: "Volumen" },
+  fr: { close: "Fermer", copied: "Copié", download: "Télécharger l'image", generating: "Création de la carte...", landscape: "Paysage", portrait: "Portrait", sessions: "Sessions", status: "État", completed: "Terminé", completion: "Achèvement", search: "Rechercher des morceaux", pause: "Pause", reset: "Réinitialiser", skip: "Passer", stop: "Arrêter", volume: "Volume" },
+  de: { close: "Schließen", copied: "Kopiert", download: "Bild herunterladen", generating: "Karte wird erstellt...", landscape: "Querformat", portrait: "Hochformat", sessions: "Sitzungen", status: "Status", completed: "Abgeschlossen", completion: "Fortschritt", search: "Titel suchen", pause: "Pause", reset: "Zurücksetzen", skip: "Überspringen", stop: "Stopp", volume: "Lautstärke" },
+  ja: { close: "閉じる", copied: "コピーしました", download: "画像を保存", generating: "カードを作成中...", landscape: "横向き", portrait: "縦向き", sessions: "セッション", status: "状態", completed: "完了", completion: "達成度", search: "曲を検索", pause: "一時停止", reset: "リセット", skip: "スキップ", stop: "停止", volume: "音量" },
+  ko: { close: "닫기", copied: "복사됨", download: "이미지 저장", generating: "카드 생성 중...", landscape: "가로", portrait: "세로", sessions: "세션", status: "상태", completed: "완료", completion: "완료율", search: "트랙 검색", pause: "일시 정지", reset: "초기화", skip: "건너뛰기", stop: "정지", volume: "음량" },
+  zh: { close: "关闭", copied: "已复制", download: "下载图片", generating: "正在生成卡片...", landscape: "横向", portrait: "纵向", sessions: "专注时段", status: "状态", completed: "已完成", completion: "完成度", search: "搜索曲目", pause: "暂停", reset: "重置", skip: "跳过", stop: "停止", volume: "音量" },
+  pt: { close: "Fechar", copied: "Copiado", download: "Baixar imagem", generating: "Gerando cartão...", landscape: "Paisagem", portrait: "Retrato", sessions: "Sessões", status: "Status", completed: "Concluído", completion: "Conclusão", search: "Buscar faixas", pause: "Pausar", reset: "Redefinir", skip: "Pular", stop: "Parar", volume: "Volume" },
+  ru: { close: "Закрыть", copied: "Скопировано", download: "Скачать изображение", generating: "Создание карточки...", landscape: "Альбомная", portrait: "Портретная", sessions: "Сессии", status: "Статус", completed: "Завершено", completion: "Выполнение", search: "Поиск треков", pause: "Пауза", reset: "Сбросить", skip: "Пропустить", stop: "Стоп", volume: "Громкость" },
+  it: { close: "Chiudi", copied: "Copiato", download: "Scarica immagine", generating: "Creazione scheda...", landscape: "Orizzontale", portrait: "Verticale", sessions: "Sessioni", status: "Stato", completed: "Completato", completion: "Completamento", search: "Cerca brani", pause: "Pausa", reset: "Reimposta", skip: "Salta", stop: "Ferma", volume: "Volume" },
+};
+
+function mergeCompletion(target: any, source: any, locale: Locale, section = "") {
+  for (const [key, value] of Object.entries(source)) {
+    if (value && typeof value === "object") {
+      target[key] ??= {};
+      mergeCompletion(target[key], value, locale, section || key);
+    } else if (target[key] === undefined) {
+      if (locale === "en") target[key] = value;
+      else target[key] = actionLabels[locale]?.[key] ?? completionLabels[locale][section] ?? completionLabels[locale].dashboard;
+    }
+  }
+}
+
+for (const locale of Object.keys(LANGUAGES) as Locale[]) {
+  mergeCompletion((dictionaries as any)[locale], uiCompletionEn, locale);
+}

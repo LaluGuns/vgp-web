@@ -9,6 +9,15 @@ import { useTranslation } from "@/hooks/use-translation";
 import { recordFidget } from "@/lib/optimizer/fidget";
 import { Lock, Check } from "lucide-react";
 import { useThemeStore, THEMES } from "@/lib/stores/theme-store";
+import { useUpgradePromptStore } from "@/lib/stores/upgrade-prompt-store";
+import { useMixerStore } from "@/lib/stores/mixer-store";
+
+const ENVIRONMENT_BUNDLES = {
+  glass: { scene: "midnight", ambience: [{ id: "rain", volume: 0.32 }] },
+  studio: { scene: "sunset", ambience: [{ id: "vinyl", volume: 0.28 }] },
+  editorial: { scene: "rain-window", ambience: [{ id: "cafe", volume: 0.26 }] },
+  terminal: { scene: "terminal", ambience: [{ id: "city", volume: 0.24 }] },
+} as const;
 
 // Small static preview palette per interface theme (bg + accent) for the swatch chips.
 const THEME_PREVIEWS: Record<string, { bg: string; accent: string }> = {
@@ -22,6 +31,10 @@ function InterfaceStyleSelector() {
   const { t } = useTranslation();
   const theme = useThemeStore((s) => s.theme);
   const setTheme = useThemeStore((s) => s.setTheme);
+  const setScene = useAppStore((s) => s.setScene);
+  const isPremium = useAppStore((s) => s.isPremium);
+  const loadPreset = useMixerStore((s) => s.loadPreset);
+  const showUpgrade = useUpgradePromptStore((s) => s.show);
 
   return (
     <div className="space-y-2.5 select-none">
@@ -33,12 +46,20 @@ function InterfaceStyleSelector() {
       <div className="grid grid-cols-2 gap-2.5">
         {THEMES.map((th) => {
           const isActive = theme === th.id;
+          const locked = th.isPremium && !isPremium;
           const preview = THEME_PREVIEWS[th.id] ?? THEME_PREVIEWS.glass;
           return (
             <button
               key={th.id}
               onClick={() => {
+                if (locked) {
+                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This environment is available with Flowstate Pro.");
+                  return;
+                }
                 setTheme(th.id);
+                const bundle = ENVIRONMENT_BUNDLES[th.id];
+                setScene(bundle.scene);
+                loadPreset([...bundle.ambience]);
                 recordFidget();
               }}
               className={cn(
@@ -65,6 +86,11 @@ function InterfaceStyleSelector() {
               {isActive && (
                 <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-primary/[0.12] border border-primary/25 flex items-center justify-center">
                   <Check className="h-2.5 w-2.5 text-primary" />
+                </span>
+              )}
+              {locked && !isActive && (
+                <span className="absolute top-1.5 right-1.5 grid h-4 w-4 place-items-center rounded-full border border-white/10 bg-black/40">
+                  <Lock className="h-2.5 w-2.5 text-white/55" />
                 </span>
               )}
             </button>
@@ -151,6 +177,7 @@ export function SceneSelector() {
   const scene = useAppStore((s) => s.scene);
   const setScene = useAppStore((s) => s.setScene);
   const isPremium = useAppStore((s) => s.isPremium);
+  const showUpgrade = useUpgradePromptStore((s) => s.show);
 
   return (
     <div className="space-y-5 select-none">
@@ -171,9 +198,7 @@ export function SceneSelector() {
               key={s.id}
               onClick={() => {
                 if (locked) {
-                  if (confirm(t("dashboard.themes.upgradeToUnlockTheme", "This theme is Pro-only. Go Pro to get all themes?"))) {
-                    window.location.href = "/pricing";
-                  }
+                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This theme is Pro-only. Go Pro to get all themes?");
                   return;
                 }
                 setScene(s.id);

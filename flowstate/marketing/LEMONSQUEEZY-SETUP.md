@@ -4,8 +4,8 @@ Panduan klik-per-klik buat dua produk Flowstate Pro. Semua teks customer-facing
 udah ditulis final (bahasa jualan, jujur, tanpa klaim palsu) — tinggal copy-paste.
 
 **Prinsip harga:** floor $5 dijaga di kode (server-side), jadi harga di Lemon Squeezy
-adalah **anchor value** ($9.99 / $99) — angka yang dilihat orang sebelum milih harga
-sendiri. Orang PWYW bayar mendekati anchor, bukan mendekati floor.
+adalah harga langganan yang benar ($9.99 / $59.99). Tampilan aplikasi mencoret $99 sebagai
+pembanding harga, lalu menampilkan $59.99 sebagai harga tahunan aktif.
 Pembanding: Brain.fm $9.99/bln, Endel $14.99/bln, Freedom $8.99/bln — masing-masing
 cuma satu fungsi. Flowstate = musik + timer + analytics.
 
@@ -96,12 +96,12 @@ Ulangi persis bagian 1, bedanya:
 |---|---|
 | **Name** | `Flowstate Pro — Yearly` |
 | **Description** | blok di bawah |
-| Price per unit | **$99** |
+| Price per unit | **$59.99** |
 | Repeat payment every | **1 Year** |
 
 **Description:**
 ```
-A full year of every premium ambient sound and visual scene in Flowstate — two months free versus monthly. Name your price, cancel anytime.
+A full year of every premium ambient sound and visual scene in Flowstate. Save 50% compared with paying monthly. Cancel anytime.
 ```
 
 Confirmation modal & email receipt: sama dengan Monthly.
@@ -154,8 +154,9 @@ Webhook kita fail-closed: tanpa secret yang benar, request ditolak.
 
 - [ ] Matikan Test mode → **recreate kedua produk di live mode** (ID beda!)
 - [ ] Ganti semua env dengan nilai live
-- [ ] Satu pembelian kecil beneran ($5) sebagai smoke test → refund sendiri
-- [ ] **Hapus `NEXT_PUBLIC_PREMIUM_PROMO=1` dari env** → gating premium aktif
+- [ ] Satu pembelian bulanan beneran ($9.99) sebagai smoke test → refund sendiri
+- [ ] Pastikan env Vercel `NEXT_PUBLIC_PREMIUM_PROMO=0` atau tidak disetel
+      (source dan Worker sudah memakai `0`)
 - [ ] Update perks/marketing kalau ada perubahan gate
 
 ---

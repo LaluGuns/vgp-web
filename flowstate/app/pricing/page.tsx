@@ -161,13 +161,18 @@ export default function PricingPage() {
                   </div>
                   <div className="inline-flex items-center justify-center">
                     <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                      Promo code FLOWBRO applied — 50% off
+                      {t("pricing.promoApplied", "Promo code FLOWBRO applied — 50% off")}
                     </span>
                   </div>
                 </div>
               ) : (
-                <div className="text-4xl font-bold text-white tabular-nums">
-                  {interval === "yearly" ? "$59.99" : "$9.99"}
+                <div className="flex items-baseline justify-center gap-2 tabular-nums">
+                  {interval === "yearly" && (
+                    <span className="text-xl font-medium text-white/35 line-through">$99</span>
+                  )}
+                  <span className="text-4xl font-bold text-white">
+                    {interval === "yearly" ? "$59.99" : "$9.99"}
+                  </span>
                   <span className="text-base font-normal text-muted-foreground/60">
                     {BILLING[interval].suffix}
                   </span>

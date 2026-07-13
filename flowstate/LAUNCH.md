@@ -15,7 +15,7 @@ Status as of 2026-06-30. Code is launch-ready; the items below are the remaining
       the two variant IDs the code needs, cleaner):
       - **Flowstate Pro Monthly** — Subscription, Standard pricing, **$9.99** (anchor;
         the $5 floor lives in the app code), repeat every 1 Month.
-      - **Flowstate Pro Yearly** — Subscription, Standard pricing, **$99**, repeat every 1 Year.
+      - **Flowstate Pro Yearly** — Subscription, Standard pricing, **$59.99**, repeat every 1 Year.
       - Full click-by-click guide + final selling copy: `marketing/LEMONSQUEEZY-SETUP.md`.
       - Turn **free trial OFF** (core app is already free; a 14-day Pro trial then charge
         invites chargebacks). Tax category: reconsider "SaaS personal use" (buyers are
@@ -28,33 +28,36 @@ Status as of 2026-06-30. Code is launch-ready; the items below are the remaining
       (b) replace webhook secret with a 32+ char random string in BOTH the LS dashboard
       and the env (current one is guessable → forged webhooks = free Pro).
 - [ ] Settings → Webhooks → add `https://flow.virzyguns.com/api/webhooks/lemonsqueezy`,
-      subscribe to all `subscription_*` events, set a signing secret →
+      subscribe to all `subscription_*` events including
+      `subscription_payment_refunded`, set a signing secret →
       `LEMONSQUEEZY_WEBHOOK_SECRET` (route fails closed without it).
 - [ ] Set `NEXT_PUBLIC_APP_URL=https://flow.virzyguns.com` (checkout redirect).
-- [ ] Toggle **Test mode** first: run a $5 test checkout (card 4242 4242 4242 4242),
+- [ ] Toggle **Test mode** first: run a monthly test checkout (card 4242 4242 4242 4242),
       confirm the webhook writes a row in `flowstate_subscriptions` and the account
       badge flips to "Pro". Then switch live.
-- [ ] After this works, flip entitlement gating from "ungated pre-launch" to enforced:
-      **remove `NEXT_PUBLIC_PREMIUM_PROMO=1` from the env** (it currently force-unlocks
-      everything for everyone via `hooks/use-entitlement.ts`).
+- [x] Source defaults enforce entitlement gating (`.env.local` and Worker config use
+      promo `0`). Before deploy, verify Vercel has `NEXT_PUBLIC_PREMIUM_PROMO=0`
+      or the variable is absent.
 
 ### 2. Audio delivery worker (Cloudflare R2 — SIGNED, not public)
 > Replaces the old "make the bucket public" plan (ADR-001): a public bucket lets any
 > download manager rip the catalog. The worker issues short-TTL signed URLs instead.
 > The bucket must stay **private** (no public access, no custom public domain).
 - [ ] `cd worker` → `wrangler login` (once).
-- [ ] Set the four secrets:
+- [ ] Set the three secrets:
       `wrangler secret put URL_SIGNING_SECRET` (long random string),
       `wrangler secret put SUPABASE_URL`,
-      `wrangler secret put SUPABASE_ANON_KEY`,
-      `wrangler secret put SUPABASE_SERVICE_ROLE_KEY`.
+      `wrangler secret put SUPABASE_ANON_KEY`.
+      Never add the service-role key: entitlement reads use the user's JWT plus RLS.
 - [ ] `wrangler deploy` → note the worker URL.
+- [ ] Run `npm run worker:sync-catalog` before every Worker deploy that changes
+      Free/Pro track flags; the Worker enforces the R2 copy, not the web bundle.
 - [ ] Set `NEXT_PUBLIC_AUDIO_WORKER_URL=<worker URL>` in the Vercel env (leave the
       legacy `NEXT_PUBLIC_AUDIO_CDN_BASE_URL` empty) and redeploy the app.
 - [ ] Verify in production: a track plays; its stream URL is `…/v1/stream?k=…&e=…&s=…`;
       pasting that URL into a new tab **after ~15 min** returns 403.
-- [ ] When `NEXT_PUBLIC_PREMIUM_PROMO` is removed from the app env, also set the
-      worker's `PREMIUM_PROMO` var to `0` in `worker/wrangler.toml` + redeploy
+- [x] Worker's `PREMIUM_PROMO` is `0` in `worker/wrangler.toml`; redeploy it with
+      that value
       (they must flip together or premium gating will disagree between app and worker).
 - [ ] Delete `scripts/.r2.env` once confirmed.
 

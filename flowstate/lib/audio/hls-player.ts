@@ -415,14 +415,10 @@ function startCrossfade(outgoing: PlayerChannel, incoming: PlayerChannel, resume
 
 export const musicPlayer = {
   unlockAudio() {
-    const audio = initAudio(activeChannel);
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        audio.pause();
-      }).catch(() => {});
-    }
-    getAudioContext();
+    // Timer and player controls both call this. Never play/pause the active
+    // HTMLAudioElement here because that races the real transport.
+    const ctx = getAudioContext();
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
   },
 
   async load(url: string) {
@@ -509,6 +505,9 @@ export const musicPlayer = {
         const ctx = getAudioContext();
         try {
           const response = await fetch(url, { signal });
+          if (!response.ok) {
+            throw new Error(`Audio stream request failed (${response.status})`);
+          }
           if (channel.activeLoadId !== loadId) return;
           const arrayBuffer = await response.arrayBuffer();
 
@@ -539,6 +538,7 @@ export const musicPlayer = {
           } else {
             stopChannel(channel);
           }
+          throw err;
         } finally {
           if (channel.activeLoadId === loadId) {
             channel.loadPromise = null;

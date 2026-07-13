@@ -39,14 +39,6 @@ export default function TermsPage() {
         {sec3Lines.map((line, idx) => {
           if (!line.trim()) return null;
           const cleanLine = line.replace(/^-\s*/, "");
-          if (cleanLine.toLowerCase().includes("refund and cancellation")) {
-            return (
-              <li key={idx}>
-                {cleanLine.split("Refund and Cancellation")[0]}
-                <a href="/legal/refund">Refund and Cancellation Policy</a>.
-              </li>
-            );
-          }
           return <li key={idx}>{cleanLine}</li>;
         })}
       </ul>

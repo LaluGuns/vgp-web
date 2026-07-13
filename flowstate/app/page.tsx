@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { usePlayerStore } from "@/lib/stores/player-store";
+import { resolveAudioUrl } from "@/lib/audio/signed-urls";
 
 const FEATURED_TRACKS = [
   {
@@ -56,13 +57,11 @@ export default function LandingPage() {
   const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
   const [isPlayingPreview, setIsPlayingPreview] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const previewRequestId = useRef(0);
 
   useEffect(() => {
     setMounted(true);
-    if (typeof document !== "undefined") {
-      document.title = "Flowstate - Deep Work Music & Focus Timer";
-    }
-    
+
     // Pause any playing music tracks when visiting the landing page
     const playerStore = usePlayerStore.getState();
     if (playerStore.isPlaying) {
@@ -70,35 +69,74 @@ export default function LandingPage() {
     }
 
     return () => {
+      previewRequestId.current += 1;
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current = null;
       }
     };
   }, []);
 
-  const handlePlayPreview = (trackId: string, url: string) => {
-    if (activeTrackId === trackId) {
+  useEffect(() => {
+    document.title = t("metadata.title", "Flowstate - Deep Work Music & Focus Timer");
+  }, [locale, t]);
+
+  const clearPreviewState = (requestId: number) => {
+    if (previewRequestId.current !== requestId) return;
+    audioRef.current?.pause();
+    if (audioRef.current) audioRef.current.src = "";
+    audioRef.current = null;
+    setActiveTrackId(null);
+    setIsPlayingPreview(false);
+  };
+
+  const handlePlayPreview = async (trackId: string, path: string) => {
+    if (activeTrackId === trackId && audioRef.current) {
       if (isPlayingPreview) {
         audioRef.current?.pause();
         setIsPlayingPreview(false);
       } else {
-        audioRef.current?.play().catch(() => {});
-        setIsPlayingPreview(true);
+        try {
+          await audioRef.current.play();
+          setIsPlayingPreview(true);
+        } catch {
+          clearPreviewState(previewRequestId.current);
+        }
       }
-    } else {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-      setActiveTrackId(trackId);
-      setIsPlayingPreview(true);
-      const audio = new Audio(url);
+      return;
+    }
+
+    const requestId = ++previewRequestId.current;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+      audioRef.current = null;
+    }
+    setActiveTrackId(trackId);
+    setIsPlayingPreview(false);
+
+    try {
+      const resolvedUrl = await resolveAudioUrl(path);
+      if (previewRequestId.current !== requestId) return;
+
+      const audio = new Audio(resolvedUrl);
       audio.volume = 0.4;
       audio.onended = () => {
-        setIsPlayingPreview(false);
-        setActiveTrackId(null);
+        clearPreviewState(requestId);
       };
+      audio.onerror = () => clearPreviewState(requestId);
       audioRef.current = audio;
-      audio.play().catch(() => {});
+
+      await audio.play();
+      if (previewRequestId.current !== requestId) {
+        audio.pause();
+        audio.src = "";
+        return;
+      }
+      setIsPlayingPreview(true);
+    } catch {
+      clearPreviewState(requestId);
     }
   };
 
@@ -151,13 +189,13 @@ export default function LandingPage() {
 
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
-              Features
+              {t("legal.landing.nav_features", "Features")}
             </a>
             <a href="#soundtracks" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
-              Soundtracks
+              {t("legal.landing.nav_soundtracks", "Soundtracks")}
             </a>
             <Link href="/pricing" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
-              Pricing
+              {t("legal.landing.nav_pricing", "Pricing")}
             </Link>
           </nav>
 
@@ -188,27 +226,26 @@ export default function LandingPage() {
               href="/app"
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[#00e5ff] border border-[#00e5ff]/30 hover:border-[#00e5ff] bg-[#00e5ff]/5 hover:bg-[#00e5ff]/10 rounded-xl transition-all duration-200 shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_20px_rgba(0,229,255,0.3)]"
             >
-              Start Focusing (Free)
+              {t("legal.landing.cta_start", "Start Focusing (Free)")}
             </Link>
           </div>
         </header>
 
         {/* Hero Section */}
-        <main className="flex-1 w-full max-w-7xl mx-auto px-8 py-20 md:py-36 grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-20 items-center">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-8 py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-20 items-center">
           
           {/* Hero Left Content */}
           <div className="md:col-span-5 space-y-8 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-mono text-[#8b5cf6] uppercase tracking-widest">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6]" /> Focus Environment
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6]" /> {t("legal.landing.focus_environment", "Focus environment")}
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black text-white tracking-tight leading-[0.95]">
-              Music for focus.<br/>
-              <span className="text-[#00e5ff]">Built for deep work.</span>
+              {t("legal.landing.hero_title", "Music for focus. Built for deep work.")}
             </h1>
             
             <p className="text-sm md:text-lg text-white/80 leading-relaxed max-w-xl">
-              A focus timer with music actually made for it. Every track is produced in-house — no stock loops — plus an ambient mixer to cover whatever's happening around you.
+              {t("legal.landing.hero_subtitle", "A focus timer with music actually made for it. Every track is produced in-house, with an ambient mixer to cover whatever's happening around you.")}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
@@ -216,14 +253,14 @@ export default function LandingPage() {
                 href="/app"
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] flex items-center gap-2 group"
               >
-                Start focusing
+                {t("legal.landing.cta_start", "Start focusing")}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link
                 href="/pricing"
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-white/80 hover:text-white bg-white/[0.02] hover:bg-white/[0.04] border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5"
               >
-                Pricing & Features
+                {t("legal.landing.cta_explore", "See Pro")}
                 <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -232,19 +269,19 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] font-mono text-white/50 pt-4 border-t border-white/[0.06] max-w-lg">
               <span className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#00e5ff]" />
-                Free tier available
+                {t("legal.landing.trust_free", "Free tier available")}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#00e5ff]" />
-                No ads
+                {t("legal.landing.trust_no_ads", "No ads")}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#00e5ff]" />
-                Runs in your browser
+                {t("legal.landing.trust_browser", "Runs in your browser")}
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#00e5ff]" />
-                No registration required
+                {t("legal.landing.trust_no_registration", "No registration required")}
               </span>
             </div>
           </div>
@@ -257,30 +294,30 @@ export default function LandingPage() {
         </main>
 
         {/* Feature Bento Grid Section */}
-        <section id="features" className="w-full max-w-7xl mx-auto px-8 py-16 md:py-24 border-t border-white/[0.04] bg-transparent">
+        <section id="features" className="w-full max-w-7xl mx-auto px-8 py-12 md:py-16 border-t border-white/[0.04] bg-transparent">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div className="space-y-3">
               <span className="inline-flex items-center gap-2 text-[10px] font-mono text-[#00e5ff] uppercase tracking-[0.3em]">
-                <span className="w-6 h-px bg-[#00e5ff]/50" /> The setup
+                <span className="w-6 h-px bg-[#00e5ff]/50" /> {t("legal.landing.setup_label", "The setup")}
               </span>
               <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-[1.05]">
-                Everything the block needs.<br className="hidden md:block" /> Nothing it doesn&apos;t.
+                {t("legal.landing.setup_title", "Everything the block needs. Nothing it doesn't.")}
               </h2>
             </div>
             <p className="text-sm text-white/50 leading-relaxed max-w-xs md:text-right">
-              A timer, music made for focus, a way to cover the room, and honest numbers after. That&apos;s the whole thing.
+              {t("legal.landing.setup_subtitle", "A timer, music made for focus, a way to cover the room, and honest numbers after.")}
             </p>
           </div>
 
           {/* Spec-plate grid: uniform modules, one accent, no fake screenshots. */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px rounded-3xl overflow-hidden border border-white/[0.07] bg-white/[0.05]">
             {[
-              { code: "01 / TIMER", Icon: Clock, title: t("legal.landing.feat_timer_title", "Focus timer"), desc: "Work in blocks. Set your own focus and break lengths to match how your attention actually runs.", spec: "Pomodoro · Deep Work · custom" },
-              { code: "02 / TASKS", Icon: CheckSquare, title: t("legal.landing.feat_task_title", "Task planning"), desc: "Line up what the block is for and check it off as you go — right beside the clock, not in another tab.", spec: "Per-session checklist" },
-              { code: "03 / SOUND", Icon: Music, title: t("legal.landing.feat_music_title", "Original soundtracks"), desc: "Lofi and synthwave, produced in-house by Virzy Guns. Written for focus, not licensed from a stock library.", spec: "80+ tracks · new ones monthly", accent: true },
-              { code: "04 / AMBIENT", Icon: Sliders, title: t("legal.landing.feat_mixer_title", "Ambient mixer"), desc: "Blend rain, café, and campfire under the music to cover whatever the room is doing around you.", spec: "12 layers · independent volumes" },
-              { code: "05 / STATS", Icon: BarChart3, title: "Honest analytics", desc: "Streaks, a heatmap of when you actually focus, personal records. Measured minutes only — nothing inflated.", spec: "Real data, never padded" },
-              { code: "→", Icon: null, title: "See it running", desc: "The hero up top is the real app on a demo clock. Open it, press play, hear the difference.", spec: "Open Flowstate", cta: true },
+              { code: "01 / TIMER", Icon: Clock, title: t("legal.landing.feat_timer_title", "Focus timer"), desc: t("legal.landing.feat_timer_desc", "Work in blocks."), spec: t("legal.landing.spec_timer", "Pomodoro · Deep Work · custom") },
+              { code: "02 / TASKS", Icon: CheckSquare, title: t("legal.landing.feat_task_title", "Task planning"), desc: t("legal.landing.feat_task_desc", "Plan and check off your session tasks."), spec: t("legal.landing.spec_tasks", "Per-session checklist") },
+              { code: "03 / SOUND", Icon: Music, title: t("legal.landing.feat_music_title", "Original soundtracks"), desc: t("legal.landing.feat_music_desc", "Original music made for focus."), spec: t("legal.landing.spec_music", "80+ tracks · new ones monthly"), accent: true },
+              { code: "04 / AMBIENT", Icon: Sliders, title: t("legal.landing.feat_mixer_title", "Ambient mixer"), desc: t("legal.landing.feat_mixer_desc", "Blend ambient sounds under the music."), spec: t("legal.landing.spec_ambient", "12 layers · independent volumes") },
+              { code: "05 / STATS", Icon: BarChart3, title: t("legal.landing.feat_analytics_title", "Honest analytics"), desc: t("legal.landing.feat_analytics_desc", "Streaks, a heatmap, and personal records. Measured minutes only."), spec: t("legal.landing.spec_stats", "Real data, never padded") },
+              { code: "→", Icon: null, title: t("legal.landing.feat_demo_title", "See it running"), desc: t("legal.landing.feat_demo_desc", "Open the app, press play, and hear the difference."), spec: t("legal.landing.spec_demo", "Open Flowstate"), cta: true },
             ].map((f) => {
               const Icon = f.Icon;
               const inner = (
@@ -305,7 +342,7 @@ export default function LandingPage() {
                   <div className="flex-1">
                     <h3 className="text-[13px] font-bold text-white uppercase tracking-[0.12em] font-mono flex items-center gap-2">
                       {f.title}
-                      {f.accent && <span className="text-[8px] font-mono text-[#00e5ff] border border-[#00e5ff]/30 rounded px-1 py-px tracking-normal normal-case">the moat</span>}
+                      {f.accent && <span className="text-[8px] font-mono text-[#00e5ff] border border-[#00e5ff]/30 rounded px-1 py-px tracking-normal normal-case">{t("legal.landing.moat_label", "The difference")}</span>}
                     </h3>
                     <p className="text-xs text-white/55 leading-relaxed mt-2.5">{f.desc}</p>
                   </div>
@@ -326,9 +363,9 @@ export default function LandingPage() {
         </section>
 
         {/* Music Production Highlight Section */}
-        <section id="soundtracks" className="w-full max-w-7xl mx-auto px-8 py-16 md:py-24 border-t border-white/[0.04] bg-transparent">
+        <section id="soundtracks" className="w-full max-w-7xl mx-auto px-8 py-12 md:py-16 border-t border-white/[0.04] bg-transparent">
           <div className="glass-card p-8 md:p-12 rounded-[32px] border border-white/5 max-w-5xl mx-auto relative overflow-hidden bg-white/[0.01]">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="!absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
@@ -354,11 +391,11 @@ export default function LandingPage() {
                 {/* Metadata & Wave visualizer */}
                 <div className="text-center z-10 w-full">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/5 text-[9px] font-mono text-muted-foreground uppercase tracking-widest mb-3">
-                    <Compass className="h-3 w-3" /> ORIGINAL SOUNDTRACKS
+                    <Compass className="h-3 w-3" /> {t("legal.landing.feat_music_title", "Original soundtracks")}
                   </span>
                   
                   <h3 className="text-sm font-bold text-white tracking-wide">
-                    {activeTrackId ? FEATURED_TRACKS.find(t => t.id === activeTrackId)?.title : "Soundtracks by Virzy Guns"}
+                    {activeTrackId ? FEATURED_TRACKS.find(t => t.id === activeTrackId)?.title : t("legal.landing.producer_title", "Soundtracks by Virzy Guns Production")}
                   </h3>
                   <p className="text-[10px] font-mono text-muted-foreground/60 mt-1">
                     {activeTrackId ? FEATURED_TRACKS.find(t => t.id === activeTrackId)?.genre : "Virzy Guns Production"}
@@ -388,7 +425,7 @@ export default function LandingPage() {
                     {t("legal.landing.producer_title", "Soundtracks by Virzy Guns Production")}
                   </h2>
                   <p className="text-xs text-white/60 leading-relaxed">
-                    {t("legal.landing.producer_desc", "Every track in Flowstate is produced by one person — Virzy Guns. Not licensed, not pulled from a stock library. Written for focus, and only here.")}
+                    {t("legal.landing.producer_desc", "Every track in Flowstate is produced by one person — Virzy Guns Production. Not licensed, not pulled from a stock library. Written for focus, and only here.")}
                   </p>
                 </div>
 
@@ -447,66 +484,72 @@ export default function LandingPage() {
         </section>
 
         {/* Honest Pricing CTA Banner */}
-        <section className="w-full max-w-7xl mx-auto px-8 py-12 md:py-20 border-t border-t-white/[0.04] bg-transparent">
+        <section className="w-full max-w-7xl mx-auto px-8 py-12 md:py-16 border-t border-t-white/[0.04] bg-transparent">
           <div className="glass-card p-8 md:p-12 rounded-3xl border border-white/5 text-center space-y-8 max-w-4xl mx-auto">
             <div className="space-y-2">
               <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
                 {t("legal.landing.pricing_cta", "Start focusing")}
               </h2>
               <p className="text-xs md:text-sm text-white/60 max-w-md mx-auto">
-                No credit card required to try. Cancel anytime.
+                {t("legal.landing.pricing_trial", "No credit card required to try. Cancel anytime.")}
               </p>
             </div>
 
             {/* Side by side simple pricing cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto text-left">
               {/* Free Tier */}
-              <div className="bg-black/20 border border-white/5 rounded-2xl p-6 space-y-4">
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
-                    {t("legal.landing.pricing_free_title", "Free Tier")}
-                  </h3>
-                  <p className="text-[10px] text-white/60">
-                    {t("legal.landing.pricing_free_desc", "Essential focus tools")}
-                  </p>
-                </div>
-                <div className="text-2xl font-extrabold text-white">
-                  $0.00
+              <div className="bg-black/20 border border-white/5 rounded-2xl p-6 flex flex-col justify-between h-full">
+                <div className="space-y-4 mb-4 flex-1">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-bold text-white font-mono uppercase tracking-wider">
+                      {t("legal.landing.pricing_free_title", "Free Tier")}
+                    </h3>
+                    <p className="text-[10px] text-white/60">
+                      {t("legal.landing.pricing_free_desc", "Essential focus tools")}
+                    </p>
+                  </div>
+                  <div className="text-2xl font-extrabold text-white">
+                    $0.00
+                  </div>
                 </div>
                 <Link
                   href="/app"
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/15 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all"
                 >
-                  Start Focusing
+                  {t("legal.landing.cta_start", "Start focusing")}
                 </Link>
               </div>
 
               {/* Pro Tier */}
-              <div className="bg-[#00e5ff]/5 border border-[#00e5ff]/20 rounded-2xl p-6 space-y-4 relative overflow-hidden">
+              <div className="bg-[#00e5ff]/5 border border-[#00e5ff]/20 rounded-2xl p-6 flex flex-col justify-between h-full relative overflow-hidden">
                 <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-[#00e5ff]/10 border border-[#00e5ff]/25 text-[8px] font-mono font-bold uppercase tracking-wider text-[#00e5ff]">
                   Pro
                 </div>
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-[#00e5ff] font-mono uppercase tracking-wider">
-                    {t("legal.landing.pricing_pro_title", "Pro Tier")}
-                  </h3>
-                  <p className="text-[10px] text-white/60">
-                    {t("legal.landing.pricing_pro_desc", "The full focus library")}
-                  </p>
-                </div>
-                <div className="space-y-0.5">
-                  <div className="text-2xl font-extrabold text-white">
-                    $9.99<span className="text-xs font-normal text-white/60"> / mo</span>
+                <div className="space-y-4 mb-4 flex-1">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-bold text-[#00e5ff] font-mono uppercase tracking-wider">
+                      {t("legal.landing.pricing_pro_title", "Pro Tier")}
+                    </h3>
+                    <p className="text-[10px] text-white/60">
+                      {t("legal.landing.pricing_pro_desc", "The full focus library")}
+                    </p>
                   </div>
-                  <div className="text-xs font-semibold text-emerald-400 font-mono">
-                    $59.99<span className="text-[10px] font-normal text-white/60"> / yr</span>
+                  <div className="space-y-0.5">
+                    <div className="text-2xl font-extrabold text-white">
+                      $9.99<span className="text-xs font-normal text-white/60"> / mo</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5 text-xs font-mono">
+                      <span className="font-medium text-white/35 line-through">$99</span>
+                      <span className="font-semibold text-emerald-400">$59.99</span>
+                      <span className="text-[10px] font-normal text-white/60">/ yr</span>
+                    </div>
                   </div>
                 </div>
                 <Link
                   href="/pricing"
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_10px_rgba(0,229,255,0.2)]"
                 >
-                  Go Pro
+                  {t("legal.landing.pricing_go_pro", "Go Pro")}
                 </Link>
               </div>
             </div>
@@ -522,14 +565,14 @@ export default function LandingPage() {
                 <Rocket className="h-4 w-4" />
               </span>
               <p className="text-xs text-white/60 leading-relaxed">
-                <strong className="text-white">Built for deep work.</strong> Designed to disappear. • Works offline • Cross-platform • Always improving
+                {t("legal.landing.roadmap_copy", "Built for deep work. Designed to disappear. Works offline. Cross-platform. Always improving")}
               </p>
             </div>
             <Link 
               href="/app"
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
             >
-              View Roadmap
+              {t("legal.landing.roadmap_cta", "View roadmap")}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -539,10 +582,10 @@ export default function LandingPage() {
         <footer className="w-full max-w-7xl mx-auto px-8 py-8 border-t border-white/[0.04] bg-transparent flex flex-col md:flex-row items-center justify-between gap-4 text-left">
           <div className="space-y-1">
             <div className="text-[10px] font-mono text-white/50">
-              © {new Date().getFullYear()} Flowstate. All rights reserved.
+              © {new Date().getFullYear()} Flowstate. {t("legal.landing.footer_rights", "All rights reserved.")}
             </div>
             <div className="text-[9px] font-mono text-white/20">
-              Operated by Virzy Guns.
+              {t("legal.landing.footer_operator", "Operated by Virzy Guns Production.")}
             </div>
           </div>
           

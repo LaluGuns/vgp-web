@@ -3,7 +3,12 @@
 import { useEffect } from "react";
 import { usePlayerStore } from "@/lib/stores/player-store";
 import { musicPlayer } from "@/lib/audio/hls-player";
-import { resolveAudioUrl, prefetchAudioUrls } from "@/lib/audio/signed-urls";
+import {
+  isWorkerConfigured,
+  prefetchAudioUrls,
+  refreshAudioUrl,
+  resolveAudioUrl,
+} from "@/lib/audio/signed-urls";
 import { genrePlaylist } from "@/lib/catalog";
 
 /**
@@ -19,6 +24,7 @@ export function AudioDriver() {
   const currentTrack = usePlayerStore((s) => s.currentTrack);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const volume = usePlayerStore((s) => s.volume);
+  const retryToken = usePlayerStore((s) => s.retryToken);
 
   // Register engine callbacks once.
   useEffect(() => {
@@ -54,16 +60,26 @@ export function AudioDriver() {
         ? playlist.tracks.slice(idx + 1, idx + 3).map((t) => t.hlsUrl)
         : [];
 
-      let url: string;
       try {
-        url = await resolveAudioUrl(currentTrack.hlsUrl, upNext);
+        const url = await resolveAudioUrl(currentTrack.hlsUrl, upNext);
+        if (cancelled) return;
+        try {
+          await musicPlayer.load(url);
+        } catch (firstError) {
+          if (cancelled || !isWorkerConfigured()) throw firstError;
+          const refreshedUrl = await refreshAudioUrl(currentTrack.hlsUrl, upNext);
+          if (cancelled) return;
+          await musicPlayer.load(refreshedUrl);
+        }
+        usePlayerStore.getState().setPlaybackError(false);
       } catch (err) {
-        console.error("Failed to resolve audio URL:", err);
-        if (!cancelled) usePlayerStore.getState().pause();
+        console.error("Failed to load audio after signed-URL refresh:", err);
+        if (!cancelled) {
+          usePlayerStore.getState().setPlaybackError(true);
+          usePlayerStore.getState().pause();
+        }
         return;
       }
-      if (cancelled) return;
-      await musicPlayer.load(url);
       if (cancelled) return;
       if (usePlayerStore.getState().isPlaying) {
         musicPlayer.play().catch(() => {});
@@ -74,11 +90,15 @@ export function AudioDriver() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTrack?.id]);
+  }, [currentTrack?.id, retryToken]);
 
   // Play/pause follows the store.
   useEffect(() => {
-    if (!currentTrack?.hlsUrl) return;
+    if (!currentTrack?.hlsUrl) {
+      musicPlayer.stop();
+      if (isPlaying) usePlayerStore.getState().pause();
+      return;
+    }
     if (isPlaying) musicPlayer.play().catch(() => {});
     else musicPlayer.pause();
     // eslint-disable-next-line react-hooks/exhaustive-deps

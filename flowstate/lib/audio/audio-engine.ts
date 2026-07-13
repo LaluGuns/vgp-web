@@ -54,7 +54,7 @@ export const ambientEngine = {
     }
   },
 
-  async play(id: string, url: string, volume: number) {
+  async play(id: string, url: string, volume: number): Promise<boolean> {
     let ctx: AudioContext;
     let master: GainNode;
     try {
@@ -62,16 +62,16 @@ export const ambientEngine = {
       master = getMaster();
     } catch (e) {
       console.error("[AudioEngine] Play failed: Web Audio context not available.", e);
-      return;
+      return false;
     }
 
     if (loops.has(id)) {
       this.setVolume(id, volume);
-      return;
+      return true;
     }
 
     // Guard against rapid re-trigger before the buffer finishes loading.
-    if (pending.has(id)) return;
+    if (pending.has(id)) return true;
     
     const currentRequest = ++requestCounter;
     pending.set(id, currentRequest);
@@ -82,7 +82,7 @@ export const ambientEngine = {
         bufferPromise = (async () => {
           const response = await fetch(url);
           if (!response.ok) {
-            throw new Error(`Failed to fetch audio: ${response.statusText}`);
+            throw new Error(`Failed to fetch audio (${response.status})`);
           }
           const arrayBuffer = await response.arrayBuffer();
           return await ctx.decodeAudioData(arrayBuffer);
@@ -100,7 +100,8 @@ export const ambientEngine = {
       const buffer = await bufferPromise;
 
       // If it was cancelled or a new request was made while loading, or already playing:
-      if (pending.get(id) !== currentRequest || loops.has(id)) return;
+      if (pending.get(id) !== currentRequest) return false;
+      if (loops.has(id)) return true;
 
       const source = ctx.createBufferSource();
       source.buffer = buffer;
@@ -115,8 +116,10 @@ export const ambientEngine = {
       source.start(0);
 
       loops.set(id, { source, gain, buffer });
+      return true;
     } catch (error) {
       console.error(`[AudioEngine] Error playing sound "${id}":`, error);
+      return false;
     } finally {
       // Only clear if this request is still the active pending request
       if (pending.get(id) === currentRequest) {

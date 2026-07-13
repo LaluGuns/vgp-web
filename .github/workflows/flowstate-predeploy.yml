@@ -1,0 +1,41 @@
+name: Flowstate predeploy
+
+on:
+  pull_request:
+    paths:
+      - "flowstate/**"
+      - ".github/workflows/flowstate-predeploy.yml"
+  push:
+    branches: [main]
+    paths:
+      - "flowstate/**"
+      - ".github/workflows/flowstate-predeploy.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flowstate-predeploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: flowstate
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: flowstate/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm run build
