@@ -42,7 +42,7 @@ export default {
       if (url.pathname === "/v1/urls" && request.method === "POST") {
         return await issueUrls(request, env, cors);
       }
-      if (url.pathname === "/v1/stream" && request.method === "GET") {
+      if (url.pathname === "/v1/stream" && (request.method === "GET" || request.method === "HEAD")) {
         return await stream(request, env, url, cors);
       }
       return json({ error: "not found" }, 404, cors);
@@ -341,7 +341,10 @@ async function stream(request, env, url, cors) {
     }
   }
 
-  const object = await env.AUDIO_BUCKET.get(key, r2Options);
+  const isHead = request.method === "HEAD";
+  const object = isHead
+    ? await env.AUDIO_BUCKET.head(key)
+    : await env.AUDIO_BUCKET.get(key, r2Options);
   if (!object) return json({ error: "not found" }, 404, cors);
 
   const size = object.size;
@@ -358,6 +361,11 @@ async function stream(request, env, url, cors) {
     "cache-control": "private, no-store",
     "x-content-type-options": "nosniff",
   });
+
+  if (isHead) {
+    headers.set("content-length", String(size));
+    return new Response(null, { status: 200, headers });
+  }
 
   if (r2Options) {
     const effectiveEnd = end !== null ? Math.min(end, size - 1) : size - 1;
