@@ -140,7 +140,9 @@ export default function LandingPage() {
     }
   };
 
-  if (!mounted) return null;
+  // NOTE: intentionally NOT gating the whole page on `mounted`. Locale now comes
+  // from the /[lang] route (identical on server + client), so the text content
+  // renders server-side for SEO. Only the client-only visuals below are deferred.
 
   // JSON-LD Structured Data for Search Engine Optimization
   const jsonLd = {
@@ -163,8 +165,9 @@ export default function LandingPage() {
     // The landing is brand territory — pin it to the glass identity so it never
     // inherits whatever in-app interface theme the visitor last picked.
     <div data-theme="glass" className="contents">
-      {/* WebGL Animated Cosmic Space Background (always the cosmic scene here) */}
-      <WebGLBackground forceScene />
+      {/* WebGL Animated Cosmic Space Background (always the cosmic scene here).
+          Client-only: deferred until mount so it never blocks or mismatches SSR. */}
+      {mounted && <WebGLBackground forceScene />}
 
       {/* SEO Schema Markup */}
       <script
@@ -286,9 +289,10 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Hero Right — a live, working machine (the product sells itself) */}
+          {/* Hero Right — a live, working machine (the product sells itself).
+              Client-only demo; the SEO-critical copy lives in the left column. */}
           <div className="md:col-span-7 relative w-full">
-            <HeroMachines />
+            {mounted && <HeroMachines />}
           </div>
 
         </main>
