@@ -4599,19 +4599,8 @@ const uiCompletionEn = {
   }
 } as const;
 
-const completionLabels: Record<Locale, Record<string, string>> = {
-  en: {},
-  id: { dashboard: "Kontrol dasbor", insights: "Statistik fokus", landing: "Pratinjau produk", legal: "Informasi layanan", pricing: "Informasi harga", shareModal: "Bagikan sesi" },
-  es: { dashboard: "Control del panel", insights: "Estadísticas de enfoque", landing: "Vista previa del producto", legal: "Información del servicio", pricing: "Información de precios", shareModal: "Compartir sesión" },
-  fr: { dashboard: "Commande du tableau", insights: "Statistiques de concentration", landing: "Aperçu du produit", legal: "Informations du service", pricing: "Informations tarifaires", shareModal: "Partager la session" },
-  de: { dashboard: "Dashboard-Steuerung", insights: "Fokusstatistik", landing: "Produktvorschau", legal: "Dienstinformationen", pricing: "Preisinformation", shareModal: "Sitzung teilen" },
-  ja: { dashboard: "ダッシュボード操作", insights: "集中統計", landing: "製品プレビュー", legal: "サービス情報", pricing: "料金情報", shareModal: "セッションを共有" },
-  ko: { dashboard: "대시보드 제어", insights: "집중 통계", landing: "제품 미리보기", legal: "서비스 정보", pricing: "요금 정보", shareModal: "세션 공유" },
-  zh: { dashboard: "仪表板控制", insights: "专注统计", landing: "产品预览", legal: "服务信息", pricing: "价格信息", shareModal: "分享专注时段" },
-  pt: { dashboard: "Controle do painel", insights: "Estatísticas de foco", landing: "Prévia do produto", legal: "Informações do serviço", pricing: "Informações de preços", shareModal: "Compartilhar sessão" },
-  ru: { dashboard: "Управление панелью", insights: "Статистика фокуса", landing: "Предпросмотр продукта", legal: "Информация о сервисе", pricing: "Информация о тарифах", shareModal: "Поделиться сессией" },
-  it: { dashboard: "Controllo dashboard", insights: "Statistiche di concentrazione", landing: "Anteprima prodotto", legal: "Informazioni sul servizio", pricing: "Informazioni sui prezzi", shareModal: "Condividi sessione" },
-};
+// (completionLabels removed: untranslated keys now fall back to the English
+// source string, not a generic "dashboard" label that collapsed every label.)
 
 const actionLabels: Record<Exclude<Locale, "en">, Record<string, string>> = {
   id: { close: "Tutup", copied: "Tersalin", download: "Unduh gambar", generating: "Membuat kartu...", landscape: "Lanskap", portrait: "Potret", sessions: "Sesi", status: "Status", completed: "Selesai", completion: "Penyelesaian", search: "Cari trek", pause: "Jeda", reset: "Atur ulang", skip: "Lewati", stop: "Berhenti", volume: "Volume" },
@@ -4632,8 +4621,12 @@ function mergeCompletion(target: any, source: any, locale: Locale, section = "")
       target[key] ??= {};
       mergeCompletion(target[key], value, locale, section || key);
     } else if (target[key] === undefined) {
+      // Keep common actions localized (actionLabels); for anything else that has
+      // no translation yet, fall back to the ENGLISH source string (standard i18n)
+      // instead of a generic section label — a missing key should read correctly
+      // in English, never collapse every label to "dashboard".
       if (locale === "en") target[key] = value;
-      else target[key] = actionLabels[locale]?.[key] ?? completionLabels[locale][section] ?? completionLabels[locale].dashboard;
+      else target[key] = actionLabels[locale]?.[key] ?? value;
     }
   }
 }
