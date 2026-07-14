@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { type Locale, LANGUAGES, DEFAULT_LOCALE, dictionaries } from "@/lib/translations/dictionaries";
 
 interface LocaleContextType {
@@ -28,6 +29,8 @@ export function LocaleProvider({
   initialLocale?: Locale;
 }) {
   const [locale, setLocaleState] = useState<Locale>(initialLocale ?? DEFAULT_LOCALE);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // The URL segment (/[lang]) is the source of truth — keep state in sync when
   // navigation changes the route locale.
@@ -52,11 +55,21 @@ export function LocaleProvider({
   }, [initialLocale]);
 
   const setLocale = (newLocale: Locale) => {
-    if (Object.keys(LANGUAGES).includes(newLocale)) {
-      setLocaleState(newLocale);
-      localStorage.setItem("flowstate-locale", newLocale);
-      document.cookie = `flowstate-locale=${newLocale}; path=/; max-age=31536000`;
+    if (!Object.keys(LANGUAGES).includes(newLocale)) return;
+    setLocaleState(newLocale);
+    localStorage.setItem("flowstate-locale", newLocale);
+    // Persist for the middleware so future visits resolve this language.
+    document.cookie = `flowstate-locale=${newLocale}; path=/; max-age=31536000`;
+
+    // The URL is the source of truth: swap the leading /[lang] segment so the
+    // language change is a real navigation (keeps content and URL in sync = SEO).
+    const segments = (pathname || "/").split("/");
+    if (Object.keys(LANGUAGES).includes(segments[1])) {
+      segments[1] = newLocale;
+    } else {
+      segments.splice(1, 0, newLocale);
     }
+    router.push(segments.join("/") || `/${newLocale}`);
   };
 
   const t = (key: string, fallback?: string): string => {
