@@ -223,12 +223,12 @@ export function AmbientMixer() {
             <div 
               key={sound.id} 
               onClick={locked ? () => {
-                showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?");
+                showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?", "sound");
               } : undefined}
               onKeyDown={locked ? (e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?");
+                  showUpgrade("pricing.upgradeToUnlock", "This sound is Pro-only. Go Pro to play the full library?", "sound");
                 }
               } : undefined}
               tabIndex={locked ? 0 : undefined}

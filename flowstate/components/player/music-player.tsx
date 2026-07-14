@@ -256,7 +256,7 @@ export function MusicPlayer() {
               onClick={() => {
                 musicPlayer.unlockAudio();
                 if (track.isPremium && !isPremium) {
-                  showUpgrade("pricing.upgradeToUnlockTrack", "This track is Pro-only. Go Pro to play the full library?");
+                  showUpgrade("pricing.upgradeToUnlockTrack", "This track is Pro-only. Go Pro to play the full library?", "track");
                   return;
                 }
                 play(track, genrePlaylist(activeGenre));

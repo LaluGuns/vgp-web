@@ -11,10 +11,15 @@ import posthog from "posthog-js";
  *
  * Event taxonomy (keep this list the single source of truth):
  *   $pageview            — route change (sent by AnalyticsProvider)
+ *   session_started      — focus block begun             { mode }
  *   session_completed    — focus block finished          { duration_min, mode }
  *   session_skipped      — focus block abandoned early   { duration_min, mode }
- *   checkout_started     — checkout POST fired           { interval, promo }
+ *   guest_gate_shown     — sign-in gate shown to guest   { count }
+ *   guest_sign_in_clicked— guest tapped sign-in in gate  { }
+ *   paywall_viewed       — upgrade prompt shown          { source }
  *   upgrade_clicked      — pricing CTA clicked           { source }
+ *   checkout_started     — checkout POST fired           { interval, promo }
+ *   checkout_redirected  — reached Lemon Squeezy checkout { interval }
  *   theme_changed        — interface theme switched      { theme }
  */
 
@@ -47,10 +52,15 @@ export function trackPageview(path: string): void {
 }
 
 type EventName =
+  | "session_started"
   | "session_completed"
   | "session_skipped"
-  | "checkout_started"
+  | "guest_gate_shown"
+  | "guest_sign_in_clicked"
+  | "paywall_viewed"
   | "upgrade_clicked"
+  | "checkout_started"
+  | "checkout_redirected"
   | "theme_changed";
 
 export function track(event: EventName, props?: Record<string, string | number | boolean>): void {

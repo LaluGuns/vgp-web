@@ -4,6 +4,7 @@ import "./globals.css";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AudioDriver } from "@/components/audio/audio-driver";
 import { UpgradePrompt } from "@/components/pricing/upgrade-prompt";
+import { GuestGate } from "@/components/auth/guest-gate";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 
@@ -80,6 +81,7 @@ export default function RootLayout({
         <LocaleProvider>
           <AudioDriver />
           <UpgradePrompt />
+          <GuestGate />
           <AnalyticsProvider />
           <ThemeProvider />
           {children}

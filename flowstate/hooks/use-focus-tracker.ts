@@ -6,6 +6,8 @@ import { useFocusSessionStore } from "@/lib/stores/focus-session-store";
 import { useTaskStore } from "@/lib/stores/task-store";
 import { persistSession, initSessionOutbox } from "@/lib/optimizer/persist";
 import { track } from "@/lib/analytics";
+import { useUser } from "@/hooks/use-user";
+import { useGuestGateStore } from "@/lib/stores/guest-gate-store";
 
 /**
  * Drives the Focus Optimizer:
@@ -25,6 +27,12 @@ export function useFocusTracker() {
 
   const prevStatus = useRef(status);
   const prevPhase = useRef(phase);
+
+  // Keep the latest auth state in a ref so the session-end effect reads it fresh
+  // (without adding it to the effect deps and re-running lifecycle logic).
+  const { user, configured } = useUser();
+  const authRef = useRef({ user, configured });
+  authRef.current = { user, configured };
 
   // ── Outbox: retry undelivered sessions on app start / reconnect ──
   useEffect(() => {
@@ -68,10 +76,14 @@ export function useFocusTracker() {
             mode: useTimerStore.getState().preset.mode,
           });
           // Increment completed Pomodoro count on active task if completed successfully
-          if (summary.completed) {
-            if (activeTaskId) {
-              useTaskStore.getState().incrementPomodoro(activeTaskId);
-            }
+          if (summary.completed && activeTaskId) {
+            useTaskStore.getState().incrementPomodoro(activeTaskId);
+          }
+          // Guest reached the break after a real focus block (>=60s finalized —
+          // completed OR skipped) → nudge sign-in at the break boundary, never
+          // mid-session. No-op when signed in or when auth isn't configured.
+          if (authRef.current.configured && !authRef.current.user) {
+            useGuestGateStore.getState().notifyGuestSessionComplete();
           }
         }
       }
@@ -79,6 +91,7 @@ export function useFocusTracker() {
 
     if (focusStarting) {
       fs.beginSession();
+      track("session_started", { mode: useTimerStore.getState().preset.mode });
     }
 
     // Pause during focus → record pause timestamp, and prompt for a context bookmark

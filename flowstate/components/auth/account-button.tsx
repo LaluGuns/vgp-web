@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { User as UserIcon, LogOut, Sparkles, ChevronDown, BarChart2 } from "lucide-react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useTranslation } from "@/hooks/use-translation";
+import { track } from "@/lib/analytics";
 
 export function AccountButton() {
   const { t } = useTranslation();
@@ -113,7 +114,7 @@ export function AccountButton() {
           </Link>
 
           {!isPremium && (
-            <Link href="/pricing" onClick={() => setOpen(false)}>
+            <Link href="/pricing" onClick={() => { track("upgrade_clicked", { source: "account_menu" }); setOpen(false); }}>
               <button className="w-full text-left px-3 py-2.5 rounded-xl text-xs text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/40 flex items-center gap-2.5 transition-all duration-200 mt-1">
                 <Sparkles className="h-3.5 w-3.5" /> {t("dashboard.upgradeToPro", "Upgrade to Pro")}
               </button>

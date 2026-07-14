@@ -93,6 +93,7 @@ export default function PricingPage() {
       }
 
       if (data.url) {
+        track("checkout_redirected", { interval });
         window.location.href = data.url;
         return;
       }

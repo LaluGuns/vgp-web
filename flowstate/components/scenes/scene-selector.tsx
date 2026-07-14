@@ -53,7 +53,7 @@ function InterfaceStyleSelector() {
               key={th.id}
               onClick={() => {
                 if (locked) {
-                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This environment is available with Flowstate Pro.");
+                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This environment is available with Flowstate Pro.", "environment");
                   return;
                 }
                 setTheme(th.id);
@@ -198,7 +198,7 @@ export function SceneSelector() {
               key={s.id}
               onClick={() => {
                 if (locked) {
-                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This theme is Pro-only. Go Pro to get all themes?");
+                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This theme is Pro-only. Go Pro to get all themes?", "scene");
                   return;
                 }
                 setScene(s.id);
