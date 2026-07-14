@@ -20,10 +20,26 @@ function resolveTranslation(dictionary: object, key: string): string | undefined
 
 const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 
-export function LocaleProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(DEFAULT_LOCALE);
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: {
+  children: React.ReactNode;
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale ?? DEFAULT_LOCALE);
 
+  // The URL segment (/[lang]) is the source of truth — keep state in sync when
+  // navigation changes the route locale.
   useEffect(() => {
+    if (initialLocale) setLocaleState(initialLocale);
+  }, [initialLocale]);
+
+  // Legacy client-only detection, used ONLY when no route locale was supplied
+  // (e.g. a page rendered outside the [lang] segment). With locale routing the
+  // middleware already resolved the language, so this stays dormant.
+  useEffect(() => {
+    if (initialLocale) return;
     const saved = localStorage.getItem("flowstate-locale") as Locale;
     if (saved && Object.keys(LANGUAGES).includes(saved)) {
       setLocaleState(saved);
@@ -33,7 +49,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
         setLocaleState(browserLang);
       }
     }
-  }, []);
+  }, [initialLocale]);
 
   const setLocale = (newLocale: Locale) => {
     if (Object.keys(LANGUAGES).includes(newLocale)) {

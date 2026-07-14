@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+import { notFound } from "next/navigation";
+import "../globals.css";
+import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/translations/dictionaries";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AudioDriver } from "@/components/audio/audio-driver";
 import { UpgradePrompt } from "@/components/pricing/upgrade-prompt";
@@ -20,42 +22,12 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Flowstate - Deep Work Music & Focus Timer",
-  description:
-    "Get in the zone with original lofi & synthwave music, Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers.",
-  metadataBase: new URL("https://flow.virzyguns.com"),
-  openGraph: {
-    title: "Flowstate — Get in the zone.",
-    description:
-      "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
-    siteName: "Flowstate",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Flowstate — Get in the zone.",
-    description:
-      "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
-  },
-  alternates: {
-    canonical: "/",
-    languages: {
-      en: "/?lang=en",
-      id: "/?lang=id",
-      es: "/?lang=es",
-      fr: "/?lang=fr",
-      de: "/?lang=de",
-      ja: "/?lang=ja",
-      ko: "/?lang=ko",
-      zh: "/?lang=zh",
-      pt: "/?lang=pt",
-      ru: "/?lang=ru",
-      it: "/?lang=it",
-    },
-  },
-  manifest: "/manifest.json",
-};
+const SITE = "https://flow.virzyguns.com";
+const LOCALES = Object.keys(LANGUAGES) as Locale[];
+
+export function generateStaticParams() {
+  return LOCALES.map((lang) => ({ lang }));
+}
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0f",
@@ -63,13 +35,59 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = (LOCALES as string[]).includes(lang) ? (lang as Locale) : DEFAULT_LOCALE;
+
+  // hreflang: every locale gets its own URL, plus x-default → English.
+  const languages: Record<string, string> = Object.fromEntries(
+    LOCALES.map((l) => [l, `/${l}`])
+  );
+  languages["x-default"] = `/${DEFAULT_LOCALE}`;
+
+  return {
+    metadataBase: new URL(SITE),
+    title: "Flowstate - Deep Work Music & Focus Timer",
+    description:
+      "Get in the zone with original lofi & synthwave music, Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers.",
+    openGraph: {
+      title: "Flowstate — Get in the zone.",
+      description:
+        "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
+      siteName: "Flowstate",
+      type: "website",
+      locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Flowstate — Get in the zone.",
+      description:
+        "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
+    },
+    alternates: {
+      canonical: `/${locale}`,
+      languages,
+    },
+    manifest: "/manifest.json",
+  };
+}
+
+export default async function LangLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ lang: string }>;
 }) {
+  const { lang } = await params;
+  if (!(LOCALES as string[]).includes(lang)) notFound();
+
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang={lang} className="dark" suppressHydrationWarning>
       <body className={`${sans.variable} ${mono.variable} font-sans`} suppressHydrationWarning>
         {/* Set the interface theme before first paint to prevent a flash of the
             default (glass) theme. Reads the zustand-persist JSON defensively. */}
@@ -78,7 +96,7 @@ export default function RootLayout({
             __html: `(function(){try{var v=["glass","studio","editorial","terminal"];var r=localStorage.getItem("flowstate-ui-theme");var t="glass";if(r){var s=JSON.parse(r);if(s&&s.state&&v.indexOf(s.state.theme)!==-1){t=s.state.theme;}}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();`,
           }}
         />
-        <LocaleProvider>
+        <LocaleProvider initialLocale={lang as Locale}>
           <AudioDriver />
           <UpgradePrompt />
           <GuestGate />
