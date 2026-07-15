@@ -100,7 +100,7 @@ export default function FlowstatePage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [tourStep, setTourStep] = useState<number | null>(null);
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
-  const [placement, setPlacement] = useState<"top" | "bottom" | "left" | "right" | "center">("center");
+  const [placement, setPlacement] = useState<"top" | "bottom" | "left" | "right" | "center" | "bottom-sheet">("center");
   const [activeTab, setActiveTab] = useState<"music" | "ambient" | "theme">("music");
   const [mobileTab, setMobileTab] = useState<"tasks" | "focus" | "atmosphere">("focus");
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -174,6 +174,21 @@ export default function FlowstatePage() {
     }
 
     const updatePosition = () => {
+      // On phones the floating tooltip can run off the bottom of the screen and
+      // clip the Next button. Pin it as a bottom sheet instead (the target still
+      // gets its highlight ring) so the controls are always visible.
+      if (window.innerWidth < 768) {
+        setPlacement("bottom-sheet");
+        setTooltipStyle({
+          position: "fixed",
+          left: "50%",
+          bottom: "16px",
+          transform: "translateX(-50%)",
+          zIndex: 9999,
+        });
+        return;
+      }
+
       let el: HTMLElement | null = null;
       if (currentStep.target === "timer") {
         el = document.getElementById("tour-timer");
@@ -1086,16 +1101,19 @@ export default function FlowstatePage() {
               style={tooltipStyle} 
               className="w-[calc(100vw-32px)] sm:w-[340px] p-5 rounded-2xl border border-[#00e5ff]/35 bg-[#0b1326]/95 shadow-[0_12px_40px_rgba(0,229,255,0.22)] space-y-4 text-left backdrop-blur-md transition-all duration-300 ease-out animate-in fade-in zoom-in-95 duration-200"
             >
-              {/* Arrow pointer */}
-              <div
-                className={cn(
-                  "absolute w-3 h-3 bg-[#0b1326] border-[#00e5ff]/35 rotate-45 pointer-events-none",
-                  placement === "top" && "bottom-[-7px] left-1/2 -translate-x-1/2 border-r border-b",
-                  placement === "bottom" && "top-[-7px] left-1/2 -translate-x-1/2 border-l border-t",
-                  placement === "left" && "right-[-7px] top-1/2 -translate-y-1/2 border-r border-t",
-                  placement === "right" && "left-[-7px] top-1/2 -translate-y-1/2 border-l border-b"
-                )}
-              />
+              {/* Arrow pointer — directional placements only; hidden for the
+                  mobile bottom sheet, which isn't anchored to the target. */}
+              {placement !== "bottom-sheet" && (
+                <div
+                  className={cn(
+                    "absolute w-3 h-3 bg-[#0b1326] border-[#00e5ff]/35 rotate-45 pointer-events-none",
+                    placement === "top" && "bottom-[-7px] left-1/2 -translate-x-1/2 border-r border-b",
+                    placement === "bottom" && "top-[-7px] left-1/2 -translate-x-1/2 border-l border-t",
+                    placement === "left" && "right-[-7px] top-1/2 -translate-y-1/2 border-r border-t",
+                    placement === "right" && "left-[-7px] top-1/2 -translate-y-1/2 border-l border-b"
+                  )}
+                />
+              )}
 
               <div className="flex justify-between items-start">
                 <span className="text-[9px] font-mono text-[#00e5ff] tracking-widest uppercase bg-[#00e5ff]/10 px-2.5 py-1 rounded-md font-bold">
