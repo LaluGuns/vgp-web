@@ -62,11 +62,15 @@ export async function POST(req: Request) {
   // Require a signed-in user so the subscription can be linked via the webhook.
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
-  if (authError) {
-    return NextResponse.json({ error: "auth_unavailable" }, { status: 503 });
-  }
+  // Check "no user" FIRST: a signed-out visitor makes getUser() return an
+  // AuthSessionMissingError, so testing authError first mislabeled guests as a
+  // 503 ("Payments not configured yet"). No session → 401 so the pricing page
+  // sends them to sign in; reserve 503 for a genuine auth-service failure.
   if (!user) {
     return NextResponse.json({ error: "login_required" }, { status: 401 });
+  }
+  if (authError) {
+    return NextResponse.json({ error: "auth_unavailable" }, { status: 503 });
   }
 
   const apiKey = process.env.LEMONSQUEEZY_API_KEY;

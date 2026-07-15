@@ -69,7 +69,8 @@ export default function PricingPage() {
         }),
       });
       if (res.status === 401) {
-        window.location.href = "/login?next=/pricing";
+        // Guest tapped Continue → send them to sign in, then straight back here.
+        window.location.href = `/${locale}/login?next=/${locale}/pricing`;
         return;
       }
 
