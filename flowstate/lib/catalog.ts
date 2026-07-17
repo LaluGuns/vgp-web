@@ -10,6 +10,10 @@ type CatalogEntry = {
   genre: string;
   category: string;
   durationS: number;
+  // Historical name: despite "hls", this holds a plain `.mp3` path today. No
+  // `.m3u8` manifests exist, so the hls.js branch in lib/audio/hls-player.ts
+  // (gated on `.m3u8`) never activates — playback uses the native <audio>
+  // path. Encrypted HLS remains a roadmap option (ADR-001, P0.5).
   hlsUrl: string;
   isPremium: boolean;
   source: string;

@@ -72,11 +72,29 @@ const SCENE_OVERLAYS: Record<string, string> = {
     "radial-gradient(circle at 15% 20%, rgba(90,28,4,0.8) 0%, transparent 60%), radial-gradient(circle at 85% 80%, rgba(70,20,0,0.75) 0%, transparent 60%), radial-gradient(circle at 50% 50%, rgba(48,14,4,0.9) 0%, transparent 70%)",
 };
 
+// UNMASKED_RENDERER_WEBGL values that mean the "GPU" is actually the CPU.
+// Booting a full-screen fragment shader on a software rasterizer melts the
+// main thread (PageSpeed bots run SwiftShader), so those clients get the
+// static CSS backdrop instead.
+const SOFTWARE_RENDERER_RE = /swiftshader|llvmpipe|software/i;
+
+// The shader is an organic low-frequency gradient — rendering at half of CSS
+// pixels (capped at 1x DPR) and letting CSS upscale is visually identical and
+// cuts fragment work by 4x+ on retina screens.
+const MAX_RENDER_SCALE = 0.5;
+
+// While idle (no timer running, no music) cap the loop at ~30fps.
+const IDLE_FRAME_MS = 33;
+
 export function WebGLBackground({ forceScene = false }: { forceScene?: boolean } = {}) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Set when the WebGL context reports a software rasterizer — we then skip
+  // the GL loop entirely and fall back to the static .theme-backdrop div.
+  const [softwareRenderer, setSoftwareRenderer] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -112,7 +130,7 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
   }, [scene, forceScene]);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || softwareRenderer) return;
     // Non-glass themes never boot the GL loop; when the user switches away
     // from glass this effect re-runs and the cleanup below tears the old
     // loop down (RAF cancelled, listeners removed, GL resources freed).
@@ -124,6 +142,22 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
       console.error("WebGL not supported");
       return;
     }
+
+    // Software rasterizer (SwiftShader/llvmpipe/…): don't boot the loop at
+    // all — release the context and swap in the static CSS backdrop.
+    const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+    if (debugInfo) {
+      const renderer = String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) ?? "");
+      if (SOFTWARE_RENDERER_RE.test(renderer)) {
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+        setSoftwareRenderer(true);
+        return;
+      }
+    }
+
+    const prefersReducedMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const vsSource = `
       attribute vec2 a_position;
@@ -263,8 +297,11 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
 
     const resize = () => {
       if (typeof window === "undefined") return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      // Render at (at most) half of 1x-DPR resolution; CSS keeps the canvas
+      // element itself full-screen and upscales the result.
+      const scale = Math.min(window.devicePixelRatio || 1, 1) * MAX_RENDER_SCALE;
+      canvas.width = Math.max(1, Math.round(window.innerWidth * scale));
+      canvas.height = Math.max(1, Math.round(window.innerHeight * scale));
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.uniform2f(uResolutionLoc, canvas.width, canvas.height);
     };
@@ -282,10 +319,7 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
     let accumulatedTime = 0.0;
     let currentIntensity = 0.0;
 
-    const animate = (timestamp: number) => {
-      const deltaTime = (timestamp - lastTime) * 0.001;
-      lastTime = timestamp;
-
+    const drawFrame = (deltaTime: number) => {
       // Smooth intensity transition
       const targetIntensity = isCurrentlyActiveRef.current ? 1.0 : 0.0;
       currentIntensity += (targetIntensity - currentIntensity) * 0.05;
@@ -316,19 +350,67 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
       }
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
 
+    const animate = (timestamp: number) => {
+      requestRef.current = requestAnimationFrame(animate);
+
+      const elapsed = timestamp - lastTime;
+      // Idle throttle: with nothing active, ~30fps is plenty for a slow
+      // ambient gradient — skip the frame if it arrived too early.
+      if (!isCurrentlyActiveRef.current && elapsed < IDLE_FRAME_MS) return;
+      lastTime = timestamp;
+
+      drawFrame(elapsed * 0.001);
+    };
+
+    // Loop gating: paused while the tab is hidden or the canvas is scrolled
+    // out of view, and never started under prefers-reduced-motion.
+    let pageHidden = document.hidden;
+    let offscreen = false;
+
+    const startLoop = () => {
+      if (prefersReducedMotion || pageHidden || offscreen) return;
+      if (requestRef.current !== null) return; // already running
+      lastTime = performance.now();
       requestRef.current = requestAnimationFrame(animate);
     };
 
-    requestRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      resizeObserver.disconnect();
-      if (requestRef.current) {
+    const stopLoop = () => {
+      if (requestRef.current !== null) {
         cancelAnimationFrame(requestRef.current);
         requestRef.current = null;
       }
+    };
+
+    const onVisibilityChange = () => {
+      pageHidden = document.hidden;
+      if (pageHidden) stopLoop();
+      else startLoop();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      const entry = entries[entries.length - 1];
+      offscreen = entry ? !entry.isIntersecting : false;
+      if (offscreen) stopLoop();
+      else startLoop();
+    });
+    intersectionObserver.observe(canvas);
+
+    if (prefersReducedMotion) {
+      // Reduced motion: paint a single static frame, no animation loop.
+      drawFrame(0);
+    } else {
+      startLoop();
+    }
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      resizeObserver.disconnect();
+      intersectionObserver.disconnect();
+      stopLoop();
 
       // Cleanup WebGL resources
       gl.deleteBuffer(positionBuffer);
@@ -339,20 +421,23 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
       // to a non-glass theme leaves no live GL context behind.
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [mounted, isGlass]);
+  }, [mounted, isGlass, softwareRenderer]);
 
   if (!mounted) return null;
 
-  // Non-glass skins: a static, per-theme CSS backdrop occupies the same
-  // fixed -z-20 stacking slot the canvas used. All styling lives in
-  // globals.css under [data-theme="…"] .theme-backdrop.
+  // Non-glass skins (and software-rendered GL, which never boots the loop):
+  // a static, per-theme CSS backdrop occupies the same fixed -z-20 stacking
+  // slot the canvas used. All styling lives in globals.css under
+  // [data-theme="…"] .theme-backdrop.
   return (
     <>
-      {!isGlass && <div className="theme-backdrop" aria-hidden />}
-      <canvas
-        ref={canvasRef}
-        className={`fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700 ${isGlass ? "opacity-100" : "opacity-45"}`}
-      />
+      {(!isGlass || softwareRenderer) && <div className="theme-backdrop" aria-hidden />}
+      {!softwareRenderer && (
+        <canvas
+          ref={canvasRef}
+          className={`fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700 ${isGlass ? "opacity-100" : "opacity-45"}`}
+        />
+      )}
       <div
         className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-70 mix-blend-screen transition-[background] duration-1000"
         style={{

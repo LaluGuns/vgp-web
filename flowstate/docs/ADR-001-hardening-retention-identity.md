@@ -62,6 +62,15 @@ proxy and OS loopback recording are NOT stoppable by any web player — full mit
 of casual in-flight capture would be encrypted HLS (AES-128), which is a follow-up
 option (P0.5) using the already-installed hls.js + `ffmpeg-static` packaging script.
 
+**Naming note (2026-07-17):** the `hlsUrl` field in `public/tracks/catalog.json`
+(and on the `Track` type) actually holds plain `.mp3` paths today — no `.m3u8`
+manifests exist, so the hls.js branch in `lib/audio/hls-player.ts` (gated on
+`url.endsWith(".m3u8")`) never activates and playback always uses the native
+`<audio>` element path. hls.js stays installed on purpose: it is the player half
+of the P0.5 encrypted-HLS option above. The unused signed-URL helper
+`lib/security/audio-url.ts` (zero callers, superseded by the Worker) was removed
+on the same date.
+
 ### P1 — Data integrity (at-least-once session persistence)
 
 - Client-side outbox: every finished session gets a client-generated UUID and is

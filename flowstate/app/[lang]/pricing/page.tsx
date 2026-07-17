@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { WebGLBackground } from "@/components/scenes/webgl-background";
-import { BILLING, type BillingInterval } from "@/lib/pricing";
+import { BILLING, type BillingInterval } from "@/lib/billing";
 import { ArrowLeft, Check, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/use-translation";
@@ -52,19 +52,15 @@ export default function PricingPage() {
     setError("");
     setLoading(true);
     try {
-      let amountUsdCents = interval === "yearly" ? 5999 : 999;
-      if (isPromoApplied) {
-        amountUsdCents = interval === "yearly" ? 2999 : 499;
-      }
-
       track("checkout_started", { interval, promo: isPromoApplied });
 
+      // Price is server-authoritative (lib/security/checkout.ts) — the client
+      // only sends the interval and promo code.
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           interval,
-          amountUsdCents,
           discountCode: isPromoApplied ? "FLOWBRO" : undefined
         }),
       });

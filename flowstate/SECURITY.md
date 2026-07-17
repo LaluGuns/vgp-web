@@ -22,8 +22,10 @@ Baseline security for the Flowstate focus SaaS. Keep this current as the app gro
 - Checkout requires Supabase auth, rejects cross-origin browser POSTs, ignores client-supplied prices, uses a configured HTTPS app origin in production, and only returns trusted Lemon Squeezy URLs.
 - Database failures return 5xx so Lemon Squeezy retries. Payment routes run on the Node runtime.
 
-### Audio protection (`lib/security/audio-url.ts`)
-- Short-lived **signed URLs** (HMAC of path+expiry) so premium tracks can't be hotlinked or URL-tampered. Verified at the CDN edge before bytes are served.
+### Audio protection (Cloudflare Worker, `worker/src/index.js`)
+- The app requests playback URLs via `POST /v1/urls` on the audio Worker; the Worker returns short-TTL **HMAC-signed URLs** (path + expiry) so tracks can't be hotlinked or URL-tampered.
+- Premium gating happens in the Worker: it validates the caller's Supabase JWT and checks `flowstate_profiles.plan` before signing URLs for Pro-only tracks.
+- Audio bytes are served by the Worker from a **private R2 bucket** (no public bucket access); the signature is verified at the edge before bytes are served.
 
 ### Rate limiting (`lib/security/rate-limit.ts`)
 - Fixed-window limiter with bounded-memory cleanup (no leak). Swappable `RateLimitStore` interface for a Redis/ioredis atomic backend in production.

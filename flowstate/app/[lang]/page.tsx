@@ -1,148 +1,35 @@
-"use client";
-
-import { useEffect, useState, useRef } from "react";
+// Server component: all SEO-critical copy (hero, features, pricing, footer)
+// renders as static HTML per locale. Interactive pieces are client islands in
+// components/landing/ (background, hero demo, soundtrack previewer, language
+// selector, side effects).
 import Link from "next/link";
-import { WebGLBackground } from "@/components/scenes/webgl-background";
-import { HeroMachines } from "@/components/landing/hero-machines";
-import { useTranslation } from "@/hooks/use-translation";
 import { cn } from "@/lib/utils";
-import { 
-  Clock, 
-  Music, 
-  Sliders, 
-  CheckSquare, 
-  Sparkles, 
-  ArrowRight, 
-  Globe, 
-  Compass,
+import {
+  Clock,
+  Music,
+  Sliders,
+  CheckSquare,
+  ArrowRight,
   ArrowUpRight,
-  Play,
-  Pause,
   Rocket,
   BarChart3,
-  Check
 } from "lucide-react";
 
-import { usePlayerStore } from "@/lib/stores/player-store";
-import { resolveAudioUrl } from "@/lib/audio/signed-urls";
+import { getTranslator, resolveLocale } from "@/lib/translations/server";
+import { LandingBackground } from "@/components/landing/landing-background";
+import { HeroMachinesIsland } from "@/components/landing/hero-machines-island";
+import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
+import { LandingLanguageSelector } from "@/components/landing/language-selector";
+import { LandingEffects } from "@/components/landing/landing-effects";
 
-const FEATURED_TRACKS = [
-  {
-    id: "city-pop/city-pop-001",
-    title: "Neon Drive",
-    genre: "City Pop",
-    url: "/tracks/city-pop/city-pop-001.mp3",
-    duration: "2:15"
-  },
-  {
-    id: "cyberpunk-jazz/cyberpunk-jazz-001",
-    title: "Neon Alley",
-    genre: "Cyberpunk Jazz",
-    url: "/tracks/cyberpunk-jazz/cyberpunk-jazz-001.mp3",
-    duration: "3:29"
-  },
-  {
-    id: "city-pop/city-pop-018",
-    title: "Velvet Cassette",
-    genre: "Lofi Chill",
-    url: "/tracks/city-pop/city-pop-018.mp3",
-    duration: "1:58"
-  }
-];
-
-export default function LandingPage() {
-  const { t, locale, setLocale } = useTranslation();
-  const [mounted, setMounted] = useState(false);
-  
-  const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
-  const [isPlayingPreview, setIsPlayingPreview] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const previewRequestId = useRef(0);
-
-  useEffect(() => {
-    setMounted(true);
-
-    // Pause any playing music tracks when visiting the landing page
-    const playerStore = usePlayerStore.getState();
-    if (playerStore.isPlaying) {
-      playerStore.pause();
-    }
-
-    return () => {
-      previewRequestId.current += 1;
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    document.title = t("metadata.title", "Flowstate - Deep Work Music & Focus Timer");
-  }, [locale, t]);
-
-  const clearPreviewState = (requestId: number) => {
-    if (previewRequestId.current !== requestId) return;
-    audioRef.current?.pause();
-    if (audioRef.current) audioRef.current.src = "";
-    audioRef.current = null;
-    setActiveTrackId(null);
-    setIsPlayingPreview(false);
-  };
-
-  const handlePlayPreview = async (trackId: string, path: string) => {
-    if (activeTrackId === trackId && audioRef.current) {
-      if (isPlayingPreview) {
-        audioRef.current?.pause();
-        setIsPlayingPreview(false);
-      } else {
-        try {
-          await audioRef.current.play();
-          setIsPlayingPreview(true);
-        } catch {
-          clearPreviewState(previewRequestId.current);
-        }
-      }
-      return;
-    }
-
-    const requestId = ++previewRequestId.current;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
-      audioRef.current = null;
-    }
-    setActiveTrackId(trackId);
-    setIsPlayingPreview(false);
-
-    try {
-      const resolvedUrl = await resolveAudioUrl(path);
-      if (previewRequestId.current !== requestId) return;
-
-      const audio = new Audio(resolvedUrl);
-      audio.volume = 0.4;
-      audio.onended = () => {
-        clearPreviewState(requestId);
-      };
-      audio.onerror = () => clearPreviewState(requestId);
-      audioRef.current = audio;
-
-      await audio.play();
-      if (previewRequestId.current !== requestId) {
-        audio.pause();
-        audio.src = "";
-        return;
-      }
-      setIsPlayingPreview(true);
-    } catch {
-      clearPreviewState(requestId);
-    }
-  };
-
-  // NOTE: intentionally NOT gating the whole page on `mounted`. Locale now comes
-  // from the /[lang] route (identical on server + client), so the text content
-  // renders server-side for SEO. Only the client-only visuals below are deferred.
+export default async function LandingPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = resolveLocale(lang);
+  const t = getTranslator(locale);
 
   // JSON-LD Structured Data for Search Engine Optimization
   const jsonLd = {
@@ -165,9 +52,12 @@ export default function LandingPage() {
     // The landing is brand territory — pin it to the glass identity so it never
     // inherits whatever in-app interface theme the visitor last picked.
     <div data-theme="glass" className="contents">
+      {/* Client-only side effects (pause in-app music, localized doc title) */}
+      <LandingEffects />
+
       {/* WebGL Animated Cosmic Space Background (always the cosmic scene here).
-          Client-only: deferred until mount so it never blocks or mismatches SSR. */}
-      {mounted && <WebGLBackground forceScene />}
+          Client island: static gradient placeholder until the browser is idle. */}
+      <LandingBackground />
 
       {/* SEO Schema Markup */}
       <script
@@ -183,7 +73,7 @@ export default function LandingPage() {
       </div>
 
       <div className="min-h-screen relative z-10 flex flex-col justify-between text-foreground bg-grid-pattern">
-        
+
         {/* Navigation Header */}
         <header className="w-full max-w-7xl mx-auto px-8 h-20 flex items-center justify-between border-b border-white/[0.04] bg-transparent">
           <div className="flex items-center gap-2 select-none shrink-0">
@@ -204,26 +94,7 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-4">
             {/* Language Selector Dropdown */}
-            <div className="flex items-center gap-1.5 bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl px-2 py-1.5 transition-all">
-              <Globe className="h-3 w-3 text-white/40" />
-              <select
-                value={locale}
-                onChange={(e) => setLocale(e.target.value as any)}
-                className="bg-transparent border-none text-[10px] font-mono text-white/60 hover:text-white focus:outline-none cursor-pointer pr-1"
-              >
-                <option value="en" className="bg-[#0b1326] text-white">EN</option>
-                <option value="id" className="bg-[#0b1326] text-white">ID</option>
-                <option value="es" className="bg-[#0b1326] text-white">ES</option>
-                <option value="fr" className="bg-[#0b1326] text-white">FR</option>
-                <option value="de" className="bg-[#0b1326] text-white">DE</option>
-                <option value="ja" className="bg-[#0b1326] text-white">JA</option>
-                <option value="ko" className="bg-[#0b1326] text-white">KO</option>
-                <option value="zh" className="bg-[#0b1326] text-white">ZH</option>
-                <option value="pt" className="bg-[#0b1326] text-white">PT</option>
-                <option value="ru" className="bg-[#0b1326] text-white">RU</option>
-                <option value="it" className="bg-[#0b1326] text-white">IT</option>
-              </select>
-            </div>
+            <LandingLanguageSelector />
 
             <Link
               href="/app"
@@ -236,17 +107,17 @@ export default function LandingPage() {
 
         {/* Hero Section */}
         <main className="flex-1 w-full max-w-7xl mx-auto px-8 py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-20 items-center">
-          
+
           {/* Hero Left Content */}
           <div className="md:col-span-5 space-y-8 text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-[10px] font-mono text-[#8b5cf6] uppercase tracking-widest">
               <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6]" /> {t("legal.landing.focus_environment", "Focus environment")}
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black text-white tracking-tight leading-[0.95]">
               {t("legal.landing.hero_title", "Music for focus. Built for deep work.")}
             </h1>
-            
+
             <p className="text-sm md:text-lg text-white/80 leading-relaxed max-w-xl">
               {t("legal.landing.hero_subtitle", "A focus timer with music actually made for it. Every track is produced in-house, with an ambient mixer to cover whatever's happening around you.")}
             </p>
@@ -292,7 +163,7 @@ export default function LandingPage() {
           {/* Hero Right — a live, working machine (the product sells itself).
               Client-only demo; the SEO-critical copy lives in the left column. */}
           <div className="md:col-span-7 relative w-full">
-            {mounted && <HeroMachines />}
+            <HeroMachinesIsland />
           </div>
 
         </main>
@@ -368,123 +239,7 @@ export default function LandingPage() {
 
         {/* Music Production Highlight Section */}
         <section id="soundtracks" className="w-full max-w-7xl mx-auto px-8 py-12 md:py-16 border-t border-white/[0.04] bg-transparent">
-          <div className="glass-card p-8 md:p-12 rounded-[32px] border border-white/5 max-w-5xl mx-auto relative overflow-hidden bg-white/[0.01]">
-            <div className="!absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
-              {/* Left Column: Visual Album / Vinyl Disk Cover */}
-              <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-white/[0.02] border border-white/5 rounded-2xl relative overflow-hidden group">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-cyan-500/10 opacity-40" />
-                
-                {/* Vinyl Record Visual */}
-                <div className="w-48 h-48 rounded-full bg-black border-4 border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.6)] relative flex items-center justify-center overflow-hidden mb-6 z-10">
-                  {/* Vinyl grooves */}
-                  <div className="absolute inset-2 rounded-full border border-white/[0.03] pointer-events-none" />
-                  <div className="absolute inset-6 rounded-full border border-white/[0.03] pointer-events-none" />
-                  <div className="absolute inset-10 rounded-full border border-white/[0.03] pointer-events-none" />
-                  <div className="absolute inset-14 rounded-full border border-white/[0.03] pointer-events-none" />
-                  
-                  {/* Center Sticker */}
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 to-cyan-500 flex items-center justify-center relative shadow-[0_0_15px_rgba(0,229,255,0.4)] ${isPlayingPreview ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-                    <img src="/icons/flowstate-logo.png" alt="Logo" className="w-8 h-8 object-contain opacity-80" />
-                    <div className="absolute w-3.5 h-3.5 rounded-full bg-[#0b1326] border border-white/10" />
-                  </div>
-                </div>
-
-                {/* Metadata & Wave visualizer */}
-                <div className="text-center z-10 w-full">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/5 text-[9px] font-mono text-muted-foreground uppercase tracking-widest mb-3">
-                    <Compass className="h-3 w-3" /> {t("legal.landing.feat_music_title", "Original soundtracks")}
-                  </span>
-                  
-                  <h3 className="text-sm font-bold text-white tracking-wide">
-                    {activeTrackId ? FEATURED_TRACKS.find(t => t.id === activeTrackId)?.title : t("legal.landing.producer_title", "Soundtracks by Virzy Guns Production")}
-                  </h3>
-                  <p className="text-[10px] font-mono text-muted-foreground/60 mt-1">
-                    {activeTrackId ? FEATURED_TRACKS.find(t => t.id === activeTrackId)?.genre : "Virzy Guns Production"}
-                  </p>
-
-                  {/* Equalizer Visualizer (animated only when playing) */}
-                  <div className="flex items-end justify-center gap-1 h-8 mt-5">
-                    {[...Array(12)].map((_, i) => (
-                      <span 
-                        key={i} 
-                        className="w-1 bg-[#00e5ff] rounded-full transition-all duration-300"
-                        style={{
-                          height: isPlayingPreview ? `${Math.floor(Math.random() * 80) + 20}%` : '15%',
-                          animation: isPlayingPreview ? `bounce-bar ${0.4 + (i * 0.05)}s ease-in-out infinite alternate` : 'none',
-                          transformOrigin: 'bottom'
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column: Playlist & Info */}
-              <div className="lg:col-span-7 space-y-6 text-left">
-                <div className="space-y-2">
-                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-                    {t("legal.landing.producer_title", "Soundtracks by Virzy Guns Production")}
-                  </h2>
-                  <p className="text-xs text-white/60 leading-relaxed">
-                    {t("legal.landing.producer_desc", "Every track in Flowstate is produced by one person — Virzy Guns Production. Not licensed, not pulled from a stock library. Written for focus, and only here.")}
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  {FEATURED_TRACKS.map((track) => {
-                    const isActive = activeTrackId === track.id;
-                    const isPlaying = isActive && isPlayingPreview;
-                    
-                    return (
-                      <div 
-                        key={track.id}
-                        className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all duration-300 ${
-                          isActive 
-                            ? "bg-white/[0.06] border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.3)]" 
-                            : "bg-white/[0.01] border-white/5 hover:bg-white/[0.03] hover:border-white/10"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => handlePlayPreview(track.id, track.url)}
-                            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                              isActive 
-                                ? "bg-[#00e5ff] text-black shadow-[0_0_12px_rgba(0,229,255,0.4)]" 
-                                : "bg-white/5 hover:bg-white/10 text-white"
-                            }`}
-                          >
-                            {isPlaying ? (
-                              <Pause className="h-3.5 w-3.5 fill-current" />
-                            ) : (
-                              <Play className="h-3.5 w-3.5 fill-current ml-0.5" />
-                            )}
-                          </button>
-                          
-                          <div>
-                            <p className={`text-xs font-bold transition-colors ${isActive ? "text-[#00e5ff]" : "text-white"}`}>
-                              {track.title}
-                            </p>
-                            <p className="text-[9px] font-mono text-white/40 mt-0.5">
-                              {track.genre}
-                            </p>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-white/40">{track.duration}</span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
-          </div>
+          <SoundtrackShowcase />
         </section>
 
         {/* Honest Pricing CTA Banner */}
@@ -572,11 +327,12 @@ export default function LandingPage() {
                 {t("legal.landing.roadmap_copy", "Built for deep work. Designed to disappear. Works offline. Cross-platform. Always improving")}
               </p>
             </div>
-            <Link 
+            {/* There is no roadmap page — the honest CTA here is the app itself. */}
+            <Link
               href="/app"
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
             >
-              {t("legal.landing.roadmap_cta", "View roadmap")}
+              {t("legal.landing.pricing_cta", "Start focusing")}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -592,7 +348,7 @@ export default function LandingPage() {
               {t("legal.landing.footer_operator", "Operated by Virzy Guns Production.")}
             </div>
           </div>
-          
+
           <div className="flex flex-wrap gap-4 text-[10px] font-mono text-muted-foreground/50">
             <Link href="/legal/terms" className="hover:text-white transition-colors">
               {t("dashboard.terms", "Terms")}

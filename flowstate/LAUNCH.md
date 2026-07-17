@@ -6,15 +6,16 @@ Status as of 2026-06-30. Code is launch-ready; the items below are the remaining
 ## 🔴 Blockers (must do before go-live)
 
 ### 1. Lemon Squeezy (payments) — account VERIFIED ✅ (2026-07-02)
-- [ ] Use product type **Subscription** (NOT "Pay what you want" — that type is
-      single-payment only, no interval). The pay-what-you-want behavior comes from the
-      app sending `custom_price` per checkout (LS applies it to every renewal); the $5
-      floor is enforced server-side in the checkout route.
+- [ ] Use product type **Subscription**. Pricing is **fixed and server-authoritative**:
+      the checkout route derives the amount from `PRICES_CENTS` in
+      `lib/security/checkout.ts` (monthly $9.99 / promo $4.99, yearly $59.99 /
+      promo $29.99, promo = `FLOWBRO`) and sends it to LS as `custom_price` per
+      checkout (LS applies it to every renewal). Client-sent amounts are ignored.
 - [ ] LS puts one billing interval per product, so create **TWO separate products**
       (adding a second interval as a "variant" in the UI is awkward — two products give
       the two variant IDs the code needs, cleaner):
-      - **Flowstate Pro Monthly** — Subscription, Standard pricing, **$9.99** (anchor;
-        the $5 floor lives in the app code), repeat every 1 Month.
+      - **Flowstate Pro Monthly** — Subscription, Standard pricing, **$9.99**,
+        repeat every 1 Month.
       - **Flowstate Pro Yearly** — Subscription, Standard pricing, **$59.99**, repeat every 1 Year.
       - Full click-by-click guide + final selling copy: `marketing/LEMONSQUEEZY-SETUP.md`.
       - Turn **free trial OFF** (core app is already free; a 14-day Pro trial then charge

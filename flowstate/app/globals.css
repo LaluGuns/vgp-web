@@ -711,6 +711,16 @@ a:active,
   pointer-events: none;
 }
 
+/* Dynamic Glass fallback: only used when WebGL reports a software rasterizer
+   (SwiftShader/llvmpipe) and the animated canvas is skipped entirely. A quiet
+   static take on the midnight cosmic scene. */
+[data-theme="glass"] .theme-backdrop {
+  background:
+    radial-gradient(90% 70% at 16% 18%, hsl(258 62% 17% / 0.85) 0%, transparent 62%),
+    radial-gradient(80% 65% at 84% 80%, hsl(214 72% 18% / 0.8) 0%, transparent 62%),
+    #04020f;
+}
+
 /* Analog Studio: deep espresso, a warm lamp glow off the top-left (like a
    desk lamp over a mixing console), soft horizontal vignette. */
 [data-theme="studio"] .theme-backdrop {
