@@ -49,43 +49,6 @@ async function getAccessToken(serviceAccountJson: any): Promise<string> {
     return data.access_token;
 }
 
-// ── Mock Data for Demo Setup Mode ───────────────────────────────────────
-function getDemoData() {
-    const today = new Date();
-    const chart = [];
-    
-    for (let i = 30; i >= 0; i--) {
-        const d = new Date(today);
-        d.setDate(today.getDate() - i - 3);
-        const randOffset = Math.sin(i / 3) * 10 + Math.random() * 5;
-        chart.push({
-            date: d.toISOString().split('T')[0],
-            clicks: Math.max(0, Math.round(15 + randOffset)),
-            impressions: Math.round(240 + randOffset * 15 + Math.random() * 50),
-        });
-    }
-
-    const queries = [
-        { query: 'healingwave beats', clicks: 120, impressions: 850, ctr: '14.1%', position: 1.2 },
-        { query: 'virzy guns production', clicks: 95, impressions: 520, ctr: '18.3%', position: 1.0 },
-        { query: 'buy spatial audio beats', clicks: 54, impressions: 940, ctr: '5.7%', position: 2.4 },
-        { query: 'cadenz app download', clicks: 42, impressions: 1100, ctr: '3.8%', position: 3.1 },
-        { query: 'bio resonance beats', clicks: 31, impressions: 450, ctr: '6.9%', position: 1.8 },
-        { query: 'free lofi beats download', clicks: 28, impressions: 2100, ctr: '1.3%', position: 8.4 },
-        { query: 'music producer bandung', clicks: 18, impressions: 320, ctr: '5.6%', position: 4.2 },
-        { query: 'vgp inner circle', clicks: 12, impressions: 85, ctr: '14.1%', position: 1.1 },
-    ];
-
-    return {
-        clicks: 400,
-        impressions: 6345,
-        ctr: '6.3%',
-        position: 2.9,
-        chart,
-        queries,
-    };
-}
-
 export async function GET(request: NextRequest) {
     try {
         const isAuthorized = await checkFounderSession(request);
@@ -96,11 +59,11 @@ export async function GET(request: NextRequest) {
         const credsEnv = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
         if (!credsEnv) {
-            // Return simulated demo data with connected: false
+            // Honest not-connected state — no placeholder metrics.
             return NextResponse.json({
                 success: true,
                 connected: false,
-                metrics: getDemoData(),
+                metrics: null,
                 clientEmail: null,
             });
         }

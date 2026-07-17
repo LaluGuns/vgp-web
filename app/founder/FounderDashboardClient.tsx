@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback, Fragment } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
     Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
     AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
-    Bell, User, LogOut, Globe, Eye, Upload
+    Bell, User, LogOut, Globe, Eye, Upload, Zap
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 import { renderCampaignEmail } from '@/lib/founder/campaign-email';
@@ -80,7 +81,22 @@ const tagLabelMap: Record<string, string> = {
     book_buyer: 'Book Buyer'
 };
 
-type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz';
+type TabKey = 'overview' | 'subscribers' | 'broadcasts' | 'seo' | 'cadenz' | 'flowstate';
+
+interface FlowstateDailyPoint { date: string; sessions: number; minutes: number; }
+interface FlowstateMetrics {
+    users: { total: number; free: number; paid: number; byPlan: Record<string, number> };
+    revenue: {
+        mrr: number;
+        monthlySubs: number;
+        yearlySubs: number;
+        lifetimeSubs: number;
+        monthlyPrice: number;
+        yearlyPrice: number;
+    };
+    sessions: { count7d: number; minutes7d: number; count30d: number; minutes30d: number; daily: FlowstateDailyPoint[] };
+    signups: { last24h: number; last7d: number };
+}
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -200,12 +216,12 @@ function GrowthChart({ data, loading }: { data: GrowthPoint[]; loading: boolean 
                 <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Subscriber growth over the last 30 days">
                     <defs>
                         <linearGradient id="growthFill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.28" />
-                            <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0" />
+                            <stop offset="0%" stopColor="var(--dash-accent, #7dd3fc)" stopOpacity="0.28" />
+                            <stop offset="100%" stopColor="var(--dash-accent, #7dd3fc)" stopOpacity="0" />
                         </linearGradient>
                     </defs>
                     <path d={area} fill="url(#growthFill)" />
-                    <path d={line} fill="none" stroke="#7dd3fc" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                    <path d={line} fill="none" stroke="var(--dash-accent, #7dd3fc)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
                     {hoverIdx !== null && (
                         <>
                             <line x1={pts[hoverIdx].x} y1={P / 2} x2={pts[hoverIdx].x} y2={H - P} stroke="rgba(125,211,252,0.4)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
@@ -239,17 +255,17 @@ function GrowthChart({ data, loading }: { data: GrowthPoint[]; loading: boolean 
     );
 }
 
-function SeoChart({ data }: { data: any[] }) {
-    if (!data || data.length < 2) return null;
+// Generic 30-day area trend — shared by the SEO (clicks) and Flowstate (focus minutes) tabs.
+function TrendChart({ values, ariaLabel, gradientId }: { values: number[]; ariaLabel: string; gradientId: string }) {
+    if (!values || values.length < 2) return null;
     const W = 600, H = 100, P = 12;
-    const clicks = data.map(d => d.clicks);
-    const maxClicks = Math.max(...clicks);
-    const minClicks = Math.min(...clicks);
-    const rangeClicks = maxClicks - minClicks || 1;
-    const xOf = (i: number) => P + (i * (W - 2 * P)) / (data.length - 1);
-    const yOf = (v: number) => H - P - ((v - minClicks) * (H - 2 * P)) / rangeClicks;
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    const range = max - min || 1;
+    const xOf = (i: number) => P + (i * (W - 2 * P)) / (values.length - 1);
+    const yOf = (v: number) => H - P - ((v - min) * (H - 2 * P)) / range;
 
-    const pts = data.map((d, i) => ({ x: xOf(i), y: yOf(d.clicks) }));
+    const pts = values.map((v, i) => ({ x: xOf(i), y: yOf(v) }));
     let line = `M ${pts[0].x} ${pts[0].y}`;
     for (let i = 1; i < pts.length; i++) {
         const cx = (pts[i - 1].x + pts[i].x) / 2;
@@ -259,15 +275,15 @@ function SeoChart({ data }: { data: any[] }) {
 
     return (
         <div className="relative mt-2 h-[100px]">
-            <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" role="img" aria-label="SEO Click growth over 30 days" preserveAspectRatio="none">
+            <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full" role="img" aria-label={ariaLabel} preserveAspectRatio="none">
                 <defs>
-                    <linearGradient id="seoFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                    <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="var(--dash-accent-strong, #38bdf8)" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="var(--dash-accent-strong, #38bdf8)" stopOpacity="0" />
                     </linearGradient>
                 </defs>
-                <path d={area} fill="url(#seoFill)" />
-                <path d={line} fill="none" stroke="#38bdf8" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+                <path d={area} fill={`url(#${gradientId})`} />
+                <path d={line} fill="none" stroke="var(--dash-accent-strong, #38bdf8)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
             </svg>
         </div>
     );
@@ -568,8 +584,6 @@ export default function FounderDashboardClient() {
 
     const { greeting, timeString } = getGreetingAndClock();
 
-    const [showNotifications, setShowNotifications] = useState(false);
-
     const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
     const [stats, setStats] = useState<Stats>({ total: 0, subscribed: 0, unsubscribed: 0, new24h: 0 });
     const [searchQuery, setSearchQuery] = useState('');
@@ -635,6 +649,11 @@ export default function FounderDashboardClient() {
     const [seoLoading, setSeoLoading] = useState(false);
     const [seoConnected, setSeoConnected] = useState<boolean | null>(null);
     const [seoClientEmail, setSeoClientEmail] = useState<string | null>(null);
+
+    // Flowstate states
+    const [flowstateMetrics, setFlowstateMetrics] = useState<FlowstateMetrics | null>(null);
+    const [flowstateConnected, setFlowstateConnected] = useState<boolean | null>(null);
+    const [flowstateLoading, setFlowstateLoading] = useState(false);
 
     const [toast, setToast] = useState<{
         message: string;
@@ -778,6 +797,23 @@ export default function FounderDashboardClient() {
         }
     }, []);
 
+    const loadFlowstate = useCallback(async () => {
+        setFlowstateLoading(true);
+        try {
+            const res = await fetch('/api/founder/flowstate');
+            if (res.ok) {
+                const data = await res.json();
+                setFlowstateConnected(data.connected);
+                setFlowstateMetrics(data.metrics);
+            }
+        } catch (err) {
+            console.error('Failed to load Flowstate metrics:', err);
+            setFlowstateConnected(false);
+        } finally {
+            setFlowstateLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         if (isAuthenticated) {
             loadSubscribers();
@@ -793,6 +829,7 @@ export default function FounderDashboardClient() {
                 loadMetrics();
                 loadHealth();
                 loadSeo();
+                loadFlowstate();
             }, 0);
             return () => clearTimeout(timer);
         }
@@ -1548,9 +1585,10 @@ export default function FounderDashboardClient() {
         { key: 'broadcasts', label: 'Broadcasts', Icon: Send },
         { key: 'seo', label: 'SEO', Icon: Search },
         { key: 'cadenz', label: 'CADENZ', Icon: Smartphone },
+        { key: 'flowstate', label: 'Flowstate', Icon: Zap },
     ];
 
-    const refreshAll = () => { loadSubscribers(); loadCampaigns(); loadMetrics(); loadHealth(); loadPerformance(); loadSeo(); };
+    const refreshAll = () => { loadSubscribers(); loadCampaigns(); loadMetrics(); loadHealth(); loadPerformance(); loadSeo(); loadFlowstate(); };
 
     // ── Dashboard ───────────────────────────────────────────────────────
     return (
@@ -1560,7 +1598,7 @@ export default function FounderDashboardClient() {
                 <div className="flex flex-col items-center gap-8 w-full">
                     {/* Logo/Icon */}
                     <div className="h-10 w-10 flex items-center justify-center">
-                        <img src="/branding/logo-tg.png" alt="VGP Logo" className="h-full w-full object-contain opacity-90" />
+                        <Image src="/branding/logo-tg.png" alt="VGP Logo" width={40} height={40} className="h-full w-full object-contain opacity-90" />
                     </div>
 
                     {/* Navigation Items */}
@@ -1584,7 +1622,7 @@ export default function FounderDashboardClient() {
                                     </span>
                                     {/* Active border bar */}
                                     {isActive && (
-                                        <span className="absolute -left-1 h-5 w-1 rounded-r-full bg-cyan-400" />
+                                        <span className="absolute -left-1 h-5 w-1 rounded-r-full bg-sky-400" />
                                     )}
                                 </button>
                             );
@@ -1632,13 +1670,6 @@ export default function FounderDashboardClient() {
                         <Globe className="h-4 w-4" />
                     </a>
                     <button
-                        onClick={refreshAll}
-                        title="Refresh all data"
-                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-white/50 transition-all hover:bg-white/[0.06] hover:text-white hover:scale-105"
-                    >
-                        <RefreshCw className="h-4 w-4" />
-                    </button>
-                    <button
                         onClick={handleLogout}
                         title="Sign out"
                         className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.02] text-rose-400/70 transition-all hover:bg-rose-500/10 hover:text-rose-300 hover:scale-105"
@@ -1670,64 +1701,9 @@ export default function FounderDashboardClient() {
                             >
                                 <RefreshCw className="h-4 w-4" />
                             </button>
-                            <div className="relative">
-                                <button 
-                                    onClick={() => setShowNotifications(!showNotifications)}
-                                    className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]"
-                                >
-                                    <Bell className="h-4 w-4" />
-                                    {/* Show warning/alert dot if queue failed or campaigns sending */}
-                                    {(((health?.queue.failed ?? 0) > 0) || campaigns.some(c => ['sending', 'queued'].includes(c.status))) && (
-                                        <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                                    )}
-                                </button>
-                                {showNotifications && (
-                                    <div className="absolute right-0 mt-2.5 w-80 rounded-xl border border-white/[0.08] bg-[#07090e]/95 backdrop-blur-xl p-4 shadow-2xl z-50 text-left">
-                                        <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
-                                            <span className="text-xs font-semibold uppercase tracking-wider text-sky-200">Alerts & Logs</span>
-                                            <button onClick={() => setShowNotifications(false)} className="text-white/30 hover:text-white text-2xs">&times;</button>
-                                        </div>
-                                        <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                                            {/* Campaign logs */}
-                                            {campaigns.filter(c => ['sending', 'queued'].includes(c.status)).map(c => (
-                                                <div key={c.id} className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="font-semibold text-white/90">Campaign dispatching</p>
-                                                        <p className="text-white/50 text-2xs mt-0.5 truncate">{c.subject}</p>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                            {/* Queue issues */}
-                                            {health && health.queue.failed > 0 && (
-                                                <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
-                                                    <div>
-                                                        <p className="font-semibold text-rose-300">Delivery Alert</p>
-                                                        <p className="text-white/50 text-2xs mt-0.5">{health.queue.failed} failures in dispatch queue.</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {/* Success dispatches */}
-                                            {health && health.queue.sentToday > 0 && (
-                                                <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
-                                                    <div>
-                                                        <p className="font-semibold text-cyan-300">Queue Active</p>
-                                                        <p className="text-white/50 text-2xs mt-0.5">{health.queue.sentToday} emails sent successfully today.</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                            {/* Fallback */}
-                                            {(!health || (health.queue.failed === 0 && health.queue.sentToday === 0 && !campaigns.some(c => ['sending', 'queued'].includes(c.status)))) && (
-                                                <p className="text-2xs text-white/40 text-center py-2">All services operational. No active alerts.</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                            <NotificationBell campaigns={campaigns} health={health} />
                             <div className="h-8 w-8 flex items-center justify-center">
-                                <img src="/branding/logo-tg.png" alt="VGP Admin" className="h-full w-full object-contain opacity-90" />
+                                <Image src="/branding/logo-tg.png" alt="VGP Admin" width={32} height={32} className="h-full w-full object-contain opacity-90" />
                             </div>
                         </div>
                     </div>
@@ -1782,7 +1758,7 @@ export default function FounderDashboardClient() {
                             <StatCard label="New · 24h" value={`+${stats.new24h}`} Icon={TrendingUp} accent="text-emerald-300" />
                         </motion.div>
 
-                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                             <div className="lg:col-span-2"><GrowthChart data={growth} loading={metricsLoading} /></div>
                             <PerformancePanel perf={performance} loading={auditLoading} onRun={() => loadPerformance(true)} />
                         </div>
@@ -1793,7 +1769,7 @@ export default function FounderDashboardClient() {
 
                 {/* SUBSCRIBERS */}
                 {activeTab === 'subscribers' && (
-                    <div className="space-y-5">
+                    <div className="space-y-6">
                         {/* Audience Sub-Tabs */}
                         <div className="flex items-center gap-1.5 rounded-full border border-white/[0.07] bg-white/[0.02] p-1 w-fit">
                             {([
@@ -2294,54 +2270,39 @@ export default function FounderDashboardClient() {
                 {/* SEO Tab — Google Search Console integration */}
                 {activeTab === 'seo' && (
                     <div className="space-y-6">
-                        {seoLoading && !seoMetrics ? (
+                        {seoLoading && seoConnected === null ? (
                             <div className="flex justify-center items-center py-20">
                                 <Loader2 className="h-8 w-8 animate-spin text-sky-300" />
                             </div>
-                        ) : !seoMetrics ? (
-                            <div className="liquid-glass-strong rounded-lg p-8 text-center">
-                                <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-amber-500/80" />
-                                <h2 className="font-display text-2xl font-semibold text-white">SEO Telemetry Unavailable</h2>
-                                <p className="mx-auto mt-2 max-w-md text-sm text-white/55">
-                                    Could not connect to Google Search Console. Check your backend logs.
-                                </p>
-                            </div>
+                        ) : !seoConnected || !seoMetrics ? (
+                            <>
+                                {/* Honest not-connected state — no simulated numbers */}
+                                <div className="liquid-glass-strong rounded-lg p-8 text-center">
+                                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100"><Search className="h-6 w-6" /></div>
+                                    <h2 className="font-display text-2xl font-semibold text-white">Search Console telemetry</h2>
+                                    <p className="mx-auto mt-2 max-w-md text-sm text-white/55">
+                                        Not connected yet. This panel stays empty on purpose — no placeholder numbers. It lights up once <code className="text-sky-200">GOOGLE_SERVICE_ACCOUNT_JSON</code> is configured and Google Search Console starts answering.
+                                    </p>
+                                </div>
+                                <div className="liquid-glass rounded-lg p-6">
+                                    <Eyebrow>Integration path</Eyebrow>
+                                    <ol className="mt-4 list-decimal list-inside text-[11px] space-y-2 text-white/50 leading-relaxed pl-1">
+                                        <li>Go to the <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Cloud Console</a> and enable the <strong>Google Search Console API</strong>.</li>
+                                        <li>Create a <strong>Service Account</strong> in IAM & Admin &rarr; Service Accounts. Generate and download a key in <strong>JSON</strong> format.</li>
+                                        <li>Go to your <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Search Console</a>, select the property <strong>sc-domain:virzyguns.com</strong>.</li>
+                                        <li>Under Settings &rarr; Users and Permissions, add the Service Account's email (e.g., <code className="text-sky-200">my-account@...gserviceaccount.com</code>) as a user with <strong>Restricted (Read-only)</strong> permissions.</li>
+                                        <li>Add the environment variable <strong>`GOOGLE_SERVICE_ACCOUNT_JSON`</strong> in Vercel. Set its value to the exact raw text of the downloaded JSON key file, then redeploy.</li>
+                                    </ol>
+                                </div>
+                            </>
                         ) : (
                             <>
-                                {/* Banner for Demo Mode / Setup Guide */}
-                                {!seoConnected && (
-                                    <div className="liquid-glass-strong border border-amber-500/20 bg-amber-500/5 rounded-lg p-6">
-                                        <div className="flex items-start gap-4">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300">
-                                                <AlertTriangle className="h-5 w-5" />
-                                            </div>
-                                            <div className="flex-1 space-y-3">
-                                                <div>
-                                                    <h3 className="font-display text-base font-semibold text-amber-200">Running in Setup / Demo Mode</h3>
-                                                    <p className="mt-1 text-xs text-white/55 leading-relaxed">
-                                                        Showing simulated data for <strong className="text-white">virzyguns.com</strong>. Connect your real Google Search Console property by following these steps:
-                                                    </p>
-                                                </div>
-                                                <ol className="list-decimal list-inside text-[11px] space-y-2 text-white/50 leading-relaxed pl-1">
-                                                    <li>Go to the <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Cloud Console</a> and enable the <strong>Google Search Console API</strong>.</li>
-                                                    <li>Create a <strong>Service Account</strong> in IAM & Admin &rarr; Service Accounts. Generate and download a key in <strong>JSON</strong> format.</li>
-                                                    <li>Go to your <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Search Console</a>, select the property <strong>sc-domain:virzyguns.com</strong>.</li>
-                                                    <li>Under Settings &rarr; Users and Permissions, add the Service Account's email (e.g., <code className="text-sky-200">my-account@...gserviceaccount.com</code>) as a user with <strong>Restricted (Read-only)</strong> permissions.</li>
-                                                    <li>Add the environment variable <strong>`GOOGLE_SERVICE_ACCOUNT_JSON`</strong> in Vercel. Set its value to the exact raw text of the downloaded JSON key file, then redeploy.</li>
-                                                </ol>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {seoConnected && (
-                                    <div className="liquid-glass border border-emerald-500/20 bg-emerald-500/5 rounded-lg p-4 flex items-center gap-3">
-                                        <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
-                                        <p className="text-xs text-emerald-200">
-                                            Connected successfully via Service Account: <strong className="text-white">{seoClientEmail}</strong>
-                                        </p>
-                                    </div>
-                                )}
+                                <div className="liquid-glass border border-emerald-500/20 bg-emerald-500/5 rounded-lg p-4 flex items-center gap-3">
+                                    <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+                                    <p className="text-xs text-emerald-200">
+                                        Connected successfully via Service Account: <strong className="text-white">{seoClientEmail}</strong>
+                                    </p>
+                                </div>
 
                                 {/* Key Metrics Cards */}
                                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -2354,7 +2315,7 @@ export default function FounderDashboardClient() {
                                 {/* Graph / Chart */}
                                 <div className="liquid-glass rounded-lg p-6">
                                     <Eyebrow>Organic search performance (30 days)</Eyebrow>
-                                    <SeoChart data={seoMetrics.chart} />
+                                    <TrendChart values={(seoMetrics.chart || []).map((d: any) => d.clicks)} ariaLabel="SEO click growth over 30 days" gradientId="seoFill" />
                                     <div className="mt-3 flex justify-between text-[10px] text-white/35">
                                         <span>30 days ago</span>
                                         <span>Clicks Trend</span>
@@ -2399,7 +2360,7 @@ export default function FounderDashboardClient() {
 
                 {/* CADENZ — honest not-yet-connected module */}
                 {activeTab === 'cadenz' && (
-                    <div className="space-y-5">
+                    <div className="space-y-6">
                         <div className="liquid-glass-strong rounded-lg p-8 text-center">
                             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100"><Smartphone className="h-6 w-6" /></div>
                             <h2 className="font-display text-2xl font-semibold text-white">CADENZ telemetry</h2>
@@ -2427,6 +2388,92 @@ export default function FounderDashboardClient() {
                                 CADENZ already runs on Supabase + CloudFront. To surface metrics here, the app writes events to a Supabase table (e.g. <code className="text-sky-200">cadenz_events</code>); this dashboard reads aggregates from a <code className="text-sky-200">/api/founder/cadenz</code> route. Until that emits real rows, nothing is shown.
                             </p>
                         </div>
+                    </div>
+                )}
+
+                {/* FLOWSTATE — deep-work SaaS metrics */}
+                {activeTab === 'flowstate' && (
+                    <div className="space-y-6">
+                        {flowstateLoading && flowstateConnected === null ? (
+                            <div className="flex justify-center items-center py-20">
+                                <Loader2 className="h-8 w-8 animate-spin text-sky-300" />
+                            </div>
+                        ) : !flowstateConnected || !flowstateMetrics ? (
+                            <>
+                                {/* Honest not-connected state — no placeholder numbers */}
+                                <div className="liquid-glass-strong rounded-lg p-8 text-center">
+                                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100"><Zap className="h-6 w-6" /></div>
+                                    <h2 className="font-display text-2xl font-semibold text-white">Flowstate metrics</h2>
+                                    <p className="mx-auto mt-2 max-w-md text-sm text-white/55">
+                                        Awaiting connection. This panel stays empty on purpose — no placeholder numbers. It lights up once the Flowstate database is reachable.
+                                    </p>
+                                </div>
+                                <div className="liquid-glass rounded-lg p-6">
+                                    <Eyebrow>Integration path</Eyebrow>
+                                    <p className="mt-3 text-xs leading-relaxed text-white/55">
+                                        Flowstate runs on its own Supabase project (<code className="text-sky-200">flowstate_*</code> tables). Set the environment variable <code className="text-sky-200">FLOWSTATE_DATABASE_URL</code> to that project&apos;s pooler connection string; this dashboard then reads users, MRR, and focus-session aggregates via <code className="text-sky-200">/api/founder/flowstate</code>. Read-only — nothing is written.
+                                    </p>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <motion.div variants={staggerParent} initial="hidden" animate="visible" className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+                                    <StatCard label="Paid users" value={flowstateMetrics.users.paid} Icon={Users} accent="text-sky-300" />
+                                    <StatCard label="MRR" value={`$${flowstateMetrics.revenue.mrr.toFixed(2)}`} Icon={TrendingUp} accent="text-emerald-300" />
+                                    <StatCard label="Sessions · 30d" value={flowstateMetrics.sessions.count30d} Icon={Zap} />
+                                    <StatCard label="Focus minutes · 30d" value={flowstateMetrics.sessions.minutes30d.toLocaleString()} Icon={Gauge} />
+                                    <StatCard label="Signups · 24h" value={`+${flowstateMetrics.signups.last24h}`} Icon={Plus} accent="text-emerald-300" />
+                                </motion.div>
+
+                                <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                                    <div className="liquid-glass rounded-lg p-6 lg:col-span-2">
+                                        <div className="flex items-end justify-between">
+                                            <Eyebrow>Measured focus minutes (30 days)</Eyebrow>
+                                            <span className="text-[10px] uppercase tracking-wider text-white/35">
+                                                {flowstateMetrics.sessions.count7d} sessions · {flowstateMetrics.sessions.minutes7d.toLocaleString()} min last 7d
+                                            </span>
+                                        </div>
+                                        <TrendChart
+                                            values={flowstateMetrics.sessions.daily.map((d) => d.minutes)}
+                                            ariaLabel="Daily measured focus minutes over the last 30 days"
+                                            gradientId="flowstateFill"
+                                        />
+                                        <div className="mt-3 flex justify-between text-[10px] text-white/35">
+                                            <span>{flowstateMetrics.sessions.daily.length > 0 ? fmtDate(flowstateMetrics.sessions.daily[0].date) : '30 days ago'}</span>
+                                            <span>Minutes / day</span>
+                                            <span>Today</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="liquid-glass rounded-lg p-6">
+                                        <Eyebrow>Plan breakdown</Eyebrow>
+                                        <div className="mt-4 space-y-3 text-sm">
+                                            {[
+                                                ['Free', flowstateMetrics.users.free, 'text-white/70'],
+                                                ['Monthly', flowstateMetrics.revenue.monthlySubs, 'text-sky-300'],
+                                                ['Yearly', flowstateMetrics.revenue.yearlySubs, 'text-sky-200'],
+                                                ['Lifetime', flowstateMetrics.revenue.lifetimeSubs, 'text-emerald-300'],
+                                            ].map(([label, value, cls]) => (
+                                                <div key={label as string} className="flex items-center justify-between border-b border-white/5 pb-2">
+                                                    <span className="text-xs text-white/55">{label}</span>
+                                                    <span className={`font-display font-semibold ${cls}`}>{value}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <p className="mt-4 text-[10px] leading-relaxed text-white/35">
+                                            MRR = monthly × ${flowstateMetrics.revenue.monthlyPrice} + yearly × ${flowstateMetrics.revenue.yearlyPrice}/12. Active + trialing subscriptions only; lifetime excluded from MRR.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                                    <StatCard label="Total users" value={flowstateMetrics.users.total} Icon={Users} />
+                                    <StatCard label="Free users" value={flowstateMetrics.users.free} Icon={User} accent="text-white/70" />
+                                    <StatCard label="Signups · 7d" value={`+${flowstateMetrics.signups.last7d}`} Icon={TrendingUp} accent="text-emerald-300" />
+                                    <StatCard label="Sessions · 7d" value={flowstateMetrics.sessions.count7d} Icon={Zap} />
+                                </div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
@@ -2870,7 +2917,7 @@ export default function FounderDashboardClient() {
             {/* ── Toast ── */}
             {toast && (
                 <div className="fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 px-4">
-                    <div className={`flex items-center gap-3.5 rounded-full border px-5 py-3 text-sm font-medium backdrop-blur-xl ${toast.type === 'success' ? 'border-sky-500/35 bg-[#0b1b2b]/95 text-sky-200 shadow-[0_0_20px_rgba(0,229,255,0.15)]' : 'border-rose-500/25 bg-rose-500/15 text-rose-200'}`}>
+                    <div className={`flex items-center gap-3.5 rounded-full border px-5 py-3 text-sm font-medium backdrop-blur-xl ${toast.type === 'success' ? 'border-sky-500/35 bg-[#0b1b2b]/95 text-sky-200 shadow-[0_0_20px_rgba(56,189,248,0.18)]' : 'border-rose-500/25 bg-rose-500/15 text-rose-200'}`}>
                         {toast.type === 'success' ? <CheckCircle2 className="h-4 w-4 text-sky-400" /> : <AlertTriangle className="h-4 w-4" />}
                         <span>{toast.message}</span>
                         {toast.action && (
@@ -2889,6 +2936,72 @@ export default function FounderDashboardClient() {
             )}
             </div>
         </main>
+    );
+}
+
+// ── Header notification bell ───────────────────────────────────────────
+function NotificationBell({ campaigns, health }: { campaigns: Campaign[]; health: HealthState | null }) {
+    const [open, setOpen] = useState(false);
+    const activeCampaigns = campaigns.filter(c => ['sending', 'queued'].includes(c.status));
+    const hasAlert = ((health?.queue.failed ?? 0) > 0) || activeCampaigns.length > 0;
+
+    return (
+        <div className="relative">
+            <button
+                onClick={() => setOpen(!open)}
+                className="relative flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-white/70 transition hover:text-white hover:bg-white/[0.06]"
+            >
+                <Bell className="h-4 w-4" />
+                {/* Show warning/alert dot if queue failed or campaigns sending */}
+                {hasAlert && (
+                    <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
+                )}
+            </button>
+            {open && (
+                <div className="absolute right-0 mt-2.5 w-80 rounded-lg border border-white/[0.08] bg-[#07090e]/95 backdrop-blur-xl p-4 shadow-2xl z-50 text-left">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-sky-200">Alerts & Logs</span>
+                        <button onClick={() => setOpen(false)} className="text-white/30 hover:text-white text-2xs">&times;</button>
+                    </div>
+                    <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                        {/* Campaign logs */}
+                        {activeCampaigns.map(c => (
+                            <div key={c.id} className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                                <div className="min-w-0 flex-1">
+                                    <p className="font-semibold text-white/90">Campaign dispatching</p>
+                                    <p className="text-white/50 text-2xs mt-0.5 truncate">{c.subject}</p>
+                                </div>
+                            </div>
+                        ))}
+                        {/* Queue issues */}
+                        {health && health.queue.failed > 0 && (
+                            <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-rose-400 mt-1.5 shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-rose-300">Delivery Alert</p>
+                                    <p className="text-white/50 text-2xs mt-0.5">{health.queue.failed} failures in dispatch queue.</p>
+                                </div>
+                            </div>
+                        )}
+                        {/* Success dispatches */}
+                        {health && health.queue.sentToday > 0 && (
+                            <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-sky-400 mt-1.5 shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-sky-300">Queue Active</p>
+                                    <p className="text-white/50 text-2xs mt-0.5">{health.queue.sentToday} emails sent successfully today.</p>
+                                </div>
+                            </div>
+                        )}
+                        {/* Fallback */}
+                        {(!health || (health.queue.failed === 0 && health.queue.sentToday === 0 && activeCampaigns.length === 0)) && (
+                            <p className="text-2xs text-white/40 text-center py-2">All services operational. No active alerts.</p>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 

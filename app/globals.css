@@ -19,6 +19,9 @@
   --text-muted-editorial: #a1a1aa;
   --text-soft-editorial: #71717a;
   --editorial-cyan: #7dd3fc;
+  /* Founder dashboard accent — sky family (do not use marketing --cyan here) */
+  --dash-accent: #7dd3fc;
+  --dash-accent-strong: #38bdf8;
   --editorial-blue: #60a5fa;
   --editorial-deep-blue: #2563eb;
   --editorial-gold: #7dd3fc;
@@ -775,7 +778,7 @@ body::before {
 
 .editorial-shell {
   background:
-    radial-gradient(circle at 52% 0%, rgba(56, 189, 248, 0.22), transparent 32rem),
+    radial-gradient(circle at 52% 0%, color-mix(in srgb, var(--dash-accent-strong) 22%, transparent), transparent 32rem),
     radial-gradient(circle at 84% 18%, rgba(14, 165, 233, 0.13), transparent 28rem),
     radial-gradient(circle at 12% 34%, rgba(103, 232, 249, 0.08), transparent 24rem),
     linear-gradient(180deg, #03111b 0%, #02070c 52%, #03111b 100%);
@@ -785,9 +788,9 @@ body::before {
 .liquid-glass-strong,
 .liquid-glass-soft {
   position: relative;
-  border: 1px solid rgba(125, 211, 252, 0.15);
+  border: 1px solid color-mix(in srgb, var(--dash-accent) 15%, transparent);
   background:
-    radial-gradient(circle at 12% 8%, rgba(125, 211, 252, 0.18), transparent 34%),
+    radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--dash-accent) 18%, transparent), transparent 34%),
     linear-gradient(135deg, rgba(10, 42, 62, 0.86), rgba(2, 14, 23, 0.74) 50%, rgba(6, 34, 51, 0.7)),
     rgba(2, 12, 20, 0.74);
   box-shadow:
@@ -801,7 +804,7 @@ body::before {
 
 .liquid-glass-strong {
   background:
-    radial-gradient(circle at 12% 6%, rgba(125, 211, 252, 0.22), transparent 36%),
+    radial-gradient(circle at 12% 6%, color-mix(in srgb, var(--dash-accent) 22%, transparent), transparent 36%),
     linear-gradient(135deg, rgba(12, 48, 70, 0.92), rgba(2, 14, 23, 0.8) 50%, rgba(5, 36, 55, 0.76)),
     rgba(3, 16, 26, 0.84);
   box-shadow:
@@ -813,7 +816,7 @@ body::before {
 
 .liquid-glass-soft {
   background:
-    radial-gradient(circle at 10% 4%, rgba(125, 211, 252, 0.14), transparent 32%),
+    radial-gradient(circle at 10% 4%, color-mix(in srgb, var(--dash-accent) 14%, transparent), transparent 32%),
     linear-gradient(135deg, rgba(8, 34, 51, 0.78), rgba(2, 13, 22, 0.66) 50%, rgba(5, 30, 45, 0.58)),
     rgba(2, 12, 20, 0.66);
   box-shadow:
@@ -832,7 +835,7 @@ body::before {
   border-radius: inherit;
   background:
     radial-gradient(circle at 18% 0%, rgba(186, 230, 253, 0.2), transparent 22%),
-    linear-gradient(120deg, rgba(125, 211, 252, 0.12), transparent 34%);
+    linear-gradient(120deg, color-mix(in srgb, var(--dash-accent) 12%, transparent), transparent 34%);
   opacity: 0.68;
 }
 
