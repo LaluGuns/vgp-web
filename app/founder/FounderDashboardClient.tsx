@@ -97,6 +97,29 @@ interface FlowstateMetrics {
     sessions: { count7d: number; minutes7d: number; count30d: number; minutes30d: number; daily: FlowstateDailyPoint[] };
     signups: { last24h: number; last7d: number };
 }
+interface FlowstateUserRow {
+    email: string;
+    plan: string;
+    createdAt: string;
+    lastSeenAt: string | null;
+    os: string | null;
+    browser: string | null;
+    deviceType: string | null;
+    country: string | null;
+    city: string | null;
+    sessions: number;
+    minutes: number;
+}
+interface FlowstateBreakdownItem { value: string; count: number; }
+interface FlowstateBreakdowns {
+    os: FlowstateBreakdownItem[];
+    browser: FlowstateBreakdownItem[];
+    country: FlowstateBreakdownItem[];
+    device: FlowstateBreakdownItem[];
+}
+type FlowstateErrors =
+    | { connected: false }
+    | { connected: true; unresolvedIssues: number; unresolvedCapped: boolean; events24h: number; events7d: number };
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -654,6 +677,9 @@ export default function FounderDashboardClient() {
     const [flowstateMetrics, setFlowstateMetrics] = useState<FlowstateMetrics | null>(null);
     const [flowstateConnected, setFlowstateConnected] = useState<boolean | null>(null);
     const [flowstateLoading, setFlowstateLoading] = useState(false);
+    const [flowstateUsers, setFlowstateUsers] = useState<FlowstateUserRow[]>([]);
+    const [flowstateBreakdowns, setFlowstateBreakdowns] = useState<FlowstateBreakdowns | null>(null);
+    const [flowstateErrors, setFlowstateErrors] = useState<FlowstateErrors>({ connected: false });
 
     const [toast, setToast] = useState<{
         message: string;
@@ -805,6 +831,9 @@ export default function FounderDashboardClient() {
                 const data = await res.json();
                 setFlowstateConnected(data.connected);
                 setFlowstateMetrics(data.metrics);
+                setFlowstateUsers(Array.isArray(data.users) ? data.users : []);
+                setFlowstateBreakdowns(data.breakdowns ?? null);
+                setFlowstateErrors(data.errors?.connected ? data.errors : { connected: false });
             }
         } catch (err) {
             console.error('Failed to load Flowstate metrics:', err);
@@ -2472,6 +2501,126 @@ export default function FounderDashboardClient() {
                                     <StatCard label="Signups · 7d" value={`+${flowstateMetrics.signups.last7d}`} Icon={TrendingUp} accent="text-emerald-300" />
                                     <StatCard label="Sessions · 7d" value={flowstateMetrics.sessions.count7d} Icon={Zap} />
                                 </div>
+
+                                {/* Per-user analytics: email, presence, focus totals */}
+                                <div className="liquid-glass overflow-hidden rounded-lg">
+                                    <div className="flex items-center justify-between px-6 pt-5">
+                                        <Eyebrow>Users</Eyebrow>
+                                        <span className="text-[10px] uppercase tracking-wider text-white/35">
+                                            {flowstateUsers.length} shown · most recent first
+                                        </span>
+                                    </div>
+                                    {flowstateUsers.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center p-12 text-center text-white/45">
+                                            <Inbox className="mb-3 h-7 w-7 text-white/25" />
+                                            <p className="text-sm">No user rows yet. Presence fills in after the profile migration is applied and users load the app.</p>
+                                        </div>
+                                    ) : (
+                                        <div className="overflow-x-auto">
+                                            <table className="w-full text-left text-sm">
+                                                <thead>
+                                                    <tr className="border-b border-white/[0.07] text-[11px] uppercase tracking-[0.12em] text-white/40 select-none">
+                                                        <th className="px-6 py-4 font-semibold">Email</th>
+                                                        <th className="px-6 py-4 font-semibold">Plan</th>
+                                                        <th className="px-6 py-4 font-semibold">OS · Device</th>
+                                                        <th className="px-6 py-4 font-semibold">Browser</th>
+                                                        <th className="px-6 py-4 font-semibold">Location</th>
+                                                        <th className="px-6 py-4 font-semibold">Last seen</th>
+                                                        <th className="px-6 py-4 text-right font-semibold">Sessions</th>
+                                                        <th className="px-6 py-4 text-right font-semibold">Minutes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-white/[0.05]">
+                                                    {flowstateUsers.map((u) => (
+                                                        <tr key={u.email} className="transition hover:bg-white/[0.02]">
+                                                            <td className="px-6 py-3.5 text-white/90">{u.email}</td>
+                                                            <td className="px-6 py-3.5">
+                                                                <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${
+                                                                    u.plan === 'lifetime' ? 'border-emerald-400/25 bg-emerald-400/10 text-emerald-300'
+                                                                    : u.plan === 'yearly' ? 'border-sky-300/25 bg-sky-300/10 text-sky-200'
+                                                                    : u.plan === 'monthly' ? 'border-sky-400/25 bg-sky-400/10 text-sky-300'
+                                                                    : 'border-white/10 bg-white/[0.04] text-white/55'
+                                                                }`}>{u.plan}</span>
+                                                            </td>
+                                                            <td className="px-6 py-3.5 text-white/70">
+                                                                {u.os ? `${u.os}${u.deviceType ? ` · ${u.deviceType}` : ''}` : '—'}
+                                                            </td>
+                                                            <td className="px-6 py-3.5 text-white/70">{u.browser ?? '—'}</td>
+                                                            <td className="px-6 py-3.5 text-white/70">
+                                                                {u.city || u.country ? [u.city, u.country].filter(Boolean).join(', ') : '—'}
+                                                            </td>
+                                                            <td className="px-6 py-3.5 text-white/70">{u.lastSeenAt ? relativeTime(u.lastSeenAt) : '—'}</td>
+                                                            <td className="px-6 py-3.5 text-right font-display text-white/80">{u.sessions}</td>
+                                                            <td className="px-6 py-3.5 text-right font-display text-white/80">{u.minutes.toLocaleString()}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Presence breakdowns — OS / browser / country / device */}
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                    {([
+                                        ['Operating system', 'os'],
+                                        ['Browser', 'browser'],
+                                        ['Country', 'country'],
+                                        ['Device', 'device'],
+                                    ] as const).map(([label, key]) => {
+                                        const items = flowstateBreakdowns?.[key] ?? [];
+                                        const max = items.reduce((m, i) => Math.max(m, i.count), 0);
+                                        return (
+                                            <div key={key} className="liquid-glass rounded-lg p-5">
+                                                <Eyebrow>{label}</Eyebrow>
+                                                {items.length === 0 ? (
+                                                    <p className="mt-4 text-xs text-white/40">No presence data yet.</p>
+                                                ) : (
+                                                    <div className="mt-4 space-y-2.5">
+                                                        {items.slice(0, 6).map((item) => (
+                                                            <div key={item.value}>
+                                                                <div className="flex items-center justify-between text-xs">
+                                                                    <span className="text-white/70">{item.value}</span>
+                                                                    <span className="font-display font-semibold text-white/85">{item.count}</span>
+                                                                </div>
+                                                                <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+                                                                    <div
+                                                                        className="h-full rounded-full"
+                                                                        style={{
+                                                                            width: `${max > 0 ? Math.max(6, (item.count / max) * 100) : 0}%`,
+                                                                            background: 'var(--dash-accent)',
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Errors (Sentry) — honest state when the token is missing */}
+                                {flowstateErrors.connected ? (
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                        <StatCard
+                                            label="Unresolved issues"
+                                            value={`${flowstateErrors.unresolvedIssues}${flowstateErrors.unresolvedCapped ? '+' : ''}`}
+                                            Icon={AlertTriangle}
+                                            accent={flowstateErrors.unresolvedIssues > 0 ? 'text-rose-300' : 'text-emerald-300'}
+                                        />
+                                        <StatCard label="Error events · 24h" value={flowstateErrors.events24h.toLocaleString()} Icon={Zap} accent="text-white/85" />
+                                        <StatCard label="Error events · 7d" value={flowstateErrors.events7d.toLocaleString()} Icon={Gauge} accent="text-white/85" />
+                                    </div>
+                                ) : (
+                                    <div className="liquid-glass rounded-lg p-6">
+                                        <Eyebrow>Errors (Sentry)</Eyebrow>
+                                        <p className="mt-3 text-xs leading-relaxed text-white/55">
+                                            Not connected — no error numbers are invented. Set <code className="text-sky-200">SENTRY_AUTH_TOKEN</code> (scopes <code className="text-sky-200">event:read project:read</code>) to surface unresolved issues and event counts for org <code className="text-sky-200">virzy-guns-production</code>, project <code className="text-sky-200">flowstate</code>.
+                                        </p>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>

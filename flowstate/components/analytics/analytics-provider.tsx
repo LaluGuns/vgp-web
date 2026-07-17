@@ -20,6 +20,21 @@ export function AnalyticsProvider() {
     if (pathname) trackPageview(pathname);
   }, [pathname]);
 
+  // Presence ping — once per page load, signed-in users only, fire-and-forget.
+  // Independent of analyticsEnabled(): presence powers the founder dashboard,
+  // not PostHog.
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    const supabase = createClient();
+    supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        if (!data.user) return;
+        fetch("/api/presence", { method: "POST" }).catch(() => {});
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (!analyticsEnabled() || !isSupabaseConfigured()) return;
     const supabase = createClient();
