@@ -19,8 +19,102 @@ function notConnected(message: string) {
         users: null,
         breakdowns: null,
         errors: { connected: false },
+        visitors: { connected: false },
         message,
     });
+}
+
+// ── PostHog anonymous-visitor stats (optional) ──────────────────────────
+// Anonymous visitors have no auth.users row, so they can never appear in the
+// per-user table. Their aggregate counts live in PostHog, from the manual
+// $pageview event (autocapture is off). Without POSTHOG_PERSONAL_API_KEY (a
+// personal key with scope `query:read`) or on any failure this returns
+// { connected: false } — never fabricated numbers.
+type Breakdown = { value: string; count: number };
+type PostHogVisitors =
+    | { connected: false }
+    | {
+          connected: true;
+          visitors24h: number;
+          visitors7d: number;
+          visitors30d: number;
+          pageviews30d: number;
+          daily: { date: string; visitors: number }[];
+          countries: Breakdown[];
+          devices: Breakdown[];
+      };
+
+async function fetchPostHogVisitors(): Promise<PostHogVisitors> {
+    const key = process.env.POSTHOG_PERSONAL_API_KEY;
+    if (!key) return { connected: false };
+
+    const projectId = process.env.POSTHOG_PROJECT_ID || '511095';
+    const host = (process.env.POSTHOG_QUERY_HOST || 'https://us.posthog.com').replace(/\/$/, '');
+    const endpoint = `${host}/api/projects/${projectId}/query/`;
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
+
+    const run = async (sql: string): Promise<unknown[][]> => {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: { kind: 'HogQLQuery', query: sql } }),
+            signal: controller.signal,
+        });
+        if (!res.ok) throw new Error(`PostHog ${res.status}`);
+        const json = (await res.json()) as { results?: unknown[][] };
+        return Array.isArray(json.results) ? json.results : [];
+    };
+
+    try {
+        const [aggRows, dailyRows, countryRows, deviceRows] = await Promise.all([
+            run(
+                `SELECT
+                    uniqIf(person_id, timestamp > now() - INTERVAL 1 DAY) AS v24h,
+                    uniqIf(person_id, timestamp > now() - INTERVAL 7 DAY) AS v7d,
+                    uniq(person_id) AS v30d,
+                    count() AS pv30d
+                 FROM events
+                 WHERE event = '$pageview' AND timestamp > now() - INTERVAL 30 DAY`
+            ),
+            run(
+                `SELECT toDate(timestamp) AS d, uniq(person_id) AS v
+                 FROM events
+                 WHERE event = '$pageview' AND timestamp > now() - INTERVAL 30 DAY
+                 GROUP BY d ORDER BY d`
+            ),
+            run(
+                `SELECT properties.$geoip_country_code AS c, uniq(person_id) AS v
+                 FROM events
+                 WHERE event = '$pageview' AND timestamp > now() - INTERVAL 30 DAY AND c != ''
+                 GROUP BY c ORDER BY v DESC LIMIT 8`
+            ),
+            run(
+                `SELECT properties.$device_type AS dt, uniq(person_id) AS v
+                 FROM events
+                 WHERE event = '$pageview' AND timestamp > now() - INTERVAL 30 DAY AND dt != ''
+                 GROUP BY dt ORDER BY v DESC LIMIT 6`
+            ),
+        ]);
+
+        const agg = aggRows[0] ?? [];
+        const num = (x: unknown) => Number(x) || 0;
+        return {
+            connected: true,
+            visitors24h: num(agg[0]),
+            visitors7d: num(agg[1]),
+            visitors30d: num(agg[2]),
+            pageviews30d: num(agg[3]),
+            daily: dailyRows.map((r) => ({ date: String(r[0]), visitors: num(r[1]) })),
+            countries: countryRows.map((r) => ({ value: String(r[0]), count: num(r[1]) })),
+            devices: deviceRows.map((r) => ({ value: String(r[0]), count: num(r[1]) })),
+        };
+    } catch {
+        return { connected: false };
+    } finally {
+        clearTimeout(timer);
+    }
 }
 
 // ── Sentry error stats (optional) ───────────────────────────────────────
@@ -94,7 +188,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const [plansRes, subsRes, sessionsRes, dailyRes, signupsRes, usersRes, breakdownRes, sentryErrors] = await Promise.all([
+        const [plansRes, subsRes, sessionsRes, dailyRes, signupsRes, usersRes, breakdownRes, sentryErrors, visitors] = await Promise.all([
             // Users per plan (free vs paid), from the profile plan column.
             flowstateQuery(
                 `SELECT plan::text AS plan, COUNT(*)::int AS users
@@ -201,6 +295,7 @@ export async function GET(request: NextRequest) {
                 return null;
             }),
             fetchSentryErrors(),
+            fetchPostHogVisitors(),
         ]);
 
         const planCounts: Record<string, number> = {};
@@ -284,6 +379,7 @@ export async function GET(request: NextRequest) {
             users,
             breakdowns,
             errors: sentryErrors,
+            visitors,
         });
     } catch (error) {
         console.error('Flowstate metrics API error:', error);

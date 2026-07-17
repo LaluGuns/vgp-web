@@ -120,6 +120,18 @@ interface FlowstateBreakdowns {
 type FlowstateErrors =
     | { connected: false }
     | { connected: true; unresolvedIssues: number; unresolvedCapped: boolean; events24h: number; events7d: number };
+type FlowstateVisitors =
+    | { connected: false }
+    | {
+          connected: true;
+          visitors24h: number;
+          visitors7d: number;
+          visitors30d: number;
+          pageviews30d: number;
+          daily: { date: string; visitors: number }[];
+          countries: FlowstateBreakdownItem[];
+          devices: FlowstateBreakdownItem[];
+      };
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -680,6 +692,7 @@ export default function FounderDashboardClient() {
     const [flowstateUsers, setFlowstateUsers] = useState<FlowstateUserRow[]>([]);
     const [flowstateBreakdowns, setFlowstateBreakdowns] = useState<FlowstateBreakdowns | null>(null);
     const [flowstateErrors, setFlowstateErrors] = useState<FlowstateErrors>({ connected: false });
+    const [flowstateVisitors, setFlowstateVisitors] = useState<FlowstateVisitors>({ connected: false });
 
     const [toast, setToast] = useState<{
         message: string;
@@ -834,6 +847,7 @@ export default function FounderDashboardClient() {
                 setFlowstateUsers(Array.isArray(data.users) ? data.users : []);
                 setFlowstateBreakdowns(data.breakdowns ?? null);
                 setFlowstateErrors(data.errors?.connected ? data.errors : { connected: false });
+                setFlowstateVisitors(data.visitors?.connected ? data.visitors : { connected: false });
             }
         } catch (err) {
             console.error('Failed to load Flowstate metrics:', err);
@@ -2618,6 +2632,82 @@ export default function FounderDashboardClient() {
                                         <Eyebrow>Errors (Sentry)</Eyebrow>
                                         <p className="mt-3 text-xs leading-relaxed text-white/55">
                                             Not connected — no error numbers are invented. Set <code className="text-sky-200">SENTRY_AUTH_TOKEN</code> (scopes <code className="text-sky-200">event:read project:read</code>) to surface unresolved issues and event counts for org <code className="text-sky-200">virzy-guns-production</code>, project <code className="text-sky-200">flowstate</code>.
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Visitors (PostHog) — anonymous traffic, no per-user identity.
+                                    Honest not-connected state without the personal API key. */}
+                                {flowstateVisitors.connected ? (
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <Eyebrow>Visitors (PostHog)</Eyebrow>
+                                            <span className="text-[10px] uppercase tracking-wider text-white/35">
+                                                {flowstateVisitors.pageviews30d.toLocaleString()} pageviews · 30d
+                                            </span>
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                            <StatCard label="Visitors · 24h" value={flowstateVisitors.visitors24h.toLocaleString()} Icon={Eye} accent="text-sky-200" />
+                                            <StatCard label="Visitors · 7d" value={flowstateVisitors.visitors7d.toLocaleString()} Icon={Eye} accent="text-sky-300" />
+                                            <StatCard label="Visitors · 30d" value={flowstateVisitors.visitors30d.toLocaleString()} Icon={Globe} accent="text-white/85" />
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                                            <div className="liquid-glass rounded-lg p-6 lg:col-span-2">
+                                                <Eyebrow>Daily visitors (30 days)</Eyebrow>
+                                                <TrendChart
+                                                    values={flowstateVisitors.daily.map((d) => d.visitors)}
+                                                    ariaLabel="Daily unique visitors over the last 30 days"
+                                                    gradientId="flowstateVisitorsFill"
+                                                />
+                                                <div className="mt-3 flex justify-between text-[10px] text-white/35">
+                                                    <span>{flowstateVisitors.daily.length > 0 ? fmtDate(flowstateVisitors.daily[0].date) : '30 days ago'}</span>
+                                                    <span>Unique / day</span>
+                                                    <span>Today</span>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-4">
+                                                {([
+                                                    ['Top countries', flowstateVisitors.countries],
+                                                    ['Devices', flowstateVisitors.devices],
+                                                ] as const).map(([label, items]) => {
+                                                    const max = items.reduce((m, i) => Math.max(m, i.count), 0);
+                                                    return (
+                                                        <div key={label} className="liquid-glass rounded-lg p-5">
+                                                            <Eyebrow>{label}</Eyebrow>
+                                                            {items.length === 0 ? (
+                                                                <p className="mt-4 text-xs text-white/40">No data in range.</p>
+                                                            ) : (
+                                                                <div className="mt-4 space-y-2.5">
+                                                                    {items.map((item) => (
+                                                                        <div key={item.value}>
+                                                                            <div className="flex items-center justify-between text-xs">
+                                                                                <span className="text-white/70">{item.value}</span>
+                                                                                <span className="font-display font-semibold text-white/85">{item.count}</span>
+                                                                            </div>
+                                                                            <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+                                                                                <div
+                                                                                    className="h-full rounded-full"
+                                                                                    style={{
+                                                                                        width: `${max > 0 ? Math.max(6, (item.count / max) * 100) : 0}%`,
+                                                                                        background: 'var(--dash-accent)',
+                                                                                    }}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="liquid-glass rounded-lg p-6">
+                                        <Eyebrow>Visitors (PostHog)</Eyebrow>
+                                        <p className="mt-3 text-xs leading-relaxed text-white/55">
+                                            Not connected — anonymous visitors have no account, so they can&apos;t appear in the users table above; their aggregate counts come from PostHog. Set <code className="text-sky-200">POSTHOG_PERSONAL_API_KEY</code> (a personal key with scope <code className="text-sky-200">query:read</code>) to surface unique visitors, top countries and devices for project <code className="text-sky-200">flowstate</code>.
                                         </p>
                                     </div>
                                 )}
