@@ -45,7 +45,7 @@ async function fetchSentryErrors(): Promise<SentryErrors> {
         const [issuesRes, statsRes] = await Promise.all([
             // Unresolved issues for the project (slug-scoped endpoint).
             fetch(
-                `https://sentry.io/api/0/projects/${org}/${project}/issues/?query=is%3Aunresolved&statsPeriod=90d&limit=100`,
+                `https://sentry.io/api/0/projects/${org}/${project}/issues/?query=is%3Aunresolved&limit=100`,
                 { headers, signal: controller.signal }
             ),
             // Hourly received-event counts for the last 7 days.
