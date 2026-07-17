@@ -21,23 +21,12 @@ const GLASS_FLOOR_BG =
 export function HeroMachinesIsland() {
   const [ready, setReady] = useState(false);
 
+  // Mount right after hydration. The hero is the LCP surface — waiting for
+  // browser idle pushed its paint several seconds out on mobile. Hydration is
+  // cheap now that the Sentry SDK no longer sits in the critical bundle
+  // (instrumentation-client.ts defers it), so the demo can come up immediately.
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    let idleId: number | null = null;
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    const mount = () => setReady(true);
-
-    if ("requestIdleCallback" in window) {
-      idleId = window.requestIdleCallback(mount, { timeout: 2000 });
-    } else {
-      timeoutId = setTimeout(mount, 200);
-    }
-    return () => {
-      if (idleId !== null && "cancelIdleCallback" in window) {
-        window.cancelIdleCallback(idleId);
-      }
-      if (timeoutId !== null) clearTimeout(timeoutId);
-    };
+    setReady(true);
   }, []);
 
   if (ready) return <HeroMachines />;
