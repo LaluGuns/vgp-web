@@ -5,7 +5,14 @@ import { useFocusSessionStore } from "@/lib/stores/focus-session-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Target, MousePointerClick, Timer, X, Share2 } from "lucide-react";
-import { ShareModal } from "./share-modal";
+import dynamic from "next/dynamic";
+
+// The share card renderer (canvas drawing + qrcode) is only needed after a
+// finished focus block — keep it out of the initial /app bundle.
+const ShareModal = dynamic(
+  () => import("./share-modal").then((m) => m.ShareModal),
+  { ssr: false }
+);
 
 /** Friction Audit — end-of-session report shown after a real focus block. */
 export function SessionSummary() {

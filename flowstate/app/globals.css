@@ -886,3 +886,13 @@ a:active,
 nextjs-status-indicator {
   display: none !important;
 }
+
+/* Onboarding tour pre-hydration gate.
+   The welcome card is SSR-rendered so it paints with FCP (it's the LCP element
+   on first visit). An inline script on /app sets this attribute before the
+   overlay is parsed when localStorage says the tour was already completed, so
+   returning users never see it flash. React removes the attribute when the
+   tour is explicitly restarted. */
+html[data-flowstate-tour-done] .tour-welcome-overlay {
+  display: none !important;
+}

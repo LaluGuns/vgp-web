@@ -1,6 +1,19 @@
-import Hls from "hls.js";
+import type Hls from "hls.js";
 import { usePlayerStore } from "@/lib/stores/player-store";
 import { genrePlaylist } from "@/lib/catalog";
+
+// hls.js is ~150KB+ gzip and only needed for `.m3u8` sources, which the current
+// catalog never produces (all tracks are .mp3 — see ADR-001). Load it lazily so
+// it stays out of the initial /app bundle; the mp3/decodeAudioData path never
+// touches it.
+type HlsConstructor = typeof import("hls.js")["default"];
+let cachedHlsCtor: HlsConstructor | null = null;
+async function loadHlsCtor(): Promise<HlsConstructor> {
+  if (!cachedHlsCtor) {
+    cachedHlsCtor = (await import("hls.js")).default;
+  }
+  return cachedHlsCtor;
+}
 
 export interface PlayerChannel {
   name: "A" | "B";
@@ -422,6 +435,10 @@ export const musicPlayer = {
   },
 
   async load(url: string) {
+    // Only the `.m3u8` path ever needs hls.js — fetch it up front (before any
+    // channel state is touched) so the common mp3 path stays fully synchronous.
+    const HlsLib = url.endsWith(".m3u8") ? await loadHlsCtor() : null;
+
     let outgoing: PlayerChannel | null = null;
     const activeIsPlaying = !activeChannel.isHlsMode
       ? activeChannel.isWebAudioPlaying
@@ -440,17 +457,17 @@ export const musicPlayer = {
     const channel = activeChannel;
     stopChannel(channel);
 
-    channel.isHlsMode = url.endsWith(".m3u8") && (Hls.isSupported() || canPlayNativeHls());
+    channel.isHlsMode = HlsLib !== null && (HlsLib.isSupported() || canPlayNativeHls());
     channel.currentUrl = url;
     pendingSeekTime = null;
     channel.volume = 1.0;
 
     const loadId = ++channel.activeLoadId;
 
-    if (channel.isHlsMode) {
+    if (channel.isHlsMode && HlsLib) {
       const audio = initAudio(channel);
-      if (Hls.isSupported()) {
-        const hlsInstance = new Hls({
+      if (HlsLib.isSupported()) {
+        const hlsInstance = new HlsLib({
           enableWorker: true,
           lowLatencyMode: true,
           maxBufferLength: 10,
@@ -462,14 +479,14 @@ export const musicPlayer = {
         hlsInstance.loadSource(url);
         hlsInstance.attachMedia(audio);
 
-        hlsInstance.on(Hls.Events.ERROR, (event, data) => {
+        hlsInstance.on(HlsLib.Events.ERROR, (event, data) => {
           if (data.fatal) {
             switch (data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
+              case HlsLib.ErrorTypes.NETWORK_ERROR:
                 console.warn("Fatal HLS network error, attempting recovery...");
                 hlsInstance.startLoad();
                 break;
-              case Hls.ErrorTypes.MEDIA_ERROR:
+              case HlsLib.ErrorTypes.MEDIA_ERROR:
                 console.warn("Fatal HLS media error, attempting recovery...");
                 hlsInstance.recoverMediaError();
                 break;

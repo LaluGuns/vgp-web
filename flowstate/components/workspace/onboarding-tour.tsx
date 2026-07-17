@@ -193,7 +193,7 @@ export function OnboardingTour({
     <>
       {/* Backdrop only for Step 0 (Welcome) */}
       {tourStep === 0 && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] flex items-center justify-center p-4">
+        <div className="tour-welcome-overlay fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] flex items-center justify-center p-4">
           <div className="glass-card p-6 md:p-8 rounded-[24px] border border-[#00e5ff]/20 max-w-md w-full bg-[#0b1326]/90 shadow-[0_0_50px_rgba(0,229,255,0.15)] space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#00e5ff]/5 rounded-full blur-3xl pointer-events-none" />
 

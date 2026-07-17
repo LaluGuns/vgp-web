@@ -36,19 +36,38 @@ const SCENE_THEMES: Record<string, { primary: string }> = {
 export default function FlowstatePage() {
   const { t } = useTranslation();
 
-  const [tourStep, setTourStep] = useState<number | null>(null);
+  // The welcome tour card is this page's LCP element on first visit, so it must
+  // paint with the SSR HTML instead of waiting for hydration. SSR always renders
+  // step 0; an inline script (see TOUR_GATE_SCRIPT below) hides it pre-paint for
+  // returning users via a CSS attribute gate, and this effect then reconciles
+  // React state with the localStorage flag after hydration.
+  const [tourStep, setTourStep] = useState<number | null>(0);
   const [activeTab, setActiveTab] = useState<AtmosphereTab>("music");
   const [mobileTab, setMobileTab] = useState<MobileTab>("focus");
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const completed = localStorage.getItem("flowstate_tour_completed");
-      if (!completed) {
-        setTourStep(0);
-      }
+    let completed = false;
+    try {
+      completed = !!localStorage.getItem("flowstate_tour_completed");
+    } catch {}
+    if (completed) {
+      // Unmount the (CSS-hidden) SSR card. The data attribute keeps it hidden
+      // until this re-render commits, so returning users never see a flash.
+      setTourStep(null);
+    } else {
+      // First visit: make sure the gate attribute can't linger (e.g. flag was
+      // cleared since the last visit) — the card must be visible.
+      document.documentElement.removeAttribute("data-flowstate-tour-done");
     }
   }, []);
+
+  const startTour = () => {
+    // Restarting the tour must lift the pre-hydration CSS gate, otherwise the
+    // card would mount but stay display:none for returning users.
+    document.documentElement.removeAttribute("data-flowstate-tour-done");
+    setTourStep(0);
+  };
 
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -96,6 +115,18 @@ export default function FlowstatePage() {
 
   return (
     <>
+      {/* Pre-hydration tour gate: runs while the HTML streams in, before the
+          welcome overlay below is parsed/painted. Returning users (flag in
+          localStorage) get the SSR-rendered card hidden via CSS (see
+          globals.css) with zero flash; first-time visitors get the card painted
+          together with FCP — no JS needed for it to show. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html:
+            'try{if(localStorage.getItem("flowstate_tour_completed"))document.documentElement.setAttribute("data-flowstate-tour-done","")}catch(e){}',
+        }}
+      />
+
       {/* Dynamic WebGL dynamic fluid flow background */}
       <WebGLBackground />
 
@@ -118,7 +149,7 @@ export default function FlowstatePage() {
         <div className="flex-1 flex flex-col h-full overflow-hidden">
 
           {/* Header — Clean Apple-style bar */}
-          <WorkspaceHeader onStartTour={() => setTourStep(0)} />
+          <WorkspaceHeader onStartTour={startTour} />
 
           {/* Main Application Workspace Content */}
           <div className="flex-1 overflow-hidden md:overflow-y-auto custom-scrollbar z-10 pr-1">
