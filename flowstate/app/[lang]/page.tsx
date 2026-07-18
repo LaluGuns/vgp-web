@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { getTranslator, resolveLocale } from "@/lib/translations/server";
+import { getFreeTimerLinks } from "@/lib/translations/pages/shared";
 import { LandingBackground } from "@/components/landing/landing-background";
 import { HeroMachinesIsland } from "@/components/landing/hero-machines-island";
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
@@ -341,7 +342,22 @@ export default async function LandingPage({
         </section>
 
         {/* Footer */}
-        <footer className="w-full max-w-7xl mx-auto px-8 py-8 border-t border-white/[0.04] bg-transparent flex flex-col md:flex-row items-center justify-between gap-4 text-left">
+        <footer className="w-full max-w-7xl mx-auto px-8 py-8 border-t border-white/[0.04] bg-transparent flex flex-col gap-8 text-left">
+          {/* Free timers cluster — internal links to the static timer pages */}
+          <div className="space-y-3">
+            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/40">
+              {t("legal.landing.footer_timers", "Free timers")}
+            </div>
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-mono text-white/45">
+              {getFreeTimerLinks(locale).map((l) => (
+                <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
           <div className="space-y-1">
             <div className="text-[10px] font-mono text-white/50">
               © {new Date().getFullYear()} Flow by Virzy Guns. {t("legal.landing.footer_rights", "All rights reserved.")}
@@ -367,6 +383,7 @@ export default async function LandingPage({
             <Link href="/legal/cookies" className="hover:text-white transition-colors">
               {t("dashboard.cookies", "Cookies")}
             </Link>
+          </div>
           </div>
         </footer>
 
