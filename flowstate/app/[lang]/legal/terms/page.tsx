@@ -8,7 +8,7 @@ export default function TermsPage() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    document.title = `${t("legal.terms.title", "Terms of Service")} - Flowstate`;
+    document.title = `${t("legal.terms.title", "Terms of Service")} - Flow`;
   }, [t]);
 
   const sec3Lines = t("legal.terms.sec3_text").split("\n");

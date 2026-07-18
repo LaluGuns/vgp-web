@@ -15,7 +15,7 @@ export default function NotFound() {
           href="/"
           className="inline-block px-5 py-2.5 rounded-full bg-primary/15 text-primary border border-primary/30 text-sm font-medium hover:bg-primary/25 transition-colors"
         >
-          Back to Flowstate
+          Back to Flow
         </Link>
       </div>
     </main>

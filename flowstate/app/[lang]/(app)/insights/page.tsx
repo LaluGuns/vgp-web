@@ -31,7 +31,7 @@ export default function InsightsPage() {
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${t("insights.title", "Focus Insights")} | Flowstate`;
+      document.title = `${t("insights.title", "Focus Insights")} | Flow`;
     }
   }, [t]);
 

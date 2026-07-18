@@ -17,7 +17,7 @@ export function InsightsSidebar({ user }: { user: any }) {
       <div className="px-6 mb-10">
         <Image
           src="/icons/flowstate-logo.png"
-          alt="Flowstate"
+          alt="Flow"
           width={150}
           height={53}
           className="h-9 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.22)]"

@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/translations/dictionaries";
+import { getTranslator } from "@/lib/translations/server";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AudioDriver } from "@/components/audio/audio-driver";
 import { UpgradePrompt } from "@/components/pricing/upgrade-prompt";
@@ -42,6 +43,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = (LOCALES as string[]).includes(lang) ? (lang as Locale) : DEFAULT_LOCALE;
+  const t = getTranslator(locale);
+
+  // Localized metadata: each locale resolves its own title/description from the
+  // shared dictionaries, so /id ships an Indonesian title, /ja Japanese, etc.
+  const title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
+  const description = t(
+    "metadata.description",
+    "Get in the zone with original lofi & synthwave music, a Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers."
+  );
+  const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
+  const ogDescription = t(
+    "metadata.ogDescription",
+    "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
+  );
 
   // hreflang: every locale gets its own URL, plus x-default → English.
   const languages: Record<string, string> = Object.fromEntries(
@@ -51,22 +66,22 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE),
-    title: "Flowstate - Deep Work Music & Focus Timer",
-    description:
-      "Get in the zone with original lofi & synthwave music, Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers.",
+    title: {
+      default: title,
+      template: "%s · Flow by Virzy Guns",
+    },
+    description,
     openGraph: {
-      title: "Flowstate — Get in the zone.",
-      description:
-        "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
-      siteName: "Flowstate",
+      title: ogTitle,
+      description: ogDescription,
+      siteName: "Flow by Virzy Guns",
       type: "website",
       locale,
     },
     twitter: {
       card: "summary_large_image",
-      title: "Flowstate — Get in the zone.",
-      description:
-        "Deep work music + focus timer with original soundtrack by Virzy Guns Production.",
+      title: ogTitle,
+      description: ogDescription,
     },
     alternates: {
       canonical: `/${locale}`,

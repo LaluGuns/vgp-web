@@ -170,7 +170,7 @@ export function SoundtrackShowcase() {
               {t("legal.landing.producer_title", "Soundtracks by Virzy Guns Production")}
             </h2>
             <p className="text-xs text-white/60 leading-relaxed">
-              {t("legal.landing.producer_desc", "Every track in Flowstate is produced by one person — Virzy Guns Production. Not licensed, not pulled from a stock library. Written for focus, and only here.")}
+              {t("legal.landing.producer_desc", "Every track in Flow is produced by one person — Virzy Guns Production. Not licensed, not pulled from a stock library. Written for focus, and only here.")}
             </p>
           </div>
 

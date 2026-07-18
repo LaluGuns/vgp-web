@@ -7,7 +7,7 @@ import type { MobileTab } from "./mobile-nav";
 
 export const TOUR_STEPS = [
   {
-    title: "Welcome to Flowstate",
+    title: "Welcome to Flow",
     desc: "A timer, music produced in-house by Virzy Guns Production, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through.",
     target: "workspace"
   },

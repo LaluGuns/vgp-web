@@ -8,7 +8,7 @@ export default function CookiesPage() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    document.title = `${t("legal.cookies.title", "Cookie Policy")} - Flowstate`;
+    document.title = `${t("legal.cookies.title", "Cookie Policy")} - Flow`;
   }, [t]);
 
   return (

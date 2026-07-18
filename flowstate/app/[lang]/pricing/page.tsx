@@ -15,7 +15,7 @@ export default function PricingPage() {
   
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${t("pricing.fixed.title", "Choose a plan")} | Flowstate`;
+      document.title = `${t("pricing.fixed.title", "Choose a plan")} | Flow`;
     }
   }, [t]);
 
@@ -108,14 +108,14 @@ export default function PricingPage() {
       <main className="min-h-screen overflow-y-auto flex items-start md:items-center justify-center p-4 py-10">
         <div className="w-full max-w-lg space-y-5">
           <Link href="/app" className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
-            <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flowstate")}
+            <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flow")}
           </Link>
 
           <div className="glass-card p-7 space-y-6">
             {/* Header */}
             <div className="text-center space-y-2">
               <div className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-primary">
-                <Sparkles className="h-3 w-3 animate-pulse" /> {t("pricing.fixed.tagline", "Flowstate Pro")}
+                <Sparkles className="h-3 w-3 animate-pulse" /> {t("pricing.fixed.tagline", "Flow Pro")}
               </div>
               <h1 className="text-2xl font-bold text-white tracking-tight">{t("pricing.fixed.title", "Choose a plan")}</h1>
               <p className="text-xs text-muted-foreground/70 max-w-sm mx-auto leading-relaxed">

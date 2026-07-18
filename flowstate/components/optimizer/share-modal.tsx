@@ -325,7 +325,7 @@ export async function drawShareCard(
       ctx.fillStyle = "#ffffff";
       ctx.font = `bold 24px ${FONT_FAMILY}`;
       if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "6px"; }
-      ctx.fillText("FLOWSTATE", cardX + 60, cardY + 70);
+      ctx.fillText("FLOW", cardX + 60, cardY + 70);
       if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "normal"; }
     }
 
@@ -440,7 +440,7 @@ export async function drawShareCard(
       ctx.fillStyle = "#ffffff";
       ctx.font = `bold 42px ${FONT_FAMILY}`;
       if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "10px"; }
-      ctx.fillText("FLOWSTATE", 540, cardY + 180);
+      ctx.fillText("FLOW", 540, cardY + 180);
       if ("letterSpacing" in ctx) { (ctx as any).letterSpacing = "normal"; }
     }
 
@@ -564,13 +564,13 @@ export function ShareModal({
   // Generate initial caption pre-filled based on type of data
   useEffect(() => {
     if (isSummary) {
-      setCaption(format(share("captionSummary", "{minutes}m of deep work across {sessions} sessions on Flowstate. {completion}% completion. Every track is produced by the person who built it: https://flow.virzyguns.com"), {
+      setCaption(format(share("captionSummary", "{minutes}m of deep work across {sessions} sessions on Flow. {completion}% completion. Every track is produced by the person who built it: https://flow.virzyguns.com"), {
         minutes: focusMinutes,
         sessions: sessionCount,
         completion: completionRate,
       }));
     } else {
-      setCaption(format(share("captionSession", "{minutes} focused minutes on Flowstate. Music by the person who built the app: https://flow.virzyguns.com"), {
+      setCaption(format(share("captionSession", "{minutes} focused minutes on Flow. Music by the person who built the app: https://flow.virzyguns.com"), {
         minutes: focusMinutes,
       }));
     }
@@ -663,8 +663,8 @@ export function ShareModal({
       const dataUrl = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = isSummary
-        ? `flowstate-weekly-stats-${orientation}-${Date.now()}.png`
-        : `flowstate-session-stats-${orientation}-${Date.now()}.png`;
+        ? `flow-weekly-stats-${orientation}-${Date.now()}.png`
+        : `flow-session-stats-${orientation}-${Date.now()}.png`;
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
@@ -694,7 +694,7 @@ export function ShareModal({
 
       const file = new File(
         [blob],
-        isSummary ? "flowstate-weekly-stats.png" : "flowstate-session-stats.png",
+        isSummary ? "flow-weekly-stats.png" : "flow-session-stats.png",
         { type: "image/png" }
       );
       const fileShare = { text: caption, files: [file] };
@@ -808,7 +808,7 @@ export function ShareModal({
   };
 
   const handleShareLinkedIn = () => {
-    shareViaPlatform("LinkedIn", `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent("https://flow.virzyguns.com")}&title=${encodeURIComponent(share("linkedInTitle", "Flowstate focus report"))}&summary=${encodeURIComponent(caption)}`);
+    shareViaPlatform("LinkedIn", `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent("https://flow.virzyguns.com")}&title=${encodeURIComponent(share("linkedInTitle", "Flow focus report"))}&summary=${encodeURIComponent(caption)}`);
   };
 
   const handleShareInstagram = () => {
@@ -825,8 +825,8 @@ export function ShareModal({
 
   const handleShareEmail = () => {
     const subject = isSummary
-      ? share("weeklyEmailSubject", "My Flowstate weekly focus stats")
-      : share("sessionEmailSubject", "My Flowstate focus session");
+      ? share("weeklyEmailSubject", "My Flow weekly focus stats")
+      : share("sessionEmailSubject", "My Flow focus session");
     shareViaPlatform("Email", `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(caption)}`);
   };
 

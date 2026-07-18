@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = `${t("login.title", "FLOWSTATE")} | Flowstate`;
+      document.title = `${t("login.title", "FLOW")} | Flow`;
     }
   }, [t]);
 
@@ -75,12 +75,12 @@ export default function LoginPage() {
       <main className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-sm space-y-5">
           <Link href={nextParam} className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
-            <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flowstate")}
+            <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flow")}
           </Link>
           <div className="glass-card p-8 space-y-6">
             <div className="text-center space-y-1.5">
               <div className="text-primary font-mono text-2xl font-bold tracking-tighter glow-text-primary">
-                {t("login.title", "FLOWSTATE")}
+                {t("login.title", "FLOW")}
               </div>
               <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">
                 {t("login.tagline", "Get in the zone")}

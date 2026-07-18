@@ -39,7 +39,7 @@ export function UpgradePrompt() {
         <div className="mb-4 grid h-11 w-11 place-items-center rounded-2xl border border-primary/25 bg-primary/10 text-primary">
           <Sparkles className="h-5 w-5" />
         </div>
-        <h2 id="upgrade-title" className="text-xl font-bold text-white">{t("pricing.fixed.tagline", "Flowstate Pro")}</h2>
+        <h2 id="upgrade-title" className="text-xl font-bold text-white">{t("pricing.fixed.tagline", "Flow Pro")}</h2>
         <p className="mt-2 text-sm leading-6 text-white/60">{t(messageKey, fallback)}</p>
         <div className="mt-6 grid grid-cols-2 gap-2">
           <button type="button" onClick={close} className="h-11 rounded-xl border border-white/10 text-sm text-white/60 hover:bg-white/5 hover:text-white">

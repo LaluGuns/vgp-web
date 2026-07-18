@@ -106,7 +106,7 @@ export async function POST(req: Request) {
         custom_price: amount, // cents, store currency (USD)
         product_options: {
           redirect_url: `${appUrl}/app?upgraded=1`,
-          receipt_button_text: "Back to Flowstate",
+          receipt_button_text: "Back to Flow",
         },
         checkout_data: {
           email: user.email ?? undefined,

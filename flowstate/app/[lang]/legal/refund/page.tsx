@@ -8,7 +8,7 @@ export default function RefundPage() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    document.title = `${t("legal.refund.title", "Refund & Cancellation Policy")} - Flowstate`;
+    document.title = `${t("legal.refund.title", "Refund & Cancellation Policy")} - Flow`;
   }, [t]);
 
   const sec2Lines = t("legal.refund.sec2_text").split("\n");

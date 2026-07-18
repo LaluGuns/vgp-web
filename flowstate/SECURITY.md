@@ -1,5 +1,9 @@
 # Flowstate — Security Posture
 
+> **Rebrand note (2026-07-18):** user-facing name is now **"Flow"** ("Flow by
+> Virzy Guns"). Technical identifiers (storage keys, tables, env vars, worker
+> and project names) keep the `flowstate` name; this doc refers to those.
+
 Baseline security for the Flowstate focus SaaS. Keep this current as the app grows.
 
 ## Implemented

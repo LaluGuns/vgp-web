@@ -71,7 +71,7 @@ export default function FlowstatePage() {
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.title = t("metadata.title", "Flowstate - Deep Work Music & Focus Timer");
+      document.title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
     }
   }, [t]);
 

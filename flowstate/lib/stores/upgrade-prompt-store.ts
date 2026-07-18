@@ -12,7 +12,7 @@ type UpgradePromptState = {
 export const useUpgradePromptStore = create<UpgradePromptState>((set) => ({
   open: false,
   messageKey: "pricing.upgradeToUnlock",
-  fallback: "This feature is available with Flowstate Pro.",
+  fallback: "This feature is available with Flow Pro.",
   // Single choke-point for the paywall: every locked-feature tap flows through
   // here, so this is where we record it (source = which feature gated them).
   show: (messageKey, fallback, source = "unknown") => {

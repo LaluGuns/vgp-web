@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Flowstate — Deep Work Music & Focus Timer";
+export const alt = "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,7 +45,20 @@ export default function OpengraphImage() {
             color: "transparent",
           }}
         >
-          flowstate
+          flow
+        </div>
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            fontWeight: 600,
+            letterSpacing: 6,
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.85)",
+            marginTop: 4,
+          }}
+        >
+          by Virzy Guns
         </div>
         <div
           style={{

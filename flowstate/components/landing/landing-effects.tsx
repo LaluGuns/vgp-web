@@ -19,7 +19,7 @@ export function LandingEffects() {
   }, []);
 
   useEffect(() => {
-    document.title = t("metadata.title", "Flowstate - Deep Work Music & Focus Timer");
+    document.title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
   }, [locale, t]);
 
   return null;

@@ -8,7 +8,7 @@ export default function PrivacyPage() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    document.title = `${t("legal.privacy.title", "Privacy Policy")} - Flowstate`;
+    document.title = `${t("legal.privacy.title", "Privacy Policy")} - Flow`;
   }, [t]);
 
   const sec1Lines = t("legal.privacy.sec1_text").split("\n");

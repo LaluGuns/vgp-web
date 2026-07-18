@@ -36,7 +36,7 @@ export function LegalShell({
           href="/app"
           className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flowstate")}
+          <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flow")}
         </Link>
 
         <div className="glass-card p-7 md:p-9 space-y-6">

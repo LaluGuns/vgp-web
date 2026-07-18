@@ -53,7 +53,7 @@ function InterfaceStyleSelector() {
               key={th.id}
               onClick={() => {
                 if (locked) {
-                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This environment is available with Flowstate Pro.", "environment");
+                  showUpgrade("dashboard.themes.upgradeToUnlockTheme", "This environment is available with Flow Pro.", "environment");
                   return;
                 }
                 setTheme(th.id);

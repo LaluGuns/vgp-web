@@ -1,5 +1,11 @@
 # Flowstate — Launch Runbook
 
+> **Rebrand note (2026-07-18):** the user-facing product name is now **"Flow"**
+> (full brand: **"Flow by Virzy Guns"**). Technical identifiers are unchanged —
+> `flowstate-*` localStorage keys, `flowstate_*` tables, env var names, the
+> `flowstate-audio-delivery` worker, and Vercel/Sentry/PostHog project names all
+> keep the old name. References to "Flowstate" below are those identifiers.
+
 Status as of 2026-06-30. Code is launch-ready; the items below are the remaining
 **human/dashboard actions** that can't be done from the codebase.
 

@@ -57,7 +57,7 @@ export function FocusScienceGlossary() {
         {activeTab === "ratio" && (
           <div className="space-y-2">
             <p>
-              <strong className="text-white">{t("insights.glossary.focustime.title", "Deep Focus Time")}</strong> {t("insights.glossary.focustime.desc1", "counts the real measured minutes your focus timer actually ran — nothing inflated. We never credit the target duration you didn't finish, and we don't penalise you for leaving this tab to work in another app (your editor, Word, Figma…). Flowstate can't see that app, so it doesn't pretend to.")}
+              <strong className="text-white">{t("insights.glossary.focustime.title", "Deep Focus Time")}</strong> {t("insights.glossary.focustime.desc1", "counts the real measured minutes your focus timer actually ran — nothing inflated. We never credit the target duration you didn't finish, and we don't penalise you for leaving this tab to work in another app (your editor, Word, Figma…). Flow can't see that app, so it doesn't pretend to.")}
             </p>
             <p>
               {t("insights.glossary.focustime.desc2", "The heatmap and trend chart both use these honest minutes, so the numbers you see are the minutes you actually put in.")}

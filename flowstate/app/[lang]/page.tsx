@@ -35,7 +35,9 @@ export default async function LandingPage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Flowstate",
+    "name": "Flow by Virzy Guns",
+    "alternateName": ["Flow", "Flowstate"],
+    "url": "https://flow.virzyguns.com",
     "operatingSystem": "All",
     "applicationCategory": "ProductivityApplication",
     "description": "A focus timer with music actually made for it. Every track is produced in-house by Virzy Guns Production — no stock loops.",
@@ -77,7 +79,7 @@ export default async function LandingPage({
         {/* Navigation Header */}
         <header className="w-full max-w-7xl mx-auto px-8 h-20 flex items-center justify-between border-b border-white/[0.04] bg-transparent">
           <div className="flex items-center gap-2 select-none shrink-0">
-            <img src="/icons/flowstate-logo.png" alt="Flowstate Logo" className="h-8 w-auto object-contain" />
+            <img src="/icons/flowstate-logo.png" alt="Flow by Virzy Guns logo" className="h-8 w-auto object-contain" />
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -192,7 +194,7 @@ export default async function LandingPage({
               { code: "03 / SOUND", Icon: Music, title: t("legal.landing.feat_music_title", "Original soundtracks"), desc: t("legal.landing.feat_music_desc", "Original music made for focus."), spec: t("legal.landing.spec_music", "80+ tracks · new ones monthly"), accent: true },
               { code: "04 / AMBIENT", Icon: Sliders, title: t("legal.landing.feat_mixer_title", "Ambient mixer"), desc: t("legal.landing.feat_mixer_desc", "Blend ambient sounds under the music."), spec: t("legal.landing.spec_ambient", "12 layers · independent volumes") },
               { code: "05 / STATS", Icon: BarChart3, title: t("legal.landing.feat_analytics_title", "Honest analytics"), desc: t("legal.landing.feat_analytics_desc", "Streaks, a heatmap, and personal records. Measured minutes only."), spec: t("legal.landing.spec_stats", "Real data, never padded") },
-              { code: "→", Icon: null, title: t("legal.landing.feat_demo_title", "See it running"), desc: t("legal.landing.feat_demo_desc", "Open the app, press play, and hear the difference."), spec: t("legal.landing.spec_demo", "Open Flowstate"), cta: true },
+              { code: "→", Icon: null, title: t("legal.landing.feat_demo_title", "See it running"), desc: t("legal.landing.feat_demo_desc", "Open the app, press play, and hear the difference."), spec: t("legal.landing.spec_demo", "Open Flow"), cta: true },
             ].map((f) => {
               const Icon = f.Icon;
               const inner = (
@@ -342,7 +344,7 @@ export default async function LandingPage({
         <footer className="w-full max-w-7xl mx-auto px-8 py-8 border-t border-white/[0.04] bg-transparent flex flex-col md:flex-row items-center justify-between gap-4 text-left">
           <div className="space-y-1">
             <div className="text-[10px] font-mono text-white/50">
-              © {new Date().getFullYear()} Flowstate. {t("legal.landing.footer_rights", "All rights reserved.")}
+              © {new Date().getFullYear()} Flow by Virzy Guns. {t("legal.landing.footer_rights", "All rights reserved.")}
             </div>
             <div className="text-[9px] font-mono text-white/20">
               {t("legal.landing.footer_operator", "Operated by Virzy Guns Production.")}
