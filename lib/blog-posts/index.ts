@@ -105,6 +105,7 @@ import { post097 } from './097-what-convolution-reverb-is-doing';
 import { post098 } from './098-why-latency-changes-performance-feel';
 import { post099 } from './099-bit-depth-is-about-noise-not-magic-warmth';
 import { post100 } from './100-every-plugin-is-math-wearing-an-interface';
+import { post101 } from './101-i-built-flow-deep-work-music-and-a-pomodoro-timer';
 
 export const newArticles: BlogArticle[] = [
     post001,
@@ -206,5 +207,6 @@ export const newArticles: BlogArticle[] = [
     post097,
     post098,
     post099,
-    post100
+    post100,
+    post101
 ];

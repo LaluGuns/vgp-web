@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/studio/masterclass',
         '/lab/healingwave',
         '/cadenz',
+        '/flow',
         '/book',
         '/blog',
     ].map((route) => ({

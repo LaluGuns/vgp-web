@@ -12,6 +12,7 @@ export const siteNav = [
     { name: 'Studio', href: '/studio' },
     { name: 'HealingWave Lab', href: '/lab/healingwave' },
     { name: 'CADENZ', href: '/cadenz' },
+    { name: 'Flow', href: '/flow' },
     { name: 'Masterclass', href: '/studio/masterclass' },
     { name: 'Books', href: '/book' },
     { name: 'Blog', href: '/blog' },
