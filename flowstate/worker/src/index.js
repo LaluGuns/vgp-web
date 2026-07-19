@@ -25,6 +25,8 @@ const CATALOG_TTL_MS = 5 * 60 * 1000;
 const MAX_ITEMS = 24; // one playlist page worth of URLs per request
 const MAX_BODY_BYTES = 16 * 1024;
 const MIN_SIGNING_SECRET_LENGTH = 32;
+const CREATOR_GENRES = new Set(["City Pop", "Cyberpunk Jazz", "Neo Synthwave"]);
+const DOWNLOAD_TTL_SECONDS = 5 * 60;
 
 export default {
   async fetch(request, env) {
@@ -42,8 +44,14 @@ export default {
       if (url.pathname === "/v1/urls" && request.method === "POST") {
         return await issueUrls(request, env, cors);
       }
+      if (url.pathname === "/v1/download-url" && request.method === "POST") {
+        return await issueDownloadUrl(request, env, cors);
+      }
       if (url.pathname === "/v1/stream" && (request.method === "GET" || request.method === "HEAD")) {
         return await stream(request, env, url, cors);
+      }
+      if (url.pathname === "/v1/download" && (request.method === "GET" || request.method === "HEAD")) {
+        return await download(request, env, url, cors);
       }
       return json({ error: "not found" }, 404, cors);
     } catch (err) {
@@ -92,7 +100,12 @@ async function getCatalog(env) {
   for (const e of entries) {
     // hlsUrl is stored with a leading slash: "/tracks/city-pop/x.mp3" → key "tracks/..."
     const key = String(e.hlsUrl || "").replace(/^\//, "");
-    if (key) map.set(key, { isPremium: !!e.isPremium });
+    if (key) {
+      map.set(key, {
+        isPremium: !!e.isPremium,
+        creatorLicenseEligible: CREATOR_GENRES.has(e.genre),
+      });
+    }
   }
   catalogCache = { map, at: now };
   return map;
@@ -223,6 +236,53 @@ async function verifyToken(env, key, exp, sig) {
   }
 }
 
+async function safeSecretEqual(provided, expected) {
+  if (typeof provided !== "string" || typeof expected !== "string" || expected.length < 32) {
+    return false;
+  }
+  const [left, right] = await Promise.all([
+    crypto.subtle.digest("SHA-256", enc.encode(provided)),
+    crypto.subtle.digest("SHA-256", enc.encode(expected)),
+  ]);
+  const a = new Uint8Array(left);
+  const b = new Uint8Array(right);
+  let diff = a.length ^ b.length;
+  for (let i = 0; i < Math.max(a.length, b.length); i += 1) {
+    diff |= (a[i] || 0) ^ (b[i] || 0);
+  }
+  return diff === 0;
+}
+
+async function signDownloadToken(env, key, filename, exp) {
+  if (!hasSigningSecret(env)) throw new Error("URL signing secret is not configured");
+  const sig = await crypto.subtle.sign(
+    "HMAC",
+    await hmacKey(env.URL_SIGNING_SECRET),
+    enc.encode(`download|${key}|${filename}|${exp}`)
+  );
+  return b64url(sig);
+}
+
+async function verifyDownloadToken(env, key, filename, exp, sig) {
+  const expires = Number(exp);
+  if (!hasSigningSecret(env) || !key || !filename || !Number.isSafeInteger(expires) || !sig || Date.now() / 1000 > expires) {
+    return false;
+  }
+  try {
+    const normalized = sig.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=");
+    const bytes = Uint8Array.from(atob(padded), (char) => char.charCodeAt(0));
+    return await crypto.subtle.verify(
+      "HMAC",
+      await hmacKey(env.URL_SIGNING_SECRET),
+      bytes,
+      enc.encode(`download|${key}|${filename}|${expires}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
 // ── POST /v1/urls ──────────────────────────────────────────────────────────
 
 // tracks/<category>/<file>.mp3  — music (catalog-gated)
@@ -303,6 +363,52 @@ async function issueUrls(request, env, cors) {
   return json({ urls: results }, 200, cors);
 }
 
+// Server-to-server only. Next.js authenticates the user, checks canonical
+// subscription rows and requires an unrevoked creator grant before this call.
+async function issueDownloadUrl(request, env, cors) {
+  const contentLength = Number(request.headers.get("content-length") || 0);
+  if (contentLength > MAX_BODY_BYTES) return json({ error: "request too large" }, 413, cors);
+  if (!hasSigningSecret(env) || typeof env.CREATOR_DOWNLOAD_SECRET !== "string") {
+    return json({ error: "service unavailable" }, 503, cors);
+  }
+  const authorized = await safeSecretEqual(
+    request.headers.get("x-creator-download-secret") || "",
+    env.CREATOR_DOWNLOAD_SECRET
+  );
+  if (!authorized) return json({ error: "unauthorized" }, 401, cors);
+
+  let body;
+  try {
+    const rawBody = await request.text();
+    if (enc.encode(rawBody).byteLength > MAX_BODY_BYTES) {
+      return json({ error: "request too large" }, 413, cors);
+    }
+    body = JSON.parse(rawBody);
+  } catch {
+    return json({ error: "invalid json" }, 400, cors);
+  }
+
+  const key = String(body?.path || "").replace(/^\//, "");
+  const filename = String(body?.filename || "");
+  if (!KEY_RE.test(key) || !/^[a-z0-9][a-z0-9_-]{0,95}\.mp3$/.test(filename)) {
+    return json({ error: "invalid download" }, 400, cors);
+  }
+  const catalog = await getCatalog(env);
+  if (!catalog.get(key)?.creatorLicenseEligible) {
+    return json({ error: "not eligible" }, 404, cors);
+  }
+
+  const exp = Math.floor(Date.now() / 1000) + DOWNLOAD_TTL_SECONDS;
+  const sig = await signDownloadToken(env, key, filename, exp);
+  const kTok = b64url(enc.encode(key));
+  const nTok = b64url(enc.encode(filename));
+  const origin = new URL(request.url).origin;
+  return json({
+    url: `${origin}/v1/download?k=${kTok}&n=${nTok}&e=${exp}&s=${sig}`,
+    expires_at: new Date(exp * 1000).toISOString(),
+  }, 200, cors);
+}
+
 // ── GET /v1/stream ─────────────────────────────────────────────────────────
 
 async function stream(request, env, url, cors) {
@@ -375,4 +481,43 @@ async function stream(request, env, url, cors) {
   }
   headers.set("content-length", String(size));
   return new Response(object.body, { status: 200, headers });
+}
+
+async function download(request, env, url, cors) {
+  let key;
+  let filename;
+  try {
+    const decode = (value) => {
+      const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+      return atob(normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "="));
+    };
+    key = decode(url.searchParams.get("k") || "");
+    filename = decode(url.searchParams.get("n") || "");
+  } catch {
+    return json({ error: "expired or invalid url" }, 403, cors);
+  }
+  if (!KEY_RE.test(key) || !/^[a-z0-9][a-z0-9_-]{0,95}\.mp3$/.test(filename)) {
+    return json({ error: "expired or invalid url" }, 403, cors);
+  }
+  if (!(await verifyDownloadToken(env, key, filename, url.searchParams.get("e"), url.searchParams.get("s")))) {
+    return json({ error: "expired or invalid url" }, 403, cors);
+  }
+
+  const object = request.method === "HEAD"
+    ? await env.AUDIO_BUCKET.head(key)
+    : await env.AUDIO_BUCKET.get(key);
+  if (!object) return json({ error: "not found" }, 404, cors);
+
+  const headers = new Headers({
+    ...cors,
+    "content-type": "audio/mpeg",
+    "content-disposition": `attachment; filename="${filename}"`,
+    "content-length": String(object.size),
+    "cache-control": "private, no-store",
+    "x-content-type-options": "nosniff",
+  });
+  return new Response(request.method === "HEAD" ? null : object.body, {
+    status: 200,
+    headers,
+  });
 }

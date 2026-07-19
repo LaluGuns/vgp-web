@@ -5,6 +5,7 @@ import worker from "../../worker/src/index.js";
 
 const freePath = "/tracks/test/free.mp3";
 const premiumPath = "/tracks/test/pro.mp3";
+const lofiPath = "/tracks/test/lofi.mp3";
 
 function env(overrides = {}) {
   return {
@@ -14,17 +15,28 @@ function env(overrides = {}) {
     URL_SIGNING_SECRET: "test-secret-that-is-at-least-32-bytes-long",
     SUPABASE_URL: "https://project.supabase.co",
     SUPABASE_ANON_KEY: "public-anon-key",
+    CREATOR_DOWNLOAD_SECRET: "creator-download-secret-at-least-32-bytes",
     AUDIO_BUCKET: {
       async get(key) {
         if (key === "tracks/catalog.json") {
           return {
             async json() {
               return [
-                { hlsUrl: freePath, isPremium: false },
-                { hlsUrl: premiumPath, isPremium: true },
+                { hlsUrl: freePath, isPremium: false, genre: "City Pop" },
+                { hlsUrl: premiumPath, isPremium: true, genre: "Cyberpunk Jazz" },
+                { hlsUrl: lofiPath, isPremium: false, genre: "Lofi Chill" },
               ];
             },
           };
+        }
+        if ([freePath, premiumPath, lofiPath].map((path) => path.slice(1)).includes(key)) {
+          return { body: "audio", size: 5 };
+        }
+        return null;
+      },
+      async head(key) {
+        if ([freePath, premiumPath, lofiPath].map((path) => path.slice(1)).includes(key)) {
+          return { size: 5 };
         }
         return null;
       },
@@ -121,4 +133,48 @@ test("worker rejects oversized bodies and unsupported range forms", async () => 
     workerEnv
   );
   assert.equal(suffixRange.status, 416);
+});
+
+test("worker issues creator attachment URLs only through the server secret", async () => {
+  const workerEnv = env();
+  const request = (secret, path = premiumPath) => new Request("https://audio.example/v1/download-url", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-creator-download-secret": secret,
+    },
+    body: JSON.stringify({ path, filename: "creator-track.mp3" }),
+  });
+
+  const denied = await worker.fetch(request("wrong-secret-that-is-at-least-32-bytes"), workerEnv);
+  assert.equal(denied.status, 401);
+
+  // Creator eligibility is genre-based and independent from premium playback.
+  const issued = await worker.fetch(
+    request("creator-download-secret-at-least-32-bytes"),
+    workerEnv
+  );
+  assert.equal(issued.status, 200);
+  const payload = await issued.json();
+  assert.match(payload.url, /^https:\/\/audio\.example\/v1\/download\?/);
+
+  const attachment = await worker.fetch(new Request(payload.url), workerEnv);
+  assert.equal(attachment.status, 200);
+  assert.equal(attachment.headers.get("content-disposition"), 'attachment; filename="creator-track.mp3"');
+  assert.equal(await attachment.text(), "audio");
+});
+
+test("worker excludes Lofi genres from creator downloads", async () => {
+  const response = await worker.fetch(
+    new Request("https://audio.example/v1/download-url", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-creator-download-secret": "creator-download-secret-at-least-32-bytes",
+      },
+      body: JSON.stringify({ path: lofiPath, filename: "lofi.mp3" }),
+    }),
+    env()
+  );
+  assert.equal(response.status, 404);
 });

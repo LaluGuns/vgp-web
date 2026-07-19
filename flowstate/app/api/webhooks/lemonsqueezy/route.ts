@@ -91,7 +91,7 @@ export async function POST(req: Request) {
 
     const { data: existing, error: lookupError } = await supabase
       .from("flowstate_subscriptions")
-      .select("user_id, provider_updated_at")
+      .select("id, user_id, provider_updated_at")
       .eq("provider_subscription_id", refundedSubscriptionId)
       .maybeSingle();
     if (lookupError) return NextResponse.json({ error: "db_error" }, { status: 500 });
@@ -110,6 +110,22 @@ export async function POST(req: Request) {
       })
       .eq("provider_subscription_id", refundedSubscriptionId);
     if (refundError || await syncProfilePlan(supabase, existing.user_id)) {
+      return NextResponse.json({ error: "db_error" }, { status: 500 });
+    }
+
+    // A full refund revokes only grants issued from this exact canonical
+    // subscription. Normal cancellation never reaches this branch, so already
+    // published content keeps its perpetual receipt after cancellation.
+    const { error: grantRevokeError } = await supabase
+      .from("flowstate_creator_license_grants")
+      .update({
+        revoked_at: validIsoDate(attributes.refunded_at) ?? providerUpdatedAt,
+        revocation_reason: "subscription_refunded",
+      })
+      .eq("user_id", existing.user_id)
+      .contains("plan_snapshot", { subscription_id: existing.id })
+      .is("revoked_at", null);
+    if (grantRevokeError) {
       return NextResponse.json({ error: "db_error" }, { status: 500 });
     }
     return NextResponse.json({ received: true });
