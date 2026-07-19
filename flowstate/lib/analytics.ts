@@ -1,4 +1,6 @@
 import posthog from "posthog-js";
+import { classifyAcquisition, type AcquisitionClass } from "@/lib/analytics-acquisition";
+export { classifyAcquisition } from "@/lib/analytics-acquisition";
 
 /**
  * Product analytics (PostHog) — privacy-first configuration.
@@ -27,6 +29,34 @@ const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY || "";
 const HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
 
 let initialized = false;
+const FIRST_TOUCH_KEY = "flow_first_touch_v1";
+
+export type AnalyticsProperties = Record<string, string | number | boolean | undefined>;
+export interface FirstTouch { channel: AcquisitionClass; referrerHost: string | null; landingPath: string; capturedAt: string; }
+
+export function getOrCreateFirstTouch(path: string): FirstTouch | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const saved = window.localStorage.getItem(FIRST_TOUCH_KEY);
+    if (saved) return JSON.parse(saved) as FirstTouch;
+    const referrer = document.referrer;
+    const touch: FirstTouch = { channel: classifyAcquisition(referrer, window.location.hostname, navigator.userAgent), referrerHost: referrer ? new URL(referrer).hostname : null, landingPath: path, capturedAt: new Date().toISOString() };
+    window.localStorage.setItem(FIRST_TOUCH_KEY, JSON.stringify(touch));
+    return touch;
+  } catch { return null; }
+}
+
+export function marketingCluster(path: string): string {
+  if (path.includes("creator-music")) return "creator_music";
+  if (path.includes("deep-work")) return "deep_work";
+  if (path.includes("study-timer")) return "study_timer";
+  if (path.includes("pomodoro")) return "pomodoro_music";
+  if (path.includes("/timer/")) return "timer_preset";
+  if (path.includes("/pricing")) return "pricing";
+  return "product";
+}
+
+export function localeFromPath(path: string): string { return path.match(/^\/([a-z]{2}(?:-[A-Z]{2})?)(?:\/|$)/)?.[1] ?? "en"; }
 
 export function analyticsEnabled(): boolean {
   return KEY.length > 0 && typeof window !== "undefined";
@@ -48,7 +78,10 @@ export function initAnalytics(): void {
 
 export function trackPageview(path: string): void {
   if (!initialized) return;
-  posthog.capture("$pageview", { $current_url: window.location.origin + path });
+  const firstTouch = getOrCreateFirstTouch(path);
+  const context = { landing_path: path, cluster: marketingCluster(path), locale: localeFromPath(path), first_touch: firstTouch?.channel ?? "unknown" };
+  posthog.capture("$pageview", { $current_url: window.location.origin + path, ...context });
+  if (firstTouch?.channel === "organic" && firstTouch.landingPath === path) posthog.capture("seo_landing_view", context);
 }
 
 type EventName =
@@ -61,11 +94,21 @@ type EventName =
   | "upgrade_clicked"
   | "checkout_started"
   | "checkout_redirected"
-  | "theme_changed";
+  | "theme_changed"
+  | "seo_landing_view"
+  | "seo_cta_clicked"
+  | "creator_genre_viewed"
+  | "creator_track_previewed"
+  | "creator_license_started"
+  | "creator_license_granted"
+  | "creator_track_downloaded"
+  | "license_attribution_copied"
+  | "spotify_catalog_clicked";
 
-export function track(event: EventName, props?: Record<string, string | number | boolean>): void {
+export function track(event: EventName, props?: AnalyticsProperties): void {
   if (!initialized) return;
-  posthog.capture(event, props);
+  const firstTouch = typeof window === "undefined" ? null : getOrCreateFirstTouch(window.location.pathname);
+  posthog.capture(event, { ...props, first_touch: firstTouch?.channel ?? "unknown" });
 }
 
 export function identifyUser(userId: string | null): void {

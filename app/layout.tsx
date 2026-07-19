@@ -96,9 +96,6 @@ export const metadata: Metadata = {
             'max-snippet': -1,
         },
     },
-    alternates: {
-        canonical: '/',
-    },
 };
 
 export default async function RootLayout({
@@ -114,11 +111,6 @@ export default async function RootLayout({
         name: 'Virzy Guns Production',
         url: 'https://www.virzyguns.com',
         description: 'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
-        potentialAction: {
-            '@type': 'SearchAction',
-            target: 'https://www.virzyguns.com/search?q={search_term_string}',
-            'query-input': 'required name=search_term_string',
-        },
     };
 
     const organizationJsonLd = {

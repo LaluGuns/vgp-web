@@ -12,6 +12,7 @@ export interface BlogArticle {
     content: string;
     category: 'production-tips' | 'licensing-guide' | 'genre-guides' | 'songwriting' | 'arrangement-groove' | 'sound-design' | 'vocal-production' | 'mixing-mastering' | 'producer-psychology' | 'audio-science';
     publishedAt: string;
+    updatedAt?: string;
     readingTime: number;
     featured?: boolean;
     seo: {

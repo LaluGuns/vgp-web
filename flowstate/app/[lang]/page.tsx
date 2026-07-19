@@ -22,6 +22,7 @@ import { HeroMachinesIsland } from "@/components/landing/hero-machines-island";
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
 import { LandingLanguageSelector } from "@/components/landing/language-selector";
 import { LandingEffects } from "@/components/landing/landing-effects";
+import { TrackedLink } from "@/components/analytics/tracked-link";
 
 export default async function LandingPage({
   params,
@@ -90,7 +91,7 @@ export default async function LandingPage({
             <a href="#soundtracks" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
               {t("legal.landing.nav_soundtracks", "Soundtracks")}
             </a>
-            <Link href="/pricing" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
+            <Link href={`/${locale}/pricing`} className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
               {t("legal.landing.nav_pricing", "Pricing")}
             </Link>
           </nav>
@@ -100,7 +101,7 @@ export default async function LandingPage({
             <LandingLanguageSelector />
 
             <Link
-              href="/app"
+              href={`/${locale}/app`}
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[#00e5ff] border border-[#00e5ff]/30 hover:border-[#00e5ff] bg-[#00e5ff]/5 hover:bg-[#00e5ff]/10 rounded-xl transition-all duration-200 shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_20px_rgba(0,229,255,0.3)]"
             >
               {t("legal.landing.cta_start", "Start Focusing (Free)")}
@@ -126,15 +127,17 @@ export default async function LandingPage({
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <Link
-                href="/app"
+              <TrackedLink
+                href={`/${locale}/app`}
+                destination={`/${locale}/app`}
+                source="landing_hero_primary"
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] flex items-center gap-2 group"
               >
                 {t("legal.landing.cta_start", "Start focusing")}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+              </TrackedLink>
               <Link
-                href="/pricing"
+                href={`/${locale}/pricing`}
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-white/80 hover:text-white bg-white/[0.02] hover:bg-white/[0.04] border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5"
               >
                 {t("legal.landing.cta_explore", "See Pro")}
@@ -232,7 +235,7 @@ export default async function LandingPage({
                 </div>
               );
               return f.cta || f.accent ? (
-                <Link key={f.code} href="/app" className="block">{inner}</Link>
+                <Link key={f.code} href={`/${locale}/app`} className="block">{inner}</Link>
               ) : (
                 <div key={f.code}>{inner}</div>
               );
@@ -275,7 +278,7 @@ export default async function LandingPage({
                   </div>
                 </div>
                 <Link
-                  href="/app"
+                  href={`/${locale}/app`}
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/15 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all"
                 >
                   {t("legal.landing.cta_start", "Start focusing")}
@@ -308,7 +311,7 @@ export default async function LandingPage({
                   </div>
                 </div>
                 <Link
-                  href="/pricing"
+                  href={`/${locale}/pricing`}
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_10px_rgba(0,229,255,0.2)]"
                 >
                   {t("legal.landing.pricing_go_pro", "Go Pro")}
@@ -332,7 +335,7 @@ export default async function LandingPage({
             </div>
             {/* There is no roadmap page — the honest CTA here is the app itself. */}
             <Link
-              href="/app"
+              href={`/${locale}/app`}
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
             >
               {t("legal.landing.pricing_cta", "Start focusing")}
@@ -368,19 +371,19 @@ export default async function LandingPage({
           </div>
 
           <div className="flex flex-wrap gap-4 text-[10px] font-mono text-muted-foreground/50">
-            <Link href="/legal/terms" className="hover:text-white transition-colors">
+            <Link href={`/${locale}/legal/terms`} className="hover:text-white transition-colors">
               {t("dashboard.terms", "Terms")}
             </Link>
             <span>·</span>
-            <Link href="/legal/privacy" className="hover:text-white transition-colors">
+            <Link href={`/${locale}/legal/privacy`} className="hover:text-white transition-colors">
               {t("dashboard.privacy", "Privacy")}
             </Link>
             <span>·</span>
-            <Link href="/legal/refund" className="hover:text-white transition-colors">
+            <Link href={`/${locale}/legal/refund`} className="hover:text-white transition-colors">
               {t("dashboard.refunds", "Refunds")}
             </Link>
             <span>·</span>
-            <Link href="/legal/cookies" className="hover:text-white transition-colors">
+            <Link href={`/${locale}/legal/cookies`} className="hover:text-white transition-colors">
               {t("dashboard.cookies", "Cookies")}
             </Link>
           </div>

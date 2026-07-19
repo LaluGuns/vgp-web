@@ -3,6 +3,12 @@ import type { AmbientChannel } from "@/lib/stores/mixer-store";
 import { AMBIENT_SOUND_CATALOG } from "@/lib/audio/ambient-catalog";
 import catalogJson from "@/public/tracks/catalog.json";
 
+export {
+  CREATOR_TRACKS,
+  CREATOR_TRACK_BY_ID,
+  creatorTracksByGenre,
+} from "@/lib/creator-license/catalog";
+
 type CatalogEntry = {
   id: string;
   title: string;

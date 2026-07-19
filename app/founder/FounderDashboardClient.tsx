@@ -97,6 +97,16 @@ interface FlowstateMetrics {
     sessions: { count7d: number; minutes7d: number; count30d: number; minutes30d: number; daily: FlowstateDailyPoint[] };
     signups: { last24h: number; last7d: number };
 }
+interface SeoBreakdownRow { clicks: number; impressions: number; ctr: string; position: number; [key: string]: string | number | boolean; }
+interface SeoMetrics {
+    clicks: number; impressions: number; ctr: string; position: number;
+    chart: { date: string; clicks: number; impressions: number }[];
+    queries: (SeoBreakdownRow & { query: string; brand: boolean })[];
+    countries?: (SeoBreakdownRow & { country: string })[];
+    devices?: (SeoBreakdownRow & { device: string })[];
+    clusters?: (SeoBreakdownRow & { cluster: string; locale: string })[];
+    scope?: { pagePrefix: string; startDate: string; endDate: string };
+}
 interface FlowstateUserRow {
     email: string;
     plan: string;
@@ -595,11 +605,14 @@ export default function FounderDashboardClient() {
     const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
     useEffect(() => {
-        setCurrentTime(new Date());
+        const initial = setTimeout(() => setCurrentTime(new Date()), 0);
         const timer = setInterval(() => {
             setCurrentTime(new Date());
         }, 1000);
-        return () => clearInterval(timer);
+        return () => {
+            clearTimeout(initial);
+            clearInterval(timer);
+        };
     }, []);
 
     const getGreetingAndClock = () => {
@@ -680,7 +693,7 @@ export default function FounderDashboardClient() {
     const [healthLoading, setHealthLoading] = useState(false);
 
     // SEO States
-    const [seoMetrics, setSeoMetrics] = useState<any>(null);
+    const [seoMetrics, setSeoMetrics] = useState<SeoMetrics | null>(null);
     const [seoLoading, setSeoLoading] = useState(false);
     const [seoConnected, setSeoConnected] = useState<boolean | null>(null);
     const [seoClientEmail, setSeoClientEmail] = useState<string | null>(null);
@@ -859,7 +872,8 @@ export default function FounderDashboardClient() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            loadSubscribers();
+            const timer = setTimeout(() => loadSubscribers(), 0);
+            return () => clearTimeout(timer);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated, statusFilter, tagFilter, currentPage, pageSize]);
@@ -1496,13 +1510,6 @@ export default function FounderDashboardClient() {
         loadSubscribers(1, { key, direction });
     };
 
-    const SortIcon = ({ columnKey }: { columnKey: string }) => {
-        if (!sortConfig || sortConfig.key !== columnKey) {
-            return <span className="ml-1 inline-block text-white/20 font-sans">↕</span>;
-        }
-        return <span className="ml-1 inline-block text-sky-300 font-sans">{sortConfig.direction === 'asc' ? '↑' : '↓'}</span>;
-    };
-
     const handleCreateCampaign = async (e: React.FormEvent) => {
         e.preventDefault();
         setCampaignActionLoading(true);
@@ -1979,10 +1986,10 @@ export default function FounderDashboardClient() {
                                                             className="rounded border-white/20 bg-white/[0.03] text-sky-400 focus:ring-sky-400 focus:ring-offset-0 cursor-pointer h-4 w-4 transition"
                                                         />
                                                     </th>
-                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('name')}>Name <SortIcon columnKey="name" /></th>
-                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('email')}>Email <SortIcon columnKey="email" /></th>
-                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('status')}>Status <SortIcon columnKey="status" /></th>
-                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('created_at')}>Registered <SortIcon columnKey="created_at" /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('name')}>Name <SortIcon columnKey="name" activeKey={sortConfig?.key ?? ''} direction={sortConfig?.direction ?? 'desc'} /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('email')}>Email <SortIcon columnKey="email" activeKey={sortConfig?.key ?? ''} direction={sortConfig?.direction ?? 'desc'} /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('status')}>Status <SortIcon columnKey="status" activeKey={sortConfig?.key ?? ''} direction={sortConfig?.direction ?? 'desc'} /></th>
+                                                    <th className="px-6 py-4 font-semibold cursor-pointer hover:text-white transition" onClick={() => requestSort('created_at')}>Registered <SortIcon columnKey="created_at" activeKey={sortConfig?.key ?? ''} direction={sortConfig?.direction ?? 'desc'} /></th>
                                                     <th className="px-6 py-4 text-right font-semibold">Actions</th>
                                                 </tr>
                                             </thead>
@@ -2094,7 +2101,7 @@ export default function FounderDashboardClient() {
                                                                             {sub.product_title && (
                                                                                 <div>
                                                                                     <span className="block text-white/30 uppercase tracking-wider text-[9px] mb-0.5 font-bold">Product Purchased</span>
-                                                                                    <span className="text-sky-200 font-medium italic">"{sub.product_title}"</span>
+                                                                                    <span className="text-sky-200 font-medium italic">&quot;{sub.product_title}&quot;</span>
                                                                                 </div>
                                                                             )}
                                                                             {sub.user_profile && (
@@ -2333,7 +2340,7 @@ export default function FounderDashboardClient() {
                                         <li>Go to the <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Cloud Console</a> and enable the <strong>Google Search Console API</strong>.</li>
                                         <li>Create a <strong>Service Account</strong> in IAM & Admin &rarr; Service Accounts. Generate and download a key in <strong>JSON</strong> format.</li>
                                         <li>Go to your <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="text-sky-300 underline">Google Search Console</a>, select the property <strong>sc-domain:virzyguns.com</strong>.</li>
-                                        <li>Under Settings &rarr; Users and Permissions, add the Service Account's email (e.g., <code className="text-sky-200">my-account@...gserviceaccount.com</code>) as a user with <strong>Restricted (Read-only)</strong> permissions.</li>
+                                        <li>Under Settings &rarr; Users and Permissions, add the Service Account&apos;s email (e.g., <code className="text-sky-200">my-account@...gserviceaccount.com</code>) as a user with <strong>Restricted (Read-only)</strong> permissions.</li>
                                         <li>Add the environment variable <strong>`GOOGLE_SERVICE_ACCOUNT_JSON`</strong> in Vercel. Set its value to the exact raw text of the downloaded JSON key file, then redeploy.</li>
                                     </ol>
                                 </div>
@@ -2354,11 +2361,12 @@ export default function FounderDashboardClient() {
                                     <StatCard label="Average CTR" value={seoMetrics.ctr} Icon={TrendingUp} accent="text-emerald-300" />
                                     <StatCard label="Average Position" value={seoMetrics.position} Icon={LayoutDashboard} accent="text-amber-300" />
                                 </div>
+                                <p className="text-[11px] text-white/40">Scope: Flow only ({seoMetrics.scope?.pagePrefix || 'flow.virzyguns.com'}) · {seoMetrics.scope?.startDate}–{seoMetrics.scope?.endDate}</p>
 
                                 {/* Graph / Chart */}
                                 <div className="liquid-glass rounded-lg p-6">
                                     <Eyebrow>Organic search performance (30 days)</Eyebrow>
-                                    <TrendChart values={(seoMetrics.chart || []).map((d: any) => d.clicks)} ariaLabel="SEO click growth over 30 days" gradientId="seoFill" />
+                                    <TrendChart values={(seoMetrics.chart || []).map((d) => d.clicks)} ariaLabel="SEO click growth over 30 days" gradientId="seoFill" />
                                     <div className="mt-3 flex justify-between text-[10px] text-white/35">
                                         <span>30 days ago</span>
                                         <span>Clicks Trend</span>
@@ -2383,9 +2391,9 @@ export default function FounderDashboardClient() {
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-white/[0.05] text-white/80">
-                                                {seoMetrics.queries?.map((q: any) => (
+                                                {seoMetrics.queries?.map((q) => (
                                                     <tr key={q.query} className="transition hover:bg-white/[0.02]">
-                                                        <td className="px-6 py-3 text-white font-medium">{q.query}</td>
+                                                        <td className="px-6 py-3 text-white font-medium">{q.query} {q.brand && <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 text-[9px] text-white/50">brand</span>}</td>
                                                         <td className="px-6 py-3">{q.clicks}</td>
                                                         <td className="px-6 py-3 text-white/55">{q.impressions}</td>
                                                         <td className="px-6 py-3 text-sky-200">{q.ctr}</td>
@@ -2395,6 +2403,21 @@ export default function FounderDashboardClient() {
                                             </tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div className="grid gap-4 lg:grid-cols-3">
+                                    {[
+                                        { title: 'Page clusters', rows: seoMetrics.clusters || [], label: (row: SeoBreakdownRow) => `${row.cluster} · ${row.locale}` },
+                                        { title: 'Countries', rows: seoMetrics.countries || [], label: (row: SeoBreakdownRow) => row.country },
+                                        { title: 'Devices', rows: seoMetrics.devices || [], label: (row: SeoBreakdownRow) => row.device },
+                                    ].map(({ title, rows, label }) => (
+                                        <div key={title} className="liquid-glass rounded-lg p-5">
+                                            <Eyebrow>{title}</Eyebrow>
+                                            <div className="mt-4 space-y-2 text-xs">
+                                                {rows.slice(0, 6).map((row, index) => <div key={`${title}-${index}`} className="flex items-center justify-between gap-3 text-white/65"><span className="truncate">{label(row)}</span><span className="shrink-0 text-sky-200">{row.clicks} clicks</span></div>)}
+                                                {!rows.length && <p className="text-white/35">No Search Console rows yet.</p>}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </>
                         )}

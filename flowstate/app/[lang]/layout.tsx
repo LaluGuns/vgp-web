@@ -5,11 +5,8 @@ import "../globals.css";
 import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/translations/dictionaries";
 import { getTranslator } from "@/lib/translations/server";
 import { LocaleProvider } from "@/hooks/use-translation";
-import { AudioDriver } from "@/components/audio/audio-driver";
-import { UpgradePrompt } from "@/components/pricing/upgrade-prompt";
-import { GuestGate } from "@/components/auth/guest-gate";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
-import { ThemeProvider } from "@/components/theme/theme-provider";
+import { indexableLanguageAlternates, isIndexableLocale, localePath } from "@/lib/marketing/seo-registry";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -59,10 +56,10 @@ export async function generateMetadata({
   );
 
   // hreflang: every locale gets its own URL, plus x-default → English.
-  const languages: Record<string, string> = Object.fromEntries(
-    LOCALES.map((l) => [l, `/${l}`])
-  );
-  languages["x-default"] = `/${DEFAULT_LOCALE}`;
+  const indexable = isIndexableLocale(locale);
+  const languages = indexable
+    ? { ...indexableLanguageAlternates(""), "x-default": localePath(DEFAULT_LOCALE) }
+    : undefined;
 
   return {
     metadataBase: new URL(SITE),
@@ -84,9 +81,10 @@ export async function generateMetadata({
       description: ogDescription,
     },
     alternates: {
-      canonical: `/${locale}`,
+      canonical: localePath(locale),
       languages,
     },
+    robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
     manifest: "/manifest.json",
   };
 }
@@ -112,11 +110,7 @@ export default async function LangLayout({
           }}
         />
         <LocaleProvider initialLocale={lang as Locale}>
-          <AudioDriver />
-          <UpgradePrompt />
-          <GuestGate />
           <AnalyticsProvider />
-          <ThemeProvider />
           {children}
         </LocaleProvider>
 

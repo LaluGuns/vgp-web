@@ -107,7 +107,7 @@ export default function PricingPage() {
       <WebGLBackground />
       <main className="min-h-screen overflow-y-auto flex items-start md:items-center justify-center p-4 py-10">
         <div className="w-full max-w-lg space-y-5">
-          <Link href="/app" className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
+          <Link href={`/${locale}/app`} className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
             <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flow")}
           </Link>
 
@@ -257,11 +257,11 @@ export default function PricingPage() {
             </div>
 
             <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground/40">
-              <Link href="/legal/terms" className="hover:text-white transition-colors">{t("dashboard.terms", "Terms")}</Link>
+              <Link href={`/${locale}/legal/terms`} className="hover:text-white transition-colors">{t("dashboard.terms", "Terms")}</Link>
               <span className="w-1 h-1 rounded-full bg-white/10" />
-              <Link href="/legal/privacy" className="hover:text-white transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
+              <Link href={`/${locale}/legal/privacy`} className="hover:text-white transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
               <span className="w-1 h-1 rounded-full bg-white/10" />
-              <Link href="/legal/refund" className="hover:text-white transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
+              <Link href={`/${locale}/legal/refund`} className="hover:text-white transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
             </div>
           </div>
         </div>

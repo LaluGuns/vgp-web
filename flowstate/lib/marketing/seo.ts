@@ -2,15 +2,16 @@
 // landings, /license, /alternatives). Metadata + JSON-LD builders only —
 // no React, safe to import from server components.
 import type { Metadata } from "next";
-import { LANGUAGES, DEFAULT_LOCALE } from "@/lib/translations/dictionaries";
+import { DEFAULT_LOCALE } from "@/lib/translations/dictionaries";
+import { indexableLanguageAlternates, localePath, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
 
 export const SITE_URL = "https://flow.virzyguns.com";
-const LOCALES = Object.keys(LANGUAGES);
 
 export type FaqItem = { q: string; a: string };
 
 /**
- * Per-page metadata with canonical + hreflang alternates for all 11 locales.
+ * Per-page metadata with a self canonical. Only reviewed EN/ID pages receive
+ * hreflang and index permission; fallback locales remain crawlable but noindex.
  * `path` is the locale-less route, e.g. "timer/50-10". The layout already
  * sets metadataBase and the `%s · Flow by Virzy Guns` title template.
  */
@@ -20,18 +21,21 @@ export function marketingMetadata(
   title: string,
   description: string
 ): Metadata {
-  const languages: Record<string, string> = Object.fromEntries(
-    LOCALES.map((l) => [l, `/${l}/${path}`])
-  );
-  languages["x-default"] = `/${DEFAULT_LOCALE}/${path}`;
+  const indexable = shouldIndexSeoPage(locale, path);
+  const languages = indexable ? {
+    ...indexableLanguageAlternates(path),
+    "x-default": localePath(DEFAULT_LOCALE, path),
+  } : undefined;
 
   return {
+    metadataBase: new URL(SITE_URL),
     title,
     description,
     alternates: {
-      canonical: `/${locale}/${path}`,
+      canonical: localePath(locale, path),
       languages,
     },
+    robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: { title, description },
   };
 }

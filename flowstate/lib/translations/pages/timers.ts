@@ -67,10 +67,10 @@ function idFaq(w: number, b: number): FaqItem[] {
 
 const en: Record<TimerSlug, TimerPageCopy> = {
   "25-5": {
-    metaTitle: "25/5 Pomodoro Timer — free, with music",
+    metaTitle: "25/5 Pomodoro Timer — free online",
     metaDescription:
       "Free 25/5 Pomodoro timer that runs in your browser. The classic split: 25 minutes of work, 5 minutes off. Pair it with original focus music in Flow.",
-    h1: "25/5 Pomodoro Timer — free, with music",
+    h1: "25/5 Pomodoro Timer — free online",
     paragraphs: [
       "This is the original Pomodoro split: 25 minutes on one task, 5 minutes off. Francesco Cirillo timed it with a kitchen timer in the late 1980s and the ratio has survived because it works — 25 minutes is short enough that starting doesn't feel like a commitment, and long enough to actually finish something small.",
       "Use 25/5 when the work is made of small, nameable pieces: replying to a queue, fixing a list of bugs, grinding flashcards, editing a document section by section. If you keep hitting the break mid-thought, your tasks probably need a longer block — try 50/10 or 90/15 instead.",
@@ -79,10 +79,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
     faq: enFaq(25, 5),
   },
   "50-10": {
-    metaTitle: "50/10 Pomodoro Timer — free, with music",
+    metaTitle: "50/10 Pomodoro Timer — free online",
     metaDescription:
       "Free 50/10 Pomodoro timer in your browser. 50 minutes of focused work, 10 minutes off — the split for tasks that need a longer ramp-up. Music in Flow.",
-    h1: "50/10 Pomodoro Timer — free, with music",
+    h1: "50/10 Pomodoro Timer — free online",
     paragraphs: [
       "50/10 is the double Pomodoro: 50 minutes of work, 10 minutes off. It exists because some work has a ramp — loading a codebase into your head, getting back into a draft, setting up an experiment — and a 25-minute block ends right when the ramp pays off.",
       "It suits programming, writing, and design sessions where the first ten minutes are just context-loading. The 10-minute break is long enough to actually leave the desk, which matters more at this block length — 50 minutes of sitting plus a 30-second break doesn't reset anything.",
@@ -91,10 +91,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
     faq: enFaq(50, 10),
   },
   "45-15": {
-    metaTitle: "45/15 Pomodoro Timer — free, with music",
+    metaTitle: "45/15 Pomodoro Timer — free online",
     metaDescription:
       "Free 45/15 timer in your browser. 45 minutes of work with a real 15-minute break — a school-period rhythm with room to recover. Music in Flow.",
-    h1: "45/15 Pomodoro Timer — free, with music",
+    h1: "45/15 Pomodoro Timer — free online",
     paragraphs: [
       "45/15 trades a slightly shorter work block for a real break. Forty-five minutes is roughly a school period — a length most people's attention already knows — and fifteen minutes is enough to eat something, stretch, or walk around the block instead of just refreshing a feed.",
       "It's a good split for long study days and for physically draining work, where the limiting factor isn't focus per block but how many blocks you can stack before the day falls apart. The generous break is what keeps block number six as usable as block number two.",
@@ -103,10 +103,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
     faq: enFaq(45, 15),
   },
   "60-10": {
-    metaTitle: "60/10 Pomodoro Timer — free, with music",
+    metaTitle: "60/10 Pomodoro Timer — free online",
     metaDescription:
       "Free 60/10 timer in your browser. A full hour of work, 10 minutes off — clean blocks that map onto a calendar. Original focus music in Flow.",
-    h1: "60/10 Pomodoro Timer — free, with music",
+    h1: "60/10 Pomodoro Timer — free online",
     paragraphs: [
       "60/10 is the calendar-shaped split: a full hour of work, ten minutes off. Its main advantage is boring and practical — hours are how meetings, schedules, and billing already work, so 'two focused hours before lunch' maps directly onto your day without arithmetic.",
       "It fits people who plan their day in hour slots and want the timer to enforce the slot instead of redefining it. One task per hour, break at the top of the hour, repeat. The ten-minute break is enough to reset between blocks without losing the slot after it.",
@@ -115,10 +115,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
     faq: enFaq(60, 10),
   },
   "90-15": {
-    metaTitle: "90/15 Deep Work Timer — free, with music",
+    metaTitle: "90/15 Deep Work Timer — free online",
     metaDescription:
       "Free 90/15 timer in your browser. 90-minute deep work blocks with 15-minute recovery — built around the ultradian rhythm. Original focus music in Flow.",
-    h1: "90/15 Deep Work Timer — free, with music",
+    h1: "90/15 Deep Work Timer — free online",
     paragraphs: [
       "90/15 is the deep work split: ninety minutes on one hard thing, fifteen minutes of real recovery. The length lines up with the ultradian rhythm — the roughly 90-minute cycles your alertness moves through during the day — and with how long it takes to get somewhere on genuinely difficult work.",
       "This is the block for the work that doesn't fit anywhere else: architecture decisions, proofs, long-form writing, anything where interruption cost is measured in half-hours. One 90-minute block with the phone in another room routinely beats an afternoon of supervised multitasking.",
@@ -130,10 +130,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
 
 const id: Record<TimerSlug, TimerPageCopy> = {
   "25-5": {
-    metaTitle: "Timer Pomodoro 25/5 — gratis, dengan musik",
+    metaTitle: "Timer Pomodoro 25/5 — gratis online",
     metaDescription:
       "Timer Pomodoro 25/5 gratis yang jalan langsung di browser. Split klasik: 25 menit kerja, 5 menit istirahat. Pasangkan dengan musik fokus original di Flow.",
-    h1: "Timer Pomodoro 25/5 — gratis, dengan musik",
+    h1: "Timer Pomodoro 25/5 — gratis online",
     paragraphs: [
       "Ini split Pomodoro yang asli: 25 menit untuk satu task, 5 menit istirahat. Francesco Cirillo menghitungnya pakai timer dapur di akhir 1980-an, dan rasionya bertahan karena memang jalan — 25 menit cukup pendek sampai mulai kerja nggak terasa seperti komitmen besar, tapi cukup panjang buat benar-benar menyelesaikan sesuatu yang kecil.",
       "Pakai 25/5 kalau kerjaanmu terdiri dari potongan kecil yang jelas: balas antrean pesan, beresin daftar bug, hafalan flashcard, edit dokumen per bagian. Kalau kamu terus kepotong break di tengah pikiran, kemungkinan task-mu butuh block lebih panjang — coba 50/10 atau 90/15.",
@@ -142,10 +142,10 @@ const id: Record<TimerSlug, TimerPageCopy> = {
     faq: idFaq(25, 5),
   },
   "50-10": {
-    metaTitle: "Timer Pomodoro 50/10 — gratis, dengan musik",
+    metaTitle: "Timer Pomodoro 50/10 — gratis online",
     metaDescription:
       "Timer Pomodoro 50/10 gratis di browser. 50 menit kerja fokus, 10 menit istirahat — split untuk kerjaan yang butuh pemanasan lebih panjang. Musiknya di Flow.",
-    h1: "Timer Pomodoro 50/10 — gratis, dengan musik",
+    h1: "Timer Pomodoro 50/10 — gratis online",
     paragraphs: [
       "50/10 itu Pomodoro dobel: 50 menit kerja, 10 menit istirahat. Split ini ada karena sebagian kerjaan punya tanjakan — masukin codebase ke kepala, balik ke draft tulisan, nyiapin eksperimen — dan block 25 menit habis tepat waktu tanjakannya mulai kebayar.",
       "Cocok buat sesi programming, menulis, dan desain, di mana sepuluh menit pertama cuma buat loading konteks. Break 10 menitnya cukup buat benar-benar ninggalin meja, dan itu makin penting di block sepanjang ini — 50 menit duduk plus break 30 detik nggak me-reset apa-apa.",
@@ -154,10 +154,10 @@ const id: Record<TimerSlug, TimerPageCopy> = {
     faq: idFaq(50, 10),
   },
   "45-15": {
-    metaTitle: "Timer Pomodoro 45/15 — gratis, dengan musik",
+    metaTitle: "Timer Pomodoro 45/15 — gratis online",
     metaDescription:
       "Timer 45/15 gratis di browser. 45 menit kerja dengan istirahat 15 menit yang beneran — ritme jam pelajaran dengan ruang buat pulih. Musiknya di Flow.",
-    h1: "Timer Pomodoro 45/15 — gratis, dengan musik",
+    h1: "Timer Pomodoro 45/15 — gratis online",
     paragraphs: [
       "45/15 menukar block kerja yang sedikit lebih pendek dengan istirahat yang beneran. Empat puluh lima menit kira-kira satu jam pelajaran — durasi yang perhatian kebanyakan orang sudah hafal — dan lima belas menit cukup buat makan, stretching, atau jalan keluar sebentar, bukan sekadar refresh feed.",
       "Split ini enak buat hari belajar yang panjang dan kerja yang menguras fisik, di mana faktor pembatasnya bukan fokus per block tapi berapa block yang bisa kamu tumpuk sebelum harinya ambruk. Break yang lega itulah yang bikin block keenam masih sekepakai block kedua.",
@@ -166,10 +166,10 @@ const id: Record<TimerSlug, TimerPageCopy> = {
     faq: idFaq(45, 15),
   },
   "60-10": {
-    metaTitle: "Timer Pomodoro 60/10 — gratis, dengan musik",
+    metaTitle: "Timer Pomodoro 60/10 — gratis online",
     metaDescription:
       "Timer 60/10 gratis di browser. Satu jam penuh kerja, 10 menit istirahat — block rapi yang pas dengan kalender. Musik fokus original di Flow.",
-    h1: "Timer Pomodoro 60/10 — gratis, dengan musik",
+    h1: "Timer Pomodoro 60/10 — gratis online",
     paragraphs: [
       "60/10 itu split berbentuk kalender: satu jam penuh kerja, sepuluh menit istirahat. Keunggulan utamanya membosankan tapi praktis — jam adalah satuan yang sudah dipakai meeting, jadwal, dan billing, jadi 'dua jam fokus sebelum makan siang' langsung nempel ke harimu tanpa hitung-hitungan.",
       "Cocok buat yang merencanakan hari dalam slot jam dan ingin timer-nya menegakkan slot itu, bukan mendefinisikan ulang. Satu task per jam, break di pergantian jam, ulang. Break sepuluh menitnya cukup buat reset antar block tanpa kehilangan slot setelahnya.",
@@ -178,10 +178,10 @@ const id: Record<TimerSlug, TimerPageCopy> = {
     faq: idFaq(60, 10),
   },
   "90-15": {
-    metaTitle: "Timer Deep Work 90/15 — gratis, dengan musik",
+    metaTitle: "Timer Deep Work 90/15 — gratis online",
     metaDescription:
       "Timer 90/15 gratis di browser. Block deep work 90 menit dengan pemulihan 15 menit — dibangun di sekitar ritme ultradian. Musik fokus original di Flow.",
-    h1: "Timer Deep Work 90/15 — gratis, dengan musik",
+    h1: "Timer Deep Work 90/15 — gratis online",
     paragraphs: [
       "90/15 itu split deep work: sembilan puluh menit untuk satu hal yang susah, lima belas menit pemulihan yang beneran. Panjangnya sejalan dengan ritme ultradian — siklus kurang lebih 90 menit yang dilalui kewaspadaanmu sepanjang hari — dan dengan waktu yang dibutuhkan buat benar-benar maju di kerjaan yang sulit.",
       "Ini block untuk kerjaan yang nggak muat di mana-mana: keputusan arsitektur, pembuktian, tulisan panjang, apa pun yang biaya interupsinya dihitung dalam setengah jam. Satu block 90 menit dengan HP di ruangan lain rutin mengalahkan satu sore multitasking.",

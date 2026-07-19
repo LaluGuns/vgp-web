@@ -23,21 +23,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         };
     }
 
+    const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
+    const imageUrl = 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png';
+
     return {
         title: article.seo.title,
         description: article.seo.description,
         keywords: article.seo.keywords,
+        alternates: {
+            canonical: articleUrl,
+        },
         openGraph: {
             title: article.seo.title,
             description: article.seo.description,
             type: 'article',
+            url: articleUrl,
             publishedTime: article.publishedAt,
-            authors: ['VGP Studio'],
+            modifiedTime: article.updatedAt ?? article.publishedAt,
+            authors: ['Virzy Guns'],
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1024,
+                    height: 1024,
+                    alt: 'Virzy Guns Production',
+                },
+            ],
         },
         twitter: {
             card: 'summary_large_image',
             title: article.title,
             description: article.excerpt,
+            images: [imageUrl],
         },
     };
 }
@@ -58,20 +75,34 @@ export default async function BlogArticlePage({ params }: Props) {
         .slice(0, 2);
 
     // JSON-LD structured data for SEO
+    const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
+    const imageUrl = 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png';
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Article',
         headline: article.title,
         description: article.excerpt,
+        mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': articleUrl,
+        },
+        url: articleUrl,
+        image: imageUrl,
         datePublished: article.publishedAt,
+        dateModified: article.updatedAt ?? article.publishedAt,
         author: {
-            '@type': 'Organization',
-            name: 'VGP Studio',
+            '@type': 'Person',
+            name: 'Virzy Guns',
+            url: 'https://www.virzyguns.com/about',
         },
         publisher: {
             '@type': 'Organization',
-            name: 'VGP Studio',
-            url: 'https://vgp.studio',
+            name: 'Virzy Guns Production',
+            url: 'https://www.virzyguns.com',
+            logo: {
+                '@type': 'ImageObject',
+                url: imageUrl,
+            },
         },
     };
 

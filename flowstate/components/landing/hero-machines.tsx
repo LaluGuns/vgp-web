@@ -31,7 +31,7 @@ const STYLES = [
 type StyleId = (typeof STYLES)[number]["id"];
 
 export function HeroMachines() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [style, setStyle] = useState<StyleId>("glass");
   const [isBreak, setIsBreak] = useState(false);
   const [running, setRunning] = useState(true); // alive on page load
@@ -150,7 +150,7 @@ export function HeroMachines() {
       <div className="flex items-center justify-center gap-2 text-[11px] font-mono text-white/45">
         <span>{t("landing.demo.caption", "A working unit, not a screenshot. The real thing has the music.")}</span>
         <Link
-          href="/app"
+          href={`/${locale}/app`}
           className="inline-flex items-center gap-1 text-[#00e5ff] hover:underline underline-offset-4"
         >
           {t("landing.demo.open", "Open the app")}

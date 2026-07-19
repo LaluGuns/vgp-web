@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { checkFounderSession } from '@/lib/auth';
 
+const FLOW_PAGE_PREFIX = 'https://flow.virzyguns.com/';
+const BRAND_TERMS = ['virzy', 'virzyguns', 'flow by virzy guns'];
+type GscRow = { keys?: string[]; clicks?: number; impressions?: number; ctr?: number; position?: number };
+
+function formatRow(row: GscRow) {
+    return { clicks: row.clicks || 0, impressions: row.impressions || 0, ctr: `${((row.ctr || 0) * 100).toFixed(1)}%`, position: parseFloat((row.position || 0).toFixed(1)) };
+}
+function classifyPage(page: string) {
+    let pathname = page;
+    try { pathname = new URL(page).pathname; } catch { /* GSC value retained */ }
+    const locale = pathname.match(/^\/([a-z]{2}(?:-[A-Z]{2})?)(?:\/|$)/)?.[1] ?? 'en';
+    const normalized = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?(?=\/|$)/, '') || '/';
+    const cluster = normalized.includes('creator-music') ? 'creator_music' : normalized.includes('deep-work') ? 'deep_work' : normalized.includes('study-timer') ? 'study_timer' : normalized.includes('pomodoro') ? 'pomodoro_music' : normalized.includes('/timer/') ? 'timer_preset' : normalized.includes('pricing') ? 'pricing' : 'product';
+    return { locale, cluster };
+}
+function isBrandQuery(query: string) { return BRAND_TERMS.some((term) => query.toLowerCase().includes(term)); }
+
 // ── Service Account Auth Helper (No Google APIs dependencies) ─────────
 async function getAccessToken(serviceAccountJson: any): Promise<string> {
     const header = {
@@ -92,63 +109,31 @@ export async function GET(request: NextRequest) {
         const resourceId = 'sc-domain:virzyguns.com';
         const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(resourceId)}/searchAnalytics/query`;
 
-        // 1. Fetch grand totals (no dimensions)
-        const totalsPromise = fetch(url, {
+        // Search Console property is domain-wide: every query is constrained to Flow.
+        const flowFilter = [{ filters: [{ dimension: 'page', operator: 'contains', expression: FLOW_PAGE_PREFIX }] }];
+        const requestGsc = (dimensions: string[] = [], rowLimit?: number) => fetch(url, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ startDate, endDate }),
+            body: JSON.stringify({ startDate, endDate, dimensions, rowLimit, dimensionFilterGroups: flowFilter }),
         });
-
-        // 2. Fetch time series chart data (date dimension)
-        const chartPromise = fetch(url, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                startDate,
-                endDate,
-                dimensions: ['date'],
-            }),
-        });
-
-        // 3. Fetch top queries (query dimension)
-        const queriesPromise = fetch(url, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                startDate,
-                endDate,
-                dimensions: ['query'],
-                rowLimit: 20,
-            }),
-        });
-
-        const [totalsRes, chartRes, queriesRes] = await Promise.all([
-            totalsPromise,
-            chartPromise,
-            queriesPromise,
+        const [totalsRes, chartRes, queriesRes, pagesRes, queryPagesRes, countriesRes, devicesRes] = await Promise.all([
+            requestGsc(), requestGsc(['date'], 1000), requestGsc(['query'], 50), requestGsc(['page'], 50),
+            requestGsc(['query', 'page'], 100), requestGsc(['country'], 25), requestGsc(['device'], 10),
         ]);
-
-        if (!totalsRes.ok || !chartRes.ok || !queriesRes.ok) {
-            const errs = await Promise.all([
-                totalsRes.ok ? '' : totalsRes.text(),
-                chartRes.ok ? '' : chartRes.text(),
-                queriesRes.ok ? '' : queriesRes.text(),
-            ]);
+        const responses = [totalsRes, chartRes, queriesRes, pagesRes, queryPagesRes, countriesRes, devicesRes];
+        if (responses.some((response) => !response.ok)) {
+            const errs = await Promise.all(responses.map((response) => response.ok ? '' : response.text()));
             throw new Error(`Google API Request(s) failed: ${errs.filter(Boolean).join(' | ')}`);
         }
 
         const totalsData = await totalsRes.json();
         const chartData = await chartRes.json();
-        const queriesData = await queriesRes.json();
+        const [queriesData, pagesData, queryPagesData, countriesData, devicesData] = await Promise.all([
+            queriesRes.json(), pagesRes.json(), queryPagesRes.json(), countriesRes.json(), devicesRes.json(),
+        ]);
 
         // Parse totals
         const totalClicks = totalsData.rows?.[0]?.clicks || 0;
@@ -164,13 +149,19 @@ export async function GET(request: NextRequest) {
         })).sort((a: any, b: any) => a.date.localeCompare(b.date));
 
         // Parse top queries
-        const queries = (queriesData.rows || []).map((row: any) => ({
-            query: row.keys[0],
-            clicks: row.clicks || 0,
-            impressions: row.impressions || 0,
-            ctr: `${((row.ctr || 0) * 100).toFixed(1)}%`,
-            position: parseFloat((row.position || 0).toFixed(1)),
-        }));
+        const queries = (queriesData.rows || []).map((row: GscRow) => ({ query: row.keys?.[0] || '', ...formatRow(row), brand: isBrandQuery(row.keys?.[0] || '') }));
+        type PageMetric = ReturnType<typeof formatRow> & { page: string; cluster: string; locale: string };
+        const pages: PageMetric[] = (pagesData.rows || []).map((row: GscRow): PageMetric => ({ page: row.keys?.[0] || '', ...formatRow(row), ...classifyPage(row.keys?.[0] || '') }));
+        const queryPages = (queryPagesData.rows || []).map((row: GscRow) => ({ query: row.keys?.[0] || '', page: row.keys?.[1] || '', ...formatRow(row), brand: isBrandQuery(row.keys?.[0] || ''), ...classifyPage(row.keys?.[1] || '') }));
+        const countries = (countriesData.rows || []).map((row: GscRow) => ({ country: row.keys?.[0] || '', ...formatRow(row) }));
+        const devices = (devicesData.rows || []).map((row: GscRow) => ({ device: row.keys?.[0] || '', ...formatRow(row) }));
+        const clusterMap = pages.reduce((acc: Record<string, { cluster: string; locale: string; clicks: number; impressions: number }>, page: PageMetric) => {
+            const key = `${page.cluster}:${page.locale}`;
+            const current = acc[key] || { cluster: page.cluster, locale: page.locale, clicks: 0, impressions: 0 };
+            current.clicks += page.clicks; current.impressions += page.impressions; acc[key] = current;
+            return acc;
+        }, {} as Record<string, { cluster: string; locale: string; clicks: number; impressions: number }>);
+        const clusters = Object.values(clusterMap).sort((a, b) => b.clicks - a.clicks);
 
         return NextResponse.json({
             success: true,
@@ -182,6 +173,12 @@ export async function GET(request: NextRequest) {
                 position: avgPosition,
                 chart,
                 queries,
+                pages,
+                queryPages,
+                countries,
+                devices,
+                clusters,
+                scope: { pagePrefix: FLOW_PAGE_PREFIX, startDate, endDate },
             },
             clientEmail: creds.client_email,
         });
