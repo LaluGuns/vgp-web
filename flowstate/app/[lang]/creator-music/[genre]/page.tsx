@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang, genre } = await params;
   const item = creatorGenreBySlug(resolveLocale(lang), genre);
   if (!item) return {};
-  return marketingMetadata(resolveLocale(lang), `${CREATOR_MUSIC_PATH}/${item.slug}`, item.title, item.description);
+  return marketingMetadata(lang, `${CREATOR_MUSIC_PATH}/${item.slug}`, item.title, item.description);
 }
 
 export default async function CreatorGenrePage({ params }: { params: Promise<{ lang: string; genre: string }> }) {

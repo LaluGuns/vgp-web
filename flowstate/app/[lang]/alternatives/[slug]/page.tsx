@@ -31,7 +31,7 @@ export async function generateMetadata({
   if (!(ALTERNATIVE_SLUGS as readonly string[]).includes(slug)) return {};
   const locale = resolveLocale(lang);
   const copy = getAlternativeCopy(locale, slug as AlternativeSlug);
-  return marketingMetadata(locale, `alternatives/${slug}`, copy.metaTitle, copy.metaDescription);
+  return marketingMetadata(lang, `alternatives/${slug}`, copy.metaTitle, copy.metaDescription);
 }
 
 export default async function AlternativePage({

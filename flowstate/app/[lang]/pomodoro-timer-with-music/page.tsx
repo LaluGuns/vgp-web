@@ -23,7 +23,7 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = resolveLocale(lang);
   const copy = getPomodoroMusicCopy(locale);
-  return marketingMetadata(locale, PATH, copy.metaTitle, copy.metaDescription);
+  return marketingMetadata(lang, PATH, copy.metaTitle, copy.metaDescription);
 }
 
 export default async function PomodoroTimerWithMusicPage({

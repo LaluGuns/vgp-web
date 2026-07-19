@@ -28,7 +28,7 @@ Flow Creator Music provides a catalog and license path for eligible City Pop, Cy
 
 The practical workflow is straightforward:
 
-1. Preview the music in the <a href="https://flow.virzyguns.com/creator-music" style="color:#7dd3fc;text-decoration:underline">Flow Creator Music catalog</a>.
+1. Preview the music in the <a href="https://flow.virzyguns.com/en/creator-music" style="color:#7dd3fc;text-decoration:underline">Flow Creator Music catalog</a>.
 2. Keep Flow Pro active when you first publish the work that uses the recording.
 3. Download the eligible asset through Flow and retain the grant or receipt.
 4. Use the required attribution: <em>Music: Flow Creator Music by Chill Music Division / Virzy Guns Production — https://flow.virzyguns.com/creator-music</em>.

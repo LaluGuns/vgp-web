@@ -3,6 +3,38 @@ export type CheckoutInterval = "monthly" | "yearly";
 export interface CheckoutInput {
   interval: CheckoutInterval;
   discountCode?: string;
+  acquisition?: CheckoutAcquisition;
+}
+
+export interface CheckoutAcquisition {
+  sessionAcquisition: "organic" | "referral" | "direct" | "internal";
+  firstTouchChannel: string;
+  acquisitionSessionId: string;
+  referrerHost: string;
+  landingPath: string;
+  locale: string;
+  market: string;
+  cluster: string;
+}
+
+function parseAcquisition(value: unknown): CheckoutAcquisition | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+  const input = value as Record<string, unknown>;
+  const channel = input.sessionAcquisition;
+  if (!["organic", "referral", "direct", "internal"].includes(String(channel))) return undefined;
+  const read = (name: string, max: number) => typeof input[name] === "string" && input[name].length <= max
+    ? input[name] as string
+    : null;
+  const acquisitionSessionId = read("acquisitionSessionId", 80);
+  const firstTouchChannel = read("firstTouchChannel", 24);
+  const referrerHost = read("referrerHost", 253);
+  const landingPath = read("landingPath", 240);
+  const locale = read("locale", 16);
+  const market = read("market", 32);
+  const cluster = read("cluster", 64);
+  if (!acquisitionSessionId || !firstTouchChannel || referrerHost === null || !landingPath || !locale || !market || !cluster) return undefined;
+  if (!landingPath.startsWith("/")) return undefined;
+  return { sessionAcquisition: channel as CheckoutAcquisition["sessionAcquisition"], firstTouchChannel, acquisitionSessionId, referrerHost, landingPath, locale, market, cluster };
 }
 
 const PRICES_CENTS: Record<CheckoutInterval, { standard: number; promo: number }> = {
@@ -23,9 +55,11 @@ export function parseCheckoutInput(value: unknown): CheckoutInput | null {
   }
 
   const discountCode = input.discountCode?.trim();
+  const acquisition = parseAcquisition(input.acquisition);
   return {
     interval: input.interval,
     ...(discountCode ? { discountCode } : {}),
+    ...(acquisition ? { acquisition } : {}),
   };
 }
 

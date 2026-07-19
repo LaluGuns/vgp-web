@@ -10,6 +10,7 @@ import {
   LANGUAGES,
   type Locale,
 } from "./dictionaries";
+import { baseLanguageForLocale, isSupportedSeoLocale } from "@/lib/marketing/seo-registry";
 
 function resolveTranslation(dictionary: object, key: string): string | undefined {
   let current: unknown = dictionary;
@@ -22,8 +23,9 @@ function resolveTranslation(dictionary: object, key: string): string | undefined
 
 /** Coerce a raw /[lang] segment to a supported locale (layout does the same). */
 export function resolveLocale(lang: string): Locale {
-  return (Object.keys(LANGUAGES) as string[]).includes(lang)
-    ? (lang as Locale)
+  const baseLanguage = isSupportedSeoLocale(lang) ? baseLanguageForLocale(lang) : lang;
+  return (Object.keys(LANGUAGES) as string[]).includes(baseLanguage)
+    ? (baseLanguage as Locale)
     : DEFAULT_LOCALE;
 }
 

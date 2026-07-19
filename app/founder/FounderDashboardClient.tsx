@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 import { renderCampaignEmail } from '@/lib/founder/campaign-email';
+import { OrganicFunnelPanel, SeoDashboard, type SeoDashboardData } from '@/components/founder/seo/SeoDashboard';
 
 // ── Types ──────────────────────────────────────────────────────────────
 interface Stats { total: number; subscribed: number; unsubscribed: number; new24h: number; }
@@ -697,6 +698,8 @@ export default function FounderDashboardClient() {
     const [seoLoading, setSeoLoading] = useState(false);
     const [seoConnected, setSeoConnected] = useState<boolean | null>(null);
     const [seoClientEmail, setSeoClientEmail] = useState<string | null>(null);
+    const [seoDashboard, setSeoDashboard] = useState<SeoDashboardData | null>(null);
+    const [seoError, setSeoError] = useState<string | null>(null);
 
     // Flowstate states
     const [flowstateMetrics, setFlowstateMetrics] = useState<FlowstateMetrics | null>(null);
@@ -832,18 +835,23 @@ export default function FounderDashboardClient() {
         }
     }, []);
 
-    const loadSeo = useCallback(async () => {
+    const loadSeo = useCallback(async (filters = new URLSearchParams()) => {
         setSeoLoading(true);
+        setSeoError(null);
         try {
-            const res = await fetch('/api/founder/seo');
+            const res = await fetch(`/api/founder/seo?${filters.toString()}`);
+            const data = await res.json();
             if (res.ok) {
-                const data = await res.json();
                 setSeoConnected(data.connected);
-                setSeoMetrics(data.metrics);
-                setSeoClientEmail(data.clientEmail);
+                setSeoDashboard(data as SeoDashboardData);
+            } else {
+                setSeoConnected(false);
+                setSeoError(data.error || 'SEO dashboard data is unavailable.');
             }
         } catch (err) {
             console.error('Failed to load SEO analytics:', err);
+            setSeoConnected(false);
+            setSeoError('Could not load SEO dashboard data.');
         } finally {
             setSeoLoading(false);
         }
@@ -2319,6 +2327,16 @@ export default function FounderDashboardClient() {
 
                 {/* SEO Tab — Google Search Console integration */}
                 {activeTab === 'seo' && (
+                    <SeoDashboard
+                        data={seoDashboard}
+                        loading={seoLoading}
+                        error={seoError}
+                        onFilterChange={loadSeo}
+                        onRefresh={() => loadSeo(new URLSearchParams({ days: String(seoDashboard?.filters.days || 28) }))}
+                    />
+                )}
+
+                {seoMetrics && false && activeTab === 'seo' && (
                     <div className="space-y-6">
                         {seoLoading && seoConnected === null ? (
                             <div className="flex justify-center items-center py-20">
@@ -2356,17 +2374,17 @@ export default function FounderDashboardClient() {
 
                                 {/* Key Metrics Cards */}
                                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                                    <StatCard label="Total Clicks" value={seoMetrics.clicks} Icon={Search} />
-                                    <StatCard label="Total Impressions" value={seoMetrics.impressions} Icon={Users} accent="text-sky-300" />
-                                    <StatCard label="Average CTR" value={seoMetrics.ctr} Icon={TrendingUp} accent="text-emerald-300" />
-                                    <StatCard label="Average Position" value={seoMetrics.position} Icon={LayoutDashboard} accent="text-amber-300" />
+                                    <StatCard label="Total Clicks" value={seoMetrics!.clicks} Icon={Search} />
+                                    <StatCard label="Total Impressions" value={seoMetrics!.impressions} Icon={Users} accent="text-sky-300" />
+                                    <StatCard label="Average CTR" value={seoMetrics!.ctr} Icon={TrendingUp} accent="text-emerald-300" />
+                                    <StatCard label="Average Position" value={seoMetrics!.position} Icon={LayoutDashboard} accent="text-amber-300" />
                                 </div>
-                                <p className="text-[11px] text-white/40">Scope: Flow only ({seoMetrics.scope?.pagePrefix || 'flow.virzyguns.com'}) · {seoMetrics.scope?.startDate}–{seoMetrics.scope?.endDate}</p>
+                                <p className="text-[11px] text-white/40">Scope: Flow only ({seoMetrics!.scope?.pagePrefix || 'flow.virzyguns.com'}) · {seoMetrics!.scope?.startDate}–{seoMetrics!.scope?.endDate}</p>
 
                                 {/* Graph / Chart */}
                                 <div className="liquid-glass rounded-lg p-6">
                                     <Eyebrow>Organic search performance (30 days)</Eyebrow>
-                                    <TrendChart values={(seoMetrics.chart || []).map((d) => d.clicks)} ariaLabel="SEO click growth over 30 days" gradientId="seoFill" />
+                                    <TrendChart values={(seoMetrics!.chart || []).map((d) => d.clicks)} ariaLabel="SEO click growth over 30 days" gradientId="seoFill" />
                                     <div className="mt-3 flex justify-between text-[10px] text-white/35">
                                         <span>30 days ago</span>
                                         <span>Clicks Trend</span>
@@ -2391,7 +2409,7 @@ export default function FounderDashboardClient() {
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-white/[0.05] text-white/80">
-                                                {seoMetrics.queries?.map((q) => (
+                                                {seoMetrics!.queries?.map((q) => (
                                                     <tr key={q.query} className="transition hover:bg-white/[0.02]">
                                                         <td className="px-6 py-3 text-white font-medium">{q.query} {q.brand && <span className="ml-2 rounded bg-white/10 px-1.5 py-0.5 text-[9px] text-white/50">brand</span>}</td>
                                                         <td className="px-6 py-3">{q.clicks}</td>
@@ -2406,9 +2424,9 @@ export default function FounderDashboardClient() {
                                 </div>
                                 <div className="grid gap-4 lg:grid-cols-3">
                                     {[
-                                        { title: 'Page clusters', rows: seoMetrics.clusters || [], label: (row: SeoBreakdownRow) => `${row.cluster} · ${row.locale}` },
-                                        { title: 'Countries', rows: seoMetrics.countries || [], label: (row: SeoBreakdownRow) => row.country },
-                                        { title: 'Devices', rows: seoMetrics.devices || [], label: (row: SeoBreakdownRow) => row.device },
+                                        { title: 'Page clusters', rows: seoMetrics!.clusters || [], label: (row: SeoBreakdownRow) => `${row.cluster} · ${row.locale}` },
+                                        { title: 'Countries', rows: seoMetrics!.countries || [], label: (row: SeoBreakdownRow) => row.country },
+                                        { title: 'Devices', rows: seoMetrics!.devices || [], label: (row: SeoBreakdownRow) => row.device },
                                     ].map(({ title, rows, label }) => (
                                         <div key={title} className="liquid-glass rounded-lg p-5">
                                             <Eyebrow>{title}</Eyebrow>
@@ -2460,6 +2478,7 @@ export default function FounderDashboardClient() {
                 {/* FLOWSTATE — deep-work SaaS metrics */}
                 {activeTab === 'flowstate' && (
                     <div className="space-y-6">
+                        <OrganicFunnelPanel data={seoDashboard} loading={seoLoading} />
                         {flowstateLoading && flowstateConnected === null ? (
                             <div className="flex justify-center items-center py-20">
                                 <Loader2 className="h-8 w-8 animate-spin text-sky-300" />

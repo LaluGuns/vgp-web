@@ -112,7 +112,19 @@ export async function POST(req: Request) {
           email: user.email ?? undefined,
           // Promo is applied via custom_price above, NOT an LS discount object
           // (passing an unknown discount_code would error the checkout).
-          custom: { user_id: user.id },
+          custom: {
+            user_id: user.id,
+            ...(body.acquisition ? {
+              session_acquisition: body.acquisition.sessionAcquisition,
+              first_touch_channel: body.acquisition.firstTouchChannel,
+              acquisition_session_id: body.acquisition.acquisitionSessionId,
+              referrer_host: body.acquisition.referrerHost,
+              landing_path: body.acquisition.landingPath,
+              locale: body.acquisition.locale,
+              market: body.acquisition.market,
+              cluster: body.acquisition.cluster,
+            } : {}),
+          },
         },
       },
       relationships: {

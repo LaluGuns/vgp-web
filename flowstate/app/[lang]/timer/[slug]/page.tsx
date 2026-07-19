@@ -36,7 +36,7 @@ export async function generateMetadata({
   if (!(TIMER_SLUGS as readonly string[]).includes(slug)) return {};
   const locale = resolveLocale(lang);
   const copy = getTimerCopy(locale, slug as TimerSlug);
-  return marketingMetadata(locale, `timer/${slug}`, copy.metaTitle, copy.metaDescription);
+  return marketingMetadata(lang, `timer/${slug}`, copy.metaTitle, copy.metaDescription);
 }
 
 export default async function TimerPresetPage({

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { indexableLanguageAlternates, localePath, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
+import { indexableLanguageAlternates, localePath, SEO_SITE_URL, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
 
 export async function generateMetadata({
   params,
@@ -13,7 +13,7 @@ export async function generateMetadata({
     alternates: {
       canonical: localePath(lang, "pricing"),
       languages: indexable
-        ? { ...indexableLanguageAlternates("pricing"), "x-default": localePath("en", "pricing") }
+        ? { ...indexableLanguageAlternates("pricing"), "x-default": `${SEO_SITE_URL}${localePath("en", "pricing")}` }
         : undefined,
     },
     robots: indexable ? { index: true, follow: true } : { index: false, follow: true },

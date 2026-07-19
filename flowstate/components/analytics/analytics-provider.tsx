@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { initAnalytics, trackPageview, identifyUser, analyticsEnabled } from "@/lib/analytics";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -11,13 +11,17 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
  */
 export function AnalyticsProvider() {
   const pathname = usePathname();
+  const isInitialPageview = useRef(true);
 
   useEffect(() => {
     initAnalytics();
   }, []);
 
   useEffect(() => {
-    if (pathname) trackPageview(pathname);
+    if (pathname) {
+      trackPageview(pathname, isInitialPageview.current);
+      isInitialPageview.current = false;
+    }
   }, [pathname]);
 
   // Presence ping — once per page load, signed-in users only, fire-and-forget.

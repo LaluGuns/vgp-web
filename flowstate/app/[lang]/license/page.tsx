@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   const locale = resolveLocale(lang);
   const copy = creatorLicenseCopy(locale);
-  return marketingMetadata(locale, PATH, copy.title, copy.description);
+  return marketingMetadata(lang, PATH, copy.title, copy.description);
 }
 
 export default async function LicensePage({ params }: { params: Promise<{ lang: string }> }) {

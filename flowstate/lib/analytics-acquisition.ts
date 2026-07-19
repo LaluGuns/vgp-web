@@ -1,5 +1,7 @@
 export type AcquisitionClass = "organic" | "referral" | "direct" | "internal" | "bot" | "staff";
 
+export const ACQUISITION_SESSION_IDLE_MS = 30 * 60 * 1000;
+
 const SEARCH_DOMAINS = [
   "google.com", "google.co.id", "google.co.uk", "bing.com", "duckduckgo.com",
   "search.yahoo.com", "yahoo.com", "yandex.com", "yandex.ru", "baidu.com",
@@ -21,4 +23,20 @@ export function classifyAcquisition(referrer: string, hostname: string, userAgen
     if (SEARCH_DOMAINS.some((domain) => matchesDomain(referrerHost, domain))) return "organic";
     return "referral";
   } catch { return "direct"; }
+}
+
+/**
+ * A session is deliberately separate from first touch. This lets an existing
+ * visitor return from a search engine and be counted as an organic acquisition
+ * session without mutating the original attribution record.
+ */
+export function shouldStartNewAcquisitionSession(
+  previous: { lastSeenAt: string } | null,
+  isTopLevelEntry: boolean,
+  now = Date.now(),
+): boolean {
+  if (!previous) return true;
+  if (isTopLevelEntry) return true;
+  const lastSeenAt = Date.parse(previous.lastSeenAt);
+  return !Number.isFinite(lastSeenAt) || now - lastSeenAt >= ACQUISITION_SESSION_IDLE_MS;
 }

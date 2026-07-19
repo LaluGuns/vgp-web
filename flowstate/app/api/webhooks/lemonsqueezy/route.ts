@@ -8,6 +8,7 @@ import {
 } from "@/lib/security/subscription";
 import { verifyLemonSqueezySignature } from "@/lib/security/webhook";
 import { createServiceClient } from "@/lib/supabase/server";
+import { captureSubscriptionEvent } from "@/lib/server-analytics";
 
 async function syncProfilePlan(supabase: Awaited<ReturnType<typeof createServiceClient>>, userId: string) {
   const { data, error } = await supabase
@@ -72,6 +73,16 @@ export async function POST(req: Request) {
 
   const eventName: string = event?.meta?.event_name ?? "";
   const userId: string | undefined = event?.meta?.custom_data?.user_id;
+  const acquisition = {
+    sessionAcquisition: event?.meta?.custom_data?.session_acquisition,
+    firstTouchChannel: event?.meta?.custom_data?.first_touch_channel,
+    acquisitionSessionId: event?.meta?.custom_data?.acquisition_session_id,
+    referrerHost: event?.meta?.custom_data?.referrer_host,
+    landingPath: event?.meta?.custom_data?.landing_path,
+    locale: event?.meta?.custom_data?.locale,
+    market: event?.meta?.custom_data?.market,
+    cluster: event?.meta?.custom_data?.cluster,
+  };
   const attributes = event?.data?.attributes ?? {};
   const subscriptionId: string | undefined = event?.data?.id;
 
@@ -128,6 +139,14 @@ export async function POST(req: Request) {
     if (grantRevokeError) {
       return NextResponse.json({ error: "db_error" }, { status: 500 });
     }
+    await captureSubscriptionEvent({
+      eventName,
+      status: "refunded",
+      userId: existing.user_id,
+      eventId: event?.meta?.webhook_id,
+      occurredAt: validIsoDate(attributes.refunded_at) ?? providerUpdatedAt,
+      acquisition,
+    });
     return NextResponse.json({ received: true });
   }
 
@@ -205,6 +224,16 @@ export async function POST(req: Request) {
     // entitlement out of sync with the canonical subscription row.
     return NextResponse.json({ error: "db_error" }, { status: 500 });
   }
+
+  await captureSubscriptionEvent({
+    eventName,
+    status: statusMapped,
+    userId,
+    plan,
+    eventId: event?.meta?.webhook_id,
+    occurredAt: providerUpdatedAt,
+    acquisition,
+  });
 
   return NextResponse.json({ received: true });
 }

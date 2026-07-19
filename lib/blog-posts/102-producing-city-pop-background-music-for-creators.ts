@@ -43,7 +43,7 @@ That restraint also makes looping and short-form extracts more forgiving. A crea
 
 Listening on a streaming service and using a recording in a published video are different things. Flow Creator Music is royalty-free with an active Flow Pro creator license; it is not a promise that every City Pop recording on the internet is free to reuse.
 
-The creator catalog is designed for background use in videos, livestreams, podcasts, study-with-me sessions, and technology content under the applicable terms. If you are choosing music for a project, use the <a href="https://flow.virzyguns.com/creator-music/city-pop" style="color:#7dd3fc;text-decoration:underline">Flow City Pop creator catalog</a> for the license and download path. Chill Music Division's <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> is a listening and discovery destination; it is not the source of a creator license.
+The creator catalog is designed for background use in videos, livestreams, podcasts, study-with-me sessions, and technology content under the applicable terms. If you are choosing music for a project, use the <a href="https://flow.virzyguns.com/en/creator-music/city-pop" style="color:#7dd3fc;text-decoration:underline">Flow City Pop creator catalog</a> for the license and download path. Chill Music Division's <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> is a listening and discovery destination; it is not the source of a creator license.
 
 ## Producer takeaway
 

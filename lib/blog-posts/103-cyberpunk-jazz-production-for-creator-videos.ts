@@ -36,7 +36,7 @@ The arrangement solves this more elegantly than a permanent EQ carve. Dense mate
 
 The Cyberpunk Jazz catalog in Flow Creator Music is for creators who need a licensed background-music workflow, not just a moodboard. The relevant permission is royalty-free with an active Flow Pro creator license and is governed by the published terms.
 
-Use the <a href="https://flow.virzyguns.com/creator-music/cyberpunk-jazz" style="color:#7dd3fc;text-decoration:underline">Cyberpunk Jazz creator catalog</a> to preview eligible music, access its license path, and download the correct assets. Chill Music Division is a division of Virzy Guns Production; its <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify profile</a> is available for discovery, but streaming availability does not establish a license for published creator work.
+Use the <a href="https://flow.virzyguns.com/en/creator-music/cyberpunk-jazz" style="color:#7dd3fc;text-decoration:underline">Cyberpunk Jazz creator catalog</a> to preview eligible music, access its license path, and download the correct assets. Chill Music Division is a division of Virzy Guns Production; its <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify profile</a> is available for discovery, but streaming availability does not establish a license for published creator work.
 
 ## Producer takeaway
 

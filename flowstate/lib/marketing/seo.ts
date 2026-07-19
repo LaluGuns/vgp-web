@@ -3,9 +3,9 @@
 // no React, safe to import from server components.
 import type { Metadata } from "next";
 import { DEFAULT_LOCALE } from "@/lib/translations/dictionaries";
-import { indexableLanguageAlternates, localePath, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
+import { indexableLanguageAlternates, localePath, SEO_SITE_URL, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
 
-export const SITE_URL = "https://flow.virzyguns.com";
+export const SITE_URL = SEO_SITE_URL;
 
 export type FaqItem = { q: string; a: string };
 
@@ -24,7 +24,7 @@ export function marketingMetadata(
   const indexable = shouldIndexSeoPage(locale, path);
   const languages = indexable ? {
     ...indexableLanguageAlternates(path),
-    "x-default": localePath(DEFAULT_LOCALE, path),
+    "x-default": `${SITE_URL}${localePath(DEFAULT_LOCALE, path)}`,
   } : undefined;
 
   return {

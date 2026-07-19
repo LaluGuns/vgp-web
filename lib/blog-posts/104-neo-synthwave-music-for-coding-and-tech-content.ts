@@ -38,7 +38,7 @@ That dynamic range gives creators more options. A single track can support an ex
 
 Neo Synthwave in Flow Creator Music is royalty-free with an active Flow Pro creator license for the uses described in the terms. That license is the route for video, livestream, podcast, study-with-me, and eligible technology content.
 
-Start with the <a href="https://flow.virzyguns.com/creator-music/neo-synthwave" style="color:#7dd3fc;text-decoration:underline">Neo Synthwave creator catalog</a> when you need a preview, the correct download, and license information. Chill Music Division — a division of Virzy Guns Production — also has a <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> for listening and discovery. A Spotify stream is not a creator-use license, and no claim is made that every Flow catalog track is available there.
+Start with the <a href="https://flow.virzyguns.com/en/creator-music/neo-synthwave" style="color:#7dd3fc;text-decoration:underline">Neo Synthwave creator catalog</a> when you need a preview, the correct download, and license information. Chill Music Division — a division of Virzy Guns Production — also has a <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> for listening and discovery. A Spotify stream is not a creator-use license, and no claim is made that every Flow catalog track is available there.
 
 ## Producer takeaway
 

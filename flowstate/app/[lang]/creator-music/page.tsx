@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   const locale = resolveLocale(lang);
   const copy = creatorMusicCopy(locale);
-  return marketingMetadata(locale, CREATOR_MUSIC_PATH, copy.title, copy.description);
+  return marketingMetadata(lang, CREATOR_MUSIC_PATH, copy.title, copy.description);
 }
 
 export default async function CreatorMusicPage({ params }: { params: Promise<{ lang: string }> }) {

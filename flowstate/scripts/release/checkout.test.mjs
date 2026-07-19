@@ -18,6 +18,29 @@ test("checkout input only accepts supported intervals and string promo codes", (
   assert.equal(parseCheckoutInput({ interval: "weekly" }), null);
   assert.equal(parseCheckoutInput({}), null);
   assert.equal(parseCheckoutInput({ interval: "monthly", discountCode: 123 }), null);
+  assert.deepEqual(parseCheckoutInput({
+    interval: "monthly",
+    acquisition: {
+      sessionAcquisition: "organic",
+      firstTouchChannel: "direct",
+      acquisitionSessionId: "session-123",
+      referrerHost: "www.google.com",
+      landingPath: "/ja-JP/creator-music/city-pop",
+      locale: "ja-JP",
+      market: "ja-JP",
+      cluster: "creator_music",
+    },
+  })?.acquisition, {
+    sessionAcquisition: "organic",
+    firstTouchChannel: "direct",
+    acquisitionSessionId: "session-123",
+    referrerHost: "www.google.com",
+    landingPath: "/ja-JP/creator-music/city-pop",
+    locale: "ja-JP",
+    market: "ja-JP",
+    cluster: "creator_music",
+  });
+  assert.equal(parseCheckoutInput({ interval: "monthly", acquisition: { sessionAcquisition: "organic", landingPath: "not-a-path" } })?.acquisition, undefined);
 });
 
 test("checkout prices are server authoritative", () => {

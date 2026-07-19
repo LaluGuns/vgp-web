@@ -2,11 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
-import { LANGUAGES, DEFAULT_LOCALE, type Locale } from "@/lib/translations/dictionaries";
-import { getTranslator } from "@/lib/translations/server";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/translations/dictionaries";
+import { getTranslator, resolveLocale } from "@/lib/translations/server";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
-import { indexableLanguageAlternates, isIndexableLocale, localePath } from "@/lib/marketing/seo-registry";
+import { indexableLanguageAlternates, isIndexableLocale, isSupportedSeoLocale, localePath, ROUTABLE_LOCALES } from "@/lib/marketing/seo-registry";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -21,7 +21,7 @@ const mono = JetBrains_Mono({
 });
 
 const SITE = "https://flow.virzyguns.com";
-const LOCALES = Object.keys(LANGUAGES) as Locale[];
+const LOCALES = ROUTABLE_LOCALES;
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -39,8 +39,8 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const locale = (LOCALES as string[]).includes(lang) ? (lang as Locale) : DEFAULT_LOCALE;
-  const t = getTranslator(locale);
+  const locale = isSupportedSeoLocale(lang) ? lang : DEFAULT_LOCALE;
+  const t = getTranslator(resolveLocale(locale));
 
   // Localized metadata: each locale resolves its own title/description from the
   // shared dictionaries, so /id ships an Indonesian title, /ja Japanese, etc.
@@ -58,7 +58,7 @@ export async function generateMetadata({
   // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
   const languages = indexable
-    ? { ...indexableLanguageAlternates(""), "x-default": localePath(DEFAULT_LOCALE) }
+    ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` }
     : undefined;
 
   return {
@@ -97,7 +97,7 @@ export default async function LangLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  if (!(LOCALES as string[]).includes(lang)) notFound();
+  if (!isSupportedSeoLocale(lang)) notFound();
 
   return (
     <html lang={lang} className="dark" suppressHydrationWarning>
@@ -109,7 +109,7 @@ export default async function LangLayout({
             __html: `(function(){try{var v=["glass","studio","editorial","terminal"];var r=localStorage.getItem("flowstate-ui-theme");var t="glass";if(r){var s=JSON.parse(r);if(s&&s.state&&v.indexOf(s.state.theme)!==-1){t=s.state.theme;}}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();`,
           }}
         />
-        <LocaleProvider initialLocale={lang as Locale}>
+        <LocaleProvider initialLocale={resolveLocale(lang) as Locale}>
           <AnalyticsProvider />
           {children}
         </LocaleProvider>

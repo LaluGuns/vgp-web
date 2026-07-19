@@ -1,20 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { legacyLocaleRedirectDestination, localePath } from "@/lib/marketing/seo-registry";
 
-// Locale routing only. Keep this list in sync with lib/translations/dictionaries.ts.
-const LOCALES = ["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it"];
+// Base dictionary routes plus country-specific destinations. Country routes
+// can render now but remain noindex until their per-page release is reviewed.
+const LOCALES = ["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it", "en-US", "en-GB", "ja-JP", "de-DE", "es-MX", "es-ES", "pt-BR", "ko-KR"];
 const DEFAULT_LOCALE = "en";
 
 function resolveLocale(req: NextRequest): string {
-  // 1. Explicit choice (cookie set by the language switcher) wins.
   const cookie = req.cookies.get("flowstate-locale")?.value;
   if (cookie && LOCALES.includes(cookie)) return cookie;
 
-  // 2. Otherwise fall back to the browser's Accept-Language preference.
   const accept = req.headers.get("accept-language");
   if (accept) {
     for (const part of accept.split(",")) {
-      const code = part.split(";")[0].trim().split("-")[0].toLowerCase();
-      if (LOCALES.includes(code)) return code;
+      const raw = part.split(";")[0].trim();
+      const exact = LOCALES.find((locale) => locale.toLowerCase() === raw.toLowerCase());
+      if (exact) return exact;
+      const base = raw.split("-")[0].toLowerCase();
+      if (LOCALES.includes(base)) return base;
     }
   }
   return DEFAULT_LOCALE;
@@ -22,13 +25,22 @@ function resolveLocale(req: NextRequest): string {
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const localeSegment = pathname.split("/")[1];
 
-  // Already locale-prefixed → let it through untouched (every /{locale}/… URL
-  // stays directly reachable and crawlable — no cloaking, no geo redirects).
-  const hasLocale = LOCALES.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
-  if (hasLocale) return NextResponse.next();
+  if (LOCALES.includes(localeSegment)) {
+    const path = pathname.split("/").slice(2).join("/");
+    const destination = legacyLocaleRedirectDestination(localeSegment, path);
+    if (destination) {
+      const url = req.nextUrl.clone();
+      url.pathname = localePath(destination, path);
+      return NextResponse.redirect(url, 308);
+    }
 
-  // Unprefixed request → 307 (temporary) redirect to the resolved locale.
+    // No geo-IP redirects. Legacy and country URLs remain directly accessible;
+    // SEO indexability is determined by the page-level release registry.
+    return NextResponse.next();
+  }
+
   const locale = resolveLocale(req);
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
@@ -36,7 +48,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  // Run on pages only: skip API, auth callbacks, Next internals, the OG image
-  // route, and any path with a file extension (sitemap.xml, robots.txt, *.png…).
   matcher: ["/((?!api|auth|_next|opengraph-image|.*\\.).*)"],
 };

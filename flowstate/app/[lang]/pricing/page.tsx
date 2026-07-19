@@ -8,7 +8,7 @@ import { BILLING, type BillingInterval } from "@/lib/billing";
 import { ArrowLeft, Check, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/use-translation";
-import { track } from "@/lib/analytics";
+import { getCheckoutAcquisitionContext, track } from "@/lib/analytics";
 
 export default function PricingPage() {
   const { t, locale, setLocale } = useTranslation();
@@ -61,7 +61,8 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           interval,
-          discountCode: isPromoApplied ? "FLOWBRO" : undefined
+          discountCode: isPromoApplied ? "FLOWBRO" : undefined,
+          acquisition: getCheckoutAcquisitionContext(window.location.pathname),
         }),
       });
       if (res.status === 401) {
