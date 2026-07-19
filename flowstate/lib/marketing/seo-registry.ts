@@ -33,6 +33,17 @@ export const SEO_PAGES: readonly SeoPage[] = [
   { path: "license", cluster: "creator", changeFrequency: "yearly", priority: 0.7, lastModified: "2026-07-19" },
 ];
 
+export function isCreatorSeoPath(path: string) {
+  return path === "license" || path === "creator-music" || path.startsWith("creator-music/");
+}
+
+export function indexableLocalesForPath(path: string): readonly Locale[] {
+  if (isCreatorSeoPath(path)) {
+    return ["en"];
+  }
+  return INDEXABLE_LOCALES;
+}
+
 export function isIndexableLocale(locale: string): locale is (typeof INDEXABLE_LOCALES)[number] {
   return (INDEXABLE_LOCALES as readonly string[]).includes(locale);
 }
@@ -42,7 +53,7 @@ export function isIndexableSeoPath(path: string) {
 }
 
 export function shouldIndexSeoPage(locale: string, path: string) {
-  return isIndexableLocale(locale) && isIndexableSeoPath(path);
+  return (indexableLocalesForPath(path) as readonly string[]).includes(locale) && isIndexableSeoPath(path);
 }
 
 export function localePath(locale: string, path = "") {
@@ -50,5 +61,5 @@ export function localePath(locale: string, path = "") {
 }
 
 export function indexableLanguageAlternates(path: string) {
-  return Object.fromEntries(INDEXABLE_LOCALES.map((locale) => [locale, localePath(locale, path)]));
+  return Object.fromEntries(indexableLocalesForPath(path).map((locale) => [locale, localePath(locale, path)]));
 }
