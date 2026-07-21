@@ -23,6 +23,8 @@ import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
 import { LandingLanguageSelector } from "@/components/landing/language-selector";
 import { LandingEffects } from "@/components/landing/landing-effects";
 import { TrackedLink } from "@/components/analytics/tracked-link";
+import { marketRouteCopy } from "@/lib/marketing/market-copy";
+import { FLOW_PRICING, formatUsd, priceCents, pricingJsonLdOffers } from "@/lib/pricing";
 
 export default async function LandingPage({
   params,
@@ -32,6 +34,7 @@ export default async function LandingPage({
   const { lang } = await params;
   const locale = resolveLocale(lang);
   const t = getTranslator(locale);
+  const regionalCopy = marketRouteCopy(lang, "");
 
   // JSON-LD Structured Data for Search Engine Optimization
   const jsonLd = {
@@ -52,6 +55,35 @@ export default async function LandingPage({
     }
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.virzyguns.com/#organization",
+        "name": "Virzy Guns Production",
+        "url": "https://www.virzyguns.com/",
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flow.virzyguns.com/#website",
+        "url": "https://flow.virzyguns.com/",
+        "name": "Flow by Virzy Guns",
+        "publisher": { "@id": "https://www.virzyguns.com/#organization" },
+        "inLanguage": lang,
+      },
+      {
+        ...jsonLd,
+        "@id": "https://flow.virzyguns.com/#app",
+        "url": `https://flow.virzyguns.com/${lang}`,
+        "operatingSystem": "Web",
+        "description": regionalCopy?.metaDescription ?? jsonLd.description,
+        "publisher": { "@id": "https://www.virzyguns.com/#organization" },
+        "offers": pricingJsonLdOffers(),
+      },
+    ],
+  };
+
   return (
     // The landing is brand territory — pin it to the glass identity so it never
     // inherits whatever in-app interface theme the visitor last picked.
@@ -66,7 +98,7 @@ export default async function LandingPage({
       {/* SEO Schema Markup */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
       {/* Ambient depth glows over the cosmic scene */}
@@ -91,7 +123,7 @@ export default async function LandingPage({
             <a href="#soundtracks" className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
               {t("legal.landing.nav_soundtracks", "Soundtracks")}
             </a>
-            <Link href={`/${locale}/pricing`} className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
+            <Link href={`/${lang}/pricing`} className="text-xs font-mono text-muted-foreground/80 hover:text-white transition-colors uppercase tracking-wider">
               {t("legal.landing.nav_pricing", "Pricing")}
             </Link>
           </nav>
@@ -101,7 +133,7 @@ export default async function LandingPage({
             <LandingLanguageSelector />
 
             <Link
-              href={`/${locale}/app`}
+              href={`/${lang}/app`}
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-[#00e5ff] border border-[#00e5ff]/30 hover:border-[#00e5ff] bg-[#00e5ff]/5 hover:bg-[#00e5ff]/10 rounded-xl transition-all duration-200 shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_20px_rgba(0,229,255,0.3)]"
             >
               {t("legal.landing.cta_start", "Start Focusing (Free)")}
@@ -119,17 +151,17 @@ export default async function LandingPage({
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black text-white tracking-tight leading-[0.95]">
-              {t("legal.landing.hero_title", "Music for focus. Built for deep work.")}
+              {regionalCopy?.h1 ?? t("legal.landing.hero_title", "Music for focus. Built for deep work.")}
             </h1>
 
             <p className="text-sm md:text-lg text-white/80 leading-relaxed max-w-xl">
-              {t("legal.landing.hero_subtitle", "A focus timer with music actually made for it. Every track is produced in-house, with an ambient mixer to cover whatever's happening around you.")}
+              {regionalCopy?.paragraphs[0] ?? t("legal.landing.hero_subtitle", "A focus timer with music actually made for it. Every track is produced in-house, with an ambient mixer to cover whatever's happening around you.")}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
               <TrackedLink
-                href={`/${locale}/app`}
-                destination={`/${locale}/app`}
+                href={`/${lang}/app`}
+                destination={`/${lang}/app`}
                 source="landing_hero_primary"
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] flex items-center gap-2 group"
               >
@@ -137,7 +169,7 @@ export default async function LandingPage({
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </TrackedLink>
               <Link
-                href={`/${locale}/pricing`}
+                href={`/${lang}/pricing`}
                 className="px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest text-white/80 hover:text-white bg-white/[0.02] hover:bg-white/[0.04] border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5"
               >
                 {t("legal.landing.cta_explore", "See Pro")}
@@ -235,7 +267,7 @@ export default async function LandingPage({
                 </div>
               );
               return f.cta || f.accent ? (
-                <Link key={f.code} href={`/${locale}/app`} className="block">{inner}</Link>
+                <Link key={f.code} href={`/${lang}/app`} className="block">{inner}</Link>
               ) : (
                 <div key={f.code}>{inner}</div>
               );
@@ -278,7 +310,7 @@ export default async function LandingPage({
                   </div>
                 </div>
                 <Link
-                  href={`/${locale}/app`}
+                  href={`/${lang}/app`}
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/15 rounded-xl hover:bg-white/10 hover:border-white/20 transition-all"
                 >
                   {t("legal.landing.cta_start", "Start focusing")}
@@ -301,17 +333,16 @@ export default async function LandingPage({
                   </div>
                   <div className="space-y-0.5">
                     <div className="text-2xl font-extrabold text-white">
-                      $9.99<span className="text-xs font-normal text-white/60"> / mo</span>
+                      {formatUsd(priceCents("monthly"))}<span className="text-xs font-normal text-white/60"> {FLOW_PRICING.plans.monthly.suffix}</span>
                     </div>
                     <div className="flex items-baseline gap-1.5 text-xs font-mono">
-                      <span className="font-medium text-white/35 line-through">$99</span>
-                      <span className="font-semibold text-emerald-400">$59.99</span>
-                      <span className="text-[10px] font-normal text-white/60">/ yr</span>
+                      <span className="font-semibold text-emerald-400">{formatUsd(priceCents("yearly"))}</span>
+                      <span className="text-[10px] font-normal text-white/60">{FLOW_PRICING.plans.yearly.suffix}</span>
                     </div>
                   </div>
                 </div>
                 <Link
-                  href={`/${locale}/pricing`}
+                  href={`/${lang}/pricing`}
                   className="block w-full text-center py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_10px_rgba(0,229,255,0.2)]"
                 >
                   {t("legal.landing.pricing_go_pro", "Go Pro")}
@@ -335,7 +366,7 @@ export default async function LandingPage({
             </div>
             {/* There is no roadmap page — the honest CTA here is the app itself. */}
             <Link
-              href={`/${locale}/app`}
+              href={`/${lang}/app`}
               className="px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/5 border border-white/10 hover:border-white/20 rounded-xl transition-all flex items-center gap-1.5 shrink-0"
             >
               {t("legal.landing.pricing_cta", "Start focusing")}
@@ -352,7 +383,7 @@ export default async function LandingPage({
               {t("legal.landing.footer_timers", "Free timers")}
             </div>
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-mono text-white/45">
-              {getFreeTimerLinks(locale).map((l) => (
+              {getFreeTimerLinks(lang).map((l) => (
                 <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
                   {l.label}
                 </Link>
@@ -371,19 +402,19 @@ export default async function LandingPage({
           </div>
 
           <div className="flex flex-wrap gap-4 text-[10px] font-mono text-muted-foreground/50">
-            <Link href={`/${locale}/legal/terms`} className="hover:text-white transition-colors">
+            <Link href={`/${lang}/legal/terms`} className="hover:text-white transition-colors">
               {t("dashboard.terms", "Terms")}
             </Link>
             <span>·</span>
-            <Link href={`/${locale}/legal/privacy`} className="hover:text-white transition-colors">
+            <Link href={`/${lang}/legal/privacy`} className="hover:text-white transition-colors">
               {t("dashboard.privacy", "Privacy")}
             </Link>
             <span>·</span>
-            <Link href={`/${locale}/legal/refund`} className="hover:text-white transition-colors">
+            <Link href={`/${lang}/legal/refund`} className="hover:text-white transition-colors">
               {t("dashboard.refunds", "Refunds")}
             </Link>
             <span>·</span>
-            <Link href={`/${locale}/legal/cookies`} className="hover:text-white transition-colors">
+            <Link href={`/${lang}/legal/cookies`} className="hover:text-white transition-colors">
               {t("dashboard.cookies", "Cookies")}
             </Link>
           </div>

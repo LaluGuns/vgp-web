@@ -1,4 +1,6 @@
-export type CheckoutInterval = "monthly" | "yearly";
+import { FLOW_PRICING, priceCents, type SubscriptionInterval } from "../pricing.ts";
+
+export type CheckoutInterval = SubscriptionInterval;
 
 export interface CheckoutInput {
   interval: CheckoutInterval;
@@ -37,13 +39,6 @@ function parseAcquisition(value: unknown): CheckoutAcquisition | undefined {
   return { sessionAcquisition: channel as CheckoutAcquisition["sessionAcquisition"], firstTouchChannel, acquisitionSessionId, referrerHost, landingPath, locale, market, cluster };
 }
 
-const PRICES_CENTS: Record<CheckoutInterval, { standard: number; promo: number }> = {
-  monthly: { standard: 999, promo: 499 },
-  yearly: { standard: 5999, promo: 2999 },
-};
-
-const PROMO_CODE = "FLOWBRO";
-
 /** Strictly parse the only client-controlled checkout fields we support. */
 export function parseCheckoutInput(value: unknown): CheckoutInput | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
@@ -64,8 +59,8 @@ export function parseCheckoutInput(value: unknown): CheckoutInput | null {
 }
 
 export function checkoutPriceCents(input: CheckoutInput): number {
-  const promoApplied = input.discountCode?.toUpperCase() === PROMO_CODE;
-  return PRICES_CENTS[input.interval][promoApplied ? "promo" : "standard"];
+  const promoApplied = input.discountCode?.toUpperCase() === FLOW_PRICING.promoCode;
+  return priceCents(input.interval, promoApplied);
 }
 
 /** Reject browser POSTs coming from another origin (CSRF defence in depth). */

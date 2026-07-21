@@ -6,6 +6,7 @@ import { resolveLocale } from "@/lib/translations/server";
 import { getPomodoroMusicCopy } from "@/lib/translations/pages/pomodoro-timer-with-music";
 import { buildTimerLabels, getMarketingShared } from "@/lib/translations/pages/shared";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
+import { withMarketRouteCopy } from "@/lib/marketing/market-copy";
 import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-shell";
 import { MiniTimer } from "@/components/marketing/mini-timer";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
@@ -22,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = getPomodoroMusicCopy(locale);
+  const copy = withMarketRouteCopy(lang, PATH, getPomodoroMusicCopy(locale));
   return marketingMetadata(lang, PATH, copy.metaTitle, copy.metaDescription);
 }
 
@@ -33,8 +34,8 @@ export default async function PomodoroTimerWithMusicPage({
 }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = getPomodoroMusicCopy(locale);
-  const shared = getMarketingShared(locale);
+  const copy = withMarketRouteCopy(lang, PATH, getPomodoroMusicCopy(locale));
+  const shared = getMarketingShared(lang);
 
   const faqLd = faqJsonLd(copy.faq);
   const breadcrumbLd = breadcrumbJsonLd(locale, [
@@ -44,9 +45,9 @@ export default async function PomodoroTimerWithMusicPage({
 
   return (
     <MarketingShell
-      locale={locale}
+      locale={lang}
       breadcrumb={[
-        { name: shared.breadcrumbHome, href: `/${locale}` },
+        { name: shared.breadcrumbHome, href: `/${lang}` },
         { name: copy.h1 },
       ]}
     >
@@ -66,8 +67,8 @@ export default async function PomodoroTimerWithMusicPage({
         <MiniTimer
           workMin={WORK}
           breakMin={BREAK}
-          appHref={`/${locale}/app`}
-          labels={buildTimerLabels(locale, WORK, BREAK)}
+          appHref={`/${lang}/app`}
+          labels={buildTimerLabels(lang, WORK, BREAK)}
         />
       </section>
 
@@ -103,9 +104,9 @@ export default async function PomodoroTimerWithMusicPage({
       </section>
 
       <FaqBlock heading={shared.faqHeading} faq={copy.faq} />
-      <TimerLinksBlock locale={locale} currentPath={PATH} />
+      <TimerLinksBlock locale={lang} currentPath={PATH} />
       <MarketingCta
-        locale={locale}
+        locale={lang}
         title={shared.ctaTitle}
         body={shared.ctaBody}
         button={shared.ctaButton}

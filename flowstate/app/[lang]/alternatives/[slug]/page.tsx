@@ -13,6 +13,7 @@ import {
 } from "@/lib/translations/pages/alternatives";
 import { getMarketingShared } from "@/lib/translations/pages/shared";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
+import { marketRouteCopy } from "@/lib/marketing/market-copy";
 import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-shell";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
 
@@ -31,7 +32,8 @@ export async function generateMetadata({
   if (!(ALTERNATIVE_SLUGS as readonly string[]).includes(slug)) return {};
   const locale = resolveLocale(lang);
   const copy = getAlternativeCopy(locale, slug as AlternativeSlug);
-  return marketingMetadata(lang, `alternatives/${slug}`, copy.metaTitle, copy.metaDescription);
+  const localized = marketRouteCopy(lang, `alternatives/${slug}`);
+  return marketingMetadata(lang, `alternatives/${slug}`, localized?.metaTitle ?? copy.metaTitle, localized?.metaDescription ?? copy.metaDescription);
 }
 
 export default async function AlternativePage({
@@ -44,20 +46,24 @@ export default async function AlternativePage({
 
   const locale = resolveLocale(lang);
   const copy = getAlternativeCopy(locale, slug as AlternativeSlug);
-  const shared = getMarketingShared(locale);
+  const localized = marketRouteCopy(lang, `alternatives/${slug}`);
+  const shared = getMarketingShared(lang);
   const others = ALTERNATIVE_SLUGS.filter((s) => s !== slug);
+  const title = localized?.h1 ?? copy.h1;
+  const intro = localized?.paragraphs ?? copy.intro;
+  const faq = localized?.faq ?? copy.faq;
 
-  const faqLd = faqJsonLd(copy.faq);
-  const breadcrumbLd = breadcrumbJsonLd(locale, [
+  const faqLd = faqJsonLd(faq);
+  const breadcrumbLd = breadcrumbJsonLd(lang, [
     { name: shared.breadcrumbHome, path: "" },
-    { name: copy.h1, path: `alternatives/${slug}` },
+    { name: title, path: `alternatives/${slug}` },
   ]);
 
   return (
     <MarketingShell
-      locale={locale}
+      locale={lang}
       breadcrumb={[
-        { name: shared.breadcrumbHome, href: `/${locale}` },
+        { name: shared.breadcrumbHome, href: `/${lang}` },
         { name: copy.competitorName },
       ]}
     >
@@ -72,9 +78,9 @@ export default async function AlternativePage({
 
       <section className="space-y-6">
         <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl">
-          {copy.h1}
+          {title}
         </h1>
-        <CopyBlock paragraphs={copy.intro} />
+        <CopyBlock paragraphs={intro} />
       </section>
 
       {/* Comparison table */}
@@ -114,29 +120,30 @@ export default async function AlternativePage({
         ))}
       </section>
 
-      <FaqBlock heading={shared.faqHeading} faq={copy.faq} />
+      <FaqBlock heading={shared.faqHeading} faq={faq} />
 
       {/* Cross-links inside the alternatives cluster */}
       <section className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {others.map((s) => {
             const other = getAlternativeCopy(locale, s);
+            const otherTitle = marketRouteCopy(lang, `alternatives/${s}`)?.h1 ?? other.h1;
             return (
               <Link
                 key={s}
-                href={`/${locale}/alternatives/${s}`}
+                href={`/${lang}/alternatives/${s}`}
                 className="px-3.5 py-1.5 rounded-full text-[11px] font-mono border border-white/10 text-white/60 hover:text-white hover:border-white/25 transition-colors"
               >
-                {other.h1}
+                {otherTitle}
               </Link>
             );
           })}
         </div>
       </section>
 
-      <TimerLinksBlock locale={locale} />
+      <TimerLinksBlock locale={lang} />
       <MarketingCta
-        locale={locale}
+        locale={lang}
         title={shared.ctaTitle}
         body={shared.ctaBody}
         button={shared.ctaButton}

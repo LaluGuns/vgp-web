@@ -18,7 +18,7 @@ const en: LandingCopy = {
   h1: "Deep Work Timer",
   paragraphs: [
     "Deep work is the stretch where the hard thing actually moves: the architecture decision, the proof, the chapter. Cal Newport gave it a name, but every programmer already knows the shape — it takes twenty minutes to load the problem into your head, and one Slack ping to drop it.",
-    "That's why this timer defaults to 90/15 instead of the classic 25/5. Ninety minutes matches the ultradian rhythm your alertness runs on, and it's long enough that the context-loading cost gets paid back with interest. The 15-minute break after is recovery, not a reward — take it away from the screen.",
+    "This timer defaults to 90/15 instead of the classic 25/5 because some people prefer a longer, uninterrupted work block. It is a practical preset, not a universal biological rhythm; choose the duration that fits the task and your energy.",
     "Treat the block as a contract: one task, phone in another room, notifications off. Most people get two or three honest 90-minute blocks a day. That's not a limitation to fix — two real blocks beat eight interrupted ones.",
     "The timer above runs right here with real start, pause, and reset. When you want the full setup — original focus music produced in-house, an ambient mixer, and stats that only count measured minutes — the app is one click away and free to try.",
   ],
@@ -49,7 +49,7 @@ const id: LandingCopy = {
   h1: "Timer Deep Work",
   paragraphs: [
     "Deep work itu rentang waktu di mana hal yang susah benar-benar bergerak: keputusan arsitektur, pembuktian, satu bab tulisan. Cal Newport yang memberi nama, tapi setiap programmer sudah kenal bentuknya — butuh dua puluh menit buat masukin masalah ke kepala, dan satu ping Slack buat menjatuhkannya.",
-    "Karena itu timer ini default-nya 90/15, bukan 25/5 klasik. Sembilan puluh menit sejalan dengan ritme ultradian yang dijalani kewaspadaanmu, dan cukup panjang sampai biaya loading konteks terbayar berlipat. Break 15 menit setelahnya itu pemulihan, bukan hadiah — jauhi layar selama break.",
+    "Karena itu timer ini default-nya 90/15, bukan 25/5 klasik. Ini adalah preset praktis untuk orang yang lebih nyaman dengan blok kerja panjang, bukan klaim tentang ritme biologis yang paling tepat untuk semua orang; pilih durasi yang cocok dengan tugas dan energimu.",
     "Perlakukan block-nya seperti kontrak: satu task, HP di ruangan lain, notifikasi mati. Kebanyakan orang dapat dua atau tiga block 90 menit yang jujur per hari. Itu bukan keterbatasan yang harus diperbaiki — dua block beneran mengalahkan delapan block yang keinterupsi.",
     "Timer di atas jalan langsung di sini dengan tombol mulai, jeda, dan reset yang beneran. Kalau mau setup lengkapnya — musik fokus original yang diproduksi sendiri, ambient mixer, dan statistik yang cuma menghitung menit terukur — aplikasinya tinggal satu klik dan gratis dicoba.",
   ],

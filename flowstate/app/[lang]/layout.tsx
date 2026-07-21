@@ -7,6 +7,7 @@ import { getTranslator, resolveLocale } from "@/lib/translations/server";
 import { LocaleProvider } from "@/hooks/use-translation";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { indexableLanguageAlternates, isIndexableLocale, isSupportedSeoLocale, localePath, ROUTABLE_LOCALES } from "@/lib/marketing/seo-registry";
+import { marketRouteCopy } from "@/lib/marketing/market-copy";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -54,6 +55,8 @@ export async function generateMetadata({
     "metadata.ogDescription",
     "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
   );
+  const regionalCopy = marketRouteCopy(locale, "");
+  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}`;
 
   // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
@@ -64,21 +67,23 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(SITE),
     title: {
-      default: title,
+      default: regionalCopy?.metaTitle ?? title,
       template: "%s · Flow by Virzy Guns",
     },
-    description,
+    description: regionalCopy?.metaDescription ?? description,
     openGraph: {
       title: ogTitle,
       description: ogDescription,
       siteName: "Flow by Virzy Guns",
       type: "website",
       locale,
+      images: [{ url: socialImage, width: 1200, height: 630, alt: "Flow by Virzy Guns" }],
     },
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: ogDescription,
+      images: [socialImage],
     },
     alternates: {
       canonical: localePath(locale),

@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { WebGLBackground } from "@/components/scenes/webgl-background";
 import { BILLING, type BillingInterval } from "@/lib/billing";
+import { FLOW_PRICING, formatUsd, priceCents, priceLabel, STANDARD_ANNUAL_SAVINGS_PERCENT } from "@/lib/pricing";
 import { ArrowLeft, Check, Loader2, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/use-translation";
@@ -12,6 +14,8 @@ import { getCheckoutAcquisitionContext, track } from "@/lib/analytics";
 
 export default function PricingPage() {
   const { t, locale, setLocale } = useTranslation();
+  const pathname = usePathname();
+  const routeLocale = pathname.split("/")[1] || locale;
   
   useEffect(() => {
     if (typeof document !== "undefined") {
@@ -28,7 +32,7 @@ export default function PricingPage() {
 
   useEffect(() => {
     const code = promoInput.trim().toUpperCase();
-    if (code === "FLOWBRO") {
+    if (code === FLOW_PRICING.promoCode) {
       setIsPromoApplied(true);
       setPromoError("");
     } else {
@@ -61,13 +65,13 @@ export default function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           interval,
-          discountCode: isPromoApplied ? "FLOWBRO" : undefined,
+          discountCode: isPromoApplied ? FLOW_PRICING.promoCode : undefined,
           acquisition: getCheckoutAcquisitionContext(window.location.pathname),
         }),
       });
       if (res.status === 401) {
         // Guest tapped Continue → send them to sign in, then straight back here.
-        window.location.href = `/${locale}/login?next=/${locale}/pricing`;
+        window.location.href = `/${routeLocale}/login?next=/${routeLocale}/pricing`;
         return;
       }
 
@@ -108,7 +112,7 @@ export default function PricingPage() {
       <WebGLBackground />
       <main className="min-h-screen overflow-y-auto flex items-start md:items-center justify-center p-4 py-10">
         <div className="w-full max-w-lg space-y-5">
-          <Link href={`/${locale}/app`} className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
+          <Link href={`/${routeLocale}/app`} className="inline-flex items-center gap-2 text-xs text-muted-foreground/70 hover:text-white transition-colors">
             <ArrowLeft className="h-4 w-4" /> {t("dashboard.backToFlowstate", "Back to Flow")}
           </Link>
 
@@ -149,10 +153,10 @@ export default function PricingPage() {
                 <div className="space-y-1">
                   <div className="flex items-center justify-center gap-2">
                     <span className="text-xl line-through text-white/30 tabular-nums">
-                      {interval === "yearly" ? "$59.99" : "$9.99"}
+                      {formatUsd(priceCents(interval))}
                     </span>
                     <span className="text-4xl font-extrabold text-emerald-400 tabular-nums drop-shadow-[0_0_15px_rgba(52,211,153,0.3)] animate-pulse">
-                      {interval === "yearly" ? "$29.99" : "$4.99"}
+                      {formatUsd(priceCents(interval, true))}
                     </span>
                     <span className="text-base font-normal text-muted-foreground/60">
                       {BILLING[interval].suffix}
@@ -166,11 +170,8 @@ export default function PricingPage() {
                 </div>
               ) : (
                 <div className="flex items-baseline justify-center gap-2 tabular-nums">
-                  {interval === "yearly" && (
-                    <span className="text-xl font-medium text-white/35 line-through">$99</span>
-                  )}
                   <span className="text-4xl font-bold text-white">
-                    {interval === "yearly" ? "$59.99" : "$9.99"}
+                    {formatUsd(priceCents(interval))}
                   </span>
                   <span className="text-base font-normal text-muted-foreground/60">
                     {BILLING[interval].suffix}
@@ -179,7 +180,7 @@ export default function PricingPage() {
               )}
               {interval === "yearly" && (
                 <p className="text-[10px] text-primary/80 font-mono mt-1.5 uppercase tracking-wider">
-                  {t("pricing.saveYearly", "Save 50% compared to monthly")}
+                  {t("pricing.saveYearly", `Save ${STANDARD_ANNUAL_SAVINGS_PERCENT}% compared to monthly`)}
                 </p>
               )}
             </div>
@@ -193,8 +194,8 @@ export default function PricingPage() {
               )}
               {t("pricing.button", "Continue")} · {
                 isPromoApplied 
-                  ? (interval === "yearly" ? "$29.99/yr" : "$4.99/mo")
-                  : (interval === "yearly" ? "$59.99/yr" : "$9.99/mo")
+                  ? priceLabel(interval, true)
+                  : priceLabel(interval)
               }
             </Button>
             {error && <p className="text-xs text-rose-400/80 text-center">{error}</p>}
@@ -258,11 +259,11 @@ export default function PricingPage() {
             </div>
 
             <div className="flex items-center justify-center gap-3 text-[10px] text-muted-foreground/40">
-              <Link href={`/${locale}/legal/terms`} className="hover:text-white transition-colors">{t("dashboard.terms", "Terms")}</Link>
+              <Link href={`/${routeLocale}/legal/terms`} className="hover:text-white transition-colors">{t("dashboard.terms", "Terms")}</Link>
               <span className="w-1 h-1 rounded-full bg-white/10" />
-              <Link href={`/${locale}/legal/privacy`} className="hover:text-white transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
+              <Link href={`/${routeLocale}/legal/privacy`} className="hover:text-white transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
               <span className="w-1 h-1 rounded-full bg-white/10" />
-              <Link href={`/${locale}/legal/refund`} className="hover:text-white transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
+              <Link href={`/${routeLocale}/legal/refund`} className="hover:text-white transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
             </div>
           </div>
         </div>

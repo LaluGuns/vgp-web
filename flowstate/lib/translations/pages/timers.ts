@@ -117,10 +117,10 @@ const en: Record<TimerSlug, TimerPageCopy> = {
   "90-15": {
     metaTitle: "90/15 Deep Work Timer — free online",
     metaDescription:
-      "Free 90/15 timer in your browser. 90-minute deep work blocks with 15-minute recovery — built around the ultradian rhythm. Original focus music in Flow.",
+      "Free 90/15 timer in your browser. A longer work-block preset with a 15-minute recovery break and original focus music in Flow.",
     h1: "90/15 Deep Work Timer — free online",
     paragraphs: [
-      "90/15 is the deep work split: ninety minutes on one hard thing, fifteen minutes of real recovery. The length lines up with the ultradian rhythm — the roughly 90-minute cycles your alertness moves through during the day — and with how long it takes to get somewhere on genuinely difficult work.",
+      "90/15 is a longer deep-work option: ninety minutes on one hard thing, followed by fifteen minutes of real recovery. It is a practical workflow choice for people who prefer longer uninterrupted blocks, not a claim that one biological cycle fits everyone.",
       "This is the block for the work that doesn't fit anywhere else: architecture decisions, proofs, long-form writing, anything where interruption cost is measured in half-hours. One 90-minute block with the phone in another room routinely beats an afternoon of supervised multitasking.",
       "Ninety minutes is demanding, and that's the point — most people get two, maybe three of these blocks per day. Don't stack five. If you can't hold ninety yet, 50/10 is the honest on-ramp.",
     ],
@@ -180,10 +180,10 @@ const id: Record<TimerSlug, TimerPageCopy> = {
   "90-15": {
     metaTitle: "Timer Deep Work 90/15 — gratis online",
     metaDescription:
-      "Timer 90/15 gratis di browser. Block deep work 90 menit dengan pemulihan 15 menit — dibangun di sekitar ritme ultradian. Musik fokus original di Flow.",
+      "Timer 90/15 gratis di browser. Preset blok kerja panjang dengan pemulihan 15 menit dan musik fokus original di Flow.",
     h1: "Timer Deep Work 90/15 — gratis online",
     paragraphs: [
-      "90/15 itu split deep work: sembilan puluh menit untuk satu hal yang susah, lima belas menit pemulihan yang beneran. Panjangnya sejalan dengan ritme ultradian — siklus kurang lebih 90 menit yang dilalui kewaspadaanmu sepanjang hari — dan dengan waktu yang dibutuhkan buat benar-benar maju di kerjaan yang sulit.",
+      "90/15 adalah opsi deep work yang lebih panjang: sembilan puluh menit untuk satu hal yang susah, lalu lima belas menit pemulihan. Ini pilihan workflow praktis untuk yang nyaman dengan blok tanpa interupsi lebih lama, bukan klaim bahwa satu siklus biologis cocok untuk semua orang.",
       "Ini block untuk kerjaan yang nggak muat di mana-mana: keputusan arsitektur, pembuktian, tulisan panjang, apa pun yang biaya interupsinya dihitung dalam setengah jam. Satu block 90 menit dengan HP di ruangan lain rutin mengalahkan satu sore multitasking.",
       "Sembilan puluh menit itu berat, dan memang itu intinya — kebanyakan orang dapat dua, paling banyak tiga block ini per hari. Jangan tumpuk lima. Kalau belum kuat sembilan puluh, 50/10 adalah jalur masuk yang jujur.",
     ],

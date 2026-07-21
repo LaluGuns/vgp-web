@@ -44,3 +44,7 @@ yarn-error.log*
 /scripts/upload-r2.err.log
 /scripts/.r2.env
 .removed-tracks/
+
+# Private executed legal evidence (contains visual signature assets).
+# Keep local/offline only; never commit, publish, or deploy through Vercel.
+/output/legal-private/

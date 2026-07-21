@@ -2,8 +2,8 @@
 // landings, /license, /alternatives). EN and ID are written for real; the
 // other nine locales fall back to English until they get a proper pass —
 // per-page long copy intentionally lives outside the UI dictionaries.
-import type { Locale } from "@/lib/translations/dictionaries";
 import type { MiniTimerLabels } from "@/components/marketing/mini-timer";
+import { marketRouteCopy, marketSharedCopy } from "@/lib/marketing/market-copy";
 
 export type MarketingShared = {
   breadcrumbHome: string;
@@ -62,13 +62,36 @@ const id: MarketingShared = {
   presetTemplate: "{work} menit kerja · {break} menit istirahat",
 };
 
-export function getMarketingShared(locale: Locale): MarketingShared {
+export function getMarketingShared(locale: string): MarketingShared {
+  const regional = marketSharedCopy(locale);
+  if (regional) {
+    return {
+      breadcrumbHome: regional.breadcrumbHome,
+      breadcrumbTimers: regional.breadcrumbTimers,
+      faqHeading: regional.faqHeading,
+      otherTimersHeading: regional.otherTimersHeading,
+      ctaTitle: regional.ctaTitle,
+      ctaBody: regional.ctaBody,
+      ctaButton: regional.ctaButton,
+      timer: {
+        work: regional.work,
+        break: regional.break,
+        start: regional.start,
+        pause: regional.pause,
+        reset: regional.reset,
+        skip: regional.skip,
+        caption: regional.timerCaption,
+        openApp: regional.openApp,
+      },
+      presetTemplate: regional.presetTemplate,
+    };
+  }
   if (locale === "id") return id;
   return en;
 }
 
 export function buildTimerLabels(
-  locale: Locale,
+  locale: string,
   workMin: number,
   breakMin: number
 ): MiniTimerLabels {
@@ -82,17 +105,18 @@ export function buildTimerLabels(
 }
 
 /** Internal links reused by the landing footer and the marketing shell. */
-export function getFreeTimerLinks(locale: Locale): { href: string; label: string }[] {
+export function getFreeTimerLinks(locale: string): { href: string; label: string }[] {
   const isId = locale === "id";
+  const label = (path: string, fallback: string) => marketRouteCopy(locale, path)?.h1 ?? fallback;
   return [
-    { href: `/${locale}/timer/25-5`, label: isId ? "Timer Pomodoro 25/5" : "25/5 Pomodoro Timer" },
-    { href: `/${locale}/timer/50-10`, label: isId ? "Timer Pomodoro 50/10" : "50/10 Pomodoro Timer" },
+    { href: `/${locale}/timer/25-5`, label: label("timer/25-5", isId ? "Timer Pomodoro 25/5" : "25/5 Pomodoro Timer") },
+    { href: `/${locale}/timer/50-10`, label: label("timer/50-10", isId ? "Timer Pomodoro 50/10" : "50/10 Pomodoro Timer") },
     { href: `/${locale}/timer/45-15`, label: isId ? "Timer Pomodoro 45/15" : "45/15 Pomodoro Timer" },
     { href: `/${locale}/timer/60-10`, label: isId ? "Timer Pomodoro 60/10" : "60/10 Pomodoro Timer" },
     { href: `/${locale}/timer/90-15`, label: isId ? "Timer Pomodoro 90/15" : "90/15 Pomodoro Timer" },
-    { href: `/${locale}/deep-work-timer`, label: isId ? "Timer Deep Work" : "Deep Work Timer" },
-    { href: `/${locale}/study-timer`, label: isId ? "Timer Belajar" : "Study Timer" },
-    { href: `/${locale}/pomodoro-timer-with-music`, label: isId ? "Timer Pomodoro dengan Musik" : "Pomodoro Timer with Music" },
-    { href: `/${locale}/license`, label: isId ? "Lisensi musik" : "Music license" },
+    { href: `/${locale}/deep-work-timer`, label: label("deep-work-timer", isId ? "Timer Deep Work" : "Deep Work Timer") },
+    { href: `/${locale}/study-timer`, label: label("study-timer", isId ? "Timer Belajar" : "Study Timer") },
+    { href: `/${locale}/pomodoro-timer-with-music`, label: label("pomodoro-timer-with-music", isId ? "Timer Pomodoro dengan Musik" : "Pomodoro Timer with Music") },
+    { href: `/${locale}/license`, label: label("license", isId ? "Lisensi musik" : "Music license") },
   ];
 }

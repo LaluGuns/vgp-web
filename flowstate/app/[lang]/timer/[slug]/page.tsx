@@ -18,6 +18,7 @@ import {
   getFreeTimerLinks,
 } from "@/lib/translations/pages/shared";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
+import { withMarketRouteCopy } from "@/lib/marketing/market-copy";
 import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-shell";
 import { MiniTimer } from "@/components/marketing/mini-timer";
 
@@ -35,7 +36,7 @@ export async function generateMetadata({
   const { lang, slug } = await params;
   if (!(TIMER_SLUGS as readonly string[]).includes(slug)) return {};
   const locale = resolveLocale(lang);
-  const copy = getTimerCopy(locale, slug as TimerSlug);
+  const copy = withMarketRouteCopy(lang, `timer/${slug}`, getTimerCopy(locale, slug as TimerSlug));
   return marketingMetadata(lang, `timer/${slug}`, copy.metaTitle, copy.metaDescription);
 }
 
@@ -50,9 +51,9 @@ export default async function TimerPresetPage({
   const locale = resolveLocale(lang);
   const timerSlug = slug as TimerSlug;
   const { workMin, breakMin } = TIMER_CONFIG[timerSlug];
-  const copy = getTimerCopy(locale, timerSlug);
-  const shared = getMarketingShared(locale);
-  const otherTimers = getFreeTimerLinks(locale).filter(
+  const copy = withMarketRouteCopy(lang, `timer/${slug}`, getTimerCopy(locale, timerSlug));
+  const shared = getMarketingShared(lang);
+  const otherTimers = getFreeTimerLinks(lang).filter(
     (l) => !l.href.endsWith(`/timer/${slug}`)
   );
 
@@ -64,9 +65,9 @@ export default async function TimerPresetPage({
 
   return (
     <MarketingShell
-      locale={locale}
+      locale={lang}
       breadcrumb={[
-        { name: shared.breadcrumbHome, href: `/${locale}` },
+        { name: shared.breadcrumbHome, href: `/${lang}` },
         { name: `${workMin}/${breakMin}` },
       ]}
     >
@@ -87,8 +88,8 @@ export default async function TimerPresetPage({
         <MiniTimer
           workMin={workMin}
           breakMin={breakMin}
-          appHref={`/${locale}/app`}
-          labels={buildTimerLabels(locale, workMin, breakMin)}
+          appHref={`/${lang}/app`}
+          labels={buildTimerLabels(lang, workMin, breakMin)}
         />
       </section>
 
@@ -133,7 +134,7 @@ export default async function TimerPresetPage({
       </section>
 
       <MarketingCta
-        locale={locale}
+        locale={lang}
         title={shared.ctaTitle}
         body={shared.ctaBody}
         button={shared.ctaButton}

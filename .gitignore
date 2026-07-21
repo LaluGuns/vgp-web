@@ -23,3 +23,7 @@ content/**/*.webp
 
 # Editor/AI tool config
 .claude/
+.env*
+.headroom-venv/
+.headroom-cache/
+.headroom-proxy.*

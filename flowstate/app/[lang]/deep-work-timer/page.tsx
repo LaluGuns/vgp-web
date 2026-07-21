@@ -5,6 +5,7 @@ import { resolveLocale } from "@/lib/translations/server";
 import { getDeepWorkTimerCopy } from "@/lib/translations/pages/deep-work-timer";
 import { buildTimerLabels, getMarketingShared } from "@/lib/translations/pages/shared";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
+import { withMarketRouteCopy } from "@/lib/marketing/market-copy";
 import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-shell";
 import { MiniTimer } from "@/components/marketing/mini-timer";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
@@ -20,7 +21,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = getDeepWorkTimerCopy(locale);
+  const copy = withMarketRouteCopy(lang, PATH, getDeepWorkTimerCopy(locale));
   return marketingMetadata(lang, PATH, copy.metaTitle, copy.metaDescription);
 }
 
@@ -31,8 +32,8 @@ export default async function DeepWorkTimerPage({
 }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = getDeepWorkTimerCopy(locale);
-  const shared = getMarketingShared(locale);
+  const copy = withMarketRouteCopy(lang, PATH, getDeepWorkTimerCopy(locale));
+  const shared = getMarketingShared(lang);
 
   const faqLd = faqJsonLd(copy.faq);
   const breadcrumbLd = breadcrumbJsonLd(locale, [
@@ -42,9 +43,9 @@ export default async function DeepWorkTimerPage({
 
   return (
     <MarketingShell
-      locale={locale}
+      locale={lang}
       breadcrumb={[
-        { name: shared.breadcrumbHome, href: `/${locale}` },
+        { name: shared.breadcrumbHome, href: `/${lang}` },
         { name: copy.h1 },
       ]}
     >
@@ -64,16 +65,16 @@ export default async function DeepWorkTimerPage({
         <MiniTimer
           workMin={WORK}
           breakMin={BREAK}
-          appHref={`/${locale}/app`}
-          labels={buildTimerLabels(locale, WORK, BREAK)}
+          appHref={`/${lang}/app`}
+          labels={buildTimerLabels(lang, WORK, BREAK)}
         />
       </section>
 
       <CopyBlock paragraphs={copy.paragraphs} />
       <FaqBlock heading={shared.faqHeading} faq={copy.faq} />
-      <TimerLinksBlock locale={locale} currentPath={PATH} />
+      <TimerLinksBlock locale={lang} currentPath={PATH} />
       <MarketingCta
-        locale={locale}
+        locale={lang}
         title={shared.ctaTitle}
         body={shared.ctaBody}
         button={shared.ctaButton}

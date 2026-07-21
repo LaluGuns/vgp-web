@@ -1,6 +1,5 @@
 // Server-rendered building blocks shared by the marketing pages.
 import Link from "next/link";
-import type { Locale } from "@/lib/translations/dictionaries";
 import type { FaqItem } from "@/lib/marketing/seo";
 import { getFreeTimerLinks, getMarketingShared } from "@/lib/translations/pages/shared";
 
@@ -37,7 +36,7 @@ export function TimerLinksBlock({
   locale,
   currentPath,
 }: {
-  locale: Locale;
+  locale: string;
   currentPath?: string;
 }) {
   const shared = getMarketingShared(locale);

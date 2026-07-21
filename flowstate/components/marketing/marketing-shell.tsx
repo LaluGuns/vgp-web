@@ -3,21 +3,20 @@
 // background, no app stores — so these pages stay light and fully SSG.
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import type { Locale } from "@/lib/translations/dictionaries";
-import { getTranslator } from "@/lib/translations/server";
-import { getFreeTimerLinks, getMarketingShared } from "@/lib/translations/pages/shared";
+import { getTranslator, resolveLocale } from "@/lib/translations/server";
+import { getFreeTimerLinks } from "@/lib/translations/pages/shared";
 
 export function MarketingShell({
   locale,
   breadcrumb,
   children,
 }: {
-  locale: Locale;
+  locale: string;
   /** Visible breadcrumb trail; last item is the current page (no link). */
   breadcrumb: { name: string; href?: string }[];
   children: React.ReactNode;
 }) {
-  const t = getTranslator(locale);
+  const t = getTranslator(resolveLocale(locale));
   const timerLinks = getFreeTimerLinks(locale);
 
   return (
@@ -109,7 +108,7 @@ export function MarketingCta({
   body,
   button,
 }: {
-  locale: Locale;
+  locale: string;
   title: string;
   body: string;
   button: string;

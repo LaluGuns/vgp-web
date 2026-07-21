@@ -22,7 +22,6 @@ export default function OpengraphImage() {
           position: "relative",
         }}
       >
-        {/* Cyan glow accent */}
         <div
           style={{
             position: "absolute",
