@@ -6,7 +6,7 @@ export const CREATOR_GENRES = [
 
 export type CreatorGenre = (typeof CREATOR_GENRES)[number];
 
-export const CREATOR_TERMS_VERSION = "creator-license-v1";
+export const CREATOR_TERMS_VERSION = "creator-license-2026-07-21";
 export const CREATOR_CATALOG_VERSION = "creator-catalog-2026-07-19";
 export const CREATOR_RIGHTS_VERSION = "creator-rights-v1";
 export const CREATOR_RELEASE_LABEL =
@@ -15,6 +15,76 @@ export const CREATOR_RELEASE_LABEL =
 export function isCreatorGenre(value: unknown): value is CreatorGenre {
   return typeof value === "string" &&
     (CREATOR_GENRES as readonly string[]).includes(value);
+}
+
+export type CreatorLicenseAcceptance = {
+  acceptTerms: true;
+  termsVersion: typeof CREATOR_TERMS_VERSION;
+  catalogVersion: typeof CREATOR_CATALOG_VERSION;
+};
+
+export type CreatorLicenseAcceptanceFailure =
+  | "terms_acceptance_required"
+  | "terms_version_mismatch"
+  | "catalog_version_mismatch";
+
+/**
+ * Clickwrap is fail-closed: a grant can only be issued for an explicit `true`
+ * acceptance of the exact server-published terms and catalog versions.
+ */
+export function validateCreatorLicenseAcceptance(
+  value: unknown
+):
+  | { ok: true; acceptance: CreatorLicenseAcceptance }
+  | { ok: false; code: CreatorLicenseAcceptanceFailure } {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return { ok: false, code: "terms_acceptance_required" };
+  }
+
+  const input = value as Record<string, unknown>;
+  if (input.acceptTerms !== true) {
+    return { ok: false, code: "terms_acceptance_required" };
+  }
+  if (input.termsVersion !== CREATOR_TERMS_VERSION) {
+    return { ok: false, code: "terms_version_mismatch" };
+  }
+  if (input.catalogVersion !== CREATOR_CATALOG_VERSION) {
+    return { ok: false, code: "catalog_version_mismatch" };
+  }
+
+  return {
+    ok: true,
+    acceptance: {
+      acceptTerms: true,
+      termsVersion: CREATOR_TERMS_VERSION,
+      catalogVersion: CREATOR_CATALOG_VERSION,
+    },
+  };
+}
+
+/**
+ * Server-side validation for explicit licensee display name ("Licensed to").
+ * Must be 2-100 characters, no control characters, and cannot be an email address.
+ */
+export function validateLicenseeName(
+  value: unknown
+): { ok: true; name: string } | { ok: false; code: "invalid_licensee_name" } {
+  if (typeof value !== "string") {
+    return { ok: false, code: "invalid_licensee_name" };
+  }
+  const trimmed = value.trim();
+  if (trimmed.length < 2 || trimmed.length > 100) {
+    return { ok: false, code: "invalid_licensee_name" };
+  }
+  // Reject control characters (\x00-\x1F, \x7F) and newlines
+  if (/[\x00-\x1F\x7F\r\n\t]/.test(trimmed)) {
+    return { ok: false, code: "invalid_licensee_name" };
+  }
+  // Reject email addresses (do not silently use email)
+  if (trimmed.includes("@")) {
+    return { ok: false, code: "invalid_licensee_name" };
+  }
+  return { ok: true, name: trimmed };
 }
 
 export type CreatorSubscriptionRow = {
@@ -28,9 +98,7 @@ export type ActiveCreatorPlan = "monthly" | "yearly" | "lifetime";
 
 /**
  * Creator downloads and new grants intentionally use the canonical subscription
- * rows instead of the denormalized profile plan or JWT metadata. A cancelled
- * subscription never creates a new grant, even while an older publication grant
- * remains valid.
+ * rows instead of the denormalized profile plan or JWT metadata.
  */
 export function selectActiveCreatorPlan(
   subscriptions: CreatorSubscriptionRow[],
@@ -76,3 +144,13 @@ export function safeCreatorDownloadFilename(title: string, id: string): string {
   return `${(base || fallback).slice(0, 96)}.mp3`;
 }
 
+export function safeCreatorCertificateFilename(title: string, certificateId: string): string {
+  const base = title
+    .normalize("NFKD")
+    .replace(/[^a-zA-Z0-9 _-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+  const fallback = certificateId.slice(0, 8);
+  return `Flow-License-${(base || fallback).slice(0, 60)}-${certificateId}.pdf`;
+}

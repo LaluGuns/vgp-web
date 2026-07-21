@@ -34,30 +34,58 @@ export async function GET(
     assertCreatorLicenseEnabled();
     const { id } = await params;
     if (!UUID_RE.test(id)) {
-      return NextResponse.json({ error: "invalid_grant_id" }, { status: 400 });
+      return NextResponse.json({ error: "invalid_id" }, { status: 400 });
     }
     const service = await createServiceClient();
-    const { data, error } = await service
+
+    // 1. First check if id matches a Certificate Record
+    const { data: cert } = await service
+      .from("flowstate_creator_license_certificates")
+      .select("id, grant_id, track_id, track_title, track_artist, track_genre, terms_version, catalog_version, issued_at, revoked_at")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (cert) {
+      return NextResponse.json({
+        type: "certificate",
+        certificateId: cert.id,
+        grantId: cert.grant_id,
+        valid: cert.revoked_at === null,
+        issuedAt: cert.issued_at,
+        trackId: cert.track_id,
+        trackTitle: cert.track_title,
+        trackArtist: cert.track_artist,
+        trackGenre: cert.track_genre,
+        termsVersion: cert.terms_version,
+        catalogVersion: cert.catalog_version,
+        issuer: "Chill Music Division / Virzy Guns Production",
+      });
+    }
+
+    // 2. Fall back to checking Grant Record
+    const { data: grant, error } = await service
       .from("flowstate_creator_license_grants")
       .select("id, terms_version, catalog_version, eligible_genres, granted_at, revoked_at")
       .eq("id", id)
       .maybeSingle();
+
     if (error) {
       return NextResponse.json({ error: "license_database_unavailable" }, { status: 503 });
     }
-    if (!data) return NextResponse.json({ error: "grant_not_found" }, { status: 404 });
+    if (!grant) return NextResponse.json({ error: "record_not_found" }, { status: 404 });
 
     return NextResponse.json({
-      grantId: data.id,
-      valid: data.revoked_at === null,
-      issuedAt: data.granted_at,
-      termsVersion: data.terms_version,
-      catalogVersion: data.catalog_version,
-      eligibleGenres: data.eligible_genres,
+      type: "grant",
+      grantId: grant.id,
+      valid: grant.revoked_at === null,
+      issuedAt: grant.granted_at,
+      termsVersion: grant.terms_version,
+      catalogVersion: grant.catalog_version,
+      eligibleGenres: grant.eligible_genres,
+      issuer: "Chill Music Division / Virzy Guns Production",
     });
   } catch (error) {
     const failure = creatorLicenseErrorResponse(error);
     return NextResponse.json({ error: failure.code }, { status: failure.status });
   }
 }
-

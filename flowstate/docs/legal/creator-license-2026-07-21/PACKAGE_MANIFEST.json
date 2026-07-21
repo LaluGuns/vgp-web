@@ -1,0 +1,14 @@
+{
+  "package_id": "creator-license-2026-07-21",
+  "status": "ready_for_signature_and_controlled_publication",
+  "controlling_language": "id-ID",
+  "track_count": 174,
+  "catalog_version": "creator-catalog-2026-07-19",
+  "rights_version": "creator-rights-v1",
+  "hashes": {
+    "FLOW_CREATOR_LICENSE_creator-license-2026-07-21_ID.md": "7d05922373a256fce5dffbd4a67547623dd676ead2d997a0c9c790d8bd64d5e9",
+    "FLOW_CREATOR_LICENSE_creator-license-2026-07-21_EN.md": "b51df66d5f7a14b5400e09e18643ab0165beb2768b787d027ace17471b9cc886",
+    "creator-rights-manifest-v1.csv": "bb4c0f2ff6373e2cb2360f4331ce0001f72297519968aed025035e89ca47cdd5"
+  },
+  "generated_on": "2026-07-21"
+}

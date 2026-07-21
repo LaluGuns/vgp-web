@@ -4,6 +4,7 @@ import {
   assertCreatorLicenseEnabled,
   creatorLicenseErrorResponse,
   findCurrentGrant,
+  getOrCreateCertificate,
   requireActiveCreatorPlan,
   requireCreatorLicenseUser,
 } from "@/lib/creator-license/server";
@@ -29,7 +30,7 @@ function configuredWorker(): { origin: string; issueUrl: string; secret: string 
 }
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ trackId: string[] }> }
 ) {
   try {
@@ -50,6 +51,12 @@ export async function GET(
     if (!grant) {
       return NextResponse.json({ error: "license_grant_required" }, { status: 409 });
     }
+
+    const reqUrl = new URL(request.url);
+    const licenseeNameInput = reqUrl.searchParams.get("licenseeName") ?? undefined;
+
+    // Create or reuse idempotent certificate for (grant.id, track.id)
+    await getOrCreateCertificate(user.id, grant, trackId, licenseeNameInput);
 
     let response: Response;
     try {

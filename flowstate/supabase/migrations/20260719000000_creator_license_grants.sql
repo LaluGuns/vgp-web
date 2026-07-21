@@ -7,12 +7,25 @@ create table public.flowstate_creator_license_grants (
   -- destroying the perpetual publication receipt or its public verifier.
   user_id uuid references auth.users(id) on delete set null,
   terms_version text not null,
+  terms_document_version text not null,
+  terms_document_sha256 text not null,
   catalog_version text not null,
   eligible_genres text[] not null,
   plan_snapshot jsonb not null,
+  accepted_at timestamptz not null,
+  acceptance_method text not null,
   granted_at timestamptz not null default now(),
   revoked_at timestamptz,
   revocation_reason text,
+  constraint fs_creator_grants_terms_document_version check (
+    terms_document_version = terms_version
+  ),
+  constraint fs_creator_grants_terms_document_sha256 check (
+    terms_document_sha256 ~ '^[0-9a-f]{64}$'
+  ),
+  constraint fs_creator_grants_acceptance_method check (
+    acceptance_method = 'clickwrap'
+  ),
   constraint fs_creator_grants_genres_exact check (
     eligible_genres = array['City Pop', 'Cyberpunk Jazz', 'Neo Synthwave']::text[]
   ),
@@ -28,9 +41,15 @@ create table public.flowstate_creator_license_grants (
 
 alter table public.flowstate_creator_license_grants enable row level security;
 
-revoke all on table public.flowstate_creator_license_grants from public, anon, authenticated;
+revoke all on table public.flowstate_creator_license_grants
+  from public, anon, authenticated, service_role;
 grant select on table public.flowstate_creator_license_grants to authenticated;
-grant all on table public.flowstate_creator_license_grants to service_role;
+-- The service may issue receipts and later annotate revocation only. Contract,
+-- acceptance, entitlement, and issue fields are immutable at the DB privilege
+-- layer, and receipts cannot be deleted through the Data API.
+grant select, insert on table public.flowstate_creator_license_grants to service_role;
+grant update (revoked_at, revocation_reason)
+  on table public.flowstate_creator_license_grants to service_role;
 
 create policy "fs_creator_grants_select_own"
   on public.flowstate_creator_license_grants
@@ -50,4 +69,13 @@ create unique index idx_fs_creator_grants_one_active_version
 
 create index idx_fs_creator_grants_public_verify
   on public.flowstate_creator_license_grants(id)
-  include (terms_version, catalog_version, granted_at, revoked_at);
+  include (
+    terms_version,
+    terms_document_version,
+    terms_document_sha256,
+    catalog_version,
+    accepted_at,
+    acceptance_method,
+    granted_at,
+    revoked_at
+  );

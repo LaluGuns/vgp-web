@@ -6,6 +6,7 @@ import {
   safeCreatorDownloadFilename,
   type CreatorGenre,
 } from "@/lib/creator-license/policy";
+import { CREATOR_RIGHTS_VERIFIED_AT } from "@/lib/creator-license/contract-v1";
 
 type RawCatalogEntry = {
   id: string;
@@ -22,8 +23,8 @@ type RawCatalogEntry = {
 export type CreatorTrack = RawCatalogEntry & {
   creatorLicenseEligible: true;
   creatorGenre: CreatorGenre;
-  /** Populated only after the external rights audit is recorded. */
-  rightsVerifiedAt: string | null;
+  /** Date of the signed rights-owner attestation for this catalog snapshot. */
+  rightsVerifiedAt: string;
   rightsVersion: string;
   spotifyUrl: string | null;
   releaseLabel: string;
@@ -41,7 +42,7 @@ export const CREATOR_TRACKS: CreatorTrack[] = (rawCatalog as RawCatalogEntry[])
     ...entry,
     creatorLicenseEligible: true,
     creatorGenre: entry.genre as CreatorGenre,
-    rightsVerifiedAt: null,
+    rightsVerifiedAt: CREATOR_RIGHTS_VERIFIED_AT,
     rightsVersion: CREATOR_RIGHTS_VERSION,
     spotifyUrl: null,
     releaseLabel: CREATOR_RELEASE_LABEL,
@@ -56,4 +57,3 @@ export const CREATOR_TRACK_BY_ID = new Map(
 export function creatorTracksByGenre(genre: CreatorGenre): CreatorTrack[] {
   return CREATOR_TRACKS.filter((track) => track.creatorGenre === genre);
 }
-
