@@ -7,3 +7,9 @@ public/sounds/**/*.wav
 .removed-tracks
 worker
 scripts/*.log
+
+# Local legal evidence, handoff documents, and generation tooling never ship
+# in the Vercel source bundle. Runtime code reads the tracked app/lib files.
+docs
+output
+scripts/legal
