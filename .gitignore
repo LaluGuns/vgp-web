@@ -21,6 +21,16 @@ content/**/*.jpg
 content/**/*.jpeg
 content/**/*.webp
 
+# Private executed legal evidence — never commit, publish, or deploy.
+# These carry a handwritten signature / PII. Only unsigned public templates
+# belong in the repo (see flowstate/docs/legal/).
+legal-intake/
+*ORIGINAL_SIGNED_EVIDENCE*
+*RIGHTS_AND_ID_APPROVAL*
+*_EXECUTED*
+*SIGNATURE_TRANSPARENT*
+*SIGNATURE_PREVIEW*
+
 # Editor/AI tool config
 .claude/
 .env*

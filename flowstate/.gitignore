@@ -47,4 +47,12 @@ yarn-error.log*
 
 # Private executed legal evidence (contains visual signature assets).
 # Keep local/offline only; never commit, publish, or deploy through Vercel.
+# docs/legal/ is public and must hold UNSIGNED templates only — an executed,
+# signature-bearing copy leaked in there once and had to be purged from history.
 /output/legal-private/
+/output/
+*ORIGINAL_SIGNED_EVIDENCE*
+*RIGHTS_AND_ID_APPROVAL*
+*_EXECUTED*
+*SIGNATURE_TRANSPARENT*
+*SIGNATURE_PREVIEW*
