@@ -151,7 +151,7 @@ export default async function LandingPage({
               <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6]" /> {t("legal.landing.focus_environment", "Focus environment")}
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black text-white tracking-tight leading-[0.95]">
+              <h1 className="text-5xl md:text-7xl lg:text-[80px] font-black text-white tracking-tight leading-[0.95] break-words [hyphens:auto]">
               {regionalCopy?.h1 ?? t("legal.landing.hero_title", "Music for focus. Built for deep work.")}
             </h1>
 
