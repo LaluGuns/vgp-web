@@ -5,6 +5,7 @@ import {
     Headphones,
     Library,
     Newspaper,
+    Timer,
     UserRound,
 } from 'lucide-react';
 
@@ -53,6 +54,15 @@ export const ecosystemCards = [
         Icon: Activity,
         description:
             'A cadence music app with original VGP music for runners and cyclists, coming soon.',
+    },
+    {
+        title: 'Flow',
+        eyebrow: 'Deep Work App',
+        href: '/flow',
+        cta: 'Open Flow',
+        Icon: Timer,
+        description:
+            'A focus timer with original VGP music, ambient sound, and honest session stats for long work blocks.',
     },
     {
         title: 'Masterclass',
