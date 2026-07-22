@@ -1,0 +1,13 @@
+# The canonical legal documents are SHA-256 fingerprinted, and that fingerprint is
+# stored on every license grant and certificate (terms_document_sha256). Their bytes
+# must therefore be identical on every platform. Without these rules a Windows
+# checkout (core.autocrlf=true) rewrites LF -> CRLF, which changes the hash and fails
+# flowstate/scripts/release/creator-license.test.mjs.
+flowstate/docs/legal/**/*.md   text eol=lf
+flowstate/docs/legal/**/*.csv  text eol=lf
+flowstate/docs/legal/**/*.txt  text eol=lf
+flowstate/docs/legal/**/*.json text eol=lf
+
+# Released legal binaries must never be transformed.
+flowstate/docs/legal/**/*.pdf  binary
+flowstate/docs/legal/**/*.docx binary
