@@ -22,6 +22,7 @@ import {
   validateLicenseeName,
 } from "../../lib/creator-license/policy.ts";
 import { generateLicenseCertificatePdf } from "../../lib/creator-license/pdf.ts";
+import { CREATOR_ATTRIBUTION } from "../../lib/creator-music/content.ts";
 
 const appRoot = new URL("../../", import.meta.url);
 
@@ -126,6 +127,23 @@ test("clickwrap requires the exact current terms and catalog versions", () => {
   }
 });
 
+test("creator UI uses only the exact controlling ID and EN clickwrap text", async () => {
+  const component = await readFile(new URL("components/creator-music/creator-catalog.tsx", appRoot), "utf8");
+  const exactId = "Saya telah membaca dan menyetujui Lisensi Musik untuk Kreator creator-license-2026-07-21. Saya memahami bahwa atribusi wajib, musik tidak boleh didistribusikan tersendiri, dan saya tidak boleh mendaftarkan rekaman atau fingerprint musiknya ke Content ID atau sistem sejenis.";
+  const exactEn = "I have read and agree to the Creator Music License creator-license-2026-07-21. I understand that attribution is required, the music may not be distributed standalone, and I may not register the track or its music fingerprint in Content ID or a similar system.";
+
+  assert.equal(component.includes(exactId), true);
+  assert.equal(component.includes(exactEn), true);
+  assert.equal(component.includes("regional?.clickwrap"), false);
+});
+
+test("issued certificates use the exact controlling attribution line", () => {
+  assert.equal(
+    CREATOR_ATTRIBUTION,
+    "Music: Flow Creator Music by Chill Music Division / Virzy Guns Production - https://flow.virzyguns.com/creator-music"
+  );
+});
+
 test("licensee name validation rejects empty, control chars, and email addresses", () => {
   assert.equal(validateLicenseeName(null).ok, false);
   assert.equal(validateLicenseeName("").ok, false);
@@ -190,7 +208,7 @@ test("PDF certificate generator produces valid PDF with required fields and zero
     termsDocumentVersion: "creator-license-2026-07-21",
     termsDocumentSha256: "537c0c9f14b70a95e1339d5142bf4ea4c55cae278c89eaaeadc14cf15277c4ec",
     licenseeName: "Studio Alpha",
-    attributionText: "Music: Flow Creator Music by Chill Music Division / Virzy Guns Production — https://flow.virzyguns.com/creator-music",
+    attributionText: "Music: Flow Creator Music by Chill Music Division / Virzy Guns Production - https://flow.virzyguns.com/creator-music",
     issuedAt: "2026-07-21T10:00:00.000Z",
     verifyUrl: `https://flow.virzyguns.com/en/license/verify/${certId}`,
   });

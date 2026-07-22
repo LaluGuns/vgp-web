@@ -36,7 +36,7 @@ export default async function DeepWorkTimerPage({
   const shared = getMarketingShared(lang);
 
   const faqLd = faqJsonLd(copy.faq);
-  const breadcrumbLd = breadcrumbJsonLd(locale, [
+  const breadcrumbLd = breadcrumbJsonLd(lang, [
     { name: shared.breadcrumbHome, path: "" },
     { name: copy.h1, path: PATH },
   ]);

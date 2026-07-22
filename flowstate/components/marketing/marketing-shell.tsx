@@ -2,9 +2,10 @@
 // keyword landings, /license, /alternatives/*). Pure HTML/CSS — no WebGL
 // background, no app stores — so these pages stay light and fully SSG.
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { getTranslator, resolveLocale } from "@/lib/translations/server";
-import { getFreeTimerLinks } from "@/lib/translations/pages/shared";
+import { getFreeTimerLinks, getMarketingDiscoveryLinks } from "@/lib/translations/pages/shared";
 
 export function MarketingShell({
   locale,
@@ -31,9 +32,11 @@ export function MarketingShell({
       {/* Header */}
       <header className="w-full max-w-5xl mx-auto px-6 h-20 flex items-center justify-between border-b border-white/[0.05]">
         <Link href={`/${locale}`} className="flex items-center gap-2 select-none shrink-0">
-          <img
+          <Image
             src="/icons/flowstate-logo.png"
             alt="Flow by Virzy Guns logo"
+            width={764}
+            height={268}
             className="h-8 w-auto object-contain"
           />
         </Link>
@@ -75,6 +78,19 @@ export function MarketingShell({
             {timerLinks.map((l) => (
               <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
                 {l.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/40">
+            {getMarketingDiscoveryLinks(locale).heading}
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-[11px] font-mono text-white/50">
+            {getMarketingDiscoveryLinks(locale).links.map((link) => (
+              <Link key={link.href} href={link.href} className="hover:text-white transition-colors">
+                {link.label}
               </Link>
             ))}
           </div>

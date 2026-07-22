@@ -3,6 +3,7 @@
 // components/landing/ (background, hero demo, soundtrack previewer, language
 // selector, side effects).
 import Link from "next/link";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
   Clock,
@@ -16,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { getTranslator, resolveLocale } from "@/lib/translations/server";
-import { getFreeTimerLinks } from "@/lib/translations/pages/shared";
+import { getFreeTimerLinks, getMarketingDiscoveryLinks } from "@/lib/translations/pages/shared";
 import { LandingBackground } from "@/components/landing/landing-background";
 import { HeroMachinesIsland } from "@/components/landing/hero-machines-island";
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
@@ -113,7 +114,7 @@ export default async function LandingPage({
         {/* Navigation Header */}
         <header className="w-full max-w-7xl mx-auto px-8 h-20 flex items-center justify-between border-b border-white/[0.04] bg-transparent">
           <div className="flex items-center gap-2 select-none shrink-0">
-            <img src="/icons/flowstate-logo.png" alt="Flow by Virzy Guns logo" className="h-8 w-auto object-contain" />
+            <Image src="/icons/flowstate-logo.png" alt="Flow by Virzy Guns logo" width={764} height={268} priority className="h-8 w-auto object-contain" />
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -384,6 +385,19 @@ export default async function LandingPage({
             </div>
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-mono text-white/45">
               {getFreeTimerLinks(lang).map((l) => (
+                <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/40">
+              {getMarketingDiscoveryLinks(lang).heading}
+            </div>
+            <div className="flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-mono text-white/45">
+              {getMarketingDiscoveryLinks(lang).links.map((l) => (
                 <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
                   {l.label}
                 </Link>

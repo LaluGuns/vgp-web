@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Compass, Play, Pause } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { resolveAudioUrl } from "@/lib/audio/signed-urls";
@@ -128,7 +129,7 @@ export function SoundtrackShowcase() {
 
             {/* Center Sticker */}
             <div className={`w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 to-cyan-500 flex items-center justify-center relative shadow-[0_0_15px_rgba(0,229,255,0.4)] ${isPlayingPreview ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
-              <img src="/icons/flowstate-logo.png" alt="Logo" className="w-8 h-8 object-contain opacity-80" />
+              <Image src="/icons/flowstate-logo.png" alt="Flow by Virzy Guns logo" width={32} height={32} className="h-8 w-8 object-contain opacity-80" />
               <div className="absolute w-3.5 h-3.5 rounded-full bg-[#0b1326] border border-white/10" />
             </div>
           </div>

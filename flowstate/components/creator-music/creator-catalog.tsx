@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Check, Copy, Download, ExternalLink, FileText, Pause, Play, Search, Sparkles } from "lucide-react";
 import { resolveAudioUrl } from "@/lib/audio/signed-urls";
 import { track } from "@/lib/analytics";
-import { CREATOR_ATTRIBUTION, SPOTIFY_ARTIST_URL } from "@/lib/creator-music/content";
+import { CREATOR_ATTRIBUTION, SPOTIFY_ARTIST_URL, creatorGrantErrorCopy, creatorUiCopy } from "@/lib/creator-music/content";
 import {
   CREATOR_CATALOG_VERSION,
   CREATOR_TERMS_VERSION,
@@ -53,6 +53,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
   const requestRef = useRef(0);
 
   const isId = locale === "id";
+  const regional = creatorUiCopy(locale);
 
   const clickwrapText = isId
     ? "Saya telah membaca dan menyetujui Lisensi Musik untuk Kreator creator-license-2026-07-21. Saya memahami bahwa atribusi wajib, musik tidak boleh didistribusikan tersendiri, dan saya tidak boleh mendaftarkan rekaman atau fingerprint musiknya ke Content ID atau sistem sejenis."
@@ -123,7 +124,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
   async function createGrant() {
     if (!termsAccepted) {
       setGrantState("error");
-      setGrantMessage(isId ? "Setujui Lisensi Musik untuk Kreator terlebih dahulu." : "Accept the Creator Music License first.");
+      setGrantMessage(regional?.acceptFirst ?? (isId ? "Setujui Lisensi Musik untuk Kreator terlebih dahulu." : "Accept the Creator Music License first."));
       return;
     }
     setGrantState("loading");
@@ -152,14 +153,14 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
           catalog_version_mismatch: "The creator catalog changed. Refresh this page and try again.",
           invalid_licensee_name: "Please enter a valid display name for your license certificate (2-100 chars, no email).",
         };
-        throw new Error(messages[payload.error ?? ""] ?? "We could not create a creator license right now.");
+        throw new Error(creatorGrantErrorCopy(locale, payload.error ?? "") ?? messages[payload.error ?? ""] ?? "We could not create a creator license right now.");
       }
       setGrantState("ready");
-      setGrantMessage(isId ? "Lisensi kreator siap. Download track dan sertifikat PDF sekarang terbuka." : "Creator license ready. Track downloads and license PDFs are now unlocked.");
+      setGrantMessage(regional?.grantReady ?? (isId ? "Lisensi kreator siap. Download track dan sertifikat PDF sekarang terbuka." : "Creator license ready. Track downloads and license PDFs are now unlocked."));
       track("creator_license_granted", { genre: genre ?? "all", locale });
     } catch (error) {
       setGrantState("error");
-      setGrantMessage(error instanceof Error ? error.message : "We could not create a creator license right now.");
+      setGrantMessage(error instanceof Error ? error.message : (creatorGrantErrorCopy(locale, "fallback") ?? "We could not create a creator license right now."));
     }
   }
 
@@ -178,9 +179,9 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
     <section className="space-y-5" aria-labelledby="creator-catalog-title">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#00e5ff]">Creator catalog</p>
-          <h2 id="creator-catalog-title" className="mt-2 text-2xl font-extrabold text-white">{title ?? (isId ? "Cari musik untuk karya kamu" : "Find a track for your next edit")}</h2>
-          <p className="mt-2 text-sm text-white/60">{tracks.length} {isId ? "track eligible" : "eligible creator tracks"}. {isId ? "Preview terbuka; download memerlukan Flow Pro aktif." : "Preview is open; downloads require active Flow Pro."}</p>
+          <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-[#00e5ff]">{regional?.creatorCatalog ?? "Creator catalog"}</p>
+          <h2 id="creator-catalog-title" className="mt-2 text-2xl font-extrabold text-white">{title ?? regional?.findTrack ?? (isId ? "Cari musik untuk karya kamu" : "Find a track for your next edit")}</h2>
+          <p className="mt-2 text-sm text-white/60">{tracks.length} {regional?.eligibleTracks ?? (isId ? "track eligible" : "eligible creator tracks")}. {regional?.previewPro ?? (isId ? "Preview terbuka; download memerlukan Flow Pro aktif." : "Preview is open; downloads require active Flow Pro.")}</p>
         </div>
         <a
           href={SPOTIFY_ARTIST_URL}
@@ -189,7 +190,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
           onClick={() => track("spotify_catalog_clicked", { genre: genre ?? "all", locale })}
           className="inline-flex items-center gap-2 self-start rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-white/75 transition-colors hover:border-[#1db954]/50 hover:text-white"
         >
-          Listen on Spotify <ExternalLink className="h-3.5 w-3.5" />
+          {regional?.listenSpotify ?? "Listen on Spotify"} <ExternalLink className="h-3.5 w-3.5" />
         </a>
       </div>
 
@@ -197,12 +198,12 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
           <label className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2.5 text-white/60 focus-within:border-[#00e5ff]/60">
             <Search className="h-4 w-4 shrink-0" />
-            <span className="sr-only">Search creator tracks</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={isId ? "Cari judul, artis, atau genre" : "Search tracks, artist, or genre"} className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/35" />
+            <span className="sr-only">{regional?.searchLabel ?? "Search creator tracks"}</span>
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={regional?.search ?? (isId ? "Cari judul, artis, atau genre" : "Search tracks, artist, or genre")} className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/35" />
           </label>
           <button type="button" onClick={createGrant} disabled={!termsAccepted || grantState === "loading" || grantState === "ready"} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00e5ff] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-black transition-colors hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60">
             <Sparkles className="h-4 w-4" />
-            {grantState === "ready" ? (isId ? "Lisensi siap" : "Creator license ready") : grantState === "loading" ? (isId ? "Memeriksa Pro…" : "Checking Pro…") : (isId ? "Buka Download Pro" : "Unlock Pro downloads")}
+            {grantState === "ready" ? (regional?.ready ?? (isId ? "Lisensi siap" : "Creator license ready")) : grantState === "loading" ? (regional?.checking ?? (isId ? "Memeriksa Pro…" : "Checking Pro…")) : (regional?.unlock ?? (isId ? "Buka Download Pro" : "Unlock Pro downloads"))}
           </button>
         </div>
 
@@ -217,7 +218,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
             <span>
               {clickwrapText}{" "}
               <Link href={`/${locale}/license`} target="_blank" rel="noopener noreferrer" className="font-semibold text-[#00e5ff] underline underline-offset-4">
-                ({isId ? "Baca syarat lengkap" : "Read full terms"})
+                ({regional?.readTerms ?? (isId ? "Baca syarat lengkap" : "Read full terms")})
               </Link>
             </span>
           </label>
@@ -225,17 +226,17 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
             type="text"
             value={licenseeName}
             onChange={(e) => setLicenseeName(e.target.value)}
-            placeholder={isId ? "Nama Lisensi (misal: Nama / Channel)" : "Licensed to (Name / Channel)"}
+            placeholder={regional?.licensedTo ?? (isId ? "Nama Lisensi (misal: Nama / Channel)" : "Licensed to (Name / Channel)")}
             className="rounded-xl border border-white/10 bg-white/[0.025] px-3 py-2.5 text-xs text-white outline-none placeholder:text-white/35 focus:border-[#00e5ff]/60"
           />
         </div>
       </div>
 
-      {grantMessage && <p role="status" className={`rounded-xl border px-3 py-2 text-sm ${grantState === "error" ? "border-rose-400/30 bg-rose-500/10 text-rose-100" : "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"}`}>{grantMessage}{grantState === "error" && <Link className="ml-2 underline underline-offset-4" href={`/${locale}/pricing`}>See Flow Pro</Link>}</p>}
+      {grantMessage && <p role="status" className={`rounded-xl border px-3 py-2 text-sm ${grantState === "error" ? "border-rose-400/30 bg-rose-500/10 text-rose-100" : "border-emerald-400/30 bg-emerald-500/10 text-emerald-100"}`}>{grantMessage}{grantState === "error" && <Link className="ml-2 underline underline-offset-4" href={`/${locale}/pricing`}>{regional?.seePro ?? "See Flow Pro"}</Link>}</p>}
 
       <div className="overflow-hidden rounded-2xl border border-white/[0.08]">
         <div className="grid grid-cols-[1fr_auto] gap-3 border-b border-white/[0.08] bg-white/[0.025] px-4 py-3 text-[10px] font-mono uppercase tracking-[0.16em] text-white/40">
-          <span>{filtered.length} matching tracks</span><span>Preview / Download track & PDF</span>
+          <span>{filtered.length} {regional?.matching ?? "matching tracks"}</span><span>{regional?.previewDownload ?? "Preview / Download track & PDF"}</span>
         </div>
         <ul className="divide-y divide-white/[0.06]">
           {filtered.map((item) => {
@@ -247,26 +248,26 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
                 <p className="mt-0.5 text-xs text-white/45">{item.genre} <span aria-hidden="true">·</span> {duration(item.durationS)}</p>
               </div>
               <div className="flex items-center gap-2">
-                <button type="button" onClick={() => togglePreview(item)} aria-label={`${playing && isActive ? "Pause" : "Play"} preview of ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
+                <button type="button" onClick={() => togglePreview(item)} aria-label={`${playing && isActive ? (locale.startsWith("ja") ? "一時停止" : locale.startsWith("ko") ? "일시정지" : "Pause") : (locale.startsWith("ja") ? "試聴" : locale.startsWith("ko") ? "미리듣기" : "Play preview")}: ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
                   {playing && isActive ? <Pause className="h-3.5 w-3.5 fill-current" /> : <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />}
                 </button>
                 {grantState === "ready" ? (
                   <>
-                    <a href={trackDownloadHref(item.id, licenseeName)} onClick={() => track("creator_track_downloaded", { track_id: item.id, genre: item.genre, locale })} title={isId ? "Download file MP3" : "Download MP3 track"} aria-label={`Download ${item.title} MP3`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
+                    <a href={trackDownloadHref(item.id, licenseeName)} onClick={() => track("creator_track_downloaded", { track_id: item.id, genre: item.genre, locale })} title={regional?.downloadMp3 ?? (isId ? "Download file MP3" : "Download MP3 track")} aria-label={`${regional?.downloadMp3 ?? "Download MP3"}: ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
                       <Download className="h-3.5 w-3.5" />
                     </a>
                     {certId ? (
-                      <a href={`/api/license/certificate/${certId}`} download title={isId ? "Download Sertifikat PDF" : "Download License PDF"} aria-label={`Download License PDF for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 text-[#00e5ff] transition-colors hover:bg-[#00e5ff]/20">
+                      <a href={`/api/license/certificate/${certId}`} download title={regional?.downloadPdf ?? (isId ? "Download Sertifikat PDF" : "Download License PDF")} aria-label={`${regional?.downloadPdf ?? "Download License PDF"}: ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 text-[#00e5ff] transition-colors hover:bg-[#00e5ff]/20">
                         <FileText className="h-3.5 w-3.5" />
                       </a>
                     ) : (
-                      <a href={trackDownloadHref(item.id, licenseeName)} title={isId ? "Download Sertifikat PDF & MP3" : "Download License PDF & MP3"} aria-label={`Download License PDF & MP3 for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
+                      <a href={trackDownloadHref(item.id, licenseeName)} title={regional ? `${regional.downloadPdf} / ${regional.downloadMp3}` : (isId ? "Download Sertifikat PDF & MP3" : "Download License PDF & MP3")} aria-label={`${regional ? `${regional.downloadPdf} / ${regional.downloadMp3}` : "Download License PDF & MP3"}: ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
                         <FileText className="h-3.5 w-3.5" />
                       </a>
                     )}
                   </>
                 ) : (
-                  <button type="button" onClick={createGrant} aria-label={`Unlock a Flow Pro download for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
+                  <button type="button" onClick={createGrant} aria-label={`${regional?.unlockTrack ?? "Unlock a Flow Pro download"}: ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
                     <Download className="h-3.5 w-3.5" />
                   </button>
                 )}
@@ -274,13 +275,13 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
             </li>;
           })}
         </ul>
-        {filtered.length === 0 && <p className="px-4 py-8 text-center text-sm text-white/50">No eligible creator track matches that search.</p>}
+        {filtered.length === 0 && <p className="px-4 py-8 text-center text-sm text-white/50">{regional?.noMatch ?? "No eligible creator track matches that search."}</p>}
       </div>
 
       <div className="flex flex-col gap-3 rounded-2xl border border-[#00e5ff]/20 bg-[#00e5ff]/[0.04] p-4 md:flex-row md:items-center md:justify-between">
         <p className="font-mono text-xs leading-relaxed text-cyan-100/85">{CREATOR_ATTRIBUTION}</p>
         <button type="button" onClick={copyAttribution} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[#00e5ff]/30 px-3 py-2 text-xs font-semibold text-[#00e5ff] hover:bg-[#00e5ff]/10">
-          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy attribution"}
+          {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}{copied ? (regional?.copied ?? "Copied") : (regional?.copyAttribution ?? "Copy attribution")}
         </button>
       </div>
     </section>

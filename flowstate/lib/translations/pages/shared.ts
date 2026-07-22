@@ -107,16 +107,46 @@ export function buildTimerLabels(
 /** Internal links reused by the landing footer and the marketing shell. */
 export function getFreeTimerLinks(locale: string): { href: string; label: string }[] {
   const isId = locale === "id";
+  const isFocusedRegional = ["en-US", "en-GB", "ja-JP", "de-DE", "es-MX", "es-ES", "pt-BR", "ko-KR"].includes(locale);
   const label = (path: string, fallback: string) => marketRouteCopy(locale, path)?.h1 ?? fallback;
   return [
     { href: `/${locale}/timer/25-5`, label: label("timer/25-5", isId ? "Timer Pomodoro 25/5" : "25/5 Pomodoro Timer") },
     { href: `/${locale}/timer/50-10`, label: label("timer/50-10", isId ? "Timer Pomodoro 50/10" : "50/10 Pomodoro Timer") },
-    { href: `/${locale}/timer/45-15`, label: isId ? "Timer Pomodoro 45/15" : "45/15 Pomodoro Timer" },
-    { href: `/${locale}/timer/60-10`, label: isId ? "Timer Pomodoro 60/10" : "60/10 Pomodoro Timer" },
-    { href: `/${locale}/timer/90-15`, label: isId ? "Timer Pomodoro 90/15" : "90/15 Pomodoro Timer" },
+    ...(!isFocusedRegional ? [
+      { href: `/${locale}/timer/45-15`, label: isId ? "Timer Pomodoro 45/15" : "45/15 Pomodoro Timer" },
+      { href: `/${locale}/timer/60-10`, label: isId ? "Timer Pomodoro 60/10" : "60/10 Pomodoro Timer" },
+      { href: `/${locale}/timer/90-15`, label: isId ? "Timer Pomodoro 90/15" : "90/15 Pomodoro Timer" },
+    ] : []),
     { href: `/${locale}/deep-work-timer`, label: label("deep-work-timer", isId ? "Timer Deep Work" : "Deep Work Timer") },
     { href: `/${locale}/study-timer`, label: label("study-timer", isId ? "Timer Belajar" : "Study Timer") },
     { href: `/${locale}/pomodoro-timer-with-music`, label: label("pomodoro-timer-with-music", isId ? "Timer Pomodoro dengan Musik" : "Pomodoro Timer with Music") },
     { href: `/${locale}/license`, label: label("license", isId ? "Lisensi musik" : "Music license") },
   ];
+}
+
+/** Indexable acquisition clusters that need a sitewide inbound path. */
+export function getMarketingDiscoveryLinks(locale: string) {
+  const isId = locale === "id";
+  const headings: Record<string, string> = {
+    id: "Jelajahi Flow",
+    "ja-JP": "Flowを詳しく見る",
+    "ko-KR": "Flow 더 알아보기",
+    "de-DE": "Flow entdecken",
+    "es-MX": "Explora Flow",
+    "es-ES": "Explora Flow",
+    "pt-BR": "Conheça o Flow",
+  };
+  const label = (path: string, fallback: string) => marketRouteCopy(locale, path)?.h1 ?? fallback;
+  return {
+    heading: headings[locale] ?? "Explore Flow",
+    links: [
+      { href: `/${locale}/pricing`, label: label("pricing", isId ? "Harga Flow Pro" : "Flow Pro pricing") },
+      { href: `/${locale}/creator-music`, label: label("creator-music", isId ? "Musik untuk kreator" : "Creator music") },
+      { href: `/${locale}/license`, label: label("license", isId ? "Lisensi musik kreator" : "Creator music license") },
+      ...(["brainfm", "endel", "flocus", "pomofocus", "noisli"] as const).map((slug) => ({
+        href: `/${locale}/alternatives/${slug}`,
+        label: label(`alternatives/${slug}`, `${slug === "brainfm" ? "Brain.fm" : slug[0].toUpperCase() + slug.slice(1)} alternative`),
+      })),
+    ],
+  };
 }

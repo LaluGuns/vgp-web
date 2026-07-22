@@ -5,39 +5,42 @@ import type { AlternativeCopy } from "./types";
 const en: AlternativeCopy = {
   metaTitle: "Endel Alternative: Flow",
   metaDescription:
-    "Looking for an Endel alternative that lives in the browser? Flow runs anywhere Chrome does — Windows included — with human-produced focus music and a real Pomodoro timer.",
+    "Compare Endel with Flow's browser-based timer, in-house music, measured session history, and separately governed Creator Music license.",
   h1: "Endel Alternative: Flow",
   intro: [
-    "Endel does adaptive soundscapes better than anyone: generative audio that reacts to the time of day, your movement, even your heart rate on a watch. On an iPhone with AirPods, it's a genuinely polished experience.",
-    "The catch is where it lives. Endel is strongest on Apple platforms and thinnest on the open web and Windows — which is exactly where most working programmers spend the day. Flow starts from the opposite end: a browser tab that runs anywhere, a real Pomodoro timer with tasks and stats, and instrumental music produced by a human musician instead of a generative engine.",
+    "Endel presents its product around adaptive soundscapes and several listening contexts. Its integrations, device support, and modes can change, so check Endel's current product pages before deciding.",
+    "Flow is browser-based and combines finished music produced in-house by one musician with a Pomodoro timer, tasks, and measured session history. The products use different audio and workflow approaches; this comparison does not claim one is universally better.",
   ],
   competitorName: "Endel",
   tableHeading: "Side by side",
   rows: [
-    { feature: "Platform", them: "Strong on iOS/macOS/watch; web and Windows are afterthoughts", flow: "Browser-first — anywhere Chrome, Firefox, or Edge runs" },
-    { feature: "Audio", them: "Generative, adaptive soundscapes", flow: "Original tracks produced in-house by one musician" },
-    { feature: "Focus timer", them: "Focus modes with timers", flow: "Full Pomodoro: 25/5 to 90/15 presets, custom splits, tasks" },
-    { feature: "Session stats", them: "Minimal", flow: "Streaks, heatmap, records — measured minutes only" },
-    { feature: "Price", them: "Subscription, sold per platform", flow: "$9.99/mo or $59.99/yr, plus a free tier" },
-    { feature: "Creator license", them: "Personal listening only", flow: "Free in streams and videos with attribution" },
+    { feature: "Current offer", them: "Plans, platforms, and availability may change; check Endel's current offer", flow: "Free timer access and a paid Pro plan; check Flow's current pricing" },
+    { feature: "Audio approach", them: "Endel describes adaptive soundscapes", flow: "Finished tracks produced in-house by one musician" },
+    { feature: "Focus workflow", them: "Check Endel's current modes and timer controls", flow: "Pomodoro presets, custom durations, and tasks" },
+    { feature: "Session history", them: "Check Endel's current reporting features", flow: "History based on measured session minutes" },
+    { feature: "Creator license", them: "Check Endel's current license terms", flow: "Not included in Free. Exactly 174 eligible tracks; every new download/license requires active Pro and a valid per-track Grant Record. Attribution and published terms apply; Spotify or YouTube listening grants no creator rights" },
   ],
   whenHeading: "When Endel is still the right pick",
   whenParagraphs: [
-    "If you live inside the Apple ecosystem and want audio that adapts on its own — soundscapes shifting with your day, your walk, your heart rate — that's Endel's home turf and nothing else really plays there. It's also the better fit if you want sleep and relaxation modes as much as focus.",
-    "Pick Flow if your focus happens at a desk in a browser, you want the timer and the stats to be first-class, and you'd rather listen to music a person wrote than a soundscape an engine renders.",
+    "Endel may suit you if its current adaptive-audio experience and supported devices match your routine. Verify present modes, platforms, plans, and terms directly with Endel because those details can change.",
+    "Consider Flow if you prefer a browser timer, tasks, measured session history, and finished music produced by one musician. Confirm browser compatibility on your own device before relying on it.",
   ],
   faq: [
     {
       q: "Does Flow work on Windows?",
-      a: "Yes — Flow runs in the browser, so Windows, Linux, macOS, and ChromeOS are all equal citizens. No install, no platform-specific app needed.",
+      a: "Flow is browser-based. Compatibility can vary by browser, device, and settings, so try the public timer on your own Windows setup before subscribing.",
     },
     {
       q: "Is Flow's music generative like Endel's?",
-      a: "No. Endel renders adaptive soundscapes with a generative engine; Flow streams finished tracks written and produced by Virzy Guns. Different philosophy: composed music instead of computed audio.",
+      a: "Flow streams finished tracks identified in its product copy as composed and produced by Virzy Guns. Check Endel's current explanation of its own audio technology directly.",
     },
     {
       q: "Is there a free way to try Flow?",
-      a: "Yes. The free tier includes the timer, ambient sounds, and part of the music library — no credit card, and the timer pages on this site work without even signing up.",
+      a: "Flow offers public timer access and a free product tier. Check the current Flow pricing page for the latest included features and any account requirements.",
+    },
+    {
+      q: "Can I use Flow music in videos or streams?",
+      a: "Only through Flow Creator Music—not through Free, Spotify, or YouTube listening. Exactly 174 tracks are eligible. Every new download/license requires active Pro and a valid per-track Grant Record; required attribution and the published terms apply.",
     },
   ],
 };
@@ -45,39 +48,42 @@ const en: AlternativeCopy = {
 const id: AlternativeCopy = {
   metaTitle: "Alternatif Endel: Flow",
   metaDescription:
-    "Cari alternatif Endel yang hidup di browser? Flow jalan di mana pun Chrome jalan — termasuk Windows — dengan musik fokus buatan manusia dan timer Pomodoro beneran.",
+    "Bandingkan Endel dengan timer berbasis browser Flow, musik produksi sendiri, riwayat sesi terukur, dan lisensi Creator Music yang terpisah.",
   h1: "Alternatif Endel: Flow",
   intro: [
-    "Endel mengerjakan soundscape adaptif lebih baik dari siapa pun: audio generatif yang bereaksi ke jam, gerakanmu, bahkan detak jantung di smartwatch. Di iPhone dengan AirPods, pengalamannya benar-benar matang.",
-    "Masalahnya di tempat tinggalnya. Endel paling kuat di platform Apple dan paling tipis di web terbuka dan Windows — persis tempat kebanyakan programmer menghabiskan hari. Flow mulai dari ujung sebaliknya: tab browser yang jalan di mana saja, timer Pomodoro beneran dengan task dan statistik, dan musik instrumental yang diproduksi musisi manusia, bukan mesin generatif.",
+    "Endel memosisikan produknya di sekitar soundscape adaptif dan beberapa konteks dengar. Integrasi, dukungan perangkat, dan modenya bisa berubah, jadi cek halaman produk Endel saat ini sebelum memutuskan.",
+    "Flow berbasis browser dan menggabungkan musik jadi yang diproduksi sendiri oleh satu musisi dengan timer Pomodoro, task, serta riwayat sesi terukur. Keduanya memakai pendekatan audio dan alur kerja berbeda; perbandingan ini tidak menyatakan salah satunya selalu lebih baik.",
   ],
   competitorName: "Endel",
   tableHeading: "Perbandingan langsung",
   rows: [
-    { feature: "Platform", them: "Kuat di iOS/macOS/watch; web dan Windows nomor dua", flow: "Browser dulu — di mana pun Chrome, Firefox, atau Edge jalan" },
-    { feature: "Audio", them: "Soundscape generatif dan adaptif", flow: "Track original diproduksi sendiri oleh satu musisi" },
-    { feature: "Timer fokus", them: "Mode fokus dengan timer", flow: "Pomodoro penuh: preset 25/5 sampai 90/15, split custom, task" },
-    { feature: "Statistik sesi", them: "Minimal", flow: "Streak, heatmap, rekor — hanya menit terukur" },
-    { feature: "Harga", them: "Langganan, dijual per platform", flow: "$9.99/bln atau $59.99/thn, plus tier gratis" },
-    { feature: "Lisensi kreator", them: "Hanya untuk didengarkan pribadi", flow: "Gratis di stream dan video dengan atribusi" },
+    { feature: "Penawaran saat ini", them: "Plan, platform, dan ketersediaan bisa berubah; cek penawaran Endel saat ini", flow: "Akses timer gratis dan plan Pro berbayar; cek harga Flow saat ini" },
+    { feature: "Pendekatan audio", them: "Endel mendeskripsikan soundscape adaptif", flow: "Track jadi yang diproduksi sendiri oleh satu musisi" },
+    { feature: "Alur fokus", them: "Cek mode dan kontrol timer Endel saat ini", flow: "Preset Pomodoro, durasi custom, dan task" },
+    { feature: "Riwayat sesi", them: "Cek fitur pelaporan Endel saat ini", flow: "Riwayat berdasarkan menit sesi terukur" },
+    { feature: "Lisensi kreator", them: "Cek ketentuan lisensi Endel saat ini", flow: "Tidak termasuk Free. Tepat 174 track memenuhi syarat; setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track. Atribusi serta ketentuan terbit berlaku; mendengarkan lewat Spotify atau YouTube tidak memberi hak kreator" },
   ],
   whenHeading: "Kapan Endel tetap pilihan yang benar",
   whenParagraphs: [
-    "Kalau kamu hidup di ekosistem Apple dan mau audio yang beradaptasi sendiri — soundscape yang bergeser mengikuti harimu, jalanmu, detak jantungmu — itu kandang Endel dan belum ada yang benar-benar main di sana. Endel juga lebih pas kalau kamu butuh mode tidur dan relaksasi sebanyak mode fokus.",
-    "Pilih Flow kalau fokusmu terjadi di meja dalam browser, kamu mau timer dan statistiknya jadi warga kelas satu, dan lebih suka mendengarkan musik yang ditulis orang daripada soundscape yang di-render mesin.",
+    "Endel mungkin cocok kalau pengalaman audio adaptif dan perangkat yang didukung saat ini sesuai rutinitasmu. Verifikasi mode, platform, plan, dan ketentuan terbarunya langsung ke Endel karena detail itu bisa berubah.",
+    "Pertimbangkan Flow kalau kamu memilih timer browser, task, riwayat sesi terukur, dan musik jadi produksi satu musisi. Uji kompatibilitas browser di perangkatmu sendiri sebelum mengandalkannya.",
   ],
   faq: [
     {
       q: "Flow jalan di Windows?",
-      a: "Jalan — Flow hidup di browser, jadi Windows, Linux, macOS, dan ChromeOS semuanya setara. Tanpa install, tanpa app khusus platform.",
+      a: "Flow berbasis browser. Kompatibilitas bisa berbeda menurut browser, perangkat, dan pengaturan, jadi coba timer publik di Windows milikmu sebelum berlangganan.",
     },
     {
       q: "Musik Flow generatif seperti Endel?",
-      a: "Bukan. Endel me-render soundscape adaptif dengan mesin generatif; Flow memutar track jadi yang ditulis dan diproduksi Virzy Guns. Filosofinya beda: musik yang dikomposisi, bukan audio yang dihitung.",
+      a: "Flow memutar track jadi yang dalam copy produknya disebut dikomposisi dan diproduksi Virzy Guns. Untuk teknologi audio Endel, cek penjelasan terbarunya langsung.",
     },
     {
       q: "Ada cara gratis buat coba Flow?",
-      a: "Ada. Tier gratis mencakup timer, ambient sound, dan sebagian library musik — tanpa kartu kredit, dan halaman timer di situs ini bahkan jalan tanpa daftar.",
+      a: "Flow menyediakan akses timer publik dan tier produk gratis. Cek halaman harga Flow saat ini untuk fitur terbaru dan persyaratan akun.",
+    },
+    {
+      q: "Boleh pakai musik Flow di video atau stream?",
+      a: "Hanya lewat Flow Creator Music—bukan lewat Free atau mendengarkan di Spotify/YouTube. Tepat 174 track memenuhi syarat. Setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track; atribusi wajib dan ketentuan terbit berlaku.",
     },
   ],
 };

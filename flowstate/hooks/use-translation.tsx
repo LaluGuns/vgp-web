@@ -3,10 +3,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { type Locale, LANGUAGES, DEFAULT_LOCALE, dictionaries } from "@/lib/translations/dictionaries";
+import { baseLanguageForLocale, isSupportedSeoLocale, type SeoRouteLocale } from "@/lib/marketing/seo-registry";
 
 interface LocaleContextType {
   locale: Locale;
-  setLocale: (locale: Locale) => void;
+  setLocale: (locale: SeoRouteLocale) => void;
   t: (key: string, fallback?: string) => string;
 }
 
@@ -54,9 +55,9 @@ export function LocaleProvider({
     }
   }, [initialLocale]);
 
-  const setLocale = (newLocale: Locale) => {
-    if (!Object.keys(LANGUAGES).includes(newLocale)) return;
-    setLocaleState(newLocale);
+  const setLocale = (newLocale: SeoRouteLocale) => {
+    if (!isSupportedSeoLocale(newLocale)) return;
+    setLocaleState(baseLanguageForLocale(newLocale) as Locale);
     localStorage.setItem("flowstate-locale", newLocale);
     // Persist for the middleware so future visits resolve this language.
     document.cookie = `flowstate-locale=${newLocale}; path=/; max-age=31536000`;
@@ -64,7 +65,7 @@ export function LocaleProvider({
     // The URL is the source of truth: swap the leading /[lang] segment so the
     // language change is a real navigation (keeps content and URL in sync = SEO).
     const segments = (pathname || "/").split("/");
-    if (Object.keys(LANGUAGES).includes(segments[1])) {
+    if (isSupportedSeoLocale(segments[1])) {
       segments[1] = newLocale;
     } else {
       segments.splice(1, 0, newLocale);
