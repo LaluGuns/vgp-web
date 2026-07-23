@@ -1,9 +1,9 @@
 import type { DbSession } from "./compute-insights";
 
 /**
- * Synthetic session history for the dev-only insights demo mode
- * (`/insights?demo=1`, only when NODE_ENV !== "production" — the call site is
- * statically tree-shaken out of production builds).
+ * Synthetic session history used by the dev-only insights demo mode
+ * (`/insights?demo=1`, NODE_ENV !== "production") and by the signed-out
+ * insights teaser (blurred preview behind the sign-in gate — production).
  *
  * Shapes ~120 days of plausible focus behaviour so every insights surface has
  * something to render: weekday-weighted sessions, varied durations, ~75%

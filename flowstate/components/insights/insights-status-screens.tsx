@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import { AlertTriangle, Key, Loader2 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { WebGLBackground } from "@/components/scenes/webgl-background";
 import { AmbientBackground } from "./ambient-background";
+import { generateDemoSessions } from "@/lib/optimizer/demo-data";
+import { FocusTrendChart } from "./focus-trend-chart";
+import { FocusHeatmap } from "./focus-heatmap";
+import { MomentumRow } from "./momentum-row";
 
 // Full-screen status states for the insights page. Extracted verbatim from
 // the page's early returns — same markup, same copy, same order of checks.
@@ -85,15 +90,28 @@ export function InsightsErrorScreen({ error, onRetry }: { error: string; onRetry
   );
 }
 
-// 4. User not logged in state
+// 4. User not logged in state — the gate stays, but a blurred demo of the
+// insights surfaces sits behind it as a teaser of what sign-in gets you.
+// Synthetic data only (never the visitor's own), non-interactive.
 export function InsightsSignInScreen() {
   const { t } = useTranslation();
+  const demoSessions = useMemo(() => generateDemoSessions(90), []);
   return (
     <>
       <WebGLBackground />
 
       <div className="w-screen h-screen flex flex-col relative overflow-hidden bg-transparent items-center justify-center p-6 text-center z-10">
         <AmbientBackground />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 overflow-hidden p-6 blur-[6px] opacity-35 pointer-events-none select-none"
+        >
+          <div className="mx-auto max-w-4xl space-y-4">
+            <MomentumRow sessions={demoSessions} />
+            <FocusTrendChart sessions={demoSessions} />
+            <FocusHeatmap sessions={demoSessions} />
+          </div>
+        </div>
         <div className="max-w-sm space-y-6 z-10 glass-card p-8 border border-white/10">
           <div className="p-4 mx-auto w-fit rounded-full bg-primary/10 text-primary border border-primary/20">
             <Key className="h-8 w-8" />
