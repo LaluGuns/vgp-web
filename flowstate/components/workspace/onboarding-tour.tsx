@@ -2,40 +2,56 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 import type { AtmosphereTab } from "./atmosphere-panel";
 import type { MobileTab } from "./mobile-nav";
 
+// Copy lives in the dictionaries (tour.*) so all locales get a native tour.
+// The fallbacks double as the canonical EN strings. Every UI reference here
+// must match a real on-screen label — the tour teaches trust in the hints.
 export const TOUR_STEPS = [
   {
-    title: "Welcome to Flow",
-    desc: "A timer, music produced in-house by Virzy Guns Production, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through.",
-    target: "workspace"
+    target: "workspace",
+    titleKey: "tour.welcome.title",
+    titleFallback: "Welcome to Flow",
+    descKey: "tour.welcome.desc",
+    descFallback: "A timer, music produced in-house by Virzy Guns Production, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through.",
   },
   {
-    title: "1. Pomodoro Timer",
-    desc: "Center of the screen. Click Play or hit SPACEBAR to start a 25-minute focus block. The gear sets your own work and break lengths.",
-    target: "timer"
+    target: "timer",
+    titleKey: "tour.timer.title",
+    titleFallback: "1. Pomodoro Timer",
+    descKey: "tour.timer.desc",
+    descFallback: "Center of the screen. Click Start or hit SPACEBAR to begin a 25-minute focus block. The Pomodoro / Deep Work / 90-20 pills switch block lengths.",
   },
   {
-    title: "2. Soundtracks",
-    desc: "Pick a track on the 'Music' tab — lofi, synthwave, ambient, all produced in-house. Tip: [ and ] swap tracks from the keyboard.",
-    target: "music"
+    target: "music",
+    titleKey: "tour.music.title",
+    titleFallback: "2. Soundtracks",
+    descKey: "tour.music.desc",
+    descFallback: "Pick a track on the 'Music Player' tab — city pop, cyberpunk jazz, synthwave, and lofi, all produced in-house. Tip: [ and ] swap tracks from the keyboard.",
   },
   {
-    title: "3. Ambient Mixer",
-    desc: "The 'Ambient' tab, next to 'Music'. Layer rain, café, campfire, and white noise — each slider sets its own level.",
-    target: "ambient"
+    target: "ambient",
+    titleKey: "tour.ambient.title",
+    titleFallback: "3. Ambient Mixer",
+    descKey: "tour.ambient.desc",
+    descFallback: "The 'Ambient' tab, next to 'Music Player'. Layer rain, café, fireplace, ocean and more — each slider sets its own level.",
   },
   {
-    title: "4. Task Checklist",
-    desc: "Left sidebar. Add tasks, estimate pomodoros, check them off as you go. One task per block keeps things clean. Press T to open the editor.",
-    target: "tasks"
+    target: "tasks",
+    titleKey: "tour.tasks.title",
+    titleFallback: "4. Task Checklist",
+    descKey: "tour.tasks.desc",
+    descFallback: "Left sidebar. Add tasks, estimate pomodoros, check them off as you go. One task per block keeps things clean. Press T to open the editor.",
   },
   {
-    title: "5. Focus Insights",
-    desc: "Click 'Stats' in the sidebar or the mobile bottom bar. Sessions, streaks, and a heatmap of when you actually focus.",
-    target: "stats"
-  }
+    target: "stats",
+    titleKey: "tour.stats.title",
+    titleFallback: "5. Focus Insights",
+    descKey: "tour.stats.desc",
+    descFallback: "Click 'Insights' in the sidebar or the bottom bar. Sessions, streaks, and a heatmap of when you actually focus.",
+  },
 ];
 
 // Interactive Tour Guide Overlay/Tooltip — owns the tooltip anchoring math and
@@ -55,8 +71,18 @@ export function OnboardingTour({
   mobileTab: MobileTab;
   setMobileTab: (tab: MobileTab) => void;
 }) {
+  const { t } = useTranslation();
   const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
   const [placement, setPlacement] = useState<"top" | "bottom" | "left" | "right" | "center" | "bottom-sheet">("center");
+
+  // The tour walks through the Ambient tab; when it ends (finish or skip),
+  // put the workspace back where a fresh session starts: Music Player + Focus.
+  const endTour = () => {
+    setTourStep(null);
+    localStorage.setItem("flowstate_tour_completed", "true");
+    setActiveTab("music");
+    setMobileTab("focus");
+  };
 
   // Update layout position of tour guide tooltips
   useEffect(() => {
@@ -199,25 +225,24 @@ export function OnboardingTour({
 
             <div className="flex justify-between items-start">
               <span className="text-[9px] font-mono text-[#00e5ff] tracking-widest uppercase bg-[#00e5ff]/10 px-2.5 py-1 rounded-md font-bold">
-                GUIDED TOUR • STEP 1 OF {TOUR_STEPS.length}
+                {t("tour.badge", "Guided tour • step {current} of {total}")
+                  .replace("{current}", "1")
+                  .replace("{total}", String(TOUR_STEPS.length))}
               </span>
               <button
-                onClick={() => {
-                  setTourStep(null);
-                  localStorage.setItem("flowstate_tour_completed", "true");
-                }}
-                className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider"
+                onClick={endTour}
+                className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider uppercase"
               >
-                SKIP
+                {t("tour.skip", "Skip")}
               </button>
             </div>
 
             <div className="space-y-2 text-left">
               <h3 className="text-lg font-bold text-white tracking-wide">
-                {TOUR_STEPS[tourStep].title}
+                {t(TOUR_STEPS[tourStep].titleKey, TOUR_STEPS[tourStep].titleFallback)}
               </h3>
               <p className="text-xs text-white/70 leading-relaxed">
-                {TOUR_STEPS[tourStep].desc}
+                {t(TOUR_STEPS[tourStep].descKey, TOUR_STEPS[tourStep].descFallback)}
               </p>
             </div>
 
@@ -226,7 +251,7 @@ export function OnboardingTour({
                 onClick={() => setTourStep(1)}
                 className="px-6 py-2.5 text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_15px_rgba(0,229,255,0.3)]"
               >
-                Start Tour →
+                {t("tour.start", "Start tour →")}
               </button>
             </div>
           </div>
@@ -255,25 +280,24 @@ export function OnboardingTour({
 
           <div className="flex justify-between items-start">
             <span className="text-[9px] font-mono text-[#00e5ff] tracking-widest uppercase bg-[#00e5ff]/10 px-2.5 py-1 rounded-md font-bold">
-              STEP {tourStep + 1} OF {TOUR_STEPS.length}
+              {t("tour.stepBadge", "Step {current} of {total}")
+                .replace("{current}", String(tourStep + 1))
+                .replace("{total}", String(TOUR_STEPS.length))}
             </span>
             <button
-              onClick={() => {
-                setTourStep(null);
-                localStorage.setItem("flowstate_tour_completed", "true");
-              }}
-              className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider"
+              onClick={endTour}
+              className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider uppercase"
             >
-              SKIP
+              {t("tour.skip", "Skip")}
             </button>
           </div>
 
           <div className="space-y-1.5">
             <h3 className="text-sm font-bold text-white tracking-wide">
-              {TOUR_STEPS[tourStep].title}
+              {t(TOUR_STEPS[tourStep].titleKey, TOUR_STEPS[tourStep].titleFallback)}
             </h3>
             <p className="text-[11px] text-white/70 leading-relaxed">
-              {TOUR_STEPS[tourStep].desc}
+              {t(TOUR_STEPS[tourStep].descKey, TOUR_STEPS[tourStep].descFallback)}
             </p>
           </div>
 
@@ -282,7 +306,7 @@ export function OnboardingTour({
               onClick={() => setTourStep(tourStep - 1)}
               className="px-3 py-1.5 text-[9px] font-mono font-bold uppercase tracking-wider text-white/50 hover:text-white transition-colors"
             >
-              ← Back
+              {t("tour.back", "← Back")}
             </button>
 
             <button
@@ -290,13 +314,12 @@ export function OnboardingTour({
                 if (tourStep < TOUR_STEPS.length - 1) {
                   setTourStep(tourStep + 1);
                 } else {
-                  setTourStep(null);
-                  localStorage.setItem("flowstate_tour_completed", "true");
+                  endTour();
                 }
               }}
               className="px-4 py-2 text-[9px] font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-lg hover:bg-cyan-300 transition-all shadow-[0_0_10px_rgba(0,229,255,0.25)]"
             >
-              {tourStep === TOUR_STEPS.length - 1 ? "Finish Tour" : "Next →"}
+              {tourStep === TOUR_STEPS.length - 1 ? t("tour.finish", "Finish tour") : t("tour.next", "Next →")}
             </button>
           </div>
         </div>
