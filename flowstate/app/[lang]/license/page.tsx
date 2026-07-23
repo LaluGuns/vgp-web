@@ -5,16 +5,17 @@ import { resolveLocale } from "@/lib/translations/server";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
 import { marketRouteCopy } from "@/lib/marketing/market-copy";
 import { getMarketingShared } from "@/lib/translations/pages/shared";
-import { creatorLicenseCopy, CREATOR_MUSIC_PATH } from "@/lib/creator-music/content";
+import { creatorLicenseCopy, creatorUiCopy, CREATOR_MUSIC_PATH } from "@/lib/creator-music/content";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { AttributionCopy } from "@/components/creator-music/attribution-copy";
+import { esPtCreatorLicenseCopy } from "@/lib/marketing/es-pt-visible-copy";
 
 const PATH = "license";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = creatorLicenseCopy(locale);
+  const copy = esPtCreatorLicenseCopy(lang) ?? creatorLicenseCopy(locale);
   const localized = marketRouteCopy(lang, PATH);
   return marketingMetadata(lang, PATH, localized?.metaTitle ?? copy.title, localized?.metaDescription ?? copy.description);
 }
@@ -22,7 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function LicensePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = creatorLicenseCopy(locale);
+  const copy = esPtCreatorLicenseCopy(lang) ?? creatorLicenseCopy(locale);
+  const ui = creatorUiCopy(lang);
   const localized = marketRouteCopy(lang, PATH);
   const shared = getMarketingShared(lang);
   const title = localized?.h1 ?? copy.h1;
@@ -48,7 +50,7 @@ export default async function LicensePage({ params }: { params: Promise<{ lang: 
           </p>
         )}
         <Link href={`/${lang}/${CREATOR_MUSIC_PATH}`} className="text-sm font-semibold text-[#00e5ff] hover:underline underline-offset-4">
-          Browse eligible creator music
+          {ui?.browseEligible ?? "Browse eligible creator music"}
         </Link>
       </section>
 
@@ -70,7 +72,7 @@ export default async function LicensePage({ params }: { params: Promise<{ lang: 
       <section className="max-w-3xl space-y-4">
         <h2 className="text-xl font-bold text-white">{copy.attributionHeading}</h2>
         <p className="text-sm text-white/70">{copy.attributionBody}</p>
-        <AttributionCopy locale={locale} />
+        <AttributionCopy locale={lang} />
         <p className="text-xs leading-relaxed text-white/45">{copy.finePrint}</p>
       </section>
 

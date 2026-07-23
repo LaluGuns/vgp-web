@@ -58,7 +58,7 @@ export default async function TimerPresetPage({
   );
 
   const faqLd = faqJsonLd(copy.faq);
-  const breadcrumbLd = breadcrumbJsonLd(locale, [
+  const breadcrumbLd = breadcrumbJsonLd(lang, [
     { name: shared.breadcrumbHome, path: "" },
     { name: shared.breadcrumbTimers, path: `timer/${slug}` },
   ]);

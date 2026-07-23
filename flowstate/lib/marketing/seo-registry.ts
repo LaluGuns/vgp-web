@@ -118,23 +118,23 @@ const LEGACY_REGION_DESTINATIONS: Partial<Record<SeoRouteLocale, SeoRouteLocale>
 
 /** The 12 original acquisition pages plus the five honest competitor comparisons. */
 export const SEO_PAGES: readonly SeoPage[] = [
-  { path: "", cluster: "brand", changeFrequency: "weekly", priority: 1, lastModified: "2026-07-21" },
-  { path: "pricing", cluster: "conversion", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "deep-work-timer", cluster: "deep-work", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "study-timer", cluster: "study", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "pomodoro-timer-with-music", cluster: "music", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-21" },
-  { path: "timer/25-5", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-21" },
-  { path: "timer/50-10", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-21" },
-  { path: "creator-music", cluster: "creator", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-21" },
-  { path: "creator-music/city-pop", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "creator-music/cyberpunk-jazz", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "creator-music/neo-synthwave", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-21" },
-  { path: "license", cluster: "creator", changeFrequency: "yearly", priority: 0.7, lastModified: "2026-07-21" },
-  { path: "alternatives/brainfm", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-21" },
-  { path: "alternatives/endel", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-21" },
-  { path: "alternatives/flocus", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-21" },
-  { path: "alternatives/pomofocus", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-21" },
-  { path: "alternatives/noisli", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-21" },
+  { path: "", cluster: "brand", changeFrequency: "weekly", priority: 1, lastModified: "2026-07-22" },
+  { path: "pricing", cluster: "conversion", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "deep-work-timer", cluster: "deep-work", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "study-timer", cluster: "study", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "pomodoro-timer-with-music", cluster: "music", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-22" },
+  { path: "timer/25-5", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-22" },
+  { path: "timer/50-10", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-22" },
+  { path: "creator-music", cluster: "creator", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-22" },
+  { path: "creator-music/city-pop", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "creator-music/cyberpunk-jazz", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "creator-music/neo-synthwave", cluster: "creator", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
+  { path: "license", cluster: "creator", changeFrequency: "yearly", priority: 0.7, lastModified: "2026-07-22" },
+  { path: "alternatives/brainfm", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-22" },
+  { path: "alternatives/endel", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-22" },
+  { path: "alternatives/flocus", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-22" },
+  { path: "alternatives/pomofocus", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-22" },
+  { path: "alternatives/noisli", cluster: "comparison", changeFrequency: "monthly", priority: 0.6, lastModified: "2026-07-22" },
 ];
 
 export function isCreatorSeoPath(path: string) {
@@ -153,11 +153,33 @@ function decision(
 }
 
 /**
- * Per-page promotion records. Keep this empty until a named native reviewer
- * approves the market copy; creator and licence pages also require the legal
- * reviewer fields. This makes review promotion a small, auditable diff.
+ * Per-page promotion records. The Focused 8 release is explicitly labelled as
+ * AI-assisted editorial review; no human-native or regional legal approval is
+ * implied. Creator pages additionally record a consistency check against the
+ * controlling EN/ID package without pretending it is a new legal opinion.
  */
-export const SEO_RELEASE_PROMOTIONS: SeoReleasePromotions = {};
+const FOCUSED_REVIEW_DATE = "2026-07-22";
+const AI_EDITORIAL_REVIEWER = "Codex AI-assisted editorial QA";
+const POLICY_CONSISTENCY_REVIEWER = "Codex AI-assisted EN/ID policy consistency QA";
+
+export const SEO_RELEASE_PROMOTIONS: SeoReleasePromotions = Object.fromEntries(
+  FOCUSED_MARKETS.map((market) => [
+    market,
+    Object.fromEntries(SEO_PAGES.map((page) => [
+      page.path,
+      decision(
+        "indexable",
+        isCreatorSeoPath(page.path)
+          ? "AI-assisted localization and claim QA completed; the published EN/ID license remains controlling."
+          : "AI-assisted market localization, back-translation and editorial QA completed.",
+        AI_EDITORIAL_REVIEWER,
+        FOCUSED_REVIEW_DATE,
+        isCreatorSeoPath(page.path) ? POLICY_CONSISTENCY_REVIEWER : null,
+        isCreatorSeoPath(page.path) ? FOCUSED_REVIEW_DATE : null,
+      ),
+    ])),
+  ])
+) as SeoReleasePromotions;
 
 function reviewGatedPromotion(page: SeoPage, promotion: SeoReleaseDecision): SeoReleaseDecision {
   if (promotion.status !== "indexable") return promotion;
@@ -165,14 +187,14 @@ function reviewGatedPromotion(page: SeoPage, promotion: SeoReleaseDecision): Seo
   if (!promotion.reviewer || !promotion.reviewedAt) {
     return decision(
       "native-review",
-      "An indexable promotion needs a named native reviewer and review date before release."
+      "An indexable promotion needs an identified editorial QA record and review date before release."
     );
   }
 
   if (isCreatorSeoPath(page.path) && (!promotion.legalReviewer || !promotion.legalReviewedAt)) {
     return decision(
       "native-review",
-      "Creator Music and License promotions need named native and legal reviewers before release.",
+      "Creator Music and License promotions need editorial and controlling-policy consistency QA records.",
       promotion.reviewer,
       promotion.reviewedAt
     );

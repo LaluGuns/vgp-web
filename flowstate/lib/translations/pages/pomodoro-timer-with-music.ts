@@ -42,7 +42,7 @@ const en: MusicLandingCopy = {
     },
     {
       q: "Can I use the music in my own videos or streams?",
-      a: "Yes, with attribution — see the music license page. Credit 'Music: Flow by Virzy Guns — flow.virzyguns.com' and you're covered for streams, videos, and study-with-me content.",
+      a: "Only through the Flow Creator License. An active Flow Pro subscription is required for new grants and downloads, attribution is required, and only the 174-track eligible catalog is covered (49 City Pop, 43 Cyberpunk Jazz, and 82 Neo Synthwave tracks; Lofi is excluded). Listening on Flow, Spotify, or YouTube does not itself grant creator-use rights.",
     },
   ],
 };
@@ -79,7 +79,7 @@ const id: MusicLandingCopy = {
     },
     {
       q: "Boleh pakai musiknya di video atau stream-ku sendiri?",
-      a: "Boleh, dengan atribusi — lihat halaman lisensi musik. Cantumkan 'Music: Flow by Virzy Guns — flow.virzyguns.com' dan kamu aman untuk stream, video, dan konten study-with-me.",
+      a: "Hanya melalui Flow Creator License. Langganan Flow Pro aktif diperlukan untuk grant dan unduhan baru, atribusi wajib, dan hanya katalog eligible berisi 174 track yang dicakup (49 City Pop, 43 Cyberpunk Jazz, dan 82 Neo Synthwave; Lofi tidak termasuk). Mendengarkan lewat Flow, Spotify, atau YouTube tidak dengan sendirinya memberi hak penggunaan kreator.",
     },
   ],
 };

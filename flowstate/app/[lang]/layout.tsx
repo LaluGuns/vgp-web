@@ -8,6 +8,7 @@ import { LocaleProvider } from "@/hooks/use-translation";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { indexableLanguageAlternates, isIndexableLocale, isSupportedSeoLocale, localePath, ROUTABLE_LOCALES } from "@/lib/marketing/seo-registry";
 import { marketRouteCopy } from "@/lib/marketing/market-copy";
+import { openGraphLocale } from "@/lib/marketing/seo";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -72,17 +73,18 @@ export async function generateMetadata({
     },
     description: regionalCopy?.metaDescription ?? description,
     openGraph: {
-      title: ogTitle,
-      description: ogDescription,
+      title: regionalCopy?.metaTitle ?? ogTitle,
+      description: regionalCopy?.metaDescription ?? ogDescription,
       siteName: "Flow by Virzy Guns",
       type: "website",
-      locale,
-      images: [{ url: socialImage, width: 1200, height: 630, alt: "Flow by Virzy Guns" }],
+      url: `${SITE}${localePath(locale)}`,
+      locale: openGraphLocale(locale),
+      images: [{ url: socialImage, width: 1200, height: 630, alt: regionalCopy?.metaTitle ?? ogTitle }],
     },
     twitter: {
       card: "summary_large_image",
-      title: ogTitle,
-      description: ogDescription,
+      title: regionalCopy?.metaTitle ?? ogTitle,
+      description: regionalCopy?.metaDescription ?? ogDescription,
       images: [socialImage],
     },
     alternates: {

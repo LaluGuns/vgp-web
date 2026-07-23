@@ -8,35 +8,39 @@ const en: AlternativeCopy = {
     "Looking for a Pomofocus alternative with music built in? Flow keeps the clean Pomodoro workflow and adds original in-house focus tracks and an ambient mixer.",
   h1: "Pomofocus Alternative: Flow",
   intro: [
-    "Pomofocus is a genuinely good Pomodoro timer. It's fast, free, uncluttered, the task list is right there, and it does the one thing it promises without ceremony. As a pure timer, there's little to criticize.",
-    "But most people don't run a Pomodoro in silence — they open Pomofocus in one tab and a YouTube lofi stream in another, and now the 'simple' setup has ads, unrelated tab audio, and music that keeps playing into the break. Flow is that whole desk in one tab: the same timer-and-tasks workflow, plus original focus music produced in-house and an ambient mixer underneath it.",
+    "Pomofocus presents a streamlined Pomodoro timer with task-oriented controls. Its current features and plan contents can change, so check Pomofocus's own site before deciding.",
+    "Flow combines a browser timer and tasks with music produced in-house, ambient controls, and measured session history. This can reduce the need for a separate audio tab, but the better workflow depends on your preferences.",
   ],
   competitorName: "Pomofocus",
   tableHeading: "Side by side",
   rows: [
-    { feature: "Pomodoro timer", them: "Excellent — presets, tasks, estimates", flow: "Same workflow: presets, custom splits, per-session tasks" },
-    { feature: "Music", them: "None — bring your own tab", flow: "80+ original tracks produced in-house, synced to the block" },
-    { feature: "Ambient sounds", them: "None", flow: "12-layer mixer: rain, café, fire, and more" },
-    { feature: "Stats", them: "Reports and streaks", flow: "Streaks, heatmap, records — measured minutes only" },
-    { feature: "Price", them: "Free; small yearly premium for reports", flow: "Free tier; Pro at $9.99/mo for the full library" },
+    { feature: "Current offer", them: "Plans and features may change; check Pomofocus's current offer", flow: "Free timer access and a paid Pro plan; check Flow's current pricing" },
+    { feature: "Pomodoro workflow", them: "Check Pomofocus's current presets, tasks, and reports", flow: "Pomodoro presets, custom durations, and tasks" },
+    { feature: "Audio", them: "Check Pomofocus's current audio features", flow: "In-house music and adjustable ambient controls" },
+    { feature: "Session history", them: "Check Pomofocus's current reporting features", flow: "History based on measured session minutes" },
+    { feature: "Creator license", them: "Check Pomofocus and any separate music provider's current license terms", flow: "Not included in Free. Exactly 174 eligible tracks; every new download/license requires active Pro and a valid per-track Grant Record. Attribution and published terms apply; Spotify or YouTube listening grants no creator rights" },
   ],
   whenHeading: "When Pomofocus is still the right pick",
   whenParagraphs: [
-    "If you work in silence — or your audio setup is already sorted and you truly just need a clean timer with a task list — Pomofocus does that with less product around it, and its free tier will never bother you. There's no shame in the simpler tool when the simpler tool is enough.",
-    "Pick Flow when the second tab is the problem: when you want the music, the ambience, and the timer to be one machine that starts and stops together.",
+    "Pomofocus may suit you if its current timer and task workflow is all you need. Verify its present features, plans, and terms directly with Pomofocus.",
+    "Consider Flow if you want timer, tasks, in-house music, ambient controls, and measured session history in one browser workspace.",
   ],
   faq: [
     {
       q: "Is Flow's timer as good as Pomofocus?",
-      a: "It covers the same ground — work/break presets from 25/5 to 90/15, custom lengths, and a per-session task list next to the clock. The difference is everything around the timer, not the timer itself.",
+      a: "Flow provides work/break presets, custom durations, and tasks. Check Pomofocus's current controls and try both products; this page does not claim equivalent quality or complete feature parity.",
     },
     {
       q: "Do I have to pay for Flow where Pomofocus is free?",
-      a: "No. Flow's timer, tasks, ambient sounds, and part of the music library are free. The paid plan adds the full in-house library — the thing Pomofocus doesn't have at any price.",
+      a: "Flow offers free timer access and a separate paid Pro plan. Check both providers' current pricing pages because plan contents can change.",
     },
     {
       q: "Can I use my own music with Flow?",
       a: "You can keep any player running alongside, but Flow's point is the built-in library: instrumental tracks made for focus that start and stop with your block, with ambient layers mixed underneath.",
+    },
+    {
+      q: "Can I use Flow music in videos or streams?",
+      a: "Only through Flow Creator Music—not through Free, Spotify, or YouTube listening. Exactly 174 tracks are eligible. Every new download/license requires active Pro and a valid per-track Grant Record; required attribution and the published terms apply.",
     },
   ],
 };
@@ -47,35 +51,39 @@ const id: AlternativeCopy = {
     "Cari alternatif Pomofocus dengan musik bawaan? Flow mempertahankan alur Pomodoro yang bersih dan menambah track fokus original in-house plus ambient mixer.",
   h1: "Alternatif Pomofocus: Flow",
   intro: [
-    "Pomofocus itu timer Pomodoro yang benar-benar bagus. Cepat, gratis, rapi, task list-nya langsung di situ, dan dia mengerjakan satu janjinya tanpa upacara. Sebagai timer murni, hampir nggak ada yang bisa dikritik.",
-    "Tapi kebanyakan orang nggak menjalankan Pomodoro dalam sunyi — mereka buka Pomofocus di satu tab dan stream lofi YouTube di tab lain, dan setup 'sederhana' itu sekarang punya iklan, audio tab yang nggak nyambung, dan musik yang terus jalan sampai ke break. Flow adalah seluruh meja itu dalam satu tab: alur timer-dan-task yang sama, plus musik fokus original yang diproduksi sendiri dan ambient mixer di bawahnya.",
+    "Pomofocus memosisikan produknya sebagai timer Pomodoro ringkas dengan kontrol berorientasi task. Fitur dan isi plan dapat berubah, jadi cek situs Pomofocus sebelum memutuskan.",
+    "Flow menggabungkan timer browser dan task dengan musik produksi sendiri, kontrol ambient, serta riwayat sesi terukur. Ini bisa mengurangi kebutuhan tab audio terpisah, tetapi alur yang lebih cocok tetap bergantung pada preferensimu.",
   ],
   competitorName: "Pomofocus",
   tableHeading: "Perbandingan langsung",
   rows: [
-    { feature: "Timer Pomodoro", them: "Bagus — preset, task, estimasi", flow: "Alur sama: preset, split custom, task per sesi" },
-    { feature: "Musik", them: "Nggak ada — bawa tab sendiri", flow: "80+ track original in-house, sinkron dengan block" },
-    { feature: "Ambient sound", them: "Nggak ada", flow: "Mixer 12 lapis: hujan, café, api, dan lainnya" },
-    { feature: "Statistik", them: "Laporan dan streak", flow: "Streak, heatmap, rekor — hanya menit terukur" },
-    { feature: "Harga", them: "Gratis; premium tahunan kecil untuk laporan", flow: "Tier gratis; Pro $9.99/bln untuk library penuh" },
+    { feature: "Penawaran saat ini", them: "Plan dan fitur bisa berubah; cek penawaran Pomofocus saat ini", flow: "Akses timer gratis dan plan Pro berbayar; cek harga Flow saat ini" },
+    { feature: "Alur Pomodoro", them: "Cek preset, task, dan laporan Pomofocus saat ini", flow: "Preset Pomodoro, durasi custom, dan task" },
+    { feature: "Audio", them: "Cek fitur audio Pomofocus saat ini", flow: "Musik produksi sendiri dan kontrol ambient yang dapat diatur" },
+    { feature: "Riwayat sesi", them: "Cek fitur pelaporan Pomofocus saat ini", flow: "Riwayat berdasarkan menit sesi terukur" },
+    { feature: "Lisensi kreator", them: "Cek ketentuan Pomofocus dan penyedia musik terpisah saat ini", flow: "Tidak termasuk Free. Tepat 174 track memenuhi syarat; setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track. Atribusi serta ketentuan terbit berlaku; mendengarkan lewat Spotify atau YouTube tidak memberi hak kreator" },
   ],
   whenHeading: "Kapan Pomofocus tetap pilihan yang benar",
   whenParagraphs: [
-    "Kalau kamu kerja dalam sunyi — atau setup audiomu sudah beres dan kamu benar-benar cuma butuh timer bersih dengan task list — Pomofocus memberikan itu dengan produk yang lebih sedikit di sekelilingnya, dan tier gratisnya nggak akan pernah mengganggumu. Nggak ada salahnya alat yang lebih sederhana kalau yang sederhana memang cukup.",
-    "Pilih Flow kalau tab kedua itulah masalahnya: kalau kamu mau musik, ambience, dan timer jadi satu mesin yang mulai dan berhenti bersama.",
+    "Pomofocus mungkin cocok kalau alur timer dan task-nya saat ini sudah cukup untukmu. Verifikasi fitur, plan, dan ketentuan terbarunya langsung ke Pomofocus.",
+    "Pertimbangkan Flow kalau kamu ingin timer, task, musik produksi sendiri, kontrol ambient, dan riwayat sesi terukur dalam satu ruang kerja browser.",
   ],
   faq: [
     {
       q: "Timer Flow sebagus Pomofocus?",
-      a: "Cakupannya sama — preset kerja/istirahat dari 25/5 sampai 90/15, durasi custom, dan task list per sesi di samping jam. Bedanya ada di semua hal di sekitar timer, bukan timer-nya sendiri.",
+      a: "Flow menyediakan preset kerja/istirahat, durasi custom, dan task. Cek kontrol Pomofocus saat ini dan coba keduanya; halaman ini tidak menyatakan kualitas setara atau kesamaan fitur lengkap.",
     },
     {
       q: "Aku harus bayar Flow padahal Pomofocus gratis?",
-      a: "Nggak. Timer, task, ambient sound, dan sebagian library musik Flow gratis. Plan berbayar menambah library in-house penuh — hal yang nggak dimiliki Pomofocus di harga berapa pun.",
+      a: "Flow menyediakan akses timer gratis dan plan Pro berbayar yang terpisah. Cek halaman harga terbaru kedua penyedia karena isi plan dapat berubah.",
     },
     {
       q: "Bisa pakai musikku sendiri di Flow?",
       a: "Player apa pun bisa tetap jalan berdampingan, tapi inti Flow adalah library bawaannya: track instrumental yang dibuat untuk fokus, mulai-berhenti bareng block-mu, dengan lapisan ambient di bawahnya.",
+    },
+    {
+      q: "Boleh pakai musik Flow di video atau stream?",
+      a: "Hanya lewat Flow Creator Music—bukan lewat Free atau mendengarkan di Spotify/YouTube. Tepat 174 track memenuhi syarat. Setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track; atribusi wajib dan ketentuan terbit berlaku.",
     },
   ],
 };

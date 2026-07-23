@@ -11,6 +11,8 @@ import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-s
 import { MiniTimer } from "@/components/marketing/mini-timer";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
+import { DE_POMODORO_MUSIC_DETAIL } from "@/lib/marketing/de-market-copy";
+import { esPtPomodoroMusicCopy } from "@/lib/marketing/es-pt-visible-copy";
 
 const PATH = "pomodoro-timer-with-music";
 const WORK = 25;
@@ -23,7 +25,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = withMarketRouteCopy(lang, PATH, getPomodoroMusicCopy(locale));
+  const baseCopy = getPomodoroMusicCopy(locale);
+  const richCopy = esPtPomodoroMusicCopy(lang) ?? (lang === "de-DE" ? { ...baseCopy, ...DE_POMODORO_MUSIC_DETAIL } : baseCopy);
+  const copy = withMarketRouteCopy(lang, PATH, richCopy);
   return marketingMetadata(lang, PATH, copy.metaTitle, copy.metaDescription);
 }
 
@@ -34,11 +38,13 @@ export default async function PomodoroTimerWithMusicPage({
 }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const copy = withMarketRouteCopy(lang, PATH, getPomodoroMusicCopy(locale));
+  const baseCopy = getPomodoroMusicCopy(locale);
+  const richCopy = esPtPomodoroMusicCopy(lang) ?? (lang === "de-DE" ? { ...baseCopy, ...DE_POMODORO_MUSIC_DETAIL } : baseCopy);
+  const copy = withMarketRouteCopy(lang, PATH, richCopy);
   const shared = getMarketingShared(lang);
 
   const faqLd = faqJsonLd(copy.faq);
-  const breadcrumbLd = breadcrumbJsonLd(locale, [
+  const breadcrumbLd = breadcrumbJsonLd(lang, [
     { name: shared.breadcrumbHome, path: "" },
     { name: copy.h1, path: PATH },
   ]);

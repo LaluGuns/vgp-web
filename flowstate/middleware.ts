@@ -6,6 +6,16 @@ import { legacyLocaleRedirectDestination, localePath } from "@/lib/marketing/seo
 const LOCALES = ["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it", "en-US", "en-GB", "ja-JP", "de-DE", "es-MX", "es-ES", "pt-BR", "ko-KR"];
 const DEFAULT_LOCALE = "en";
 
+function withHostRobotsPolicy(response: NextResponse, req: NextRequest) {
+  // Preview, branch and local hosts must never become indexable. This is
+  // host-based so the exact same tested artifact can later be promoted and
+  // become indexable only behind the production hostname.
+  if (req.nextUrl.hostname !== "flow.virzyguns.com") {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  }
+  return response;
+}
+
 function resolveLocale(req: NextRequest): string {
   const cookie = req.cookies.get("flowstate-locale")?.value;
   if (cookie && LOCALES.includes(cookie)) return cookie;
@@ -33,18 +43,18 @@ export function middleware(req: NextRequest) {
     if (destination) {
       const url = req.nextUrl.clone();
       url.pathname = localePath(destination, path);
-      return NextResponse.redirect(url, 308);
+      return withHostRobotsPolicy(NextResponse.redirect(url, 308), req);
     }
 
     // No geo-IP redirects. Legacy and country URLs remain directly accessible;
     // SEO indexability is determined by the page-level release registry.
-    return NextResponse.next();
+    return withHostRobotsPolicy(NextResponse.next(), req);
   }
 
   const locale = resolveLocale(req);
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.redirect(url, 307);
+  return withHostRobotsPolicy(NextResponse.redirect(url, 307), req);
 }
 
 export const config = {

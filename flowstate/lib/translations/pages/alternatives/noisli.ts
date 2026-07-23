@@ -5,30 +5,30 @@ import type { AlternativeCopy } from "./types";
 const en: AlternativeCopy = {
   metaTitle: "Noisli Alternative: Flow",
   metaDescription:
-    "Looking for a Noisli alternative with actual music? Flow layers a 12-channel ambient mixer under original in-house focus tracks, with a real Pomodoro timer on top.",
+    "Compare Noisli with Flow's in-house music, adjustable ambient controls, browser timer, measured history, and separate Creator Music license.",
   h1: "Noisli Alternative: Flow",
   intro: [
-    "Noisli got ambient mixing right years before it was fashionable: rain, thunder, wind, a coffee shop, each on its own fader, saved as combos. For masking an open office or tinnitus, a good noise mixer is quietly one of the most useful tools there is.",
-    "But Noisli stops at noise — there's no music in it, and the timer is a side feature. Flow treats the same mixer idea as one layer of a bigger machine: original instrumental tracks produced in-house sit on top, the ambient layers blend underneath at independent volumes, and a full Pomodoro timer with tasks and honest stats drives the session.",
+    "Noisli presents its product around mixing ambient sounds for work and relaxation. Its current sounds, controls, timer, and plans can change, so check Noisli's own site before deciding.",
+    "Flow combines adjustable ambient controls with finished instrumental music produced in-house, a browser timer, tasks, and measured session history. This is a difference in scope, not a promise that one approach works better for concentration.",
   ],
   competitorName: "Noisli",
   tableHeading: "Side by side",
   rows: [
-    { feature: "Ambient sounds", them: "The core product — well-made noise generators", flow: "12-layer mixer: rain, café, fire, river, city, and more" },
-    { feature: "Music", them: "None — ambient noise only", flow: "80+ original tracks produced in-house by one musician" },
-    { feature: "Focus timer", them: "Basic timer alongside the sounds", flow: "Full Pomodoro: presets, custom splits, per-session tasks" },
-    { feature: "Stats", them: "None to speak of", flow: "Streaks, heatmap, records — measured minutes only" },
-    { feature: "Price", them: "Limited free hours, then subscription", flow: "Free tier; Pro at $9.99/mo for the full library" },
+    { feature: "Current offer", them: "Plans and features may change; check Noisli's current offer", flow: "Free timer access and a paid Pro plan; check Flow's current pricing" },
+    { feature: "Ambient controls", them: "Check Noisli's current sounds, mixing, and saving options", flow: "Adjustable ambient sounds within the Flow workspace" },
+    { feature: "Music", them: "Check Noisli's current audio catalog", flow: "Finished tracks produced in-house by one musician" },
+    { feature: "Focus workflow", them: "Check Noisli's current timer and reporting features", flow: "Pomodoro presets, custom durations, tasks, and measured history" },
+    { feature: "Creator license", them: "Check Noisli and each audio provider's current license terms", flow: "Not included in Free. Exactly 174 eligible tracks; every new download/license requires active Pro and a valid per-track Grant Record. Attribution and published terms apply; Spotify or YouTube listening grants no creator rights" },
   ],
   whenHeading: "When Noisli is still the right pick",
   whenParagraphs: [
-    "If music — any music — breaks your concentration and pure noise is what works for you, Noisli is dedicated to exactly that, and its combo-saving and background-noise focus is more granular than a music app's ambient layer will ever need to be. Writers who want a wall of rain and nothing else are well served there.",
-    "Pick Flow when you want both dials: real music made for focus when you want it, the ambient wall when you don't, and a timer that turns the whole thing into finished blocks instead of an endless soundscape.",
+    "Noisli may suit you if its current ambient-sound workflow matches your preferences. Verify its present sounds, controls, plans, and terms directly with Noisli.",
+    "Consider Flow if you want in-house music, adjustable ambient sounds, a timer, tasks, and measured session history in one browser workspace.",
   ],
   faq: [
     {
       q: "Does Flow have ambient sounds like Noisli?",
-      a: "Yes — a 12-layer mixer with rain, café, fire, river, city, and more, each at its own volume. The difference is that Flow layers them under original music instead of stopping at noise.",
+      a: "Flow currently includes adjustable ambient sounds that can run with or without its music. Check both products directly for their latest sound lists and controls.",
     },
     {
       q: "Can I use Flow as just a noise mixer?",
@@ -36,7 +36,11 @@ const en: AlternativeCopy = {
     },
     {
       q: "Is Flow's music going to distract me?",
-      a: "It's instrumental and written specifically to sit behind work — no lyrics, no attention-grabbing drops. If it still isn't for you, the ambient-only setup above is a click away.",
+      a: "Flow's catalog includes instrumental music, but distraction is subjective and Flow does not guarantee focus outcomes. Try the music or use the ambient-only controls.",
+    },
+    {
+      q: "Can I use Flow music in videos or streams?",
+      a: "Only through Flow Creator Music—not through Free, Spotify, or YouTube listening. Exactly 174 tracks are eligible. Every new download/license requires active Pro and a valid per-track Grant Record; required attribution and the published terms apply.",
     },
   ],
 };
@@ -44,30 +48,30 @@ const en: AlternativeCopy = {
 const id: AlternativeCopy = {
   metaTitle: "Alternatif Noisli: Flow",
   metaDescription:
-    "Cari alternatif Noisli yang punya musik beneran? Flow melapis mixer ambient 12 kanal di bawah track fokus original in-house, dengan timer Pomodoro beneran di atasnya.",
+    "Bandingkan Noisli dengan musik produksi sendiri, kontrol ambient, timer browser, riwayat terukur, dan lisensi Creator Music Flow yang terpisah.",
   h1: "Alternatif Noisli: Flow",
   intro: [
-    "Noisli membereskan urusan ambient mixing bertahun-tahun sebelum jadi tren: hujan, guntur, angin, kedai kopi, masing-masing dengan fader sendiri, bisa disimpan jadi combo. Buat menutup suara open office atau tinnitus, mixer noise yang bagus diam-diam salah satu alat paling berguna yang ada.",
-    "Tapi Noisli berhenti di noise — nggak ada musik di dalamnya, dan timer-nya fitur sampingan. Flow memperlakukan ide mixer yang sama sebagai satu lapisan dari mesin yang lebih besar: track instrumental original yang diproduksi sendiri di atas, lapisan ambient membaur di bawah dengan volume masing-masing, dan timer Pomodoro penuh dengan task serta statistik jujur yang menjalankan sesinya.",
+    "Noisli memosisikan produknya di sekitar pencampuran suara ambient untuk kerja dan relaksasi. Daftar suara, kontrol, timer, dan plan dapat berubah, jadi cek situs Noisli sebelum memutuskan.",
+    "Flow menggabungkan kontrol ambient yang dapat diatur dengan musik instrumental jadi produksi sendiri, timer browser, task, dan riwayat sesi terukur. Ini perbedaan cakupan, bukan janji bahwa salah satu pendekatan pasti lebih baik untuk konsentrasi.",
   ],
   competitorName: "Noisli",
   tableHeading: "Perbandingan langsung",
   rows: [
-    { feature: "Ambient sound", them: "Produk intinya — generator noise yang digarap baik", flow: "Mixer 12 lapis: hujan, café, api, sungai, kota, dan lainnya" },
-    { feature: "Musik", them: "Nggak ada — hanya ambient noise", flow: "80+ track original diproduksi sendiri oleh satu musisi" },
-    { feature: "Timer fokus", them: "Timer dasar di samping suara", flow: "Pomodoro penuh: preset, split custom, task per sesi" },
-    { feature: "Statistik", them: "Praktis nggak ada", flow: "Streak, heatmap, rekor — hanya menit terukur" },
-    { feature: "Harga", them: "Jam gratis terbatas, lalu langganan", flow: "Tier gratis; Pro $9.99/bln untuk library penuh" },
+    { feature: "Penawaran saat ini", them: "Plan dan fitur bisa berubah; cek penawaran Noisli saat ini", flow: "Akses timer gratis dan plan Pro berbayar; cek harga Flow saat ini" },
+    { feature: "Kontrol ambient", them: "Cek pilihan suara, mixing, dan penyimpanan Noisli saat ini", flow: "Suara ambient yang dapat diatur di dalam ruang kerja Flow" },
+    { feature: "Musik", them: "Cek katalog audio Noisli saat ini", flow: "Track jadi yang diproduksi sendiri oleh satu musisi" },
+    { feature: "Alur fokus", them: "Cek fitur timer dan pelaporan Noisli saat ini", flow: "Preset Pomodoro, durasi custom, task, dan riwayat terukur" },
+    { feature: "Lisensi kreator", them: "Cek ketentuan lisensi Noisli dan tiap penyedia audio saat ini", flow: "Tidak termasuk Free. Tepat 174 track memenuhi syarat; setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track. Atribusi serta ketentuan terbit berlaku; mendengarkan lewat Spotify atau YouTube tidak memberi hak kreator" },
   ],
   whenHeading: "Kapan Noisli tetap pilihan yang benar",
   whenParagraphs: [
-    "Kalau musik — musik apa pun — memecah konsentrasimu dan noise murni yang jalan buat kamu, Noisli didedikasikan persis untuk itu, dan fitur simpan-combo serta fokus background-noise-nya lebih granular daripada yang akan pernah dibutuhkan lapisan ambient sebuah app musik. Penulis yang cuma mau dinding hujan terlayani baik di sana.",
-    "Pilih Flow kalau kamu mau dua kenop: musik beneran yang dibuat untuk fokus saat kamu mau, dinding ambient saat nggak, dan timer yang mengubah semuanya jadi block yang selesai, bukan soundscape tanpa ujung.",
+    "Noisli mungkin cocok kalau alur suara ambient-nya saat ini sesuai preferensimu. Verifikasi daftar suara, kontrol, plan, dan ketentuan terbarunya langsung ke Noisli.",
+    "Pertimbangkan Flow kalau kamu ingin musik produksi sendiri, suara ambient yang dapat diatur, timer, task, dan riwayat sesi terukur dalam satu ruang kerja browser.",
   ],
   faq: [
     {
       q: "Flow punya ambient sound seperti Noisli?",
-      a: "Punya — mixer 12 lapis dengan hujan, café, api, sungai, kota, dan lainnya, masing-masing dengan volume sendiri. Bedanya, Flow melapisnya di bawah musik original, bukan berhenti di noise.",
+      a: "Flow saat ini menyediakan suara ambient yang dapat diatur dan bisa berjalan dengan atau tanpa musik. Cek kedua produk langsung untuk daftar suara dan kontrol terbaru.",
     },
     {
       q: "Bisa pakai Flow cuma sebagai mixer noise?",
@@ -75,7 +79,11 @@ const id: AlternativeCopy = {
     },
     {
       q: "Musik Flow bakal mengganggu fokusku?",
-      a: "Musiknya instrumental dan ditulis khusus untuk duduk di belakang kerjaan — tanpa lirik, tanpa drop yang menyita perhatian. Kalau tetap bukan seleramu, setup ambient-saja di atas tinggal satu klik.",
+      a: "Katalog Flow mencakup musik instrumental, tetapi distraksi bersifat subjektif dan Flow tidak menjamin hasil fokus. Coba musiknya atau gunakan kontrol ambient saja.",
+    },
+    {
+      q: "Boleh pakai musik Flow di video atau stream?",
+      a: "Hanya lewat Flow Creator Music—bukan lewat Free atau mendengarkan di Spotify/YouTube. Tepat 174 track memenuhi syarat. Setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track; atribusi wajib dan ketentuan terbit berlaku.",
     },
   ],
 };

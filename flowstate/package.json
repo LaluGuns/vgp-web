@@ -2,13 +2,17 @@
   "name": "flowstate",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "tsc --noEmit",
+    "lint": "next lint --no-cache",
+    "typecheck": "tsc --noEmit --incremental false",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test \"scripts/release/*.test.mjs\" && node scripts/i18n/check-parity.cjs",
+    "seo:crawl": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/release/runtime-seo-crawl.mjs",
     "predeploy": "npm run typecheck && npm run lint && npm test && npm run build",
     "worker:sync-catalog": "npx wrangler r2 object put flowstate-audio/tracks/catalog.json --file public/tracks/catalog.json --content-type application/json --remote --force --config worker/wrangler.toml",
     "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml"
@@ -27,11 +31,11 @@
     "clsx": "^2.1.1",
     "hls.js": "^1.6.5",
     "lucide-react": "^0.575.0",
-    "next": "^15.3.3",
+    "next": "15.5.21",
     "posthog-js": "^1.398.2",
     "qrcode": "^1.5.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "tailwind-merge": "^3.3.0",
     "three": "^0.185.0",
     "zustand": "^5.0.5"
@@ -48,16 +52,18 @@
     "@types/three": "^0.185.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.5",
-    "eslint-config-next": "^15.5.19",
+    "eslint-config-next": "15.5.21",
     "ffmpeg-static": "^5.3.0",
-    "postcss": "^8.5.21",
+    "postcss": "8.5.22",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   },
   "overrides": {
-    "sharp": "^0.35.3",
-    "postcss": "$postcss",
-    "dompurify": "^3.4.12",
-    "fast-uri": "^3.1.4"
+    "dompurify": "3.4.12",
+    "fast-uri": "3.1.4",
+    "next": {
+      "postcss": "8.5.10",
+      "sharp": "0.35.0"
+    }
   }
 }

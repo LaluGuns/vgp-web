@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { indexableLanguageAlternates, localePath, SEO_SITE_URL, shouldIndexSeoPage } from "@/lib/marketing/seo-registry";
+import { marketRouteCopy } from "@/lib/marketing/market-copy";
+import { marketingMetadata } from "@/lib/marketing/seo";
+import { getTranslator, resolveLocale } from "@/lib/translations/server";
 
 export async function generateMetadata({
   params,
@@ -7,17 +9,14 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const indexable = shouldIndexSeoPage(lang, "pricing");
-
-  return {
-    alternates: {
-      canonical: localePath(lang, "pricing"),
-      languages: indexable
-        ? { ...indexableLanguageAlternates("pricing"), "x-default": `${SEO_SITE_URL}${localePath("en", "pricing")}` }
-        : undefined,
-    },
-    robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
-  };
+  const regional = marketRouteCopy(lang, "pricing");
+  const t = getTranslator(resolveLocale(lang));
+  return marketingMetadata(
+    lang,
+    "pricing",
+    regional?.metaTitle ?? t("pricing.fixed.title", "Flow Pro pricing"),
+    regional?.metaDescription ?? t("pricing.fixed.description", "Compare Flow Free and Flow Pro plans for focus music, ambient sounds, scenes, and creator tools.")
+  );
 }
 
 export default function PricingLayout({ children }: { children: React.ReactNode }) {

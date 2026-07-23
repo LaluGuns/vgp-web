@@ -14,6 +14,9 @@ import {
 import { getMarketingShared } from "@/lib/translations/pages/shared";
 import { marketingMetadata, faqJsonLd, breadcrumbJsonLd } from "@/lib/marketing/seo";
 import { marketRouteCopy } from "@/lib/marketing/market-copy";
+import { getJaKoAlternativeCopy } from "@/lib/marketing/ja-ko-alternatives";
+import { deAlternativeCopy } from "@/lib/marketing/de-market-copy";
+import { getEsPtAlternativeCopy } from "@/lib/marketing/es-pt-alternatives";
 import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-shell";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
 
@@ -31,7 +34,7 @@ export async function generateMetadata({
   const { lang, slug } = await params;
   if (!(ALTERNATIVE_SLUGS as readonly string[]).includes(slug)) return {};
   const locale = resolveLocale(lang);
-  const copy = getAlternativeCopy(locale, slug as AlternativeSlug);
+  const copy = getJaKoAlternativeCopy(lang, slug as AlternativeSlug) ?? deAlternativeCopy(lang, slug as AlternativeSlug) ?? getEsPtAlternativeCopy(lang, slug as AlternativeSlug) ?? getAlternativeCopy(locale, slug as AlternativeSlug);
   const localized = marketRouteCopy(lang, `alternatives/${slug}`);
   return marketingMetadata(lang, `alternatives/${slug}`, localized?.metaTitle ?? copy.metaTitle, localized?.metaDescription ?? copy.metaDescription);
 }
@@ -45,7 +48,7 @@ export default async function AlternativePage({
   if (!(ALTERNATIVE_SLUGS as readonly string[]).includes(slug)) notFound();
 
   const locale = resolveLocale(lang);
-  const copy = getAlternativeCopy(locale, slug as AlternativeSlug);
+  const copy = getJaKoAlternativeCopy(lang, slug as AlternativeSlug) ?? deAlternativeCopy(lang, slug as AlternativeSlug) ?? getEsPtAlternativeCopy(lang, slug as AlternativeSlug) ?? getAlternativeCopy(locale, slug as AlternativeSlug);
   const localized = marketRouteCopy(lang, `alternatives/${slug}`);
   const shared = getMarketingShared(lang);
   const others = ALTERNATIVE_SLUGS.filter((s) => s !== slug);
@@ -126,7 +129,7 @@ export default async function AlternativePage({
       <section className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {others.map((s) => {
-            const other = getAlternativeCopy(locale, s);
+            const other = getJaKoAlternativeCopy(lang, s) ?? deAlternativeCopy(lang, s) ?? getEsPtAlternativeCopy(lang, s) ?? getAlternativeCopy(locale, s);
             const otherTitle = marketRouteCopy(lang, `alternatives/${s}`)?.h1 ?? other.h1;
             return (
               <Link

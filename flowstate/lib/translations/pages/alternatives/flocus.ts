@@ -5,39 +5,42 @@ import type { AlternativeCopy } from "./types";
 const en: AlternativeCopy = {
   metaTitle: "Flocus Alternative: Flow",
   metaDescription:
-    "Looking for a Flocus alternative? Flow trades the aesthetic dashboard for music that's actually produced for the app — original tracks, a real Pomodoro timer, honest stats.",
+    "Compare Flocus with Flow's browser timer, in-house music, measured session history, and separately governed Creator Music license.",
   h1: "Flocus Alternative: Flow",
   intro: [
-    "Flocus nails the vibe. The aesthetic dashboard, the greeting with your name, the wallpapers — it turned the browser start page into a mood, and it's easy to see why people set it as their home tab and keep it there.",
-    "The music is where the two products split. Flocus embeds existing lofi streams and playlists into that beautiful shell; Flow's entire reason to exist is the opposite — every track is produced in-house by one musician, for this app, and the timer, tasks, and stats are built around actually finishing focus blocks rather than setting a scene.",
+    "Flocus presents a visual browser workspace that can include timer, music, and personalization features. Its current integrations and plan contents can change, so check Flocus's own site before deciding.",
+    "Flow combines music produced in-house by one musician with a browser timer, tasks, ambient controls, and measured session history. This is a workflow distinction, not an objective quality ranking.",
   ],
   competitorName: "Flocus",
   tableHeading: "Side by side",
   rows: [
-    { feature: "Music", them: "Embedded lofi streams and playlists", flow: "80+ original tracks produced in-house" },
-    { feature: "Focus timer", them: "Pomodoro modes with aesthetic themes", flow: "Pomodoro presets, custom splits, per-session tasks" },
-    { feature: "Session stats", them: "Light", flow: "Streaks, heatmap, records — measured minutes only" },
-    { feature: "Ambient sounds", them: "Scene-based ambience", flow: "12-layer mixer with independent volumes" },
-    { feature: "Price", them: "Free, with a premium tier for more themes", flow: "Free tier; Pro at $9.99/mo for the full library" },
-    { feature: "Creator license", them: "Depends on the embedded music's owners", flow: "Free in streams and videos with attribution" },
+    { feature: "Current offer", them: "Plans and features may change; check Flocus's current offer", flow: "Free timer access and a paid Pro plan; check Flow's current pricing" },
+    { feature: "Music approach", them: "Check Flocus's current music sources and terms", flow: "Finished tracks produced in-house by one musician" },
+    { feature: "Focus workflow", them: "Check Flocus's current timer and task controls", flow: "Pomodoro presets, custom durations, and tasks" },
+    { feature: "Session history", them: "Check Flocus's current reporting features", flow: "History based on measured session minutes" },
+    { feature: "Creator license", them: "Check Flocus and each music provider's current license terms", flow: "Not included in Free. Exactly 174 eligible tracks; every new download/license requires active Pro and a valid per-track Grant Record. Attribution and published terms apply; Spotify or YouTube listening grants no creator rights" },
   ],
   whenHeading: "When Flocus is still the right pick",
   whenParagraphs: [
-    "If what you want is a beautiful start page — a calm screen with your name on it, wallpapers you enjoy looking at, and whatever music you already stream anyway — Flocus does that for free and does it with taste. Not every desk needs session analytics.",
-    "Pick Flow when the music itself matters — because someone made it for this exact use, and because it starts and stops with your block — and when you want your focus time counted honestly instead of decorated.",
+    "Flocus may suit you if its current visual workspace and integrations fit how you start a session. Verify its present features, plans, music sources, and terms directly with Flocus.",
+    "Consider Flow if you prefer in-house music, a timer, tasks, ambient controls, and history based on measured minutes in one browser workspace.",
   ],
   faq: [
     {
       q: "Is Flow free like Flocus?",
-      a: "Flow has a free tier — timer, ambient sounds, part of the music library. The $9.99/mo Pro plan mainly buys the full in-house music library and every scene.",
+      a: "Flow offers free timer access and a separate paid Pro plan. Plan contents can change, so check Flow's current pricing page and compare it with Flocus's current offer.",
     },
     {
       q: "What's actually different about the music?",
-      a: "Flocus plays existing lofi content inside its dashboard. Flow's tracks are written and produced by Virzy Guns specifically for focus blocks — they exist nowhere else, and they're licensed for your streams and videos with attribution.",
+      a: "Flow's product copy identifies Virzy Guns as its composer and producer. Check Flocus's current music sources and their respective terms directly; do not assume playback includes creator-use rights.",
     },
     {
       q: "Does Flow look as good as Flocus?",
       a: "Different taste: Flocus goes for cozy wallpaper aesthetics, Flow goes for instrument-grade timer machines — a tape deck, a terminal, an editorial folio. Try the landing page demo and judge for yourself.",
+    },
+    {
+      q: "Can I use Flow music in videos or streams?",
+      a: "Only through Flow Creator Music—not through Free, Spotify, or YouTube listening. Exactly 174 tracks are eligible. Every new download/license requires active Pro and a valid per-track Grant Record; required attribution and the published terms apply.",
     },
   ],
 };
@@ -45,39 +48,42 @@ const en: AlternativeCopy = {
 const id: AlternativeCopy = {
   metaTitle: "Alternatif Flocus: Flow",
   metaDescription:
-    "Cari alternatif Flocus? Flow menukar dashboard estetik dengan musik yang benar-benar diproduksi untuk app-nya — track original, timer Pomodoro beneran, statistik jujur.",
+    "Bandingkan Flocus dengan timer browser Flow, musik produksi sendiri, riwayat sesi terukur, dan lisensi Creator Music yang terpisah.",
   h1: "Alternatif Flocus: Flow",
   intro: [
-    "Flocus juara soal vibe. Dashboard estetik, sapaan dengan namamu, wallpaper-nya — dia mengubah start page browser jadi mood, dan gampang paham kenapa orang menjadikannya home tab dan nggak pindah-pindah.",
-    "Musiknya yang jadi titik pisah dua produk ini. Flocus menyematkan stream dan playlist lofi yang sudah ada ke dalam cangkang cantik itu; alasan hidup Flow justru kebalikannya — setiap track diproduksi sendiri oleh satu musisi, untuk app ini, dan timer, task, serta statistiknya dibangun untuk benar-benar menyelesaikan block fokus, bukan sekadar membangun suasana.",
+    "Flocus memosisikan produknya sebagai ruang kerja visual di browser yang dapat mencakup timer, musik, dan personalisasi. Integrasi serta isi plan dapat berubah, jadi cek situs Flocus sebelum memutuskan.",
+    "Flow menggabungkan musik produksi sendiri oleh satu musisi dengan timer browser, task, kontrol ambient, dan riwayat sesi terukur. Ini perbedaan alur kerja, bukan peringkat kualitas objektif.",
   ],
   competitorName: "Flocus",
   tableHeading: "Perbandingan langsung",
   rows: [
-    { feature: "Musik", them: "Stream dan playlist lofi yang disematkan", flow: "80+ track original diproduksi sendiri" },
-    { feature: "Timer fokus", them: "Mode Pomodoro dengan tema estetik", flow: "Preset Pomodoro, split custom, task per sesi" },
-    { feature: "Statistik sesi", them: "Ringan", flow: "Streak, heatmap, rekor — hanya menit terukur" },
-    { feature: "Ambient sound", them: "Ambience berbasis scene", flow: "Mixer 12 lapis dengan volume masing-masing" },
-    { feature: "Harga", them: "Gratis, dengan tier premium untuk tema tambahan", flow: "Tier gratis; Pro $9.99/bln untuk library penuh" },
-    { feature: "Lisensi kreator", them: "Tergantung pemilik musik yang disematkan", flow: "Gratis di stream dan video dengan atribusi" },
+    { feature: "Penawaran saat ini", them: "Plan dan fitur bisa berubah; cek penawaran Flocus saat ini", flow: "Akses timer gratis dan plan Pro berbayar; cek harga Flow saat ini" },
+    { feature: "Pendekatan musik", them: "Cek sumber musik dan ketentuan Flocus saat ini", flow: "Track jadi yang diproduksi sendiri oleh satu musisi" },
+    { feature: "Alur fokus", them: "Cek kontrol timer dan task Flocus saat ini", flow: "Preset Pomodoro, durasi custom, dan task" },
+    { feature: "Riwayat sesi", them: "Cek fitur pelaporan Flocus saat ini", flow: "Riwayat berdasarkan menit sesi terukur" },
+    { feature: "Lisensi kreator", them: "Cek ketentuan lisensi Flocus dan tiap penyedia musik saat ini", flow: "Tidak termasuk Free. Tepat 174 track memenuhi syarat; setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track. Atribusi serta ketentuan terbit berlaku; mendengarkan lewat Spotify atau YouTube tidak memberi hak kreator" },
   ],
   whenHeading: "Kapan Flocus tetap pilihan yang benar",
   whenParagraphs: [
-    "Kalau yang kamu mau adalah start page yang cantik — layar tenang dengan namamu, wallpaper yang enak dipandang, dan musik apa pun yang memang sudah kamu putar — Flocus memberikan itu gratis dan dengan selera. Nggak semua meja butuh analitik sesi.",
-    "Pilih Flow kalau musiknya sendiri yang penting — karena ada orang yang membuatnya untuk kegunaan persis ini, dan karena dia mulai-berhenti bareng block-mu — dan kalau kamu mau waktu fokusmu dihitung jujur, bukan didekorasi.",
+    "Flocus mungkin cocok kalau ruang kerja visual dan integrasinya saat ini sesuai cara kamu memulai sesi. Verifikasi fitur, plan, sumber musik, dan ketentuan terbarunya langsung ke Flocus.",
+    "Pertimbangkan Flow kalau kamu memilih musik produksi sendiri, timer, task, kontrol ambient, dan riwayat berbasis menit terukur dalam satu ruang kerja browser.",
   ],
   faq: [
     {
       q: "Flow gratis seperti Flocus?",
-      a: "Flow punya tier gratis — timer, ambient sound, sebagian library musik. Plan Pro $9.99/bln terutama membeli library musik in-house penuh dan semua scene.",
+      a: "Flow menyediakan akses timer gratis dan plan Pro berbayar yang terpisah. Isi plan dapat berubah, jadi cek halaman harga Flow dan bandingkan dengan penawaran Flocus saat ini.",
     },
     {
       q: "Musiknya beda di mana sebenarnya?",
-      a: "Flocus memutar konten lofi yang sudah ada di dalam dashboard-nya. Track Flow ditulis dan diproduksi Virzy Guns khusus untuk block fokus — nggak ada di tempat lain, dan berlisensi untuk stream dan videomu dengan atribusi.",
+      a: "Copy produk Flow menyebut Virzy Guns sebagai komposer dan produser. Cek sumber musik Flocus dan ketentuannya saat ini langsung; jangan anggap hak dengar otomatis mencakup hak pakai kreator.",
     },
     {
       q: "Tampilan Flow sebagus Flocus?",
       a: "Beda selera: Flocus main di estetika wallpaper yang cozy, Flow main di mesin timer rasa instrumen — tape deck, terminal, folio editorial. Coba demo di halaman depan dan nilai sendiri.",
+    },
+    {
+      q: "Boleh pakai musik Flow di video atau stream?",
+      a: "Hanya lewat Flow Creator Music—bukan lewat Free atau mendengarkan di Spotify/YouTube. Tepat 174 track memenuhi syarat. Setiap download/lisensi baru memerlukan Pro aktif dan Grant Record valid per track; atribusi wajib dan ketentuan terbit berlaku.",
     },
   ],
 };
