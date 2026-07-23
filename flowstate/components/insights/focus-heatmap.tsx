@@ -136,7 +136,11 @@ export function FocusHeatmap({ sessions }: { sessions: DbSession[] }) {
                     <div
                       key={idx}
                       role="img"
-                      tabIndex={0}
+                      // Deliberately not focusable. 168 cells meant 168 tab
+                      // stops between the heatmap and the next control, and the
+                      // tooltip they revealed only repeats this aria-label — so
+                      // keyboard users paid the traversal cost for nothing.
+                      // Screen readers still announce every cell in browse mode.
                       aria-label={`${day.date.toLocaleDateString(locale)}: ${day.minutes} minutes, ${day.sessions} sessions, ${day.cumulative} cumulative minutes`}
                       className={cn(
                         "w-[13px] h-[13px] rounded-[3px] transition-all duration-150 cursor-pointer hover:scale-125 hover:border-white/30",
@@ -165,14 +169,6 @@ export function FocusHeatmap({ sessions }: { sessions: DbSession[] }) {
                           setHoveredCell({ date: day.date, minutes: day.minutes, sessions: day.sessions, cumulative: day.cumulative, x: rect.left - parentRect.left + rect.width / 2, y: rect.top - parentRect.top, parentW: parentRect.width });
                         }
                       }}
-                      onFocus={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        const parentRect = outerRef.current?.getBoundingClientRect();
-                        if (parentRect) {
-                          setHoveredCell({ date: day.date, minutes: day.minutes, sessions: day.sessions, cumulative: day.cumulative, x: rect.left - parentRect.left + rect.width / 2, y: rect.top - parentRect.top, parentW: parentRect.width });
-                        }
-                      }}
-                      onBlur={() => setHoveredCell(null)}
                     />
                   );
                 })}
