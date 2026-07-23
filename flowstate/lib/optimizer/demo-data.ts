@@ -53,7 +53,6 @@ export function generateDemoSessions(days = 120): DbSession[] {
       const startHour = 8 + Math.floor(rand() * 12); // 08:00–20:00
       const started = new Date(day);
       started.setHours(startHour, Math.floor(rand() * 60), 0, 0);
-      if (started > now) continue;
 
       const targetMin = [25, 25, 25, 50, 90][Math.floor(rand() * 5)];
       const completed = rand() < 0.75;
@@ -66,6 +65,14 @@ export function generateDemoSessions(days = 120): DbSession[] {
       const timeline = Array.from({ length: fidgets }, () =>
         Math.floor(rand() * actualS)
       ).sort((a, b) => a - b);
+
+      // Drop sessions later than the current clock only AFTER every draw above.
+      // Skipping earlier consumed a variable number of PRNG values depending on
+      // the time of day, which desynced the whole stream — the seeded history
+      // (streak, records, cumulative minutes) silently changed as the day went
+      // on, despite the fixed seed. Deciding here keeps the past immutable and
+      // lets only today fill in.
+      if (started > now) continue;
 
       sessions.push({
         id: `demo-${dayOffset}-${i}`,
