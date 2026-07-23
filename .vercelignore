@@ -1,0 +1,33 @@
+# Root .vercelignore — safety net for the vgp-web project.
+#
+# The working tree carries private material that must never reach a deploy:
+# executed legal evidence, signatures, handoff bundles, audio masters.
+# Vercel does NOT read .gitignore, so untracked private files WOULD be
+# uploaded without this file. Keep it strict.
+
+# Legal evidence, executed contracts, intake material
+legal-intake/
+**/output/legal-private/
+flowstate/scripts/legal/
+**/signatures/
+**/*signature*
+
+# Handoff bundles and prompt archives
+*.zip
+*HANDOFF*
+*ANTIGRAVITY*
+CHATGPT_HANDOFF_PROMPT.md
+
+# Local tooling / build caches
+.playwright-cli/
+**/.wrangler/
+.next/
+node_modules/
+
+# The Flow app is a separate Vercel project (flowstate) with its own
+# root directory. It must not be bundled into a vgp-web deploy.
+flowstate/
+
+# Scratch and working notes
+scratch/
+*.local
