@@ -9,7 +9,7 @@ import { AccountButton } from "@/components/auth/account-button";
 import { LiveClock } from "./live-clock";
 import { useActiveLogoClass } from "./use-active-logo-class";
 
-// Header — Clean Apple-style bar (clock, mobile language select, logo,
+// Header — Clean Apple-style bar (clock, mobile language select, mobile logo,
 // account, tour + fullscreen buttons).
 export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
   const { t, locale, setLocale } = useTranslation();
@@ -64,8 +64,10 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
         </select>
       </div>
 
-      {/* Center: Title/Logo */}
-      <div className="flex items-center gap-2 group cursor-pointer select-none">
+      {/* Center: Title/Logo — mobile only. The sidebar (hidden md:flex) already
+          carries the wordmark on md+, so showing it here too put two Flow logos
+          on screen at once. */}
+      <div className="flex md:hidden items-center gap-2 group cursor-pointer select-none">
         <Image
           src="/icons/flowstate-logo.png"
           alt="Flow"
