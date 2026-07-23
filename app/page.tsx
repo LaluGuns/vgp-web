@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { BookOpen, Headphones, Timer } from 'lucide-react';
+import { BookOpen, Focus, Headphones, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SocialDock } from '@/components/SocialDock';
 import { OrganizationSchema } from '@/components/seo/OrganizationSchema';
@@ -21,6 +21,7 @@ import { useNewsletter } from '@/components/context/NewsletterContext';
 
 const quickSignals = [
     { label: 'Studio', value: 'Beats and audio services', href: '/studio/beats', Icon: Headphones },
+    { label: 'Flow', value: 'Deep-work timer and music', href: '/flow', Icon: Focus },
     { label: 'CADENZ', value: 'Coming-soon cadence app', href: '/cadenz', Icon: Timer },
     { label: 'Library', value: 'Books, blog, and masterclass', href: '/book', Icon: BookOpen },
 ];
@@ -67,7 +68,7 @@ export default function HomePage() {
                                 <EditorialButton href="/lab/healingwave" variant="ghost">Enter The Lab</EditorialButton>
                             </m.div>
 
-                            <m.div variants={staggerChild} className="mt-8 grid gap-3 sm:grid-cols-3">
+                            <m.div variants={staggerChild} className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                                 {quickSignals.map((item) => (
                                     <Link
                                         key={item.label}
