@@ -175,6 +175,9 @@ export const dictionaries = {
         estimate: "Estimate",
         complete: "Complete",
       },
+      blockToday: "focus block today",
+      blocksToday: "focus blocks today",
+      minutesToday: "min of deep work today",
       mixer: {
         title: "Ambient Mixer",
         volume: "Volume",
@@ -201,6 +204,15 @@ export const dictionaries = {
         play: "Play",
         pause: "Pause",
         sound: "Sound",
+        soundtrack: "Soundtrack",
+        changeSound: "Change sound",
+        nowPlaying: "Now playing",
+        crossfade: "Crossfade",
+        off: "Off",
+        noTracks: "No tracks found",
+        collapse: "Collapse player",
+        fullscreen: "Full screen",
+        toggleFullscreen: "Toggle full screen",
       },
       themes: {
         title: "Themes",
@@ -212,6 +224,7 @@ export const dictionaries = {
         sunset: "Sunset",
         upgradeToUnlockTheme: "This theme is Pro-only. Go Pro to get all themes?",
       },
+      login: { title: "Sign in to Flow" },
     },
     app: {
       themes: {
@@ -256,16 +269,17 @@ export const dictionaries = {
         sounds: "Extra ambient sounds — fire & rain, river, waterfall, city, vinyl",
         scenes: "Every visual scene and theme",
         music: "New original music added every month",
-        support: "Directly support an independent producer"
+        support: "Every track here is made by one producer — Pro keeps the catalog growing",
+        library: "The full library — all 295 original tracks, including the 170 Pro-only ones"
       },
       upgradeToUnlockTrack: "This track is Pro-only. Go Pro to play the full library?",
       upgradeToUnlock: "This sound is Pro-only. Go Pro to play the full library?",
       saveYearly: "Save 50% compared to monthly",
-      supportUnlocks: "Your support gets you",
+      supportUnlocks: "Pro gets you",
       fixed: {
         tagline: "Flow Pro",
         title: "Choose a plan",
-        description: "Full access to every ambient sound and visual scene, plus new original music added each month.",
+        description: "Full access to all 295 original tracks, every ambient sound and visual scene — with new music added each month.",
       },
       error: {
         generic: "Something went wrong. Please try again.",
@@ -415,6 +429,39 @@ export const dictionaries = {
         title: "Sign in first",
         description: "Sign in or create an account so your focus history is saved and synced.",
         signIn: "Sign In / Sign Up"
+      }
+    },
+    tour: {
+      badge: "Guided tour • step {current} of {total}",
+      stepBadge: "Step {current} of {total}",
+      skip: "Skip",
+      start: "Start tour →",
+      back: "← Back",
+      next: "Next →",
+      finish: "Finish tour",
+      welcome: {
+        title: "Welcome to Flow",
+        desc: "A timer, music produced in-house by Virzy Guns Production, an ambient mixer, and a task list. That's the whole setup — takes about a minute to walk through."
+      },
+      timer: {
+        title: "1. Pomodoro Timer",
+        desc: "Center of the screen. Click Start or hit SPACEBAR to begin a 25-minute focus block. The Pomodoro / Deep Work / 90-20 pills switch block lengths."
+      },
+      music: {
+        title: "2. Soundtracks",
+        desc: "Pick a track on the 'Music Player' tab — city pop, cyberpunk jazz, synthwave, and lofi, all produced in-house. Tip: [ and ] swap tracks from the keyboard."
+      },
+      ambient: {
+        title: "3. Ambient Mixer",
+        desc: "The 'Ambient' tab, next to 'Music Player'. Layer rain, café, fireplace, ocean and more — each slider sets its own level."
+      },
+      tasks: {
+        title: "4. Task Checklist",
+        desc: "Left sidebar. Add tasks, estimate pomodoros, check them off as you go. One task per block keeps things clean. Press T to open the editor."
+      },
+      stats: {
+        title: "5. Focus Insights",
+        desc: "Click 'Insights' in the sidebar or the bottom bar. Sessions, streaks, and a heatmap of when you actually focus."
       }
     }
   },
@@ -607,6 +654,9 @@ export const dictionaries = {
         estimate: "Estimasi",
         complete: "Selesai",
       },
+      blockToday: "focus block hari ini",
+      blocksToday: "focus block hari ini",
+      minutesToday: "menit deep work hari ini",
       mixer: {
         title: "Mixer Suara",
         volume: "Volume",
@@ -633,6 +683,15 @@ export const dictionaries = {
         play: "Putar",
         pause: "Jeda",
         sound: "Suara",
+        soundtrack: "Soundtrack",
+        changeSound: "Ganti suara",
+        nowPlaying: "Sedang diputar",
+        crossfade: "Crossfade",
+        off: "Nonaktif",
+        noTracks: "Trek tidak ditemukan",
+        collapse: "Ciutkan pemutar",
+        fullscreen: "Layar penuh",
+        toggleFullscreen: "Alihkan layar penuh",
       },
       themes: {
         title: "Tema",
@@ -644,6 +703,7 @@ export const dictionaries = {
         sunset: "Senja",
         upgradeToUnlockTheme: "Tema ini khusus Pro. Naik ke Pro buat dapat semua tema?",
       },
+      login: { title: "Masuk ke Flow" },
     },
     app: {
       themes: {
@@ -688,16 +748,17 @@ export const dictionaries = {
         sounds: "Suara latar tambahan — api & hujan, sungai, air terjun, kota, piringan hitam",
         scenes: "Semua tema dan latar visual",
         music: "Musik orisinal baru tiap bulan",
-        support: "Mendukung produser independen secara langsung"
+        support: "Semua track di sini dibuat satu orang — Pro yang bikin katalognya terus nambah",
+        library: "Seluruh library — 295 track orisinal, termasuk 170 yang khusus Pro"
       },
       upgradeToUnlockTrack: "Track ini khusus Pro. Naik ke Pro buat putar semua library?",
       upgradeToUnlock: "Suara ini khusus Pro. Naik ke Pro buat putar semua library?",
       saveYearly: "Hemat 50% dibanding bulanan",
-      supportUnlocks: "Dukunganmu dapat",
+      supportUnlocks: "Pro kasih kamu",
       fixed: {
         tagline: "Flow Pro",
         title: "Pilih paket",
-        description: "Akses penuh ke semua suara latar dan latar visual, plus musik orisinal baru tiap bulan.",
+        description: "Akses penuh ke 295 track orisinal, semua suara latar dan latar visual — plus musik baru tiap bulan.",
       },
       invalidPromo: "Kode promo itu ga valid",
       promoApplied: "Kode promo berhasil dipakai — diskon 50%",
@@ -851,6 +912,39 @@ export const dictionaries = {
         title: "Perlu Masuk Dulu",
         description: "Masuk atau buat akun supaya analisis fokusmu tersimpan dan tersinkron.",
         signIn: "Masuk / Daftar"
+      }
+    },
+    tour: {
+      badge: "Tur berpandu • langkah {current} dari {total}",
+      stepBadge: "Langkah {current} dari {total}",
+      skip: "Lewati",
+      start: "Mulai tur →",
+      back: "← Kembali",
+      next: "Berikutnya →",
+      finish: "Selesaikan tur",
+      welcome: {
+        title: "Selamat datang di Flow",
+        desc: "Timer, musik yang diproduksi sendiri oleh Virzy Guns Production, ambient mixer, dan daftar tugas. Itu aja seluruh setupnya — jalan-jalan lihatnya sekitar satu menit."
+      },
+      timer: {
+        title: "1. Timer Pomodoro",
+        desc: "Di tengah layar. Klik Mulai atau tekan SPACEBAR buat mulai satu focus block 25 menit. Pill Pomodoro / Deep Work / 90-20 buat ganti durasi block."
+      },
+      music: {
+        title: "2. Soundtrack",
+        desc: "Pilih track di tab 'Pemutar Musik' — city pop, cyberpunk jazz, synthwave, dan lofi, semuanya diproduksi sendiri. Tip: [ dan ] buat ganti track dari keyboard."
+      },
+      ambient: {
+        title: "3. Mixer Ambien",
+        desc: "Tab 'Latar', di sebelah 'Pemutar Musik'. Susun lapisan hujan, kafe, perapian, laut, dan lainnya — tiap slider punya levelnya sendiri."
+      },
+      tasks: {
+        title: "4. Checklist Tugas",
+        desc: "Sidebar kiri. Tambah tugas, estimasi pomodoro, centang satu-satu waktu kelar. Satu tugas per block bikin semuanya rapi. Tekan T buat buka editornya."
+      },
+      stats: {
+        title: "5. Analisis Fokus",
+        desc: "Klik 'Analisis' di sidebar atau bottom bar. Sesi, streak, dan heatmap kapan kamu beneran fokus."
       }
     }
   },
@@ -1041,8 +1135,11 @@ export const dictionaries = {
         placeholder: "Añadir tarea...",
         empty: "No hay tareas aún. Crea una arriba para empezar.",
         estimate: "Estimación",
-        complete: "Completar",
+        complete: "Completado",
       },
+      blockToday: "bloque de enfoque hoy",
+      blocksToday: "bloques de enfoque hoy",
+      minutesToday: "min de trabajo profundo hoy",
       mixer: {
         title: "Mezclador ambiental",
         volume: "Volumen",
@@ -1069,6 +1166,15 @@ export const dictionaries = {
         play: "Reproducir",
         pause: "Pausa",
         sound: "Sonido",
+        soundtrack: "Banda sonora",
+        changeSound: "Cambiar sonido",
+        nowPlaying: "Reproduciendo ahora",
+        crossfade: "Crossfade",
+        off: "Desactivado",
+        noTracks: "No se encontraron pistas",
+        collapse: "Contraer reproductor",
+        fullscreen: "Pantalla completa",
+        toggleFullscreen: "Alternar pantalla completa",
       },
       themes: {
         title: "Temas",
@@ -1080,6 +1186,7 @@ export const dictionaries = {
         sunset: "Atardecer",
         upgradeToUnlockTheme: "Este tema es solo para Pro. ¿Pasar a Pro para tener todos los temas?",
       },
+      login: { title: "Iniciar sesión en Flow" },
     },
     login: {
       title: "FLOW",
@@ -1115,16 +1222,17 @@ export const dictionaries = {
         sounds: "Sonidos ambientales adicionales — fuego y lluvia, río, cascada, ciudad, vinilo",
         scenes: "Todos los escenarios visuales y temas",
         music: "Música original nueva cada mes",
-        support: "Apoya directamente a un productor independiente"
+        support: "Cada pista aquí la hace un solo productor — Pro mantiene el catálogo creciendo",
+        library: "La biblioteca completa — los 295 temas originales, incluidos los 170 exclusivos de Pro"
       },
       upgradeToUnlockTrack: "Esta pista es solo para Pro. ¿Pasar a Pro para escuchar toda la biblioteca?",
       upgradeToUnlock: "Este sonido es solo para Pro. ¿Pasar a Pro para escuchar toda la biblioteca?",
       saveYearly: "Ahorra 50% en comparación con el plan mensual",
-      supportUnlocks: "Tu apoyo te da",
+      supportUnlocks: "Pro te da",
       fixed: {
         tagline: "Flow Pro",
         title: "Elige un plan",
-        description: "Acceso completo a todos los sonidos ambientales y escenarios visuales, más música original nueva cada mes.",
+        description: "Acceso completo a los 295 temas originales, todos los sonidos ambientales y escenarios visuales — con música nueva cada mes.",
       },
       invalidPromo: "Ese código promocional no es válido",
       promoApplied: "Código promocional aplicado — 50% de descuento",
@@ -1259,6 +1367,39 @@ export const dictionaries = {
         title: "Autenticación Requerida",
         description: "Para rastrear tus análisis de enfoque y proteger tus métricas, por favor inicia sesión o crea una cuenta.",
         signIn: "Iniciar Sesión / Registrarse"
+      }
+    },
+    tour: {
+      badge: "Recorrido guiado • paso {current} de {total}",
+      stepBadge: "Paso {current} de {total}",
+      skip: "Omitir",
+      start: "Iniciar recorrido →",
+      back: "← Atrás",
+      next: "Siguiente →",
+      finish: "Finalizar recorrido",
+      welcome: {
+        title: "Bienvenido a Flow",
+        desc: "Un timer, música producida internamente por Virzy Guns Production, un mezclador de sonido ambiental y una lista de tareas. Eso es toda la configuración — el recorrido toma alrededor de un minuto."
+      },
+      timer: {
+        title: "1. Temporizador Pomodoro",
+        desc: "En el centro de la pantalla. Haz clic en Iniciar o pulsa SPACEBAR para empezar un bloque de enfoque de 25 minutos. Las pastillas Pomodoro / Deep Work / 90-20 cambian la duración del bloque."
+      },
+      music: {
+        title: "2. Bandas sonoras",
+        desc: "Elige una pista en la pestaña 'Reproductor de música' — city pop, cyberpunk jazz, synthwave y lofi, todo producido internamente. Consejo: [ y ] cambian de pista desde el teclado."
+      },
+      ambient: {
+        title: "3. Mezclador Ambiental",
+        desc: "La pestaña 'Ambiental', junto a 'Reproductor de música'. Combina lluvia, café, chimenea, océano y más — cada control deslizante tiene su propio nivel."
+      },
+      tasks: {
+        title: "4. Lista de Tareas",
+        desc: "Barra lateral izquierda. Añade tareas, estima pomodoros, márcalas a medida que avanzas. Una tarea por bloque mantiene todo ordenado. Pulsa T para abrir el editor."
+      },
+      stats: {
+        title: "5. Análisis de Enfoque",
+        desc: "Haz clic en 'Estadísticas' en la barra lateral o en la barra inferior. Sesiones, rachas y un mapa de calor de cuándo realmente te concentras."
       }
     }
   },
@@ -1449,8 +1590,11 @@ export const dictionaries = {
         placeholder: "Ajouter une tâche...",
         empty: "Aucune tâche pour l'instant. Créez-en une ci-dessus pour commencer.",
         estimate: "Estimation",
-        complete: "Terminer",
+        complete: "Terminé",
       },
+      blockToday: "bloc de concentration aujourd'hui",
+      blocksToday: "blocs de concentration aujourd'hui",
+      minutesToday: "min de travail profond aujourd'hui",
       mixer: {
         title: "Mixeur d'ambiance",
         volume: "Volume",
@@ -1477,6 +1621,15 @@ export const dictionaries = {
         play: "Lecture",
         pause: "Pause",
         sound: "Son",
+        soundtrack: "Bande-son",
+        changeSound: "Changer de son",
+        nowPlaying: "Lecture en cours",
+        crossfade: "Fondu enchaîné",
+        off: "Désactivé",
+        noTracks: "Aucun morceau trouvé",
+        collapse: "Réduire le lecteur",
+        fullscreen: "Plein écran",
+        toggleFullscreen: "Basculer en plein écran",
       },
       themes: {
         title: "Thèmes",
@@ -1488,6 +1641,7 @@ export const dictionaries = {
         sunset: "Coucher de soleil",
         upgradeToUnlockTheme: "Ce thème est réservé à Pro. Passer à Pro pour avoir tous les thèmes ?",
       },
+      login: { title: "Se connecter à Flow" },
     },
     login: {
       title: "FLOW",
@@ -1523,16 +1677,17 @@ export const dictionaries = {
         sounds: "Sons d'ambiance supplémentaires — feu et pluie, rivière, cascade, ville, vinyle",
         scenes: "Tous les décors visuels et thèmes",
         music: "Nouvelle musique originale chaque mois",
-        support: "Soutenez directement un producteur indépendant"
+        support: "Chaque morceau ici est fait par un seul producteur — Pro fait grandir le catalogue",
+        library: "La bibliothèque complète — les 295 morceaux originaux, dont les 170 réservés à Pro"
       },
       upgradeToUnlockTrack: "Ce morceau est réservé à Pro. Passer à Pro pour écouter toute la bibliothèque ?",
       upgradeToUnlock: "Ce son est réservé à Pro. Passer à Pro pour écouter toute la bibliothèque ?",
       saveYearly: "Économisez 50% par rapport à l'abonnement mensuel",
-      supportUnlocks: "Votre soutien vous donne",
+      supportUnlocks: "Pro vous donne",
       fixed: {
         tagline: "Flow Pro",
         title: "Choisir un forfait",
-        description: "Accès complet à tous les sons d'ambiance et décors visuels, plus une nouvelle musique originale chaque mois.",
+        description: "Accès complet aux 295 morceaux originaux, à tous les sons d'ambiance et décors visuels — avec de la musique nouvelle chaque mois.",
       },
       invalidPromo: "Ce code promo n'est pas valide",
       promoApplied: "Code promo appliqué — 50 % de réduction",
@@ -1668,6 +1823,39 @@ export const dictionaries = {
         description: "Pour suivre vos analyses de focus et sécuriser vos métriques, veuillez vous connecter ou créer un compte.",
         signIn: "Se Connecter / S'Inscrire"
       }
+    },
+    tour: {
+      badge: "Visite guidée • étape {current} sur {total}",
+      stepBadge: "Étape {current} sur {total}",
+      skip: "Passer",
+      start: "Démarrer la visite →",
+      back: "← Retour",
+      next: "Suivant →",
+      finish: "Terminer la visite",
+      welcome: {
+        title: "Bienvenue sur Flow",
+        desc: "Un minuteur, de la musique produite en interne par Virzy Guns Production, un mixeur ambiant et une liste de tâches. C'est toute la configuration — la visite prend environ une minute."
+      },
+      timer: {
+        title: "1. Minuteur Pomodoro",
+        desc: "Au centre de l'écran. Cliquez sur Démarrer ou appuyez sur SPACEBAR pour commencer un bloc de concentration de 25 minutes. Les pastilles Pomodoro / Deep Work / 90-20 changent la durée du bloc."
+      },
+      music: {
+        title: "2. Bandes-son",
+        desc: "Choisissez un morceau dans l'onglet 'Lecteur de musique' — city pop, cyberpunk jazz, synthwave et lofi, tout produit en interne. Astuce : [ et ] changent de morceau au clavier."
+      },
+      ambient: {
+        title: "3. Mixeur Ambiant",
+        desc: "L'onglet 'Ambiance', à côté de 'Lecteur de musique'. Superposez pluie, café, cheminée, océan et plus — chaque curseur a son propre niveau."
+      },
+      tasks: {
+        title: "4. Liste de Tâches",
+        desc: "Barre latérale gauche. Ajoutez des tâches, estimez les pomodoros, cochez-les au fur et à mesure. Une tâche par bloc garde les choses claires. Appuyez sur T pour ouvrir l'éditeur."
+      },
+      stats: {
+        title: "5. Analyses de Focus",
+        desc: "Cliquez sur 'Statistiques' dans la barre latérale ou la barre du bas. Sessions, séries, et une heatmap de quand vous vous concentrez réellement."
+      }
     }
   },
   de: {
@@ -1724,81 +1912,81 @@ export const dictionaries = {
           "terms": {
                 "title": "Nutzungsbedingungen",
                 "updated": "6. Juli 2026",
-                "intro": "Willkommen bei Flow (\"Flow\", \"wir\", \"uns\"). Flow ist eine webbasierte Deep-Work-Anwendung, die einen Fokus-Timer, Originalmusik, Umgebungsgeräusche und Fokus-Analysen bereitstellt, betrieben von Virzy Guns und verfügbar unter flow.virzyguns.com. Durch den Zugriff auf oder die Nutzung von Flow stimmen Sie diesen Nutzungsbedingungen zu. Wenn Sie nicht zustimmen, nutzen Sie den Dienst bitte nicht.",
+                "intro": "Willkommen bei Flow (\"Flow\", \"wir\", \"uns\"). Flow ist eine webbasierte Deep-Work-Anwendung, die einen Fokus-Timer, Originalmusik, Umgebungsgeräusche und Fokus-Analysen bereitstellt, betrieben von Virzy Guns und verfügbar unter flow.virzyguns.com. Durch den Zugriff auf oder die Nutzung von Flow stimmst du diesen Nutzungsbedingungen zu. Wenn du nicht zustimmst, nutze den Dienst bitte nicht.",
                 "sec1_title": "1. Der Dienst",
                 "sec1_text": "Flow bietet eine kostenlose Stufe und optionale kostenpflichtige Funktionen. Der Basis-Fokus-Timer sowie eine große Bibliothek mit Musik und Umgebungsgeräuschen stehen kostenlos zur Verfügung. Wir können Funktionen im Laufe der Zeit hinzufügen, ändern oder entfernen, um das Produkt zu verbessern.",
-                "sec2_title": "2. Ihr Konto",
-                "sec2_text": "Einige Funktionen erfordern ein Konto, das über die Google-Anmeldung oder einen E-Mail-Magic-Link erstellt wird. Sie sind für die Aktivitäten unter Ihrem Konto und für die Sicherheit des Zugangs zu Ihrer E-Mail verantwortlich. Sie müssen mindestens 13 Jahre alt sein (oder das Mindestalter für die digitale Einwilligung in Ihrem Land), um Flow nutzen zu dürfen.",
+                "sec2_title": "2. Dein Konto",
+                "sec2_text": "Einige Funktionen erfordern ein Konto, das über die Google-Anmeldung oder einen E-Mail-Magic-Link erstellt wird. Du bist für die Aktivitäten unter deinem Konto und für die Sicherheit des Zugangs zu deiner E-Mail verantwortlich. Du musst mindestens 13 Jahre alt sein (oder das Mindestalter für die digitale Einwilligung in deinem Land), um Flow nutzen zu dürfen.",
                 "sec3_title": "3. Abonnements & Zahlung",
-                "sec3_text": "- Kostenpflichtige Pläne sind als wiederkehrendes Monatsabonnement für 9.99 USD pro Monat oder als wiederkehrendes Jahresabonnement für 59.99 USD pro Jahr erhältlich. Das von Ihnen gewählte Abrechnungsintervall bestimmt, wann Ihr Zahlungsmittel automatisch belastet wird.\n- Zahlungen werden von Lemon Squeezy, Inc. verarbeitet, das als unser eingetragener Händler fungiert. Lemon Squeezy kümmert sich um die Abrechnung, geltende Steuern und Zahlungsdaten. Deren Bedingungen gelten ebenfalls für den Kauf.\n- Abonnements verlängern sich am Ende jedes Abrechnungszeitraums automatisch, es sei denn, Sie kündigen sie. Sie können Ihr Abonnement jederzeit kündigen. Wenn Sie kündigen, bleibt Ihr Zugang zu den kostenpflichtigen Funktionen bis zum Ende Ihres aktuellen Abrechnungszeitraums bestehen.\n- Wir bieten eine 14-tägige Rückerstattungsfrist sowohl für monatliche als auch für jährliche Pläne an. Wenn Sie nicht zufrieden sind, können Sie innerhalb von 14 Tagen nach Ihrem Erstkauf oder einer wiederkehrenden Belastung eine Rückerstattung beantragen. Siehe unsere Rückerstattungs- und Stornierungsrichtlinie.",
+                "sec3_text": "- Kostenpflichtige Pläne sind als wiederkehrendes Monatsabonnement für 9.99 USD pro Monat oder als wiederkehrendes Jahresabonnement für 59.99 USD pro Jahr erhältlich. Das von dir gewählte Abrechnungsintervall bestimmt, wann dein Zahlungsmittel automatisch belastet wird.\n- Zahlungen werden von Lemon Squeezy, Inc. verarbeitet, das als unser eingetragener Händler fungiert. Lemon Squeezy kümmert sich um die Abrechnung, geltende Steuern und Zahlungsdaten. Deren Bedingungen gelten ebenfalls für den Kauf.\n- Abonnements verlängern sich am Ende jedes Abrechnungszeitraums automatisch, es sei denn, du kündigst sie. Du kannst dein Abonnement jederzeit kündigen. Wenn du kündigst, bleibt dein Zugang zu den kostenpflichtigen Funktionen bis zum Ende deines aktuellen Abrechnungszeitraums bestehen.\n- Wir bieten eine 14-tägige Rückerstattungsfrist sowohl für monatliche als auch für jährliche Pläne an. Wenn du nicht zufrieden bist, kannst du innerhalb von 14 Tagen nach deinem Erstkauf oder einer wiederkehrenden Belastung eine Rückerstattung beantragen. Siehe unsere Rückerstattungs- und Stornierungsrichtlinie.",
                 "sec4_title": "4. Musik- & Inhaltslizenz",
-                "sec4_text": "Die Musik und die Umgebungsgeräusche in Flow sind unser Eigentum oder an uns lizenziert. Sie erhalten eine persönliche, nicht exklusive, nicht übertragbare Lizenz zum Streamen dieser Inhalte für Ihren eigenen Fokus- und Produktivitätsgebrauch, solange Ihr Konto in gutem Zustand ist. Sie dürfen das Audiomaterial nicht herunterladen, weiterverbreiten, weiterverkaufen, sampeln oder in Ihren eigenen veröffentlichten Werken (einschließlich Videos, Streams oder kommerziellen Projekten) ohne gesonderte schriftliche Genehmigung verwenden.",
+                "sec4_text": "Die Musik und die Umgebungsgeräusche in Flow sind unser Eigentum oder an uns lizenziert. Du erhältst eine persönliche, nicht exklusive, nicht übertragbare Lizenz zum Streamen dieser Inhalte für deinen eigenen Fokus- und Produktivitätsgebrauch, solange dein Konto in gutem Zustand ist. Du darfst das Audiomaterial nicht herunterladen, weiterverbreiten, weiterverkaufen, sampeln oder in deinen eigenen veröffentlichten Werken (einschließlich Videos, Streams oder kommerziellen Projekten) ohne gesonderte schriftliche Genehmigung verwenden.",
                 "sec5_title": "5. Zulässige Nutzung",
-                "sec5_text": "Sie stimmen zu, Folgendes nicht zu tun:\n- Umgehung von kostenpflichtigen Funktionsbeschränkungen, Ratenbegrenzungen oder Inhaltsschutzmaßnahmen.\n- Scraping, Massen-Download oder Kopieren der Audiobibliothek oder anderer Vermögenswerte.\n- Versuchen, den Dienst zu stören, zurückzuentwickeln oder unbefugten Zugriff auf den Dienst zu erlangen.\n- Flow für ungesetzliche Zwecke zu nutzen.",
+                "sec5_text": "Du stimmst zu, Folgendes nicht zu tun:\n- Umgehung von kostenpflichtigen Funktionsbeschränkungen, Ratenbegrenzungen oder Inhaltsschutzmaßnahmen.\n- Scraping, Massen-Download oder Kopieren der Audiobibliothek oder anderer Vermögenswerte.\n- Versuchen, den Dienst zu stören, zurückzuentwickeln oder unbefugten Zugriff auf den Dienst zu erlangen.\n- Flow für ungesetzliche Zwecke zu nutzen.",
                 "sec6_title": "6. Geistiges Eigentum",
-                "sec6_text": "Flow, sein Name, Logo, Design, Software und Inhalte sind unser Eigentum oder das unserer Lizenzgeber und durch Gesetze zum geistigen Eigentum geschützt. Diese Bedingungen gewähren Ihnen keine Eigentumsrechte.",
+                "sec6_text": "Flow, sein Name, Logo, Design, Software und Inhalte sind unser Eigentum oder das unserer Lizenzgeber und durch Gesetze zum geistigen Eigentum geschützt. Diese Bedingungen gewähren dir keine Eigentumsrechte.",
                 "sec7_title": "7. Haftungsausschlüsse",
                 "sec7_text": "Flow wird ohne Mängelgewähr und wie verfügbar ohne Garantien jeglicher Art bereitgestellt. Wir garantieren keinen ununterbrochenen oder fehlerfreien Betrieb und machen keine medizinischen oder produktivitätsbezogenen Aussagen. Fokus-Funktionen sind Informationswerkzeuge, keine professionelle Beratung.",
                 "sec8_title": "8. Haftungsbeschränkung",
-                "sec8_text": "Soweit gesetzlich zulässig, haften wir nicht für indirekte, zufällige oder Folgeschäden, die aus Ihrer Nutzung von Flow entstehen. Unsere Gesamthaftung für alle Ansprüche ist auf den Betrag beschränkt, den Sie uns in den zwölf Monaten vor dem Anspruch gezahlt haben.",
+                "sec8_text": "Soweit gesetzlich zulässig, haften wir nicht für indirekte, zufällige oder Folgeschäden, die aus deiner Nutzung von Flow entstehen. Unsere Gesamthaftung für alle Ansprüche ist auf den Betrag beschränkt, den du uns in den zwölf Monaten vor dem Anspruch gezahlt hast.",
                 "sec9_title": "9. Kündigung",
-                "sec9_text": "Wir können Konten sperren oder kündigen, die gegen diese Bedingungen verstoßen. Sie können die Nutzung von Flow jederzeit einstellen und Ihr Konto kündigen, indem Sie uns kontaktieren.",
+                "sec9_text": "Wir können Konten sperren oder kündigen, die gegen diese Bedingungen verstoßen. Du kannst die Nutzung von Flow jederzeit einstellen und dein Konto kündigen, indem du uns kontaktierst.",
                 "sec10_title": "10. Änderungen & anwendbares Recht",
                 "sec10_text": "Wir können diese Bedingungen aktualisieren; wesentliche Änderungen werden durch das Datum der \"letzten Aktualisierung\" oben widergespiegelt. Die fortgesetzte Nutzung nach Änderungen gilt als Annahme. Diese Bedingungen unterlegen den Gesetzen der Republik Indonesien, unter Ausschluss des Kollisionsrechts."
           },
           "refund": {
                 "title": "Rückerstattungs- & Stornierungsrichtlinie",
                 "updated": "6. Juli 2026",
-                "intro": "Wir möchten, dass Sie mit Flow zufrieden sind. Diese Richtlinie erklärt, wie Kündigungen und Rückerstattungen für kostenpflichtige Abonnements funktionieren.",
+                "intro": "Wir möchten, dass du mit Flow zufrieden bist. Diese Richtlinie erklärt, wie Kündigungen und Rückerstattungen für kostenpflichtige Abonnements funktionieren.",
                 "sec1_title": "1. Stornierungen",
-                "sec1_text": "Sie können Ihr Abonnement jederzeit über Ihre Kontoeinstellungen oder durch Kontaktaufnahme mit uns kündigen. Wenn Sie kündigen, wird Ihr Plan nicht mehr verlängert und Sie behalten den kostenpflichtigen Zugang bis zum Ende des aktuellen Abrechnungszeitraums. Wir gewähren keine Teilrückerstattungen für den ungenutzten Teil eines Zeitraums, es sei denn, dies ist gesetzlich vorgeschrieben.",
+                "sec1_text": "Du kannst dein Abonnement jederzeit über deine Kontoeinstellungen oder durch Kontaktaufnahme mit uns kündigen. Wenn du kündigst, wird dein Plan nicht mehr verlängert und du behältst den kostenpflichtigen Zugang bis zum Ende des aktuellen Abrechnungszeitraums. Wir gewähren keine Teilrückerstattungen für den ungenutzten Teil eines Zeitraums, es sei denn, dies ist gesetzlich vorgeschrieben.",
                 "sec2_title": "2. Rückerstattungen",
-                "sec2_text": "- Wenn Sie mit Ihrem monatlichen (9.99 USD/Monat) oder jährlichen (59.99 USD/Jahr) Abonnement nicht zufrieden sind, können Sie innerhalb von 14 Tagen nach Ihrem Erstkauf oder einer Verlängerungsbelastung eine Rückerstattung beantragen.\n- Da ein großer Teil von Flow vor dem Kauf kostenlos getestet werden kann, werden Rückerstattungen nach unserem angemessenen Ermessen gewährt und können bei offensichtlichem Missbrauch (z. B. wiederholten Rückerstattungs- und Wiederanmeldezyklen) abgelehnt werden.",
-                "sec3_title": "3. So beantragen Sie eine Rückerstattung",
-                "sec3_text": "Senden Sie eine E-Mail an founder@virzyguns.com von der in Ihrem Konto hinterlegten Adresse und fügen Sie Ihre Bestell- oder Belegdetails bei. Da Lemon Squeezy, Inc. unser eingetragener Händler ist, werden genehmigte Rückerstattungen über Lemon Squeezy auf Ihre ursprüngliche Zahlungsmethode zurückerstattet. Sie können sich auch direkt mit dem Lemon Squeezy Support in Verbindung setzen, indem Sie den Beleg verwenden, den Sie erhalten haben.",
+                "sec2_text": "- Wenn du mit deinem monatlichen (9.99 USD/Monat) oder jährlichen (59.99 USD/Jahr) Abonnement nicht zufrieden bist, kannst du innerhalb von 14 Tagen nach deinem Erstkauf oder einer Verlängerungsbelastung eine Rückerstattung beantragen.\n- Da ein großer Teil von Flow vor dem Kauf kostenlos getestet werden kann, werden Rückerstattungen nach unserem angemessenen Ermessen gewährt und können bei offensichtlichem Missbrauch (z. B. wiederholten Rückerstattungs- und Wiederanmeldezyklen) abgelehnt werden.",
+                "sec3_title": "3. So beantragst du eine Rückerstattung",
+                "sec3_text": "Sende eine E-Mail an founder@virzyguns.com von der in deinem Konto hinterlegten Adresse und füge deine Bestell- oder Belegdetails bei. Da Lemon Squeezy, Inc. unser eingetragener Händler ist, werden genehmigte Rückerstattungen über Lemon Squeezy auf deine ursprüngliche Zahlungsmethode zurückerstattet. Du kannst dich auch direkt mit dem Lemon Squeezy Support in Verbindung setzen, indem du den Beleg verwendest, den du erhalten hast.",
                 "sec4_title": "4. Bearbeitungszeit",
-                "sec4_text": "Genehmigte Rückerstattungen werden in der Regel innerhalb weniger Werktage bearbeitet. Die Zeit, bis das Geld auf Ihrem Konto eingeht, hängt von Ihrer Bank oder Ihrem Kartenanbieter ab.",
+                "sec4_text": "Genehmigte Rückerstattungen werden in der Regel innerhalb weniger Werktage bearbeitet. Die Zeit, bis das Geld auf deinem Konto eingeht, hängt von deiner Bank oder deinem Kartenanbieter ab.",
                 "sec5_title": "5. Fragen",
-                "sec5_text": "Wenn etwas unklar ist, kontaktieren Sie uns unter founder@virzyguns.com. Wir helfen Ihnen gerne weiter."
+                "sec5_text": "Wenn etwas unklar ist, kontaktiere uns unter founder@virzyguns.com. Wir helfen dir gerne weiter."
           },
           "privacy": {
                 "title": "Datenschutzerklärung",
                 "updated": "6. Juli 2026",
                 "intro": "Diese Datenschutzerklärung erklärt, welche Daten Flow sammelt und wie wir sie verwenden. Wir sind bestrebt, so wenig wie möglich zu erfassen. Flow wird von Virzy Guns betrieben.",
                 "sec1_title": "1. Daten, die wir sammeln",
-                "sec1_text": "- Kontodaten: Wenn Sie sich anmelden, speichern wir Ihre E-Mail-Adresse und, falls über die Google-Anmeldung bereitgestellt, Ihren Namen und Ihre Avatar-URL.\n- Fokusdaten: Aufgaben, Timer-Sitzungen und Fokus-Analysen (wie Sitzungsdauer, Fidget-Counts und Fokus-Verhältnis), die Sie während der Nutzung der App generieren, damit wir sie auf Ihren Geräten synchronisieren und Ihren Verlauf anzeigen können.\n- Abonnementdaten: Ihr Planstatus und Ihre Verlängerungsdaten. Wir speichern Ihre Karten- oder Zahlungsdaten nicht: Diese werden vollständig von unserem Zahlungsabwickler verarbeitet (siehe unten).\n- Technische Daten: Standard-Serverprotokolle und Sicherheitsdaten (wie Ratenbegrenzungsaufzeichnungen), die für den sicheren Betrieb des Dienstes erforderlich sind.",
-                "sec2_title": "2. Wie wir Ihre Daten verwenden",
-                "sec2_text": "Wir verwenden Ihre Daten, um den Dienst bereitzustellen und zu synchronisieren, Ihr Konto und Abonnement zu verwalten, Flow zu verbessern und den Dienst sicher zu halten. Wir verkaufen Ihre persönlichen Daten nicht und zeigen keine Werbung von Drittanbietern an.",
+                "sec1_text": "- Kontodaten: Wenn du dich anmeldest, speichern wir deine E-Mail-Adresse und, falls über die Google-Anmeldung bereitgestellt, deinen Namen und deine Avatar-URL.\n- Fokusdaten: Aufgaben, Timer-Sitzungen und Fokus-Analysen (wie Sitzungsdauer, Fidget-Counts und Fokus-Verhältnis), die du während der Nutzung der App generierst, damit wir sie auf deinen Geräten synchronisieren und deinen Verlauf anzeigen können.\n- Abonnementdaten: dein Planstatus und deine Verlängerungsdaten. Wir speichern deine Karten- oder Zahlungsdaten nicht: Diese werden vollständig von unserem Zahlungsabwickler verarbeitet (siehe unten).\n- Technische Daten: Standard-Serverprotokolle und Sicherheitsdaten (wie Ratenbegrenzungsaufzeichnungen), die für den sicheren Betrieb des Dienstes erforderlich sind.",
+                "sec2_title": "2. Wie wir deine Daten verwenden",
+                "sec2_text": "Wir verwenden deine Daten, um den Dienst bereitzustellen und zu synchronisieren, dein Konto und Abonnement zu verwalten, Flow zu verbessern und den Dienst sicher zu halten. Wir verkaufen deine persönlichen Daten nicht und zeigen keine Werbung von Drittanbietern an.",
                 "sec3_title": "3. Dienstleister",
-                "sec3_text": "- Supabase: Authentifizierung und Datenbank-Hosting für Ihr Konto und Ihre Fokusdaten.\n- Lemon Squeezy, Inc.: Unser eingetragener Händler, der Zahlungen abwickelt und Abrechnungsdaten und Steuern verwaltet. Siehe die Datenschutzerklärung von Lemon Squeezy für Details.\n- Content Delivery Network: Wird verwendet, um Audio effizient zu streamen. CDN-Anfragen können standardmäßige technische Metadaten wie die IP-Adresse enthalten.",
+                "sec3_text": "- Supabase: Authentifizierung und Datenbank-Hosting für dein Konto und deine Fokusdaten.\n- Lemon Squeezy, Inc.: Unser eingetragener Händler, der Zahlungen abwickelt und Abrechnungsdaten und Steuern verwaltet. Siehe die Datenschutzerklärung von Lemon Squeezy für Details.\n- Content Delivery Network: Wird verwendet, um Audio effizient zu streamen. CDN-Anfragen können standardmäßige technische Metadaten wie die IP-Adresse enthalten.",
                 "sec4_title": "4. Cookies & lokaler Speicher",
-                "sec4_text": "Wir verwenden essenzielle Cookies und den lokalen Speicher des Browsers, um Sie angemeldet zu halten und uns an Ihre In-App-Präferenzen (wie Lautstärke, Szene und Timer-Einstellungen) zu erinnern. Wir verwenden keine Werbe- oder Cross-Site-Tracking-Cookies.",
-                "sec5_title": "5. Datenspeicherung & Ihre Rechte",
-                "sec5_text": "Wir bewahren Ihre Daten auf, solange Ihr Konto aktiv ist. Sie können jederzeit eine Kopie Ihrer Daten anfordern oder uns bitten, Ihr Konto und die damit verbundenen Daten per E-Mail zu löschen. Durch das Löschen Ihres Kontos werden Ihr Profil, Ihre Aufgaben und Ihr Fokusverlauf gelöscht.",
+                "sec4_text": "Wir verwenden essenzielle Cookies und den lokalen Speicher des Browsers, um dich angemeldet zu halten und uns an deine In-App-Präferenzen (wie Lautstärke, Szene und Timer-Einstellungen) zu erinnern. Wir verwenden keine Werbe- oder Cross-Site-Tracking-Cookies.",
+                "sec5_title": "5. Datenspeicherung & deine Rechte",
+                "sec5_text": "Wir bewahren deine Daten auf, solange dein Konto aktiv ist. Du kannst jederzeit eine Kopie deiner Daten anfordern oder uns bitten, dein Konto und die damit verbundenen Daten per E-Mail zu löschen. Durch das Löschen deines Kontos werden dein Profil, deine Aufgaben und dein Fokusverlauf gelöscht.",
                 "sec6_title": "6. Sicherheit",
-                "sec6_text": "Wir schützen Ihre Daten mit branchenüblichen Maßnahmen, einschließlich Zeilenebenensicherheit in unserer Datenbank, verschlüsselten Verbindungen (HTTPS) und strengen Zugriffskontrollen. Kein System ist vollkommen sicher, aber wir arbeiten daran, Ihre Informationen zu schützen.",
+                "sec6_text": "Wir schützen deine Daten mit branchenüblichen Maßnahmen, einschließlich Zeilenebenensicherheit in unserer Datenbank, verschlüsselten Verbindungen (HTTPS) und strengen Zugriffskontrollen. Kein System ist vollkommen sicher, aber wir arbeiten daran, deine Informationen zu schützen.",
                 "sec7_title": "7. Internationale Nutzer",
-                "sec7_text": "Flow wird von Indonesien aus betrieben und nutzt Dienstleister, die Daten in anderen Ländern verarbeiten können. Durch die Nutzung von Flow stimmen Sie dieser Übertragung und Verarbeitung zu.",
+                "sec7_text": "Flow wird von Indonesien aus betrieben und nutzt Dienstleister, die Daten in anderen Ländern verarbeiten können. Durch die Nutzung von Flow stimmst du dieser Übertragung und Verarbeitung zu.",
                 "sec8_title": "8. Änderungen",
-                "sec8_text": "Wir können diese Richtlinie aktualisieren; das Datum der \"letzten Aktualisierung\" oben spiegelt die neueste Version wider. Bei Fragen oder Datenanfragen wenden Sie sich an founder@virzyguns.com."
+                "sec8_text": "Wir können diese Richtlinie aktualisieren; das Datum der \"letzten Aktualisierung\" oben spiegelt die neueste Version wider. Bei Fragen oder Datenanfragen wende dich an founder@virzyguns.com."
           },
           "cookies": {
                 "title": "Cookie-Richtlinie",
                 "updated": "6. Juli 2026",
-                "intro": "Flow (\"Flow\", \"wir\", \"uns\") verwendet Cookies und den lokalen Speicher des Browsers, um unsere Dienste bereitzustellen, zu sichern und zu verbessern. Diese Cookie-Richtlinie erklärt, was diese Technologien sind, wie wir sie verwenden und welche Wahlmöglichkeiten Sie haben.",
+                "intro": "Flow (\"Flow\", \"wir\", \"uns\") verwendet Cookies und den lokalen Speicher des Browsers, um unsere Dienste bereitzustellen, zu sichern und zu verbessern. Diese Cookie-Richtlinie erklärt, was diese Technologien sind, wie wir sie verwenden und welche Wahlmöglichkeiten du hast.",
                 "sec1_title": "1. Was sind Cookies & lokaler Speicher?",
-                "sec1_text": "Cookies are small text files. Cookies sind kleine Textdateien, die von Ihrem Browser gespeichert werden, wenn Sie eine Website besuchen. Lokaler Speicher ist eine ähnliche Webtechnologie, mit der wir Präferenzen und Einstellungen direkt in Ihrem Browser speichern können. Beide ermöglichen es uns, uns an Ihren Status und Ihre Präferenzen über Seitenaufrufe und Sitzungen hinweg zu erinnern.",
+                "sec1_text": "Cookies sind kleine Textdateien, die von deinem Browser gespeichert werden, wenn du eine Website besuchst. Lokaler Speicher ist eine ähnliche Webtechnologie, mit der wir Präferenzen und Einstellungen direkt in deinem Browser speichern können. Beide ermöglichen es uns, uns an deinen Status und deine Präferenzen über Seitenaufrufe und Sitzungen hinweg zu erinnern.",
                 "sec2_title": "2. Arten von Cookies, die wir verwenden",
-                "sec2_text": "Wir verwenden nur essenzielle Cookies und lokalen Speicher. Wir verwenden keine Cookies von Drittanbietern für Analysen, Marketing oder Werbung.\n- Authentifizierung (Supabase): Wir verwenden essenzielle Cookies, um Ihre Identität zu überprüfen und Sie sicher in Ihrem Konto angemeldet zu halten. Ohne diese Cookies müssten Sie sich jedes Mal neu anmelden, wenn Sie zwischen den Seiten navigieren.\n- Benutzerpräferenzen (lokaler Speicher): Wir verwenden den lokalen Speicher des Browsers, um uns an Ihre individuellen Präferenzen zu erinnern, z. B. an die aktuelle Lautstärke des Umgebungsgeräusch-Mixers, die aktive Hintergrundszene und die Fokus-Timer-Einstellungen.",
+                "sec2_text": "Wir verwenden nur essenzielle Cookies und lokalen Speicher. Wir verwenden keine Cookies von Drittanbietern für Analysen, Marketing oder Werbung.\n- Authentifizierung (Supabase): Wir verwenden essenzielle Cookies, um deine Identität zu überprüfen und dich sicher in deinem Konto angemeldet zu halten. Ohne diese Cookies müsstest du dich jedes Mal neu anmelden, wenn du zwischen den Seiten navigierst.\n- Benutzerpräferenzen (lokaler Speicher): Wir verwenden den lokalen Speicher des Browsers, um uns an deine individuellen Präferenzen zu erinnern, z. B. an die aktuelle Lautstärke des Umgebungsgeräusch-Mixers, die aktive Hintergrundszene und die Fokus-Timer-Einstellungen.",
                 "sec3_title": "3. Cookies von Drittanbietern",
-                "sec3_text": "Da wir Abonnements und Zahlungen über Lemon Squeezy, Inc. abwickeln, können diese beim Bezahlen essenzielle Cookies platzieren, um die Zahlungssicherheit und Betrugsprävention zu erleichtern. Bitte lesen Sie die Datenschutz- und Cookie-Richtlinien von Lemon Squeezy für Details.",
-                "sec4_title": "4. Verwalten Ihrer Einstellungen",
-                "sec4_text": "Die meisten Webbrowser ermöglichen es Ihnen, Cookies über ihre Einstellungen zu steuern. Sie können Cookies jederzeit blockieren, deaktivieren oder löschen. Bitte beachten Sie jedoch, dass das Blockieren essenzieller Cookies die Anmeldung oder den Zugriff auf Ihre personalisierten Fokusdaten unmöglich macht.",
-                "sec5_title": "5. Kontaktieren Sie uns",
-                "sec5_text": "Wenn Sie Fragen zu unserer Verwendung von Cookies oder lokalem Speicher haben, wenden Sie sich bitte an uns unter founder@virzyguns.com."
+                "sec3_text": "Da wir Abonnements und Zahlungen über Lemon Squeezy, Inc. abwickeln, können diese beim Bezahlen essenzielle Cookies platzieren, um die Zahlungssicherheit und Betrugsprävention zu erleichtern. Bitte lies die Datenschutz- und Cookie-Richtlinien von Lemon Squeezy für Details.",
+                "sec4_title": "4. Verwalten deiner Einstellungen",
+                "sec4_text": "Die meisten Webbrowser ermöglichen es dir, Cookies über ihre Einstellungen zu steuern. Du kannst Cookies jederzeit blockieren, deaktivieren oder löschen. Bitte beachte jedoch, dass das Blockieren essenzieller Cookies die Anmeldung oder den Zugriff auf deine personalisierten Fokusdaten unmöglich macht.",
+                "sec5_title": "5. Kontaktiere uns",
+                "sec5_text": "Wenn du Fragen zu unserer Verwendung von Cookies oder lokalem Speicher hast, wende dich bitte an uns unter founder@virzyguns.com."
           },
           "last_updated": "Zuletzt aktualisiert",
-          "questions_contact": "Fragen? Kontaktieren Sie uns."
+          "questions_contact": "Fragen? Kontaktiere uns."
     },
     landing: { demo: { caption: "Sieh den Fokusraum in Aktion", context: "Interaktive Produktvorschau", open: "Demo öffnen" } },
     metadata: {
@@ -1855,10 +2043,13 @@ export const dictionaries = {
       tasks: {
         title: "Aufgaben",
         placeholder: "Aufgabe hinzufügen...",
-        empty: "Noch keine Aufgaben vorhanden. Erstellen Sie oben eine, um zu beginnen.",
+        empty: "Noch keine Aufgaben vorhanden. Erstelle oben eine, um zu beginnen.",
         estimate: "Schätzung",
-        complete: "Erledigen",
+        complete: "Erledigt",
       },
+      blockToday: "Fokusblock heute",
+      blocksToday: "Fokusblöcke heute",
+      minutesToday: "Min. Deep Work heute",
       mixer: {
         title: "Umgebungs-Mixer",
         volume: "Lautstärke",
@@ -1885,6 +2076,15 @@ export const dictionaries = {
         play: "Spielen",
         pause: "Pause",
         sound: "Ton",
+        soundtrack: "Soundtrack",
+        changeSound: "Sound wechseln",
+        nowPlaying: "Läuft gerade",
+        crossfade: "Crossfade",
+        off: "Aus",
+        noTracks: "Keine Titel gefunden",
+        collapse: "Player einklappen",
+        fullscreen: "Vollbild",
+        toggleFullscreen: "Vollbild umschalten",
       },
       themes: {
         title: "Themen",
@@ -1896,6 +2096,7 @@ export const dictionaries = {
         sunset: "Sonnenuntergang",
         upgradeToUnlockTheme: "Dieses Thema ist nur für Pro. Zu Pro wechseln, um alle Themes zu bekommen?",
       },
+      login: { title: "Bei Flow anmelden" },
     },
     login: {
       title: "FLOW",
@@ -1907,11 +2108,11 @@ export const dictionaries = {
       agree: "Mit dem Fortfahren stimmst du unseren",
       and: "und",
       error: {
-        authFailed: "Authentifizierung fehlgeschlagen. Bitte versuchen Sie erneut, sich anzumelden.",
-        unconfigured: "Authentifizierung noch nicht konfiguriert — legen Sie Supabase-Umgebungsvariablen fest, um die Anmeldung zu aktivieren.",
+        authFailed: "Authentifizierung fehlgeschlagen. Bitte versuche erneut, dich anzumelden.",
+        unconfigured: "Authentifizierung noch nicht konfiguriert — leg die Supabase-Umgebungsvariablen fest, um die Anmeldung zu aktivieren.",
       },
       status: {
-        sent: "Überprüfen Sie Ihren Posteingang auf einen Anmeldelink.",
+        sent: "Überprüfe deinen Posteingang auf einen Anmeldelink.",
       },
     },
     guestGate: {
@@ -1931,26 +2132,27 @@ export const dictionaries = {
         sounds: "Zusätzliche Umgebungsgeräusche — Feuer & Regen, Fluss, Wasserfall, Stadt, Vinyl",
         scenes: "Alle visuellen Szenen und Themes",
         music: "Jeden Monat neue Original-Musik",
-        support: "Direkte Unterstützung für einen unabhängigen Produzenten"
+        support: "Jeder Track hier stammt von einem Produzenten — Pro sorgt dafür, dass der Katalog weiterwächst",
+        library: "Die komplette Bibliothek — alle 295 Original-Tracks, einschließlich der 170 nur für Pro"
       },
       upgradeToUnlockTrack: "Dieser Track ist nur für Pro. Zu Pro wechseln, um die komplette Bibliothek zu hören?",
       upgradeToUnlock: "Dieser Sound ist nur für Pro. Zu Pro wechseln, um die komplette Bibliothek zu hören?",
-      saveYearly: "Sparen Sie 50% gegenüber der monatlichen Zahlung",
-      supportUnlocks: "Ihre Unterstützung gibt Ihnen",
+      saveYearly: "Spare 50 % gegenüber der monatlichen Zahlung",
+      supportUnlocks: "Pro gibt dir",
       fixed: {
         tagline: "Flow Pro",
         title: "Tarif wählen",
-        description: "Voller Zugriff auf alle Umgebungsgeräusche und visuellen Szenen, dazu jeden Monat neue Original-Musik.",
+        description: "Voller Zugriff auf alle 295 Original-Tracks, jedes Umgebungsgeräusch und jede visuelle Szene — dazu jeden Monat neue Musik.",
       },
       invalidPromo: "Dieser Promo-Code ist ungültig",
       promoApplied: "Promo-Code angewendet — 50% Rabatt",
-      promoCode: "Haben Sie einen Promo-Code?",
+      promoCode: "Hast du einen Promo-Code?",
       promoPlaceholder: "Promo-Code eingeben",
       error: {
-        generic: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-        rateLimit: "Zu viele Bezahlversuche. Bitte versuchen Sie es in einer Minute erneut.",
-        failed: "Kasse fehlgeschlagen. Bitte versuchen Sie es bald erneut.",
-        unavailable: "Kasse noch nicht verfügbar — versuchen Sie es bald erneut.",
+        generic: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+        rateLimit: "Zu viele Bezahlversuche. Bitte versuche es in einer Minute erneut.",
+        failed: "Kasse fehlgeschlagen. Bitte versuche es bald erneut.",
+        unavailable: "Kasse noch nicht verfügbar — versuch es bald erneut.",
       },
     },
     insights: {
@@ -1959,7 +2161,7 @@ export const dictionaries = {
       loading: "Analysen werden geladen...",
       empty: {
         title: "Keine Fokus-Sitzungen protokolliert",
-        subtitle: "Schließen Sie Fokus-Sitzungen mit dem Pomodoro-Timer ab, um Ihre Ablenkungs-Audits und Analysen der echten Fokus-Rate zu verfolgen."
+        subtitle: "Schließe Fokus-Sitzungen mit dem Pomodoro-Timer ab, um deine Ablenkungs-Audits und Analysen der echten Fokus-Rate zu verfolgen."
       },
       metrics: {
         sessions: {
@@ -2008,24 +2210,24 @@ export const dictionaries = {
       },
       glossary: {
         title: "Fokus-Wissenschaft Glossar",
-        subtitle: "Erfahren Sie, wie Ihr Gehirn mit Arbeitsplatzreibung und Aufmerksamkeitsdrift umgeht.",
+        subtitle: "Erfahre, wie dein Gehirn mit Arbeitsplatzreibung und Aufmerksamkeitsdrift umgeht.",
         ratio: {
           tab: "Rate",
           title: "Echte Fokus-Rate (%)",
-          desc1: "verfolgt die Reinheit Ihres Flow-Zustands. Anstatt die allgemeine verstrichene Zeit zu messen, ziehen wir die genauen Sekunden ab, in denen Sie wegschauen oder das Browserfenster unscharf machen (Ablenkungszeit).",
+          desc1: "verfolgt die Reinheit deines Flow-Zustands. Anstatt die allgemeine verstrichene Zeit zu messen, ziehen wir die genauen Sekunden ab, in denen du wegschaust oder das Browserfenster unscharf machst (Ablenkungszeit).",
           formula: "Formel: ((Tatsächliche Sitzungsdauer - Ablenkungssekunden) / Tatsächliche Sitzungsdauer) * 100"
         },
         fidgeting: {
           tab: "Unruhe",
           title: "Unruhe-Audit",
           desc1: "misst physische Mikroeinstellungen (Einstellen der Lautstärke, Ändern von Umgebungsgeräuschen oder Wechseln des Hintergrundbilds) während der ersten 10 Minuten.",
-          desc2: "Häufige Anpassungen deuten auf eine hohe Reibung am Arbeitsplatz hin. Richten Sie Ihre Audio-Voreinstellungen und Hintergrundbilder ein, bevor Sie den Timer starten, um Konzentrationsbrüche zu vermeiden."
+          desc2: "Häufige Anpassungen deuten meist darauf hin, dass das Setup noch nicht bereit war. Richte Audio und Szene ein, bevor du den Timer startest — dann kommst du schneller rein."
         },
         residue: {
           tab: "Rückstand",
           title: "Aufmerksamkeitsrückstand",
-          desc1: "tritt auf, wenn Ihr Gehirn nach dem Wechseln von Tabs oder dem Überprüfen von Nachrichten an einer vorherigen Aufgabe hängen bleibt.",
-          desc2: "Selbst ein schneller Kontextwechsel von 5 Sekunden führt zu kognitiver Verschmutzung, die Ihre nachfolgende Deep-Work-Kapazität für bis zu 20 Minuten beeinträchtigt. Halten Sie dieses Fenster aktiv, um den Flow zu schützen."
+          desc1: "ist das, was übrig bleibt, wenn du die Aufgabe wechselst — ein Teil deines Kopfs bleibt noch eine Weile bei der letzten Sache, auch wenn du längst weiter bist.",
+          desc2: "Ein kurzer Blick auf Nachrichten mitten im Block hinterlässt schon etwas davon. Je weniger du wechselst, während der Timer läuft, desto weniger wird deine Aufmerksamkeit gesplittet."
         }
       },
       history: {
@@ -2036,7 +2238,7 @@ export const dictionaries = {
         durationAndFidgets: "Dauer {duration} Min. • {fidgets} Anpassungen",
         workingOn: "Arbeitet an:",
         rating: "Fokus-Rate",
-        confirmDelete: "Sind Sie sicher, dass Sie diese Fokus-Sitzung dauerhaft aus Ihrem Verlauf löschen möchten?",
+        confirmDelete: "Willst du diese Fokus-Sitzung wirklich dauerhaft aus deinem Verlauf löschen?",
         deleteError: "Beim Löschen der Sitzung ist ein Fehler aufgetreten.",
         loadingDate: "Datum wird geladen...",
       },
@@ -2050,31 +2252,64 @@ export const dictionaries = {
         fidgets: "Anpassungen:",
         mins: "Min.",
         times: "Mal",
-        noSessions: "Noch keine Sitzungen {period} — starten Sie einen Fokus-Block, um sie hier anzuzeigen.",
+        noSessions: "Noch keine Sitzungen {period} — starte einen Fokus-Block, damit sie hier erscheinen.",
         oneSession: "Bisher eine Sitzung {period} — eine weitere und die Trendlinie erscheint.",
         session: "Sitzung",
       },
       message: {
-        noSessions: "Schließen Sie eine Fokus-Sitzung ab, um Analysen zu generieren.",
-        solid: "Ihr Fokus ist stark. Machen Sie weiter so.",
-        lowRatio: "Ihre echte Fokus-Rate liegt unter 60%. Versuchen Sie, den Autopilot-Modus zu verwenden, um Ablenkungen zu sperren.",
-        fidgetAlert: "Sie nehmen in den ersten 10 Minuten durchschnittlich {count} Anpassungen vor. Richten Sie alles vor dem Start ein.",
-        peakFocus: "Ihre höchste Fokus-Rate liegt bei {ratio}% gegen {time}. Schützen Sie dieses Zeitfenster.",
-        highRatio: "Sie halten konsequent eine sehr hohe Fokus-Rate aufrecht. Hervorragende Disziplin."
+        noSessions: "Schließe eine Fokus-Sitzung ab, damit Analysen entstehen.",
+        solid: "Dein Fokus ist stark. Mach weiter so.",
+        lowRatio: "Deine echte Fokus-Rate liegt unter 60%. Versuch, den Autopilot-Modus zu verwenden, um Ablenkungen zu sperren.",
+        fidgetAlert: "Du machst in den ersten 10 Minuten im Schnitt {count} Anpassungen. Richte alles vor dem Start ein.",
+        peakFocus: "Deine höchste Fokus-Rate liegt bei {ratio}% gegen {time}. Schütze dieses Zeitfenster.",
+        highRatio: "Du hältst konsequent eine sehr hohe Fokus-Rate aufrecht. Hervorragende Disziplin."
       },
       unconfigured: {
         title: "Datenbank nicht konfiguriert",
-        description: "Supabase ist in Ihren Umgebungsvariablen nicht konfiguriert. Fügen Sie NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY hinzu, um den servergespeicherten Fokus-Verlauf zu aktivieren."
+        description: "Supabase ist in deinen Umgebungsvariablen nicht konfiguriert. Füg NEXT_PUBLIC_SUPABASE_URL und NEXT_PUBLIC_SUPABASE_ANON_KEY hinzu, um den servergespeicherten Fokus-Verlauf zu aktivieren."
       },
       error: {
         title: "Analysen können nicht geladen werden",
-        description: "Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        description: "Bitte überprüfe deine Verbindung und versuch es erneut.",
         retry: "Verbindung erneut versuchen"
       },
       auth: {
         title: "Authentifizierung erforderlich",
-        description: "Um Ihre Fokus-Analysen zu verfolgen und Ihre Daten zu sichern, melden Sie sich bitte an oder erstellen Sie ein Konto.",
+        description: "Um deine Fokus-Analysen zu verfolgen und deine Daten zu sichern, melde dich bitte an oder erstelle ein Konto.",
         signIn: "Anmelden / Registrieren"
+      }
+    },
+    tour: {
+      badge: "Geführte Tour • Schritt {current} von {total}",
+      stepBadge: "Schritt {current} von {total}",
+      skip: "Überspringen",
+      start: "Tour starten →",
+      back: "← Zurück",
+      next: "Weiter →",
+      finish: "Tour beenden",
+      welcome: {
+        title: "Willkommen bei Flow",
+        desc: "Ein Timer, Musik, die Virzy Guns Production selbst produziert, ein Ambient-Mixer und eine Aufgabenliste. Das ist das komplette Setup — die Tour dauert etwa eine Minute."
+      },
+      timer: {
+        title: "1. Pomodoro-Timer",
+        desc: "Mitte des Bildschirms. Klick auf Starten oder drück SPACEBAR, um einen 25-Minuten-Fokusblock zu starten. Die Pills Pomodoro / Deep Work / 90-20 wechseln die Blocklänge."
+      },
+      music: {
+        title: "2. Soundtracks",
+        desc: "Wähl einen Track im Tab 'Musik-Player' — city pop, cyberpunk jazz, synthwave und lofi, alles selbst produziert. Tipp: [ und ] wechseln Tracks über die Tastatur."
+      },
+      ambient: {
+        title: "3. Ambient-Mixer",
+        desc: "Der Tab 'Umgebung', neben 'Musik-Player'. Schicht Regen, Café, Kamin, Meer und mehr übereinander — jeder Regler hat sein eigenes Level."
+      },
+      tasks: {
+        title: "4. Aufgaben-Checkliste",
+        desc: "Linke Seitenleiste. Füg Aufgaben hinzu, schätz Pomodoros, hak sie ab, während du arbeitest. Eine Aufgabe pro Block hält es übersichtlich. Drück T, um den Editor zu öffnen."
+      },
+      stats: {
+        title: "5. Fokus-Analysen",
+        desc: "Klick auf 'Analysen' in der Seitenleiste oder der unteren Leiste. Sessions, Streaks und eine Heatmap davon, wann du wirklich fokussiert bist."
       }
     }
   },
@@ -2267,6 +2502,9 @@ export const dictionaries = {
         estimate: "見積もり",
         complete: "完了",
       },
+      blockToday: "今日のフォーカスブロック",
+      blocksToday: "今日のフォーカスブロック",
+      minutesToday: "今日のディープワーク時間（分）",
       mixer: {
         title: "環境音ミキサー",
         volume: "音量",
@@ -2293,6 +2531,15 @@ export const dictionaries = {
         play: "再生",
         pause: "一時停止",
         sound: "音",
+        soundtrack: "サウンドトラック",
+        changeSound: "音を変更",
+        nowPlaying: "再生中",
+        crossfade: "クロスフェード",
+        off: "オフ",
+        noTracks: "曲が見つかりません",
+        collapse: "プレイヤーを閉じる",
+        fullscreen: "全画面表示",
+        toggleFullscreen: "全画面表示を切り替え",
       },
       themes: {
         title: "テーマ",
@@ -2304,6 +2551,7 @@ export const dictionaries = {
         sunset: "夕暮れ",
         upgradeToUnlockTheme: "このテーマはPro限定。すべてのテーマを使うにはProに登録する？",
       },
+      login: { title: "Flowにサインイン" },
     },
     login: {
       title: "FLOW",
@@ -2339,16 +2587,17 @@ export const dictionaries = {
         sounds: "追加のアンビエントサウンド — 焚き火と雨、川、滝、街、レコード",
         scenes: "すべてのビジュアルシーンとテーマ",
         music: "毎月追加される新しいオリジナル音楽",
-        support: "インディーの制作者を直接サポート"
+        support: "ここにある曲は全部一人の制作者による作品 — Proがカタログを増やし続ける原動力",
+        library: "ライブラリ全体 — オリジナル楽曲295曲、Pro限定の170曲を含む"
       },
       upgradeToUnlockTrack: "このトラックはPro限定。ライブラリすべてを聴くにはProに登録する？",
       upgradeToUnlock: "このサウンドはPro限定。ライブラリすべてを聴くにはProに登録する？",
       saveYearly: "月払いと比べて50%お得",
-      supportUnlocks: "サポートすると得られるもの",
+      supportUnlocks: "Proで得られるもの",
       fixed: {
         tagline: "Flow Pro",
         title: "プランを選択",
-        description: "すべてのアンビエントサウンドとビジュアルシーンにフルアクセス、さらに毎月新しいオリジナル音楽が追加される。",
+        description: "オリジナル楽曲295曲すべて、あらゆるアンビエントサウンドとビジュアルシーンにフルアクセス — 毎月新しい音楽も追加される。",
       },
       invalidPromo: "そのプロモコードは無効です",
       promoApplied: "プロモコードを適用 — 50%オフ",
@@ -2483,6 +2732,39 @@ export const dictionaries = {
         title: "認証が必要です",
         description: "集中の分析を記録しデータを安全に保存するために、ログインするかアカウントを作成してください。",
         signIn: "ログイン / 新規登録"
+      }
+    },
+    tour: {
+      badge: "ガイドツアー • ステップ{current}/{total}",
+      stepBadge: "ステップ{current}/{total}",
+      skip: "スキップ",
+      start: "ツアーを開始 →",
+      back: "← 戻る",
+      next: "次へ →",
+      finish: "ツアーを終了",
+      welcome: {
+        title: "Flowへようこそ",
+        desc: "タイマー、Virzy Guns Productionが自社制作した音楽、アンビエントミキサー、タスクリスト。これで全部です — ひと通り見るのに1分ほどかかります。"
+      },
+      timer: {
+        title: "1. ポモドーロタイマー",
+        desc: "画面中央にあります。スタートをクリックするか、SPACEBARを押すと25分のフォーカスブロックが始まります。Pomodoro / Deep Work / 90-20のピルでブロックの長さを切り替えられます。"
+      },
+      music: {
+        title: "2. サウンドトラック",
+        desc: "'音楽プレイヤー'タブでトラックを選ぶ — city pop、cyberpunk jazz、synthwave、lofiまで、すべて自社制作。ヒント: [ と ] でキーボードからトラックを切り替えられます。"
+      },
+      ambient: {
+        title: "3. アンビエントミキサー",
+        desc: "'音楽プレイヤー'の隣にある'環境音'タブ。雨、カフェ、暖炉、海などを重ねられます — スライダーごとに自分のレベルを設定できます。"
+      },
+      tasks: {
+        title: "4. タスクチェックリスト",
+        desc: "左サイドバー。タスクを追加し、ポモドーロ数を見積もり、進めながらチェックしていきます。1ブロックにつき1タスクにすると整理しやすいです。Tを押すとエディタが開きます。"
+      },
+      stats: {
+        title: "5. 集中分析",
+        desc: "サイドバーまたは下部バーの'分析'をクリック。セッション数、連続記録、実際に集中している時間帯のヒートマップが見られます。"
       }
     }
   },
@@ -2675,6 +2957,9 @@ export const dictionaries = {
         estimate: "예상 시간",
         complete: "완료",
       },
+      blockToday: "오늘의 포커스 블록",
+      blocksToday: "오늘의 포커스 블록",
+      minutesToday: "오늘의 딥 워크 분",
       mixer: {
         title: "환경음 믹서",
         volume: "볼륨",
@@ -2701,6 +2986,15 @@ export const dictionaries = {
         play: "재생",
         pause: "일시 중지",
         sound: "소리",
+        soundtrack: "사운드트랙",
+        changeSound: "사운드 변경",
+        nowPlaying: "재생 중",
+        crossfade: "크로스페이드",
+        off: "꺼짐",
+        noTracks: "트랙을 찾을 수 없음",
+        collapse: "플레이어 접기",
+        fullscreen: "전체 화면",
+        toggleFullscreen: "전체 화면 전환",
       },
       themes: {
         title: "테마",
@@ -2712,6 +3006,7 @@ export const dictionaries = {
         sunset: "노을빛",
         upgradeToUnlockTheme: "이 테마는 Pro 전용입니다. 모든 테마를 사용하려면 Pro로 전환할까요?",
       },
+      login: { title: "Flow에 로그인" },
     },
     login: {
       title: "FLOW",
@@ -2747,16 +3042,17 @@ export const dictionaries = {
         sounds: "추가 앰비언트 사운드 — 모닥불과 빗소리, 강, 폭포, 도시, 바이닐",
         scenes: "모든 비주얼 씬과 테마",
         music: "매달 추가되는 새로운 오리지널 음악",
-        support: "독립 제작자를 직접 후원"
+        support: "여기 있는 모든 트랙은 한 명의 제작자가 만듭니다 — Pro가 카탈로그를 계속 키웁니다",
+        library: "라이브러리 전체 — 오리지널 트랙 295개, Pro 전용 170개 포함"
       },
       upgradeToUnlockTrack: "이 트랙은 Pro 전용입니다. 전체 라이브러리를 들으려면 Pro로 전환할까요?",
       upgradeToUnlock: "이 사운드는 Pro 전용입니다. 전체 라이브러리를 들으려면 Pro로 전환할까요?",
       saveYearly: "월간 요금제 대비 50% 절약",
-      supportUnlocks: "후원하면 받는 것",
+      supportUnlocks: "Pro로 얻는 것",
       fixed: {
         tagline: "Flow Pro",
         title: "요금제 선택",
-        description: "모든 앰비언트 사운드와 비주얼 씬에 대한 전체 접근 권한, 그리고 매달 추가되는 새로운 오리지널 음악.",
+        description: "오리지널 트랙 295개 전체, 모든 앰비언트 사운드와 비주얼 씬에 대한 전체 접근 권한 — 매달 새로운 음악도 추가됩니다.",
       },
       invalidPromo: "유효하지 않은 프로모 코드입니다",
       promoApplied: "프로모 코드 적용됨 — 50% 할인",
@@ -2891,6 +3187,39 @@ export const dictionaries = {
         title: "인증이 필요합니다",
         description: "집중 분석을 기록하고 데이터를 안전하게 보관하기 위해 로그인하거나 계정을 생성해 주세요.",
         signIn: "로그인 / 회원가입"
+      }
+    },
+    tour: {
+      badge: "가이드 투어 • {current}/{total} 단계",
+      stepBadge: "{current}/{total} 단계",
+      skip: "건너뛰기",
+      start: "투어 시작 →",
+      back: "← 뒤로",
+      next: "다음 →",
+      finish: "투어 마치기",
+      welcome: {
+        title: "Flow에 오신 것을 환영합니다",
+        desc: "타이머, Virzy Guns Production이 직접 제작한 음악, 앰비언트 믹서, 할 일 목록. 구성은 이게 전부입니다 — 둘러보는 데 1분 정도 걸립니다."
+      },
+      timer: {
+        title: "1. 뽀모도로 타이머",
+        desc: "화면 중앙에 있습니다. 시작을 클릭하거나 SPACEBAR를 눌러 25분짜리 포커스 블록을 시작하세요. Pomodoro / Deep Work / 90-20 필로 블록 길이를 바꿀 수 있습니다."
+      },
+      music: {
+        title: "2. 사운드트랙",
+        desc: "'음악 플레이어' 탭에서 트랙을 골라보세요 — city pop, cyberpunk jazz, synthwave, lofi까지 전부 자체 제작입니다. 팁: [ 와 ] 키로 키보드에서 트랙을 바꿀 수 있어요."
+      },
+      ambient: {
+        title: "3. 앰비언트 믹서",
+        desc: "'음악 플레이어' 옆에 있는 '환경음' 탭입니다. 비, 카페, 벽난로, 바다 소리 등을 겹쳐보세요 — 슬라이더마다 자기만의 레벨을 가집니다."
+      },
+      tasks: {
+        title: "4. 작업 체크리스트",
+        desc: "왼쪽 사이드바입니다. 작업을 추가하고, 뽀모도로 수를 예상한 다음, 진행하면서 체크하세요. 블록당 작업 하나면 깔끔하게 유지됩니다. T를 누르면 편집기가 열립니다."
+      },
+      stats: {
+        title: "5. 집중 분석",
+        desc: "사이드바 또는 하단 바의 '통계'를 클릭하세요. 세션, 연속 기록, 실제로 집중한 시간대의 히트맵을 볼 수 있습니다."
       }
     }
   },
@@ -3083,6 +3412,9 @@ export const dictionaries = {
         estimate: "预估",
         complete: "完成",
       },
+      blockToday: "今天的专注区块",
+      blocksToday: "今天的专注区块",
+      minutesToday: "今天的深度工作分钟数",
       mixer: {
         title: "环境音混音器",
         volume: "音量",
@@ -3109,6 +3441,15 @@ export const dictionaries = {
         play: "播放",
         pause: "暂停",
         sound: "声音",
+        soundtrack: "原声音乐",
+        changeSound: "更换声音",
+        nowPlaying: "正在播放",
+        crossfade: "淡入淡出",
+        off: "关闭",
+        noTracks: "未找到曲目",
+        collapse: "收起播放器",
+        fullscreen: "全屏",
+        toggleFullscreen: "切换全屏",
       },
       themes: {
         title: "主题背景",
@@ -3120,6 +3461,7 @@ export const dictionaries = {
         sunset: "落日余晖",
         upgradeToUnlockTheme: "这个主题仅限 Pro。要升级到 Pro 获取所有主题吗？",
       },
+      login: { title: "登录 Flow" },
     },
     login: {
       title: "FLOW",
@@ -3155,16 +3497,17 @@ export const dictionaries = {
         sounds: "更多环境音 — 篝火与雨声、河流、瀑布、城市、黑胶",
         scenes: "所有视觉场景和主题",
         music: "每月新增原创音乐",
-        support: "直接支持独立制作人"
+        support: "这里的每首曲子都出自同一位制作人之手 — Pro 让曲库持续增长",
+        library: "完整曲库——全部 295 首原创曲目，包含 170 首 Pro 专属曲目"
       },
       upgradeToUnlockTrack: "这首曲目仅限 Pro。要升级到 Pro 收听完整曲库吗？",
       upgradeToUnlock: "这个音效仅限 Pro。要升级到 Pro 收听完整曲库吗？",
       saveYearly: "相比月付可节省50%",
-      supportUnlocks: "你的支持能获得",
+      supportUnlocks: "Pro 能带给你",
       fixed: {
         tagline: "Flow Pro",
         title: "选择方案",
-        description: "完整访问所有环境音和视觉场景，外加每月新增的原创音乐。",
+        description: "完整访问全部 295 首原创曲目、所有环境音和视觉场景 — 每月还有新音乐加入。",
       },
       invalidPromo: "该促销码无效",
       promoApplied: "促销码已应用 — 五折优惠",
@@ -3299,6 +3642,39 @@ export const dictionaries = {
         title: "需要身份验证",
         description: "要追踪您的专注分析并保护您的数据安全，请登录或创建账户。",
         signIn: "登录 / 注册"
+      }
+    },
+    tour: {
+      badge: "引导教程 • 第 {current}/{total} 步",
+      stepBadge: "第 {current}/{total} 步",
+      skip: "跳过",
+      start: "开始教程 →",
+      back: "← 上一步",
+      next: "下一步 →",
+      finish: "结束教程",
+      welcome: {
+        title: "欢迎使用 Flow",
+        desc: "一个计时器、Virzy Guns Production 自主制作的音乐、一个环境音混音器，还有一个任务列表。整个配置就是这些——大概花一分钟就能看完。"
+      },
+      timer: {
+        title: "1. 番茄钟计时器",
+        desc: "位于屏幕中央。点击开始或按 SPACEBAR 开始一个 25 分钟的专注区块。Pomodoro / Deep Work / 90-20 三个选项可以切换区块时长。"
+      },
+      music: {
+        title: "2. 原声音乐",
+        desc: "在'音乐播放器'标签页选一首曲子——city pop、cyberpunk jazz、synthwave 和 lofi，全部自主制作。小贴士: [ 和 ] 可以用键盘切换曲目。"
+      },
+      ambient: {
+        title: "3. 环境音混音器",
+        desc: "'音乐播放器'旁边的'环境'标签页。叠加雨声、咖啡馆、壁炉、海洋等声音——每个滑块都有自己的音量。"
+      },
+      tasks: {
+        title: "4. 任务清单",
+        desc: "左侧边栏。添加任务、预估番茄钟数量，边做边打勾。每个区块只安排一个任务能保持清爽。按 T 打开编辑器。"
+      },
+      stats: {
+        title: "5. 专注分析",
+        desc: "点击侧边栏或底部栏的'统计'。可以看到专注时段、连续记录，以及你实际专注时间的热力图。"
       }
     }
   },
@@ -3489,8 +3865,11 @@ export const dictionaries = {
         placeholder: "Adicionar tarefa...",
         empty: "Nenhuma tarefa ainda. Crie uma acima para começar a registrar.",
         estimate: "Estimativa",
-        complete: "Concluir",
+        complete: "Concluídas",
       },
+      blockToday: "bloco de foco hoje",
+      blocksToday: "blocos de foco hoje",
+      minutesToday: "min de trabalho profundo hoje",
       mixer: {
         title: "Misturador de ambiente",
         volume: "Volume",
@@ -3517,6 +3896,15 @@ export const dictionaries = {
         play: "Reproduzir",
         pause: "Pausar",
         sound: "Som",
+        soundtrack: "Trilha sonora",
+        changeSound: "Mudar som",
+        nowPlaying: "Tocando agora",
+        crossfade: "Crossfade",
+        off: "Desligado",
+        noTracks: "Nenhuma faixa encontrada",
+        collapse: "Recolher player",
+        fullscreen: "Tela cheia",
+        toggleFullscreen: "Alternar tela cheia",
       },
       themes: {
         title: "Temas",
@@ -3528,6 +3916,7 @@ export const dictionaries = {
         sunset: "Pôr do sol",
         upgradeToUnlockTheme: "Este tema é exclusivo do Pro. Migrar para o Pro para ter todos os temas?",
       },
+      login: { title: "Entrar no Flow" },
     },
     login: {
       title: "FLOW",
@@ -3563,16 +3952,17 @@ export const dictionaries = {
         sounds: "Sons de ambiente extras — fogueira e chuva, rio, cachoeira, cidade, vinil",
         scenes: "Todas as cenas visuais e temas",
         music: "Nova música original todo mês",
-        support: "Apoie diretamente um produtor independente"
+        support: "Cada faixa aqui é feita por um único produtor — o Pro mantém o catálogo crescendo",
+        library: "A biblioteca completa — as 295 faixas originais, incluindo as 170 exclusivas do Pro"
       },
       upgradeToUnlockTrack: "Esta faixa é exclusiva do Pro. Migrar para o Pro para ouvir a biblioteca completa?",
       upgradeToUnlock: "Este som é exclusivo do Pro. Migrar para o Pro para ouvir a biblioteca completa?",
       saveYearly: "Economize 50% em relação ao plano mensal",
-      supportUnlocks: "Seu apoio te dá",
+      supportUnlocks: "O Pro te dá",
       fixed: {
         tagline: "Flow Pro",
         title: "Escolha um plano",
-        description: "Acesso completo a todos os sons de ambiente e cenas visuais, mais música original nova todo mês.",
+        description: "Acesso completo às 295 faixas originais, todos os sons de ambiente e cenas visuais — com música nova todo mês.",
       },
       invalidPromo: "Esse código promocional não é válido",
       promoApplied: "Código promocional aplicado — 50% de desconto",
@@ -3707,6 +4097,39 @@ export const dictionaries = {
         title: "Autenticação Necessária",
         description: "Para rastrear suas análises de foco e proteger seus dados, faça login ou crie uma conta.",
         signIn: "Entrar / Cadastrar-se"
+      }
+    },
+    tour: {
+      badge: "Tour guiado • passo {current} de {total}",
+      stepBadge: "Passo {current} de {total}",
+      skip: "Pular",
+      start: "Iniciar tour →",
+      back: "← Voltar",
+      next: "Próximo →",
+      finish: "Concluir tour",
+      welcome: {
+        title: "Bem-vindo ao Flow",
+        desc: "Um timer, música produzida internamente pela Virzy Guns Production, um mixer ambiente e uma lista de tarefas. Essa é toda a configuração — o tour leva cerca de um minuto."
+      },
+      timer: {
+        title: "1. Timer Pomodoro",
+        desc: "Centro da tela. Clique em Iniciar ou pressione SPACEBAR para começar um bloco de foco de 25 minutos. Os botões Pomodoro / Deep Work / 90-20 trocam a duração do bloco."
+      },
+      music: {
+        title: "2. Trilhas sonoras",
+        desc: "Escolha uma faixa na aba 'Reprodutor de música' — city pop, cyberpunk jazz, synthwave e lofi, tudo produzido internamente. Dica: [ e ] trocam de faixa pelo teclado."
+      },
+      ambient: {
+        title: "3. Mixer Ambiente",
+        desc: "A aba 'Ambiente', ao lado de 'Reprodutor de música'. Combine chuva, café, lareira, oceano e mais — cada controle deslizante tem seu próprio nível."
+      },
+      tasks: {
+        title: "4. Lista de Tarefas",
+        desc: "Barra lateral esquerda. Adicione tarefas, estime pomodoros, marque-as conforme avança. Uma tarefa por bloco mantém tudo organizado. Pressione T para abrir o editor."
+      },
+      stats: {
+        title: "5. Análise de Foco",
+        desc: "Clique em 'Análise' na barra lateral ou na barra inferior. Sessões, sequências e um mapa de calor de quando você realmente foca."
       }
     }
   },
@@ -3897,8 +4320,11 @@ export const dictionaries = {
         placeholder: "Добавить задачу...",
         empty: "Задач пока нет. Добавьте задачу выше, чтобы начать отслеживание.",
         estimate: "Оценка",
-        complete: "Завершить",
+        complete: "Завершено",
       },
+      blockToday: "фокус-блок сегодня",
+      blocksToday: "фокус-блока сегодня",
+      minutesToday: "минут глубокой работы сегодня",
       mixer: {
         title: "Шумы и атмосфера",
         volume: "Громкость",
@@ -3925,6 +4351,15 @@ export const dictionaries = {
         play: "Воспроизвести",
         pause: "Пауза",
         sound: "Звук",
+        soundtrack: "Саундтрек",
+        changeSound: "Сменить звук",
+        nowPlaying: "Сейчас играет",
+        crossfade: "Кроссфейд",
+        off: "Выкл",
+        noTracks: "Треки не найдены",
+        collapse: "Свернуть плеер",
+        fullscreen: "Полноэкранный режим",
+        toggleFullscreen: "Переключить полноэкранный режим",
       },
       themes: {
         title: "Темы",
@@ -3936,6 +4371,7 @@ export const dictionaries = {
         sunset: "Закат солнца",
         upgradeToUnlockTheme: "Эта тема доступна только в Pro. Перейти на Pro, чтобы получить все темы?",
       },
+      login: { title: "Войти в Flow" },
     },
     login: {
       title: "FLOW",
@@ -3971,16 +4407,17 @@ export const dictionaries = {
         sounds: "Дополнительные фоновые звуки — костёр и дождь, река, водопад, город, винил",
         scenes: "Все визуальные сцены и темы",
         music: "Новая оригинальная музыка каждый месяц",
-        support: "Прямая поддержка независимого автора"
+        support: "Каждый трек здесь делает один автор — Pro помогает каталогу расти дальше",
+        library: "Полная библиотека — все 295 оригинальных треков, включая 170 доступных только в Pro"
       },
       upgradeToUnlockTrack: "Этот трек доступен только в Pro. Перейти на Pro, чтобы слушать всю библиотеку?",
       upgradeToUnlock: "Этот звук доступен только в Pro. Перейти на Pro, чтобы слушать всю библиотеку?",
       saveYearly: "Экономия 50% по сравнению с помесячной оплатой",
-      supportUnlocks: "Ваша поддержка даёт вам",
+      supportUnlocks: "Pro даёт вам",
       fixed: {
         tagline: "Flow Pro",
         title: "Выберите тариф",
-        description: "Полный доступ ко всем фоновым звукам и визуальным сценам, плюс новая оригинальная музыка каждый месяц.",
+        description: "Полный доступ ко всем 295 оригинальным трекам, всем фоновым звукам и визуальным сценам — плюс новая музыка каждый месяц.",
       },
       invalidPromo: "Этот промокод недействителен",
       promoApplied: "Промокод применён — скидка 50%",
@@ -4115,6 +4552,39 @@ export const dictionaries = {
         title: "Требуется авторизация",
         description: "Для отслеживания аналитики фокуса и защиты ваших данных, пожалуйста, войдите в систему или создайте учетную запись.",
         signIn: "Войти / Зарегистрироваться"
+      }
+    },
+    tour: {
+      badge: "Обзорный тур • шаг {current} из {total}",
+      stepBadge: "Шаг {current} из {total}",
+      skip: "Пропустить",
+      start: "Начать тур →",
+      back: "← Назад",
+      next: "Далее →",
+      finish: "Завершить тур",
+      welcome: {
+        title: "Добро пожаловать в Flow",
+        desc: "Таймер, музыка, созданная собственными силами Virzy Guns Production, микшер атмосферных звуков и список задач. Это весь набор — обзор займёт около минуты."
+      },
+      timer: {
+        title: "1. Таймер Помодоро",
+        desc: "В центре экрана. Нажмите Старт или клавишу SPACEBAR, чтобы начать 25-минутный фокус-блок. Кнопки Pomodoro / Deep Work / 90-20 переключают длительность блока."
+      },
+      music: {
+        title: "2. Саундтреки",
+        desc: "Выберите трек на вкладке 'Музыкальный плеер' — city pop, cyberpunk jazz, synthwave и lofi, всё создано собственными силами. Подсказка: [ и ] переключают треки с клавиатуры."
+      },
+      ambient: {
+        title: "3. Микшер атмосферы",
+        desc: "Вкладка 'Атмосфера', рядом с 'Музыкальный плеер'. Смешивайте дождь, кафе, камин, океан и другое — у каждого ползунка свой уровень."
+      },
+      tasks: {
+        title: "4. Список задач",
+        desc: "Левая боковая панель. Добавляйте задачи, оценивайте количество помодоро, отмечайте их по ходу дела. Одна задача на блок — и всё остаётся аккуратным. Нажмите T, чтобы открыть редактор."
+      },
+      stats: {
+        title: "5. Анализ фокуса",
+        desc: "Нажмите 'Аналитика' в боковой панели или нижней панели. Сессии, серии подряд и тепловая карта того, когда вы действительно фокусируетесь."
       }
     }
   },
@@ -4305,8 +4775,11 @@ export const dictionaries = {
         placeholder: "Aggiungi un'attività...",
         empty: "Nessuna attività presente. Creane una in alto per iniziare.",
         estimate: "Stima",
-        complete: "Completa",
+        complete: "Completato",
       },
+      blockToday: "blocco di concentrazione oggi",
+      blocksToday: "blocchi di concentrazione oggi",
+      minutesToday: "min di deep work oggi",
       mixer: {
         title: "Mixer ambientale",
         volume: "Volume",
@@ -4333,6 +4806,15 @@ export const dictionaries = {
         play: "Riproduci",
         pause: "Pausa",
         sound: "Suono",
+        soundtrack: "Colonna sonora",
+        changeSound: "Cambia suono",
+        nowPlaying: "In riproduzione",
+        crossfade: "Dissolvenza incrociata",
+        off: "Spento",
+        noTracks: "Nessuna traccia trovata",
+        collapse: "Comprimi player",
+        fullscreen: "Schermo intero",
+        toggleFullscreen: "Attiva/disattiva schermo intero",
       },
       themes: {
         title: "Temi",
@@ -4344,6 +4826,7 @@ export const dictionaries = {
         sunset: "Tramonto",
         upgradeToUnlockTheme: "Questo tema è riservato a Pro. Passare a Pro per avere tutti i temi?",
       },
+      login: { title: "Accedi a Flow" },
     },
     login: {
       title: "FLOW",
@@ -4379,16 +4862,17 @@ export const dictionaries = {
         sounds: "Suoni ambientali extra — fuoco e pioggia, fiume, cascata, città, vinile",
         scenes: "Tutte le scene visive e i temi",
         music: "Nuova musica originale ogni mese",
-        support: "Sostieni direttamente un produttore indipendente"
+        support: "Ogni traccia qui è opera di un solo produttore — Pro fa crescere il catalogo",
+        library: "L'intera libreria — tutte le 295 tracce originali, incluse le 170 esclusive di Pro"
       },
       upgradeToUnlockTrack: "Questa traccia è riservata a Pro. Passare a Pro per ascoltare tutta la libreria?",
       upgradeToUnlock: "Questo suono è riservato a Pro. Passare a Pro per ascoltare tutta la libreria?",
       saveYearly: "Risparmia il 50% rispetto al mensile",
-      supportUnlocks: "Il tuo supporto ti dà",
+      supportUnlocks: "Pro ti dà",
       fixed: {
         tagline: "Flow Pro",
         title: "Scegli un piano",
-        description: "Accesso completo a tutti i suoni ambientali e alle scene visive, più nuova musica originale ogni mese.",
+        description: "Accesso completo a tutte le 295 tracce originali, a ogni suono ambientale e scena visiva — con nuova musica ogni mese.",
       },
       invalidPromo: "Questo codice promozionale non è valido",
       promoApplied: "Codice promozionale applicato — 50% di sconto",
@@ -4523,6 +5007,39 @@ export const dictionaries = {
         title: "Autentica Richiesta",
         description: "Per tracciare le tue analisi di focus e proteggere i tuoi dati, accedi o crea un account.",
         signIn: "Accedi / Registrati"
+      }
+    },
+    tour: {
+      badge: "Tour guidato • passo {current} di {total}",
+      stepBadge: "Passo {current} di {total}",
+      skip: "Salta",
+      start: "Avvia il tour →",
+      back: "← Indietro",
+      next: "Avanti →",
+      finish: "Termina il tour",
+      welcome: {
+        title: "Benvenuto su Flow",
+        desc: "Un timer, musica prodotta internamente da Virzy Guns Production, un mixer ambientale e una lista di attività. Questa è tutta la configurazione — il giro dura circa un minuto."
+      },
+      timer: {
+        title: "1. Timer Pomodoro",
+        desc: "Al centro dello schermo. Clicca su Avvia o premi SPACEBAR per iniziare un blocco di concentrazione da 25 minuti. Le pillole Pomodoro / Deep Work / 90-20 cambiano la durata del blocco."
+      },
+      music: {
+        title: "2. Colonne sonore",
+        desc: "Scegli una traccia nella scheda 'Lettore musicale' — city pop, cyberpunk jazz, synthwave e lofi, tutto prodotto internamente. Suggerimento: [ e ] cambiano traccia da tastiera."
+      },
+      ambient: {
+        title: "3. Mixer Ambientale",
+        desc: "La scheda 'Ambientale', accanto a 'Lettore musicale'. Sovrapponi pioggia, caffè, camino, oceano e altro — ogni slider ha il proprio livello."
+      },
+      tasks: {
+        title: "4. Elenco Attività",
+        desc: "Barra laterale sinistra. Aggiungi attività, stima i pomodori, spuntale man mano. Un'attività per blocco mantiene tutto ordinato. Premi T per aprire l'editor."
+      },
+      stats: {
+        title: "5. Analisi di Focus",
+        desc: "Clicca su 'Analisi' nella barra laterale o in quella inferiore. Sessioni, serie consecutive e una heatmap di quando ti concentri davvero."
       }
     }
   }
