@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Sparkles, X } from "lucide-react";
 import { useGuestGateStore } from "@/lib/stores/guest-gate-store";
+import { useFocusSessionStore } from "@/lib/stores/focus-session-store";
 import { track } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -16,10 +17,15 @@ import { useTranslation } from "@/hooks/use-translation";
 export function GuestGate() {
   const { t } = useTranslation();
   const { open, close } = useGuestGateStore();
+  // The Friction Audit (SessionSummary) fires at the same break boundary. Hold
+  // this gate until that modal is dismissed so the user never faces two
+  // stacked dialogs; `open` stays true, so we appear right after.
+  const summaryShowing = useFocusSessionStore((s) => s.lastSummary !== null);
+  const visible = open && !summaryShowing;
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (!open) return;
+    if (!visible) return;
     const previous = document.activeElement as HTMLElement | null;
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") close(); };
     document.addEventListener("keydown", onKeyDown);
@@ -28,9 +34,9 @@ export function GuestGate() {
       document.removeEventListener("keydown", onKeyDown);
       previous?.focus();
     };
-  }, [open, close]);
+  }, [visible, close]);
 
-  if (!open) return null;
+  if (!visible) return null;
 
   return (
     <div
