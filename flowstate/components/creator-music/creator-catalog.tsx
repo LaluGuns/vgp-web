@@ -27,12 +27,24 @@ type Props = {
   title?: string;
 };
 
-function trackDownloadHref(id: string, licenseeName?: string) {
-  const base = `/api/license/download/${id.split("/").map(encodeURIComponent).join("/")}`;
+function trackPath(id: string) {
+  return id.split("/").map(encodeURIComponent).join("/");
+}
+
+function withLicenseeName(base: string, licenseeName?: string) {
   if (licenseeName && licenseeName.trim()) {
     return `${base}?licenseeName=${encodeURIComponent(licenseeName.trim())}`;
   }
   return base;
+}
+
+function trackDownloadHref(id: string, licenseeName?: string) {
+  return withLicenseeName(`/api/license/download/${trackPath(id)}`, licenseeName);
+}
+
+/** Resolves the certificate by track, so the client never needs a certificate id. */
+function certificateHref(id: string, licenseeName?: string) {
+  return withLicenseeName(`/api/license/certificate/track/${trackPath(id)}`, licenseeName);
 }
 
 function duration(seconds: number) {
@@ -48,7 +60,6 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [licenseeName, setLicenseeName] = useState("");
   const [copied, setCopied] = useState(false);
-  const [certMap, setCertMap] = useState<Record<string, string>>({});
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const requestRef = useRef(0);
 
@@ -240,7 +251,6 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
         <ul className="divide-y divide-white/[0.06]">
           {filtered.map((item) => {
             const isActive = activeTrackId === item.id;
-            const certId = certMap[item.id];
             return <li key={item.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3.5">
               <div className="min-w-0">
                 <p className={`truncate text-sm font-semibold ${isActive ? "text-[#00e5ff]" : "text-white"}`}>{item.title}</p>
@@ -255,15 +265,9 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
                     <a href={trackDownloadHref(item.id, licenseeName)} onClick={() => track("creator_track_downloaded", { track_id: item.id, genre: item.genre, locale })} title={isId ? "Download file MP3" : "Download MP3 track"} aria-label={`Download ${item.title} MP3`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
                       <Download className="h-3.5 w-3.5" />
                     </a>
-                    {certId ? (
-                      <a href={`/api/license/certificate/${certId}`} download title={isId ? "Download Sertifikat PDF" : "Download License PDF"} aria-label={`Download License PDF for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 text-[#00e5ff] transition-colors hover:bg-[#00e5ff]/20">
-                        <FileText className="h-3.5 w-3.5" />
-                      </a>
-                    ) : (
-                      <a href={trackDownloadHref(item.id, licenseeName)} title={isId ? "Download Sertifikat PDF & MP3" : "Download License PDF & MP3"} aria-label={`Download License PDF & MP3 for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
-                        <FileText className="h-3.5 w-3.5" />
-                      </a>
-                    )}
+                    <a href={certificateHref(item.id, licenseeName)} download title={isId ? "Download Sertifikat PDF" : "Download License PDF"} aria-label={`Download License PDF for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 text-[#00e5ff] transition-colors hover:bg-[#00e5ff]/20">
+                      <FileText className="h-3.5 w-3.5" />
+                    </a>
                   </>
                 ) : (
                   <button type="button" onClick={createGrant} aria-label={`Unlock a Flow Pro download for ${item.title}`} className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-white/70 transition-colors hover:border-[#00e5ff]/60 hover:text-[#00e5ff]">
