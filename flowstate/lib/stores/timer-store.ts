@@ -204,7 +204,41 @@ export const useTimerStore = create<TimerState>()(
       partialize: (state) => ({
         preset: state.preset,
         sessionsCompleted: state.sessionsCompleted,
+        status: state.status,
+        phase: state.phase,
+        secondsRemaining: state.secondsRemaining,
+        totalSeconds: state.totalSeconds,
+        currentSessionId: state.currentSessionId,
+        expectedEndTime: state.expectedEndTime,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (!state || state.status !== "running") return;
+        // A running phase survived a reload. expectedEndTime is absolute, so
+        // the countdown stays correct; if it already elapsed while the tab was
+        // gone, settle the phase without auto-starting the next one.
+        if (!state.expectedEndTime) {
+          useTimerStore.setState({ status: "paused" });
+          return;
+        }
+        const remaining = Math.ceil((state.expectedEndTime - Date.now()) / 1000);
+        if (remaining > 0) {
+          useTimerStore.setState({ secondsRemaining: remaining });
+          return;
+        }
+        const { phase, sessionsCompleted, preset } = state;
+        const wasWork = phase === "focus";
+        const newPhase = nextPhase(phase, sessionsCompleted, preset);
+        const total = getPhaseSeconds(preset, newPhase);
+        useTimerStore.setState({
+          phase: newPhase,
+          secondsRemaining: total,
+          totalSeconds: total,
+          sessionsCompleted: wasWork ? sessionsCompleted + 1 : sessionsCompleted,
+          status: "idle",
+          currentSessionId: null,
+          expectedEndTime: null,
+        });
+      },
     }
   )
 );

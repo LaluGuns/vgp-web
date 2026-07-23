@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { musicPlayer } from "@/lib/audio/hls-player";
 import { genrePlaylist } from "@/lib/catalog";
 import { useAppStore } from "@/lib/stores/app-store";
@@ -57,7 +58,9 @@ interface PlayerState {
   retryPlayback: () => void;
 }
 
-export const usePlayerStore = create<PlayerState>()((set, get) => ({
+export const usePlayerStore = create<PlayerState>()(
+  persist(
+    (set, get) => ({
   currentTrack: null,
   currentPlaylist: null,
   activeGenre: "Lofi Chill", // Default genre tab
@@ -206,4 +209,19 @@ export const usePlayerStore = create<PlayerState>()((set, get) => ({
     if (!get().currentTrack) return;
     set({ playbackError: false, isPlaying: true, retryToken: get().retryToken + 1 });
   },
-}));
+    }),
+    {
+      name: "flowstate-player",
+      // Listening preferences only — never the transport state. Persisting
+      // currentTrack/isPlaying would try to resume audio without a user
+      // gesture, which autoplay policy blocks.
+      partialize: (state) => ({
+        activeGenre: state.activeGenre,
+        volume: state.volume,
+        shuffle: state.shuffle,
+        repeat: state.repeat,
+        crossfadeDuration: state.crossfadeDuration,
+      }),
+    }
+  )
+);
