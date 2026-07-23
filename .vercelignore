@@ -3,31 +3,38 @@
 # The working tree carries private material that must never reach a deploy:
 # executed legal evidence, signatures, handoff bundles, audio masters.
 # Vercel does NOT read .gitignore, so untracked private files WOULD be
-# uploaded without this file. Keep it strict.
+# uploaded without this file.
+#
+# ⚠️ ANCHOR DIRECTORY PATTERNS WITH A LEADING SLASH.
+# These patterns use .gitignore semantics: `flowstate/` (no leading slash)
+# matches a directory named "flowstate" at ANY depth. That silently deleted
+# `app/api/founder/flowstate/route.ts` from the bundle and made the founder
+# dashboard's Flowstate panel return 404. Use `/flowstate/` to mean
+# "the flowstate directory at the repo root, and nothing else".
 
 # Legal evidence, executed contracts, intake material
-legal-intake/
+/legal-intake/
 **/output/legal-private/
-flowstate/scripts/legal/
 **/signatures/
 **/*signature*
 
-# Handoff bundles and prompt archives
-*.zip
-*HANDOFF*
-*ANTIGRAVITY*
-CHATGPT_HANDOFF_PROMPT.md
+# Handoff bundles and prompt archives (root level only)
+/*.zip
+/*HANDOFF*
+/*ANTIGRAVITY*
 
-# Local tooling / build caches
-.playwright-cli/
-**/.wrangler/
-.next/
+# The Flow app is a separate Vercel project (flowstate) with its own root
+# directory, and is already excluded from the root tsconfig. Anchored so it
+# cannot match app/api/founder/flowstate/ or any other nested path.
+/flowstate/
+
+# Scratch and working notes (root level only)
+/scratch/
+/.playwright-cli/
+
+# Build output and caches — these legitimately appear nested, so they stay
+# unanchored on purpose.
 node_modules/
-
-# The Flow app is a separate Vercel project (flowstate) with its own
-# root directory. It must not be bundled into a vgp-web deploy.
-flowstate/
-
-# Scratch and working notes
-scratch/
+.next/
+**/.wrangler/
 *.local
