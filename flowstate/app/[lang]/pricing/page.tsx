@@ -62,11 +62,13 @@ export default function PricingPage() {
     }
   }, [promoInput, regionalPricing?.invalidPromo, t]);
 
+  // Music first — the catalog is the product; ambient and themes follow.
   const perks = [
+    t("pricing.perks.library", "The full library — all 295 original tracks, including the 170 Pro-only ones"),
+    regionalPricing?.music ?? t("pricing.perks.music", "New original music added every month"),
     regionalPricing?.sounds ?? t("pricing.perks.sounds", "Extra ambient sounds — fire & rain, river, waterfall, city, vinyl"),
     regionalPricing?.scenes ?? t("pricing.perks.scenes", "Every visual scene and theme"),
-    regionalPricing?.music ?? t("pricing.perks.music", "New original music added every month"),
-    regionalPricing?.support ?? t("pricing.perks.support", "Directly support an independent producer"),
+    regionalPricing?.support ?? t("pricing.perks.support", "Every track here is made by one producer — Pro keeps the catalog growing"),
   ];
 
   async function handleCheckout() {
@@ -238,7 +240,7 @@ export default function PricingPage() {
             {/* Perks */}
             <div className="pt-2 space-y-2 border-t border-white/5">
               <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50 pt-3">
-                {regionalPricing?.supportUnlocks ?? t("pricing.supportUnlocks", "Your support gets you")}
+                {regionalPricing?.supportUnlocks ?? t("pricing.supportUnlocks", "Pro gets you")}
               </p>
               {perks.map((p) => (
                 <div key={p} className="flex items-start gap-2.5 text-xs text-muted-foreground/80">
@@ -249,9 +251,10 @@ export default function PricingPage() {
             </div>
 
             <p className="text-[10px] text-muted-foreground/50 text-center leading-relaxed">
-              {regionalPricing?.secure
+              {(regionalPricing?.secure
                 ?? SAFE_CHECKOUT_COPY[routeLocale]
-                ?? t("pricing.secure", "Secure checkout via Lemon Squeezy (Merchant of Record). The final amount, currency, and checkout terms appear before payment.")}
+                ?? t("pricing.secure", "Secure checkout via Lemon Squeezy (Merchant of Record). The final amount, currency, and checkout terms appear before payment.")
+              ).replace("{currency}", "USD")}
             </p>
 
             {/* Language Selector Dropdown */}
