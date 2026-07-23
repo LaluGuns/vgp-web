@@ -31,6 +31,15 @@ legal-intake/
 *SIGNATURE_TRANSPARENT*
 *SIGNATURE_PREVIEW*
 
+# Creator Licence build tooling — generates signed/executed artefacts locally.
+# Kept out of git for the same reason as legal-intake/ above.
+flowstate/scripts/legal/
+
+# Local tool caches
+.playwright-cli/
+.wrangler/
+**/.wrangler/
+
 # Editor/AI tool config
 .claude/
 .env*
