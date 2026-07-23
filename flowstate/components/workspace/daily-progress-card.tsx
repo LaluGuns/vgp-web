@@ -3,6 +3,8 @@
 import { useTranslation } from "@/hooks/use-translation";
 import { useTaskStore } from "@/lib/stores/task-store";
 import { useAppStore } from "@/lib/stores/app-store";
+import { useFocusSessionStore } from "@/lib/stores/focus-session-store";
+import { useTimerStore } from "@/lib/stores/timer-store";
 import { use3dTilt } from "@/hooks/use-3d-tilt";
 
 const SCENE_PROGRESS_THEMES: Record<
@@ -32,7 +34,23 @@ export function DailyProgressCard() {
   const doneCount = tasks.filter((t) => t.done).length;
   const totalEstimated = tasks.reduce((sum, t) => sum + t.pomodorosEstimated, 0);
   const totalDone = tasks.reduce((sum, t) => sum + t.pomodorosDone, 0);
-  const progress = tasks.length > 0 ? (doneCount / tasks.length) * 100 : 0;
+
+  // Without tasks the card used to sit at a permanent "0/0 · 0% achieved" —
+  // contradicting the session-complete modal. Fall back to the measured daily
+  // tally instead: real blocks finished today, ring filling one long-break
+  // cycle (e.g. 4 blocks) as a neutral reference, capped, never judged.
+  const todayDate = useFocusSessionStore((s) => s.todayDate);
+  const todayBlocks = useFocusSessionStore((s) => s.todayBlocks);
+  const todayMinutes = useFocusSessionStore((s) => s.todayMinutes);
+  const longBreakInterval = useTimerStore((s) => s.preset.longBreakInterval);
+  const isToday = todayDate === new Date().toDateString();
+  const blocksToday = isToday ? todayBlocks : 0;
+  const minutesToday = isToday ? todayMinutes : 0;
+
+  const hasTasks = tasks.length > 0;
+  const progress = hasTasks
+    ? (doneCount / tasks.length) * 100
+    : Math.min(blocksToday / Math.max(longBreakInterval, 1), 1) * 100;
 
   const progressRadius = 25;
   const progressCircumference = 2 * Math.PI * progressRadius;
@@ -45,24 +63,40 @@ export function DailyProgressCard() {
           {t("dashboard.dailyProgress", "Daily Progress")}
         </span>
         <h4 className="text-sm font-bold text-white/90 tracking-tight leading-tight">
-          {tasks.length > 0 ? (
+          {hasTasks ? (
             <>
               <span className="text-white font-bold">{doneCount}</span>
               <span className="text-white/30 mx-0.5">/</span>
               <span className="text-white/70">{tasks.length}</span> {t("dashboard.tasksCompleted", "tasks completed")}
+            </>
+          ) : blocksToday > 0 ? (
+            <>
+              <span className="text-white font-bold">{blocksToday}</span>{" "}
+              {blocksToday === 1
+                ? t("dashboard.blockToday", "focus block today")
+                : t("dashboard.blocksToday", "focus blocks today")}
             </>
           ) : (
             <span className="text-white/40 italic font-normal">{t("dashboard.noTasks", "No tasks active today")}</span>
           )}
         </h4>
         <div className="flex items-center gap-2 text-[10px] font-mono text-white/40 leading-none">
-          <span>
-            <span className="text-white/70 font-semibold">{totalDone}</span>
-            <span className="text-white/30 mx-0.5">/</span>
-            <span className="text-white/60">{totalEstimated}</span> {t("dashboard.sessions", "sessions")}
-          </span>
-          <span className="w-1.5 h-1.5 rounded-full bg-primary/20" />
-          <span className="text-primary font-bold tracking-tight">{progress.toFixed(0)}% {t("dashboard.achieved", "achieved")}</span>
+          {hasTasks ? (
+            <>
+              <span>
+                <span className="text-white/70 font-semibold">{totalDone}</span>
+                <span className="text-white/30 mx-0.5">/</span>
+                <span className="text-white/60">{totalEstimated}</span> {t("dashboard.sessions", "sessions")}
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+              <span className="text-primary font-bold tracking-tight">{progress.toFixed(0)}% {t("dashboard.achieved", "achieved")}</span>
+            </>
+          ) : (
+            <span>
+              <span className="text-white/70 font-semibold">{minutesToday}</span>{" "}
+              {t("dashboard.minutesToday", "min of deep work today")}
+            </span>
+          )}
         </div>
       </div>
 
@@ -144,9 +178,9 @@ export function DailyProgressCard() {
           )}
         </svg>
 
-        {/* Percentage label */}
+        {/* Center label: task % when tasks drive the ring, block count otherwise */}
         <span className="relative z-10 text-xs font-mono font-extrabold text-white tracking-tighter drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
-          {Math.round(progress)}%
+          {hasTasks ? `${Math.round(progress)}%` : blocksToday}
         </span>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { useTimerStore } from "./timer-store";
 
 export interface SessionSummary {
@@ -31,6 +32,13 @@ interface FocusSessionState {
   contextModalOpen: boolean;
   lastSummary: SessionSummary | null;
 
+  // measured-only daily tally (persisted): real focus blocks that produced a
+  // report today, and their summed minutes. Powers the Daily Progress widget
+  // for users without tasks. Rolls over by calendar date on read.
+  todayDate: string;
+  todayBlocks: number;
+  todayMinutes: number;
+
   beginSession: () => void;
   tickElapsed: () => void;
   pauseSession: () => void;
@@ -47,7 +55,13 @@ interface FocusSessionState {
 // Sessions shorter than this don't produce a report (avoids noise from quick stops).
 const MIN_REPORT_SECONDS = 60;
 
-export const useFocusSessionStore = create<FocusSessionState>()((set, get) => ({
+function localDateKey(): string {
+  return new Date().toDateString();
+}
+
+export const useFocusSessionStore = create<FocusSessionState>()(
+  persist(
+    (set, get) => ({
   startedAt: null,
   startedAtCalendar: null,
   elapsedSeconds: 0,
@@ -59,6 +73,9 @@ export const useFocusSessionStore = create<FocusSessionState>()((set, get) => ({
   autopilot: false,
   contextModalOpen: false,
   lastSummary: null,
+  todayDate: "",
+  todayBlocks: 0,
+  todayMinutes: 0,
 
   beginSession: () =>
     set({
@@ -162,9 +179,27 @@ export const useFocusSessionStore = create<FocusSessionState>()((set, get) => ({
       elapsedSeconds: elapsed,
       targetDurationSeconds,
     };
-    set({ ...cleared, lastSummary: summary });
+    const today = localDateKey();
+    const sameDay = s.todayDate === today;
+    set({
+      ...cleared,
+      lastSummary: summary,
+      todayDate: today,
+      todayBlocks: (sameDay ? s.todayBlocks : 0) + 1,
+      todayMinutes: (sameDay ? s.todayMinutes : 0) + summary.durationMinutes,
+    });
     return summary;
   },
 
   dismissSummary: () => set({ lastSummary: null }),
-}));
+    }),
+    {
+      name: "flowstate-focus-session",
+      partialize: (state) => ({
+        todayDate: state.todayDate,
+        todayBlocks: state.todayBlocks,
+        todayMinutes: state.todayMinutes,
+      }),
+    }
+  )
+);
