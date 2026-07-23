@@ -6,7 +6,6 @@ import { m } from 'framer-motion';
 import { BookOpen, Focus, Headphones, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SocialDock } from '@/components/SocialDock';
-import { OrganizationSchema } from '@/components/seo/OrganizationSchema';
 import {
     CinematicBackdrop,
     EcosystemCard,
@@ -32,7 +31,6 @@ export default function HomePage() {
     return (
         <PageTransition>
             <main className="editorial-shell relative min-h-screen overflow-hidden text-white">
-                <OrganizationSchema />
                 <SocialDock />
 
                 <section className="relative min-h-[680px] overflow-hidden px-4 pb-10 pt-28 sm:px-6 sm:pt-32 lg:min-h-[760px] lg:pb-12 lg:pt-32">

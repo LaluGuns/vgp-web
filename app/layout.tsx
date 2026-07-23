@@ -4,6 +4,7 @@ import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { AppFrame } from '@/components/AppFrame';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import { headers } from 'next/headers';
+import { founderSchema, organizationSchema, websiteSchema } from '@/lib/seo/structured-data';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -108,48 +109,23 @@ export default async function RootLayout({
 }) {
     const nonce = (await headers()).get('x-nonce') || undefined;
 
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        name: 'Virzy Guns Production',
-        url: 'https://www.virzyguns.com',
-        description: 'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
-        potentialAction: {
-            '@type': 'SearchAction',
-            target: 'https://www.virzyguns.com/search?q={search_term_string}',
-            'query-input': 'required name=search_term_string',
-        },
-    };
-
-    const organizationJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Virzy Guns Production',
-        url: 'https://www.virzyguns.com',
-        logo: 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png',
-        founder: {
-            '@type': 'Person',
-            name: 'Virzy Guns',
-            jobTitle: 'Top 10% songwriter and top 25% producer',
-        },
-        sameAs: [
-            'https://youtube.com/@virzyguns',
-            'https://instagram.com/virzyguns',
-        ],
-    };
-
     return (
         <html lang="en" className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
             <head>
                 <script
                     nonce={nonce}
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
                 />
                 <script
                     nonce={nonce}
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+                />
+                <script
+                    nonce={nonce}
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
                 />
             </head>
             <body className="bg-background text-white antialiased">
