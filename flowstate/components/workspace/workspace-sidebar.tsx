@@ -107,12 +107,14 @@ export function WorkspaceSidebar({ activeTourTarget }: { activeTourTarget: strin
           </select>
         </div>
 
-        <div className="flex items-center gap-2 px-4 pt-2 text-[9px] font-mono text-white/25">
-          <Link href="/legal/terms" className="hover:text-white/60 transition-colors">{t("dashboard.terms", "Terms")}</Link>
+        {/* white/50 keeps these de-emphasized while clearing ~4.5:1 on the dark
+            backdrop (white/25 measured 2.2:1); py-1 widens the tap area. */}
+        <div className="flex items-center gap-2 px-4 pt-2 text-[10px] font-mono text-white/50">
+          <Link href="/legal/terms" className="py-1 hover:text-white/80 transition-colors">{t("dashboard.terms", "Terms")}</Link>
           <span>·</span>
-          <Link href="/legal/privacy" className="hover:text-white/60 transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
+          <Link href="/legal/privacy" className="py-1 hover:text-white/80 transition-colors">{t("dashboard.privacy", "Privacy")}</Link>
           <span>·</span>
-          <Link href="/legal/refund" className="hover:text-white/60 transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
+          <Link href="/legal/refund" className="py-1 hover:text-white/80 transition-colors">{t("dashboard.refunds", "Refunds")}</Link>
         </div>
       </div>
     </nav>

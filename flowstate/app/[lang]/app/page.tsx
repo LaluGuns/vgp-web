@@ -46,6 +46,18 @@ export default function FlowstatePage() {
   const [mobileTab, setMobileTab] = useState<MobileTab>("focus");
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Below md the three columns become swipe panels hidden with opacity/transform,
+  // which leaves ~80 offscreen controls in the tab order. `inert` (per panel,
+  // only when actually hidden) removes them from focus and the a11y tree.
+  const [isMobileLayout, setIsMobileLayout] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const apply = () => setIsMobileLayout(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
   useEffect(() => {
     let completed = false;
     try {
@@ -166,6 +178,7 @@ export default function FlowstatePage() {
                 "md:translate-x-0 md:opacity-100 md:z-10 md:pointer-events-auto md:flex",
                 isTransitioning && "liquid-melting"
               )}
+              inert={isMobileLayout && mobileTab !== "tasks"}
               {...taskTilt}
             >
               <div
@@ -190,6 +203,7 @@ export default function FlowstatePage() {
                 "md:translate-x-0 md:opacity-100 md:z-10 md:pointer-events-auto md:flex",
                 isTransitioning && "liquid-melting"
               )}
+              inert={isMobileLayout && mobileTab !== "focus"}
             >
 
               {/* Daily Progress widget with 3D Tilt */}
@@ -224,6 +238,7 @@ export default function FlowstatePage() {
                 "md:translate-x-0 md:opacity-100 md:z-10 md:pointer-events-auto md:flex",
                 isTransitioning && "liquid-melting"
               )}
+              inert={isMobileLayout && mobileTab !== "atmosphere"}
             >
               <AtmospherePanel
                 activeTab={activeTab}

@@ -123,7 +123,7 @@ export function TaskList() {
           size="icon" 
           onClick={handleAdd} 
           aria-label="Add task"
-          className="h-8 w-8 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] hover:shadow-[0_0_10px_rgba(0,212,255,0.3)] transition-all duration-300 active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] hover:shadow-[0_0_10px_rgba(0,212,255,0.3)] transition-all duration-300 active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <Plus className="h-4 w-4" />
         </Button>
