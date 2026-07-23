@@ -286,7 +286,7 @@ export function MusicPlayer() {
                 )}
               </span>
               <span className="flex-1 text-xs truncate font-medium">{track.title}</span>
-              {track.isPremium && <Lock className="h-3 w-3 shrink-0 opacity-60" />}
+              {track.isPremium && !isPremium && <Lock className="h-3 w-3 shrink-0 opacity-60" />}
               <span className="text-[10px] tabular-nums shrink-0 font-mono opacity-65">
                 {formatTime(track.durationS)}
               </span>
