@@ -23,6 +23,16 @@ const BOOKMARKS = [
 ];
 
 // Deterministic PRNG so the demo looks the same on every reload.
+//
+// The seed is chosen, not arbitrary. Because generation walks back from "now",
+// the weekday/weekend pattern — and so the whole dataset — repeats on a 7-day
+// cycle, which means a seed reads the same way on a given weekday forever.
+// 1337 left today and yesterday empty on 24 of any 28 days, so the signed-out
+// teaser's headline stat sat at "Current streak 0 days" most of the time.
+// Scanning seeds against all seven phases, 9645 never drops below a 4-day
+// current streak (avg 8, shortest "longest" 7, >=153 sessions of history).
+const DEMO_SEED = 9645;
+
 function mulberry32(seed: number) {
   return () => {
     seed |= 0;
@@ -34,7 +44,7 @@ function mulberry32(seed: number) {
 }
 
 export function generateDemoSessions(days = 120): DbSession[] {
-  const rand = mulberry32(1337);
+  const rand = mulberry32(DEMO_SEED);
   const sessions: DbSession[] = [];
   const now = new Date();
 
