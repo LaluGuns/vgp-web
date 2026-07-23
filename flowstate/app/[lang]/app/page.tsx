@@ -54,8 +54,14 @@ export default function FlowstatePage() {
     const mq = window.matchMedia("(max-width: 767px)");
     const apply = () => setIsMobileLayout(mq.matches);
     apply();
+    // Both signals: emulated viewports (devtools, embedded panes) don't always
+    // fire matchMedia change events, but they do fire window resize.
     mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+    window.addEventListener("resize", apply);
+    return () => {
+      mq.removeEventListener("change", apply);
+      window.removeEventListener("resize", apply);
+    };
   }, []);
 
   useEffect(() => {
