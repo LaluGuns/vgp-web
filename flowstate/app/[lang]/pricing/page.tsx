@@ -143,7 +143,7 @@ export default function PricingPage() {
               </div>
               <h1 className="text-2xl font-bold text-white tracking-tight">{regionalPricing?.title ?? t("pricing.fixed.title", "Choose a plan")}</h1>
               <p className="text-xs text-muted-foreground/70 max-w-sm mx-auto leading-relaxed">
-                {regionalPricing?.description ?? t("pricing.fixed.description", "Full access to every ambient sound and visual scene, plus new original music added each month.")}
+                {regionalPricing?.description ?? t("pricing.fixed.description", "Full access to all 295 original tracks, every ambient sound and visual scene — with new music added each month.")}
               </p>
             </div>
 
