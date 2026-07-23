@@ -134,6 +134,7 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
     // Non-glass themes never boot the GL loop; when the user switches away
     // from glass this effect re-runs and the cleanup below tears the old
     // loop down (RAF cancelled, listeners removed, GL resources freed).
+    if (!isGlass) return;
     if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
@@ -412,14 +413,20 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
       intersectionObserver.disconnect();
       stopLoop();
 
-      // Cleanup WebGL resources
+      // Cleanup WebGL resources. Note: we deliberately do NOT force-lose the
+      // GL context here (no WEBGL_lose_context.loseContext()). The <canvas>
+      // element persists across theme switches (it's not unmounted), and a
+      // forced context loss is not auto-restored — the next switch back to
+      // "glass" would call canvas.getContext("webgl") again on that same
+      // dead context, silently fail to compile/link (COMPILE_STATUS false,
+      // info log null), and leave the canvas painting solid white at full
+      // opacity — the "UI goes blank white" bug. Deleting the buffer/program/
+      // shaders is sufficient cleanup; the context itself stays valid and
+      // cheap to sit idle until the loop restarts.
       gl.deleteBuffer(positionBuffer);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);
-      // Release the GPU context immediately (don't wait for GC) so switching
-      // to a non-glass theme leaves no live GL context behind.
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [mounted, isGlass, softwareRenderer]);
 
