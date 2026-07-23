@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/use-translation";
+import { track } from "@/lib/analytics";
 import type { AtmosphereTab } from "./atmosphere-panel";
 import type { MobileTab } from "./mobile-nav";
 
@@ -77,7 +78,12 @@ export function OnboardingTour({
 
   // The tour walks through the Ambient tab; when it ends (finish or skip),
   // put the workspace back where a fresh session starts: Music Player + Focus.
-  const endTour = () => {
+  const endTour = (outcome: "completed" | "skipped") => {
+    if (outcome === "completed") {
+      track("tour_completed", {});
+    } else if (tourStep !== null) {
+      track("tour_skipped", { step: tourStep });
+    }
     setTourStep(null);
     localStorage.setItem("flowstate_tour_completed", "true");
     setActiveTab("music");
@@ -230,7 +236,7 @@ export function OnboardingTour({
                   .replace("{total}", String(TOUR_STEPS.length))}
               </span>
               <button
-                onClick={endTour}
+                onClick={() => endTour("skipped")}
                 className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider uppercase"
               >
                 {t("tour.skip", "Skip")}
@@ -248,7 +254,10 @@ export function OnboardingTour({
 
             <div className="flex justify-end items-center pt-2">
               <button
-                onClick={() => setTourStep(1)}
+                onClick={() => {
+                  track("tour_started", {});
+                  setTourStep(1);
+                }}
                 className="px-6 py-2.5 text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-xl hover:bg-cyan-300 transition-all shadow-[0_0_15px_rgba(0,229,255,0.3)]"
               >
                 {t("tour.start", "Start tour →")}
@@ -285,7 +294,7 @@ export function OnboardingTour({
                 .replace("{total}", String(TOUR_STEPS.length))}
             </span>
             <button
-              onClick={endTour}
+              onClick={() => endTour("skipped")}
               className="text-white/45 hover:text-white text-xs font-mono font-bold tracking-wider uppercase"
             >
               {t("tour.skip", "Skip")}
@@ -314,7 +323,7 @@ export function OnboardingTour({
                 if (tourStep < TOUR_STEPS.length - 1) {
                   setTourStep(tourStep + 1);
                 } else {
-                  endTour();
+                  endTour("completed");
                 }
               }}
               className="px-4 py-2 text-[9px] font-mono font-bold uppercase tracking-widest text-black bg-[#00e5ff] rounded-lg hover:bg-cyan-300 transition-all shadow-[0_0_10px_rgba(0,229,255,0.25)]"

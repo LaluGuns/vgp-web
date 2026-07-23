@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { AlertTriangle, Key, Loader2 } from "lucide-react";
+import { track } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/use-translation";
 import { WebGLBackground } from "@/components/scenes/webgl-background";
 import { AmbientBackground } from "./ambient-background";
@@ -96,6 +97,9 @@ export function InsightsErrorScreen({ error, onRetry }: { error: string; onRetry
 export function InsightsSignInScreen() {
   const { t } = useTranslation();
   const demoSessions = useMemo(() => generateDemoSessions(90), []);
+  useEffect(() => {
+    track("insights_gate_shown", {});
+  }, []);
   return (
     <>
       <WebGLBackground />

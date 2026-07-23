@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { musicPlayer } from "@/lib/audio/hls-player";
 import { genrePlaylist } from "@/lib/catalog";
 import { useAppStore } from "@/lib/stores/app-store";
+import { track as trackEvent } from "@/lib/analytics";
 
 export interface Track {
   id: string;
@@ -78,6 +79,7 @@ export const usePlayerStore = create<PlayerState>()(
 
   play: (track, playlist) => {
     if (track.isPremium && !useAppStore.getState().isPremium) return;
+    trackEvent("track_played", { genre: track.genre, premium: track.isPremium });
     set({
       currentTrack: track,
       isPlaying: true,
@@ -184,6 +186,7 @@ export const usePlayerStore = create<PlayerState>()(
   // Select a genre AND start playing it (first track, or a random one when shuffle
   // is on). Used by the genre picker so choosing a genre plays immediately.
   playGenre: (genre) => {
+    trackEvent("genre_selected", { genre });
     const playlist = genrePlaylist(genre);
     const tracks = useAppStore.getState().isPremium
       ? playlist.tracks

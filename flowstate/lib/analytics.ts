@@ -23,6 +23,12 @@ export { classifyAcquisition } from "@/lib/analytics-acquisition";
  *   checkout_started     — checkout POST fired           { interval, promo }
  *   checkout_redirected  — reached Lemon Squeezy checkout { interval }
  *   theme_changed        — interface theme switched      { theme }
+ *   genre_selected       — soundtrack genre picked       { genre }
+ *   track_played         — track manually selected       { genre, premium }
+ *   tour_started         — guided tour begun             { }
+ *   tour_completed       — guided tour finished          { }
+ *   tour_skipped         — guided tour dismissed early   { step }
+ *   insights_gate_shown  — guest hit the insights gate   { }
  */
 
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY || "";
@@ -179,7 +185,13 @@ type EventName =
   | "creator_license_granted"
   | "creator_track_downloaded"
   | "license_attribution_copied"
-  | "spotify_catalog_clicked";
+  | "spotify_catalog_clicked"
+  | "genre_selected"
+  | "track_played"
+  | "tour_started"
+  | "tour_completed"
+  | "tour_skipped"
+  | "insights_gate_shown";
 
 export function track(event: EventName, props?: AnalyticsProperties): void {
   if (!initialized) return;
