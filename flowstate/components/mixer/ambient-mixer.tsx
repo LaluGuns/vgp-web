@@ -90,6 +90,8 @@ export function AmbientMixer() {
   const availableSounds = useMixerStore((s) => s.availableSounds);
   const setSounds = useMixerStore((s) => s.setSounds);
   const loadPreset = useMixerStore((s) => s.loadPreset);
+  const dropUnavailable = useMixerStore((s) => s.dropUnavailable);
+  const [failedSound, setFailedSound] = useState<string | null>(null);
 
   const isPremium = useAppStore((s) => s.isPremium);
   const showUpgrade = useUpgradePromptStore((s) => s.show);
@@ -153,6 +155,12 @@ export function AmbientMixer() {
             await ambientEngine.play(sound.id, refreshedUrl, channel.volume);
           } catch (err) {
             console.error("Failed to load ambient audio after signed-URL refresh:", err);
+            // A console line is invisible to the listener: the fader stayed lit
+            // while nothing played, which reads as the app being broken. Switch
+            // the channel off so the UI matches what is audible, and say so.
+            if (!activeChannelsRef.current.some((c) => c.id === sound.id)) return;
+            dropUnavailable(sound.id);
+            setFailedSound(sound.name);
           }
         })();
       } else if (ambientEngine.isPlaying(sound.id)) {
@@ -166,7 +174,7 @@ export function AmbientMixer() {
         }
       }
     };
-  }, [activeIdsString, isPremium, sounds]);
+  }, [activeIdsString, isPremium, sounds, dropUnavailable]);
 
   // Track previous volume settings to avoid redundant engine calls during slider updates
   const prevVolumesRef = useRef<Record<string, number>>({});
@@ -189,7 +197,25 @@ export function AmbientMixer() {
 
   return (
     <div className="space-y-6 select-none">
-      
+
+      {failedSound && (
+        <div
+          role="status"
+          className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/25 bg-amber-400/[0.07] px-4 py-3"
+        >
+          <p className="text-[11px] leading-snug text-amber-100/90">
+            {t("dashboard.mixer.loadFailed", "{sound} couldn't load, so it's switched off.").replace("{sound}", failedSound)}
+          </p>
+          <button
+            onClick={() => setFailedSound(null)}
+            aria-label={t("dashboard.mixer.dismiss", "Dismiss")}
+            className="shrink-0 rounded-lg px-2 py-1 text-[10px] font-mono uppercase tracking-wider text-amber-100/60 transition-colors hover:bg-white/[0.06] hover:text-amber-100"
+          >
+            {t("dashboard.mixer.dismiss", "Dismiss")}
+          </button>
+        </div>
+      )}
+
       {/* Master Volume Controls */}
       <div className="flex justify-between items-center bg-white/[0.02] p-4 border border-white/[0.04] rounded-2xl">
         <div className="space-y-0.5">

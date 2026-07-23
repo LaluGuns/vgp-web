@@ -34,6 +34,7 @@ function InterfaceStyleSelector() {
   const setScene = useAppStore((s) => s.setScene);
   const isPremium = useAppStore((s) => s.isPremium);
   const loadPreset = useMixerStore((s) => s.loadPreset);
+  const mixIsCustom = useMixerStore((s) => s.mixIsCustom);
   const showUpgrade = useUpgradePromptStore((s) => s.show);
 
   return (
@@ -59,7 +60,11 @@ function InterfaceStyleSelector() {
                 setTheme(th.id);
                 const bundle = ENVIRONMENT_BUNDLES[th.id];
                 setScene(bundle.scene);
-                loadPreset([...bundle.ambience]);
+                // Seed the bundled ambience only for a listener who has not
+                // built a mix. This control is labelled "Interface Style", so
+                // silently replacing a curated rain+cafe blend with the new
+                // theme's single track read as the app losing their settings.
+                if (!mixIsCustom) loadPreset([...bundle.ambience]);
                 recordFidget();
               }}
               className={cn(
