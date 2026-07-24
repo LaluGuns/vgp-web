@@ -13,13 +13,16 @@ import { trackBeatEvent } from '@/lib/analytics';
 
 interface BeatDetailClientProps {
     beat: BeatProduct;
+    locale?: 'en-US' | 'ja-JP' | 'de-DE';
 }
 
-export default function BeatDetailClient({ beat }: BeatDetailClientProps) {
+export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailClientProps) {
     const [selectedLicense, setSelectedLicense] = useState(beat.licenses[0] || beat.licenses[1]);
     const relatedBeats = getBeatsByCategory(beat.primaryGenre.toLowerCase().replace(/ /g, '-'))
         .filter((b) => b.id !== beat.id)
         .slice(0, 3);
+
+    const description = beat.description[locale] || beat.description['en-US'] || '';
 
     const handleCheckoutClick = (licenseName: string, price: string) => {
         trackBeatEvent('beatstars_checkout_click', {
@@ -32,25 +35,42 @@ export default function BeatDetailClient({ beat }: BeatDetailClientProps) {
         });
     };
 
+    const getLocalePath = (path: string) => {
+        if (locale === 'ja-JP') return `/ja-JP${path}`;
+        if (locale === 'de-DE') return `/de-DE${path}`;
+        return path;
+    };
+
+    const playerTitle = locale === 'ja-JP' ? '公式ビート試聴' : locale === 'de-DE' ? 'Offizieller Beat-Player' : 'Play This Beat';
+    const playerSub = locale === 'ja-JP' ? '公式BeatStarsプレイヤー' : locale === 'de-DE' ? 'Offizieller BeatStars Player' : 'Official Beat Preview';
+
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
-                {/* Breadcrumbs */}
-                <div className="mx-auto max-w-5xl px-6 mb-8">
+                {/* Language Selector & Breadcrumbs */}
+                <div className="mx-auto max-w-5xl px-6 mb-8 flex items-center justify-between">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                        <Link href="/" className="hover:text-white transition">Home</Link>
+                        <Link href={getLocalePath('/')} className="hover:text-white transition">Home</Link>
                         <span>/</span>
-                        <Link href="/studio/beats" className="hover:text-white transition">Beats</Link>
+                        <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">Beats</Link>
                         <span>/</span>
                         <span className="text-sky-200/80">{beat.title}</span>
                     </nav>
+
+                    <div className="flex items-center gap-2 text-xs text-white/50">
+                        <Link href={`/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'en-US' ? 'text-sky-200 font-bold' : ''}`}>EN</Link>
+                        <span>|</span>
+                        <Link href={`/ja-JP/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-sky-200 font-bold' : ''}`}>JA</Link>
+                        <span>|</span>
+                        <Link href={`/de-DE/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'de-DE' ? 'text-sky-200 font-bold' : ''}`}>DE</Link>
+                    </div>
                 </div>
 
                 {/* Hero Product Stage */}
                 <SectionShell id="beat-hero" className="py-6">
                     <div className="mx-auto max-w-5xl">
                         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-                            {/* Left: Cover Art & Integrated Player */}
+                            {/* Left: Cover Art & Integrated Track Player */}
                             <m.div
                                 className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-md space-y-5"
                                 variants={revealUp}
@@ -68,19 +88,29 @@ export default function BeatDetailClient({ beat }: BeatDetailClientProps) {
                                     />
                                 </div>
 
-                                {/* Embedded BeatStars Store Player */}
+                                {/* Official Track-Specific BeatStars Player Widget */}
                                 <div className="rounded-xl overflow-hidden border border-white/10 bg-black/60">
                                     <div className="border-b border-white/10 px-3 py-2 text-[11px] font-medium text-white/60 flex justify-between">
-                                        <span>Full BeatStars Catalog Player</span>
-                                        <span>Play & Select Beat</span>
+                                        <span>{playerTitle}</span>
+                                        <span>{playerSub}</span>
                                     </div>
-                                    <iframe
-                                        src="https://player.beatstars.com/?storeId=122437"
-                                        className="block h-[220px] w-full"
-                                        allow="autoplay; clipboard-write"
-                                        title={`Full BeatStars catalog player on ${beat.title} product page`}
-                                        loading="lazy"
-                                    />
+                                    {beat.beatstarsTrackId ? (
+                                        <iframe
+                                            src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                            className="block h-[140px] w-full border-none"
+                                            allow="autoplay; clipboard-write"
+                                            title={`${beat.title} official BeatStars player`}
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <iframe
+                                            src="https://player.beatstars.com/?storeId=122437"
+                                            className="block h-[220px] w-full border-none"
+                                            allow="autoplay; clipboard-write"
+                                            title={`${beat.title} full store player`}
+                                            loading="lazy"
+                                        />
+                                    )}
                                 </div>
 
                                 <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-white/50">
@@ -104,7 +134,7 @@ export default function BeatDetailClient({ beat }: BeatDetailClientProps) {
                                         {beat.title}
                                     </h1>
                                     <p className="mt-3 text-base leading-7 text-white/70">
-                                        {beat.description['en-US']}
+                                        {description}
                                     </p>
                                 </div>
 
@@ -219,7 +249,7 @@ export default function BeatDetailClient({ beat }: BeatDetailClientProps) {
                                 {relatedBeats.map((relBeat) => (
                                     <Link
                                         key={relBeat.id}
-                                        href={`/studio/beats/${relBeat.slug}`}
+                                        href={getLocalePath(`/studio/beats/${relBeat.slug}`)}
                                         className="group rounded-xl border border-white/10 bg-white/[0.02] p-4 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
                                     >
                                         <p className="text-xs text-sky-200/60 uppercase font-semibold">{relBeat.primaryGenre}</p>

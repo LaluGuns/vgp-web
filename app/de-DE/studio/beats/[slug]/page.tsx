@@ -12,9 +12,9 @@ import {
     generateCategorySchema,
     generateLicensingSchema,
 } from '@/lib/seo/beat-structured-data';
-import BeatDetailClient from '../components/BeatDetailClient';
-import CategoryClient from '../components/CategoryClient';
-import LicensingClient from '../components/LicensingClient';
+import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClient';
+import CategoryClient from '../../../../studio/beats/components/CategoryClient';
+import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -33,18 +33,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (slug === 'licensing') {
         return {
-            title: 'Beat Licensing Guide & Terms | Virzy Guns Production',
+            title: 'Beat Lizenzierungsleitfaden & Bedingungen | Virzy Guns Production',
             description:
-                'Official beat licensing options explained: MP3, WAV, Stems, Unlimited, and Exclusive rights by Virzy Guns.',
+                'Offizielle Beat-Lizenzoptionen erklärt: MP3, WAV, Einzelspuren (Stems), Unbegrenzte Nutzung und Exklusivrechte von Virzy Guns.',
             keywords: [
-                'beat licensing guide',
-                'exclusive beat rights',
-                'non exclusive beat lease',
+                'beat lizenzbedingungen',
+                'exklusive beat rechte',
+                'non exklusive beat lizenz',
                 'mp3 wav stems',
-                'spotify beat licensing',
+                'beat kaufen deutschland',
             ],
             alternates: {
-                canonical: `${SITE_URL}/studio/beats/licensing`,
+                canonical: `${SITE_URL}/de-DE/studio/beats/licensing`,
                 languages: {
                     'en-US': `${SITE_URL}/studio/beats/licensing`,
                     'ja-JP': `${SITE_URL}/ja-JP/studio/beats/licensing`,
@@ -58,17 +58,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const beat = getBeatBySlug(slug);
     if (beat) {
         return {
-            title: beat.localizedTitle?.['en-US'] || `${beat.title} | ${beat.primaryGenre} Beat`,
-            description: beat.description['en-US'] || '',
+            title: beat.localizedTitle?.['de-DE'] || `${beat.title} | ${beat.primaryGenre} Beat kaufen`,
+            description: beat.description['de-DE'] || beat.description['en-US'] || '',
             keywords: [
                 beat.title,
                 beat.primaryGenre,
                 ...beat.tags,
-                'buy beats online',
-                'Virzy Guns beats',
+                'beats kaufen',
+                'Virzy Guns',
             ],
             alternates: {
-                canonical: `${SITE_URL}/studio/beats/${beat.slug}`,
+                canonical: `${SITE_URL}/de-DE/studio/beats/${beat.slug}`,
                 languages: {
                     'en-US': `${SITE_URL}/studio/beats/${beat.slug}`,
                     'ja-JP': `${SITE_URL}/ja-JP/studio/beats/${beat.slug}`,
@@ -78,8 +78,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             },
             openGraph: {
                 title: beat.title,
-                description: beat.description['en-US'] || '',
-                url: `${SITE_URL}/studio/beats/${beat.slug}`,
+                description: beat.description['de-DE'] || beat.description['en-US'] || '',
+                url: `${SITE_URL}/de-DE/studio/beats/${beat.slug}`,
                 siteName: 'Virzy Guns Production',
                 images: [
                     {
@@ -97,11 +97,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const category = getCategoryBySlug(slug);
     if (category) {
         return {
-            title: category.localizedName['en-US'] || `${category.name} | Virzy Guns`,
-            description: category.shortDescription['en-US'] || '',
-            keywords: category.keywords['en-US'] || [],
+            title: category.localizedName['de-DE'] || `${category.name} | Virzy Guns`,
+            description: category.shortDescription['de-DE'] || category.shortDescription['en-US'] || '',
+            keywords: category.keywords['de-DE'] || [],
             alternates: {
-                canonical: `${SITE_URL}/studio/beats/${category.slug}`,
+                canonical: `${SITE_URL}/de-DE/studio/beats/${category.slug}`,
                 languages: {
                     'en-US': `${SITE_URL}/studio/beats/${category.slug}`,
                     'ja-JP': `${SITE_URL}/ja-JP/studio/beats/${category.slug}`,
@@ -115,7 +115,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
 }
 
-export default async function SlugPage({ params }: PageProps) {
+export default async function GermanSlugPage({ params }: PageProps) {
     const { slug } = await params;
 
     if (slug === 'licensing') {
@@ -126,7 +126,7 @@ export default async function SlugPage({ params }: PageProps) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
                 />
-                <LicensingClient locale="en-US" />
+                <LicensingClient locale="de-DE" />
             </>
         );
     }
@@ -140,7 +140,7 @@ export default async function SlugPage({ params }: PageProps) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
                 />
-                <BeatDetailClient beat={beat} locale="en-US" />
+                <BeatDetailClient beat={beat} locale="de-DE" />
             </>
         );
     }
@@ -155,7 +155,7 @@ export default async function SlugPage({ params }: PageProps) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
                 />
-                <CategoryClient category={category} beats={matchingBeats} locale="en-US" />
+                <CategoryClient category={category} beats={matchingBeats} locale="de-DE" />
             </>
         );
     }

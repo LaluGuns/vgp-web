@@ -14,6 +14,8 @@ export function validateCatalog(): ValidationIssue[] {
     const seenIds = new Set<string>();
 
     for (const beat of beatsCatalog) {
+        if (!beat) continue;
+
         // ID Uniqueness
         if (seenIds.has(beat.id)) {
             issues.push({ beatId: beat.id, field: 'id', issue: 'Duplicate beat ID', severity: 'error' });
@@ -87,6 +89,7 @@ export function validateCatalog(): ValidationIssue[] {
     // Validate Categories
     const categorySlugs = new Set<string>();
     for (const cat of categories) {
+        if (!cat) continue;
         if (categorySlugs.has(cat.slug)) {
             issues.push({ slug: cat.slug, field: 'category.slug', issue: 'Duplicate category slug', severity: 'error' });
         }

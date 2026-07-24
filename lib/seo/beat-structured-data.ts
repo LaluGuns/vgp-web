@@ -10,8 +10,24 @@ function toAbsoluteUrl(pathOrUrl?: string): string {
     return `${SITE_URL}${pathOrUrl.startsWith('/') ? '' : '/'}${pathOrUrl}`;
 }
 
-export function generateBeatProductSchema(beat: BeatProduct) {
-    const canonicalUrl = `${SITE_URL}/studio/beats/${beat.slug}`;
+export function generateHreflangs(path: string) {
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return {
+        'en-US': `${SITE_URL}${cleanPath}`,
+        'ja-JP': `${SITE_URL}/ja${cleanPath}`,
+        'de-DE': `${SITE_URL}/de${cleanPath}`,
+        'x-default': `${SITE_URL}${cleanPath}`,
+    };
+}
+
+export function generateCanonicalUrl(path: string) {
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${SITE_URL}${cleanPath}`;
+}
+
+export function generateBeatProductSchema(beat: BeatProduct, locale: 'en-US' | 'ja-JP' | 'de-DE' = 'en-US') {
+    const localizedSlug = locale === 'en-US' ? beat.slug : `${locale.split('-')[0]}/${beat.slug}`;
+    const canonicalUrl = `${SITE_URL}/studio/beats/${localizedSlug}`;
 
     return {
         '@context': 'https://schema.org',
@@ -19,8 +35,8 @@ export function generateBeatProductSchema(beat: BeatProduct) {
             {
                 '@type': 'Product',
                 '@id': `${canonicalUrl}#product`,
-                name: beat.title,
-                description: beat.description['en-US'] || beat.title,
+                name: beat.localizedTitle?.[locale] || beat.title,
+                description: beat.description[locale] || beat.description['en-US'] || beat.title,
                 ...(beat.coverImageUrl ? { image: [toAbsoluteUrl(beat.coverImageUrl)] } : {}),
                 brand: {
                     '@type': 'Brand',
@@ -85,8 +101,9 @@ export function generateBeatProductSchema(beat: BeatProduct) {
     };
 }
 
-export function generateCategorySchema(category: CategoryDef, beats: BeatProduct[]) {
-    const canonicalUrl = `${SITE_URL}/studio/beats/${category.slug}`;
+export function generateCategorySchema(category: CategoryDef, beats: BeatProduct[], locale: 'en-US' | 'ja-JP' | 'de-DE' = 'en-US') {
+    const localizedSlug = locale === 'en-US' ? category.slug : `${locale.split('-')[0]}/${category.slug}`;
+    const canonicalUrl = `${SITE_URL}/studio/beats/${localizedSlug}`;
 
     return {
         '@context': 'https://schema.org',
@@ -94,8 +111,8 @@ export function generateCategorySchema(category: CategoryDef, beats: BeatProduct
             {
                 '@type': 'CollectionPage',
                 '@id': `${canonicalUrl}#collection`,
-                name: category.localizedName['en-US'] || category.name,
-                description: category.shortDescription['en-US'] || category.name,
+                name: category.localizedName[locale] || category.localizedName['en-US'] || category.name,
+                description: category.shortDescription[locale] || category.shortDescription['en-US'] || category.name,
                 url: canonicalUrl,
             },
             {

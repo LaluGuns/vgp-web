@@ -5,13 +5,17 @@ import { beatsCatalog, categories as beatCategories } from '@/lib/catalog';
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://www.virzyguns.com';
 
-    // 1. Static Routes
-    const routes = [
+    // 1. Static Core Routes
+    const staticRoutes = [
         '',
         '/about',
         '/studio',
         '/studio/beats',
         '/studio/beats/licensing',
+        '/ja-JP/studio/beats',
+        '/ja-JP/studio/beats/licensing',
+        '/de-DE/studio/beats',
+        '/de-DE/studio/beats/licensing',
         '/studio/masterclass',
         '/lab/healingwave',
         '/cadenz',
@@ -21,25 +25,53 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         lastModified: new Date(),
-        changeFrequency: route === '/studio/beats' ? ('daily' as const) : ('monthly' as const),
-        priority: route === '' ? 1 : route === '/studio/beats' ? 0.9 : 0.8,
+        changeFrequency: route.includes('/studio/beats') ? ('daily' as const) : ('monthly' as const),
+        priority: route === '' ? 1 : route.includes('/studio/beats') ? 0.9 : 0.8,
     }));
 
-    // 2. Owned Beat Store Category Routes
-    const beatCategoryRoutes = beatCategories.map((cat) => ({
-        url: `${baseUrl}/studio/beats/${cat.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.85,
-    }));
+    // 2. Multilingual Category Routes (en-US, ja-JP, de-DE)
+    const beatCategoryRoutes = beatCategories.flatMap((cat) => [
+        {
+            url: `${baseUrl}/studio/beats/${cat.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.85,
+        },
+        {
+            url: `${baseUrl}/ja-JP/studio/beats/${cat.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/de-DE/studio/beats/${cat.slug}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        },
+    ]);
 
-    // 3. Owned Beat Product Pages (P0 & P1 Beats)
-    const beatProductRoutes = beatsCatalog.map((beat) => ({
-        url: `${baseUrl}/studio/beats/${beat.slug}`,
-        lastModified: new Date(beat.updatedAt || new Date()),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
+    // 3. Multilingual Beat Product Pages (en-US, ja-JP, de-DE)
+    const beatProductRoutes = beatsCatalog.flatMap((beat) => [
+        {
+            url: `${baseUrl}/studio/beats/${beat.slug}`,
+            lastModified: new Date(beat.updatedAt || new Date()),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/ja-JP/studio/beats/${beat.slug}`,
+            lastModified: new Date(beat.updatedAt || new Date()),
+            changeFrequency: 'weekly' as const,
+            priority: 0.75,
+        },
+        {
+            url: `${baseUrl}/de-DE/studio/beats/${beat.slug}`,
+            lastModified: new Date(beat.updatedAt || new Date()),
+            changeFrequency: 'weekly' as const,
+            priority: 0.75,
+        },
+    ]);
 
     // 4. Dynamic Blog Routes
     const blogRoutes = getAllSlugs().map((slug) => ({
@@ -50,13 +82,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
 
     // 5. Blog Category Routes
-    const categories = ['production-tips', 'licensing-guide', 'genre-guides'];
-    const categoryRoutes = categories.map((cat) => ({
+    const blogCategories = ['production-tips', 'licensing-guide', 'genre-guides'];
+    const categoryRoutes = blogCategories.map((cat) => ({
         url: `${baseUrl}/blog/category/${cat}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
     }));
 
-    return [...routes, ...beatCategoryRoutes, ...beatProductRoutes, ...blogRoutes, ...categoryRoutes];
+    return [...staticRoutes, ...beatCategoryRoutes, ...beatProductRoutes, ...blogRoutes, ...categoryRoutes];
 }

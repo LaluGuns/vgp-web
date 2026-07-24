@@ -6,25 +6,46 @@ import { PageTransition } from '@/components/PageTransition';
 import { SectionShell, PageHeader } from '@/components/editorial/EditorialPrimitives';
 import { defaultLicenses, BeatLicense } from '@/lib/catalog';
 
-export default function LicensingClient() {
+interface LicensingClientProps {
+    locale?: 'en-US' | 'ja-JP' | 'de-DE';
+}
+
+export default function LicensingClient({ locale = 'en-US' }: LicensingClientProps) {
+    const getLocalePath = (path: string) => {
+        if (locale === 'ja-JP') return `/ja-JP${path}`;
+        if (locale === 'de-DE') return `/de-DE${path}`;
+        return path;
+    };
+
+    const title = locale === 'ja-JP' ? 'ビートライセンス利用規約' : locale === 'de-DE' ? 'Beat-Lizenzbedingungen' : 'Beat Licensing Terms';
+    const desc = locale === 'ja-JP' ? 'アーティスト、プロデューサー、レーベルのための明確で透明性のある商用ライセンス。' : locale === 'de-DE' ? 'Klar verständliche kommerzielle Veröffentlichungsrechte für Künstler und Produzenten.' : 'Clear, transparent commercial release rights for artists, producers, and labels.';
+
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
-                <div className="mx-auto max-w-5xl px-6 mb-8">
+                <div className="mx-auto max-w-5xl px-6 mb-8 flex items-center justify-between">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                        <Link href="/" className="hover:text-white transition">Home</Link>
+                        <Link href={getLocalePath('/')} className="hover:text-white transition">Home</Link>
                         <span>/</span>
-                        <Link href="/studio/beats" className="hover:text-white transition">Beats</Link>
+                        <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">Beats</Link>
                         <span>/</span>
-                        <span className="text-sky-200/80">Licensing Guide</span>
+                        <span className="text-sky-200/80">{title}</span>
                     </nav>
+
+                    <div className="flex items-center gap-2 text-xs text-white/50">
+                        <Link href="/studio/beats/licensing" className={`hover:text-white transition ${locale === 'en-US' ? 'text-sky-200 font-bold' : ''}`}>EN</Link>
+                        <span>|</span>
+                        <Link href="/ja-JP/studio/beats/licensing" className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-sky-200 font-bold' : ''}`}>JA</Link>
+                        <span>|</span>
+                        <Link href="/de-DE/studio/beats/licensing" className={`hover:text-white transition ${locale === 'de-DE' ? 'text-sky-200 font-bold' : ''}`}>DE</Link>
+                    </div>
                 </div>
 
                 <PageHeader
                     eyebrow="Virzy Guns Licensing Hub"
-                    title="Beat Licensing Terms"
+                    title={title}
                     mutedTitle="explained clearly."
-                    description="Clear, transparent commercial release rights for artists, producers, and labels."
+                    description={desc}
                 />
 
                 {/* License Matrix */}
@@ -58,7 +79,7 @@ export default function LicensingClient() {
                                         </div>
                                     </div>
                                     <Link
-                                        href="/studio/beats"
+                                        href={getLocalePath('/studio/beats')}
                                         className="mt-6 flex items-center justify-center gap-1 rounded-lg border border-sky-200/30 bg-sky-300/10 py-2.5 text-xs font-semibold text-sky-200 transition hover:bg-sky-300/20"
                                     >
                                         Browse Beats for {lic.name}
