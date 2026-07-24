@@ -41,7 +41,7 @@ function InterfaceStyleSelector() {
     <div className="space-y-2.5 select-none">
       <div className="flex items-center justify-between">
         <span className="text-[9.5px] font-sans font-bold text-white/45 uppercase tracking-[0.15em] leading-none">
-          {t("app.themes.title", "Interface Style")}
+          {t("app.themes.title", "Environment")}
         </span>
       </div>
       <div className="grid grid-cols-2 gap-2.5">
@@ -61,7 +61,7 @@ function InterfaceStyleSelector() {
                 const bundle = ENVIRONMENT_BUNDLES[th.id];
                 setScene(bundle.scene);
                 // Seed the bundled ambience only for a listener who has not
-                // built a mix. This control is labelled "Interface Style", so
+                // built a mix. Even under the clearer "Environment" label,
                 // silently replacing a curated rain+cafe blend with the new
                 // theme's single track read as the app losing their settings.
                 if (!mixIsCustom) loadPreset([...bundle.ambience]);
@@ -108,8 +108,8 @@ function InterfaceStyleSelector() {
 
 export const SCENES = [
   { 
-    id: "midnight", 
-    name: "Dynamic Glass", 
+    id: "midnight",
+    name: "Midnight",
     gradient: "from-[#08021a] via-[#0c0528] to-[#04010a]", 
     orbs: [
       { color: "rgba(139, 92, 246, 0.85)", size: "900px", position: "-top-24 -left-24" },

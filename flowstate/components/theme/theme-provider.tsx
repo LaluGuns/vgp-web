@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useThemeStore } from "@/lib/stores/theme-store";
+import { useAppStore } from "@/lib/stores/app-store";
 import { track } from "@/lib/analytics";
 
 /**
@@ -37,9 +38,31 @@ export function ThemeProvider() {
       if (hydrated) track("theme_changed", { theme: state.theme });
     });
 
+    // Mirror the Scene onto <html data-scene="…"> too. Outside glass the WebGL
+    // loop never runs, so the Scene had nothing to paint and only shifted the
+    // accent — picking "Deep Forest" in Analog Studio looked like nothing had
+    // happened. globals.css keys a per-theme tint wash off this attribute so a
+    // Scene reads everywhere, without disturbing each theme's own art direction.
+    const applyScene = (scene: string) => {
+      document.documentElement.setAttribute("data-scene", scene);
+    };
+
+    if (useAppStore.persist.hasHydrated()) applyScene(useAppStore.getState().scene);
+
+    const unsubSceneHydration = useAppStore.persist.onFinishHydration((state) => {
+      applyScene(state.scene);
+    });
+
+    const unsubScene = useAppStore.subscribe((state, prev) => {
+      if (state.scene === prev.scene) return;
+      applyScene(state.scene);
+    });
+
     return () => {
       unsubHydration();
       unsubChanges();
+      unsubSceneHydration();
+      unsubScene();
     };
   }, []);
 

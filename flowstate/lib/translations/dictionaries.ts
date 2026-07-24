@@ -199,7 +199,7 @@ export const dictionaries = {
         originals: "Originals",
         ambient: "Ambient",
         theme: "Theme",
-        visualTheme: "Visual Theme",
+        visualTheme: "Scene",
         selectTrack: "Select a track",
         shuffle: "Shuffle",
         repeat: "Repeat",
@@ -218,7 +218,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Themes",
-        midnight: "Dynamic Glass",
+        midnight: "Midnight",
         "rain-window": "Rain Window",
         synthwave: "Synthwave",
         forest: "Deep Forest",
@@ -230,7 +230,7 @@ export const dictionaries = {
     },
     app: {
       themes: {
-        title: "Interface Style",
+        title: "Environment",
         glass: "Dynamic Glass",
         studio: "Analog Studio",
         editorial: "Editorial",
@@ -680,7 +680,7 @@ export const dictionaries = {
         originals: "Orisinal",
         ambient: "Latar",
         theme: "Tema",
-        visualTheme: "Tema Visual",
+        visualTheme: "Scene",
         selectTrack: "Pilih lagu",
         shuffle: "Acak",
         repeat: "Ulangi",
@@ -699,7 +699,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Tema",
-        midnight: "Kaca Dinamis",
+        midnight: "Tengah Malam",
         "rain-window": "Jendela Hujan",
         synthwave: "Synthwave",
         forest: "Hutan Lebat",
@@ -711,7 +711,7 @@ export const dictionaries = {
     },
     app: {
       themes: {
-        title: "Gaya Antarmuka",
+        title: "Lingkungan",
         glass: "Kaca Dinamis",
         studio: "Studio Analog",
         editorial: "Editorial",
@@ -1165,7 +1165,7 @@ export const dictionaries = {
         originals: "Originales",
         ambient: "Ambiental",
         theme: "Tema",
-        visualTheme: "Tema visual",
+        visualTheme: "Escena",
         selectTrack: "Selecciona una pista",
         shuffle: "Aleatorio",
         repeat: "Repetir",
@@ -1184,7 +1184,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Temas",
-        midnight: "Vidrio dinámico",
+        midnight: "Medianoche",
         "rain-window": "Ventana de lluvia",
         synthwave: "Synthwave",
         forest: "Bosque profundo",
@@ -1622,7 +1622,7 @@ export const dictionaries = {
         originals: "Originals",
         ambient: "Ambiance",
         theme: "Thème",
-        visualTheme: "Thème visuel",
+        visualTheme: "Scène",
         selectTrack: "Sélectionner une piste",
         shuffle: "Aléatoire",
         repeat: "Répéter",
@@ -1641,7 +1641,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Thèmes",
-        midnight: "Verre dynamique",
+        midnight: "Minuit",
         "rain-window": "Fenêtre de pluie",
         synthwave: "Synthwave",
         forest: "Forêt profonde",
@@ -2079,7 +2079,7 @@ export const dictionaries = {
         originals: "Originale",
         ambient: "Umgebung",
         theme: "Thema",
-        visualTheme: "Visuelles Thema",
+        visualTheme: "Szene",
         selectTrack: "Titel auswählen",
         shuffle: "Zufällig",
         repeat: "Wiederholen",
@@ -2098,7 +2098,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Themen",
-        midnight: "Dynamisches Glas",
+        midnight: "Mitternacht",
         "rain-window": "Regenfenster",
         synthwave: "Synthwave",
         forest: "Tiefer Wald",
@@ -2536,7 +2536,7 @@ export const dictionaries = {
         originals: "オリジナル",
         ambient: "環境音",
         theme: "テーマ",
-        visualTheme: "視覚テーマ",
+        visualTheme: "シーン",
         selectTrack: "トラックを選択",
         shuffle: "シャッフル",
         repeat: "リピート",
@@ -2555,7 +2555,7 @@ export const dictionaries = {
       },
       themes: {
         title: "テーマ",
-        midnight: "ダイナミックグラス",
+        midnight: "ミッドナイト",
         "rain-window": "雨の窓辺",
         synthwave: "シンセウェーブ",
         forest: "深い森",
@@ -2993,7 +2993,7 @@ export const dictionaries = {
         originals: "오리지널",
         ambient: "환경음",
         theme: "테마",
-        visualTheme: "시각 테마",
+        visualTheme: "장면",
         selectTrack: "트랙 선택",
         shuffle: "셔플",
         repeat: "반복",
@@ -3012,7 +3012,7 @@ export const dictionaries = {
       },
       themes: {
         title: "테마",
-        midnight: "다이내믹 글래스",
+        midnight: "미드나이트",
         "rain-window": "빗방울 창가",
         synthwave: "신스웨이브",
         forest: "깊은 숲속",
@@ -3450,7 +3450,7 @@ export const dictionaries = {
         originals: "原创",
         ambient: "环境",
         theme: "主题",
-        visualTheme: "视觉主题",
+        visualTheme: "场景",
         selectTrack: "选择曲目",
         shuffle: "随机",
         repeat: "重复",
@@ -3469,7 +3469,7 @@ export const dictionaries = {
       },
       themes: {
         title: "主题背景",
-        midnight: "磨砂玻璃",
+        midnight: "午夜",
         "rain-window": "雨中之窗",
         synthwave: "赛博霓虹",
         forest: "幽静森野",
@@ -3907,7 +3907,7 @@ export const dictionaries = {
         originals: "Originais",
         ambient: "Ambiente",
         theme: "Tema",
-        visualTheme: "Tema visual",
+        visualTheme: "Cena",
         selectTrack: "Selecionar uma faixa",
         shuffle: "Aleatório",
         repeat: "Repetir",
@@ -3926,7 +3926,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Temas",
-        midnight: "Vidro dinâmico",
+        midnight: "Meia-noite",
         "rain-window": "Janela de chuva",
         synthwave: "Synthwave",
         forest: "Floresta profunda",
@@ -4364,7 +4364,7 @@ export const dictionaries = {
         originals: "Оригиналы",
         ambient: "Атмосфера",
         theme: "Тема",
-        visualTheme: "Визуальная тема",
+        visualTheme: "Сцена",
         selectTrack: "Выберите трек",
         shuffle: "Перемешать",
         repeat: "Повтор",
@@ -4383,7 +4383,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Темы",
-        midnight: "Матовое стекло",
+        midnight: "Полночь",
         "rain-window": "Дождливое окно",
         synthwave: "Ретро-вейв",
         forest: "Глухой лес",
@@ -4821,7 +4821,7 @@ export const dictionaries = {
         originals: "Originali",
         ambient: "Ambientale",
         theme: "Tema",
-        visualTheme: "Tema visivo",
+        visualTheme: "Scena",
         selectTrack: "Seleziona una traccia",
         shuffle: "Riproduzione casuale",
         repeat: "Ripeti",
@@ -4840,7 +4840,7 @@ export const dictionaries = {
       },
       themes: {
         title: "Temi",
-        midnight: "Vetro dinamico",
+        midnight: "Mezzanotte",
         "rain-window": "Finestra piovosa",
         synthwave: "Synthwave",
         forest: "Foresta profonda",
@@ -5080,7 +5080,7 @@ const localeSchemaV2: Record<string, {
   consistent: string;
 }> = {
   es: {
-    themes: ["Temas", "Cristal dinámico", "Estudio analógico", "Editorial", "Terminal"],
+    themes: ["Entorno", "Cristal dinámico", "Estudio analógico", "Editorial", "Terminal"],
     streak: ["Racha actual", "día", "días", "Más larga: {count} días"],
     goal: ["Objetivo semanal", "de un objetivo de {target}m", "Ajustar objetivo", "Reducir objetivo", "Aumentar objetivo"],
     records: ["Récords personales", "Sesión más larga", "Mejor día", "Mejor semana"],
@@ -5089,7 +5089,7 @@ const localeSchemaV2: Record<string, {
     consistent: "Semana constante: tus cifras se mantienen estables.",
   },
   fr: {
-    themes: ["Thèmes", "Verre dynamique", "Studio analogique", "Éditorial", "Terminal"],
+    themes: ["Environnement", "Verre dynamique", "Studio analogique", "Éditorial", "Terminal"],
     streak: ["Série actuelle", "jour", "jours", "Record : {count} jours"],
     goal: ["Objectif hebdomadaire", "sur un objectif de {target} min", "Ajuster l’objectif", "Réduire l’objectif", "Augmenter l’objectif"],
     records: ["Records personnels", "Session la plus longue", "Meilleur jour", "Meilleure semaine"],
@@ -5098,7 +5098,7 @@ const localeSchemaV2: Record<string, {
     consistent: "Semaine régulière : les chiffres restent stables.",
   },
   de: {
-    themes: ["Designs", "Dynamisches Glas", "Analogstudio", "Editorial", "Terminal"],
+    themes: ["Umgebung", "Dynamisches Glas", "Analogstudio", "Editorial", "Terminal"],
     streak: ["Aktuelle Serie", "Tag", "Tage", "Längste: {count} Tage"],
     goal: ["Wochenziel", "von {target} Min. Ziel", "Ziel anpassen", "Ziel senken", "Ziel erhöhen"],
     records: ["Persönliche Rekorde", "Längste Sitzung", "Bester Tag", "Beste Woche"],
@@ -5107,7 +5107,7 @@ const localeSchemaV2: Record<string, {
     consistent: "Konstante Woche – deine Werte bleiben stabil.",
   },
   ja: {
-    themes: ["テーマ", "ダイナミックガラス", "アナログスタジオ", "エディトリアル", "ターミナル"],
+    themes: ["環境", "ダイナミックガラス", "アナログスタジオ", "エディトリアル", "ターミナル"],
     streak: ["現在の連続記録", "日", "日", "最長：{count}日"],
     goal: ["週間目標", "目標{target}分のうち", "目標を調整", "目標を減らす", "目標を増やす"],
     records: ["自己ベスト", "最長セッション", "ベストデー", "ベストウィーク"],
@@ -5116,7 +5116,7 @@ const localeSchemaV2: Record<string, {
     consistent: "安定した一週間です。数値も維持できています。",
   },
   ko: {
-    themes: ["테마", "다이내믹 글라스", "아날로그 스튜디오", "에디토리얼", "터미널"],
+    themes: ["환경", "다이내믹 글라스", "아날로그 스튜디오", "에디토리얼", "터미널"],
     streak: ["현재 연속 기록", "일", "일", "최장: {count}일"],
     goal: ["주간 목표", "목표 {target}분 중", "목표 조정", "목표 줄이기", "목표 늘리기"],
     records: ["개인 기록", "최장 세션", "최고의 날", "최고의 주"],
@@ -5125,7 +5125,7 @@ const localeSchemaV2: Record<string, {
     consistent: "안정적인 한 주입니다. 수치가 꾸준히 유지되고 있습니다.",
   },
   zh: {
-    themes: ["主题", "动态玻璃", "模拟录音室", "编辑风格", "终端"],
+    themes: ["环境", "动态玻璃", "模拟录音室", "编辑风格", "终端"],
     streak: ["当前连续记录", "天", "天", "最长：{count}天"],
     goal: ["每周目标", "目标 {target} 分钟", "调整目标", "降低目标", "提高目标"],
     records: ["个人纪录", "最长专注时段", "最佳单日", "最佳一周"],
@@ -5134,7 +5134,7 @@ const localeSchemaV2: Record<string, {
     consistent: "这一周很稳定，数据保持平稳。",
   },
   pt: {
-    themes: ["Temas", "Vidro dinâmico", "Estúdio analógico", "Editorial", "Terminal"],
+    themes: ["Ambiente", "Vidro dinâmico", "Estúdio analógico", "Editorial", "Terminal"],
     streak: ["Sequência atual", "dia", "dias", "Maior: {count} dias"],
     goal: ["Meta semanal", "de uma meta de {target} min", "Ajustar meta", "Diminuir meta", "Aumentar meta"],
     records: ["Recordes pessoais", "Sessão mais longa", "Melhor dia", "Melhor semana"],
@@ -5143,7 +5143,7 @@ const localeSchemaV2: Record<string, {
     consistent: "Semana consistente: os números continuam estáveis.",
   },
   ru: {
-    themes: ["Темы", "Динамическое стекло", "Аналоговая студия", "Редакционный", "Терминал"],
+    themes: ["Окружение", "Динамическое стекло", "Аналоговая студия", "Редакционный", "Терминал"],
     streak: ["Текущая серия", "день", "дней", "Лучшая: {count} дней"],
     goal: ["Недельная цель", "из цели {target} мин", "Изменить цель", "Уменьшить цель", "Увеличить цель"],
     records: ["Личные рекорды", "Самая длинная сессия", "Лучший день", "Лучшая неделя"],
@@ -5152,7 +5152,7 @@ const localeSchemaV2: Record<string, {
     consistent: "Стабильная неделя — показатели держатся на одном уровне.",
   },
   it: {
-    themes: ["Temi", "Vetro dinamico", "Studio analogico", "Editoriale", "Terminale"],
+    themes: ["Ambiente", "Vetro dinamico", "Studio analogico", "Editoriale", "Terminale"],
     streak: ["Serie attuale", "giorno", "giorni", "Più lunga: {count} giorni"],
     goal: ["Obiettivo settimanale", "su un obiettivo di {target} min", "Modifica obiettivo", "Riduci obiettivo", "Aumenta obiettivo"],
     records: ["Record personali", "Sessione più lunga", "Giorno migliore", "Settimana migliore"],

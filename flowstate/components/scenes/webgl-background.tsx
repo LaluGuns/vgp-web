@@ -442,7 +442,12 @@ export function WebGLBackground({ forceScene = false }: { forceScene?: boolean }
       {!softwareRenderer && (
         <canvas
           ref={canvasRef}
-          className={`fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700 ${isGlass ? "opacity-100" : "opacity-45"}`}
+          // Stays mounted on purpose — the invariant above depends on this
+          // canvas surviving theme switches. Outside glass the GL loop never
+          // boots, so the element held nothing but could still composite a
+          // stale frame at 45% over .theme-backdrop; opacity-0 removes that
+          // without unmounting and re-acquiring a context.
+          className={`fixed inset-0 w-full h-full -z-20 pointer-events-none transition-opacity duration-700 ${isGlass ? "opacity-100" : "opacity-0"}`}
         />
       )}
       <div

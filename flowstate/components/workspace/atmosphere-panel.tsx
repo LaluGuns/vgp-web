@@ -72,14 +72,14 @@ export function AtmospherePanel({
 
   // Find current scene name for display
   const sceneNames: Record<string, string> = {
-    midnight: "Dynamic Glass",
+    midnight: "Midnight",
     "rain-window": "Rain Window",
     synthwave: "Synthwave",
     forest: "Deep Forest",
     terminal: "Terminal",
     sunset: "Sunset",
   };
-  const currentSceneName = t(`dashboard.themes.${scene}`, sceneNames[scene] ?? "Dynamic Glass");
+  const currentSceneName = t(`dashboard.themes.${scene}`, sceneNames[scene] ?? "Midnight");
 
   return (
     <>
