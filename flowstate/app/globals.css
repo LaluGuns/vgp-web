@@ -702,6 +702,48 @@ a:active,
    (fixed, full viewport, -z-20, non-interactive). Each theme's
    backdrop is deliberately quiet — this is a focus app.
    ═══════════════════════════════════════════════════════════════ */
+:root {
+  --scene-glow-h: 258;
+  --scene-glow-s: 62%;
+  --scene-glow-l: 17%;
+}
+
+[data-scene="midnight"] {
+  --scene-glow-h: 258;
+  --scene-glow-s: 62%;
+  --scene-glow-l: 17%;
+}
+
+[data-scene="rain-window"] {
+  --scene-glow-h: 214;
+  --scene-glow-s: 72%;
+  --scene-glow-l: 18%;
+}
+
+[data-scene="synthwave"] {
+  --scene-glow-h: 320;
+  --scene-glow-s: 80%;
+  --scene-glow-l: 22%;
+}
+
+[data-scene="forest"] {
+  --scene-glow-h: 150;
+  --scene-glow-s: 65%;
+  --scene-glow-l: 15%;
+}
+
+[data-scene="terminal"] {
+  --scene-glow-h: 140;
+  --scene-glow-s: 70%;
+  --scene-glow-l: 16%;
+}
+
+[data-scene="sunset"] {
+  --scene-glow-h: 25;
+  --scene-glow-s: 80%;
+  --scene-glow-l: 20%;
+}
+
 .theme-backdrop {
   position: fixed;
   inset: 0;
@@ -721,12 +763,11 @@ a:active,
     #04020f;
 }
 
-/* Analog Studio: deep espresso, a warm lamp glow off the top-left (like a
-   desk lamp over a mixing console), soft horizontal vignette. */
+/* Analog Studio: deep espresso, warm lamp glow off the top-left tinted by scene glow */
 [data-theme="studio"] .theme-backdrop {
   background:
-    /* warm lamp glow, offset top-left */
-    radial-gradient(110% 85% at 16% 10%, hsl(32 48% 16% / 0.95) 0%, hsl(28 38% 10% / 0.4) 42%, transparent 68%),
+    /* warm lamp glow, offset top-left tinted by scene glow */
+    radial-gradient(110% 85% at 16% 10%, hsl(var(--scene-glow-h) var(--scene-glow-s) var(--scene-glow-l) / 0.95) 0%, hsl(var(--scene-glow-h) var(--scene-glow-s) 10% / 0.4) 42%, transparent 68%),
     /* faint horizontal vignette framing the desk */
     linear-gradient(to right, rgba(0, 0, 0, 0.38) 0%, transparent 16%, transparent 84%, rgba(0, 0, 0, 0.38) 100%),
     /* espresso base */
@@ -743,20 +784,17 @@ a:active,
   pointer-events: none;
 }
 
-/* Editorial: matte dark-paper. A whisper of a top-lit vignette, nothing else —
-   the stray vertical margin rule read as a glitch in-app, so it's gone. */
+/* Editorial: matte dark-paper with top-lit scene glow vignette */
 [data-theme="editorial"] .theme-backdrop {
   background:
-    radial-gradient(125% 85% at 50% -12%, hsl(30 10% 13%) 0%, transparent 62%),
+    radial-gradient(125% 85% at 50% -12%, hsl(var(--scene-glow-h) var(--scene-glow-s) 14%) 0%, transparent 62%),
     #141311;
 }
 
-/* Instrument Panel: near-black with a barely-visible phosphor grid
-   (1px lines every 48px at ~2.5% accent opacity) and a faint top-edge
-   glow. Static — no scanline animation (distraction + battery). */
+/* Instrument Panel: near-black with scene-tinted top-edge glow and phosphor grid */
 [data-theme="terminal"] .theme-backdrop {
   background:
-    radial-gradient(85% 26% at 50% 0%, hsl(var(--primary) / 0.06) 0%, transparent 75%),
+    radial-gradient(85% 26% at 50% 0%, hsl(var(--scene-glow-h) var(--scene-glow-s) var(--scene-glow-l) / 0.35) 0%, transparent 75%),
     repeating-linear-gradient(to right, hsl(var(--primary) / 0.025) 0 1px, transparent 1px 48px),
     repeating-linear-gradient(to bottom, hsl(var(--primary) / 0.025) 0 1px, transparent 1px 48px),
     #050906;
