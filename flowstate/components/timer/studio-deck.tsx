@@ -104,8 +104,8 @@ function VuMeter({
   return (
     <svg viewBox="0 0 150 74" className="w-full h-auto">
       {/* Meter face */}
-      <rect x="1" y="1" width="148" height="72" rx="5" fill="hsl(36 32% 9%)" stroke="hsl(30 15% 20%)" />
-      <rect x="4" y="4" width="142" height="66" rx="3" fill="hsl(38 42% 12%)" />
+      <rect x="1" y="1" width="148" height="72" rx="5" fill="hsl(var(--scene-glow-h, 36) 24% 9%)" stroke="hsl(var(--primary) / 0.25)" />
+      <rect x="4" y="4" width="142" height="66" rx="3" fill="hsl(var(--scene-glow-h, 38) 28% 11%)" />
       {/* Warm backlight */}
       <ellipse cx="75" cy="66" rx="66" ry="34" fill="hsl(var(--primary) / 0.13)" />
 
@@ -329,8 +329,8 @@ export function StudioDeck({
         className="relative rounded-[18px] p-4 sm:p-5"
         style={{
           background:
-            "linear-gradient(160deg, hsl(28 14% 13%) 0%, hsl(26 16% 9%) 45%, hsl(24 14% 7%) 100%)",
-          border: "1px solid hsl(30 14% 22%)",
+            "linear-gradient(160deg, hsl(var(--scene-glow-h, 28) 20% 12%) 0%, hsl(var(--scene-glow-h, 26) 22% 8%) 45%, hsl(var(--scene-glow-h, 24) 20% 6%) 100%)",
+          border: "1px solid hsl(var(--primary) / 0.25)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.09), inset 0 -1px 0 rgba(0,0,0,0.6), 0 24px 50px rgba(0,0,0,0.55)",
         }}
@@ -344,8 +344,8 @@ export function StudioDeck({
         <div
           className="rounded-[10px] px-3 py-3 mb-4 flex items-center gap-3"
           style={{
-            background: "linear-gradient(180deg, hsl(26 16% 7%), hsl(26 18% 5%))",
-            border: "1px solid hsl(30 12% 18%)",
+            background: "linear-gradient(180deg, hsl(var(--scene-glow-h, 26) 22% 6%), hsl(var(--scene-glow-h, 26) 24% 4%))",
+            border: "1px solid hsl(var(--primary) / 0.20)",
             boxShadow: "inset 0 2px 6px rgba(0,0,0,0.6)",
           }}
         >
@@ -366,8 +366,8 @@ export function StudioDeck({
         <div
           className="relative rounded-[10px] px-3 pt-5 pb-3 mb-4"
           style={{
-            background: "linear-gradient(180deg, hsl(26 18% 8%), hsl(25 20% 6%))",
-            border: "1px solid hsl(30 12% 18%)",
+            background: "linear-gradient(180deg, hsl(var(--scene-glow-h, 26) 24% 8%), hsl(var(--scene-glow-h, 25) 26% 6%))",
+            border: "1px solid hsl(var(--primary) / 0.20)",
             boxShadow: "inset 0 2px 8px rgba(0,0,0,0.65)",
           }}
         >

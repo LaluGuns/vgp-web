@@ -61,31 +61,31 @@
      burnt-orange secondary, warm smoked glass, slightly tighter radius.
      ───────────────────────────────────────────────────────────── */
   [data-theme="studio"] {
-    --background: 26 28% 7%;
+    --background: hsl(var(--scene-glow-h, 26) 24% 6%);
     --foreground: 40 30% 90%;
-    --card: 26 26% 9%;
+    --card: hsl(var(--scene-glow-h, 26) 22% 8%);
     --card-foreground: 40 32% 95%;
     --primary: var(--scene-primary, 38 88% 56%);
     --primary-foreground: 30 45% 8%;
     --secondary: var(--scene-secondary, 24 62% 46%);
     --secondary-foreground: 40 30% 95%;
-    --muted: 26 18% 14%;
+    --muted: hsl(var(--scene-glow-h, 26) 18% 12%);
     --muted-foreground: 34 16% 62%;
     --accent: var(--scene-primary, 38 88% 56%);
     --accent-foreground: var(--scene-primary, 38 88% 56%);
-    --border: 28 22% 18%;
+    --border: hsl(var(--primary) / 0.20);
     --ring: var(--scene-primary, 38 88% 56%);
     --radius: 1.125rem; /* ~18px */
 
-    /* Light smoked glass: near-opaque warm espresso, gentle blur (≤8px),
+    /* Light smoked glass: scene-tinted espresso surfaces, gentle blur (≤8px),
        scene-tinted hairlines, warm inner glow. */
-    --glass-bg: rgba(40, 29, 18, 0.85);
-    --glass-bg-hover: rgba(50, 37, 24, 0.90);
-    --glass-border: hsl(var(--scene-primary, 38 88% 56%) / 0.18);
-    --glass-border-top: hsl(var(--scene-primary, 38 82% 62%) / 0.30);
-    --glass-border-left: hsl(var(--scene-primary, 38 84% 58%) / 0.22);
-    --glass-inner-glow: rgba(255, 218, 168, 0.10);
-    --glass-shadow: rgba(0, 0, 0, 0.15);
+    --glass-bg: hsl(var(--scene-glow-h, 28) 22% 9% / 0.88);
+    --glass-bg-hover: hsl(var(--scene-glow-h, 28) 22% 12% / 0.92);
+    --glass-border: hsl(var(--scene-primary, 38 88% 56%) / 0.22);
+    --glass-border-top: hsl(var(--scene-primary, 38 82% 62%) / 0.35);
+    --glass-border-left: hsl(var(--scene-primary, 38 84% 58%) / 0.28);
+    --glass-inner-glow: hsl(var(--scene-primary, 38 88% 56%) / 0.08);
+    --glass-shadow: rgba(0, 0, 0, 0.25);
     --glass-blur: 8px;
     --glass-saturate: 1.05;
   }
@@ -96,29 +96,29 @@
      cool-gray secondary, near-flat panels with hairline borders, sharper radius.
      ───────────────────────────────────────────────────────────── */
   [data-theme="editorial"] {
-    --background: 30 8% 8%;
+    --background: hsl(var(--scene-glow-h, 30) 10% 7%);
     --foreground: 40 14% 94%;
-    --card: 30 8% 10%;
+    --card: hsl(var(--scene-glow-h, 30) 10% 9%);
     --card-foreground: 40 14% 96%;
     --primary: var(--scene-primary, 16 90% 55%);
     --primary-foreground: 30 12% 8%;
     --secondary: var(--scene-secondary, 220 8% 55%);
     --secondary-foreground: 40 14% 94%;
-    --muted: 30 6% 15%;
+    --muted: hsl(var(--scene-glow-h, 30) 8% 14%);
     --muted-foreground: 32 7% 60%;
     --accent: var(--scene-primary, 16 90% 55%);
     --accent-foreground: var(--scene-primary, 16 90% 55%);
-    --border: 30 7% 20%;
+    --border: hsl(var(--primary) / 0.20);
     --ring: var(--scene-primary, 16 90% 55%);
     --radius: 0.6875rem; /* ~11px */
 
     /* Fully opaque dark-paper panels: no blur, scene-tinted hairlines,
        no white glass highlights. */
-    --glass-bg: hsl(30 8% 11%);
-    --glass-bg-hover: hsl(30 8% 13%);
-    --glass-border: hsl(var(--scene-primary, 16 90% 55%) / 0.20);
-    --glass-border-top: hsl(var(--scene-primary, 16 90% 55%) / 0.30);
-    --glass-border-left: hsl(var(--scene-primary, 16 90% 55%) / 0.22);
+    --glass-bg: hsl(var(--scene-glow-h, 30) 10% 10%);
+    --glass-bg-hover: hsl(var(--scene-glow-h, 30) 10% 12%);
+    --glass-border: hsl(var(--scene-primary, 16 90% 55%) / 0.22);
+    --glass-border-top: hsl(var(--scene-primary, 16 90% 55%) / 0.32);
+    --glass-border-left: hsl(var(--scene-primary, 16 90% 55%) / 0.25);
     --glass-inner-glow: transparent;
     --glass-shadow: rgba(0, 0, 0, 0.12);
     --glass-blur: 0px;
@@ -131,29 +131,29 @@
      flat panels with 1px accent-tinted borders, small radius.
      ───────────────────────────────────────────────────────────── */
   [data-theme="terminal"] {
-    --background: 160 12% 5%;
+    --background: hsl(var(--scene-glow-h, 160) 14% 5%);
     --foreground: 150 10% 72%;
-    --card: 160 14% 7%;
+    --card: hsl(var(--scene-glow-h, 160) 14% 7%);
     --card-foreground: 140 22% 88%;
     --primary: var(--scene-primary, 140 90% 55%);
     --primary-foreground: 140 45% 6%;
     --secondary: var(--scene-secondary, 140 28% 42%);
     --secondary-foreground: 140 30% 88%;
-    --muted: 160 12% 12%;
+    --muted: hsl(var(--scene-glow-h, 160) 12% 12%);
     --muted-foreground: 150 9% 55%;
     --accent: var(--scene-primary, 140 90% 55%);
     --accent-foreground: var(--scene-primary, 140 90% 55%);
-    --border: 150 16% 16%;
+    --border: hsl(var(--primary) / 0.22);
     --ring: var(--scene-primary, 140 90% 55%);
     --radius: 0.5rem; /* 8px */
 
     /* Fully opaque instrument panels: no blur, scene-tinted hairlines,
        no glass highlights at all. */
-    --glass-bg: hsl(160 10% 7%);
-    --glass-bg-hover: hsl(160 11% 9%);
-    --glass-border: hsl(var(--scene-primary, 140 90% 55%) / 0.22);
-    --glass-border-top: hsl(var(--scene-primary, 140 90% 55%) / 0.32);
-    --glass-border-left: hsl(var(--scene-primary, 140 90% 55%) / 0.25);
+    --glass-bg: hsl(var(--scene-glow-h, 160) 14% 7%);
+    --glass-bg-hover: hsl(var(--scene-glow-h, 160) 14% 9%);
+    --glass-border: hsl(var(--scene-primary, 140 90% 55%) / 0.24);
+    --glass-border-top: hsl(var(--scene-primary, 140 90% 55%) / 0.35);
+    --glass-border-left: hsl(var(--scene-primary, 140 90% 55%) / 0.28);
     --glass-inner-glow: transparent;
     --glass-shadow: rgba(0, 0, 0, 0.15);
     --glass-blur: 0px;
@@ -777,15 +777,15 @@ a:active,
     #04020f;
 }
 
-/* Analog Studio: deep espresso, warm lamp glow off the top-left tinted by scene glow */
+/* Analog Studio: scene-tinted espresso, warm lamp glow off the top-left tinted by scene glow */
 [data-theme="studio"] .theme-backdrop {
   background:
     /* warm lamp glow, offset top-left tinted by scene glow */
-    radial-gradient(110% 85% at 16% 10%, hsl(var(--scene-glow-h) var(--scene-glow-s) var(--scene-glow-l) / 0.95) 0%, hsl(var(--scene-glow-h) var(--scene-glow-s) 10% / 0.4) 42%, transparent 68%),
+    radial-gradient(110% 85% at 16% 10%, hsl(var(--scene-glow-h, 26) var(--scene-glow-s, 80%) var(--scene-glow-l, 30%) / 0.85) 0%, hsl(var(--scene-glow-h, 26) var(--scene-glow-s, 40%) 10% / 0.5) 45%, transparent 70%),
     /* faint horizontal vignette framing the desk */
     linear-gradient(to right, rgba(0, 0, 0, 0.38) 0%, transparent 16%, transparent 84%, rgba(0, 0, 0, 0.38) 100%),
-    /* espresso base */
-    #140d06;
+    /* scene-tinted base */
+    hsl(var(--scene-glow-h, 26) var(--scene-glow-s, 24%) 6%);
 }
 /* Ultra-subtle analog film grain (inline SVG feTurbulence, ~2.5% opacity). */
 [data-theme="studio"] .theme-backdrop::after {
