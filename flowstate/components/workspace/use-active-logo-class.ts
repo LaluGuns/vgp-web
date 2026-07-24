@@ -3,13 +3,12 @@
 import { useAppStore } from "@/lib/stores/app-store";
 import { useThemeStore } from "@/lib/stores/theme-store";
 
-// Interface theme. In "glass" the Scene recolours --primary (legacy behaviour);
-// other themes own their accent, so we don't let the Scene override it.
+// Interface theme and scene. Scene drives the visual accent color everywhere.
 export function useActiveLogoClass() {
   const scene = useAppStore((s) => s.scene);
   const uiTheme = useThemeStore((s) => s.theme);
 
-  const activeColor = uiTheme !== "glass" ? uiTheme : scene;
+  const activeColor = scene || uiTheme;
   return activeColor === "studio" ? "logo-amber" :
     activeColor === "editorial" ? "logo-red" :
     activeColor === "terminal" ? "logo-green" :

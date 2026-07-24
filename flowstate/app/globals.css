@@ -14,16 +14,16 @@
     --foreground: 215 15% 92%;
     --card: 270 65% 5%;
     --card-foreground: 0 0% 100%;
-    --primary: 199 100% 67%;
+    --primary: var(--scene-primary, 199 100% 67%);
     --primary-foreground: 0 0% 0%;
-    --secondary: 191 100% 40%;
+    --secondary: var(--scene-secondary, 191 100% 40%);
     --secondary-foreground: 0 0% 100%;
     --muted: 270 40% 8%;
     --muted-foreground: 213 10% 65%;
-    --accent: 199 100% 67%;
-    --accent-foreground: 199 100% 67%;
+    --accent: var(--scene-primary, 199 100% 67%);
+    --accent-foreground: var(--scene-primary, 199 100% 67%);
     --border: 270 20% 12%;
-    --ring: 199 100% 67%;
+    --ring: var(--scene-primary, 199 100% 67%);
     --radius: 1.5rem; /* ~24px matching mockup's highly rounded corners */
 
     /* ── Apple Liquid Glass tokens (iOS 26 / macOS Tahoe) ── */
@@ -43,16 +43,16 @@
     --foreground: 215 15% 92%;
     --card: 270 65% 5%;
     --card-foreground: 0 0% 100%;
-    --primary: 199 100% 67%;
+    --primary: var(--scene-primary, 199 100% 67%);
     --primary-foreground: 0 0% 0%;
-    --secondary: 191 100% 40%;
+    --secondary: var(--scene-secondary, 191 100% 40%);
     --secondary-foreground: 0 0% 100%;
     --muted: 270 40% 8%;
     --muted-foreground: 213 10% 65%;
-    --accent: 199 100% 67%;
-    --accent-foreground: 199 100% 67%;
+    --accent: var(--scene-primary, 199 100% 67%);
+    --accent-foreground: var(--scene-primary, 199 100% 67%);
     --border: 270 20% 12%;
-    --ring: 199 100% 67%;
+    --ring: var(--scene-primary, 199 100% 67%);
   }
 
   /* ─────────────────────────────────────────────────────────────
@@ -703,42 +703,56 @@ a:active,
    backdrop is deliberately quiet — this is a focus app.
    ═══════════════════════════════════════════════════════════════ */
 :root {
+  --scene-primary: 199 100% 67%;
+  --scene-secondary: 258 85% 65%;
   --scene-glow-h: 258;
   --scene-glow-s: 62%;
   --scene-glow-l: 17%;
 }
 
 [data-scene="midnight"] {
+  --scene-primary: 199 100% 67%;
+  --scene-secondary: 258 85% 65%;
   --scene-glow-h: 258;
   --scene-glow-s: 62%;
   --scene-glow-l: 17%;
 }
 
 [data-scene="rain-window"] {
+  --scene-primary: 190 100% 50%;
+  --scene-secondary: 210 90% 55%;
   --scene-glow-h: 214;
   --scene-glow-s: 72%;
   --scene-glow-l: 18%;
 }
 
 [data-scene="synthwave"] {
+  --scene-primary: 330 100% 55%;
+  --scene-secondary: 270 90% 60%;
   --scene-glow-h: 320;
   --scene-glow-s: 80%;
   --scene-glow-l: 22%;
 }
 
 [data-scene="forest"] {
+  --scene-primary: 152 100% 50%;
+  --scene-secondary: 160 80% 40%;
   --scene-glow-h: 150;
   --scene-glow-s: 65%;
   --scene-glow-l: 15%;
 }
 
 [data-scene="terminal"] {
+  --scene-primary: 139 100% 50%;
+  --scene-secondary: 140 70% 40%;
   --scene-glow-h: 140;
   --scene-glow-s: 70%;
   --scene-glow-l: 16%;
 }
 
 [data-scene="sunset"] {
+  --scene-primary: 20 100% 55%;
+  --scene-secondary: 35 90% 50%;
   --scene-glow-h: 25;
   --scene-glow-s: 80%;
   --scene-glow-l: 20%;
