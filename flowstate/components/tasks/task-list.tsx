@@ -101,13 +101,13 @@ export function TaskList() {
           <span className="text-[9px] font-mono uppercase tracking-[0.22em] text-white/40">{t("dashboard.tasks.title", "Tasks")}</span>
           <h3 className="text-sm font-semibold text-white/95 tracking-tight mt-0.5">{t("dashboard.tasks.title", "Tasks")} ({tasks.length})</h3>
         </div>
-        <span className="text-[10px] font-mono text-primary bg-primary/[0.06] border border-primary/20 shadow-[0_2px_8px_rgba(0,229,255,0.1),inset_0_1px_1px_rgba(255,255,255,0.1)] px-2.5 py-0.5 rounded-full backdrop-blur-sm transition-all duration-300">
+        <span className="text-[10px] font-mono text-primary bg-primary/[0.06] border border-primary/20 shadow-[0_2px_8px_hsl(var(--primary)/0.1),inset_0_1px_1px_rgba(255,255,255,0.1)] px-2.5 py-0.5 rounded-full backdrop-blur-sm transition-all duration-300">
           {doneCount}/{tasks.length} {t("dashboard.tasks.complete", "Complete")}
         </span>
       </div>
 
       {/* Ultra-Premium Input Bar (macOS Spotlight Style) */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl shrink-0 transition-all duration-300 transform-gpu border border-white/[0.06] bg-white/[0.02] shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] focus-within:bg-white/[0.04] focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20 focus-within:shadow-[0_0_15px_rgba(0,229,255,0.12),inset_0_1px_1px_rgba(255,255,255,0.05)] relative">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl shrink-0 transition-all duration-300 transform-gpu border border-white/[0.06] bg-white/[0.02] shadow-[inset_0_1px_1px_rgba(255,255,255,0.03)] focus-within:bg-white/[0.04] focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20 focus-within:shadow-[0_0_15px_hsl(var(--primary)/0.12),inset_0_1px_1px_rgba(255,255,255,0.05)] relative">
         <input
           type="text"
           value={input}
@@ -123,7 +123,7 @@ export function TaskList() {
           size="icon" 
           onClick={handleAdd} 
           aria-label="Add task"
-          className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] hover:shadow-[0_0_10px_rgba(0,212,255,0.3)] transition-all duration-300 active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-primary-foreground hover:scale-[1.03] hover:shadow-[0_0_10px_hsl(var(--primary)/0.3)] transition-all duration-300 active:scale-95 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <Plus className="h-4 w-4" />
         </Button>
@@ -199,13 +199,13 @@ function TaskItem({
       className={cn(
         "group flex items-center gap-3 px-3.5 py-3 rounded-2xl transition-all duration-500 border relative overflow-hidden select-none transform-gpu glass-tile",
         isActive 
-          ? "bg-primary/[0.04] border-primary/30 ring-1 ring-primary/20 shadow-[0_4px_16px_rgba(0,212,255,0.08),inset_0_1px_1px_rgba(255,255,255,0.15)] opacity-100" 
+          ? "bg-primary/[0.04] border-primary/30 ring-1 ring-primary/20 shadow-[0_4px_16px_hsl(var(--primary)/0.08),inset_0_1px_1px_rgba(255,255,255,0.15)] opacity-100" 
           : "border-white/5 opacity-90 hover:opacity-100 hover:shadow-[0_4px_14px_-4px_rgba(0,0,0,0.45)]"
       )}
     >
       {/* Selection Left indicator dot (Pill shaped, matching mockups) */}
       {isActive && (
-        <span className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-primary/90 shadow-[0_0_8px_rgba(0,212,255,0.6)]" />
+        <span className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-primary/90 shadow-[0_0_8px_hsl(var(--primary)/0.6)]" />
       )}
 
       {/* Round Checklist Checkbox with SVG draw animation */}
@@ -217,8 +217,8 @@ function TaskItem({
         className={cn(
           "w-6 h-6 rounded-full border shrink-0 flex items-center justify-center transition-all duration-300 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           task.done
-            ? "bg-primary/10 border-primary/50 text-primary shadow-[0_0_12px_rgba(0,229,255,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]"
-            : "border-white/15 bg-white/[0.02] hover:border-primary/40 hover:bg-primary/[0.04] hover:shadow-[0_0_8px_rgba(0,229,255,0.1)] text-white/20"
+            ? "bg-primary/10 border-primary/50 text-primary shadow-[0_0_12px_hsl(var(--primary)/0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+            : "border-white/15 bg-white/[0.02] hover:border-primary/40 hover:bg-primary/[0.04] hover:shadow-[0_0_8px_hsl(var(--primary)/0.1)] text-white/20"
         )}
       >
         <div className="relative flex items-center justify-center h-3 w-3">
@@ -249,7 +249,7 @@ function TaskItem({
       <div className={cn(
         "w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 transition-all duration-300",
         isActive 
-          ? "bg-primary/10 border-primary/30 text-primary shadow-[0_0_10px_rgba(0,229,255,0.15)]" 
+          ? "bg-primary/10 border-primary/30 text-primary shadow-[0_0_10px_hsl(var(--primary)/0.15)]" 
           : "bg-white/[0.03] border-white/5 text-white/50 group-hover:text-white group-hover:border-white/10 group-hover:scale-105"
       )}>
         {getTaskIcon(task.title, "h-4 w-4")}
@@ -297,7 +297,7 @@ function TaskItem({
         className={cn(
           "h-8 w-8 rounded-lg shrink-0 transition-all duration-300 border active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isActive 
-            ? "bg-primary/10 border-primary/30 text-primary shadow-[0_0_10px_rgba(0,229,255,0.15)] opacity-100" 
+            ? "bg-primary/10 border-primary/30 text-primary shadow-[0_0_10px_hsl(var(--primary)/0.15)] opacity-100" 
             : "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100 hover:text-primary hover:bg-primary/5 hover:border-primary/20 border-transparent"
         )}
         onClick={onSetActive}

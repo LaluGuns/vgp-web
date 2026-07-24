@@ -136,7 +136,7 @@ export function AtmospherePanel({
               className={cn(
                 "relative z-10 py-1 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5",
                 activeTab === "music" ? "text-white font-bold" : "text-white/60 hover:text-white",
-                activeTourTarget === "music" && "ring-2 ring-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.4)] bg-[#00e5ff]/10"
+                activeTourTarget === "music" && "ring-2 ring-primary shadow-[0_0_15px_hsl(var(--primary)/0.4)] bg-primary/10"
               )}
             >
               <Music className="h-3.5 w-3.5" /> {t("dashboard.player.title", "Music")}
@@ -147,7 +147,7 @@ export function AtmospherePanel({
               className={cn(
                 "relative z-10 py-1 rounded-lg text-xs font-semibold transition-all duration-300 flex items-center justify-center gap-1.5",
                 activeTab === "ambient" ? "text-white font-bold" : "text-white/60 hover:text-white",
-                activeTourTarget === "ambient" && "ring-2 ring-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.4)] bg-[#00e5ff]/10"
+                activeTourTarget === "ambient" && "ring-2 ring-primary shadow-[0_0_15px_hsl(var(--primary)/0.4)] bg-primary/10"
               )}
             >
               <Volume2 className="h-3.5 w-3.5" /> {t("dashboard.player.ambient", "Ambient")}

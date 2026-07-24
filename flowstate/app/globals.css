@@ -65,25 +65,25 @@
     --foreground: 40 30% 90%;
     --card: 26 26% 9%;
     --card-foreground: 40 32% 95%;
-    --primary: 38 88% 56%;
+    --primary: var(--scene-primary, 38 88% 56%);
     --primary-foreground: 30 45% 8%;
-    --secondary: 24 62% 46%;
+    --secondary: var(--scene-secondary, 24 62% 46%);
     --secondary-foreground: 40 30% 95%;
     --muted: 26 18% 14%;
     --muted-foreground: 34 16% 62%;
-    --accent: 38 88% 56%;
-    --accent-foreground: 38 88% 56%;
+    --accent: var(--scene-primary, 38 88% 56%);
+    --accent-foreground: var(--scene-primary, 38 88% 56%);
     --border: 28 22% 18%;
-    --ring: 38 88% 56%;
+    --ring: var(--scene-primary, 38 88% 56%);
     --radius: 1.125rem; /* ~18px */
 
     /* Light smoked glass: near-opaque warm espresso, gentle blur (≤8px),
-       brass-tinted hairlines, warm (never white) inner glow. */
+       scene-tinted hairlines, warm inner glow. */
     --glass-bg: rgba(40, 29, 18, 0.85);
     --glass-bg-hover: rgba(50, 37, 24, 0.90);
-    --glass-border: hsl(38 88% 56% / 0.15);
-    --glass-border-top: hsl(38 82% 62% / 0.24);
-    --glass-border-left: hsl(38 84% 58% / 0.18);
+    --glass-border: hsl(var(--scene-primary, 38 88% 56%) / 0.18);
+    --glass-border-top: hsl(var(--scene-primary, 38 82% 62%) / 0.30);
+    --glass-border-left: hsl(var(--scene-primary, 38 84% 58%) / 0.22);
     --glass-inner-glow: rgba(255, 218, 168, 0.10);
     --glass-shadow: rgba(0, 0, 0, 0.15);
     --glass-blur: 8px;
@@ -100,25 +100,25 @@
     --foreground: 40 14% 94%;
     --card: 30 8% 10%;
     --card-foreground: 40 14% 96%;
-    --primary: 16 90% 55%;
+    --primary: var(--scene-primary, 16 90% 55%);
     --primary-foreground: 30 12% 8%;
-    --secondary: 220 8% 55%;
+    --secondary: var(--scene-secondary, 220 8% 55%);
     --secondary-foreground: 40 14% 94%;
     --muted: 30 6% 15%;
     --muted-foreground: 32 7% 60%;
-    --accent: 16 90% 55%;
-    --accent-foreground: 16 90% 55%;
+    --accent: var(--scene-primary, 16 90% 55%);
+    --accent-foreground: var(--scene-primary, 16 90% 55%);
     --border: 30 7% 20%;
-    --ring: 16 90% 55%;
+    --ring: var(--scene-primary, 16 90% 55%);
     --radius: 0.6875rem; /* ~11px */
 
-    /* Fully opaque dark-paper panels: no blur, neutral hairlines,
+    /* Fully opaque dark-paper panels: no blur, scene-tinted hairlines,
        no white glass highlights. */
     --glass-bg: hsl(30 8% 11%);
     --glass-bg-hover: hsl(30 8% 13%);
-    --glass-border: hsl(var(--foreground) / 0.12);
-    --glass-border-top: hsl(var(--foreground) / 0.12);
-    --glass-border-left: hsl(var(--foreground) / 0.12);
+    --glass-border: hsl(var(--scene-primary, 16 90% 55%) / 0.20);
+    --glass-border-top: hsl(var(--scene-primary, 16 90% 55%) / 0.30);
+    --glass-border-left: hsl(var(--scene-primary, 16 90% 55%) / 0.22);
     --glass-inner-glow: transparent;
     --glass-shadow: rgba(0, 0, 0, 0.12);
     --glass-blur: 0px;
@@ -135,25 +135,25 @@
     --foreground: 150 10% 72%;
     --card: 160 14% 7%;
     --card-foreground: 140 22% 88%;
-    --primary: 140 90% 55%;
+    --primary: var(--scene-primary, 140 90% 55%);
     --primary-foreground: 140 45% 6%;
-    --secondary: 140 28% 42%;
+    --secondary: var(--scene-secondary, 140 28% 42%);
     --secondary-foreground: 140 30% 88%;
     --muted: 160 12% 12%;
     --muted-foreground: 150 9% 55%;
-    --accent: 140 90% 55%;
-    --accent-foreground: 140 90% 55%;
+    --accent: var(--scene-primary, 140 90% 55%);
+    --accent-foreground: var(--scene-primary, 140 90% 55%);
     --border: 150 16% 16%;
-    --ring: 140 90% 55%;
+    --ring: var(--scene-primary, 140 90% 55%);
     --radius: 0.5rem; /* 8px */
 
-    /* Fully opaque instrument panels: no blur, phosphor-tinted hairlines,
+    /* Fully opaque instrument panels: no blur, scene-tinted hairlines,
        no glass highlights at all. */
     --glass-bg: hsl(160 10% 7%);
     --glass-bg-hover: hsl(160 11% 9%);
-    --glass-border: hsl(var(--primary) / 0.18);
-    --glass-border-top: hsl(var(--primary) / 0.18);
-    --glass-border-left: hsl(var(--primary) / 0.18);
+    --glass-border: hsl(var(--scene-primary, 140 90% 55%) / 0.22);
+    --glass-border-top: hsl(var(--scene-primary, 140 90% 55%) / 0.32);
+    --glass-border-left: hsl(var(--scene-primary, 140 90% 55%) / 0.25);
     --glass-inner-glow: transparent;
     --glass-shadow: rgba(0, 0, 0, 0.15);
     --glass-blur: 0px;

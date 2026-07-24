@@ -39,7 +39,7 @@ export function WorkspaceMobileNav({
         className={cn(
           "flex flex-col items-center justify-center flex-1 py-1 transition-all duration-300 rounded-full relative -top-3 w-14 h-14 bg-gradient-to-b from-white/10 to-white/[0.02] border border-white/15 shadow-xl backdrop-blur-xl",
           mobileTab === "focus"
-            ? "text-primary border-primary/40 shadow-[0_8px_24px_rgba(88,196,255,0.3),inset_0_1px_rgba(255,255,255,0.25)]"
+            ? "text-primary border-primary/40 shadow-[0_8px_24px_hsl(var(--primary)/0.3),inset_0_1px_rgba(255,255,255,0.25)]"
             : "text-white/60 hover:text-white"
         )}
       >
@@ -69,7 +69,7 @@ export function WorkspaceMobileNav({
         href="/insights"
         className={cn(
           "flex flex-col items-center justify-center flex-1 py-1 text-white/45 hover:text-white transition-all duration-300",
-          activeTourTarget === "stats" && "ring-2 ring-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.4)] bg-[#00e5ff]/10 rounded-xl"
+          activeTourTarget === "stats" && "ring-2 ring-primary shadow-[0_0_15px_hsl(var(--primary)/0.4)] bg-primary/10 rounded-xl"
         )}
       >
         <BarChart2 className="h-5 w-5 mb-0.5" />

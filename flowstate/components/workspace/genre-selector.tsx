@@ -62,12 +62,12 @@ export function GenreSelector() {
                   className={cn(
                     "shrink-0 px-3.5 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-wider transition-all duration-300 border flex items-center gap-1.5 active:scale-95",
                     isActive
-                      ? "bg-primary/[0.12] text-primary border-primary/25 shadow-[inset_0_1px_rgba(255,255,255,0.1),0_0_12px_rgba(0,229,255,0.25)] border-t-primary/35 border-l-primary/30 font-semibold"
+                      ? "bg-primary/[0.12] text-primary border-primary/25 shadow-[inset_0_1px_rgba(255,255,255,0.1),0_0_12px_hsl(var(--primary)/0.25)] border-t-primary/35 border-l-primary/30 font-semibold"
                       : "text-white/60 hover:text-white bg-white/[0.02] border-white/5 hover:bg-white/[0.06] hover:border-white/10"
                   )}
                 >
                   {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_6px_rgba(0,229,255,0.8)]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_6px_hsl(var(--primary)/0.8)]" />
                   )}
                   <span>{g}</span>
                 </button>

@@ -92,7 +92,7 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
           title="Start Tour Guide"
           className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 shadow-[inset_0_1px_rgba(255,255,255,0.05),0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 active:scale-90"
         >
-          <HelpCircle className="h-4 w-4 text-[#00e5ff] group-hover:text-cyan-300 transition-colors" />
+          <HelpCircle className="h-4 w-4 text-primary group-hover:text-primary/80 transition-colors" />
         </button>
         <button
           onClick={toggleFullscreen}

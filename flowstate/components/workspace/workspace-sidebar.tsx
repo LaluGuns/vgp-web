@@ -41,9 +41,9 @@ export function WorkspaceSidebar({ activeTourTarget }: { activeTourTarget: strin
       <div className="flex-1 flex flex-col gap-1.5 px-3">
         <Link
           href="/app"
-          className="relative px-4 py-3 flex items-center gap-3 rounded-2xl bg-white/[0.07] border border-white/20 border-t-white/40 border-l-primary/60 shadow-[0_8px_20px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-md font-mono text-[11px] font-bold uppercase tracking-wider text-primary drop-shadow-[0_0_10px_rgba(0,229,255,0.2)] transition-all duration-300 scale-[1.02]"
+          className="relative px-4 py-3 flex items-center gap-3 rounded-2xl bg-white/[0.07] border border-white/20 border-t-white/40 border-l-primary/60 shadow-[0_8px_20px_rgba(0,0,0,0.12),inset_0_1px_1px_rgba(255,255,255,0.25)] backdrop-blur-md font-mono text-[11px] font-bold uppercase tracking-wider text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.2)] transition-all duration-300 scale-[1.02]"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_hsl(var(--primary)/0.8)]" />
           <span>{t("dashboard.focus", "Focus")}</span>
         </Link>
         <Link
@@ -51,7 +51,7 @@ export function WorkspaceSidebar({ activeTourTarget }: { activeTourTarget: strin
           href="/insights"
           className={cn(
             "group px-4 py-3 flex items-center gap-3 rounded-2xl border border-transparent hover:border-white/10 hover:bg-white/[0.03] text-white/50 hover:text-white/90 transition-all duration-300 font-mono text-[11px] font-semibold uppercase tracking-wider hover:translate-x-1 active:scale-[0.98]",
-            activeTourTarget === "stats" && "ring-2 ring-[#00e5ff] shadow-[0_0_15px_rgba(0,229,255,0.4)] bg-[#00e5ff]/10 text-white"
+            activeTourTarget === "stats" && "ring-2 ring-primary shadow-[0_0_15px_hsl(var(--primary)/0.4)] bg-primary/10 text-white"
           )}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white/20 group-hover:bg-primary transition-colors duration-300" />
