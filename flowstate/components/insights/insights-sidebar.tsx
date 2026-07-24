@@ -2,25 +2,31 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { useTranslation } from "@/hooks/use-translation";
 import { userDisplayName, userAvatarUrl } from "@/lib/user-profile";
+import { useActiveLogoClass } from "@/components/workspace/use-active-logo-class";
 
 // Left SideNav Sidebar (Stitch premium theme spec)
 export function InsightsSidebar({ user }: { user: any }) {
   const { t, locale, setLocale } = useTranslation();
+  const activeLogoClass = useActiveLogoClass();
 
   return (
     <nav className="relative hidden md:flex flex-col h-full w-64 backdrop-blur-[45px] border-t border-l border-white/15 border-r border-b border-white/5 bg-white/[0.03] shadow-[0_24px_60px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.15)] rounded-[32px] py-8 shrink-0 z-20 overflow-hidden">
       {/* Top specular reflection strip */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
 
-      <div className="px-6 mb-10">
+      <div className="px-6 mb-10 select-none">
         <Image
           src="/icons/flowstate-logo.png"
           alt="Flow"
           width={150}
           height={53}
-          className="h-9 w-auto object-contain drop-shadow-[0_0_12px_rgba(0,229,255,0.22)]"
+          className={cn(
+            "h-9 w-auto object-contain theme-logo transition-all duration-500",
+            activeLogoClass
+          )}
           priority
         />
         <p className="text-[9px] font-mono text-white/40 uppercase tracking-widest mt-2.5 ml-0.5">{t("dashboard.deepWorkActive", "Deep Work Active")}</p>

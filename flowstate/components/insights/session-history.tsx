@@ -60,28 +60,28 @@ export function SessionHistory({
             >
 
               <div className="flex flex-col gap-1 min-w-0 z-10">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs font-semibold tracking-tight text-white/90 truncate">
                     {mounted ? formatDateTime(session.started_at, t) : t("insights.history.loadingDate", "Loading date...")}
                   </span>
                   {session.completed ? (
-                    <span className="inline-flex items-center gap-0.5 text-[8px] font-mono uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md">
-                      <CheckCircle className="h-2 w-2" /> {t("insights.chart.completed", "Completed")}
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                      <CheckCircle className="h-2.5 w-2.5" /> {t("insights.chart.completed", "Completed")}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-0.5 text-[8px] font-mono uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.5 rounded-md">
-                      <XCircle className="h-2 w-2" /> {t("insights.chart.skipped", "Skipped")}
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-md">
+                      <XCircle className="h-2.5 w-2.5" /> {t("insights.chart.skipped", "Skipped")}
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] text-white/50">
+                <div className="text-[11px] text-white/60">
                   {t("insights.history.durationAndFidgets", "{duration}m duration • {fidgets} fidgets").replace("{duration}", String(durMin)).replace("{fidgets}", String(session.fidget_count || 0))}
                   {session.context_bookmark && (
-                    <span className="block text-[9px] font-sans tracking-tight text-primary/65 mt-1 truncate max-w-[280px]">
+                    <div className="text-[10px] font-sans tracking-tight text-primary/80 mt-0.5 truncate max-w-[280px]">
                       {t("insights.history.workingOn", "Working on:")} &ldquo;{session.context_bookmark}&rdquo;
-                    </span>
+                    </div>
                   )}
-                </span>
+                </div>
               </div>
 
               <div className="flex items-center gap-3 shrink-0 z-10">

@@ -62,24 +62,26 @@ export function FocusHeatmap({ sessions }: { sessions: DbSession[] }) {
   return (
     <div className="glass-card p-6 relative overflow-visible select-none mt-2">
 
-      <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-primary leading-none mb-1.5">{t("insights.heatmap.title", "Focus Heatmap")}</h2>
           <span className="text-[10px] text-white/50 font-sans tracking-normal leading-normal">{t("insights.heatmap.subtitle", "Daily deep focus duration across the last 24 weeks")}</span>
         </div>
-        <div className="flex gap-5 text-right">
-          <div><strong className="block text-lg text-white tabular-nums">{periodTotal}m</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.cumulative", "Cumulative")}</span></div>
-          <div><strong className="block text-lg text-white tabular-nums">{activeDays}</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.activeDays", "Active days")}</span></div>
-          <div><strong className="block text-lg text-white tabular-nums">{periodSessions}</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.sessions", "Sessions")}</span></div>
-        </div>
-        <div className="flex items-center gap-2 text-[9px] font-sans font-semibold uppercase tracking-[0.1em] text-white/40 basis-full justify-end">
-          <span>{t("insights.heatmap.less", "Less")}</span>
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-white/[0.03] border border-white/[0.04]" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-secondary/15 border border-secondary/25" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-secondary/45 border border-secondary/55" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-primary/35 border border-primary/45" />
-          <div className="w-2.5 h-2.5 rounded-[2px] bg-primary/80 border border-primary" />
-          <span>{t("insights.heatmap.more", "More")}</span>
+        <div className="flex flex-wrap items-center gap-6 sm:justify-end">
+          <div className="flex gap-5 text-right">
+            <div><strong className="block text-lg text-white tabular-nums">{periodTotal}m</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.cumulative", "Cumulative")}</span></div>
+            <div><strong className="block text-lg text-white tabular-nums">{activeDays}</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.activeDays", "Active days")}</span></div>
+            <div><strong className="block text-lg text-white tabular-nums">{periodSessions}</strong><span className="text-[8px] uppercase tracking-wider text-white/35">{t("insights.heatmap.sessions", "Sessions")}</span></div>
+          </div>
+          <div className="flex items-center gap-1.5 text-[9px] font-sans font-semibold uppercase tracking-[0.1em] text-white/40 sm:border-l sm:border-white/10 sm:pl-4">
+            <span>{t("insights.heatmap.less", "Less")}</span>
+            <div className="w-2.5 h-2.5 rounded-[2px] bg-white/[0.03] border border-white/[0.04]" />
+            <div className="w-2.5 h-2.5 rounded-[2px] bg-secondary/15 border border-secondary/25" />
+            <div className="w-2.5 h-2.5 rounded-[2px] bg-secondary/45 border border-secondary/55" />
+            <div className="w-2.5 h-2.5 rounded-[2px] bg-primary/35 border border-primary/45" />
+            <div className="w-2.5 h-2.5 rounded-[2px] bg-primary/80 border border-primary" />
+            <span>{t("insights.heatmap.more", "More")}</span>
+          </div>
         </div>
       </div>
 
