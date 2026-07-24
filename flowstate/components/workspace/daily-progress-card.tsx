@@ -112,9 +112,9 @@ export function DailyProgressCard() {
         <svg className="absolute inset-0 -rotate-90 w-full h-full p-1 z-0" viewBox="0 0 64 64">
           <defs>
             <linearGradient id="progressRingGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={SCENE_PROGRESS_THEMES[scene]?.gradientStart ?? "#00A3FF"} />
-              <stop offset="60%" stopColor={SCENE_PROGRESS_THEMES[scene]?.gradientMid ?? "#00E5FF"} />
-              <stop offset="100%" stopColor={SCENE_PROGRESS_THEMES[scene]?.gradientEnd ?? "#80F5FF"} />
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.65" />
+              <stop offset="60%" stopColor="hsl(var(--primary))" stopOpacity="0.85" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="1" />
             </linearGradient>
             <filter id="ring-glow" x="-30%" y="-30%" width="160%" height="160%">
               <feGaussianBlur stdDeviation="3.5" result="blur" />

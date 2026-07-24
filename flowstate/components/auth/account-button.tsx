@@ -124,7 +124,7 @@ export function AccountButton() {
           <form onSubmit={handleSignOut}>
             <button
               type="submit"
-              className="w-full text-left px-3 py-2.5 rounded-xl text-xs text-white/50 hover:text-rose-400 hover:bg-rose-500/10 flex items-center gap-2.5 transition-all duration-200 border-t border-white/[0.08] mt-1 pt-2.5"
+              className="w-full text-left px-3 py-2.5 rounded-xl text-xs text-white/50 hover:text-destructive hover:bg-destructive/10 flex items-center gap-2.5 transition-all duration-200 border-t border-white/[0.08] mt-1 pt-2.5"
             >
               <LogOut className="h-3.5 w-3.5" /> {t("dashboard.signOut", "Sign out")}
             </button>

@@ -141,7 +141,7 @@ function VuMeter({
         <line
           ref={needleRef}
           x1="0" y1="4" x2="0" y2="-48"
-          stroke="hsl(34 80% 62%)" strokeWidth="1.6" strokeLinecap="round"
+          stroke="hsl(var(--primary))" strokeWidth="1.6" strokeLinecap="round"
           style={{ transform: "rotate(-44deg)", transformOrigin: "0 0" }}
         />
         <circle cx="0" cy="0" r="4" fill="hsl(28 18% 14%)" stroke="hsl(30 12% 26%)" />
@@ -174,7 +174,7 @@ function Reel({ cx, tapeR, spinning }: { cx: number; tapeR: number; spinning: bo
             dur="2.6s" repeatCount="indefinite"
           />
         )}
-        <circle cx={cx} cy="0" r="30" fill="hsl(35 10% 72% / 0.13)" stroke="hsl(40 18% 70% / 0.5)" strokeWidth="1.4" />
+        <circle cx={cx} cy="0" r="30" fill="hsl(35 10% 72% / 0.13)" stroke="hsl(var(--primary) / 0.4)" strokeWidth="1.4" />
         {/* Three trapezoid windows like a real NAB reel */}
         {[90, 210, 330].map((a) => (
           <path
@@ -182,11 +182,11 @@ function Reel({ cx, tapeR, spinning }: { cx: number; tapeR: number; spinning: bo
             d="M -7 -26 L 7 -26 L 11 -12 L -11 -12 Z"
             transform={`translate(${cx} 0) rotate(${a})`}
             fill="hsl(26 26% 7%)"
-            stroke="hsl(40 18% 70% / 0.35)"
+            stroke="hsl(var(--primary) / 0.3)"
             strokeWidth="0.8"
           />
         ))}
-        <circle cx={cx} cy="0" r="9" fill="hsl(30 8% 22%)" stroke="hsl(40 20% 66% / 0.6)" strokeWidth="1.2" />
+        <circle cx={cx} cy="0" r="9" fill="hsl(30 8% 22%)" stroke="hsl(var(--primary) / 0.5)" strokeWidth="1.2" />
         <circle cx={cx} cy="0" r="3" fill="hsl(26 20% 8%)" />
       </g>
     </g>
@@ -411,8 +411,8 @@ export function StudioDeck({
             <span
               className="mt-2 px-3 py-[3px] rounded-[4px] text-[9px] font-mono font-bold uppercase tracking-[0.28em] flex items-center gap-1.5"
               style={{
-                color: isFocus ? "hsl(var(--primary))" : "#34d399",
-                border: `1px solid ${isFocus ? "hsl(var(--primary) / 0.4)" : "rgba(52,211,153,0.4)"}`,
+                color: isFocus ? "hsl(var(--primary))" : "hsl(var(--secondary))",
+                border: `1px solid ${isFocus ? "hsl(var(--primary) / 0.4)" : "hsl(var(--secondary) / 0.4)"}`,
                 background: "rgba(0,0,0,0.45)",
               }}
             >

@@ -65,11 +65,11 @@ export function SessionHistory({
                     {mounted ? formatDateTime(session.started_at, t) : t("insights.history.loadingDate", "Loading date...")}
                   </span>
                   {session.completed ? (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md">
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-md">
                       <CheckCircle className="h-2.5 w-2.5" /> {t("insights.chart.completed", "Completed")}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-md">
+                    <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium uppercase tracking-wider text-secondary/80 bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded-md">
                       <XCircle className="h-2.5 w-2.5" /> {t("insights.chart.skipped", "Skipped")}
                     </span>
                   )}

@@ -336,7 +336,7 @@ export function TimerDisplay() {
         <div className="absolute inset-[15px] rounded-full overflow-hidden z-10 pointer-events-none">
           <LiquidSphere
             isRunning={status === "running"}
-            color={isFocus ? (SCENE_THEMES[scene]?.primary ?? "#58c4ff") : "#51ecd6"}
+            color={isFocus ? (SCENE_THEMES[scene]?.primary ?? "#58c4ff") : (SCENE_THEMES[scene]?.gradientMid ?? "#10B981")}
           />
         </div>
 
@@ -356,13 +356,13 @@ export function TimerDisplay() {
             <div
               className={cn(
                 "absolute w-[250px] h-[250px] rounded-full border opacity-0 pointer-events-none animate-ripple z-0",
-                isFocus ? "border-primary/20" : "border-emerald-500/20"
+                isFocus ? "border-primary/20" : "border-secondary/20"
               )}
             />
             <div
               className={cn(
                 "absolute w-[250px] h-[250px] rounded-full border opacity-0 pointer-events-none animate-ripple-delayed z-0",
-                isFocus ? "border-primary/20" : "border-emerald-500/20"
+                isFocus ? "border-primary/20" : "border-secondary/20"
               )}
             />
           </>
@@ -428,19 +428,19 @@ export function TimerDisplay() {
             <div
               className={cn(
                 "px-3.5 py-1 rounded-full border bg-black/40 border-white/[0.06] backdrop-blur-sm flex items-center gap-2",
-                isFocus ? "border-primary/20" : "border-emerald-500/25"
+                isFocus ? "border-primary/20" : "border-secondary/25"
               )}
             >
               <span
                 className={cn(
                   "w-1.5 h-1.5 rounded-full animate-pulse",
-                  isFocus ? "bg-primary shadow-[0_0_6px_hsl(var(--primary))]" : "bg-emerald-400 shadow-[0_0_6px_#10B981]"
+                  isFocus ? "bg-primary shadow-[0_0_6px_hsl(var(--primary))]" : "bg-secondary shadow-[0_0_6px_hsl(var(--secondary))]"
                 )}
               />
               <span
                 className={cn(
                   "text-[9px] font-mono font-bold uppercase tracking-[0.2em]",
-                  isFocus ? "text-primary glow-text-primary" : "text-emerald-400"
+                  isFocus ? "text-primary glow-text-primary" : "text-secondary glow-text-secondary"
                 )}
               >
                 {phaseLabel}
@@ -454,7 +454,7 @@ export function TimerDisplay() {
             style={{
               filter: isFocus
                 ? `drop-shadow(0px 2px 8px rgba(0,0,0,0.5)) drop-shadow(0px 4px 20px ${SCENE_THEMES[scene]?.shadowColor ?? "rgba(88,196,255,0.4)"})`
-                : "drop-shadow(0px 2px 8px rgba(0,0,0,0.5)) drop-shadow(0px 4px 20px rgba(81,236,214,0.4))"
+                : `drop-shadow(0px 2px 8px rgba(0,0,0,0.5)) drop-shadow(0px 4px 20px ${SCENE_THEMES[scene]?.shadowColor ?? "rgba(88,196,255,0.4)"})`
             }}
           >
             {formatTime(secondsRemaining)}
@@ -520,7 +520,7 @@ export function TimerDisplay() {
               status === "running"
                 ? isFocus
                   ? "border-primary shadow-[0_0_15px_hsl(var(--primary)/0.5)]"
-                  : "border-emerald-400 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                  : "border-secondary text-secondary shadow-[0_0_15px_hsl(var(--secondary)/0.5)]"
                 : "border-primary shadow-[0_0_15px_hsl(var(--primary)/0.4)] animate-pulse-glow"
             )}
             onClick={handlePlayPause}

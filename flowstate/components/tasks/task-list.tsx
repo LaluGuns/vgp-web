@@ -284,7 +284,7 @@ function TaskItem({
         </span>
         <span className={cn(
           "text-[9px] font-mono mt-0.5 transition-colors duration-300",
-          task.done ? "text-emerald-400/50 font-medium" : "text-white/40"
+          task.done ? "text-primary/70 font-medium" : "text-white/40"
         )}>
           {task.done ? t("dashboard.tasks.complete", "Completed") : `${t("dashboard.tasks.session", "Session")}: ${task.pomodorosDone}/${task.pomodorosEstimated}`}
         </span>

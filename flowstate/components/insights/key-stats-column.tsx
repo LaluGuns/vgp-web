@@ -43,7 +43,7 @@ export function KeyStatsColumn({
         <div className={cn(
           "flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border gap-0.5",
           sessionsThisWeek > 0
-            ? "text-emerald-400 bg-emerald-400/10 border-emerald-400/20 shadow-[inset_0_0_8px_rgba(81,236,214,0.05)]"
+            ? "text-primary bg-primary/10 border-primary/20 shadow-[inset_0_0_8px_hsl(var(--primary)/0.1)]"
             : "text-white/40 bg-white/[0.03] border-white/10"
         )}>
           {sessionsThisWeek > 0 ? (
@@ -68,10 +68,10 @@ export function KeyStatsColumn({
         <div className={cn(
           "flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border gap-0.5",
           completionRate >= 70
-            ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+            ? "text-primary bg-primary/10 border-primary/20"
             : completionRate >= 40
-              ? "text-primary bg-primary/10 border-primary/20"
-              : "text-amber-400 bg-amber-500/10 border-amber-500/20"
+              ? "text-secondary bg-secondary/10 border-secondary/20"
+              : "text-white/60 bg-white/5 border-white/10"
         )}>
           {completionRate >= 70 ? t("insights.metrics.completion.strong", "Strong") : completionRate >= 40 ? t("insights.metrics.completion.steady", "Steady") : t("insights.metrics.completion.building", "Building")}
         </div>
@@ -87,11 +87,11 @@ export function KeyStatsColumn({
             </div>
           ) : (
             categoriesData.map((cat, idx) => {
-              const dotColor = idx === 0 ? "bg-primary" : idx === 1 ? "bg-secondary" : "bg-emerald-400";
+              const dotColor = idx === 0 ? "bg-primary" : idx === 1 ? "bg-secondary" : "bg-primary/50";
               return (
                 <div key={idx} className="flex justify-between items-center bg-white/[0.02] p-3 rounded-xl border border-white/5 hover:bg-white/[0.05] transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className={cn("w-2 h-2 rounded-full shrink-0 shadow-[0_0_8px_currentColor]", dotColor === "bg-primary" ? "text-primary" : dotColor === "bg-secondary" ? "text-secondary" : "text-emerald-400", dotColor)}></div>
+                    <div className={cn("w-2 h-2 rounded-full shrink-0 shadow-[0_0_8px_currentColor]", dotColor === "bg-primary" ? "text-primary" : dotColor === "bg-secondary" ? "text-secondary" : "text-primary/50", dotColor)}></div>
                     <span className="text-xs font-semibold text-white/80 tracking-tight truncate">{cat.name === "General Deep Work" ? t("insights.focusBlocks.general", "General Deep Work") : cat.name === "Software Development" ? t("insights.focusBlocks.software", "Software Development") : cat.name === "Design & UI" ? t("insights.focusBlocks.design", "Design & UI") : cat.name === "Technical Writing" ? t("insights.focusBlocks.writing", "Technical Writing") : cat.name === "Research & Learning" ? t("insights.focusBlocks.research", "Research & Learning") : cat.name === "Planning & Admin" ? t("insights.focusBlocks.planning", "Planning & Admin") : cat.name}</span>
                   </div>
                   <span className="text-xs font-mono font-bold text-primary shrink-0 ml-2">{formatMinutes(cat.minutes)}</span>

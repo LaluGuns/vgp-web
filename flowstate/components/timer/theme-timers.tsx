@@ -91,7 +91,7 @@ export function TerminalReadoutTimer({
   const filled = Math.round((Math.max(0, Math.min(100, progress)) / 100) * cells);
   const m = Math.floor(secondsRemaining / 60).toString().padStart(2, "0");
   const s = (secondsRemaining % 60).toString().padStart(2, "0");
-  const accent = isFocus ? "hsl(var(--primary))" : "#34d399";
+  const accent = isFocus ? "hsl(var(--primary))" : "hsl(var(--secondary))";
   const volCells = 10;
   const volFilled = Math.round(Math.max(0, Math.min(1, volume)) * volCells);
 
@@ -247,7 +247,7 @@ export function EditorialFolioTimer({
   onGiveUp,
   t,
 }: ThemeTimerProps) {
-  const accent = isFocus ? "hsl(var(--primary))" : "#34d399";
+  const accent = isFocus ? "hsl(var(--primary))" : "hsl(var(--secondary))";
 
   return (
     <div className="relative w-full max-w-[440px] flex items-center justify-center shrink-0 select-none">

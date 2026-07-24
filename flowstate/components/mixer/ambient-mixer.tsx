@@ -259,9 +259,9 @@ export function AmbientMixer() {
               } : undefined}
               tabIndex={locked ? 0 : undefined}
               className={cn(
-                "flex flex-col items-center justify-between p-3 px-2.5 rounded-2xl transition-all duration-500 min-h-[112px] relative overflow-hidden select-none transform-gpu glass-tile group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500/50",
+                "flex flex-col items-center justify-between p-3 px-2.5 rounded-2xl transition-all duration-500 min-h-[112px] relative overflow-hidden select-none transform-gpu glass-tile group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/50",
                 active 
-                  ? "ring-1 ring-primary/30 shadow-[0_4px_14px_rgba(0,212,255,0.12)] scale-[1.02] hover:scale-[1.04]" 
+                  ? "ring-1 ring-primary/30 shadow-[0_4px_14px_hsl(var(--primary)/0.15)] scale-[1.02] hover:scale-[1.04]" 
                   : locked
                     ? "opacity-60 hover:opacity-95 cursor-pointer hover:scale-[1.02] border-white/5 active:scale-[0.98]"
                     : "border-white/5 opacity-85 hover:opacity-100 hover:scale-[1.02] active:scale-[0.98] cursor-default"
@@ -269,8 +269,8 @@ export function AmbientMixer() {
             >
               {/* Premium Lock Corner */}
               {locked && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30 flex items-center justify-center shadow-[0_0_8px_rgba(245,158,11,0.15)] transition-all duration-300 group-hover:scale-110">
-                  <Lock className="h-2.5 w-2.5 text-amber-400" />
+                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 border border-primary/30 flex items-center justify-center shadow-[0_0_8px_hsl(var(--primary)/0.2)] transition-all duration-300 group-hover:scale-110">
+                  <Lock className="h-2.5 w-2.5 text-primary" />
                 </div>
               )}
 

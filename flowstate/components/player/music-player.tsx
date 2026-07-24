@@ -97,7 +97,7 @@ export function MusicPlayer() {
         <div
           className={cn(
             "w-14 h-14 rounded-xl bg-gradient-to-br from-white/[0.04] to-white/[0.01] border border-white/10 flex items-center justify-center shrink-0 relative overflow-hidden",
-            isPlaying ? "border-primary/35 shadow-[inset_0_1px_rgba(255,255,255,0.1),0_0_15px_rgba(0,229,255,0.2)]" : "shadow-[inset_0_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.15)]"
+            isPlaying ? "border-primary/35 shadow-[inset_0_1px_rgba(255,255,255,0.1),0_0_15px_hsl(var(--primary)/0.2)]" : "shadow-[inset_0_1px_rgba(255,255,255,0.05),0_4px_12px_rgba(0,0,0,0.15)]"
           )}
         >
           <div className="absolute inset-0.5 rounded-lg bg-gradient-to-b from-white/15 to-transparent opacity-80 pointer-events-none" />
@@ -118,7 +118,7 @@ export function MusicPlayer() {
       </div>
 
       {playbackError && (
-        <div role="alert" className="flex items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-400/[0.08] px-3 py-2">
+        <div role="alert" className="flex items-center justify-between gap-3 rounded-xl border border-destructive/25 bg-destructive/[0.08] px-3 py-2">
           <span className="text-[11px] text-white/65">
             {t("insights.error.description", "Please check your connection and try again.")}
           </span>
@@ -145,7 +145,7 @@ export function MusicPlayer() {
           size="icon-sm"
           className={cn(
             shuffle
-              ? "text-primary bg-primary/10 border-primary/25 shadow-[0_0_10px_rgba(0,229,255,0.2)]"
+              ? "text-primary bg-primary/10 border-primary/25 shadow-[0_0_10px_hsl(var(--primary)/0.2)]"
               : "text-white/35 border-transparent",
             "transition-all duration-300 hover:text-white hover:bg-white/[0.06] hover:border-white/10 active:scale-95 border rounded-xl"
           )}
@@ -179,7 +179,7 @@ export function MusicPlayer() {
         >
           <div className="absolute inset-0.5 rounded-full bg-gradient-to-b from-white/25 to-transparent opacity-90 pointer-events-none" />
           {isPlaying ? (
-            <Pause className="h-5 w-5 relative z-10 text-primary drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" />
+            <Pause className="h-5 w-5 relative z-10 text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]" />
           ) : (
             <Play className="h-5 w-5 ml-0.5 relative z-10 text-white/90 group-hover:text-white transition-colors duration-200" />
           )}
@@ -198,7 +198,7 @@ export function MusicPlayer() {
           size="icon-sm"
           className={cn(
             repeat !== "none"
-              ? "text-primary bg-primary/10 border-primary/25 shadow-[0_0_10px_rgba(0,229,255,0.2)]"
+              ? "text-primary bg-primary/10 border-primary/25 shadow-[0_0_10px_hsl(var(--primary)/0.2)]"
               : "text-white/35 border-transparent",
             "transition-all duration-300 hover:text-white hover:bg-white/[0.06] hover:border-white/10 active:scale-95 border rounded-xl"
           )}
@@ -232,7 +232,7 @@ export function MusicPlayer() {
 
 
       {/* Search */}
-      <div className="flex items-center gap-2 bg-white/[0.02] border border-white/10 rounded-full px-3.5 py-1.5 transition-all duration-300 focus-within:border-primary/45 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_10px_rgba(0,229,255,0.08)] relative overflow-hidden group">
+      <div className="flex items-center gap-2 bg-white/[0.02] border border-white/10 rounded-full px-3.5 py-1.5 transition-all duration-300 focus-within:border-primary/45 focus-within:bg-white/[0.04] focus-within:shadow-[0_0_10px_hsl(var(--primary)/0.08)] relative overflow-hidden group">
         <div className="absolute inset-x-0 top-0 h-[1px] bg-white/10 group-focus-within:bg-primary/20" />
         <Search className="h-3.5 w-3.5 text-white/40 shrink-0 group-focus-within:text-primary transition-colors duration-300" />
         <input
@@ -265,7 +265,7 @@ export function MusicPlayer() {
               className={cn(
                 "w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-left transition-all duration-300 border relative group",
                 isActive
-                  ? "bg-primary/[0.08] border-primary/25 text-primary shadow-[inset_0_1px_rgba(255,255,255,0.08),0_0_15px_rgba(0,229,255,0.12)] border-t-primary/40 border-l-primary/30 font-semibold"
+                  ? "bg-primary/[0.08] border-primary/25 text-primary shadow-[inset_0_1px_rgba(255,255,255,0.08),0_0_15px_hsl(var(--primary)/0.12)] border-t-primary/40 border-l-primary/30 font-semibold"
                   : "text-white/60 hover:text-white hover:bg-white/[0.03] border-transparent hover:border-white/10 hover:shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
               )}
             >

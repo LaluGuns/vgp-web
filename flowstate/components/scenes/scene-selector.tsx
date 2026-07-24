@@ -214,7 +214,7 @@ export function SceneSelector() {
                 "glass-tile",
                 s.gradient,
                 isActive
-                  ? "ring-1 ring-primary/60 shadow-[0_0_14px_rgba(0,212,255,0.1)] scale-[1.005]"
+                  ? "ring-1 ring-primary/60 shadow-[0_0_14px_hsl(var(--primary)/0.2)] scale-[1.005]"
                   : "border-white/5 opacity-85 hover:opacity-100"
               )}
             >
@@ -223,7 +223,7 @@ export function SceneSelector() {
               
               {/* Selection Checkmark */}
               {isActive && (
-                <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary/[0.08] border border-primary/20 flex items-center justify-center shadow-[0_0_6px_rgba(0,212,255,0.12)] animate-in zoom-in-75 duration-300">
+                <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-primary/[0.08] border border-primary/20 flex items-center justify-center shadow-[0_0_6px_hsl(var(--primary)/0.25)] animate-in zoom-in-75 duration-300">
                   <Check className="h-3 w-3 text-primary" />
                 </div>
               )}

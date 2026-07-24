@@ -235,7 +235,7 @@ export function FocusTrendChart({ sessions }: { sessions: DbSession[] }) {
                   cx={p.x}
                   cy={p.y}
                   r="4.5"
-                  style={{ fill: p.completed ? "hsl(var(--primary))" : "#a855f7" }}
+                  style={{ fill: p.completed ? "hsl(var(--primary))" : "hsl(var(--secondary))" }}
                   stroke="#0b1326"
                   strokeWidth="2"
                   className="cursor-pointer transition-transform duration-150 hover:scale-150 [transform-box:fill-box] origin-center"
@@ -277,7 +277,7 @@ export function FocusTrendChart({ sessions }: { sessions: DbSession[] }) {
               </span>
               <span className={cn(
                 "text-[8px] px-1.5 py-0.5 rounded font-bold uppercase",
-                hoveredPoint.completed ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                hoveredPoint.completed ? "bg-primary/10 text-primary border border-primary/20" : "bg-secondary/10 text-secondary border border-secondary/20"
               )}>
                 {hoveredPoint.completed ? t("insights.chart.completed", "Completed") : t("insights.chart.skipped", "Skipped")}
               </span>
@@ -307,7 +307,7 @@ export function FocusTrendChart({ sessions }: { sessions: DbSession[] }) {
             <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {t("insights.chart.completed", "Completed")}
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#a855f7]" /> {t("insights.chart.skipped", "Skipped")}
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary" /> {t("insights.chart.skipped", "Skipped")}
           </span>
         </div>
         <span>{t("insights.chart.latest", "Latest Session")}</span>
