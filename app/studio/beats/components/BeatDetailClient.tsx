@@ -91,15 +91,16 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 </div>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
-                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black">
+                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black min-h-[180px]">
                                     <div className="border-b border-white/10 px-3 py-2 text-[11px] font-medium text-white/60 flex justify-between bg-black/40">
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
                                     <iframe
                                         src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                        className="block h-[160px] w-full border-none"
-                                        allow="autoplay; encrypted-media; fullscreen"
+                                        className="block h-[180px] w-full border-none"
+                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                        referrerPolicy="no-referrer-when-downgrade"
                                         title={`${beat.title} official BeatStars player`}
                                     />
                                 </div>

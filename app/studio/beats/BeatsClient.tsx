@@ -262,8 +262,9 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             <div className="bg-[#030405]">
                                 <iframe
                                     src="https://player.beatstars.com/?storeId=122437"
-                                    className="block h-[620px] w-full sm:h-[700px] lg:h-[760px] border-none"
-                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen"
+                                    className="block h-[700px] w-full sm:h-[780px] lg:h-[840px] border-none"
+                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                    referrerPolicy="no-referrer-when-downgrade"
                                     title="VGP Beat Store Catalog Player"
                                 />
                             </div>
@@ -358,11 +359,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     </div>
 
                                     {/* Dedicated Track Embed Player */}
-                                    <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black">
+                                    <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
                                         <iframe
                                             src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                            className="block h-[160px] w-full border-none"
-                                            allow="autoplay; encrypted-media; fullscreen"
+                                            className="block h-[180px] w-full border-none"
+                                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                            referrerPolicy="no-referrer-when-downgrade"
                                             title={`${beat.title} BeatStars Audio Player`}
                                         />
                                     </div>
