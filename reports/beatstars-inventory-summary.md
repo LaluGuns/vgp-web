@@ -1,12 +1,12 @@
 # BeatStars Track Inventory Extraction Summary Report
 
-- **Extracted At**: 2026-07-25T06:28:56.895Z
-- **Total BeatStars Tracks Verified**: 276
+- **Extracted At**: 2026-07-25T06:50:48.716Z
+- **Total BeatStars Tracks Verified**: 325
 - **Target Catalog Total**: 329 Tracks
 
 ---
 
-## Verified Inventory Table (276 / 329 Tracks)
+## Verified Inventory Table (325 / 329 Tracks)
 
 | # | Exact Track Title | Track ID | Verification Status | Embed URL |
 |---|---|---|---|---|
@@ -286,3 +286,52 @@
 | 274 | `Dababy type beat "Maniac"` | `11271260` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=11271260) |
 | 275 | `Guitar Dababy Type Beat "Vibe"` | `11284713` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=11284713) |
 | 276 | `Night Dance` | `14643816` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=14643816) |
+| 277 | `Cyber Arcade` | `18404240` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18404240) |
+| 278 | `Cyberpunk Night City` | `18385383` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18385383) |
+| 279 | `Sweet Night` | `18341340` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18341340) |
+| 280 | `Night Rider` | `18322099` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18322099) |
+| 281 | `Night in Cyber City` | `18200057` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18200057) |
+| 282 | `delusion` | `18114985` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=18114985) |
+| 283 | `Miami Night` | `17861460` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17861460) |
+| 284 | `Cyberpunk Vision Pro` | `17660624` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17660624) |
+| 285 | `Sins City | 80s Retro Synthwave Pop` | `17566468` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17566468) |
+| 286 | `Gotham Night City | Cyberpunk 80s Retro Synthwave` | `17482944` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17482944) |
+| 287 | `Vice City | 80s Retro Synthwave` | `17452970` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17452970) |
+| 288 | `Blade Runner (Cyberpunk Techno Synthwave)` | `17086692` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17086692) |
+| 289 | `Cyberpunk Tokyo City` | `17060391` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=17060391) |
+| 290 | `Back to The Future | Cyberpunk 80's Retro Synthwave` | `16343907` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16343907) |
+| 291 | `Night Runner | Cyberpunk 80s Retro Synthwave` | `16305711` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16305711) |
+| 292 | `Night Drive | Cyberpunk 80s Retro Synthwave` | `16297975` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16297975) |
+| 293 | `Pirate Phonk 2.0 | Phonk Choir House Techno` | `16287311` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16287311) |
+| 294 | `Tokyo Night City | Cyberpunk 80s Retro Synthwave` | `16275701` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16275701) |
+| 295 | `Pirate Phonk | Japanese Phonk House Techno` | `16266459` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16266459) |
+| 296 | `Nami One Piece | Cyberpunk 80's Retro Synthwave` | `16228184` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=16228184) |
+| 297 | `CyberPhonk | Cyberpunk Phonk House Beat` | `15996050` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15996050) |
+| 298 | `Edgerunner | Cyberpunk 80s Retro Synthwave` | `15969636` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15969636) |
+| 299 | `Miami Vice City | Cyberpunk 80s Retro Synthwave` | `15940173` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15940173) |
+| 300 | `Cyber Ninja | Cyberpunk Dark Techno Beat` | `15908636` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15908636) |
+| 301 | `B M W E 3 0 | Cyberpunk Phonk Jersey Drill Trap Beat` | `15880417` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15880417) |
+| 302 | `M U S T A N G | Cyberpunk Phonk Jersey Drill Trap Beat` | `15868597` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15868597) |
+| 303 | `Just Wanna Swag | Cyberpunk Jersey Drill Trap Beat` | `15739906` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15739906) |
+| 304 | `Just Wanna Space | Cyberpunk Jersey Club Phonk Type Beat` | `15726873` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15726873) |
+| 305 | `Just Wanna W | Cyberpunk Phonk Jersey Club Type Beat` | `15687176` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15687176) |
+| 306 | `Just Wanna Race | Cyberpunk Lil Uzi Vert Jersey Phonk Beat` | `15668270` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15668270) |
+| 307 | `No Way Back | Cyberpunk Trap Beat` | `15589499` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15589499) |
+| 308 | `Mando` | `15479947` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15479947) |
+| 309 | `Tokyo Dance` | `15398734` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15398734) |
+| 310 | `This is the way` | `15391031` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=15391031) |
+| 311 | `One Night Stand` | `14595235` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=14595235) |
+| 312 | `Best Day` | `13175871` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=13175871) |
+| 313 | `MOVE` | `13107603` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=13107603) |
+| 314 | `Smokin' Dope` | `13024167` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=13024167) |
+| 315 | `Cyber Pussy` | `12197191` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=12197191) |
+| 316 | `DRUNK` | `12170011` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=12170011) |
+| 317 | `House Type Beat "Good Vibes"` | `12110366` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=12110366) |
+| 318 | `SAD DANCE` | `11310234` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=11310234) |
+| 319 | `Cardi B Type beat " HOT "` | `8599998` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=8599998) |
+| 320 | `WEIRD HARD TRAP BEAT "TRICK"` | `7949406` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=7949406) |
+| 321 | `*FREE HARD GUITAR TRAP BEAT "GOTHAM CITY"` | `11118508` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=11118508) |
+| 322 | `Tight Melodic Hiphop/Trap Instrumental "Innocent"` | `9549461` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=9549461) |
+| 323 | `*FREE ORCHESTRA DRILL BEAT "RED ALERT"` | `11006271` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=11006271) |
+| 324 | `FRONTMAN` | `9721472` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=9721472) |
+| 325 | `HARD 808 TRAP BEAT "CLOWN"` | `7949789` | `verified` | [Embed Widget](https://www.beatstars.com/embed/track?id=7949789) |
