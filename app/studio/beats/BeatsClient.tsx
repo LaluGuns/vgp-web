@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram, Play, Pause, Volume2 } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -11,7 +11,8 @@ import {
 } from '@/components/editorial/EditorialPrimitives';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { catalogCredentials } from '@/lib/vgp-ecosystem';
-import { categories, beatsCatalog } from '@/lib/catalog';
+import { categories, beatsCatalog, BeatProduct } from '@/lib/catalog';
+import { useAudioPlayer } from '@/components/audio/BeatPlayer';
 
 interface BeatsClientProps {
     locale?: 'en-US' | 'ja-JP' | 'de-DE';
@@ -52,6 +53,8 @@ const copyDict = {
         exclusiveBoxHeader: 'Exclusive Rights Inquiry',
         exclusiveBoxText: 'To acquire 100% exclusive ownership and remove this beat from the store:',
         secureCheckout: 'Secure checkout & instant MP3/WAV/Stems delivery',
+        playAudio: 'Play Audio Preview',
+        pauseAudio: 'Pause Audio',
     },
     'ja-JP': {
         eyebrow: 'VGPスタジオ / ビートストア',
@@ -87,6 +90,8 @@ const copyDict = {
         exclusiveBoxHeader: '独占ライセンスのお問い合わせ',
         exclusiveBoxText: '100%独占所有権を取得し、ストアから取り下げるには:',
         secureCheckout: '安全な決済および即時MP3/WAV/ステム配信',
+        playAudio: '試聴再生',
+        pauseAudio: '一時停止',
     },
     'de-DE': {
         eyebrow: 'VGP Studio / Beat Store',
@@ -122,6 +127,8 @@ const copyDict = {
         exclusiveBoxHeader: 'Exklusivrechte-Anfrage',
         exclusiveBoxText: 'Um 100% exklusive Rechte zu erwerben und den Beat aus dem Store zu entfernen:',
         secureCheckout: 'Sichere Kasse & sofortige MP3/WAV/Stems Lieferung',
+        playAudio: 'Audio abspielen',
+        pauseAudio: 'Pause',
     },
 };
 
@@ -162,6 +169,7 @@ const instagramDmUrl = 'https://ig.me/m/virzyguns';
 export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const t = copyDict[locale] || copyDict['en-US'];
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
+    const { currentBeat, isPlaying, togglePlay } = useAudioPlayer();
 
     const genresList = [
         { id: 'all', label: t.filterAll },
@@ -342,73 +350,98 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
                         {/* Beats Grid */}
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {filteredBeats.slice(0, 30).map((beat) => (
-                                <div
-                                    key={beat.id}
-                                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:border-white/20 transition"
-                                >
-                                    <div>
-                                        <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
-                                            <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
-                                            <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
+                            {filteredBeats.slice(0, 30).map((beat) => {
+                                const isCurrentPlaying = currentBeat?.id === beat.id && isPlaying;
+                                return (
+                                    <div
+                                        key={beat.id}
+                                        className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:border-white/20 transition"
+                                    >
+                                        <div>
+                                            <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
+                                                <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
+                                                <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
+                                            </div>
+                                            <h3 className="mt-2 text-lg font-bold text-white line-clamp-1">{beat.title}</h3>
+                                            <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-white/60">
+                                                {beat.description[locale] || beat.description['en-US']}
+                                            </p>
                                         </div>
-                                        <h3 className="mt-2 text-lg font-bold text-white line-clamp-1">{beat.title}</h3>
-                                        <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-white/60">
-                                            {beat.description[locale] || beat.description['en-US']}
-                                        </p>
-                                    </div>
 
-                                    {/* Dedicated Track Embed Player */}
-                                    <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
-                                        <iframe
-                                            src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                            className="block h-[180px] w-full border-none"
-                                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                            title={`${beat.title} BeatStars Audio Player`}
-                                        />
-                                    </div>
-
-                                    {/* Clean Exclusive Rights Box */}
-                                    <div className="mt-3 rounded-lg border border-sky-200/20 bg-sky-300/[0.04] p-3 text-[11px] space-y-2">
-                                        <p className="text-sky-200 font-semibold uppercase tracking-wider text-[10px]">
-                                            {t.exclusiveBoxHeader}
-                                        </p>
-                                        <p className="text-white/70 leading-4">
-                                            {t.exclusiveBoxText}
-                                        </p>
-                                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
-                                            <a
-                                                href={instagramDmUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
-                                            >
-                                                <Instagram className="h-3 w-3 shrink-0" />
-                                                {t.dmExclusive}
-                                            </a>
-                                            <a
-                                                href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
-                                                className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
-                                            >
-                                                <Mail className="h-3 w-3 shrink-0" />
-                                                {t.emailExclusive}
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
-                                        <span className="text-white/50">{t.officialTrack}</span>
-                                        <Link
-                                            href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                            className="inline-flex items-center gap-1 font-semibold text-white hover:text-sky-200 transition"
+                                        {/* Instant Native HTML5 Audio Play Button */}
+                                        <button
+                                            onClick={() => togglePlay(beat)}
+                                            className={`mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl font-bold text-xs uppercase tracking-wider transition ${
+                                                isCurrentPlaying
+                                                    ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/20'
+                                                    : 'bg-sky-200 text-black hover:bg-sky-100 shadow-lg shadow-sky-200/10'
+                                            }`}
                                         >
-                                            {t.viewBeatPage}
-                                            <ExternalLink className="h-3 w-3" />
-                                        </Link>
+                                            {isCurrentPlaying ? (
+                                                <>
+                                                    <Pause className="h-4 w-4 fill-black" />
+                                                    {t.pauseAudio}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Play className="h-4 w-4 fill-black" />
+                                                    {t.playAudio}
+                                                </>
+                                            )}
+                                        </button>
+
+                                        {/* Embedded Iframe Player Widget */}
+                                        <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
+                                            <iframe
+                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                                className="block h-[180px] w-full border-none"
+                                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                                referrerPolicy="no-referrer-when-downgrade"
+                                                title={`${beat.title} BeatStars Audio Player`}
+                                            />
+                                        </div>
+
+                                        {/* Clean Exclusive Rights Box */}
+                                        <div className="mt-3 rounded-lg border border-sky-200/20 bg-sky-300/[0.04] p-3 text-[11px] space-y-2">
+                                            <p className="text-sky-200 font-semibold uppercase tracking-wider text-[10px]">
+                                                {t.exclusiveBoxHeader}
+                                            </p>
+                                            <p className="text-white/70 leading-4">
+                                                {t.exclusiveBoxText}
+                                            </p>
+                                            <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
+                                                <a
+                                                    href={instagramDmUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
+                                                >
+                                                    <Instagram className="h-3 w-3 shrink-0" />
+                                                    {t.dmExclusive}
+                                                </a>
+                                                <a
+                                                    href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
+                                                    className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
+                                                >
+                                                    <Mail className="h-3 w-3 shrink-0" />
+                                                    {t.emailExclusive}
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
+                                            <span className="text-white/50">{t.officialTrack}</span>
+                                            <Link
+                                                href={getLocalePath(`/studio/beats/${beat.slug}`)}
+                                                className="inline-flex items-center gap-1 font-semibold text-white hover:text-sky-200 transition"
+                                            >
+                                                {t.viewBeatPage}
+                                                <ExternalLink className="h-3 w-3" />
+                                            </Link>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         {filteredBeats.length > 30 && (

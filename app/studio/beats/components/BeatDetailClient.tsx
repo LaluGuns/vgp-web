@@ -4,12 +4,13 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram, Play, Pause, Volume2 } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { BeatProduct, getBeatsByCategory } from '@/lib/catalog';
 import { trackBeatEvent } from '@/lib/analytics';
+import { useAudioPlayer } from '@/components/audio/BeatPlayer';
 
 interface BeatDetailClientProps {
     beat: BeatProduct;
@@ -20,6 +21,7 @@ const instagramDmUrl = 'https://ig.me/m/virzyguns';
 
 export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailClientProps) {
     const [selectedLicense, setSelectedLicense] = useState(beat.licenses[0] || beat.licenses[1]);
+    const { currentBeat, isPlaying, togglePlay } = useAudioPlayer();
     const relatedBeats = getBeatsByCategory(beat.primaryGenre.toLowerCase().replace(/ /g, '-'))
         .filter((b) => b.id !== beat.id)
         .slice(0, 3);
@@ -43,6 +45,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         return path;
     };
 
+    const isCurrentPlaying = currentBeat?.id === beat.id && isPlaying;
     const playerTitle = locale === 'ja-JP' ? '公式ビート試聴' : locale === 'de-DE' ? 'Offizieller Beat-Player' : 'Play This Beat';
     const playerSub = locale === 'ja-JP' ? '公式BeatStarsプレイヤー' : locale === 'de-DE' ? 'Offizieller BeatStars Player' : 'Official Beat Preview';
 
@@ -89,6 +92,28 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         priority
                                     />
                                 </div>
+
+                                {/* Instant Native HTML5 Audio Play Button */}
+                                <button
+                                    onClick={() => togglePlay(beat)}
+                                    className={`flex h-12 w-full items-center justify-center gap-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition ${
+                                        isCurrentPlaying
+                                            ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/20'
+                                            : 'bg-sky-200 text-black hover:bg-sky-100 shadow-lg shadow-sky-200/10'
+                                    }`}
+                                >
+                                    {isCurrentPlaying ? (
+                                        <>
+                                            <Pause className="h-4 w-4 fill-black" />
+                                            Pause Audio Preview
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Play className="h-4 w-4 fill-black" />
+                                            Play Audio Preview Now
+                                        </>
+                                    )}
+                                </button>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
                                 <div className="rounded-xl overflow-hidden border border-white/10 bg-black min-h-[180px]">
