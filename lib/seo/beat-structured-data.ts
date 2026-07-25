@@ -14,8 +14,8 @@ export function generateHreflangs(path: string) {
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
     return {
         'en-US': `${SITE_URL}${cleanPath}`,
-        'ja-JP': `${SITE_URL}/ja${cleanPath}`,
-        'de-DE': `${SITE_URL}/de${cleanPath}`,
+        'ja-JP': `${SITE_URL}/ja-JP${cleanPath}`,
+        'de-DE': `${SITE_URL}/de-DE${cleanPath}`,
         'x-default': `${SITE_URL}${cleanPath}`,
     };
 }

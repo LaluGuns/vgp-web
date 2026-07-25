@@ -35,6 +35,10 @@ legal-intake/
 # Kept out of git for the same reason as legal-intake/ above.
 flowstate/scripts/legal/
 
+# Playwright session and evidence screenshots
+.playwright-session/
+reports/evidence/
+
 # Local tool caches
 .playwright-cli/
 .wrangler/

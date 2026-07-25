@@ -49,7 +49,7 @@ const beatstarsTracksUrl = 'https://www.beatstars.com/virzyguns/tracks';
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 
 export default function BeatsClient() {
-    const featuredBeats = beatsCatalog.slice(0, 3);
+    const catalogBeats = beatsCatalog;
 
     return (
         <PageTransition>
@@ -129,30 +129,33 @@ export default function BeatsClient() {
                     </div>
                 </SectionShell>
 
-                {/* Featured Beats Direct Product Pages */}
+                {/* Owned Catalog Grid */}
                 <SectionShell id="featured-beats" className="border-t border-white/[0.08] py-12">
                     <div className="mx-auto max-w-5xl">
                         <div className="max-w-2xl mb-8">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">Flagship Beats</p>
-                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">Featured Instrumentals</h2>
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">Owned Catalog</p>
+                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">Active Beat Inventory</h2>
                             <p className="mt-4 text-sm leading-7 text-white/70 sm:text-base">
-                                Dedicated owned SEO landing pages for featured beats in the catalog.
+                                Owned product landing pages with verified BeatStars audio player integration and licensing specs.
                             </p>
                         </div>
 
-                        <div className="grid gap-4 sm:grid-cols-3">
-                            {featuredBeats.map((beat) => (
+                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {catalogBeats.map((beat) => (
                                 <div
                                     key={beat.id}
                                     className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.025] p-5"
                                 >
                                     <div>
-                                        <span className="text-xs uppercase tracking-wider text-sky-200/60 font-semibold">{beat.primaryGenre}</span>
+                                        <div className="flex items-center justify-between text-xs font-semibold text-sky-200/60">
+                                            <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
+                                            <span className="text-white/40 font-medium">{beat.beatstarsTrackId ? `#${beat.beatstarsTrackId}` : 'Pending Verification'}</span>
+                                        </div>
                                         <h3 className="mt-2 text-xl font-bold text-white">{beat.title}</h3>
-                                        <p className="mt-2 text-xs leading-5 text-white/60">{beat.description['en-US']}</p>
+                                        <p className="mt-2 line-clamp-2 text-xs leading-5 text-white/60">{beat.description['en-US']}</p>
                                     </div>
                                     <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-                                        <span className="text-xs font-semibold text-white/50">Verified Audio</span>
+                                        <span className="text-xs font-semibold text-white/60">Official Track</span>
                                         <Link
                                             href={`/studio/beats/${beat.slug}`}
                                             className="inline-flex items-center gap-1 rounded-lg border border-sky-200/30 bg-sky-300/10 px-3 py-1.5 text-xs font-semibold text-sky-200 transition hover:bg-sky-300/20"
