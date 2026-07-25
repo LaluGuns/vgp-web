@@ -58,22 +58,10 @@ function normalizeTitle(title: string): string {
         .trim();
 }
 
-function loadExistingRecords(): BeatStarsInventoryRecord[] {
-    if (fs.existsSync(RAW_JSON_PATH)) {
-        try {
-            return JSON.parse(fs.readFileSync(RAW_JSON_PATH, 'utf-8'));
-        } catch {
-            return [];
-        }
-    }
-    return [];
-}
-
 function updateDiskOutput(records: BeatStarsInventoryRecord[], totalVisible: number) {
     ensureDirectories();
 
     fs.writeFileSync(RAW_JSON_PATH, JSON.stringify(records, null, 2), 'utf-8');
-
     const verifiedRecords = records.filter((r) => r.verificationStatus === 'verified');
     fs.writeFileSync(VERIFIED_JSON_PATH, JSON.stringify(verifiedRecords, null, 2), 'utf-8');
 
@@ -98,9 +86,9 @@ function updateDiskOutput(records: BeatStarsInventoryRecord[], totalVisible: num
 
 ---
 
-## Verified Inventory Table (${verifiedRecords.length} Active BeatStars Tracks)
+## Verified Inventory Table (${verifiedRecords.length} Tracks)
 
-| # | Exact List Title | Track ID | Verification Status | Embed URL |
+| # | Exact Track Title | Track ID | Verification Status | Embed URL |
 |---|---|---|---|---|
 ${verifiedRecords
     .map(
@@ -113,20 +101,11 @@ ${verifiedRecords
     fs.writeFileSync(REPORT_MD_PATH, summaryMd, 'utf-8');
 }
 
-export async function runWidgetGeneratorExtraction() {
+export async function extractEveryWidgetTrack() {
     ensureDirectories();
-    console.log('=== TRACK WIDGET GENERATOR DIRECT EXTRACTION ===\n');
+    console.log('=== FULL VIRTUALIZED SCROLL TRACK WIDGET EXTRACTOR ===\n');
 
-    const existingRecords = loadExistingRecords();
     const recordsMap = new Map<string, BeatStarsInventoryRecord>();
-    existingRecords.forEach((r) => {
-        const cleanKey = cleanTrackTitle(r.exactListTitle);
-        if (cleanKey && r.beatstarsTrackId && r.beatstarsTrackId !== 'NONE') {
-            recordsMap.set(cleanKey, r);
-        }
-    });
-
-    console.log(`Loaded ${recordsMap.size} clean verified records from disk.`);
 
     const context: BrowserContext = await chromium.launchPersistentContext(USER_DATA_DIR, {
         headless: false,
@@ -136,28 +115,32 @@ export async function runWidgetGeneratorExtraction() {
 
     const page: Page = context.pages()[0] || (await context.newPage());
 
-    console.log('[1/4] Navigating to BeatStars Track Widget Generator...');
+    console.log('[1/4] Navigating to Track Widget Generator...');
     await page.goto('https://studio.beatstars.com/players/track-player-widget', {
         waitUntil: 'domcontentloaded',
         timeout: 60000,
     });
 
     if (page.url().includes('login') || page.url().includes('oauth')) {
-        console.log('🔐 LOGIN REQUIRED: Waiting for login completion in browser...');
+        console.log('🔐 LOGIN REQUIRED: Waiting for login completion...');
         await page.waitForURL((url) => url.href.includes('studio.beatstars.com/players/track-player-widget'), {
             timeout: 300000,
         });
     }
 
-    console.log('[2/4] Waiting for track list to load...');
+    console.log('[2/4] Waiting for initial list load...');
     await page.waitForTimeout(8000);
 
-    // Dynamic track item extraction loop
-    console.log('[3/4] Discovering and clicking all track items in widget generator list...');
+    console.log('[3/4] Performing aggressive scroll iterations to discover ALL tracks in account...');
 
-    // Function to get visible track cards
-    const getTrackItems = async () => {
-        return await page.evaluate(() => {
+    const discoveredTitlesList: string[] = [];
+
+    // Infinite scroll loop on left panel
+    let noNewCount = 0;
+    let prevCount = 0;
+
+    for (let scrollStep = 0; scrollStep < 50; scrollStep++) {
+        const batchTitles = await page.evaluate(() => {
             const searchInput = document.querySelector('input[placeholder*="search"i]');
             if (!searchInput) return [];
 
@@ -167,39 +150,51 @@ export async function runWidgetGeneratorExtraction() {
             }
             if (!container) return [];
 
-            const elements = Array.from(container.querySelectorAll('div, li')).filter((el) => {
+            // Scroll container down aggressively
+            container.scrollTop += 1200;
+
+            const items = Array.from(container.querySelectorAll('div, li')).filter((el) => {
                 const hasImg = el.querySelector('img') !== null;
                 const text = el.textContent?.trim() || '';
                 return hasImg && text.length > 2 && !el.querySelector('input');
             });
 
-            return elements.map((el) => {
-                const textLines = (el.textContent?.trim() || '').split('\n').map((l) => l.trim()).filter(Boolean);
-                return textLines[0] || '';
+            return items.map((el) => {
+                const lines = (el.textContent?.trim() || '').split('\n').map((l) => l.trim()).filter(Boolean);
+                return lines[0] || '';
             });
         });
-    };
 
-    let rawTitles = await getTrackItems();
-    let uniqueTitles = Array.from(
-        new Set(
-            rawTitles
-                .map(cleanTrackTitle)
-                .filter((t) => t && t !== 'Start typing to search...' && !t.toLowerCase().includes('by beatstars'))
-        )
-    );
+        batchTitles.forEach((raw) => {
+            const clean = cleanTrackTitle(raw);
+            if (clean && clean !== 'Start typing to search...' && !clean.toLowerCase().includes('by beatstars')) {
+                if (!discoveredTitlesList.includes(clean)) {
+                    discoveredTitlesList.push(clean);
+                }
+            }
+        });
 
-    console.log(`Discovered ${uniqueTitles.length} track items in Widget Generator list.`);
-
-    for (let index = 0; index < uniqueTitles.length; index++) {
-        const title = uniqueTitles[index];
-
-        if (recordsMap.has(title) && recordsMap.get(title)?.verificationStatus === 'verified') {
-            console.log(`[${index + 1}/${uniqueTitles.length}] Skipping verified: "${title}"`);
-            continue;
+        if (discoveredTitlesList.length === prevCount) {
+            noNewCount++;
+            if (noNewCount >= 4) {
+                console.log(`No new tracks discovered after ${scrollStep + 1} scroll attempts.`);
+                break;
+            }
+        } else {
+            noNewCount = 0;
+            prevCount = discoveredTitlesList.length;
         }
 
-        console.log(`\n[${index + 1}/${uniqueTitles.length}] Selecting track row: "${title}"`);
+        await page.waitForTimeout(1000);
+    }
+
+    console.log(`Discovered ${discoveredTitlesList.length} total unique track titles in your BeatStars account.`);
+
+    console.log('\n[4/4] Clicking each track item in the widget generator list to extract exact Track ID...');
+
+    for (let i = 0; i < discoveredTitlesList.length; i++) {
+        const title = discoveredTitlesList[i];
+        console.log(`\n[${i + 1}/${discoveredTitlesList.length}] Processing track: "${title}"`);
 
         // Click track card in DOM
         const clicked = await page.evaluate((targetTitle) => {
@@ -225,19 +220,19 @@ export async function runWidgetGeneratorExtraction() {
         }, title);
 
         if (!clicked) {
-            console.log(`  -> Warning: Could not click row element for "${title}"`);
+            console.log(`  -> Scroll click retry for "${title}"...`);
         }
 
         await page.waitForTimeout(2500);
 
-        // Read Embeddable Code textarea
+        // Extract Embeddable Code textarea
         let embedCode = '';
         const embedTextarea = await page.$('textarea, textarea.mat-input-element');
         if (embedTextarea) {
             embedCode = (await embedTextarea.inputValue().catch(() => embedTextarea.textContent())) || '';
         }
 
-        // Extract Track ID from embed code or preview iframe
+        // Extract numeric Track ID from embed code or preview iframe
         let beatstarsTrackId = '';
         let idMatch = embedCode.match(/track\?id=(\d+)|embed\/track\?id=(\d+)|id=(\d+)/i);
 
@@ -263,27 +258,27 @@ export async function runWidgetGeneratorExtraction() {
                 beatstarsEmbedUrl: `https://www.beatstars.com/embed/track?id=${beatstarsTrackId}`,
                 titleMatch: true,
                 verificationStatus: 'verified',
-                evidenceScreenshot: `reports/evidence/track-${index + 1}-${beatstarsTrackId}.png`,
+                evidenceScreenshot: `reports/evidence/track-${i + 1}-${beatstarsTrackId}.png`,
                 extractedAt: new Date().toISOString(),
             };
 
             recordsMap.set(title, record);
-            updateDiskOutput(Array.from(recordsMap.values()), uniqueTitles.length);
+            updateDiskOutput(Array.from(recordsMap.values()), discoveredTitlesList.length);
 
-            console.log(`  -> SAVED RECORD: "${title}" | Track ID: ${beatstarsTrackId}`);
+            console.log(`  -> RECORD SAVED: "${title}" | Track ID: ${beatstarsTrackId}`);
         } else {
             console.log(`  -> Warning: No Track ID found for "${title}"`);
         }
     }
 
-    console.log('\n[4/4] Track Widget Generator extraction complete.');
-    console.log(`Total Clean Verified Records: ${recordsMap.size}`);
+    console.log('\n=== COMPLETE TRACK WIDGET EXTRACTION COMPLETE ===');
+    console.log(`Total Extracted BeatStars Tracks: ${recordsMap.size}`);
 
     await context.close().catch(() => {});
 }
 
 if (require.main === module) {
-    runWidgetGeneratorExtraction().catch((err) => {
+    extractEveryWidgetTrack().catch((err) => {
         console.error('Fatal error:', err);
         process.exit(1);
     });
