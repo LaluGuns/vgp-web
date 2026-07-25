@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Filter, Play, Music, Mail, Instagram, Sparkles } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -11,7 +11,7 @@ import {
 } from '@/components/editorial/EditorialPrimitives';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { catalogCredentials } from '@/lib/vgp-ecosystem';
-import { categories, beatsCatalog, BeatProduct } from '@/lib/catalog';
+import { categories, beatsCatalog } from '@/lib/catalog';
 
 interface BeatsClientProps {
     locale?: 'en-US' | 'ja-JP' | 'de-DE';
@@ -21,8 +21,8 @@ const copyDict = {
     'en-US': {
         eyebrow: 'VGP Studio / Beat Store',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
-        mutedTitle: 'Top SEO Catalog for Artists.',
-        description: 'Stream, preview and license official Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats by Virzy Guns. Instant MP3, WAV & Stems license delivery.',
+        mutedTitle: 'Engineered for Recording & Content.',
+        description: 'Browse official instrumentals by Virzy Guns across Cyberpunk Trap, Phonk, Synthwave, and Hard 808s. Instant MP3, WAV, and Track Stems license delivery.',
         credentialsTag: 'Verified track record',
         credentialsTitle: 'Production proof behind the catalog.',
         credentialsSub: 'Independent credits verified through MUSO.AI, placed here where the production record matters most.',
@@ -34,7 +34,7 @@ const copyDict = {
         catalogSub: 'Filter the catalog by genre to preview official audio tracks and inspect licensing specifications.',
         filterAll: 'All Beats',
         playerTag: 'BeatStars Catalog Player',
-        playerTitle: 'Official Audio Showcase',
+        playerTitle: 'Official Audio Store Player',
         playerSub: 'Interactive store player powered by BeatStars. Secure checkout and instant file delivery.',
         openBeatstars: 'Open full catalog on BeatStars',
         licensesTag: 'Release Tiers',
@@ -43,19 +43,22 @@ const copyDict = {
         chooseBeatstars: 'Choose on BeatStars',
         commissionsTag: 'Private commissions',
         commissionsTitle: 'Exclusive rights or custom beats.',
-        commissionsSub: 'Use DM or Email for work that needs a direct conversation: exclusive ownership or production built from scratch.',
-        dmExclusive: 'DM on IG for Exclusive Rights',
-        emailExclusive: 'Email for Exclusive Rights',
-        dmCustom: 'DM for a custom beat',
+        commissionsSub: 'Use Instagram DM or Email for work that needs a direct conversation: exclusive ownership or production built from scratch.',
+        dmExclusive: 'Instagram DM (@virzyguns)',
+        emailExclusive: 'Email Direct',
+        dmCustom: 'Custom Beat DM',
         exclusiveIncludes: 'Exclusive package includes',
         viewBeatPage: 'View Beat Page',
         officialTrack: 'Official Track',
-        exclusiveCTA: 'Exclusive License? DM on IG (@virzyguns) or Email',
+        exclusiveBoxHeader: 'Exclusive Rights Inquiry',
+        exclusiveBoxText: 'To acquire 100% exclusive ownership and remove this beat from the store:',
+        playOnBeatstars: 'Play on BeatStars',
+        secureCheckout: 'Secure checkout & instant MP3/WAV/Stems delivery',
     },
     'ja-JP': {
         eyebrow: 'VGPスタジオ / ビートストア',
         title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売',
-        mutedTitle: 'アーティスト向け公式インストゥルメンタル。',
+        mutedTitle: 'アーティス向け公式インストゥルメンタル。',
         description: 'Virzy Guns制作の公式サイバーパンクトラップ、フォンク、シンセウェーブ、808ビート。即時MP3/WAV/ステムダウンロード。',
         credentialsTag: '実績証明',
         credentialsTitle: '制作実績とクレジット',
@@ -78,18 +81,21 @@ const copyDict = {
         commissionsTag: '個別の制作依頼',
         commissionsTitle: '独占ライセンス権・カスタム制作',
         commissionsSub: '独占所有権の取得や完全オーダーメイド楽曲の制作はダイレクトメッセージまたはメールでご相談ください。',
-        dmExclusive: 'IGで独占権をDM相談',
-        emailExclusive: 'メールで独占権を相談',
+        dmExclusive: 'Instagram DM (@virzyguns)',
+        emailExclusive: 'メールで相談',
         dmCustom: 'カスタム制作のDM相談',
         exclusiveIncludes: '独占ライセンスパッケージ内容',
         viewBeatPage: 'ビート詳細を見る',
         officialTrack: '公式トラック',
-        exclusiveCTA: '独占ライセンス購入？ IG(@virzyguns) DMまたはメールで相談',
+        exclusiveBoxHeader: '独占ライセンスのお問い合わせ',
+        exclusiveBoxText: '100%独占所有権を取得し、ストアから取り下げるには:',
+        playOnBeatstars: 'BeatStarsで再生',
+        secureCheckout: '安全な決済および即時MP3/WAV/ステム配信',
     },
     'de-DE': {
         eyebrow: 'VGP Studio / Beat Store',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
-        mutedTitle: 'Top SEO Katalog für Künstler.',
+        mutedTitle: 'Produziert für Künstler & Content.',
         description: 'Offizielle Cyberpunk Trap, Phonk, Synthwave und 808 Beats von Virzy Guns. Sofortiger MP3-, WAV- und Stems-Download.',
         credentialsTag: 'Verifizierte Erfolge',
         credentialsTitle: 'Produktionsnachweise des Katalogs.',
@@ -112,13 +118,16 @@ const copyDict = {
         commissionsTag: 'Private Aufträge',
         commissionsTitle: 'Exklusivrechte oder Custom Beats.',
         commissionsSub: 'Nutzen Sie DMs oder E-Mails für exklusive Rechte oder individuell angefertigte Instrumentals.',
-        dmExclusive: 'DM auf IG für Exklusivrechte',
-        emailExclusive: 'E-Mail für Exklusivrechte',
+        dmExclusive: 'Instagram DM (@virzyguns)',
+        emailExclusive: 'E-Mail Direkt',
         dmCustom: 'DM für Custom Beat',
         exclusiveIncludes: 'Exklusiv-Paket enthält',
         viewBeatPage: 'Beat-Seite anzeigen',
         officialTrack: 'Offizieller Track',
-        exclusiveCTA: 'Exklusiv-Lizenz? DM auf IG (@virzyguns) oder E-Mail',
+        exclusiveBoxHeader: 'Exklusivrechte-Anfrage',
+        exclusiveBoxText: 'Um 100% exklusive Rechte zu erwerben und den Beat aus dem Store zu entfernen:',
+        playOnBeatstars: 'Auf BeatStars abspielen',
+        secureCheckout: 'Sichere Kasse & sofortige MP3/WAV/Stems Lieferung',
     },
 };
 
@@ -193,7 +202,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 {/* Language Switcher Navbar */}
                 <div className="mx-auto max-w-5xl px-6 mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-200/60">
-                        <Music className="h-4 w-4 text-sky-200" />
                         <span>Virzy Guns Production</span>
                     </div>
 
@@ -273,14 +281,15 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 <iframe
                                     src="https://player.beatstars.com/?storeId=122437"
                                     className="block h-[580px] w-full sm:h-[640px] lg:h-[680px] border-none"
-                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen"
+                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                    referrerPolicy="no-referrer-when-downgrade"
                                     title="VGP Beat Store Catalog Player"
                                     loading="lazy"
                                 />
                             </div>
 
                             <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 text-xs text-white/50">
-                                <span>🔒 Secure checkout & instant MP3/WAV/Stems delivery</span>
+                                <span>{t.secureCheckout}</span>
                                 <span>Powered by BeatStars Store</span>
                             </div>
                         </div>
@@ -374,33 +383,36 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
                                             className="block h-[165px] w-full border-none"
                                             allow="autoplay; encrypted-media; fullscreen"
+                                            referrerPolicy="no-referrer-when-downgrade"
                                             title={`${beat.title} BeatStars Audio Player`}
                                             loading="lazy"
                                         />
                                     </div>
 
-                                    {/* Exclusive License IG DM / Email CTA Box */}
-                                    <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] p-2.5 text-[11px] space-y-1.5">
-                                        <div className="flex items-center gap-1.5 text-amber-200 font-semibold">
-                                            <Sparkles className="h-3 w-3 shrink-0" />
-                                            <span>Exclusive Rights Available</span>
-                                        </div>
-                                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-amber-500/10">
+                                    {/* Clean Exclusive Rights Box - NO Emojis */}
+                                    <div className="mt-3 rounded-lg border border-sky-200/20 bg-sky-300/[0.04] p-3 text-[11px] space-y-2">
+                                        <p className="text-sky-200 font-semibold uppercase tracking-wider text-[10px]">
+                                            {t.exclusiveBoxHeader}
+                                        </p>
+                                        <p className="text-white/70 leading-4">
+                                            {t.exclusiveBoxText}
+                                        </p>
+                                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
                                             <a
                                                 href={instagramDmUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-1 text-sky-200 hover:underline font-medium"
+                                                className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
                                             >
-                                                <Instagram className="h-3 w-3" />
-                                                IG DM
+                                                <Instagram className="h-3 w-3 shrink-0" />
+                                                {t.dmExclusive}
                                             </a>
                                             <a
                                                 href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
-                                                className="flex items-center gap-1 text-sky-200 hover:underline font-medium"
+                                                className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
                                             >
-                                                <Mail className="h-3 w-3" />
-                                                Email Us
+                                                <Mail className="h-3 w-3 shrink-0" />
+                                                {t.emailExclusive}
                                             </a>
                                         </div>
                                     </div>
@@ -412,7 +424,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             rel="noopener noreferrer"
                                             className="text-sky-200 hover:underline font-semibold flex items-center gap-1"
                                         >
-                                            Play on BeatStars
+                                            {t.playOnBeatstars}
                                             <ExternalLink className="h-3 w-3" />
                                         </a>
                                         <Link
