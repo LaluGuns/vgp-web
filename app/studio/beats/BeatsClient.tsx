@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Filter, Play, Music } from 'lucide-react';
+import { Check, ExternalLink, Filter, Play, Music, Mail, Instagram, Sparkles } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -20,9 +20,9 @@ interface BeatsClientProps {
 const copyDict = {
     'en-US': {
         eyebrow: 'VGP Studio / Beat Store',
-        title: 'Beats for sale',
-        mutedTitle: 'for working artists.',
-        description: 'Browse official Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats by Virzy Guns. Instant MP3, WAV & Stems licensing.',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
+        mutedTitle: 'Top SEO Catalog for Artists.',
+        description: 'Stream, preview and license official Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats by Virzy Guns. Instant MP3, WAV & Stems license delivery.',
         credentialsTag: 'Verified track record',
         credentialsTitle: 'Production proof behind the catalog.',
         credentialsSub: 'Independent credits verified through MUSO.AI, placed here where the production record matters most.',
@@ -43,18 +43,20 @@ const copyDict = {
         chooseBeatstars: 'Choose on BeatStars',
         commissionsTag: 'Private commissions',
         commissionsTitle: 'Exclusive rights or custom beats.',
-        commissionsSub: 'Use DM only for work that needs a direct conversation: exclusive ownership or production built from scratch.',
-        dmExclusive: 'DM for exclusive rights',
+        commissionsSub: 'Use DM or Email for work that needs a direct conversation: exclusive ownership or production built from scratch.',
+        dmExclusive: 'DM on IG for Exclusive Rights',
+        emailExclusive: 'Email for Exclusive Rights',
         dmCustom: 'DM for a custom beat',
         exclusiveIncludes: 'Exclusive package includes',
         viewBeatPage: 'View Beat Page',
         officialTrack: 'Official Track',
+        exclusiveCTA: 'Exclusive License? DM on IG (@virzyguns) or Email',
     },
     'ja-JP': {
         eyebrow: 'VGPスタジオ / ビートストア',
-        title: '公式ビート販売',
-        mutedTitle: 'アーティス向けインストゥルメンタル。',
-        description: 'Virzy Guns制作のサイバーパンクトラップ、フォンク、シンセウェーブ、808ビート。即時MP3/WAV/ステムダウンロード。',
+        title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売',
+        mutedTitle: 'アーティスト向け公式インストゥルメンタル。',
+        description: 'Virzy Guns制作の公式サイバーパンクトラップ、フォンク、シンセウェーブ、808ビート。即時MP3/WAV/ステムダウンロード。',
         credentialsTag: '実績証明',
         credentialsTitle: '制作実績とクレジット',
         credentialsSub: 'MUSO.AIで検証された独立プロデューサーとしての公式制作クレジット。',
@@ -75,17 +77,19 @@ const copyDict = {
         chooseBeatstars: 'BeatStarsで購入する',
         commissionsTag: '個別の制作依頼',
         commissionsTitle: '独占ライセンス権・カスタム制作',
-        commissionsSub: '独占所有権の取得や完全オーダーメイド楽曲の制作はダイレクトメッセージでご相談ください。',
-        dmExclusive: '独占権のDM相談',
+        commissionsSub: '独占所有権の取得や完全オーダーメイド楽曲の制作はダイレクトメッセージまたはメールでご相談ください。',
+        dmExclusive: 'IGで独占権をDM相談',
+        emailExclusive: 'メールで独占権を相談',
         dmCustom: 'カスタム制作のDM相談',
         exclusiveIncludes: '独占ライセンスパッケージ内容',
         viewBeatPage: 'ビート詳細を見る',
         officialTrack: '公式トラック',
+        exclusiveCTA: '独占ライセンス購入？ IG(@virzyguns) DMまたはメールで相談',
     },
     'de-DE': {
         eyebrow: 'VGP Studio / Beat Store',
-        title: 'Beats zu verkaufen',
-        mutedTitle: 'für aktive Künstler.',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
+        mutedTitle: 'Top SEO Katalog für Künstler.',
         description: 'Offizielle Cyberpunk Trap, Phonk, Synthwave und 808 Beats von Virzy Guns. Sofortiger MP3-, WAV- und Stems-Download.',
         credentialsTag: 'Verifizierte Erfolge',
         credentialsTitle: 'Produktionsnachweise des Katalogs.',
@@ -107,12 +111,14 @@ const copyDict = {
         chooseBeatstars: 'Auf BeatStars wählen',
         commissionsTag: 'Private Aufträge',
         commissionsTitle: 'Exklusivrechte oder Custom Beats.',
-        commissionsSub: 'Nutzen Sie DMs für exklusive Rechte oder individuell angefertigte Instrumentals.',
-        dmExclusive: 'DM für Exklusivrechte',
+        commissionsSub: 'Nutzen Sie DMs oder E-Mails für exklusive Rechte oder individuell angefertigte Instrumentals.',
+        dmExclusive: 'DM auf IG für Exklusivrechte',
+        emailExclusive: 'E-Mail für Exklusivrechte',
         dmCustom: 'DM für Custom Beat',
         exclusiveIncludes: 'Exklusiv-Paket enthält',
         viewBeatPage: 'Beat-Seite anzeigen',
         officialTrack: 'Offizieller Track',
+        exclusiveCTA: 'Exklusiv-Lizenz? DM auf IG (@virzyguns) oder E-Mail',
     },
 };
 
@@ -366,18 +372,52 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <div className="mt-4 overflow-hidden rounded-lg border border-white/10 bg-black/60">
                                         <iframe
                                             src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                            className="block h-[150px] w-full border-none"
+                                            className="block h-[165px] w-full border-none"
                                             allow="autoplay; encrypted-media; fullscreen"
                                             title={`${beat.title} BeatStars Audio Player`}
                                             loading="lazy"
                                         />
                                     </div>
 
+                                    {/* Exclusive License IG DM / Email CTA Box */}
+                                    <div className="mt-3 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] p-2.5 text-[11px] space-y-1.5">
+                                        <div className="flex items-center gap-1.5 text-amber-200 font-semibold">
+                                            <Sparkles className="h-3 w-3 shrink-0" />
+                                            <span>Exclusive Rights Available</span>
+                                        </div>
+                                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-amber-500/10">
+                                            <a
+                                                href={instagramDmUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1 text-sky-200 hover:underline font-medium"
+                                            >
+                                                <Instagram className="h-3 w-3" />
+                                                IG DM
+                                            </a>
+                                            <a
+                                                href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
+                                                className="flex items-center gap-1 text-sky-200 hover:underline font-medium"
+                                            >
+                                                <Mail className="h-3 w-3" />
+                                                Email Us
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
-                                        <span className="text-white/50">{t.officialTrack}</span>
+                                        <a
+                                            href={`https://www.beatstars.com/beat/${beat.beatstarsTrackId}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-sky-200 hover:underline font-semibold flex items-center gap-1"
+                                        >
+                                            Play on BeatStars
+                                            <ExternalLink className="h-3 w-3" />
+                                        </a>
                                         <Link
                                             href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                            className="inline-flex items-center gap-1 font-semibold text-sky-200 hover:underline"
+                                            className="inline-flex items-center gap-1 font-semibold text-white hover:text-sky-200 transition"
                                         >
                                             {t.viewBeatPage}
                                             <ExternalLink className="h-3 w-3" />
@@ -482,17 +522,16 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-sky-200/30 bg-sky-300/[0.08] px-4 py-2.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.15]"
                                 >
+                                    <Instagram className="h-3.5 w-3.5" />
                                     {t.dmExclusive}
                                     <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                                 </a>
                                 <a
-                                    href={instagramDmUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    href="mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry"
                                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-xs font-semibold text-white/75 transition hover:text-white"
                                 >
-                                    {t.dmCustom}
-                                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                                    <Mail className="h-3.5 w-3.5" />
+                                    {t.emailExclusive}
                                 </a>
                             </div>
                         </div>
