@@ -37,6 +37,8 @@ flowstate/scripts/legal/
 
 # Local tool caches
 .playwright-cli/
+.playwright-session/
+reports/
 .wrangler/
 **/.wrangler/
 
