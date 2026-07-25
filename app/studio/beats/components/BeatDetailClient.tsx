@@ -96,13 +96,12 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
-                                    <iframe
-                                        src={`https://player.beatstars.com/?storeId=122437&trackId=${beat.beatstarsTrackId}`}
-                                        className="block h-[180px] w-full border-none"
-                                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                        referrerPolicy="no-referrer-when-downgrade"
-                                        title={`${beat.title} official BeatStars player`}
-                                    />
+                                    <iframe 
+                                        src={`//www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                        width="100%"
+                                        height="140"
+                                        className="border-none"
+                                    ></iframe>
                                 </div>
 
                                 <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-white/50">

@@ -369,13 +369,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
                                         {/* Embedded Iframe Player Widget */}
                                         <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
-                                            <iframe
-                                                src={`https://player.beatstars.com/?storeId=122437&trackId=${beat.beatstarsTrackId}`}
-                                                className="block h-[180px] w-full border-none"
-                                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                                referrerPolicy="no-referrer-when-downgrade"
-                                                title={`${beat.title} BeatStars Audio Player`}
-                                            />
+                                            <iframe 
+                                                src={`//www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                                width="100%"
+                                                height="140"
+                                                className="border-none"
+                                            ></iframe>
                                         </div>
 
                                         {/* Clean Exclusive Rights Box */}
