@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram, Play, Volume2 } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -36,11 +36,10 @@ const copyDict = {
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Official Audio Store Player',
         playerSub: 'Interactive store player powered by BeatStars. Secure checkout and instant file delivery.',
-        openBeatstars: 'Open full catalog on BeatStars',
         licensesTag: 'Release Tiers',
         licensesTitle: 'Non-exclusive licenses.',
         readLicensing: 'Read full licensing terms & FAQ',
-        chooseBeatstars: 'Choose on BeatStars',
+        chooseBeatstars: 'Choose License on BeatStars',
         commissionsTag: 'Private commissions',
         commissionsTitle: 'Exclusive rights or custom beats.',
         commissionsSub: 'Use Instagram DM or Email for work that needs a direct conversation: exclusive ownership or production built from scratch.',
@@ -52,7 +51,6 @@ const copyDict = {
         officialTrack: 'Official Track',
         exclusiveBoxHeader: 'Exclusive Rights Inquiry',
         exclusiveBoxText: 'To acquire 100% exclusive ownership and remove this beat from the store:',
-        playOnBeatstars: 'Play on BeatStars',
         secureCheckout: 'Secure checkout & instant MP3/WAV/Stems delivery',
     },
     'ja-JP': {
@@ -73,7 +71,6 @@ const copyDict = {
         playerTag: 'BeatStars公式プレーヤー',
         playerTitle: 'オフィシャル試聴プレーヤー',
         playerSub: 'BeatStars提供のインタラクティブストア。安全な決済と即時ファイル配信。',
-        openBeatstars: 'BeatStarsでフルカタログを見る',
         licensesTag: 'ライセンス体系',
         licensesTitle: '非独占ライセンス規約',
         readLicensing: 'ライセンス規約とFAQを読む',
@@ -89,7 +86,6 @@ const copyDict = {
         officialTrack: '公式トラック',
         exclusiveBoxHeader: '独占ライセンスのお問い合わせ',
         exclusiveBoxText: '100%独占所有権を取得し、ストアから取り下げるには:',
-        playOnBeatstars: 'BeatStarsで再生',
         secureCheckout: '安全な決済および即時MP3/WAV/ステム配信',
     },
     'de-DE': {
@@ -110,7 +106,6 @@ const copyDict = {
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Offizieller Audio-Showcase',
         playerSub: 'Interaktiver Store-Player betrieben von BeatStars. Sichere Kasse und sofortige Dateilieferung.',
-        openBeatstars: 'Vollständigen Katalog auf BeatStars öffnen',
         licensesTag: 'Lizenzstufen',
         licensesTitle: 'Nicht-exklusive Lizenzen.',
         readLicensing: 'Vollständige Lizenzbedingungen & FAQ lesen',
@@ -126,7 +121,6 @@ const copyDict = {
         officialTrack: 'Offizieller Track',
         exclusiveBoxHeader: 'Exklusivrechte-Anfrage',
         exclusiveBoxText: 'Um 100% exklusive Rechte zu erwerben und den Beat aus dem Store zu entfernen:',
-        playOnBeatstars: 'Auf BeatStars abspielen',
         secureCheckout: 'Sichere Kasse & sofortige MP3/WAV/Stems Lieferung',
     },
 };
@@ -162,7 +156,6 @@ const nonExclusiveLicenses = [
     },
 ];
 
-const beatstarsProfileUrl = 'https://www.beatstars.com/virzyguns';
 const beatstarsTracksUrl = 'https://www.beatstars.com/virzyguns/tracks';
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 
@@ -256,52 +249,22 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     </div>
                 </SectionShell>
 
-                {/* Main Interactive BeatStars Store Player */}
+                {/* Main Embedded BeatStars Store Player */}
                 <SectionShell id="store-player" className="py-12 border-b border-white/[0.08]">
                     <div className="mx-auto max-w-5xl">
                         <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
-                            <div className="flex flex-col gap-3 border-b border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/60">{t.playerTag}</p>
-                                    <h2 className="mt-1 text-xl font-bold text-white">{t.playerTitle}</h2>
-                                    <p className="text-xs text-white/60">{t.playerSub}</p>
-                                </div>
-                                <a
-                                    href={beatstarsProfileUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 rounded-xl border border-sky-200/30 bg-sky-300/[0.12] px-4 py-2.5 text-xs font-bold text-sky-100 transition hover:bg-sky-300/[0.25]"
-                                >
-                                    <Play className="h-3.5 w-3.5 fill-current" />
-                                    {t.openBeatstars}
-                                    <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                                </a>
+                            <div className="border-b border-white/10 px-5 py-4">
+                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/60">{t.playerTag}</p>
+                                <h2 className="mt-1 text-xl font-bold text-white">{t.playerTitle}</h2>
+                                <p className="text-xs text-white/60">{t.playerSub}</p>
                             </div>
 
-                            <div className="bg-[#030405] relative">
-                                {/* Direct Action Overlay Bar to ensure player is 100% accessible */}
-                                <div className="p-4 bg-sky-950/40 border-b border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                                    <span className="flex items-center gap-2 text-sky-200 font-medium">
-                                        <Volume2 className="h-4 w-4 shrink-0 text-sky-200" />
-                                        Stream all 325 Beats & Instant MP3/WAV/Stems Checkout
-                                    </span>
-                                    <a
-                                        href={beatstarsTracksUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 rounded-lg bg-sky-200 px-3.5 py-1.5 font-bold text-black text-xs hover:bg-sky-100 transition uppercase tracking-wider"
-                                    >
-                                        <Play className="h-3 w-3 fill-black" />
-                                        Launch Full BeatStars Player
-                                    </a>
-                                </div>
-
+                            <div className="bg-[#030405]">
                                 <iframe
                                     src="https://player.beatstars.com/?storeId=122437"
-                                    className="block h-[500px] w-full sm:h-[580px] lg:h-[620px] border-none"
+                                    className="block h-[620px] w-full sm:h-[700px] lg:h-[760px] border-none"
                                     allow="autoplay; clipboard-write; encrypted-media; fullscreen"
                                     title="VGP Beat Store Catalog Player"
-                                    loading="lazy"
                                 />
                             </div>
 
@@ -394,29 +357,14 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         </p>
                                     </div>
 
-                                    {/* Direct Play Audio Action Button */}
-                                    <div className="mt-4 rounded-xl border border-white/10 bg-black/60 p-3 space-y-3">
-                                        <a
-                                            href={beat.beatstarsProductUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-sky-200 text-black font-bold text-xs transition hover:bg-sky-100"
-                                        >
-                                            <Play className="h-3.5 w-3.5 fill-black" />
-                                            Play on BeatStars
-                                            <ExternalLink className="h-3 w-3" />
-                                        </a>
-
-                                        {/* Embedded Track Player */}
-                                        <div className="overflow-hidden rounded-lg border border-white/10 bg-black">
-                                            <iframe
-                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                                className="block h-[150px] w-full border-none"
-                                                allow="autoplay; encrypted-media; fullscreen"
-                                                title={`${beat.title} BeatStars Audio Player`}
-                                                loading="lazy"
-                                            />
-                                        </div>
+                                    {/* Dedicated Track Embed Player */}
+                                    <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black">
+                                        <iframe
+                                            src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                            className="block h-[160px] w-full border-none"
+                                            allow="autoplay; encrypted-media; fullscreen"
+                                            title={`${beat.title} BeatStars Audio Player`}
+                                        />
                                     </div>
 
                                     {/* Clean Exclusive Rights Box */}
