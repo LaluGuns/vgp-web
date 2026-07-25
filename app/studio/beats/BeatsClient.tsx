@@ -370,7 +370,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         {/* Embedded Iframe Player Widget */}
                                         <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
                                             <iframe 
-                                                src={`//www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
                                                 width="100%"
                                                 height="140"
                                                 className="border-none"

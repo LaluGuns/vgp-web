@@ -97,7 +97,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         <span>{playerSub}</span>
                                     </div>
                                     <iframe 
-                                        src={`//www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                        src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
                                         width="100%"
                                         height="140"
                                         className="border-none"
