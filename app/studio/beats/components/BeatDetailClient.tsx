@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram, Play, Volume2 } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
@@ -43,8 +43,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         return path;
     };
 
-    const playerTitle = locale === 'ja-JP' ? '公式ビート試聴' : locale === 'de-DE' ? 'Offizieller Beat-Player' : 'Play This Beat';
-    const playerSub = locale === 'ja-JP' ? '公式BeatStarsプレイヤー' : locale === 'de-DE' ? 'Offizieller BeatStars Player' : 'Official Beat Preview';
+    const playerTitle = locale === 'ja-JP' ? '公式ビート試聴' : locale === 'de-DE' ? 'Offizieller Beat-Player' : 'Play Beat Preview';
+    const playBtnText = locale === 'ja-JP' ? 'BeatStarsで再生する' : locale === 'de-DE' ? 'Auf BeatStars abspielen' : 'Play Audio Preview on BeatStars';
 
     return (
         <PageTransition>
@@ -72,7 +72,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                 <SectionShell id="beat-hero" className="py-6">
                     <div className="mx-auto max-w-5xl">
                         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-                            {/* Left: Cover Art & Integrated Track Player */}
+                            {/* Left: Cover Art & Direct Audio Action Card */}
                             <m.div
                                 className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-md space-y-5"
                                 variants={revealUp}
@@ -90,36 +90,44 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                     />
                                 </div>
 
-                                {/* Official Track-Specific BeatStars Player Widget */}
-                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/60">
-                                    <div className="border-b border-white/10 px-3 py-2 text-[11px] font-medium text-white/60 flex justify-between">
-                                        <span>{playerTitle}</span>
-                                        <span>{playerSub}</span>
+                                {/* Clean Fail-Safe Audio Player Showcase */}
+                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black/70 p-4 space-y-4">
+                                    <div className="flex items-center justify-between text-xs font-semibold text-sky-200/80 border-b border-white/10 pb-3">
+                                        <span className="flex items-center gap-1.5">
+                                            <Volume2 className="h-4 w-4 text-sky-200" />
+                                            {playerTitle}
+                                        </span>
+                                        <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
                                     </div>
-                                    {beat.beatstarsTrackId ? (
-                                        <iframe
-                                            src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                            className="block h-[165px] w-full border-none"
-                                            allow="autoplay; encrypted-media; fullscreen"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                            title={`${beat.title} official BeatStars player`}
-                                            loading="lazy"
-                                        />
-                                    ) : (
-                                        <iframe
-                                            src="https://player.beatstars.com/?storeId=122437"
-                                            className="block h-[220px] w-full border-none"
-                                            allow="autoplay; encrypted-media; fullscreen"
-                                            referrerPolicy="no-referrer-when-downgrade"
-                                            title={`${beat.title} full store player`}
-                                            loading="lazy"
-                                        />
-                                    )}
-                                </div>
 
-                                <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-white/50">
-                                    <span>Producer: <strong className="text-white">{beat.producer}</strong></span>
-                                    <span>Powered by BeatStars</span>
+                                    {/* Direct Play Action Button */}
+                                    <a
+                                        href={beat.beatstarsProductUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex min-h-12 w-full items-center justify-center gap-2.5 rounded-xl bg-sky-200 text-black font-bold text-xs uppercase tracking-wider transition hover:bg-sky-100 shadow-lg"
+                                    >
+                                        <Play className="h-4 w-4 fill-black" />
+                                        {playBtnText}
+                                        <ExternalLink className="h-3.5 w-3.5" />
+                                    </a>
+
+                                    {/* Embedded Iframe Player with Fail-Safe Height */}
+                                    {beat.beatstarsTrackId && (
+                                        <div className="overflow-hidden rounded-lg border border-white/10 bg-black">
+                                            <iframe
+                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                                className="block h-[165px] w-full border-none"
+                                                allow="autoplay; encrypted-media; fullscreen"
+                                                title={`${beat.title} official BeatStars player`}
+                                                loading="lazy"
+                                            />
+                                        </div>
+                                    )}
+
+                                    <p className="text-[11px] text-white/50 text-center">
+                                        Producer: <strong className="text-white">{beat.producer}</strong> | Powered by BeatStars
+                                    </p>
                                 </div>
                             </m.div>
 
