@@ -99,8 +99,6 @@ export const metadata: Metadata = {
     },
 };
 
-import { AudioPlayerProvider } from '@/components/audio/BeatPlayer';
-
 export default async function RootLayout({
     children,
 }: {
@@ -131,7 +129,6 @@ export default async function RootLayout({
                 <div className="wave-physics-bg" aria-hidden="true" />
 
                 <NewsletterProvider>
-                    <AudioPlayerProvider>
                         <SmoothScrollProvider>
                             <LazyMotion features={domAnimation}>
                                 <AppFrame>
@@ -139,7 +136,6 @@ export default async function RootLayout({
                                 </AppFrame>
                             </LazyMotion>
                         </SmoothScrollProvider>
-                    </AudioPlayerProvider>
                 </NewsletterProvider>
             </body>
         </html>

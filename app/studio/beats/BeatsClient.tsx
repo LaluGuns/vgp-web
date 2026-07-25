@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram, Play, Pause, Volume2 } from 'lucide-react';
+import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -12,7 +12,6 @@ import {
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { catalogCredentials } from '@/lib/vgp-ecosystem';
 import { categories, beatsCatalog, BeatProduct } from '@/lib/catalog';
-import { useAudioPlayer } from '@/components/audio/BeatPlayer';
 
 interface BeatsClientProps {
     locale?: 'en-US' | 'ja-JP' | 'de-DE';
@@ -169,7 +168,6 @@ const instagramDmUrl = 'https://ig.me/m/virzyguns';
 export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const t = copyDict[locale] || copyDict['en-US'];
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
-    const { currentBeat, isPlaying, togglePlay } = useAudioPlayer();
 
     const genresList = [
         { id: 'all', label: t.filterAll },
@@ -351,7 +349,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                         {/* Beats Grid */}
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {filteredBeats.slice(0, 30).map((beat) => {
-                                const isCurrentPlaying = currentBeat?.id === beat.id && isPlaying;
                                 return (
                                     <div
                                         key={beat.id}
@@ -368,32 +365,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             </p>
                                         </div>
 
-                                        {/* Instant Native HTML5 Audio Play Button */}
-                                        <button
-                                            onClick={() => togglePlay(beat)}
-                                            className={`mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl font-bold text-xs uppercase tracking-wider transition ${
-                                                isCurrentPlaying
-                                                    ? 'bg-amber-400 text-black shadow-lg shadow-amber-400/20'
-                                                    : 'bg-sky-200 text-black hover:bg-sky-100 shadow-lg shadow-sky-200/10'
-                                            }`}
-                                        >
-                                            {isCurrentPlaying ? (
-                                                <>
-                                                    <Pause className="h-4 w-4 fill-black" />
-                                                    {t.pauseAudio}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Play className="h-4 w-4 fill-black" />
-                                                    {t.playAudio}
-                                                </>
-                                            )}
-                                        </button>
+
 
                                         {/* Embedded Iframe Player Widget */}
                                         <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
                                             <iframe
-                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
+                                                src={`https://player.beatstars.com/?storeId=122437&trackId=${beat.beatstarsTrackId}`}
                                                 className="block h-[180px] w-full border-none"
                                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                                 referrerPolicy="no-referrer-when-downgrade"
