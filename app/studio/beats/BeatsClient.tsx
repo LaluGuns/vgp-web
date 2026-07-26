@@ -14,6 +14,7 @@ import { catalogCredentials } from '@/lib/vgp-ecosystem';
 import { categories, beatsCatalog } from '@/lib/catalog';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
+import BeatStarsCatalogPreview from './components/BeatStarsCatalogPreview';
 import BeatStarsStorePlayer from './components/BeatStarsStorePlayer';
 
 interface BeatsClientProps {
@@ -24,8 +25,8 @@ const copyDict = {
     'en-US': {
         eyebrow: 'VGP Studio / Beat Store',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
-        mutedTitle: 'Engineered for Recording & Content.',
-        description: 'Browse official instrumentals by Virzy Guns across Cyberpunk Trap, Phonk, Synthwave, and Hard 808s. Instant MP3, WAV, and Track Stems license delivery.',
+        mutedTitle: 'Made for artists ready to release.',
+        description: 'Shop official Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats by Virzy Guns. Preview every production, lock the right license, and turn your next idea into a release.',
         credentialsTag: 'Verified track record',
         credentialsTitle: 'Production proof behind the catalog.',
         credentialsSub: 'Independent credits verified through MUSO.AI, placed here where the production record matters most.',
@@ -33,8 +34,8 @@ const copyDict = {
         categoriesTitle: 'Explore genre categories.',
         categoriesSub: 'Dedicated category landing pages optimized for search, streaming guidelines, and vocal fit.',
         catalogTag: 'Beat Inventory',
-        catalogTitle: 'Browse Beats by Genre',
-        catalogSub: 'Filter the catalog by genre to preview official audio tracks and inspect licensing specifications.',
+        catalogTitle: 'Find the beat that makes the record.',
+        catalogSub: 'Preview every official Virzy Guns production right here, then choose the license that fits your release.',
         filterAll: 'All Beats',
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Official Audio Store Player',
@@ -50,7 +51,7 @@ const copyDict = {
         emailExclusive: 'Email Direct',
         dmCustom: 'Custom Beat DM',
         exclusiveIncludes: 'Exclusive package includes',
-        viewBeatPage: 'View Beat Page',
+        viewBeatPage: 'License details',
         officialTrack: 'Official Track',
         exclusiveBoxHeader: 'Exclusive Rights Inquiry',
         exclusiveBoxText: 'To acquire 100% exclusive ownership and remove this beat from the store:',
@@ -177,6 +178,7 @@ const catalogCopy = {
         reset: 'Reset filters',
         cardHint: 'Open the beat page for the official preview and license options.',
         openBeatStars: 'Open on BeatStars',
+        buy: (price: string) => `License from ${price}`,
         previous: 'Previous',
         next: 'Next',
         page: (current: number, total: number) => `Page ${current} of ${total}`,
@@ -189,6 +191,7 @@ const catalogCopy = {
         reset: 'フィルターをリセット',
         cardHint: '公式プレビューとライセンスはビートページで確認できます。',
         openBeatStars: 'BeatStars で開く',
+        buy: (price: string) => `${price} からライセンス`,
         previous: '前へ',
         next: '次へ',
         page: (current: number, total: number) => `${current} / ${total} ページ`,
@@ -201,6 +204,7 @@ const catalogCopy = {
         reset: 'Filter zurücksetzen',
         cardHint: 'Auf der Beat-Seite findest du die offizielle Vorschau und Lizenzoptionen.',
         openBeatStars: 'Bei BeatStars öffnen',
+        buy: (price: string) => `Lizenz ab ${price}`,
         previous: 'Zurück',
         next: 'Weiter',
         page: (current: number, total: number) => `Seite ${current} von ${total}`,
@@ -358,7 +362,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </p>
                             </div>
 
-                            <div className="grid gap-4 rounded-xl border border-white/[0.1] bg-white/[0.018] p-3 sm:p-4 lg:grid-cols-[1fr_auto] lg:items-center">
+                            <div className="grid gap-4 rounded-xl border border-white/[0.1] bg-white/[0.018] p-3 sm:p-4 lg:grid-cols-[minmax(0,0.9fr)_1.6fr] lg:items-start">
                                 <label className="relative block">
                                     <span className="sr-only">{catalogText.search}</span>
                                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sky-200/60" aria-hidden="true" />
@@ -387,7 +391,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     ) : null}
                                 </label>
 
-                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none lg:max-w-xl">
+                                <div className="flex flex-wrap items-center gap-2">
                                     {genresList.map((genre) => (
                                         <button
                                             key={genre.id}
@@ -420,7 +424,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 return (
                                     <div
                                         key={beat.id}
-                                        className="flex min-h-[17rem] flex-col rounded-xl border border-white/10 bg-white/[0.02] p-5 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
+                                        className="flex min-h-[29rem] flex-col rounded-xl border border-white/10 bg-white/[0.02] p-5 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
                                     >
                                         <div>
                                             <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
@@ -433,10 +437,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             </p>
                                         </div>
 
-                                        <div className="mt-5 rounded-lg border border-white/10 bg-black/20 px-3 py-2.5">
-                                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-200/70">{t.officialTrack}</p>
-                                            <p className="mt-1 text-xs leading-5 text-white/55">{catalogText.cardHint}</p>
-                                        </div>
+                                        <BeatStarsCatalogPreview
+                                            trackId={beat.beatstarsTrackId}
+                                            productUrl={beat.beatstarsProductUrl}
+                                            beatTitle={beat.title}
+                                            locale={locale}
+                                        />
 
                                         <div className="mt-auto grid grid-cols-2 gap-2 pt-4 text-xs">
                                             <Link
@@ -452,7 +458,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 rel="noopener noreferrer"
                                                 className="inline-flex min-h-10 items-center justify-center gap-1 rounded-lg border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                             >
-                                                {catalogText.openBeatStars}
+                                                {catalogText.buy(beat.licenses[0]?.price || '')}
                                                 <ExternalLink className="h-3 w-3" aria-hidden="true" />
                                             </a>
                                         </div>
@@ -587,7 +593,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                                 </a>
                                 <a
-                                    href="mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry"
+                                    href="mailto:founder@virzyguns.com?subject=Exclusive%20Rights%20Inquiry"
                                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-xs font-semibold text-white/75 transition hover:text-white"
                                 >
                                     <Mail className="h-3.5 w-3.5" />

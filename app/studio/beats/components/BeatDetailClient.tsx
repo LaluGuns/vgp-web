@@ -140,7 +140,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             {beat.primaryGenre}
                                         </span>
                                         <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                                            Instant License Delivery
+                                            Ready to license
                                         </span>
                                     </div>
                                     <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
@@ -210,7 +210,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         onClick={() => handleCheckoutClick(selectedLicense.name, selectedLicense.price)}
                                         className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-sky-200 text-black font-semibold text-sm transition hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-200"
                                     >
-                                        Choose {selectedLicense.name} on BeatStars ({selectedLicense.price})
+                                        Secure {selectedLicense.name} — {selectedLicense.price}
                                         <ExternalLink className="h-4 w-4" />
                                     </a>
                                 </div>
@@ -234,7 +234,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             Instagram DM (@virzyguns)
                                         </a>
                                         <a
-                                            href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
+                                            href={`mailto:founder@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
                                             className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10 transition"
                                         >
                                             <Mail className="h-3.5 w-3.5" />
