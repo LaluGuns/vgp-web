@@ -2,7 +2,12 @@ import { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/blog-data';
 import { beatsCatalog, categories as beatCategories } from '@/lib/catalog';
 
-const STABLE_BUILD_DATE = new Date('2026-07-25T00:00:00.000Z');
+function getLastModified(updatedAt?: string) {
+    if (!updatedAt) return undefined;
+
+    const date = new Date(updatedAt);
+    return Number.isNaN(date.getTime()) ? undefined : date;
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://www.virzyguns.com';
@@ -26,7 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/blog',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
-        lastModified: STABLE_BUILD_DATE,
         changeFrequency: route.includes('/studio/beats') ? ('daily' as const) : ('monthly' as const),
         priority: route === '' ? 1 : route.includes('/studio/beats') ? 0.9 : 0.8,
     }));
@@ -35,19 +39,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const beatCategoryRoutes = beatCategories.flatMap((cat) => [
         {
             url: `${baseUrl}/studio/beats/${cat.slug}`,
-            lastModified: STABLE_BUILD_DATE,
             changeFrequency: 'weekly' as const,
             priority: 0.85,
         },
         {
             url: `${baseUrl}/ja-JP/studio/beats/${cat.slug}`,
-            lastModified: STABLE_BUILD_DATE,
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         },
         {
             url: `${baseUrl}/de-DE/studio/beats/${cat.slug}`,
-            lastModified: STABLE_BUILD_DATE,
             changeFrequency: 'weekly' as const,
             priority: 0.8,
         },
@@ -55,31 +56,35 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // 3. Multilingual Beat Product Pages (Only Indexable beats)
     const indexableBeats = beatsCatalog.filter((b) => b.seoStatus === 'indexable');
-    const beatProductRoutes = indexableBeats.flatMap((beat) => [
-        {
-            url: `${baseUrl}/studio/beats/${beat.slug}`,
-            lastModified: beat.updatedAt ? new Date(beat.updatedAt) : STABLE_BUILD_DATE,
-            changeFrequency: 'weekly' as const,
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/ja-JP/studio/beats/${beat.slug}`,
-            lastModified: beat.updatedAt ? new Date(beat.updatedAt) : STABLE_BUILD_DATE,
-            changeFrequency: 'weekly' as const,
-            priority: 0.75,
-        },
-        {
-            url: `${baseUrl}/de-DE/studio/beats/${beat.slug}`,
-            lastModified: beat.updatedAt ? new Date(beat.updatedAt) : STABLE_BUILD_DATE,
-            changeFrequency: 'weekly' as const,
-            priority: 0.75,
-        },
-    ]);
+    const beatProductRoutes = indexableBeats.flatMap((beat) => {
+        const lastModified = getLastModified(beat.updatedAt);
+        const timestamp = lastModified ? { lastModified } : {};
+
+        return [
+            {
+                url: `${baseUrl}/studio/beats/${beat.slug}`,
+                ...timestamp,
+                changeFrequency: 'weekly' as const,
+                priority: 0.8,
+            },
+            {
+                url: `${baseUrl}/ja-JP/studio/beats/${beat.slug}`,
+                ...timestamp,
+                changeFrequency: 'weekly' as const,
+                priority: 0.75,
+            },
+            {
+                url: `${baseUrl}/de-DE/studio/beats/${beat.slug}`,
+                ...timestamp,
+                changeFrequency: 'weekly' as const,
+                priority: 0.75,
+            },
+        ];
+    });
 
     // 4. Dynamic Blog Routes
     const blogRoutes = getAllSlugs().map((slug) => ({
         url: `${baseUrl}/blog/${slug}`,
-        lastModified: STABLE_BUILD_DATE,
         changeFrequency: 'weekly' as const,
         priority: 0.7,
     }));
@@ -88,7 +93,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const blogCategories = ['production-tips', 'licensing-guide', 'genre-guides'];
     const categoryRoutes = blogCategories.map((cat) => ({
         url: `${baseUrl}/blog/category/${cat}`,
-        lastModified: STABLE_BUILD_DATE,
         changeFrequency: 'weekly' as const,
         priority: 0.6,
     }));

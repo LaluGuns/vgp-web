@@ -92,6 +92,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 ],
                 type: 'music.song',
             },
+            twitter: {
+                card: 'summary_large_image',
+                title: beat.localizedTitle?.['en-US'] || beat.title,
+                description: beat.description['en-US'] || '',
+                images: [beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`],
+            },
         };
     }
 

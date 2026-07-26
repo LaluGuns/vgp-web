@@ -10,6 +10,7 @@ import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { BeatProduct, getBeatsByCategory } from '@/lib/catalog';
 import { trackBeatEvent } from '@/lib/analytics';
+import BeatStarsTrackPlayer from './BeatStarsTrackPlayer';
 
 interface BeatDetailClientProps {
     beat: BeatProduct;
@@ -96,12 +97,18 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
-                                    <iframe 
-                                        src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                        width="100%"
-                                        height="140"
-                                        className="border-none"
-                                    ></iframe>
+                                    {beat.beatstarsEmbedUrl ? (
+                                        <BeatStarsTrackPlayer
+                                            embedUrl={beat.beatstarsEmbedUrl}
+                                            productUrl={beat.beatstarsProductUrl}
+                                            beatTitle={beat.title}
+                                            locale={locale}
+                                        />
+                                    ) : (
+                                        <div className="flex min-h-[140px] items-center justify-center px-4 text-center text-xs text-white/60">
+                                            Official preview unavailable. Use the BeatStars purchase link below.
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-white/50">
@@ -129,7 +136,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                     </p>
                                 </div>
 
-                                {/* License Selection Matrix */}
+                                {/* License selection matrix */}
                                 <div className="space-y-3">
                                     <p className="text-xs uppercase tracking-widest text-sky-200/70 font-semibold">Select Release Tier</p>
                                     <div className="grid gap-2 sm:grid-cols-2">
