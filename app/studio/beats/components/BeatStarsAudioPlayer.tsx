@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import { AlertCircle, ExternalLink, LoaderCircle, Pause, Play } from 'lucide-react';
+import { formatTrackTime, getBeatStarsTrack, type BeatStarsTrackData } from './beatstars-track-data';
 
 type BeatLocale = 'en-US' | 'ja-JP' | 'de-DE';
 
@@ -16,85 +17,6 @@ interface BeatStarsAudioPlayerProps {
     showArtwork?: boolean;
 }
 
-interface PreviewResponse {
-    previewUrl?: string;
-    duration?: number | null;
-    artworkUrl?: string;
-}
-
-interface BeatStarsTrackResponse {
-    data?: {
-        track?: {
-            bundle?: {
-                stream?: { url?: string; duration?: number };
-                hls?: { url?: string; duration?: number };
-            };
-            profile?: { username?: string };
-            artwork?: { fitInUrl?: string };
-            streamUrl?: string;
-        };
-    };
-}
-
-const BEATSTARS_GRAPHQL_URL = 'https://core.prod.beatstars.net/graphql?op=getNewTrackV3';
-const VIRZY_GUNS_USERNAME = 'virzyguns';
-const previewRequests = new Map<string, Promise<PreviewResponse>>();
-const TRACK_QUERY = `
-    query getNewTrackV3($id: String!) {
-        track(id: $id) {
-            streamUrl
-            bundle {
-                stream { url duration }
-                hls { url duration }
-            }
-            profile { username }
-            artwork { fitInUrl(width: 160, height: 160) }
-        }
-    }
-`;
-
-function fetchPreview(trackId: string) {
-    const existingRequest = previewRequests.get(trackId);
-    if (existingRequest) return existingRequest;
-
-    const request = fetch(BEATSTARS_GRAPHQL_URL, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-            operationName: 'getNewTrackV3',
-            variables: { id: `TK${trackId}` },
-            query: TRACK_QUERY,
-        }),
-    })
-        .then(async (response) => {
-            if (!response.ok) throw new Error('BeatStars preview request failed');
-
-            const payload = (await response.json()) as BeatStarsTrackResponse;
-            const track = payload.data?.track;
-            const previewUrl = track?.streamUrl || track?.bundle?.hls?.url;
-
-            if (
-                !track ||
-                track.profile?.username?.toLowerCase() !== VIRZY_GUNS_USERNAME ||
-                !previewUrl
-            ) {
-                throw new Error('Verified BeatStars preview unavailable');
-            }
-
-            return {
-                previewUrl,
-                duration: track.bundle?.hls?.duration || track.bundle?.stream?.duration || null,
-                artworkUrl: track.artwork?.fitInUrl,
-            };
-        })
-        .catch((error) => {
-            previewRequests.delete(trackId);
-            throw error;
-        });
-
-    previewRequests.set(trackId, request);
-    return request;
-}
 
 const copy = {
     'en-US': {
@@ -126,13 +48,6 @@ const copy = {
     },
 } as const;
 
-function formatTime(seconds: number) {
-    if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
-    const minutes = Math.floor(seconds / 60);
-    const remainder = Math.floor(seconds % 60);
-    return `${minutes}:${remainder.toString().padStart(2, '0')}`;
-}
-
 export default function BeatStarsAudioPlayer({
     trackId,
     productUrl,
@@ -146,6 +61,7 @@ export default function BeatStarsAudioPlayer({
     const [shouldLoad, setShouldLoad] = useState(autoLoad);
     const [previewUrl, setPreviewUrl] = useState<string>();
     const [artworkUrl, setArtworkUrl] = useState<string>();
+    const [trackData, setTrackData] = useState<BeatStarsTrackData>();
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailed, setHasFailed] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -182,13 +98,14 @@ export default function BeatStarsAudioPlayer({
         let isCancelled = false;
         queueMicrotask(() => setIsLoading(true));
 
-        fetchPreview(trackId)
+        getBeatStarsTrack(trackId)
             .then((payload) => {
                 if (isCancelled) return;
                 if (!payload.previewUrl) throw new Error('Preview URL unavailable');
                 setPreviewUrl(payload.previewUrl);
                 if (payload.duration) setDuration(payload.duration);
                 if (payload.artworkUrl) setArtworkUrl(payload.artworkUrl);
+                setTrackData(payload);
             })
             .catch(() => {
                 if (isCancelled) return;
@@ -270,6 +187,12 @@ export default function BeatStarsAudioPlayer({
         setCurrentTime(value);
     };
 
+    const metadata = [
+        trackData?.metadata.bpm ? `${trackData.metadata.bpm} BPM` : undefined,
+        trackData?.metadata.key,
+        trackData?.metadata.genres[0],
+    ].filter(Boolean).join(' · ');
+
     return (
         <div ref={containerRef} className="h-[104px] overflow-hidden rounded-xl border border-white/[0.1] bg-[#02080d] shadow-inner shadow-black/40">
             {hasFailed ? (
@@ -327,8 +250,9 @@ export default function BeatStarsAudioPlayer({
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-2">
                                 <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/70">{text.label}</p>
-                                <span className="shrink-0 font-mono text-[10px] text-white/50">{formatTime(currentTime)} / {formatTime(duration)}</span>
+                                <span className="shrink-0 font-mono text-[10px] text-white/50">{formatTrackTime(currentTime)} / {formatTrackTime(duration)}</span>
                             </div>
+                            {metadata ? <p className="mt-1 truncate text-[10px] font-medium text-white/45">{metadata}</p> : null}
                             <input
                                 type="range"
                                 min="0"
@@ -337,7 +261,7 @@ export default function BeatStarsAudioPlayer({
                                 value={Math.min(currentTime, duration || 0)}
                                 onChange={(event) => seekTo(Number(event.target.value))}
                                 aria-label={text.position(beatTitle)}
-                                className="mt-2.5 h-1.5 w-full cursor-pointer accent-sky-200"
+                                className={`${metadata ? 'mt-2' : 'mt-2.5'} h-1.5 w-full cursor-pointer accent-sky-200`}
                             />
                         </div>
                     </div>

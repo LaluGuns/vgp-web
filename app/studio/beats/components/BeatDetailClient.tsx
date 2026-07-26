@@ -1,18 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
 import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
-import { BeatProduct, getBeatsByCategory } from '@/lib/catalog';
+import { type BeatLicense, BeatProduct, getBeatsByCategory } from '@/lib/catalog';
 import { trackBeatEvent } from '@/lib/analytics';
-import { getBeatSummary } from '@/lib/seo/beat-copy';
+import { getBeatStory } from '@/lib/seo/beat-copy';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
 import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
+import BeatStarsTrackArtwork from './BeatStarsTrackArtwork';
+import BeatStarsTrackMeta from './BeatStarsTrackMeta';
+import { getBeatStarsTrack } from './beatstars-track-data';
 
 interface BeatDetailClientProps {
     beat: BeatProduct;
@@ -21,10 +23,35 @@ interface BeatDetailClientProps {
 
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 
+function toOfficialLicense(contract: Awaited<ReturnType<typeof getBeatStarsTrack>>['contracts'][number]): BeatLicense {
+    const streamFeature = contract.features.find((feature) => /stream/i.test(feature));
+    const salesFeature = contract.features.find((feature) => /copies|units/i.test(feature));
+
+    return {
+        id: `beatstars-${contract.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+        name: contract.title,
+        price: typeof contract.price === 'number' ? `$${contract.price}` : 'See BeatStars',
+        priceValue: contract.price || 0,
+        currency: 'USD',
+        type: 'non-exclusive',
+        fileFormats: contract.deliverables.length ? contract.deliverables : ['See BeatStars contract'],
+        includesStems: contract.deliverables.some((deliverable) => deliverable.toLowerCase().includes('stem')),
+        commercialUse: contract.features.some((feature) => /profit|commercial/i.test(feature)),
+        streamingLimit: streamFeature || 'See BeatStars contract',
+        salesLimit: salesFeature || 'See BeatStars contract',
+        musicVideoLimit: contract.features.find((feature) => /music video/i.test(feature)) || 'See BeatStars contract',
+        paidPerformances: contract.features.some((feature) => /profit.*performance|live performance/i.test(feature)),
+        contentIdAllowed: false,
+        creditRequired: false,
+        creditString: 'See BeatStars contract',
+        source: 'beatstars-api',
+    };
+}
+
 const detailCopy = {
     'en-US': {
         home: 'Home', beats: 'Beats', officialRelease: 'Official release', previewUnavailable: 'Preview unavailable. Use the official BeatStars link below.',
-        producer: 'Producer', powered: 'Preview via BeatStars', ready: 'Ready to license', selectTier: 'Choose a license tier',
+        producer: 'Producer', powered: 'Preview via BeatStars', ready: 'Ready to license', selectTier: 'Choose a license tier', liveTerms: 'Terms loaded from the official BeatStars contract',
         includes: (name: string) => `Included with ${name}`, formats: 'Formats', streams: 'Streams', sales: 'Sales', stems: 'Stems',
         stemsIncluded: 'Included', stemsNotIncluded: 'Not included', checkout: (name: string, price: string) => `License ${name} — ${price}`,
         exclusiveEyebrow: 'Exclusive license inquiry', exclusiveText: 'Ask about current availability and terms for an exclusive license. Details are confirmed directly in writing before purchase.',
@@ -36,7 +63,7 @@ const detailCopy = {
     },
     'ja-JP': {
         home: 'ホーム', beats: 'ビート', officialRelease: '公式リリース', previewUnavailable: 'プレビューを再生できません。下のBeatStars公式リンクをご利用ください。',
-        producer: 'プロデューサー', powered: 'BeatStars提供のプレビュー', ready: 'ライセンス購入可能', selectTier: 'ライセンスを選ぶ',
+        producer: 'プロデューサー', powered: 'BeatStars提供のプレビュー', ready: 'ライセンス購入可能', selectTier: 'ライセンスを選ぶ', liveTerms: 'BeatStars公式コントラクトから取得した条件',
         includes: (name: string) => `${name}に含まれる内容`, formats: 'ファイル形式', streams: 'ストリーミング', sales: '販売数', stems: 'ステム',
         stemsIncluded: '含まれます', stemsNotIncluded: '含まれません', checkout: (name: string, price: string) => `${name}をライセンス — ${price}`,
         exclusiveEyebrow: '独占ライセンスのお問い合わせ', exclusiveText: '独占ライセンスの現在の提供状況と条件についてお問い合わせください。購入前に詳細を書面で直接ご案内します。',
@@ -48,7 +75,7 @@ const detailCopy = {
     },
     'de-DE': {
         home: 'Startseite', beats: 'Beats', officialRelease: 'Offizieller Release', previewUnavailable: 'Vorschau nicht verfügbar. Bitte nutze unten den offiziellen BeatStars-Link.',
-        producer: 'Produzent', powered: 'Vorschau via BeatStars', ready: 'Lizenz verfügbar', selectTier: 'Lizenz auswählen',
+        producer: 'Produzent', powered: 'Vorschau via BeatStars', ready: 'Lizenz verfügbar', selectTier: 'Lizenz auswählen', liveTerms: 'Konditionen aus dem offiziellen BeatStars-Vertrag',
         includes: (name: string) => `Enthalten in ${name}`, formats: 'Dateiformate', streams: 'Streams', sales: 'Verkäufe', stems: 'Stems',
         stemsIncluded: 'Enthalten', stemsNotIncluded: 'Nicht enthalten', checkout: (name: string, price: string) => `${name} lizenzieren — ${price}`,
         exclusiveEyebrow: 'Anfrage zu einer Exklusivlizenz', exclusiveText: 'Frag nach aktueller Verfügbarkeit und den Bedingungen einer Exklusivlizenz. Alle Details werden vor dem Kauf direkt schriftlich bestätigt.',
@@ -63,11 +90,35 @@ const detailCopy = {
 export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailClientProps) {
     const text = detailCopy[locale];
     const [selectedLicense, setSelectedLicense] = useState(beat.licenses[0] || beat.licenses[1]);
+    const [officialLicenses, setOfficialLicenses] = useState<BeatLicense[]>();
     const relatedBeats = getBeatsByCategory(beat.primaryGenre.toLowerCase().replace(/ /g, '-'))
         .filter((b) => b.id !== beat.id)
         .slice(0, 3);
 
-    const description = getBeatSummary(beat, locale);
+    const description = getBeatStory(beat, locale);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        getBeatStarsTrack(beat.beatstarsTrackId)
+            .then((track) => {
+                const licenses = track.contracts
+                    .filter((contract) => !contract.offerOnly && typeof contract.price === 'number' && contract.price > 0)
+                    .map(toOfficialLicense);
+
+                if (!cancelled && licenses.length) {
+                    setOfficialLicenses(licenses);
+                    setSelectedLicense((current) => licenses.find((license) => license.name.toLowerCase() === current.name.toLowerCase()) || licenses[0]);
+                }
+            })
+            .catch(() => undefined);
+
+        return () => {
+            cancelled = true;
+        };
+    }, [beat.beatstarsTrackId]);
+
+    const licenseOptions = officialLicenses || beat.licenses;
 
     const handleCheckoutClick = (licenseName: string, price: string) => {
         trackBeatEvent('beatstars_checkout_click', {
@@ -77,6 +128,22 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
             licenseName,
             displayedPrice: price,
             destinationUrl: beat.beatstarsProductUrl,
+        });
+    };
+
+    const handleLicenseSelection = (license: BeatLicense) => {
+        setSelectedLicense(license);
+        trackBeatEvent('beat_license_selected', {
+            beatId: beat.id,
+            beatSlug: beat.slug,
+            beatTitle: beat.title,
+            primaryGenre: beat.primaryGenre,
+            locale,
+            licenseId: license.id,
+            licenseName: license.name,
+            displayedPrice: license.price,
+            currency: license.currency,
+            sourcePage: 'beat-detail',
         });
     };
 
@@ -123,17 +190,10 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 animate="visible"
                             >
                                 <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-black/40 border border-white/10">
-                                    {beat.coverImageUrl ? (
-                                        <Image
-                                            src={beat.coverImageUrl}
-                                            alt={`${beat.title} cover artwork`}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, 400px"
-                                            className="object-cover"
-                                            priority
-                                        />
-                                    ) : (
-                                        <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.28),transparent_30%),radial-gradient(circle_at_86%_82%,rgba(168,85,247,0.2),transparent_34%),linear-gradient(145deg,#071923,#02070d_62%,#050a12)] p-7">
+                                    <BeatStarsTrackArtwork
+                                        trackId={beat.beatstarsTrackId}
+                                        title={beat.title}
+                                        fallback={<div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.28),transparent_30%),radial-gradient(circle_at_86%_82%,rgba(168,85,247,0.2),transparent_34%),linear-gradient(145deg,#071923,#02070d_62%,#050a12)] p-7">
                                             <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,0.06)_42%,transparent_43%)]" aria-hidden="true" />
                                             <div className="relative flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.24em] text-sky-100/75">
                                                 <span>Virzy Guns</span>
@@ -143,8 +203,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/70">{beat.primaryGenre}</p>
                                                 <h2 className="mt-3 max-w-sm font-display text-3xl font-semibold leading-[0.95] tracking-tight text-white sm:text-4xl">{beat.title}</h2>
                                             </div>
-                                        </div>
-                                    )}
+                                        </div>}
+                                    />
                                 </div>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
@@ -160,6 +220,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             beatTitle={beat.title}
                                             locale={locale}
                                             autoLoad
+                                            showArtwork
                                         />
                                     ) : (
                                         <div className="flex min-h-[140px] items-center justify-center px-4 text-center text-xs text-white/60">
@@ -191,18 +252,24 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                     <p className="mt-3 text-sm leading-7 text-white/70 sm:text-base">
                                         {description}
                                     </p>
+                                    <div className="mt-4">
+                                        <BeatStarsTrackMeta trackId={beat.beatstarsTrackId} locale={locale} />
+                                    </div>
                                 </div>
 
                                 {/* License selection matrix */}
                                 <div className="space-y-3">
-                                    <p className="text-xs uppercase tracking-widest text-sky-200/70 font-semibold">{text.selectTier}</p>
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <p className="text-xs uppercase tracking-widest text-sky-200/70 font-semibold">{text.selectTier}</p>
+                                        {officialLicenses ? <p className="text-[11px] text-white/45">{text.liveTerms}</p> : null}
+                                    </div>
                                     <div className="grid gap-2 sm:grid-cols-2">
-                                        {beat.licenses.map((lic) => {
+                                        {licenseOptions.map((lic) => {
                                             const isSelected = selectedLicense.id === lic.id;
                                             return (
                                                 <button
                                                     key={lic.id}
-                                                    onClick={() => setSelectedLicense(lic)}
+                                                    onClick={() => handleLicenseSelection(lic)}
                                                     className={`flex items-center justify-between rounded-xl border p-4 text-left transition ${
                                                         isSelected
                                                             ? 'border-sky-200/60 bg-sky-300/[0.12] text-white shadow-lg'
