@@ -16,7 +16,77 @@ interface BeatStarsAudioPlayerProps {
 interface PreviewResponse {
     previewUrl?: string;
     duration?: number | null;
-    error?: string;
+}
+
+interface BeatStarsTrackResponse {
+    data?: {
+        track?: {
+            bundle?: {
+                stream?: { url?: string; duration?: number };
+                hls?: { url?: string; duration?: number };
+            };
+            profile?: { username?: string };
+            streamUrl?: string;
+        };
+    };
+}
+
+const BEATSTARS_GRAPHQL_URL = 'https://core.prod.beatstars.net/graphql?op=getNewTrackV3';
+const VIRZY_GUNS_USERNAME = 'virzyguns';
+const previewRequests = new Map<string, Promise<PreviewResponse>>();
+const TRACK_QUERY = `
+    query getNewTrackV3($id: String!) {
+        track(id: $id) {
+            streamUrl
+            bundle {
+                stream { url duration }
+                hls { url duration }
+            }
+            profile { username }
+        }
+    }
+`;
+
+function fetchPreview(trackId: string) {
+    const existingRequest = previewRequests.get(trackId);
+    if (existingRequest) return existingRequest;
+
+    const request = fetch(BEATSTARS_GRAPHQL_URL, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+            operationName: 'getNewTrackV3',
+            variables: { id: `TK${trackId}` },
+            query: TRACK_QUERY,
+        }),
+    })
+        .then(async (response) => {
+            if (!response.ok) throw new Error('BeatStars preview request failed');
+
+            const payload = (await response.json()) as BeatStarsTrackResponse;
+            const track = payload.data?.track;
+            const previewUrl = track?.bundle?.stream?.url || track?.streamUrl;
+
+            if (
+                !track ||
+                track.profile?.username?.toLowerCase() !== VIRZY_GUNS_USERNAME ||
+                !previewUrl
+            ) {
+                throw new Error('Verified BeatStars preview unavailable');
+            }
+
+            return {
+                previewUrl,
+                duration: track.bundle?.stream?.duration || track.bundle?.hls?.duration || null,
+            };
+        })
+        .catch((error) => {
+            previewRequests.delete(trackId);
+            throw error;
+        });
+
+    previewRequests.set(trackId, request);
+    return request;
 }
 
 const copy = {
@@ -97,25 +167,27 @@ export default function BeatStarsAudioPlayer({
     useEffect(() => {
         if (!shouldLoad || previewUrl || hasFailed) return;
 
-        const controller = new AbortController();
+        let isCancelled = false;
         setIsLoading(true);
 
-        fetch(`/api/beats/preview/${trackId}`, { signal: controller.signal })
-            .then(async (response) => {
-                const payload = (await response.json()) as PreviewResponse;
-                if (!response.ok || !payload.previewUrl) throw new Error(payload.error);
+        fetchPreview(trackId)
+            .then((payload) => {
+                if (isCancelled) return;
+                if (!payload.previewUrl) throw new Error('Preview URL unavailable');
                 setPreviewUrl(payload.previewUrl);
                 if (payload.duration) setDuration(payload.duration);
             })
-            .catch((error: unknown) => {
-                if (error instanceof DOMException && error.name === 'AbortError') return;
+            .catch(() => {
+                if (isCancelled) return;
                 setHasFailed(true);
             })
             .finally(() => {
-                if (!controller.signal.aborted) setIsLoading(false);
+                if (!isCancelled) setIsLoading(false);
             });
 
-        return () => controller.abort();
+        return () => {
+            isCancelled = true;
+        };
     }, [hasFailed, previewUrl, shouldLoad, trackId]);
 
     useEffect(() => {
