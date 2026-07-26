@@ -13,17 +13,15 @@ function localizedTitle(beat: BeatProduct, locale: BeatLocale) {
 export function getBeatSummary(beat: BeatProduct, locale: BeatLocale) {
     const title = localizedTitle(beat, locale);
     const genre = beat.primaryGenre;
-    const mood = beat.moods[0]?.toLowerCase();
-
     if (locale === 'de-DE') {
-        return `Mach ${title} zu deinem nächsten Release: ein offizielles ${genre}-Instrumental von ${beat.producer}${mood ? ` mit ${mood} Energie` : ''}. Vorschau starten, Lizenz sichern und direkt bei BeatStars kaufen.`;
+        return `${title} ist ein offizielles ${genre}-Instrumental von ${beat.producer}. Hör die Vorschau an, prüfe die Lizenzstufen und kaufe bei BeatStars.`;
     }
 
     if (locale === 'ja-JP') {
-        return `${title} を次のリリースの中心に。${beat.producer}による公式 ${genre} インストゥルメンタルです。プレビューを聴き、ライセンスを確保し、BeatStars ですぐに購入。`;
+        return `${title} は${beat.producer}による公式${genre}インストゥルメンタルです。試聴し、ライセンス内容を確認してBeatStarsで購入できます。`;
     }
 
-    return `Make ${title} the foundation of your next release. This official ${genre} instrumental by ${beat.producer}${mood ? ` brings ${mood} energy` : ''}; preview it below, lock in your license, and release with confidence.`;
+    return `${title} is an official ${genre} instrumental by ${beat.producer}. Preview the track, review the license tiers, then purchase on BeatStars.`;
 }
 
 export function getBeatMetaDescription(beat: BeatProduct, locale: BeatLocale) {
@@ -31,12 +29,12 @@ export function getBeatMetaDescription(beat: BeatProduct, locale: BeatLocale) {
     const firstLicense = beat.licenses[0]?.name;
 
     if (locale === 'de-DE') {
-        return `${title}: ${beat.primaryGenre}-Beat von ${beat.producer}. Vorschau anhören,${firstLicense ? ` ${firstLicense}-Lizenz` : ' Lizenz'} sichern und den nächsten Release bei BeatStars starten.`;
+        return `${title}: ${beat.primaryGenre}-Beat von ${beat.producer}. Vorschau anhören,${firstLicense ? ` ${firstLicense}-Lizenz` : ' Lizenz'} prüfen und bei BeatStars kaufen.`;
     }
 
     if (locale === 'ja-JP') {
-        return `${title}: ${beat.producer}の ${beat.primaryGenre} ビート。プレビューを聴き、BeatStars でライセンスを確保して次のリリースへ。`;
+        return `${title}: ${beat.producer}による${beat.primaryGenre}ビート。プレビューを聴き、BeatStarsでライセンス内容を確認して購入できます。`;
     }
 
-    return `${title}: ${beat.primaryGenre} beat by ${beat.producer}. Preview the official track, lock${firstLicense ? ` a ${firstLicense} license` : ' your license'}, and build your next release on BeatStars.`;
+    return `${title}: ${beat.primaryGenre} beat by ${beat.producer}. Preview the official track, review${firstLicense ? ` the ${firstLicense} license` : ' the available licenses'}, and purchase on BeatStars.`;
 }

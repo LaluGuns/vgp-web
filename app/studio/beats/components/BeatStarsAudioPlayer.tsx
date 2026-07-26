@@ -98,6 +98,7 @@ const copy = {
         external: 'Open on BeatStars',
         play: 'Play preview',
         pause: 'Pause preview',
+        position: (title: string) => `${title} playback position`,
     },
     'ja-JP': {
         label: '公式 BeatStars プレビュー',
@@ -106,6 +107,7 @@ const copy = {
         external: 'BeatStars で開く',
         play: 'プレビューを再生',
         pause: 'プレビューを一時停止',
+        position: (title: string) => `${title}の再生位置`,
     },
     'de-DE': {
         label: 'Offizielle BeatStars-Vorschau',
@@ -114,6 +116,7 @@ const copy = {
         external: 'Bei BeatStars öffnen',
         play: 'Vorschau abspielen',
         pause: 'Vorschau pausieren',
+        position: (title: string) => `Wiedergabeposition: ${title}`,
     },
 } as const;
 
@@ -147,7 +150,7 @@ export default function BeatStarsAudioPlayer({
         if (!element || shouldLoad) return;
 
         if (!('IntersectionObserver' in window)) {
-            setShouldLoad(true);
+            queueMicrotask(() => setShouldLoad(true));
             return;
         }
 
@@ -169,7 +172,7 @@ export default function BeatStarsAudioPlayer({
         if (!shouldLoad || previewUrl || hasFailed) return;
 
         let isCancelled = false;
-        setIsLoading(true);
+        queueMicrotask(() => setIsLoading(true));
 
         fetchPreview(trackId)
             .then((payload) => {
@@ -215,7 +218,7 @@ export default function BeatStarsAudioPlayer({
         }
 
         if (!Hls.isSupported()) {
-            setHasFailed(true);
+            queueMicrotask(() => setHasFailed(true));
             return;
         }
 
@@ -259,9 +262,9 @@ export default function BeatStarsAudioPlayer({
     };
 
     return (
-        <div ref={containerRef} className="mt-5 overflow-hidden rounded-xl border border-white/10 bg-[#03090d]">
+        <div ref={containerRef} className="overflow-hidden rounded-2xl border border-white/[0.1] bg-[#02080d] shadow-inner shadow-black/40">
             {hasFailed ? (
-                <div className="flex min-h-[116px] flex-col items-center justify-center gap-2 px-4 text-center">
+                <div className="flex min-h-[128px] flex-col items-center justify-center gap-2 px-4 text-center" aria-live="polite">
                     <AlertCircle className="h-4 w-4 text-amber-200/75" aria-hidden="true" />
                     <p className="text-xs text-white/55">{text.unavailable}</p>
                     <a
@@ -275,12 +278,12 @@ export default function BeatStarsAudioPlayer({
                     </a>
                 </div>
             ) : !previewUrl ? (
-                <div className="flex min-h-[116px] items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sky-100/60">
+                <div className="flex min-h-[128px] items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sky-100/60" aria-live="polite">
                     <LoaderCircle className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} aria-hidden="true" />
                     {text.loading}
                 </div>
             ) : (
-                <div className="p-4">
+                <div className="p-4 sm:p-5">
                     <audio
                         ref={audioRef}
                         preload="metadata"
@@ -301,7 +304,7 @@ export default function BeatStarsAudioPlayer({
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-3">
                                 <p className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-sky-100/70">{text.label}</p>
-                                <span className="font-mono text-[10px] text-white/40">{formatTime(currentTime)} / {formatTime(duration)}</span>
+                                <span className="font-mono text-[11px] text-white/50">{formatTime(currentTime)} / {formatTime(duration)}</span>
                             </div>
                             <input
                                 type="range"
@@ -310,7 +313,7 @@ export default function BeatStarsAudioPlayer({
                                 step="0.1"
                                 value={Math.min(currentTime, duration || 0)}
                                 onChange={(event) => seekTo(Number(event.target.value))}
-                                aria-label={`${beatTitle} playback position`}
+                                aria-label={text.position(beatTitle)}
                                 className="mt-2 h-1.5 w-full cursor-pointer accent-sky-200"
                             />
                         </div>

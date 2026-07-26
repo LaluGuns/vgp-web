@@ -35,8 +35,10 @@ const copyDict = {
         categoriesTitle: 'Explore genre categories.',
         categoriesSub: 'Dedicated category landing pages optimized for search, streaming guidelines, and vocal fit.',
         catalogTag: 'Beat Inventory',
-        catalogTitle: 'Find the beat that makes the record.',
-        catalogSub: 'Preview every official Virzy Guns production right here, then choose the license that fits your release.',
+        catalogTitle: 'Preview the sound. License the release.',
+        catalogSub: 'Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats — preview before you choose a license and complete checkout on BeatStars.',
+        catalogMeta: 'Official previews · License options from $15 · Checkout on BeatStars',
+        categoryCta: (name: string) => `Explore ${name}`,
         filterAll: 'All Beats',
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Official Audio Store Player',
@@ -51,7 +53,7 @@ const copyDict = {
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'Email Direct',
         dmCustom: 'Custom Beat DM',
-        exclusiveIncludes: 'Exclusive package includes',
+        exclusiveIncludes: 'What we confirm directly',
         viewBeatPage: 'License details',
         officialTrack: 'Official Track',
         exclusiveBoxHeader: 'Exclusive Rights Inquiry',
@@ -59,6 +61,8 @@ const copyDict = {
         secureCheckout: 'Secure checkout & instant MP3/WAV/Stems delivery',
         playAudio: 'Play Audio Preview',
         pauseAudio: 'Pause Audio',
+        exclusiveEmailSubject: 'Exclusive license inquiry',
+        exclusiveEmailBody: 'Hi Virzy Guns,\n\nI would like to discuss an exclusive license for a beat.\n\nProject details:',
     },
     'ja-JP': {
         eyebrow: 'VGPスタジオ / ビートストア',
@@ -72,8 +76,10 @@ const copyDict = {
         categoriesTitle: 'カテゴリーから探す',
         categoriesSub: '検索とストリーミングガイドラインに最適化されたジャンル別専用ページ。',
         catalogTag: 'ビートインベントリ',
-        catalogTitle: 'ジャンル別ビート一覧',
-        catalogSub: 'ジャンルフィルターでビートを絞り込み、試聴プレーヤーでサウンドを確認できます。',
+        catalogTitle: '試聴して、リリースに合うライセンスを選ぶ',
+        catalogSub: 'サイバーパンクトラップ、フォンク、シンセウェーブ、ハード808の公式ビートを試聴し、BeatStarsでライセンスを選べます。',
+        catalogMeta: '公式プレビュー · ライセンスは$15から · BeatStarsで決済',
+        categoryCta: (name: string) => `${name}を探す`,
         filterAll: 'すべてのビート',
         playerTag: 'BeatStars公式プレーヤー',
         playerTitle: 'オフィシャル試聴プレーヤー',
@@ -88,7 +94,7 @@ const copyDict = {
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'メールで相談',
         dmCustom: 'カスタム制作のDM相談',
-        exclusiveIncludes: '独占ライセンスパッケージ内容',
+        exclusiveIncludes: '直接確認する内容',
         viewBeatPage: 'ビート詳細を見る',
         officialTrack: '公式トラック',
         exclusiveBoxHeader: '独占ライセンスのお問い合わせ',
@@ -96,6 +102,8 @@ const copyDict = {
         secureCheckout: '安全な決済および即時MP3/WAV/ステム配信',
         playAudio: '試聴再生',
         pauseAudio: '一時停止',
+        exclusiveEmailSubject: '独占ライセンスのお問い合わせ',
+        exclusiveEmailBody: 'Virzy Guns様\n\nビートの独占ライセンスについて伺いたいです。\n\nプロジェクトの詳細:',
     },
     'de-DE': {
         eyebrow: 'VGP Studio / Beat Store',
@@ -109,8 +117,10 @@ const copyDict = {
         categoriesTitle: 'Genre-Kategorien erkunden.',
         categoriesSub: 'Spezielle Kategorie-Seiten optimiert für Suche, Streaming-Richtlinien und Vocal-Passgenauigkeit.',
         catalogTag: 'Beat-Inventar',
-        catalogTitle: 'Beats nach Genre durchsuchen',
-        catalogSub: 'Filtern Sie den Katalog nach Genre, um Audiotracks anzuhören und Lizenzdetails zu prüfen.',
+        catalogTitle: 'Sound anhören. Release lizenzieren.',
+        catalogSub: 'Offizielle Cyberpunk-Trap-, Phonk-, Synthwave- und Hard-808-Beats anhören, Lizenz wählen und den Kauf bei BeatStars abschließen.',
+        catalogMeta: 'Offizielle Vorschauen · Lizenzen ab 15 $ · Checkout bei BeatStars',
+        categoryCta: (name: string) => `${name} entdecken`,
         filterAll: 'Alle Beats',
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Offizieller Audio-Showcase',
@@ -125,7 +135,7 @@ const copyDict = {
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'E-Mail Direkt',
         dmCustom: 'DM für Custom Beat',
-        exclusiveIncludes: 'Exklusiv-Paket enthält',
+        exclusiveIncludes: 'Direkt zu klären',
         viewBeatPage: 'Beat-Seite anzeigen',
         officialTrack: 'Offizieller Track',
         exclusiveBoxHeader: 'Exklusivrechte-Anfrage',
@@ -133,6 +143,8 @@ const copyDict = {
         secureCheckout: 'Sichere Kasse & sofortige MP3/WAV/Stems Lieferung',
         playAudio: 'Audio abspielen',
         pauseAudio: 'Pause',
+        exclusiveEmailSubject: 'Anfrage zu einer Exklusivlizenz',
+        exclusiveEmailBody: 'Hallo Virzy Guns,\n\nich möchte mich nach einer Exklusivlizenz für einen Beat erkundigen.\n\nProjektdetails:',
     },
 };
 
@@ -166,6 +178,33 @@ const nonExclusiveLicenses = [
         features: ['MP3 + WAV + Track Stems', '2 Music Videos', 'For-Profit', 'Radio (2 Stations)'],
     },
 ];
+
+const licenseTierCopy = {
+    'en-US': [
+        { copies: '5,000 sales', streams: '100K streams', features: ['MP3 file (320kbps)', '1 music video'] },
+        { copies: '10,000 sales', streams: '500K streams', features: ['MP3 + WAV (24-bit)', '1 music video', 'For-profit performances'] },
+        { copies: '50,000 sales', streams: '1M streams', features: ['MP3 + WAV + stems', '1 music video', 'For-profit performances', 'Radio: 2 stations'] },
+        { copies: 'Unlimited sales', streams: 'Unlimited streams', features: ['MP3 + WAV + stems', '2 music videos', 'For-profit performances', 'Radio: 2 stations'] },
+    ],
+    'ja-JP': [
+        { copies: '販売上限：5,000', streams: 'ストリーミング：10万回', features: ['MP3ファイル（320kbps）', 'ミュージックビデオ1本'] },
+        { copies: '販売上限：10,000', streams: 'ストリーミング：50万回', features: ['MP3 + WAV（24-bit）', 'ミュージックビデオ1本', '収益化パフォーマンス可'] },
+        { copies: '販売上限：50,000', streams: 'ストリーミング：100万回', features: ['MP3 + WAV + ステム', 'ミュージックビデオ1本', '収益化パフォーマンス可', 'ラジオ：2局'] },
+        { copies: '販売上限なし', streams: 'ストリーミング上限なし', features: ['MP3 + WAV + ステム', 'ミュージックビデオ2本', '収益化パフォーマンス可', 'ラジオ：2局'] },
+    ],
+    'de-DE': [
+        { copies: '5.000 Verkäufe', streams: '100.000 Streams', features: ['MP3-Datei (320 kbps)', '1 Musikvideo'] },
+        { copies: '10.000 Verkäufe', streams: '500.000 Streams', features: ['MP3 + WAV (24-Bit)', '1 Musikvideo', 'Kommerzielle Auftritte'] },
+        { copies: '50.000 Verkäufe', streams: '1 Mio. Streams', features: ['MP3 + WAV + Stems', '1 Musikvideo', 'Kommerzielle Auftritte', 'Radio: 2 Sender'] },
+        { copies: 'Unbegrenzte Verkäufe', streams: 'Unbegrenzte Streams', features: ['MP3 + WAV + Stems', '2 Musikvideos', 'Kommerzielle Auftritte', 'Radio: 2 Sender'] },
+    ],
+} as const;
+
+const exclusiveBenefits = {
+    'en-US': ['Ask about current availability', 'Scope confirmed directly in writing', 'Files and delivery confirmed before purchase', 'Catalog removal discussed when applicable'],
+    'ja-JP': ['現在の提供状況を確認', '利用範囲を書面で直接確認', '購入前にファイルと納品内容を確認', '該当する場合はストアからの取り下げを相談'],
+    'de-DE': ['Aktuelle Verfügbarkeit anfragen', 'Umfang direkt schriftlich bestätigen', 'Dateien und Lieferung vor dem Kauf bestätigen', 'Entfernung aus dem Katalog bei Bedarf besprechen'],
+} as const;
 
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 const PAGE_SIZE = 24;
@@ -215,6 +254,10 @@ const catalogCopy = {
 export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const t = copyDict[locale] || copyDict['en-US'];
     const catalogText = catalogCopy[locale];
+    const localizedLicenses = nonExclusiveLicenses.map((license, index) => ({
+        ...license,
+        ...licenseTierCopy[locale][index],
+    }));
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
     const [query, setQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -258,7 +301,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
     return (
         <PageTransition>
-            <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
+            <article className="editorial-shell flex min-h-screen flex-col text-white pt-24 pb-20">
                 {/* Language Switcher Navbar */}
                 <div className="mx-auto max-w-5xl px-6 mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-200/60">
@@ -282,7 +325,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 />
 
                 {/* Verified Credentials */}
-                <SectionShell id="credentials" className="border-y border-white/[0.08] bg-white/[0.012] py-10 sm:py-12">
+                <SectionShell id="credentials" className="order-[50] border-y border-white/[0.08] bg-white/[0.012] py-10 sm:py-12">
                     <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
@@ -316,10 +359,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     </div>
                 </SectionShell>
 
-                <BeatStarsStorePlayer locale={locale} />
+                <div className="order-[40]">
+                    <BeatStarsStorePlayer locale={locale} />
+                </div>
 
                 {/* Genre Category Cards */}
-                <SectionShell id="catalog-categories" className="py-12 border-b border-white/[0.08]">
+                <SectionShell id="catalog-categories" className="order-[20] border-b border-white/[0.08] py-12">
                     <div className="mx-auto max-w-5xl">
                         <div className="max-w-2xl mb-8">
                             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.categoriesTag}</p>
@@ -342,7 +387,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         <p className="mt-2 text-xs leading-5 text-white/60">{cat.shortDescription[locale] || cat.shortDescription['en-US']}</p>
                                     </div>
                                     <div className="mt-4 flex items-center gap-1 text-xs font-semibold text-sky-200 group-hover:underline">
-                                        Explore {cat.localizedName[locale] || cat.name}
+                                        {t.categoryCta(cat.localizedName[locale] || cat.name)}
                                         <ExternalLink className="h-3 w-3" />
                                     </div>
                                 </Link>
@@ -352,18 +397,21 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 </SectionShell>
 
                 {/* Clean Beats Inventory by Genre (Organized Filter at the Bottom) */}
-                <SectionShell id="beats-inventory" className="py-12">
+                <SectionShell id="beats-inventory" className="order-10 py-10 sm:py-12">
                     <div className="mx-auto max-w-5xl">
-                        <div className="flex flex-col gap-6 mb-8">
+                        <div className="mb-7 flex flex-col gap-5">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.catalogTag}</p>
                                 <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">{t.catalogTitle}</h2>
-                                <p className="mt-2 text-xs leading-6 text-white/70 sm:text-sm max-w-xl">
+                                <p className="mt-2 max-w-2xl text-xs leading-6 text-white/70 sm:text-sm">
                                     {t.catalogSub}
+                                </p>
+                                <p className="mt-3 text-[11px] font-medium tracking-wide text-sky-100/60 sm:text-xs">
+                                    {t.catalogMeta}
                                 </p>
                             </div>
 
-                            <div className="grid gap-4 rounded-xl border border-white/[0.1] bg-white/[0.018] p-3 sm:p-4 lg:grid-cols-[minmax(0,0.9fr)_1.6fr] lg:items-start">
+                            <div className="grid gap-3 rounded-2xl border border-white/[0.1] bg-[#06131c]/80 p-3 shadow-[0_18px_50px_rgba(0,0,0,0.16)] sm:p-4 lg:grid-cols-[minmax(0,0.85fr)_1.7fr] lg:items-center">
                                 <label className="relative block">
                                     <span className="sr-only">{catalogText.search}</span>
                                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sky-200/60" aria-hidden="true" />
@@ -392,7 +440,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     ) : null}
                                 </label>
 
-                                <div className="flex flex-wrap items-center gap-2">
+                                <div className="-mr-1 flex items-center gap-2 overflow-x-auto pb-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                                     {genresList.map((genre) => (
                                         <button
                                             key={genre.id}
@@ -401,7 +449,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 setSelectedGenre(genre.id);
                                                 setCurrentPage(1);
                                             }}
-                                            className={`min-h-9 rounded-lg border px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
+                                            className={`min-h-10 shrink-0 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
                                                 selectedGenre === genre.id
                                                     ? 'border-sky-200/60 bg-sky-300/20 text-sky-100'
                                                     : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
@@ -414,7 +462,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             </div>
                         </div>
 
-                        <div className="mb-4 flex items-center justify-between gap-4 text-xs text-white/50">
+                        <div className="mb-4 flex items-center justify-between gap-4 text-xs text-white/60">
                             <p>{catalogText.showing(visibleBeats.length, filteredBeats.length)}</p>
                             <p className="hidden sm:block">{catalogText.page(currentPage, pageCount)}</p>
                         </div>
@@ -423,16 +471,16 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {visibleBeats.map((beat) => {
                                 return (
-                                    <div
+                                    <article
                                         key={beat.id}
-                                        className="flex min-h-[29rem] flex-col rounded-xl border border-white/10 bg-white/[0.02] p-5 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
+                                        className="group flex flex-col gap-4 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition duration-300 hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
                                     >
                                         <div>
                                             <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
                                                 <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
                                                 <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
                                             </div>
-                                            <h3 className="mt-2 text-lg font-bold text-white line-clamp-1">{beat.title}</h3>
+                                            <h3 className="mt-2 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
                                             <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-white/60">
                                                 {getBeatSummary(beat, locale)}
                                             </p>
@@ -445,10 +493,10 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             locale={locale}
                                         />
 
-                                        <div className="mt-auto grid grid-cols-2 gap-2 pt-4 text-xs">
+                                        <div className="mt-auto grid grid-cols-[0.9fr_1.1fr] gap-2 pt-1 text-xs">
                                             <Link
                                                 href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                                className="inline-flex min-h-10 items-center justify-center gap-1 rounded-lg bg-sky-200 px-3 font-semibold text-black transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                             >
                                                 {t.viewBeatPage}
                                                 <ExternalLink className="h-3 w-3" />
@@ -457,13 +505,13 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 href={beat.beatstarsProductUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex min-h-10 items-center justify-center gap-1 rounded-lg border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                             >
                                                 {catalogText.buy(beat.licenses[0]?.price || '')}
                                                 <ExternalLink className="h-3 w-3" aria-hidden="true" />
                                             </a>
                                         </div>
-                                    </div>
+                                    </article>
                                 );
                             })}
                             </div>
@@ -511,7 +559,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 </SectionShell>
 
                 {/* Non-Exclusive Licenses */}
-                <SectionShell className="border-y border-white/[0.08] bg-white/[0.015] py-12">
+                <SectionShell className="order-[30] border-y border-white/[0.08] bg-white/[0.015] py-12">
                     <div className="mx-auto max-w-5xl">
                         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                             <div>
@@ -534,7 +582,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             whileInView="visible"
                             viewport={{ once: true }}
                         >
-                            {nonExclusiveLicenses.map((license) => (
+                            {localizedLicenses.map((license) => (
                                 <m.article
                                     key={license.name}
                                     variants={staggerChild}
@@ -570,7 +618,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 </SectionShell>
 
                 {/* Private Commissions */}
-                <SectionShell id="private-commissions" className="py-12">
+                <SectionShell id="private-commissions" className="order-[60] py-12">
                     <m.div
                         className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start"
                         variants={revealUp}
@@ -595,8 +643,8 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </a>
                                 <a
                                     href={getFounderGmailComposeUrl(
-                                        'Exclusive Rights Inquiry',
-                                        'Hi Virzy Guns,\n\nI am interested in discussing exclusive rights for a beat.\n\nProject details:',
+                                        t.exclusiveEmailSubject,
+                                        t.exclusiveEmailBody,
                                     )}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -610,18 +658,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
                         <div className="grid gap-x-6 gap-y-2.5 border-t border-white/[0.08] pt-6 sm:grid-cols-2 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
                             <p className="sm:col-span-2 text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/55">{t.exclusiveIncludes}</p>
-                            {[
-                                'Untagged MP3 + WAV + STEMS',
-                                'Unlimited Sale Units',
-                                'Unlimited Streams',
-                                'For-Profit Performances',
-                                'Unlimited Radio Use',
-                                'YouTube Monetization',
-                                'SoundCloud Monetization',
-                                'Content ID Registration',
-                                'Full Exclusive Rights',
-                                'Beat removed from public store',
-                            ].map((item) => (
+                            {exclusiveBenefits[locale].map((item) => (
                                 <div key={item} className="flex items-start gap-2 text-xs leading-5 text-white/70">
                                     <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sky-200" aria-hidden="true" />
                                     <span>{item}</span>

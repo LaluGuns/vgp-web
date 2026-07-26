@@ -9,24 +9,24 @@ type BeatLocale = 'en-US' | 'ja-JP' | 'de-DE';
 const copy = {
     'en-US': {
         eyebrow: 'Official BeatStars catalog',
-        title: 'Browse the full Virzy Guns store.',
-        description: 'Open the official catalog for the complete checkout experience, then return here to compare each beat and its license options.',
+        title: 'Preview the full Virzy Guns catalog.',
+        description: 'Browse every available beat and complete your purchase on the official BeatStars store. Compare tracks and license options here first.',
         load: 'Open the full BeatStars catalog',
         external: 'Open on BeatStars',
         unavailable: 'The store player is unavailable here. The official BeatStars catalog remains available in a new tab.',
     },
     'ja-JP': {
         eyebrow: '公式 BeatStars カタログ',
-        title: 'フルの Virzy Guns ストアを見る。',
-        description: '公式カタログで購入手続きをするまで、ここで各ビートとライセンスを比較できます。',
+        title: 'Virzy Gunsの全カタログを試聴する。',
+        description: 'BeatStarsの公式カタログで購入手続きを行えます。ここでは各ビートとライセンス内容を比較できます。',
         load: 'フル BeatStars カタログを開く',
         external: 'BeatStars で開く',
         unavailable: 'ここでストアプレイヤーを開けません。公式 BeatStars カタログを別タブで開くことができます。',
     },
     'de-DE': {
         eyebrow: 'Offizieller BeatStars-Katalog',
-        title: 'Den kompletten Virzy Guns Store durchsuchen.',
-        description: 'Für den vollständigen Checkout den offiziellen Katalog öffnen; einzelne Beats und Lizenzen kannst du weiterhin hier vergleichen.',
+        title: 'Den vollständigen Virzy Guns Katalog anhören.',
+        description: 'Für Kauf und Checkout öffne den offiziellen Katalog. Hier kannst du Beats und Lizenzoptionen vergleichen.',
         load: 'Vollständigen BeatStars-Katalog öffnen',
         external: 'Bei BeatStars öffnen',
         unavailable: 'Der Store-Player ist hier nicht verfügbar. Der offizielle BeatStars-Katalog lässt sich weiterhin in einem neuen Tab öffnen.',
@@ -81,7 +81,7 @@ export default function BeatStarsStorePlayer({ locale = 'en-US' }: { locale?: Be
                     {isLoaded && !hasFailed ? (
                         <iframe
                             src={beatStarsBlazePlayerUrl}
-                            title="Virzy Guns official BeatStars catalog"
+                            title={`${text.eyebrow}: Virzy Guns`}
                             className="block h-[620px] w-full border-0 sm:h-[760px]"
                             loading="lazy"
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
