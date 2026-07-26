@@ -14,7 +14,8 @@ import { catalogCredentials } from '@/lib/vgp-ecosystem';
 import { categories, beatsCatalog } from '@/lib/catalog';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
-import BeatStarsCatalogPreview from './components/BeatStarsCatalogPreview';
+import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
+import BeatStarsAudioPlayer from './components/BeatStarsAudioPlayer';
 import BeatStarsStorePlayer from './components/BeatStarsStorePlayer';
 
 interface BeatsClientProps {
@@ -437,7 +438,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             </p>
                                         </div>
 
-                                        <BeatStarsCatalogPreview
+                                        <BeatStarsAudioPlayer
                                             trackId={beat.beatstarsTrackId}
                                             productUrl={beat.beatstarsProductUrl}
                                             beatTitle={beat.title}
@@ -593,7 +594,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                                 </a>
                                 <a
-                                    href="mailto:founder@virzyguns.com?subject=Exclusive%20Rights%20Inquiry"
+                                    href={getFounderGmailComposeUrl(
+                                        'Exclusive Rights Inquiry',
+                                        'Hi Virzy Guns,\n\nI am interested in discussing exclusive rights for a beat.\n\nProject details:',
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-xs font-semibold text-white/75 transition hover:text-white"
                                 >
                                     <Mail className="h-3.5 w-3.5" />

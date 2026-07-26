@@ -11,7 +11,8 @@ import { revealUp } from '@/lib/motion-presets';
 import { BeatProduct, getBeatsByCategory } from '@/lib/catalog';
 import { trackBeatEvent } from '@/lib/analytics';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
-import BeatStarsTrackPlayer from './BeatStarsTrackPlayer';
+import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
+import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
 
 interface BeatDetailClientProps {
     beat: BeatProduct;
@@ -113,11 +114,12 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         <span>{playerSub}</span>
                                     </div>
                                     {beat.beatstarsTrackId ? (
-                                        <BeatStarsTrackPlayer
+                                        <BeatStarsAudioPlayer
                                             trackId={beat.beatstarsTrackId}
                                             productUrl={beat.beatstarsProductUrl}
                                             beatTitle={beat.title}
                                             locale={locale}
+                                            autoLoad
                                         />
                                     ) : (
                                         <div className="flex min-h-[140px] items-center justify-center px-4 text-center text-xs text-white/60">
@@ -234,7 +236,12 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             Instagram DM (@virzyguns)
                                         </a>
                                         <a
-                                            href={`mailto:founder@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
+                                            href={getFounderGmailComposeUrl(
+                                                `Exclusive Rights Inquiry - ${beat.title}`,
+                                                `Hi Virzy Guns,\n\nI am interested in exclusive rights for ${beat.title}.\n\nProject details:`,
+                                            )}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10 transition"
                                         >
                                             <Mail className="h-3.5 w-3.5" />

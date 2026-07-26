@@ -4,9 +4,3 @@
  */
 export const beatStarsStoreUrl = 'https://www.beatstars.com/virzyguns/tracks';
 export const beatStarsBlazePlayerUrl = 'https://player.beatstars.com/?storeId=122437';
-
-export function getBeatStarsTrackEmbedUrl(trackId: string) {
-    // BeatStars' embed snippet may be protocol-relative, but an explicit HTTPS
-    // source is required when this local site is served over HTTP.
-    return `https://www.beatstars.com/embed/track?id=${trackId}`;
-}
