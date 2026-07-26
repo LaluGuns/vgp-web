@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Check, ExternalLink, Mail, Instagram } from 'lucide-react';
+import { Check, ChevronLeft, ChevronRight, ExternalLink, Instagram, Mail, Search, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
     PageHeader,
@@ -11,7 +11,10 @@ import {
 } from '@/components/editorial/EditorialPrimitives';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { catalogCredentials } from '@/lib/vgp-ecosystem';
-import { categories, beatsCatalog, BeatProduct } from '@/lib/catalog';
+import { categories, beatsCatalog } from '@/lib/catalog';
+import { beatStarsStoreUrl } from '@/lib/beatstars';
+import { getBeatSummary } from '@/lib/seo/beat-copy';
+import BeatStarsStorePlayer from './components/BeatStarsStorePlayer';
 
 interface BeatsClientProps {
     locale?: 'en-US' | 'ja-JP' | 'de-DE';
@@ -162,12 +165,54 @@ const nonExclusiveLicenses = [
     },
 ];
 
-const beatstarsTracksUrl = 'https://www.beatstars.com/virzyguns/tracks';
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
+const PAGE_SIZE = 24;
+
+const catalogCopy = {
+    'en-US': {
+        search: 'Search title, genre, or mood',
+        clear: 'Clear search',
+        showing: (shown: number, total: number) => `Showing ${shown} of ${total} official beats`,
+        noResults: 'No beats match that search yet.',
+        reset: 'Reset filters',
+        cardHint: 'Open the beat page for the official preview and license options.',
+        openBeatStars: 'Open on BeatStars',
+        previous: 'Previous',
+        next: 'Next',
+        page: (current: number, total: number) => `Page ${current} of ${total}`,
+    },
+    'ja-JP': {
+        search: 'タイトル、ジャンル、ムードで検索',
+        clear: '検索をクリア',
+        showing: (shown: number, total: number) => `${total}曲中 ${shown}曲を表示`,
+        noResults: 'その検索に合うビートはまだありません。',
+        reset: 'フィルターをリセット',
+        cardHint: '公式プレビューとライセンスはビートページで確認できます。',
+        openBeatStars: 'BeatStars で開く',
+        previous: '前へ',
+        next: '次へ',
+        page: (current: number, total: number) => `${current} / ${total} ページ`,
+    },
+    'de-DE': {
+        search: 'Titel, Genre oder Stimmung suchen',
+        clear: 'Suche löschen',
+        showing: (shown: number, total: number) => `${shown} von ${total} offiziellen Beats`,
+        noResults: 'Zu dieser Suche gibt es noch keine Beats.',
+        reset: 'Filter zurücksetzen',
+        cardHint: 'Auf der Beat-Seite findest du die offizielle Vorschau und Lizenzoptionen.',
+        openBeatStars: 'Bei BeatStars öffnen',
+        previous: 'Zurück',
+        next: 'Weiter',
+        page: (current: number, total: number) => `Seite ${current} von ${total}`,
+    },
+} as const;
 
 export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const t = copyDict[locale] || copyDict['en-US'];
+    const catalogText = catalogCopy[locale];
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
+    const [query, setQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
 
     const genresList = [
         { id: 'all', label: t.filterAll },
@@ -180,14 +225,25 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
         { id: 'r&b', label: 'R&B' },
     ];
 
-    const filteredBeats = beatsCatalog.filter((beat) => {
-        if (selectedGenre === 'all') return true;
+    const filteredBeats = useMemo(() => beatsCatalog.filter((beat) => {
         const genreId = selectedGenre.toLowerCase();
-        return (
+        const matchesGenre = selectedGenre === 'all' || (
             beat.primaryGenre.toLowerCase().replace(/ /g, '-').includes(genreId) ||
-            beat.subgenres.some((s) => s.toLowerCase().replace(/ /g, '-').includes(genreId))
+            beat.subgenres.some((subgenre) => subgenre.toLowerCase().replace(/ /g, '-').includes(genreId))
         );
-    });
+        const normalizedQuery = query.trim().toLowerCase();
+        const matchesQuery = !normalizedQuery || [
+            beat.title,
+            beat.primaryGenre,
+            ...beat.subgenres,
+            ...beat.moods,
+            ...beat.tags,
+        ].some((value) => value.toLowerCase().includes(normalizedQuery));
+
+        return matchesGenre && matchesQuery;
+    }), [query, selectedGenre]);
+    const pageCount = Math.max(1, Math.ceil(filteredBeats.length / PAGE_SIZE));
+    const visibleBeats = filteredBeats.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
     const getLocalePath = (path: string) => {
         if (locale === 'ja-JP') return `/ja-JP${path}`;
@@ -255,33 +311,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     </div>
                 </SectionShell>
 
-                {/* Main Embedded BeatStars Store Player */}
-                <SectionShell id="store-player" className="py-12 border-b border-white/[0.08]">
-                    <div className="mx-auto max-w-5xl">
-                        <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md shadow-2xl">
-                            <div className="border-b border-white/10 px-5 py-4">
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/60">{t.playerTag}</p>
-                                <h2 className="mt-1 text-xl font-bold text-white">{t.playerTitle}</h2>
-                                <p className="text-xs text-white/60">{t.playerSub}</p>
-                            </div>
-
-                            <div className="bg-[#030405]">
-                                <iframe
-                                    src="https://player.beatstars.com/?storeId=122437"
-                                    className="block h-[700px] w-full sm:h-[780px] lg:h-[840px] border-none"
-                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    title="VGP Beat Store Catalog Player"
-                                />
-                            </div>
-
-                            <div className="flex items-center justify-between border-t border-white/10 px-5 py-3 text-xs text-white/50">
-                                <span>{t.secureCheckout}</span>
-                                <span>Powered by BeatStars Store</span>
-                            </div>
-                        </div>
-                    </div>
-                </SectionShell>
+                <BeatStarsStorePlayer locale={locale} />
 
                 {/* Genre Category Cards */}
                 <SectionShell id="catalog-categories" className="py-12 border-b border-white/[0.08]">
@@ -319,7 +349,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 {/* Clean Beats Inventory by Genre (Organized Filter at the Bottom) */}
                 <SectionShell id="beats-inventory" className="py-12">
                     <div className="mx-auto max-w-5xl">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                        <div className="flex flex-col gap-6 mb-8">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.catalogTag}</p>
                                 <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">{t.catalogTitle}</h2>
@@ -328,31 +358,69 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </p>
                             </div>
 
-                            {/* Genre Filter Buttons */}
-                            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none">
-                                {genresList.map((g) => (
-                                    <button
-                                        key={g.id}
-                                        onClick={() => setSelectedGenre(g.id)}
-                                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition border ${
-                                            selectedGenre === g.id
-                                                ? 'bg-sky-300/20 border-sky-200/60 text-sky-100'
-                                                : 'bg-white/[0.03] border-white/10 text-white/60 hover:text-white hover:border-white/20'
-                                        }`}
-                                    >
-                                        {g.label}
-                                    </button>
-                                ))}
+                            <div className="grid gap-4 rounded-xl border border-white/[0.1] bg-white/[0.018] p-3 sm:p-4 lg:grid-cols-[1fr_auto] lg:items-center">
+                                <label className="relative block">
+                                    <span className="sr-only">{catalogText.search}</span>
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sky-200/60" aria-hidden="true" />
+                                    <input
+                                        type="search"
+                                        value={query}
+                                        onChange={(event) => {
+                                            setQuery(event.target.value);
+                                            setCurrentPage(1);
+                                        }}
+                                        placeholder={catalogText.search}
+                                        className="min-h-11 w-full rounded-lg border border-white/10 bg-[#03111a] py-2 pl-10 pr-10 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-sky-200/60 focus:ring-2 focus:ring-sky-200/20"
+                                    />
+                                    {query ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setQuery('');
+                                                setCurrentPage(1);
+                                            }}
+                                            aria-label={catalogText.clear}
+                                            className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-white/50 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                        >
+                                            <X className="h-4 w-4" aria-hidden="true" />
+                                        </button>
+                                    ) : null}
+                                </label>
+
+                                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none lg:max-w-xl">
+                                    {genresList.map((genre) => (
+                                        <button
+                                            key={genre.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setSelectedGenre(genre.id);
+                                                setCurrentPage(1);
+                                            }}
+                                            className={`min-h-9 rounded-lg border px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition ${
+                                                selectedGenre === genre.id
+                                                    ? 'border-sky-200/60 bg-sky-300/20 text-sky-100'
+                                                    : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+                                            }`}
+                                        >
+                                            {genre.label}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Beats Grid */}
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {filteredBeats.slice(0, 30).map((beat) => {
+                        <div className="mb-4 flex items-center justify-between gap-4 text-xs text-white/50">
+                            <p>{catalogText.showing(visibleBeats.length, filteredBeats.length)}</p>
+                            <p className="hidden sm:block">{catalogText.page(currentPage, pageCount)}</p>
+                        </div>
+
+                        {visibleBeats.length ? (
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {visibleBeats.map((beat) => {
                                 return (
                                     <div
                                         key={beat.id}
-                                        className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:border-white/20 transition"
+                                        className="flex min-h-[17rem] flex-col rounded-xl border border-white/10 bg-white/[0.02] p-5 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
                                     >
                                         <div>
                                             <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
@@ -361,78 +429,77 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             </div>
                                             <h3 className="mt-2 text-lg font-bold text-white line-clamp-1">{beat.title}</h3>
                                             <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-white/60">
-                                                {beat.description[locale] || beat.description['en-US']}
+                                                {getBeatSummary(beat, locale)}
                                             </p>
                                         </div>
 
-
-
-                                        {/* Embedded Iframe Player Widget */}
-                                        <div className="mt-3 overflow-hidden rounded-xl border border-white/10 bg-black min-h-[180px]">
-                                            <iframe 
-                                                src={`https://www.beatstars.com/embed/track?id=${beat.beatstarsTrackId}`}
-                                                width="100%"
-                                                height="140"
-                                                className="border-none"
-                                            ></iframe>
+                                        <div className="mt-5 rounded-lg border border-white/10 bg-black/20 px-3 py-2.5">
+                                            <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-200/70">{t.officialTrack}</p>
+                                            <p className="mt-1 text-xs leading-5 text-white/55">{catalogText.cardHint}</p>
                                         </div>
 
-                                        {/* Clean Exclusive Rights Box */}
-                                        <div className="mt-3 rounded-lg border border-sky-200/20 bg-sky-300/[0.04] p-3 text-[11px] space-y-2">
-                                            <p className="text-sky-200 font-semibold uppercase tracking-wider text-[10px]">
-                                                {t.exclusiveBoxHeader}
-                                            </p>
-                                            <p className="text-white/70 leading-4">
-                                                {t.exclusiveBoxText}
-                                            </p>
-                                            <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/10">
-                                                <a
-                                                    href={instagramDmUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
-                                                >
-                                                    <Instagram className="h-3 w-3 shrink-0" />
-                                                    {t.dmExclusive}
-                                                </a>
-                                                <a
-                                                    href={`mailto:contact@virzyguns.com?subject=Exclusive%20Rights%20Inquiry%20-%20${encodeURIComponent(beat.title)}`}
-                                                    className="flex items-center gap-1 text-sky-200 hover:underline font-semibold"
-                                                >
-                                                    <Mail className="h-3 w-3 shrink-0" />
-                                                    {t.emailExclusive}
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs">
-                                            <span className="text-white/50">{t.officialTrack}</span>
+                                        <div className="mt-auto grid grid-cols-2 gap-2 pt-4 text-xs">
                                             <Link
                                                 href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                                className="inline-flex items-center gap-1 font-semibold text-white hover:text-sky-200 transition"
+                                                className="inline-flex min-h-10 items-center justify-center gap-1 rounded-lg bg-sky-200 px-3 font-semibold text-black transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                             >
                                                 {t.viewBeatPage}
                                                 <ExternalLink className="h-3 w-3" />
                                             </Link>
+                                            <a
+                                                href={beat.beatstarsProductUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex min-h-10 items-center justify-center gap-1 rounded-lg border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            >
+                                                {catalogText.openBeatStars}
+                                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                            </a>
                                         </div>
                                     </div>
                                 );
                             })}
-                        </div>
-
-                        {filteredBeats.length > 30 && (
-                            <div className="mt-8 text-center">
-                                <a
-                                    href={beatstarsTracksUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3 text-xs font-semibold text-white hover:bg-white/[0.08] transition"
+                            </div>
+                        ) : (
+                            <div className="rounded-xl border border-dashed border-white/[0.14] px-5 py-12 text-center">
+                                <p className="text-sm text-white/65">{catalogText.noResults}</p>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setQuery('');
+                                        setSelectedGenre('all');
+                                        setCurrentPage(1);
+                                    }}
+                                    className="mt-4 text-xs font-semibold text-sky-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                 >
-                                    Browse all {filteredBeats.length} tracks on BeatStars Store
-                                    <ExternalLink className="h-3.5 w-3.5" />
-                                </a>
+                                    {catalogText.reset}
+                                </button>
                             </div>
                         )}
+
+                        {pageCount > 1 ? (
+                            <nav className="mt-8 flex items-center justify-center gap-3" aria-label="Catalog pagination">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                                    disabled={currentPage === 1}
+                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-sky-200/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                                >
+                                    <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                                    {catalogText.previous}
+                                </button>
+                                <span className="text-xs text-white/50">{catalogText.page(currentPage, pageCount)}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
+                                    disabled={currentPage === pageCount}
+                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-sky-200/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                                >
+                                    {catalogText.next}
+                                    <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+                                </button>
+                            </nav>
+                        ) : null}
                     </div>
                 </SectionShell>
 
@@ -481,7 +548,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         ))}
                                     </div>
                                     <a
-                                        href={beatstarsTracksUrl}
+                                        href={beatStarsStoreUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="mt-5 inline-flex items-center justify-between gap-2 rounded-lg border border-sky-200/25 bg-sky-300/[0.07] px-3 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.15]"

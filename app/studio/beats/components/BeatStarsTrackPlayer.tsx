@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { ExternalLink, Play } from 'lucide-react';
+import { getBeatStarsTrackEmbedUrl } from '@/lib/beatstars';
 
 type BeatLocale = 'en-US' | 'ja-JP' | 'de-DE';
 
 interface BeatStarsTrackPlayerProps {
-    embedUrl: string;
+    trackId: string;
     productUrl: string;
     beatTitle: string;
     locale: BeatLocale;
@@ -31,7 +32,7 @@ const copy = {
 } as const;
 
 export default function BeatStarsTrackPlayer({
-    embedUrl,
+    trackId,
     productUrl,
     beatTitle,
     locale,
@@ -39,6 +40,7 @@ export default function BeatStarsTrackPlayer({
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasFailed, setHasFailed] = useState(false);
     const text = copy[locale];
+    const embedUrl = getBeatStarsTrackEmbedUrl(trackId);
 
     if (hasFailed) {
         return (
@@ -82,16 +84,29 @@ export default function BeatStarsTrackPlayer({
     }
 
     return (
-        <iframe
-            src={embedUrl}
-            title={`${beatTitle} official BeatStars preview`}
-            width="100%"
-            height="140"
-            loading="lazy"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="block border-none"
-            onError={() => setHasFailed(true)}
-        />
+        <div>
+            <iframe
+                src={embedUrl}
+                title={`${beatTitle} official BeatStars preview`}
+                width="100%"
+                height="140"
+                loading="lazy"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="block border-none"
+                onError={() => setHasFailed(true)}
+            />
+            <div className="border-t border-white/10 px-3 py-2 text-right">
+                <a
+                    href={productUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                >
+                    {text.external}
+                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                </a>
+            </div>
+        </div>
     );
 }

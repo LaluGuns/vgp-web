@@ -15,6 +15,7 @@ import {
 import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClient';
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
+import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -57,9 +58,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const beat = getBeatBySlug(slug);
     if (beat) {
+        const description = getBeatMetaDescription(beat, 'ja-JP');
         return {
             title: beat.localizedTitle?.['ja-JP'] || `${beat.title} | ${beat.primaryGenre} ビート`,
-            description: beat.description['ja-JP'] || beat.description['en-US'] || '',
+            description,
             robots: beat.seoStatus === 'indexable' ? { index: true, follow: true } : { index: false, follow: true },
             keywords: [
                 beat.title,
@@ -79,7 +81,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             },
             openGraph: {
                 title: beat.title,
-                description: beat.description['ja-JP'] || beat.description['en-US'] || '',
+                description,
                 url: `${SITE_URL}/ja-JP/studio/beats/${beat.slug}`,
                 siteName: 'Virzy Guns Production',
                 images: [
@@ -95,7 +97,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             twitter: {
                 card: 'summary_large_image',
                 title: beat.localizedTitle?.['ja-JP'] || beat.title,
-                description: beat.description['ja-JP'] || beat.description['en-US'] || '',
+                description,
                 images: [beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`],
             },
         };

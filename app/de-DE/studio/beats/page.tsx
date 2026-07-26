@@ -4,9 +4,9 @@ import BeatsClient from '../../../studio/beats/BeatsClient';
 const SITE_URL = 'https://www.virzyguns.com';
 
 export const metadata: Metadata = {
-    title: 'Beats kaufen | Cyberpunk Trap, Phonk & Synthwave | Virzy Guns',
+    title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
     description:
-        'Offizielle Instrumentals von Virzy Guns durchsuchen und lizensieren. Cyberpunk Trap, Phonk, Synthwave und exklusive Beats.',
+        'Offizielle Cyberpunk Trap-, Phonk-, Synthwave- und 808-Instrumentals von Virzy Guns anhören, eine Lizenz wählen und bei BeatStars kaufen.',
     keywords: [
         'Beats kaufen',
         'Trap Beats kaufen',
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: 'Beats kaufen | Virzy Guns Production',
-        description: 'Offizielle Cyberpunk Trap, Phonk und Synthwave Beats von Virzy Guns lizensieren.',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
+        description: 'Offizielle Instrumentals von Virzy Guns anhören, Lizenzen vergleichen und direkt bei BeatStars kaufen.',
         url: `${SITE_URL}/de-DE/studio/beats`,
         siteName: 'Virzy Guns Production',
         images: [
@@ -39,6 +39,12 @@ export const metadata: Metadata = {
         ],
         type: 'website',
     },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
+        description: 'Offizielle Instrumentals anhören, Lizenzen vergleichen und direkt bei BeatStars kaufen.',
+        images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
+    },
 };
 
 const hubSchema = {
@@ -48,7 +54,7 @@ const hubSchema = {
             '@type': 'CollectionPage',
             '@id': `${SITE_URL}/de-DE/studio/beats#collection`,
             name: 'Virzy Guns Beat Store',
-            description: 'Offizieller Beat-Katalog von Virzy Guns. Cyberpunk Trap, Phonk, Synthwave.',
+            description: 'Offizieller Beat-Katalog von Virzy Guns für Cyberpunk Trap, Phonk, Synthwave, 808 und Rap-Instrumentals.',
             url: `${SITE_URL}/de-DE/studio/beats`,
         },
         {

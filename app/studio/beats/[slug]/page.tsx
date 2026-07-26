@@ -15,6 +15,7 @@ import {
 import BeatDetailClient from '../components/BeatDetailClient';
 import CategoryClient from '../components/CategoryClient';
 import LicensingClient from '../components/LicensingClient';
+import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -57,9 +58,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const beat = getBeatBySlug(slug);
     if (beat) {
+        const title = beat.localizedTitle?.['en-US'] || beat.title;
+        const description = getBeatMetaDescription(beat, 'en-US');
         return {
-            title: beat.localizedTitle?.['en-US'] || `${beat.title} | ${beat.primaryGenre} Beat`,
-            description: beat.description['en-US'] || '',
+            title: `${title} | ${beat.primaryGenre} Beat by Virzy Guns`,
+            description,
             robots: beat.seoStatus === 'indexable' ? { index: true, follow: true } : { index: false, follow: true },
             keywords: [
                 beat.title,
@@ -78,8 +81,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 },
             },
             openGraph: {
-                title: beat.title,
-                description: beat.description['en-US'] || '',
+                title: `${title} | ${beat.primaryGenre} Beat by Virzy Guns`,
+                description,
                 url: `${SITE_URL}/studio/beats/${beat.slug}`,
                 siteName: 'Virzy Guns Production',
                 images: [
@@ -94,8 +97,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             },
             twitter: {
                 card: 'summary_large_image',
-                title: beat.localizedTitle?.['en-US'] || beat.title,
-                description: beat.description['en-US'] || '',
+                title: `${title} | ${beat.primaryGenre} Beat by Virzy Guns`,
+                description,
                 images: [beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`],
             },
         };

@@ -4,9 +4,9 @@ import BeatsClient from './BeatsClient';
 const SITE_URL = 'https://www.virzyguns.com';
 
 export const metadata: Metadata = {
-    title: 'Beats for Sale | Cyberpunk Trap, Phonk & Synthwave Beats | Virzy Guns',
+    title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
     description:
-        'Browse and license official instrumentals by Virzy Guns. Cyberpunk trap, phonk, synthwave, hard 808s, and exclusive beats with instant delivery.',
+        'Buy and license official Cyberpunk Trap, Phonk, Synthwave, Hard 808, and rap instrumentals by Virzy Guns through the official BeatStars store.',
     keywords: [
         'buy beats online',
         'beats for sale',
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: 'Beats for Sale | Cyberpunk Trap, Phonk & Synthwave Beats | Virzy Guns',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
         description:
-            'Browse and license official instrumentals by Virzy Guns. Instant MP3, WAV, Track Stems, and Exclusive licensing options.',
+            'Browse official instrumentals by Virzy Guns, compare license options, and buy directly through the official BeatStars store.',
         url: `${SITE_URL}/studio/beats`,
         siteName: 'Virzy Guns Production',
         images: [
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Beats for Sale | Virzy Guns Production',
-        description: 'Browse and license official Cyberpunk Trap, Phonk, and Synthwave beats.',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
+        description: 'Browse official instrumentals, compare licenses, and buy directly through the official BeatStars store.',
         images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
     },
 };
@@ -60,7 +60,7 @@ const hubSchema = {
             '@id': `${SITE_URL}/studio/beats#collection`,
             name: 'Virzy Guns Beat Store',
             description:
-                'Browse official beat catalog produced by Virzy Guns across Cyberpunk Trap, Phonk, Synthwave, Hard 808, and Exclusive Rights.',
+                'Official beat catalog by Virzy Guns for artists looking for Cyberpunk Trap, Phonk, Synthwave, Hard 808, and rap instrumentals.',
             url: `${SITE_URL}/studio/beats`,
         },
         {

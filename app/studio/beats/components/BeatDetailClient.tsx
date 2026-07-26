@@ -10,6 +10,7 @@ import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { BeatProduct, getBeatsByCategory } from '@/lib/catalog';
 import { trackBeatEvent } from '@/lib/analytics';
+import { getBeatSummary } from '@/lib/seo/beat-copy';
 import BeatStarsTrackPlayer from './BeatStarsTrackPlayer';
 
 interface BeatDetailClientProps {
@@ -25,7 +26,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         .filter((b) => b.id !== beat.id)
         .slice(0, 3);
 
-    const description = beat.description[locale] || beat.description['en-US'] || '';
+    const description = getBeatSummary(beat, locale);
 
     const handleCheckoutClick = (licenseName: string, price: string) => {
         trackBeatEvent('beatstars_checkout_click', {
@@ -81,14 +82,28 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 animate="visible"
                             >
                                 <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-black/40 border border-white/10">
-                                    <Image
-                                        src={beat.coverImageUrl || '/branding/vgp-logo-chrome-full.png'}
-                                        alt={`${beat.title} cover artwork`}
-                                        fill
-                                        sizes="(max-width: 768px) 100vw, 400px"
-                                        className="object-cover"
-                                        priority
-                                    />
+                                    {beat.coverImageUrl ? (
+                                        <Image
+                                            src={beat.coverImageUrl}
+                                            alt={`${beat.title} cover artwork`}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, 400px"
+                                            className="object-cover"
+                                            priority
+                                        />
+                                    ) : (
+                                        <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.28),transparent_30%),radial-gradient(circle_at_86%_82%,rgba(168,85,247,0.2),transparent_34%),linear-gradient(145deg,#071923,#02070d_62%,#050a12)] p-7">
+                                            <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,0.06)_42%,transparent_43%)]" aria-hidden="true" />
+                                            <div className="relative flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.24em] text-sky-100/75">
+                                                <span>Virzy Guns</span>
+                                                <span>Official release</span>
+                                            </div>
+                                            <div className="relative">
+                                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/70">{beat.primaryGenre}</p>
+                                                <h2 className="mt-3 max-w-sm font-display text-3xl font-semibold leading-[0.95] tracking-tight text-white sm:text-4xl">{beat.title}</h2>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
@@ -97,9 +112,9 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
-                                    {beat.beatstarsEmbedUrl ? (
+                                    {beat.beatstarsTrackId ? (
                                         <BeatStarsTrackPlayer
-                                            embedUrl={beat.beatstarsEmbedUrl}
+                                            trackId={beat.beatstarsTrackId}
                                             productUrl={beat.beatstarsProductUrl}
                                             beatTitle={beat.title}
                                             locale={locale}
@@ -237,9 +252,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                     <div className="mx-auto max-w-5xl grid gap-10 md:grid-cols-2">
                         <div>
                             <h2 className="font-display text-2xl font-semibold text-white">Production & Sound Character</h2>
-                            <p className="mt-4 text-sm leading-7 text-white/70">
-                                {description} Engineered with 100% Art & 100% Science by Virzy Guns featuring dynamic headroom for vocal tracking, punchy 808 transient control, and high-definition audio mastering.
-                            </p>
+                            <p className="mt-4 text-sm leading-7 text-white/70">{description}</p>
                             <div className="mt-6 space-y-3 text-xs text-white/60">
                                 <p><strong className="text-white">Tags:</strong> {beat.tags.join(', ')}</p>
                                 <p><strong className="text-white">Credit required:</strong> {selectedLicense.creditString}</p>
@@ -250,16 +263,16 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                             <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-200/70">Licensing Summary</h3>
                             <div className="space-y-3 text-xs text-white/70">
                                 <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">Commercial Release</span>
-                                    <span className="text-sm font-semibold text-white">Allowed on all major platforms (Spotify, Apple Music, Tidal)</span>
+                                    <span className="text-white/40 block">Selected license</span>
+                                    <span className="text-sm font-semibold text-white">{selectedLicense.name}: {selectedLicense.streamingLimit}</span>
                                 </div>
                                 <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">Delivery</span>
-                                    <span className="text-sm font-semibold text-white">Instant high-quality MP3/WAV/Stems download via BeatStars</span>
+                                    <span className="text-white/40 block">Included formats</span>
+                                    <span className="text-sm font-semibold text-white">{selectedLicense.fileFormats.join(', ')}</span>
                                 </div>
                                 <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">Exclusive Rights</span>
-                                    <span className="text-sm font-semibold text-white">Available via IG DM (@virzyguns) or Email</span>
+                                    <span className="text-white/40 block">Official checkout</span>
+                                    <span className="text-sm font-semibold text-white">Completed on the Virzy Guns BeatStars product page</span>
                                 </div>
                             </div>
                         </div>

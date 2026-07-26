@@ -7,6 +7,7 @@ import { PageTransition } from '@/components/PageTransition';
 import { SectionShell, PageHeader } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { CategoryDef, BeatProduct } from '@/lib/catalog';
+import { beatStarsStoreUrl } from '@/lib/beatstars';
 
 interface CategoryClientProps {
     category: CategoryDef;
@@ -54,18 +55,20 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                     description={shortDesc}
                 />
 
-                {/* Embedded BeatStars Player */}
-                <SectionShell id="embedded-player" className="py-6">
-                    <div className="mx-auto max-w-5xl">
-                        <div className="rounded-xl overflow-hidden border border-white/10 bg-black/60 shadow-2xl">
-                            <iframe
-                                src="https://player.beatstars.com/?storeId=122437"
-                                className="block h-[380px] w-full sm:h-[480px]"
-                                allow="autoplay; clipboard-write"
-                                title={`VGP ${category.name} Player on BeatStars`}
-                                loading="lazy"
-                            />
-                        </div>
+                <SectionShell id="official-store-link" className="py-6">
+                    <div className="mx-auto flex max-w-5xl flex-col gap-4 rounded-xl border border-white/[0.1] bg-white/[0.02] px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="max-w-2xl text-sm leading-6 text-white/65">
+                            Explore the complete official catalog on BeatStars, or compare every available {title} beat below.
+                        </p>
+                        <a
+                            href={beatStarsStoreUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-sky-200/30 bg-sky-300/[0.08] px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.16]"
+                        >
+                            Open official store
+                            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                        </a>
                     </div>
                 </SectionShell>
 

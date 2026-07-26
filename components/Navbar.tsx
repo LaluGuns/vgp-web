@@ -136,10 +136,10 @@ export function Navbar() {
         <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-3 sm:px-6">
             <nav
                 ref={navRef}
-                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full px-3 py-2 transition duration-300 ${
+                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full !bg-[#03131d] px-3 py-2 transition duration-300 ${
                     scrolled
-                        ? 'shadow-[0_18px_60px_rgba(0,0,0,0.34)]'
-                        : ''
+                        ? 'border-sky-200/20 shadow-[0_18px_60px_rgba(0,0,0,0.46)]'
+                        : 'shadow-[0_12px_40px_rgba(0,0,0,0.28)]'
                 }`}
                 aria-label="Main navigation"
             >
