@@ -9,6 +9,7 @@ import { revealUp } from '@/lib/motion-presets';
 import { CategoryDef, BeatProduct } from '@/lib/catalog';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
+import { getGenreTheme } from '@/lib/genre-theme';
 import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
 
 interface CategoryClientProps {
@@ -118,53 +119,57 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                         </h2>
 
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {beats.map((beat) => (
-                                <m.article
-                                    key={beat.id}
-                                    variants={revealUp}
-                                    initial="hidden"
-                                    whileInView="visible"
-                                    viewport={{ once: true }}
-                                    className="group flex min-h-[20.5rem] flex-col gap-3 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
-                                >
-                                    <div className="h-[8.25rem]">
-                                        <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
-                                            <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
-                                            <span className="font-mono text-white/40">#{beat.beatstarsTrackId}</span>
+                            {beats.map((beat) => {
+                                const theme = getGenreTheme(beat.primaryGenre);
+                                return (
+                                    <m.article
+                                        key={beat.id}
+                                        variants={revealUp}
+                                        initial="hidden"
+                                        whileInView="visible"
+                                        viewport={{ once: true }}
+                                        className={`group relative flex min-h-[20.5rem] flex-col gap-3 overflow-hidden rounded-2xl border bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] hover:-translate-y-0.5 sm:p-5 ${theme.card} ${theme.edge}`}
+                                    >
+                                        <div className="h-[8.25rem]">
+                                            <div className={`flex items-center justify-between text-[11px] font-semibold ${theme.tag}`}>
+                                                <span className="flex items-center gap-2 uppercase tracking-wider"><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{beat.primaryGenre}</span>
+                                                <span className="font-mono text-white/40">#{beat.beatstarsTrackId}</span>
+                                            </div>
+                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
+                                            <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
+                                                {getBeatSummary(beat, locale)}
+                                            </p>
                                         </div>
-                                        <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
-                                        <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
-                                            {getBeatSummary(beat, locale)}
-                                        </p>
-                                    </div>
 
-                                    <BeatStarsAudioPlayer
-                                        trackId={beat.beatstarsTrackId}
-                                        productUrl={beat.beatstarsProductUrl}
-                                        beatTitle={beat.title}
-                                        locale={locale}
-                                    />
+                                        <BeatStarsAudioPlayer
+                                            trackId={beat.beatstarsTrackId}
+                                            productUrl={beat.beatstarsProductUrl}
+                                            beatTitle={beat.title}
+                                            locale={locale}
+                                            showArtwork
+                                        />
 
-                                    <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
-                                        <Link
-                                            href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
-                                        >
-                                            {text.details}
-                                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                                        </Link>
-                                        <a
-                                            href={beat.beatstarsProductUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
-                                        >
-                                            {text.buy(beat.licenses[0]?.price || '')}
-                                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                                        </a>
-                                    </div>
-                                </m.article>
-                            ))}
+                                        <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
+                                            <Link
+                                                href={getLocalePath(`/studio/beats/${beat.slug}`)}
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            >
+                                                {text.details}
+                                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                            </Link>
+                                            <a
+                                                href={beat.beatstarsProductUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            >
+                                                {text.buy(beat.licenses[0]?.price || '')}
+                                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                            </a>
+                                        </div>
+                                    </m.article>
+                                );
+                            })}
                         </div>
                     </div>
                 </SectionShell>

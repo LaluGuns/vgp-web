@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element -- BeatStars supplies short-lived artwork URLs, so the preview thumbnail is rendered directly. */
 
 import { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
@@ -12,11 +13,13 @@ interface BeatStarsAudioPlayerProps {
     beatTitle: string;
     locale: BeatLocale;
     autoLoad?: boolean;
+    showArtwork?: boolean;
 }
 
 interface PreviewResponse {
     previewUrl?: string;
     duration?: number | null;
+    artworkUrl?: string;
 }
 
 interface BeatStarsTrackResponse {
@@ -27,6 +30,7 @@ interface BeatStarsTrackResponse {
                 hls?: { url?: string; duration?: number };
             };
             profile?: { username?: string };
+            artwork?: { fitInUrl?: string };
             streamUrl?: string;
         };
     };
@@ -44,6 +48,7 @@ const TRACK_QUERY = `
                 hls { url duration }
             }
             profile { username }
+            artwork { fitInUrl(width: 160, height: 160) }
         }
     }
 `;
@@ -79,6 +84,7 @@ function fetchPreview(trackId: string) {
             return {
                 previewUrl,
                 duration: track.bundle?.hls?.duration || track.bundle?.stream?.duration || null,
+                artworkUrl: track.artwork?.fitInUrl,
             };
         })
         .catch((error) => {
@@ -133,11 +139,13 @@ export default function BeatStarsAudioPlayer({
     beatTitle,
     locale,
     autoLoad = false,
+    showArtwork = false,
 }: BeatStarsAudioPlayerProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [shouldLoad, setShouldLoad] = useState(autoLoad);
     const [previewUrl, setPreviewUrl] = useState<string>();
+    const [artworkUrl, setArtworkUrl] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailed, setHasFailed] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -180,6 +188,7 @@ export default function BeatStarsAudioPlayer({
                 if (!payload.previewUrl) throw new Error('Preview URL unavailable');
                 setPreviewUrl(payload.previewUrl);
                 if (payload.duration) setDuration(payload.duration);
+                if (payload.artworkUrl) setArtworkUrl(payload.artworkUrl);
             })
             .catch(() => {
                 if (isCancelled) return;
@@ -293,14 +302,28 @@ export default function BeatStarsAudioPlayer({
                         onError={() => setHasFailed(true)}
                     />
                     <div className="flex w-full items-center gap-3">
-                        <button
-                            type="button"
-                            onClick={togglePlayback}
-                            aria-label={isPlaying ? text.pause : text.play}
-                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-200 text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
-                        >
-                            {isPlaying ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="ml-0.5 h-4 w-4" aria-hidden="true" />}
-                        </button>
+                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                            {showArtwork && artworkUrl ? (
+                                <img
+                                    src={artworkUrl}
+                                    alt={`${beatTitle} artwork`}
+                                    loading="eager"
+                                    className="h-full w-full object-cover"
+                                />
+                            ) : null}
+                            <button
+                                type="button"
+                                onClick={togglePlayback}
+                                aria-label={isPlaying ? text.pause : text.play}
+                                className={`absolute inset-0 inline-flex items-center justify-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 ${
+                                    showArtwork && artworkUrl
+                                        ? 'bg-slate-950/55 text-white hover:bg-slate-950/35'
+                                        : 'bg-sky-200 text-slate-950 hover:bg-sky-100'
+                                }`}
+                            >
+                                {isPlaying ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="ml-0.5 h-4 w-4" aria-hidden="true" />}
+                            </button>
+                        </div>
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-2">
                                 <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/70">{text.label}</p>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
 import { Check, ChevronLeft, ChevronRight, ExternalLink, Instagram, Mail, Search, X } from 'lucide-react';
@@ -15,6 +15,7 @@ import { categories, beatsCatalog } from '@/lib/catalog';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
+import { getGenreTheme } from '@/lib/genre-theme';
 import BeatStarsAudioPlayer from './components/BeatStarsAudioPlayer';
 import BeatStarsStorePlayer from './components/BeatStarsStorePlayer';
 
@@ -221,6 +222,8 @@ const catalogCopy = {
         buy: (price: string) => `License from ${price}`,
         previous: 'Previous',
         next: 'Next',
+        scrollGenresLeft: 'Show previous genres',
+        scrollGenresRight: 'Show more genres',
         page: (current: number, total: number) => `Page ${current} of ${total}`,
     },
     'ja-JP': {
@@ -234,6 +237,8 @@ const catalogCopy = {
         buy: (price: string) => `${price} からライセンス`,
         previous: '前へ',
         next: '次へ',
+        scrollGenresLeft: '前のジャンルを表示',
+        scrollGenresRight: '次のジャンルを表示',
         page: (current: number, total: number) => `${current} / ${total} ページ`,
     },
     'de-DE': {
@@ -247,6 +252,8 @@ const catalogCopy = {
         buy: (price: string) => `Lizenz ab ${price}`,
         previous: 'Zurück',
         next: 'Weiter',
+        scrollGenresLeft: 'Vorherige Genres anzeigen',
+        scrollGenresRight: 'Weitere Genres anzeigen',
         page: (current: number, total: number) => `Seite ${current} von ${total}`,
     },
 } as const;
@@ -261,6 +268,14 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
     const [query, setQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const genreScrollRef = useRef<HTMLDivElement>(null);
+
+    const scrollGenres = (direction: 'left' | 'right') => {
+        const container = genreScrollRef.current;
+        if (!container) return;
+
+        container.scrollLeft += direction === 'left' ? -260 : 260;
+    };
 
     const genresList = [
         { id: 'all', label: t.filterAll },
@@ -440,24 +455,46 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     ) : null}
                                 </label>
 
-                                <div className="-mr-1 flex items-center gap-2 overflow-x-auto pb-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                                    {genresList.map((genre) => (
-                                        <button
-                                            key={genre.id}
-                                            type="button"
-                                            onClick={() => {
-                                                setSelectedGenre(genre.id);
-                                                setCurrentPage(1);
-                                            }}
-                                            className={`min-h-10 shrink-0 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
-                                                selectedGenre === genre.id
-                                                    ? 'border-sky-200/60 bg-sky-300/20 text-sky-100'
-                                                    : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
-                                            }`}
-                                        >
-                                            {genre.label}
-                                        </button>
-                                    ))}
+                                <div className="flex min-w-0 items-center gap-1.5">
+                                    <button
+                                        type="button"
+                                        onClick={() => scrollGenres('left')}
+                                        aria-label={catalogText.scrollGenresLeft}
+                                        className="inline-flex h-10 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                    >
+                                        <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+                                    </button>
+                                    <div ref={genreScrollRef} className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto scroll-smooth pb-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                                        {genresList.map((genre) => {
+                                            const theme = getGenreTheme(genre.label);
+                                            return (
+                                                <button
+                                                    key={genre.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedGenre(genre.id);
+                                                        setCurrentPage(1);
+                                                    }}
+                                                    className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
+                                                        selectedGenre === genre.id
+                                                            ? theme.filter
+                                                            : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+                                                    }`}
+                                                >
+                                                    <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />
+                                                    {genre.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => scrollGenres('right')}
+                                        aria-label={catalogText.scrollGenresRight}
+                                        className="inline-flex h-10 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                    >
+                                        <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -470,14 +507,15 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                         {visibleBeats.length ? (
                             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {visibleBeats.map((beat) => {
+                                const theme = getGenreTheme(beat.primaryGenre);
                                 return (
                                     <article
                                         key={beat.id}
-                                        className="group flex min-h-[20.5rem] flex-col gap-3 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition duration-300 hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
+                                        className={`group relative flex min-h-[20.5rem] flex-col gap-3 overflow-hidden rounded-2xl border bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition duration-300 before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] hover:-translate-y-0.5 sm:p-5 ${theme.card} ${theme.edge}`}
                                     >
                                         <div className="h-[8.25rem]">
-                                            <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
-                                                <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
+                                            <div className={`flex items-center justify-between text-[11px] font-semibold ${theme.tag}`}>
+                                                <span className="flex items-center gap-2 uppercase tracking-wider"><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{beat.primaryGenre}</span>
                                                 <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
                                             </div>
                                             <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
@@ -491,6 +529,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             productUrl={beat.beatstarsProductUrl}
                                             beatTitle={beat.title}
                                             locale={locale}
+                                            showArtwork
                                         />
 
                                         <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
