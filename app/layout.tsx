@@ -129,13 +129,13 @@ export default async function RootLayout({
                 <div className="wave-physics-bg" aria-hidden="true" />
 
                 <NewsletterProvider>
-                    <SmoothScrollProvider>
-                        <LazyMotion features={domAnimation}>
-                            <AppFrame>
-                                {children}
-                            </AppFrame>
-                        </LazyMotion>
-                    </SmoothScrollProvider>
+                        <SmoothScrollProvider>
+                            <LazyMotion features={domAnimation}>
+                                <AppFrame>
+                                    {children}
+                                </AppFrame>
+                            </LazyMotion>
+                        </SmoothScrollProvider>
                 </NewsletterProvider>
             </body>
         </html>

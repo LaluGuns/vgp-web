@@ -1,26 +1,22 @@
 import type { Metadata } from 'next';
-import BeatsClient from './BeatsClient';
+import BeatsClient from '../../../studio/beats/BeatsClient';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
 export const metadata: Metadata = {
-    title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
+    title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
     description:
-        'Buy and license official Cyberpunk Trap, Phonk, Synthwave, Hard 808, and rap instrumentals by Virzy Guns through the official BeatStars store.',
+        'Offizielle Cyberpunk Trap-, Phonk-, Synthwave- und 808-Instrumentals von Virzy Guns anhören, eine Lizenz wählen und bei BeatStars kaufen.',
     keywords: [
-        'buy beats online',
-        'beats for sale',
-        'trap beats for sale',
-        'cyberpunk beats for sale',
-        'phonk beats for sale',
-        'synthwave beats for sale',
-        'hard 808 beats',
-        'rap instrumentals for sale',
-        'exclusive beats for sale',
-        'beat licensing',
+        'Beats kaufen',
+        'Trap Beats kaufen',
+        'Cyberpunk Beats',
+        'Phonk Beats',
+        'Synthwave Beats',
+        'Virzy Guns',
     ],
     alternates: {
-        canonical: `${SITE_URL}/studio/beats`,
+        canonical: `${SITE_URL}/de-DE/studio/beats`,
         languages: {
             'en-US': `${SITE_URL}/studio/beats`,
             'ja-JP': `${SITE_URL}/ja-JP/studio/beats`,
@@ -29,10 +25,9 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
-        description:
-            'Browse official instrumentals by Virzy Guns, compare license options, and buy directly through the official BeatStars store.',
-        url: `${SITE_URL}/studio/beats`,
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
+        description: 'Offizielle Instrumentals von Virzy Guns anhören, Lizenzen vergleichen und direkt bei BeatStars kaufen.',
+        url: `${SITE_URL}/de-DE/studio/beats`,
         siteName: 'Virzy Guns Production',
         images: [
             {
@@ -46,8 +41,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
-        description: 'Browse official instrumentals, compare licenses, and buy directly through the official BeatStars store.',
+        title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
+        description: 'Offizielle Instrumentals anhören, Lizenzen vergleichen und direkt bei BeatStars kaufen.',
         images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
     },
 };
@@ -57,15 +52,14 @@ const hubSchema = {
     '@graph': [
         {
             '@type': 'CollectionPage',
-            '@id': `${SITE_URL}/studio/beats#collection`,
+            '@id': `${SITE_URL}/de-DE/studio/beats#collection`,
             name: 'Virzy Guns Beat Store',
-            description:
-                'Official beat catalog by Virzy Guns for artists looking for Cyberpunk Trap, Phonk, Synthwave, Hard 808, and rap instrumentals.',
-            url: `${SITE_URL}/studio/beats`,
+            description: 'Offizieller Beat-Katalog von Virzy Guns für Cyberpunk Trap, Phonk, Synthwave, 808 und Rap-Instrumentals.',
+            url: `${SITE_URL}/de-DE/studio/beats`,
         },
         {
             '@type': 'BreadcrumbList',
-            '@id': `${SITE_URL}/studio/beats#breadcrumbs`,
+            '@id': `${SITE_URL}/de-DE/studio/beats#breadcrumbs`,
             itemListElement: [
                 {
                     '@type': 'ListItem',
@@ -77,21 +71,21 @@ const hubSchema = {
                     '@type': 'ListItem',
                     position: 2,
                     name: 'Beats',
-                    item: `${SITE_URL}/studio/beats`,
+                    item: `${SITE_URL}/de-DE/studio/beats`,
                 },
             ],
         },
     ],
 };
 
-export default function BeatsPage() {
+export default function GermanBeatsIndexPage() {
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(hubSchema) }}
             />
-            <BeatsClient />
+            <BeatsClient locale="de-DE" />
         </>
     );
 }

@@ -11,7 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, m } from 'framer-motion';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, CircleHelp, ListMusic, Menu, SlidersHorizontal, X } from 'lucide-react';
 import { siteNav, studioNav } from '@/lib/vgp-ecosystem';
 import { springFast } from '@/lib/motion-presets';
 
@@ -19,8 +19,54 @@ const mobileSiteNav = siteNav.filter(
     (item) => item.name !== 'Masterclass' && item.name !== 'Books',
 );
 
+const beatStoreNavCopy = {
+    'en-US': {
+        brand: 'Virzy Guns Beat Store',
+        shortBrand: 'VGP Beats',
+        browse: 'Browse beats',
+        finder: 'Beat finder',
+        licensing: 'Licensing',
+        how: 'How it works',
+        howMobile: 'How the store works',
+        cta: 'Browse & license',
+    },
+    'ja-JP': {
+        brand: 'Virzy Guns ビートストア',
+        shortBrand: 'VGP Beats',
+        browse: 'ビートを探す',
+        finder: 'ビートファインダー',
+        licensing: 'ライセンス',
+        how: '購入ガイド',
+        howMobile: 'ストアの使い方',
+        cta: '試聴・ライセンス',
+    },
+    'de-DE': {
+        brand: 'Virzy Guns Beat Store',
+        shortBrand: 'VGP Beats',
+        browse: 'Beats durchsuchen',
+        finder: 'Beat-Finder',
+        licensing: 'Lizenzen',
+        how: 'So funktioniert es',
+        howMobile: 'So funktioniert der Store',
+        cta: 'Anhören & lizenzieren',
+    },
+} as const;
+
 export function Navbar() {
     const pathname = usePathname();
+    const beatStoreLocale = pathname.startsWith('/ja-JP/')
+        ? 'ja-JP'
+        : pathname.startsWith('/de-DE/')
+            ? 'de-DE'
+            : 'en-US';
+    const beatNav = beatStoreNavCopy[beatStoreLocale];
+    const isBeatStore = /^\/(?:(?:ja-JP|de-DE)\/)?studio\/beats(?:\/|$)/.test(pathname);
+    const beatStoreBase = pathname.startsWith('/ja-JP/')
+        ? '/ja-JP/studio/beats'
+        : pathname.startsWith('/de-DE/')
+            ? '/de-DE/studio/beats'
+            : '/studio/beats';
+    const isBeatStoreHome = pathname === beatStoreBase;
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [studioOpen, setStudioOpen] = useState(false);
@@ -132,22 +178,31 @@ export function Navbar() {
         }
     };
 
+    const openBeatStorePanel = (panel: 'store' | 'finder') => {
+        setMobileOpen(false);
+        if (isBeatStoreHome) {
+            window.dispatchEvent(new CustomEvent(`vgp:open-${panel}-guide`));
+            return;
+        }
+        window.location.assign(`${beatStoreBase}?panel=${panel}`);
+    };
+
     return (
         <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-3 sm:px-6">
             <nav
                 ref={navRef}
-                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full px-3 py-2 transition duration-300 ${
+                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full !bg-[#03131d] px-3 py-2 transition duration-300 ${
                     scrolled
-                        ? 'shadow-[0_18px_60px_rgba(0,0,0,0.34)]'
-                        : ''
+                        ? 'border-sky-200/20 shadow-[0_18px_60px_rgba(0,0,0,0.46)]'
+                        : 'shadow-[0_12px_40px_rgba(0,0,0,0.28)]'
                 }`}
                 aria-label="Main navigation"
             >
                 <div className="flex h-full items-center justify-between gap-3">
                     <Link
-                        href="/"
+                        href={isBeatStore ? beatStoreBase : '/'}
                         className="flex min-w-0 flex-1 items-center gap-2 rounded-full pr-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 sm:gap-3 sm:pr-3 lg:flex-none"
-                        aria-label="Virzy Guns Production home"
+                        aria-label={isBeatStore ? beatNav.brand : 'Virzy Guns Production home'}
                     >
                         <Image
                             src="/branding/logo-tg.png"
@@ -158,13 +213,49 @@ export function Navbar() {
                             priority
                         />
                         <span className="min-w-0 truncate text-xs font-semibold text-white sm:text-sm">
-                            <span className="sm:hidden">Virzy Guns</span>
-                            <span className="hidden sm:inline">Virzy Guns Production</span>
+                            <span className="sm:hidden">{isBeatStore ? beatNav.shortBrand : 'Virzy Guns'}</span>
+                            <span className="hidden sm:inline">{isBeatStore ? beatNav.brand : 'Virzy Guns Production'}</span>
                         </span>
                     </Link>
 
                     <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
-                        {siteNav.map((item) => {
+                        {isBeatStore ? (
+                            <>
+                                <Link
+                                    href={`${beatStoreBase}#beats-inventory`}
+                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
+                                >
+                                    <ListMusic className="h-3.5 w-3.5" aria-hidden="true" />
+                                    {beatNav.browse}
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={() => openBeatStorePanel('finder')}
+                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
+                                >
+                                    <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
+                                    {beatNav.finder}
+                                </button>
+                                <Link
+                                    href={`${beatStoreBase}/licensing`}
+                                    className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
+                                        pathname.endsWith('/licensing')
+                                            ? 'bg-white/[0.08] text-white'
+                                            : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
+                                    }`}
+                                >
+                                    {beatNav.licensing}
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={() => openBeatStorePanel('store')}
+                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
+                                >
+                                    <CircleHelp className="h-3.5 w-3.5" aria-hidden="true" />
+                                    {beatNav.how}
+                                </button>
+                            </>
+                        ) : siteNav.map((item) => {
                             if (item.name === 'Studio') {
                                 return (
                                     <div key={item.href} className="relative">
@@ -242,10 +333,10 @@ export function Navbar() {
 
                     <div className="hidden items-center gap-2 lg:flex">
                         <Link
-                            href="/studio/beats"
+                            href={isBeatStore ? `${beatStoreBase}#beats-inventory` : '/studio/beats'}
                             className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-white/15 bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                         >
-                            Enter Studio
+                            {isBeatStore ? beatNav.cta : 'Enter Studio'}
                         </Link>
                     </div>
 
@@ -273,7 +364,40 @@ export function Navbar() {
                         className="liquid-glass-strong mx-auto mt-2 max-w-7xl overflow-hidden rounded-lg p-3 lg:hidden"
                     >
                         <div className="grid gap-1">
-                            {[{ name: 'Home', href: '/' }, ...mobileSiteNav].map((item) => {
+                            {isBeatStore ? (
+                                <>
+                                    <Link
+                                        href={`${beatStoreBase}#beats-inventory`}
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                    >
+                                        <ListMusic className="h-4 w-4" aria-hidden="true" />
+                                        {beatNav.browse}
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={() => openBeatStorePanel('finder')}
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                    >
+                                        <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+                                        {beatNav.finder}
+                                    </button>
+                                    <Link
+                                        href={`${beatStoreBase}/licensing`}
+                                        className="flex min-h-11 items-center rounded-lg px-4 py-3 text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                    >
+                                        {beatNav.licensing}
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={() => openBeatStorePanel('store')}
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                    >
+                                        <CircleHelp className="h-4 w-4" aria-hidden="true" />
+                                        {beatNav.howMobile}
+                                    </button>
+                                </>
+                            ) : [{ name: 'Home', href: '/' }, ...mobileSiteNav].map((item) => {
                                 if (item.name === 'Studio') {
                                     return (
                                         <div key={item.href} className="rounded-lg bg-white/[0.03] p-1">

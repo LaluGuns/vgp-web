@@ -7,6 +7,9 @@ import { Home, Headphones, Activity, BookOpen, Timer } from 'lucide-react';
 export function MobileBottomNav() {
     const pathname = usePathname();
     const isBlog = pathname.startsWith('/blog');
+    const isBeatStore = /^\/(?:(?:ja-JP|de-DE)\/)?studio\/beats(?:\/|$)/.test(pathname);
+
+    if (isBeatStore) return null;
 
     const navItems = [
         { name: 'Home', href: '/', icon: Home },

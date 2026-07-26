@@ -1,0 +1,526 @@
+import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
+
+/**
+ * Official multi-genre metadata extracted from the Virzy Guns BeatStars catalog.
+ * Keep VGP signature sound tags separate: BeatStars genres describe platform
+ * taxonomy, while VGP tags describe the collection's editorial positioning.
+ */
+export const beatStarsGenresByTrackId: Record<string, readonly string[]> = {
+    '7949265': ['Hip Hop', 'Trap'],
+    '7949350': ['Hip Hop', 'Trap'],
+    '7949406': ['Hip Hop', 'West Coast'],
+    '7949483': ['Gangsta', 'Hip Hop'],
+    '7949534': ['Hip Hop', 'Trap'],
+    '7949687': ['Club', 'Hip Hop'],
+    '7949789': ['Hip Hop', 'Trap'],
+    '8291991': ['Club', 'Hip Hop'],
+    '8337940': ['Hip Hop', 'Trap'],
+    '8374625': ['Hip Hop', 'Trap'],
+    '8500249': ['Grime', 'Hip Hop'],
+    '8523842': ['Grime', 'Hip Hop'],
+    '8523884': ['Grime', 'Hip Hop'],
+    '8523931': ['Grime', 'Hip Hop'],
+    '8536796': ['Club', 'Hip Hop'],
+    '8536887': ['Grime', 'Hip Hop'],
+    '8536963': ['Grime', 'Hip Hop'],
+    '8550252': ['Hip Hop', 'Trap'],
+    '8550277': ['New Soul', 'R&B'],
+    '8550334': ['Hip Hop', 'Trap'],
+    '8550374': ['Hip Hop', 'Trap'],
+    '8567368': ['Club', 'Hip Hop'],
+    '8599998': ['Club', 'Hip Hop'],
+    '8606248': ['Grime', 'Hip Hop'],
+    '8630086': ['Club', 'Hip Hop'],
+    '8664023': ['Hip Hop', 'Trap'],
+    '8680847': ['Pop', 'Pop / Hip Hop'],
+    '8735698': ['New Soul', 'R&B'],
+    '8751043': ['Grime', 'Hip Hop'],
+    '8751306': ['Grime', 'Hip Hop'],
+    '8751663': ['Hip Hop', 'Trap'],
+    '8779769': ['Hip Hop', 'Trap'],
+    '8795993': ['Hip Hop', 'Trap'],
+    '8814116': ['Grime', 'Hip Hop'],
+    '8841401': ['Hip Hop', 'Trap'],
+    '8868943': ['Club', 'Hip Hop'],
+    '9549461': ['Hip Hop', 'Orchestral'],
+    '9549587': ['Hip Hop', 'Trap'],
+    '9549703': ['Club', 'Hip Hop'],
+    '9549760': ['Grime', 'Hip Hop'],
+    '9549810': ['Pop', 'Pop / Hip Hop'],
+    '9549897': ['Hip Hop', 'Trap'],
+    '9549916': ['Grime', 'Hip Hop'],
+    '9550039': ['Hip Hop', 'Trap'],
+    '9550166': ['Hip Hop', 'Trap'],
+    '9603085': ['Hip Hop', 'Trap'],
+    '9627172': ['Hip Hop'],
+    '9636278': ['Hip Hop', 'Trap'],
+    '9653134': ['Hip Hop', 'Trap'],
+    '9677701': ['Hip Hop', 'Trap'],
+    '9696095': ['Club', 'Hip Hop'],
+    '9721472': ['Hip Hop', 'Trap'],
+    '9741032': ['Hip Hop', 'Trap'],
+    '10586777': ['Hip Hop', 'Trap'],
+    '11005790': ['Hip Hop', 'Trap'],
+    '11005991': ['Hip Hop', 'Trap'],
+    '11006117': ['Drill'],
+    '11006271': ['Drill'],
+    '11017041': ['Hip Hop'],
+    '11052008': ['2 Step', 'Electronic'],
+    '11071863': ['K_Pop', 'Pop'],
+    '11084454': ['Hip Hop', 'Trap'],
+    '11093039': ['Hip Hop', 'Trap'],
+    '11110144': ['Hip Hop', 'Trap'],
+    '11110536': ['Hyperpop'],
+    '11118508': ['Hip Hop', 'Trap'],
+    '11133693': ['Drill'],
+    '11143689': ['Hip Hop', 'Trap'],
+    '11191865': ['New Soul', 'R&B'],
+    '11203473': ['Hip Hop', 'Trap'],
+    '11241051': ['Hyperpop'],
+    '11260689': ['R&B'],
+    '11271227': ['Hip Hop', 'Trap'],
+    '11271260': ['Hip Hop', 'Trap'],
+    '11284713': ['Hip Hop', 'Trap'],
+    '11310234': ['Pop', 'Pop / Hip Hop'],
+    '11329345': ['Pop', 'Pop / Hip Hop'],
+    '11340380': ['Pop', 'Pop / Hip Hop'],
+    '11349944': ['Hip Hop', 'Trap'],
+    '11361205': ['New Soul', 'R&B'],
+    '11386885': ['Hip Hop', 'Trap'],
+    '11416769': ['Drill'],
+    '11427945': ['Pop', 'Pop / Hip Hop'],
+    '11436167': ['Hip Hop', 'Trap'],
+    '11474888': ['Hip Hop', 'Trap'],
+    '11484224': ['Club', 'Hip Hop'],
+    '11534507': ['Hip Hop'],
+    '11547308': ['Hip Hop', 'Trap'],
+    '11558089': ['Club', 'Hip Hop'],
+    '11594645': ['Hip Hop', 'Trap'],
+    '11650567': ['Hip Hop', 'Trap'],
+    '11671368': ['Club', 'Hip Hop'],
+    '11713441': ['Hip Hop', 'Orchestral'],
+    '11723553': ['Hip Hop', 'Trap'],
+    '11778613': ['Hip Hop', 'Trap'],
+    '11810006': ['Hip Hop', 'Trap'],
+    '11837289': ['Hip Hop', 'Trap'],
+    '11849134': ['Hip Hop', 'Trap'],
+    '11883202': ['Pop', 'Pop / R&B'],
+    '11930051': ['Hip Hop', 'Trap'],
+    '11940208': ['Hip Hop', 'Trap'],
+    '12024590': ['Electronic', 'House'],
+    '12063167': ['Electronic', 'House'],
+    '12082598': ['Electronic', 'House'],
+    '12103091': ['Electronic', 'House'],
+    '12110366': ['Electronic', 'House'],
+    '12124456': ['Hip Hop', 'Trap'],
+    '12135719': ['Hip Hop', 'Trap'],
+    '12170011': ['Electronic', 'House'],
+    '12197191': ['Electronic', 'House'],
+    '12207241': ['Electronic', 'House'],
+    '13015698': ['Hip Hop', 'Trap'],
+    '13015916': ['Hip Hop', 'Trap'],
+    '13016136': ['Hip Hop', 'Trap'],
+    '13023944': ['Dance', 'Electronic'],
+    '13024167': ['Hip Hop', 'Trap'],
+    '13086139': ['Hip Hop', 'Trap'],
+    '13107603': ['Dance', 'Electronic'],
+    '13117227': ['Hip Hop', 'Trap'],
+    '13145511': ['Dance', 'Electronic'],
+    '13175871': ['Electronic', 'Tropical House'],
+    '13382494': ['Electronic', 'House'],
+    '14309875': ['Club', 'Drill', 'House'],
+    '14310335': ['House', 'Pop / Electronic', 'R&B'],
+    '14342926': ['Club', 'Electronic', 'House'],
+    '14405381': ['Dubstep', 'Trap'],
+    '14435255': ['Dubstep', 'Electronic', 'Trap'],
+    '14483000': ['Electronic', 'Trance', 'Trap'],
+    '14533739': ['Electronic', 'House', 'Trance'],
+    '14587624': ['Electronic', 'House', 'Trance'],
+    '14595235': ['Electronic', 'House', 'Trance'],
+    '14643816': ['Dance', 'Electronic', 'House'],
+    '15391031': ['Hip Hop', 'Trap'],
+    '15391142': ['Hyperpop', 'Pop / Electronic', 'Trap'],
+    '15391482': ['Dance-pop', 'EDM', 'House'],
+    '15391748': ['Drill', 'Hip Hop', 'Trap'],
+    '15392564': ['Club', 'EDM', 'House'],
+    '15392978': ['House', 'Jersey club', 'Techno'],
+    '15398654': ['Club', 'EDM', 'House'],
+    '15398734': ['Club', 'House', 'Techno'],
+    '15398849': ['Dance', 'House'],
+    '15412255': ['Hip Hop', 'Trap'],
+    '15479236': ['Classical', 'Hip Hop', 'Trap'],
+    '15479947': ['Electronic', 'Hardcore'],
+    '15514517': ['EDM', 'Electronic', 'House'],
+    '15532263': ['Electronic', 'Hip Hop'],
+    '15543234': ['Drill', 'Jersey club', 'Trap'],
+    '15561632': ['Dubstep', 'Electronic', 'Trap'],
+    '15578526': ['Drill', 'Jersey club', 'Trap'],
+    '15589499': ['Dubstep', 'Electronic', 'Trap'],
+    '15618931': ['Drill', 'Hyperpop', 'Jersey club'],
+    '15647655': ['Club', 'Electronic', 'Jersey club'],
+    '15668270': ['Electronic', 'Jersey club', 'Punk Rock'],
+    '15687176': ['Club', 'Electronic', 'Jersey club'],
+    '15689815': ['Dubstep', 'Electronic', 'Trap'],
+    '15715611': ['Dubstep', 'Electronic', 'Jersey club'],
+    '15726873': ['Club', 'Electronic', 'Jersey club'],
+    '15739906': ['Drill', 'Electronic', 'Jersey club'],
+    '15756797': ['Club', 'Electronic', 'Jersey club'],
+    '15768827': ['80s Pop', 'Jersey club', 'Synthwave'],
+    '15784882': ['Drill', 'Jersey club', 'Trap'],
+    '15807005': ['Alternative Hip Hop', 'Electro hop', 'Rock'],
+    '15826574': ['Hip Hop', 'Synthwave', 'Trap'],
+    '15845154': ['Drill', 'Jersey club', 'Trap'],
+    '15868597': ['Drill', 'Jersey club', 'Trap'],
+    '15876378': ['Electro hop', 'Electronic', 'Jersey club'],
+    '15880417': ['Drill', 'Jersey club', 'Trap'],
+    '15896925': ['Drill', 'Jersey club', 'Trap'],
+    '15908636': ['Electronic', 'Techno'],
+    '15926674': ['Electronic', 'House', 'Techno'],
+    '15940173': ['Electronic', 'Indie', 'Synthwave'],
+    '15956090': ['Drill', 'Jersey club', 'Trap'],
+    '15957019': ['Drill', 'Jersey club', 'Trap'],
+    '15968535': ['Electronic', 'Techno'],
+    '15969636': ['Electronic', 'Indie', 'Synthwave'],
+    '15996050': ['Dubstep', 'Electronic', 'House'],
+    '16006752': ['Hip Hop', 'Trap', 'UK Grime'],
+    '16017383': ['Electronic', 'Hip Hop', 'Trap'],
+    '16027725': ['EDM', 'Electronic', 'House'],
+    '16038003': ['Electronic', 'House', 'Techno'],
+    '16047291': ['Drill', 'Hip Hop', 'Jersey club'],
+    '16066585': ['Electronic', 'House', 'Techno'],
+    '16077445': ['Electronic', 'House', 'Techno'],
+    '16088821': ['Electronic', 'Synthwave'],
+    '16099355': ['Drill', 'Electronic', 'Jersey club'],
+    '16117759': ['House', 'Synthwave', 'Techno'],
+    '16138364': ['Jersey club', 'Rock', 'Trap'],
+    '16160739': ['Drill', 'Jersey club', 'Trap'],
+    '16168733': ['Drill', 'Jersey club'],
+    '16190905': ['Electronic', 'Indie', 'Synthwave'],
+    '16228184': ['Electronic', 'Indie', 'Synthwave'],
+    '16248751': ['Electronic', 'Techno'],
+    '16266459': ['Electronic', 'Techno'],
+    '16275701': ['Electronic', 'Synthwave'],
+    '16287311': ['Electronic', 'House', 'Techno'],
+    '16297975': ['Electronic', 'Indie', 'Synthwave'],
+    '16305711': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '16333109': ['Electronic', 'House', 'Techno'],
+    '16343907': ['Electronic', 'Synthwave'],
+    '16367477': ['Hip Hop', 'R&B', 'Trap'],
+    '16412193': ['Electronic'],
+    '16543035': ['Electronic', 'House', 'Techno'],
+    '16578585': ['Electronic', 'Techno'],
+    '16754817': ['Electronic', 'Hip Hop'],
+    '16791044': ['Hip Hop', 'Hyperpop', 'Trap'],
+    '16797718': ['Electronic', 'Lo-fi', 'Synthwave'],
+    '16872716': ['Electronic', 'Synthwave', 'Trap'],
+    '16916687': ['Drill', 'Electronic', 'Synthwave'],
+    '16934626': ['Drill', 'Hip Hop', 'Synthwave'],
+    '16942830': ['Pop', 'Synthwave', 'Trap'],
+    '17005379': ['Electronic', 'Freestyle rap', 'Trap'],
+    '17031821': ['Dubstep', 'Jersey club', 'Trap'],
+    '17042244': ['Electronic', 'Lo-fi', 'Synthwave'],
+    '17051561': ['R&B', 'Synthwave', 'Trap'],
+    '17060391': ['Electronic', 'J-Pop', 'Synthwave'],
+    '17086692': ['Electronic', 'Synthwave', 'Techno'],
+    '17096317': ['Electronic', 'Indie', 'Synthwave'],
+    '17115025': ['Hip Hop', 'Pop Rap', 'Trap'],
+    '17157840': ['Electronic', 'Hip Hop', 'Trap'],
+    '17175596': ['Electronic', 'Hip Hop', 'Trap'],
+    '17231558': ['Electronic', 'Indie', 'Synthwave'],
+    '17248431': ['Drum & Bass', 'Rap rock', 'Rock'],
+    '17349434': ['Club', 'Drill', 'Jersey club'],
+    '17381119': ['Ambient', 'Electronic', 'Synthwave'],
+    '17400697': ['Club', 'Drill', 'Jersey club'],
+    '17410408': ['Club', 'Drill', 'Jersey club'],
+    '17421098': ['Club', 'Jersey club', 'Porno rap'],
+    '17431718': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17442123': ['Club', 'Electronic', 'Jersey club'],
+    '17452970': ['Electronic', 'Indie', 'Synthwave'],
+    '17463091': ['Jersey club', 'Synth-pop', 'Synthwave'],
+    '17472741': ['Drill', 'Jersey club', 'Trap'],
+    '17482944': ['Electronic', 'Indie', 'Synthwave'],
+    '17504213': ['Drill', 'Jersey club', 'Synthwave'],
+    '17515925': ['Electronic', 'Jersey club', 'Synthwave'],
+    '17536071': ['Jersey club', 'Synth-pop', 'Synthwave'],
+    '17566468': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17597757': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17619156': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17628269': ['Electronic', 'Jersey club', 'Synthwave'],
+    '17639065': ['Drill', 'Electronic', 'Jersey club'],
+    '17649470': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17660624': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17690577': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17737271': ['Hip Hop', 'Synthwave', 'Trap'],
+    '17765192': ['80s Pop', 'Electronic', 'Synthwave'],
+    '17775812': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '17785497': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17795709': ['Ambient', 'Drill', 'Jersey club'],
+    '17795787': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17824915': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17840831': ['Drill', 'Jersey club', 'Trap'],
+    '17841279': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17851700': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17861460': ['80s Pop', 'Synth-pop', 'Synthwave'],
+    '17861522': ['Drill', 'Electronic', 'Jersey club'],
+    '17881978': ['Hyperpop', 'Rage / Rage Beats', 'Trap'],
+    '17882313': ['Indie', 'Pop', 'Synthwave'],
+    '17891411': ['80s Pop', 'J-Pop', 'Synthwave'],
+    '17891494': ['Drill', 'Dubstep', 'Jersey club'],
+    '17911182': ['Alternative Hip Hop', 'Hip Hop', 'Rock'],
+    '17911854': ['Pop', 'R&B', 'Synthwave'],
+    '17932134': ['Drill', 'Dubstep', 'Jersey club'],
+    '17932971': ['Electronic', 'Indie', 'Synthwave'],
+    '17961827': ['Drill', 'Jersey club', 'Trap'],
+    '17982351': ['Pop', 'R&B', 'Synthwave'],
+    '17991814': ['Drill', 'Jersey club', 'Trap'],
+    '18012478': ['Indie', 'R&B', 'Synthwave'],
+    '18048543': ['Electronic', 'Indie', 'Synthwave'],
+    '18069675': ['Hip Hop', 'Pop', 'Synthwave'],
+    '18114985': ['Electronic', 'Indie', 'Synthwave'],
+    '18134395': ['Indie', 'Pop', 'Synthwave'],
+    '18152827': ['Drill', 'Jersey club', 'Trap'],
+    '18153252': ['Chillwave', 'Synth-pop', 'Synthwave'],
+    '18200057': ['Electro Pop', 'Pop / Electronic', 'Synthwave'],
+    '18258097': ['Electronic', 'Indie', 'Synthwave'],
+    '18295331': ['Pop', 'Synth-pop', 'Synthwave'],
+    '18322099': ['Pop', 'Synth-pop', 'Synthwave'],
+    '18341340': ['House', 'Synth-pop', 'Synthwave'],
+    '18351018': ['Hyperpop', 'Rage / Rage Beats', 'Trap'],
+    '18359100': ['80s Pop', 'Pop', 'Synthwave'],
+    '18375810': ['Hip Hop', 'Pop', 'Synthwave'],
+    '18385383': ['Electronic', 'Pop / Electronic', 'Synthwave'],
+    '18404240': ['Drum & Bass', 'Electronic', 'Synthwave'],
+    '18422142': ['Pop', 'Synth-pop', 'Synthwave'],
+    '18475399': ['Electronic', 'Pop / Electronic', 'Synthwave'],
+    '18511269': ['Electronic', 'Indie', 'Synthwave'],
+    '18529216': ['Electronic', 'Pop', 'Synthwave'],
+    '18555518': ['Electronic', 'Indie', 'Synthwave'],
+    '18574041': ['Electronic', 'Synthwave'],
+    '18602173': ['Electronic', 'Synthwave'],
+    '18754146': ['Drum & Bass', 'Punk', 'Synthwave'],
+    '18754224': ['Electronic', 'Indie', 'Synthwave'],
+    '18774230': ['Electronic', 'Indie', 'Synthwave'],
+    '18851145': ['Electronic', 'Punk', 'Synthwave'],
+    '19299471': ['Hip Hop', 'K_Pop', 'Synth-pop'],
+    '19572842': ['Dubstep', 'Electronic', 'Punk'],
+    '19817756': ['Electronic', 'Rap rock', 'Synthwave'],
+    '21646885': ['Drill', 'Synthwave'],
+    '21646915': ['Drill', 'Hip Hop', 'Synthwave'],
+    '21646949': ['Drill', 'Synthwave'],
+    '22850391': ['Hip Hop', 'Rage / Rage Beats', 'Trap'],
+    '22900772': ['Electronic', 'House', 'Techno'],
+    '23135236': ['Electronic', 'Synth-pop', 'Synthwave'],
+    '23279887': ['Electronic', 'Rock', 'Synthwave'],
+    '23613920': ['80s Pop', 'Electronic', 'Synthwave'],
+    '23624295': ['Electronic', 'Punk', 'Synthwave'],
+    '23632279': ['Electronic', 'Indie', 'Synthwave'],
+    '23632641': ['Electronic', 'Pop / Electronic', 'Synthwave'],
+    '23671789': ['Electronic', 'Indie', 'Synthwave'],
+    '23682668': ['Electronic', 'Indie', 'Synthwave'],
+    '23690781': ['Electronic', 'Indie', 'Synthwave'],
+    '23701127': ['80s Pop', 'Electronic', 'Synthwave'],
+    '23845815': ['Electronic', 'Indie', 'Synthwave'],
+    '24017418': ['Electronic', 'Indie', 'Synthwave'],
+    '24047819': ['Pop', 'Synth-pop', 'Synthwave'],
+    '24082291': ['Breakbeat', 'Dubstep', 'Electronic'],
+    '24097008': ['Electronic', 'Indie', 'Synthwave'],
+    '24140060': ['Electronic', 'Future bass hop', 'Trap'],
+    '24147773': ['Beat', 'Electronic', 'House'],
+    '24175250': ['Electronic', 'Indie', 'Trap'],
+    '24198649': ['Electronic', 'Synthwave', 'Trap'],
+    '24225531': ['Club', 'Electronic', 'Pop / Hip Hop'],
+    '24233863': ['Drum & Bass', 'Dubstep', 'Electronic'],
+    '24276595': ['Drum & Bass', 'Electronic', 'Trap'],
+};
+
+export function getOfficialBeatStarsGenres(trackId: string) {
+    return beatStarsGenresByTrackId[trackId] || [];
+}
+
+export const officialBeatStarsGenreOptions = Object.entries(
+    Object.values(beatStarsGenresByTrackId)
+        .flat()
+        .reduce<Record<string, number>>((counts, genre) => {
+            counts[genre] = (counts[genre] || 0) + 1;
+            return counts;
+        }, {}),
+    )
+    .map(([label, count]) => ({
+        id: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        label,
+        count,
+    }))
+    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+
+/**
+ * The official API labels are intentionally kept separate from the visual
+ * "world" used by VGP. A world is an editorial navigation aid, never a claim
+ * that replaces BeatStars' genre taxonomy.
+ *
+ * Important invariant: any world containing the word "Trap" is only returned
+ * when the official BeatStars genre array contains "Trap". Titles and local
+ * marketing copy may mention trap, but they do not create a trap classification.
+ */
+export type EditorialBeatWorld =
+    | 'Cyberpunk Phonk'
+    | 'Cyberpunk Trap'
+    | 'Synthwave Trap'
+    | 'Synthwave Drill'
+    | 'Synthwave / Jersey Club'
+    | 'Synthwave / House'
+    | 'Synthwave'
+    | 'Drill Trap'
+    | 'Drill / Jersey Club'
+    | 'Drill'
+    | 'Jersey Club'
+    | 'House'
+    | 'Bass / Electronic'
+    | 'Electronic'
+    | 'Trap'
+    | 'Hip Hop'
+    | 'R&B'
+    | 'Pop'
+    | 'Alternative';
+
+export type EditorialWorldEvidence = 'official-genre' | 'official-tag' | 'needs-review';
+
+export interface OfficialBeatStarsTrackMetadata {
+    bpm: number | null;
+    key: string | null;
+    duration: number | null;
+    genres: readonly string[];
+    tags: readonly string[];
+}
+
+export interface BeatEditorialClassification {
+    /** BeatStars' taxonomy exactly as returned by the official metadata API. */
+    officialGenres: readonly string[];
+    /** Public BeatStars tags exactly as returned by the official metadata API. */
+    officialTags: readonly string[];
+    /** VGP visual/filtering world, derived from the official fields above. */
+    editorialWorld: EditorialBeatWorld;
+    /** Why this navigation label is safe to show. */
+    evidence: readonly EditorialWorldEvidence[];
+    /** Broad metadata only: keep editorial claims conservative until human audio review. */
+    requiresHumanReview: boolean;
+}
+
+const beatStarsFilterIndex = beatStarsFilterIndexJson as Record<string, OfficialBeatStarsTrackMetadata>;
+
+function hasValue(values: readonly string[], expected: string) {
+    return values.some((value) => value.toLocaleLowerCase('en-US') === expected.toLocaleLowerCase('en-US'));
+}
+
+function hasAnyValue(values: readonly string[], expected: readonly string[]) {
+    return expected.some((value) => hasValue(values, value));
+}
+
+function classifyEditorialWorld(metadata: OfficialBeatStarsTrackMetadata): BeatEditorialClassification {
+    const officialGenres = metadata.genres;
+    const officialTags = metadata.tags;
+    const hasGenre = (value: string) => hasValue(officialGenres, value);
+    const hasTag = (value: string) => hasValue(officialTags, value);
+    const hasTrap = hasGenre('Trap');
+    const hasSynthwave = hasGenre('Synthwave');
+    const hasDrill = hasGenre('Drill');
+    const hasJerseyClub = hasGenre('Jersey club');
+    const hasHouse = hasGenre('House');
+    const isCyberpunk = hasTag('cyberpunk');
+    const isPhonk = hasTag('phonk');
+
+    const withEvidence = (
+        editorialWorld: EditorialBeatWorld,
+        evidence: readonly EditorialWorldEvidence[],
+        requiresHumanReview = false,
+    ): BeatEditorialClassification => ({
+        officialGenres,
+        officialTags,
+        editorialWorld,
+        evidence,
+        requiresHumanReview,
+    });
+
+    // All combinations below have the precise official genre required by their label.
+    if (isCyberpunk && isPhonk) return withEvidence('Cyberpunk Phonk', ['official-tag']);
+    if (isCyberpunk && hasTrap) return withEvidence('Cyberpunk Trap', ['official-genre', 'official-tag']);
+    if (hasSynthwave && hasTrap) return withEvidence('Synthwave Trap', ['official-genre']);
+    if (hasSynthwave && hasDrill) return withEvidence('Synthwave Drill', ['official-genre']);
+    if (hasSynthwave && hasJerseyClub) return withEvidence('Synthwave / Jersey Club', ['official-genre']);
+    if (hasSynthwave && hasHouse) return withEvidence('Synthwave / House', ['official-genre']);
+    if (hasSynthwave) return withEvidence('Synthwave', ['official-genre']);
+    if (hasDrill && hasTrap) return withEvidence('Drill Trap', ['official-genre']);
+    if (hasDrill && hasJerseyClub) return withEvidence('Drill / Jersey Club', ['official-genre']);
+    if (hasDrill) return withEvidence('Drill', ['official-genre']);
+    if (hasJerseyClub) return withEvidence('Jersey Club', ['official-genre']);
+    if (hasHouse) return withEvidence('House', ['official-genre']);
+    if (hasAnyValue(officialGenres, ['Drum & Bass', 'Dubstep', 'Breakbeat', 'Hardcore'])) {
+        return withEvidence('Bass / Electronic', ['official-genre']);
+    }
+    if (hasTrap) return withEvidence('Trap', ['official-genre']);
+    if (hasGenre('R&B') || hasGenre('New Soul')) return withEvidence('R&B', ['official-genre']);
+    if (hasGenre('Hip Hop') || hasGenre('Alternative Hip Hop') || hasGenre('Pop Rap')) {
+        return withEvidence('Hip Hop', ['official-genre']);
+    }
+    if (hasAnyValue(officialGenres, ['Pop', '80s Pop', 'Dance-pop', 'Electro Pop', 'K_Pop', 'J-Pop', 'Pop / Electronic', 'Pop / Hip Hop', 'Pop / R&B'])) {
+        return withEvidence('Pop', ['official-genre']);
+    }
+    if (hasAnyValue(officialGenres, ['Electronic', 'EDM', 'Dance', 'Trance', 'Techno', '2 Step'])) {
+        return withEvidence('Electronic', ['official-genre']);
+    }
+
+    return withEvidence('Alternative', ['needs-review'], true);
+}
+
+/**
+ * Canonical classification for every track with extracted BeatStars metadata.
+ * Do not use BeatProduct.primaryGenre for factual BeatStars filters or facts.
+ */
+export const beatStarsEditorialByTrackId: Record<string, BeatEditorialClassification> = Object.fromEntries(
+    Object.entries(beatStarsFilterIndex).map(([trackId, metadata]) => [trackId, classifyEditorialWorld(metadata)]),
+);
+
+export function getBeatEditorialClassification(trackId: string): BeatEditorialClassification | undefined {
+    return beatStarsEditorialByTrackId[trackId];
+}
+
+export function getEditorialBeatWorld(trackId: string): EditorialBeatWorld | undefined {
+    return getBeatEditorialClassification(trackId)?.editorialWorld;
+}
+
+/** Editor-facing navigation options. The factual genre selector should use officialBeatStarsGenreOptions instead. */
+export const editorialBeatWorldOptions = Object.entries(
+    Object.values(beatStarsEditorialByTrackId).reduce<Record<string, number>>((counts, classification) => {
+        counts[classification.editorialWorld] = (counts[classification.editorialWorld] || 0) + 1;
+        return counts;
+    }, {}),
+)
+    .map(([label, count]) => ({
+        id: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        label: label as EditorialBeatWorld,
+        count,
+    }))
+    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+
+/** Tracks with only broad/unmappable official metadata. Keep them out of narrowly named worlds. */
+export const beatStarsTracksRequiringEditorialReview = Object.entries(beatStarsEditorialByTrackId)
+    .filter(([, classification]) => classification.requiresHumanReview)
+    .map(([trackId]) => trackId);
+
+/** Runtime/data guard used by catalog validation and extraction checks. */
+export function validateBeatStarsClassificationCoverage(trackIds: readonly string[]) {
+    const missing = trackIds.filter((trackId) => !beatStarsEditorialByTrackId[trackId]);
+    const unsupportedTrapWorlds = trackIds.filter((trackId) => {
+        const classification = beatStarsEditorialByTrackId[trackId];
+        return Boolean(
+            classification?.editorialWorld.includes('Trap') && !hasValue(classification.officialGenres, 'Trap'),
+        );
+    });
+
+    return {
+        total: trackIds.length,
+        covered: trackIds.length - missing.length,
+        missing,
+        unsupportedTrapWorlds,
+        requiresHumanReview: trackIds.filter((trackId) => beatStarsEditorialByTrackId[trackId]?.requiresHumanReview),
+    };
+}
