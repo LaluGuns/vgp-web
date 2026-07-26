@@ -12,6 +12,7 @@ import {
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { catalogCredentials } from '@/lib/vgp-ecosystem';
 import { categories, beatsCatalog } from '@/lib/catalog';
+import { getOfficialBeatStarsGenres, officialBeatStarsGenreOptions } from '@/lib/catalog/beatstars-genre-index';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
@@ -210,6 +211,10 @@ const exclusiveBenefits = {
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
 const PAGE_SIZE = 24;
 
+function normalizeGenreId(value: string) {
+    return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 const catalogCopy = {
     'en-US': {
         search: 'Search title, genre, or mood',
@@ -224,6 +229,8 @@ const catalogCopy = {
         next: 'Next',
         scrollGenresLeft: 'Show previous genres',
         scrollGenresRight: 'Show more genres',
+        signatureGenres: 'VGP sound tags',
+        officialGenres: 'BeatStars genres',
         page: (current: number, total: number) => `Page ${current} of ${total}`,
     },
     'ja-JP': {
@@ -239,6 +246,8 @@ const catalogCopy = {
         next: '次へ',
         scrollGenresLeft: '前のジャンルを表示',
         scrollGenresRight: '次のジャンルを表示',
+        signatureGenres: 'VGPサウンドタグ',
+        officialGenres: 'BeatStarsジャンル',
         page: (current: number, total: number) => `${current} / ${total} ページ`,
     },
     'de-DE': {
@@ -254,6 +263,8 @@ const catalogCopy = {
         next: 'Weiter',
         scrollGenresLeft: 'Vorherige Genres anzeigen',
         scrollGenresRight: 'Weitere Genres anzeigen',
+        signatureGenres: 'VGP-Sound-Tags',
+        officialGenres: 'BeatStars-Genres',
         page: (current: number, total: number) => `Seite ${current} von ${total}`,
     },
 } as const;
@@ -277,22 +288,36 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
         container.scrollLeft += direction === 'left' ? -260 : 260;
     };
 
-    const genresList = [
-        { id: 'all', label: t.filterAll },
-        { id: 'cyberpunk-trap', label: 'Cyberpunk Trap' },
-        { id: 'cyberpunk-phonk', label: 'Cyberpunk Phonk' },
-        { id: 'synthwave-trap', label: 'Synthwave Trap' },
-        { id: 'drill', label: 'Drill' },
-        { id: 'house', label: 'House' },
-        { id: 'lo-fi', label: 'Lo-fi' },
-        { id: 'r&b', label: 'R&B' },
+    const signatureGenres = [
+        { id: 'signature:cyberpunk-trap', label: 'Cyberpunk Trap' },
+        { id: 'signature:cyberpunk-phonk', label: 'Cyberpunk Phonk' },
+        { id: 'signature:synthwave-trap', label: 'Synthwave Trap' },
+        { id: 'signature:retro-synth', label: 'Retro Synth' },
+        { id: 'signature:drift-phonk', label: 'Drift Phonk' },
+        { id: 'signature:drill', label: 'Drill' },
+        { id: 'signature:house', label: 'House' },
+        { id: 'signature:lo-fi', label: 'Lo-fi' },
+        { id: 'signature:r-b', label: 'R&B' },
+    ];
+    const genreSections = [
+        { label: catalogText.signatureGenres, genres: signatureGenres },
+        {
+            label: catalogText.officialGenres,
+            genres: officialBeatStarsGenreOptions.map((genre) => ({
+                id: `official:${genre.id}`,
+                label: `${genre.label} (${genre.count})`,
+                themeLabel: genre.label,
+            })),
+        },
     ];
 
     const filteredBeats = useMemo(() => beatsCatalog.filter((beat) => {
-        const genreId = selectedGenre.toLowerCase();
+        const officialGenres = getOfficialBeatStarsGenres(beat.beatstarsTrackId);
         const matchesGenre = selectedGenre === 'all' || (
-            beat.primaryGenre.toLowerCase().replace(/ /g, '-').includes(genreId) ||
-            beat.subgenres.some((subgenre) => subgenre.toLowerCase().replace(/ /g, '-').includes(genreId))
+            selectedGenre.startsWith('official:')
+                ? officialGenres.some((genre) => `official:${normalizeGenreId(genre)}` === selectedGenre)
+                : [beat.primaryGenre, ...beat.subgenres, ...beat.tags]
+                    .some((genre) => `signature:${normalizeGenreId(genre)}` === selectedGenre)
         );
         const normalizedQuery = query.trim().toLowerCase();
         const matchesQuery = !normalizedQuery || [
@@ -301,6 +326,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
             ...beat.subgenres,
             ...beat.moods,
             ...beat.tags,
+            ...officialGenres,
         ].some((value) => value.toLowerCase().includes(normalizedQuery));
 
         return matchesGenre && matchesQuery;
@@ -465,27 +491,49 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                                     </button>
                                     <div ref={genreScrollRef} className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto scroll-smooth pb-1 pr-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                                        {genresList.map((genre) => {
-                                            const theme = getGenreTheme(genre.label);
-                                            return (
-                                                <button
-                                                    key={genre.id}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setSelectedGenre(genre.id);
-                                                        setCurrentPage(1);
-                                                    }}
-                                                    className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
-                                                        selectedGenre === genre.id
-                                                            ? theme.filter
-                                                            : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
-                                                    }`}
-                                                >
-                                                    <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />
-                                                    {genre.label}
-                                                </button>
-                                            );
-                                        })}
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setSelectedGenre('all');
+                                                setCurrentPage(1);
+                                            }}
+                                            className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
+                                                selectedGenre === 'all'
+                                                    ? getGenreTheme(t.filterAll).filter
+                                                    : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+                                            }`}
+                                        >
+                                            <span className={`h-1.5 w-1.5 rounded-full ${getGenreTheme(t.filterAll).dot}`} aria-hidden="true" />
+                                            {t.filterAll}
+                                        </button>
+                                        {genreSections.map((section) => (
+                                            <div key={section.label} className="flex items-center gap-2">
+                                                <span className="ml-1 shrink-0 border-l border-white/10 pl-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">
+                                                    {section.label}
+                                                </span>
+                                                {section.genres.map((genre) => {
+                                                    const theme = getGenreTheme('themeLabel' in genre ? genre.themeLabel : genre.label);
+                                                    return (
+                                                        <button
+                                                            key={genre.id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setSelectedGenre(genre.id);
+                                                                setCurrentPage(1);
+                                                            }}
+                                                            className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
+                                                                selectedGenre === genre.id
+                                                                    ? theme.filter
+                                                                    : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+                                                            }`}
+                                                        >
+                                                            <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />
+                                                            {genre.label}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        ))}
                                     </div>
                                     <button
                                         type="button"
