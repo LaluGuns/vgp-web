@@ -1,16 +1,18 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ArrowDown, ExternalLink, ShoppingBag } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { CategoryDef, BeatProduct } from '@/lib/catalog';
-import { beatStarsStoreUrl } from '@/lib/beatstars';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
 import { getGenreTheme } from '@/lib/genre-theme';
+import { getEditorialBeatWorld } from '@/lib/catalog/beatstars-genre-index';
 import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
+import BeatStarsCheckoutModal from './BeatStarsCheckoutModal';
 
 interface CategoryClientProps {
     category: CategoryDef;
@@ -21,26 +23,37 @@ interface CategoryClientProps {
 const categoryCopy = {
     'en-US': {
         home: 'Home', beats: 'Beats', muted: 'Built for hard hooks and darker records.',
-        storeDescription: 'Want the whole catalog in one place? Open the official BeatStars store. Every track below is ready to audition here first.',
-        storeCta: 'Open full catalog', available: (count: number) => `${count} tracks ready to audition`, details: 'License details', buy: (price: string) => `License from ${price}`,
+        storeDescription: 'Every track below is ready to audition. When one fits, open the official BeatStars cart and complete the license without leaving this site.',
+        storeCta: 'Browse these beats', available: (count: number) => `${count} tracks ready to audition`, details: 'License details', buy: (price: string) => `License here · ${price}`,
         sound: 'Sound character', vocal: 'Recommended vocal fit', licensingTitle: 'Need clear licensing terms?', licensingSub: 'Compare MP3, WAV, Stems, and exclusive-license availability before you buy.', licensingCta: 'Read licensing guide',
     },
     'ja-JP': {
         home: 'ホーム', beats: 'ビート', muted: '強いフックとダークな世界観のために。',
-        storeDescription: '全カタログをまとめて見るなら、BeatStars公式ストアへ。下の全曲はここで試聴できます。',
-        storeCta: '全カタログを開く', available: (count: number) => `試聴できる${count}曲`, details: 'ライセンス詳細', buy: (price: string) => `${price}からライセンス`,
+        storeDescription: '下の全曲を試聴できます。気に入った曲は、このサイトを離れずBeatStars公式カートでライセンス購入できます。',
+        storeCta: 'このジャンルを見る', available: (count: number) => `試聴できる${count}曲`, details: 'ライセンス詳細', buy: (price: string) => `ここで購入 · ${price}`,
         sound: 'サウンドの特徴', vocal: 'おすすめのボーカルスタイル', licensingTitle: 'ライセンス条件を確認しますか？', licensingSub: '購入前にMP3、WAV、ステム、独占ライセンスの提供状況を比較できます。', licensingCta: 'ライセンスガイドを見る',
     },
     'de-DE': {
         home: 'Startseite', beats: 'Beats', muted: 'Für harte Hooks und dunklere Records.',
-        storeDescription: 'Du willst den ganzen Katalog an einem Ort? Öffne den offiziellen BeatStars-Store. Jeden Track unten kannst du zuerst hier anhören.',
-        storeCta: 'Gesamten Katalog öffnen', available: (count: number) => `${count} Tracks zum Anhören`, details: 'Lizenzdetails', buy: (price: string) => `Lizenz ab ${price}`,
+        storeDescription: 'Jeden Track unten kannst du anhören. Wenn einer passt, öffne den offiziellen BeatStars-Warenkorb und lizenziere ihn, ohne diese Seite zu verlassen.',
+        storeCta: 'Diese Beats ansehen', available: (count: number) => `${count} Tracks zum Anhören`, details: 'Lizenzdetails', buy: (price: string) => `Hier lizenzieren · ${price}`,
         sound: 'Sound-Charakter', vocal: 'Empfohlener Vocal-Stil', licensingTitle: 'Klare Lizenzbedingungen?', licensingSub: 'Vergleiche MP3, WAV, Stems und die Verfügbarkeit einer Exklusivlizenz vor dem Kauf.', licensingCta: 'Lizenzguide lesen',
     },
 } as const;
 
 export default function CategoryClient({ category, beats, locale = 'en-US' }: CategoryClientProps) {
     const text = categoryCopy[locale];
+    const [checkoutOpen, setCheckoutOpen] = useState(false);
+    const [checkoutBeatSelections, setCheckoutBeatSelections] = useState<Array<{ trackId: string; title: string; productUrl: string }>>([]);
+    const categoryTheme = getGenreTheme(category.primaryGenre);
+    const openCheckout = (selectedBeats: BeatProduct[] = []) => {
+        setCheckoutBeatSelections(selectedBeats.map((beat) => ({
+            trackId: beat.beatstarsTrackId,
+            title: beat.title,
+            productUrl: beat.beatstarsProductUrl,
+        })));
+        setCheckoutOpen(true);
+    };
     const getLocalePath = (path: string) => {
         if (locale === 'ja-JP') return `/ja-JP${path}`;
         if (locale === 'de-DE') return `/de-DE${path}`;
@@ -54,7 +67,7 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
 
     return (
         <PageTransition>
-            <article className="editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24">
+            <article className={`editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24 ${categoryTheme.world}`}>
                 <div className="mx-auto mb-5 flex max-w-5xl items-center justify-between px-6">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
                         <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
@@ -74,8 +87,8 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                 </div>
 
                 <SectionShell id="category-intro" className="!py-6 sm:!py-8 lg:!py-10">
-                    <div className="mx-auto max-w-5xl overflow-hidden rounded-[1.5rem] border border-white/[0.1] bg-[linear-gradient(135deg,rgba(8,27,39,0.92),rgba(3,10,15,0.98))] px-5 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.2)] sm:px-8 sm:py-9">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-200/65">
+                    <div className={`mx-auto max-w-5xl overflow-hidden rounded-[1.5rem] border bg-[linear-gradient(135deg,rgba(8,27,39,0.92),rgba(3,10,15,0.98))] px-5 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.2)] sm:px-8 sm:py-9 ${categoryTheme.surface}`}>
+                        <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${categoryTheme.tag}`}>
                             VGP Beat Store / {category.primaryGenre}
                         </p>
                         <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -99,15 +112,14 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                         <p className="max-w-2xl text-sm leading-6 text-white/65">
                             {text.storeDescription}
                         </p>
-                        <a
-                            href={beatStarsStoreUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
+                            type="button"
+                            onClick={() => document.getElementById('matching-beats')?.scrollIntoView({ behavior: 'smooth' })}
                             className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-sky-200/30 bg-sky-300/[0.08] px-4 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.16]"
                         >
                             {text.storeCta}
-                            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                        </a>
+                            <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
+                        </button>
                     </div>
                 </SectionShell>
 
@@ -120,7 +132,8 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
 
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {beats.map((beat) => {
-                                const theme = getGenreTheme(beat.primaryGenre);
+                                const editorialWorld = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
+                                const theme = getGenreTheme(editorialWorld);
                                 return (
                                     <m.article
                                         key={beat.id}
@@ -128,11 +141,11 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                                         initial="hidden"
                                         whileInView="visible"
                                         viewport={{ once: true }}
-                                        className={`group relative flex min-h-[20.5rem] flex-col gap-3 overflow-hidden rounded-2xl border bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] hover:-translate-y-0.5 sm:p-5 ${theme.card} ${theme.edge}`}
+                                        className={`group relative flex min-h-[20.5rem] flex-col gap-3 overflow-hidden rounded-2xl border p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] hover:-translate-y-0.5 sm:p-5 ${theme.world} ${theme.card} ${theme.edge}`}
                                     >
                                         <div className="h-[8.25rem]">
                                             <div className={`flex items-center justify-between text-[11px] font-semibold ${theme.tag}`}>
-                                                <span className="flex items-center gap-2 uppercase tracking-wider"><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{beat.primaryGenre}</span>
+                                                <span className="flex items-center gap-2 uppercase tracking-wider"><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{editorialWorld}</span>
                                                 <span className="font-mono text-white/40">#{beat.beatstarsTrackId}</span>
                                             </div>
                                             <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
@@ -157,15 +170,14 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                                                 {text.details}
                                                 <ExternalLink className="h-3 w-3" aria-hidden="true" />
                                             </Link>
-                                            <a
-                                                href={beat.beatstarsProductUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
+                                            <button
+                                                type="button"
+                                                onClick={() => openCheckout([beat])}
                                                 className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                             >
                                                 {text.buy(beat.licenses[0]?.price || '')}
-                                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                                            </a>
+                                                <ShoppingBag className="h-3 w-3" aria-hidden="true" />
+                                            </button>
                                         </div>
                                     </m.article>
                                 );
@@ -207,6 +219,13 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                         </Link>
                     </div>
                 </SectionShell>
+
+                <BeatStarsCheckoutModal
+                    open={checkoutOpen}
+                    onClose={() => setCheckoutOpen(false)}
+                    locale={locale}
+                    beatSelections={checkoutBeatSelections}
+                />
             </article>
         </PageTransition>
     );

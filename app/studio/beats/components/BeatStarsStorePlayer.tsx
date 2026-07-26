@@ -84,7 +84,7 @@ export default function BeatStarsStorePlayer({ locale = 'en-US' }: { locale?: Be
                             title={`${text.eyebrow}: Virzy Guns`}
                             className="block h-[620px] w-full border-0 sm:h-[760px]"
                             loading="lazy"
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture; payment"
                             referrerPolicy="strict-origin-when-cross-origin"
                             onError={() => setHasFailed(true)}
                         />

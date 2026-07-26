@@ -1,23 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Activity, Clock3, Gauge, KeyRound, Tag } from 'lucide-react';
+import { Clock3, Gauge, KeyRound, Tag } from 'lucide-react';
 import { formatTrackTime, getBeatStarsTrack, type BeatStarsTrackData } from './beatstars-track-data';
 
 type BeatLocale = 'en-US' | 'ja-JP' | 'de-DE';
 
 const copy = {
     'en-US': {
-        label: 'Verified BeatStars track data', bpm: 'BPM', key: 'Key', length: 'Length', genres: 'Genres', plays: 'BeatStars plays',
-        loading: 'Loading verified track data',
+        label: 'Track details', bpm: 'BPM', key: 'Key', length: 'Length', genres: 'Genres',
+        loading: 'Loading track details',
     },
     'ja-JP': {
-        label: 'BeatStars確認済みトラックデータ', bpm: 'BPM', key: 'キー', length: '再生時間', genres: 'ジャンル', plays: 'BeatStarsでの再生',
-        loading: '確認済みトラックデータを読み込み中',
+        label: 'トラック詳細', bpm: 'BPM', key: 'キー', length: '再生時間', genres: 'ジャンル',
+        loading: 'トラック詳細を読み込み中',
     },
     'de-DE': {
-        label: 'Verifizierte BeatStars-Trackdaten', bpm: 'BPM', key: 'Tonart', length: 'Länge', genres: 'Genres', plays: 'BeatStars-Wiedergaben',
-        loading: 'Verifizierte Trackdaten werden geladen',
+        label: 'Trackdetails', bpm: 'BPM', key: 'Tonart', length: 'Länge', genres: 'Genres',
+        loading: 'Trackdetails werden geladen',
     },
 } as const;
 
@@ -58,19 +58,9 @@ export default function BeatStarsTrackMeta({ trackId, locale }: BeatStarsTrackMe
     }
 
     const genres = track.metadata.genres.slice(0, 2).join(' · ');
-    const activity = track.activity.plays ? new Intl.NumberFormat(locale === 'ja-JP' ? 'ja-JP' : locale).format(track.activity.plays) : undefined;
-
     return (
         <section className="rounded-2xl border border-white/[0.1] bg-[#041018]/75 p-4 sm:p-5" aria-label={text.label}>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-200/75">{text.label}</p>
-                {activity ? (
-                    <span className="inline-flex items-center gap-1.5 text-xs text-white/55">
-                        <Activity className="h-3.5 w-3.5 text-sky-200/70" aria-hidden="true" />
-                        {activity} {text.plays}
-                    </span>
-                ) : null}
-            </div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-200/75">{text.label}</p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 {track.metadata.bpm ? <Metric icon={Gauge} label={text.bpm} value={String(track.metadata.bpm)} /> : null}
                 {track.metadata.key ? <Metric icon={KeyRound} label={text.key} value={track.metadata.key} /> : null}

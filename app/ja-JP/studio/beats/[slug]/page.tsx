@@ -16,6 +16,10 @@ import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClie
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
+import {
+    getEditorialBeatWorld,
+    getOfficialBeatStarsGenres,
+} from '@/lib/catalog/beatstars-genre-index';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -59,13 +63,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const beat = getBeatBySlug(slug);
     if (beat) {
         const description = getBeatMetaDescription(beat, 'ja-JP');
+        const editorialWorld = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
+        const officialGenres = getOfficialBeatStarsGenres(beat.beatstarsTrackId);
         return {
-            title: beat.localizedTitle?.['ja-JP'] || `${beat.title} | ${beat.primaryGenre} ビート`,
+            title: beat.localizedTitle?.['ja-JP'] || `${beat.title} | ${editorialWorld} ビート`,
             description,
             robots: beat.seoStatus === 'indexable' ? { index: true, follow: true } : { index: false, follow: true },
             keywords: [
                 beat.title,
-                beat.primaryGenre,
+                editorialWorld,
+                ...officialGenres,
                 ...beat.tags,
                 'ビート販売',
                 'Virzy Guns',

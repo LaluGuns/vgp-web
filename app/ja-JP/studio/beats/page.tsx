@@ -3,34 +3,10 @@ import BeatsClient from '../../../studio/beats/BeatsClient';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
-const japaneseStoreMetadata = {
-    title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
-    description: 'Virzy Guns 公式のサイバーパンクトラップ、フォンク、シンセウェーブ、808インストゥルメンタル。プレビューを聴き、BeatStars でライセンスを選ぶ。',
-    openGraph: {
-        title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
-        description: 'Virzy Guns 公式のインストゥルメンタルを聴き、ライセンスを比較して BeatStars で購入。',
-        url: `${SITE_URL}/ja-JP/studio/beats`,
-        siteName: 'Virzy Guns Production',
-        images: [{
-            url: `${SITE_URL}/branding/vgp-logo-chrome-full.png`,
-            width: 1024,
-            height: 1024,
-            alt: 'Virzy Guns Production Beat Store',
-        }],
-        type: 'website' as const,
-    },
-    twitter: {
-        card: 'summary_large_image' as const,
-        title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
-        description: 'Virzy Guns 公式インストゥルメンタルのプレビューとライセンス。',
-        images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
-    },
-};
-
 export const metadata: Metadata = {
-    title: 'ビート販売 | サイバーパンクトラップ、フォンク＆シンセウェーブ | Virzy Guns',
+    title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
     description:
-        'Virzy Gunsによる公式インストゥルメンタルのライセンス購入。サイバーパンクトラップ、フォンク、シンセウェーブ、重厚な808ベース。',
+        'Virzy Guns 公式のサイバーパンクトラップ、フォンク、シンセウェーブ、808インストゥルメンタル。プレビューを聴き、BeatStars でライセンスを選ぶ。',
     keywords: [
         'ビート購入',
         'トラップビート',
@@ -49,8 +25,8 @@ export const metadata: Metadata = {
         },
     },
     openGraph: {
-        title: 'ビート販売 | Virzy Guns Production',
-        description: 'Virzy Guns制作の公式サイバーパンクトラップ、フォンク、シンセウェーブビートのライセンス購入。',
+        title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
+        description: 'Virzy Guns 公式のインストゥルメンタルを聴き、ライセンスを比較して BeatStars で購入。',
         url: `${SITE_URL}/ja-JP/studio/beats`,
         siteName: 'Virzy Guns Production',
         images: [
@@ -63,7 +39,12 @@ export const metadata: Metadata = {
         ],
         type: 'website',
     },
-    ...japaneseStoreMetadata,
+    twitter: {
+        card: 'summary_large_image',
+        title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
+        description: 'Virzy Guns 公式インストゥルメンタルのプレビューとライセンス。',
+        images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
+    },
 };
 
 const hubSchema = {

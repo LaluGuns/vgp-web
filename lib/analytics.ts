@@ -15,6 +15,11 @@ export interface TrackBeatEventParams {
     currency?: string;
     sourcePage?: string;
     destinationUrl?: string;
+    action?: string;
+    beatIds?: string;
+    beatCount?: number;
+    preset?: string;
+    vibe?: string;
 }
 
 export function trackBeatEvent(eventName: string, params: TrackBeatEventParams = {}) {

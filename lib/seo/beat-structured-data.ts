@@ -1,4 +1,5 @@
 import { BeatProduct, CategoryDef } from '@/lib/catalog';
+import { getOfficialBeatStarsGenres } from '@/lib/catalog/beatstars-genre-index';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -82,7 +83,10 @@ export function generateBeatProductSchema(beat: BeatProduct, locale: 'en-US' | '
             url: `${SITE_URL}/about`,
         },
         ...(beat.durationSeconds ? { duration: `PT${beat.durationSeconds}S` } : {}),
-        genre: [beat.primaryGenre, ...beat.subgenres],
+        // Schema exposes BeatStars' multi-genre taxonomy, not a legacy VGP label.
+        genre: getOfficialBeatStarsGenres(beat.beatstarsTrackId).length > 0
+            ? getOfficialBeatStarsGenres(beat.beatstarsTrackId)
+            : [beat.primaryGenre, ...beat.subgenres],
     });
 
     // Always include BreadcrumbList schema

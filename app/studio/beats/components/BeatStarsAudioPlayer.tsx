@@ -20,7 +20,7 @@ interface BeatStarsAudioPlayerProps {
 
 const copy = {
     'en-US': {
-        label: 'BeatStars preview',
+        label: 'Preview',
         loading: 'Loading preview',
         unavailable: 'Preview unavailable',
         external: 'Open on BeatStars',
@@ -29,7 +29,7 @@ const copy = {
         position: (title: string) => `${title} playback position`,
     },
     'ja-JP': {
-        label: '公式 BeatStars プレビュー',
+        label: '試聴',
         loading: 'プレビューを読み込み中',
         unavailable: 'プレビューを利用できません',
         external: 'BeatStars で開く',
@@ -38,7 +38,7 @@ const copy = {
         position: (title: string) => `${title}の再生位置`,
     },
     'de-DE': {
-        label: 'Offizielle BeatStars-Vorschau',
+        label: 'Vorschau',
         loading: 'Vorschau wird geladen',
         unavailable: 'Vorschau nicht verfügbar',
         external: 'Bei BeatStars öffnen',

@@ -7,6 +7,10 @@ import {
     generateLicensingSchema,
     generateHreflangs,
 } from '../seo/beat-structured-data';
+import {
+    getOfficialBeatStarsGenres,
+    validateBeatStarsClassificationCoverage,
+} from './beatstars-genre-index';
 
 export interface ValidationIssue {
     ruleId: number;
@@ -22,6 +26,37 @@ export function validateCatalogSuite(): ValidationIssue[] {
     const idMap = new Map<string, string>();
     const slugMap = new Map<string, string>();
     const trackIdMap = new Map<string, string>();
+
+    const classificationCoverage = validateBeatStarsClassificationCoverage(
+        beatsCatalog.map((beat) => beat.beatstarsTrackId),
+    );
+
+    if (classificationCoverage.missing.length > 0) {
+        issues.push({
+            ruleId: 24,
+            ruleName: 'missing-official-genre-classification',
+            severity: 'error',
+            message: `Missing official BeatStars classification for ${classificationCoverage.missing.join(', ')}`,
+        });
+    }
+
+    if (classificationCoverage.unsupportedTrapWorlds.length > 0) {
+        issues.push({
+            ruleId: 25,
+            ruleName: 'unsupported-editorial-trap-world',
+            severity: 'error',
+            message: `Editorial Trap world without official BeatStars Trap genre: ${classificationCoverage.unsupportedTrapWorlds.join(', ')}`,
+        });
+    }
+
+    if (classificationCoverage.requiresHumanReview.length > 0) {
+        issues.push({
+            ruleId: 26,
+            ruleName: 'broad-official-genre-needs-review',
+            severity: 'warning',
+            message: `Tracks retained in the Alternative world pending human audio review: ${classificationCoverage.requiresHumanReview.join(', ')}`,
+        });
+    }
 
     // Check catalog route collisions with categories or 'licensing'
     const reservedSlugs = new Set([...categories.map((c) => c.slug), 'licensing']);
@@ -195,6 +230,18 @@ export function validateCatalogSuite(): ValidationIssue[] {
                 severity: 'warning',
                 beatId: beat.id,
                 message: `Title "${beat.title}" contains 'phonk' but primaryGenre is 'Synthwave'`,
+            });
+        }
+
+        // 18. The stored official genre index must never drift from BeatStars metadata.
+        const officialGenres = getOfficialBeatStarsGenres(beat.beatstarsTrackId);
+        if (officialGenres.length === 0) {
+            issues.push({
+                ruleId: 18,
+                ruleName: 'missing-official-beatstars-genres',
+                severity: 'error',
+                beatId: beat.id,
+                message: `No official BeatStars genres indexed for ${beat.title}`,
             });
         }
 

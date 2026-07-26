@@ -1,3 +1,5 @@
+import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
+
 /**
  * Official multi-genre metadata extracted from the Virzy Guns BeatStars catalog.
  * Keep VGP signature sound tags separate: BeatStars genres describe platform
@@ -349,3 +351,176 @@ export const officialBeatStarsGenreOptions = Object.entries(
         count,
     }))
     .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+
+/**
+ * The official API labels are intentionally kept separate from the visual
+ * "world" used by VGP. A world is an editorial navigation aid, never a claim
+ * that replaces BeatStars' genre taxonomy.
+ *
+ * Important invariant: any world containing the word "Trap" is only returned
+ * when the official BeatStars genre array contains "Trap". Titles and local
+ * marketing copy may mention trap, but they do not create a trap classification.
+ */
+export type EditorialBeatWorld =
+    | 'Cyberpunk Phonk'
+    | 'Cyberpunk Trap'
+    | 'Synthwave Trap'
+    | 'Synthwave Drill'
+    | 'Synthwave / Jersey Club'
+    | 'Synthwave / House'
+    | 'Synthwave'
+    | 'Drill Trap'
+    | 'Drill / Jersey Club'
+    | 'Drill'
+    | 'Jersey Club'
+    | 'House'
+    | 'Bass / Electronic'
+    | 'Electronic'
+    | 'Trap'
+    | 'Hip Hop'
+    | 'R&B'
+    | 'Pop'
+    | 'Alternative';
+
+export type EditorialWorldEvidence = 'official-genre' | 'official-tag' | 'needs-review';
+
+export interface OfficialBeatStarsTrackMetadata {
+    bpm: number | null;
+    key: string | null;
+    duration: number | null;
+    genres: readonly string[];
+    tags: readonly string[];
+}
+
+export interface BeatEditorialClassification {
+    /** BeatStars' taxonomy exactly as returned by the official metadata API. */
+    officialGenres: readonly string[];
+    /** Public BeatStars tags exactly as returned by the official metadata API. */
+    officialTags: readonly string[];
+    /** VGP visual/filtering world, derived from the official fields above. */
+    editorialWorld: EditorialBeatWorld;
+    /** Why this navigation label is safe to show. */
+    evidence: readonly EditorialWorldEvidence[];
+    /** Broad metadata only: keep editorial claims conservative until human audio review. */
+    requiresHumanReview: boolean;
+}
+
+const beatStarsFilterIndex = beatStarsFilterIndexJson as Record<string, OfficialBeatStarsTrackMetadata>;
+
+function hasValue(values: readonly string[], expected: string) {
+    return values.some((value) => value.toLocaleLowerCase('en-US') === expected.toLocaleLowerCase('en-US'));
+}
+
+function hasAnyValue(values: readonly string[], expected: readonly string[]) {
+    return expected.some((value) => hasValue(values, value));
+}
+
+function classifyEditorialWorld(metadata: OfficialBeatStarsTrackMetadata): BeatEditorialClassification {
+    const officialGenres = metadata.genres;
+    const officialTags = metadata.tags;
+    const hasGenre = (value: string) => hasValue(officialGenres, value);
+    const hasTag = (value: string) => hasValue(officialTags, value);
+    const hasTrap = hasGenre('Trap');
+    const hasSynthwave = hasGenre('Synthwave');
+    const hasDrill = hasGenre('Drill');
+    const hasJerseyClub = hasGenre('Jersey club');
+    const hasHouse = hasGenre('House');
+    const isCyberpunk = hasTag('cyberpunk');
+    const isPhonk = hasTag('phonk');
+
+    const withEvidence = (
+        editorialWorld: EditorialBeatWorld,
+        evidence: readonly EditorialWorldEvidence[],
+        requiresHumanReview = false,
+    ): BeatEditorialClassification => ({
+        officialGenres,
+        officialTags,
+        editorialWorld,
+        evidence,
+        requiresHumanReview,
+    });
+
+    // All combinations below have the precise official genre required by their label.
+    if (isCyberpunk && isPhonk) return withEvidence('Cyberpunk Phonk', ['official-tag']);
+    if (isCyberpunk && hasTrap) return withEvidence('Cyberpunk Trap', ['official-genre', 'official-tag']);
+    if (hasSynthwave && hasTrap) return withEvidence('Synthwave Trap', ['official-genre']);
+    if (hasSynthwave && hasDrill) return withEvidence('Synthwave Drill', ['official-genre']);
+    if (hasSynthwave && hasJerseyClub) return withEvidence('Synthwave / Jersey Club', ['official-genre']);
+    if (hasSynthwave && hasHouse) return withEvidence('Synthwave / House', ['official-genre']);
+    if (hasSynthwave) return withEvidence('Synthwave', ['official-genre']);
+    if (hasDrill && hasTrap) return withEvidence('Drill Trap', ['official-genre']);
+    if (hasDrill && hasJerseyClub) return withEvidence('Drill / Jersey Club', ['official-genre']);
+    if (hasDrill) return withEvidence('Drill', ['official-genre']);
+    if (hasJerseyClub) return withEvidence('Jersey Club', ['official-genre']);
+    if (hasHouse) return withEvidence('House', ['official-genre']);
+    if (hasAnyValue(officialGenres, ['Drum & Bass', 'Dubstep', 'Breakbeat', 'Hardcore'])) {
+        return withEvidence('Bass / Electronic', ['official-genre']);
+    }
+    if (hasTrap) return withEvidence('Trap', ['official-genre']);
+    if (hasGenre('R&B') || hasGenre('New Soul')) return withEvidence('R&B', ['official-genre']);
+    if (hasGenre('Hip Hop') || hasGenre('Alternative Hip Hop') || hasGenre('Pop Rap')) {
+        return withEvidence('Hip Hop', ['official-genre']);
+    }
+    if (hasAnyValue(officialGenres, ['Pop', '80s Pop', 'Dance-pop', 'Electro Pop', 'K_Pop', 'J-Pop', 'Pop / Electronic', 'Pop / Hip Hop', 'Pop / R&B'])) {
+        return withEvidence('Pop', ['official-genre']);
+    }
+    if (hasAnyValue(officialGenres, ['Electronic', 'EDM', 'Dance', 'Trance', 'Techno', '2 Step'])) {
+        return withEvidence('Electronic', ['official-genre']);
+    }
+
+    return withEvidence('Alternative', ['needs-review'], true);
+}
+
+/**
+ * Canonical classification for every track with extracted BeatStars metadata.
+ * Do not use BeatProduct.primaryGenre for factual BeatStars filters or facts.
+ */
+export const beatStarsEditorialByTrackId: Record<string, BeatEditorialClassification> = Object.fromEntries(
+    Object.entries(beatStarsFilterIndex).map(([trackId, metadata]) => [trackId, classifyEditorialWorld(metadata)]),
+);
+
+export function getBeatEditorialClassification(trackId: string): BeatEditorialClassification | undefined {
+    return beatStarsEditorialByTrackId[trackId];
+}
+
+export function getEditorialBeatWorld(trackId: string): EditorialBeatWorld | undefined {
+    return getBeatEditorialClassification(trackId)?.editorialWorld;
+}
+
+/** Editor-facing navigation options. The factual genre selector should use officialBeatStarsGenreOptions instead. */
+export const editorialBeatWorldOptions = Object.entries(
+    Object.values(beatStarsEditorialByTrackId).reduce<Record<string, number>>((counts, classification) => {
+        counts[classification.editorialWorld] = (counts[classification.editorialWorld] || 0) + 1;
+        return counts;
+    }, {}),
+)
+    .map(([label, count]) => ({
+        id: label.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        label: label as EditorialBeatWorld,
+        count,
+    }))
+    .sort((left, right) => right.count - left.count || left.label.localeCompare(right.label));
+
+/** Tracks with only broad/unmappable official metadata. Keep them out of narrowly named worlds. */
+export const beatStarsTracksRequiringEditorialReview = Object.entries(beatStarsEditorialByTrackId)
+    .filter(([, classification]) => classification.requiresHumanReview)
+    .map(([trackId]) => trackId);
+
+/** Runtime/data guard used by catalog validation and extraction checks. */
+export function validateBeatStarsClassificationCoverage(trackIds: readonly string[]) {
+    const missing = trackIds.filter((trackId) => !beatStarsEditorialByTrackId[trackId]);
+    const unsupportedTrapWorlds = trackIds.filter((trackId) => {
+        const classification = beatStarsEditorialByTrackId[trackId];
+        return Boolean(
+            classification?.editorialWorld.includes('Trap') && !hasValue(classification.officialGenres, 'Trap'),
+        );
+    });
+
+    return {
+        total: trackIds.length,
+        covered: trackIds.length - missing.length,
+        missing,
+        unsupportedTrapWorlds,
+        requiresHumanReview: trackIds.filter((trackId) => beatStarsEditorialByTrackId[trackId]?.requiresHumanReview),
+    };
+}

@@ -16,6 +16,10 @@ import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClie
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
+import {
+    getEditorialBeatWorld,
+    getOfficialBeatStarsGenres,
+} from '@/lib/catalog/beatstars-genre-index';
 
 const SITE_URL = 'https://www.virzyguns.com';
 
@@ -60,13 +64,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (beat) {
         const title = beat.localizedTitle?.['de-DE'] || beat.title;
         const description = getBeatMetaDescription(beat, 'de-DE');
+        const editorialWorld = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
+        const officialGenres = getOfficialBeatStarsGenres(beat.beatstarsTrackId);
         return {
-            title: `${title} | ${beat.primaryGenre} Beat von Virzy Guns`,
+            title: `${title} | ${editorialWorld} Beat von Virzy Guns`,
             description,
             robots: beat.seoStatus === 'indexable' ? { index: true, follow: true } : { index: false, follow: true },
             keywords: [
                 beat.title,
-                beat.primaryGenre,
+                editorialWorld,
+                ...officialGenres,
                 ...beat.tags,
                 'Beats kaufen',
                 'Virzy Guns',
@@ -81,7 +88,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 },
             },
             openGraph: {
-                title: `${title} | ${beat.primaryGenre} Beat von Virzy Guns`,
+                title: `${title} | ${editorialWorld} Beat von Virzy Guns`,
                 description,
                 url: `${SITE_URL}/de-DE/studio/beats/${beat.slug}`,
                 siteName: 'Virzy Guns Production',
@@ -97,7 +104,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             },
             twitter: {
                 card: 'summary_large_image',
-                title: `${title} | ${beat.primaryGenre} Beat von Virzy Guns`,
+                title: `${title} | ${editorialWorld} Beat von Virzy Guns`,
                 description,
                 images: [beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`],
             },

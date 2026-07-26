@@ -1,0 +1,6340 @@
+{
+  "extractedAt": "2026-07-26T06:44:03.629Z",
+  "owner": "virzyguns",
+  "source": "https://core.prod.beatstars.net/graphql?op=getNewTrackV3",
+  "verifiedTrackCount": 325,
+  "successCount": 325,
+  "failureCount": 0,
+  "tracks": [
+    {
+      "trackId": "24276595",
+      "title": "HARDCORE PHONK",
+      "bpm": 90,
+      "key": "E♭M",
+      "duration": 235,
+      "genres": [
+        "Drum & Bass",
+        "Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "cyberpunk",
+        "trap",
+        "phonk"
+      ],
+      "plays": 304,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "24233863",
+      "title": "808 Danger Line - Cyberpunk Trap Type Beat",
+      "bpm": 90,
+      "key": "Fm",
+      "duration": 235,
+      "genres": [
+        "Drum & Bass",
+        "Dubstep",
+        "Electronic"
+      ],
+      "tags": [
+        "808 aggressive",
+        "cyberpunk",
+        "trap"
+      ],
+      "plays": 32,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "24225531",
+      "title": "808s and Dance (Nicki Minaj, Ice Spice, Doja Cat, Club)",
+      "bpm": 90,
+      "key": "Dm",
+      "duration": 235,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "Ice Spice",
+        "Nicki Minaj",
+        "Club Banger"
+      ],
+      "plays": 41,
+      "purchases": 0,
+      "likes": 0
+    },
+    {
+      "trackId": "24198649",
+      "title": "808 Commander - Hard 808 Type Beat, The Weeknd Playboi Carti",
+      "bpm": 90,
+      "key": "Cm",
+      "duration": 245,
+      "genres": [
+        "Electronic",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "playboi carti",
+        "the weeknd",
+        "ken carson"
+      ],
+      "plays": 26,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "24175250",
+      "title": "ENDLESS SACRIFICE - CYBERPUNK HARD 808 TRAP TYPE BEAT",
+      "bpm": 90,
+      "key": "Em",
+      "duration": 224,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Trap"
+      ],
+      "tags": [
+        "hard 808",
+        "cyberpunk",
+        "trap"
+      ],
+      "plays": 13,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "24147773",
+      "title": "BLADEPHONK 2098 - Cyberpunk Phonk Type Beat",
+      "bpm": 120,
+      "key": "Em",
+      "duration": 209,
+      "genres": [
+        "Beat",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "cyberpunk",
+        "house",
+        "phonk"
+      ],
+      "plays": 26,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "24140060",
+      "title": "SHOGUN’S DAUGHTER",
+      "bpm": 90,
+      "key": "Fm",
+      "duration": 224,
+      "genres": [
+        "Electronic",
+        "Future bass hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard 808",
+        "cyberpunk",
+        "trap"
+      ],
+      "plays": 23,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "24097008",
+      "title": "SYN808 - Cyberpunk Synthwave Trap Beat",
+      "bpm": 122,
+      "key": "B♭m",
+      "duration": 204,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "rap",
+        "cyberpunk synthwave",
+        "trap"
+      ],
+      "plays": 135,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "24082291",
+      "title": "CYBER RUNNER",
+      "bpm": 122,
+      "key": "Fm",
+      "duration": 204,
+      "genres": [
+        "Breakbeat",
+        "Dubstep",
+        "Electronic"
+      ],
+      "tags": [
+        "cyberpunk",
+        "electronic",
+        "synthwave"
+      ],
+      "plays": 128,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "24047819",
+      "title": "DESYNC - Cyberpunk Synthwave Type Beat",
+      "bpm": 122,
+      "key": "Fm",
+      "duration": 204,
+      "genres": [
+        "Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 143,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "24017418",
+      "title": "Christmas Synth",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave",
+        "christmas"
+      ],
+      "plays": 128,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "23845815",
+      "title": "Velvetpulse (Cyberpunk Retro-Futuristic Synthwave Beat)",
+      "bpm": 100,
+      "key": "Cm",
+      "duration": 178,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 19,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "23701127",
+      "title": "memory bloom (cyberpunk retro-futuristic synthwave beat)",
+      "bpm": 118,
+      "key": "Am",
+      "duration": 129,
+      "genres": [
+        "80s Pop",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro synthwave",
+        "synthwave",
+        "80s"
+      ],
+      "plays": 37,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "23690781",
+      "title": "NIGHTFLOWER (RETRO-FUTURISTIC SYNTHWAVE BEAT)",
+      "bpm": 112,
+      "key": "None",
+      "duration": 172,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "retro synthwave",
+        "synthwave"
+      ],
+      "plays": 30,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "23682668",
+      "title": "ZERO HURTZ (CYBERPUNK RETRO-FUTURISTIC SYNTHWAVE BEAT)",
+      "bpm": 106,
+      "key": "Cm",
+      "duration": 170,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retrowave",
+        "synthwave"
+      ],
+      "plays": 27,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "23671789",
+      "title": "EASECODE (CYBERPUNK RETRo-FUTURISTIC SYNTHWAVE BEAT)",
+      "bpm": 98,
+      "key": "B♭M",
+      "duration": 161,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retro-futuristic",
+        "synthwave"
+      ],
+      "plays": 28,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "23632641",
+      "title": "SILKGLITCH | CYBERPUNK RETRO-FUTURISTIC SYNTHWAVE BEAT",
+      "bpm": 104,
+      "key": "Cm",
+      "duration": 191,
+      "genres": [
+        "Electronic",
+        "Pop / Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retro futuristic",
+        "synthwave"
+      ],
+      "plays": 36,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "23632279",
+      "title": "GROOVECAINE | CYBERPUNK RETRO-FUTURISTIC SYNTHWAVE BEAT",
+      "bpm": 104,
+      "key": "Cm",
+      "duration": 188,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retro synthwave",
+        "synthwave"
+      ],
+      "plays": 24,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "23624295",
+      "title": "Joybreaker CYBERPUNK SYNTHWAVE BEAT",
+      "bpm": 90,
+      "key": "Cm",
+      "duration": 175,
+      "genres": [
+        "Electronic",
+        "Punk",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retro-futuristic",
+        "synthwave"
+      ],
+      "plays": 21,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "23613920",
+      "title": "FLOATSTATE (CYBERPUNK RETRO-FUTURISTIC SYNTHWAVE BEAT)",
+      "bpm": 150,
+      "key": "Cm",
+      "duration": 141,
+      "genres": [
+        "80s Pop",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro-futuristic synthwav",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 20,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "23279887",
+      "title": "NOVAPAIN (CYBERPUNK SYNTHWAVE)",
+      "bpm": 150,
+      "key": "Cm",
+      "duration": 157,
+      "genres": [
+        "Electronic",
+        "Rock",
+        "Synthwave"
+      ],
+      "tags": [
+        "rock",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 42,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "23135236",
+      "title": "Pleasurhythm",
+      "bpm": 165,
+      "key": "Cm",
+      "duration": 173,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "synthwave",
+        "pop rock"
+      ],
+      "plays": 43,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "22900772",
+      "title": "Obsession - Summer Deep House",
+      "bpm": 126,
+      "key": "Cm",
+      "duration": 193,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "deep house",
+        "house",
+        "edm"
+      ],
+      "plays": 50,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "22850391",
+      "title": "CARTEL CODEX [RAGE x TRAP] | type beat",
+      "bpm": 146,
+      "key": "E♭m",
+      "duration": 115,
+      "genres": [
+        "Hip Hop",
+        "Rage / Rage Beats",
+        "Trap"
+      ],
+      "tags": [
+        "playboi carti",
+        "rage",
+        "trap"
+      ],
+      "plays": 76,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "21646949",
+      "title": "SYNTHSTAR (Synthwave DRILL)",
+      "bpm": 141,
+      "key": "Gm",
+      "duration": 151,
+      "genres": [
+        "Drill",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro",
+        "synthwave",
+        "drill"
+      ],
+      "plays": 108,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "21646915",
+      "title": "City of Light (Synthwave DRILL)",
+      "bpm": 150,
+      "key": "B♭m",
+      "duration": 128,
+      "genres": [
+        "Drill",
+        "Hip Hop",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro",
+        "synthwave",
+        "drill"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 0
+    },
+    {
+      "trackId": "21646885",
+      "title": "Neon Drill (Synthwave DRILL)",
+      "bpm": 150,
+      "key": "Am",
+      "duration": 128,
+      "genres": [
+        "Drill",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro",
+        "synthwave",
+        "drill"
+      ],
+      "plays": 71,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "19817756",
+      "title": "CYBERCA$H",
+      "bpm": 171,
+      "key": "Gm",
+      "duration": 179,
+      "genres": [
+        "Electronic",
+        "Rap rock",
+        "Synthwave"
+      ],
+      "tags": [
+        "rap",
+        "cyberpunk",
+        "Phonk"
+      ],
+      "plays": 898,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "19572842",
+      "title": "PHONK RAPTOR",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 187,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Punk"
+      ],
+      "tags": [
+        "cyberpunk",
+        "Phonk"
+      ],
+      "plays": 39,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "19299471",
+      "title": "AUTOPILOT",
+      "bpm": 150,
+      "key": "F♯m",
+      "duration": 166,
+      "genres": [
+        "Hip Hop",
+        "K_Pop",
+        "Synth-pop"
+      ],
+      "tags": [
+        "rap",
+        "kpop",
+        "synthpop"
+      ],
+      "plays": 116,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "18851145",
+      "title": "Beat by Virzy Guns",
+      "bpm": 151,
+      "key": "Dm",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "Punk",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave",
+        "phonk"
+      ],
+      "plays": 169,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18774230",
+      "title": "Waiting for The Lover",
+      "bpm": 118,
+      "key": "Am",
+      "duration": 258,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "rnb",
+        "synthwave"
+      ],
+      "plays": 113,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18754224",
+      "title": "highway",
+      "bpm": 106,
+      "key": "Gm",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave"
+      ],
+      "plays": 191,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "18754146",
+      "title": "SYNTHWAR",
+      "bpm": 172,
+      "key": "Fm",
+      "duration": 180,
+      "genres": [
+        "Drum & Bass",
+        "Punk",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave",
+        "phonk"
+      ],
+      "plays": 77,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "18602173",
+      "title": "SynthPhonk",
+      "bpm": 171,
+      "key": "Cm",
+      "duration": 179,
+      "genres": [
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave",
+        "phonk"
+      ],
+      "plays": 108,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18574041",
+      "title": "Dystopian World",
+      "bpm": 172,
+      "key": "A♭m",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "rap",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 136,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "18555518",
+      "title": "Netrunner",
+      "bpm": 106,
+      "key": "Cm",
+      "duration": 170,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 74,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "18529216",
+      "title": "Summer Beach Party",
+      "bpm": 106,
+      "key": "Am",
+      "duration": 163,
+      "genres": [
+        "Electronic",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave"
+      ],
+      "plays": 116,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "18511269",
+      "title": "Lost Memory",
+      "bpm": 106,
+      "key": "Bm",
+      "duration": 163,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthwave"
+      ],
+      "plays": 58,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "18475399",
+      "title": "Street Race | Phonk Synthwave",
+      "bpm": 172,
+      "key": "Am",
+      "duration": 180,
+      "genres": [
+        "Electronic",
+        "Pop / Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthwave",
+        "phonk"
+      ],
+      "plays": 102,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18422142",
+      "title": "Cyberpunk Tokyo Trip",
+      "bpm": 172,
+      "key": "Gm",
+      "duration": 180,
+      "genres": [
+        "Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthpop",
+        "synthwave"
+      ],
+      "plays": 134,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18404240",
+      "title": "Cyber Arcade",
+      "bpm": 172,
+      "key": "Cm",
+      "duration": 180,
+      "genres": [
+        "Drum & Bass",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "synthwave",
+        "dark synthwave"
+      ],
+      "plays": 139,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "18385383",
+      "title": "Cyberpunk Night City",
+      "bpm": 172,
+      "key": "Fm",
+      "duration": 180,
+      "genres": [
+        "Electronic",
+        "Pop / Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 226,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "18375810",
+      "title": "Retro Memory",
+      "bpm": 106,
+      "key": "Am",
+      "duration": 163,
+      "genres": [
+        "Hip Hop",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "rap",
+        "synthwave"
+      ],
+      "plays": 103,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "18359100",
+      "title": "summertime",
+      "bpm": 106,
+      "key": "Em",
+      "duration": 169,
+      "genres": [
+        "80s Pop",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthwave pop",
+        "80s",
+        "house"
+      ],
+      "plays": 69,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "18351018",
+      "title": "G.O.A.T",
+      "bpm": 140,
+      "key": "Gm",
+      "duration": 187,
+      "genres": [
+        "Hyperpop",
+        "Rage / Rage Beats",
+        "Trap"
+      ],
+      "tags": [
+        "playboi carti",
+        "rage",
+        "hyperpop"
+      ],
+      "plays": 91,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "18341340",
+      "title": "Sweet Night",
+      "bpm": 106,
+      "key": "A♭M",
+      "duration": 169,
+      "genres": [
+        "House",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave",
+        "house"
+      ],
+      "plays": 67,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "18322099",
+      "title": "Night Rider",
+      "bpm": 106,
+      "key": "Fm",
+      "duration": 170,
+      "genres": [
+        "Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave",
+        "80s"
+      ],
+      "plays": 269,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "18295331",
+      "title": "STRANGER ECHOES",
+      "bpm": 172,
+      "key": "Bm",
+      "duration": 185,
+      "genres": [
+        "Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthpop",
+        "synthwave"
+      ],
+      "plays": 162,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "18258097",
+      "title": "Night Hustler",
+      "bpm": 106,
+      "key": "Gm",
+      "duration": 164,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "gaming",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 125,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "18200057",
+      "title": "Night in Cyber City",
+      "bpm": 106,
+      "key": "Am",
+      "duration": 169,
+      "genres": [
+        "Electro Pop",
+        "Pop / Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "rap",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 68,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "18153252",
+      "title": "Synthwave in The Rain",
+      "bpm": 106,
+      "key": "B♭M",
+      "duration": 169,
+      "genres": [
+        "Chillwave",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 54,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "18152827",
+      "title": "WARDRILL",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 177,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "sample",
+        "jersey drill"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "18134395",
+      "title": "MoonLight Synthwave",
+      "bpm": 106,
+      "key": "Fm",
+      "duration": 167,
+      "genres": [
+        "Indie",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "18114985",
+      "title": "delusion",
+      "bpm": 106,
+      "key": "F♯m",
+      "duration": 170,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 53,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "18069675",
+      "title": "Cosmic Wave",
+      "bpm": 106,
+      "key": "Cm",
+      "duration": 167,
+      "genres": [
+        "Hip Hop",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "rap",
+        "synthwave"
+      ],
+      "plays": 57,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "18048543",
+      "title": "Cyber Sunset",
+      "bpm": 86,
+      "key": "E♭m",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "retro",
+        "synthwave"
+      ],
+      "plays": 52,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "18012478",
+      "title": "Take It Slow",
+      "bpm": 106,
+      "key": "Dm",
+      "duration": 220,
+      "genres": [
+        "Indie",
+        "R&B",
+        "Synthwave"
+      ],
+      "tags": [
+        "ariana grande",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 69,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "17991814",
+      "title": "Moon Dance | Jersey Club x Drill x Trap",
+      "bpm": 148,
+      "key": "Dm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "trap",
+        "drill"
+      ],
+      "plays": 874,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "17982351",
+      "title": "Lovewave Lullaby",
+      "bpm": 110,
+      "key": "Dm",
+      "duration": 210,
+      "genres": [
+        "Pop",
+        "R&B",
+        "Synthwave"
+      ],
+      "tags": [
+        "ariana grande",
+        "rnb",
+        "synthwave"
+      ],
+      "plays": 55,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17961827",
+      "title": "Dragon Ball Phonk | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "trap",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 309,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17932971",
+      "title": "Synthwave Party",
+      "bpm": 171,
+      "key": "Am",
+      "duration": 189,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 59,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "17932134",
+      "title": "CyberPhonk War Zone | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Dubstep",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "drill",
+        "phonk"
+      ],
+      "plays": 231,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "17911854",
+      "title": "Neon Nightscape",
+      "bpm": 110,
+      "key": "Cm",
+      "duration": 210,
+      "genres": [
+        "Pop",
+        "R&B",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "ariana grande",
+        "the weeknd"
+      ],
+      "plays": 91,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17911182",
+      "title": "HYPERDRIVE",
+      "bpm": 140,
+      "key": "F♯m",
+      "duration": 226,
+      "genres": [
+        "Alternative Hip Hop",
+        "Hip Hop",
+        "Rock"
+      ],
+      "tags": [
+        "rock",
+        "cyberpunk",
+        "drake"
+      ],
+      "plays": 57,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17891494",
+      "title": "CyberPhonk Tesla | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "E♭m",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Dubstep",
+        "Jersey club"
+      ],
+      "tags": [
+        "cyberphonk",
+        "trap",
+        "phonk"
+      ],
+      "plays": 231,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "17891411",
+      "title": "Tokyo Vice City",
+      "bpm": 140,
+      "key": "Am",
+      "duration": 226,
+      "genres": [
+        "80s Pop",
+        "J-Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "synthwave"
+      ],
+      "plays": 46,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17882313",
+      "title": "Laser Dreams",
+      "bpm": 110,
+      "key": "E♭m",
+      "duration": 288,
+      "genres": [
+        "Indie",
+        "Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "the weeknd",
+        "synthwave",
+        "drake"
+      ],
+      "plays": 25,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17881978",
+      "title": "Satoru is DEAD - Yeat x playboi Carti Type Beat",
+      "bpm": 140,
+      "key": "Gm",
+      "duration": 171,
+      "genres": [
+        "Hyperpop",
+        "Rage / Rage Beats",
+        "Trap"
+      ],
+      "tags": [
+        "playboi carti",
+        "yeat",
+        "rage"
+      ],
+      "plays": 30,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17861522",
+      "title": "Red Alert | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Dm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "trap",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 211,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17861460",
+      "title": "Miami Night",
+      "bpm": 110,
+      "key": "Dm",
+      "duration": 288,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "80s pop",
+        "synthwave"
+      ],
+      "plays": 46,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "17851700",
+      "title": "Whispers in The Night",
+      "bpm": 110,
+      "key": "DM",
+      "duration": 288,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "ariana grande",
+        "the weeknd",
+        "synthwave pop"
+      ],
+      "plays": 43,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "17841279",
+      "title": "Stay With Me",
+      "bpm": 110,
+      "key": "AM",
+      "duration": 288,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "ariana grande",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 41,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17840831",
+      "title": "CyberPhonk Turbo | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Gm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "trap",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 171,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "17824915",
+      "title": "Lazy Sunday",
+      "bpm": 110,
+      "key": "Cm",
+      "duration": 288,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "dua lipa",
+        "the weeknd",
+        "synthwave pop"
+      ],
+      "plays": 46,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "17795787",
+      "title": "Ghost Echoes",
+      "bpm": 172,
+      "key": "DM",
+      "duration": 185,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "michael jackson",
+        "dark synthwave"
+      ],
+      "plays": 60,
+      "purchases": 0,
+      "likes": 1
+    },
+    {
+      "trackId": "17795709",
+      "title": "Marathoner, not Sprinter",
+      "bpm": 143,
+      "key": "D♭m",
+      "duration": 161,
+      "genres": [
+        "Ambient",
+        "Drill",
+        "Jersey club"
+      ],
+      "tags": [
+        "centrall cee",
+        "jersey club",
+        "jersey drill"
+      ],
+      "plays": 34,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17785497",
+      "title": "Dance With Me",
+      "bpm": 172,
+      "key": "E♭m",
+      "duration": 185,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 121,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17775812",
+      "title": "Night Drive with Me",
+      "bpm": 86,
+      "key": "Fm",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "synthwave",
+        "80s"
+      ],
+      "plays": 53,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "17765192",
+      "title": "Neon Detective",
+      "bpm": 172,
+      "key": "Em",
+      "duration": 185,
+      "genres": [
+        "80s Pop",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "dua lipa",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 59,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "17737271",
+      "title": "Neon Ninja: The Sasuke Saga",
+      "bpm": 142,
+      "key": "B♭m",
+      "duration": 167,
+      "genres": [
+        "Hip Hop",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "synthwave",
+        "drake",
+        "trap"
+      ],
+      "plays": 439,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17690577",
+      "title": "Mikasa in Action - Cyberpunk Retro Synthwave",
+      "bpm": 172,
+      "key": "E♭m",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "city pop",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 165,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "17660624",
+      "title": "Cyberpunk Vision Pro",
+      "bpm": 171,
+      "key": "Em",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave",
+        "dark synthwave"
+      ],
+      "plays": 53,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "17649470",
+      "title": "Pool Party | 80s Retro Synthwave Pop",
+      "bpm": 172,
+      "key": "Bm",
+      "duration": 185,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "dua lipa",
+        "th weeknd",
+        "synthwave"
+      ],
+      "plays": 228,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "17639065",
+      "title": "CyberPhonk DrillChemy | Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Gm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "cyberphonk",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 98,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "17628269",
+      "title": "Dream On | Jersey Club 80s Retro Synthwave",
+      "bpm": 146,
+      "key": "E♭m",
+      "duration": 145,
+      "genres": [
+        "Electronic",
+        "Jersey club",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "synthwave",
+        "jersey club"
+      ],
+      "plays": 183,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "17619156",
+      "title": "Astral Echoes | Synthwave Pop",
+      "bpm": 171,
+      "key": "Em",
+      "duration": 179,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "dua lipa",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 166,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "17597757",
+      "title": "Neon Light | 80s SynthPop The Weeknd Type Beat",
+      "bpm": 172,
+      "key": "F♯m",
+      "duration": 179,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "dua lipa",
+        "synthpop",
+        "the weeknd"
+      ],
+      "plays": 87,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "17566468",
+      "title": "Sins City | 80s Retro Synthwave Pop",
+      "bpm": 172,
+      "key": "Cm",
+      "duration": 179,
+      "genres": [
+        "80s Pop",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "the weeknd",
+        "synthwave"
+      ],
+      "plays": 78,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "17536071",
+      "title": "The Queen of Synthwave | Cyberpunk Jersey Club Synthwave",
+      "bpm": 146,
+      "key": "Bm",
+      "duration": 145,
+      "genres": [
+        "Jersey club",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "retrowave",
+        "synthwave",
+        "jersey club"
+      ],
+      "plays": 89,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17515925",
+      "title": "The Angel of Synthwave | Cyberpunk Jersey Club Synthwave",
+      "bpm": 146,
+      "key": "Dm",
+      "duration": 140,
+      "genres": [
+        "Electronic",
+        "Jersey club",
+        "Synthwave"
+      ],
+      "tags": [
+        "jersey club synthwave",
+        "synthwave",
+        "jersey club"
+      ],
+      "plays": 71,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "17504213",
+      "title": "CyberPhonk Sanji | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Am",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthwave",
+        "jersey club drill",
+        "phonk"
+      ],
+      "plays": 128,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "17482944",
+      "title": "Gotham Night City | Cyberpunk 80s Retro Synthwave",
+      "bpm": 106,
+      "key": "Gm",
+      "duration": 151,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "retrowave",
+        "synthwave",
+        "80s"
+      ],
+      "plays": 63,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "17472741",
+      "title": "CyberPhonk Hacker | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 147,
+      "key": "Gm",
+      "duration": 194,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club drill",
+        "trap",
+        "phonk"
+      ],
+      "plays": 113,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "17463091",
+      "title": "Invasion | Cyberpunk Jersey Club Synthwave",
+      "bpm": 146,
+      "key": "Bm",
+      "duration": 140,
+      "genres": [
+        "Jersey club",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthwave",
+        "jersey club",
+        "lil uzi vert"
+      ],
+      "plays": 96,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "17452970",
+      "title": "Vice City | 80s Retro Synthwave",
+      "bpm": 86,
+      "key": "Am",
+      "duration": 192,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "retrowave",
+        "synthwave",
+        "80's"
+      ],
+      "plays": 49,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "17442123",
+      "title": "Phonk Dance Jersey Club",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 143,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey phonk",
+        "phonk"
+      ],
+      "plays": 142,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "17431718",
+      "title": "Jakarta Night City",
+      "bpm": 102,
+      "key": "B♭m",
+      "duration": 197,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "retrowave",
+        "synthwave"
+      ],
+      "plays": 40,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "17421098",
+      "title": "Shake Your Booty, Bitch",
+      "bpm": 150,
+      "key": "F♯M",
+      "duration": 133,
+      "genres": [
+        "Club",
+        "Jersey club",
+        "Porno rap"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "jersey club"
+      ],
+      "plays": 74,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "17410408",
+      "title": "FAT A$$",
+      "bpm": 150,
+      "key": "F♯m",
+      "duration": 133,
+      "genres": [
+        "Club",
+        "Drill",
+        "Jersey club"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "jersey club"
+      ],
+      "plays": 65,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "17400697",
+      "title": "TWERK that ASS",
+      "bpm": 146,
+      "key": "Cm",
+      "duration": 138,
+      "genres": [
+        "Club",
+        "Drill",
+        "Jersey club"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "jersey club"
+      ],
+      "plays": 211,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17381119",
+      "title": "Healing Soul | Cyberpunk Synthwave for Your Soundtrack",
+      "bpm": 110,
+      "key": "Gm",
+      "duration": 192,
+      "genres": [
+        "Ambient",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "soundtrack",
+        "synthwave",
+        "ambient"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "17349434",
+      "title": "Big booty",
+      "bpm": 146,
+      "key": "Cm",
+      "duration": 141,
+      "genres": [
+        "Club",
+        "Drill",
+        "Jersey club"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "jersey drill"
+      ],
+      "plays": 254,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17248431",
+      "title": "Gear 5 | Hard Anime Rap Rock Beat",
+      "bpm": 106,
+      "key": "Fm",
+      "duration": 144,
+      "genres": [
+        "Drum & Bass",
+        "Rap rock",
+        "Rock"
+      ],
+      "tags": [
+        "virzy guns",
+        "rap rock",
+        "anime"
+      ],
+      "plays": 364,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "17231558",
+      "title": "Nico Robin One Piece | Anime 80's Retro Synthwave",
+      "bpm": 140,
+      "key": "Dm",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "retrowave",
+        "synthwave",
+        "anime"
+      ],
+      "plays": 62,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "17175596",
+      "title": "Praise God | Hard Synthwave Choir Trap Beat",
+      "bpm": 64,
+      "key": "Cm",
+      "duration": 151,
+      "genres": [
+        "Electronic",
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "a$ap rocky",
+        "j cole",
+        "drake"
+      ],
+      "plays": 125,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "17157840",
+      "title": "Christmas Trap 2.0 Rap Beat",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 137,
+      "genres": [
+        "Electronic",
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "21savage",
+        "jid",
+        "travis scott"
+      ],
+      "plays": 128,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "17115025",
+      "title": "Sukuna | Hard Anime Rap Type Beat",
+      "bpm": 90,
+      "key": "None",
+      "duration": 154,
+      "genres": [
+        "Hip Hop",
+        "Pop Rap",
+        "Trap"
+      ],
+      "tags": [
+        "string",
+        "anime rap",
+        "trap"
+      ],
+      "plays": 262,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17096317",
+      "title": "Tokyo Midnight | Cyberpunk 80s Retro Synthwave",
+      "bpm": 70,
+      "key": "B♭m",
+      "duration": 146,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro synthwave",
+        "synthwave",
+        "80's"
+      ],
+      "plays": 72,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "17086692",
+      "title": "Blade Runner (Cyberpunk Techno Synthwave)",
+      "bpm": 126,
+      "key": "Bm",
+      "duration": 159,
+      "genres": [
+        "Electronic",
+        "Synthwave",
+        "Techno"
+      ],
+      "tags": [
+        "cyberpunk",
+        "techno",
+        "synthwave"
+      ],
+      "plays": 142,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "17060391",
+      "title": "Cyberpunk Tokyo City",
+      "bpm": 100,
+      "key": "Dm",
+      "duration": 176,
+      "genres": [
+        "Electronic",
+        "J-Pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "japan rap",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 80,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "17051561",
+      "title": "Christmas Trap Synthwave",
+      "bpm": 140,
+      "key": "A♭m",
+      "duration": 161,
+      "genres": [
+        "R&B",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "rnb",
+        "synthwave",
+        "trap"
+      ],
+      "plays": 107,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "17042244",
+      "title": "Memory Road | 80's Retro Synthwave",
+      "bpm": 144,
+      "key": "Dm",
+      "duration": 146,
+      "genres": [
+        "Electronic",
+        "Lo-fi",
+        "Synthwave"
+      ],
+      "tags": [
+        "lofi",
+        "chill",
+        "synthwave"
+      ],
+      "plays": 53,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "17031821",
+      "title": "Jujutsu Phonk | Cyberpunk Japanese Phonk",
+      "bpm": 148,
+      "key": "B♭M",
+      "duration": 189,
+      "genres": [
+        "Dubstep",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "trap",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 310,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "17005379",
+      "title": "Cyber Rap Battle | Cyberpunk Freestyle Trap/Rap Beat",
+      "bpm": 106,
+      "key": "Gm",
+      "duration": 173,
+      "genres": [
+        "Electronic",
+        "Freestyle rap",
+        "Trap"
+      ],
+      "tags": [
+        "freestyle rap",
+        "j cole",
+        "drake"
+      ],
+      "plays": 252,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "16942830",
+      "title": "CyberFight | Cyberpunk Synthwave Drake Type Beat",
+      "bpm": 90,
+      "key": "Gm",
+      "duration": 160,
+      "genres": [
+        "Pop",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "j cole",
+        "Synthwave",
+        "Drake"
+      ],
+      "plays": 51,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "16934626",
+      "title": "RetroDrill 2.0 | Cyberpunk Drill Synthwave",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 153,
+      "genres": [
+        "Drill",
+        "Hip Hop",
+        "Synthwave"
+      ],
+      "tags": [
+        "yeat",
+        "synthwave",
+        "drill"
+      ],
+      "plays": 72,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "16916687",
+      "title": "RetroDrill | Cyberpunk Drill Synthwave",
+      "bpm": 76,
+      "key": "Am",
+      "duration": 153,
+      "genres": [
+        "Drill",
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "central cee",
+        "synthwave",
+        "drill"
+      ],
+      "plays": 63,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "16872716",
+      "title": "Cyber Godzilla | Cyberpunk Trap Synthwave",
+      "bpm": 100,
+      "key": "Bm",
+      "duration": 153,
+      "genres": [
+        "Electronic",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "cyberpunk",
+        "synthwave",
+        "trap"
+      ],
+      "plays": 220,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "16797718",
+      "title": "Slave Of Freedom | Cyberpunk Synthwave",
+      "bpm": 140,
+      "key": "A♯m",
+      "duration": 164,
+      "genres": [
+        "Electronic",
+        "Lo-fi",
+        "Synthwave"
+      ],
+      "tags": [
+        "lofi",
+        "cyberpunk",
+        "synthwave"
+      ],
+      "plays": 74,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16791044",
+      "title": "Money For Fun | Cyberpunk Hyperpop Drake x Yeat",
+      "bpm": 150,
+      "key": "Bm",
+      "duration": 152,
+      "genres": [
+        "Hip Hop",
+        "Hyperpop",
+        "Trap"
+      ],
+      "tags": [
+        "yeat",
+        "hyperpop",
+        "drake"
+      ],
+      "plays": 76,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16754817",
+      "title": "Cyber Rapper | Cyberpunk Freestyle Female Hard Trap/Rap Beat",
+      "bpm": 94,
+      "key": "Em",
+      "duration": 133,
+      "genres": [
+        "Electronic",
+        "Hip Hop"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "female rap"
+      ],
+      "plays": 488,
+      "purchases": 0,
+      "likes": 21
+    },
+    {
+      "trackId": "16578585",
+      "title": "Drug Phonk | CyberPhonk House Techno",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 135,
+      "genres": [
+        "Electronic",
+        "Techno"
+      ],
+      "tags": [
+        "phonk techno",
+        "techno",
+        "phonk"
+      ],
+      "plays": 145,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "16543035",
+      "title": "CyberPhonk Dead | Cyberpunk Phonk House Club Beat",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 135,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "phonk"
+      ],
+      "plays": 182,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "16412193",
+      "title": "The Hacker",
+      "bpm": 102,
+      "key": "Em",
+      "duration": 149,
+      "genres": [
+        "Electronic"
+      ],
+      "tags": [
+        "cyberpunk",
+        "dubstep",
+        "house"
+      ],
+      "plays": 72,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "16367477",
+      "title": "Rap Queen",
+      "bpm": 90,
+      "key": "DM",
+      "duration": 144,
+      "genres": [
+        "Hip Hop",
+        "R&B",
+        "Trap"
+      ],
+      "tags": [
+        "nicki minaj",
+        "saweetie",
+        "ice spice"
+      ],
+      "plays": 39,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "16343907",
+      "title": "Back to The Future | Cyberpunk 80's Retro Synthwave",
+      "bpm": 102,
+      "key": "Am",
+      "duration": 154,
+      "genres": [
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "pop",
+        "synthwave",
+        "80's"
+      ],
+      "plays": 71,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16333109",
+      "title": "Phonk Party | Japanese Phonk House Techno",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 135,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "house",
+        "phonk"
+      ],
+      "plays": 184,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "16305711",
+      "title": "Night Runner | Cyberpunk 80s Retro Synthwave",
+      "bpm": 92,
+      "key": "E♭M",
+      "duration": 188,
+      "genres": [
+        "Electronic",
+        "Synth-pop",
+        "Synthwave"
+      ],
+      "tags": [
+        "synthpop",
+        "retro",
+        "synthwave"
+      ],
+      "plays": 67,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "16297975",
+      "title": "Night Drive | Cyberpunk 80s Retro Synthwave",
+      "bpm": 110,
+      "key": "D♭m",
+      "duration": 158,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "retro",
+        "synthwave"
+      ],
+      "plays": 37,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16287311",
+      "title": "Pirate Phonk 2.0 | Phonk Choir House Techno",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 135,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "Techno",
+        "House",
+        "Phonk"
+      ],
+      "plays": 103,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "16275701",
+      "title": "Tokyo Night City | Cyberpunk 80s Retro Synthwave",
+      "bpm": 98,
+      "key": "F♯m",
+      "duration": 176,
+      "genres": [
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "80s pop",
+        "retro synthwave",
+        "synthwave"
+      ],
+      "plays": 317,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "16266459",
+      "title": "Pirate Phonk | Japanese Phonk House Techno",
+      "bpm": 128,
+      "key": "Am",
+      "duration": 135,
+      "genres": [
+        "Electronic",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "house",
+        "phonk"
+      ],
+      "plays": 154,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "16248751",
+      "title": "Cyber Zoro | Cyberpunk Dark Techno Beat",
+      "bpm": 126,
+      "key": "Fm",
+      "duration": 151,
+      "genres": [
+        "Electronic",
+        "Techno"
+      ],
+      "tags": [
+        "cyberpunk",
+        "techno",
+        "tekno"
+      ],
+      "plays": 193,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "16228184",
+      "title": "Nami One Piece | Cyberpunk 80's Retro Synthwave",
+      "bpm": 106,
+      "key": "Em",
+      "duration": 155,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "cyberpunk",
+        "retrowave",
+        "synthwave"
+      ],
+      "plays": 128,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "16190905",
+      "title": "One Piece | Cyberpunk 80's Retro Synthwave",
+      "bpm": 86,
+      "key": "D♭M",
+      "duration": 198,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "justin bieber",
+        "the weeknd",
+        "coi leray"
+      ],
+      "plays": 50,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16168733",
+      "title": "Just Wanna Fight | jersey Drill Lil Uzi Vert Type Beat",
+      "bpm": 136,
+      "key": "F♯m",
+      "duration": 143,
+      "genres": [
+        "Drill",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "lil uzi vert"
+      ],
+      "plays": 63,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "16160739",
+      "title": "Cyber Party | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "E♭m",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 3321,
+      "purchases": 0,
+      "likes": 92
+    },
+    {
+      "trackId": "16138364",
+      "title": "Cyber Rock | Cyberpunk Rock Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 187,
+      "genres": [
+        "Jersey club",
+        "Rock",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "lil uzi vert"
+      ],
+      "plays": 510,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "16117759",
+      "title": "TGIF | Cyberpunk 80's Retro Synthwave",
+      "bpm": 126,
+      "key": "Am",
+      "duration": 169,
+      "genres": [
+        "House",
+        "Synthwave",
+        "Techno"
+      ],
+      "tags": [
+        "retrowave",
+        "synthwave",
+        "house"
+      ],
+      "plays": 110,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "16099355",
+      "title": "CyberPhonk Z | Cyberpunk Jersey Drill Phonk Trap Beat",
+      "bpm": 148,
+      "key": "Dm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "cyberpunk",
+        "jersey drill",
+        "jersey phonk"
+      ],
+      "plays": 630,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "16088821",
+      "title": "import numpy as np",
+      "bpm": 96,
+      "key": "Cm",
+      "duration": 151,
+      "genres": [
+        "Electronic",
+        "Synthwave"
+      ],
+      "tags": [
+        "coding",
+        "gaming",
+        "programming"
+      ],
+      "plays": 30,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "16077445",
+      "title": "CyberPhonk 3.0 | Cyberpunk Phonk House Club Beat",
+      "bpm": 128,
+      "key": "Gm",
+      "duration": 154,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "cyberphonk",
+        "phonk house",
+        "phonk"
+      ],
+      "plays": 202,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16066585",
+      "title": "Cyber Drifter| Cyberpunk Phonk House Beat",
+      "bpm": 150,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "phonk house",
+        "aggressive phonk",
+        "cyberpunk house"
+      ],
+      "plays": 74,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "16047291",
+      "title": "Just Wanna Gun | jersey Drill Lil Uzi Vert Type Beat",
+      "bpm": 136,
+      "key": "E♭m",
+      "duration": 143,
+      "genres": [
+        "Drill",
+        "Hip Hop",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "lil uzi vert"
+      ],
+      "plays": 142,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "16038003",
+      "title": "CyberPhonk X | Cyberpunk Phonk House Club Beat",
+      "bpm": 128,
+      "key": "Dm",
+      "duration": 148,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "phonk house",
+        "aggressive phonk",
+        "techno"
+      ],
+      "plays": 160,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "16027725",
+      "title": "CyberPhonk 2.0 | Cyberpunk Phonk House Club Beat",
+      "bpm": 128,
+      "key": "Cm",
+      "duration": 158,
+      "genres": [
+        "EDM",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "phonk house",
+        "edm",
+        "phonk"
+      ],
+      "plays": 524,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "16017383",
+      "title": "Nuke Girl | Cyberpunk Hard Rap Trap Beat",
+      "bpm": 90,
+      "key": "Gm",
+      "duration": 170,
+      "genres": [
+        "Electronic",
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "megan the stallion"
+      ],
+      "plays": 338,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "16006752",
+      "title": "Cyber Flex | Cyberpunk Hard Rap Trap Beat",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 130,
+      "genres": [
+        "Hip Hop",
+        "Trap",
+        "UK Grime"
+      ],
+      "tags": [
+        "hard trap",
+        "cyberpunk trap",
+        "trap beat"
+      ],
+      "plays": 125,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15996050",
+      "title": "CyberPhonk | Cyberpunk Phonk House Beat",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 189,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "cyberpunk",
+        "house",
+        "phonk"
+      ],
+      "plays": 283,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "15969636",
+      "title": "Edgerunner | Cyberpunk 80s Retro Synthwave",
+      "bpm": 110,
+      "key": "Dm",
+      "duration": 209,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "chill",
+        "cyberpunk",
+        "Synthwave"
+      ],
+      "plays": 194,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15968535",
+      "title": "Cyber Samurai | Cyberpunk Dark Techno Beat",
+      "bpm": 125,
+      "key": "Fm",
+      "duration": 154,
+      "genres": [
+        "Electronic",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "dark techno",
+        "techno house"
+      ],
+      "plays": 198,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15957019",
+      "title": "Just Wanna Phonk | Cyberpunk Phonk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "cyberpunk phonk",
+        "jersey club",
+        "jersey drill"
+      ],
+      "plays": 117,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "15956090",
+      "title": "SUPRA | Cyberpunk Phonk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "E♭m",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "jersey phonk"
+      ],
+      "plays": 1744,
+      "purchases": 0,
+      "likes": 28
+    },
+    {
+      "trackId": "15940173",
+      "title": "Miami Vice City | Cyberpunk 80s Retro Synthwave",
+      "bpm": 140,
+      "key": "Am",
+      "duration": 205,
+      "genres": [
+        "Electronic",
+        "Indie",
+        "Synthwave"
+      ],
+      "tags": [
+        "the weeknd",
+        "synthwave",
+        "drake"
+      ],
+      "plays": 94,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "15926674",
+      "title": "X Corp Agent | Cyberpunk Dark Techno",
+      "bpm": 125,
+      "key": "Cm",
+      "duration": 193,
+      "genres": [
+        "Electronic",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "dark techno",
+        "house"
+      ],
+      "plays": 426,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15908636",
+      "title": "Cyber Ninja | Cyberpunk Dark Techno Beat",
+      "bpm": 126,
+      "key": "E♭m",
+      "duration": 193,
+      "genres": [
+        "Electronic",
+        "Techno"
+      ],
+      "tags": [
+        "cyberpunk",
+        "techno",
+        "dark techno"
+      ],
+      "plays": 235,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15896925",
+      "title": "Jersey Phonk Drill",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "drill",
+        "phonk"
+      ],
+      "plays": 1093,
+      "purchases": 0,
+      "likes": 21
+    },
+    {
+      "trackId": "15880417",
+      "title": "B M W E 3 0 | Cyberpunk Phonk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "nicki minaj",
+        "ice spice",
+        "jersey phonk"
+      ],
+      "plays": 172,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15876378",
+      "title": "S K Y L I N E | Cyberpunk Phonk Jersey Club Type Beat",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 186,
+      "genres": [
+        "Electro hop",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey phonk",
+        "phonk"
+      ],
+      "plays": 316,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "15868597",
+      "title": "M U S T A N G | Cyberpunk Phonk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "trap",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 470,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "15845154",
+      "title": "GTR | Cyberpunk Phonk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey drill",
+        "phonk"
+      ],
+      "plays": 254,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "15826574",
+      "title": "Utopia | Cyberpunk Synthwave Travis Scott Trap Beat",
+      "bpm": 121,
+      "key": "Gm",
+      "duration": 126,
+      "genres": [
+        "Hip Hop",
+        "Synthwave",
+        "Trap"
+      ],
+      "tags": [
+        "travis scott",
+        "synthwave",
+        "lil uzi vert"
+      ],
+      "plays": 295,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15807005",
+      "title": "Just Wanna Kill | Cyberpunk Rock Type Beat",
+      "bpm": 106,
+      "key": "Fm",
+      "duration": 144,
+      "genres": [
+        "Alternative Hip Hop",
+        "Electro hop",
+        "Rock"
+      ],
+      "tags": [
+        "rock",
+        "alternative hip hop",
+        "electro hop"
+      ],
+      "plays": 332,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15784882",
+      "title": "Just Wanna Flex | Cyberpunk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Gm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "cyberpunk",
+        "trap",
+        "jersey drill"
+      ],
+      "plays": 296,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "15768827",
+      "title": "Leo Messi | Cyberpunk Synthwave Jersey Club Type Beat",
+      "bpm": 149,
+      "key": "Bm",
+      "duration": 186,
+      "genres": [
+        "80s Pop",
+        "Jersey club",
+        "Synthwave"
+      ],
+      "tags": [
+        "synhtwave",
+        "cyberpunk",
+        "jersey club"
+      ],
+      "plays": 307,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "15756797",
+      "title": "Just Wanna Death Race | Cyberpunk Jersey Phonk Type Beat",
+      "bpm": 148,
+      "key": "Fm",
+      "duration": 186,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "jersey phonk",
+        "phonk"
+      ],
+      "plays": 250,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "15739906",
+      "title": "Just Wanna Swag | Cyberpunk Jersey Drill Trap Beat",
+      "bpm": 148,
+      "key": "Gm",
+      "duration": 182,
+      "genres": [
+        "Drill",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "cyberpunk type beat",
+        "jersey drill"
+      ],
+      "plays": 378,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "15726873",
+      "title": "Just Wanna Space | Cyberpunk Jersey Club Phonk Type Beat",
+      "bpm": 151,
+      "key": "Am",
+      "duration": 188,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club type beat",
+        "cyberpunk type beat",
+        "jersey phonk"
+      ],
+      "plays": 365,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "15715611",
+      "title": "Just Wanna Tesla | Cyberpunk Phonk Jersey Club Type Beat",
+      "bpm": 148,
+      "key": "Dm",
+      "duration": 186,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "cyberpunk jersey phonk",
+        "jersey club",
+        "jersey phonk"
+      ],
+      "plays": 279,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15689815",
+      "title": "Viper Valorant | Cyberpunk Trap Beat",
+      "bpm": 150,
+      "key": "Dm",
+      "duration": 189,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "Gaming Music",
+        "Cyberpunk Trap Beat",
+        "Hard Trap Beat"
+      ],
+      "plays": 401,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "15687176",
+      "title": "Just Wanna W | Cyberpunk Phonk Jersey Club Type Beat",
+      "bpm": 148,
+      "key": "E♭m",
+      "duration": 186,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "cyberpunk phonk",
+        "cyberpunk type beat",
+        "jersey phonk"
+      ],
+      "plays": 299,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "15668270",
+      "title": "Just Wanna Race | Cyberpunk Lil Uzi Vert Jersey Phonk Beat",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 186,
+      "genres": [
+        "Electronic",
+        "Jersey club",
+        "Punk Rock"
+      ],
+      "tags": [
+        "cyberpunk",
+        "jersey club",
+        "lil uzi vert"
+      ],
+      "plays": 288,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "15647655",
+      "title": "Just Wanna Drift | Cyberpunk Phonk Jersey Club Type Beat",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 186,
+      "genres": [
+        "Club",
+        "Electronic",
+        "Jersey club"
+      ],
+      "tags": [
+        "jersey club",
+        "lil uzi vert",
+        "phonk"
+      ],
+      "plays": 273,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "15618931",
+      "title": "Just Wanna Punk | Cyberpunk Lil Uzi Vert Jersey Drill",
+      "bpm": 148,
+      "key": "Gm",
+      "duration": 186,
+      "genres": [
+        "Drill",
+        "Hyperpop",
+        "Jersey club"
+      ],
+      "tags": [
+        "icespice",
+        "yeat",
+        "lil uzi vert"
+      ],
+      "plays": 224,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "15589499",
+      "title": "No Way Back | Cyberpunk Trap Beat",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 188,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "cyberpunk bass",
+        "cyberpunk",
+        "cyberpunk trap beat"
+      ],
+      "plays": 528,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "15578526",
+      "title": "Mafia | Jersey Drill Trap Guitar Type Beat",
+      "bpm": 148,
+      "key": "Bm",
+      "duration": 189,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "trap beat",
+        "jersey drill",
+        "guitar"
+      ],
+      "plays": 184,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "15561632",
+      "title": "Japanese Hard Trap Beat \"Genshin\"",
+      "bpm": 150,
+      "key": "Em",
+      "duration": 188,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap beat",
+        "japanese trap beat",
+        "dubstep"
+      ],
+      "plays": 154,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "15543234",
+      "title": "Cyberpunk Dystopia | Drill x Jersey Club x Trap x Hyperpop",
+      "bpm": 148,
+      "key": "Cm",
+      "duration": 186,
+      "genres": [
+        "Drill",
+        "Jersey club",
+        "Trap"
+      ],
+      "tags": [
+        "ice spice",
+        "hyperpop",
+        "jersey drill"
+      ],
+      "plays": 316,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "15532263",
+      "title": "Princess Grahhh",
+      "bpm": 148,
+      "key": "Em",
+      "duration": 186,
+      "genres": [
+        "Electronic",
+        "Hip Hop"
+      ],
+      "tags": [
+        "nicki minaj",
+        "princess diana",
+        "ice spice"
+      ],
+      "plays": 164,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "15514517",
+      "title": "Chill",
+      "bpm": 128,
+      "key": "E♭m",
+      "duration": 178,
+      "genres": [
+        "EDM",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "electronic",
+        "edm",
+        "guitar"
+      ],
+      "plays": 38,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "15479947",
+      "title": "Mando",
+      "bpm": 150,
+      "key": "F♯m",
+      "duration": 143,
+      "genres": [
+        "Electronic",
+        "Hardcore"
+      ],
+      "tags": [
+        "club",
+        "dance",
+        "edm"
+      ],
+      "plays": 63,
+      "purchases": 0,
+      "likes": 3
+    },
+    {
+      "trackId": "15479236",
+      "title": "The Last Of Us",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 146,
+      "genres": [
+        "Classical",
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "sad type beat",
+        "classical",
+        "trap beat"
+      ],
+      "plays": 90,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "15412255",
+      "title": "GodDamn",
+      "bpm": 126,
+      "key": "D♭m",
+      "duration": 183,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "takeoff",
+        "quavo",
+        "migos"
+      ],
+      "plays": 58,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "15398849",
+      "title": "Spyder Dance",
+      "bpm": null,
+      "key": null,
+      "duration": 160,
+      "genres": [
+        "Dance",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "dance",
+        "house"
+      ],
+      "plays": 174,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "15398734",
+      "title": "Tokyo Dance",
+      "bpm": null,
+      "key": null,
+      "duration": 152,
+      "genres": [
+        "Club",
+        "House",
+        "Techno"
+      ],
+      "tags": [
+        "techno",
+        "club",
+        "house"
+      ],
+      "plays": 252,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15398654",
+      "title": "Summer Vibes",
+      "bpm": 128,
+      "key": "Dm",
+      "duration": 180,
+      "genres": [
+        "Club",
+        "EDM",
+        "House"
+      ],
+      "tags": [
+        "deep house",
+        "house",
+        "summer"
+      ],
+      "plays": 235,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "15392978",
+      "title": "Lil Uzi Vert - Just Wanna Rock Remix type beat",
+      "bpm": null,
+      "key": null,
+      "duration": 158,
+      "genres": [
+        "House",
+        "Jersey club",
+        "Techno"
+      ],
+      "tags": [
+        "jersey club",
+        "techno house",
+        "lil uzi vert"
+      ],
+      "plays": 391,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "15392564",
+      "title": "Scarlett Lamborghini",
+      "bpm": 128,
+      "key": "Gm",
+      "duration": 178,
+      "genres": [
+        "Club",
+        "EDM",
+        "House"
+      ],
+      "tags": [
+        "free beat",
+        "house",
+        "guitar"
+      ],
+      "plays": 230,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "15391748",
+      "title": "Joker Dance",
+      "bpm": 90,
+      "key": "A♯m",
+      "duration": 178,
+      "genres": [
+        "Drill",
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil whatever",
+        "trap",
+        "lil baby"
+      ],
+      "plays": 221,
+      "purchases": 0,
+      "likes": 6
+    },
+    {
+      "trackId": "15391482",
+      "title": "Captain Marvel",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 166,
+      "genres": [
+        "Dance-pop",
+        "EDM",
+        "House"
+      ],
+      "tags": [
+        "deep house",
+        "dance",
+        "edm"
+      ],
+      "plays": 378,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "15391142",
+      "title": "cyberpsycho",
+      "bpm": 154,
+      "key": "Bm",
+      "duration": 175,
+      "genres": [
+        "Hyperpop",
+        "Pop / Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "yeat",
+        "hyperpop",
+        "trap"
+      ],
+      "plays": 132,
+      "purchases": 0,
+      "likes": 0
+    },
+    {
+      "trackId": "15391031",
+      "title": "This is the way",
+      "bpm": 126,
+      "key": "C♯m",
+      "duration": 139,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hip hop",
+        "trap"
+      ],
+      "plays": 209,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "14643816",
+      "title": "Night Dance",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 191,
+      "genres": [
+        "Dance",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "house",
+        "edm"
+      ],
+      "plays": 702,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "14595235",
+      "title": "One Night Stand",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 162,
+      "genres": [
+        "Electronic",
+        "House",
+        "Trance"
+      ],
+      "tags": [
+        "bass house",
+        "house",
+        "edm"
+      ],
+      "plays": 73,
+      "purchases": 0,
+      "likes": 4
+    },
+    {
+      "trackId": "14587624",
+      "title": "Bebe Rexha",
+      "bpm": 140,
+      "key": "Em",
+      "duration": 148,
+      "genres": [
+        "Electronic",
+        "House",
+        "Trance"
+      ],
+      "tags": [
+        "bebe rexha",
+        "bass house",
+        "house"
+      ],
+      "plays": 86,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "14533739",
+      "title": "Crazy Night",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 148,
+      "genres": [
+        "Electronic",
+        "House",
+        "Trance"
+      ],
+      "tags": [
+        "future rave",
+        "trance",
+        "house"
+      ],
+      "plays": 160,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "14483000",
+      "title": "Chainsaw Devil",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 187,
+      "genres": [
+        "Electronic",
+        "Trance",
+        "Trap"
+      ],
+      "tags": [
+        "club",
+        "electronic",
+        "trap"
+      ],
+      "plays": 161,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "14435255",
+      "title": "Thanos Burn The World",
+      "bpm": 140,
+      "key": "Bm",
+      "duration": 123,
+      "genres": [
+        "Dubstep",
+        "Electronic",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap",
+        "drake",
+        "trap"
+      ],
+      "plays": 75,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "14405381",
+      "title": "Final Rumbl",
+      "bpm": 135,
+      "key": "Fm",
+      "duration": 129,
+      "genres": [
+        "Dubstep",
+        "Trap"
+      ],
+      "tags": [],
+      "plays": 126,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "14342926",
+      "title": "deep house \"DRUGS",
+      "bpm": 125,
+      "key": "A♯m",
+      "duration": 245,
+      "genres": [
+        "Club",
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "deep house",
+        "club",
+        "house"
+      ],
+      "plays": 817,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "14310335",
+      "title": "R&B Deep House \"Lover\"",
+      "bpm": 120,
+      "key": "A♭m",
+      "duration": 174,
+      "genres": [
+        "House",
+        "Pop / Electronic",
+        "R&B"
+      ],
+      "tags": [
+        "deep house",
+        "tiesto",
+        "r&b"
+      ],
+      "plays": 1025,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "14309875",
+      "title": "Jersey Club X Drill X Deep House Type Beat \"Dancing Dead\"",
+      "bpm": 135,
+      "key": "Bm",
+      "duration": 145,
+      "genres": [
+        "Club",
+        "Drill",
+        "House"
+      ],
+      "tags": [
+        "ny drill",
+        "jersey club",
+        "kay flock"
+      ],
+      "plays": 817,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "13382494",
+      "title": "Football Party",
+      "bpm": 128,
+      "key": "FM",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "deep house",
+        "house",
+        "sport"
+      ],
+      "plays": 1097,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "13175871",
+      "title": "Best Day",
+      "bpm": 128,
+      "key": "Bm",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "Tropical House"
+      ],
+      "tags": [
+        "chill",
+        "house",
+        "guitar"
+      ],
+      "plays": 230,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "13145511",
+      "title": "Halloween Party",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 152,
+      "genres": [
+        "Dance",
+        "Electronic"
+      ],
+      "tags": [
+        "halloween",
+        "house",
+        "edm"
+      ],
+      "plays": 1118,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "13117227",
+      "title": "Christmas Murder",
+      "bpm": 128,
+      "key": "C♯m",
+      "duration": 214,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "halloween",
+        "trap"
+      ],
+      "plays": 395,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "13107603",
+      "title": "MOVE",
+      "bpm": 128,
+      "key": "Bm",
+      "duration": 166,
+      "genres": [
+        "Dance",
+        "Electronic"
+      ],
+      "tags": [
+        "drake",
+        "house",
+        "edm"
+      ],
+      "plays": 576,
+      "purchases": 0,
+      "likes": 21
+    },
+    {
+      "trackId": "13086139",
+      "title": "Madara Uchiha",
+      "bpm": 134,
+      "key": "Dm",
+      "duration": 159,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "aggressive",
+        "trap"
+      ],
+      "plays": 579,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "13024167",
+      "title": "Smokin' Dope",
+      "bpm": 155,
+      "key": "A♯m",
+      "duration": 147,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "trap",
+        "lil baby"
+      ],
+      "plays": 166,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "13023944",
+      "title": "Take Me !",
+      "bpm": 128,
+      "key": "C♯m",
+      "duration": 166,
+      "genres": [
+        "Dance",
+        "Electronic"
+      ],
+      "tags": [
+        "deep house",
+        "dance",
+        "edm"
+      ],
+      "plays": 561,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "13016136",
+      "title": "Satoru Goju",
+      "bpm": 162,
+      "key": "Am",
+      "duration": 169,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "trap",
+        "lil baby"
+      ],
+      "plays": 234,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "13015916",
+      "title": "Kaneki",
+      "bpm": 158,
+      "key": "Bm",
+      "duration": 173,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lilbaby",
+        "drake",
+        "trap"
+      ],
+      "plays": 292,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "13015698",
+      "title": "Resident Evil",
+      "bpm": 131,
+      "key": "Bm",
+      "duration": 209,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "halloween",
+        "trap",
+        "lil baby"
+      ],
+      "plays": 359,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "12207241",
+      "title": "Vodka",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "dance",
+        "house"
+      ],
+      "plays": 1148,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "12197191",
+      "title": "Cyber Pussy",
+      "bpm": 128,
+      "key": "Em",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "house",
+        "edm"
+      ],
+      "plays": 1617,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "12170011",
+      "title": "DRUNK",
+      "bpm": 128,
+      "key": "Gm",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "house",
+        "edm"
+      ],
+      "plays": 1764,
+      "purchases": 0,
+      "likes": 22
+    },
+    {
+      "trackId": "12135719",
+      "title": "MID + RATIO",
+      "bpm": 108,
+      "key": "Gm",
+      "duration": 175,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "exclusive",
+        "trap",
+        "guitar flute"
+      ],
+      "plays": 2113,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "12124456",
+      "title": "KANEKI KEN (HARD TYPE BEAT EXCLUSIVE)",
+      "bpm": 131,
+      "key": "Bm",
+      "duration": 203,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap",
+        "exclusive",
+        "trap"
+      ],
+      "plays": 3189,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "12110366",
+      "title": "House Type Beat \"Good Vibes\"",
+      "bpm": 128,
+      "key": "Bm",
+      "duration": 166,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "house",
+        "edm"
+      ],
+      "plays": 1174,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "12103091",
+      "title": "House Type Beat \"Champagne\"",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "deep house",
+        "club",
+        "house"
+      ],
+      "plays": 1778,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "12082598",
+      "title": "House Type Beat \"SUMMER\"",
+      "bpm": 128,
+      "key": "Dm",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "drake",
+        "house"
+      ],
+      "plays": 2667,
+      "purchases": 0,
+      "likes": 25
+    },
+    {
+      "trackId": "12063167",
+      "title": "House Type Beat \"NIGHT PARTY\"",
+      "bpm": 128,
+      "key": "Dm",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "club",
+        "drake",
+        "house"
+      ],
+      "plays": 2706,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "12024590",
+      "title": "BEAUTY",
+      "bpm": 128,
+      "key": "Am",
+      "duration": 165,
+      "genres": [
+        "Electronic",
+        "House"
+      ],
+      "tags": [
+        "festival",
+        "club",
+        "house"
+      ],
+      "plays": 2569,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "11940208",
+      "title": "lil durk x lil baby type beat \"why so serious\"",
+      "bpm": 152,
+      "key": "C♯m",
+      "duration": 157,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil durk",
+        "trap",
+        "lil baby"
+      ],
+      "plays": 1031,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "11930051",
+      "title": "FAKE GUCCI - Drake, 21SAVAGE, Skrillex",
+      "bpm": 154,
+      "key": "Bm",
+      "duration": 173,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "future",
+        "travis scott",
+        "drake"
+      ],
+      "plays": 1068,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "11883202",
+      "title": "Yor Forger \"beat with hook\"",
+      "bpm": 95,
+      "key": "D♯m",
+      "duration": 195,
+      "genres": [
+        "Pop",
+        "Pop / R&B"
+      ],
+      "tags": [
+        "beat with hook",
+        "nf",
+        "guitar"
+      ],
+      "plays": 1299,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "11849134",
+      "title": "Guitar Trap Beat \"Forget\"",
+      "bpm": 154,
+      "key": "Dm",
+      "duration": 190,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "drake",
+        "juice wrld",
+        "young thug"
+      ],
+      "plays": 1068,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "11837289",
+      "title": "SAMURAI",
+      "bpm": 90,
+      "key": "A♯m",
+      "duration": 182,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "piano",
+        "rnb",
+        "guitar"
+      ],
+      "plays": 232,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "11810006",
+      "title": "Pain Akatsuki",
+      "bpm": 126,
+      "key": "F♯m",
+      "duration": 137,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap beat",
+        "kendrick lamar",
+        "baby keem"
+      ],
+      "plays": 1056,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "11778613",
+      "title": "GLOCK",
+      "bpm": 142,
+      "key": "F♯m",
+      "duration": 152,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap beat",
+        "travis scott",
+        "trap"
+      ],
+      "plays": 1596,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "11723553",
+      "title": "Stranger Drake",
+      "bpm": 136,
+      "key": "Em",
+      "duration": 155,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "future",
+        "drake",
+        "young thug"
+      ],
+      "plays": 1331,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "11713441",
+      "title": "Darth Vader",
+      "bpm": 175,
+      "key": "Bm",
+      "duration": 150,
+      "genres": [
+        "Hip Hop",
+        "Orchestral"
+      ],
+      "tags": [
+        "halloween",
+        "orchestra",
+        "choir"
+      ],
+      "plays": 1764,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "11671368",
+      "title": "KAWAII",
+      "bpm": 90,
+      "key": "B♭m",
+      "duration": 162,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "doja cat",
+        "megan the stallion",
+        "cardi b"
+      ],
+      "plays": 1319,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "11650567",
+      "title": "aggressive hard trap beat \"chaos\"",
+      "bpm": 150,
+      "key": "Bm",
+      "duration": 139,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "fuckthehashtag",
+        "hard",
+        "trap"
+      ],
+      "plays": 276,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "11594645",
+      "title": "RRRRGGGGGH",
+      "bpm": 120,
+      "key": "Em",
+      "duration": 130,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap",
+        "yo gotti",
+        "lil uzi vert"
+      ],
+      "plays": 268,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "11558089",
+      "title": "JACK HARLOW",
+      "bpm": 110,
+      "key": "AM",
+      "duration": 139,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "hip hop",
+        "jack harlow",
+        "guitar"
+      ],
+      "plays": 175,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "11547308",
+      "title": "MIKASA ACKERMAN",
+      "bpm": 139,
+      "key": "Cm",
+      "duration": 134,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "hard trap",
+        "drake"
+      ],
+      "plays": 1202,
+      "purchases": 0,
+      "likes": 26
+    },
+    {
+      "trackId": "11534507",
+      "title": "FLOW",
+      "bpm": 128,
+      "key": "G♯m",
+      "duration": 174,
+      "genres": [
+        "Hip Hop"
+      ],
+      "tags": [
+        "piano",
+        "storytelling",
+        "melodic"
+      ],
+      "plays": 120,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "11484224",
+      "title": "Hard Club Type Beat \"CAT WOMAN\"",
+      "bpm": 90,
+      "key": "C♯m",
+      "duration": 128,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "doja cat",
+        "club banger",
+        "cardi b"
+      ],
+      "plays": 405,
+      "purchases": 0,
+      "likes": 21
+    },
+    {
+      "trackId": "11474888",
+      "title": "Dark Trap Beat \"Scarlet Witch\"",
+      "bpm": 180,
+      "key": "Bm",
+      "duration": 148,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "808",
+        "halloween",
+        "dark trap"
+      ],
+      "plays": 1074,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "11436167",
+      "title": "Madness",
+      "bpm": 150,
+      "key": "Gm",
+      "duration": 155,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "jackharlow",
+        "lilnasx",
+        "brass"
+      ],
+      "plays": 121,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "11427945",
+      "title": "Brass with vocal chop type beat \"Dr Strange\"",
+      "bpm": 150,
+      "key": "Gm",
+      "duration": 155,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "vocal chop",
+        "dr strange",
+        "brass"
+      ],
+      "plays": 38,
+      "purchases": 0,
+      "likes": 2
+    },
+    {
+      "trackId": "11416769",
+      "title": "You Were Just A Child",
+      "bpm": 140,
+      "key": "DM",
+      "duration": 157,
+      "genres": [
+        "Drill"
+      ],
+      "tags": [
+        "drillguitar",
+        "drillvocal",
+        "moon knight"
+      ],
+      "plays": 57,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "11386885",
+      "title": "Moon Knight",
+      "bpm": 150,
+      "key": "C♯m",
+      "duration": 144,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hardtrapbeat",
+        "moonknight",
+        "trap"
+      ],
+      "plays": 126,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "11361205",
+      "title": "Idontneedyou",
+      "bpm": 160,
+      "key": "Am",
+      "duration": 146,
+      "genres": [
+        "New Soul",
+        "R&B"
+      ],
+      "tags": [
+        "typebeat",
+        "rnb",
+        "guitar"
+      ],
+      "plays": 553,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "11349944",
+      "title": "fuck the world",
+      "bpm": 150,
+      "key": "Fm",
+      "duration": 144,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "jazz",
+        "trap",
+        "guitar"
+      ],
+      "plays": 152,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "11340380",
+      "title": "420",
+      "bpm": 140,
+      "key": "Dm",
+      "duration": 154,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "marijuana",
+        "guitar",
+        "reggae"
+      ],
+      "plays": 205,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "11329345",
+      "title": "pussy talk",
+      "bpm": 90,
+      "key": "Fm",
+      "duration": 142,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "city girl",
+        "meganthestallion",
+        "cardi b"
+      ],
+      "plays": 160,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "11310234",
+      "title": "SAD DANCE",
+      "bpm": 110,
+      "key": "D♯m",
+      "duration": 201,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "tyga",
+        "dababy",
+        "guitar"
+      ],
+      "plays": 198,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "11284713",
+      "title": "Guitar Dababy Type Beat \"Vibe\"",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 165,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "tory lanez",
+        "dababy",
+        "guitar"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "11271260",
+      "title": "Dababy type beat \"Maniac\"",
+      "bpm": 128,
+      "key": "Fm",
+      "duration": 195,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "tory lanez",
+        "dababy",
+        "megan the stallion"
+      ],
+      "plays": 1413,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "11271227",
+      "title": "Dababy Type Beat \"SHAMAN\"",
+      "bpm": 128,
+      "key": "D♯m",
+      "duration": 195,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "flute",
+        "tory lanez",
+        "dababy"
+      ],
+      "plays": 37,
+      "purchases": 0,
+      "likes": 7
+    },
+    {
+      "trackId": "11260689",
+      "title": "Timeless",
+      "bpm": 90,
+      "key": "Bm",
+      "duration": 224,
+      "genres": [
+        "R&B"
+      ],
+      "tags": [
+        "rnb",
+        "doja cat",
+        "sza"
+      ],
+      "plays": 463,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "11241051",
+      "title": "Money Talk $$",
+      "bpm": 145,
+      "key": "Cm",
+      "duration": 167,
+      "genres": [
+        "Hyperpop"
+      ],
+      "tags": [
+        "trippie redd",
+        "yeat",
+        "hyperpop"
+      ],
+      "plays": 198,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "11203473",
+      "title": "NUCLEAR",
+      "bpm": 120,
+      "key": "Am",
+      "duration": 176,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "kodak black",
+        "gunna",
+        "drake"
+      ],
+      "plays": 46,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "11191865",
+      "title": "HARD TRAP RNB GUITAR \"NEEDY\"",
+      "bpm": 140,
+      "key": "Am",
+      "duration": 144,
+      "genres": [
+        "New Soul",
+        "R&B"
+      ],
+      "tags": [
+        "rnb",
+        "lil tjay",
+        "traprnb"
+      ],
+      "plays": 215,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "11143689",
+      "title": "NO MORE",
+      "bpm": 146,
+      "key": "GM",
+      "duration": 187,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "kodak black",
+        "beat with hook",
+        "piano"
+      ],
+      "plays": 173,
+      "purchases": 0,
+      "likes": 17
+    },
+    {
+      "trackId": "11133693",
+      "title": "RnB Guitar Drill \"Unity\"",
+      "bpm": 146,
+      "key": "DM",
+      "duration": 161,
+      "genres": [
+        "Drill"
+      ],
+      "tags": [
+        "rnbdrill",
+        "fivio foreign",
+        "kanye west"
+      ],
+      "plays": 150,
+      "purchases": 0,
+      "likes": 19
+    },
+    {
+      "trackId": "11118508",
+      "title": "*FREE HARD GUITAR TRAP BEAT \"GOTHAM CITY\"",
+      "bpm": 144,
+      "key": "C♯m",
+      "duration": 153,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard trap beat",
+        "aggressive",
+        "guitar"
+      ],
+      "plays": 196,
+      "purchases": 0,
+      "likes": 25
+    },
+    {
+      "trackId": "11110536",
+      "title": "*FREE NICO ROBIN",
+      "bpm": 144,
+      "key": "Bm",
+      "duration": 153,
+      "genres": [
+        "Hyperpop"
+      ],
+      "tags": [
+        "japan",
+        "hyperpop",
+        "anime"
+      ],
+      "plays": 125,
+      "purchases": 0,
+      "likes": 16
+    },
+    {
+      "trackId": "11110144",
+      "title": "*FREE HUSTLE",
+      "bpm": 140,
+      "key": "G♯m",
+      "duration": 172,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "tech n9ne",
+        "polo g",
+        "hard trap beat"
+      ],
+      "plays": 121,
+      "purchases": 0,
+      "likes": 13
+    },
+    {
+      "trackId": "11093039",
+      "title": "*EXCLUSIVE GREMLIN",
+      "bpm": 89,
+      "key": "A♯m",
+      "duration": 164,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "kodak black",
+        "gunna",
+        "young thug"
+      ],
+      "plays": 117,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "11084454",
+      "title": "*FREE IRON MAN",
+      "bpm": 160,
+      "key": "Fm",
+      "duration": 163,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "tory lanez",
+        "dababy",
+        "jack harlow"
+      ],
+      "plays": 133,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "11071863",
+      "title": "*FREE Deadpool",
+      "bpm": 127,
+      "key": "FM",
+      "duration": 159,
+      "genres": [
+        "K_Pop",
+        "Pop"
+      ],
+      "tags": [
+        "808",
+        "deadpool",
+        "guitar"
+      ],
+      "plays": 171,
+      "purchases": 0,
+      "likes": 21
+    },
+    {
+      "trackId": "11052008",
+      "title": "*FREE THE BATMAN",
+      "bpm": 140,
+      "key": "D♯m",
+      "duration": 183,
+      "genres": [
+        "2 Step",
+        "Electronic"
+      ],
+      "tags": [
+        "drop",
+        "trap",
+        "batman"
+      ],
+      "plays": 1844,
+      "purchases": 0,
+      "likes": 52
+    },
+    {
+      "trackId": "11017041",
+      "title": "*FREE Piano Hard Type Beat \"PAIN\"",
+      "bpm": 90,
+      "key": "Gm",
+      "duration": 173,
+      "genres": [
+        "Hip Hop"
+      ],
+      "tags": [
+        "piano",
+        "nf",
+        "eminem"
+      ],
+      "plays": 829,
+      "purchases": 0,
+      "likes": 27
+    },
+    {
+      "trackId": "11006271",
+      "title": "*FREE ORCHESTRA DRILL BEAT \"RED ALERT\"",
+      "bpm": 75,
+      "key": "None",
+      "duration": 123,
+      "genres": [
+        "Drill"
+      ],
+      "tags": [
+        "ukdrill",
+        "orchestra",
+        "drill"
+      ],
+      "plays": 94,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "11006117",
+      "title": "*FREE PRAY",
+      "bpm": 150,
+      "key": "None",
+      "duration": 145,
+      "genres": [
+        "Drill"
+      ],
+      "tags": [
+        "ukdrill",
+        "drill",
+        "nydrill"
+      ],
+      "plays": 122,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "11005991",
+      "title": "*FREE WORLD WAR III",
+      "bpm": 120,
+      "key": "D♯m",
+      "duration": 168,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "xxxtentacion",
+        "war",
+        "trap"
+      ],
+      "plays": 123,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "11005790",
+      "title": "*FREE Juice Wrld type Beat \"Numb\"",
+      "bpm": 76,
+      "key": "Am",
+      "duration": 173,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "playboicarti",
+        "juicewrld",
+        "drokenji"
+      ],
+      "plays": 112,
+      "purchases": 0,
+      "likes": 12
+    },
+    {
+      "trackId": "10586777",
+      "title": "FAINT",
+      "bpm": 120,
+      "key": "A♯M",
+      "duration": 215,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "drake",
+        "kanye west",
+        "guitar"
+      ],
+      "plays": 117,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "9741032",
+      "title": "DARK LIGHT",
+      "bpm": 140,
+      "key": "Em",
+      "duration": 157,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "trap",
+        "bell",
+        "hardtrap"
+      ],
+      "plays": 163,
+      "purchases": 0,
+      "likes": 34
+    },
+    {
+      "trackId": "9721472",
+      "title": "FRONTMAN",
+      "bpm": 140,
+      "key": "F♯m",
+      "duration": 157,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil durk",
+        "halloween",
+        "lil baby"
+      ],
+      "plays": 158,
+      "purchases": 0,
+      "likes": 38
+    },
+    {
+      "trackId": "9696095",
+      "title": "*FREE BAD BITCHES",
+      "bpm": 174,
+      "key": "Bm",
+      "duration": 137,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "saweetie",
+        "doja cat",
+        "megan the stallion"
+      ],
+      "plays": 1507,
+      "purchases": 0,
+      "likes": 97
+    },
+    {
+      "trackId": "9677701",
+      "title": "Asian Gangster",
+      "bpm": 140,
+      "key": "C♯m",
+      "duration": 132,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "asian",
+        "trap",
+        "gangster"
+      ],
+      "plays": 612,
+      "purchases": 0,
+      "likes": 72
+    },
+    {
+      "trackId": "9653134",
+      "title": "Hard Trap Beat Travis Scott Type Beat \"Uzi\"",
+      "bpm": 142,
+      "key": "C♯m",
+      "duration": 141,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "travis scott",
+        "drake",
+        "trap"
+      ],
+      "plays": 66,
+      "purchases": 0,
+      "likes": 31
+    },
+    {
+      "trackId": "9636278",
+      "title": "I am WEED",
+      "bpm": 76,
+      "key": "Am",
+      "duration": 176,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "juicewrld",
+        "young thug",
+        "trippieredd"
+      ],
+      "plays": 38,
+      "purchases": 0,
+      "likes": 26
+    },
+    {
+      "trackId": "9627172",
+      "title": "Chill Guitar Type Beat \" Freedom\"",
+      "bpm": 94,
+      "key": "CM",
+      "duration": 163,
+      "genres": [
+        "Hip Hop"
+      ],
+      "tags": [
+        "chill",
+        "trap",
+        "guitar"
+      ],
+      "plays": 71,
+      "purchases": 0,
+      "likes": 38
+    },
+    {
+      "trackId": "9603085",
+      "title": "HALLOWEEN TYPE BEAT NECROMANCER",
+      "bpm": 120,
+      "key": "Dm",
+      "duration": 128,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "21savage",
+        "metroboomin",
+        "migos"
+      ],
+      "plays": 90,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "9550166",
+      "title": "SAE BYEOK",
+      "bpm": 162,
+      "key": "None",
+      "duration": 136,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "future bass",
+        "vocal chop",
+        "trap"
+      ],
+      "plays": 132,
+      "purchases": 0,
+      "likes": 44
+    },
+    {
+      "trackId": "9550039",
+      "title": "FAST FLOW RAP BEAT SQUID GAME",
+      "bpm": 162,
+      "key": "A♭m",
+      "duration": 131,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "fast flow",
+        "fast rap",
+        "squid"
+      ],
+      "plays": 443,
+      "purchases": 0,
+      "likes": 67
+    },
+    {
+      "trackId": "9549916",
+      "title": "SQUID GAME DRILL BEAT",
+      "bpm": 150,
+      "key": "A♭m",
+      "duration": 157,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "halloween",
+        "ukny drill",
+        "drill"
+      ],
+      "plays": 299,
+      "purchases": 0,
+      "likes": 51
+    },
+    {
+      "trackId": "9549897",
+      "title": "SQUID GAME TRAP BEAT",
+      "bpm": 120,
+      "key": "A♭m",
+      "duration": 178,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "halloween",
+        "yo gotti",
+        "lil uzi vert"
+      ],
+      "plays": 504,
+      "purchases": 0,
+      "likes": 69
+    },
+    {
+      "trackId": "9549810",
+      "title": "AGGRESSIVE YEAT TYPE BEAT \"JAWS\"",
+      "bpm": 90,
+      "key": "C♯m",
+      "duration": 130,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "playboi carti",
+        "trippie redd",
+        "lil uzi vert"
+      ],
+      "plays": 230,
+      "purchases": 0,
+      "likes": 60
+    },
+    {
+      "trackId": "9549760",
+      "title": "EPIC UK/NY DRILL BEAT \"DRACARYS\"",
+      "bpm": 150,
+      "key": "Dm",
+      "duration": 160,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "headie one",
+        "fivio foreign",
+        "pop smoke"
+      ],
+      "plays": 164,
+      "purchases": 0,
+      "likes": 44
+    },
+    {
+      "trackId": "9549703",
+      "title": "TOKYO NIGHT",
+      "bpm": 100,
+      "key": "Gm",
+      "duration": 148,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "tyga",
+        "trap",
+        "club banger"
+      ],
+      "plays": 160,
+      "purchases": 0,
+      "likes": 30
+    },
+    {
+      "trackId": "9549587",
+      "title": "HALLOWEEN TYPE BEAT \"RYUK\"",
+      "bpm": 90,
+      "key": "Bm",
+      "duration": 168,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "joyner lucas",
+        "nf",
+        "eminem"
+      ],
+      "plays": 141,
+      "purchases": 0,
+      "likes": 15
+    },
+    {
+      "trackId": "9549461",
+      "title": "Tight Melodic Hiphop/Trap Instrumental \"Innocent\"",
+      "bpm": 128,
+      "key": "Cm",
+      "duration": 202,
+      "genres": [
+        "Hip Hop",
+        "Orchestral"
+      ],
+      "tags": [
+        "virzy guns",
+        "melodic",
+        "trap"
+      ],
+      "plays": 183,
+      "purchases": 0,
+      "likes": 11
+    },
+    {
+      "trackId": "8868943",
+      "title": "CYBER CLUB F#m 100 BPM",
+      "bpm": 100,
+      "key": "F♯m",
+      "duration": 141,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "club",
+        "trap",
+        "dubstep"
+      ],
+      "plays": 1095,
+      "purchases": 0,
+      "likes": 74
+    },
+    {
+      "trackId": "8841401",
+      "title": "HARD TRAP BEAT \"BUBBLE BOWL\"",
+      "bpm": 126,
+      "key": "Em",
+      "duration": 146,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil nas x",
+        "jack harlow",
+        "hornbrass"
+      ],
+      "plays": 340,
+      "purchases": 0,
+      "likes": 65
+    },
+    {
+      "trackId": "8814116",
+      "title": "NY DRILL BEAT \"BROOKLYN\"",
+      "bpm": 140,
+      "key": "Dm",
+      "duration": 177,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "headie one",
+        "cj",
+        "pop smoke"
+      ],
+      "plays": 228,
+      "purchases": 0,
+      "likes": 56
+    },
+    {
+      "trackId": "8795993",
+      "title": "HARD TRAP BEAT \" GRIND \"",
+      "bpm": 181,
+      "key": "D♯m",
+      "duration": 164,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "rick ross",
+        "trap",
+        "nipsey hussle"
+      ],
+      "plays": 187,
+      "purchases": 0,
+      "likes": 48
+    },
+    {
+      "trackId": "8779769",
+      "title": "Fast aggresive hard trap \"Black\" 98 G#m",
+      "bpm": 98,
+      "key": "G♯m",
+      "duration": 129,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "hard",
+        "trap",
+        "aggresive"
+      ],
+      "plays": 1316,
+      "purchases": 0,
+      "likes": 75
+    },
+    {
+      "trackId": "8751663",
+      "title": "HARD UNIQUE TRAP BEAT \"SCHIZOPHRENIA\"",
+      "bpm": 140,
+      "key": "Cm",
+      "duration": 140,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "halloween",
+        "hard trap beat",
+        "trap"
+      ],
+      "plays": 7494,
+      "purchases": 0,
+      "likes": 114
+    },
+    {
+      "trackId": "8751306",
+      "title": "UK/NY DRILL BEAT SUICIDE",
+      "bpm": 110,
+      "key": "G♯m",
+      "duration": 165,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "ukdrill",
+        "drill",
+        "nydrill"
+      ],
+      "plays": 171,
+      "purchases": 0,
+      "likes": 39
+    },
+    {
+      "trackId": "8751043",
+      "title": "UK/NY DRILL BEAT \"FALL\"",
+      "bpm": 130,
+      "key": "Bm",
+      "duration": 140,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "ukdrill",
+        "drill",
+        "nydrill"
+      ],
+      "plays": 114,
+      "purchases": 0,
+      "likes": 41
+    },
+    {
+      "trackId": "8735698",
+      "title": "HARD TRAP RNB GUITAR SAXOPHONE \"HANGOVER\"",
+      "bpm": 164,
+      "key": "F♯m",
+      "duration": 180,
+      "genres": [
+        "New Soul",
+        "R&B"
+      ],
+      "tags": [
+        "soul",
+        "rnb",
+        "trap"
+      ],
+      "plays": 5287,
+      "purchases": 0,
+      "likes": 121
+    },
+    {
+      "trackId": "8680847",
+      "title": "HARD TRAP POP ROCK GUITAR 808 \"EVELYN\"",
+      "bpm": 184,
+      "key": "Bm",
+      "duration": 157,
+      "genres": [
+        "Pop",
+        "Pop / Hip Hop"
+      ],
+      "tags": [
+        "pop",
+        "trap",
+        "guitar"
+      ],
+      "plays": 1692,
+      "purchases": 0,
+      "likes": 85
+    },
+    {
+      "trackId": "8664023",
+      "title": "HARD TRAP/DRILL \"SYLVIE\"",
+      "bpm": 162,
+      "key": "D♯m",
+      "duration": 141,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "loki",
+        "ukdrill",
+        "trap"
+      ],
+      "plays": 3273,
+      "purchases": 0,
+      "likes": 122
+    },
+    {
+      "trackId": "8630086",
+      "title": "HARD TRAP BEAT EURO",
+      "bpm": 100,
+      "key": "D♯m",
+      "duration": 136,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "euro",
+        "trap",
+        "edm"
+      ],
+      "plays": 316,
+      "purchases": 0,
+      "likes": 62
+    },
+    {
+      "trackId": "8606248",
+      "title": "HARD AGGRESIVE UK DRILL BEAT \"SMOKE\" BUY 2 GET",
+      "bpm": 140,
+      "key": "Am",
+      "duration": 153,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "headie one",
+        "cj",
+        "pop smoke"
+      ],
+      "plays": 468,
+      "purchases": 0,
+      "likes": 56
+    },
+    {
+      "trackId": "8599998",
+      "title": "Cardi B Type beat \" HOT \"",
+      "bpm": 180,
+      "key": "Bm",
+      "duration": 150,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "saweetie",
+        "megan the stallion",
+        "cardi b"
+      ],
+      "plays": 1466,
+      "purchases": 0,
+      "likes": 73
+    },
+    {
+      "trackId": "8567368",
+      "title": "BUY 2 GET 1 HIP HOP CLUB BANGER \"LAMBORGHINI\"",
+      "bpm": 184,
+      "key": "F♯m",
+      "duration": 117,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "saweetie",
+        "dababy",
+        "cardi b"
+      ],
+      "plays": 785,
+      "purchases": 0,
+      "likes": 70
+    },
+    {
+      "trackId": "8550374",
+      "title": "BUY 2 GET 1 HARD TRAP BEAT \"BEAT\"",
+      "bpm": 180,
+      "key": "GM",
+      "duration": 133,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil uzi",
+        "roddy rich",
+        "dababy"
+      ],
+      "plays": 1452,
+      "purchases": 0,
+      "likes": 41
+    },
+    {
+      "trackId": "8550334",
+      "title": "BUY 2 GET 1 HARD TRAP BEAT CYBERPUNK",
+      "bpm": 70,
+      "key": "Cm",
+      "duration": 136,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil uzi",
+        "cyberpunk",
+        "hyperpop"
+      ],
+      "plays": 904,
+      "purchases": 0,
+      "likes": 39
+    },
+    {
+      "trackId": "8550277",
+      "title": "BUY 2 GET 1 TRAP GUITAR RNB \"QUEEN\"",
+      "bpm": 100,
+      "key": "Em",
+      "duration": 166,
+      "genres": [
+        "New Soul",
+        "R&B"
+      ],
+      "tags": [
+        "ariana grande",
+        "rnb",
+        "kehlani"
+      ],
+      "plays": 200,
+      "purchases": 0,
+      "likes": 31
+    },
+    {
+      "trackId": "8550252",
+      "title": "BUY 2 GET 1 HARD TRAP BEAT CYBERWAR",
+      "bpm": 90,
+      "key": "D♯m",
+      "duration": 144,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "lil uzi",
+        "dababy",
+        "lil baby"
+      ],
+      "plays": 129,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "8536963",
+      "title": "HARD 808 UK DRILL BEAT \"LAST BLOOD\" BUY 2 GET",
+      "bpm": 130,
+      "key": "Gm",
+      "duration": 155,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "skepta",
+        "fivio foreign",
+        "pop smoke"
+      ],
+      "plays": 289,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "8536887",
+      "title": "HARD 808 UK DRILL BEAT \"DEATH\" BUY 2 GET",
+      "bpm": 127,
+      "key": "F♯m",
+      "duration": 166,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "headie one",
+        "fivio foreign",
+        "pop smoke"
+      ],
+      "plays": 247,
+      "purchases": 0,
+      "likes": 25
+    },
+    {
+      "trackId": "8536796",
+      "title": "BUY 2 GET 1 | HIP HOP DANCE CLUB BANGER 808 \"FREESTYLE\"",
+      "bpm": 126,
+      "key": "Cm",
+      "duration": 154,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "doja cat",
+        "megan the stallion",
+        "cardi b"
+      ],
+      "plays": 682,
+      "purchases": 0,
+      "likes": 22
+    },
+    {
+      "trackId": "8523931",
+      "title": "BUY 2 GET 1 UK DRILL x SINDEN GAMELAN \"NIRVANA\"",
+      "bpm": 140,
+      "key": "C♯m",
+      "duration": 190,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "skepta",
+        "headie one",
+        "pop smoke"
+      ],
+      "plays": 143,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "8523884",
+      "title": "BUY 2 GET 1 FREE HARD AGGRESIVE UK DRILL BEAT \"BAD GIRL\"",
+      "bpm": 128,
+      "key": "Dm",
+      "duration": 143,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "skepta",
+        "club",
+        "drill"
+      ],
+      "plays": 339,
+      "purchases": 0,
+      "likes": 20
+    },
+    {
+      "trackId": "8523842",
+      "title": "BUY 2 GET 1 FREE HARD UK DRILL BEAT \"FREE PALESTINE\"",
+      "bpm": 144,
+      "key": "Cm",
+      "duration": 136,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "skepta",
+        "headie one",
+        "pop smoke"
+      ],
+      "plays": 430,
+      "purchases": 0,
+      "likes": 27
+    },
+    {
+      "trackId": "8500249",
+      "title": "FREE BEAT | UK DRILL BEAT | HARD | EVIL HYMN",
+      "bpm": 140,
+      "key": "Fm",
+      "duration": 123,
+      "genres": [
+        "Grime",
+        "Hip Hop"
+      ],
+      "tags": [
+        "skepta",
+        "headie one",
+        "pop smoke"
+      ],
+      "plays": 196,
+      "purchases": 0,
+      "likes": 23
+    },
+    {
+      "trackId": "8374625",
+      "title": "FREE BEAT | HARD TRAP BEAT FLUTE \"GAME ON\"",
+      "bpm": 140,
+      "key": "F♯m",
+      "duration": 132,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "flute",
+        "roddy rich",
+        "dababy"
+      ],
+      "plays": 77,
+      "purchases": 0,
+      "likes": 14
+    },
+    {
+      "trackId": "8337940",
+      "title": "FREE BEAT | HARD TRAP BEAT GUITAR FLUTE 808 \"RAPSTAR\"",
+      "bpm": 76,
+      "key": "Dm",
+      "duration": 182,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "polo g",
+        "juicewrld",
+        "trap"
+      ],
+      "plays": 878,
+      "purchases": 0,
+      "likes": 24
+    },
+    {
+      "trackId": "8291991",
+      "title": "Hip Hop dance club banger hard 808 trap \" savage\"",
+      "bpm": 190,
+      "key": "Am",
+      "duration": 133,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "club",
+        "trap",
+        "dance"
+      ],
+      "plays": 1916,
+      "purchases": 0,
+      "likes": 28
+    },
+    {
+      "trackId": "7949789",
+      "title": "HARD 808 TRAP BEAT \"CLOWN\"",
+      "bpm": 90,
+      "key": "E♭M",
+      "duration": 144,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "scare",
+        "clown",
+        "hard"
+      ],
+      "plays": 180,
+      "purchases": 0,
+      "likes": 9
+    },
+    {
+      "trackId": "7949687",
+      "title": "CLUB BANGER TYPE BEAT \"JEDAG JEDUG\"",
+      "bpm": 126,
+      "key": "G♯m",
+      "duration": 145,
+      "genres": [
+        "Club",
+        "Hip Hop"
+      ],
+      "tags": [
+        "breakbeat",
+        "indo",
+        "club"
+      ],
+      "plays": 178,
+      "purchases": 0,
+      "likes": 5
+    },
+    {
+      "trackId": "7949534",
+      "title": "UK/NY DRILL BEAT \"PTSD\"",
+      "bpm": 140,
+      "key": "D♯m",
+      "duration": 125,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "polo g",
+        "fivio foreign",
+        "pop smoke"
+      ],
+      "plays": 77,
+      "purchases": 0,
+      "likes": 10
+    },
+    {
+      "trackId": "7949483",
+      "title": "US/NY DRILL BEAT \" ILLUMINATI \"",
+      "bpm": 140,
+      "key": "C♯m",
+      "duration": 127,
+      "genres": [
+        "Gangsta",
+        "Hip Hop"
+      ],
+      "tags": [
+        "polo g",
+        "fivio foreign",
+        "pop smoke"
+      ],
+      "plays": 95,
+      "purchases": 0,
+      "likes": 8
+    },
+    {
+      "trackId": "7949406",
+      "title": "WEIRD HARD TRAP BEAT \"TRICK\"",
+      "bpm": 126,
+      "key": "CM",
+      "duration": 139,
+      "genres": [
+        "Hip Hop",
+        "West Coast"
+      ],
+      "tags": [
+        "weird",
+        "virzy guns",
+        "hard"
+      ],
+      "plays": 230,
+      "purchases": 0,
+      "likes": 18
+    },
+    {
+      "trackId": "7949350",
+      "title": "JAPANESE TRAP BEAT \"KATANA\"",
+      "bpm": 90,
+      "key": "A♯m",
+      "duration": 131,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "japan",
+        "trap",
+        "samurai"
+      ],
+      "plays": 2277,
+      "purchases": 0,
+      "likes": 59
+    },
+    {
+      "trackId": "7949265",
+      "title": "HARD TRAP BEAT \" TAJ MAHAL\"",
+      "bpm": 126,
+      "key": "Am",
+      "duration": 137,
+      "genres": [
+        "Hip Hop",
+        "Trap"
+      ],
+      "tags": [
+        "calm",
+        "moslem",
+        "india"
+      ],
+      "plays": 139,
+      "purchases": 0,
+      "likes": 3
+    }
+  ],
+  "failures": []
+}

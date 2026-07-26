@@ -5,6 +5,8 @@
  * Verified BeatStars Track IDs: 325 unique tracks extracted.
  */
 
+import { getEditorialBeatWorld } from './beatstars-genre-index';
+
 export type CatalogSource =
     | 'repository'
     | 'beatstars-api'
@@ -11710,7 +11712,7 @@ export function getBeatsByCategory(categorySlug: string): BeatProduct[] {
     const category = categories.find((c) => c.slug === categorySlug);
     if (!category) return [];
     return beatsCatalog.filter(
-        (b) => b.primaryGenre === category.primaryGenre || b.subgenres.some((s) => category.subgenres.includes(s))
+        (beat) => getEditorialBeatWorld(beat.beatstarsTrackId) === category.primaryGenre,
     );
 }
 
