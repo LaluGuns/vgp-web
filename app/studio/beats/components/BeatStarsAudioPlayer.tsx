@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Hls from 'hls.js';
 import { AlertCircle, ExternalLink, LoaderCircle, Pause, Play } from 'lucide-react';
 
 type BeatLocale = 'en-US' | 'ja-JP' | 'de-DE';
@@ -65,7 +66,7 @@ function fetchPreview(trackId: string) {
 
             const payload = (await response.json()) as BeatStarsTrackResponse;
             const track = payload.data?.track;
-            const previewUrl = track?.bundle?.stream?.url || track?.streamUrl;
+            const previewUrl = track?.streamUrl || track?.bundle?.hls?.url;
 
             if (
                 !track ||
@@ -77,7 +78,7 @@ function fetchPreview(trackId: string) {
 
             return {
                 previewUrl,
-                duration: track.bundle?.stream?.duration || track.bundle?.hls?.duration || null,
+                duration: track.bundle?.hls?.duration || track.bundle?.stream?.duration || null,
             };
         })
         .catch((error) => {
@@ -201,6 +202,37 @@ export default function BeatStarsAudioPlayer({
         return () => window.removeEventListener('vgp:preview-play', pauseOtherPlayer);
     }, [trackId]);
 
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio || !previewUrl) return;
+
+        if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.src = previewUrl;
+            return () => {
+                audio.removeAttribute('src');
+                audio.load();
+            };
+        }
+
+        if (!Hls.isSupported()) {
+            setHasFailed(true);
+            return;
+        }
+
+        const hls = new Hls({
+            enableWorker: true,
+            startLevel: -1,
+        });
+
+        hls.loadSource(previewUrl);
+        hls.attachMedia(audio);
+        hls.on(Hls.Events.ERROR, (_event, data) => {
+            if (data.fatal) setHasFailed(true);
+        });
+
+        return () => hls.destroy();
+    }, [previewUrl]);
+
     const togglePlayback = async () => {
         const audio = audioRef.current;
         if (!audio) return;
@@ -251,7 +283,6 @@ export default function BeatStarsAudioPlayer({
                 <div className="p-4">
                     <audio
                         ref={audioRef}
-                        src={previewUrl}
                         preload="metadata"
                         onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
                         onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
