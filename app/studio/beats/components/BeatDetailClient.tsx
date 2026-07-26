@@ -86,14 +86,14 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         return path;
     };
 
-    const playerTitle = locale === 'ja-JP' ? '公式ビートプレビュー' : locale === 'de-DE' ? 'Offizielle Beat-Vorschau' : 'Official beat preview';
-    const playerSub = locale === 'ja-JP' ? 'BeatStars公式プレーヤー' : locale === 'de-DE' ? 'BeatStars Original-Player' : 'Preview via BeatStars';
+    const playerTitle = locale === 'ja-JP' ? '試聴' : locale === 'de-DE' ? 'Vorschau' : 'Preview';
+    const playerSub = locale === 'ja-JP' ? 'BeatStars公式オーディオ' : locale === 'de-DE' ? 'Offizielles BeatStars-Audio' : 'Official BeatStars audio';
 
     return (
         <PageTransition>
-            <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
+            <article className="editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24">
                 {/* Language Selector & Breadcrumbs */}
-                <div className="mx-auto max-w-5xl px-6 mb-8 flex items-center justify-between">
+                <div className="mx-auto mb-5 flex max-w-5xl items-center justify-between px-6">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
                         <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
                         <span>/</span>
@@ -112,9 +112,9 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                 </div>
 
                 {/* Hero Product Stage */}
-                <SectionShell id="beat-hero" className="py-6">
+                <SectionShell id="beat-hero" className="!py-6 sm:!py-8 lg:!py-10">
                     <div className="mx-auto max-w-5xl">
-                        <div className="grid gap-8 rounded-[1.75rem] border border-white/[0.1] bg-[linear-gradient(145deg,rgba(9,25,35,0.92),rgba(2,8,13,0.98))] p-4 shadow-[0_35px_100px_rgba(0,0,0,0.3)] sm:p-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:p-8">
+                        <div className="grid gap-6 rounded-[1.75rem] border border-white/[0.1] bg-[linear-gradient(145deg,rgba(9,25,35,0.92),rgba(2,8,13,0.98))] p-4 shadow-[0_35px_100px_rgba(0,0,0,0.3)] sm:p-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:p-7">
                             {/* Left: Cover Art & Integrated Track Player */}
                             <m.div
                                 className="space-y-5"
@@ -148,8 +148,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 </div>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
-                                <div className="rounded-xl overflow-hidden border border-white/10 bg-black min-h-[180px]">
-                                    <div className="border-b border-white/10 px-3 py-2 text-[11px] font-medium text-white/60 flex justify-between bg-black/40">
+                                <div className="overflow-hidden rounded-xl border border-white/10 bg-black">
+                                    <div className="flex justify-between border-b border-white/10 bg-black/40 px-3 py-2 text-[10px] font-medium text-white/55">
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
@@ -185,7 +185,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             {text.ready}
                                         </span>
                                     </div>
-                                    <h1 className="mt-4 font-display text-4xl font-bold tracking-[-0.04em] text-white sm:text-5xl">
+                                    <h1 className="mt-4 font-display text-3xl font-bold leading-[1.02] tracking-[-0.04em] text-white sm:text-[2.7rem]">
                                         {beat.title}
                                     </h1>
                                     <p className="mt-3 text-sm leading-7 text-white/70 sm:text-base">

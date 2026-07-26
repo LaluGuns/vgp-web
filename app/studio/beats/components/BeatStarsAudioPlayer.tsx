@@ -92,7 +92,7 @@ function fetchPreview(trackId: string) {
 
 const copy = {
     'en-US': {
-        label: 'Official BeatStars preview',
+        label: 'BeatStars preview',
         loading: 'Loading preview',
         unavailable: 'Preview unavailable',
         external: 'Open on BeatStars',
@@ -262,9 +262,9 @@ export default function BeatStarsAudioPlayer({
     };
 
     return (
-        <div ref={containerRef} className="overflow-hidden rounded-2xl border border-white/[0.1] bg-[#02080d] shadow-inner shadow-black/40">
+        <div ref={containerRef} className="h-[104px] overflow-hidden rounded-xl border border-white/[0.1] bg-[#02080d] shadow-inner shadow-black/40">
             {hasFailed ? (
-                <div className="flex min-h-[128px] flex-col items-center justify-center gap-2 px-4 text-center" aria-live="polite">
+                <div className="flex h-full flex-col items-center justify-center gap-1.5 px-4 text-center" aria-live="polite">
                     <AlertCircle className="h-4 w-4 text-amber-200/75" aria-hidden="true" />
                     <p className="text-xs text-white/55">{text.unavailable}</p>
                     <a
@@ -278,12 +278,12 @@ export default function BeatStarsAudioPlayer({
                     </a>
                 </div>
             ) : !previewUrl ? (
-                <div className="flex min-h-[128px] items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-sky-100/60" aria-live="polite">
+                <div className="flex h-full items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/60" aria-live="polite">
                     <LoaderCircle className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} aria-hidden="true" />
                     {text.loading}
                 </div>
             ) : (
-                <div className="p-4 sm:p-5">
+                <div className="flex h-full items-center p-3.5">
                     <audio
                         ref={audioRef}
                         preload="metadata"
@@ -292,19 +292,19 @@ export default function BeatStarsAudioPlayer({
                         onEnded={() => setIsPlaying(false)}
                         onError={() => setHasFailed(true)}
                     />
-                    <div className="flex items-center gap-3">
+                    <div className="flex w-full items-center gap-3">
                         <button
                             type="button"
                             onClick={togglePlayback}
                             aria-label={isPlaying ? text.pause : text.play}
-                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sky-200 text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sky-200 text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                         >
                             {isPlaying ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="ml-0.5 h-4 w-4" aria-hidden="true" />}
                         </button>
                         <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between gap-3">
-                                <p className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-sky-100/70">{text.label}</p>
-                                <span className="font-mono text-[11px] text-white/50">{formatTime(currentTime)} / {formatTime(duration)}</span>
+                            <div className="flex items-center justify-between gap-2">
+                                <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/70">{text.label}</p>
+                                <span className="shrink-0 font-mono text-[10px] text-white/50">{formatTime(currentTime)} / {formatTime(duration)}</span>
                             </div>
                             <input
                                 type="range"
@@ -314,7 +314,7 @@ export default function BeatStarsAudioPlayer({
                                 value={Math.min(currentTime, duration || 0)}
                                 onChange={(event) => seekTo(Number(event.target.value))}
                                 aria-label={text.position(beatTitle)}
-                                className="mt-2 h-1.5 w-full cursor-pointer accent-sky-200"
+                                className="mt-2.5 h-1.5 w-full cursor-pointer accent-sky-200"
                             />
                         </div>
                     </div>

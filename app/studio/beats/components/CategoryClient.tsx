@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { m } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionShell, PageHeader } from '@/components/editorial/EditorialPrimitives';
+import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp } from '@/lib/motion-presets';
 import { CategoryDef, BeatProduct } from '@/lib/catalog';
 import { beatStarsStoreUrl } from '@/lib/beatstars';
+import { getBeatSummary } from '@/lib/seo/beat-copy';
+import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
 
 interface CategoryClientProps {
     category: CategoryDef;
@@ -17,21 +19,21 @@ interface CategoryClientProps {
 
 const categoryCopy = {
     'en-US': {
-        home: 'Home', beats: 'Beats', muted: 'for artists building a distinct sound.',
-        storeDescription: (title: string) => `Browse the complete official catalog on BeatStars, or compare every available ${title} beat below.`,
-        storeCta: 'Open official store', available: (title: string, count: number) => `${title} beats (${count})`, verified: 'Official preview', from: 'License from $15', details: 'Details & licenses',
+        home: 'Home', beats: 'Beats', muted: 'Built for hard hooks and darker records.',
+        storeDescription: 'Want the whole catalog in one place? Open the official BeatStars store. Every track below is ready to audition here first.',
+        storeCta: 'Open full catalog', available: (count: number) => `${count} tracks ready to audition`, details: 'License details', buy: (price: string) => `License from ${price}`,
         sound: 'Sound character', vocal: 'Recommended vocal fit', licensingTitle: 'Need clear licensing terms?', licensingSub: 'Compare MP3, WAV, Stems, and exclusive-license availability before you buy.', licensingCta: 'Read licensing guide',
     },
     'ja-JP': {
-        home: 'ホーム', beats: 'ビート', muted: '個性あるサウンドを作るアーティストのために。',
-        storeDescription: (title: string) => `BeatStarsの公式カタログを確認するか、下で利用可能な${title}ビートを比較できます。`,
-        storeCta: '公式ストアを開く', available: (title: string, count: number) => `${title}ビート（${count}曲）`, verified: '公式プレビュー', from: 'ライセンスは$15から', details: '詳細とライセンス',
+        home: 'ホーム', beats: 'ビート', muted: '強いフックとダークな世界観のために。',
+        storeDescription: '全カタログをまとめて見るなら、BeatStars公式ストアへ。下の全曲はここで試聴できます。',
+        storeCta: '全カタログを開く', available: (count: number) => `試聴できる${count}曲`, details: 'ライセンス詳細', buy: (price: string) => `${price}からライセンス`,
         sound: 'サウンドの特徴', vocal: 'おすすめのボーカルスタイル', licensingTitle: 'ライセンス条件を確認しますか？', licensingSub: '購入前にMP3、WAV、ステム、独占ライセンスの提供状況を比較できます。', licensingCta: 'ライセンスガイドを見る',
     },
     'de-DE': {
-        home: 'Startseite', beats: 'Beats', muted: 'für Artists mit einem eigenen Sound.',
-        storeDescription: (title: string) => `Durchsuche den vollständigen offiziellen Katalog auf BeatStars oder vergleiche unten alle verfügbaren ${title}-Beats.`,
-        storeCta: 'Offiziellen Store öffnen', available: (title: string, count: number) => `${title}-Beats (${count})`, verified: 'Offizielle Vorschau', from: 'Lizenz ab 15 $', details: 'Details & Lizenzen',
+        home: 'Startseite', beats: 'Beats', muted: 'Für harte Hooks und dunklere Records.',
+        storeDescription: 'Du willst den ganzen Katalog an einem Ort? Öffne den offiziellen BeatStars-Store. Jeden Track unten kannst du zuerst hier anhören.',
+        storeCta: 'Gesamten Katalog öffnen', available: (count: number) => `${count} Tracks zum Anhören`, details: 'Lizenzdetails', buy: (price: string) => `Lizenz ab ${price}`,
         sound: 'Sound-Charakter', vocal: 'Empfohlener Vocal-Stil', licensingTitle: 'Klare Lizenzbedingungen?', licensingSub: 'Vergleiche MP3, WAV, Stems und die Verfügbarkeit einer Exklusivlizenz vor dem Kauf.', licensingCta: 'Lizenzguide lesen',
     },
 } as const;
@@ -51,8 +53,8 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
 
     return (
         <PageTransition>
-            <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
-                <div className="mx-auto max-w-5xl px-6 mb-8 flex items-center justify-between">
+            <article className="editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24">
+                <div className="mx-auto mb-5 flex max-w-5xl items-center justify-between px-6">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
                         <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
                         <span>/</span>
@@ -70,17 +72,31 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                     </div>
                 </div>
 
-                <PageHeader
-                    eyebrow={`VGP Beat Store / ${category.primaryGenre}`}
-                    title={title}
-                    mutedTitle={text.muted}
-                    description={shortDesc}
-                />
+                <SectionShell id="category-intro" className="!py-6 sm:!py-8 lg:!py-10">
+                    <div className="mx-auto max-w-5xl overflow-hidden rounded-[1.5rem] border border-white/[0.1] bg-[linear-gradient(135deg,rgba(8,27,39,0.92),rgba(3,10,15,0.98))] px-5 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.2)] sm:px-8 sm:py-9">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-200/65">
+                            VGP Beat Store / {category.primaryGenre}
+                        </p>
+                        <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                            <div className="max-w-3xl">
+                                <h1 className="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
+                                    {title}
+                                </h1>
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
+                                    {shortDesc}
+                                </p>
+                            </div>
+                            <p className="max-w-xs border-l border-sky-200/25 pl-4 text-sm leading-6 text-sky-100/75 sm:pb-1">
+                                {text.muted}
+                            </p>
+                        </div>
+                    </div>
+                </SectionShell>
 
-                <SectionShell id="official-store-link" className="py-6">
+                <SectionShell id="official-store-link" className="!py-6 sm:!py-8">
                     <div className="mx-auto flex max-w-5xl flex-col gap-4 rounded-xl border border-white/[0.1] bg-white/[0.02] px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
                         <p className="max-w-2xl text-sm leading-6 text-white/65">
-                            {text.storeDescription(title)}
+                            {text.storeDescription}
                         </p>
                         <a
                             href={beatStarsStoreUrl}
@@ -95,44 +111,59 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                 </SectionShell>
 
                 {/* Matching Beats Inventory */}
-                <SectionShell id="matching-beats" className="py-10">
+                <SectionShell id="matching-beats" className="!py-8 sm:!py-10">
                     <div className="mx-auto max-w-5xl">
                         <h2 className="font-display text-2xl font-semibold text-white mb-6">
-                            {text.available(title, beats.length)}
+                            {text.available(beats.length)}
                         </h2>
 
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {beats.map((beat) => (
-                                <m.div
+                                <m.article
                                     key={beat.id}
                                     variants={revealUp}
                                     initial="hidden"
                                     whileInView="visible"
                                     viewport={{ once: true }}
-                                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.02] p-5 backdrop-blur-sm transition hover:border-sky-200/40 hover:bg-white/[0.04]"
+                                    className="group flex min-h-[20.5rem] flex-col gap-3 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
                                 >
-                                    <div>
-                                        <div className="flex items-center justify-between text-xs text-sky-200/60 font-semibold">
-                                            <span>{beat.primaryGenre}</span>
-                                            <span className="text-white/40">{text.verified}</span>
+                                    <div className="h-[8.25rem]">
+                                        <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
+                                            <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
+                                            <span className="font-mono text-white/40">#{beat.beatstarsTrackId}</span>
                                         </div>
-                                        <h3 className="mt-2 text-xl font-bold text-white">{beat.title}</h3>
-                                        <p className="mt-2 line-clamp-2 text-xs leading-5 text-white/60">
-                                            {beat.description[locale] || beat.description['en-US']}
+                                        <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
+                                        <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
+                                            {getBeatSummary(beat, locale)}
                                         </p>
                                     </div>
 
-                                    <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-                                        <span className="text-sm font-semibold text-sky-200">{text.from}</span>
+                                    <BeatStarsAudioPlayer
+                                        trackId={beat.beatstarsTrackId}
+                                        productUrl={beat.beatstarsProductUrl}
+                                        beatTitle={beat.title}
+                                        locale={locale}
+                                    />
+
+                                    <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
                                         <Link
                                             href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                            className="inline-flex items-center gap-1 text-xs font-semibold text-white hover:text-sky-200 transition"
+                                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
                                         >
                                             {text.details}
-                                            <ExternalLink className="h-3 w-3" />
+                                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
                                         </Link>
+                                        <a
+                                            href={beat.beatstarsProductUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                        >
+                                            {text.buy(beat.licenses[0]?.price || '')}
+                                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                        </a>
                                     </div>
-                                </m.div>
+                                </m.article>
                             ))}
                         </div>
                     </div>

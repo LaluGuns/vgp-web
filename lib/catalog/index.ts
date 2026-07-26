@@ -217,14 +217,14 @@ export const categories: CategoryDef[] = [
             'de-DE': 'Cyberpunk Trap Beats',
         },
         shortDescription: {
-            'en-US': 'Futuristic 808 trap instrumentals with neon synth textures, heavy low-end impact, and dark sci-fi drive by Virzy Guns.',
-            'ja-JP': '重厚な808ベースと近未来的なシンセサイザーが融合したダークなサイバーパンクトラップビート。',
-            'de-DE': 'Futuristische 808-Trap-Instrumentals mit Neon-Synth-Texturen und düsterem Sci-Fi-Drive.',
+            'en-US': 'Cold synths, heavy 808s, and a dark pocket for hooks that need to cut through.',
+            'ja-JP': '冷たいシンセと重い808。強いフックが抜けるダークなサイバーパンクトラップ。',
+            'de-DE': 'Kalte Synths, schwere 808s und ein dunkler Raum für Hooks, die durchschneiden.',
         },
         fullDescription: {
-            'en-US': 'Cyberpunk trap instrumentals produced by Virzy Guns. High-energy 808 dynamics and futuristic synth textures for vocal recording and content creation.',
-            'ja-JP': 'Virzy Guns制作のサイバーパンクトラップビート。重厚な808ドラムと近未来的なシンセレイヤーが特徴。',
-            'de-DE': 'Cyberpunk-Trap-Instrumentals von Virzy Guns. Druckvolle 808-Drums und futuristische Synths.',
+            'en-US': 'Cyberpunk trap built around 808 pressure, cold synth detail, and open space for a melodic hook or hard verse.',
+            'ja-JP': '重い808、冷たいシンセ、メロディックなフックや強いバースが映える余白を軸にしたサイバーパンクトラップ。',
+            'de-DE': 'Cyberpunk Trap mit 808-Druck, kalten Synth-Details und Platz für melodische Hooks oder harte Verse.',
         },
         keywords: {
             'en-US': ['cyberpunk trap beats', 'cyberpunk beats for sale', 'futuristic trap beats', 'dark cyberpunk instrumental'],
@@ -253,14 +253,14 @@ export const categories: CategoryDef[] = [
             'de-DE': 'Cyberpunk Phonk Beats',
         },
         shortDescription: {
-            'en-US': 'Distorted drift phonk energy infused with dark cyberpunk synths and crushing basslines by Virzy Guns.',
-            'ja-JP': '歪んだドトフトフォンクのエネルギーとダークなサイバーパンクシンセが融合したビート。',
-            'de-DE': 'Verzerrte Drift-Phonk-Energie kombiniert mit düsteren Cyberpunk-Synths.',
+            'en-US': 'Distorted drums, deep bass, and midnight drift energy for a vocal that needs grit.',
+            'ja-JP': '歪んだドラム、深いベース、荒さのあるボーカルに合う深夜のドリフト感。',
+            'de-DE': 'Verzerrte Drums, tiefer Bass und nächtliche Drift-Energie für raue Vocals.',
         },
         fullDescription: {
-            'en-US': 'Cyberpunk phonk instrumentals produced by Virzy Guns featuring cowbell melodies, saturated 808 slides, and dystopian sci-fi soundscapes.',
-            'ja-JP': 'Virzy Guns制作のサイバーパンクフォンクビート。カウベルメロディと808スライドが特徴。',
-            'de-DE': 'Cyberpunk-Phonk-Instrumentals von Virzy Guns mit Cowbells und 808-Slides.',
+            'en-US': 'Cyberpunk phonk with cowbell motifs, saturated 808 slides, and enough space for chants, sharp flows, or a hostile hook.',
+            'ja-JP': 'カウベルのモチーフ、飽和した808スライド、チャントや鋭いフロウ、攻めたフックが入る余白を持つサイバーパンクフォンク。',
+            'de-DE': 'Cyberpunk Phonk mit Cowbell-Motiven, satten 808-Slides und Raum für Chants, scharfe Flows oder harte Hooks.',
         },
         keywords: {
             'en-US': ['cyberpunk phonk beats', 'phonk beats for sale', 'drift phonk instrumental', 'bladephonk beat'],
@@ -289,14 +289,14 @@ export const categories: CategoryDef[] = [
             'de-DE': 'Synthwave Trap Beats',
         },
         shortDescription: {
-            'en-US': 'Melodic 80s synth nostalgia fused with modern trap drum bounces and deep sub dynamics by Virzy Guns.',
-            'ja-JP': '80年代シンセノスタルジーと現代トラップドラムが融合したメロディックビート。',
-            'de-DE': 'Melodische 80er-Synth-Nostalgie verschmolzen mit modernen Trap-Drums.',
+            'en-US': 'Retro synth color, modern trap weight, and room for melodies that stay in your head.',
+            'ja-JP': 'レトロなシンセの色彩、現代的なトラップの重さ、耳に残るメロディーのための余白。',
+            'de-DE': 'Retro-Synth-Farbe, modernes Trap-Gewicht und Raum für Melodien, die hängen bleiben.',
         },
         fullDescription: {
-            'en-US': 'Synthwave trap instrumentals produced by Virzy Guns. Analog warmth, arpeggiated synth lines, and gated drum atmosphere.',
-            'ja-JP': 'Virzy Guns制作のシンセウェーブトラップビート。アナログシンセの温かみとドラムが融合。',
-            'de-DE': 'Synthwave-Trap-Instrumentals von Virzy Guns. Analoge Wärme und Synth-Arpeggios.',
+            'en-US': 'Synthwave trap with analog warmth, arpeggiated synth lines, and modern low-end weight for melodic rap and sung hooks.',
+            'ja-JP': 'アナログの温かみ、アルペジオのシンセ、現代的な低域を組み合わせたシンセウェーブトラップ。メロディックラップや歌フックに合います。',
+            'de-DE': 'Synthwave Trap mit analoger Wärme, Arpeggio-Synths und modernem Low End für melodischen Rap und gesungene Hooks.',
         },
         keywords: {
             'en-US': ['synthwave trap beats', 'synthwave beats for sale', 'retro trap beat', '80s synthwave beat'],

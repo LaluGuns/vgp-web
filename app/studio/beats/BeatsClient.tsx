@@ -26,19 +26,19 @@ const copyDict = {
     'en-US': {
         eyebrow: 'VGP Studio / Beat Store',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
-        mutedTitle: 'Made for artists ready to release.',
-        description: 'Shop official Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats by Virzy Guns. Preview every production, lock the right license, and turn your next idea into a release.',
+        mutedTitle: 'Pick the sound. Write the record.',
+        description: 'Start with the feeling, not a genre dropdown. Preview the beat, find the pocket for your vocal, then choose your BeatStars license when it clicks.',
         credentialsTag: 'Verified track record',
-        credentialsTitle: 'Production proof behind the catalog.',
-        credentialsSub: 'Independent credits verified through MUSO.AI, placed here where the production record matters most.',
+        credentialsTitle: 'Work people can trace.',
+        credentialsSub: 'Verified songwriting, artist, and producer credits through MUSO.AI.',
         categoriesTag: 'Shop by sound',
-        categoriesTitle: 'Explore genre categories.',
-        categoriesSub: 'Dedicated category landing pages optimized for search, streaming guidelines, and vocal fit.',
+        categoriesTitle: 'Choose the mood before the beat.',
+        categoriesSub: 'Heavy 808 pressure, distorted phonk, or neon synth melodies. Start with the feeling your vocal needs.',
         catalogTag: 'Beat Inventory',
-        catalogTitle: 'Preview the sound. License the release.',
-        catalogSub: 'Cyberpunk Trap, Phonk, Synthwave, and Hard 808 beats — preview before you choose a license and complete checkout on BeatStars.',
-        catalogMeta: 'Official previews · License options from $15 · Checkout on BeatStars',
-        categoryCta: (name: string) => `Explore ${name}`,
+        catalogTitle: 'Find the beat that gives the record a pulse.',
+        catalogSub: 'Every beat is ready to audition. Press play, find the pocket for your vocal, then choose your license on BeatStars.',
+        catalogMeta: 'Preview every beat · Licenses from $15 · Official BeatStars checkout',
+        categoryCta: (name: string) => `Browse ${name}`,
         filterAll: 'All Beats',
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Official Audio Store Player',
@@ -49,7 +49,7 @@ const copyDict = {
         chooseBeatstars: 'Choose License on BeatStars',
         commissionsTag: 'Private commissions',
         commissionsTitle: 'Exclusive rights or custom beats.',
-        commissionsSub: 'Use Instagram DM or Email for work that needs a direct conversation: exclusive ownership or production built from scratch.',
+        commissionsSub: 'Need a beat held for your project or built from zero? Tell us what you are making.',
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'Email Direct',
         dmCustom: 'Custom Beat DM',
@@ -67,19 +67,19 @@ const copyDict = {
     'ja-JP': {
         eyebrow: 'VGPスタジオ / ビートストア',
         title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売',
-        mutedTitle: 'アーティス向け公式インストゥルメンタル。',
-        description: 'Virzy Guns制作の公式サイバーパンクトラップ、フォンク、シンセウェーブ、808ビート。即時MP3/WAV/ステムダウンロード。',
+        mutedTitle: '曲の核になるサウンドを選ぶ。',
+        description: 'ジャンルからではなく、まずムードから選ぶ。試聴して、しっくり来たらBeatStarsでライセンスを選べます。',
         credentialsTag: '実績証明',
-        credentialsTitle: '制作実績とクレジット',
-        credentialsSub: 'MUSO.AIで検証された独立プロデューサーとしての公式制作クレジット。',
+        credentialsTitle: '実績で語るカタログ。',
+        credentialsSub: 'MUSO.AIで確認できる作詞、アーティスト、プロデュースの実績。',
         categoriesTag: 'ジャンル別検索',
-        categoriesTitle: 'カテゴリーから探す',
-        categoriesSub: '検索とストリーミングガイドラインに最適化されたジャンル別専用ページ。',
+        categoriesTitle: 'ビートより先に、ムードを選ぶ。',
+        categoriesSub: '重い808、歪んだフォンク、ネオンのシンセ。ボーカルに合う質感から探せます。',
         catalogTag: 'ビートインベントリ',
-        catalogTitle: '試聴して、リリースに合うライセンスを選ぶ',
-        catalogSub: 'サイバーパンクトラップ、フォンク、シンセウェーブ、ハード808の公式ビートを試聴し、BeatStarsでライセンスを選べます。',
-        catalogMeta: '公式プレビュー · ライセンスは$15から · BeatStarsで決済',
-        categoryCta: (name: string) => `${name}を探す`,
+        catalogTitle: '曲に火をつけるビートを見つける。',
+        catalogSub: 'すべてのビートを試聴できます。ボーカルに合う一曲を見つけたら、BeatStarsでライセンスを選んでください。',
+        catalogMeta: '全曲試聴 · ライセンスは$15から · BeatStars公式決済',
+        categoryCta: (name: string) => `${name}を見る`,
         filterAll: 'すべてのビート',
         playerTag: 'BeatStars公式プレーヤー',
         playerTitle: 'オフィシャル試聴プレーヤー',
@@ -90,7 +90,7 @@ const copyDict = {
         chooseBeatstars: 'BeatStarsで購入する',
         commissionsTag: '個別の制作依頼',
         commissionsTitle: '独占ライセンス権・カスタム制作',
-        commissionsSub: '独占所有権の取得や完全オーダーメイド楽曲の制作はダイレクトメッセージまたはメールでご相談ください。',
+        commissionsSub: 'プロジェクト用にビートを確保したい、ゼロから作りたい。まず何を作るか教えてください。',
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'メールで相談',
         dmCustom: 'カスタム制作のDM相談',
@@ -108,19 +108,19 @@ const copyDict = {
     'de-DE': {
         eyebrow: 'VGP Studio / Beat Store',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats',
-        mutedTitle: 'Produziert für Künstler & Content.',
-        description: 'Offizielle Cyberpunk Trap, Phonk, Synthwave und 808 Beats von Virzy Guns. Sofortiger MP3-, WAV- und Stems-Download.',
+        mutedTitle: 'Finde den Sound für deinen nächsten Record.',
+        description: 'Starte nicht beim Genre. Hör rein, finde den Beat für deine Vocal und wähle die passende Lizenz bei BeatStars.',
         credentialsTag: 'Verifizierte Erfolge',
-        credentialsTitle: 'Produktionsnachweise des Katalogs.',
-        credentialsSub: 'Unabhängige Credits verifiziert über MUSO.AI für maximale Transparenz.',
+        credentialsTitle: 'Credits, die man nachprüfen kann.',
+        credentialsSub: 'Verifizierte Songwriting-, Artist- und Producer-Credits über MUSO.AI.',
         categoriesTag: 'Nach Sound filtern',
-        categoriesTitle: 'Genre-Kategorien erkunden.',
-        categoriesSub: 'Spezielle Kategorie-Seiten optimiert für Suche, Streaming-Richtlinien und Vocal-Passgenauigkeit.',
+        categoriesTitle: 'Erst die Stimmung, dann der Beat.',
+        categoriesSub: 'Schwere 808s, verzerrter Phonk oder Neon-Synths. Fang bei dem Gefühl an, das deine Vocal braucht.',
         catalogTag: 'Beat-Inventar',
-        catalogTitle: 'Sound anhören. Release lizenzieren.',
-        catalogSub: 'Offizielle Cyberpunk-Trap-, Phonk-, Synthwave- und Hard-808-Beats anhören, Lizenz wählen und den Kauf bei BeatStars abschließen.',
-        catalogMeta: 'Offizielle Vorschauen · Lizenzen ab 15 $ · Checkout bei BeatStars',
-        categoryCta: (name: string) => `${name} entdecken`,
+        catalogTitle: 'Finde den Beat, der deinem Record Puls gibt.',
+        catalogSub: 'Jeder Beat ist bereit zum Anhören. Finde den Raum für deine Stimme und wähle die Lizenz bei BeatStars, wenn es passt.',
+        catalogMeta: 'Jeden Beat anhören · Lizenzen ab 15 $ · Offizieller BeatStars-Checkout',
+        categoryCta: (name: string) => `${name} ansehen`,
         filterAll: 'Alle Beats',
         playerTag: 'BeatStars Catalog Player',
         playerTitle: 'Offizieller Audio-Showcase',
@@ -131,7 +131,7 @@ const copyDict = {
         chooseBeatstars: 'Auf BeatStars wählen',
         commissionsTag: 'Private Aufträge',
         commissionsTitle: 'Exklusivrechte oder Custom Beats.',
-        commissionsSub: 'Nutzen Sie DMs oder E-Mails für exklusive Rechte oder individuell angefertigte Instrumentals.',
+        commissionsSub: 'Du willst einen Beat für dein Projekt reservieren oder von null bauen? Sag uns, was du machst.',
         dmExclusive: 'Instagram DM (@virzyguns)',
         emailExclusive: 'E-Mail Direkt',
         dmCustom: 'DM für Custom Beat',
@@ -473,15 +473,15 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 return (
                                     <article
                                         key={beat.id}
-                                        className="group flex flex-col gap-4 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition duration-300 hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
+                                        className="group flex min-h-[20.5rem] flex-col gap-3 rounded-2xl border border-white/[0.11] bg-[linear-gradient(145deg,rgba(8,22,31,0.94),rgba(3,10,15,0.92))] p-4 shadow-[0_18px_45px_rgba(0,0,0,0.14)] transition duration-300 hover:-translate-y-0.5 hover:border-sky-200/40 hover:shadow-[0_24px_55px_rgba(0,0,0,0.24)] sm:p-5"
                                     >
-                                        <div>
+                                        <div className="h-[8.25rem]">
                                             <div className="flex items-center justify-between text-[11px] font-semibold text-sky-200/70">
                                                 <span className="uppercase tracking-wider">{beat.primaryGenre}</span>
                                                 <span className="text-white/40 font-mono">#{beat.beatstarsTrackId}</span>
                                             </div>
-                                            <h3 className="mt-2 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
-                                            <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-white/60">
+                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
+                                            <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
                                                 {getBeatSummary(beat, locale)}
                                             </p>
                                         </div>
@@ -493,7 +493,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             locale={locale}
                                         />
 
-                                        <div className="mt-auto grid grid-cols-[0.9fr_1.1fr] gap-2 pt-1 text-xs">
+                                        <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
                                             <Link
                                                 href={getLocalePath(`/studio/beats/${beat.slug}`)}
                                                 className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
