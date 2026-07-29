@@ -517,12 +517,12 @@ This is the big one. Streaming rights determine how many times your song can be 
 
 ### **The "Cap" System**
 Most licenses come with a "stream cap."
-- **Basic MP3 ($15):** 100,000 streams.
-- **Basic Pro ($25):** 500,000 streams.
-- **Premium ($50):** 1 Million streams.
+- **Basic MP3 ($15):** 5,000 streams.
+- **Basic Pro ($25):** 200,000 streams.
+- **Premium ($50):** 500,000 streams.
 
-**Scenario:** You buy a Basic MP3 lease. Your song blows up on TikTok and gets 150,000 streams on Spotify in a month.
-**What happens?**Technically, you have exceeded your license terms. You must contact us to upgrade to a **Basic Pro** or **Premium** license to cover the additional streams. Don't worry - your song won't be instantly deleted, but you are legally required to upgrade once you hit the cap.
+**Scenario:** You buy a Basic MP3 lease. Your song blows up on TikTok and gets 10,000 streams on Spotify in a month.
+**What happens?** Technically, you have exceeded your license terms. You must contact us to upgrade to a **Basic Pro** or **Premium** license to cover the additional streams. Don't worry - your song won't be instantly deleted, but you are legally required to upgrade once you hit the cap.
 
 **Tip:** If you believe in your song, the **Unlimited** license ($100) removes this stress entirely. Infinite streams, forever.
 
