@@ -30,7 +30,7 @@ Psychoacoustics explains this through spectral masking and critical bands. The b
 
 We can represent the auditory masking threshold expansion mathematically:
 
-\`T_masked = T_quiet + M(f, I)\`
+$$T_{\text{masked}} = T_{\text{quiet}} + M(f, I)$$
 
 Where T_masked is the new hearing threshold, T_quiet is the absolute threshold in quiet, and M is the masking function that depends on the frequency f and intensity I of the masker.
 

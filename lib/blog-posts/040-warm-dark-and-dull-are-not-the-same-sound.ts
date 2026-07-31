@@ -38,7 +38,7 @@ Spectral slope is the rate at which harmonic energy decreases as frequency incre
 
 We can express the spectral slope mathematically as a power decay function:
 
-\`S(f) = A * f^(-alpha)\`
+$$S(f) = A \cdot f^{-\alpha}$$
 
 Where alpha is the decay constant.
 

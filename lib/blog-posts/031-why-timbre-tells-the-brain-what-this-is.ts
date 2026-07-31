@@ -30,7 +30,7 @@ Timbre is defined by its spectral shape. This is the distribution of harmonic en
 
 Mathematically, we can describe the spectral envelope as a function of frequency:
 
-\`E(f) = sum( A_n * delta(f - n * f_0) )\`
+$$E(f) = \sum_{n=1}^{N} A_n \cdot \delta(f - n \cdot f_0)$$
 
 Where f_0 is the fundamental frequency, n is the harmonic number, and A_n is the amplitude of the n-th harmonic. The spectral shape is the contour of these amplitudes.
 

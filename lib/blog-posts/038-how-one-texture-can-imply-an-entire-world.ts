@@ -32,7 +32,7 @@ Auditory perception is not absolute. The brain evaluates incoming sound waves re
 
 We can express the relation between the lead signal and the ambient noise floor using a signal-to-noise ratio model of perception:
 
-\`SNR_perceived = 10 * log_10( P_signal / (P_ambient + P_noise) )\`
+$$\text{SNR}_{\text{perceived}} = 10 \log_{10}\left(\frac{P_{\text{signal}}}{P_{\text{ambient}} + P_{\text{noise}}}\right)$$
 
 Where P_signal is the power of the lead instrument, P_ambient is the acoustic environment level, and P_noise is the internal noise of the recording.
 

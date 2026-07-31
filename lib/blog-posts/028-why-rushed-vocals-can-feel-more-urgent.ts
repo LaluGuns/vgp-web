@@ -32,7 +32,7 @@ In linguistics, prosody refers to the rhythmic and melodic patterns of spoken la
 
 When a singer is delivering an emotional line, their vocal transients will naturally lean forward. We can represent this relationship with the vocal timing offset equation:
 
-\`Vocal Offset = Vocal Transient Time - Grid Beat Time\`
+$$\Delta t_{\text{vocal}} = t_{\text{transient}} - t_{\text{grid}}$$
 
 When the Vocal Offset is negative, the vocal transient lands before the grid beat. This early arrival creates temporal friction. 
 

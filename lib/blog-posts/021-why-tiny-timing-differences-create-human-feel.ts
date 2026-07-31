@@ -30,7 +30,7 @@ Groove relies on timing expectation. This concept is studied in cognitive musico
 
 Mathematically, we can express the timing offset of a note as:
 
-\`t_offset = t_actual - t_grid\`
+$$t_{\text{offset}} = t_{\text{actual}} - t_{\text{grid}}$$
 
 Where t_actual is the physical arrival time of the transient, and t_grid is the mathematical grid point. In human performances, this offset fluctuates between 5 and 15 milliseconds. 
 

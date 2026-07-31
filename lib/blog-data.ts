@@ -1128,13 +1128,13 @@ But sometimes you want to ask a different question. Not "what's happening at thi
 
 The FFT is just a clever, optimized version of the Discrete Fourier Transform (DFT). The DFT formula looks like this:
 
-\`X[k] = Σ x[n] · e^(-j·2π·k·n/N)\`
+$$X[k] = \sum_{n=0}^{N-1} x[n] \cdot e^{-j 2\pi k n / N}$$
 
 In human terms: take your block of N audio samples, multiply each sample by a spinning complex number at frequency k, and add them all up. The result tells you how much energy lives at that frequency. Do this for every k from 0 to N-1, and you get a full frequency snapshot.
 
 Each frequency "bin" in the analyzer corresponds to:
 
-\`frequency = k × (sample_rate / N)\`
+$$\text{frequency} = k \times \frac{f_s}{N}$$
 
 So if your sample rate is 44,100 Hz and your FFT size is 4096, each bin covers about 10.77 Hz. That's why the low end looks like fat blurry blobs on a small FFT, and why cranking up the FFT size makes low frequencies sharper but makes everything respond slower. There's a real tradeoff here.
 
@@ -1244,7 +1244,7 @@ If you find yourself staring at the analyzer more than listening to the music, c
         },
     },
     {
-        slug: 'why-your-low-end-lies-in-small-room',
+        slug: 'why-your-low-end-lies-in-a-small-room',
         title: 'Why Your Low End Lies in a Small Room',
         excerpt: 'Your 808 sounds perfect at your desk. In the car it\'s a boomy mess. In your friend\'s studio it barely exists. The problem isn\'t your mix. It\'s your room.',
         category: 'audio-science',
@@ -1279,13 +1279,13 @@ When a sound wave bounces between two parallel walls, it creates a standing wave
 
 The simplest ones are axial modes. The formula:
 
-\`f_n = n × c / (2 × L)\`
+$$f_n = \\frac{n \\cdot c}{2L}$$
 
-Where n is the mode number (1, 2, 3...), c is the speed of sound, and L is the distance between two walls.
+Where $n$ is the mode number ($1, 2, 3\dots$), $c$ is the speed of sound, and $L$ is the distance between two walls.
 
 Real example. Your bedroom is 4 meters long. The first axial mode:
 
-\`f_1 = 1 × 343 / (2 × 4) = 42.875 Hz\`
+$$f_1 = \\frac{1 \\cdot 343}{2 \\cdot 4} = 42.875\\text{ Hz}$$
 
 So at roughly 43 Hz, a standing wave forms between your front and back walls. The second mode is at 86 Hz. Third at 129 Hz.
 
@@ -1403,7 +1403,7 @@ Simultaneous masking is the one that ruins vocal clarity in 90% of cases. So tha
 
 There's a rough model for this:
 
-\`audibility = level of target - masker level within the same critical band\`
+$$\text{Audibility} = L_{\text{target}} - L_{\text{masker}}$$
 
 A "critical band" is roughly a third-octave wide in the range we care about for vocals (1 kHz to 5 kHz). If your vocal is at -12 dB in the 2 to 4 kHz range and a distorted guitar is at -10 dB in that same range, the audibility of the vocal in that band is about -2 dB. Negative audibility means the vocal is being masked. It's still there in the waveform. Your ears just can't pull it out.
 
@@ -1484,16 +1484,13 @@ The ratio describes how much the compressor reduces signal that exceeds the thre
 
 The formula is:
 
-\`output = threshold + (input - threshold) / ratio\`
+$$L_{\text{out}} = T + \frac{L_{\text{in}} - T}{R}$$
 
 This only applies to signal above the threshold. Everything below the threshold passes through unchanged (assuming a hard knee, which we'll get to).
 
 Here's a concrete example. Threshold is set to -20 dB. Input signal hits -8 dB. Ratio is 4:1.
 
-\`output = -20 + (-8 - (-20)) / 4\`
-\`output = -20 + 12 / 4\`
-\`output = -20 + 3\`
-\`output = -17 dB\`
+$$L_{\text{out}} = -20 + \frac{-8 - (-20)}{4} = -20 + 3 = -17\text{ dBFS}$$
 
 The input was -8 dB. The output is -17 dB. That's 9 dB of gain reduction. The signal went 12 dB over the threshold, and the compressor squashed 9 of those decibels away, letting only 3 through.
 
@@ -1590,11 +1587,11 @@ Phase is different. Phase is where a signal sits in its cycle at any given momen
 
 The formula is straightforward:
 
-\`phase_shift (degrees) = 360 × frequency × delay_seconds\`
+$$\Delta \phi = 360^\circ \times f \times \Delta t$$
 
 So a 1 ms delay at 500 Hz:
 
-\`360 × 500 × 0.001 = 180°\`
+$$360^\circ \times 500\text{ Hz} \times 0.001\text{ s} = 180^\circ$$
 
 180 degrees is perfect cancellation. That same 1 ms delay at 250 Hz is only 90 degrees of shift, which is partial cancellation. At 1000 Hz it's 360 degrees, meaning the signals are back in alignment. This is why phase problems don't sound like a simple volume drop. They carve weird, uneven holes across the spectrum.
 
@@ -1689,14 +1686,13 @@ At the simplest level, audio processing is either linear or nonlinear. Linear pr
 
 **Saturation** applies a smooth curve to the signal. The classic model is the hyperbolic tangent function:
 
-\`y = tanh(g × x)\`
+$$y(t) = \tanh(g \cdot x(t))$$
 
-Where g is the gain (drive) and x is the input. At low levels, the output is nearly identical to the input. As the signal gets louder, the curve gently rounds off the peaks instead of letting them pass through untouched. This rounding is soft, gradual, and continuous. No sharp corners.
+Where $g$ is the gain (drive) and $x$ is the input. At low levels, the output is nearly identical to the input. As the signal gets louder, the curve gently rounds off the peaks instead of letting them pass through untouched. This rounding is soft, gradual, and continuous. No sharp corners.
 
 **Hard clipping** is blunt. Everything above a threshold gets chopped flat:
 
-\`if |x| > threshold: y = threshold\`
-\`if |x| ≤ threshold: y = x\`
+$$y(x) = \begin{cases} \text{threshold} & \text{if } |x| > \text{threshold} \\ x & \text{if } |x| \le \text{threshold} \end{cases}$$
 
 The waveform hits a wall and the top of the peak becomes a straight horizontal line. There is no gradual transition. The signal is either below the ceiling and untouched, or above it and flattened.
 
@@ -1789,7 +1785,8 @@ Know which tool you're reaching for and why. Saturation adds harmonics and gentl
 
 // Helper functions
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-    return articles.find((article) => article.slug === slug);
+    const normalized = slug.replace('-in-a-', '-in-');
+    return articles.find((article) => article.slug === slug || article.slug === normalized);
 }
 
 export function getArticlesByCategory(category: string): BlogArticle[] {

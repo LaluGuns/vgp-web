@@ -32,7 +32,7 @@ Low frequencies have long physical cycles. A 50 Hz wave has a period of 20 milli
 
 If your kick transient hits at the exact same millisecond as the bass note, the kick transient will mask the initial attack of the bass. We can write the combined amplitude of the low end as:
 
-\`Combined Amplitude = Kick Amplitude(t) + Bass Amplitude(t - delta_t)\`
+$$A_{\text{combined}}(t) = A_{\text{kick}}(t) + A_{\text{bass}}(t - \Delta t)$$
 
 Where delta_t is the timing offset between the kick and the bass. 
 

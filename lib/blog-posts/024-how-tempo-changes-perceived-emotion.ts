@@ -28,7 +28,7 @@ If the speed is too low, the energy drains. The gaps between the kick and the sn
 
 The human brain decodes tempo through the motor cortex and the autonomic nervous system. Faster tempos increase cognitive arousal. This speed forces the brain to process auditory events in rapid succession, which elevates heart rates and muscle tension. We can express the emotional arousal factor with a simple formula:
 
-\`Arousal Factor = BPM × Event Density\`
+$$\text{Arousal Factor} = \text{BPM} \times \text{Event Density}$$
 
 Where BPM is the tempo, and Event Density is the number of notes or transients per bar. 
 

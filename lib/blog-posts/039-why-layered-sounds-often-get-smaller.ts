@@ -34,7 +34,7 @@ Phase represents the position of a point in time on a wave cycle. When we combin
 
 Mathematically, the sum of two sine waves with different phases can be expressed as:
 
-\`A_total * sin(w * t + phi_total) = A_1 * sin(w * t) + A_2 * sin(w * t + delta_phi)\`
+$$A_{\text{total}} \sin(\omega t + \phi_{\text{total}}) = A_1 \sin(\omega t) + A_2 \sin(\omega t + \Delta \phi)$$
 
 Where delta_phi is the phase difference between the two waves.
 

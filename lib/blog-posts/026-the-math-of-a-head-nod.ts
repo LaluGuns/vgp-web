@@ -30,7 +30,7 @@ A head nod is a physical pendulum. The head and neck system has a natural resona
 
 When a drum pattern defines a consistent cycle that aligns with this frequency, it triggers a phase-locking response in the motor cortex. The brain synchronizes its motor commands with the auditory cues. We can express the resonance frequency of the head-nod pendulum with the classical equation:
 
-\`Resonance Frequency = 1 / (2 × pi) × sqrt(g / L)\`
+$$f_{\text{resonance}} = \frac{1}{2\pi} \sqrt{\frac{g}{L}}$$
 
 Where L is the length of the pendulum (the head and neck structure), and g is the acceleration due to gravity. 
 

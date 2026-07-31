@@ -32,7 +32,7 @@ The amplitude envelope is the shape of a sound's volume over time. In sound desi
 
 We can express the attack phase of a waveform mathematically as a growth function:
 
-\`A(t) = A_max * (1 - e^(-t / tau_attack))\`
+$$A(t) = A_{\text{max}} \left(1 - e^{-t / \tau_{\text{attack}}}\right)$$
 
 Where A_max is the maximum amplitude, t is time, and tau_attack is the time constant that dictates the speed of the attack.
 

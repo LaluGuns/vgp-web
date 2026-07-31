@@ -32,7 +32,7 @@ The human brain relies on immediate auditory feedback to regulate vocal pitch an
 
 We can express the vocal control error mathematically:
 
-\`Error_vocal = P_target - (w_air * P_feedback_air + w_bone * P_feedback_bone)\`
+$$\text{Error}_{\text{vocal}} = P_{\text{target}} - (w_{\text{air}} P_{\text{feedback, air}} + w_{\text{bone}} P_{\text{feedback, bone}})$$
 
 Where P_target is the intended pitch, and P_feedback_air and P_feedback_bone are the feedback paths.
 

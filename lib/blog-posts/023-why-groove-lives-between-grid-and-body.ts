@@ -32,7 +32,7 @@ Groove lives in timing expectation. When we listen to a beat, our auditory corte
 
 If a secondary percussion element arrives slightly early or late, it violates that prediction. This timing violation triggers a physical reaction. We feel a pull or a push against the main anchor. We can represent this relationship with a simple conceptual ratio:
 
-\`Pocket Tension = Anchor Stability / Support Offset\`
+$$\text{Pocket Tension} = \frac{\text{Anchor Stability}}{\text{Support Offset}}$$
 
 Where Anchor Stability is the predictability of the downbeat, and Support Offset is the displacement of secondary parts. 
 

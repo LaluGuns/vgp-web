@@ -30,7 +30,7 @@ The human brain does not need to hear a fundamental frequency to perceive its pi
 
 Mathematically, the relationship between a fundamental frequency f_0 and its harmonic series is:
 
-\`f_n = n * f_0\`
+$$f_n = n \cdot f_0$$
 
 Where n is an integer. If the speaker only plays 200 Hz, 300 Hz, 400 Hz, and 500 Hz, the brain notices the constant difference of 100 Hz. It then recreates the perception of a 100 Hz tone, even though that frequency is physically absent from the room.
 

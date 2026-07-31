@@ -30,7 +30,7 @@ Swing works by dividing a beat into unequal parts. In a straight pattern, two ei
 
 In a swung pattern, the first note becomes longer and the second note becomes shorter. This is an uneven subdivision. We can write the relationship as a ratio:
 
-\`Swing Ratio = T_long / T_short\`
+$$\text{Swing Ratio} = \frac{T_{\text{long}}}{T_{\text{short}}}$$
 
 Where T_long is the duration of the first note, and T_short is the duration of the second. 
 

@@ -30,7 +30,7 @@ Saturation is a nonlinear process. When a signal passes through a nonlinear syst
 
 Mathematically, we can describe a simple soft-clipping function using a cubic nonlinearity:
 
-\`f(x) = x - (1/3) * x^3\`
+$$f(x) = x - \frac{1}{3}x^3$$
 
 Where x is the input signal. When we input a pure sine wave, this equation produces the fundamental frequency along with odd harmonics, specifically the third and fifth harmonics.
 

@@ -30,7 +30,7 @@ The cognitive mechanics of rhythm are rooted in statistical learning. When we he
 
 When a loud transient lands on a low-probability offbeat, it causes an expectation violation. This event triggers a rapid cognitive response. The brain releases a small burst of dopamine as it successfully resolves the surprise and syncs back with the main pulse. We can model this attention trigger with a simple relationship:
 
-\`Attention Trigger = Accent Intensity × (1 - Probability of Grid Placement)\`
+$$\text{Attention Trigger} = I_{\text{accent}} \times (1 - P_{\text{grid}})$$
 
 Where the Probability of Grid Placement is high on downbeats and low on offbeats. 
 

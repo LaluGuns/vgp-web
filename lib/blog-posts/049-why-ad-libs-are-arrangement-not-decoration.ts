@@ -30,7 +30,7 @@ Auditory scene analysis explains how the brain separates a complex sound wave in
 
 We can express the auditory separation threshold mathematically using a grouping metric:
 
-\`S_segregation = w_1 * Delta f + w_2 * Delta t + w_3 * Delta p\`
+$$S_{\text{segregation}} = w_1 \Delta f + w_2 \Delta t + w_3 \Delta p$$
 
 Where Delta f is the pitch difference, Delta t is the timing offset, and Delta p is the panning distance.
 

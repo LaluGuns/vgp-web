@@ -30,7 +30,7 @@ In psychoacoustics, spectral texture refers to the temporal fluctuations of ener
 
 We can express the combination of a harmonic signal and a noise component mathematically:
 
-\`y(t) = s(t) + n(t) * e(t)\`
+$$y(t) = s(t) + n(t) \cdot e(t)$$
 
 Where s(t) is the clean harmonic synth signal, n(t) is the random noise signal, and e(t) is the amplitude envelope of the synth.
 

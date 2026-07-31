@@ -2,9 +2,21 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { m } from 'framer-motion';
-import { ArrowRight, Bell, BookOpen, Clock, FileText, ListFilter, Mail, Newspaper } from 'lucide-react';
+import {
+    ArrowRight,
+    Bell,
+    Bookmark,
+    BookOpen,
+    Clock,
+    FileText,
+    ListFilter,
+    Mail,
+    Newspaper,
+    Search,
+    X,
+} from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { CinematicBackdrop } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
@@ -91,7 +103,7 @@ function CategoryButton({
         <button
             onClick={onClick}
             aria-pressed={active}
-            className={`rounded-md border px-4 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-md border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                 active
                     ? 'border-white bg-white text-[#1d1d1f]'
                     : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
@@ -133,7 +145,7 @@ function FeaturedArticle({
     return (
         <Link
             href={`/blog/${article.slug}`}
-            className="group block overflow-hidden rounded-lg border border-white/10 bg-white/[0.04]"
+            className="group block overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] transition hover:border-white/25"
         >
             <div className="flex flex-col justify-between p-6 sm:p-8 lg:p-10">
                 <div>
@@ -165,9 +177,11 @@ function FeaturedArticle({
 function ArticleCard({
     article,
     getCategoryName,
+    isBookmarked,
 }: {
     article: BlogArticle;
     getCategoryName: (slug: string) => string;
+    isBookmarked?: boolean;
 }) {
     const category = getCategoryStyle(article.category);
 
@@ -175,17 +189,22 @@ function ArticleCard({
         <article className="h-full">
             <Link
                 href={`/blog/${article.slug}`}
-                className="group flex h-full flex-col rounded-lg border border-white/10 bg-white/[0.035] p-6 transition-colors hover:border-white/20"
+                className="group flex h-full flex-col rounded-xl border border-white/10 bg-white/[0.035] p-6 transition-all hover:border-white/25 hover:bg-white/[0.05]"
             >
                 <div className={`mb-5 h-1 w-10 rounded-full ${category.line}`} />
-                <div className="mb-4 flex flex-wrap items-center gap-3">
+                <div className="mb-4 flex items-center justify-between gap-3">
                     <span className={`inline-flex rounded-md px-2.5 py-1 text-xs font-semibold ring-1 ${category.badge}`}>
                         {getCategoryName(article.category)}
                     </span>
-                    <span className="text-xs text-white/35">{article.publishedAt}</span>
+                    <div className="flex items-center gap-2">
+                        {isBookmarked && (
+                            <Bookmark size={13} className="text-sky-300 fill-current" />
+                        )}
+                        <span className="text-xs text-white/35">{article.publishedAt}</span>
+                    </div>
                 </div>
 
-                <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-white">
+                <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-white group-hover:text-sky-200 transition-colors">
                     {article.title}
                 </h3>
                 <p className="mt-4 line-clamp-3 flex-1 text-sm leading-7 text-white/55">
@@ -197,7 +216,7 @@ function ArticleCard({
                         <Clock size={15} />
                         {article.readingTime} min
                     </span>
-                    <span className="inline-flex items-center gap-1.5 font-semibold text-[#0071e3]">
+                    <span className="inline-flex items-center gap-1.5 font-semibold text-[#0071e3] group-hover:translate-x-0.5 transition-transform">
                         Read <ArrowRight size={15} />
                     </span>
                 </div>
@@ -208,19 +227,48 @@ function ArticleCard({
 
 export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [showBookmarkedOnly, setShowBookmarkedOnly] = useState<boolean>(false);
+    const [bookmarkedSlugs, setBookmarkedSlugs] = useState<string[]>([]);
     const { openPopup } = useNewsletter();
 
-    const filteredArticles = useMemo(
-        () => articles.filter((article) => selectedCategory === 'all' || article.category === selectedCategory),
-        [articles, selectedCategory],
-    );
+    useEffect(() => {
+        let isMounted = true;
+        try {
+            const saved: string[] = JSON.parse(localStorage.getItem('vgp_bookmarked_articles') || '[]');
+            requestAnimationFrame(() => {
+                if (isMounted) {
+                    setBookmarkedSlugs(saved);
+                }
+            });
+        } catch {
+            // ignore
+        }
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const filteredArticles = useMemo(() => {
+        return articles.filter((article) => {
+            const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
+            const matchesSearch =
+                searchQuery.trim() === '' ||
+                article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                article.seo.keywords.some(k => k.toLowerCase().includes(searchQuery.toLowerCase()));
+            const matchesBookmark = !showBookmarkedOnly || bookmarkedSlugs.includes(article.slug);
+
+            return matchesCategory && matchesSearch && matchesBookmark;
+        });
+    }, [articles, selectedCategory, searchQuery, showBookmarkedOnly, bookmarkedSlugs]);
 
     const featuredArticle = featured[0] ?? articles[0];
     const getCategoryName = (slug: string) => categories.find((category) => category.slug === slug)?.name || getCategoryStyle(slug).label;
 
     return (
         <PageTransition>
-        <main className="editorial-shell relative max-w-full overflow-hidden text-white">
+            <main className="editorial-shell relative max-w-full overflow-hidden text-white">
                 <section className="relative overflow-hidden px-4 pb-16 pt-8 sm:px-6 sm:pb-20 sm:pt-12 lg:pb-24 lg:pt-16">
                     <CinematicBackdrop />
 
@@ -284,7 +332,6 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                     </div>
                 </section>
 
-
                 <section className="overflow-hidden border-y border-white/10 bg-white/[0.035] px-4 py-14 sm:px-6">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
                         <div>
@@ -347,29 +394,69 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                             </div>
                         </div>
 
-                        {featuredArticle && (
+                        {featuredArticle && !searchQuery && selectedCategory === 'all' && !showBookmarkedOnly && (
                             <div className="mb-12">
                                 <FeaturedArticle article={featuredArticle} getCategoryName={getCategoryName} />
                             </div>
                         )}
 
-                        <div className="mb-8 flex flex-col gap-4 rounded-lg border border-white/10 bg-white/[0.035] p-4 md:flex-row md:items-center">
-                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-white/50">
-                                <ListFilter size={16} />
-                                Filter
-                            </span>
-                            <div className="flex flex-wrap gap-2">
+                        {/* Interactive Filter & Search Control Panel */}
+                        <div className="mb-8 flex flex-col gap-4 rounded-xl border border-white/10 bg-white/[0.035] p-4 lg:flex-row lg:items-center">
+                            {/* Search Input Bar */}
+                            <div className="relative flex-1 min-w-[220px]">
+                                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40" />
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search articles by topic, 808, mixing..."
+                                    className="w-full rounded-lg border border-white/10 bg-black/40 py-2.5 pl-10 pr-9 text-xs text-white placeholder-white/40 transition focus:border-sky-300/50 focus:outline-none focus:ring-1 focus:ring-sky-300/50"
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery('')}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {/* Category & Bookmark Buttons */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/40 mr-1 hidden sm:inline-flex">
+                                    <ListFilter size={14} />
+                                    Categories:
+                                </span>
                                 {[{ slug: 'all', name: 'All' }, ...categories].map((category) => (
                                     <CategoryButton
                                         key={category.slug}
                                         category={category}
-                                        active={selectedCategory === category.slug}
-                                        onClick={() => setSelectedCategory(category.slug)}
+                                        active={selectedCategory === category.slug && !showBookmarkedOnly}
+                                        onClick={() => {
+                                            setSelectedCategory(category.slug);
+                                            setShowBookmarkedOnly(false);
+                                        }}
                                     />
                                 ))}
+
+                                {bookmarkedSlugs.length > 0 && (
+                                    <button
+                                        onClick={() => setShowBookmarkedOnly(!showBookmarkedOnly)}
+                                        className={`inline-flex items-center gap-1.5 rounded-md border px-3.5 py-1.5 text-xs font-semibold transition ${
+                                            showBookmarkedOnly
+                                                ? 'border-sky-300/50 bg-sky-400/20 text-sky-200'
+                                                : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
+                                        }`}
+                                    >
+                                        <Bookmark size={13} className={showBookmarkedOnly ? 'fill-current' : ''} />
+                                        Saved ({bookmarkedSlugs.length})
+                                    </button>
+                                )}
                             </div>
-                            <span className="text-sm font-medium text-white/45 md:ml-auto">
-                                {filteredArticles.length} entries
+
+                            <span className="text-xs font-semibold text-white/45 lg:ml-auto">
+                                {filteredArticles.length} entries found
                             </span>
                         </div>
 
@@ -380,23 +467,28 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                         key={article.slug}
                                         article={article}
                                         getCategoryName={getCategoryName}
+                                        isBookmarked={bookmarkedSlugs.includes(article.slug)}
                                     />
                                 ))}
                             </div>
                         ) : (
-                            <div className="rounded-lg border border-white/10 bg-white/[0.035] py-16 text-center">
-                                <p className="text-sm font-semibold text-white/50">No entries in this filter.</p>
+                            <div className="rounded-xl border border-white/10 bg-white/[0.035] py-16 text-center">
+                                <p className="text-sm font-semibold text-white/50">No articles match your search criteria.</p>
                                 <button
-                                    onClick={() => setSelectedCategory('all')}
-                                    className="mt-4 text-sm font-semibold text-[#0071e3]"
+                                    onClick={() => {
+                                        setSelectedCategory('all');
+                                        setSearchQuery('');
+                                        setShowBookmarkedOnly(false);
+                                    }}
+                                    className="mt-4 text-xs font-semibold text-[#0071e3] hover:underline"
                                 >
-                                    Clear filter
+                                    Reset all filters
                                 </button>
                             </div>
                         )}
                     </div>
                 </section>
-        </main>
+            </main>
         </PageTransition>
     );
 }
