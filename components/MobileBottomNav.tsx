@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Headphones, Activity, BookOpen, Timer } from 'lucide-react';
+import { Home, Headphones, Activity, BookOpen, Timer, Zap } from 'lucide-react';
 
 export function MobileBottomNav() {
     const pathname = usePathname();
@@ -14,7 +14,8 @@ export function MobileBottomNav() {
     const navItems = [
         { name: 'Home', href: '/', icon: Home },
         { name: 'Studio', href: '/studio/beats', icon: Headphones },
-        { name: 'CADENZ', href: '/cadenz', icon: Timer },
+        { name: 'Flow', href: '/flow', icon: Timer },
+        { name: 'CADENZ', href: '/cadenz', icon: Zap },
         { name: 'Lab', href: '/lab/healingwave', icon: Activity },
         { name: 'Blog', href: '/blog', icon: BookOpen },
     ];
@@ -28,7 +29,7 @@ export function MobileBottomNav() {
             }`}
             style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
         >
-            <div className="mx-auto grid w-full max-w-full grid-cols-5 items-center">
+            <div className="mx-auto grid w-full max-w-full grid-cols-6 items-center">
                 {navItems.map((item) => {
                     const isActive = item.name === 'Studio'
                         ? pathname.startsWith('/studio')
