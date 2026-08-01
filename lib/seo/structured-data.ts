@@ -28,7 +28,7 @@ const profiles = [
 
 export const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'MusicProductionCompany',
+    '@type': 'Organization',
     name: 'Virzy Guns Production',
     alternateName: 'VGP',
     url: SITE_URL,

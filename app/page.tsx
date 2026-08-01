@@ -3,26 +3,71 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { BookOpen, Focus, Headphones, Timer } from 'lucide-react';
+import { ArrowRight, BookOpen, Headphones, Timer } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SocialDock } from '@/components/SocialDock';
 import {
     CinematicBackdrop,
-    EcosystemCard,
     EditorialButton,
-    FeatureStrip,
     SectionShell,
 } from '@/components/editorial/EditorialPrimitives';
 import { VGPBrandHeroMedia } from '@/components/editorial/VGPBrandHeroMedia';
-import { catalogCredentials, ecosystemCards, founderStatement } from '@/lib/vgp-ecosystem';
-import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
+import { FLOW_APP_URL, catalogCredentials, founderStatement } from '@/lib/vgp-ecosystem';
+import { staggerChild, staggerParent } from '@/lib/motion-presets';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
-const quickSignals = [
-    { label: 'Studio', value: 'Beats and audio services', href: '/studio/beats', Icon: Headphones },
-    { label: 'Flow', value: 'Deep-work timer and music', href: '/flow', Icon: Focus },
-    { label: 'CADENZ', value: 'Coming-soon cadence app', href: '/cadenz', Icon: Timer },
-    { label: 'Library', value: 'Books, blog, and masterclass', href: '/book', Icon: BookOpen },
+const visitorPaths = [
+    {
+        title: 'Make Music',
+        description: 'Browse beats, licensing, custom production, mixing, and mastering.',
+        cta: 'Browse Beats',
+        href: '/studio/beats',
+        Icon: Headphones,
+    },
+    {
+        title: 'Focus or Move',
+        description: 'Use Flow for deep work or preview CADENZ for running and cycling.',
+        cta: 'Open Flow',
+        href: FLOW_APP_URL,
+        Icon: Timer,
+    },
+    {
+        title: 'Learn Production',
+        description: 'Read free articles, explore books, or view upcoming courses.',
+        cta: 'Explore Learn Hub',
+        href: '/learn',
+        Icon: BookOpen,
+    },
+];
+
+const featuredProducts = [
+    {
+        title: 'VGP Studio Beats',
+        eyebrow: 'Commercial Music Catalog',
+        href: '/studio/beats',
+        cta: 'Browse & License Beats',
+        status: 'Available Now',
+        statusColor: 'bg-sky-400/20 text-sky-200 border-sky-400/30',
+        description: 'Premium beats across trap, drill, phonk, synthwave, R&B, club, pop, and more, with instant licensing, trackouts, and commercial rights.',
+    },
+    {
+        title: 'Flow App',
+        eyebrow: 'Deep Work Focus',
+        href: FLOW_APP_URL,
+        cta: 'Open Flow App',
+        status: 'Available Now',
+        statusColor: 'bg-sky-400/20 text-sky-200 border-sky-400/30',
+        description: 'A browser-based focus timer with original VGP audio, ambient sound, and honest session stats.',
+    },
+    {
+        title: 'CADENZ',
+        eyebrow: 'Movement Audio',
+        href: '/cadenz',
+        cta: 'Preview CADENZ',
+        status: 'Coming Soon',
+        statusColor: 'bg-amber-400/20 text-amber-200 border-amber-400/30',
+        description: 'A cadence music app connecting original VGP music with running and cycling rhythm.',
+    },
 ];
 
 export default function HomePage() {
@@ -33,136 +78,169 @@ export default function HomePage() {
             <main className="editorial-shell relative min-h-screen overflow-hidden text-white">
                 <SocialDock />
 
-                <section className="relative min-h-[680px] overflow-hidden px-4 pb-10 pt-28 sm:px-6 sm:pt-32 lg:min-h-[760px] lg:pb-12 lg:pt-32">
+                {/* Section 1: Visitor-Centered Hero */}
+                <section className="relative overflow-hidden bg-[#030405] px-4 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:pt-32">
                     <CinematicBackdrop />
-                    <VGPBrandHeroMedia placement="heroBackground" />
 
-                    <div className="relative z-10 mx-auto max-w-7xl">
+                    <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-12 px-2 sm:px-6 lg:min-h-[570px] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-10 xl:px-0">
+                        {/* LEFT CONTENT */}
                         <m.div
                             variants={staggerParent}
-                            initial="hidden"
+                            initial={false}
                             animate="visible"
-                            className="max-w-[43rem]"
+                            className="relative z-20 min-w-0"
                         >
-
-
-                            <m.p variants={staggerChild} className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/60">
-                                Founded by Virzy Guns
+                            <m.p variants={staggerChild} className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/55">
+                                100% Art. 100% Science.
                             </m.p>
+
+                            <m.p variants={staggerChild} className="mb-4 text-xs font-bold tracking-[0.28em] text-sky-300">
+                                VIRZY GUNS PRODUCTION
+                            </m.p>
+
                             <m.h1
                                 variants={staggerChild}
-                                className="font-display text-5xl font-semibold leading-[0.98] text-white sm:text-6xl md:text-7xl lg:text-[5.65rem]"
+                                className="max-w-[580px] font-display text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl lg:text-[4.2rem]"
                             >
-                                <span className="block sm:whitespace-nowrap">100% Art.</span>
-                                <span className="block bg-gradient-to-r from-white/40 via-sky-200/80 to-white/40 bg-clip-text text-transparent sm:whitespace-nowrap">
-                                    100% Science.
-                                </span>
+                                <span className="block">Buy premium beats.</span>
+                                <span className="block text-white/90">Focus better.</span>
+                                <span className="block text-white/75">Learn music production.</span>
                             </m.h1>
-                            <m.p variants={staggerChild} className="mt-7 max-w-2xl text-base leading-8 text-white/60 sm:text-xl sm:leading-9">
-                                A founder-led music and technology ecosystem spanning VGP Studio, HealingWave Lab, CADENZ, books, and producer education.
+
+                            <m.p variants={staggerChild} className="mt-6 max-w-[570px] text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+                                Original beats across trap, drill, phonk, synthwave, R&amp;B, club, pop, and more, plus the Flow focus app and practical production resources by Virzy Guns.
                             </m.p>
-                            <m.div variants={staggerChild} className="mt-9 flex flex-col gap-3 sm:flex-row">
-                                <EditorialButton href="/studio/beats">Explore Studio</EditorialButton>
-                                <EditorialButton href="/lab/healingwave" variant="ghost">Enter The Lab</EditorialButton>
+
+                            <m.div variants={staggerChild} className="mt-8 flex flex-wrap items-center gap-3">
+                                <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
+                                <EditorialButton href={FLOW_APP_URL} variant="ghost">Open Flow</EditorialButton>
                             </m.div>
-
-                            <m.div variants={staggerChild} className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                                {quickSignals.map((item) => (
-                                    <Link
-                                        key={item.label}
-                                        href={item.href}
-                                        className="liquid-glass-soft group rounded-lg p-4 transition hover:border-sky-200/25 hover:bg-white/[0.055] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
-                                    >
-                                        <div className="mb-4 flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-sky-100">
-                                            <item.Icon className="h-4 w-4" aria-hidden="true" />
-                                        </div>
-                                        <p className="text-sm font-semibold text-white">{item.label}</p>
-                                        <p className="mt-1 text-xs leading-5 text-white/50">{item.value}</p>
-                                    </Link>
-                                ))}
-                            </m.div>
-
-
                         </m.div>
+
+                        {/* RIGHT PRODUCT AREA */}
+                        <div className="relative isolate min-w-0 w-full">
+                            {/* Original hero artwork stays intact; CSS only controls its dissolve. */}
+                            <div
+                                className="pointer-events-none absolute right-[-5rem] top-1/2 z-0 h-[620px] w-[1100px] -translate-y-1/2 select-none opacity-40 blur-[0.35px] sm:right-[-7rem] sm:h-[700px] sm:w-[1240px]"
+                                style={{
+                                    maskImage: 'radial-gradient(ellipse at center, black 0%, black 52%, transparent 88%)',
+                                    WebkitMaskImage: 'radial-gradient(ellipse at center, black 0%, black 52%, transparent 88%)',
+                                }}
+                            >
+                                <Image
+                                    src="/images/vgp-brand-hero-v2.png"
+                                    alt=""
+                                    fill
+                                    priority
+                                    sizes="1240px"
+                                    className="object-contain"
+                                    aria-hidden="true"
+                                />
+                            </div>
+
+                    {/* PRODUCT CARDS - NORMAL DOCUMENT FLOW */}
+                    <VGPBrandHeroMedia />
+                        </div>
                     </div>
                 </section>
 
-                <SectionShell id="ecosystem" className="pt-8">
-                    <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                {/* Section 2: Choose What You Need */}
+                <SectionShell id="choose" className="pt-6">
+                    <div className="mb-8">
+                        <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
+                            Navigation Pathways
+                        </span>
+                        <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
+                            Choose what you need.
+                        </h2>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-3">
+                        {visitorPaths.map((path) => {
+                            const { Icon } = path;
+                            return (
+                                <Link
+                                    key={path.title}
+                                    href={path.href}
+                                    className="group flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-sky-200/30 hover:bg-white/[0.05]"
+                                >
+                                    <div>
+                                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
+                                            <Icon size={20} />
+                                        </div>
+                                        <h3 className="text-xl font-semibold text-white">{path.title}</h3>
+                                        <p className="mt-2 text-sm leading-6 text-white/65">{path.description}</p>
+                                    </div>
+                                    <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-sky-200 group-hover:text-white">
+                                        <span>{path.cta}</span>
+                                        <ArrowRight size={14} />
+                                    </div>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </SectionShell>
+
+                {/* Section 3: Current Featured Products */}
+                <SectionShell id="featured" className="pt-8">
+                    <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/50">
-                                The Ecosystem
-                            </p>
-                            <h2 className="max-w-4xl font-display text-4xl font-semibold leading-[1.02] text-white sm:text-6xl">
-                                One studio, one lab, one learning system.
+                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
+                                Featured Catalog
+                            </span>
+                            <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
+                                Products and tools.
                             </h2>
                         </div>
-                        <p className="max-w-md text-sm leading-7 text-white/50">
-                            Songs, beats, audio tools, and producer education from one studio system.
+                        <p className="text-xs font-medium text-white/50">
+                            Clearly separated by current availability.
                         </p>
                     </div>
 
-                    <m.div
-                        className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
-                        variants={staggerParent}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
-                        {ecosystemCards.map((card, index) => (
-                            <EcosystemCard key={card.title} {...card} index={index} />
-                        ))}
-                    </m.div>
-                </SectionShell>
-
-                <SectionShell>
-                    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-stretch">
-                        <FeatureStrip
-                            label="Featured Product"
-                            title="CADENZ is the first product under HealingWave Lab."
-                            description="A cadence music app that connects original music with running and cycling rhythm. Built for movement, focus, and a more intentional training flow."
-                            href="/cadenz"
-                            cta="Preview CADENZ"
-                        />
-
-                        <m.div
-                            variants={revealUp}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            className="h-full overflow-hidden rounded-lg border border-white/[0.1] bg-white/[0.035]"
-                        >
-                            <div className="relative h-full min-h-[23rem]">
-                                <Image
-                                    src="/images/CADENZ_POSTER.jpg"
-                                    alt="CADENZ by HealingWave Lab poster"
-                                    fill
-                                    sizes="(min-width: 1024px) 520px, 92vw"
-                                    className="object-contain object-center opacity-[0.9]"
-                                />
-                                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,4,5,0.06)_0%,rgba(3,4,5,0.28)_45%,rgba(3,4,5,0.86)_100%)]" />
-                                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100/70">
-                                        Coming Soon
-                                    </p>
-                                    <h3 className="mt-3 max-w-sm text-2xl font-semibold leading-tight text-white">Adaptive music for motion.</h3>
+                    <div className="grid gap-4 md:grid-cols-3">
+                        {featuredProducts.map((prod) => (
+                            <div
+                                key={prod.title}
+                                className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-white/20"
+                            >
+                                <div>
+                                    <div className="flex items-center justify-between gap-3">
+                                        <span className="text-xs font-semibold uppercase tracking-wider text-sky-200/60">
+                                            {prod.eyebrow}
+                                        </span>
+                                        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold ${prod.statusColor}`}>
+                                            {prod.status}
+                                        </span>
+                                    </div>
+                                    <h3 className="mt-4 text-xl font-semibold text-white">{prod.title}</h3>
+                                    <p className="mt-3 text-sm leading-6 text-white/65">{prod.description}</p>
+                                </div>
+                                <div className="mt-8">
+                                    <Link
+                                        href={prod.href}
+                                        className="inline-flex items-center gap-2 text-xs font-semibold text-sky-200 transition hover:text-white"
+                                    >
+                                        <span>{prod.cta}</span>
+                                        <ArrowRight size={14} />
+                                    </Link>
                                 </div>
                             </div>
-                        </m.div>
+                        ))}
                     </div>
                 </SectionShell>
 
+                {/* Section 4: Proof and Founder Credibility */}
                 <SectionShell id="credentials" className="border-y border-white/[0.08] bg-white/[0.012] py-12 sm:py-14">
-                    <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+                    <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
-                                Track record
-                            </p>
+                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
+                                Verified Track Record
+                            </span>
                             <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-                                Credentials behind the ecosystem.
+                                Credentials behind the work.
                             </h2>
-                            <p className="mt-4 max-w-md text-sm leading-7 text-white/55">
-                                The founder story comes first. These verified credits are the production foundation beneath it.
+                            <p className="mt-4 max-w-md text-sm leading-7 text-white/60">
+                                Virzy Guns is the founder shaping songs, beats, audio tools, and learning systems. Verified credits support the catalog.
                             </p>
                         </div>
 
@@ -173,34 +251,82 @@ export default function HomePage() {
                                     href={item.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group border-t border-white/[0.1] pt-4 transition hover:border-sky-200/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
+                                    className="group border-t border-white/[0.1] pt-4 transition hover:border-sky-200/40 focus:outline-none"
                                 >
                                     <p className="text-2xl font-semibold leading-none text-white sm:text-3xl">{item.value}</p>
-                                    <p className="mt-2 text-xs leading-5 text-white/55 transition group-hover:text-sky-100">{item.label}</p>
+                                    <p className="mt-2 text-xs leading-5 text-white/65 transition group-hover:text-sky-100">{item.label}</p>
                                 </a>
                             ))}
                         </div>
                     </div>
                 </SectionShell>
 
-                <SectionShell className="pb-24">
-                    <div className="liquid-glass-strong grid gap-8 rounded-lg p-6 sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-10">
+                {/* Section 5: Latest Learning Content Preview */}
+                <SectionShell id="learn-preview" className="pt-8">
+                    <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
-                                Founder Philosophy
-                            </p>
-                            <h2 className="font-display text-4xl font-semibold leading-[1.02] text-white sm:text-5xl">
-                                100% Art.
-                                <br />
-                                <span className="bg-gradient-to-r from-white/40 via-sky-200/80 to-white/40 bg-clip-text text-transparent">100% Science.</span>
+                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
+                                Producer Education
+                            </span>
+                            <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
+                                Latest guides and articles.
                             </h2>
                         </div>
-                        <div>
-                            <p className="text-lg leading-9 text-white/60">{founderStatement}</p>
-                            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                                <EditorialButton href="/about">Read About VGP</EditorialButton>
-                                <EditorialButton onClick={openPopup} variant="ghost">Join Updates</EditorialButton>
+                        <Link href="/learn" className="text-xs font-semibold text-sky-200 hover:underline">
+                            Explore full Learn Hub &rarr;
+                        </Link>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                        <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6">
+                            <div>
+                                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Free Article</span>
+                                <h3 className="mt-3 text-xl font-semibold text-white">Trap Beats: Anatomy of the Perfect 808</h3>
+                                <p className="mt-3 text-sm leading-6 text-white/65">
+                                    Learn what makes an 808 work as a melodic instrument, rhythmic driver, and the emotional foundation of a trap record.
+                                </p>
                             </div>
+                            <div className="mt-6">
+                                <Link href="/blog/trap-beats-anatomy-of-the-perfect-808" className="text-xs font-semibold text-sky-200 hover:text-white">
+                                    Read Article &rarr;
+                                </Link>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6">
+                            <div>
+                                <span className="text-xs font-semibold uppercase tracking-wider text-amber-200">PDF Book · Coming Soon</span>
+                                <h3 className="mt-3 text-xl font-semibold text-white">Music Production Guide: Trap Edition</h3>
+                                <p className="mt-3 text-sm leading-6 text-white/65">
+                                    80+ page practical guide for drums, 808s, vocals, mixing balance, and release mastering.
+                                </p>
+                            </div>
+                            <div className="mt-6">
+                                <Link href="/book" className="text-xs font-semibold text-sky-200 hover:text-white">
+                                    View Book Details &rarr;
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </SectionShell>
+
+                {/* Section 6: Founder Context & Final CTA */}
+                <SectionShell className="pb-20">
+                    <div className="liquid-glass-strong grid gap-8 rounded-2xl p-6 sm:p-10 lg:grid-cols-[1fr_1fr]">
+                        <div>
+                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
+                                Founder Philosophy
+                            </span>
+                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
+                                Art leads; science makes the decisions sharper.
+                            </h2>
+                            <p className="mt-4 text-sm leading-7 text-white/70">
+                                {founderStatement}
+                            </p>
+                        </div>
+                        <div className="flex flex-col justify-center gap-4">
+                            <EditorialButton href="/studio/beats">Browse Beats & Studio</EditorialButton>
+                            <EditorialButton onClick={openPopup} variant="ghost">Join Newsletter Updates</EditorialButton>
                         </div>
                     </div>
                 </SectionShell>

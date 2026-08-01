@@ -9,102 +9,159 @@ import {
     UserRound,
 } from 'lucide-react';
 
-export const siteNav = [
-    { name: 'Studio', href: '/studio' },
-    { name: 'HealingWave Lab', href: '/lab/healingwave' },
-    { name: 'CADENZ', href: '/cadenz' },
-    { name: 'Flow', href: '/flow' },
-    { name: 'Masterclass', href: '/studio/masterclass' },
-    { name: 'Books', href: '/book' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'About', href: '/about' },
+export interface NavChild {
+    name: string;
+    href: string;
+    description?: string;
+    status?: 'Available' | 'Coming Soon' | 'Free' | 'Paid';
+    external?: boolean;
+}
+
+export interface NavGroup {
+    key: 'studio' | 'apps' | 'learn' | 'about';
+    name: string;
+    href: string;
+    children: NavChild[];
+    activePrefixes?: string[];
+}
+
+export const FLOW_APP_URL = 'https://flow.virzyguns.com';
+
+export const mainNavGroups: NavGroup[] = [
+    {
+        key: 'studio',
+        name: 'Studio',
+        href: '/studio',
+        children: [
+            { name: 'Studio Overview', href: '/studio', description: 'Custom production, mixing, and mastering' },
+            { name: 'Beat Store', href: '/studio/beats', description: 'Browse and license beats across trap, drill, phonk, synthwave, R&B, club, pop, and more', status: 'Available' },
+            { name: 'Licensing Info', href: '/studio/beats/licensing', description: 'Clear terms for non-exclusive & exclusive rights' },
+        ],
+    },
+    {
+        key: 'apps',
+        name: 'Apps',
+        href: FLOW_APP_URL,
+        activePrefixes: ['/flow', '/cadenz', '/lab'],
+        children: [
+            { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
+            { name: 'CADENZ', href: '/cadenz', description: 'Cadence music app for runners and cyclists', status: 'Coming Soon' },
+            { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },
+        ],
+    },
+    {
+        key: 'learn',
+        name: 'Learn',
+        href: '/learn',
+        children: [
+            { name: 'Learn Hub', href: '/learn', description: 'Overview of articles, books, and courses' },
+            { name: 'Articles', href: '/blog', description: 'Free production notes, 808 physics, and licensing guides', status: 'Free' },
+            { name: 'Books', href: '/book', description: 'Structured PDF producer manuals and guides', status: 'Coming Soon' },
+            { name: 'Courses', href: '/studio/masterclass', description: 'Producer masterclasses and workflow modules', status: 'Coming Soon' },
+        ],
+    },
+    {
+        key: 'about',
+        name: 'About',
+        href: '/about',
+        children: [
+            { name: 'Virzy Guns & Mission', href: '/about', description: 'The founder story and production system' },
+        ],
+    },
 ];
 
-export const studioNav = [
-    { name: 'Studio Overview', href: '/studio' },
-    { name: 'Beat Store', href: '/studio/beats' },
-    { name: 'Masterclass', href: '/studio/masterclass' },
-    { name: 'Books', href: '/book' },
-];
+export const siteNav = mainNavGroups.map(({ name, href }) => ({ name, href }));
+
+export const studioNav = mainNavGroups
+    .find((group) => group.key === 'studio')
+    ?.children.map(({ name, href }) => ({ name, href })) ?? [];
 
 export const ecosystemCards = [
     {
         title: 'VGP Studio',
         eyebrow: 'Beats and Services',
         href: '/studio/beats',
-        cta: 'Explore Studio',
+        cta: 'Browse Beats',
         Icon: Headphones,
         description:
             'Premium beats, custom production, mixing, mastering, and sound design by Virzy Guns.',
+        status: 'Available',
     },
     {
-        title: 'HealingWave Lab',
-        eyebrow: 'Functional Audio',
-        href: '/lab/healingwave',
-        cta: 'Enter The Lab',
-        Icon: Activity,
+        title: 'Flow App',
+        eyebrow: 'Deep Work Focus',
+        href: FLOW_APP_URL,
+        cta: 'Open Flow',
+        Icon: Timer,
         description:
-            'Functional audio for focus, recovery, running cadence, cycling cadence, and calm listening.',
+            'A focus timer with original VGP music, ambient sound, and session stats for long work blocks.',
+        status: 'Available',
+        external: true,
     },
     {
         title: 'CADENZ',
-        eyebrow: 'First HealingWave Product',
+        eyebrow: 'Movement Audio App',
         href: '/cadenz',
         cta: 'Preview CADENZ',
         Icon: Activity,
         description:
-            'A cadence music app with original VGP music for runners and cyclists, coming soon.',
+            'A cadence music app with original VGP music for runners and cyclists.',
+        status: 'Coming Soon',
     },
     {
-        title: 'Flow',
-        eyebrow: 'Deep Work App',
-        href: '/flow',
-        cta: 'Open Flow',
-        Icon: Timer,
+        title: 'HealingWave Lab',
+        eyebrow: 'Functional Audio Studio',
+        href: '/lab/healingwave',
+        cta: 'Explore Lab',
+        Icon: Activity,
         description:
-            'A focus timer with original VGP music, ambient sound, and honest session stats for long work blocks.',
+            'Parent research studio developing functional audio for focus, cadence, and recovery.',
+        status: 'Research',
     },
     {
-        title: 'Masterclass',
+        title: 'Learn Hub',
         eyebrow: 'Producer Education',
-        href: '/studio/masterclass',
-        cta: 'Start Learning',
+        href: '/learn',
+        cta: 'Explore Learn Hub',
         Icon: GraduationCap,
         description:
-            'Practical education for producers who want cleaner sound, sharper decisions, and stronger releases.',
+            'Central hub for free articles, producer guidebooks, and upcoming video masterclasses.',
+        status: 'Available',
+    },
+    {
+        title: 'Articles',
+        eyebrow: 'Editorial Library',
+        href: '/blog',
+        cta: 'Read Articles',
+        Icon: Newspaper,
+        description:
+            'Free tutorials on trap drums, 808 physics, mixing decisions, and beat licensing.',
+        status: 'Free',
     },
     {
         title: 'Books',
         eyebrow: 'Producer Library',
         href: '/book',
-        cta: 'Browse Books',
+        cta: 'View Books',
         Icon: Library,
         description:
-            'Music production guides, workbooks, and audio resources for producers who want cleaner decisions.',
+            'Music production manuals and workbooks for producers who want cleaner decisions.',
+        status: 'Available',
     },
     {
-        title: 'Blog',
-        eyebrow: 'Editorial Hub',
-        href: '/blog',
-        cta: 'Read Articles',
-        Icon: Newspaper,
-        description:
-            'Founder notes, tutorials, and practical breakdowns from the VGP catalog.',
-    },
-    {
-        title: 'About',
-        eyebrow: 'Founder and Mission',
+        title: 'About VGP',
+        eyebrow: 'Founder & Mission',
         href: '/about',
-        cta: 'Our Story',
+        cta: 'Read Our Story',
         Icon: UserRound,
         description:
-            'Meet Virzy Guns, the founder shaping the studio, lab, products, and learning system behind VGP.',
+            'Meet Virzy Guns, the founder shaping the studio, lab, products, and learning system.',
+        status: 'Founder',
     },
 ];
 
 export const cadenzHighlights = [
     'CADENZ by HealingWave Lab',
-    'First HealingWave Product',
     'Cadence music for running and cycling',
     'VGP original music',
     'Coming soon',
@@ -112,12 +169,15 @@ export const cadenzHighlights = [
 
 export const healingWaveModules = [
     {
-        name: 'HealingWave Focus',
+        name: 'Flow',
+        availability: 'Available now',
         platform: 'Web Application',
         description:
-            'A browser-based functional audio environment for deep work, focus sessions, and study listening.',
-        features: ['Focus timers', 'Custom presets', 'Session modes', 'Study listening'],
-        note: 'Designed for quiet, repeatable listening sessions with fewer distractions.',
+            'A browser-based functional audio focus timer for deep work, focus sessions, and study listening.',
+        features: ['Focus timers', 'Custom presets', 'Session stats', 'Study listening'],
+        note: 'Designed for quiet, repeatable listening sessions with minimal distraction.',
+        href: FLOW_APP_URL,
+        external: true,
     },
     {
         name: 'CADENZ',
@@ -127,14 +187,17 @@ export const healingWaveModules = [
             'Tempo-matched cadence music with original VGP music for runners and cyclists.',
         features: ['Cadence targets', 'BPM based music', 'Motion flow', 'Training rhythm'],
         note: 'Built to keep cadence targets clear while the music carries the session.',
+        href: '/cadenz',
     },
     {
         name: 'HealingWave Gym',
+        availability: 'Research concept',
         platform: 'Strength Training',
         description:
-            'A concept for workout-focused audio sessions that organize intensity, rhythm, and recovery cues into one listening system.',
+            'An exploratory concept for workout audio sessions organizing intensity, rhythm, and recovery cues.',
         features: ['Workout modes', 'Tempo sets', 'Session logs', 'Sound presets'],
-        note: 'Explores how intensity, rhythm, and recovery can shape a focused workout session.',
+        note: 'Exploration on how intensity and recovery can shape a workout session.',
+        href: '/lab/healingwave',
     },
 ];
 

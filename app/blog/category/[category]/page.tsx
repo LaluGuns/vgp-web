@@ -26,10 +26,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: `${category.name} | VGP Studio Blog`,
         description: category.description,
+        alternates: {
+            canonical: `/blog/category/${category.slug}`,
+        },
         openGraph: {
             title: `${category.name} | VGP Studio Blog`,
             description: category.description,
             type: 'website',
+            url: `https://www.virzyguns.com/blog/category/${category.slug}`,
         },
     };
 }

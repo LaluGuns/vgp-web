@@ -1,5 +1,6 @@
-﻿'use client';
+'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { m } from 'framer-motion';
 import { ArrowRight, type LucideIcon } from 'lucide-react';
@@ -8,11 +9,29 @@ import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
-export function CinematicBackdrop() {
+export function CinematicBackdrop({
+    showLogo = false,
+    logoClassName = 'right-0 top-0 h-[480px] w-[480px] opacity-15 sm:h-[600px] sm:w-[600px]',
+}: {
+    showLogo?: boolean;
+    logoClassName?: string;
+} = {}) {
     return (
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.18),transparent_34%),radial-gradient(circle_at_70%_26%,rgba(14,165,233,0.1),transparent_28%),linear-gradient(180deg,rgba(3,4,5,0)_0%,#030405_86%)]" />
-            <div className="absolute left-1/2 top-36 h-[18rem] w-[58rem] -translate-x-1/2 rounded-[100%] border border-sky-200/[0.075] bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.13),transparent_64%)] blur-[1px]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15),transparent_42%),linear-gradient(180deg,rgba(3,4,5,0)_0%,#030405_86%)]" />
+            {showLogo && (
+                <div className={`absolute pointer-events-none ${logoClassName} blur-[0.5px]`}>
+                    <Image
+                        src="/images/vgp-brand-hero-v2.png"
+                        alt=""
+                        fill
+                        priority
+                        sizes="100vw"
+                        className="object-contain object-right"
+                    />
+                </div>
+            )}
+
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         </div>
     );
@@ -44,6 +63,14 @@ export function EditorialButton({
     );
 
     const baseClass = `inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#030405] ${className}`;
+
+    if (href?.startsWith('http')) {
+        return (
+            <a href={href} target="_blank" rel="noopener noreferrer" className={baseClass}>
+                {content}
+            </a>
+        );
+    }
 
     if (href) {
         return (
@@ -172,7 +199,7 @@ export function EcosystemCard({
                 <p className="mt-4 flex-1 text-sm leading-7 text-white/65">{description}</p>
                 <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-sky-100/80 transition group-hover:text-white">
                     {cta}
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </span>
             </Link>
         </m.article>
@@ -195,7 +222,7 @@ export function FeatureStrip({
     return (
         <m.div
             variants={revealUp}
-            initial="hidden"
+                initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="liquid-glass-strong h-full overflow-hidden rounded-lg"

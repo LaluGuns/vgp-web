@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getAllSlugs } from '@/lib/blog-data';
+import { categories as blogCategoriesData, getAllSlugs } from '@/lib/blog-data';
 import { beatsCatalog, categories as beatCategories } from '@/lib/catalog';
 
 function getLastModified(updatedAt?: string) {
@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const staticRoutes = [
         '',
         '/about',
+        '/learn',
         '/studio',
         '/studio/beats',
         '/studio/beats/licensing',
@@ -90,9 +91,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }));
 
     // 5. Blog Category Routes
-    const blogCategories = ['production-tips', 'licensing-guide', 'genre-guides'];
-    const categoryRoutes = blogCategories.map((cat) => ({
-        url: `${baseUrl}/blog/category/${cat}`,
+    const categoryRoutes = blogCategoriesData.map((category) => ({
+        url: `${baseUrl}/blog/category/${category.slug}`,
         changeFrequency: 'weekly' as const,
         priority: 0.6,
     }));

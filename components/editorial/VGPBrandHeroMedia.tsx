@@ -1,53 +1,142 @@
 'use client';
 
 import Image from 'next/image';
-import { m, useReducedMotion } from 'framer-motion';
+import Link from 'next/link';
+import { m } from 'framer-motion';
+import { Activity, BookOpen, Play, type LucideIcon } from 'lucide-react';
 
-type VGPBrandHeroMediaProps = {
-    placement?: 'flow' | 'heroBackground';
-    className?: string;
+import { FLOW_APP_URL } from '@/lib/vgp-ecosystem';
+
+type HeroProduct = {
+    title: string;
+    subtitle: string;
+    status: string;
+    statusClassName: string;
+    meta: string;
+    href: string;
+    cta: string;
+    Icon: LucideIcon;
+    image: {
+        src: string;
+        alt: string;
+        className: string;
+    };
+    external?: boolean;
 };
 
-export function VGPBrandHeroMedia({
-    placement = 'flow',
-    className = '',
-}: VGPBrandHeroMediaProps) {
-    const reduceMotion = useReducedMotion();
-    const isHeroBackground = placement === 'heroBackground';
+const heroProducts: HeroProduct[] = [
+    {
+        title: 'Beat Store',
+        subtitle: 'Trap, Drill, Phonk & More',
+        status: 'Available Now',
+        statusClassName: 'bg-sky-400/20 text-sky-200 ring-sky-400/30',
+        meta: '$100',
+        href: '/studio/beats',
+        cta: 'Browse beats',
+        Icon: Play,
+        image: { src: '/branding/logo-tg.png', alt: 'VGP logo', className: 'object-contain p-0.5' },
+    },
+    {
+        title: 'Flow Focus App',
+        subtitle: 'Deep Work Audio',
+        status: 'Available Now',
+        statusClassName: 'bg-sky-400/20 text-sky-200 ring-sky-400/30',
+        meta: '25:00',
+        href: FLOW_APP_URL,
+        cta: 'Open Flow App',
+        Icon: Play,
+        external: true,
+        image: { src: '/branding/flowstate-logo.png', alt: 'Flow App logo', className: 'object-contain p-0.5' },
+    },
+    {
+        title: 'Trap Edition Guide',
+        subtitle: 'Producer Manual',
+        status: 'Coming Soon',
+        statusClassName: 'bg-amber-400/20 text-amber-200 ring-amber-400/30',
+        meta: '80+ Pg PDF',
+        href: '/book',
+        cta: 'View details',
+        Icon: BookOpen,
+        image: { src: '/ebooks/trap-guide-book-cover.jpg', alt: 'Trap Edition Guide', className: 'object-cover' },
+    },
+    {
+        title: 'CADENZ',
+        subtitle: 'Running & Cycling',
+        status: 'Coming Soon',
+        statusClassName: 'bg-amber-400/20 text-amber-200 ring-amber-400/30',
+        meta: 'Cadence',
+        href: '/cadenz',
+        cta: 'Preview',
+        Icon: Activity,
+        image: { src: '/images/CADENZ_POSTER.jpg', alt: 'CADENZ poster', className: 'object-cover' },
+    },
+];
 
-    const wrapperClass = isHeroBackground
-        ? 'pointer-events-none absolute inset-x-0 top-0 h-[380px] sm:h-[450px] xl:h-full z-0 overflow-hidden'
-        : 'relative mx-auto aspect-[16/10] w-full overflow-hidden rounded-lg border border-sky-200/[0.08] bg-[#02070c]';
+function ProductLink({ product, children }: { product: HeroProduct; children: React.ReactNode }) {
+    const className = 'mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs font-semibold text-sky-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70';
 
+    if (product.external) {
+        return (
+            <a href={product.href} target="_blank" rel="noopener noreferrer" className={className}>
+                {children}
+            </a>
+        );
+    }
+
+    return <Link href={product.href} className={className}>{children}</Link>;
+}
+
+export function VGPBrandHeroMedia({ className = '' }: { className?: string }) {
     return (
-        <m.div
-            className={`${wrapperClass} ${className}`}
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <div className={`relative z-10 w-full ${className}`}>
             <m.div
-                className="absolute inset-0"
-                animate={reduceMotion ? undefined : { scale: [1.01, 1.025, 1.01] }}
-                transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                initial={false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="grid grid-cols-1 gap-3.5 min-[390px]:grid-cols-2 sm:gap-4"
             >
-                <Image
-                    src="/images/vgp-brand-hero-v2.png"
-                    alt="Virzy Guns Production chrome monogram"
-                    fill
-                    priority={isHeroBackground}
-                    sizes={isHeroBackground ? '100vw' : '(max-width: 768px) 92vw, 688px'}
-                    className={isHeroBackground ? 'object-cover object-[66%_center] xl:object-right opacity-[0.32] xl:opacity-100 transition-all duration-500' : 'object-cover object-[66%_center]'}
-                />
-            </m.div>
+                {heroProducts.map((product) => {
+                    const Icon = product.Icon;
+                    return (
+                        <article
+                            key={product.title}
+                            className="group relative flex min-w-0 flex-col justify-between overflow-hidden rounded-xl border border-white/15 bg-[#03131d]/90 p-4 shadow-2xl backdrop-blur-sm transition-all hover:border-sky-300/50 hover:bg-[#03131d]"
+                        >
+                            <div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className={`rounded-full px-2 py-0.5 text-[9px] font-bold ring-1 sm:text-[10px] ${product.statusClassName}`}>
+                                        {product.status}
+                                    </span>
+                                    <span className="shrink-0 font-mono text-xs font-semibold text-white/60">{product.meta}</span>
+                                </div>
+                                <div className="mt-4 flex min-w-0 items-center gap-3">
+                                    <div className="relative size-9 shrink-0 overflow-hidden rounded-lg border border-white/15 bg-black/40 p-1">
+                                        <Image
+                                            src={product.image.src}
+                                            alt={product.image.alt}
+                                            fill
+                                            sizes="36px"
+                                            className={product.image.className}
+                                        />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <h2 className="truncate text-sm font-semibold text-white">{product.title}</h2>
+                                        <p className="truncate text-xs text-white/50">{product.subtitle}</p>
+                                    </div>
+                                </div>
+                            </div>
 
-            <div
-                className={isHeroBackground
-                    ? 'absolute inset-0 bg-[linear-gradient(180deg,#02070c_0%,rgba(2,7,12,0.65)_30%,rgba(2,7,12,0.45)_50%,rgba(2,7,12,0.75)_80%,#02070c_100%)] xl:bg-[linear-gradient(90deg,#02070c_0%,#02070c_19%,rgba(2,7,12,0.92)_35%,rgba(2,7,12,0.46)_53%,rgba(2,7,12,0.08)_72%,rgba(2,7,12,0.12)_100%)]'
-                    : 'absolute inset-0 bg-[linear-gradient(90deg,rgba(2,7,12,0.58),transparent_45%,rgba(2,7,12,0.08))]'}
-                aria-hidden="true"
-            />
-            <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#02070c] to-transparent" aria-hidden="true" />
-        </m.div>
+                            <ProductLink product={product}>
+                                <span className="inline-flex items-center gap-1">
+                                    <Icon size={10} className={product.Icon === Play ? 'fill-current' : undefined} aria-hidden="true" />
+                                    {product.cta}
+                                </span>
+                                <span aria-hidden="true" className="text-white/40 group-hover:text-white">&rarr;</span>
+                            </ProductLink>
+                        </article>
+                    );
+                })}
+            </m.div>
+        </div>
     );
 }

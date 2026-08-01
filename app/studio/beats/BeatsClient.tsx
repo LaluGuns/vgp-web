@@ -667,9 +667,18 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
         <PageTransition>
             <article className="editorial-shell flex min-h-screen flex-col text-white pt-24 pb-20">
                 {/* Language Switcher Navbar */}
-                <div className="mx-auto max-w-5xl px-6 mb-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-200/60">
-                        <span>Virzy Guns Production</span>
+                <div className="mx-auto max-w-5xl px-6 mb-4 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/30 bg-sky-400/15 px-3.5 py-1.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-400/25 hover:text-white"
+                        >
+                            <ChevronLeft className="h-3.5 w-3.5" />
+                            {locale === 'ja-JP' ? 'VGPホームに戻る' : locale === 'de-DE' ? 'Zurück zur Startseite' : 'Back to VGP Home'}
+                        </Link>
+                        <span className="hidden sm:inline text-xs font-semibold uppercase tracking-wider text-sky-200/60">
+                            Virzy Guns Production
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-2 text-xs font-medium text-white/50 bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10">

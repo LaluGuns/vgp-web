@@ -11,10 +11,13 @@ export const metadata: Metadata = {
     metadataBase: new URL('https://www.virzyguns.com'),
     title: {
         template: '%s | Virzy Guns Production',
-        default: 'Virzy Guns Production | Beats, Songs, Functional Audio',
+        default: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
     },
     description:
-        'Virzy Guns Production is the music-tech ecosystem of Virzy Guns, ranked top 10% songwriter and top 25% producer, building songs, premium beats, functional audio, CADENZ, books, and producer education.',
+        'Buy premium beats, use Flow for deep work, preview CADENZ cadence music, and learn music production through books, articles, and courses by Virzy Guns.',
+    alternates: {
+        canonical: '/',
+    },
     keywords: [
         'Virzy Guns',
         'Virzy Guns Production',
@@ -62,17 +65,17 @@ export const metadata: Metadata = {
         apple: '/branding/logo-tg.jpg',
     },
     openGraph: {
-        title: 'Virzy Guns Production | Beats, Songs, Functional Audio',
+        title: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
         description:
-            'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
+            'Premium beats, the Flow focus app, CADENZ cadence music, and practical producer education by Virzy Guns.',
         url: 'https://www.virzyguns.com',
         siteName: 'Virzy Guns Production',
         images: [
             {
-                url: '/branding/vgp-logo-chrome-full.png',
-                width: 1024,
-                height: 1024,
-                alt: 'Virzy Guns Production chrome logo',
+                url: '/branding/og-image.png',
+                width: 1200,
+                height: 630,
+                alt: 'Virzy Guns Production — beats, Flow, CADENZ and producer education',
             },
         ],
         locale: 'en_US',
@@ -80,10 +83,10 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Virzy Guns Production | Beats, Songs, Functional Audio',
+        title: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
         description:
-            'Songs, premium beats, custom production, functional audio, CADENZ, books, and producer education by Virzy Guns.',
-        images: ['/branding/vgp-logo-chrome-full.png'],
+            'Premium beats, the Flow focus app, CADENZ cadence music, and practical producer education by Virzy Guns.',
+        images: ['/branding/og-image.png'],
         creator: '@virzyguns',
     },
     robots: {
@@ -111,16 +114,19 @@ export default async function RootLayout({
             <head>
                 <script
                     nonce={nonce}
+                    suppressHydrationWarning
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
                 />
                 <script
                     nonce={nonce}
+                    suppressHydrationWarning
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
                 />
                 <script
                     nonce={nonce}
+                    suppressHydrationWarning
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
                 />

@@ -2,67 +2,64 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Headphones, Activity, BookOpen, Timer, Zap } from 'lucide-react';
+import { AppWindow, Home, Headphones, BookOpen, Menu } from 'lucide-react';
 
-export function MobileBottomNav() {
+export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     const pathname = usePathname();
-    const isBlog = pathname.startsWith('/blog');
     const isBeatStore = /^\/(?:(?:ja-JP|de-DE)\/)?studio\/beats(?:\/|$)/.test(pathname);
 
+    // Hide if inside BeatStars store view to prevent overlap with audio player
     if (isBeatStore) return null;
 
     const navItems = [
-        { name: 'Home', href: '/', icon: Home },
-        { name: 'Studio', href: '/studio/beats', icon: Headphones },
-        { name: 'Flow', href: '/flow', icon: Timer },
-        { name: 'CADENZ', href: '/cadenz', icon: Zap },
-        { name: 'Lab', href: '/lab/healingwave', icon: Activity },
-        { name: 'Blog', href: '/blog', icon: BookOpen },
+        { name: 'Home', href: '/', icon: Home, exact: true },
+        { name: 'Beats', href: '/studio/beats', icon: Headphones },
+        { name: 'Apps', href: '/flow', icon: AppWindow },
+        { name: 'Learn', href: '/learn', icon: BookOpen },
     ];
 
+    const isItemActive = (href: string, exact?: boolean) => {
+        if (exact) return pathname === href;
+        return pathname === href || pathname.startsWith(`${href}/`);
+    };
+
+    const handleMenuClick = () => {
+        if (onOpenMenu) {
+            onOpenMenu();
+        } else {
+            window.dispatchEvent(new CustomEvent('vgp:open-mobile-menu'));
+        }
+    };
+
     return (
-        <div
-            className={`fixed bottom-0 left-0 right-0 z-[100] px-0 pt-3 backdrop-blur-xl transform-gpu translate-z-0 will-change-transform md:hidden ${
-                isBlog
-                    ? 'border-t border-white/10 bg-black/75'
-                    : 'border-t border-white/10 bg-black/60'
-            }`}
-            style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
+        <nav
+            aria-label="Mobile navigation"
+            className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#03131d]/95 pt-2 backdrop-blur-xl md:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
+            style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 10px)' }}
         >
-            <div className="mx-auto grid w-full max-w-full grid-cols-6 items-center">
+            <div className="mx-auto grid w-full max-w-md grid-cols-5 items-center px-2">
                 {navItems.map((item) => {
-                    const isActive = item.name === 'Studio'
-                        ? pathname.startsWith('/studio')
-                        : pathname === item.href || pathname.startsWith(item.href !== '/' ? item.href : '/___impossible');
+                    const active = isItemActive(item.href, item.exact);
                     const Icon = item.icon;
                     return (
                         <Link
-                            key={item.href}
+                            key={item.name}
                             href={item.href}
-                            className="flex min-w-0 flex-col items-center gap-1"
+                            aria-current={active ? 'page' : undefined}
+                            className="flex min-h-11 flex-col items-center gap-1 py-1 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 focus-visible:ring-inset"
                         >
                             <div
-                                className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                                    isBlog
-                                        ? isActive
-                                            ? 'bg-white text-[#1d1d1f]'
-                                            : 'text-white/45 hover:bg-white/10 hover:text-white'
-                                        : isActive
-                                            ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]'
-                                            : 'text-white/40 hover:text-white/80'
+                                className={`flex h-8 w-12 items-center justify-center rounded-full transition-all ${
+                                    active
+                                        ? 'bg-sky-400/20 text-sky-200 ring-1 ring-sky-400/30'
+                                        : 'text-white/45 hover:text-white'
                                 }`}
                             >
-                                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                                <Icon size={18} strokeWidth={active ? 2.5 : 2} />
                             </div>
                             <span
-                                className={`truncate text-[10px] font-medium ${
-                                    isBlog
-                                        ? isActive
-                                            ? 'text-white'
-                                            : 'text-white/45'
-                                        : isActive
-                                            ? 'text-white'
-                                            : 'text-white/40'
+                                className={`text-[10px] font-semibold tracking-tight ${
+                                    active ? 'text-white' : 'text-white/45'
                                 }`}
                             >
                                 {item.name}
@@ -70,7 +67,20 @@ export function MobileBottomNav() {
                         </Link>
                     );
                 })}
+
+                {/* 5th Tab: Menu Trigger */}
+                <button
+                    type="button"
+                    onClick={handleMenuClick}
+                    className="flex min-h-11 flex-col items-center gap-1 py-1 text-center text-white/45 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 focus-visible:ring-inset"
+                    aria-label="Open full menu"
+                >
+                    <div className="flex h-8 w-12 items-center justify-center rounded-full text-white/45 hover:bg-white/10 hover:text-white transition-all">
+                        <Menu size={18} strokeWidth={2} />
+                    </div>
+                    <span className="text-[10px] font-semibold tracking-tight">Menu</span>
+                </button>
             </div>
-        </div>
+        </nav>
     );
 }

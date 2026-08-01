@@ -1,28 +1,19 @@
-﻿'use client';
+'use client';
 
-import {
-    type KeyboardEvent as ReactKeyboardEvent,
-    useEffect,
-    useId,
-    useRef,
-    useState,
-} from 'react';
+import { useId, useRef, useState, useEffect, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AnimatePresence, m } from 'framer-motion';
-import { ChevronDown, CircleHelp, ListMusic, Menu, SlidersHorizontal, X } from 'lucide-react';
-import { siteNav, studioNav } from '@/lib/vgp-ecosystem';
+import { ChevronDown, CircleHelp, Home, ListMusic, Menu, SlidersHorizontal, X } from 'lucide-react';
+import { FLOW_APP_URL, mainNavGroups } from '@/lib/vgp-ecosystem';
 import { springFast } from '@/lib/motion-presets';
-
-const mobileSiteNav = siteNav.filter(
-    (item) => item.name !== 'Masterclass' && item.name !== 'Books',
-);
 
 const beatStoreNavCopy = {
     'en-US': {
         brand: 'Virzy Guns Beat Store',
         shortBrand: 'VGP Beats',
+        home: 'Back to Home',
         browse: 'Browse beats',
         finder: 'Beat finder',
         licensing: 'Licensing',
@@ -33,6 +24,7 @@ const beatStoreNavCopy = {
     'ja-JP': {
         brand: 'Virzy Guns ビートストア',
         shortBrand: 'VGP Beats',
+        home: 'ホームに戻る',
         browse: 'ビートを探す',
         finder: 'ビートファインダー',
         licensing: 'ライセンス',
@@ -43,6 +35,7 @@ const beatStoreNavCopy = {
     'de-DE': {
         brand: 'Virzy Guns Beat Store',
         shortBrand: 'VGP Beats',
+        home: 'Zurück zur Startseite',
         browse: 'Beats durchsuchen',
         finder: 'Beat-Finder',
         licensing: 'Lizenzen',
@@ -67,13 +60,19 @@ export function Navbar() {
             ? '/de-DE/studio/beats'
             : '/studio/beats';
     const isBeatStoreHome = pathname === beatStoreBase;
+
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [studioOpen, setStudioOpen] = useState(false);
+    const [openGroup, setOpenGroup] = useState<string | null>(null);
+
     const navRef = useRef<HTMLElement>(null);
-    const studioTriggerRef = useRef<HTMLButtonElement>(null);
-    const studioItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-    const studioMenuId = useId();
+    const mobilePanelRef = useRef<HTMLDivElement>(null);
+    const mobileTriggerRef = useRef<HTMLButtonElement>(null);
+    const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+    const mobilePanelId = useId();
+    const hadMobileMenuOpen = useRef(false);
+
+    const isAppPage = pathname.startsWith('/flow') || pathname.startsWith('/cadenz') || pathname.startsWith('/lab');
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 18);
@@ -83,28 +82,59 @@ export function Navbar() {
     }, []);
 
     useEffect(() => {
+        const handleOpenMobileMenu = () => setMobileOpen(true);
+        window.addEventListener('vgp:open-mobile-menu', handleOpenMobileMenu);
+        return () => window.removeEventListener('vgp:open-mobile-menu', handleOpenMobileMenu);
+    }, []);
+
+    useEffect(() => {
         const frame = requestAnimationFrame(() => {
             setMobileOpen(false);
-            setStudioOpen(false);
+            setOpenGroup(null);
         });
 
         return () => cancelAnimationFrame(frame);
     }, [pathname]);
 
+    // Lock body scroll when mobile menu is open
     useEffect(() => {
-        if (!studioOpen) return;
+        if (mobileOpen) {
+            hadMobileMenuOpen.current = true;
+            document.body.style.overflow = 'hidden';
+            const frame = requestAnimationFrame(() => mobilePanelRef.current?.focus());
+            return () => {
+                cancelAnimationFrame(frame);
+                document.body.style.overflow = '';
+            };
+        } else {
+            document.body.style.overflow = '';
+            if (hadMobileMenuOpen.current) {
+                hadMobileMenuOpen.current = false;
+                mobileTriggerRef.current?.focus();
+            }
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileOpen]);
+
+    // Close dropdowns on pointerdown outside or Escape key
+    useEffect(() => {
+        if (!openGroup && !mobileOpen) return;
 
         const handlePointerDown = (event: PointerEvent) => {
-            if (!navRef.current?.contains(event.target as Node)) {
-                setStudioOpen(false);
+            const target = event.target as Node;
+            if (!navRef.current?.contains(target) && !mobilePanelRef.current?.contains(target)) {
+                setOpenGroup(null);
+                setMobileOpen(false);
             }
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
-                setStudioOpen(false);
-                setTimeout(() => studioTriggerRef.current?.focus(), 0);
+                setOpenGroup(null);
+                setMobileOpen(false);
             }
         };
 
@@ -115,67 +145,31 @@ export function Navbar() {
             document.removeEventListener('pointerdown', handlePointerDown);
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [studioOpen]);
+    }, [openGroup, mobileOpen]);
 
-    const isActive = (href: string, exact = false) => {
+    const handleMobilePanelKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+        if (event.key !== 'Tab') return;
+
+        const focusable = Array.from(
+            mobilePanelRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? [],
+        );
+        if (focusable.length === 0) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    };
+
+    const isActive = (href: string, exact?: boolean) => {
         if (exact) return pathname === href;
         if (href === '/') return pathname === '/';
-        if (href === '/studio') return pathname.startsWith('/studio');
         return pathname === href || pathname.startsWith(`${href}/`);
-    };
-
-    const focusStudioItem = (index: number) => {
-        const items = studioItemRefs.current.filter(
-            (item): item is HTMLAnchorElement => item !== null,
-        );
-        if (items.length === 0) return;
-
-        items[(index + items.length) % items.length]?.focus();
-    };
-
-    const openStudioMenuAt = (index: number) => {
-        setStudioOpen(true);
-        setTimeout(() => focusStudioItem(index), 0);
-    };
-
-    const handleStudioTriggerKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>) => {
-        if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            openStudioMenuAt(0);
-        } else if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            openStudioMenuAt(-1);
-        } else if (event.key === 'Escape' && studioOpen) {
-            event.preventDefault();
-            setStudioOpen(false);
-        }
-    };
-
-    const handleStudioMenuKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
-        const currentIndex = studioItemRefs.current.findIndex(
-            (item) => item === document.activeElement,
-        );
-
-        if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            focusStudioItem(currentIndex + 1);
-        } else if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            focusStudioItem(currentIndex - 1);
-        } else if (event.key === 'Home') {
-            event.preventDefault();
-            focusStudioItem(0);
-        } else if (event.key === 'End') {
-            event.preventDefault();
-            focusStudioItem(-1);
-        } else if (event.key === 'Escape') {
-            event.preventDefault();
-            event.stopPropagation();
-            setStudioOpen(false);
-            setTimeout(() => studioTriggerRef.current?.focus(), 0);
-        } else if (event.key === 'Tab') {
-            setStudioOpen(false);
-        }
     };
 
     const openBeatStorePanel = (panel: 'store' | 'finder') => {
@@ -188,7 +182,7 @@ export function Navbar() {
     };
 
     return (
-        <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-3 sm:px-6">
+        <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
             <nav
                 ref={navRef}
                 className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full !bg-[#03131d] px-3 py-2 transition duration-300 ${
@@ -199,6 +193,7 @@ export function Navbar() {
                 aria-label="Main navigation"
             >
                 <div className="flex h-full items-center justify-between gap-3">
+                    {/* Brand Logo */}
                     <Link
                         href={isBeatStore ? beatStoreBase : '/'}
                         className="flex min-w-0 flex-1 items-center gap-2 rounded-full pr-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 sm:gap-3 sm:pr-3 lg:flex-none"
@@ -218,9 +213,17 @@ export function Navbar() {
                         </span>
                     </Link>
 
+                    {/* Desktop Navigation Groups (Studio, Apps, Learn, About) */}
                     <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
                         {isBeatStore ? (
                             <>
+                                <Link
+                                    href="/"
+                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full bg-sky-400/10 border border-sky-400/20 px-3 text-xs font-semibold text-sky-200 transition hover:bg-sky-400/20 hover:text-white"
+                                >
+                                    <Home className="h-3.5 w-3.5" aria-hidden="true" />
+                                    {beatNav.home}
+                                </Link>
                                 <Link
                                     href={`${beatStoreBase}#beats-inventory`}
                                     className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
@@ -255,97 +258,169 @@ export function Navbar() {
                                     {beatNav.how}
                                 </button>
                             </>
-                        ) : siteNav.map((item) => {
-                            if (item.name === 'Studio') {
-                                return (
-                                    <div key={item.href} className="relative">
-                                        <button
-                                            ref={studioTriggerRef}
-                                            type="button"
-                                            onClick={() => setStudioOpen((open) => !open)}
-                                            onKeyDown={handleStudioTriggerKeyDown}
-                                            aria-expanded={studioOpen}
-                                            aria-haspopup="menu"
-                                            aria-controls={studioMenuId}
-                                            className={`inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
-                                                isActive(item.href)
-                                                    ? 'bg-white/[0.08] text-white'
-                                                    : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
-                                            }`}
-                                        >
-                                            <span>Studio</span>
-                                            <ChevronDown
-                                                className={`h-3.5 w-3.5 transition ${studioOpen ? 'rotate-180' : ''}`}
-                                                aria-hidden="true"
-                                            />
-                                        </button>
+                        ) : mainNavGroups.map((group) => {
+                            const isGroupActive = group.activePrefixes?.some((prefix) => isActive(prefix)) ?? pathname.startsWith(group.href);
 
-                                        {studioOpen ? (
-                                            <div className="absolute left-0 top-[calc(100%+0.55rem)] z-[90] w-56">
-                                                <div
-                                                    id={studioMenuId}
-                                                    role="menu"
-                                                    onKeyDown={handleStudioMenuKeyDown}
-                                                    className="liquid-glass-strong rounded-lg p-2 shadow-[0_22px_70px_rgba(0,0,0,0.42)]"
-                                                >
-                                                    {studioNav.map((sub, index) => (
-                                                        <Link
-                                                            ref={(element) => {
-                                                                studioItemRefs.current[index] = element;
-                                                            }}
-                                                            key={sub.href}
-                                                            href={sub.href}
-                                                            role="menuitem"
-                                                            aria-current={isActive(sub.href, true) ? 'page' : undefined}
-                                                            onClick={() => setStudioOpen(false)}
-                                                            className={`block rounded-md px-3 py-2.5 text-sm transition focus:bg-white/[0.05] focus:text-white focus:outline-none ${
-                                                                isActive(sub.href, true)
-                                                                    ? 'bg-white/[0.07] text-white'
-                                                                    : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
-                                                            }`}
-                                                        >
-                                                            {sub.name}
-                                                        </Link>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ) : null}
-                                    </div>
+                            if (group.key === 'about') {
+                                return (
+                                    <Link
+                                        key={group.key}
+                                        href={group.href}
+                                        aria-current={isActive(group.href, true) ? 'page' : undefined}
+                                        className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3.5 text-xs font-semibold transition ${
+                                            isActive(group.href, true)
+                                                ? 'bg-white/[0.08] text-white'
+                                                : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
+                                        }`}
+                                    >
+                                        {group.name}
+                                    </Link>
                                 );
                             }
 
+                            const isOpen = openGroup === group.key;
+
                             return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    aria-current={isActive(item.href) ? 'page' : undefined}
-                                    className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
-                                        isActive(item.href)
-                                            ? 'bg-white/[0.08] text-white'
-                                            : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
-                                    }`}
+                                <div
+                                    key={group.key}
+                                    className="relative py-1"
+                                    onMouseEnter={() => setOpenGroup(group.key)}
+                                    onMouseLeave={() => setOpenGroup(null)}
                                 >
-                                    {item.name}
-                                </Link>
+                                    <button
+                                        ref={(el) => {
+                                            triggerRefs.current[group.key] = el;
+                                        }}
+                                        type="button"
+                                        onClick={() => setOpenGroup(isOpen ? null : group.key)}
+                                        aria-expanded={isOpen}
+                                        aria-haspopup="menu"
+                                        className={`inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 text-xs font-semibold transition ${
+                                            isGroupActive || isOpen
+                                                ? 'bg-white/[0.08] text-white'
+                                                : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
+                                        }`}
+                                    >
+                                        <span>{group.name}</span>
+                                        <ChevronDown
+                                            className={`h-3.5 w-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+
+                                    <AnimatePresence>
+                                        {isOpen && (
+                                            <m.div
+                                                initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                                                transition={{ duration: 0.18, ease: 'easeOut' }}
+                                                className="absolute left-0 top-full pt-1.5 z-[90] w-64"
+                                            >
+                                                <div
+                                                    role="menu"
+                                                    className="liquid-glass-strong rounded-xl p-2 shadow-[0_22px_70px_rgba(0,0,0,0.55)] border border-white/15 bg-[#03131d]/98 backdrop-blur-xl"
+                                                >
+                                                    {group.children.map((sub) => {
+                                                        const isExternal = sub.external || sub.href.startsWith('http');
+                                                        const linkClasses = `block rounded-lg px-3.5 py-2.5 transition focus:outline-none ${
+                                                            isActive(sub.href, true)
+                                                                ? 'bg-white/[0.09] text-white'
+                                                                : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
+                                                        }`;
+
+                                                        return isExternal ? (
+                                                            <a
+                                                                key={sub.href}
+                                                                href={sub.href}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                role="menuitem"
+                                                                onClick={() => setOpenGroup(null)}
+                                                                className={linkClasses}
+                                                            >
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <span className="text-xs font-semibold text-white">{sub.name}</span>
+                                                                    {sub.status && (
+                                                                        <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[10px] font-medium text-sky-200 ring-1 ring-sky-400/30">
+                                                                            {sub.status}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                {sub.description && (
+                                                                    <p className="mt-0.5 line-clamp-1 text-[11px] text-white/45">
+                                                                        {sub.description}
+                                                                    </p>
+                                                                )}
+                                                            </a>
+                                                        ) : (
+                                                            <Link
+                                                                key={sub.href}
+                                                                href={sub.href}
+                                                                role="menuitem"
+                                                                onClick={() => setOpenGroup(null)}
+                                                                className={linkClasses}
+                                                            >
+                                                                <div className="flex items-center justify-between gap-2">
+                                                                    <span className="text-xs font-semibold text-white">{sub.name}</span>
+                                                                    {sub.status && (
+                                                                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide ${
+                                                                            sub.status === 'Available'
+                                                                                ? 'bg-sky-400/15 text-sky-200 ring-1 ring-sky-400/30'
+                                                                                : sub.status === 'Free'
+                                                                                    ? 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/30'
+                                                                                    : 'bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/30'
+                                                                        }`}>
+                                                                            {sub.status}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                {sub.description && (
+                                                                    <p className="mt-0.5 line-clamp-1 text-[11px] text-white/45">
+                                                                        {sub.description}
+                                                                    </p>
+                                                                )}
+                                                            </Link>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </m.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             );
                         })}
                     </div>
 
+                    {/* Contextual Desktop CTA Button */}
                     <div className="hidden items-center gap-2 lg:flex">
-                        <Link
-                            href={isBeatStore ? `${beatStoreBase}#beats-inventory` : '/studio/beats'}
-                            className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-white/15 bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                        >
-                            {isBeatStore ? beatNav.cta : 'Enter Studio'}
-                        </Link>
+                        {isAppPage ? (
+                            <a
+                                href={FLOW_APP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-sky-300/30 bg-sky-400/15 px-4 text-xs font-semibold text-sky-100 transition hover:bg-sky-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                            >
+                                Open Flow
+                            </a>
+                        ) : (
+                            <Link
+                                href={isBeatStore ? `${beatStoreBase}#beats-inventory` : '/studio/beats'}
+                                className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-white/15 bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                            >
+                                {isBeatStore ? beatNav.cta : 'Browse Beats'}
+                            </Link>
+                        )}
                     </div>
 
+                    {/* Mobile Menu Trigger Button */}
                     <button
                         type="button"
                         onClick={() => setMobileOpen((open) => !open)}
+                        ref={mobileTriggerRef}
                         className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white lg:hidden"
                         aria-expanded={mobileOpen}
-                        aria-controls="mobile-nav-panel"
+                        aria-controls={mobilePanelId}
                         aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
                     >
                         {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -353,23 +428,38 @@ export function Navbar() {
                 </div>
             </nav>
 
+            {/* Mobile Navigation Drawer */}
             <AnimatePresence>
                 {mobileOpen ? (
                     <m.div
-                        id="mobile-nav-panel"
+                        id={mobilePanelId}
+                        ref={mobilePanelRef}
+                        tabIndex={-1}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Mobile navigation"
+                        onKeyDown={handleMobilePanelKeyDown}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={springFast}
-                        className="liquid-glass-strong mx-auto mt-2 max-w-7xl overflow-hidden rounded-lg p-3 lg:hidden"
+                        className="liquid-glass-strong mx-auto mt-2 max-h-[calc(100dvh-5.75rem)] max-w-7xl overflow-y-auto overscroll-contain rounded-2xl border border-white/10 bg-[#03131d]/98 p-4 shadow-2xl outline-none backdrop-blur-2xl lg:hidden"
                     >
-                        <div className="grid gap-1">
+                        <div className="grid gap-5">
                             {isBeatStore ? (
-                                <>
+                                <div className="grid gap-1">
+                                    <Link
+                                        href="/"
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex min-h-11 items-center gap-3 rounded-lg bg-sky-400/10 border border-sky-400/20 px-4 py-3 text-sm font-semibold text-sky-200 transition hover:bg-sky-400/20"
+                                    >
+                                        <Home className="h-4 w-4" aria-hidden="true" />
+                                        {beatNav.home}
+                                    </Link>
                                     <Link
                                         href={`${beatStoreBase}#beats-inventory`}
                                         onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
                                     >
                                         <ListMusic className="h-4 w-4" aria-hidden="true" />
                                         {beatNav.browse}
@@ -377,76 +467,107 @@ export function Navbar() {
                                     <button
                                         type="button"
                                         onClick={() => openBeatStorePanel('finder')}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
                                     >
                                         <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
                                         {beatNav.finder}
                                     </button>
                                     <Link
                                         href={`${beatStoreBase}/licensing`}
-                                        className="flex min-h-11 items-center rounded-lg px-4 py-3 text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex min-h-11 items-center rounded-lg px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
                                     >
                                         {beatNav.licensing}
                                     </Link>
                                     <button
                                         type="button"
                                         onClick={() => openBeatStorePanel('store')}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/70 transition hover:bg-white/[0.06] hover:text-white"
+                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
                                     >
                                         <CircleHelp className="h-4 w-4" aria-hidden="true" />
                                         {beatNav.howMobile}
                                     </button>
-                                </>
-                            ) : [{ name: 'Home', href: '/' }, ...mobileSiteNav].map((item) => {
-                                if (item.name === 'Studio') {
-                                    return (
-                                        <div key={item.href} className="rounded-lg bg-white/[0.03] p-1">
-                                            <Link
-                                                href={item.href}
-                                                aria-current={pathname === item.href ? 'page' : undefined}
-                                                className={`block rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
-                                                    isActive(item.href)
-                                                        ? 'bg-white/[0.08] text-white'
-                                                        : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
-                                                }`}
-                                            >
-                                                Studio
-                                            </Link>
-                                            <div className="mt-1 grid gap-1 border-t border-white/10 pt-1">
-                                                {studioNav.map((sub) => (
+                                </div>
+                            ) : (
+                                mainNavGroups.map((group) => (
+                                    <div key={group.key} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3">
+                                        <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-wider text-sky-200/60">
+                                            {group.name}
+                                        </p>
+                                        <div className="grid gap-1">
+                                            {group.children.map((sub) => {
+                                                const isExternal = sub.external || sub.href.startsWith('http');
+                                                const linkClasses = `flex min-h-11 items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                                                    isActive(sub.href, true)
+                                                        ? 'bg-white/[0.09] text-white'
+                                                        : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
+                                                }`;
+
+                                                return isExternal ? (
+                                                    <a
+                                                        key={sub.href}
+                                                        href={sub.href}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        onClick={() => setMobileOpen(false)}
+                                                        className={linkClasses}
+                                                    >
+                                                        <span className="truncate">{sub.name}</span>
+                                                        {sub.status && (
+                                                            <span className="ml-2 rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] font-medium text-sky-200 shrink-0">
+                                                                {sub.status}
+                                                            </span>
+                                                        )}
+                                                    </a>
+                                                ) : (
                                                     <Link
                                                         key={sub.href}
                                                         href={sub.href}
-                                                        aria-current={isActive(sub.href, true) ? 'page' : undefined}
-                                                        className={`rounded-lg px-3 py-2 text-sm transition ${
-                                                            isActive(sub.href, true)
-                                                                ? 'bg-white/[0.07] text-white'
-                                                                : 'text-white/50 hover:bg-white/[0.05] hover:text-white'
-                                                        }`}
+                                                        onClick={() => setMobileOpen(false)}
+                                                        className={linkClasses}
                                                     >
-                                                        {sub.name}
+                                                        <span className="truncate">{sub.name}</span>
+                                                        {sub.status && (
+                                                            <span className={`ml-2 rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0 ${
+                                                                sub.status === 'Available'
+                                                                    ? 'bg-sky-400/20 text-sky-200'
+                                                                    : sub.status === 'Free'
+                                                                        ? 'bg-emerald-400/20 text-emerald-200'
+                                                                        : 'bg-amber-400/20 text-amber-200'
+                                                            }`}>
+                                                                {sub.status}
+                                                            </span>
+                                                        )}
                                                     </Link>
-                                                ))}
-                                            </div>
+                                                );
+                                            })}
                                         </div>
-                                    );
-                                }
+                                    </div>
+                                ))
+                            )}
 
-                                return (
-                                    <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        aria-current={isActive(item.href) ? 'page' : undefined}
-                                        className={`rounded-lg px-4 py-3 text-sm font-semibold transition ${
-                                            isActive(item.href)
-                                                ? 'bg-white/[0.08] text-white'
-                                                : 'text-white/60 hover:bg-white/[0.05] hover:text-white'
-                                        }`}
+                            {/* Mobile Contextual Action Bar */}
+                            <div className="border-t border-white/10 pt-3">
+                                {isAppPage ? (
+                                    <a
+                                        href={FLOW_APP_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex min-h-11 w-full items-center justify-center rounded-xl bg-sky-400/20 border border-sky-300/30 text-sm font-semibold text-sky-100 transition active:scale-[0.98]"
                                     >
-                                        {item.name}
+                                        Open Flow App
+                                    </a>
+                                ) : (
+                                    <Link
+                                        href="/studio/beats"
+                                        onClick={() => setMobileOpen(false)}
+                                        className="flex min-h-11 w-full items-center justify-center rounded-xl bg-white text-sm font-semibold text-[#030405] transition active:scale-[0.98]"
+                                    >
+                                        Browse Beats
                                     </Link>
-                                );
-                            })}
+                                )}
+                            </div>
                         </div>
                     </m.div>
                 ) : null}

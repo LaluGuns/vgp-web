@@ -5,39 +5,24 @@ import Link from 'next/link';
 import { m } from 'framer-motion';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { socialData } from '@/components/SocialDock';
+import { FLOW_APP_URL, mainNavGroups } from '@/lib/vgp-ecosystem';
+
+const navGroupLinks = (key: 'studio' | 'apps' | 'learn') =>
+    mainNavGroups.find((group) => group.key === key)?.children.map(({ name, href }) => ({ name, href })) ?? [];
 
 const footerGroups = [
-    {
-        title: 'Studio',
-        links: [
-            { name: 'Studio Overview', href: '/studio' },
-            { name: 'Beat Store', href: '/studio/beats' },
-            { name: 'Custom Production', href: '/studio/beats' },
-        ],
-    },
-    {
-        title: 'Lab',
-        links: [
-            { name: 'HealingWave Lab', href: '/lab/healingwave' },
-            { name: 'CADENZ', href: '/cadenz' },
-        ],
-    },
-    {
-        title: 'Learn',
-        links: [
-            { name: 'Masterclass', href: '/studio/masterclass' },
-            { name: 'Books', href: '/book' },
-            { name: 'Blog', href: '/blog' },
-        ],
-    },
+    { title: 'Studio', links: navGroupLinks('studio') },
+    { title: 'Apps', links: navGroupLinks('apps').map((link) => link.name === 'Flow' ? { ...link, href: FLOW_APP_URL } : link) },
+    { title: 'Learn', links: navGroupLinks('learn') },
     {
         title: 'Company',
         links: [
-            { name: 'About', href: '/about' },
+            { name: 'About Virzy Guns', href: '/about' },
             { name: 'Contact', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com' },
         ],
     },
 ];
+
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -53,8 +38,8 @@ export function Footer() {
                 whileInView="visible"
                 viewport={{ once: true }}
             >
-                <div className="grid gap-12 lg:grid-cols-[1.1fr_1.4fr]">
-                    <div>
+                <div className="grid min-w-0 gap-12 lg:grid-cols-[1.1fr_1.4fr]">
+                    <div className="min-w-0">
                         <Image
                             src="/branding/vgp-logo-chrome-full.png"
                             alt="Virzy Guns Production"
@@ -91,7 +76,7 @@ export function Footer() {
                     </div>
 
                     <m.div
-                        className="grid grid-cols-2 gap-8 sm:grid-cols-4"
+                        className="grid min-w-0 grid-cols-2 gap-8 sm:grid-cols-4"
                         variants={staggerParent}
                         initial="hidden"
                         whileInView="visible"
