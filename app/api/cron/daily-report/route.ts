@@ -7,8 +7,18 @@ import nodemailer from 'nodemailer';
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
+function getSafeErrorCode(error: unknown): string {
+    if (!error || typeof error !== 'object') return 'UNCLASSIFIED';
+    const candidate = error as { code?: unknown; responseCode?: unknown };
+    return String(candidate.code ?? candidate.responseCode ?? 'UNCLASSIFIED')
+        .toUpperCase()
+        .replace(/[^A-Z0-9_-]/g, '_')
+        .slice(0, 32);
+}
+
 export async function GET(request: NextRequest) {
     let reportClaimed = false;
+    let smtpAttemptStarted = false;
 
     try {
         // 1. Cron Secret Authorization check
@@ -21,16 +31,28 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        // 2. Atomically claim today's report. A failed or stale pending attempt
-        // may be retried, while concurrent healthy invocations are deduplicated.
+        // A stale row that crossed the SMTP boundary has an ambiguous outcome.
+        // Quarantine it instead of risking a duplicate founder report.
+        await pool.query(
+            `UPDATE vgp_daily_report_logs
+             SET status = 'unknown'
+             WHERE status = 'pending'
+               AND smtp_attempted_at IS NOT NULL
+               AND sent_at < CURRENT_TIMESTAMP - INTERVAL '15 minutes'`
+        );
+
+        // 2. Atomically claim today's report. Only pre-SMTP failures or stale
+        // pre-SMTP work may retry.
         const claimResult = await pool.query(
             `INSERT INTO vgp_daily_report_logs (report_date, status)
              VALUES (CURRENT_DATE, 'pending')
              ON CONFLICT (report_date) DO UPDATE
-             SET status = 'pending', sent_at = CURRENT_TIMESTAMP
+             SET status = 'pending', sent_at = CURRENT_TIMESTAMP,
+                 smtp_attempted_at = NULL
              WHERE vgp_daily_report_logs.status = 'failed'
                 OR (
                     vgp_daily_report_logs.status = 'pending'
+                    AND vgp_daily_report_logs.smtp_attempted_at IS NULL
                     AND vgp_daily_report_logs.sent_at < CURRENT_TIMESTAMP - INTERVAL '15 minutes'
                 )
              RETURNING status`
@@ -45,7 +67,9 @@ export async function GET(request: NextRequest) {
                 success: true,
                 message: status === 'sent'
                     ? 'Daily performance email report already sent today.'
-                    : 'Daily performance email report is already being processed.'
+                    : status === 'unknown'
+                        ? 'Daily report delivery outcome requires manual reconciliation.'
+                        : 'Daily performance email report is already being processed.'
             });
         }
 
@@ -257,6 +281,21 @@ export async function GET(request: NextRequest) {
             </div>
         `;
 
+        const smtpBoundary = await pool.query(
+            `UPDATE vgp_daily_report_logs
+             SET smtp_attempted_at = CURRENT_TIMESTAMP
+             WHERE report_date = CURRENT_DATE
+               AND status = 'pending'
+               AND smtp_attempted_at IS NULL
+             RETURNING id`
+        );
+        if (smtpBoundary.rowCount !== 1) {
+            throw Object.assign(new Error('daily_report_state_changed'), {
+                code: 'DAILY_REPORT_STATE_CHANGED',
+            });
+        }
+        smtpAttemptStarted = true;
+
         await transporter.sendMail({
             from: `"VGP System" <${process.env.SMTP_USER}>`,
             to: process.env.SMTP_USER,
@@ -294,19 +333,29 @@ export async function GET(request: NextRequest) {
                 campaigns
             }
         });
-    } catch (error: any) {
-        console.error('Daily Report Cron Error:', error);
+    } catch (error: unknown) {
+        console.error(JSON.stringify({
+            event: 'daily_report_error',
+            deliveryState: smtpAttemptStarted ? 'unknown' : 'failed',
+            errorCode: getSafeErrorCode(error),
+        }));
         
-        // Only the invocation that claimed today's slot may mark it failed.
+        // Only the invocation that claimed today's slot may update it. Once
+        // SMTP begins, any error is ambiguous and must never auto-retry.
         if (reportClaimed) {
             try {
                 await pool.query(
                     `UPDATE vgp_daily_report_logs
-                     SET status = 'failed', sent_at = CURRENT_TIMESTAMP
+                     SET status = $1, sent_at = CURRENT_TIMESTAMP
                      WHERE report_date = CURRENT_DATE AND status = 'pending'`
+                    ,
+                    [smtpAttemptStarted ? 'unknown' : 'failed']
                 );
-            } catch (dbErr) {
-                console.error('Failed to log report failure in DB:', dbErr);
+            } catch {
+                console.error(JSON.stringify({
+                    event: 'daily_report_state_update_error',
+                    errorCode: 'STATUS_UPDATE_FAILED',
+                }));
             }
         }
 

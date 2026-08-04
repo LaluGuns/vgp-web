@@ -226,7 +226,7 @@ export function generateLicensingSchema(locale: 'en-US' | 'ja-JP' | 'de-DE' = 'e
                     name: 'What is the difference between non-exclusive and exclusive beat licenses?',
                     acceptedAnswer: {
                         '@type': 'Answer',
-                        text: 'Non-exclusive licenses allow multiple artists to lease and record over the same instrumental under stream and sales limits. An exclusive license transfers full rights to one artist, removes the beat from the public store, and grants unlimited usage.',
+                        text: 'The owner-confirmed Basic MP3 license is non-exclusive and has specific copy, stream, and music-video limits. Exclusive availability and terms must be confirmed directly in writing before purchase.',
                     },
                 },
                 {
@@ -234,7 +234,7 @@ export function generateLicensingSchema(locale: 'en-US' | 'ja-JP' | 'de-DE' = 'e
                     name: 'Can I upload a song recorded over a leased beat to Spotify and Apple Music?',
                     acceptedAnswer: {
                         '@type': 'Answer',
-                        text: 'Yes! All non-exclusive leases (Basic MP3, Basic Pro, Premium, Unlimited) permit commercial streaming releases on Spotify, Apple Music, Tidal, and all digital streaming platforms up to the stream limit of your chosen tier.',
+                        text: 'Check the current written license delivered for the selected beat before release. The owner-confirmed Basic MP3 summary covers music recording, up to 2,000 copies, 5,000 online audio streams, and one music video.',
                     },
                 },
                 {
@@ -242,7 +242,7 @@ export function generateLicensingSchema(locale: 'en-US' | 'ja-JP' | 'de-DE' = 'e
                     name: 'Are track stems included with the lease?',
                     acceptedAnswer: {
                         '@type': 'Answer',
-                        text: 'Track stems (separated audio channels such as kick, snare, 808, synth, FX) are included with Premium Lease ($50), Unlimited Lease ($100), and Exclusive Rights.',
+                        text: 'Included files vary by license tier. Review the current product-page terms and the written license before checkout; stems are not implied by the Basic MP3 summary.',
                     },
                 },
             ],

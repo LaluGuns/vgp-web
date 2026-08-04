@@ -24,8 +24,25 @@ export const dynamic = 'force-dynamic';
 
 // Max emails to process in a single batch run
 const BATCH_SIZE = 10;
+const STALE_LOCK_MINUTES = 30;
 
-export async function GET(request: NextRequest) {
+function getSafeErrorCode(error: unknown): string {
+    let rawCode = '';
+
+    if (typeof error === 'object' && error !== null) {
+        const candidate = error as { code?: unknown; responseCode?: unknown };
+        rawCode = String(candidate.code ?? candidate.responseCode ?? '');
+    }
+
+    const sanitized = rawCode
+        .toUpperCase()
+        .replace(/[^A-Z0-9_-]/g, '_')
+        .slice(0, 32);
+
+    return sanitized || 'UNCLASSIFIED';
+}
+
+export async function POST(request: NextRequest) {
     try {
         // 1. Cron Secret Authorization check
         const cronSecret = process.env.CRON_SECRET;
@@ -75,6 +92,58 @@ export async function GET(request: NextRequest) {
         let jobs: Job[] = [];
 
         await withTransaction(async (client) => {
+            // A stale lock with an SMTP-attempt marker has an ambiguous external
+            // outcome. Quarantine it for provider reconciliation; never retry it.
+            const quarantinedResult = await client.query(
+                `UPDATE vgp_recipient_logs
+                 SET status = 'unknown', locked_at = NULL, next_attempt_at = NULL,
+                     last_error = 'Delivery outcome unknown after interrupted SMTP attempt; manual reconciliation required',
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE status = 'sending'
+                   AND locked_at < CURRENT_TIMESTAMP - make_interval(mins => $1::int)
+                   AND smtp_attempted_at IS NOT NULL
+                 RETURNING id`,
+                [STALE_LOCK_MINUTES]
+            );
+
+            if (quarantinedResult.rowCount) {
+                console.warn(JSON.stringify({
+                    event: 'campaign_delivery_stale_quarantined',
+                    count: quarantinedResult.rowCount,
+                    deliveryState: 'unknown',
+                }));
+            }
+
+            // A stale lock that never reached the SMTP-attempt marker is safe to
+            // retry using the ordinary failed/backoff queue semantics.
+            const releasedResult = await client.query(
+                `UPDATE vgp_recipient_logs
+                 SET status = 'failed', locked_at = NULL,
+                     next_attempt_at = CASE
+                       WHEN attempts >= max_attempts THEN NULL
+                       ELSE CURRENT_TIMESTAMP
+                     END,
+                     last_error = CASE
+                       WHEN attempts >= max_attempts
+                         THEN 'Processor stopped before SMTP attempt; maximum attempts exhausted'
+                       ELSE 'Processor stopped before SMTP attempt; safe to retry'
+                     END,
+                     updated_at = CURRENT_TIMESTAMP
+                 WHERE status = 'sending'
+                   AND locked_at < CURRENT_TIMESTAMP - make_interval(mins => $1::int)
+                   AND smtp_attempted_at IS NULL
+                 RETURNING id`,
+                [STALE_LOCK_MINUTES]
+            );
+
+            if (releasedResult.rowCount) {
+                console.warn(JSON.stringify({
+                    event: 'campaign_delivery_stale_released',
+                    count: releasedResult.rowCount,
+                    deliveryState: 'failed',
+                }));
+            }
+
             // Terminalize exhausted work so a stale final attempt cannot leave
             // its parent campaign permanently in the sending state.
             await client.query(
@@ -83,10 +152,7 @@ export async function GET(request: NextRequest) {
                      last_error = COALESCE(last_error, 'Maximum delivery attempts exhausted'),
                      updated_at = CURRENT_TIMESTAMP
                  WHERE attempts >= max_attempts
-                   AND (
-                     status IN ('pending', 'failed')
-                     OR (status = 'sending' AND locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
-                   )`
+                   AND status IN ('pending', 'failed')`
             );
 
             // Suppress queue rows that can no longer be delivered. Without this,
@@ -101,10 +167,7 @@ export async function GET(request: NextRequest) {
                    AND c.id = rl.campaign_id
                    AND c.status IN ('queued', 'sending')
                    AND s.status <> 'subscribed'
-                   AND (
-                     rl.status IN ('pending', 'failed')
-                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
-                   )`
+                   AND rl.status IN ('pending', 'failed')`
             );
 
             // Select up to BATCH_SIZE pending/retriable jobs
@@ -131,7 +194,6 @@ export async function GET(request: NextRequest) {
                    AND (
                      rl.status = 'pending'
                      OR (rl.status = 'failed' AND rl.next_attempt_at <= CURRENT_TIMESTAMP)
-                     OR (rl.status = 'sending' AND rl.locked_at < CURRENT_TIMESTAMP - INTERVAL '30 minutes')
                    )
                  ORDER BY rl.next_attempt_at ASC, rl.id ASC
                  LIMIT $1
@@ -146,7 +208,9 @@ export async function GET(request: NextRequest) {
                 // Atomically mark them as sending and increment attempts, record locked time
                 await client.query(
                     `UPDATE vgp_recipient_logs
-                     SET status = 'sending', locked_at = CURRENT_TIMESTAMP, attempts = attempts + 1, updated_at = CURRENT_TIMESTAMP
+                     SET status = 'sending', locked_at = CURRENT_TIMESTAMP,
+                         smtp_attempted_at = NULL, attempts = attempts + 1,
+                         updated_at = CURRENT_TIMESTAMP
                      WHERE id = ANY($1)`,
                     [jobIds]
                 );
@@ -175,7 +239,7 @@ export async function GET(request: NextRequest) {
                      SELECT 1 FROM vgp_recipient_logs rl
                      WHERE rl.campaign_id = c.id
                        AND (
-                         rl.status IN ('pending', 'sending')
+                         rl.status IN ('pending', 'sending', 'unknown')
                          OR (
                            rl.status = 'failed'
                            AND rl.attempts < rl.max_attempts
@@ -195,11 +259,14 @@ export async function GET(request: NextRequest) {
         const results = {
             successCount: 0,
             failCount: 0,
-            processedJobs: [] as { jobId: number; status: string; error?: string }[]
+            unknownCount: 0,
+            processedJobs: [] as { jobId: number; status: string }[]
         };
 
         // 4. Send SMTP emails OUTSIDE the database transaction
         for (const job of jobs) {
+            let deliveryAttemptStarted = false;
+
             try {
                 // Re-check mutable state immediately before delivery. This closes
                 // the normal unsubscribe/pause window without holding a DB
@@ -279,6 +346,23 @@ export async function GET(request: NextRequest) {
                     includeTrackingPixel: true,
                 });
 
+                // Persist the external-action boundary before invoking SMTP.
+                // A crash after this marker must be reconciled, never retried.
+                const attemptResult = await pool.query(
+                    `UPDATE vgp_recipient_logs
+                     SET smtp_attempted_at = CURRENT_TIMESTAMP,
+                         updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1 AND status = 'sending'
+                     RETURNING id`,
+                    [job.id]
+                );
+
+                if (attemptResult.rowCount !== 1) {
+                    results.processedJobs.push({ jobId: job.id, status: 'state_changed' });
+                    continue;
+                }
+
+                deliveryAttemptStarted = true;
                 const mailRes = await transporter.sendMail({
                     from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
                     to: job.email,
@@ -287,32 +371,79 @@ export async function GET(request: NextRequest) {
                     html: renderedEmail.html
                 });
 
-                // Update database job status to 'sent'
-                await pool.query(
+                // SMTP returned acceptance. Persist it even if a concurrent abort
+                // changed the row to skipped after the final state check.
+                const sentResult = await pool.query(
                     `UPDATE vgp_recipient_logs
-                     SET status = 'sent', sent_at = CURRENT_TIMESTAMP, message_id = $2, locked_at = NULL, last_error = NULL, updated_at = CURRENT_TIMESTAMP
-                     WHERE id = $1 AND status = 'sending'`,
+                     SET status = 'sent', sent_at = CURRENT_TIMESTAMP,
+                         message_id = $2, locked_at = NULL, next_attempt_at = NULL,
+                         last_error = NULL, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1 AND status IN ('sending', 'skipped', 'unknown')
+                     RETURNING id`,
                     [job.id, mailRes.messageId || 'unknown']
                 );
 
+                if (sentResult.rowCount !== 1) {
+                    const persistenceError = new Error('delivery_receipt_not_persisted') as Error & { code: string };
+                    persistenceError.code = 'DELIVERY_RECEIPT_NOT_PERSISTED';
+                    throw persistenceError;
+                }
+
                 results.successCount++;
                 results.processedJobs.push({ jobId: job.id, status: 'sent' });
-            } catch (err: any) {
-                console.error(`Failed to send email job ID ${job.id} to ${job.email}:`, err);
+            } catch (err: unknown) {
+                const errorCode = getSafeErrorCode(err);
                 const isFinalFailure = job.attempts >= job.max_attempts;
                 const retryDelayMinutes = Math.min(60, 5 * (2 ** Math.max(0, job.attempts - 1)));
                 const nextAttemptAt = new Date(Date.now() + retryDelayMinutes * 60 * 1000);
+                const deliveryState = deliveryAttemptStarted ? 'unknown' : 'failed';
+                const storedError = deliveryAttemptStarted
+                    ? `Delivery outcome unknown after SMTP attempt (${errorCode}); manual reconciliation required`
+                    : `Pre-delivery processing failed (${errorCode})`;
+                const allowedCurrentStatuses = deliveryAttemptStarted
+                    ? ['sending', 'skipped', 'unknown']
+                    : ['sending'];
 
-                // Update database job status to 'failed' with error log
-                await pool.query(
+                console.error(JSON.stringify({
+                    event: 'campaign_delivery_error',
+                    jobId: job.id,
+                    campaignId: job.campaign_id,
+                    attempt: job.attempts,
+                    deliveryState,
+                    errorCode,
+                }));
+
+                const failureResult = await pool.query(
                     `UPDATE vgp_recipient_logs
-                     SET status = 'failed', last_error = $2, locked_at = NULL, next_attempt_at = $3, updated_at = CURRENT_TIMESTAMP
-                     WHERE id = $1 AND status = 'sending'`,
-                    [job.id, err.message || 'Unknown SMTP error', isFinalFailure ? null : nextAttemptAt]
+                     SET status = $2, last_error = $3, locked_at = NULL,
+                         next_attempt_at = $4, updated_at = CURRENT_TIMESTAMP
+                     WHERE id = $1 AND status = ANY($5::text[])
+                     RETURNING id`,
+                    [
+                        job.id,
+                        deliveryState,
+                        storedError,
+                        deliveryAttemptStarted || isFinalFailure ? null : nextAttemptAt,
+                        allowedCurrentStatuses,
+                    ]
                 );
 
-                results.failCount++;
-                results.processedJobs.push({ jobId: job.id, status: 'failed', error: err.message });
+                if (failureResult.rowCount !== 1) {
+                    console.error(JSON.stringify({
+                        event: 'campaign_delivery_state_conflict',
+                        jobId: job.id,
+                        campaignId: job.campaign_id,
+                        deliveryState,
+                        errorCode: 'STATUS_UPDATE_NOT_APPLIED',
+                    }));
+                }
+
+                if (deliveryAttemptStarted) {
+                    results.unknownCount++;
+                } else {
+                    results.failCount++;
+                }
+                results.processedJobs.push({ jobId: job.id, status: deliveryState });
             }
         }
 
@@ -325,7 +456,7 @@ export async function GET(request: NextRequest) {
                  SELECT 1 FROM vgp_recipient_logs rl
                  WHERE rl.campaign_id = c.id
                    AND (
-                     rl.status IN ('pending', 'sending')
+                     rl.status IN ('pending', 'sending', 'unknown')
                      OR (
                        rl.status = 'failed'
                        AND rl.attempts < rl.max_attempts
@@ -341,14 +472,28 @@ export async function GET(request: NextRequest) {
             batchSize: jobs.length,
             successCount: results.successCount,
             failCount: results.failCount,
+            unknownCount: results.unknownCount,
             processedJobs: results.processedJobs,
             completedCampaigns: compResult.rows.map(r => r.id)
         });
-    } catch (error: any) {
-        console.error('Batch Queue Processor Cron Error:', error);
+    } catch (error: unknown) {
+        console.error(JSON.stringify({
+            event: 'campaign_processor_crash',
+            errorCode: getSafeErrorCode(error),
+        }));
         return NextResponse.json(
             { error: 'Internal queue processor crash.' },
             { status: 500 }
         );
     }
+}
+
+export async function GET() {
+    return NextResponse.json(
+        { error: 'Method not allowed' },
+        {
+            status: 405,
+            headers: { Allow: 'POST' },
+        }
+    );
 }

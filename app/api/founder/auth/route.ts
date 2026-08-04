@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import pool from '@/lib/db';
 import { signToken } from '@/lib/tokens';
-import { hasValidRequestOrigin, SESSION_COOKIE_NAME } from '@/lib/auth';
+import {
+    checkFounderSession,
+    hasValidRequestOrigin,
+    SESSION_COOKIE_NAME,
+} from '@/lib/auth';
 import crypto from 'crypto';
 
 function getFounderPasscode(): string {
@@ -20,6 +24,13 @@ function safeCompare(input: string, secret: string): boolean {
     const inputHash = crypto.createHash('sha256').update(input).digest();
     const secretHash = crypto.createHash('sha256').update(secret).digest();
     return crypto.timingSafeEqual(inputHash, secretHash);
+}
+
+export async function GET(request: NextRequest) {
+    return NextResponse.json(
+        { authenticated: await checkFounderSession(request) },
+        { headers: { 'Cache-Control': 'private, no-store, max-age=0' } },
+    );
 }
 
 export async function POST(request: NextRequest) {

@@ -6,6 +6,7 @@
  */
 
 import { getEditorialBeatWorld } from './beatstars-genre-index';
+import { PUBLIC_CONFIRMED_LICENSES } from '../licensing-registry';
 
 export type CatalogSource =
     | 'repository'
@@ -120,93 +121,55 @@ export interface CategoryDef {
     recommendedVocalFit: LocalizedText;
 }
 
-/** Standard Non-Exclusive Licenses (Source of Truth for licensing terms) */
-export const defaultLicenses: BeatLicense[] = [
-    {
-        id: 'basic-mp3',
-        name: 'Basic MP3',
-        price: '$15',
-        priceValue: 15,
-        currency: 'USD',
-        type: 'non-exclusive',
-        includes: ['MP3 File'],
-        fileFormats: ['MP3 (320kbps)'],
-        includesStems: false,
-        commercialUse: true,
-        streamingLimit: '5,000 Streams',
-        salesLimit: '2,000 Copies',
-        musicVideoLimit: '1 Music Video',
-        radioStationsLimit: '0 Stations',
-        paidPerformances: false,
-        contentIdAllowed: false,
-        creditRequired: true,
-        creditString: 'Prod. By Virzy Guns',
-        source: 'owner-provided',
-    },
-    {
-        id: 'basic-pro-wav',
-        name: 'Basic Pro Lease',
-        price: '$25',
-        priceValue: 25,
-        currency: 'USD',
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File'],
-        fileFormats: ['MP3 (320kbps)', 'WAV (24-Bit)'],
-        includesStems: false,
-        commercialUse: true,
-        streamingLimit: '200,000 Streams',
-        salesLimit: '5,000 Copies',
-        musicVideoLimit: '1 Music Video',
-        radioStationsLimit: '2 Stations',
-        paidPerformances: true,
-        contentIdAllowed: false,
-        creditRequired: true,
-        creditString: 'Prod. By Virzy Guns',
-        source: 'owner-provided',
-    },
-    {
-        id: 'premium-stems',
-        name: 'Premium Lease',
-        price: '$50',
-        priceValue: 50,
-        currency: 'USD',
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File', 'Track Stems'],
-        fileFormats: ['MP3 (320kbps)', 'WAV (24-Bit)', 'Track Stems'],
-        includesStems: true,
-        commercialUse: true,
-        streamingLimit: '500,000 Streams',
-        salesLimit: '10,000 Copies',
-        musicVideoLimit: '1 Music Video',
-        radioStationsLimit: '2 Stations',
-        paidPerformances: true,
-        contentIdAllowed: false,
-        creditRequired: true,
-        creditString: 'Prod. By Virzy Guns',
-        source: 'owner-provided',
-    },
-    {
-        id: 'unlimited',
-        name: 'UNLIMITED Lease',
-        price: '$100',
-        priceValue: 100,
-        currency: 'USD',
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File', 'Track Stems'],
-        fileFormats: ['MP3 (320kbps)', 'WAV (24-Bit)', 'Track Stems'],
-        includesStems: true,
-        commercialUse: true,
-        streamingLimit: 'UNLIMITED Streams',
-        salesLimit: 'UNLIMITED Copies',
-        musicVideoLimit: '2 Music Videos',
-        radioStationsLimit: '2 Stations',
-        paidPerformances: true,
-        contentIdAllowed: false,
-        creditRequired: true,
-        creditString: 'Prod. By Virzy Guns',
-        source: 'owner-provided',
-    },
-];
+const formatCatalogLimit = (
+    value: number | null,
+    unlimited: boolean,
+    singular: string,
+    plural: string,
+): string => {
+    if (unlimited) return `UNLIMITED ${plural}`;
+    if (value === null) return `Unconfirmed ${plural}`;
+    return `${value.toLocaleString('en-US')} ${value === 1 ? singular : plural}`;
+};
+
+const formatIncludedFile = (format: string): string => {
+    if (format.startsWith('MP3')) return 'MP3 File';
+    if (format.startsWith('WAV')) return 'WAV File';
+    return format;
+};
+
+/** Standard Non-Exclusive Licenses, generated from the canonical registry. */
+export const defaultLicenses: BeatLicense[] = PUBLIC_CONFIRMED_LICENSES.map((tier) => ({
+    id: tier.catalogId,
+    name: tier.name,
+    price: tier.priceUsd === null ? 'Contact' : `$${tier.priceUsd}`,
+    priceValue: tier.priceUsd ?? 0,
+    currency: 'USD',
+    type: 'non-exclusive',
+    includes: tier.fileFormats.map(formatIncludedFile),
+    fileFormats: [...tier.fileFormats],
+    includesStems: tier.includesStems === true,
+    commercialUse: tier.commercialUse === true,
+    streamingLimit: formatCatalogLimit(
+        tier.onlineAudioStreams,
+        tier.unlimitedOnlineAudioStreams,
+        'Stream',
+        'Streams',
+    ),
+    salesLimit: formatCatalogLimit(
+        tier.distributionCopies,
+        tier.unlimitedDistribution,
+        'Copy',
+        'Copies',
+    ),
+    musicVideoLimit: formatCatalogLimit(tier.musicVideos, false, 'Music Video', 'Music Videos'),
+    radioStationsLimit: formatCatalogLimit(tier.radioStations, false, 'Station', 'Stations'),
+    paidPerformances: tier.paidPerformances === true,
+    contentIdAllowed: tier.contentIdAllowed === true,
+    creditRequired: tier.creditRequired === true,
+    creditString: tier.creditString ?? '',
+    source: 'owner-provided',
+}));
 
 /** Category Definitions */
 export const categories: CategoryDef[] = [

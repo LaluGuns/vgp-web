@@ -5,6 +5,7 @@ const eslintConfig = [
     {
         ignores: [
             '.next/**',
+            'cloudflare/vgp-founder-agent/**',
             'flowstate/**',
             'scratch/**',
             'node_modules/**',

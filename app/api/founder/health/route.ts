@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
         pending: 0,
         sending: 0,
         failed: 0,
+        unknown: 0,
         sentToday: 0,
         activeCampaigns: 0,
         lastDeliveryAt: null as string | null,
@@ -46,6 +47,7 @@ export async function GET(request: NextRequest) {
                     COUNT(*) FILTER (WHERE status = 'pending') AS pending,
                     COUNT(*) FILTER (WHERE status = 'sending') AS sending,
                     COUNT(*) FILTER (WHERE status = 'failed' AND attempts < max_attempts) AS failed,
+                    COUNT(*) FILTER (WHERE status = 'unknown') AS unknown,
                     COUNT(*) FILTER (WHERE status = 'sent' AND sent_at >= CURRENT_DATE) AS sent_today,
                     MAX(sent_at) FILTER (WHERE status = 'sent') AS last_delivery
                  FROM vgp_recipient_logs`
@@ -54,6 +56,7 @@ export async function GET(request: NextRequest) {
             queue.pending = parseInt(r.pending || '0');
             queue.sending = parseInt(r.sending || '0');
             queue.failed = parseInt(r.failed || '0');
+            queue.unknown = parseInt(r.unknown || '0');
             queue.sentToday = parseInt(r.sent_today || '0');
             queue.lastDeliveryAt = r.last_delivery ? new Date(r.last_delivery).toISOString() : null;
 

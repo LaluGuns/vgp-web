@@ -1,42 +1,58 @@
-# VGP — Process Campaigns Cron (Cloudflare Worker)
+# VGP — Process Campaigns Cron
 
-Drives the email queue every 10 minutes. Replaces the Vercel cron that the
-**Hobby plan rejects** (Hobby allows cron jobs only once per day, so the
-`*/10 * * * *` schedule fails the deploy).
+This Cloudflare Worker drives the email queue every 10 minutes. It replaces a
+Vercel cron schedule that is not available on the Hobby plan.
 
-## One-time setup
+## Required deployment order
+
+Before deploying this Worker or the matching Next.js route, apply
+`scripts/migrate-v5-recipient-delivery-unknown.js` through the normal,
+reviewed database migration process. The migration adds the `unknown`
+recipient-delivery state used to quarantine ambiguous SMTP outcomes.
+The same additive migration also protects the daily founder report from
+automatic retry after an ambiguous SMTP attempt.
+
+This system does not claim SMTP exactly-once delivery. An `unknown` row means
+SMTP was invoked but the application could not prove whether delivery was
+accepted. Those rows are never retried automatically. Reconcile them with the
+SMTP provider and retry manually only after confirming that no delivery was
+accepted.
+
+## One-time Cloudflare setup
 
 ```bash
 cd cloudflare/process-campaigns-cron
 
-# 1. Log in (opens browser)
+# Log in (opens a browser).
 npx wrangler login
 
-# 2. Deploy the Worker + its 10-minute cron trigger
+# Deploy the Worker and its 10-minute cron trigger.
 npx wrangler deploy
 
-# 3. Set the shared secret — paste the SAME value as CRON_SECRET on Vercel
+# Paste the same CRON_SECRET value used by the Next.js deployment.
 npx wrangler secret put CRON_SECRET
 ```
 
-That's it. Cloudflare now calls `/api/cron/process-campaigns` every 10 minutes.
+Cloudflare sends an authenticated `POST` to
+`/api/cron/process-campaigns` every 10 minutes.
 
 ## Verify
 
 ```bash
-# Watch live logs (you should see "process-campaigns ok: ..." every 10 min)
+# Watch structured live logs for campaign_processor_ok.
 npx wrangler tail
 
-# Or trigger once manually:
-curl https://vgp-process-campaigns-cron.<your-subdomain>.workers.dev
+# Public health check. This never processes a campaign.
+curl https://vgp-process-campaigns-cron.<your-subdomain>.workers.dev/health
 ```
 
 ## Notes
 
-- `PROCESS_URL` in `wrangler.toml` must be the **live custom domain**
-  (`https://www.virzyguns.com/...`), not the `*.vercel.app` preview URL —
-  otherwise Vercel deployment protection can block the request.
-- The Worker authenticates with `Authorization: Bearer <CRON_SECRET>`, exactly
-  what the route checks. No other access is granted.
-- The daily report cron (`/api/cron/daily-report`) stays on Vercel — a
-  once-a-day schedule is allowed on Hobby, so it does not need a Worker.
+- `PROCESS_URL` in `wrangler.toml` must be the live custom domain, not a
+  protected preview URL.
+- Public HTTP requests cannot start the processor. Only the Cloudflare
+  `scheduled` handler calls the actionful endpoint.
+- Logs contain request IDs, status codes, and timing only. Response bodies,
+  recipient data, credentials, and secrets are not logged.
+- The daily report cron remains on Vercel because its once-daily schedule is
+  supported there.

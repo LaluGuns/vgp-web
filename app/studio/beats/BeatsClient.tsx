@@ -18,6 +18,7 @@ import { trackBeatEvent } from '@/lib/analytics';
 import { getBeatSummary } from '@/lib/seo/beat-copy';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
 import { getGenreTheme } from '@/lib/genre-theme';
+import { PUBLIC_CONFIRMED_LICENSES } from '@/lib/licensing-registry';
 import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
 import BeatStarsAudioPlayer from './components/BeatStarsAudioPlayer';
 import BeatStarsCheckoutModal from './components/BeatStarsCheckoutModal';
@@ -156,37 +157,6 @@ const copyDict = {
         exclusiveEmailBody: 'Hallo Virzy Guns,\n\nich möchte mich nach einer Exklusivlizenz für einen Beat erkundigen.\n\nProjektdetails:',
     },
 };
-
-const nonExclusiveLicenses = [
-    {
-        name: 'Basic MP3',
-        price: '$15',
-        copies: '2,000 Copies',
-        streams: '5K Streams',
-        features: ['MP3 File (320kbps)', '1 Music Video'],
-    },
-    {
-        name: 'Basic Pro Lease',
-        price: '$25',
-        copies: '5,000 Copies',
-        streams: '200K Streams',
-        features: ['MP3 + WAV (24-Bit)', '1 Music Video', 'For-Profit Performances', 'Radio (2 Stations)'],
-    },
-    {
-        name: 'Premium Lease',
-        price: '$50',
-        copies: '10,000 Copies',
-        streams: '500K Streams',
-        features: ['MP3 + WAV + Stems', '1 Music Video', 'For-Profit Performances', 'Radio (2 Stations)'],
-    },
-    {
-        name: 'UNLIMITED Lease',
-        price: '$100',
-        copies: 'UNLIMITED Copies',
-        streams: 'UNLIMITED Streams',
-        features: ['MP3 + WAV + Track Stems', '2 Music Videos', 'For-Profit Performances', 'Radio (2 Stations)'],
-    },
-];
 
 const licenseTierCopy = {
     'en-US': [
@@ -432,8 +402,9 @@ const catalogCopy = {
 export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const t = copyDict[locale] || copyDict['en-US'];
     const catalogText = catalogCopy[locale];
-    const localizedLicenses = nonExclusiveLicenses.map((license, index) => ({
-        ...license,
+    const localizedLicenses = PUBLIC_CONFIRMED_LICENSES.map((license, index) => ({
+        name: license.name,
+        price: license.priceUsd === null ? 'Contact' : `$${license.priceUsd}`,
         ...licenseTierCopy[locale][index],
     }));
     const [selectedGenre, setSelectedGenre] = useState<string>('all');
