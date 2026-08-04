@@ -1,0 +1,81 @@
+name: Render Flow Remotion promo
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "flowstate/remotion/**"
+      - "flowstate/remotion.config.ts"
+      - "flowstate/scripts/render-remotion-stills.mjs"
+      - "flowstate/package.json"
+      - "flowstate/package-lock.json"
+      - ".github/workflows/render-flow-remotion.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flow-remotion-render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: flowstate
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: flowstate/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck Remotion source
+        run: npm run remotion:typecheck
+
+      - name: List compositions
+        run: npm run remotion:compositions
+
+      - name: Render portrait MP4
+        run: npm run remotion:render:portrait
+
+      - name: Render QA stills
+        run: npm run remotion:still
+
+      - name: Verify render metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="remotion/out/Flow_Promo_Remotion_Portrait_1080x1920.mp4"
+          ffprobe -v error \
+            -show_entries format=duration:stream=index,codec_name,codec_type,width,height,r_frame_rate,nb_frames,pix_fmt,sample_rate,channels \
+            -of json \
+            "$output" \
+            | tee remotion/out/render-metadata.json
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$output")" = "h264"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$output")" = "1080"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$output")" = "1920"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=pix_fmt -of csv=p=0 "$output")" = "yuv420p"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$output")" = "30/1"
+          test "$(ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of csv=p=0 "$output")" = "600"
+          test "$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of csv=p=0 "$output")" = "aac"
+          test "$(ffprobe -v error -select_streams a:0 -show_entries stream=sample_rate -of csv=p=0 "$output")" = "48000"
+          test "$(ffprobe -v error -select_streams a:0 -show_entries stream=channels -of csv=p=0 "$output")" = "2"
+
+      - name: Upload MP4 and QA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-promo-remotion-portrait
+          path: flowstate/remotion/out
+          if-no-files-found: error
+          retention-days: 14

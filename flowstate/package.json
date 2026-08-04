@@ -15,7 +15,12 @@
     "seo:crawl": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/release/runtime-seo-crawl.mjs",
     "predeploy": "npm run typecheck && npm run lint && npm test && npm run build",
     "worker:sync-catalog": "npx wrangler r2 object put flowstate-audio/tracks/catalog.json --file public/tracks/catalog.json --content-type application/json --remote --force --config worker/wrangler.toml",
-    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml"
+    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml",
+    "remotion:studio": "remotion studio remotion/index.ts",
+    "remotion:compositions": "remotion compositions remotion/index.ts",
+    "remotion:render:portrait": "remotion render remotion/index.ts FlowPromoPortrait remotion/out/Flow_Promo_Remotion_Portrait_1080x1920.mp4 --codec=h264 --pixel-format=yuv420p --audio-codec=aac --concurrency=2",
+    "remotion:still": "node scripts/render-remotion-stills.mjs",
+    "remotion:typecheck": "tsc --noEmit --pretty false --incremental false"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
@@ -45,6 +50,7 @@
     "@emnapi/core": "^1.7.1",
     "@emnapi/runtime": "^1.7.1",
     "@eslint/eslintrc": "^3.3.6",
+    "@remotion/cli": "4.0.505",
     "@types/node": "^22.15.0",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19.1.0",
@@ -55,6 +61,7 @@
     "eslint-config-next": "15.5.21",
     "ffmpeg-static": "^5.3.0",
     "postcss": "8.5.22",
+    "remotion": "4.0.505",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   },

@@ -56,3 +56,6 @@ yarn-error.log*
 *_EXECUTED*
 *SIGNATURE_TRANSPARENT*
 *SIGNATURE_PREVIEW*
+
+# Generated Remotion exports and stills stay local or in CI artifacts.
+/remotion/out/
