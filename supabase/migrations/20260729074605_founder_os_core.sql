@@ -47,7 +47,18 @@ create table founder_internal.settings (
     constraint settings_unverified_contacts_locked check (not allow_unverified_contacts),
     constraint settings_trend_sources_shape check (
         jsonb_typeof(trend_sources) = 'object'
-        and jsonb_object_length(trend_sources) = 4
+        and trend_sources ?& array[
+            'ownedAnalytics',
+            'officialPlatformApis',
+            'manualResearch',
+            'scraping'
+        ]::text[]
+        and trend_sources - array[
+            'ownedAnalytics',
+            'officialPlatformApis',
+            'manualResearch',
+            'scraping'
+        ]::text[] = '{}'::jsonb
         and jsonb_typeof(trend_sources -> 'ownedAnalytics') = 'boolean'
         and jsonb_typeof(trend_sources -> 'officialPlatformApis') = 'boolean'
         and jsonb_typeof(trend_sources -> 'manualResearch') = 'boolean'
@@ -55,7 +66,12 @@ create table founder_internal.settings (
     ),
     constraint settings_integrations_shape check (
         jsonb_typeof(integrations) = 'object'
-        and jsonb_object_length(integrations) = 4
+        and integrations - array[
+            'meta',
+            'tiktok',
+            'hostinger-email',
+            'cloudflare-agent'
+        ]::text[] = '{}'::jsonb
         and integrations ?& array['meta', 'tiktok', 'hostinger-email', 'cloudflare-agent']::text[]
         and integrations ->> 'meta' in ('connected', 'configured', 'not-connected', 'error')
         and integrations ->> 'tiktok' in ('connected', 'configured', 'not-connected', 'error')
@@ -148,7 +164,6 @@ create table founder_internal.prospects (
     constraint prospects_score check (score between 0 and 100),
     constraint prospects_score_breakdown check (
         jsonb_typeof(score_breakdown) = 'object'
-        and jsonb_object_length(score_breakdown) = 5
         and score_breakdown ?& array[
             'audienceFit',
             'styleFit',
@@ -157,6 +172,13 @@ create table founder_internal.prospects (
             'freshness'
         ]::text[]
         and jsonb_typeof(score_breakdown -> 'audienceFit') = 'number'
+        and score_breakdown - array[
+            'audienceFit',
+            'styleFit',
+            'purchaseIntent',
+            'contactability',
+            'freshness'
+        ]::text[] = '{}'::jsonb
         and jsonb_typeof(score_breakdown -> 'styleFit') = 'number'
         and jsonb_typeof(score_breakdown -> 'purchaseIntent') = 'number'
         and jsonb_typeof(score_breakdown -> 'contactability') = 'number'
