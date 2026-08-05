@@ -18,6 +18,8 @@ const footerGroups = [
         title: 'Company',
         links: [
             { name: 'About Virzy Guns', href: '/about' },
+            { name: 'Privacy', href: '/privacy' },
+            { name: 'Terms', href: '/terms' },
             { name: 'Contact', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com' },
         ],
     },
