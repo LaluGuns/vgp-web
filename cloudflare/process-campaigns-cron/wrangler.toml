@@ -14,7 +14,11 @@
 
 name = "vgp-process-campaigns-cron"
 main = "src/index.js"
-compatibility_date = "2024-11-01"
+compatibility_date = "2026-07-29"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
 
 [triggers]
 crons = ["*/10 * * * *"]

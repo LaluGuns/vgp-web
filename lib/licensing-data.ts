@@ -1,7 +1,15 @@
 /**
- * VGP Licensing Data System
- * Based on Beatstars licensing structure
+ * Public licensing view adapter.
+ *
+ * Product summaries come from the canonical registry. Exclusive terms remain
+ * inquiry-only until the founder approves the complete written agreement.
  */
+
+import {
+    PUBLIC_CONFIRMED_LICENSES,
+    formatLicenseCount,
+    type CanonicalLicenseTier,
+} from './licensing-registry';
 
 export interface LicenseTier {
     id: string;
@@ -14,103 +22,64 @@ export interface LicenseTier {
     highlight?: boolean;
 }
 
-// Non-Exclusive License Tiers
-export const nonExclusiveTiers: LicenseTier[] = [
-    {
-        id: 'basic-mp3',
-        name: 'Basic MP3',
-        price: '$15',
-        priceValue: 15,
-        type: 'non-exclusive',
-        includes: ['MP3 File'],
-        features: [
-            '2,000 Sales/Copies',
-            '5,000 Online Audio Streams',
-            '1 Music Video',
-            'Must Credit "Prod. By Virzy Guns"',
-        ],
-    },
-    {
-        id: 'basic-pro',
-        name: 'Basic Pro Lease',
-        price: '$25',
-        priceValue: 25,
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File'],
-        features: [
-            '5,000 Sales/Copies',
-            '200,000 Online Audio Streams',
-            '1 Music Video',
-            'Profit Performances',
-            'Radio Broadcasting (2 Stations)',
-            'Must Credit "Prod. By Virzy Guns"',
-        ],
-    },
-    {
-        id: 'premium',
-        name: 'Premium Lease',
-        price: '$50',
-        priceValue: 50,
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File', 'Track Stems'],
-        features: [
-            '10,000 Sales/Copies',
-            '500,000 Online Audio Streams',
-            '1 Music Video',
-            'Profit Performances',
-            'Radio Broadcasting (2 Stations)',
-            'Must Credit "Prod. By Virzy Guns"',
-        ],
-        highlight: true,
-    },
-    {
-        id: 'unlimited',
-        name: 'UNLIMITED Lease',
-        price: '$100',
-        priceValue: 100,
-        type: 'non-exclusive',
-        includes: ['MP3 File', 'WAV File', 'Track Stems'],
-        features: [
-            'UNLIMITED Sales/Copies',
-            'UNLIMITED Online Audio Streams',
-            '2 Music Videos',
-            'Profit Performances',
-            'Radio Broadcasting (2 Stations)',
-            'Must Credit "Prod. By Virzy Guns"',
-        ],
-    },
-];
+const licenseFeatures = (tier: CanonicalLicenseTier): string[] => {
+    const features = [
+        formatLicenseCount(
+            tier.distributionCopies,
+            'Sale/Copy',
+            'Sales/Copies',
+            tier.unlimitedDistribution,
+        ),
+        formatLicenseCount(
+            tier.onlineAudioStreams,
+            'Online Audio Stream',
+            'Online Audio Streams',
+            tier.unlimitedOnlineAudioStreams,
+        ),
+        formatLicenseCount(tier.musicVideos, 'Music Video', 'Music Videos'),
+    ];
 
-// Exclusive License
+    if (tier.paidPerformances) features.push('For-Profit Performances');
+    if ((tier.radioStations ?? 0) > 0) {
+        features.push(formatLicenseCount(tier.radioStations, 'Radio Station', 'Radio Stations'));
+    }
+    if (tier.creditRequired && tier.creditString) {
+        features.push(`Must Credit "${tier.creditString}"`);
+    }
+
+    return features;
+};
+
+export const nonExclusiveTiers: LicenseTier[] = PUBLIC_CONFIRMED_LICENSES.map((tier) => ({
+    id: tier.id,
+    name: tier.name,
+    price: tier.priceUsd === null ? 'Contact' : `$${tier.priceUsd}`,
+    priceValue: tier.priceUsd ?? 0,
+    type: 'non-exclusive',
+    includes: [...tier.fileFormats],
+    features: licenseFeatures(tier),
+    highlight: tier.id === 'premium',
+}));
+
 export const exclusiveLicense: LicenseTier = {
     id: 'exclusive',
-    name: 'Exclusive',
-    price: 'Negotiate price',
+    name: 'Exclusive Inquiry',
+    price: 'Contact for written terms',
     priceValue: 0,
     type: 'exclusive',
-    includes: ['MP3 File', 'WAV File', 'Track Stems'],
+    includes: [],
     features: [
-        'UNLIMITED Sales/Copies',
-        'UNLIMITED Online Audio Streams',
-        'UNLIMITED Music Videos',
-        'Profit Performances',
-        'UNLIMITED Radio Broadcasting',
-        'YouTube Monetization',
-        'SoundCloud Monetization',
-        'Content ID Registration',
-        'Full Exclusive Rights',
-        'No Credit Required',
+        'Availability confirmed directly',
+        'Scope and files confirmed in writing',
+        'No automated rights or usage promises',
     ],
     highlight: true,
 };
 
-// All tiers combined
 export const allLicenseTiers: LicenseTier[] = [...nonExclusiveTiers, exclusiveLicense];
 
-// Common rules for non-exclusive licenses
 export const nonExclusiveRules = [
-    'Virzy Guns Production maintains full ownership of the instrumental',
-    'Artist must credit "Prod. By Virzy Guns" in song title and description',
-    'License is non-transferable',
-    'Beat may be sold to other artists (non-exclusive)',
+    'The written license issued at checkout is authoritative',
+    'Each non-exclusive tier has its own usage and distribution limits',
+    'Credit, Content ID, territory, and upgrade terms must be checked in the written license',
 ];

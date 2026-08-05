@@ -9,36 +9,82 @@
  * Required secret (set with `wrangler secret put CRON_SECRET`, NOT in
  * wrangler.toml): CRON_SECRET — must match the CRON_SECRET env var on Vercel.
  */
-export default {
+const worker = {
     async scheduled(event, env, ctx) {
-        ctx.waitUntil(trigger(env));
+        ctx.waitUntil(trigger(env, event?.scheduledTime));
     },
 
-    // Optional manual trigger for testing: curl https://<worker-subdomain>.workers.dev
-    async fetch(request, env) {
-        await trigger(env);
-        return new Response('process-campaigns triggered\n');
+    // Public HTTP traffic is deliberately side-effect free. Campaign processing
+    // can only be started by the configured Cloudflare Cron Trigger.
+    async fetch(request) {
+        const url = new URL(request.url);
+
+        if (request.method === 'GET' && url.pathname === '/health') {
+            return Response.json({
+                ok: true,
+                service: 'vgp-process-campaigns-cron',
+                scheduledOnly: true,
+            });
+        }
+
+        return Response.json({ error: 'Not found' }, { status: 404 });
     },
 };
 
-async function trigger(env) {
+export default worker;
+
+async function trigger(env, scheduledTime) {
+    const requestId = crypto.randomUUID();
+    const startedAt = Date.now();
+
     if (!env.CRON_SECRET) {
-        console.error('CRON_SECRET is not set. Run: wrangler secret put CRON_SECRET');
-        return;
+        console.error(JSON.stringify({
+            event: 'campaign_processor_config_error',
+            requestId,
+            code: 'CRON_SECRET_MISSING',
+        }));
+        throw new Error('campaign_processor_config_error');
     }
 
     try {
         const res = await fetch(env.PROCESS_URL, {
-            method: 'GET',
+            method: 'POST',
             headers: { Authorization: `Bearer ${env.CRON_SECRET}` },
         });
-        const body = await res.text();
+
+        // The response may contain job-level metadata. Do not buffer or log it.
+        await res.body?.cancel();
+
         if (!res.ok) {
-            console.error(`process-campaigns failed: ${res.status} ${body}`);
-        } else {
-            console.log(`process-campaigns ok: ${body}`);
+            console.error(JSON.stringify({
+                event: 'campaign_processor_http_error',
+                requestId,
+                scheduledTime: scheduledTime ?? null,
+                status: res.status,
+                durationMs: Date.now() - startedAt,
+            }));
+            throw new Error(`campaign_processor_http_${res.status}`);
         }
+
+        console.log(JSON.stringify({
+            event: 'campaign_processor_ok',
+            requestId,
+            scheduledTime: scheduledTime ?? null,
+            status: res.status,
+            durationMs: Date.now() - startedAt,
+        }));
     } catch (err) {
-        console.error('process-campaigns request error:', err);
+        if (err instanceof Error && err.message.startsWith('campaign_processor_http_')) {
+            throw err;
+        }
+
+        console.error(JSON.stringify({
+            event: 'campaign_processor_request_error',
+            requestId,
+            scheduledTime: scheduledTime ?? null,
+            code: 'UPSTREAM_REQUEST_FAILED',
+            durationMs: Date.now() - startedAt,
+        }));
+        throw new Error('campaign_processor_request_failed');
     }
 }

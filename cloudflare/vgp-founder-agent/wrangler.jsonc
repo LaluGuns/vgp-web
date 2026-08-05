@@ -1,0 +1,87 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "vgp-founder-agent",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-29",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "ENVIRONMENT": "development",
+    "INTERNAL_HMAC_KEY_ID": "local-v1",
+    "PROPOSAL_MODE": "mock-dry-run",
+    "MAX_BODY_BYTES": "32768"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CHIEF_OF_STAFF",
+        "class_name": "ChiefOfStaff"
+      },
+      {
+        "name": "REPLAY_GUARD",
+        "class_name": "ReplayNonceGuard"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["ChiefOfStaff", "ReplayNonceGuard"]
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "env": {
+    "staging": {
+      "name": "vgp-founder-agent-staging",
+      "vars": {
+        "ENVIRONMENT": "staging",
+        "INTERNAL_HMAC_KEY_ID": "staging-v1",
+        "PROPOSAL_MODE": "mock-dry-run",
+        "MAX_BODY_BYTES": "32768"
+      },
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "CHIEF_OF_STAFF",
+            "class_name": "ChiefOfStaff"
+          },
+          {
+            "name": "REPLAY_GUARD",
+            "class_name": "ReplayNonceGuard"
+          }
+        ]
+      },
+      "observability": {
+        "enabled": true,
+        "head_sampling_rate": 1
+      }
+    },
+    "production": {
+      "name": "vgp-founder-agent-production",
+      "vars": {
+        "ENVIRONMENT": "production",
+        "INTERNAL_HMAC_KEY_ID": "production-v1",
+        "PROPOSAL_MODE": "mock-dry-run",
+        "MAX_BODY_BYTES": "32768"
+      },
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "CHIEF_OF_STAFF",
+            "class_name": "ChiefOfStaff"
+          },
+          {
+            "name": "REPLAY_GUARD",
+            "class_name": "ReplayNonceGuard"
+          }
+        ]
+      },
+      "observability": {
+        "enabled": true,
+        "head_sampling_rate": 0.1
+      }
+    }
+  }
+}

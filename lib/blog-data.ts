@@ -509,7 +509,7 @@ You found the perfect beat. You're ready to record. But before you pay that $25,
 
 In the music industry, **ownership is everything**. When you lease a beat, you aren't buying the instrumental itself - you are buying a *license* to use it in specific ways. Understanding these rights is the difference between keeping your royalties and getting your song taken down for copyright infringement.
 
-This guide breaks down every right included in VGP Studio licenses so you can release your music with 100% confidence.
+This guide summarizes the current storefront tiers. The written license issued at checkout is authoritative, so confirm scope, territory, Content ID, credit, upgrade, and remedy terms there before release.
 
 ## 1. Streaming Rights (Spotify, Apple Music, etc.)
 
@@ -517,23 +517,26 @@ This is the big one. Streaming rights determine how many times your song can be 
 
 ### **The "Cap" System**
 Most licenses come with a "stream cap."
-- **Basic MP3 ($15):** 5,000 streams.
-- **Basic Pro ($25):** 200,000 streams.
-- **Premium ($50):** 500,000 streams.
+- **Basic MP3 ($15):** 5,000 online audio streams and up to 2,000 copies.
+- **Basic Pro Lease ($25):** 200,000 online audio streams and up to 5,000 copies.
+- **Premium Lease ($50):** 500,000 online audio streams and up to 10,000 copies.
+- **UNLIMITED Lease ($100):** unlimited online audio streams and copies in the current product summary.
 
 **Scenario:** You buy a Basic MP3 lease. Your song blows up on TikTok and gets 10,000 streams on Spotify in a month.
-**What happens?** Technically, you have exceeded your license terms. You must contact us to upgrade to a **Basic Pro** or **Premium** license to cover the additional streams. Don't worry - your song won't be instantly deleted, but you are legally required to upgrade once you hit the cap.
+**What happens?** The release has passed the Basic MP3 storefront limit. Contact us before further exploitation so the available upgrade or replacement-license path can be confirmed in writing.
 
-**Tip:** If you believe in your song, the **Unlimited** license ($100) removes this stress entirely. Infinite streams, forever.
+**Tip:** If you expect strong reach, compare the **UNLIMITED Lease** product summary with its written license before purchase. "Unlimited" describes the listed stream and copy caps; it should not be read as a promise that every right is unlimited forever.
 
 ## 2. Music Video Rights (YouTube & Socials)
 
 Visuals are crucial for promotion, but they are treated differently than audio streams.
 
-- **Monetization:** Most *Exclusive* licenses allow you to monetize your video on YouTube (get paid from ads). Lower tier leases usually *do not* allow Content ID monetization (because the producer still owns the master).
+- **Monetization and Content ID:** Do not infer either right from the tier name. Check the written license before enabling monetization or registering Content ID.
 - **Video Limit:**
-    - **Basic:** 1 Music Video allowed.
-    - **Unlimited:** 2 Music Videos allowed.
+    - **Basic MP3:** 1 music video.
+    - **Basic Pro Lease:** 1 music video.
+    - **Premium Lease:** 1 music video.
+    - **UNLIMITED Lease:** 2 music videos.
     
 **Why the limit?** This prevents people from using the beat for an entire web series or multiple different projects under one cheap license.
 
@@ -541,10 +544,10 @@ Visuals are crucial for promotion, but they are treated differently than audio s
 
 Planning to perform live?
 
-- **Non-Profit Performances:** Almost all licenses allow you to perform for free (charity, school, unpaid open mics).
+- **Non-Profit Performances:** Check the written agreement for the exact permitted scope.
 - **For-Profit Performances:** This is where you get paid ticket sales or booking fees.
-    - **Basic MP3:** Not allowed.
-    - **Basic Pro & Up:** Allowed.
+    - **Basic MP3:** Not listed as included in the current product summary.
+    - **Basic Pro Lease, Premium Lease, and UNLIMITED Lease:** Listed as included.
     
 If you're getting paid $500 for a show, investing $25 in the Basic Pro license is a no-brainer to ensure you're legally covered.
 
@@ -552,24 +555,24 @@ If you're getting paid $500 for a show, investing $25 in the Basic Pro license i
 
 Radio is still a major royalty generator.
 
-- **Internet Radio:** Often included in streaming numbers.
-- **Terrestrial (FM/AM) Radio:** This is strictly regulated.
-    - **Basic Tiers:** Usually 0 stations allowed.
-    - **Premium:** 2 Stations allowed.
-    - **Exclusive:** Unlimited stations.
+- **Internet Radio:** Do not assume it is interchangeable with ordinary audio streams.
+- **Current product summary:**
+    - **Basic MP3:** 0 stations.
+    - **Basic Pro Lease, Premium Lease, and UNLIMITED Lease:** 2 stations.
+    - **Exclusive:** Confirm directly in writing.
     
 Getting radio spins generates **publishing royalties** (ASCAP/BMI). If you don't have the right license, you can't collect these checks.
 
 ## Frequently Asked Questions
 
 **Q: Can I upgrade my license later?**
-A: Yes! You just pay the difference. If you bought Basic ($25) and want Unlimited ($100), you typically pay $75 to upgrade.
+A: Ask before exceeding the current license. Availability, price credit, and replacement terms must be confirmed in writing; do not assume the upgrade is only the price difference.
 
 **Q: Do I own the master recording?**
-A: You own the *master to your specific song* (lyrics + vocal performance), but the producer retains ownership of the *instrumental composition*.
+A: Ownership and royalty splits depend on the written agreement. Do not infer master or composition ownership from this summary.
 
 **Q: What if I don't buy a license and just use the free download?**
-A: Free downloads are for **non-profit / personal use only**. You cannot upload to Spotify, Apple Music, or monetize on YouTube. If you do, your song will be taken down or claimed.
+A: Follow the specific free-download terms shown with the beat. A free download is not a substitute for a commercial license.
 
 ## Final Word
 

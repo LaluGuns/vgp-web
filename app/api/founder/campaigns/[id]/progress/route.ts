@@ -48,6 +48,7 @@ export async function GET(
             sending: 0,
             sent: 0,
             failed: 0,
+            unknown: 0,
             skipped: 0,
             cancelled: 0
         };

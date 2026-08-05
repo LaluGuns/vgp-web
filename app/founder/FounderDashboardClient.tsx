@@ -7,7 +7,7 @@ import {
     LayoutDashboard, Users, Send, Smartphone, Database, Mail, Gauge,
     Search, Plus, Pencil, Ban, Pause, Play, Radio, X, CheckCircle2,
     AlertTriangle, Loader2, RefreshCw, ShieldCheck, TrendingUp, Inbox,
-    Bell, User, LogOut, Globe, Eye, Upload, Zap
+    Bell, User, LogOut, Globe, Eye, Upload, Zap, BrainCircuit
 } from 'lucide-react';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 import { renderCampaignEmail } from '@/lib/founder/campaign-email';
@@ -49,7 +49,7 @@ interface HealthState {
     checkedAt: string;
     db: { ok: boolean; latencyMs: number | null; detail: string };
     smtp: { ok: boolean; configured: boolean; detail: string };
-    queue: { pending: number; sending: number; failed: number; sentToday: number; activeCampaigns: number; lastDeliveryAt: string | null };
+    queue: { pending: number; sending: number; failed: number; unknown: number; sentToday: number; activeCampaigns: number; lastDeliveryAt: string | null };
 }
 interface MetricSet {
     performance: number;
@@ -494,9 +494,9 @@ function HealthPanel({ health, loading, onRefresh }: { health: HealthState | nul
                     <HealthRow ok={health.db.ok} label="Database" detail={health.db.ok ? `Supabase · ${health.db.detail}` : health.db.detail} />
                     <HealthRow ok={health.smtp.ok} label="SMTP" detail={health.smtp.detail} />
                     <HealthRow
-                        ok={health.queue.failed === 0}
+                        ok={health.queue.failed === 0 && health.queue.unknown === 0}
                         label="Email queue"
-                        detail={`${health.queue.pending} pending · ${health.queue.sending} sending · ${health.queue.failed} failed · ${health.queue.sentToday} sent today · last delivery ${relativeTime(health.queue.lastDeliveryAt)}`}
+                        detail={`${health.queue.pending} pending · ${health.queue.sending} sending · ${health.queue.failed} failed · ${health.queue.unknown} needs review · ${health.queue.sentToday} sent today · last delivery ${relativeTime(health.queue.lastDeliveryAt)}`}
                     />
                 </div>
             )}
@@ -738,8 +738,9 @@ export default function FounderDashboardClient() {
     useEffect(() => {
         (async () => {
             try {
-                const res = await fetch('/api/founder/subscribers?limit=1');
-                setIsAuthenticated(res.ok);
+                const res = await fetch('/api/founder/auth');
+                const data = await res.json();
+                setIsAuthenticated(res.ok && data.authenticated === true);
             } catch {
                 setIsAuthenticated(false);
             }
@@ -1690,6 +1691,16 @@ export default function FounderDashboardClient() {
 
                 {/* Bottom utilities */}
                 <div className="flex flex-col items-center gap-3.5 w-full border-t border-white/[0.06] pt-5">
+                    <a
+                        href="/founder/os"
+                        className="group relative flex h-10 w-10 items-center justify-center rounded-xl border border-violet-300/15 bg-violet-300/[0.05] text-violet-200 transition-all hover:scale-105 hover:bg-violet-300/10 hover:text-white"
+                    >
+                        <BrainCircuit className="h-4.5 w-4.5" />
+                        <span className="absolute left-16 z-50 scale-0 whitespace-nowrap rounded-md border border-white/[0.08] bg-[#07090e]/95 px-2.5 py-1 text-xs font-medium text-white shadow-xl transition-all duration-200 group-hover:scale-100 pointer-events-none">
+                            Open Founder OS
+                        </span>
+                    </a>
+
                     {/* Hostinger Mailbox */}
                     <a
                         href="https://mail.hostinger.com"
@@ -1752,6 +1763,13 @@ export default function FounderDashboardClient() {
                             </h1>
                         </div>
                         <div className="flex items-center gap-4">
+                            <a
+                                href="/founder/os"
+                                className="inline-flex h-8 items-center gap-2 rounded-full border border-violet-300/15 bg-violet-300/[0.06] px-3 text-xs font-semibold text-violet-100 transition hover:bg-violet-300/10"
+                            >
+                                <BrainCircuit className="h-3.5 w-3.5" />
+                                Founder OS
+                            </a>
                             <button 
                                 onClick={refreshAll}
                                 title="Refresh all data"
@@ -1775,6 +1793,9 @@ export default function FounderDashboardClient() {
                                 <span className="text-2xs text-white/35">· mission control</span>
                             </div>
                             <div className="flex items-center gap-2">
+                                <a href="/founder/os" title="Open Founder OS" className="flex h-7 w-7 items-center justify-center rounded-full border border-violet-300/15 bg-violet-300/[0.06] text-violet-200 transition hover:text-white">
+                                    <BrainCircuit className="h-3 w-3" />
+                                </a>
                                 <a href="https://mail.hostinger.com" target="_blank" rel="noopener noreferrer" title="Hostinger Mailbox" className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.02] text-sky-300 transition hover:text-sky-200">
                                     <Mail className="h-3 w-3" />
                                 </a>
@@ -2230,8 +2251,8 @@ export default function FounderDashboardClient() {
                                                 <div className="h-2.5 w-full overflow-hidden rounded-full border border-white/[0.07] bg-white/[0.03]">
                                                     <div className="h-full rounded-full bg-sky-300 transition-all duration-500" style={{ width: `${pct}%` }} />
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                                                    {[['Delivered', s.sent, 'text-white'], ['Processing', s.sending + s.pending, 'text-sky-300'], ['Failures', s.failed, s.failed > 0 ? 'text-rose-300' : 'text-white/50'], ['Complete', `${pct}%`, 'text-white']].map(([l, v, c]) => (
+                                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                                                    {[['Delivered', s.sent, 'text-white'], ['Processing', s.sending + s.pending, 'text-sky-300'], ['Failures', s.failed, s.failed > 0 ? 'text-rose-300' : 'text-white/50'], ['Needs review', s.unknown ?? 0, (s.unknown ?? 0) > 0 ? 'text-amber-200' : 'text-white/50'], ['Complete', `${pct}%`, 'text-white']].map(([l, v, c]) => (
                                                         <div key={l as string} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
                                                             <p className="text-[10px] uppercase tracking-wider text-white/40">{l}</p>
                                                             <p className={`mt-0.5 font-display text-lg font-semibold ${c}`}>{v}</p>
@@ -3224,7 +3245,7 @@ export default function FounderDashboardClient() {
 function NotificationBell({ campaigns, health }: { campaigns: Campaign[]; health: HealthState | null }) {
     const [open, setOpen] = useState(false);
     const activeCampaigns = campaigns.filter(c => ['sending', 'queued'].includes(c.status));
-    const hasAlert = ((health?.queue.failed ?? 0) > 0) || activeCampaigns.length > 0;
+    const hasAlert = ((health?.queue.failed ?? 0) > 0) || ((health?.queue.unknown ?? 0) > 0) || activeCampaigns.length > 0;
 
     return (
         <div className="relative">
@@ -3265,6 +3286,15 @@ function NotificationBell({ campaigns, health }: { campaigns: Campaign[]; health
                                 </div>
                             </div>
                         )}
+                        {health && health.queue.unknown > 0 && (
+                            <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-amber-300 mt-1.5 shrink-0" />
+                                <div>
+                                    <p className="font-semibold text-amber-200">Manual reconciliation required</p>
+                                    <p className="text-white/50 text-2xs mt-0.5">{health.queue.unknown} SMTP outcomes are unknown and will not retry automatically.</p>
+                                </div>
+                            </div>
+                        )}
                         {/* Success dispatches */}
                         {health && health.queue.sentToday > 0 && (
                             <div className="flex gap-2.5 items-start text-xs border-b border-white/[0.03] pb-2">
@@ -3276,7 +3306,7 @@ function NotificationBell({ campaigns, health }: { campaigns: Campaign[]; health
                             </div>
                         )}
                         {/* Fallback */}
-                        {(!health || (health.queue.failed === 0 && health.queue.sentToday === 0 && activeCampaigns.length === 0)) && (
+                        {(!health || (health.queue.failed === 0 && health.queue.unknown === 0 && health.queue.sentToday === 0 && activeCampaigns.length === 0)) && (
                             <p className="text-2xs text-white/40 text-center py-2">All services operational. No active alerts.</p>
                         )}
                     </div>
