@@ -99,6 +99,65 @@ paths:
         content:
           application/json:
             schema:
+              type: object
+              required: [kind, requestKey, targetLabel, payloadSummary]
+              properties:
+                kind:
+                  type: string
+                  enum: [email-outreach, instagram-reel, instagram-reel-publish, tiktok-draft-upload]
+                  description: Selects the exact draft variant. The server enforces the matching variant fields.
+                requestKey:
+                  type: string
+                  minLength: 8
+                  maxLength: 120
+                  pattern: "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+                targetLabel:
+                  type: string
+                  minLength: 1
+                  maxLength: 1000
+                payloadSummary:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+                evidenceIds:
+                  type: array
+                  maxItems: 20
+                  items:
+                    type: string
+                prospectId:
+                  type: string
+                  description: Required when kind is email-outreach.
+                subject:
+                  type: string
+                  minLength: 1
+                  maxLength: 998
+                  description: Required when kind is email-outreach.
+                body:
+                  type: string
+                  minLength: 1
+                  maxLength: 20000
+                  description: Required when kind is email-outreach.
+                videoUrl:
+                  type: string
+                  format: uri
+                  description: Required for instagram-reel and tiktok-draft-upload.
+                caption:
+                  type: string
+                  maxLength: 2200
+                  description: Required when kind is instagram-reel.
+                shareToFeed:
+                  type: boolean
+                  description: Required when kind is instagram-reel.
+                creationId:
+                  type: string
+                  minLength: 1
+                  maxLength: 256
+                  pattern: "^[A-Za-z0-9._:-]+$"
+                  description: Required when kind is instagram-reel-publish.
+                founderConfirmedUpload:
+                  type: boolean
+                  const: true
+                  description: Required when kind is tiktok-draft-upload and only after explicit founder confirmation.
               oneOf:
                 - $ref: "#/components/schemas/EmailOutreachDraft"
                 - $ref: "#/components/schemas/InstagramReelDraft"
