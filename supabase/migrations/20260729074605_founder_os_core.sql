@@ -213,7 +213,7 @@ create table founder_internal.approval_actions (
     payload jsonb not null,
     content_hash text generated always as (
         'sha256:' || encode(
-            extensions.digest(pg_catalog.convert_to(payload::text, 'UTF8'), 'sha256'),
+            extensions.digest(payload::text, 'sha256'),
             'hex'
         )
     ) stored,
