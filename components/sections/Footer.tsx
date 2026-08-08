@@ -19,8 +19,7 @@ const footerGroups = [
         links: [
             { name: 'About Virzy Guns', href: '/about' },
             { name: 'Privacy', href: '/privacy' },
-            { name: 'Terms', href: '/terms' },
-            { name: 'Contact', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=founder@virzyguns.com' },
+            { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
         ],
     },
 ];
@@ -92,6 +91,7 @@ export function Footer() {
                                 <nav className="grid gap-2.5" aria-label={`${group.title} links`}>
                                     {group.links.map((link) => {
                                         const external = link.href.startsWith('http');
+                                        const mailto = link.href.startsWith('mailto:');
                                         const className =
                                             'text-sm text-white/50 transition hover:text-white focus:outline-none focus-visible:text-white';
 
@@ -103,6 +103,10 @@ export function Footer() {
                                                 rel="noopener noreferrer"
                                                 className={className}
                                             >
+                                                {link.name}
+                                            </a>
+                                        ) : mailto ? (
+                                            <a key={link.name} href={link.href} className={className}>
                                                 {link.name}
                                             </a>
                                         ) : (
