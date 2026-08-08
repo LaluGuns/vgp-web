@@ -2,20 +2,23 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { founderEmail } from '@/lib/founder-contact';
 
-type PolicySection = {
+export type PolicySection = {
+    id?: string;
     title: string;
     content: ReactNode;
 };
 
-export function ProviderPolicyPage({
+export function PolicyPage({
     eyebrow,
     title,
     summary,
+    effectiveDate,
     sections,
 }: {
     eyebrow: string;
     title: string;
     summary: string;
+    effectiveDate: string;
     sections: PolicySection[];
 }) {
     return (
@@ -36,7 +39,7 @@ export function ProviderPolicyPage({
                         {summary}
                     </p>
                     <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-white/40">
-                        Effective August 5, 2026
+                        Effective {effectiveDate}
                     </p>
                 </div>
             </header>
@@ -44,7 +47,7 @@ export function ProviderPolicyPage({
             <section className="relative px-4 pb-20 sm:px-6 sm:pb-24">
                 <div className="mx-auto max-w-4xl space-y-4">
                     {sections.map((section, index) => (
-                        <section key={section.title} className="liquid-glass rounded-lg p-6 sm:p-8">
+                        <section key={section.id ?? section.title} id={section.id} className="liquid-glass rounded-lg p-6 sm:p-8">
                             <div className="flex gap-4 sm:gap-6">
                                 <span className="mt-1 text-xs font-semibold tabular-nums text-sky-200/45" aria-hidden="true">
                                     {String(index + 1).padStart(2, '0')}
@@ -74,9 +77,6 @@ export function ProviderPolicyPage({
                         <div className="mt-6 flex flex-wrap gap-3 text-sm font-semibold">
                             <Link className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-white/70 transition hover:border-white/25 hover:text-white" href="/">
                                 Official website
-                            </Link>
-                            <Link className="rounded-full border border-sky-300/20 bg-sky-300/[0.08] px-4 py-2 text-sky-100 transition hover:border-sky-200/40 hover:text-white" href="/founder/os">
-                                Founder OS
                             </Link>
                         </div>
                     </div>
