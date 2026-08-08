@@ -13,7 +13,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
     const isHome = pathname === '/';
     const hasDedicatedHeroArtwork = isHome || pathname === '/cadenz';
 
-    const isFounder = pathname.startsWith('/founder');
+    const isFounder = pathname === '/founder' || pathname.startsWith('/founder/');
 
     if (isFounder) {
         return (
