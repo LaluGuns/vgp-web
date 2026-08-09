@@ -43,6 +43,17 @@ export function AudioDriver() {
     });
   }, []);
 
+  // YouTube discovery and native Flow audio are mutually exclusive. The
+  // discovery island only emits this event after YouTube reports PLAYING.
+  useEffect(() => {
+    const onYouTubePlaying = () => {
+      musicPlayer.pause();
+      if (usePlayerStore.getState().isPlaying) usePlayerStore.getState().pause();
+    };
+    window.addEventListener("flow:youtube-playing", onYouTubePlaying);
+    return () => window.removeEventListener("flow:youtube-playing", onYouTubePlaying);
+  }, []);
+
   // Load + (maybe) play whenever the track changes.
   useEffect(() => {
     if (!currentTrack?.hlsUrl) {
@@ -100,6 +111,7 @@ export function AudioDriver() {
       return;
     }
     if (isPlaying) musicPlayer.play().catch(() => {});
+    if (isPlaying) window.dispatchEvent(new Event("flow:native-audio-playing"));
     else musicPlayer.pause();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying]);

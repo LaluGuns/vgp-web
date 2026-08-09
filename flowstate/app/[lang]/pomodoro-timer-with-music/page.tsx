@@ -11,6 +11,7 @@ import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-s
 import { MiniTimer } from "@/components/marketing/mini-timer";
 import { CopyBlock, FaqBlock, TimerLinksBlock } from "@/components/marketing/landing-sections";
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
+import { YouTubeDiscoveryPlayer } from "@/components/marketing/youtube-discovery-player";
 import { DE_POMODORO_MUSIC_DETAIL } from "@/lib/marketing/de-market-copy";
 import { esPtPomodoroMusicCopy } from "@/lib/marketing/es-pt-visible-copy";
 
@@ -77,6 +78,12 @@ export default async function PomodoroTimerWithMusicPage({
           labels={buildTimerLabels(lang, WORK, BREAK)}
         />
       </section>
+      <YouTubeDiscoveryPlayer
+        videoId={null}
+        title="Pomodoro focus music by Chill Music Division"
+        intent="pomodoro music"
+      />
+
 
       <CopyBlock paragraphs={copy.paragraphs} />
 

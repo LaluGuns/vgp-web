@@ -5,6 +5,7 @@ import { MarketingShell, MarketingCta } from "@/components/marketing/marketing-s
 import { SoundtrackShowcase } from "@/components/landing/soundtrack-showcase";
 import { TrackedLink } from "@/components/analytics/tracked-link";
 import { breadcrumbJsonLd, marketingMetadata } from "@/lib/marketing/seo";
+import { YouTubeDiscoveryPlayer } from "@/components/marketing/youtube-discovery-player";
 
 const PATH = "coding-music";
 
@@ -48,6 +49,11 @@ export default async function CodingMusicPage({
       ]}
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <YouTubeDiscoveryPlayer
+        videoId={null}
+        title="Coding music by Chill Music Division"
+        intent="coding music"
+      />
       <section className="space-y-6">
         <p className="text-[10px] font-mono uppercase tracking-[0.28em] text-[#00e5ff]">Coding music → Flow</p>
         <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight max-w-3xl">

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { usePlayerStore } from "@/lib/stores/player-store";
 import { useAppStore } from "@/lib/stores/app-store";
 import { TRACKS, PLAYLIST, GENRES, tracksByGenre, genrePlaylist } from "@/lib/catalog";
+import { isVerifiedSpotifyIdentity } from "@/lib/catalog/external-identities";
+import { track } from "@/lib/analytics";
 import { useTranslation } from "@/hooks/use-translation";
 import { musicPlayer } from "@/lib/audio/hls-player";
 import { useUpgradePromptStore } from "@/lib/stores/upgrade-prompt-store";
@@ -21,6 +23,7 @@ import {
   Repeat,
   Repeat1,
   Disc3,
+  ExternalLink,
   Lock,
   Search,
 } from "lucide-react";
@@ -50,6 +53,7 @@ export function MusicPlayer() {
   const retryPlayback = usePlayerStore((s) => s.retryPlayback);
 
   const [query, setQuery] = useState("");
+  const canListenOnSpotify = isVerifiedSpotifyIdentity(currentTrack?.externalIdentity);
   const isPremium = useAppStore((s) => s.isPremium);
   // Never render a playing state unless there is an actual source to load.
   const isPlaying = Boolean(currentTrack?.hlsUrl && storeIsPlaying);
@@ -111,9 +115,27 @@ export function MusicPlayer() {
             {currentTrack?.title ?? t("dashboard.player.selectTrack", "Select a track")}
           </p>
           <p className="text-[11px] text-white/40 truncate font-mono">
-            {currentTrack?.artist ?? "Virzy Guns Production"}
+            {currentTrack?.displayCredit ?? "Virzy Guns Production"}
+            {currentTrack?.recordingArtist ? ` / ${currentTrack.recordingArtist}` : ""}
             {currentTrack?.genre ? ` · ${currentTrack.genre}` : ""}
           </p>
+          {canListenOnSpotify && currentTrack?.externalIdentity?.spotifyUrl ? (
+            <a
+              href={currentTrack.externalIdentity.spotifyUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-300/80 transition-colors hover:text-emerald-200"
+              onClick={() => track("outbound_clicked", {
+                track_id: currentTrack.id,
+                genre: currentTrack.genre,
+                destination_type: "spotify",
+                source_position: "flow_player",
+              })}
+            >
+              <ExternalLink className="h-3 w-3" aria-hidden="true" />
+              {t("dashboard.player.listenOnSpotify", "Listen on Spotify")}
+            </a>
+          ) : null}
         </div>
       </div>
 

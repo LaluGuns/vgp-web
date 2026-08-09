@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { musicPlayer } from "@/lib/audio/hls-player";
 import { genrePlaylist } from "@/lib/catalog";
 import { useAppStore } from "@/lib/stores/app-store";
+import type { ExternalCatalogIdentity } from "@/lib/catalog/external-identities";
 
 export interface Track {
   id: string;
@@ -13,6 +14,10 @@ export interface Track {
   hlsUrl: string;
   coverUrl: string | null;
   isPremium: boolean;
+  /** Public product credit; legacy artist stays available for compatibility. */
+  displayCredit?: "Virzy Guns Production";
+  recordingArtist?: "Chill Music Division" | null;
+  externalIdentity?: ExternalCatalogIdentity;
 }
 
 export interface Playlist {

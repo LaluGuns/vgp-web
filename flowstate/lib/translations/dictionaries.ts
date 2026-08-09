@@ -4656,7 +4656,7 @@ const uiCompletionEn = {
     login: { title: "Sign in to Flow" },
     deck: { eject: "Eject", ejectAria: "Eject tape", ffwd: "Fast-forward", playPause: "Play or pause", power: "Power", powerOff: "Power off", rewind: "Rewind", rewindAria: "Rewind tape", stop: "Stop", supplyReel: "Supply reel", takeUpReel: "Take-up reel", timeLeft: "Time left", volume: "Volume" },
     mixer: { atmosphere: "Atmosphere", environmentalControls: "Environmental controls" },
-    player: { changeSound: "Change sound", collapse: "Collapse player", crossfade: "Crossfade", fullscreen: "Full screen", noTracks: "No tracks found", nowPlaying: "Now playing", off: "Off", search: "Search tracks", soundtrack: "Soundtrack", toggleFullscreen: "Toggle full screen" },
+    player: { changeSound: "Change sound", collapse: "Collapse player", crossfade: "Crossfade", fullscreen: "Full screen", listenOnSpotify: "Listen on Spotify", noTracks: "No tracks found", nowPlaying: "Now playing", off: "Off", search: "Search tracks", soundtrack: "Soundtrack", toggleFullscreen: "Toggle full screen" },
     tasks: { clearCompleted: "Clear completed", session: "Session tasks" },
     term: { abort: "Abort", pause: "Pause", reset: "Reset", run: "Run", skip: "Skip", volDown: "Volume down", volUp: "Volume up" },
     timer: { giveUp: "Give up session", locked: "Timer locked", lockedAutopilot: "Timer is controlled by Autopilot" },

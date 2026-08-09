@@ -16,6 +16,7 @@
 const SITE_URL = 'https://www.virzyguns.com';
 
 /** Public profiles for the company entity. Keep canonical (www + exact handle casing). */
+const VIRZY_GUNS_SPOTIFY_URL = 'https://open.spotify.com/artist/13PhVfASmYQp8asSheyAxD';
 const profiles = [
     'https://www.youtube.com/@VirzyGuns',
     'https://www.instagram.com/virzyguns/',
@@ -23,9 +24,14 @@ const profiles = [
     'https://www.tiktok.com/@virzyguns808',
     'https://www.linkedin.com/in/virzyguns/',
     'https://www.beatstars.com/virzyguns',
-    'https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy',
 ];
 
+
+/** Artist-owned profiles are separate from the production organization. */
+const virzyArtistProfiles = [
+    ...profiles,
+    VIRZY_GUNS_SPOTIFY_URL,
+];
 export const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -91,5 +97,5 @@ export const founderSchema = {
         'functional audio',
         'producer education',
     ],
-    sameAs: profiles,
+    sameAs: virzyArtistProfiles,
 };

@@ -6,6 +6,11 @@ export type CertificatePdfParams = {
   trackId: string;
   trackTitle: string;
   trackArtist: string;
+  displayCredit?: string | null;
+  recordingArtist?: string | null;
+  labelLicensor?: string | null;
+  externalTitle?: string | null;
+  isrc?: string | null;
   trackGenre: string;
   catalogVersion: string;
   termsVersion: string;
@@ -151,10 +156,10 @@ export async function generateLicenseCertificatePdf(
   };
 
   printRow(700, "LICENSEE", params.licenseeName + (params.licenseeOrganization ? ` (${params.licenseeOrganization})` : ""), "CERTIFICATE ID", params.certificateId);
-  printRow(675, "TRACK TITLE", `${params.trackTitle} - ${params.trackArtist}`, "GRANT ID", params.grantId);
+  printRow(675, "TRACK TITLE", `${params.trackTitle} - ${params.recordingArtist ?? params.trackArtist}`, "GRANT ID", params.grantId);
   printRow(650, "GENRE / ID", `${params.trackGenre} (${params.trackId})`, "ISSUED (UTC)", new Date(params.issuedAt).toISOString().replace("T", " ").slice(0, 19));
   printRow(625, "TERMS VERSION", params.termsVersion, "CATALOG VERSION", params.catalogVersion);
-  printRow(600, "LICENSOR", "Chill Music Division / Virzy Guns Production", "GOVERNING LAW", "Indonesia (DJKI / PN Praya)");
+  printRow(600, "LICENSOR", params.labelLicensor ?? "Virzy Guns Production", "GOVERNING LAW", "Indonesia (DJKI / PN Praya)");
 
   // 3. License Grant Summary
   s += `BT /F2 9.5 Tf 0.027 0.078 0.180 rg 45 565 Td (LICENSE GRANT & PERMISSIONS) Tj ET\n`;

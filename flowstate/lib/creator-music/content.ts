@@ -334,7 +334,7 @@ export function creatorLicenseCopy(locale: Locale) {
 export function creatorOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "MusicGroup",
     name: "Chill Music Division",
     parentOrganization: { "@type": "Organization", name: "Virzy Guns Production" },
     sameAs: [SPOTIFY_ARTIST_URL],
