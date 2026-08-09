@@ -67,7 +67,7 @@ function walkFiles(dir) {
 
 function walkExternalFiles(dir) {
   if (!fs.existsSync(dir)) return [];
-  const command = "Get-ChildItem -LiteralPath " + JSON.stringify(dir) + " -Recurse -File -Include *.wav,*.mp3,*.flac,*.m4a,*.aiff,*.aif | ForEach-Object FullName";
+  const command = "Get-ChildItem -LiteralPath " + JSON.stringify(dir) + " -Recurse -File | Where-Object { @('.wav','.mp3','.flac','.m4a','.aiff','.aif') -contains $_.Extension.ToLowerInvariant() } | ForEach-Object FullName";
   try {
     const output = execFileSync("powershell.exe", [
       "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", command,
