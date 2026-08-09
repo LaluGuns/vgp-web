@@ -32,7 +32,7 @@ let initialized = false;
 const FIRST_TOUCH_KEY = "flow_first_touch_v1";
 const ACQUISITION_SESSION_KEY = "flow_acquisition_session_v1";
 
-export type AnalyticsProperties = Record<string, string | number | boolean | undefined>;
+export type AnalyticsProperties = Record<string, string | number | boolean | null | undefined>;
 export interface FirstTouch { channel: AcquisitionClass; referrerHost: string | null; landingPath: string; capturedAt: string; }
 export interface AcquisitionSession {
   id: string;
@@ -142,6 +142,13 @@ export function trackPageview(path: string, isTopLevelEntry = false): void {
   const firstTouch = getOrCreateFirstTouch(path);
   const acquisition = getOrCreateAcquisitionSession(path, isTopLevelEntry);
   const context = {
+    site_scope: "flow",
+    funnel: "flow",
+    route_key: path,
+    intent: marketingCluster(path),
+    bpm: null,
+    destination_type: "none",
+    source_position: "landing",
     landing_path: path,
     cluster: marketingCluster(path),
     locale: localeFromPath(path),
@@ -173,6 +180,9 @@ type EventName =
   | "theme_changed"
   | "seo_landing_view"
   | "seo_cta_clicked"
+  | "music_preview_started"
+  | "collection_selected"
+  | "outbound_clicked"
   | "creator_genre_viewed"
   | "creator_track_previewed"
   | "creator_license_started"
@@ -187,6 +197,13 @@ export function track(event: EventName, props?: AnalyticsProperties): void {
   const acquisition = typeof window === "undefined" ? null : getOrCreateAcquisitionSession(window.location.pathname);
   posthog.capture(event, {
     ...props,
+    site_scope: "flow",
+    funnel: "flow",
+    route_key: window.location.pathname,
+    intent: props?.intent ?? marketingCluster(window.location.pathname),
+    bpm: props?.bpm ?? null,
+    destination_type: props?.destination_type ?? "none",
+    source_position: props?.source_position ?? "event",
     first_touch_channel: firstTouch?.channel ?? "unknown",
     session_acquisition: acquisition?.channel ?? "unknown",
     acquisition_session_id: acquisition?.id ?? "unknown",

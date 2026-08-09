@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+﻿import assert from 'node:assert/strict';
 import test from 'node:test';
 import { daysToBackfill, normalizePostHogFunnelRow, shouldRequestNextGscPage } from '../../lib/seo/ingestion-utils.ts';
 
@@ -13,7 +13,7 @@ test('backfill is seven finalized UTC dates, newest first', () => {
 });
 
 test('PostHog funnel dimensions preserve empty strings instead of coercing them to zero', () => {
-  const result = normalizePostHogFunnelRow(['global-en', 'en', '', '', 'product', '4', null]);
-  assert.deepEqual(result.dimensions, ['global-en', 'en', '', '', 'product']);
+  const result = normalizePostHogFunnelRow(['flow', 'global-en', 'en', '', '', 'product', '4', null]);
+  assert.deepEqual(result.dimensions, ['flow', 'global-en', 'en', '', '', 'product']);
   assert.deepEqual(result.metrics, [4, 0]);
 });

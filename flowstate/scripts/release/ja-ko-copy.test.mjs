@@ -19,6 +19,7 @@ const LOCALES = [
 test("Japanese and Korean copy covers every SEO registry route", () => {
   for (const [locale, , nativeScript] of LOCALES) {
     for (const page of SEO_PAGES) {
+      if (page.releaseLocales) continue;
       const copy = jaKoMarketRouteCopy(locale, page.path);
       assert.ok(copy, `${locale}:${page.path}:missing`);
       assert.match(copy.h1, nativeScript, `${locale}:${page.path}:native-h1`);

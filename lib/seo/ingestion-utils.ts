@@ -1,4 +1,4 @@
-export const GSC_ROW_LIMIT = 25_000;
+﻿export const GSC_ROW_LIMIT = 25_000;
 
 /** Pure pagination rule used by the GSC reader and release tests. */
 export function shouldRequestNextGscPage(receivedRows: number, rowLimit = GSC_ROW_LIMIT): boolean {
@@ -16,9 +16,9 @@ export function daysToBackfill(now = new Date()): string[] {
   return dates;
 }
 
-export function normalizePostHogFunnelRow(row: unknown[]): { dimensions: [string, string, string, string, string]; metrics: number[] } {
+export function normalizePostHogFunnelRow(row: unknown[]): { dimensions: [string, string, string, string, string, string]; metrics: number[] } {
   return {
-    dimensions: [0, 1, 2, 3, 4].map((index) => String(row[index] ?? '')) as [string, string, string, string, string],
-    metrics: row.slice(5).map((value) => Number(value) || 0),
+    dimensions: [0, 1, 2, 3, 4, 5].map((index) => String(row[index] ?? '')) as [string, string, string, string, string, string],
+    metrics: row.slice(6).map((value) => Number(value) || 0),
   };
 }

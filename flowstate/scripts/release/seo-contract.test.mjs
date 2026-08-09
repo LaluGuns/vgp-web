@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
 import {
@@ -22,10 +22,11 @@ import {
 } from "../../lib/pricing.ts";
 
 test("every focused market has an honest AI-assisted indexable record for every SEO route", () => {
-  assert.equal(SEO_PAGES.length, 17);
+  assert.equal(SEO_PAGES.length, 19);
   for (const market of FOCUSED_MARKETS) {
-    const releases = SEO_PAGE_RELEASES.filter((release) => release.market === market);
-    assert.equal(releases.length, SEO_PAGES.length, market);
+    const releasedPages = SEO_PAGES.filter((page) => !page.releaseLocales);
+    const releases = SEO_PAGE_RELEASES.filter((release) => release.market === market && !["work-music", "coding-music"].includes(release.path));
+    assert.equal(releases.length, releasedPages.length, market);
     for (const release of releases) {
       assert.equal(release.status, "indexable", `${market}:${release.path}`);
       assert.match(release.reviewer ?? "", /AI-assisted editorial QA/, `${market}:${release.path}`);
@@ -36,12 +37,14 @@ test("every focused market has an honest AI-assisted indexable record for every 
 
 test("focused regional releases enter the sitemap and reciprocal hreflang graph", () => {
   const urls = sitemapCandidates("https://flow.virzyguns.com").map((entry) => entry.url);
-  assert.equal(urls.length, 160);
+  assert.equal(urls.length, 162);
   for (const market of FOCUSED_MARKETS) {
     assert.ok(urls.includes(`https://flow.virzyguns.com/${market}`), market);
     assert.ok(urls.includes(`https://flow.virzyguns.com/${market}/alternatives/brainfm`), market);
   }
   assert.ok(urls.includes("https://flow.virzyguns.com/en/alternatives/brainfm"));
+  assert.ok(urls.includes("https://flow.virzyguns.com/en/work-music"));
+  assert.ok(urls.includes("https://flow.virzyguns.com/en/coding-music"));
   assert.deepEqual(indexableLocalesForPath("deep-work-timer"), ["en", ...FOCUSED_MARKETS, "id"]);
   const deepWorkAlternates = indexableLanguageAlternates("deep-work-timer");
   assert.equal(Object.keys(deepWorkAlternates).length, 10);
@@ -51,6 +54,8 @@ test("focused regional releases enter the sitemap and reciprocal hreflang graph"
     assert.equal(deepWorkAlternates[market], `https://flow.virzyguns.com/${market}/deep-work-timer`);
   }
   assert.deepEqual(indexableLocalesForPath("alternatives/brainfm"), ["en", ...FOCUSED_MARKETS]);
+  assert.deepEqual(indexableLocalesForPath("work-music"), ["en"]);
+  assert.deepEqual(indexableLocalesForPath("coding-music"), ["en"]);
 });
 
 test("a promotion enters sitemap and hreflang only after its required reviews", () => {
@@ -108,6 +113,7 @@ test("a promotion enters sitemap and hreflang only after its required reviews", 
 test("every regional market route has localized metadata, H1, body copy, and FAQs", () => {
   for (const market of FOCUSED_MARKETS) {
     for (const page of SEO_PAGES) {
+      if (page.releaseLocales) continue;
       const copy = marketRouteCopy(market, page.path);
       assert.ok(copy, `${market}:${page.path}`);
       assert.ok(copy.metaTitle.length > 12, `${market}:${page.path}:title`);
@@ -122,6 +128,7 @@ test("every regional market route has localized metadata, H1, body copy, and FAQ
 
 test("US and UK releases have distinct route copy and exact creator-license boundaries", () => {
   for (const page of SEO_PAGES) {
+    if (page.releaseLocales) continue;
     const us = marketRouteCopy("en-US", page.path);
     const uk = marketRouteCopy("en-GB", page.path);
     assert.ok(us, `en-US:${page.path}`);

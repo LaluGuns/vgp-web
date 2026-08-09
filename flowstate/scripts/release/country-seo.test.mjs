@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import test from "node:test";
 import {
   baseLanguageForLocale,
@@ -45,7 +45,9 @@ test("sitemap candidates and legacy redirects follow activated country releases"
   assert.ok(urls.includes("https://flow.virzyguns.com/id/deep-work-timer"));
   assert.ok(urls.includes("https://flow.virzyguns.com/ja-JP"));
   assert.ok(urls.includes("https://flow.virzyguns.com/es-MX/pricing"));
-  assert.equal(urls.length, 160);
+  assert.ok(urls.includes("https://flow.virzyguns.com/en/work-music"));
+  assert.ok(urls.includes("https://flow.virzyguns.com/en/coding-music"));
+  assert.equal(urls.length, 162);
   assert.equal(
     sitemapCandidates("https://flow.virzyguns.com")[0].alternates.languages["x-default"],
     "https://flow.virzyguns.com/en"

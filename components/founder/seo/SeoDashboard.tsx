@@ -31,6 +31,7 @@ export function SeoDashboard({ data, loading, error, onFilterChange, onRefresh }
   onFilterChange: (filters: URLSearchParams) => void; onRefresh: () => void;
 }) {
   const [days, setDays] = useState('28');
+  const [siteScope, setSiteScope] = useState<'root' | 'flow'>('flow');
   const [market, setMarket] = useState('');
   const [locale, setLocale] = useState('');
   const [cluster, setCluster] = useState('');
@@ -40,10 +41,10 @@ export function SeoDashboard({ data, loading, error, onFilterChange, onRefresh }
   const [customStart, setCustomStart] = useState('');
   const [customEnd, setCustomEnd] = useState('');
   useEffect(() => {
-    const params = new URLSearchParams({ days, brand });
+    const params = new URLSearchParams({ days, brand, siteScope });
     if (market) params.set('market', market); if (locale) params.set('locale', locale); if (cluster) params.set('cluster', cluster); if (country) params.set('country', country.toLowerCase()); if (device) params.set('device', device.toUpperCase()); if (customStart && customEnd) { params.set('start', customStart); params.set('end', customEnd); }
     onFilterChange(params);
-  }, [days, market, locale, cluster, brand, country, device, customStart, customEnd, onFilterChange]);
+  }, [days, siteScope, market, locale, cluster, brand, country, device, customStart, customEnd, onFilterChange]);
 
   if (loading && !data) return <div className="flex justify-center py-20"><Loader2 className="h-8 w-8 animate-spin text-sky-300" /></div>;
   if (error && !data) return <EmptyState title="SEO telemetry unavailable" detail={error} />;
@@ -54,6 +55,7 @@ export function SeoDashboard({ data, loading, error, onFilterChange, onRefresh }
       <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-200/55">Search growth controls</p><p className="mt-1 text-xs text-white/45">Current {data.scope.start}–{data.scope.end}; compares the preceding equal-length period.</p></div>
       <div className="mt-4 flex flex-wrap gap-2 sm:mt-0">
         <select aria-label="SEO period" value={days} onChange={(e) => setDays(e.target.value)} className="rounded border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white"><option value="7">7 days</option><option value="28">28 days</option><option value="90">90 days</option></select>
+        <select aria-label="SEO site scope" value={siteScope} onChange={(e) => setSiteScope(e.target.value as 'root' | 'flow')} className="rounded border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white"><option value="flow">Flow</option><option value="root">Root / CADENZ</option></select>
         <input aria-label="SEO custom start" type="date" value={customStart} onChange={(e) => setCustomStart(e.target.value)} className="rounded border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white" />
         <input aria-label="SEO custom end" type="date" value={customEnd} onChange={(e) => setCustomEnd(e.target.value)} className="rounded border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white" />
         <select aria-label="SEO market" value={market} onChange={(e) => setMarket(e.target.value)} className="rounded border border-white/10 bg-black/20 px-2 py-1.5 text-xs text-white"><option value="">All markets</option><option value="global-en">Global English</option><option value="global-es">Global Spanish</option><option value="ja-JP">Japan</option><option value="de-DE">Germany</option><option value="pt-BR">Brazil</option><option value="ko-KR">Korea</option></select>

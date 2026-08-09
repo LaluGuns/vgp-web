@@ -1,8 +1,11 @@
+import type { SiteScope } from '@/lib/organic-discovery/types';
+
 export type SeoRange = 7 | 28 | 90;
 export type SeoConnectorState = 'connected' | 'not_configured' | 'error' | 'stale';
 
 export interface SeoFilters {
   days: SeoRange;
+  siteScope?: SiteScope;
   start?: string;
   end?: string;
   market?: string;

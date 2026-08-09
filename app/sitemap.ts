@@ -1,6 +1,7 @@
-import { MetadataRoute } from 'next';
+﻿import { MetadataRoute } from 'next';
 import { categories as blogCategoriesData, getAllSlugs } from '@/lib/blog-data';
 import { beatsCatalog, categories as beatCategories } from '@/lib/catalog';
+import { CADENZ_HUB_PATH, CADENZ_INDEXABLE_BPMS, cadenzBpmPath } from '@/lib/organic-discovery/cadenz';
 
 function getLastModified(updatedAt?: string) {
     if (!updatedAt) return undefined;
@@ -84,6 +85,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         ];
     });
 
+    const cadenzRunningRoutes = [
+        CADENZ_HUB_PATH,
+        ...CADENZ_INDEXABLE_BPMS.map(cadenzBpmPath),
+    ].map((route) => ({
+        url: baseUrl + route,
+        changeFrequency: 'weekly' as const,
+        priority: route === CADENZ_HUB_PATH ? 0.9 : 0.75,
+    }));
     // 4. Dynamic Blog Routes
     const blogRoutes = getAllSlugs().map((slug) => ({
         url: `${baseUrl}/blog/${slug}`,
@@ -98,5 +107,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.6,
     }));
 
-    return [...staticRoutes, ...beatCategoryRoutes, ...beatProductRoutes, ...blogRoutes, ...categoryRoutes];
+    return [...staticRoutes, ...cadenzRunningRoutes, ...beatCategoryRoutes, ...beatProductRoutes, ...blogRoutes, ...categoryRoutes];
 }

@@ -1,8 +1,8 @@
 import { query } from '@/lib/db';
+import { getSeoSiteScope } from './site-scope';
 import type { SeoFilters } from './types';
 
 const BRAND_TERMS = ['virzy', 'virzyguns', 'flow by virzy guns'];
-const FLOW_PAGE_PREFIX = 'https://flow.virzyguns.com/';
 
 function number(value: unknown): number { return Number(value) || 0; }
 function parsePage(page: string) {
@@ -27,7 +27,7 @@ function normalizeFilters(input: URLSearchParams): SeoFilters {
   const brand = input.get('brand');
   const start = read('start'); const end = read('end');
   const validDate = (value: string | undefined) => Boolean(value && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(`${value}T00:00:00Z`)));
-  return { days, start: validDate(start) ? start : undefined, end: validDate(end) ? end : undefined, market: read('market'), locale: read('locale'), country: read('country')?.toLowerCase(), cluster: read('cluster'), device: read('device')?.toUpperCase(), brand: brand === 'brand' || brand === 'non_brand' ? brand : 'all', searchType: 'web' };
+  return { days, siteScope: input.get('siteScope') === 'root' ? 'root' : 'flow', start: validDate(start) ? start : undefined, end: validDate(end) ? end : undefined, market: read('market'), locale: read('locale'), country: read('country')?.toLowerCase(), cluster: read('cluster'), device: read('device')?.toUpperCase(), brand: brand === 'brand' || brand === 'non_brand' ? brand : 'all', searchType: 'web' };
 }
 function dateWindow(days: number, customStart?: string, customEnd?: string) {
   if (customStart && customEnd && customStart <= customEnd) {
@@ -75,7 +75,7 @@ async function fetchExactPostHogFunnel(
   if (!key) return { state: 'not_configured', data: null };
   const host = (process.env.POSTHOG_QUERY_HOST || 'https://us.posthog.com').replace(/\/$/, '');
   const projectId = process.env.POSTHOG_PROJECT_ID || '511095';
-  const propertyFilters = Object.entries({ market: filters.market, locale: filters.locale, country: filters.country, device: filters.device, cluster: filters.cluster })
+  const propertyFilters = Object.entries({ site_scope: filters.siteScope || 'flow', market: filters.market, locale: filters.locale, country: filters.country, device: filters.device, cluster: filters.cluster })
     .filter((entry): entry is [string, string] => Boolean(entry[1]))
     .map(([property, value]) => `AND coalesce(toString(properties.${property === 'country' ? '$geoip_country_code' : property === 'device' ? '$device_type' : property}), '') = ${hogqlLiteral(value)}`)
     .join('\n');
@@ -116,29 +116,31 @@ async function fetchExactPostHogFunnel(
 
 export async function getFounderSeoDashboard(params: URLSearchParams) {
   const filters = normalizeFilters(params);
+  const siteScope = filters.siteScope || 'flow';
+  const site = getSeoSiteScope(siteScope);
   const window = dateWindow(filters.days, filters.start, filters.end);
   const exactFunnelPromise = filters.brand && filters.brand !== 'all'
     ? Promise.resolve({ state: 'not_configured' as const, data: null })
     : fetchExactPostHogFunnel(window, filters);
   const pageTable = filters.country || filters.device ? 'seo_gsc_page_dimension_daily' : 'seo_gsc_page_daily';
-  const pageConditions = ['metric_date BETWEEN $1 AND $2'];
-  const pageValues: unknown[] = [window.start, window.end];
+  const pageConditions = ['site_scope = $1', 'metric_date BETWEEN $2 AND $3'];
+  const pageValues: unknown[] = [siteScope, window.start, window.end];
   if (filters.country) { pageValues.push(filters.country); pageConditions.push(`country = $${pageValues.length}`); }
   if (filters.device) { pageValues.push(filters.device); pageConditions.push(`device = $${pageValues.length}`); }
   const queryTable = filters.country || filters.device ? 'seo_gsc_query_page_dimension_daily' : 'seo_gsc_query_page_daily';
-  const queryValues: unknown[] = [window.start, window.end];
-  const queryConditions = ['metric_date BETWEEN $1 AND $2'];
+  const queryValues: unknown[] = [siteScope, window.start, window.end];
+  const queryConditions = ['site_scope = $1', 'metric_date BETWEEN $2 AND $3'];
   if (filters.country) { queryValues.push(filters.country); queryConditions.push(`country = $${queryValues.length}`); }
   if (filters.device) { queryValues.push(filters.device); queryConditions.push(`device = $${queryValues.length}`); }
   const [currentSite, previousSite, pageResult, queryPageResult, countryResult, deviceResult, runResult, indexingResult] = await Promise.all([
-    query(`SELECT clicks, impressions, position_weighted FROM seo_gsc_site_daily WHERE metric_date BETWEEN $1 AND $2 AND dimension_kind='all'`, [window.start, window.end]),
-    query(`SELECT clicks, impressions, position_weighted FROM seo_gsc_site_daily WHERE metric_date BETWEEN $1 AND $2 AND dimension_kind='all'`, [window.previousStart, window.previousEnd]),
+    query(`SELECT clicks, impressions, position_weighted FROM seo_gsc_site_daily WHERE site_scope = $1 AND metric_date BETWEEN $2 AND $3 AND dimension_kind='all'`, [siteScope, window.start, window.end]),
+    query(`SELECT clicks, impressions, position_weighted FROM seo_gsc_site_daily WHERE site_scope = $1 AND metric_date BETWEEN $2 AND $3 AND dimension_kind='all'`, [siteScope, window.previousStart, window.previousEnd]),
     query(`SELECT page_url, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM ${pageTable} WHERE ${pageConditions.join(' AND ')} GROUP BY page_url ORDER BY clicks DESC, impressions DESC LIMIT 100`, pageValues),
     query(`SELECT query, page_url, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM ${queryTable} WHERE ${queryConditions.join(' AND ')} GROUP BY query, page_url ORDER BY clicks DESC, impressions DESC LIMIT 200`, queryValues),
-    query(`SELECT dimension_value AS country, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM seo_gsc_site_daily WHERE metric_date BETWEEN $1 AND $2 AND dimension_kind='country' GROUP BY dimension_value ORDER BY clicks DESC, impressions DESC LIMIT 30`, [window.start, window.end]),
-    query(`SELECT dimension_value AS device, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM seo_gsc_site_daily WHERE metric_date BETWEEN $1 AND $2 AND dimension_kind='device' GROUP BY dimension_value ORDER BY clicks DESC, impressions DESC LIMIT 10`, [window.start, window.end]),
+    query(`SELECT dimension_value AS country, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM seo_gsc_site_daily WHERE site_scope = $1 AND metric_date BETWEEN $2 AND $3 AND dimension_kind='country' GROUP BY dimension_value ORDER BY clicks DESC, impressions DESC LIMIT 30`, [siteScope, window.start, window.end]),
+    query(`SELECT dimension_value AS device, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM seo_gsc_site_daily WHERE site_scope = $1 AND metric_date BETWEEN $2 AND $3 AND dimension_kind='device' GROUP BY dimension_value ORDER BY clicks DESC, impressions DESC LIMIT 10`, [siteScope, window.start, window.end]),
     query(`SELECT status, gsc_status, posthog_status, started_at, completed_at, last_complete_date, error_message FROM seo_ingestion_runs ORDER BY started_at DESC LIMIT 1`),
-    query(`SELECT page_url, market, locale, submitted_at, indexed_state, declared_canonical, google_canonical, last_crawl_at, mobile_result, sitemap_status, robots_allowed, schema_status, checked_at FROM seo_indexing_evidence ORDER BY checked_at DESC LIMIT 100`),
+    query(`SELECT page_url, market, locale, submitted_at, indexed_state, declared_canonical, google_canonical, last_crawl_at, mobile_result, sitemap_status, robots_allowed, schema_status, checked_at FROM seo_indexing_evidence WHERE page_url LIKE $1 ORDER BY checked_at DESC LIMIT 100`, [site.pagePrefix + '%']),
   ]);
   const pageRows = pageResult.rows.map((row) => {
     const details = parsePage(String(row.page_url));
@@ -153,8 +155,8 @@ export async function getFounderSeoDashboard(params: URLSearchParams) {
     const brandFiltered = Boolean(filters.brand && filters.brand !== 'all');
     const dimensioned = Boolean(filters.country || filters.device);
     const table = brandFiltered ? queryTable : (dimensioned ? pageTable : 'seo_gsc_page_daily');
-    const values: unknown[] = [start, end];
-    const conditions = ['metric_date BETWEEN $1 AND $2'];
+    const values: unknown[] = [siteScope, start, end];
+    const conditions = ['site_scope = $1', 'metric_date BETWEEN $2 AND $3'];
     if (dimensioned && filters.country) { values.push(filters.country); conditions.push(`country = $${values.length}`); }
     if (dimensioned && filters.device) { values.push(filters.device); conditions.push(`device = $${values.length}`); }
     const selectQuery = brandFiltered ? 'query,' : '';
@@ -185,7 +187,7 @@ export async function getFounderSeoDashboard(params: URLSearchParams) {
     if (position <= 3) buckets['1-3']++; else if (position <= 10) buckets['4-10']++; else if (position <= 20) buckets['11-20']++; else if (position <= 50) buckets['21-50']++; else buckets['>50']++;
   }
   const samePageFilters = (rows: { page_url: unknown; clicks: unknown; impressions: unknown; position_weighted: unknown }[]) => rows.map((row) => ({ page: String(row.page_url), ...parsePage(String(row.page_url)), ...aggregate([row]) })).filter((row) => (!filters.locale || row.locale === filters.locale) && (!filters.market || row.market === filters.market) && (!filters.cluster || row.cluster === filters.cluster));
-  const previousValues = [window.previousStart, window.previousEnd, ...((filters.brand && filters.brand !== 'all') ? queryValues.slice(2) : pageValues.slice(2))];
+  const previousValues = [siteScope, window.previousStart, window.previousEnd, ...((filters.brand && filters.brand !== 'all') ? queryValues.slice(3) : pageValues.slice(3))];
   const previousSource = filters.brand && filters.brand !== 'all'
     ? await query(`SELECT query, page_url, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM ${queryTable} WHERE ${queryConditions.join(' AND ')} GROUP BY query, page_url`, previousValues)
     : await query(`SELECT page_url, SUM(clicks)::int AS clicks, SUM(impressions)::int AS impressions, SUM(position_weighted)::float AS position_weighted FROM ${pageTable} WHERE ${pageConditions.join(' AND ')} GROUP BY page_url`, previousValues);
@@ -193,8 +195,8 @@ export async function getFounderSeoDashboard(params: URLSearchParams) {
     ? previousSource.rows.filter((row) => (filters.brand === 'brand') === isBrand(String(row.query))).map((row) => ({ ...row, page_url: row.page_url }))
     : previousSource.rows;
   const previousRows = samePageFilters(previousFiltered);
-  const funnelConditions = ['metric_date BETWEEN $1 AND $2'];
-  const funnelValues: unknown[] = [window.start, window.end];
+  const funnelConditions = ['site_scope = $1', 'metric_date BETWEEN $2 AND $3'];
+  const funnelValues: unknown[] = [siteScope, window.start, window.end];
   for (const [column, value] of Object.entries({ market: filters.market, locale: filters.locale, country: filters.country, device: filters.device, cluster: filters.cluster })) {
     if (value) { funnelValues.push(value); funnelConditions.push(`${column} = $${funnelValues.length}`); }
   }
@@ -266,7 +268,7 @@ export async function getFounderSeoDashboard(params: URLSearchParams) {
     if (row.submittedAt && row.indexedState !== 'indexed' && Date.now() - new Date(row.submittedAt).getTime() > 14 * 86_400_000) alerts.push({ kind: 'beachhead_not_indexed', severity: 'warning', page: row.page, message: 'Submitted beachhead has not been indexed after 14 days.' });
   }
   return {
-    connected: Boolean(latestRun), filters, scope: { pagePrefix: FLOW_PAGE_PREFIX, ...window },
+    connected: Boolean(latestRun), filters, scope: { siteScope, pagePrefix: site.pagePrefix, ...window },
     metrics: { ...current, previous, chart, previousChart,
       organicVisitors, qualifiedActivation: organicVisitors && funnel ? funnel.qualifiedActivations / organicVisitors : null,
       commercialConversion: organicVisitors && funnel ? funnel.activatedPro / organicVisitors : null,
