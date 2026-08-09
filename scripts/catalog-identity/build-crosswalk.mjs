@@ -37,6 +37,7 @@ const dryRun = args.has("--dry-run");
 const fullNegativeFingerprint = args.has("--full-negative-fingerprint");
 const copyReleaseAssets = args.has("--copy-release-assets");
 const skipHashes = args.has("--skip-hashes");
+const catalogOnly = args.has("--catalog-only");
 const externalEnumerationTimeoutMs = Number(process.env.CATALOG_EXTERNAL_ENUM_TIMEOUT_MS || 120000);
 const runStamp = process.env.CATALOG_RUN_STAMP ||
   new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
@@ -381,6 +382,7 @@ function writeRun(source, external, rows, traffic) {
       sourceCount: source.length,
       externalCount: external.length,
       fullNegativeFingerprint,
+      catalogOnly,
       copyReleaseAssets,
     }, null, 2) + "\n", "utf8");
     fs.writeFileSync(path.join(runDir, "source_master_manifest.json"), JSON.stringify({
@@ -507,7 +509,7 @@ function writeRun(source, external, rows, traffic) {
       `- Verified matches: ${rows.filter((row) => row.verificationStatus === "verified").length}`,
       `- Candidate/manual rows: ${rows.filter((row) => row.verificationStatus === "candidate" || row.verificationStatus === "manual_review").length}`,
       `- Planned new releases: ${planned.length}`,
-      `- Full negative fingerprint: ${fullNegativeFingerprint ? "complete" : "not_run (planned releases remain blocked)"}`,
+      `- Full negative fingerprint: ${fullNegativeFingerprint ? "complete" : catalogOnly ? "not_run (catalog_only; planned releases remain blocked)" : "not_run (planned releases remain blocked)"}`,
       "",
       "No DistroKid, Spotify, YouTube, or Flow upload was performed by this script.",
       "",
@@ -534,9 +536,9 @@ function main() {
   console.error("catalog: validating traffic pack");
   const source = sourceRecords();
   console.error("catalog: indexing official masters");
-  const external = externalRecords();
+  const external = catalogOnly ? [] : externalRecords();
   console.error("catalog: indexing CMD backup");
-  const rows = matchRecords(source, external, fullNegativeFingerprint);
+  const rows = matchRecords(source, external, fullNegativeFingerprint && !catalogOnly);
   console.error("catalog: matching");
   writeRun(source, external, rows, traffic);
   console.log(JSON.stringify({
