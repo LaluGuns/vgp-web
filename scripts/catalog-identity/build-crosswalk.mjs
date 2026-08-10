@@ -9,11 +9,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
-import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const DRIVE_PACK = "G:/My Drive/codex_traffic_pack";
+const DRIVE_PACK = process.env.CATALOG_DRIVE_PACK || "G:/My Drive/codex_traffic_pack";
+const TRAFFIC_PACK = process.env.CATALOG_TRAFFIC_PACK || DRIVE_PACK;
 const FLOW_CATALOG = path.join(ROOT, "flowstate/public/tracks/catalog.json");
 const AUDIO_EXTENSIONS = new Set([".wav", ".mp3", ".flac", ".m4a", ".aiff", ".aif"]);
 const CREATOR_GENRES = new Set(["City Pop", "Cyberpunk Jazz", "Neo Synthwave"]);
@@ -22,7 +22,8 @@ const SOURCE_GROUPS = [
   { category: "cyberpunk-jazz", genre: "Cyberpunk Jazz", root: "F:/Cyberpunk Synthwave JAZZ/WAV MASTERED JAZZ" },
   { category: "chill-synthwave", genre: "Neo Synthwave", root: "F:/chill synthwave new/WAV" },
 ];
-const CMD_BACKUP_ROOT = "G:/My Drive/Distrokid Backup/GREEN/Chill Music Division";
+const CMD_BACKUP_ROOT = process.env.CATALOG_EXTERNAL_ROOT ||
+  "G:/My Drive/Distrokid Backup/GREEN/Chill Music Division";
 const NEW_RELEASE_TITLES = {
   "cyberpunk-jazz-033": "Obsidian Mainframe",
   "cyberpunk-jazz-034": "Neon Circuit Dreamwalk",
@@ -38,7 +39,10 @@ const fullNegativeFingerprint = args.has("--full-negative-fingerprint");
 const copyReleaseAssets = args.has("--copy-release-assets");
 const skipHashes = args.has("--skip-hashes");
 const catalogOnly = args.has("--catalog-only");
-const externalEnumerationTimeoutMs = Number(process.env.CATALOG_EXTERNAL_ENUM_TIMEOUT_MS || 120000);
+const requestedHashConcurrency = Number(process.env.CATALOG_HASH_CONCURRENCY || 4);
+const hashConcurrency = Number.isFinite(requestedHashConcurrency)
+  ? Math.max(1, Math.floor(requestedHashConcurrency))
+  : 4;
 const runStamp = process.env.CATALOG_RUN_STAMP ||
   new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
 const runDir = path.join(DRIVE_PACK, "runs", runStamp);
@@ -67,22 +71,15 @@ function walkFiles(dir) {
 }
 
 function walkExternalFiles(dir) {
-  if (!fs.existsSync(dir)) return [];
-  const command = "Get-ChildItem -LiteralPath " + JSON.stringify(dir) + " -Recurse -File | Where-Object { @('.wav','.mp3','.flac','.m4a','.aiff','.aif') -contains $_.Extension.ToLowerInvariant() } | ForEach-Object FullName";
+  // Use the same Node-native walker as the official masters. The previous
+  // PowerShell child-process fallback fails under the Codex sandbox with
+  // spawnSync EPERM, even when the Drive-synced files are locally available.
+  // walkFiles already filters supported audio extensions and sorts
+  // deterministically, so matching semantics remain unchanged.
   try {
-    const output = execFileSync("powershell.exe", [
-      "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", command,
-    ], {
-      encoding: "utf8",
-      timeout: externalEnumerationTimeoutMs,
-      maxBuffer: 64 * 1024 * 1024,
-      windowsHide: true,
-    });
-    return output.split("\n").map((value) => value.trim()).filter(Boolean).sort((a, b) =>
-      a.localeCompare(b, "en", { numeric: true, sensitivity: "base" }));
+    return walkFiles(dir);
   } catch (error) {
-    const timedOut = error?.code === "ETIMEDOUT" || error?.killed;
-    const reason = timedOut ? "enumeration timed out after " + externalEnumerationTimeoutMs + "ms" : error?.message ?? String(error);
+    const reason = error?.message ?? String(error);
     throw new Error("blocked_external_data: " + dir + ": " + reason);
   }
 }
@@ -113,7 +110,7 @@ function writeCsv(filePath, rows) {
 function sha256File(filePath) {
   const hash = crypto.createHash("sha256");
   const fd = fs.openSync(filePath, "r");
-  const buffer = Buffer.allocUnsafe(1024 * 1024);
+  const buffer = Buffer.allocUnsafe(8 * 1024 * 1024);
   try {
     let read = 0;
     do {
@@ -139,6 +136,7 @@ function wavInfo(filePath) {
     let channels = null;
     let bits = null;
     let dataBytes = null;
+    let dataOffset = null;
     while (offset + 8 <= stat.size) {
       const chunkHeader = Buffer.alloc(8);
       fs.readSync(fd, chunkHeader, 0, 8, offset);
@@ -154,6 +152,7 @@ function wavInfo(filePath) {
       }
       if (chunk === "data") {
         dataBytes = length;
+        dataOffset = offset;
         break;
       }
       offset += length + (length % 2);
@@ -166,6 +165,7 @@ function wavInfo(filePath) {
       channels,
       bits,
       dataBytes,
+      dataOffset,
       durationS: durationS ? Number(durationS.toFixed(3)) : null,
     };
   } finally {
@@ -173,64 +173,77 @@ function wavInfo(filePath) {
   }
 }
 
-function wavDataSha256(filePath) {
-  const fd = fs.openSync(filePath, "r");
-  try {
-    const header = Buffer.alloc(12);
-    if (fs.readSync(fd, header, 0, 12, 0) !== 12 ||
-        header.toString("ascii", 0, 4) !== "RIFF" ||
-        header.toString("ascii", 8, 12) !== "WAVE") return null;
-    const stat = fs.statSync(filePath);
-    let offset = 12;
-    while (offset + 8 <= stat.size) {
-      const chunkHeader = Buffer.alloc(8);
-      fs.readSync(fd, chunkHeader, 0, 8, offset);
-      const chunk = chunkHeader.toString("ascii", 0, 4);
-      const length = chunkHeader.readUInt32LE(4);
-      offset += 8;
-      if (chunk === "data") {
-        const hash = crypto.createHash("sha256");
-        const buffer = Buffer.allocUnsafe(1024 * 1024);
-        let remaining = length;
-        let position = offset;
-        while (remaining > 0) {
-          const size = Math.min(buffer.length, remaining);
-          const read = fs.readSync(fd, buffer, 0, size, position);
-          if (!read) break;
-          hash.update(buffer.subarray(0, read));
-          remaining -= read;
-          position += read;
-        }
-        return hash.digest("hex");
+let hashedFileCount = 0;
+
+async function fileHashesAsync(filePath, info = {}) {
+  const fullHash = crypto.createHash("sha256");
+  const pcmHash = info.dataOffset != null && info.dataBytes != null
+    ? crypto.createHash("sha256")
+    : null;
+  const stream = fs.createReadStream(filePath, { highWaterMark: 8 * 1024 * 1024 });
+  let position = 0;
+  for await (const chunk of stream) {
+    fullHash.update(chunk);
+    if (pcmHash) {
+      const dataStart = info.dataOffset;
+      const dataEnd = dataStart + info.dataBytes;
+      const overlapStart = Math.max(position, dataStart);
+      const overlapEnd = Math.min(position + chunk.length, dataEnd);
+      if (overlapEnd > overlapStart) {
+        pcmHash.update(chunk.subarray(overlapStart - position, overlapEnd - position));
       }
-      offset += length + (length % 2);
     }
-    return null;
-  } finally {
-    fs.closeSync(fd);
+    position += chunk.length;
   }
+  return {
+    sha256: fullHash.digest("hex"),
+    pcmSha256: pcmHash ? pcmHash.digest("hex") : null,
+  };
 }
 
-function fileIdentity(filePath, includeHashes = true) {
+async function fileIdentityAsync(filePath, includeHashes = true) {
   const stat = fs.statSync(filePath);
   const ext = path.extname(filePath).toLowerCase();
   const info = ext === ".wav" ? wavInfo(filePath) : {};
+  const hashes = includeHashes
+    ? await fileHashesAsync(filePath, info)
+    : { sha256: null, pcmSha256: null };
+  if (includeHashes) {
+    hashedFileCount += 1;
+    if (hashedFileCount % 25 === 0) console.error(`catalog: hashed ${hashedFileCount} files`);
+  }
   return {
     fileName: path.basename(filePath),
     absolutePath: filePath,
     bytes: stat.size,
     modifiedUtc: stat.mtime.toISOString(),
     durationS: info.durationS ?? null,
-    sha256: includeHashes ? sha256File(filePath) : null,
-    pcmSha256: includeHashes && ext === ".wav" ? wavDataSha256(filePath) : null,
+    sha256: hashes.sha256,
+    pcmSha256: hashes.pcmSha256,
   };
 }
+
+async function mapWithConcurrency(items, limit, mapper) {
+  const output = new Array(items.length);
+  let nextIndex = 0;
+  async function worker() {
+    while (true) {
+      const index = nextIndex++;
+      if (index >= items.length) return;
+      output[index] = await mapper(items[index], index);
+    }
+  }
+  const workers = Math.min(Math.max(1, limit), items.length);
+  await Promise.all(Array.from({ length: workers }, () => worker()));
+  return output;
+}
+
 function parseFlowCatalog() {
   const raw = JSON.parse(fs.readFileSync(FLOW_CATALOG, "utf8"));
   return raw.map((entry) => ({ ...entry, normalizedTitle: normalizeTitle(entry.title) }));
 }
 
-function sourceRecords() {
+async function sourceRecords() {
   const catalog = parseFlowCatalog();
   const records = [];
   for (const group of SOURCE_GROUPS) {
@@ -239,7 +252,13 @@ function sourceRecords() {
     const groupCatalog = catalog.filter((entry) => entry.category === group.category);
     const titleIndex = new Map(groupCatalog.map((entry) => [entry.normalizedTitle, entry]));
     let fallbackIndex = 0;
-    for (const file of files) {
+    const identities = await mapWithConcurrency(
+      files,
+      hashConcurrency,
+      (file) => fileIdentityAsync(file, !skipHashes),
+    );
+    for (let fileIndex = 0; fileIndex < files.length; fileIndex += 1) {
+      const file = files[fileIndex];
       const base = path.basename(file);
       const numbered = /^\s*(\d{1,3})\s*[-_.]?\s*(.*?)\.(?:wav|mp3|flac|m4a|aiff?)$/i.exec(base);
       let entry = titleIndex.get(normalizeTitle(base));
@@ -253,17 +272,23 @@ function sourceRecords() {
         genre: group.genre,
         flowTrackId: entry?.id ?? `${group.category}/unmapped-${String(records.length + 1).padStart(3, "0")}`,
         flowAliasTitle: entry?.title ?? path.basename(file, path.extname(file)),
-        source: fileIdentity(file, !skipHashes),
+        source: identities[fileIndex],
       });
     }
   }
   return records;
 }
 
-function externalRecords() {
+async function externalRecords() {
   console.error(`catalog: indexing backup ${CMD_BACKUP_ROOT}`);
-  return walkExternalFiles(CMD_BACKUP_ROOT).map((file) => ({
-    ...fileIdentity(file, !skipHashes),
+  const files = walkExternalFiles(CMD_BACKUP_ROOT);
+  const identities = await mapWithConcurrency(
+    files,
+    hashConcurrency,
+    (file) => fileIdentityAsync(file, !skipHashes),
+  );
+  return files.map((file, index) => ({
+    ...identities[index],
     normalizedTitle: normalizeTitle(path.basename(file, path.extname(file))),
     artist: "Chill Music Division",
   }));
@@ -350,14 +375,14 @@ function matchRecords(sources, external, negativeScanComplete) {
 }
 
 function validateTrafficPack() {
-  const manifestPath = path.join(DRIVE_PACK, "SHA256SUMS.txt");
+  const manifestPath = path.join(TRAFFIC_PACK, "SHA256SUMS.txt");
   if (!fs.existsSync(manifestPath)) throw new Error(`missing checksum manifest: ${manifestPath}`);
   const rows = [];
   for (const line of fs.readFileSync(manifestPath, "utf8").split(/\r?\n/).filter(Boolean)) {
     const match = /^(\S+)\s+[* ](.+)$/.exec(line.trim());
     if (!match) continue;
     const relative = match[2].replaceAll("/", path.sep);
-    const filePath = path.join(DRIVE_PACK, relative);
+    const filePath = path.join(TRAFFIC_PACK, relative);
     const exists = fs.existsSync(filePath);
     const actual = exists ? sha256File(filePath) : null;
     rows.push({ file: match[2], expected: match[1], actual, status: exists && actual === match[1] ? "ok" : "mismatch_or_missing" });
@@ -375,9 +400,10 @@ function writeRun(source, external, rows, traffic) {
   if (!dryRun) fs.mkdirSync(runDir, { recursive: true });
   if (!dryRun) {
     fs.writeFileSync(path.join(runDir, "input_manifest.json"), JSON.stringify({
-      generatedUtc: new Date().toISOString(),
+      generatedUtc: runStamp,
       runStamp,
       trafficFiles: traffic.files,
+      trafficPack: TRAFFIC_PACK,
       sourceGroups: SOURCE_GROUPS,
       sourceCount: source.length,
       externalCount: external.length,
@@ -386,7 +412,7 @@ function writeRun(source, external, rows, traffic) {
       copyReleaseAssets,
     }, null, 2) + "\n", "utf8");
     fs.writeFileSync(path.join(runDir, "source_master_manifest.json"), JSON.stringify({
-      generatedUtc: new Date().toISOString(),
+      generatedUtc: runStamp,
       groups: SOURCE_GROUPS,
       records: source,
     }, null, 2) + "\n", "utf8");
@@ -531,12 +557,12 @@ function writeRun(source, external, rows, traffic) {
   }
 }
 
-function main() {
+async function main() {
   const traffic = validateTrafficPack();
   console.error("catalog: validating traffic pack");
-  const source = sourceRecords();
+  const source = await sourceRecords();
   console.error("catalog: indexing official masters");
-  const external = catalogOnly ? [] : externalRecords();
+  const external = catalogOnly ? [] : await externalRecords();
   console.error("catalog: indexing CMD backup");
   const rows = matchRecords(source, external, fullNegativeFingerprint && !catalogOnly);
   console.error("catalog: matching");
@@ -554,4 +580,7 @@ function main() {
   }, null, 2));
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
