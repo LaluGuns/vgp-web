@@ -36,6 +36,7 @@ interface SettingsRow {
     allow_unverified_contacts: boolean;
     trend_sources: FounderSettings['trendSources'];
     integrations: FounderSettings['integrations'];
+    operating_profile: FounderSettings['operatingProfile'];
 }
 
 interface ApprovalRow {
@@ -148,6 +149,7 @@ function mapSettingsRow(row: SettingsRow): FounderSettings {
         allowUnverifiedContacts: row.allow_unverified_contacts,
         trendSources: row.trend_sources,
         integrations: row.integrations,
+        operatingProfile: row.operating_profile,
     });
 
     if (!parsed.success) {
@@ -300,7 +302,8 @@ export async function readFounderOsSnapshot(): Promise<FounderDashboardSnapshot>
                     allow_cold_social_dm,
                     allow_unverified_contacts,
                     trend_sources,
-                    integrations
+                    integrations,
+                    operating_profile
                  from founder_internal.settings
                  where settings_key = 'default'`
             );
@@ -684,9 +687,10 @@ export class FounderOsRepository {
                 allow_cold_social_dm,
                 allow_unverified_contacts,
                 trend_sources,
-                integrations
+                integrations,
+                operating_profile
              )
-             values ('default', $1, $2, $3, $4, $5, $6, $7, $8, $9)
+             values ('default', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
              on conflict (settings_key) do nothing`,
             [
                 seed.settings.contractVersion,
@@ -698,6 +702,7 @@ export class FounderOsRepository {
                 seed.settings.allowUnverifiedContacts,
                 seed.settings.trendSources,
                 seed.settings.integrations,
+                seed.settings.operatingProfile,
             ]
         );
 
@@ -787,7 +792,8 @@ export class FounderOsRepository {
                 allow_cold_social_dm,
                 allow_unverified_contacts,
                 trend_sources,
-                integrations
+                integrations,
+                operating_profile
              from founder_internal.settings
              where settings_key = 'default'
              for update`
@@ -807,9 +813,10 @@ export class FounderOsRepository {
                 allow_cold_social_dm,
                 allow_unverified_contacts,
                 trend_sources,
-                integrations
+                integrations,
+                operating_profile
              )
-             values ('default', $1, $2, $3, $4, $5, $6, $7, $8, $9)
+             values ('default', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
              on conflict (settings_key) do update set
                 contract_version = excluded.contract_version,
                 markets = excluded.markets,
@@ -820,7 +827,8 @@ export class FounderOsRepository {
                 allow_cold_social_dm = excluded.allow_cold_social_dm,
                 allow_unverified_contacts = excluded.allow_unverified_contacts,
                 trend_sources = excluded.trend_sources,
-                integrations = excluded.integrations
+                integrations = excluded.integrations,
+                operating_profile = excluded.operating_profile
              returning
                 contract_version,
                 markets,
@@ -830,7 +838,8 @@ export class FounderOsRepository {
                 allow_cold_social_dm,
                 allow_unverified_contacts,
                 trend_sources,
-                integrations`,
+                integrations,
+                operating_profile`,
             [
                 settings.contractVersion,
                 settings.markets,
@@ -841,6 +850,7 @@ export class FounderOsRepository {
                 settings.allowUnverifiedContacts,
                 settings.trendSources,
                 settings.integrations,
+                settings.operatingProfile,
             ]
         );
         return mapSettingsRow(result.rows[0]);
@@ -868,6 +878,32 @@ export class FounderOsRepository {
              from founder_internal.approval_actions
              where id = $1
              for update`,
+            [approvalId]
+        );
+        return result.rows[0] ? mapApprovalRow(result.rows[0]) : null;
+    }
+
+    async getApprovalForReview(approvalId: string): Promise<StoredApproval | null> {
+        const result = await this.client.query<ApprovalRow>(
+            `select
+                id,
+                prospect_id,
+                action_type,
+                channel,
+                status,
+                target_label,
+                payload_summary,
+                payload,
+                content_hash,
+                created_at,
+                updated_at,
+                approved_at,
+                executed_at,
+                provider_reference,
+                failure_reason,
+                is_demo
+             from founder_internal.approval_actions
+             where id = $1`,
             [approvalId]
         );
         return result.rows[0] ? mapApprovalRow(result.rows[0]) : null;

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VGP Founder OS Bridge tool policy",
+  "type": "object",
+  "const": {
+    "mode": "approval-gated",
+    "allowedCapabilities": [
+      "brief.read",
+      "catalog.search",
+      "prospects.read",
+      "prospects.candidate.save",
+      "draft.create",
+      "review.request",
+      "approval.status.read",
+      "provider.health.read",
+      "provider.analytics.read-permitted",
+      "audit.read-sanitized"
+    ],
+    "prohibitedCapabilities": [
+      "approval.grant",
+      "external.execute",
+      "email.send",
+      "social.publish",
+      "media.upload",
+      "message.reply",
+      "direct-message.send",
+      "oauth.mutate",
+      "provider.disconnect"
+    ],
+    "externalActionsAllowed": false,
+    "founderApprovalRequired": true
+  }
+}

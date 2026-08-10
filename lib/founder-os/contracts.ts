@@ -24,6 +24,22 @@ export type EvidenceFreshness = 'fresh' | 'stale' | 'unknown';
 export type ContactPermission = 'verified-opt-in' | 'public-business-email' | 'manual-only' | 'blocked';
 export type IntegrationStatus = 'connected' | 'configured' | 'not-connected' | 'error';
 
+export interface FounderOperatingProfile {
+    skills: Record<'founder-daily-brief' | 'content-intelligence' | 'content-planner' | 'lead-discovery' | 'outreach-drafts' | 'social-operations' | 'seo-operations' | 'provider-health' | 'approval-operator' | 'release-operator', boolean>;
+    approvalPolicy: 'every-external-action';
+    leadLimit: number;
+    targetCountries: string[];
+    targetNiches: string[];
+    targetPlatforms: Array<'instagram' | 'tiktok' | 'youtube' | 'website'>;
+    tone: string;
+    brandVoice: string;
+    contentCadence: number;
+    providerPreferences: { tiktokDelivery: 'draft-upload' | 'direct-post' };
+    notifications: { approvalQueue: boolean; providerHealth: boolean; dailyDigest: boolean };
+    dataRetentionDays: number;
+    safetyLimits: { maxExternalActionsPerApproval: 1; maxLeadResearchPerRun: number; maxEvidencePerDraft: number };
+}
+
 export interface SourceEvidence {
     id: string;
     label: string;
@@ -113,7 +129,8 @@ export interface FounderSettings {
         manualResearch: boolean;
         scraping: false;
     };
-    integrations: Record<'meta' | 'tiktok' | 'hostinger-email' | 'cloudflare-agent', IntegrationStatus>;
+    integrations: Record<'meta' | 'tiktok' | 'hostinger-email' | 'codex-plugin', IntegrationStatus>;
+    operatingProfile: FounderOperatingProfile;
 }
 
 export interface FounderDashboardSnapshot {
@@ -146,6 +163,14 @@ export const DEFAULT_FOUNDER_SETTINGS: FounderSettings = {
         meta: 'not-connected',
         tiktok: 'not-connected',
         'hostinger-email': 'configured',
-        'cloudflare-agent': 'not-connected',
+        'codex-plugin': 'configured',
+    },
+    operatingProfile: {
+        skills: { 'founder-daily-brief': true, 'content-intelligence': true, 'content-planner': true, 'lead-discovery': true, 'outreach-drafts': true, 'social-operations': true, 'seo-operations': true, 'provider-health': true, 'approval-operator': true, 'release-operator': true },
+        approvalPolicy: 'every-external-action', leadLimit: 25,
+        targetCountries: ['US', 'JP', 'DE'], targetNiches: ['rappers', 'game developers', 'content creators'], targetPlatforms: ['instagram', 'tiktok', 'youtube', 'website'],
+        tone: 'Clear, evidence-led, and respectful.', brandVoice: 'Virzy Guns Production: practical music expertise without hype.', contentCadence: 0,
+        providerPreferences: { tiktokDelivery: 'draft-upload' }, notifications: { approvalQueue: true, providerHealth: true, dailyDigest: false }, dataRetentionDays: 365,
+        safetyLimits: { maxExternalActionsPerApproval: 1, maxLeadResearchPerRun: 25, maxEvidencePerDraft: 10 },
     },
 };

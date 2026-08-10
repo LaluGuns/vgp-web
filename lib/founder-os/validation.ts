@@ -12,6 +12,19 @@ const integrationStatusSchema = z.enum([
     'not-connected',
     'error',
 ]);
+const uniqueStringArray = (max: number) => z.array(z.string().trim().min(1).max(80)).max(max).refine(hasNoDuplicates, 'Values must not contain duplicates.');
+const operatingProfileSchema = z.object({
+    skills: z.object({ 'founder-daily-brief': z.boolean(), 'content-intelligence': z.boolean(), 'content-planner': z.boolean(), 'lead-discovery': z.boolean(), 'outreach-drafts': z.boolean(), 'social-operations': z.boolean(), 'seo-operations': z.boolean(), 'provider-health': z.boolean(), 'approval-operator': z.boolean(), 'release-operator': z.boolean() }).strict(),
+    approvalPolicy: z.literal('every-external-action'),
+    leadLimit: z.number().int().min(1).max(100),
+    targetCountries: uniqueStringArray(12), targetNiches: uniqueStringArray(20),
+    targetPlatforms: z.array(z.enum(['instagram', 'tiktok', 'youtube', 'website'])).min(1).max(4).refine(hasNoDuplicates, 'Platforms must not contain duplicates.'),
+    tone: z.string().trim().min(1).max(400), brandVoice: z.string().trim().min(1).max(800), contentCadence: z.number().int().min(0).max(90),
+    providerPreferences: z.object({ tiktokDelivery: z.enum(['draft-upload', 'direct-post']) }).strict(),
+    notifications: z.object({ approvalQueue: z.boolean(), providerHealth: z.boolean(), dailyDigest: z.boolean() }).strict(),
+    dataRetentionDays: z.number().int().min(30).max(3650),
+    safetyLimits: z.object({ maxExternalActionsPerApproval: z.literal(1), maxLeadResearchPerRun: z.number().int().min(1).max(100), maxEvidencePerDraft: z.number().int().min(1).max(20) }).strict(),
+}).strict();
 
 function hasNoDuplicates(values: readonly string[]): boolean {
     return new Set(values).size === values.length;
@@ -40,8 +53,9 @@ export const founderSettingsInputSchema = z.object({
         meta: integrationStatusSchema,
         tiktok: integrationStatusSchema,
         'hostinger-email': integrationStatusSchema,
-        'cloudflare-agent': integrationStatusSchema,
+        'codex-plugin': integrationStatusSchema,
     }).strict(),
+    operatingProfile: operatingProfileSchema,
 }).strict();
 
 export const demoBootstrapInputSchema = z.object({

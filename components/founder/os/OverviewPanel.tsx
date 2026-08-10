@@ -167,7 +167,7 @@ export function OverviewPanel({
                             <button
                                 key={agent.id}
                                 type="button"
-                                onClick={() => onNavigate('agents')}
+                                onClick={() => onNavigate('agents-skills')}
                                 className="block w-full rounded-2xl border border-white/[0.06] bg-black/20 p-4 text-left transition hover:border-violet-300/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
                             >
                                 <span className="flex items-center justify-between gap-3">

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import {
@@ -96,6 +97,10 @@ test('Founder OS defaults keep every external action founder-controlled', () => 
     assert.equal(DEFAULT_FOUNDER_SETTINGS.allowColdSocialDm, false);
     assert.equal(DEFAULT_FOUNDER_SETTINGS.allowUnverifiedContacts, false);
     assert.equal(DEFAULT_FOUNDER_SETTINGS.trendSources.scraping, false);
+    assert.equal(DEFAULT_FOUNDER_SETTINGS.operatingProfile.approvalPolicy, 'every-external-action');
+    assert.equal(DEFAULT_FOUNDER_SETTINGS.operatingProfile.safetyLimits.maxExternalActionsPerApproval, 1);
+    assert.equal(DEFAULT_FOUNDER_SETTINGS.operatingProfile.providerPreferences.tiktokDelivery, 'draft-upload');
+    assert.equal(DEFAULT_FOUNDER_SETTINGS.integrations['codex-plugin'], 'configured');
     assert.deepEqual(APPROVAL_STATUSES, [
         'DRAFT',
         'READY_FOR_APPROVAL',
@@ -105,4 +110,10 @@ test('Founder OS defaults keep every external action founder-controlled', () => 
         'FAILED',
         'UNKNOWN',
     ]);
+});
+
+test('operating profile rejects Direct Post while the server flag is disabled', async () => {
+    const source = await readFile(new URL('../../lib/founder-os/service.ts', import.meta.url), 'utf8');
+    assert.match(source, /providerPreferences\.tiktokDelivery === 'direct-post'/);
+    assert.match(source, /TIKTOK_DIRECT_POST_ENABLED !== 'true'/);
 });
