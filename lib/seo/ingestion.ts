@@ -2,11 +2,10 @@ import crypto from 'crypto';
 import { query, withTransaction } from '@/lib/db';
 import type { PoolClient } from 'pg';
 import { GSC_ROW_LIMIT, daysToBackfill, normalizePostHogFunnelRow, shouldRequestNextGscPage } from './ingestion-utils';
+import { SEO_SITE_SCOPES, type SeoSiteScope } from './site-scope';
 export { GSC_ROW_LIMIT, daysToBackfill, normalizePostHogFunnelRow, shouldRequestNextGscPage } from './ingestion-utils';
 
-const FLOW_PAGE_PREFIX = 'https://flow.virzyguns.com/';
 const GSC_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly';
-const GSC_PROPERTY = process.env.GSC_SITE_URL || 'sc-domain:virzyguns.com';
 
 type GscRow = { keys?: string[]; clicks?: number; impressions?: number; position?: number };
 type ServiceAccount = { client_email: string; private_key: string };
@@ -61,8 +60,8 @@ async function fetchWithRetry(url: string, init: RequestInit): Promise<Response>
   return lastResponse!;
 }
 
-async function queryAll(token: string, metricDate: string, dimensions: string[]): Promise<GscRow[]> {
-  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_PROPERTY)}/searchAnalytics/query`;
+async function queryAll(token: string, metricDate: string, dimensions: string[], scope: SeoSiteScope): Promise<GscRow[]> {
+  const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(scope.propertyUri)}/searchAnalytics/query`;
   const rows: GscRow[] = [];
   for (let startRow = 0; ; startRow += GSC_ROW_LIMIT) {
     const response = await fetchWithRetry(url, {
@@ -70,7 +69,7 @@ async function queryAll(token: string, metricDate: string, dimensions: string[])
       body: JSON.stringify({
         startDate: metricDate, endDate: metricDate, searchType: 'web', dimensions,
         rowLimit: GSC_ROW_LIMIT, startRow,
-        dimensionFilterGroups: [{ filters: [{ dimension: 'page', operator: 'contains', expression: FLOW_PAGE_PREFIX }] }],
+        dimensionFilterGroups: [{ filters: [{ dimension: 'page', operator: 'contains', expression: scope.pagePrefix }] }],
       }),
     });
     if (!response.ok) throw new Error(`GSC Search Analytics returned ${response.status}.`);
@@ -85,58 +84,58 @@ const n = (value: number | undefined) => Number(value) || 0;
 const weighted = (row: GscRow) => n(row.position) * n(row.impressions);
 
 type GscDay = { totals: GscRow[]; pages: GscRow[]; queryPages: GscRow[]; countries: GscRow[]; devices: GscRow[]; pageDimensions: GscRow[]; queryPageDimensions: GscRow[] };
-export async function fetchGscDay(token: string, date: string): Promise<GscDay> {
+export async function fetchGscDay(token: string, date: string, scope: SeoSiteScope): Promise<GscDay> {
   const [totals, pages, queryPages, countries, devices, pageDimensions, queryPageDimensions] = await Promise.all([
-    queryAll(token, date, []), queryAll(token, date, ['page']), queryAll(token, date, ['query', 'page']),
-    queryAll(token, date, ['country']), queryAll(token, date, ['device']), queryAll(token, date, ['page', 'country', 'device']), queryAll(token, date, ['query', 'page', 'country', 'device']),
+    queryAll(token, date, [], scope), queryAll(token, date, ['page'], scope), queryAll(token, date, ['query', 'page'], scope),
+    queryAll(token, date, ['country'], scope), queryAll(token, date, ['device'], scope), queryAll(token, date, ['page', 'country', 'device'], scope), queryAll(token, date, ['query', 'page', 'country', 'device'], scope),
   ]);
   return { totals, pages, queryPages, countries, devices, pageDimensions, queryPageDimensions };
 }
 
-async function upsertGscDay(client: PoolClient, date: string, data: GscDay): Promise<number> {
+async function upsertGscDay(client: PoolClient, date: string, scope: SeoSiteScope, data: GscDay): Promise<number> {
   const { totals, pages, queryPages, countries, devices, pageDimensions, queryPageDimensions } = data;
   let written = 0;
   const insert = async (sql: string, values: unknown[]) => { await client.query(sql, values); written++; };
   for (const row of totals) await insert(
-    `INSERT INTO seo_gsc_site_daily (metric_date, dimension_kind, dimension_value, clicks, impressions, position_weighted)
-     VALUES ($1, 'all', '', $2, $3, $4) ON CONFLICT (metric_date, search_type, dimension_kind, dimension_value)
+    `INSERT INTO seo_gsc_site_daily (site_scope, metric_date, dimension_kind, dimension_value, clicks, impressions, position_weighted)
+     VALUES ($1, $2, 'all', '', $3, $4, $5) ON CONFLICT (site_scope, metric_date, search_type, dimension_kind, dimension_value)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, n(row.clicks), n(row.impressions), weighted(row)]);
   for (const [kind, rows] of [['country', countries], ['device', devices]] as const) for (const row of rows) await insert(
-    `INSERT INTO seo_gsc_site_daily (metric_date, dimension_kind, dimension_value, clicks, impressions, position_weighted)
-     VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (metric_date, search_type, dimension_kind, dimension_value)
+    `INSERT INTO seo_gsc_site_daily (site_scope, metric_date, dimension_kind, dimension_value, clicks, impressions, position_weighted)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (site_scope, metric_date, search_type, dimension_kind, dimension_value)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, kind, row.keys?.[0] || '', n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, kind, row.keys?.[0] || '', n(row.clicks), n(row.impressions), weighted(row)]);
   for (const row of pages) await insert(
-    `INSERT INTO seo_gsc_page_daily (metric_date, page_url, clicks, impressions, position_weighted)
-     VALUES ($1, $2, $3, $4, $5) ON CONFLICT (metric_date, search_type, page_url)
+    `INSERT INTO seo_gsc_page_daily (site_scope, metric_date, page_url, clicks, impressions, position_weighted)
+     VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (site_scope, metric_date, search_type, page_url)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, row.keys?.[0] || '', n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, row.keys?.[0] || '', n(row.clicks), n(row.impressions), weighted(row)]);
   for (const row of queryPages) await insert(
-    `INSERT INTO seo_gsc_query_page_daily (metric_date, query, page_url, clicks, impressions, position_weighted)
-     VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (metric_date, search_type, query, page_url)
+    `INSERT INTO seo_gsc_query_page_daily (site_scope, metric_date, query, page_url, clicks, impressions, position_weighted)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (site_scope, metric_date, search_type, query, page_url)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, row.keys?.[0] || '', row.keys?.[1] || '', n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, row.keys?.[0] || '', row.keys?.[1] || '', n(row.clicks), n(row.impressions), weighted(row)]);
   for (const row of pageDimensions) await insert(
-    `INSERT INTO seo_gsc_page_dimension_daily (metric_date, page_url, country, device, clicks, impressions, position_weighted)
-     VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (metric_date, search_type, page_url, country, device)
+    `INSERT INTO seo_gsc_page_dimension_daily (site_scope, metric_date, page_url, country, device, clicks, impressions, position_weighted)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (site_scope, metric_date, search_type, page_url, country, device)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, row.keys?.[0] || '', row.keys?.[1] || '', row.keys?.[2] || '', n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, row.keys?.[0] || '', row.keys?.[1] || '', row.keys?.[2] || '', n(row.clicks), n(row.impressions), weighted(row)]);
   for (const row of queryPageDimensions) await insert(
-    `INSERT INTO seo_gsc_query_page_dimension_daily (metric_date, query, page_url, country, device, clicks, impressions, position_weighted)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (metric_date, search_type, query, page_url, country, device)
+    `INSERT INTO seo_gsc_query_page_dimension_daily (site_scope, metric_date, query, page_url, country, device, clicks, impressions, position_weighted)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (site_scope, metric_date, search_type, query, page_url, country, device)
      DO UPDATE SET clicks=EXCLUDED.clicks, impressions=EXCLUDED.impressions, position_weighted=EXCLUDED.position_weighted, updated_at=now()`,
-    [date, row.keys?.[0] || '', row.keys?.[1] || '', row.keys?.[2] || '', row.keys?.[3] || '', n(row.clicks), n(row.impressions), weighted(row)]);
+    [scope.key, date, row.keys?.[0] || '', row.keys?.[1] || '', row.keys?.[2] || '', row.keys?.[3] || '', n(row.clicks), n(row.impressions), weighted(row)]);
   return written;
 }
-
-type PostHogFunnelRow = { dimensions: [string, string, string, string, string]; metrics: number[] };
+type PostHogFunnelRow = { dimensions: [string, string, string, string, string, string]; metrics: number[] };
 
 async function fetchPostHogFunnelDay(date: string): Promise<{ result: IngestionResult; rows: PostHogFunnelRow[] }> {
   if (!process.env.POSTHOG_PERSONAL_API_KEY) return { result: { status: 'not_configured', rowsWritten: 0 }, rows: [] };
   const projectId = process.env.POSTHOG_PROJECT_ID || '511095';
   const host = (process.env.POSTHOG_QUERY_HOST || 'https://us.posthog.com').replace(/\/$/, '');
   const queryText = `SELECT
+    coalesce(nullIf(toString(properties.site_scope), ''), 'flow') AS site_scope,
     coalesce(nullIf(toString(properties.market), ''), 'unknown') AS market,
     coalesce(nullIf(toString(properties.locale), ''), 'unknown') AS locale,
     coalesce(nullIf(toString(properties.$geoip_country_code), ''), '') AS country,
@@ -150,7 +149,7 @@ async function fetchPostHogFunnelDay(date: string): Promise<{ result: IngestionR
     uniqIf(distinct_id, event = 'creator_license_granted' AND properties.session_acquisition = 'organic') AS creator_grants,
     uniqIf(distinct_id, event = 'creator_track_downloaded' AND properties.session_acquisition = 'organic') AS downloads
     FROM events WHERE timestamp >= toDateTime('${date} 00:00:00') AND timestamp < toDateTime('${date} 00:00:00') + INTERVAL 1 DAY
-    GROUP BY market, locale, country, device, cluster`;
+    GROUP BY site_scope, market, locale, country, device, cluster`;
   try {
     const response = await fetch(`${host}/api/projects/${projectId}/query/`, { method: 'POST', headers: { Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ query: { kind: 'HogQLQuery', query: queryText } }), signal: AbortSignal.timeout(15_000) });
     if (!response.ok) throw new Error(`PostHog Query API returned ${response.status}.`);
@@ -163,9 +162,9 @@ async function fetchPostHogFunnelDay(date: string): Promise<{ result: IngestionR
 async function upsertPostHogFunnelDay(client: PoolClient, date: string, rows: PostHogFunnelRow[]): Promise<number> {
   let rowsWritten = 0;
   for (const row of rows) {
-      await client.query(`INSERT INTO seo_funnel_daily (metric_date, market, locale, country, device, cluster, organic_visitors, focus_sessions, creator_previews, checkouts, activated_pro, creator_grants, downloads)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) ON CONFLICT (metric_date, market, locale, country, device, cluster)
-        DO UPDATE SET organic_visitors=EXCLUDED.organic_visitors, focus_sessions=EXCLUDED.focus_sessions, creator_previews=EXCLUDED.creator_previews, checkouts=EXCLUDED.checkouts, activated_pro=EXCLUDED.activated_pro, creator_grants=EXCLUDED.creator_grants, downloads=EXCLUDED.downloads, updated_at=now()`, [date, ...row.dimensions, ...row.metrics]);
+      await client.query(`INSERT INTO seo_funnel_daily (site_scope, metric_date, market, locale, country, device, cluster, organic_visitors, focus_sessions, creator_previews, checkouts, activated_pro, creator_grants, downloads)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) ON CONFLICT (site_scope, metric_date, market, locale, country, device, cluster)
+        DO UPDATE SET organic_visitors=EXCLUDED.organic_visitors, focus_sessions=EXCLUDED.focus_sessions, creator_previews=EXCLUDED.creator_previews, checkouts=EXCLUDED.checkouts, activated_pro=EXCLUDED.activated_pro, creator_grants=EXCLUDED.creator_grants, downloads=EXCLUDED.downloads, updated_at=now()`, [...row.dimensions.slice(0, 1), date, ...row.dimensions.slice(1), ...row.metrics]);
       rowsWritten++;
   }
   return rowsWritten;
@@ -185,14 +184,16 @@ export async function runSeoIngestion(): Promise<{ skipped?: boolean; gsc: Inges
   let posthog: IngestionResult = { status: 'not_configured', rowsWritten: 0 };
   let rowsWritten = 0;
   try {
-    await query(`INSERT INTO seo_ingestion_runs (id, status, gsc_status, posthog_status) VALUES ($1, 'running', 'not_configured', 'not_configured')`, [runId]);
+    await query(`INSERT INTO seo_ingestion_runs (id, status, site_scope, property_uri, gsc_status, posthog_status) VALUES ($1, 'running', 'all', $2, 'not_configured', 'not_configured')`, [runId, SEO_SITE_SCOPES.map((scope) => scope.propertyUri).join(',')]);
     try {
       const account = parseServiceAccount();
       if (account) {
         const token = await getAccessToken(account);
-        for (const date of daysToBackfill()) {
-          const data = await fetchGscDay(token, date); // no database transaction/connection during HTTP fetch
-          gsc.rowsWritten += await withTransaction((client) => upsertGscDay(client, date, data));
+        for (const scope of SEO_SITE_SCOPES) {
+          for (const date of daysToBackfill()) {
+            const data = await fetchGscDay(token, date, scope); // no database transaction/connection during HTTP fetch
+            gsc.rowsWritten += await withTransaction((client) => upsertGscDay(client, date, scope, data));
+          }
         }
         gsc.status = 'connected';
       }

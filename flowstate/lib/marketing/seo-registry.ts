@@ -1,4 +1,4 @@
-/**
+﻿/**
  * The public SEO release registry.
  *
  * A rendered route is not automatically a search release. This manifest is
@@ -41,6 +41,8 @@ export type SeoPage = {
   changeFrequency: "weekly" | "monthly" | "yearly";
   priority: number;
   lastModified: string;
+  /** Optional release matrix for pilots that are intentionally English-only. */
+  releaseLocales?: readonly SeoRouteLocale[];
 };
 
 export type SeoReleaseDecision = {
@@ -123,6 +125,8 @@ export const SEO_PAGES: readonly SeoPage[] = [
   { path: "deep-work-timer", cluster: "deep-work", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
   { path: "study-timer", cluster: "study", changeFrequency: "monthly", priority: 0.8, lastModified: "2026-07-22" },
   { path: "pomodoro-timer-with-music", cluster: "music", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-22" },
+  { path: "work-music", cluster: "music", changeFrequency: "monthly", priority: 0.85, lastModified: "2026-08-09", releaseLocales: ["en"] },
+  { path: "coding-music", cluster: "music", changeFrequency: "monthly", priority: 0.85, lastModified: "2026-08-09", releaseLocales: ["en"] },
   { path: "timer/25-5", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-22" },
   { path: "timer/50-10", cluster: "timer", changeFrequency: "monthly", priority: 0.7, lastModified: "2026-07-22" },
   { path: "creator-music", cluster: "creator", changeFrequency: "monthly", priority: 0.9, lastModified: "2026-07-22" },
@@ -208,6 +212,10 @@ function decisionForPage(
   market: SeoMarketCode,
   promotions: SeoReleasePromotions
 ): SeoReleaseDecision {
+  const marketLocale = MARKET_BY_LOCALE[market].locale;
+  if (page.releaseLocales && !page.releaseLocales.includes(marketLocale)) {
+    return decision("draft", "Pilot is intentionally released in English only until localized copy is reviewed.");
+  }
   const promotion = promotions[market]?.[page.path];
   if (promotion) return reviewGatedPromotion(page, promotion);
   if (market === "global-en") {
@@ -233,7 +241,7 @@ function decisionForPage(
 }
 
 /**
- * Explicit page × market review manifest. The status is never inferred from a
+ * Explicit page Ã— market review manifest. The status is never inferred from a
  * route or dictionary fallback: this is the only promotion switch that feeds
  * canonical clusters and the sitemap.
  */

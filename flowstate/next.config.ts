@@ -55,7 +55,7 @@ function buildCsp(): string {
     "font-src 'self' data:",
     `media-src ${media}`,
     `connect-src ${connect}`,
-    "frame-src 'self' https://*.lemonsqueezy.com",
+    "frame-src 'self' https://*.lemonsqueezy.com https://www.youtube.com https://www.youtube-nocookie.com",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
     !isDev ? "upgrade-insecure-requests" : "",

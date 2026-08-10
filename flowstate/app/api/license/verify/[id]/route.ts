@@ -41,7 +41,7 @@ export async function GET(
     // 1. First check if id matches a Certificate Record
     const { data: cert } = await service
       .from("flowstate_creator_license_certificates")
-      .select("id, grant_id, track_id, track_title, track_artist, track_genre, terms_version, catalog_version, issued_at, revoked_at")
+      .select("id, grant_id, track_id, track_title, track_artist, recording_artist, display_credit, label_licensor, external_title, isrc, track_genre, terms_version, catalog_version, issued_at, revoked_at")
       .eq("id", id)
       .maybeSingle();
 
@@ -55,6 +55,11 @@ export async function GET(
         trackId: cert.track_id,
         trackTitle: cert.track_title,
         trackArtist: cert.track_artist,
+        recordingArtist: cert.recording_artist,
+        displayCredit: cert.display_credit,
+        labelLicensor: cert.label_licensor,
+        externalTitle: cert.external_title,
+        isrc: cert.isrc,
         trackGenre: cert.track_genre,
         termsVersion: cert.terms_version,
         catalogVersion: cert.catalog_version,

@@ -4,7 +4,7 @@ import {
   sitemapCandidates,
 } from "../../lib/marketing/seo-registry.ts";
 
-const EXPECTED_INDEXABLE_URLS = 160;
+const EXPECTED_INDEXABLE_URLS = 162;
 const DEFAULT_CONCURRENCY = 8;
 const DEFAULT_TIMEOUT_MS = 20_000;
 const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);

@@ -7,6 +7,8 @@ import {
   type CreatorGenre,
 } from "@/lib/creator-license/policy";
 import { CREATOR_RIGHTS_VERIFIED_AT } from "@/lib/creator-license/contract-v1";
+import type { ExternalCatalogIdentity } from "@/lib/catalog/external-identities";
+import { externalIdentityForTrack } from "@/lib/catalog/external-identities";
 
 type RawCatalogEntry = {
   id: string;
@@ -26,6 +28,12 @@ export type CreatorTrack = RawCatalogEntry & {
   /** Date of the signed rights-owner attestation for this catalog snapshot. */
   rightsVerifiedAt: string;
   rightsVersion: string;
+  displayCredit: "Virzy Guns Production";
+  recordingArtist: "Chill Music Division";
+  labelLicensor: "Virzy Guns Production";
+  externalTitle: string | null;
+  isrc: string | null;
+  externalIdentity: ExternalCatalogIdentity;
   spotifyUrl: string | null;
   releaseLabel: string;
   creatorDownloadAsset: string;
@@ -38,17 +46,26 @@ export type CreatorTrack = RawCatalogEntry & {
  */
 export const CREATOR_TRACKS: CreatorTrack[] = (rawCatalog as RawCatalogEntry[])
   .filter((entry) => isCreatorGenre(entry.genre))
-  .map((entry) => ({
-    ...entry,
-    creatorLicenseEligible: true,
-    creatorGenre: entry.genre as CreatorGenre,
-    rightsVerifiedAt: CREATOR_RIGHTS_VERIFIED_AT,
-    rightsVersion: CREATOR_RIGHTS_VERSION,
-    spotifyUrl: null,
-    releaseLabel: CREATOR_RELEASE_LABEL,
-    creatorDownloadAsset: entry.hlsUrl,
-    creatorDownloadFilename: safeCreatorDownloadFilename(entry.title, entry.id),
-  }));
+  .map((entry) => {
+    const identity = externalIdentityForTrack(entry);
+    return {
+      ...entry,
+      creatorLicenseEligible: true,
+      creatorGenre: entry.genre as CreatorGenre,
+      rightsVerifiedAt: CREATOR_RIGHTS_VERIFIED_AT,
+      rightsVersion: CREATOR_RIGHTS_VERSION,
+      spotifyUrl: identity.spotifyUrl,
+      releaseLabel: CREATOR_RELEASE_LABEL,
+      displayCredit: identity.displayCredit,
+      externalIdentity: identity,
+      recordingArtist: identity.recordingArtist ?? "Chill Music Division",
+      labelLicensor: identity.label,
+      externalTitle: identity.dspTitle,
+      isrc: identity.isrc,
+      creatorDownloadAsset: entry.hlsUrl,
+      creatorDownloadFilename: safeCreatorDownloadFilename(entry.title, entry.id),
+    };
+  });
 
 export const CREATOR_TRACK_BY_ID = new Map(
   CREATOR_TRACKS.map((track) => [track.id, track] as const)

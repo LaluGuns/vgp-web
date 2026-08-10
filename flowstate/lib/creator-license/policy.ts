@@ -7,7 +7,8 @@ export const CREATOR_GENRES = [
 export type CreatorGenre = (typeof CREATOR_GENRES)[number];
 
 export const CREATOR_TERMS_VERSION = "creator-license-2026-07-21";
-export const CREATOR_CATALOG_VERSION = "creator-catalog-2026-07-19";
+export const CREATOR_CATALOG_VERSION_V1 = "creator-catalog-2026-07-19";
+export const CREATOR_CATALOG_VERSION = "creator-catalog-2026-08-09-v2";
 export const CREATOR_RIGHTS_VERSION = "creator-rights-v1";
 export const CREATOR_RELEASE_LABEL =
   "Chill Music Division / Virzy Guns Production";

@@ -5,6 +5,7 @@ import { AppFrame } from '@/components/AppFrame';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import { headers } from 'next/headers';
 import { founderSchema, organizationSchema, websiteSchema } from '@/lib/seo/structured-data';
+import { OrganicDiscoveryAnalytics } from '@/components/analytics/OrganicDiscoveryAnalytics';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -133,6 +134,7 @@ export default async function RootLayout({
             </head>
             <body className="bg-background text-white antialiased">
                 <div className="wave-physics-bg" aria-hidden="true" />
+                <OrganicDiscoveryAnalytics />
 
                 <NewsletterProvider>
                         <SmoothScrollProvider>

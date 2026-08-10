@@ -72,6 +72,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
 
   useEffect(() => {
     track("creator_genre_viewed", { genre: genre ?? "all", locale, track_count: tracks.length });
+    track("collection_selected", { intent: "creator music collection", destination_type: "creator_collection", source_position: "collection_view" });
   }, [genre, locale, tracks.length]);
 
   useEffect(() => () => {
@@ -124,6 +125,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
       if (requestId !== requestRef.current) return;
       setPlaying(true);
       track("creator_track_previewed", { track_id: item.id, genre: item.genre, locale });
+      track("music_preview_started", { track_id: item.id, genre: item.genre, destination_type: "music_preview", source_position: "catalog" });
     } catch {
       if (requestId === requestRef.current) {
         setActiveTrackId(null);
@@ -198,7 +200,7 @@ export function CreatorCatalog({ tracks, locale, genre, title }: Props) {
           href={SPOTIFY_ARTIST_URL}
           target="_blank"
           rel="noreferrer"
-          onClick={() => track("spotify_catalog_clicked", { genre: genre ?? "all", locale })}
+          onClick={() => { track("spotify_catalog_clicked", { genre: genre ?? "all", locale }); track("outbound_clicked", { destination_type: "spotify", source_position: "creator_catalog" }); }}
           className="inline-flex items-center gap-2 self-start rounded-xl border border-white/10 px-4 py-2 text-xs font-semibold text-white/75 transition-colors hover:border-[#1db954]/50 hover:text-white"
         >
           {regional?.listenSpotify ?? "Listen on Spotify"} <ExternalLink className="h-3.5 w-3.5" />

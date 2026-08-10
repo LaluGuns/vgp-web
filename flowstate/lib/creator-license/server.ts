@@ -1,5 +1,6 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import {
+  CREATOR_CATALOG_VERSION_V1,
   CREATOR_CATALOG_VERSION,
   CREATOR_GENRES,
   CREATOR_RELEASE_LABEL,
@@ -118,7 +119,7 @@ export async function findCurrentGrant(userId: string) {
     )
     .eq("user_id", userId)
     .eq("terms_version", CREATOR_TERMS_VERSION)
-    .eq("catalog_version", CREATOR_CATALOG_VERSION)
+    .in("catalog_version", [CREATOR_CATALOG_VERSION, CREATOR_CATALOG_VERSION_V1])
     .is("revoked_at", null)
     .order("granted_at", { ascending: false })
     .limit(1)
@@ -144,6 +145,11 @@ export function grantInsertPayload(
     terms_document_version: spec.documentVersion,
     terms_document_sha256: spec.documentSha256,
     catalog_version: acceptance.catalogVersion,
+    recording_artist: "Chill Music Division",
+    display_credit: "Virzy Guns Production",
+    label_licensor: "Virzy Guns Production",
+    external_title: null,
+    isrc: null,
     eligible_genres: [...CREATOR_GENRES],
     plan_snapshot: {
       plan: entitlement.plan,
@@ -158,6 +164,11 @@ export function grantInsertPayload(
 export type CreatorCertificateRow = {
   id: string;
   grant_id: string;
+  recording_artist: string | null;
+  display_credit: string | null;
+  label_licensor: string | null;
+  external_title: string | null;
+  isrc: string | null;
   user_id: string | null;
   track_id: string;
   track_title: string;
@@ -243,6 +254,11 @@ export async function getOrCreateCertificate(
     track_id: track.id,
     track_title: track.title,
     track_artist: track.artist,
+    recording_artist: track.recordingArtist ?? null,
+    display_credit: track.displayCredit ?? "Virzy Guns Production",
+    label_licensor: track.externalIdentity?.label ?? "Virzy Guns Production",
+    external_title: track.externalIdentity?.dspTitle ?? null,
+    isrc: track.externalIdentity?.isrc ?? null,
     track_genre: track.genre,
     catalog_version: grant.catalog_version,
     terms_version: grant.terms_version,
