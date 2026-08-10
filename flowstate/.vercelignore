@@ -1,3 +1,7 @@
+# Flow project-level deployment boundary.
+# This file takes precedence over the repository-root .vercelignore when the
+# Vercel project root is `flowstate`.
+
 # Audio masters never ship to Vercel — they stream from R2 via the
 # flowstate-audio-delivery worker (see docs/ADR-001). catalog.json stays.
 public/tracks/**/*.mp3
@@ -13,3 +17,23 @@ scripts/*.log
 docs
 output
 scripts/legal
+
+# Legal evidence and private execution output outside the standard Flow paths
+/legal-intake/
+**/legal-intake/
+/output/legal-private/
+**/output/legal-private/
+/signatures/
+**/signatures/
+**/*signature*
+
+# Local worktrees, scratch material, and build output
+/.codex-worktrees/
+/release-clones/
+/worktrees/
+/scratch/
+/.playwright-cli/
+node_modules/
+.next/
+**/.wrangler/
+*.local
