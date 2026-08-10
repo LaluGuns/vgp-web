@@ -21,6 +21,73 @@ import {
     Surface,
 } from './FounderOsPrimitives';
 
+interface ApprovalContentReview {
+    approval: ApprovalAction;
+    prospectId: string | null;
+    payload: Record<string, unknown>;
+    isDemo: boolean;
+}
+
+function formatPayloadValue(value: unknown): string {
+    if (typeof value === 'string') return value;
+    if (value === null) return 'null';
+    if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+    return JSON.stringify(value, null, 2);
+}
+
+function ExactPayloadReview({ detail }: { detail: ApprovalContentReview }) {
+    const entries = Object.entries(detail.payload);
+    return (
+        <Surface className="p-5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold">Exact database payload</p>
+                <span className="rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-100">
+                    Hash verified
+                </span>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-white/40">
+                This is the immutable revision the executor will claim. It is visible only to the
+                authenticated founder and is never returned by the Codex Bridge.
+            </p>
+            <dl className="mt-4 space-y-3">
+                {entries.map(([key, value]) => (
+                    <div key={key} className="rounded-xl border border-white/[0.06] bg-black/25 p-3">
+                        <dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35">
+                            {key.replaceAll('_', ' ')}
+                        </dt>
+                        <dd className="mt-2 whitespace-pre-wrap break-words font-mono text-xs leading-5 text-white/70">
+                            {formatPayloadValue(value)}
+                        </dd>
+                    </div>
+                ))}
+                {entries.length === 0 ? (
+                    <div className="rounded-xl border border-amber-300/15 bg-amber-300/[0.04] p-3 text-xs text-amber-100">
+                        Empty payload. Do not approve or execute this revision.
+                    </div>
+                ) : null}
+            </dl>
+            <dl className="mt-4 grid gap-3 text-xs sm:grid-cols-2">
+                <div>
+                    <dt className="text-white/35">Data source</dt>
+                    <dd className="mt-1 text-white/65">Founder OS private approval ledger</dd>
+                </div>
+                <div>
+                    <dt className="text-white/35">Linked prospect</dt>
+                    <dd className="mt-1 break-all text-white/65">{detail.prospectId ?? 'Not linked'}</dd>
+                </div>
+                <div>
+                    <dt className="text-white/35">Confidence</dt>
+                    <dd className="mt-1 text-white/65">Exact content-hash match, not an inferred summary</dd>
+                </div>
+                <div>
+                    <dt className="text-white/35">Recommended action</dt>
+                    <dd className="mt-1 text-white/65">Review every field before changing lifecycle state.</dd>
+                </div>
+            </dl>
+        </Surface>
+    );
+}
+
 function actionIcon(action: ApprovalAction) {
     if (action.actionType === 'outreach-send') {
         return <Mail className="h-4 w-4" aria-hidden="true" />;
@@ -56,6 +123,13 @@ function ApprovalReviewDialog({
         status: 'idle' | 'executing' | 'error';
         message: string | null;
     }>({ status: 'idle', message: null });
+    const [contentReview, setContentReview] = useState<{
+        status: 'idle' | 'loading' | 'ready' | 'error';
+        detail: ApprovalContentReview | null;
+        message: string | null;
+    }>(() => live
+        ? { status: 'loading', detail: null, message: null }
+        : { status: 'idle', detail: null, message: null });
 
     useEffect(() => {
         const dialog = dialogRef.current;
@@ -66,13 +140,62 @@ function ApprovalReviewDialog({
         };
     }, []);
 
+    useEffect(() => {
+        if (!live) return;
+        const controller = new AbortController();
+        void fetch(
+            `/api/founder/os/approvals/${encodeURIComponent(approval.id)}/content`,
+            { cache: 'no-store', signal: controller.signal },
+        )
+            .then(async (response) => {
+                const result = (await response.json().catch(() => null)) as {
+                    success?: boolean;
+                    approval?: ApprovalAction;
+                    prospectId?: string | null;
+                    payload?: Record<string, unknown>;
+                    isDemo?: boolean;
+                    error?: string;
+                } | null;
+                if (!response.ok || !result?.success || !result.approval || !result.payload) {
+                    throw new Error(result?.error || 'Exact approval payload could not be loaded.');
+                }
+                if (result.approval.contentHash !== approval.contentHash) {
+                    throw new Error('This approval changed after the list loaded. Close and refresh before review.');
+                }
+                setContentReview({
+                    status: 'ready',
+                    detail: {
+                        approval: result.approval,
+                        prospectId: result.prospectId ?? null,
+                        payload: result.payload,
+                        isDemo: result.isDemo ?? false,
+                    },
+                    message: null,
+                });
+            })
+            .catch((error: unknown) => {
+                if (controller.signal.aborted) return;
+                setContentReview({
+                    status: 'error',
+                    detail: null,
+                    message: error instanceof Error ? error.message : 'Exact approval payload could not be loaded.',
+                });
+            });
+        return () => controller.abort();
+    }, [approval.contentHash, approval.id, live]);
+
+    const exactPayloadVerified =
+        contentReview.status === 'ready'
+        && contentReview.detail?.approval.contentHash === approval.contentHash
+        && Object.keys(contentReview.detail.payload).length > 0;
+
     const transitionExactRevision = async (
         targetStatus: 'READY_FOR_APPROVAL' | 'APPROVED',
     ) => {
         const allowed =
             (approval.status === 'DRAFT' && targetStatus === 'READY_FOR_APPROVAL') ||
             (approval.status === 'READY_FOR_APPROVAL' && targetStatus === 'APPROVED');
-        if (!live || !allowed) return;
+        if (!live || !allowed || !exactPayloadVerified) return;
 
         setTransitionState({ status: 'saving', target: targetStatus, message: null });
         try {
@@ -117,7 +240,7 @@ function ApprovalReviewDialog({
     };
 
     const executeExactRevision = async () => {
-        if (!live || approval.status !== 'APPROVED') return;
+        if (!live || approval.status !== 'APPROVED' || !exactPayloadVerified) return;
 
         const isEmail =
             approval.actionType === 'outreach-send' && approval.channel === 'email';
@@ -256,6 +379,19 @@ function ApprovalReviewDialog({
                     </div>
                 </Surface>
 
+                {live ? (
+                    contentReview.status === 'ready' && contentReview.detail ? (
+                        <ExactPayloadReview detail={contentReview.detail} />
+                    ) : (
+                        <SafetyNotice title="Exact payload review required" tone="warning">
+                            {contentReview.status === 'loading'
+                                ? 'Loading the private approval payload and verifying its content hash.'
+                                : contentReview.message
+                                    ?? 'The exact payload is unavailable. Close this review and retry; approval and execution stay disabled.'}
+                        </SafetyNotice>
+                    )
+                ) : null}
+
                 <Surface className="p-5">
                     <p className="text-sm font-semibold">Execution checklist</p>
                     <ul className="mt-4 space-y-3">
@@ -344,7 +480,7 @@ function ApprovalReviewDialog({
                         {approval.status === 'DRAFT' ? (
                             <button
                                 type="button"
-                                disabled={!live || transitionState.status === 'saving'}
+                            disabled={!live || !exactPayloadVerified || transitionState.status === 'saving'}
                                 onClick={() => void transitionExactRevision('READY_FOR_APPROVAL')}
                                 className="min-h-11 rounded-xl border border-amber-300/20 bg-amber-300/[0.08] px-4 text-sm font-medium text-amber-100 transition hover:bg-amber-300/[0.13] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 disabled:cursor-not-allowed disabled:opacity-30"
                             >
@@ -358,6 +494,7 @@ function ApprovalReviewDialog({
                                 type="button"
                                 disabled={
                                     !live
+                                    || !exactPayloadVerified
                                     || approval.status !== 'READY_FOR_APPROVAL'
                                     || transitionState.status === 'saving'
                                 }
@@ -372,7 +509,7 @@ function ApprovalReviewDialog({
                         ) : approval.status === 'APPROVED' && hasExplicitExecutor ? (
                             <button
                                 type="button"
-                                disabled={!live || executionState.status === 'executing'}
+                                disabled={!live || !exactPayloadVerified || executionState.status === 'executing'}
                                 onClick={() => void executeExactRevision()}
                                 className="min-h-11 rounded-xl border border-rose-300/25 bg-rose-300/[0.09] px-4 text-sm font-medium text-rose-100 transition hover:bg-rose-300/[0.15] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 disabled:cursor-not-allowed disabled:opacity-30"
                             >
@@ -403,11 +540,18 @@ function ApprovalReviewDialog({
 export function ApprovalsPanel({
     approvals,
     live,
+    filter,
 }: {
     approvals: ApprovalAction[];
     live: boolean;
+    filter?: 'drafts' | 'queue';
 }) {
     const [approvalRows, setApprovalRows] = useState(approvals);
+    const visibleRows = filter === 'drafts'
+        ? approvalRows.filter((approval) => approval.status === 'DRAFT')
+        : filter === 'queue'
+            ? approvalRows.filter((approval) => approval.status === 'READY_FOR_APPROVAL')
+            : approvalRows;
     const [selectedApproval, setSelectedApproval] = useState<ApprovalAction | null>(null);
     const readyCount = approvalRows.filter(
         (approval) => approval.status === 'READY_FOR_APPROVAL',
@@ -424,9 +568,9 @@ export function ApprovalsPanel({
     return (
         <div className="space-y-6">
             <SectionHeading
-                eyebrow="Human execution boundary"
-                title="Review the exact revision before anything leaves VGP."
-                description="Approval is bound to the target, content hash, links, channel, and offer. Editing any one of them requires a fresh review."
+                eyebrow={filter === 'drafts' ? 'Draft workspace' : 'Human execution boundary'}
+                title={filter === 'drafts' ? 'Drafts are visible, but not executable.' : filter === 'queue' ? 'Only exact revisions enter the approval queue.' : 'Review the exact revision before anything leaves VGP.'}
+                description={filter === 'drafts' ? 'A draft has no authority to send, reply, or publish. Stage a specific revision before founder review.' : 'Approval is bound to the target, content hash, links, channel, and offer. Editing any one of them requires a fresh review.'}
                 action={
                     <span className="inline-flex items-center gap-2 rounded-full border border-amber-300/15 bg-amber-300/[0.06] px-3 py-2 text-xs text-amber-100">
                         <CircleAlert className="h-4 w-4" aria-hidden="true" />
@@ -459,13 +603,13 @@ export function ApprovalsPanel({
 
             <Surface className="overflow-hidden">
                 <div className="border-b border-white/[0.07] px-5 py-4">
-                    <p className="text-sm font-semibold">Approval queue</p>
+                    <p className="text-sm font-semibold">{filter === 'drafts' ? 'Draft inventory' : filter === 'queue' ? 'Approval queue' : 'Approval history'}</p>
                     <p className="mt-1 text-xs text-white/35">
                         Every item is reviewed independently; a sequence never grants future-step approval.
                     </p>
                 </div>
                 <div className="divide-y divide-white/[0.06]">
-                    {approvalRows.map((approval) => (
+                    {visibleRows.map((approval) => (
                         <article
                             key={approval.id}
                             className="grid gap-4 px-5 py-5 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center"
@@ -495,6 +639,9 @@ export function ApprovalsPanel({
                             </button>
                         </article>
                     ))}
+                    {visibleRows.length === 0 ? (
+                        <p className="px-5 py-8 text-sm text-white/40">No records match this operational view. This is not evidence that an action has executed.</p>
+                    ) : null}
                 </div>
             </Surface>
 

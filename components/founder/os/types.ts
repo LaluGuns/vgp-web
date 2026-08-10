@@ -1,7 +1,12 @@
 export type FounderOsSection =
     | 'overview'
+    | 'agents-skills'
+    | 'content-intelligence'
     | 'prospects'
+    | 'content-calendar'
+    | 'drafts'
     | 'approvals'
-    | 'agents'
-    | 'intelligence'
+    | 'providers'
+    | 'analytics'
+    | 'audit-log'
     | 'settings';

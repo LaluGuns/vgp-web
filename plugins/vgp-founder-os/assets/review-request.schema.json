@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.virzyguns.com/schemas/founder-os/review-request.schema.json",
+  "title": "Founder OS review request",
+  "description": "Requests founder review of an exact DRAFT revision. It does not grant approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requestKey", "approvalId", "expectedContentHash"],
+  "properties": {
+    "requestKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,119}$"
+    },
+    "approvalId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$"
+    },
+    "expectedContentHash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import type {
     FounderMarket,
+    FounderOperatingProfile,
     FounderSettings,
 } from '@/lib/founder-os/contracts';
 import {
@@ -37,7 +38,7 @@ const MARKET_OPTIONS: Array<{
 ];
 
 const EXECUTION_INTEGRATIONS: Array<{
-    id: 'hostinger-email' | 'cloudflare-agent';
+    id: 'hostinger-email' | 'codex-plugin';
     label: string;
     icon: typeof Cloud;
     description: string;
@@ -49,10 +50,10 @@ const EXECUTION_INTEGRATIONS: Array<{
         description: 'Configured transport; execution remains behind approval and suppression checks.',
     },
     {
-        id: 'cloudflare-agent',
-        label: 'Cloudflare Agent',
+        id: 'codex-plugin',
+        label: 'Codex plugin',
         icon: Cloud,
-        description: 'Bounded analysis and draft orchestration. No provider write credentials.',
+        description: 'Configured plugin preference only. It is never treated as a connected provider by inference.',
     },
 ];
 
@@ -114,6 +115,7 @@ export function SettingsPanel({
     const [manualResearch, setManualResearch] = useState(
         initialSettings.trendSources.manualResearch,
     );
+    const [operatingProfile, setOperatingProfile] = useState<FounderOperatingProfile>(initialSettings.operatingProfile);
     const [stagedAt, setStagedAt] = useState<string | null>(null);
     const [saveState, setSaveState] = useState<
         { status: 'idle' | 'saving' | 'saved' | 'error'; message: string | null }
@@ -125,10 +127,12 @@ export function SettingsPanel({
         ownedAnalytics,
         officialApis,
         manualResearch,
+        operatingProfile,
     }), [
         manualResearch,
         markets,
         officialApis,
+        operatingProfile,
         ownedAnalytics,
         scoreThreshold,
     ]);
@@ -138,6 +142,7 @@ export function SettingsPanel({
         ownedAnalytics: initialSettings.trendSources.ownedAnalytics,
         officialApis: initialSettings.trendSources.officialPlatformApis,
         manualResearch: initialSettings.trendSources.manualResearch,
+        operatingProfile: initialSettings.operatingProfile,
     }));
     const hasChanges = useMemo(() => {
         return currentSignature !== savedSignature;
@@ -187,6 +192,7 @@ export function SettingsPanel({
                         manualResearch,
                         scraping: false,
                     },
+                    operatingProfile,
                 }),
             });
             const result = (await response.json()) as {
@@ -310,6 +316,20 @@ export function SettingsPanel({
 
                     <Surface className="p-5 sm:p-6">
                         <div className="flex items-center gap-2">
+                            <SlidersHorizontal className="h-4 w-4 text-violet-200" aria-hidden="true" />
+                            <h3 className="text-sm font-semibold">Operating profile</h3>
+                        </div>
+                        <p className="mt-2 text-xs leading-5 text-white/40">Preferences persist through the audited settings contract. They do not claim an adapter, provider account, or scheduled action is active.</p>
+                        <dl className="mt-5 grid gap-3 text-xs sm:grid-cols-2">
+                            <label className="rounded-2xl border border-white/[0.06] bg-black/20 p-4"><span className="text-white/35">Lead limit</span><input type="number" min={1} max={100} value={operatingProfile.leadLimit} onChange={(event) => setOperatingProfile({ ...operatingProfile, leadLimit: Number(event.target.value) })} className="mt-2 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-1.5 text-white" /></label>
+                            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-4 space-y-2"><span className="text-white/35">Countries / niches / platforms</span>{(['targetCountries', 'targetNiches', 'targetPlatforms'] as const).map((field) => <label key={field} className="block text-[10px] text-white/35">{field}<input value={operatingProfile[field].join(', ')} onChange={(event) => setOperatingProfile({ ...operatingProfile, [field]: event.target.value.split(',').map((value) => value.trim()).filter(Boolean) })} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-1.5 text-white" /></label>)}</div>
+                            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-4"><p className="text-white/35">Active skills</p><div className="mt-2 grid grid-cols-2 gap-2">{(Object.entries(operatingProfile.skills) as Array<[keyof FounderOperatingProfile['skills'], boolean]>).map(([skill, enabled]) => <label key={skill} className="flex items-center gap-2 text-[11px] text-white/65"><input type="checkbox" checked={enabled} onChange={(event) => setOperatingProfile({ ...operatingProfile, skills: { ...operatingProfile.skills, [skill]: event.target.checked } })} />{skill}</label>)}</div></div>
+                            <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-4"><label className="block text-white/35">Tone<textarea value={operatingProfile.tone} onChange={(event) => setOperatingProfile({ ...operatingProfile, tone: event.target.value })} className="mt-2 w-full rounded-lg border border-white/10 bg-black/30 p-2 text-white" rows={2} /></label><label className="mt-3 block text-white/35">Brand voice<textarea value={operatingProfile.brandVoice} onChange={(event) => setOperatingProfile({ ...operatingProfile, brandVoice: event.target.value })} className="mt-2 w-full rounded-lg border border-white/10 bg-black/30 p-2 text-white" rows={2} /></label><label className="mt-3 block text-white/35">Cadence (0 = unconfigured)<input type="number" min={0} max={90} value={operatingProfile.contentCadence} onChange={(event) => setOperatingProfile({ ...operatingProfile, contentCadence: Number(event.target.value) })} className="mt-2 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-1.5 text-white" /></label></div>
+                        </dl>
+                    </Surface>
+
+                    <Surface className="p-5 sm:p-6">
+                        <div className="flex items-center gap-2">
                             <ShieldCheck className="h-4 w-4 text-emerald-200" aria-hidden="true" />
                             <h3 className="text-sm font-semibold">Research sources</h3>
                         </div>
@@ -397,6 +417,14 @@ export function SettingsPanel({
                             }}
                             live={live}
                         />
+                        <div className="border-t border-white/[0.07] px-5 py-5 sm:px-6">
+                            <h4 className="text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Provider feature flags</h4>
+                            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                                <div className="rounded-2xl border border-white/[0.06] bg-black/20 p-4"><p className="text-sm font-medium">TikTok Upload to Draft</p><p className="mt-1 text-xs leading-5 text-white/40">Preferred path when a connected account has the verified upload capability and an exact approved action.</p></div>
+                                <div className="rounded-2xl border border-amber-300/15 bg-amber-300/[0.04] p-4"><p className="text-sm font-medium text-amber-100">TikTok Direct Post: disabled by default</p><p className="mt-1 text-xs leading-5 text-white/45">Requires provider audit approval, a server feature flag, verified scope, and exact-revision approval. This panel cannot enable it.</p></div>
+                            </div>
+                            <label className="mt-3 block text-xs text-white/45">TikTok delivery preference<select value={operatingProfile.providerPreferences.tiktokDelivery} onChange={(event) => setOperatingProfile({ ...operatingProfile, providerPreferences: { tiktokDelivery: event.target.value as 'draft-upload' | 'direct-post' } })} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-white"><option value="draft-upload">Upload to Draft (default)</option><option value="direct-post">Direct Post (server-gated)</option></select></label>
+                        </div>
                         <div className="border-t border-white/[0.07] px-5 pb-2 pt-5 sm:px-6">
                             <h4 className="text-xs font-semibold uppercase tracking-[0.12em] text-white/45">
                                 Execution infrastructure
@@ -434,6 +462,17 @@ export function SettingsPanel({
                                 );
                             })}
                         </div>
+                    </Surface>
+
+                    <Surface className="p-5 sm:p-6">
+                        <h3 className="text-sm font-semibold">Notifications, retention, and safety limits</h3>
+                        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                            {(['approvalQueue', 'providerHealth', 'dailyDigest'] as const).map((key) => <label key={key} className="flex items-center gap-2 text-xs text-white/65"><input type="checkbox" checked={operatingProfile.notifications[key]} onChange={(event) => setOperatingProfile({ ...operatingProfile, notifications: { ...operatingProfile.notifications, [key]: event.target.checked } })} />{key}</label>)}
+                            <label className="text-xs text-white/45">Data retention days<input type="number" min={30} max={3650} value={operatingProfile.dataRetentionDays} onChange={(event) => setOperatingProfile({ ...operatingProfile, dataRetentionDays: Number(event.target.value) })} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-white" /></label>
+                            <label className="text-xs text-white/45">Lead research/run<input type="number" min={1} max={100} value={operatingProfile.safetyLimits.maxLeadResearchPerRun} onChange={(event) => setOperatingProfile({ ...operatingProfile, safetyLimits: { ...operatingProfile.safetyLimits, maxLeadResearchPerRun: Number(event.target.value) } })} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-white" /></label>
+                            <label className="text-xs text-white/45">Evidence/draft<input type="number" min={1} max={20} value={operatingProfile.safetyLimits.maxEvidencePerDraft} onChange={(event) => setOperatingProfile({ ...operatingProfile, safetyLimits: { ...operatingProfile.safetyLimits, maxEvidencePerDraft: Number(event.target.value) } })} className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-2 py-2 text-white" /></label>
+                        </div>
+                        <p className="mt-4 text-xs text-amber-100">Approval policy: every external action. Maximum external actions per approval: 1. Both are server-enforced and immutable.</p>
                     </Surface>
                 </div>
             </div>

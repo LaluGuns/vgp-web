@@ -106,6 +106,33 @@ interface CustomGptDraftResult {
     mode: 'demo' | 'live';
 }
 
+export interface FounderOsAutomationActor {
+    actorId: string;
+    auditNamespace: 'custom_gpt' | 'bridge';
+    draftIdPrefix: 'gpt-draft' | 'bridge-draft';
+    prospectIdPrefix: 'lead' | 'bridge-lead';
+}
+
+const CUSTOM_GPT_ACTOR: FounderOsAutomationActor = {
+    actorId: 'custom-gpt-plus-action',
+    auditNamespace: 'custom_gpt',
+    draftIdPrefix: 'gpt-draft',
+    prospectIdPrefix: 'lead',
+};
+
+export interface FounderApprovalActor {
+    actorType: 'founder' | 'system';
+    actorId: string;
+    auditAction?: string;
+    auditMetadata?: Record<string, JsonValue>;
+    allowExactReplay?: boolean;
+}
+
+const FOUNDER_SESSION_ACTOR: FounderApprovalActor = {
+    actorType: 'founder',
+    actorId: 'founder-session',
+};
+
 export interface FounderEmailExecutionClaim {
     approval: StoredApproval;
     recipientEmail: string;
@@ -265,9 +292,10 @@ export async function getCustomGptBrief(): Promise<CustomGptBrief> {
 
 export async function createCustomGptDraft(
     input: CustomGptDraftInput,
-    requestId: string
+    requestId: string,
+    actor: FounderOsAutomationActor = CUSTOM_GPT_ACTOR
 ): Promise<CustomGptDraftResult> {
-    const approvalId = `gpt-draft-${createHash('sha256')
+    const approvalId = `${actor.draftIdPrefix}-${createHash('sha256')
         .update(input.requestKey, 'utf8')
         .digest('hex')
         .slice(0, 40)}`;
@@ -346,10 +374,10 @@ export async function createCustomGptDraft(
 
         await repository.appendAudit({
             actorType: 'system',
-            actorId: 'custom-gpt-plus-action',
+            actorId: actor.actorId,
             action: result.created
-                ? 'custom_gpt.draft_created'
-                : 'custom_gpt.draft_replayed',
+                ? `${actor.auditNamespace}.draft_created`
+                : `${actor.auditNamespace}.draft_replayed`,
             entityType: 'approval_action',
             entityId: approvalId,
             requestId,
@@ -372,8 +400,11 @@ export async function createCustomGptDraft(
     }, { isolation: 'serializable' });
 }
 
-function customGptLeadId(requestKey: string): string {
-    return `lead-${createHash('sha256')
+function customGptLeadId(
+    requestKey: string,
+    prefix: FounderOsAutomationActor['prospectIdPrefix']
+): string {
+    return `${prefix}-${createHash('sha256')
         .update(requestKey, 'utf8')
         .digest('hex')
         .slice(0, 40)}`;
@@ -413,9 +444,10 @@ function canonicalBeatMatch(
 
 export async function createCustomGptProspect(
     input: CustomGptProspectInput,
-    requestId: string
+    requestId: string,
+    actor: FounderOsAutomationActor = CUSTOM_GPT_ACTOR
 ) {
-    const prospectId = customGptLeadId(input.requestKey);
+    const prospectId = customGptLeadId(input.requestKey, actor.prospectIdPrefix);
     const evidenceId = (key: string) => `${prospectId}:${key}`;
     const candidate: LeadCandidateInput = {
         id: prospectId,
@@ -486,10 +518,10 @@ export async function createCustomGptProspect(
 
         await repository.appendAudit({
             actorType: 'system',
-            actorId: 'custom-gpt-plus-lead-scout',
+            actorId: actor.actorId,
             action: stored.created
-                ? 'custom_gpt.prospect_scored'
-                : 'custom_gpt.prospect_replayed',
+                ? `${actor.auditNamespace}.prospect_scored`
+                : `${actor.auditNamespace}.prospect_replayed`,
             entityType: 'prospect',
             entityId: prospectId,
             requestId,
@@ -637,6 +669,18 @@ export async function saveFounderOsSettings(
         const before = await repository.getSettingsForUpdate();
 
         if (
+            settings.operatingProfile.providerPreferences.tiktokDelivery === 'direct-post'
+            && before?.operatingProfile.providerPreferences.tiktokDelivery !== 'direct-post'
+            && process.env.TIKTOK_DIRECT_POST_ENABLED !== 'true'
+        ) {
+            throw new FounderOsError(
+                'FOUNDER_OS_POLICY_BLOCKED',
+                'TikTok Direct Post preference requires the audited server feature flag.',
+                409
+            );
+        }
+
+        if (
             before
             && JSON.stringify(before.integrations) !== JSON.stringify(settings.integrations)
         ) {
@@ -708,12 +752,36 @@ export async function transitionFounderApproval(
     approvalId: string,
     targetStatus: Extract<ApprovalStatus, 'READY_FOR_APPROVAL' | 'APPROVED'>,
     expectedContentHash: string,
-    requestId: string
+    requestId: string,
+    actor: FounderApprovalActor = FOUNDER_SESSION_ACTOR
 ): Promise<ApprovalReviewResult> {
     return withFounderOsRepository(async (repository) => {
         const before = await repository.getApprovalForUpdate(approvalId);
         assertApprovalFound(before, approvalId);
         assertExpectedContentHash(before, expectedContentHash);
+        if (
+            actor.allowExactReplay
+            && targetStatus === 'READY_FOR_APPROVAL'
+            && before.action.status === 'READY_FOR_APPROVAL'
+        ) {
+            await repository.appendAudit({
+                actorType: actor.actorType,
+                actorId: actor.actorId,
+                action: `${actor.auditAction ?? 'approval.ready_for_approval'}.replayed`,
+                entityType: 'approval_action',
+                entityId: approvalId,
+                requestId,
+                beforeState: approvalAuditState(before),
+                afterState: approvalAuditState(before),
+                metadata: {
+                    outboxHeld: false,
+                    noProviderCallPerformed: true,
+                    idempotentReplay: true,
+                    ...actor.auditMetadata,
+                },
+            });
+            return { approval: before.action, outboxHeld: false };
+        }
         assertApprovalTransition(before.action.status, targetStatus);
 
         if (targetStatus === 'APPROVED') {
@@ -735,9 +803,9 @@ export async function transitionFounderApproval(
         }
 
         await repository.appendAudit({
-            actorType: 'founder',
-            actorId: 'founder-session',
-            action: `approval.${targetStatus.toLowerCase()}`,
+            actorType: actor.actorType,
+            actorId: actor.actorId,
+            action: actor.auditAction ?? `approval.${targetStatus.toLowerCase()}`,
             entityType: 'approval_action',
             entityId: approvalId,
             requestId,
@@ -746,6 +814,7 @@ export async function transitionFounderApproval(
             metadata: {
                 outboxHeld,
                 noProviderCallPerformed: true,
+                ...actor.auditMetadata,
             },
         });
 
@@ -824,6 +893,36 @@ export async function replaceFounderApprovalContent(
             supersededOutboxCount,
         };
     }, { isolation: 'serializable' });
+}
+
+/** Exact payload read for the authenticated founder review UI only. */
+export async function getFounderApprovalContentForReview(
+    approvalId: string,
+    requestId: string
+) {
+    return withFounderOsRepository(async (repository) => {
+        const approval = await repository.getApprovalForReview(approvalId);
+        assertApprovalFound(approval, approvalId);
+        await repository.appendAudit({
+            actorType: 'founder',
+            actorId: 'founder-session',
+            action: 'approval.content_viewed',
+            entityType: 'approval_action',
+            entityId: approvalId,
+            requestId,
+            metadata: {
+                contentHash: approval.action.contentHash,
+                payloadReturnedToAuthenticatedFounder: true,
+                payloadLogged: false,
+            },
+        });
+        return {
+            approval: approval.action,
+            prospectId: approval.prospectId,
+            payload: approval.payload,
+            isDemo: approval.isDemo,
+        };
+    });
 }
 
 /**
@@ -907,7 +1006,7 @@ export async function beginFounderApprovalExecution(
                     ? 'meta'
                     : before.action.channel === 'tiktok'
                         ? 'tiktok'
-                        : 'cloudflare-agent';
+                        : 'codex-plugin';
         const configuredEmailWasVerified =
             integrationKey === 'hostinger-email'
             && settings.integrations[integrationKey] === 'configured'

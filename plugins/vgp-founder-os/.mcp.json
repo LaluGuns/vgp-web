@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "vgp-founder-os-bridge": {
+      "command": "node",
+      "args": [
+        "./scripts/founder-os-mcp.mjs"
+      ],
+      "cwd": "."
+    }
+  }
+}

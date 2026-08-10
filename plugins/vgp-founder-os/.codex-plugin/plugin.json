@@ -1,0 +1,41 @@
+{
+  "name": "vgp-founder-os",
+  "version": "0.1.0",
+  "description": "Approval-gated Codex operations for the private VGP Founder OS.",
+  "author": {
+    "name": "Virzy Guns Production"
+  },
+  "homepage": "https://www.virzyguns.com/founder-os/privacy",
+  "repository": "https://github.com/LaluGuns/VGP-WEB",
+  "license": "UNLICENSED",
+  "keywords": [
+    "founder-os",
+    "operations",
+    "approvals",
+    "content",
+    "growth"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "VGP Founder OS",
+    "shortDescription": "Run VGP workflows with founder approval gates.",
+    "longDescription": "Reads the private Founder OS, creates evidence-backed internal drafts, and requests founder review without exposing any send, publish, upload, reply, OAuth, or execution capability.",
+    "developerName": "Virzy Guns Production",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://www.virzyguns.com/",
+    "privacyPolicyURL": "https://www.virzyguns.com/founder-os/privacy",
+    "termsOfServiceURL": "https://www.virzyguns.com/founder-os/terms",
+    "defaultPrompt": [
+      "Prepare my evidence-backed founder brief.",
+      "Turn these content ideas into reviewable drafts.",
+      "Check provider health without changing anything."
+    ],
+    "brandColor": "#111827"
+  }
+}

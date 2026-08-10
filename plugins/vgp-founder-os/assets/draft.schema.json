@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.virzyguns.com/schemas/founder-os/draft.schema.json",
+  "title": "Founder OS internal draft request",
+  "description": "Creates a database DRAFT only. It performs no provider or external action.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requestKey", "kind", "targetLabel", "payloadSummary", "evidenceIds"],
+  "properties": {
+    "requestKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,119}$"
+    },
+    "kind": {
+      "enum": ["email-outreach", "instagram-reel", "tiktok-draft-upload"]
+    },
+    "targetLabel": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "payloadSummary": { "type": "string", "minLength": 1, "maxLength": 10000 },
+    "evidenceIds": {
+      "type": "array",
+      "maxItems": 20,
+      "uniqueItems": true,
+      "items": { "type": "string", "maxLength": 160 }
+    },
+    "prospectId": { "type": "string", "maxLength": 160 },
+    "subject": { "type": "string", "minLength": 1, "maxLength": 998 },
+    "body": { "type": "string", "minLength": 1, "maxLength": 20000 },
+    "videoUrl": { "type": "string", "format": "uri", "maxLength": 2048 },
+    "caption": { "type": "string", "maxLength": 2200 },
+    "shareToFeed": { "type": "boolean" },
+    "founderConfirmedUpload": { "const": true }
+  },
+  "oneOf": [
+    {
+      "properties": { "kind": { "const": "email-outreach" } },
+      "required": ["prospectId", "subject", "body"]
+    },
+    {
+      "properties": { "kind": { "const": "instagram-reel" } },
+      "required": ["videoUrl", "caption", "shareToFeed"]
+    },
+    {
+      "properties": { "kind": { "const": "tiktok-draft-upload" } },
+      "required": ["videoUrl", "founderConfirmedUpload"]
+    }
+  ]
+}

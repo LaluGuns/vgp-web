@@ -12,8 +12,12 @@ verified inbound events, and no action can spend money.
 - Next.js and PostgreSQL are the system of record.
 - `founder_internal` is the private database schema for prospects, settings,
   evidence, approvals, audit events, and the external-action outbox.
-- `cloudflare/vgp-founder-agent` is a separate analysis and drafting execution
-  plane. It never stores provider credentials or calls provider write APIs.
+- The installable `vgp-founder-os` Codex plugin is the interactive analysis and
+  orchestration plane. It talks to the authenticated Founder OS Bridge and can
+  create DRAFTs or request review, but it cannot approve or execute them.
+- `cloudflare/vgp-founder-agent` is retained as a historical dry-run prototype.
+  It is not a required runtime and must not be used for AI inference or external
+  actions.
 - `flowstate/`, CADENZ data, `cadenz-audio-delivery`, and
   `flowstate-audio-delivery` are outside this feature boundary.
 - Campaign and daily-report email routes now quarantine ambiguous SMTP outcomes
@@ -37,7 +41,11 @@ verified inbound events, and no action can spend money.
   an inbound reply claim.
 - `/api/founder/os/gpt/actions/*` is the private ChatGPT Plus Action surface for
   a sanitized brief, verified catalog search, source-backed prospect handoff,
-  and `DRAFT` creation only.
+  and `DRAFT` creation only. It remains for backward compatibility.
+- `/api/founder/os/bridge/v1/*` is the private Codex plugin surface for safe
+  reads, source-backed prospect/DRAFT creation, and `DRAFT` to
+  `READY_FOR_APPROVAL` review requests. It has no final-approval or execution
+  endpoint.
 
 The page defaults to an explicit local demo snapshot. After applying the
 migration, set `FOUNDER_OS_ENABLE_DATABASE=true` to load the private database
@@ -52,8 +60,8 @@ transitions. Integration status remains server-managed.
   `DRAFT -> READY_FOR_APPROVAL -> APPROVED -> EXECUTING -> SUCCEEDED|FAILED|UNKNOWN`.
 - `UNKNOWN` is never retried automatically when a provider may have accepted
   the request.
-- Approval and execution are separate founder clicks. Neither the Custom GPT
-  nor a Cloudflare scheduled agent can perform those clicks.
+- Approval and execution are separate founder clicks. Neither the legacy Custom
+  GPT, the Codex Bridge, nor a background service can perform those clicks.
 - Cold Instagram and TikTok DMs are disabled.
 - Contact details may not be guessed. Every usable contact needs a permission
   state, source, and observation time.
@@ -83,15 +91,15 @@ terms and outreach policy are approved in a separate licensing session.
 No command in this slice deploys or mutates the live database.
 
 ```powershell
-node --test scripts\tests\custom-gpt-actions.test.mts scripts\tests\founder-email-execution.test.mts scripts\tests\founder-os-contracts.test.mts scripts\tests\lead-scout-engine.test.mts app\founder\os\live-view-model.test.mjs components\founder\os\LiveWorkspaceActivationModel.test.mjs components\founder\os\ProviderSetupModel.test.mjs lib\founder-os\core-security.test.mjs lib\founder-os\provider-storage\provider-storage.test.mjs lib\founder-os\providers\provider-connectors.test.mjs cloudflare\process-campaigns-cron\test\safety-contract.test.mjs
+node --test scripts\tests\custom-gpt-actions.test.mts scripts\tests\founder-email-execution.test.mts scripts\tests\founder-os-contracts.test.mts scripts\tests\lead-scout-engine.test.mts scripts\tests\founder-os-bridge.test.mts app\founder\os\live-view-model.test.mjs components\founder\os\LiveWorkspaceActivationModel.test.mjs components\founder\os\ProviderSetupModel.test.mjs lib\founder-os\core-security.test.mjs lib\founder-os\provider-storage\provider-storage.test.mjs lib\founder-os\providers\provider-connectors.test.mjs cloudflare\process-campaigns-cron\test\safety-contract.test.mjs
 node node_modules\typescript\bin\tsc --noEmit --incremental false
 npm.cmd run lint
 npm.cmd run build
 ```
 
-The Cloudflare package has its own install, typecheck, test, type-generation,
-and dry-run commands documented in
-`cloudflare/vgp-founder-agent/README.md`.
+The historical Cloudflare prototype has separate dry-run documentation in
+`cloudflare/vgp-founder-agent/README.md`; it is not part of the current Codex
+plugin production path.
 
 The difference between configured, authorized, and empirically verified Meta
 and TikTok capabilities is documented in
@@ -100,3 +108,7 @@ and TikTok capabilities is documented in
 The ChatGPT Plus setup and importable Action schema are documented in
 `docs/founder-os/custom-gpt-plus-setup.md` and
 `docs/founder-os/custom-gpt-action.openapi.yaml`.
+
+The current Codex bridge setup and schema are documented in
+`docs/founder-os/codex-bridge-setup.md` and
+`docs/founder-os/bridge.openapi.yaml`.

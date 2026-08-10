@@ -6,6 +6,9 @@ import {
     BrainCircuit,
     ChevronRight,
     ClipboardCheck,
+    CalendarDays,
+    FileCheck2,
+    History,
     Database,
     LayoutDashboard,
     Menu,
@@ -28,6 +31,8 @@ import { AgentsPanel } from './AgentsPanel';
 import { IntelligencePanel } from './IntelligencePanel';
 import { shouldShowLiveWorkspaceActivation } from './LiveWorkspaceActivationModel';
 import { SettingsPanel } from './SettingsPanel';
+import { OperationalDetailPanel } from './OperationalDetailPanel';
+import { ProviderConnectionsPanel } from './ProviderConnectionsPanel';
 import type { FounderOsSection } from './types';
 
 interface NavigationItem {
@@ -45,28 +50,58 @@ const NAVIGATION: NavigationItem[] = [
         icon: LayoutDashboard,
     },
     {
+        id: 'agents-skills',
+        label: 'Agents / Skills',
+        description: 'AI workforce and boundaries',
+        icon: Bot,
+    },
+    {
+        id: 'content-intelligence',
+        label: 'Content intelligence',
+        description: 'Evidence and hypotheses',
+        icon: Radar,
+    },
+    {
         id: 'prospects',
-        label: 'Prospects',
+        label: 'Leads / Prospects',
         description: 'Buyer pipeline',
         icon: UserRoundSearch,
     },
     {
+        id: 'content-calendar',
+        label: 'Content calendar',
+        description: 'Dated plan evidence',
+        icon: CalendarDays,
+    },
+    {
+        id: 'drafts',
+        label: 'Drafts',
+        description: 'Not executable',
+        icon: FileCheck2,
+    },
+    {
         id: 'approvals',
-        label: 'Approvals',
+        label: 'Approval queue',
         description: 'Execution boundary',
         icon: ClipboardCheck,
     },
     {
-        id: 'agents',
-        label: 'Agents',
-        description: 'AI workforce',
-        icon: Bot,
+        id: 'providers',
+        label: 'Provider connections',
+        description: 'Scopes and feature gates',
+        icon: ShieldCheck,
     },
     {
-        id: 'intelligence',
-        label: 'Intelligence',
-        description: 'Evidence and experiments',
-        icon: Radar,
+        id: 'analytics',
+        label: 'Analytics',
+        description: 'Verified owned data',
+        icon: Database,
+    },
+    {
+        id: 'audit-log',
+        label: 'Audit log',
+        description: 'Status and reconciliation',
+        icon: History,
     },
     {
         id: 'settings',
@@ -84,22 +119,21 @@ const SECTION_CONTEXT: Record<
         label: 'Founder overview',
         summary: 'Priorities, risks, approvals, and workforce status.',
     },
+    'agents-skills': { label: 'Agents / skills', summary: 'Bounded roles, active skills, and evidence coverage.' },
+    'content-intelligence': { label: 'Content intelligence', summary: 'Evidence, confidence, and testable hypotheses.' },
     prospects: {
         label: 'Prospect intelligence',
         summary: 'Source-backed rapper, game developer, and creator leads.',
     },
+    'content-calendar': { label: 'Content calendar', summary: 'Schedule claims require persisted, dated records.' },
+    drafts: { label: 'Drafts', summary: 'Drafts are reviewable but never executable.' },
     approvals: {
         label: 'Approval center',
         summary: 'Review exact revisions before external execution.',
     },
-    agents: {
-        label: 'AI team',
-        summary: 'Bounded roles, current assignments, and permissions.',
-    },
-    intelligence: {
-        label: 'Growth intelligence',
-        summary: 'Owned data, channel capability, and testable hypotheses.',
-    },
+    providers: { label: 'Provider connections', summary: 'Configured, connected, scoped, token, webhook, and health stay distinct.' },
+    analytics: { label: 'Analytics', summary: 'Only evidence-backed measurement is shown.' },
+    'audit-log': { label: 'Audit log', summary: 'Recorded approvals, provider references, and manual reconciliation.' },
     settings: {
         label: 'Founder settings',
         summary: 'Tune strategy while hard safety controls stay locked.',
@@ -347,24 +381,30 @@ export function FounderOsClient({
                     >
                         {activeSection === 'overview' ? (
                             <OverviewPanel snapshot={snapshot} onNavigate={navigate} />
+                        ) : activeSection === 'agents-skills' ? (
+                            <AgentsPanel agents={snapshot.agents} />
+                        ) : activeSection === 'content-intelligence' ? (
+                            <IntelligencePanel signals={intelligenceSignals} settings={snapshot.settings} dataGaps={snapshot.dataGaps} />
                         ) : activeSection === 'prospects' ? (
                             <ProspectsPanel
                                 prospects={snapshot.prospects}
                                 beatDirectory={beatDirectory}
                                 threshold={snapshot.settings.scoreThreshold}
                             />
+                        ) : activeSection === 'content-calendar' || activeSection === 'analytics' || activeSection === 'audit-log' ? (
+                            <OperationalDetailPanel section={activeSection} snapshot={snapshot} />
+                        ) : activeSection === 'drafts' ? (
+                            <ApprovalsPanel approvals={snapshot.approvals} live={isLive} filter="drafts" />
                         ) : activeSection === 'approvals' ? (
                             <ApprovalsPanel
                                 approvals={snapshot.approvals}
                                 live={isLive}
+                                filter="queue"
                             />
-                        ) : activeSection === 'agents' ? (
-                            <AgentsPanel agents={snapshot.agents} />
-                        ) : activeSection === 'intelligence' ? (
-                            <IntelligencePanel
-                                signals={intelligenceSignals}
+                        ) : activeSection === 'providers' ? (
+                            <ProviderConnectionsPanel
                                 settings={snapshot.settings}
-                                dataGaps={snapshot.dataGaps}
+                                live={isLive}
                             />
                         ) : (
                             <SettingsPanel
