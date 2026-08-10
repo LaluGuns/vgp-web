@@ -108,10 +108,13 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const nonce = (await headers()).get('x-nonce') || undefined;
+    const requestHeaders = await headers();
+    const nonce = requestHeaders.get('x-nonce') || undefined;
+    const pathname = requestHeaders.get('x-pathname') || '/';
+    const documentLang = pathname.match(/^\/(ja-JP|de-DE)(?:\/|$)/)?.[1] || 'en';
 
     return (
-        <html lang="en" className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
+        <html lang={documentLang} className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
             <head>
                 <script
                     nonce={nonce}
