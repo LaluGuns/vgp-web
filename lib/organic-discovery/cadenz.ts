@@ -6,6 +6,139 @@ export type CadenzBpm = (typeof CADENZ_BPM_COVERAGE)[number];
 export const CADENZ_INDEXABLE_BPMS = [180, 170, 165, 175, 160, 150] as const satisfies readonly CadenzBpm[];
 
 export const CADENZ_HUB_PATH = "/cadenz/running-music";
+export const CADENZ_SPOTIFY_ARTIST_URL = "https://open.spotify.com/artist/13PhVfASmYQp8asSheyAxD";
+export const CADENZ_YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@VirzyGuns";
+export const CADENZ_MUSIC_COVER = "/images/cadenz-running-cadence-cover.jpg";
+
+type CadenzIndexableBpm = (typeof CADENZ_INDEXABLE_BPMS)[number];
+
+export type CadenzMusicAsset = {
+  bpm: CadenzIndexableBpm;
+  title: string;
+  artist: "Virzy Guns";
+  isrc: string;
+  upc: "198675394255";
+  releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)";
+  releaseDate: "2024-06-08";
+  spotifyUrl: string;
+  coverImage: typeof CADENZ_MUSIC_COVER;
+  youtube: {
+    videoId: string;
+    title: string;
+  } | null;
+  sessionLabel: string;
+  sessionSummary: string;
+  useTips: readonly [string, string, string];
+  verificationStatus: "verified_exact_isrc";
+};
+
+/**
+ * Public, publishable CADENZ music assets.
+ *
+ * Spotify URLs were accepted only when the DistroKid ISRC returned the same
+ * ISRC and one canonical open.spotify.com/track URL. YouTube IDs are limited
+ * to DistroKid-delivered Virzy Guns topic videos with a successful oEmbed and
+ * privacy-enhanced embed response. A missing YouTube ID never blocks the exact
+ * Spotify asset from being published.
+ */
+export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> = {
+  150: {
+    bpm: 150,
+    title: "150 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464387",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/3pS5kAdxdMuDnR8rxSeHr7",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: { videoId: "LajiPxpOYF4", title: "150 SPM Running Cadence" },
+    sessionLabel: "Controlled rhythm",
+    sessionSummary: "A measured tempo for runners who want a clear beat without jumping straight to the fastest end of the catalog.",
+    useTips: ["Start at a comfortable effort.", "Use the beat as a cue, not a command.", "Adjust or stop if the rhythm feels unnatural."],
+    verificationStatus: "verified_exact_isrc",
+  },
+  160: {
+    bpm: 160,
+    title: "160 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464389",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/1i68JJW6y8nI1HNyS5VssX",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: { videoId: "1X1qkeaPwx4", title: "160 SPM Running Cadence" },
+    sessionLabel: "Steady momentum",
+    sessionSummary: "A mid-range cadence track with enough pulse to anchor a steady session while keeping the musical count easy to follow.",
+    useTips: ["Settle into your natural stride first.", "Match one step per beat only if it feels comfortable.", "Use half-time counting when that feels more natural."],
+    verificationStatus: "verified_exact_isrc",
+  },
+  165: {
+    bpm: 165,
+    title: "165 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464390",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/6fpXmZbWHYX8TqPYQXAK39",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: { videoId: "CCxy5QjHXuY", title: "165 SPM Running Cadence" },
+    sessionLabel: "Progressive tempo",
+    sessionSummary: "A focused bridge between the steady and faster collections, built for listeners who prefer a slightly quicker rhythmic cue.",
+    useTips: ["Warm up before changing cadence.", "Let posture and comfort lead the session.", "Move to an adjacent BPM when the cue feels forced."],
+    verificationStatus: "verified_exact_isrc",
+  },
+  170: {
+    bpm: 170,
+    title: "170 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464391",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/2xiBhyorRtN8w88f9XQddv",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: { videoId: "YZFNlCNp5OI", title: "170 SPM Running Cadence" },
+    sessionLabel: "Brisk focus",
+    sessionSummary: "A faster, highly legible pulse for runners deliberately exploring the upper-middle range of the CADENZ tempo map.",
+    useTips: ["Choose this tempo intentionally.", "Keep the effort appropriate to your plan.", "Drop to 165 or 160 BPM whenever comfort changes."],
+    verificationStatus: "verified_exact_isrc",
+  },
+  175: {
+    bpm: 175,
+    title: "175 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464392",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/18rLXwSbAw3VnfTfnkgpEy",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: { videoId: "F9sRuwHMejs", title: "175 SPM Running Cadence" },
+    sessionLabel: "Fast turnover",
+    sessionSummary: "A quick cadence cue for experienced runners who already know that this range suits their own movement and session plan.",
+    useTips: ["Do not chase the number at the expense of form.", "Use shorter blocks if needed.", "Step down to an adjacent tempo without hesitation."],
+    verificationStatus: "verified_exact_isrc",
+  },
+  180: {
+    bpm: 180,
+    title: "180 SPM Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    artist: "Virzy Guns",
+    isrc: "QZNWT2464393",
+    upc: "198675394255",
+    releaseTitle: "Cyberpunk Synthwave Beats That Will Improve Your Running Cadence (Cyberpunk Synthwave 1 Hour)",
+    releaseDate: "2024-06-08",
+    spotifyUrl: "https://open.spotify.com/track/6rpDryjPJxPzL9qo65HrYm",
+    coverImage: CADENZ_MUSIC_COVER,
+    youtube: null,
+    sessionLabel: "Peak tempo",
+    sessionSummary: "The fastest verified destination in this collection, intended for runners who already use a high-turnover musical cue comfortably.",
+    useTips: ["Treat 180 as an option, not a universal target.", "Prioritize comfort and control.", "Explore 175 or 170 BPM when a lower cue fits better."],
+    verificationStatus: "verified_exact_isrc",
+  },
+};
 
 export const CADENZ_BPM_TITLES: Record<CadenzBpm, readonly string[]> = {
   130: ["Launch Sequence (130 BPM)", "Horizon Line (130 BPM)", "Leg Flush 130 SPM Running Cadence Active Recovery"],

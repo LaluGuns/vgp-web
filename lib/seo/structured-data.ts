@@ -68,6 +68,7 @@ export const organizationSchema = {
 export const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
     name: 'Virzy Guns Production',
     url: SITE_URL,
     description:
