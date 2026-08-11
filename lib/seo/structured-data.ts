@@ -52,7 +52,7 @@ export const organizationSchema = {
         jobTitle: 'Founder and creative director of Virzy Guns Production',
         sameAs: 'https://www.linkedin.com/in/virzyguns/',
     },
-    sameAs: profiles,
+    sameAs: [...profiles, VIRZY_GUNS_SPOTIFY_URL],
     hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Beats & Instrumentals',
