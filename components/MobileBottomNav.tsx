@@ -7,6 +7,7 @@ import { AppWindow, Home, Headphones, BookOpen, Menu } from 'lucide-react';
 export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     const pathname = usePathname();
     const isBeatStore = /^\/(?:(?:ja-JP|de-DE)\/)?studio\/beats(?:\/|$)/.test(pathname);
+    const isCadenzPage = pathname === '/cadenz' || pathname.startsWith('/cadenz/');
 
     // Hide if inside BeatStars store view to prevent overlap with audio player
     if (isBeatStore) return null;
@@ -14,7 +15,7 @@ export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     const navItems = [
         { name: 'Home', href: '/', icon: Home, exact: true },
         { name: 'Beats', href: '/studio/beats', icon: Headphones },
-        { name: 'Apps', href: '/flow', icon: AppWindow },
+        { name: 'Apps', href: isCadenzPage ? '/cadenz' : '/flow', icon: AppWindow },
         { name: 'Learn', href: '/learn', icon: BookOpen },
     ];
 

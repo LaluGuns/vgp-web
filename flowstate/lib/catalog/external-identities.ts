@@ -86,6 +86,16 @@ const VERIFIED_SPOTIFY_BY_FLOW_ID: Record<string, { isrc: string; spotifyUrl: st
   "cyberpunk-jazz/cyberpunk-jazz-006": { isrc: "QZZ7T2545943", spotifyUrl: "https://open.spotify.com/track/096NAHZw6FpIs4ioozDctf" },
   "cyberpunk-jazz/cyberpunk-jazz-007": { isrc: "QZZ7T2545944", spotifyUrl: "https://open.spotify.com/track/6QbkVnVQLwW2Hv4D5J2mwX" },
   "cyberpunk-jazz/cyberpunk-jazz-009": { isrc: "QT3FD2517338", spotifyUrl: "https://open.spotify.com/track/0sg3F4m4UH7tFzQNMbVMph" },
+  "chill-synthwave/afterdust": { isrc: "QZTAT2541356", spotifyUrl: "https://open.spotify.com/track/0aeOOyJdPm2K9uFOixI5Nx" },
+  "chill-synthwave/second-sun": { isrc: "QZTAT2541357", spotifyUrl: "https://open.spotify.com/track/2fskrPKmL8EpjusS555fLl" },
+  "chill-synthwave/memory-bloom": { isrc: "QZTAT2541358", spotifyUrl: "https://open.spotify.com/track/3vv40Emu8A5Yzv4gVQvK3D" },
+  "chill-synthwave/glass-river": { isrc: "QZTAT2541359", spotifyUrl: "https://open.spotify.com/track/4sfZn2rSbD7nkxhrIIjJ1c" },
+  "chill-synthwave/new-horizon": { isrc: "QZTAT2541360", spotifyUrl: "https://open.spotify.com/track/48iUtS1zlYjBpSoKb7Wkbt" },
+  "chill-synthwave/last-radio": { isrc: "QZTAT2541361", spotifyUrl: "https://open.spotify.com/track/02Ulr6qjvh2YXWY5PQQWsa" },
+  "chill-synthwave/citylight-prayer": { isrc: "QZTAT2541362", spotifyUrl: "https://open.spotify.com/track/1nvZfY4yTtnP8PpFNiFCKR" },
+  "chill-synthwave/nightflower": { isrc: "QZTAT2541363", spotifyUrl: "https://open.spotify.com/track/4Y9xESHiH8F1aucrTGxnHZ" },
+  "chill-synthwave/echo-harbor": { isrc: "QZTAT2541364", spotifyUrl: "https://open.spotify.com/track/2vLPzqGVsEsLBc3qE2KDPl" },
+  "chill-synthwave/still-breathing": { isrc: "QZTAT2541365", spotifyUrl: "https://open.spotify.com/track/6t0LGF4cnckFLbPEZnCom6" },
 };
 
 /**

@@ -31,7 +31,7 @@ test("CMD, VGP, and Virzy identity fields stay separate", () => {
 
 test("only unique exact ISRC matches receive a Spotify track CTA", () => {
   const verified = catalog.filter((track) => externalIdentityForTrack(track).verificationStatus === "verified");
-  assert.equal(verified.length, 49);
+  assert.equal(verified.length, 59);
   // Four Flow aliases have two distinct exact DSP releases and therefore stay
   // manual-review until the owner chooses the intended external recording.
   for (const id of [
@@ -42,6 +42,31 @@ test("only unique exact ISRC matches receive a Spotify track CTA", () => {
   ]) {
     assert.equal(externalIdentityForTrack(catalog.find((item) => item.id === id)).spotifyUrl, null);
   }
+});
+test("NEON REBORN provides ten exact Neo Synthwave Spotify CTAs", () => {
+  const expected = new Map([
+    ["chill-synthwave/afterdust", ["QZTAT2541356", "https://open.spotify.com/track/0aeOOyJdPm2K9uFOixI5Nx"]],
+    ["chill-synthwave/second-sun", ["QZTAT2541357", "https://open.spotify.com/track/2fskrPKmL8EpjusS555fLl"]],
+    ["chill-synthwave/memory-bloom", ["QZTAT2541358", "https://open.spotify.com/track/3vv40Emu8A5Yzv4gVQvK3D"]],
+    ["chill-synthwave/glass-river", ["QZTAT2541359", "https://open.spotify.com/track/4sfZn2rSbD7nkxhrIIjJ1c"]],
+    ["chill-synthwave/new-horizon", ["QZTAT2541360", "https://open.spotify.com/track/48iUtS1zlYjBpSoKb7Wkbt"]],
+    ["chill-synthwave/last-radio", ["QZTAT2541361", "https://open.spotify.com/track/02Ulr6qjvh2YXWY5PQQWsa"]],
+    ["chill-synthwave/citylight-prayer", ["QZTAT2541362", "https://open.spotify.com/track/1nvZfY4yTtnP8PpFNiFCKR"]],
+    ["chill-synthwave/nightflower", ["QZTAT2541363", "https://open.spotify.com/track/4Y9xESHiH8F1aucrTGxnHZ"]],
+    ["chill-synthwave/echo-harbor", ["QZTAT2541364", "https://open.spotify.com/track/2vLPzqGVsEsLBc3qE2KDPl"]],
+    ["chill-synthwave/still-breathing", ["QZTAT2541365", "https://open.spotify.com/track/6t0LGF4cnckFLbPEZnCom6"]],
+  ]);
+  const urls = new Set();
+  for (const [id, [isrc, spotifyUrl]] of expected) {
+    const track = catalog.find((item) => item.id === id);
+    assert.ok(track, `missing ${id}`);
+    const identity = externalIdentityForTrack(track);
+    assert.equal(identity.isrc, isrc);
+    assert.equal(identity.spotifyUrl, spotifyUrl);
+    assert.equal(identity.verificationStatus, "verified");
+    urls.add(spotifyUrl);
+  }
+  assert.equal(urls.size, expected.size);
 });
 
 test("Lofi stays Flow-only and has no external identity", () => {
