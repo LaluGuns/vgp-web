@@ -31,7 +31,11 @@ test("CMD, VGP, and Virzy identity fields stay separate", () => {
 
 test("only unique exact ISRC matches receive a Spotify track CTA", () => {
   const verified = catalog.filter((track) => externalIdentityForTrack(track).verificationStatus === "verified");
-  assert.equal(verified.length, 59);
+  assert.equal(verified.length, 113);
+  assert.equal(new Set(verified.map((track) => externalIdentityForTrack(track).spotifyUrl)).size, verified.length);
+  for (const track of verified) {
+    assert.equal(isVerifiedSpotifyIdentity(externalIdentityForTrack(track)), true);
+  }
   // Four Flow aliases have two distinct exact DSP releases and therefore stay
   // manual-review until the owner chooses the intended external recording.
   for (const id of [
