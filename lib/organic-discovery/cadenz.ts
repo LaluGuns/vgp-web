@@ -7,7 +7,7 @@ export const CADENZ_INDEXABLE_BPMS = [180, 170, 165, 175, 160, 150] as const sat
 
 export const CADENZ_HUB_PATH = "/cadenz/running-music";
 export const CADENZ_SPOTIFY_ARTIST_URL = "https://open.spotify.com/artist/13PhVfASmYQp8asSheyAxD";
-export const CADENZ_YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@VirzyGuns";
+export const CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL = "https://music.youtube.com/playlist?list=OLAK5uy_nraxYC4BXwCAGc9Q4uAKKoUE02oDqWagQ&si=hvP5RPQIcr4OJGf1";
 export const CADENZ_MUSIC_COVER = "/images/cadenz-running-cadence-cover.jpg";
 
 type CadenzIndexableBpm = (typeof CADENZ_INDEXABLE_BPMS)[number];
@@ -23,7 +23,7 @@ export type CadenzMusicAsset = {
   spotifyUrl: string;
   coverImage: typeof CADENZ_MUSIC_COVER;
   youtube: {
-    videoId: string;
+    playlistUrl: typeof CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL;
     title: string;
   } | null;
   sessionLabel: string;
@@ -36,10 +36,9 @@ export type CadenzMusicAsset = {
  * Public, publishable CADENZ music assets.
  *
  * Spotify URLs were accepted only when the DistroKid ISRC returned the same
- * ISRC and one canonical open.spotify.com/track URL. YouTube IDs are limited
- * to DistroKid-delivered Virzy Guns topic videos with a successful oEmbed and
- * privacy-enhanced embed response. A missing YouTube ID never blocks the exact
- * Spotify asset from being published.
+ * ISRC and one canonical open.spotify.com/track URL. YouTube Music uses one
+ * owner-supplied CADENZ playlist as a discovery destination; it is deliberately
+ * an outbound playlist link rather than a guessed per-video embed.
  */
 export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> = {
   150: {
@@ -52,7 +51,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/3pS5kAdxdMuDnR8rxSeHr7",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: { videoId: "LajiPxpOYF4", title: "150 SPM Running Cadence" },
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Controlled rhythm",
     sessionSummary: "A measured tempo for runners who want a clear beat without jumping straight to the fastest end of the catalog.",
     useTips: ["Start at a comfortable effort.", "Use the beat as a cue, not a command.", "Adjust or stop if the rhythm feels unnatural."],
@@ -68,7 +67,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/1i68JJW6y8nI1HNyS5VssX",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: { videoId: "1X1qkeaPwx4", title: "160 SPM Running Cadence" },
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Steady momentum",
     sessionSummary: "A mid-range cadence track with enough pulse to anchor a steady session while keeping the musical count easy to follow.",
     useTips: ["Settle into your natural stride first.", "Match one step per beat only if it feels comfortable.", "Use half-time counting when that feels more natural."],
@@ -84,7 +83,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/6fpXmZbWHYX8TqPYQXAK39",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: { videoId: "CCxy5QjHXuY", title: "165 SPM Running Cadence" },
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Progressive tempo",
     sessionSummary: "A focused bridge between the steady and faster collections, built for listeners who prefer a slightly quicker rhythmic cue.",
     useTips: ["Warm up before changing cadence.", "Let posture and comfort lead the session.", "Move to an adjacent BPM when the cue feels forced."],
@@ -100,7 +99,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/2xiBhyorRtN8w88f9XQddv",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: { videoId: "YZFNlCNp5OI", title: "170 SPM Running Cadence" },
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Brisk focus",
     sessionSummary: "A faster, highly legible pulse for runners deliberately exploring the upper-middle range of the CADENZ tempo map.",
     useTips: ["Choose this tempo intentionally.", "Keep the effort appropriate to your plan.", "Drop to 165 or 160 BPM whenever comfort changes."],
@@ -116,7 +115,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/18rLXwSbAw3VnfTfnkgpEy",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: { videoId: "F9sRuwHMejs", title: "175 SPM Running Cadence" },
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Fast turnover",
     sessionSummary: "A quick cadence cue for experienced runners who already know that this range suits their own movement and session plan.",
     useTips: ["Do not chase the number at the expense of form.", "Use shorter blocks if needed.", "Step down to an adjacent tempo without hesitation."],
@@ -132,7 +131,7 @@ export const CADENZ_MUSIC_ASSETS: Record<CadenzIndexableBpm, CadenzMusicAsset> =
     releaseDate: "2024-06-08",
     spotifyUrl: "https://open.spotify.com/track/6rpDryjPJxPzL9qo65HrYm",
     coverImage: CADENZ_MUSIC_COVER,
-    youtube: null,
+    youtube: { playlistUrl: CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL, title: "CADENZ Running Cadence on YouTube Music" },
     sessionLabel: "Peak tempo",
     sessionSummary: "The fastest verified destination in this collection, intended for runners who already use a high-turnover musical cue comfortably.",
     useTips: ["Treat 180 as an option, not a universal target.", "Prioritize comfort and control.", "Explore 175 or 170 BPM when a lower cue fits better."],
