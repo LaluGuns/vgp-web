@@ -20,17 +20,17 @@ const SITE_URL = "https://www.virzyguns.com";
 
 export const metadata: Metadata = {
   title: "Running Music by BPM | CADENZ",
-  description: "Choose verified Virzy Guns running music from 150 to 180 BPM, preview cadence tracks on YouTube, and listen on Spotify with CADENZ.",
+  description: "Choose verified Virzy Guns running music from 150 to 180 BPM, open the shared CADENZ playlist on YouTube Music, and listen on Spotify.",
   alternates: { canonical: CADENZ_HUB_PATH },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     url: CADENZ_HUB_PATH,
     title: "Running Music by BPM | CADENZ",
-    description: "An interactive 130–180 BPM tempo map with verified Virzy Guns running tracks.",
+    description: "An interactive 130–180 BPM tempo map with verified Virzy Guns running tracks and a shared YouTube Music playlist.",
     images: [{ url: "/images/cadenz-running-cadence-cover.jpg", width: 300, height: 300, alt: "Cyberpunk running cadence music by Virzy Guns" }],
   },
-  twitter: { card: "summary_large_image", title: "Running Music by BPM | CADENZ", description: "Find your tempo, preview the track, then continue on Spotify or YouTube.", images: ["/images/cadenz-running-cadence-cover.jpg"] },
+  twitter: { card: "summary_large_image", title: "Running Music by BPM | CADENZ", description: "Find your tempo, listen on Spotify, or browse the shared YouTube Music playlist.", images: ["/images/cadenz-running-cadence-cover.jpg"] },
 };
 
 function bpmHref(bpm: number) {
@@ -93,7 +93,7 @@ export default async function CadenzRunningMusicHub({ searchParams }: { searchPa
             <h1 className="mt-6 max-w-3xl text-[clamp(3.25rem,7.4vw,7.25rem)] font-semibold leading-[0.88] tracking-[-0.065em]">
               Running music <span className="mt-2 block bg-[linear-gradient(90deg,#67e8f9,#b8ff48_55%,#a78bfa)] bg-clip-text text-transparent">by BPM.</span>
             </h1>
-            <p className="mt-7 max-w-xl text-base leading-8 text-white/62 sm:text-lg">Pick a pulse, preview the music, and move into your session. The map covers 130–180 BPM; six destinations connect to exact Virzy Guns tracks on Spotify.</p>
+            <p className="mt-7 max-w-xl text-base leading-8 text-white/62 sm:text-lg">Pick a pulse, open the exact Spotify track, or browse the shared CADENZ playlist on YouTube Music. The map covers 130–180 BPM and six tempo pages connect to exact Virzy Guns tracks.</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link href={cadenzBpmPath(170)} data-organic-cta data-destination-type="bpm_collection" data-source-position="hub_hero_primary" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#b8ff48] px-6 py-3.5 text-sm font-extrabold text-[#081006] transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 Start at 170 BPM <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -108,7 +108,7 @@ export default async function CadenzRunningMusicHub({ searchParams }: { searchPa
         <section className="mt-16 grid grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] sm:grid-cols-4" aria-label="Collection summary">
           <div className="p-5 sm:p-6"><CircleGauge className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">11</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">tempo points</p></div>
           <div className="border-l border-white/10 p-5 sm:p-6"><Headphones className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">6</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">exact Spotify tracks</p></div>
-          <div className="border-l border-white/10 p-5 sm:p-6"><AudioLines className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">5</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">click-to-play videos</p></div>
+          <div className="border-l border-white/10 p-5 sm:p-6"><AudioLines className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">1</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">YouTube Music playlist</p></div>
           <div className="border-l border-white/10 p-5 sm:p-6"><Sparkles className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">130–180</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">BPM range</p></div>
         </section>
 

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ bpm: stri
   if (!bpm) return {};
   const asset = CADENZ_MUSIC_ASSETS[bpm];
   const title = `${bpm} BPM Running Music | CADENZ`;
-  const description = `Listen to ${asset.title} by Virzy Guns on Spotify and explore a focused ${bpm} BPM running cadence session.`;
+  const description = `Listen to ${asset.title} by Virzy Guns on Spotify, then browse the shared CADENZ YouTube Music playlist for a focused ${bpm} BPM running cadence session.`;
   return {
     title,
     description,
@@ -122,7 +122,7 @@ export default async function CadenzBpmPage({ params }: { params: Promise<{ bpm:
           </div>
 
           <div className="pb-2">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#b8ff48]/25 bg-[#b8ff48]/[0.07] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#d7ff9d]"><Check className="h-3.5 w-3.5" aria-hidden="true" /> Exact Spotify track</div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#b8ff48]/25 bg-[#b8ff48]/[0.07] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[#d7ff9d]"><Check className="h-3.5 w-3.5" aria-hidden="true" /> Exact Spotify track + playlist</div>
             <h1 className="mt-6 text-[clamp(3rem,6.7vw,7rem)] font-semibold leading-[0.91] tracking-[-0.06em]">{bpm} BPM <span className="block bg-[linear-gradient(90deg,#67e8f9,#a7f3d0_52%,#a78bfa)] bg-clip-text text-transparent">running music.</span></h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/62 sm:text-lg">{asset.sessionSummary}</p>
             <div className="mt-7 flex flex-wrap gap-2 text-[10px] font-semibold uppercase tracking-[0.13em] text-white/54"><span className="rounded-full border border-white/10 px-3 py-2">{asset.sessionLabel}</span><span className="rounded-full border border-white/10 px-3 py-2">Virzy Guns</span><span className="rounded-full border border-white/10 px-3 py-2">1-hour track</span></div>
@@ -148,7 +148,7 @@ export default async function CadenzBpmPage({ params }: { params: Promise<{ bpm:
             <div className="bg-[#071017] p-4"><dt className="text-[10px] uppercase tracking-[0.15em] text-white/35">Artist</dt><dd className="mt-2 text-sm font-semibold">{asset.artist}</dd></div>
             <div className="bg-[#071017] p-4"><dt className="text-[10px] uppercase tracking-[0.15em] text-white/35">ISRC</dt><dd className="mt-2 font-mono text-sm text-white/75">{asset.isrc}</dd></div>
             <div className="bg-[#071017] p-4"><dt className="text-[10px] uppercase tracking-[0.15em] text-white/35">Release date</dt><dd className="mt-2 text-sm font-semibold">June 8, 2024</dd></div>
-            <div className="bg-[#071017] p-4"><dt className="text-[10px] uppercase tracking-[0.15em] text-white/35">Availability</dt><dd className="mt-2 text-sm font-semibold">Spotify{asset.youtube ? " + YouTube" : ""}</dd></div>
+            <div className="bg-[#071017] p-4"><dt className="text-[10px] uppercase tracking-[0.15em] text-white/35">Availability</dt><dd className="mt-2 text-sm font-semibold">Spotify{asset.youtube ? " + YouTube Music" : ""}</dd></div>
           </dl>
         </section>
 

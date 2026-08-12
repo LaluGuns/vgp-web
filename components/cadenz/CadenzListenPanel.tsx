@@ -1,13 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
-import { Check, ExternalLink, Play, Radio, Youtube } from 'lucide-react';
+import { Check, ExternalLink, ListMusic, Youtube } from 'lucide-react';
 
 import { useNewsletter } from '@/components/context/NewsletterContext';
 import { trackOrganicEvent } from '@/lib/analytics';
 import {
-  CADENZ_YOUTUBE_CHANNEL_URL,
+  CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL,
   type CadenzMusicAsset,
 } from '@/lib/organic-discovery/cadenz';
 
@@ -35,19 +34,7 @@ export function CadenzListenPanel({
   headingLevel?: 'h2' | 'h3';
 }) {
   const { openPopup } = useNewsletter();
-  const [youtubeActive, setYoutubeActive] = useState(false);
   const Heading = headingLevel;
-
-  const startYoutube = () => {
-    if (!asset.youtube) return;
-    window.dispatchEvent(new CustomEvent('vgp:preview-play', { detail: `cadenz-youtube-${asset.bpm}` }));
-    trackOrganicEvent('music_preview_started', {
-      bpm: asset.bpm,
-      destination_type: 'youtube_video',
-      source_position: 'youtube_facade',
-    });
-    setYoutubeActive(true);
-  };
 
   return (
     <section
@@ -120,70 +107,55 @@ export function CadenzListenPanel({
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
             <a
-              href={asset.youtube ? `https://www.youtube.com/watch?v=${asset.youtube.videoId}` : CADENZ_YOUTUBE_CHANNEL_URL}
+              href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => outbound(asset.youtube ? 'youtube_video' : 'youtube_channel', asset.bpm, 'verified_track_card')}
+              onClick={() => outbound('youtube_playlist', asset.bpm, 'verified_track_card')}
               data-organic-cta
-              data-destination-type={asset.youtube ? 'youtube_video' : 'youtube_channel'}
+              data-destination-type="youtube_playlist"
               data-source-position="verified_track_card"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.05] px-5 py-3 text-sm font-semibold text-white transition hover:border-red-300/40 hover:bg-red-300/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <Youtube className="h-5 w-5 text-red-300" aria-hidden="true" />
-              {asset.youtube ? 'Open on YouTube' : 'Virzy Guns on YouTube'}
+              Open YouTube Music
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             </a>
           </div>
 
-          {asset.youtube ? (
-            <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black">
-              {youtubeActive ? (
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${asset.youtube.videoId}?autoplay=1&rel=0`}
-                  title={asset.youtube.title}
-                  className="aspect-video w-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={startYoutube}
-                  className="group relative block aspect-video w-full overflow-hidden text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-200"
-                  aria-label={`Play ${asset.youtube.title} from Virzy Guns on YouTube`}
+          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black">
+            <div className="relative aspect-[16/8] overflow-hidden">
+              <Image
+                src={asset.coverImage}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-cover opacity-60"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(1,7,12,0.22),rgba(1,7,12,0.9))]" />
+              <div className="absolute inset-0 flex flex-col justify-end gap-3 p-5 sm:p-6">
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-red-200/20 bg-red-200/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-red-100">
+                  <ListMusic className="h-3.5 w-3.5" aria-hidden="true" />
+                  YouTube Music playlist
+                </span>
+                <p className="max-w-md text-sm font-semibold text-white">Keep the CADENZ cadence collection moving.</p>
+                <p className="max-w-lg text-xs leading-5 text-white/60">Open the owner-supplied playlist to browse the running-cadence set on YouTube Music.</p>
+                <a
+                  href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => outbound('youtube_playlist', asset.bpm, 'youtube_playlist_card')}
                   data-organic-cta
-                  data-destination-type="youtube_video"
-                  data-source-position="youtube_facade"
+                  data-destination-type="youtube_playlist"
+                  data-source-position="youtube_playlist_card"
+                  className="inline-flex w-fit items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold text-[#071017] transition hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
-                  <Image
-                    src={asset.coverImage}
-                    alt=""
-                    fill
-                    sizes="(min-width: 1024px) 42vw, 100vw"
-                    className="object-cover opacity-55 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-70"
-                  />
-                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.12),rgba(0,0,0,0.58))]" />
-                  <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-slate-950 shadow-xl transition group-hover:scale-105">
-                      <Play className="ml-0.5 h-5 w-5 fill-current" aria-hidden="true" />
-                    </span>
-                    <span className="text-sm font-semibold text-white">Click to play on YouTube</span>
-                    <span className="text-xs text-white/60">Privacy-enhanced embed loads only after your click.</span>
-                  </span>
-                </button>
-              )}
+                  Open playlist
+                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                </a>
+              </div>
             </div>
-          ) : (
-            <div className="mt-6 flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-              <Radio className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" aria-hidden="true" />
-              <p className="text-xs leading-6 text-white/60">
-                No exact 180 BPM YouTube video is published here yet. The verified Spotify track remains available; the channel link opens Virzy Guns without guessing a video ID.
-              </p>
-            </div>
-          )}
-
-          {asset.youtube ? <p className="mt-3 text-[11px] leading-5 text-white/40">The YouTube preview is a separate official Virzy Guns catalog upload at the same tempo; the exact ISRC badge applies to the Spotify track above.</p> : null}
+          </div>
+          <p className="mt-3 text-[11px] leading-5 text-white/40">The Spotify link above is the exact ISRC match. YouTube Music is a shared discovery playlist, so no per-video identity is implied.</p>
 
           <button
             type="button"
