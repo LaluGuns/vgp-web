@@ -6,6 +6,7 @@ import { Check, ExternalLink, ListMusic, Youtube } from 'lucide-react';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 import { trackOrganicEvent } from '@/lib/analytics';
 import {
+  CADENZ_YOUTUBE_MUSIC_EMBED_URL,
   CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL,
   type CadenzMusicAsset,
 } from '@/lib/organic-discovery/cadenz';
@@ -122,40 +123,43 @@ export function CadenzListenPanel({
             </a>
           </div>
 
-          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black">
-            <div className="relative aspect-[16/8] overflow-hidden">
-              <Image
-                src={asset.coverImage}
-                alt=""
-                fill
-                sizes="(min-width: 1024px) 42vw, 100vw"
-                className="object-cover opacity-60"
+          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_18px_60px_rgba(0,0,0,0.3)]">
+            <div className="relative aspect-video overflow-hidden bg-[#050b10]">
+              <iframe
+                src={CADENZ_YOUTUBE_MUSIC_EMBED_URL}
+                title="CADENZ 11 BPM running cadence album on YouTube Music"
+                className="absolute inset-0 h-full w-full"
+                loading="lazy"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                onLoad={() =>
+                  trackOrganicEvent('music_preview_started', {
+                    bpm: asset.bpm,
+                    destination_type: 'youtube_playlist',
+                    source_position: 'youtube_playlist_embed',
+                  })
+                }
               />
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(1,7,12,0.22),rgba(1,7,12,0.9))]" />
-              <div className="absolute inset-0 flex flex-col justify-end gap-3 p-5 sm:p-6">
-                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-red-200/20 bg-red-200/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-red-100">
-                  <ListMusic className="h-3.5 w-3.5" aria-hidden="true" />
-                  YouTube Music playlist
-                </span>
-                <p className="max-w-md text-sm font-semibold text-white">Keep the CADENZ cadence collection moving.</p>
-                <p className="max-w-lg text-xs leading-5 text-white/60">Open the owner-supplied playlist to browse the running-cadence set on YouTube Music.</p>
-                <a
-                  href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => outbound('youtube_playlist', asset.bpm, 'youtube_playlist_card')}
-                  data-organic-cta
-                  data-destination-type="youtube_playlist"
-                  data-source-position="youtube_playlist_card"
-                  className="inline-flex w-fit items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold text-[#071017] transition hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                >
-                  Open playlist
-                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-                </a>
-              </div>
             </div>
           </div>
-          <p className="mt-3 text-[11px] leading-5 text-white/40">The Spotify link above is the exact ISRC match. YouTube Music is a shared discovery playlist, so no per-video identity is implied.</p>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200/10 bg-red-200/[0.045] px-4 py-3">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold text-white/75"><ListMusic className="h-4 w-4 text-red-200" aria-hidden="true" /> Full 11-BPM album playlist embedded</p>
+            <a
+              href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => outbound('youtube_playlist', asset.bpm, 'youtube_playlist_fallback')}
+              data-organic-cta
+              data-destination-type="youtube_playlist"
+              data-source-position="youtube_playlist_fallback"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-red-100 underline decoration-red-200/40 underline-offset-4 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              Open in YouTube Music
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
+          </div>
+          <p className="mt-3 text-[11px] leading-5 text-white/40">The full owner-supplied CADENZ album playlist stays embedded here. The Spotify link above remains the exact ISRC match for this BPM page.</p>
 
           <button
             type="button"
