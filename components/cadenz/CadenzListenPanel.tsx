@@ -42,16 +42,17 @@ export function CadenzListenPanel({
       className="overflow-hidden rounded-[1.75rem] border border-cyan-200/15 bg-[linear-gradient(145deg,rgba(7,30,42,0.96),rgba(2,8,14,0.98))] shadow-[0_28px_100px_rgba(0,0,0,0.34)]"
       aria-labelledby={`cadenz-listen-${asset.bpm}`}
     >
-      <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
-        <div className="relative min-h-[20rem] overflow-hidden border-b border-white/10 lg:min-h-full lg:border-b-0 lg:border-r">
+      <div className="grid items-start lg:grid-cols-[0.78fr_1.22fr]">
+        <div className="relative aspect-square min-h-[20rem] overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.14),rgba(2,8,14,0.98)_72%)] lg:min-h-0 lg:self-start lg:border-b-0 lg:border-r">
           <Image
             src={asset.coverImage}
             alt={`${asset.releaseTitle} cover artwork`}
             fill
             sizes="(min-width: 1024px) 34vw, 100vw"
-            className="object-cover"
+            quality={100}
+            className="object-contain"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(1,7,12,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(1,7,12,0.9)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100/70">Verified release</p>
