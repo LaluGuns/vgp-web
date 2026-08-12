@@ -47,11 +47,13 @@ assert.ok(hub.includes("CadenzTempoOrbit"));
 assert.ok(hub.includes("CadenzListenPanel"));
 assert.ok(child.includes("MusicRecording"));
 assert.ok(panel.includes("CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL"));
-assert.ok(panel.includes("YouTube Music playlist"));
-assert.ok(!panel.includes("youtube-nocookie.com"));
+assert.ok(panel.includes("CADENZ_YOUTUBE_MUSIC_EMBED_URL"));
+assert.ok(catalog.includes("youtube-nocookie.com/embed/videoseries?list="));
+assert.ok(panel.includes("Full 11-BPM album playlist embedded"));
+assert.ok(panel.includes("allowFullScreen"));
 assert.ok(!panel.includes("videoId:"));
 for (const text of [hub, child]) {
   assert.ok(!/Evidence tier|royalty evidence|search proxy|Catalog title evidence/i.test(text), "internal audit copy leaked into visitor UI");
 }
 
-console.log("CADENZ asset contract: 6 exact Spotify tracks, 1 shared YouTube Music playlist, DistroKid cover hash and visitor copy PASS");
+console.log("CADENZ asset contract: 6 exact Spotify tracks, embedded 11-BPM YouTube Music album playlist, DistroKid cover hash and visitor copy PASS");
