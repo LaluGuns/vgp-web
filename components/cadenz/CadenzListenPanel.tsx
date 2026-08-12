@@ -7,6 +7,7 @@ import { useNewsletter } from '@/components/context/NewsletterContext';
 import { trackOrganicEvent } from '@/lib/analytics';
 import {
   CADENZ_YOUTUBE_MUSIC_EMBED_URL,
+  CADENZ_YOUTUBE_THUMBNAIL,
   CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL,
   type CadenzMusicAsset,
 } from '@/lib/organic-discovery/cadenz';
@@ -42,20 +43,20 @@ export function CadenzListenPanel({
       className="overflow-hidden rounded-[1.75rem] border border-cyan-200/15 bg-[linear-gradient(145deg,rgba(7,30,42,0.96),rgba(2,8,14,0.98))] shadow-[0_28px_100px_rgba(0,0,0,0.34)]"
       aria-labelledby={`cadenz-listen-${asset.bpm}`}
     >
-      <div className="grid items-start lg:grid-cols-[0.78fr_1.22fr]">
-        <div className="relative aspect-square min-h-[20rem] overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.14),rgba(2,8,14,0.98)_72%)] lg:min-h-0 lg:self-start lg:border-b-0 lg:border-r">
+      <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
+        <div className="relative min-h-[20rem] overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.14),rgba(2,8,14,0.98)_72%)] lg:min-h-full lg:border-b-0 lg:border-r">
           <Image
-            src={asset.coverImage}
-            alt={`${asset.releaseTitle} cover artwork`}
+            src={CADENZ_YOUTUBE_THUMBNAIL}
+            alt="CADENZ running cadence thumbnail from YouTube Music"
             fill
             sizes="(min-width: 1024px) 34vw, 100vw"
-            quality={100}
-            className="object-contain"
+            quality={90}
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(1,7,12,0.9)_100%)]" />
           <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100/70">Verified release</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100/70">YouTube Music thumbnail</p>
               <p className="mt-1 text-sm font-semibold text-white">{asset.artist}</p>
             </div>
             <span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-xs font-semibold text-white/80 backdrop-blur">

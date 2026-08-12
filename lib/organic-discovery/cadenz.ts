@@ -10,6 +10,7 @@ export const CADENZ_SPOTIFY_ARTIST_URL = "https://open.spotify.com/artist/13PhVf
 export const CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL = "https://music.youtube.com/playlist?list=OLAK5uy_nraxYC4BXwCAGc9Q4uAKKoUE02oDqWagQ&si=hvP5RPQIcr4OJGf1";
 export const CADENZ_YOUTUBE_MUSIC_PLAYLIST_ID = "OLAK5uy_nraxYC4BXwCAGc9Q4uAKKoUE02oDqWagQ";
 export const CADENZ_YOUTUBE_MUSIC_EMBED_URL = `https://www.youtube-nocookie.com/embed/videoseries?list=${CADENZ_YOUTUBE_MUSIC_PLAYLIST_ID}&rel=0&modestbranding=1`;
+export const CADENZ_YOUTUBE_THUMBNAIL = "/images/cadenz-youtube-thumbnail.webp";
 export const CADENZ_MUSIC_COVER = "/images/cadenz-running-cadence-cover.jpg";
 
 type CadenzIndexableBpm = (typeof CADENZ_INDEXABLE_BPMS)[number];
