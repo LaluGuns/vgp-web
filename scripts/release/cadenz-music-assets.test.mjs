@@ -9,6 +9,7 @@ const hub = readFileSync(join(root, "app/cadenz/running-music/page.tsx"), "utf8"
 const child = readFileSync(join(root, "app/cadenz/running-music/[bpm]/page.tsx"), "utf8");
 const panel = readFileSync(join(root, "components/cadenz/CadenzListenPanel.tsx"), "utf8");
 const cover = readFileSync(join(root, "public/images/cadenz-running-cadence-cover.jpg"));
+const youtubeThumbnail = readFileSync(join(root, "public/images/cadenz-youtube-thumbnail.webp"));
 
 const youtubePlaylistUrl = "https://music.youtube.com/playlist?list=OLAK5uy_nraxYC4BXwCAGc9Q4uAKKoUE02oDqWagQ&si=hvP5RPQIcr4OJGf1";
 const expected = {
@@ -42,11 +43,15 @@ assert.ok(catalog.includes("CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL"));
 assert.ok(catalog.includes(youtubePlaylistUrl));
 assert.equal((catalog.match(/verificationStatus: "verified_exact_isrc"/g) ?? []).length, 7, "six assets plus the type must carry exact verification status");
 assert.equal(createHash("sha256").update(cover).digest("hex").toUpperCase(), "F3EB89456E2D037F412EBAD8C7AA1FA567867CF1B99AE372B8CD1DF64054FBD0");
+assert.equal(youtubeThumbnail.length, 46674, "YouTube thumbnail WebP size changed unexpectedly");
+assert.equal(createHash("sha256").update(youtubeThumbnail).digest("hex").toUpperCase(), "3AE7A85A0BE201520074C98E22ABD92979671D3439832B17FA0AB8C216BD772C");
 
 assert.ok(hub.includes("CadenzTempoOrbit"));
 assert.ok(hub.includes("CadenzListenPanel"));
 assert.ok(child.includes("MusicRecording"));
 assert.ok(panel.includes("CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL"));
+assert.ok(panel.includes("CADENZ_YOUTUBE_THUMBNAIL"));
+assert.ok(catalog.includes("CADENZ_YOUTUBE_THUMBNAIL"));
 assert.ok(panel.includes("CADENZ_YOUTUBE_MUSIC_EMBED_URL"));
 assert.ok(catalog.includes("youtube-nocookie.com/embed/videoseries?list="));
 assert.ok(panel.includes("Full 11-BPM album playlist embedded"));
@@ -56,4 +61,4 @@ for (const text of [hub, child]) {
   assert.ok(!/Evidence tier|royalty evidence|search proxy|Catalog title evidence/i.test(text), "internal audit copy leaked into visitor UI");
 }
 
-console.log("CADENZ asset contract: 6 exact Spotify tracks, embedded 11-BPM YouTube Music album playlist, DistroKid cover hash and visitor copy PASS");
+console.log("CADENZ asset contract: 6 exact Spotify tracks, embedded 11-BPM YouTube Music album playlist, HD thumbnail and DistroKid cover hash PASS");
