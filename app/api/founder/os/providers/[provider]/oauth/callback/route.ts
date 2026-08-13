@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAppBaseUrl } from '@/lib/auth';
 import {
-    authorizeFounderOsRequest,
     founderOsErrorResponse,
     founderOsJson,
     getFounderOsRequestId,
@@ -30,8 +29,9 @@ export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ provider: string }> }
 ) {
-    const unauthorized = await authorizeFounderOsRequest(request, false);
-    if (unauthorized) return unauthorized;
+    // OAuth providers redirect from a different site, so the founder session's
+    // SameSite=Strict cookie is intentionally absent here. Authenticate the
+    // callback with the one-time state plus the scoped HttpOnly nonce instead.
     const requestId = getFounderOsRequestId(request);
     const providerResult = providerIdSchema.safeParse((await params).provider);
     if (!providerResult.success) {
