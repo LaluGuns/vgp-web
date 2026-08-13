@@ -7,9 +7,11 @@ import {
 } from '@/lib/founder-os/http';
 import {
     consumeOAuthState,
+    isProviderStorageError,
     saveProviderConnection,
 } from '@/lib/founder-os/provider-storage';
 import { providerIdSchema } from '@/lib/founder-os/providers/contracts';
+import { ProviderRequestError } from '@/lib/founder-os/providers/http';
 import {
     getMetaClient,
     getTikTokClient,
@@ -67,6 +69,8 @@ export async function GET(
         );
     }
 
+    let phase: 'state_validation' | 'token_exchange' | 'connection_persistence' =
+        'state_validation';
     try {
         const consumed = await consumeOAuthState({
             provider,
@@ -76,8 +80,10 @@ export async function GET(
         });
         const connectedAt = new Date().toISOString();
 
+        phase = 'token_exchange';
         if (provider === 'meta') {
             const tokens = await getMetaClient().exchangeAuthorizationCode(code);
+            phase = 'connection_persistence';
             await saveProviderConnection({
                 provider,
                 providerAccountId: tokens.accountId,
@@ -101,6 +107,7 @@ export async function GET(
             });
         } else {
             const tokens = await getTikTokClient().exchangeAuthorizationCode(code);
+            phase = 'connection_persistence';
             await saveProviderConnection({
                 provider,
                 providerAccountId: tokens.accountId,
@@ -139,6 +146,45 @@ export async function GET(
         response.headers.set('Cache-Control', 'private, no-store, max-age=0');
         return response;
     } catch (error) {
+        if (error instanceof ProviderRequestError) {
+            console.error('Founder OS provider OAuth failed', {
+                requestId,
+                provider,
+                phase,
+                providerCode: error.providerCode,
+                httpStatus: error.httpStatus,
+            });
+            return founderOsJson(
+                {
+                    success: false,
+                    error: 'Provider authorization could not be completed.',
+                    code: error.providerCode,
+                    provider,
+                    phase,
+                    requestId,
+                },
+                { status: error.providerCode === 'TIMEOUT' ? 504 : 502 }
+            );
+        }
+        if (isProviderStorageError(error)) {
+            console.error('Founder OS provider OAuth storage failed', {
+                requestId,
+                provider,
+                phase,
+                storageCode: error.code,
+            });
+            return founderOsJson(
+                {
+                    success: false,
+                    error: 'Provider connection could not be stored.',
+                    code: error.code,
+                    provider,
+                    phase,
+                    requestId,
+                },
+                { status: error.status }
+            );
+        }
         return founderOsErrorResponse(error, requestId);
     }
 }
