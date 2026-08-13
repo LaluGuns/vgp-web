@@ -13,19 +13,7 @@ const metaTokenSchema = z.object({
     access_token: z.string().min(1),
     user_id: z.coerce.string().min(1).optional(),
     expires_in: z.coerce.number().int().positive().optional(),
-}).passthrough();
-
-const metaProfileSchema = z.object({
-    id: z.coerce.string().min(1),
-    username: z.string().min(1).optional(),
-    name: z.string().optional(),
-    account_type: z.string().optional(),
-}).passthrough();
-const permissionsSchema = z.object({
-    data: z.array(z.object({
-        permission: z.string(),
-        status: z.string(),
-    }).passthrough()),
+    permissions: z.array(z.string().min(1)).min(1).optional(),
 }).passthrough();
 
 const metaIdSchema = z.object({ id: z.coerce.string().min(1) }).passthrough();
@@ -115,6 +103,12 @@ export class MetaProviderClient {
             { externalWrite: false }
         );
         const shortToken = metaTokenSchema.parse(shortBody);
+        if (!shortToken.user_id || !shortToken.permissions) {
+            throw new ProviderRequestError(
+                'Provider token response did not include an account and granted scopes.',
+                { providerCode: 'INCOMPLETE_TOKEN_GRANTS' }
+            );
+        }
 
         const exchangeUrl = new URL('https://graph.instagram.com/access_token');
         exchangeUrl.search = new URLSearchParams({
@@ -129,17 +123,15 @@ export class MetaProviderClient {
             { externalWrite: false }
         );
         const longToken = metaTokenSchema.parse(longBody);
-        const profile = await this.getProfile(longToken.access_token);
-        const grantedScopes = await this.getGrantedScopes(longToken.access_token);
         const expiresAt = longToken.expires_in
             ? new Date(Date.now() + longToken.expires_in * 1000).toISOString()
             : null;
 
         return {
             accessToken: longToken.access_token,
-            accountId: profile.id,
-            accountLabel: profile.username ?? profile.name ?? null,
-            grantedScopes,
+            accountId: shortToken.user_id,
+            accountLabel: null,
+            grantedScopes: shortToken.permissions,
             expiresAt,
         };
     }
@@ -292,50 +284,6 @@ export class MetaProviderClient {
             providerReference: parsed.message_id,
             detail: { messageId: parsed.message_id },
         };
-    }
-
-    private async getProfile(accessToken: string) {
-        const credentials: ProviderCredentials = {
-            connectionId: 'oauth',
-            provider: 'meta',
-            accountId: 'me',
-            accountLabel: null,
-            accessToken,
-            refreshToken: null,
-            grantedScopes: [],
-            expiresAt: null,
-        };
-        const body = await this.authorizedRequest(
-            credentials,
-            this.graphUrl('me', {
-                fields: 'id,username,name,account_type',
-            }),
-            { method: 'GET' },
-            false
-        );
-        return metaProfileSchema.parse(body);
-    }
-
-    private async getGrantedScopes(accessToken: string): Promise<string[]> {
-        const credentials: ProviderCredentials = {
-            connectionId: 'oauth',
-            provider: 'meta',
-            accountId: 'me',
-            accountLabel: null,
-            accessToken,
-            refreshToken: null,
-            grantedScopes: [],
-            expiresAt: null,
-        };
-        const body = await this.authorizedRequest(
-            credentials,
-            this.graphUrl('me/permissions'),
-            { method: 'GET' },
-            false
-        );
-        return permissionsSchema.parse(body).data
-            .filter((permission) => permission.status === 'granted')
-            .map((permission) => permission.permission);
     }
 
     private graphUrl(path: string, query?: Record<string, string>): string {
