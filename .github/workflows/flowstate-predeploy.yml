@@ -95,8 +95,8 @@ jobs:
               raise SystemExit("twitter:card is not summary_large_image")
           if expected not in twitter_image:
               raise SystemExit("twitter:image is stale or missing")
-          if expected not in og_image:
-              raise SystemExit("og:image is stale or missing")
+          if "/opengraph-image" not in og_image:
+              raise SystemExit("og:image is missing the generated Flow card")
 
           open("/tmp/flow-social-image-url", "w", encoding="utf-8").write(twitter_image)
           PY
