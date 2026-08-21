@@ -97,6 +97,21 @@ jobs:
               raise SystemExit("image is unexpectedly small")
           PY
 
+          mkdir -p "$GITHUB_WORKSPACE/live-social-qa"
+          cp /tmp/image.bin "$GITHUB_WORKSPACE/live-social-qa/flow-live-social-card.png"
+          cp /tmp/page.html "$GITHUB_WORKSPACE/live-social-qa/page.html"
+          cp /tmp/page.headers "$GITHUB_WORKSPACE/live-social-qa/page.headers.txt"
+          cp /tmp/image.headers "$GITHUB_WORKSPACE/live-social-qa/image.headers.txt"
+
+      - name: Upload live social-card artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-live-social-card
+          path: live-social-qa/
+          if-no-files-found: warn
+          retention-days: 1
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
