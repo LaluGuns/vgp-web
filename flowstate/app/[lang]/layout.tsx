@@ -60,7 +60,7 @@ export async function generateMetadata({
   // Version both the generated image URL and the page used for social QA.
   // X caches cards by shared page URL, so image-only cache busting is not
   // sufficient for an already-seen bare domain.
-  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}?v=20260821-player-v2`;
+  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}?v=20260821-home-player-v1`;
 
   // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
