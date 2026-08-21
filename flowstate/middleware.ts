@@ -5,6 +5,7 @@ import { legacyLocaleRedirectDestination, localePath } from "@/lib/marketing/seo
 // can render now but remain noindex until their per-page release is reviewed.
 const LOCALES = ["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it", "en-US", "en-GB", "ja-JP", "de-DE", "es-MX", "es-ES", "pt-BR", "ko-KR"];
 const DEFAULT_LOCALE = "en";
+const SOCIAL_CRAWLER_RE = /twitterbot|facebookexternalhit|facebot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot/i;
 
 function withHostRobotsPolicy(response: NextResponse, req: NextRequest) {
   // Preview, branch and local hosts must never become indexable. This is
@@ -14,6 +15,10 @@ function withHostRobotsPolicy(response: NextResponse, req: NextRequest) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   }
   return response;
+}
+
+function isSocialCrawler(req: NextRequest): boolean {
+  return SOCIAL_CRAWLER_RE.test(req.headers.get("user-agent") ?? "");
 }
 
 function resolveLocale(req: NextRequest): string {
@@ -51,9 +56,18 @@ export function middleware(req: NextRequest) {
     return withHostRobotsPolicy(NextResponse.next(), req);
   }
 
-  const locale = resolveLocale(req);
+  // Social preview crawlers should receive the rendered English page directly
+  // instead of a locale redirect. This makes metadata discovery deterministic
+  // for bare flow.virzyguns.com shares while preserving normal locale redirects
+  // for real visitors.
+  const locale = isSocialCrawler(req) ? DEFAULT_LOCALE : resolveLocale(req);
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
+
+  if (isSocialCrawler(req)) {
+    return withHostRobotsPolicy(NextResponse.rewrite(url), req);
+  }
+
   return withHostRobotsPolicy(NextResponse.redirect(url, 307), req);
 }
 
