@@ -19,6 +19,84 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  live-card-debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Inspect production Twitterbot response
+        shell: bash
+        run: |
+          set -euo pipefail
+          PAGE_URL="https://flow.virzyguns.com/?social=20260821-v2"
+          USER_AGENT="Twitterbot/1.0"
+
+          curl --fail --silent --show-error --location \
+            --user-agent "$USER_AGENT" \
+            --connect-timeout 10 --max-time 30 \
+            -D /tmp/page.headers \
+            "$PAGE_URL" -o /tmp/page.html
+
+          echo "===== PAGE HEADERS ====="
+          cat /tmp/page.headers
+
+          python - <<'PY'
+          from html.parser import HTMLParser
+
+          class MetaParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.meta = []
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() != "meta":
+                      return
+                  data = {k.lower(): v for k, v in attrs if k and v is not None}
+                  key = data.get("property") or data.get("name")
+                  value = data.get("content")
+                  if key and value and (key.lower().startswith("twitter:") or key.lower().startswith("og:")):
+                      self.meta.append((key, value))
+
+          html = open("/tmp/page.html", encoding="utf-8").read()
+          parser = MetaParser()
+          parser.feed(html)
+          print("===== SOCIAL META =====")
+          for key, value in parser.meta:
+              print(f"{key} = {value}")
+
+          values = {k.lower(): v for k, v in parser.meta}
+          image = values.get("twitter:image") or values.get("og:image") or ""
+          print("SELECTED_IMAGE =", image)
+          open("/tmp/image-url", "w", encoding="utf-8").write(image)
+
+          if values.get("twitter:card") != "summary_large_image":
+              raise SystemExit("twitter:card mismatch")
+          if "20260821-player-v2" not in image:
+              raise SystemExit("live social image metadata is stale")
+          PY
+
+          IMAGE_URL="$(cat /tmp/image-url)"
+          curl --fail --silent --show-error --location \
+            --user-agent "$USER_AGENT" \
+            --connect-timeout 10 --max-time 45 \
+            -D /tmp/image.headers \
+            "$IMAGE_URL" -o /tmp/image.bin
+
+          echo "===== IMAGE HEADERS ====="
+          cat /tmp/image.headers
+
+          python - <<'PY'
+          from pathlib import Path
+          headers = Path("/tmp/image.headers").read_text(errors="replace").lower()
+          data = Path("/tmp/image.bin").read_bytes()
+          print("IMAGE_BYTES =", len(data))
+          print("PNG_SIGNATURE =", data[:8].hex())
+          if "content-type: image/png" not in headers:
+              raise SystemExit("image content-type is not PNG")
+          if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+              raise SystemExit("image body is not PNG")
+          if len(data) < 10_000:
+              raise SystemExit("image is unexpectedly small")
+          PY
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
