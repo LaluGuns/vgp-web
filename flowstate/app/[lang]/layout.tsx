@@ -57,7 +57,7 @@ export async function generateMetadata({
     "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
   );
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}`;
+  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}?v=20260821-player`;
 
   // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
