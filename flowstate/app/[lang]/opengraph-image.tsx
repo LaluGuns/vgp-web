@@ -4,6 +4,43 @@ export const alt = "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+const FLOW_LOGO = "https://flow.virzyguns.com/icons/flowstate-logo.png";
+
+function Control({
+  children,
+  primary = false,
+}: {
+  children: React.ReactNode;
+  primary?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        width: primary ? 70 : 48,
+        height: primary ? 70 : 48,
+        borderRadius: primary ? 35 : 24,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: primary
+          ? "1px solid rgba(162,244,255,0.58)"
+          : "1px solid rgba(255,255,255,0.11)",
+        background: primary
+          ? "radial-gradient(circle at 35% 25%, rgba(255,255,255,0.34) 0%, rgba(90,216,255,0.21) 34%, rgba(18,96,185,0.11) 100%)"
+          : "rgba(255,255,255,0.025)",
+        boxShadow: primary
+          ? "0 0 30px rgba(0,210,255,0.22), inset 0 1px 0 rgba(255,255,255,0.28)"
+          : "inset 0 1px 0 rgba(255,255,255,0.07)",
+        color: primary ? "#e9fcff" : "rgba(255,255,255,0.58)",
+        fontSize: primary ? 25 : 19,
+        fontWeight: 700,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -15,9 +52,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           position: "relative",
           overflow: "hidden",
-          padding: "52px 64px",
+          padding: "42px 58px 48px",
           background:
-            "radial-gradient(900px 520px at 18% 0%, rgba(25,113,255,0.30) 0%, rgba(25,113,255,0) 58%), radial-gradient(760px 460px at 88% 95%, rgba(0,222,255,0.20) 0%, rgba(0,222,255,0) 56%), linear-gradient(135deg, #040814 0%, #071226 54%, #071a3d 100%)",
+            "radial-gradient(780px 390px at 32% 18%, rgba(27,93,228,0.14) 0%, rgba(27,93,228,0) 62%), radial-gradient(760px 430px at 78% 92%, rgba(0,193,255,0.10) 0%, rgba(0,193,255,0) 62%), linear-gradient(180deg, #03050a 0%, #050812 100%)",
           color: "white",
           fontFamily: "sans-serif",
         }}
@@ -27,44 +64,38 @@ export default function OpengraphImage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            height: 58,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div
+          <div
+            style={{
+              width: 196,
+              height: 58,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={FLOW_LOGO}
+              alt="Flow"
+              width={196}
+              height={58}
               style={{
-                width: 44,
-                height: 44,
-                borderRadius: 14,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "1px solid rgba(255,255,255,0.18)",
-                background: "linear-gradient(145deg, rgba(143,234,255,0.25), rgba(30,112,255,0.10))",
-                fontSize: 26,
-                fontWeight: 800,
-                color: "#9beeff",
+                width: 196,
+                height: 58,
+                objectFit: "contain",
+                objectPosition: "left center",
               }}
-            >
-              f
-            </div>
-            <div
-              style={{
-                display: "flex",
-                fontSize: 34,
-                fontWeight: 800,
-                letterSpacing: -1.5,
-                color: "#eafaff",
-              }}
-            >
-              flow
-            </div>
+            />
           </div>
 
           <div
             style={{
               display: "flex",
-              fontSize: 17,
-              color: "rgba(255,255,255,0.46)",
+              fontSize: 16,
+              color: "rgba(255,255,255,0.34)",
+              letterSpacing: 0.2,
             }}
           >
             flow.virzyguns.com
@@ -77,69 +108,78 @@ export default function OpengraphImage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            paddingTop: 18,
           }}
         >
           <div
             style={{
-              width: 1010,
-              height: 396,
-              borderRadius: 34,
+              width: 1084,
+              height: 436,
+              borderRadius: 32,
               display: "flex",
+              alignItems: "stretch",
               overflow: "hidden",
-              border: "1px solid rgba(255,255,255,0.16)",
-              background: "linear-gradient(145deg, rgba(255,255,255,0.115) 0%, rgba(255,255,255,0.035) 100%)",
-              boxShadow: "0 28px 80px rgba(0,0,0,0.42)",
+              border: "1px solid rgba(255,255,255,0.10)",
+              background:
+                "linear-gradient(135deg, rgba(10,15,27,0.95) 0%, rgba(4,8,16,0.90) 55%, rgba(5,11,22,0.92) 100%)",
+              boxShadow:
+                "0 34px 90px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.06)",
             }}
           >
             <div
               style={{
-                width: 326,
+                width: 420,
                 display: "flex",
-                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
                 position: "relative",
-                borderRight: "1px solid rgba(255,255,255,0.08)",
-                background: "radial-gradient(circle at 50% 43%, rgba(0,210,255,0.17), rgba(255,255,255,0.015) 60%)",
+                background:
+                  "radial-gradient(circle at 48% 51%, rgba(0,221,255,0.09) 0%, rgba(0,221,255,0) 52%)",
               }}
             >
               <div
                 style={{
-                  width: 188,
-                  height: 188,
-                  borderRadius: 94,
+                  width: 248,
+                  height: 248,
+                  borderRadius: 124,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  border: "1px solid rgba(164,241,255,0.34)",
-                  background: "radial-gradient(circle at 35% 28%, #8df0ff 0%, #28c3ff 23%, #126ed0 43%, #0a3475 67%, #07152e 100%)",
-                  boxShadow: "0 0 60px rgba(0,210,255,0.28)",
+                  position: "relative",
+                  background:
+                    "radial-gradient(circle at 33% 23%, #d9fbff 0%, #82eaff 13%, #36c9ff 31%, #1286d8 54%, #0a4c97 72%, #071f4a 88%, #061329 100%)",
+                  border: "1px solid rgba(175,244,255,0.52)",
+                  boxShadow:
+                    "0 0 22px rgba(0,211,255,0.42), 0 0 70px rgba(0,184,255,0.25), inset -28px -34px 60px rgba(0,15,59,0.48), inset 18px 18px 34px rgba(255,255,255,0.22)",
                 }}
               >
                 <div
                   style={{
-                    width: 62,
-                    height: 62,
-                    borderRadius: 31,
+                    position: "absolute",
+                    width: 172,
+                    height: 172,
+                    left: 24,
+                    top: 17,
+                    borderRadius: 86,
                     display: "flex",
-                    border: "1px solid rgba(255,255,255,0.34)",
-                    background: "linear-gradient(145deg, rgba(255,255,255,0.34), rgba(255,255,255,0.08))",
+                    border: "1px solid rgba(238,253,255,0.24)",
+                    background:
+                      "linear-gradient(145deg, rgba(255,255,255,0.34) 0%, rgba(160,239,255,0.08) 47%, rgba(18,73,150,0.02) 100%)",
                   }}
                 />
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: 32,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: 2.1,
-                  textTransform: "uppercase",
-                  color: "rgba(154,235,255,0.72)",
-                }}
-              >
-                Deep work soundtrack
+                <div
+                  style={{
+                    position: "absolute",
+                    width: 66,
+                    height: 40,
+                    left: 52,
+                    top: 31,
+                    borderRadius: 36,
+                    display: "flex",
+                    background: "rgba(255,255,255,0.34)",
+                    filter: "blur(8px)",
+                  }}
+                />
               </div>
             </div>
 
@@ -148,138 +188,30 @@ export default function OpengraphImage() {
                 flex: 1,
                 display: "flex",
                 flexDirection: "column",
-                padding: "42px 48px 34px",
+                padding: "58px 66px 42px 26px",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: 2.4,
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.40)",
-                }}
-              >
-                Now playing
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: 13,
-                  fontSize: 40,
-                  fontWeight: 800,
-                  letterSpacing: -1.2,
-                  color: "#f4fbff",
-                }}
-              >
-                Focus music
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  marginTop: 8,
-                  fontSize: 17,
-                  color: "rgba(255,255,255,0.45)",
-                }}
-              >
-                Virzy Guns Production
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 14,
-                  marginTop: 42,
-                }}
-              >
+              <div style={{ display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
-                    width: 430,
-                    height: 8,
                     display: "flex",
-                    borderRadius: 999,
-                    overflow: "hidden",
-                    background: "rgba(255,255,255,0.10)",
+                    fontSize: 34,
+                    fontWeight: 800,
+                    letterSpacing: -0.7,
+                    color: "#f5f7fb",
                   }}
                 >
-                  <div
-                    style={{
-                      width: 278,
-                      height: "100%",
-                      display: "flex",
-                      borderRadius: 999,
-                      background: "linear-gradient(90deg, #72e9ff 0%, #00d8ff 56%, #438cff 100%)",
-                    }}
-                  />
+                  Deep Focus
                 </div>
-                <div style={{ display: "flex", fontSize: 13, color: "rgba(255,255,255,0.42)" }}>
-                  24:18
-                </div>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 18,
-                  marginTop: 34,
-                }}
-              >
                 <div
                   style={{
-                    width: 54,
-                    height: 54,
-                    borderRadius: 16,
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "1px solid rgba(255,255,255,0.14)",
-                    background: "rgba(255,255,255,0.055)",
-                    color: "rgba(255,255,255,0.70)",
-                    fontSize: 20,
+                    marginTop: 7,
+                    fontSize: 17,
+                    color: "rgba(255,255,255,0.39)",
                   }}
                 >
-                  ◀
-                </div>
-
-                <div
-                  style={{
-                    width: 72,
-                    height: 72,
-                    borderRadius: 36,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "1px solid rgba(98,225,255,0.55)",
-                    background: "linear-gradient(180deg, rgba(126,232,255,0.28) 0%, rgba(0,168,255,0.13) 100%)",
-                    boxShadow: "0 0 34px rgba(0,213,255,0.28)",
-                    color: "#dffaff",
-                    fontSize: 25,
-                  }}
-                >
-                  ▶
-                </div>
-
-                <div
-                  style={{
-                    width: 54,
-                    height: 54,
-                    borderRadius: 16,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "1px solid rgba(255,255,255,0.14)",
-                    background: "rgba(255,255,255,0.055)",
-                    color: "rgba(255,255,255,0.70)",
-                    fontSize: 20,
-                  }}
-                >
-                  ▶
+                  Soothe
                 </div>
               </div>
 
@@ -288,27 +220,107 @@ export default function OpengraphImage() {
                   display: "flex",
                   alignItems: "center",
                   gap: 12,
-                  marginTop: 30,
+                  marginTop: 52,
                 }}
               >
-                <div style={{ display: "flex", fontSize: 13, color: "rgba(255,255,255,0.34)" }}>VOL</div>
                 <div
                   style={{
-                    width: 220,
-                    height: 5,
+                    width: 42,
                     display: "flex",
+                    justifyContent: "flex-start",
+                    fontSize: 12,
+                    color: "rgba(255,255,255,0.30)",
+                  }}
+                >
+                  0:00
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 6,
                     borderRadius: 999,
+                    display: "flex",
+                    background: "rgba(255,255,255,0.16)",
                     overflow: "hidden",
-                    background: "rgba(255,255,255,0.09)",
                   }}
                 >
                   <div
                     style={{
-                      width: 154,
-                      height: "100%",
+                      width: 6,
+                      height: 6,
+                      borderRadius: 3,
                       display: "flex",
+                      background: "#92efff",
+                      boxShadow: "0 0 10px rgba(110,232,255,0.65)",
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: 42,
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    fontSize: 12,
+                    color: "rgba(255,255,255,0.30)",
+                  }}
+                >
+                  5:30
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  marginTop: 36,
+                }}
+              >
+                <Control>⤨</Control>
+                <Control>◀</Control>
+                <Control primary>▶</Control>
+                <Control>▶</Control>
+                <Control>↻</Control>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  marginTop: 34,
+                }}
+              >
+                <div
+                  style={{
+                    width: 26,
+                    display: "flex",
+                    fontSize: 15,
+                    color: "rgba(255,255,255,0.34)",
+                  }}
+                >
+                  ◖
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    height: 5,
+                    borderRadius: 999,
+                    display: "flex",
+                    background: "rgba(255,255,255,0.14)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "46%",
+                      height: "100%",
                       borderRadius: 999,
-                      background: "rgba(139,235,255,0.72)",
+                      display: "flex",
+                      background:
+                        "linear-gradient(90deg, rgba(116,233,255,0.95), rgba(84,196,255,0.88))",
+                      boxShadow: "0 0 12px rgba(0,211,255,0.28)",
                     }}
                   />
                 </div>
