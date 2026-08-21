@@ -41,7 +41,7 @@ jobs:
       - run: npm run build
 
       - name: Verify live X social card
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         working-directory: .
         shell: bash
         run: |
