@@ -47,8 +47,8 @@ jobs:
         run: |
           set -euo pipefail
 
-          PAGE_URL="https://flow.virzyguns.com/?social=20260821-v2"
-          EXPECTED_IMAGE_VERSION="20260821-player-v2"
+          PAGE_URL="https://flow.virzyguns.com/?social=20260821-home-player-v1"
+          EXPECTED_IMAGE_VERSION="20260821-home-player-v1"
           USER_AGENT="Twitterbot/1.0"
 
           ok=0
