@@ -9,109 +9,49 @@ permissions:
   contents: read
 
 jobs:
-  verify-linkedin-root:
+  reverse-engineer-post-inspector:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Verify bare Flow URL for LinkedInBot
-        shell: bash
-        run: |
-          set -euo pipefail
-          HTML=/tmp/linkedin.html
-          HEADERS=/tmp/linkedin-image.headers
-          IMG=/tmp/linkedin-image.png
-          curl --fail --silent --show-error --location \
-            --user-agent "LinkedInBot/1.0" \
-            --connect-timeout 10 --max-time 30 \
-            "https://flow.virzyguns.com/" -o "$HTML"
-          HTML="$HTML" python - <<'PY'
-          import os
-          from html.parser import HTMLParser
-          class P(HTMLParser):
-              def __init__(self): super().__init__(); self.meta = {}
-              def handle_starttag(self, tag, attrs):
-                  if tag.lower() != 'meta': return
-                  d = {k.lower(): v for k, v in attrs if k and v is not None}
-                  key = d.get('property') or d.get('name')
-                  if key and d.get('content'): self.meta[key.lower()] = d['content']
-          p=P(); p.feed(open(os.environ['HTML'],encoding='utf-8').read())
-          og=p.meta.get('og:image',''); title=p.meta.get('og:title',''); ogurl=p.meta.get('og:url','')
-          print('og:title =',title); print('og:image =',og); print('og:url =',ogurl)
-          assert title == 'Flow by Virzy Guns: Get in the zone.'
-          assert '/en/social-card-v7?v=20260822-fullbleed-0808' in og
-          assert ogurl == 'https://flow.virzyguns.com'
-          open('/tmp/linkedin-image-url','w').write(og)
-          PY
-          IMAGE_URL="$(cat /tmp/linkedin-image-url)"
-          curl --fail --silent --show-error --location \
-            --user-agent "LinkedInBot/1.0" --connect-timeout 10 --max-time 45 \
-            -D "$HEADERS" "$IMAGE_URL" -o "$IMG"
-          HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
-          import os
-          from pathlib import Path
-          h=Path(os.environ['HEADERS']).read_text(errors='replace').lower(); b=Path(os.environ['IMG']).read_bytes()
-          print('image bytes =',len(b)); assert 'content-type: image/png' in h; assert b.startswith(b'\x89PNG\r\n\x1a\n'); assert len(b)>10000
-          PY
-
-      - name: Discover Post Inspector client API
+      - name: Fetch LinkedIn Post Inspector app bundle
         shell: bash
         run: |
           set -euo pipefail
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36'
           curl --fail --silent --show-error --location --user-agent "$UA" \
             --connect-timeout 10 --max-time 30 \
-            'https://www.linkedin.com/post-inspector/' -o /tmp/pi.html
-          python - <<'PY'
-          from html.parser import HTMLParser
-          from urllib.parse import urljoin
-          class P(HTMLParser):
-              def __init__(self): super().__init__(); self.s=[]
-              def handle_starttag(self,tag,attrs):
-                  if tag.lower()!='script': return
-                  d=dict(attrs); src=d.get('src')
-                  if src: self.s.append(urljoin('https://www.linkedin.com/post-inspector/',src))
-          p=P(); p.feed(open('/tmp/pi.html',encoding='utf-8',errors='replace').read())
-          for i,u in enumerate(p.s[:20]): print(i,u)
-          open('/tmp/pi-scripts','w').write('\n'.join(p.s[:20])+'\n')
-          PY
-          mkdir -p /tmp/pi-js
-          n=0
-          while IFS= read -r url || [ -n "$url" ]; do
-            [ -z "$url" ] && continue
-            echo "fetching $url"
-            curl --fail --silent --show-error --location --user-agent "$UA" \
-              --connect-timeout 10 --max-time 30 "$url" -o "/tmp/pi-js/$n.js" || true
-            wc -c "/tmp/pi-js/$n.js" || true
-            n=$((n+1))
-          done < /tmp/pi-scripts
+            'https://static.licdn.com/aero-v1/sc/h/1dmt9ag4pwy2q52tz4m6tet83' \
+            -o /tmp/app.js
+          wc -c /tmp/app.js
+
+      - name: Print exact inspect route and API modules
+        shell: bash
+        run: |
+          set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          import re
-          needles=('post-inspector','sharing-debugger','inspect','ingest','preview','metadata','voyager','csrf','ajax')
-          print('--- app-specific snippets ---')
-          for f in sorted(Path('/tmp/pi-js').glob('*.js')):
-              text=f.read_text(errors='ignore')
-              print('FILE',f.name,'bytes',len(text))
-              low=text.lower()
-              hits=[]
-              for needle in needles:
-                  start=0
-                  while True:
-                      i=low.find(needle,start)
-                      if i<0: break
-                      hits.append((i,needle))
-                      start=i+len(needle)
-              for i,needle in sorted(hits)[:120]:
-                  a=max(0,i-220); b=min(len(text),i+420)
-                  snippet=text[a:b].replace('\n',' ')
-                  print(f'[{f.name}] {needle}: {snippet}')
-          print('--- URL-like candidates ---')
-          found=set()
-          for f in Path('/tmp/pi-js').glob('*.js'):
-              text=f.read_text(errors='ignore')
-              for m in re.findall(r'https?://[^"\'\s]+|/[A-Za-z0-9_./?=&:%-]{4,}',text):
-                  lm=m.lower()
-                  if any(k in lm for k in ('inspect','sharing','debug','voyager','api','ingest','preview','metadata')):
-                      found.add(m[:600])
-          for item in sorted(found)[:400]: print(item)
+          text=Path('/tmp/app.js').read_text(errors='ignore')
+          targets=[
+            'define("sharing-debugger-web/routes/inspect"',
+            'define("sharing-debugger-web/models/post-inspector"',
+            'define("sharing-debugger-web/utils/authentication-utils"',
+            'define("sharing-debugger-web/adapters/application"',
+            'define("sharing-debugger-web/serializers/post-inspector"',
+            'define("sharing-debugger-web/router"',
+            'postInspector',
+          ]
+          for target in targets:
+              print('\n===== TARGET:',target,'=====')
+              start=0
+              count=0
+              while True:
+                  i=text.find(target,start)
+                  if i < 0: break
+                  a=max(0,i-300)
+                  b=min(len(text),i+7000)
+                  print(text[a:b])
+                  count += 1
+                  start=i+len(target)
+                  if count>=8: break
+              print('occurrences shown',count)
           PY
