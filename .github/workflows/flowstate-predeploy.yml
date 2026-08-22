@@ -54,7 +54,7 @@ jobs:
             if curl --fail --silent --show-error --location \
               --connect-timeout 5 --max-time 30 \
               -D /tmp/flow-social.headers \
-              "http://127.0.0.1:3000/en/social-card-v7" \
+              "http://127.0.0.1:3000/en/social-card-v7?v=20260822-blueglass-2227" \
               -o /tmp/flow-social.png; then
               if python - <<'PY'
           from pathlib import Path
@@ -77,6 +77,50 @@ jobs:
             cat /tmp/flow-next.log || true
             exit 1
           fi
+
+      - name: Assert no black outer background
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image
+
+          im = Image.open('/tmp/flow-social.png').convert('RGB')
+          assert im.size == (1200, 630), im.size
+
+          points = {
+              'top-left': (0, 0),
+              'top-right': (1199, 0),
+              'bottom-left': (0, 629),
+              'bottom-right': (1199, 629),
+              'top-mid': (600, 0),
+              'bottom-mid': (600, 629),
+              'left-mid': (0, 315),
+              'right-mid': (1199, 315),
+          }
+          for name, point in points.items():
+              rgb = im.getpixel(point)
+              print(name, rgb)
+              assert sum(rgb) > 260, f'{name} too dark: {rgb}'
+              assert max(rgb) > 120, f'{name} not blue/cyan enough: {rgb}'
+
+          edge = []
+          for y in range(im.height):
+              for x in range(24):
+                  edge.append(im.getpixel((x, y)))
+                  edge.append(im.getpixel((im.width - 1 - x, y)))
+          for x in range(im.width):
+              for y in range(24):
+                  edge.append(im.getpixel((x, y)))
+                  edge.append(im.getpixel((x, im.height - 1 - y)))
+
+          near_black = sum(1 for r, g, b in edge if r < 45 and g < 45 and b < 45)
+          ratio = near_black / len(edge)
+          print('near-black edge ratio =', ratio)
+          assert ratio < 0.001, f'outer edge still contains black: {ratio:.4%}'
+          PY
 
       - name: Upload social card preview
         if: github.event_name == 'pull_request'
