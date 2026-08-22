@@ -10,18 +10,8 @@ import { indexableLanguageAlternates, isIndexableLocale, isSupportedSeoLocale, l
 import { marketRouteCopy } from "@/lib/marketing/market-copy";
 import { openGraphLocale } from "@/lib/marketing/seo";
 
-const sans = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
+const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
 const LOCALES = ROUTABLE_LOCALES;
 
@@ -35,28 +25,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
   const locale = isSupportedSeoLocale(lang) ? lang : DEFAULT_LOCALE;
   const t = getTranslator(resolveLocale(locale));
-
   const title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
-  const description = t(
-    "metadata.description",
-    "Get in the zone with original lofi & synthwave music, a Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers."
-  );
+  const description = t("metadata.description", "Get in the zone with original lofi & synthwave music, a Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers.");
   const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
-  const ogDescription = t(
-    "metadata.ogDescription",
-    "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
-  );
+  const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "social-card-v3")}`;
-
+  const socialImage = `${SITE}${localePath(locale, "social-card-v4")}`;
   const indexable = isIndexableLocale(locale);
   const languages = indexable
     ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` }
@@ -64,10 +42,7 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(SITE),
-    title: {
-      default: regionalCopy?.metaTitle ?? title,
-      template: "%s · Flow by Virzy Guns",
-    },
+    title: { default: regionalCopy?.metaTitle ?? title, template: "%s · Flow by Virzy Guns" },
     description: regionalCopy?.metaDescription ?? description,
     openGraph: {
       title: regionalCopy?.metaTitle ?? ogTitle,
@@ -84,22 +59,13 @@ export async function generateMetadata({
       description: regionalCopy?.metaDescription ?? ogDescription,
       images: [{ url: socialImage, alt: regionalCopy?.metaTitle ?? ogTitle }],
     },
-    alternates: {
-      canonical: localePath(locale),
-      languages,
-    },
+    alternates: { canonical: localePath(locale), languages },
     robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
     manifest: "/manifest.json",
   };
 }
 
-export default async function LangLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ lang: string }>;
-}) {
+export default async function LangLayout({ children, params }: { children: React.ReactNode; params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   if (!isSupportedSeoLocale(lang)) notFound();
 
@@ -115,22 +81,11 @@ export default async function LangLayout({
           <AnalyticsProvider />
           {children}
         </LocaleProvider>
-
         <svg className="absolute w-[1px] h-[1px] opacity-0 pointer-events-none" aria-hidden="true" style={{ pointerEvents: "none" }}>
           <defs>
-            <filter id="liquid-glass-refract">
-              <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-            <filter id="lens-refraction">
-              <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-            <filter id="liquid-goo">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -12" result="goo" />
-              <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-            </filter>
+            <filter id="liquid-glass-refract"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" /></filter>
+            <filter id="lens-refraction"><feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" /></filter>
+            <filter id="liquid-goo"><feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" /><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -12" result="goo" /><feComposite in="SourceGraphic" in2="goo" operator="atop" /></filter>
           </defs>
         </svg>
       </body>
