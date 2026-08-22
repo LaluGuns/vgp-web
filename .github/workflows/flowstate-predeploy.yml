@@ -9,49 +9,85 @@ permissions:
   contents: read
 
 jobs:
-  reverse-engineer-post-inspector:
+  force-linkedin-reinspect:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Fetch LinkedIn Post Inspector app bundle
+      - name: Reproduce LinkedIn Post Inspector request
         shell: bash
         run: |
           set -euo pipefail
           UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36'
-          curl --fail --silent --show-error --location --user-agent "$UA" \
-            --connect-timeout 10 --max-time 30 \
-            'https://static.licdn.com/aero-v1/sc/h/1dmt9ag4pwy2q52tz4m6tet83' \
-            -o /tmp/app.js
-          wc -c /tmp/app.js
+          TARGET='https://flow.virzyguns.com'
+          ENCODED='https%3A%2F%2Fflow.virzyguns.com'
+          COOKIE_JAR=/tmp/linkedin.cookies
 
-      - name: Print exact inspect route and API modules
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
+          curl --fail --silent --show-error --location \
+            --user-agent "$UA" \
+            --cookie-jar "$COOKIE_JAR" --cookie "$COOKIE_JAR" \
+            --connect-timeout 10 --max-time 30 \
+            'https://www.linkedin.com/post-inspector/' \
+            -o /tmp/post-inspector.html
+
+          JSESSIONID=$(python - <<'PY'
           from pathlib import Path
-          text=Path('/tmp/app.js').read_text(errors='ignore')
-          targets=[
-            'define("sharing-debugger-web/routes/inspect"',
-            'define("sharing-debugger-web/models/post-inspector"',
-            'define("sharing-debugger-web/utils/authentication-utils"',
-            'define("sharing-debugger-web/adapters/application"',
-            'define("sharing-debugger-web/serializers/post-inspector"',
-            'define("sharing-debugger-web/router"',
-            'postInspector',
-          ]
-          for target in targets:
-              print('\n===== TARGET:',target,'=====')
-              start=0
-              count=0
-              while True:
-                  i=text.find(target,start)
-                  if i < 0: break
-                  a=max(0,i-300)
-                  b=min(len(text),i+7000)
-                  print(text[a:b])
-                  count += 1
-                  start=i+len(target)
-                  if count>=8: break
-              print('occurrences shown',count)
+          rows=Path('/tmp/linkedin.cookies').read_text(errors='replace').splitlines()
+          for row in rows:
+              if not row or row.startswith('#'):
+                  continue
+              parts=row.split('\t')
+              if len(parts)>=7 and parts[5]=='JSESSIONID':
+                  print(parts[6].strip('"'))
+                  break
+          PY
+          )
+          if [ -z "$JSESSIONID" ]; then
+            echo 'JSESSIONID not found'
+            cat "$COOKIE_JAR"
+            exit 1
+          fi
+          echo "anonymous JSESSIONID acquired: ${JSESSIONID%%:*}:***"
+
+          API="https://www.linkedin.com/post-inspector-api/postInspector/${ENCODED}?action=inspect"
+          STATUS=$(curl --silent --show-error --location \
+            --user-agent "$UA" \
+            --cookie "$COOKIE_JAR" --cookie-jar "$COOKIE_JAR" \
+            --request POST \
+            --header "Csrf-Token: $JSESSIONID" \
+            --header 'X-RestLi-Protocol-Version: 2.0.0' \
+            --header 'Content-Type: application/json; charset=UTF-8' \
+            --header 'Accept: application/json, text/javascript, */*; q=0.01' \
+            --header 'Origin: https://www.linkedin.com' \
+            --header 'Referer: https://www.linkedin.com/post-inspector/' \
+            --data '{"url":"https://flow.virzyguns.com"}' \
+            --connect-timeout 10 --max-time 60 \
+            -D /tmp/inspect.headers \
+            -o /tmp/inspect.json \
+            -w '%{http_code}' \
+            "$API" || true)
+
+          echo "inspect API status = $STATUS"
+          echo '--- headers ---'
+          sed -n '1,80p' /tmp/inspect.headers || true
+          echo '--- response ---'
+          head -c 12000 /tmp/inspect.json || true
+          echo
+
+          STATUS="$STATUS" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          status=os.environ['STATUS']
+          body=Path('/tmp/inspect.json').read_text(errors='replace')
+          print('status for assertion =',status)
+          if status.startswith('2'):
+              try:
+                  data=json.loads(body)
+                  print('top-level keys =',list(data)[:30] if isinstance(data,dict) else type(data).__name__)
+                  print(json.dumps(data, indent=2)[:20000])
+              except Exception as e:
+                  print('JSON parse failed:',e)
+          elif status in {'401','403'}:
+              print('AUTH_REQUIRED')
+          else:
+              print('UNEXPECTED_STATUS')
           PY
