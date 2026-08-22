@@ -19,11 +19,7 @@ export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
 
-export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { themeColor: "#0a0a0f", width: "device-width", initialScale: 1 };
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -34,11 +30,9 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
   const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "social-card-v4")}`;
+  const socialImage = `${SITE}${localePath(locale, "social-card-v5")}`;
   const indexable = isIndexableLocale(locale);
-  const languages = indexable
-    ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` }
-    : undefined;
+  const languages = indexable ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` } : undefined;
 
   return {
     metadataBase: new URL(SITE),
@@ -72,11 +66,7 @@ export default async function LangLayout({ children, params }: { children: React
   return (
     <html lang={lang} className="dark" suppressHydrationWarning>
       <body className={`${sans.variable} ${mono.variable} font-sans`} suppressHydrationWarning>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var v=["glass","studio","editorial","terminal"];var r=localStorage.getItem("flowstate-ui-theme");var t="glass";if(r){var s=JSON.parse(r);if(s&&s.state&&v.indexOf(s.state.theme)!==-1){t=s.state.theme;}}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var v=["glass","studio","editorial","terminal"];var r=localStorage.getItem("flowstate-ui-theme");var t="glass";if(r){var s=JSON.parse(r);if(s&&s.state&&v.indexOf(s.state.theme)!==-1){t=s.state.theme;}}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();` }} />
         <LocaleProvider initialLocale={resolveLocale(lang) as Locale}>
           <AnalyticsProvider />
           {children}
