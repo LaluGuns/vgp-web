@@ -21,7 +21,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: flowstate
@@ -40,45 +40,18 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
-      - name: Capture exact home hero OG image
-        if: github.event_name == 'pull_request'
+      - name: Verify exact static social preview asset
         shell: bash
         run: |
           set -euo pipefail
-          npx --yes playwright@1.55.0 install chromium --with-deps
-          npm start > /tmp/flow-next.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
-
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:3000/en/og-capture >/dev/null; then
-              break
-            fi
-            sleep 2
-          done
-
-          npx --yes playwright@1.55.0 screenshot \
-            --viewport-size="1200,630" \
-            --wait-for-timeout=3500 \
-            http://127.0.0.1:3000/en/og-capture \
-            /tmp/flow-og-home.png
-
           python - <<'PY'
           from pathlib import Path
-          p = Path('/tmp/flow-og-home.png')
-          raw = p.read_bytes()
-          assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(raw) > 100000
-          print('captured exact home OG bytes =', len(raw))
+          p = Path('public/social/flow-og-home-0808.jpg')
+          b = p.read_bytes()
+          print('static social preview bytes =', len(b))
+          assert b.startswith(b'\xff\xd8\xff')
+          assert len(b) > 50000
           PY
-
-      - name: Upload exact home OG preview
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flow-og-exact-home
-          path: /tmp/flow-og-home.png
-          if-no-files-found: error
 
       - name: Verify bare Flow URL live
         if: github.event_name == 'push'
@@ -86,13 +59,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social/flow-og-home-0808.png"
+          EXPECTED_IMAGE_PATH="/social/flow-og-home-0808.jpg"
 
           verify() {
             local LABEL="$1"
             local UA="$2"
             local HTML="/tmp/${LABEL}.html"
-            local IMG="/tmp/${LABEL}.png"
+            local IMG="/tmp/${LABEL}.jpg"
             local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
             local ok=0
 
@@ -144,8 +117,8 @@ jobs:
           from pathlib import Path
           b = Path(os.environ['IMG']).read_bytes()
           print('image bytes =', len(b))
-          assert b.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(b) > 100000
+          assert b.startswith(b'\xff\xd8\xff')
+          assert len(b) > 50000
           PY
                     then
                       ok=1
