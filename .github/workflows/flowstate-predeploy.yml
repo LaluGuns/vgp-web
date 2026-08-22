@@ -41,12 +41,11 @@ jobs:
       - run: npm run build
 
       - name: Verify live social cards
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
-
           EXPECTED_IMAGE_PATH="/social-card-v4"
 
           verify_card() {
@@ -59,16 +58,12 @@ jobs:
             local IMAGE_HEADERS="/tmp/flow-social-${PREFIX}-image.headers"
             local IMAGE_BIN="/tmp/flow-social-${PREFIX}-image.bin"
 
-            local ok=0
-            for attempt in $(seq 1 24); do
-              echo "$LABEL live social-card check ${attempt}/24"
+            curl --fail --silent --show-error --location \
+              --user-agent "$USER_AGENT" \
+              --connect-timeout 10 --max-time 30 \
+              "$PAGE_URL" -o "$HTML"
 
-              if curl --fail --silent --show-error --location \
-                --user-agent "$USER_AGENT" \
-                --connect-timeout 10 --max-time 30 \
-                "$PAGE_URL" -o "$HTML"; then
-
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" python - <<'PY'
+            HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" python - <<'PY'
           import os
           from html.parser import HTMLParser
 
@@ -76,7 +71,6 @@ jobs:
               def __init__(self):
                   super().__init__()
                   self.meta = {}
-
               def handle_starttag(self, tag, attrs):
                   if tag.lower() != "meta":
                       return
@@ -98,21 +92,19 @@ jobs:
           print("og:image =", og_image)
           if twitter_card != "summary_large_image":
               raise SystemExit("twitter:card is not summary_large_image")
-          if expected not in twitter_image:
-              raise SystemExit("twitter:image is stale or missing the v4 card")
-          if expected not in og_image:
-              raise SystemExit("og:image is stale or missing the v4 card")
+          if expected not in twitter_image or expected not in og_image:
+              raise SystemExit("social metadata is not serving v4")
           open(os.environ["IMAGE_URL_FILE"], "w", encoding="utf-8").write(og_image)
           PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$USER_AGENT" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$IMAGE_HEADERS" \
-                    "$IMAGE_URL" -o "$IMAGE_BIN"; then
 
-                    IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
+            IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
+            curl --fail --silent --show-error --location \
+              --user-agent "$USER_AGENT" \
+              --connect-timeout 10 --max-time 45 \
+              -D "$IMAGE_HEADERS" \
+              "$IMAGE_URL" -o "$IMAGE_BIN"
+
+            IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
           import os
           from pathlib import Path
           headers = Path(os.environ["IMAGE_HEADERS"]).read_text(errors="replace").lower()
@@ -121,26 +113,14 @@ jobs:
           if "content-type: image/png" not in headers:
               raise SystemExit("social image did not return image/png")
           if not image.startswith(b"\x89PNG\r\n\x1a\n"):
-              raise SystemExit("social image response is not a valid PNG")
+              raise SystemExit("social image response is not a PNG")
           if len(image) < 10_000:
               raise SystemExit("social image PNG is unexpectedly small")
           PY
-                    ok=1
-                    break
-                  fi
-                fi
-              fi
-              sleep 10
-            done
-
-            if [ "$ok" -ne 1 ]; then
-              echo "$LABEL social card did not converge to v4."
-              return 1
-            fi
-            echo "$LABEL is serving Flow player v4 and a valid PNG."
+            echo "$LABEL PASS"
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "facebookexternalhit/1.1"
-          verify_card "Twitter share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "Twitterbot/1.0"
-          verify_card "Facebook share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "facebookexternalhit/1.1"
+          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4-final" "Twitterbot/1.0"
+          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4-final" "facebookexternalhit/1.1"
+          verify_card "Twitter share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4-final" "Twitterbot/1.0"
+          verify_card "Facebook share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4-final" "facebookexternalhit/1.1"
