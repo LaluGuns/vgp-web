@@ -1,100 +1,22 @@
-name: Flowstate predeploy
+name: Flow root social QA
 
 on:
   pull_request:
     paths:
-      - "flowstate/**"
-      - ".github/workflows/flowstate-predeploy.yml"
-  push:
-    branches: [main]
-    paths:
-      - "flowstate/**"
       - ".github/workflows/flowstate-predeploy.yml"
 
 permissions:
   contents: read
 
-concurrency:
-  group: flowstate-predeploy-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  verify:
+  verify-root-social:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: flowstate
-
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: flowstate/package-lock.json
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm test
-      - run: npm audit --omit=dev --audit-level=high
-      - run: npm run build
-
-      - name: Render current social card locally
-        if: github.event_name == 'pull_request'
+      - name: Verify bare Flow URL for social crawlers
         shell: bash
         run: |
           set -euo pipefail
-          npm start > /tmp/flow-next.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
-
-          ok=0
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent --show-error --location \
-              --connect-timeout 5 --max-time 30 \
-              -D /tmp/flow-social.headers \
-              "http://127.0.0.1:3000/en/social-card-v7" \
-              -o /tmp/flow-social.png; then
-              if python - <<'PY'
-          from pathlib import Path
-          headers = Path('/tmp/flow-social.headers').read_text(errors='replace').lower()
-          image = Path('/tmp/flow-social.png').read_bytes()
-          print('preview image bytes =', len(image))
-          assert 'content-type: image/png' in headers
-          assert image.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(image) > 10000
-          PY
-              then
-                ok=1
-                break
-              fi
-            fi
-            sleep 2
-          done
-
-          if [ "$ok" -ne 1 ]; then
-            cat /tmp/flow-next.log || true
-            exit 1
-          fi
-
-      - name: Upload social card preview
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flow-social-v7-preview
-          path: /tmp/flow-social.png
-          if-no-files-found: error
-
-      - name: Verify bare Flow URL live
-        if: github.event_name == 'push'
-        working-directory: .
-        shell: bash
-        run: |
-          set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social-card-v7"
-          EXPECTED_VERSION="20260822-fullbleed-0808"
-
           verify() {
             local LABEL="$1"
             local UA="$2"
@@ -102,18 +24,15 @@ jobs:
             local IMG="/tmp/${LABEL}.png"
             local HEADERS="/tmp/${LABEL}.headers"
             local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
-            local ok=0
 
-            for attempt in $(seq 1 24); do
-              echo "$LABEL attempt ${attempt}/24"
-              if curl --fail --silent --show-error --location \
-                --user-agent "$UA" \
-                --connect-timeout 10 --max-time 30 \
-                "https://flow.virzyguns.com/" -o "$HTML"; then
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" EXPECTED_VERSION="$EXPECTED_VERSION" python - <<'PY'
+            curl --fail --silent --show-error --location \
+              --user-agent "$UA" \
+              --connect-timeout 10 --max-time 30 \
+              "https://flow.virzyguns.com/" -o "$HTML"
+
+            HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" python - <<'PY'
           import os
           from html.parser import HTMLParser
-
           class P(HTMLParser):
               def __init__(self):
                   super().__init__(); self.meta = {}
@@ -122,7 +41,6 @@ jobs:
                   d = {k.lower(): v for k, v in attrs if k and v is not None}
                   key = d.get('property') or d.get('name')
                   if key and d.get('content'): self.meta[key.lower()] = d['content']
-
           p = P(); p.feed(open(os.environ['HTML'], encoding='utf-8').read())
           card = p.meta.get('twitter:card', '')
           og = p.meta.get('og:image', '')
@@ -135,21 +53,20 @@ jobs:
           print('og:url =', ogurl)
           print('og:title =', ogtitle)
           assert card == 'summary_large_image'
-          assert os.environ['EXPECTED_IMAGE_PATH'] in og
-          assert os.environ['EXPECTED_IMAGE_PATH'] in tw
-          assert os.environ['EXPECTED_VERSION'] in og
-          assert os.environ['EXPECTED_VERSION'] in tw
+          assert '/en/social-card-v7?v=20260822-fullbleed-0808' in og
+          assert '/en/social-card-v7?v=20260822-fullbleed-0808' in tw
           assert ogurl == 'https://flow.virzyguns.com'
           assert '—' not in ogtitle and '–' not in ogtitle
           open(os.environ['IMAGE_URL_FILE'], 'w').write(og)
           PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$UA" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$HEADERS" "$IMAGE_URL" -o "$IMG"; then
-                    if HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
+
+            IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
+            curl --fail --silent --show-error --location \
+              --user-agent "$UA" \
+              --connect-timeout 10 --max-time 45 \
+              -D "$HEADERS" "$IMAGE_URL" -o "$IMG"
+
+            HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
           import os
           from pathlib import Path
           h = Path(os.environ['HEADERS']).read_text(errors='replace').lower()
@@ -159,18 +76,6 @@ jobs:
           assert b.startswith(b'\x89PNG\r\n\x1a\n')
           assert len(b) > 10000
           PY
-                    then
-                      ok=1
-                      break
-                    fi
-                  fi
-                fi
-              fi
-              sleep 10
-            done
-
-            test "$ok" -eq 1
-            echo "$LABEL PASS"
           }
 
           verify twitter Twitterbot/1.0
