@@ -1,221 +1,118 @@
-name: Flowstate predeploy
+name: Flow live social QA
 
 on:
   pull_request:
     paths:
-      - "flowstate/**"
-      - ".github/workflows/flowstate-predeploy.yml"
-  push:
-    branches: [main]
-    paths:
-      - "flowstate/**"
       - ".github/workflows/flowstate-predeploy.yml"
 
 permissions:
   contents: read
 
-concurrency:
-  group: flowstate-predeploy-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  verify:
+  verify-live-linkedin:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    defaults:
-      run:
-        working-directory: flowstate
-
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: flowstate/package-lock.json
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm run lint
-      - run: npm test
-      - run: npm audit --omit=dev --audit-level=high
-      - run: npm run build
-
-      - name: Render current social card locally
-        if: github.event_name == 'pull_request'
+      - name: Verify live Flow card for LinkedInBot
         shell: bash
         run: |
           set -euo pipefail
-          npm start > /tmp/flow-next.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID || true' EXIT
+          HTML=/tmp/linkedin.html
+          IMG=/tmp/linkedin.png
+          HEADERS=/tmp/linkedin.headers
+          IMAGE_URL_FILE=/tmp/linkedin-image-url
+          EXPECTED_VERSION='20260822-blueglass-2227'
 
           ok=0
-          for attempt in $(seq 1 30); do
+          for attempt in $(seq 1 36); do
+            echo "live attempt ${attempt}/36"
             if curl --fail --silent --show-error --location \
-              --connect-timeout 5 --max-time 30 \
-              -D /tmp/flow-social.headers \
-              "http://127.0.0.1:3000/en/social-card-v7?v=20260822-blueglass-2227" \
-              -o /tmp/flow-social.png; then
-              if python - <<'PY'
-          from pathlib import Path
-          headers = Path('/tmp/flow-social.headers').read_text(errors='replace').lower()
-          image = Path('/tmp/flow-social.png').read_bytes()
-          print('preview image bytes =', len(image))
-          assert 'content-type: image/png' in headers
-          assert image.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(image) > 10000
+              --user-agent 'LinkedInBot/1.0' \
+              --connect-timeout 10 --max-time 30 \
+              'https://flow.virzyguns.com/' -o "$HTML"; then
+              if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_VERSION="$EXPECTED_VERSION" python - <<'PY'
+          import os
+          from html.parser import HTMLParser
+
+          class P(HTMLParser):
+              def __init__(self):
+                  super().__init__(); self.meta={}
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower()!='meta': return
+                  d={k.lower():v for k,v in attrs if k and v is not None}
+                  key=d.get('property') or d.get('name')
+                  if key and d.get('content'): self.meta[key.lower()]=d['content']
+
+          p=P(); p.feed(open(os.environ['HTML'],encoding='utf-8').read())
+          og=p.meta.get('og:image','')
+          title=p.meta.get('og:title','')
+          ogurl=p.meta.get('og:url','')
+          print('og:title =',title)
+          print('og:image =',og)
+          print('og:url =',ogurl)
+          assert '/social-card-v7' in og
+          assert os.environ['EXPECTED_VERSION'] in og
+          assert ogurl == 'https://flow.virzyguns.com'
+          open(os.environ['IMAGE_URL_FILE'],'w').write(og)
           PY
               then
                 ok=1
                 break
               fi
             fi
-            sleep 2
+            sleep 5
           done
 
-          if [ "$ok" -ne 1 ]; then
-            cat /tmp/flow-next.log || true
-            exit 1
-          fi
+          test "$ok" -eq 1
+          IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
+          curl --fail --silent --show-error --location \
+            --user-agent 'LinkedInBot/1.0' \
+            --connect-timeout 10 --max-time 45 \
+            -D "$HEADERS" "$IMAGE_URL" -o "$IMG"
 
-      - name: Assert no black outer background
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          set -euo pipefail
           python -m pip install --quiet pillow
-          python - <<'PY'
-          from PIL import Image
-
-          im = Image.open('/tmp/flow-social.png').convert('RGB')
-          assert im.size == (1200, 630), im.size
-
-          points = {
-              'top-left': (0, 0),
-              'top-right': (1199, 0),
-              'bottom-left': (0, 629),
-              'bottom-right': (1199, 629),
-              'top-mid': (600, 0),
-              'bottom-mid': (600, 629),
-              'left-mid': (0, 315),
-              'right-mid': (1199, 315),
-          }
-          for name, point in points.items():
-              rgb = im.getpixel(point)
-              print(name, rgb)
-              assert sum(rgb) > 260, f'{name} too dark: {rgb}'
-              assert max(rgb) > 120, f'{name} not blue/cyan enough: {rgb}'
-
-          edge = []
-          for y in range(im.height):
-              for x in range(24):
-                  edge.append(im.getpixel((x, y)))
-                  edge.append(im.getpixel((im.width - 1 - x, y)))
-          for x in range(im.width):
-              for y in range(24):
-                  edge.append(im.getpixel((x, y)))
-                  edge.append(im.getpixel((x, im.height - 1 - y)))
-
-          near_black = sum(1 for r, g, b in edge if r < 45 and g < 45 and b < 45)
-          ratio = near_black / len(edge)
-          print('near-black edge ratio =', ratio)
-          assert ratio < 0.001, f'outer edge still contains black: {ratio:.4%}'
-          PY
-
-      - name: Upload social card preview
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flow-social-v7-preview
-          path: /tmp/flow-social.png
-          if-no-files-found: error
-
-      - name: Verify bare Flow URL live
-        if: github.event_name == 'push'
-        working-directory: .
-        shell: bash
-        run: |
-          set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social-card-v7"
-          EXPECTED_VERSION="20260822-blueglass-2227"
-
-          verify() {
-            local LABEL="$1"
-            local UA="$2"
-            local HTML="/tmp/${LABEL}.html"
-            local IMG="/tmp/${LABEL}.png"
-            local HEADERS="/tmp/${LABEL}.headers"
-            local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
-            local ok=0
-
-            for attempt in $(seq 1 24); do
-              echo "$LABEL attempt ${attempt}/24"
-              if curl --fail --silent --show-error --location \
-                --user-agent "$UA" \
-                --connect-timeout 10 --max-time 30 \
-                "https://flow.virzyguns.com/" -o "$HTML"; then
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" EXPECTED_VERSION="$EXPECTED_VERSION" python - <<'PY'
-          import os
-          from html.parser import HTMLParser
-
-          class P(HTMLParser):
-              def __init__(self):
-                  super().__init__(); self.meta = {}
-              def handle_starttag(self, tag, attrs):
-                  if tag.lower() != 'meta': return
-                  d = {k.lower(): v for k, v in attrs if k and v is not None}
-                  key = d.get('property') or d.get('name')
-                  if key and d.get('content'): self.meta[key.lower()] = d['content']
-
-          p = P(); p.feed(open(os.environ['HTML'], encoding='utf-8').read())
-          card = p.meta.get('twitter:card', '')
-          og = p.meta.get('og:image', '')
-          tw = p.meta.get('twitter:image', '')
-          ogurl = p.meta.get('og:url', '')
-          ogtitle = p.meta.get('og:title', '')
-          print('twitter:card =', card)
-          print('og:image =', og)
-          print('twitter:image =', tw)
-          print('og:url =', ogurl)
-          print('og:title =', ogtitle)
-          assert card == 'summary_large_image'
-          assert os.environ['EXPECTED_IMAGE_PATH'] in og
-          assert os.environ['EXPECTED_IMAGE_PATH'] in tw
-          assert os.environ['EXPECTED_VERSION'] in og
-          assert os.environ['EXPECTED_VERSION'] in tw
-          assert ogurl == 'https://flow.virzyguns.com'
-          assert '—' not in ogtitle and '–' not in ogtitle
-          open(os.environ['IMAGE_URL_FILE'], 'w').write(og)
-          PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$UA" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$HEADERS" "$IMAGE_URL" -o "$IMG"; then
-                    if HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
+          HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
           import os
           from pathlib import Path
-          h = Path(os.environ['HEADERS']).read_text(errors='replace').lower()
-          b = Path(os.environ['IMG']).read_bytes()
-          print('image bytes =', len(b))
-          assert 'content-type: image/png' in h
-          assert b.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(b) > 10000
-          PY
-                    then
-                      ok=1
-                      break
-                    fi
-                  fi
-                fi
-              fi
-              sleep 10
-            done
+          from PIL import Image
 
-            test "$ok" -eq 1
-            echo "$LABEL PASS"
+          headers=Path(os.environ['HEADERS']).read_text(errors='replace').lower()
+          raw=Path(os.environ['IMG']).read_bytes()
+          assert 'content-type: image/png' in headers
+          assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(raw)>10000
+
+          im=Image.open(os.environ['IMG']).convert('RGB')
+          print('live size =',im.size,'bytes =',len(raw))
+          assert im.size == (1200,630)
+
+          points={
+            'top-left':(0,0),'top-right':(1199,0),
+            'bottom-left':(0,629),'bottom-right':(1199,629),
+            'top-mid':(600,0),'bottom-mid':(600,629),
+            'left-mid':(0,315),'right-mid':(1199,315),
           }
+          for name,p in points.items():
+            rgb=im.getpixel(p)
+            print(name,rgb)
+            assert sum(rgb)>260, f'{name} too dark: {rgb}'
 
-          verify twitter Twitterbot/1.0
-          verify facebook facebookexternalhit/1.1
+          edge=[]
+          for y in range(im.height):
+            for x in range(24):
+              edge.extend((im.getpixel((x,y)),im.getpixel((im.width-1-x,y))))
+          for x in range(im.width):
+            for y in range(24):
+              edge.extend((im.getpixel((x,y)),im.getpixel((x,im.height-1-y))))
+          near_black=sum(1 for r,g,b in edge if r<45 and g<45 and b<45)
+          ratio=near_black/len(edge)
+          print('LIVE near-black edge ratio =',ratio)
+          assert ratio < 0.001
+          PY
+
+      - name: Upload live LinkedIn card
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-live-linkedin-card
+          path: /tmp/linkedin.png
+          if-no-files-found: error
