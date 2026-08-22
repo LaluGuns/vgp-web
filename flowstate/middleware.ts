@@ -5,7 +5,7 @@ import { legacyLocaleRedirectDestination, localePath } from "@/lib/marketing/seo
 // can render now but remain noindex until their per-page release is reviewed.
 const LOCALES = ["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it", "en-US", "en-GB", "ja-JP", "de-DE", "es-MX", "es-ES", "pt-BR", "ko-KR"];
 const DEFAULT_LOCALE = "en";
-const SOCIAL_CRAWLER_RE = /twitterbot|facebookexternalhit|facebot|meta-externalagent|meta-externalfetcher|threads|linkedinbot|slackbot|discordbot|whatsapp|telegrambot/i;
+const SOCIAL_CRAWLER_RE = /twitterbot|facebookexternalhit|facebot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot/i;
 
 function withHostRobotsPolicy(response: NextResponse, req: NextRequest) {
   // Preview, branch and local hosts must never become indexable. This is
@@ -65,10 +65,7 @@ export function middleware(req: NextRequest) {
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
 
   if (isSocialCrawler(req)) {
-    const response = NextResponse.rewrite(url);
-    response.headers.set("Cache-Control", "no-store, max-age=0");
-    response.headers.set("Vary", "User-Agent");
-    return withHostRobotsPolicy(response, req);
+    return withHostRobotsPolicy(NextResponse.rewrite(url), req);
   }
 
   return withHostRobotsPolicy(NextResponse.redirect(url, 307), req);
