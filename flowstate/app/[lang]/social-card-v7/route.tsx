@@ -1,7 +1,5 @@
-import { renderFlowHomeOgCard } from "@/lib/social/flow-home-og-card";
-
-export const dynamic = "force-static";
+const SOCIAL_IMAGE = "https://flow.virzyguns.com/social/flow-og-home-0808.png";
 
 export function GET() {
-  return renderFlowHomeOgCard();
+  return Response.redirect(SOCIAL_IMAGE, 307);
 }
