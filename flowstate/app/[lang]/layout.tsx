@@ -44,8 +44,6 @@ export async function generateMetadata({
   const locale = isSupportedSeoLocale(lang) ? lang : DEFAULT_LOCALE;
   const t = getTranslator(resolveLocale(locale));
 
-  // Localized metadata: each locale resolves its own title/description from the
-  // shared dictionaries, so /id ships an Indonesian title, /ja Japanese, etc.
   const title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
   const description = t(
     "metadata.description",
@@ -57,11 +55,8 @@ export async function generateMetadata({
     "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
   );
   const regionalCopy = marketRouteCopy(locale, "");
-  // Use a new pathname rather than a query-only version so social platforms
-  // cannot collapse the refreshed player card onto the previous image cache key.
-  const socialImage = `${SITE}${localePath(locale, "social-card-v2")}`;
+  const socialImage = `${SITE}${localePath(locale, "social-card-v3")}`;
 
-  // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
   const languages = indexable
     ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` }
@@ -111,8 +106,6 @@ export default async function LangLayout({
   return (
     <html lang={lang} className="dark" suppressHydrationWarning>
       <body className={`${sans.variable} ${mono.variable} font-sans`} suppressHydrationWarning>
-        {/* Set the interface theme before first paint to prevent a flash of the
-            default (glass) theme. Reads the zustand-persist JSON defensively. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var v=["glass","studio","editorial","terminal"];var r=localStorage.getItem("flowstate-ui-theme");var t="glass";if(r){var s=JSON.parse(r);if(s&&s.state&&v.indexOf(s.state.theme)!==-1){t=s.state.theme;}}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","glass");}})();`,
@@ -123,20 +116,16 @@ export default async function LangLayout({
           {children}
         </LocaleProvider>
 
-        {/* Global SVG displacement filters for realistic liquid glass refraction */}
         <svg className="absolute w-[1px] h-[1px] opacity-0 pointer-events-none" aria-hidden="true" style={{ pointerEvents: "none" }}>
           <defs>
-            {/* Card liquid glass refraction (warps background subtly) */}
             <filter id="liquid-glass-refract">
               <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" />
               <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
             </filter>
-            {/* 3D Sphere dial lens refraction (warps background like a crystal ball) */}
             <filter id="lens-refraction">
               <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" />
               <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" />
             </filter>
-            {/* Gooey liquid effect for sliding tabs */}
             <filter id="liquid-goo">
               <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
               <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -12" result="goo" />
