@@ -5,6 +5,8 @@ export const dynamic = "force-static";
 const size = { width: 1200, height: 630 };
 const FLOW_LOGO = "https://flow.virzyguns.com/icons/flowstate-logo.png";
 
+type ControlIcon = "reset" | "pause" | "skip";
+
 function ThemePill({ label, active = false }: { label: string; active?: boolean }) {
   return (
     <div
@@ -28,7 +30,68 @@ function ThemePill({ label, active = false }: { label: string; active?: boolean 
   );
 }
 
-function SmallButton({ children, primary = false }: { children: React.ReactNode; primary?: boolean }) {
+function IconShape({ icon, primary }: { icon: ControlIcon; primary: boolean }) {
+  const color = primary ? "#67d7ff" : "rgba(255,255,255,0.46)";
+
+  if (icon === "pause") {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
+        <div style={{ display: "flex", width: 4, height: 18, borderRadius: 2, background: color }} />
+        <div style={{ display: "flex", width: 4, height: 18, borderRadius: 2, background: color }} />
+      </div>
+    );
+  }
+
+  if (icon === "reset") {
+    return (
+      <div style={{ width: 19, height: 19, position: "relative", display: "flex" }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 2,
+            borderRadius: 9,
+            display: "flex",
+            border: `2px solid ${color}`,
+            borderRightColor: "transparent",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            right: 1,
+            top: 2,
+            width: 6,
+            height: 6,
+            display: "flex",
+            borderTop: `2px solid ${color}`,
+            borderRight: `2px solid ${color}`,
+            transform: "rotate(20deg)",
+          }}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ width: 20, height: 18, position: "relative", display: "flex", alignItems: "center" }}>
+      <div
+        style={{
+          position: "absolute",
+          left: 3,
+          width: 10,
+          height: 10,
+          display: "flex",
+          borderTop: `2px solid ${color}`,
+          borderRight: `2px solid ${color}`,
+          transform: "rotate(45deg)",
+        }}
+      />
+      <div style={{ position: "absolute", right: 2, width: 2, height: 15, display: "flex", borderRadius: 1, background: color }} />
+    </div>
+  );
+}
+
+function SmallButton({ icon, primary = false }: { icon: ControlIcon; primary?: boolean }) {
   return (
     <div
       style={{
@@ -42,15 +105,12 @@ function SmallButton({ children, primary = false }: { children: React.ReactNode;
         background: primary
           ? "radial-gradient(circle at 35% 25%, rgba(255,255,255,0.20) 0%, rgba(88,196,255,0.10) 52%, rgba(5,8,20,0.15) 100%)"
           : "rgba(255,255,255,0.015)",
-        color: primary ? "#67d7ff" : "rgba(255,255,255,0.46)",
         boxShadow: primary
           ? "0 0 20px rgba(88,196,255,0.38), inset 0 1px 0 rgba(255,255,255,0.20)"
           : "none",
-        fontSize: primary ? 26 : 20,
-        fontWeight: 800,
       }}
     >
-      {children}
+      <IconShape icon={icon} primary={primary} />
     </div>
   );
 }
@@ -256,9 +316,9 @@ export function GET() {
                   boxShadow: "0 12px 30px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.12)",
                 }}
               >
-                <SmallButton>↻</SmallButton>
-                <SmallButton primary>Ⅱ</SmallButton>
-                <SmallButton>▷</SmallButton>
+                <SmallButton icon="reset" />
+                <SmallButton icon="pause" primary />
+                <SmallButton icon="skip" />
               </div>
             </div>
           </div>
