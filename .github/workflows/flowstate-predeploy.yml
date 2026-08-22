@@ -40,6 +40,48 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
+      - name: Verify v6 image in Vercel Preview
+        if: github.event_name == 'pull_request'
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://flowstate-git-fix-flow-soci-7a2cfb-lalu-virzy-gunawans-projects.vercel.app/en/social-card-v6"
+          ok=0
+          for attempt in $(seq 1 24); do
+            echo "Preview image check ${attempt}/24"
+            if curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 45 \
+              -D /tmp/flow-v6.headers "$URL" -o /tmp/flow-v6.png; then
+              if python - <<'PY'
+          from pathlib import Path
+          headers = Path('/tmp/flow-v6.headers').read_text(errors='replace').lower()
+          image = Path('/tmp/flow-v6.png').read_bytes()
+          print('image bytes =', len(image))
+          if 'content-type: image/png' not in headers:
+              raise SystemExit('not image/png')
+          if not image.startswith(b'\x89PNG\r\n\x1a\n'):
+              raise SystemExit('not a PNG')
+          if len(image) < 10000:
+              raise SystemExit('PNG unexpectedly small')
+          PY
+              then
+                ok=1
+                break
+              fi
+            fi
+            sleep 10
+          done
+          test "$ok" -eq 1
+
+      - name: Upload v6 preview image
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-social-v6-preview
+          path: /tmp/flow-v6.png
+          if-no-files-found: error
+
       - name: Verify live social cards
         if: github.event_name == 'push'
         working-directory: .
