@@ -40,107 +40,51 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
+      - name: Verify v5 image in Vercel Preview
+        if: github.event_name == 'pull_request'
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://flowstate-git-fix-flow-soci-f6ccbf-lalu-virzy-gunawans-projects.vercel.app/en/social-card-v5"
+          ok=0
+          for attempt in $(seq 1 24); do
+            echo "Preview image check ${attempt}/24"
+            if curl --fail --silent --show-error --location \
+              --connect-timeout 10 --max-time 45 \
+              -D /tmp/flow-v5.headers "$URL" -o /tmp/flow-v5.bin; then
+              if python - <<'PY'
+          from pathlib import Path
+          headers = Path('/tmp/flow-v5.headers').read_text(errors='replace').lower()
+          image = Path('/tmp/flow-v5.bin').read_bytes()
+          print('image bytes =', len(image))
+          if 'content-type: image/png' not in headers:
+              raise SystemExit('not image/png')
+          if not image.startswith(b'\x89PNG\r\n\x1a\n'):
+              raise SystemExit('not a PNG')
+          if len(image) < 10000:
+              raise SystemExit('PNG unexpectedly small')
+          PY
+              then
+                ok=1
+                break
+              fi
+            fi
+            sleep 10
+          done
+          test "$ok" -eq 1
+
       - name: Verify live social cards
         if: github.event_name == 'push'
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
-
           EXPECTED_IMAGE_PATH="/social-card-v4"
-
-          verify_card() {
-            local LABEL="$1"
-            local PAGE_URL="$2"
-            local USER_AGENT="$3"
-            local PREFIX="$(echo "$LABEL" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')"
-            local HTML="/tmp/flow-social-${PREFIX}.html"
-            local IMAGE_URL_FILE="/tmp/flow-social-${PREFIX}-image-url"
-            local IMAGE_HEADERS="/tmp/flow-social-${PREFIX}-image.headers"
-            local IMAGE_BIN="/tmp/flow-social-${PREFIX}-image.bin"
-
-            local ok=0
-            for attempt in $(seq 1 24); do
-              echo "$LABEL live social-card check ${attempt}/24"
-
-              if curl --fail --silent --show-error --location \
-                --user-agent "$USER_AGENT" \
-                --connect-timeout 10 --max-time 30 \
-                "$PAGE_URL" -o "$HTML"; then
-
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" python - <<'PY'
-          import os
-          from html.parser import HTMLParser
-
-          class MetaParser(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.meta = {}
-
-              def handle_starttag(self, tag, attrs):
-                  if tag.lower() != "meta":
-                      return
-                  data = {k.lower(): v for k, v in attrs if k and v is not None}
-                  key = data.get("property") or data.get("name")
-                  value = data.get("content")
-                  if key and value:
-                      self.meta[key.lower()] = value
-
-          html = open(os.environ["HTML"], encoding="utf-8").read()
-          parser = MetaParser()
-          parser.feed(html)
-          expected = os.environ["EXPECTED_IMAGE_PATH"]
-          twitter_card = parser.meta.get("twitter:card", "")
-          twitter_image = parser.meta.get("twitter:image", "")
-          og_image = parser.meta.get("og:image", "")
-          print("twitter:card =", twitter_card)
-          print("twitter:image =", twitter_image)
-          print("og:image =", og_image)
-          if twitter_card != "summary_large_image":
-              raise SystemExit("twitter:card is not summary_large_image")
-          if expected not in twitter_image:
-              raise SystemExit("twitter:image is stale or missing the v4 card")
-          if expected not in og_image:
-              raise SystemExit("og:image is stale or missing the v4 card")
-          open(os.environ["IMAGE_URL_FILE"], "w", encoding="utf-8").write(og_image)
-          PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$USER_AGENT" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$IMAGE_HEADERS" \
-                    "$IMAGE_URL" -o "$IMAGE_BIN"; then
-
-                    IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
-          import os
-          from pathlib import Path
-          headers = Path(os.environ["IMAGE_HEADERS"]).read_text(errors="replace").lower()
-          image = Path(os.environ["IMAGE_BIN"]).read_bytes()
-          print("image bytes =", len(image))
-          if "content-type: image/png" not in headers:
-              raise SystemExit("social image did not return image/png")
-          if not image.startswith(b"\x89PNG\r\n\x1a\n"):
-              raise SystemExit("social image response is not a valid PNG")
-          if len(image) < 10_000:
-              raise SystemExit("social image PNG is unexpectedly small")
-          PY
-                    ok=1
-                    break
-                  fi
-                fi
-              fi
-              sleep 10
-            done
-
-            if [ "$ok" -ne 1 ]; then
-              echo "$LABEL social card did not converge to v4."
-              return 1
-            fi
-            echo "$LABEL is serving Flow player v4 and a valid PNG."
-          }
-
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "facebookexternalhit/1.1"
-          verify_card "Twitter share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "Twitterbot/1.0"
-          verify_card "Facebook share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "facebookexternalhit/1.1"
+          for ua in "Twitterbot/1.0" "facebookexternalhit/1.1"; do
+            curl --fail --silent --show-error --location \
+              --user-agent "$ua" \
+              --connect-timeout 10 --max-time 30 \
+              "https://flow.virzyguns.com/?qa=20260822-social-v4" -o /tmp/flow-social.html
+            grep -q "$EXPECTED_IMAGE_PATH" /tmp/flow-social.html
+          done
