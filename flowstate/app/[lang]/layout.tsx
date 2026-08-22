@@ -13,8 +13,12 @@ import { openGraphLocale } from "@/lib/marketing/seo";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
-const SOCIAL_IMAGE_VERSION = "20260822-0808";
+const SOCIAL_IMAGE_VERSION = "20260822-fullbleed-0808";
 const LOCALES = ROUTABLE_LOCALES;
+
+function removeLongDashes(value: string): string {
+  return value.replace(/\s*[—–]\s*/g, ": ");
+}
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -26,33 +30,34 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const { lang } = await params;
   const locale = isSupportedSeoLocale(lang) ? lang : DEFAULT_LOCALE;
   const t = getTranslator(resolveLocale(locale));
-  const title = t("metadata.title", "Flow by Virzy Guns — Deep Work Music & Pomodoro Timer");
+  const title = removeLongDashes(t("metadata.title", "Flow by Virzy Guns: Deep Work Music & Pomodoro Timer"));
   const description = t("metadata.description", "Get in the zone with original lofi & synthwave music, a Pomodoro timer, ambient sound mixer, and focus analytics. Built for programmers, creators, and deep workers.");
-  const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
+  const ogTitle = removeLongDashes(t("metadata.ogTitle", "Flow by Virzy Guns: Get in the zone."));
   const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "social-card-v6")}?v=${SOCIAL_IMAGE_VERSION}`;
+  const regionalTitle = regionalCopy?.metaTitle ? removeLongDashes(regionalCopy.metaTitle) : undefined;
+  const socialImage = `${SITE}${localePath(locale, "social-card-v7")}?v=${SOCIAL_IMAGE_VERSION}`;
   const indexable = isIndexableLocale(locale);
   const languages = indexable ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` } : undefined;
 
   return {
     metadataBase: new URL(SITE),
-    title: { default: regionalCopy?.metaTitle ?? title, template: "%s · Flow by Virzy Guns" },
+    title: { default: regionalTitle ?? title, template: "%s · Flow by Virzy Guns" },
     description: regionalCopy?.metaDescription ?? description,
     openGraph: {
-      title: regionalCopy?.metaTitle ?? ogTitle,
+      title: regionalTitle ?? ogTitle,
       description: regionalCopy?.metaDescription ?? ogDescription,
       siteName: "Flow by Virzy Guns",
       type: "website",
       url: SITE,
       locale: openGraphLocale(locale),
-      images: [{ url: socialImage, width: 1200, height: 630, alt: regionalCopy?.metaTitle ?? ogTitle }],
+      images: [{ url: socialImage, width: 1200, height: 630, alt: regionalTitle ?? ogTitle }],
     },
     twitter: {
       card: "summary_large_image",
-      title: regionalCopy?.metaTitle ?? ogTitle,
+      title: regionalTitle ?? ogTitle,
       description: regionalCopy?.metaDescription ?? ogDescription,
-      images: [{ url: socialImage, alt: regionalCopy?.metaTitle ?? ogTitle }],
+      images: [{ url: socialImage, alt: regionalTitle ?? ogTitle }],
     },
     alternates: { canonical: localePath(locale), languages },
     robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
