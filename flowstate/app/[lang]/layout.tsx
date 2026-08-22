@@ -13,7 +13,7 @@ import { openGraphLocale } from "@/lib/marketing/seo";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
-const SOCIAL_IMAGE_VERSION = "20260822-blueglass-2227";
+const SOCIAL_IMAGE = `${SITE}/social/flow-og-home-0808.jpg`;
 const LOCALES = ROUTABLE_LOCALES;
 
 function removeLongDashes(value: string): string {
@@ -36,7 +36,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
   const regionalTitle = regionalCopy?.metaTitle ? removeLongDashes(regionalCopy.metaTitle) : undefined;
-  const socialImage = `${SITE}${localePath(locale, "social-card-v7")}?v=${SOCIAL_IMAGE_VERSION}`;
   const indexable = isIndexableLocale(locale);
   const languages = indexable ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` } : undefined;
 
@@ -51,13 +50,13 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       type: "website",
       url: SITE,
       locale: openGraphLocale(locale),
-      images: [{ url: socialImage, width: 1200, height: 630, alt: regionalTitle ?? ogTitle }],
+      images: [{ url: SOCIAL_IMAGE, width: 1200, height: 630, alt: regionalTitle ?? ogTitle, type: "image/jpeg" }],
     },
     twitter: {
       card: "summary_large_image",
       title: regionalTitle ?? ogTitle,
       description: regionalCopy?.metaDescription ?? ogDescription,
-      images: [{ url: socialImage, alt: regionalTitle ?? ogTitle }],
+      images: [{ url: SOCIAL_IMAGE, alt: regionalTitle ?? ogTitle }],
     },
     alternates: { canonical: localePath(locale), languages },
     robots: indexable ? { index: true, follow: true } : { index: false, follow: true },
