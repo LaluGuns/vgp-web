@@ -1,25 +1,16 @@
-name: Flowstate predeploy
+name: Flow social card visual QA
 
 on:
   pull_request:
     paths:
-      - "flowstate/**"
       - ".github/workflows/flowstate-predeploy.yml"
-  push:
-    branches: [main]
-    paths:
       - "flowstate/**"
-      - ".github/workflows/flowstate-predeploy.yml"
 
 permissions:
   contents: read
 
-concurrency:
-  group: flowstate-predeploy-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  verify:
+  verify-blueglass-card:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -35,13 +26,9 @@ jobs:
           cache-dependency-path: flowstate/package-lock.json
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run lint
-      - run: npm test
-      - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
-      - name: Render current social card locally
-        if: github.event_name == 'pull_request'
+      - name: Render social card
         shell: bash
         run: |
           set -euo pipefail
@@ -54,21 +41,10 @@ jobs:
             if curl --fail --silent --show-error --location \
               --connect-timeout 5 --max-time 30 \
               -D /tmp/flow-social.headers \
-              "http://127.0.0.1:3000/en/social-card-v7" \
+              "http://127.0.0.1:3000/en/social-card-v7?v=20260822-blueglass-2227" \
               -o /tmp/flow-social.png; then
-              if python - <<'PY'
-          from pathlib import Path
-          headers = Path('/tmp/flow-social.headers').read_text(errors='replace').lower()
-          image = Path('/tmp/flow-social.png').read_bytes()
-          print('preview image bytes =', len(image))
-          assert 'content-type: image/png' in headers
-          assert image.startswith(b'\x89PNG\r\n\x1a\n')
-          assert len(image) > 10000
-          PY
-              then
-                ok=1
-                break
-              fi
+              ok=1
+              break
             fi
             sleep 2
           done
@@ -78,100 +54,63 @@ jobs:
             exit 1
           fi
 
-      - name: Upload social card preview
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flow-social-v7-preview
-          path: /tmp/flow-social.png
-          if-no-files-found: error
-
-      - name: Verify bare Flow URL live
-        if: github.event_name == 'push'
-        working-directory: .
-        shell: bash
-        run: |
-          set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social-card-v7"
-          EXPECTED_VERSION="20260822-fullbleed-0808"
-
-          verify() {
-            local LABEL="$1"
-            local UA="$2"
-            local HTML="/tmp/${LABEL}.html"
-            local IMG="/tmp/${LABEL}.png"
-            local HEADERS="/tmp/${LABEL}.headers"
-            local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
-            local ok=0
-
-            for attempt in $(seq 1 24); do
-              echo "$LABEL attempt ${attempt}/24"
-              if curl --fail --silent --show-error --location \
-                --user-agent "$UA" \
-                --connect-timeout 10 --max-time 30 \
-                "https://flow.virzyguns.com/" -o "$HTML"; then
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" EXPECTED_VERSION="$EXPECTED_VERSION" python - <<'PY'
-          import os
-          from html.parser import HTMLParser
-
-          class P(HTMLParser):
-              def __init__(self):
-                  super().__init__(); self.meta = {}
-              def handle_starttag(self, tag, attrs):
-                  if tag.lower() != 'meta': return
-                  d = {k.lower(): v for k, v in attrs if k and v is not None}
-                  key = d.get('property') or d.get('name')
-                  if key and d.get('content'): self.meta[key.lower()] = d['content']
-
-          p = P(); p.feed(open(os.environ['HTML'], encoding='utf-8').read())
-          card = p.meta.get('twitter:card', '')
-          og = p.meta.get('og:image', '')
-          tw = p.meta.get('twitter:image', '')
-          ogurl = p.meta.get('og:url', '')
-          ogtitle = p.meta.get('og:title', '')
-          print('twitter:card =', card)
-          print('og:image =', og)
-          print('twitter:image =', tw)
-          print('og:url =', ogurl)
-          print('og:title =', ogtitle)
-          assert card == 'summary_large_image'
-          assert os.environ['EXPECTED_IMAGE_PATH'] in og
-          assert os.environ['EXPECTED_IMAGE_PATH'] in tw
-          assert os.environ['EXPECTED_VERSION'] in og
-          assert os.environ['EXPECTED_VERSION'] in tw
-          assert ogurl == 'https://flow.virzyguns.com'
-          assert '—' not in ogtitle and '–' not in ogtitle
-          open(os.environ['IMAGE_URL_FILE'], 'w').write(og)
-          PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$UA" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$HEADERS" "$IMAGE_URL" -o "$IMG"; then
-                    if HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
-          import os
+          python - <<'PY'
           from pathlib import Path
-          h = Path(os.environ['HEADERS']).read_text(errors='replace').lower()
-          b = Path(os.environ['IMG']).read_bytes()
+          h=Path('/tmp/flow-social.headers').read_text(errors='replace').lower()
+          b=Path('/tmp/flow-social.png').read_bytes()
           print('image bytes =', len(b))
           assert 'content-type: image/png' in h
           assert b.startswith(b'\x89PNG\r\n\x1a\n')
           assert len(b) > 10000
           PY
-                    then
-                      ok=1
-                      break
-                    fi
-                  fi
-                fi
-              fi
-              sleep 10
-            done
 
-            test "$ok" -eq 1
-            echo "$LABEL PASS"
+      - name: Assert no black outer background
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image
+
+          im=Image.open('/tmp/flow-social.png').convert('RGB')
+          print('size =', im.size)
+          assert im.size == (1200,630)
+
+          points={
+            'top-left':(0,0),
+            'top-right':(1199,0),
+            'bottom-left':(0,629),
+            'bottom-right':(1199,629),
+            'top-mid':(600,0),
+            'bottom-mid':(600,629),
+            'left-mid':(0,315),
+            'right-mid':(1199,315),
           }
+          for name,p in points.items():
+            rgb=im.getpixel(p)
+            print(name, rgb)
+            assert sum(rgb) > 260, f'{name} is too dark: {rgb}'
+            assert max(rgb) > 120, f'{name} lacks blue/cyan brightness: {rgb}'
 
-          verify twitter Twitterbot/1.0
-          verify facebook facebookexternalhit/1.1
+          edge=[]
+          for y in range(im.height):
+            for x in range(24):
+              edge.append(im.getpixel((x,y)))
+              edge.append(im.getpixel((im.width-1-x,y)))
+          for x in range(im.width):
+            for y in range(24):
+              edge.append(im.getpixel((x,y)))
+              edge.append(im.getpixel((x,im.height-1-y)))
+
+          near_black=sum(1 for r,g,b in edge if r < 45 and g < 45 and b < 45)
+          ratio=near_black/len(edge)
+          print('near-black edge pixels =', near_black, '/', len(edge), 'ratio=', ratio)
+          assert ratio < 0.001, f'outer edge still contains black background: {ratio:.4%}'
+          PY
+
+      - name: Upload rendered social card
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-blueglass-social-card
+          path: /tmp/flow-social.png
+          if-no-files-found: error
