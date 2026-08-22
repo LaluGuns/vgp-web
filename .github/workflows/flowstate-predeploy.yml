@@ -93,7 +93,7 @@ jobs:
         run: |
           set -euo pipefail
           EXPECTED_IMAGE_PATH="/social-card-v7"
-          EXPECTED_VERSION="20260822-fullbleed-0808"
+          EXPECTED_VERSION="20260822-blueglass-2227"
 
           verify() {
             local LABEL="$1"
