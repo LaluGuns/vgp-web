@@ -1,7 +1,7 @@
-import OpengraphImage from "../opengraph-image";
+import FlowSocialCard from "@/lib/social/flow-social-card";
 
 export const dynamic = "force-static";
 
 export function GET() {
-  return OpengraphImage();
+  return FlowSocialCard();
 }

@@ -41,7 +41,7 @@ function Control({
   );
 }
 
-export default function OpengraphImage() {
+export default function FlowSocialCard() {
   return new ImageResponse(
     (
       <div
@@ -75,7 +75,6 @@ export default function OpengraphImage() {
               alignItems: "center",
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={FLOW_LOGO}
               alt="Flow"
