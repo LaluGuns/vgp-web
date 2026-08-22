@@ -13,7 +13,7 @@ import { openGraphLocale } from "@/lib/marketing/seo";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
-const SOCIAL_IMAGE_VERSION = "20260822-fullbleed-0808";
+const SOCIAL_IMAGE_VERSION = "20260822-blueglass-2227";
 const LOCALES = ROUTABLE_LOCALES;
 
 function removeLongDashes(value: string): string {
