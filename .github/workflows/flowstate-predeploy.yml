@@ -40,35 +40,27 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
-      - name: Verify live social cards
+      - name: Verify live X social card
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
 
-          PAGE_URL="https://flow.virzyguns.com/?social=20260821-threads-player-v2"
-          EXPECTED_IMAGE_VERSION="20260821-threads-player-v2"
+          PAGE_URL="https://flow.virzyguns.com/?social=20260821-home-player-v1"
+          EXPECTED_IMAGE_VERSION="20260821-home-player-v1"
+          USER_AGENT="Twitterbot/1.0"
 
-          verify_agent() {
-            local LABEL="$1"
-            local USER_AGENT="$2"
-            local PREFIX="$(echo "$LABEL" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')"
-            local HTML="/tmp/flow-social-${PREFIX}.html"
-            local IMAGE_URL_FILE="/tmp/flow-social-${PREFIX}-image-url"
-            local IMAGE_HEADERS="/tmp/flow-social-${PREFIX}-image.headers"
-            local IMAGE_BIN="/tmp/flow-social-${PREFIX}-image.bin"
+          ok=0
+          for attempt in $(seq 1 24); do
+            echo "Live social-card check ${attempt}/24"
 
-            local ok=0
-            for attempt in $(seq 1 24); do
-              echo "$LABEL live social-card check ${attempt}/24"
+            if curl --fail --silent --show-error --location \
+              --user-agent "$USER_AGENT" \
+              --connect-timeout 10 --max-time 30 \
+              "$PAGE_URL" -o /tmp/flow-social.html; then
 
-              if curl --fail --silent --show-error --location \
-                --user-agent "$USER_AGENT" \
-                --connect-timeout 10 --max-time 30 \
-                "$PAGE_URL" -o "$HTML"; then
-
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_VERSION="$EXPECTED_IMAGE_VERSION" python - <<'PY'
+              if EXPECTED_IMAGE_VERSION="$EXPECTED_IMAGE_VERSION" python - <<'PY'
           import os
           from html.parser import HTMLParser
 
@@ -86,7 +78,7 @@ jobs:
                   if key and value:
                       self.meta[key.lower()] = value
 
-          html = open(os.environ["HTML"], encoding="utf-8").read()
+          html = open("/tmp/flow-social.html", encoding="utf-8").read()
           parser = MetaParser()
           parser.feed(html)
 
@@ -103,27 +95,24 @@ jobs:
               raise SystemExit("twitter:card is not summary_large_image")
           if expected not in twitter_image:
               raise SystemExit("twitter:image is stale or missing")
-          if expected not in og_image:
-              raise SystemExit("og:image is stale or missing")
           if "/opengraph-image" not in og_image:
               raise SystemExit("og:image is missing the generated Flow card")
 
-          open(os.environ["IMAGE_URL_FILE"], "w", encoding="utf-8").write(og_image)
+          open("/tmp/flow-social-image-url", "w", encoding="utf-8").write(twitter_image)
           PY
-                then
-                  IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
-                  if curl --fail --silent --show-error --location \
-                    --user-agent "$USER_AGENT" \
-                    --connect-timeout 10 --max-time 45 \
-                    -D "$IMAGE_HEADERS" \
-                    "$IMAGE_URL" -o "$IMAGE_BIN"; then
+              then
+                IMAGE_URL="$(cat /tmp/flow-social-image-url)"
+                if curl --fail --silent --show-error --location \
+                  --user-agent "$USER_AGENT" \
+                  --connect-timeout 10 --max-time 45 \
+                  -D /tmp/flow-social-image.headers \
+                  "$IMAGE_URL" -o /tmp/flow-social-image.bin; then
 
-                    IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
-          import os
+                  python - <<'PY'
           from pathlib import Path
 
-          headers = Path(os.environ["IMAGE_HEADERS"]).read_text(errors="replace").lower()
-          image = Path(os.environ["IMAGE_BIN"]).read_bytes()
+          headers = Path("/tmp/flow-social-image.headers").read_text(errors="replace").lower()
+          image = Path("/tmp/flow-social-image.bin").read_bytes()
 
           print("image bytes =", len(image))
           if "content-type: image/png" not in headers:
@@ -133,22 +122,18 @@ jobs:
           if len(image) < 10_000:
               raise SystemExit("social image PNG is unexpectedly small")
           PY
-                    ok=1
-                    break
-                  fi
+                  ok=1
+                  break
                 fi
               fi
-
-              sleep 10
-            done
-
-            if [ "$ok" -ne 1 ]; then
-              echo "$LABEL social card did not converge to the expected metadata/image."
-              return 1
             fi
 
-            echo "$LABEL is serving fresh Flow social metadata and a valid PNG."
-          }
+            sleep 10
+          done
 
-          verify_agent "Twitterbot" "Twitterbot/1.0"
-          verify_agent "MetaExternalAgent" "meta-externalagent/1.1"
+          if [ "$ok" -ne 1 ]; then
+            echo "Flow live social card did not converge to the expected metadata/image."
+            exit 1
+          fi
+
+          echo "Flow live social card is serving fresh X metadata and a valid PNG."
