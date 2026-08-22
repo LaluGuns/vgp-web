@@ -41,7 +41,7 @@ jobs:
       - run: npm run build
 
       - name: Verify live social cards
-        if: github.event_name == 'push'
+        if: github.event_name == 'pull_request'
         working-directory: .
         shell: bash
         run: |
@@ -128,7 +128,7 @@ jobs:
             echo "$LABEL PASS"
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "facebookexternalhit/1.1"
-          verify_card "Twitter share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "Twitterbot/1.0"
-          verify_card "Facebook share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "facebookexternalhit/1.1"
+          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6-final" "Twitterbot/1.0"
+          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6-final" "facebookexternalhit/1.1"
+          verify_card "Twitter share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6-final" "Twitterbot/1.0"
+          verify_card "Facebook share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6-final" "facebookexternalhit/1.1"
