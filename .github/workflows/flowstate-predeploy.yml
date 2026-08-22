@@ -72,30 +72,46 @@ jobs:
                   if src: self.s.append(urljoin('https://www.linkedin.com/post-inspector/',src))
           p=P(); p.feed(open('/tmp/pi.html',encoding='utf-8',errors='replace').read())
           for i,u in enumerate(p.s[:20]): print(i,u)
-          open('/tmp/pi-scripts','w').write('\n'.join(p.s[:20]))
+          open('/tmp/pi-scripts','w').write('\n'.join(p.s[:20])+'\n')
           PY
           mkdir -p /tmp/pi-js
           n=0
-          while IFS= read -r url; do
+          while IFS= read -r url || [ -n "$url" ]; do
             [ -z "$url" ] && continue
             echo "fetching $url"
             curl --fail --silent --show-error --location --user-agent "$UA" \
               --connect-timeout 10 --max-time 30 "$url" -o "/tmp/pi-js/$n.js" || true
+            wc -c "/tmp/pi-js/$n.js" || true
             n=$((n+1))
           done < /tmp/pi-scripts
           python - <<'PY'
           from pathlib import Path
           import re
-          keywords=('inspect','debug','sharing','voyager','api','metadata','ingest','preview','url')
+          needles=('post-inspector','sharing-debugger','inspect','ingest','preview','metadata','voyager','csrf','ajax')
+          print('--- app-specific snippets ---')
+          for f in sorted(Path('/tmp/pi-js').glob('*.js')):
+              text=f.read_text(errors='ignore')
+              print('FILE',f.name,'bytes',len(text))
+              low=text.lower()
+              hits=[]
+              for needle in needles:
+                  start=0
+                  while True:
+                      i=low.find(needle,start)
+                      if i<0: break
+                      hits.append((i,needle))
+                      start=i+len(needle)
+              for i,needle in sorted(hits)[:120]:
+                  a=max(0,i-220); b=min(len(text),i+420)
+                  snippet=text[a:b].replace('\n',' ')
+                  print(f'[{f.name}] {needle}: {snippet}')
+          print('--- URL-like candidates ---')
           found=set()
-          patterns=[r'https?://[^"\'\s]+', r'/[A-Za-z0-9_./?=&:%-]{4,}']
           for f in Path('/tmp/pi-js').glob('*.js'):
               text=f.read_text(errors='ignore')
-              for pat in patterns:
-                  for m in re.findall(pat,text):
-                      low=m.lower()
-                      if any(k in low for k in keywords):
-                          found.add(m[:500])
-          print('--- candidate API strings ---')
-          for item in sorted(found)[:300]: print(item)
+              for m in re.findall(r'https?://[^"\'\s]+|/[A-Za-z0-9_./?=&:%-]{4,}',text):
+                  lm=m.lower()
+                  if any(k in lm for k in ('inspect','sharing','debug','voyager','api','ingest','preview','metadata')):
+                      found.add(m[:600])
+          for item in sorted(found)[:400]: print(item)
           PY
