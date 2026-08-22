@@ -47,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          EXPECTED_IMAGE_PATH="/social-card-v2"
+          EXPECTED_IMAGE_PATH="/social-card-v3"
 
           verify_card() {
             local LABEL="$1"
@@ -145,10 +145,10 @@ jobs:
               return 1
             fi
 
-            echo "$LABEL is serving the fresh Flow player social card and a valid PNG."
+            echo "$LABEL is serving the exact-player Flow social card and a valid PNG."
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v2" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v2" "facebookexternalhit/1.1"
-          verify_card "Twitter share URL" "https://flow.virzyguns.com/share?qa=20260822-social-v2" "Twitterbot/1.0"
-          verify_card "Facebook share URL" "https://flow.virzyguns.com/share?qa=20260822-social-v2" "facebookexternalhit/1.1"
+          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v3" "Twitterbot/1.0"
+          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v3" "facebookexternalhit/1.1"
+          verify_card "Twitter share v3 URL" "https://flow.virzyguns.com/share-v3?qa=20260822-social-v3" "Twitterbot/1.0"
+          verify_card "Facebook share v3 URL" "https://flow.virzyguns.com/share-v3?qa=20260822-social-v3" "facebookexternalhit/1.1"
