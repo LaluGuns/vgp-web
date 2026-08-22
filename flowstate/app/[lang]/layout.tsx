@@ -57,10 +57,9 @@ export async function generateMetadata({
     "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns."
   );
   const regionalCopy = marketRouteCopy(locale, "");
-  // Version both the generated image URL and the page used for social QA.
-  // X caches cards by shared page URL, so image-only cache busting is not
-  // sufficient for an already-seen bare domain.
-  const socialImage = `${SITE}${localePath(locale, "opengraph-image")}?v=20260821-home-player-v1`;
+  // Use a new pathname rather than a query-only version so social platforms
+  // cannot collapse the refreshed player card onto the previous image cache key.
+  const socialImage = `${SITE}${localePath(locale, "social-card-v2")}`;
 
   // hreflang: every locale gets its own URL, plus x-default → English.
   const indexable = isIndexableLocale(locale);
