@@ -46,7 +46,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social-card-v5"
+          EXPECTED_IMAGE_PATH="/social-card-v6"
 
           verify_card() {
             local LABEL="$1"
@@ -93,7 +93,7 @@ jobs:
           if twitter_card != 'summary_large_image':
               raise SystemExit('wrong twitter card')
           if expected not in twitter_image or expected not in og_image:
-              raise SystemExit('metadata is not serving v5')
+              raise SystemExit('metadata is not serving v6')
           open(os.environ['IMAGE_URL_FILE'], 'w', encoding='utf-8').write(og_image)
           PY
                 then
@@ -128,7 +128,7 @@ jobs:
             echo "$LABEL PASS"
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v5" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v5" "facebookexternalhit/1.1"
-          verify_card "Twitter share v5" "https://flow.virzyguns.com/share-v5?qa=20260822-social-v5" "Twitterbot/1.0"
-          verify_card "Facebook share v5" "https://flow.virzyguns.com/share-v5?qa=20260822-social-v5" "facebookexternalhit/1.1"
+          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "Twitterbot/1.0"
+          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "facebookexternalhit/1.1"
+          verify_card "Twitter share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "Twitterbot/1.0"
+          verify_card "Facebook share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "facebookexternalhit/1.1"

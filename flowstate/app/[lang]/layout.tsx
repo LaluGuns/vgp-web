@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
   const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "social-card-v5")}`;
+  const socialImage = `${SITE}${localePath(locale, "social-card-v6")}`;
   const indexable = isIndexableLocale(locale);
   const languages = indexable ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` } : undefined;
 
