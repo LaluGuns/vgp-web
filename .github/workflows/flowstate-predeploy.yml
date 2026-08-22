@@ -83,7 +83,19 @@ jobs:
               --connect-timeout 10 --max-time 30 "$url" -o "/tmp/pi-js/$n.js" || true
             n=$((n+1))
           done < /tmp/pi-scripts
-          echo '--- candidate API strings ---'
-          grep -aEo 'https?://[^"'"' ]+|/[A-Za-z0-9_./?=&:-]{4,}' /tmp/pi-js/*.js 2>/dev/null \
-            | grep -Ei 'inspect|debug|sharing|voyager|api|url|metadata|ingest|preview' \
-            | sort -u | head -n 250 || true
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          keywords=('inspect','debug','sharing','voyager','api','metadata','ingest','preview','url')
+          found=set()
+          patterns=[r'https?://[^"\'\s]+', r'/[A-Za-z0-9_./?=&:%-]{4,}']
+          for f in Path('/tmp/pi-js').glob('*.js'):
+              text=f.read_text(errors='ignore')
+              for pat in patterns:
+                  for m in re.findall(pat,text):
+                      low=m.lower()
+                      if any(k in low for k in keywords):
+                          found.add(m[:500])
+          print('--- candidate API strings ---')
+          for item in sorted(found)[:300]: print(item)
+          PY
