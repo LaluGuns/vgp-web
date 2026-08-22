@@ -13,6 +13,7 @@ import { openGraphLocale } from "@/lib/marketing/seo";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
+const SOCIAL_IMAGE_VERSION = "20260822-0808";
 const LOCALES = ROUTABLE_LOCALES;
 
 export function generateStaticParams() {
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const ogTitle = t("metadata.ogTitle", "Flow by Virzy Guns — Get in the zone.");
   const ogDescription = t("metadata.ogDescription", "Deep work music + Pomodoro timer with an original soundtrack, produced in-house by Virzy Guns.");
   const regionalCopy = marketRouteCopy(locale, "");
-  const socialImage = `${SITE}${localePath(locale, "social-card-v6")}`;
+  const socialImage = `${SITE}${localePath(locale, "social-card-v6")}?v=${SOCIAL_IMAGE_VERSION}`;
   const indexable = isIndexableLocale(locale);
   const languages = indexable ? { ...indexableLanguageAlternates(""), "x-default": `${SITE}${localePath(DEFAULT_LOCALE)}` } : undefined;
 
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       description: regionalCopy?.metaDescription ?? ogDescription,
       siteName: "Flow by Virzy Guns",
       type: "website",
-      url: `${SITE}${localePath(locale)}`,
+      url: SITE,
       locale: openGraphLocale(locale),
       images: [{ url: socialImage, width: 1200, height: 630, alt: regionalCopy?.metaTitle ?? ogTitle }],
     },

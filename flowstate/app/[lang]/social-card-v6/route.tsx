@@ -286,7 +286,7 @@ export function GET() {
                     textShadow: "0 4px 20px rgba(88,196,255,0.35)",
                   }}
                 >
-                  22:20
+                  08:08
                 </div>
 
                 <div

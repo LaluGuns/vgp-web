@@ -56,16 +56,20 @@ export function middleware(req: NextRequest) {
     return withHostRobotsPolicy(NextResponse.next(), req);
   }
 
-  // Social preview crawlers should receive the rendered English page directly
-  // instead of a locale redirect. This makes metadata discovery deterministic
-  // for bare flow.virzyguns.com shares while preserving normal locale redirects
-  // for real visitors.
-  const locale = isSocialCrawler(req) ? DEFAULT_LOCALE : resolveLocale(req);
+  // Social crawlers receive the English page directly at the bare domain.
+  // Explicit no-store headers make new share scrapes revalidate metadata instead
+  // of inheriting an edge-cached crawler response from an older OG image.
+  const socialCrawler = isSocialCrawler(req);
+  const locale = socialCrawler ? DEFAULT_LOCALE : resolveLocale(req);
   const url = req.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
 
-  if (isSocialCrawler(req)) {
-    return withHostRobotsPolicy(NextResponse.rewrite(url), req);
+  if (socialCrawler) {
+    const response = NextResponse.rewrite(url);
+    response.headers.set("Cache-Control", "no-store, max-age=0, must-revalidate");
+    response.headers.set("CDN-Cache-Control", "no-store");
+    response.headers.set("Vary", "User-Agent");
+    return withHostRobotsPolicy(response, req);
   }
 
   return withHostRobotsPolicy(NextResponse.redirect(url, 307), req);
