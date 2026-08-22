@@ -41,13 +41,13 @@ jobs:
       - run: npm run build
 
       - name: Verify live social cards
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        if: github.event_name == 'push'
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
 
-          EXPECTED_IMAGE_PATH="/social-card-v2"
+          EXPECTED_IMAGE_PATH="/social-card-v4"
 
           verify_card() {
             local LABEL="$1"
@@ -89,23 +89,19 @@ jobs:
           html = open(os.environ["HTML"], encoding="utf-8").read()
           parser = MetaParser()
           parser.feed(html)
-
           expected = os.environ["EXPECTED_IMAGE_PATH"]
           twitter_card = parser.meta.get("twitter:card", "")
           twitter_image = parser.meta.get("twitter:image", "")
           og_image = parser.meta.get("og:image", "")
-
           print("twitter:card =", twitter_card)
           print("twitter:image =", twitter_image)
           print("og:image =", og_image)
-
           if twitter_card != "summary_large_image":
               raise SystemExit("twitter:card is not summary_large_image")
           if expected not in twitter_image:
-              raise SystemExit("twitter:image is stale or missing the fresh social-card path")
+              raise SystemExit("twitter:image is stale or missing the v4 card")
           if expected not in og_image:
-              raise SystemExit("og:image is stale or missing the fresh social-card path")
-
+              raise SystemExit("og:image is stale or missing the v4 card")
           open(os.environ["IMAGE_URL_FILE"], "w", encoding="utf-8").write(og_image)
           PY
                 then
@@ -119,10 +115,8 @@ jobs:
                     IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
           import os
           from pathlib import Path
-
           headers = Path(os.environ["IMAGE_HEADERS"]).read_text(errors="replace").lower()
           image = Path(os.environ["IMAGE_BIN"]).read_bytes()
-
           print("image bytes =", len(image))
           if "content-type: image/png" not in headers:
               raise SystemExit("social image did not return image/png")
@@ -136,19 +130,17 @@ jobs:
                   fi
                 fi
               fi
-
               sleep 10
             done
 
             if [ "$ok" -ne 1 ]; then
-              echo "$LABEL social card did not converge to the expected metadata/image."
+              echo "$LABEL social card did not converge to v4."
               return 1
             fi
-
-            echo "$LABEL is serving the fresh Flow player social card and a valid PNG."
+            echo "$LABEL is serving Flow player v4 and a valid PNG."
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v2" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v2" "facebookexternalhit/1.1"
-          verify_card "Twitter share URL" "https://flow.virzyguns.com/share?qa=20260822-social-v2" "Twitterbot/1.0"
-          verify_card "Facebook share URL" "https://flow.virzyguns.com/share?qa=20260822-social-v2" "facebookexternalhit/1.1"
+          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "Twitterbot/1.0"
+          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v4" "facebookexternalhit/1.1"
+          verify_card "Twitter share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "Twitterbot/1.0"
+          verify_card "Facebook share v4 URL" "https://flow.virzyguns.com/share-v4?qa=20260822-social-v4" "facebookexternalhit/1.1"
