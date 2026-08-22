@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 const SIZE = { width: 1200, height: 630 };
 const FLOW_LOGO = "https://flow.virzyguns.com/icons/flowstate-logo.png";
 
-type ControlIcon = "reset" | "pause" | "skip";
+type ControlIcon = "previous" | "pause" | "skip";
 
 function ThemePill({ label, active = false }: { label: string; active?: boolean }) {
   return (
@@ -40,11 +40,11 @@ function IconShape({ icon, primary = false }: { icon: ControlIcon; primary?: boo
     );
   }
 
-  if (icon === "reset") {
+  if (icon === "previous") {
     return (
-      <div style={{ width: 22, height: 22, position: "relative", display: "flex" }}>
-        <div style={{ position: "absolute", inset: 3, borderRadius: 9, display: "flex", border: `2px solid ${color}`, borderRightColor: "transparent" }} />
-        <div style={{ position: "absolute", right: 1, top: 2, width: 7, height: 7, display: "flex", borderTop: `2px solid ${color}`, borderRight: `2px solid ${color}`, transform: "rotate(20deg)" }} />
+      <div style={{ width: 24, height: 22, position: "relative", display: "flex", alignItems: "center" }}>
+        <div style={{ position: "absolute", left: 2, width: 3, height: 18, display: "flex", borderRadius: 2, background: color }} />
+        <div style={{ position: "absolute", left: 8, width: 12, height: 12, display: "flex", borderTop: `3px solid ${color}`, borderRight: `3px solid ${color}`, transform: "rotate(225deg)" }} />
       </div>
     );
   }
@@ -148,7 +148,7 @@ export function renderFlowHomeOgCard() {
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 18, padding: "8px 14px", borderRadius: 24, border: "1px solid rgba(255,255,255,0.14)", background: "rgba(255,255,255,0.025)", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)" }}>
-              <ControlButton icon="reset" />
+              <ControlButton icon="previous" />
               <ControlButton icon="pause" primary />
               <ControlButton icon="skip" />
             </div>
