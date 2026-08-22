@@ -12,7 +12,7 @@ on:
       - ".github/workflows/flowstate-predeploy.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: flowstate-predeploy-${{ github.ref }}
@@ -28,6 +28,52 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Restore exact captured homepage PNG
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TARGET="public/social/flow-og-home-0808.png"
+          if [ -f "$TARGET" ] && [ "$(stat -c%s "$TARGET")" -gt 100000 ]; then
+            echo "Exact PNG already present: $(stat -c%s "$TARGET") bytes"
+            exit 0
+          fi
+
+          curl --fail --silent --show-error --location \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9477747945/zip" \
+            -o /tmp/flow-og.zip
+          rm -rf /tmp/flow-og-artifact
+          mkdir -p /tmp/flow-og-artifact
+          unzip -q /tmp/flow-og.zip -d /tmp/flow-og-artifact
+          test -f /tmp/flow-og-artifact/flow-og-home.png
+          mkdir -p public/social
+          cp /tmp/flow-og-artifact/flow-og-home.png "$TARGET"
+          rm -f public/social/flow-og-home-0808.jpg
+
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('public/social/flow-og-home-0808.png')
+          b=p.read_bytes()
+          print('restored exact PNG bytes =', len(b))
+          assert b.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(b) > 100000
+          PY
+
+          git config user.name "VirzyG"
+          git config user.email "118427962+LaluGuns@users.noreply.github.com"
+          git add public/social/flow-og-home-0808.png public/social/flow-og-home-0808.jpg || true
+          if ! git diff --cached --quiet; then
+            git commit -m "fix(flow): store exact homepage social preview"
+            git push origin "HEAD:${GITHUB_HEAD_REF}"
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -46,11 +92,11 @@ jobs:
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
-          p = Path('public/social/flow-og-home-0808.jpg')
+          p = Path('public/social/flow-og-home-0808.png')
           b = p.read_bytes()
           print('static social preview bytes =', len(b))
-          assert b.startswith(b'\xff\xd8\xff')
-          assert len(b) > 50000
+          assert b.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(b) > 100000
           PY
 
       - name: Verify bare Flow URL live
@@ -59,13 +105,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social/flow-og-home-0808.jpg"
+          EXPECTED_IMAGE_PATH="/social/flow-og-home-0808.png"
 
           verify() {
             local LABEL="$1"
             local UA="$2"
             local HTML="/tmp/${LABEL}.html"
-            local IMG="/tmp/${LABEL}.jpg"
+            local IMG="/tmp/${LABEL}.png"
             local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
             local ok=0
 
@@ -117,8 +163,8 @@ jobs:
           from pathlib import Path
           b = Path(os.environ['IMG']).read_bytes()
           print('image bytes =', len(b))
-          assert b.startswith(b'\xff\xd8\xff')
-          assert len(b) > 50000
+          assert b.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(b) > 100000
           PY
                     then
                       ok=1
