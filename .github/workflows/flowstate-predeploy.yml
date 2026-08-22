@@ -40,79 +40,124 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
 
-      - name: Verify live social cards
+      - name: Render current social card locally
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm start > /tmp/flow-next.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+
+          ok=0
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent --show-error --location \
+              --connect-timeout 5 --max-time 30 \
+              -D /tmp/flow-social.headers \
+              "http://127.0.0.1:3000/en/social-card-v7" \
+              -o /tmp/flow-social.png; then
+              if python - <<'PY'
+          from pathlib import Path
+          headers = Path('/tmp/flow-social.headers').read_text(errors='replace').lower()
+          image = Path('/tmp/flow-social.png').read_bytes()
+          print('preview image bytes =', len(image))
+          assert 'content-type: image/png' in headers
+          assert image.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(image) > 10000
+          PY
+              then
+                ok=1
+                break
+              fi
+            fi
+            sleep 2
+          done
+
+          if [ "$ok" -ne 1 ]; then
+            cat /tmp/flow-next.log || true
+            exit 1
+          fi
+
+      - name: Upload social card preview
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-social-v7-preview
+          path: /tmp/flow-social.png
+          if-no-files-found: error
+
+      - name: Verify bare Flow URL live
         if: github.event_name == 'push'
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED_IMAGE_PATH="/social-card-v6"
+          EXPECTED_IMAGE_PATH="/social-card-v7"
+          EXPECTED_VERSION="20260822-fullbleed-0808"
 
-          verify_card() {
+          verify() {
             local LABEL="$1"
-            local PAGE_URL="$2"
-            local USER_AGENT="$3"
-            local PREFIX="$(echo "$LABEL" | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9')"
-            local HTML="/tmp/flow-${PREFIX}.html"
-            local IMAGE_URL_FILE="/tmp/flow-${PREFIX}-image-url"
-            local IMAGE_HEADERS="/tmp/flow-${PREFIX}-image.headers"
-            local IMAGE_BIN="/tmp/flow-${PREFIX}-image.bin"
+            local UA="$2"
+            local HTML="/tmp/${LABEL}.html"
+            local IMG="/tmp/${LABEL}.png"
+            local HEADERS="/tmp/${LABEL}.headers"
+            local IMAGE_URL_FILE="/tmp/${LABEL}-image-url"
             local ok=0
 
             for attempt in $(seq 1 24); do
-              echo "$LABEL check ${attempt}/24"
+              echo "$LABEL attempt ${attempt}/24"
               if curl --fail --silent --show-error --location \
-                --user-agent "$USER_AGENT" --connect-timeout 10 --max-time 30 \
-                "$PAGE_URL" -o "$HTML"; then
-                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" python - <<'PY'
+                --user-agent "$UA" \
+                --connect-timeout 10 --max-time 30 \
+                "https://flow.virzyguns.com/" -o "$HTML"; then
+                if HTML="$HTML" IMAGE_URL_FILE="$IMAGE_URL_FILE" EXPECTED_IMAGE_PATH="$EXPECTED_IMAGE_PATH" EXPECTED_VERSION="$EXPECTED_VERSION" python - <<'PY'
           import os
           from html.parser import HTMLParser
 
-          class MetaParser(HTMLParser):
+          class P(HTMLParser):
               def __init__(self):
-                  super().__init__()
-                  self.meta = {}
+                  super().__init__(); self.meta = {}
               def handle_starttag(self, tag, attrs):
-                  if tag.lower() != 'meta':
-                      return
-                  data = {k.lower(): v for k, v in attrs if k and v is not None}
-                  key = data.get('property') or data.get('name')
-                  value = data.get('content')
-                  if key and value:
-                      self.meta[key.lower()] = value
+                  if tag.lower() != 'meta': return
+                  d = {k.lower(): v for k, v in attrs if k and v is not None}
+                  key = d.get('property') or d.get('name')
+                  if key and d.get('content'): self.meta[key.lower()] = d['content']
 
-          parser = MetaParser()
-          parser.feed(open(os.environ['HTML'], encoding='utf-8').read())
-          expected = os.environ['EXPECTED_IMAGE_PATH']
-          twitter_card = parser.meta.get('twitter:card', '')
-          twitter_image = parser.meta.get('twitter:image', '')
-          og_image = parser.meta.get('og:image', '')
-          print('twitter:card =', twitter_card)
-          print('twitter:image =', twitter_image)
-          print('og:image =', og_image)
-          if twitter_card != 'summary_large_image':
-              raise SystemExit('wrong twitter card')
-          if expected not in twitter_image or expected not in og_image:
-              raise SystemExit('metadata is not serving v6')
-          open(os.environ['IMAGE_URL_FILE'], 'w', encoding='utf-8').write(og_image)
+          p = P(); p.feed(open(os.environ['HTML'], encoding='utf-8').read())
+          card = p.meta.get('twitter:card', '')
+          og = p.meta.get('og:image', '')
+          tw = p.meta.get('twitter:image', '')
+          ogurl = p.meta.get('og:url', '')
+          ogtitle = p.meta.get('og:title', '')
+          print('twitter:card =', card)
+          print('og:image =', og)
+          print('twitter:image =', tw)
+          print('og:url =', ogurl)
+          print('og:title =', ogtitle)
+          assert card == 'summary_large_image'
+          assert os.environ['EXPECTED_IMAGE_PATH'] in og
+          assert os.environ['EXPECTED_IMAGE_PATH'] in tw
+          assert os.environ['EXPECTED_VERSION'] in og
+          assert os.environ['EXPECTED_VERSION'] in tw
+          assert ogurl == 'https://flow.virzyguns.com'
+          assert '—' not in ogtitle and '–' not in ogtitle
+          open(os.environ['IMAGE_URL_FILE'], 'w').write(og)
           PY
                 then
                   IMAGE_URL="$(cat "$IMAGE_URL_FILE")"
                   if curl --fail --silent --show-error --location \
-                    --user-agent "$USER_AGENT" --connect-timeout 10 --max-time 45 \
-                    -D "$IMAGE_HEADERS" "$IMAGE_URL" -o "$IMAGE_BIN"; then
-                    if IMAGE_HEADERS="$IMAGE_HEADERS" IMAGE_BIN="$IMAGE_BIN" python - <<'PY'
+                    --user-agent "$UA" \
+                    --connect-timeout 10 --max-time 45 \
+                    -D "$HEADERS" "$IMAGE_URL" -o "$IMG"; then
+                    if HEADERS="$HEADERS" IMG="$IMG" python - <<'PY'
           import os
           from pathlib import Path
-          headers = Path(os.environ['IMAGE_HEADERS']).read_text(errors='replace').lower()
-          image = Path(os.environ['IMAGE_BIN']).read_bytes()
-          print('image bytes =', len(image))
-          if 'content-type: image/png' not in headers:
-              raise SystemExit('not image/png')
-          if not image.startswith(b'\x89PNG\r\n\x1a\n'):
-              raise SystemExit('not PNG')
-          if len(image) < 10000:
-              raise SystemExit('PNG too small')
+          h = Path(os.environ['HEADERS']).read_text(errors='replace').lower()
+          b = Path(os.environ['IMG']).read_bytes()
+          print('image bytes =', len(b))
+          assert 'content-type: image/png' in h
+          assert b.startswith(b'\x89PNG\r\n\x1a\n')
+          assert len(b) > 10000
           PY
                     then
                       ok=1
@@ -128,7 +173,5 @@ jobs:
             echo "$LABEL PASS"
           }
 
-          verify_card "Twitter bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "Twitterbot/1.0"
-          verify_card "Facebook bare domain" "https://flow.virzyguns.com/?qa=20260822-social-v6" "facebookexternalhit/1.1"
-          verify_card "Twitter share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "Twitterbot/1.0"
-          verify_card "Facebook share v6" "https://flow.virzyguns.com/share-v6?qa=20260822-social-v6" "facebookexternalhit/1.1"
+          verify twitter Twitterbot/1.0
+          verify facebook facebookexternalhit/1.1
