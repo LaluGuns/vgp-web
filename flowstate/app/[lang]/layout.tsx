@@ -13,7 +13,7 @@ import { openGraphLocale } from "@/lib/marketing/seo";
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 const SITE = "https://flow.virzyguns.com";
-const SOCIAL_IMAGE = `${SITE}/social/flow-og-home-0808.jpg`;
+const SOCIAL_IMAGE = `${SITE}/social/flow-og-home-0808.png`;
 const LOCALES = ROUTABLE_LOCALES;
 
 function removeLongDashes(value: string): string {
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       type: "website",
       url: SITE,
       locale: openGraphLocale(locale),
-      images: [{ url: SOCIAL_IMAGE, width: 1200, height: 630, alt: regionalTitle ?? ogTitle, type: "image/jpeg" }],
+      images: [{ url: SOCIAL_IMAGE, width: 1200, height: 630, alt: regionalTitle ?? ogTitle, type: "image/png" }],
     },
     twitter: {
       card: "summary_large_image",
