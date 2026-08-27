@@ -26,7 +26,14 @@ export interface VgpProductRecord {
     topics: string[];
     discoveryEligible: boolean;
     availabilityNote: string;
-    schemaType: 'Thing' | 'SoftwareApplication' | 'Book' | 'Course' | 'VideoGame';
+    schemaType:
+        | 'Thing'
+        | 'MusicPlaylist'
+        | 'SoftwareApplication'
+        | 'Book'
+        | 'Course'
+        | 'ResearchProject'
+        | 'VideoGame';
     machineFeedUrl?: string;
 }
 
@@ -52,7 +59,7 @@ export const vgpProductCatalog: VgpProductRecord[] = [
         discoveryEligible: true,
         availabilityNote:
             'Catalog identity is public. Availability for an individual recording should be verified on the target streaming or download service.',
-        schemaType: 'Thing',
+        schemaType: 'MusicPlaylist',
         machineFeedUrl: `${SITE_URL}/products/music.json`,
     },
     {
@@ -139,7 +146,7 @@ export const vgpProductCatalog: VgpProductRecord[] = [
         topics: ['functional audio', 'focus music', 'recovery listening', 'running cadence', 'cycling cadence'],
         discoveryEligible: false,
         availabilityNote: 'Research program. Individual public modules have their own availability status.',
-        schemaType: 'Thing',
+        schemaType: 'ResearchProject',
     },
     {
         id: 'hear-the-difference',
