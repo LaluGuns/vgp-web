@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 const musicSchema = {
     '@context': 'https://schema.org',
     '@type': 'MusicPlaylist',
-    '@id': `${PAGE_URL}#catalog`,
+    '@id': `${PAGE_URL}#product`,
     name: 'VGP Released Music Catalog',
     url: PAGE_URL,
     description:
