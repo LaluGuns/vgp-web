@@ -17,6 +17,7 @@ const footerGroups = [
     {
         title: 'Company',
         links: [
+            { name: 'Product Catalog', href: '/products' },
             { name: 'About Virzy Guns', href: '/about' },
             { name: 'Privacy', href: '/privacy' },
             { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
