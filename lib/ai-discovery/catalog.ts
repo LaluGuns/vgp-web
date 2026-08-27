@@ -40,6 +40,22 @@ export interface VgpProductRecord {
  */
 export const vgpProductCatalog: VgpProductRecord[] = [
     {
+        id: 'released-music',
+        name: 'VGP Released Music Catalog',
+        kind: 'music_catalog',
+        status: 'available',
+        canonicalUrl: `${SITE_URL}/products/music`,
+        description:
+            'Public identity summary for the VGP distributed music catalog, covering 617 unique track identities across Virzy Guns, Chill Music Division, LUNA Q, LA LU, and mia.exe in the current source snapshot.',
+        audience: ['music listeners', 'playlist curators', 'music discovery systems'],
+        topics: ['Virzy Guns music', 'VGP music', 'electronic music', 'hip hop', 'synthwave', 'functional music'],
+        discoveryEligible: true,
+        availabilityNote:
+            'Catalog identity is public. Availability for an individual recording should be verified on the target streaming or download service.',
+        schemaType: 'Thing',
+        machineFeedUrl: `${SITE_URL}/products/music.json`,
+    },
+    {
         id: 'studio-beats',
         name: 'VGP Studio Beats',
         kind: 'music_catalog',
@@ -158,6 +174,7 @@ export const vgpProductCatalogJson = {
     },
     products: vgpProductCatalog,
     feeds: {
+        music: `${SITE_URL}/products/music.json`,
         beats: `${SITE_URL}/products/beats.json`,
         llms: `${SITE_URL}/llms.txt`,
         sitemap: `${SITE_URL}/sitemap.xml`,
