@@ -31,15 +31,19 @@ export const metadata: Metadata = {
 
 const musicSchema = {
     '@context': 'https://schema.org',
-    '@type': 'MusicPlaylist',
+    '@type': 'Collection',
     '@id': `${PAGE_URL}#product`,
     name: 'VGP Released Music Catalog',
     url: PAGE_URL,
     description:
         'Virzy Guns Production catalog identity summary covering 617 unique distributed track identities across five artist names.',
-    numTracks: 617,
     creator: {
         '@id': `${SITE_URL}/#organization`,
+    },
+    additionalProperty: {
+        '@type': 'PropertyValue',
+        name: 'Unique track identities',
+        value: 617,
     },
 };
 
