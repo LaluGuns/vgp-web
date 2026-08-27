@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/flow',
         '/book',
         '/products',
+        '/products/music',
         '/products/hear-the-difference',
         '/blog',
     ].map((route) => ({
