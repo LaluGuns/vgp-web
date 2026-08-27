@@ -62,23 +62,18 @@ export const organizationSchema = {
         itemListElement: [
             {
                 '@type': 'OfferCatalog',
+                name: 'Released Music',
+                url: `${SITE_URL}/products/music`,
+            },
+            {
+                '@type': 'OfferCatalog',
                 name: 'Beats & Instrumentals',
                 url: `${SITE_URL}/studio/beats`,
             },
             {
                 '@type': 'OfferCatalog',
-                name: 'Apps & Functional Audio',
-                url: `${SITE_URL}/products#apps`,
-            },
-            {
-                '@type': 'OfferCatalog',
-                name: 'Books & Producer Education',
-                url: `${SITE_URL}/products#learning`,
-            },
-            {
-                '@type': 'OfferCatalog',
-                name: 'Games',
-                url: `${SITE_URL}/products#games`,
+                name: 'Apps, Functional Audio, Books, Courses & Games',
+                url: `${SITE_URL}/products`,
             },
         ],
     },
