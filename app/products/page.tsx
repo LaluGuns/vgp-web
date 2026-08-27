@@ -8,7 +8,7 @@ const SITE_URL = 'https://www.virzyguns.com';
 export const metadata: Metadata = {
     title: 'Official Product Catalog | VGP',
     description:
-        'Official Virzy Guns Production catalog covering beats, apps, functional audio, books, courses, and games with current availability status.',
+        'Official Virzy Guns Production catalog covering released music, beats, apps, functional audio, books, courses, and games with current availability status.',
     alternates: {
         canonical: '/products',
     },
@@ -126,6 +126,7 @@ export default function ProductsPage() {
                     </p>
                     <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold">
                         <a href="/products/catalog.json" className="text-sky-200 hover:text-white">Product catalog JSON</a>
+                        <a href="/products/music.json" className="text-sky-200 hover:text-white">Music catalog JSON</a>
                         <a href="/products/beats.json" className="text-sky-200 hover:text-white">Beat catalog JSON</a>
                         <a href="/llms.txt" className="text-sky-200 hover:text-white">LLM discovery index</a>
                         <a href="/sitemap.xml" className="text-sky-200 hover:text-white">XML sitemap</a>
