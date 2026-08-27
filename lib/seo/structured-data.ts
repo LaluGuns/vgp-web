@@ -14,6 +14,9 @@
  */
 
 const SITE_URL = 'https://www.virzyguns.com';
+const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+const WEBSITE_ID = `${SITE_URL}/#website`;
+const FOUNDER_ID = `${SITE_URL}/#founder`;
 
 /** Public profiles for the company entity. Keep canonical (www + exact handle casing). */
 const VIRZY_GUNS_SPOTIFY_URL = 'https://open.spotify.com/artist/13PhVfASmYQp8asSheyAxD';
@@ -26,15 +29,16 @@ const profiles = [
     'https://www.beatstars.com/virzyguns',
 ];
 
-
 /** Artist-owned profiles are separate from the production organization. */
 const virzyArtistProfiles = [
     ...profiles,
     VIRZY_GUNS_SPOTIFY_URL,
 ];
+
 export const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    '@id': ORGANIZATION_ID,
     name: 'Virzy Guns Production',
     alternateName: 'VGP',
     url: SITE_URL,
@@ -45,18 +49,38 @@ export const organizationSchema = {
         height: 1024,
     },
     description:
-        'Virzy Guns Production is a music-tech ecosystem for songs, premium beats, custom production, functional audio, Flow, CADENZ, books, and producer education.',
+        'Virzy Guns Production is a music-tech ecosystem for songs, premium beats, custom production, functional audio, Flow, CADENZ, books, games, and producer education.',
     founder: {
-        '@type': 'Person',
-        name: 'Virzy Guns',
-        jobTitle: 'Founder and creative director of Virzy Guns Production',
-        sameAs: 'https://www.linkedin.com/in/virzyguns/',
+        '@id': FOUNDER_ID,
     },
     sameAs: [...profiles, VIRZY_GUNS_SPOTIFY_URL],
     hasOfferCatalog: {
         '@type': 'OfferCatalog',
-        name: 'Beats & Instrumentals',
-        url: `${SITE_URL}/studio/beats`,
+        '@id': `${SITE_URL}/products#catalog`,
+        name: 'Virzy Guns Production Product Catalog',
+        url: `${SITE_URL}/products`,
+        itemListElement: [
+            {
+                '@type': 'OfferCatalog',
+                name: 'Beats & Instrumentals',
+                url: `${SITE_URL}/studio/beats`,
+            },
+            {
+                '@type': 'OfferCatalog',
+                name: 'Apps & Functional Audio',
+                url: `${SITE_URL}/products#apps`,
+            },
+            {
+                '@type': 'OfferCatalog',
+                name: 'Books & Producer Education',
+                url: `${SITE_URL}/products#learning`,
+            },
+            {
+                '@type': 'OfferCatalog',
+                name: 'Games',
+                url: `${SITE_URL}/products#games`,
+            },
+        ],
     },
 };
 
@@ -68,27 +92,25 @@ export const organizationSchema = {
 export const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    '@id': `${SITE_URL}/#website`,
+    '@id': WEBSITE_ID,
     name: 'Virzy Guns Production',
     url: SITE_URL,
     description:
-        'Songs, premium beats, custom production, functional audio, Flow, CADENZ, books, and producer education by Virzy Guns.',
+        'Songs, premium beats, custom production, functional audio, Flow, CADENZ, books, games, and producer education by Virzy Guns.',
     publisher: {
-        '@type': 'Organization',
-        name: 'Virzy Guns Production',
+        '@id': ORGANIZATION_ID,
     },
 };
 
 export const founderSchema = {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': FOUNDER_ID,
     name: 'Virzy Guns',
     url: `${SITE_URL}/about`,
     jobTitle: 'Founder and creative director of Virzy Guns Production',
     worksFor: {
-        '@type': 'Organization',
-        name: 'Virzy Guns Production',
-        url: SITE_URL,
+        '@id': ORGANIZATION_ID,
     },
     knowsAbout: [
         'songwriting',
@@ -97,6 +119,7 @@ export const founderSchema = {
         'mixing and mastering',
         'functional audio',
         'producer education',
+        'music technology',
     ],
     sameAs: virzyArtistProfiles,
 };
