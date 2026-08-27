@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import FlowClient from './FlowClient';
+import { JsonLd } from '@/components/seo/JsonLd';
 
 export const metadata: Metadata = {
     title: 'Flow by Virzy Guns — Deep Work Music & Pomodoro Timer',
@@ -40,6 +41,7 @@ export const metadata: Metadata = {
 const flowJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
+    '@id': 'https://www.virzyguns.com/flow#product',
     name: 'Flow by Virzy Guns',
     alternateName: ['Flow', 'Flowstate'],
     url: 'https://flow.virzyguns.com',
@@ -49,9 +51,10 @@ const flowJsonLd = {
     description:
         'A deep work app that pairs a pomodoro timer with focus music produced in-house by Virzy Guns. Free tier without an account; Flow Pro unlocks the full catalog and themes.',
     author: {
-        '@type': 'Person',
-        name: 'Virzy Guns',
-        url: 'https://www.virzyguns.com/about',
+        '@id': 'https://www.virzyguns.com/#founder',
+    },
+    publisher: {
+        '@id': 'https://www.virzyguns.com/#organization',
     },
     offers: [
         {
@@ -59,18 +62,21 @@ const flowJsonLd = {
             name: 'Flow Free',
             price: '0',
             priceCurrency: 'USD',
+            url: 'https://flow.virzyguns.com',
         },
         {
             '@type': 'Offer',
             name: 'Flow Pro Monthly',
             price: '9.99',
             priceCurrency: 'USD',
+            url: 'https://flow.virzyguns.com',
         },
         {
             '@type': 'Offer',
             name: 'Flow Pro Yearly',
             price: '59.99',
             priceCurrency: 'USD',
+            url: 'https://flow.virzyguns.com',
         },
     ],
 };
@@ -78,10 +84,7 @@ const flowJsonLd = {
 export default function FlowPage() {
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(flowJsonLd) }}
-            />
+            <JsonLd data={flowJsonLd} />
             <FlowClient />
         </>
     );
