@@ -31,11 +31,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/cadenz',
         '/flow',
         '/book',
+        '/products',
+        '/products/hear-the-difference',
         '/blog',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         changeFrequency: route.includes('/studio/beats') ? ('daily' as const) : ('monthly' as const),
-        priority: route === '' ? 1 : route.includes('/studio/beats') ? 0.9 : 0.8,
+        priority: route === '' ? 1 : route.includes('/studio/beats') ? 0.9 : route === '/products' ? 0.9 : 0.8,
     }));
 
     // 2. Multilingual Category Routes (en-US, ja-JP, de-DE)
@@ -93,6 +95,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'weekly' as const,
         priority: route === CADENZ_HUB_PATH ? 0.9 : 0.75,
     }));
+
     // 4. Dynamic Blog Routes
     const blogRoutes = getAllSlugs().map((slug) => ({
         url: `${baseUrl}/blog/${slug}`,
