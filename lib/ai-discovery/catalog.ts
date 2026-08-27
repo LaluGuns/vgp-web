@@ -28,7 +28,7 @@ export interface VgpProductRecord {
     availabilityNote: string;
     schemaType:
         | 'Thing'
-        | 'MusicPlaylist'
+        | 'Collection'
         | 'SoftwareApplication'
         | 'Book'
         | 'Course'
@@ -59,7 +59,7 @@ export const vgpProductCatalog: VgpProductRecord[] = [
         discoveryEligible: true,
         availabilityNote:
             'Catalog identity is public. Availability for an individual recording should be verified on the target streaming or download service.',
-        schemaType: 'MusicPlaylist',
+        schemaType: 'Collection',
         machineFeedUrl: `${SITE_URL}/products/music.json`,
     },
     {
