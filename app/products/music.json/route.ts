@@ -12,9 +12,8 @@ const musicCatalogSummary = {
         url: SITE_URL,
     },
     canonicalUrl: `${SITE_URL}/products/music`,
-    sourceSnapshot: 'VGP_REUPLOAD_FIXED_NO_FALSE_MISSING_ISRC_2026-06-01.xlsx',
     sourcePolicy:
-        'This public summary exposes catalog identity only. Financial, store-performance, country, and transaction-level data from the source workbook are intentionally excluded.',
+        'This public summary exposes catalog identity only. Financial, store-performance, country, transaction-level, and internal source-file metadata are intentionally excluded.',
     trackIdentityCount: 617,
     identifierCoverage: ['ISRC', 'UPC'],
     artists: [
