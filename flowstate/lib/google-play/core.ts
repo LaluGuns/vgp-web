@@ -24,6 +24,8 @@ export type SubscriptionPurchaseV2 = {
   }>;
 };
 
+type PurchaseLine = NonNullable<SubscriptionPurchaseV2["lineItems"]>[number];
+
 type PurchaseDisposition = {
   status: SubscriptionStatus;
   entitled: boolean;
@@ -93,6 +95,53 @@ function configuredBasePlan(plan: SubscriptionPlan) {
   return null;
 }
 
+function configuredLine(line: PurchaseLine): { plan: SubscriptionPlan; basePlanId: string | null } {
+  const productId = String(line.productId || "");
+  const plan = planForProduct(productId);
+  if (!plan) throw new Error("Unexpected Google Play subscription product");
+
+  const basePlanId = line.offerDetails?.basePlanId?.trim() || null;
+  const requiredBasePlan = configuredBasePlan(plan);
+  if (requiredBasePlan && requiredBasePlan !== basePlanId) {
+    throw new Error("Unexpected Google Play base plan");
+  }
+  return { plan, basePlanId };
+}
+
+function selectAuthoritativeLine(
+  purchase: SubscriptionPurchaseV2,
+  expectedProductId?: string | null,
+  expectedBasePlanId?: string | null,
+) {
+  const lines = (purchase.lineItems || []).filter((line) => line.productId && planForProduct(line.productId));
+  if (!lines.length) throw new Error("Purchase contains no configured Flow subscription product");
+
+  let expectedLine: PurchaseLine | null = null;
+  if (expectedProductId) {
+    expectedLine = lines.find((line) => line.productId === expectedProductId) || null;
+    if (!expectedLine) throw new Error("Google Play product mismatch");
+    const expectedConfig = configuredLine(expectedLine);
+    if (expectedBasePlanId && expectedConfig.basePlanId !== expectedBasePlanId) {
+      throw new Error("Google Play base plan mismatch");
+    }
+  } else if (expectedBasePlanId) {
+    throw new Error("Google Play base plan supplied without product");
+  }
+
+  // During a deferred replacement, Google can return both the still-current
+  // line (future expiry) and the newly purchased future line (no expiry yet).
+  // The line with the furthest valid expiry is the current entitlement. If no
+  // line has an expiry, use the client-matched line for pending purchases.
+  const byExpiry = [...lines].sort((a, b) => {
+    const aMs = validIsoDate(a.expiryTime) ? new Date(a.expiryTime as string).getTime() : -1;
+    const bMs = validIsoDate(b.expiryTime) ? new Date(b.expiryTime as string).getTime() : -1;
+    return bMs - aMs;
+  });
+  const line = byExpiry.find((candidate) => validIsoDate(candidate.expiryTime)) || expectedLine || byExpiry[0];
+  const config = configuredLine(line);
+  return { line, plan: config.plan, basePlanId: config.basePlanId };
+}
+
 function dispositionForState(state: string, expiry: string | null): PurchaseDisposition {
   const futureExpiry = Boolean(expiry && new Date(expiry).getTime() > Date.now());
   switch (state) {
@@ -156,6 +205,51 @@ async function acknowledgeSubscriptionPurchase(purchaseToken: string, productId:
   );
 }
 
+async function expireLinkedPurchaseToken(input: {
+  linkedPurchaseToken?: string | null;
+  currentPurchaseTokenHash: string;
+  userId: string;
+  providerUpdatedAt: string;
+  currentState: string;
+}) {
+  const linkedToken = input.linkedPurchaseToken?.trim();
+  if (!linkedToken) return false;
+  if (
+    input.currentState === "SUBSCRIPTION_STATE_PENDING" ||
+    input.currentState === "SUBSCRIPTION_STATE_PENDING_PURCHASE_CANCELED"
+  ) {
+    return false;
+  }
+
+  const linkedHash = sha256Hex(linkedToken);
+  if (linkedHash === input.currentPurchaseTokenHash) return false;
+
+  const supabase = await createServiceClient();
+  const { data, error } = await supabase
+    .from("flowstate_subscriptions")
+    .select("user_id,provider,provider_customer_id,plan,current_period_start")
+    .eq("provider_subscription_id", linkedHash)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return false;
+  if (data.provider !== "google_play" || data.user_id !== input.userId) {
+    throw new Error("Linked Google Play purchase ownership conflict");
+  }
+
+  const result = await applySubscriptionState({
+    userId: input.userId,
+    provider: "google_play",
+    providerSubscriptionId: linkedHash,
+    providerCustomerId: data.provider_customer_id,
+    status: "expired",
+    plan: data.plan,
+    currentPeriodStart: data.current_period_start,
+    currentPeriodEnd: input.providerUpdatedAt,
+    providerUpdatedAt: input.providerUpdatedAt,
+  });
+  return result === "applied";
+}
+
 export async function verifyAndPersistPlayPurchase(input: {
   purchaseToken: string;
   expectedUserId?: string | null;
@@ -172,25 +266,12 @@ export async function verifyAndPersistPlayPurchase(input: {
     `/applications/${encodeURIComponent(ANDROID_PACKAGE)}/purchases/subscriptionsv2/tokens/${encodeURIComponent(purchaseToken)}`,
   );
   const userId = await resolvePurchaseUser(purchase, purchaseToken, input.expectedUserId);
-
-  const lines = (purchase.lineItems || []).filter((line) => line.productId && planForProduct(line.productId));
-  if (!lines.length) throw new Error("Purchase contains no configured Flow subscription product");
-  lines.sort((a, b) => new Date(b.expiryTime || 0).getTime() - new Date(a.expiryTime || 0).getTime());
-
-  const line = lines[0];
+  const { line, plan, basePlanId } = selectAuthoritativeLine(
+    purchase,
+    input.expectedProductId,
+    input.expectedBasePlanId,
+  );
   const productId = String(line.productId);
-  const plan = planForProduct(productId)!;
-  const basePlanId = line.offerDetails?.basePlanId?.trim() || null;
-  const requiredBasePlan = configuredBasePlan(plan);
-  if (input.expectedProductId && input.expectedProductId !== productId) {
-    throw new Error("Google Play product mismatch");
-  }
-  if (input.expectedBasePlanId && input.expectedBasePlanId !== basePlanId) {
-    throw new Error("Google Play base plan mismatch");
-  }
-  if (requiredBasePlan && requiredBasePlan !== basePlanId) {
-    throw new Error("Unexpected Google Play base plan");
-  }
 
   const expiry = validIsoDate(line.expiryTime);
   const state = String(purchase.subscriptionState || "SUBSCRIPTION_STATE_UNSPECIFIED");
@@ -211,7 +292,15 @@ export async function verifyAndPersistPlayPurchase(input: {
     providerUpdatedAt,
   });
 
-  if (result === "applied") {
+  const linkedExpired = await expireLinkedPurchaseToken({
+    linkedPurchaseToken: purchase.linkedPurchaseToken,
+    currentPurchaseTokenHash: tokenHash,
+    userId,
+    providerUpdatedAt,
+    currentState: state,
+  });
+
+  if (result === "applied" || linkedExpired) {
     const supabase = await createServiceClient();
     const { error } = await supabase.rpc("flowstate_recompute_profile_plan", { p_user_id: userId });
     if (error) throw error;
@@ -367,55 +456,4 @@ export async function listVoidedSubscriptionPurchases(input: {
     voidedPurchases?: VoidedPurchase[];
     tokenPagination?: { nextPageToken?: string };
   }>(`/applications/${encodeURIComponent(ANDROID_PACKAGE)}/purchases/voidedpurchases?${q}`);
-}
-
-export async function reconcileVoidedPurchase(item: VoidedPurchase): Promise<boolean> {
-  if (!item.purchaseToken) return false;
-  const tokenHash = sha256Hex(item.purchaseToken);
-  const supabase = await createServiceClient();
-  const { data, error } = await supabase.from("flowstate_subscriptions")
-    .select("user_id,plan,current_period_start,provider_customer_id")
-    .eq("provider", "google_play")
-    .eq("provider_subscription_id", tokenHash)
-    .maybeSingle();
-  if (error) throw error;
-  if (!data) return false;
-
-  const voidedMs = Number(item.voidedTimeMillis);
-  const occurredAt = Number.isFinite(voidedMs) && voidedMs > 0
-    ? new Date(voidedMs).toISOString()
-    : new Date().toISOString();
-
-  const applyResult = await applySubscriptionState({
-    userId: data.user_id,
-    provider: "google_play",
-    providerSubscriptionId: tokenHash,
-    providerCustomerId: data.provider_customer_id,
-    status: "expired",
-    plan: data.plan,
-    currentPeriodStart: data.current_period_start,
-    currentPeriodEnd: occurredAt,
-    providerUpdatedAt: occurredAt,
-  });
-  if (applyResult === "applied") {
-    const { error: recomputeError } = await supabase.rpc("flowstate_recompute_profile_plan", {
-      p_user_id: data.user_id,
-    });
-    if (recomputeError) throw recomputeError;
-  }
-
-  const chargeback = Number(item.voidedReason) === 7;
-  await captureSubscriptionEvent({
-    eventName: chargeback
-      ? "google_play_subscription_chargeback"
-      : "google_play_subscription_refunded",
-    status: "expired",
-    userId: data.user_id,
-    plan: data.plan,
-    eventId: `voided:${item.orderId || tokenHash}:${occurredAt}`,
-    occurredAt,
-    provider: "google_play",
-    platform: "server",
-  });
-  return true;
 }
