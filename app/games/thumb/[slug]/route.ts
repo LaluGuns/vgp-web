@@ -4,6 +4,8 @@ import h2 from '../../_thumb-data/hear-2';
 import h3 from '../../_thumb-data/hear-3';
 import b0 from '../../_thumb-data/block-0';
 import b1 from '../../_thumb-data/block-1';
+import b2 from '../../_thumb-data/block-2';
+import b3 from '../../_thumb-data/block-3';
 import t0 from '../../_thumb-data/tap-0';
 import t1 from '../../_thumb-data/tap-1';
 import t2 from '../../_thumb-data/tap-2';
@@ -12,7 +14,7 @@ export const runtime = 'nodejs';
 
 const images = {
   'hear-the-difference': h0 + h1 + h2 + h3,
-  'block-stacker': b0 + b1,
+  'block-stacker': b0 + b1 + b2 + b3,
   'tap-groove': t0 + t1 + t2,
 } as const;
 
