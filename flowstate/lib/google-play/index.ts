@@ -5,9 +5,10 @@ export {
   rtdnEventName,
   sha256Hex,
   verifyAndPersistPlayPurchase,
-  verifyPubSubPushBearer,
 } from "@/lib/google-play/core";
 export type { SubscriptionPurchaseV2, VoidedPurchase } from "@/lib/google-play/core";
+
+export { verifyPubSubPushBearer } from "@/lib/google-play/pubsub-auth";
 
 export { reconcileVoidedPurchase } from "@/lib/google-play/voided";
 
