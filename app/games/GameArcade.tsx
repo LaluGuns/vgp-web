@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState, type CSSProperties } from 'react';
 import styles from './games.module.css';
 
@@ -18,6 +17,20 @@ type ArcadeGame = {
 
 function PlayGlyph() {
   return <span aria-hidden="true" className={styles.playGlyph}>▶</span>;
+}
+
+function GameImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      loading="eager"
+      decoding="async"
+      referrerPolicy="no-referrer"
+      style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
+    />
+  );
 }
 
 export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) {
@@ -66,7 +79,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
           </div>
         </header>
 
-        <main className={styles.desktopMain}>
+        <div className={styles.desktopMain}>
           <section className={styles.desktopFeatured} aria-label={`Featured game: ${activeGame.title}`}>
             <div className={styles.desktopFeaturedInfo}>
               <p className={styles.featureBadge}>Featured game</p>
@@ -88,15 +101,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
             </div>
 
             <div className={styles.desktopFeaturedMedia}>
-              <Image
-                key={activeGame.slug}
-                src={activeGame.image}
-                alt={activeGame.imageAlt}
-                fill
-                priority
-                sizes="(min-width: 1180px) 58vw, (min-width: 761px) 55vw, 0px"
-                className={styles.featureImage}
-              />
+              <GameImage key={activeGame.slug} src={activeGame.image} alt={activeGame.imageAlt} className={styles.featureImage} />
             </div>
           </section>
 
@@ -126,7 +131,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                       onClick={() => choose(index)}
                     >
                       <span className={styles.desktopCardThumb}>
-                        <Image src={game.image} alt={game.imageAlt} fill sizes="(min-width: 1100px) 31vw, 44vw" />
+                        <GameImage src={game.image} alt={game.imageAlt} />
                       </span>
                     </button>
                     <div className={styles.desktopCardFooter}>
@@ -146,7 +151,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
           </section>
 
           <footer className={styles.desktopFooter}>100% Play. 100% VGP.</footer>
-        </main>
+        </div>
       </div>
 
       <div className={styles.mobileExperience}>
@@ -158,18 +163,10 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
           <a href="/" className={styles.mobileHomeLink}>VGP</a>
         </header>
 
-        <main className={styles.mobileMain}>
+        <div className={styles.mobileMain}>
           <section className={styles.mobileFeatured} aria-label={`Featured game: ${activeGame.title}`}>
             <div className={styles.mobileFeaturedArt}>
-              <Image
-                key={activeGame.slug}
-                src={activeGame.image}
-                alt={activeGame.imageAlt}
-                fill
-                priority
-                sizes="100vw"
-                className={styles.featureImage}
-              />
+              <GameImage key={activeGame.slug} src={activeGame.image} alt={activeGame.imageAlt} className={styles.featureImage} />
             </div>
             <div className={styles.mobileFeaturedInfo}>
               <p className={styles.gameType}>{activeGame.type}</p>
@@ -206,7 +203,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                   >
                     <button type="button" className={styles.mobileRowSelect} onClick={() => choose(index)}>
                       <span className={styles.mobileRowThumb}>
-                        <Image src={game.image} alt="" fill sizes="132px" />
+                        <GameImage src={game.image} alt="" />
                       </span>
                       <span className={styles.mobileRowTitle}>
                         <small>{game.type}</small>
@@ -223,7 +220,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
           </section>
 
           <footer className={styles.mobileFooter}>100% Play. 100% VGP.</footer>
-        </main>
+        </div>
       </div>
 
       {previewOpen ? (
