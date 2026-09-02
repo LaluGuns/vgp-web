@@ -12,6 +12,7 @@ import t2 from '../../_thumb-data/tap-2';
 
 export const runtime = 'nodejs';
 
+const CACHE_CONTROL = 'public, max-age=31536000, immutable';
 const images = {
   'hear-the-difference': h0 + h1 + h2 + h3,
   'block-stacker': b0 + b1 + b2 + b3,
@@ -37,7 +38,7 @@ export async function GET(
     headers: {
       'Content-Type': 'image/jpeg',
       'Content-Length': String(bytes.byteLength),
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Cache-Control': CACHE_CONTROL,
       'X-Content-Type-Options': 'nosniff',
     },
   });
