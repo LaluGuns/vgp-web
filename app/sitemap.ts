@@ -1,4 +1,4 @@
-﻿import { MetadataRoute } from 'next';
+import { MetadataRoute } from 'next';
 import { categories as blogCategoriesData, getAllSlugs } from '@/lib/blog-data';
 import { beatsCatalog, categories as beatCategories } from '@/lib/catalog';
 import { CADENZ_HUB_PATH, CADENZ_INDEXABLE_BPMS, cadenzBpmPath } from '@/lib/organic-discovery/cadenz';
@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/lab/healingwave',
         '/cadenz',
         '/flow',
+        '/games',
         '/book',
         '/blog',
     ].map((route) => ({
@@ -93,6 +94,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'weekly' as const,
         priority: route === CADENZ_HUB_PATH ? 0.9 : 0.75,
     }));
+
     // 4. Dynamic Blog Routes
     const blogRoutes = getAllSlugs().map((slug) => ({
         url: `${baseUrl}/blog/${slug}`,

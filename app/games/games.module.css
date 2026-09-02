@@ -1,0 +1,740 @@
+.page {
+  min-height: 100svh;
+  background: #05060b;
+  color: #fff;
+}
+
+.hub {
+  --active-accent: #ff4f9a;
+  min-height: 100svh;
+  background: #05060b;
+  color: #fff;
+}
+
+.mobileExperience { display: none; }
+
+.desktopExperience {
+  min-height: 100svh;
+  background: #05060b;
+}
+
+.desktopTopbar,
+.mobileTopbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.desktopTopbar {
+  min-height: 78px;
+  padding: 0 max(36px, env(safe-area-inset-right)) 0 max(36px, env(safe-area-inset-left));
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.brandLockup {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brandLockup strong {
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 950;
+  letter-spacing: -.06em;
+  font-style: italic;
+}
+
+.brandLockup span {
+  color: #d858f2;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+.desktopTopbarRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.mantra {
+  color: rgba(255,255,255,.42);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.homeLink,
+.mobileHomeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.13);
+  background: #0d0f17;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 850;
+}
+
+.homeLink {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.desktopMain {
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  padding: 30px max(36px, env(safe-area-inset-right)) 26px max(36px, env(safe-area-inset-left));
+}
+
+.desktopFeatured {
+  display: grid;
+  grid-template-columns: minmax(300px, .72fr) minmax(0, 1.55fr);
+  gap: 30px;
+  align-items: stretch;
+  min-height: 510px;
+  padding: 34px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 28px;
+  background: #090b12;
+  box-shadow: 0 30px 100px rgba(0,0,0,.34);
+}
+
+.desktopFeaturedInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 26px;
+  min-width: 0;
+  padding: 16px 4px 16px 12px;
+}
+
+.featureBadge {
+  align-self: flex-start;
+  margin: 0;
+  padding: 10px 13px;
+  border: 1px solid color-mix(in srgb, var(--active-accent) 46%, transparent);
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--active-accent) 82%, white);
+  background: color-mix(in srgb, var(--active-accent) 8%, #090b12);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.gameType,
+.cardType,
+.mobileRowTitle small,
+.libraryHeader p,
+.mobileLibraryHeader p {
+  color: color-mix(in srgb, var(--active-accent) 76%, white);
+  font-weight: 850;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.gameType {
+  margin: 0 0 10px;
+  font-size: 9px;
+  line-height: 1;
+}
+
+.desktopFeaturedInfo h1 {
+  margin: 0;
+  max-width: 10ch;
+  font-size: clamp(44px, 4.7vw, 74px);
+  line-height: .95;
+  letter-spacing: -.05em;
+  text-wrap: balance;
+}
+
+.featureCue {
+  margin: 16px 0 0;
+  max-width: 30ch;
+  color: rgba(255,255,255,.62);
+  font-size: 15px;
+  line-height: 1.48;
+}
+
+.desktopActions,
+.mobileActions {
+  display: grid;
+  gap: 10px;
+}
+
+.desktopActions {
+  grid-template-columns: 1fr;
+  max-width: 360px;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 15px 0 19px;
+  border-radius: 15px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.primaryButton {
+  border: 1px solid var(--active-accent);
+  background: var(--active-accent);
+  color: #06070c;
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--active-accent) 20%, transparent);
+}
+
+.secondaryButton {
+  border: 1px solid rgba(255,255,255,.16);
+  background: #10131c;
+  color: #fff;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible,
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  transform: translateY(-2px);
+}
+
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  border-color: var(--active-accent);
+}
+
+.playGlyph {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 31px;
+  height: 31px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 1;
+  padding-left: 2px;
+  opacity: .88;
+}
+
+.desktopFeaturedMedia {
+  position: relative;
+  align-self: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--active-accent) 78%, white 8%);
+  border-radius: 23px;
+  background: #0b0d13;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 0 42px color-mix(in srgb, var(--active-accent) 18%, transparent);
+}
+
+.featureImage {
+  object-fit: cover;
+  object-position: center;
+  animation: featureIn .28s ease both;
+}
+
+@keyframes featureIn {
+  from { opacity: .52; transform: scale(1.012); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.desktopLibrary {
+  padding-top: 34px;
+}
+
+.libraryHeader,
+.mobileLibraryHeader {
+  margin-bottom: 15px;
+}
+
+.libraryHeader p,
+.mobileLibraryHeader p {
+  margin: 0 0 7px;
+  color: #d858f2;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.libraryHeader h2,
+.mobileLibraryHeader h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: -.035em;
+}
+
+.desktopGameGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.desktopGameCard {
+  --game-accent: #fff;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 21px;
+  background: #0b0e16;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.desktopGameCard:hover,
+.desktopGameCard:focus-within,
+.desktopGameCardActive {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--game-accent) 72%, white 8%);
+  box-shadow: 0 18px 42px rgba(0,0,0,.28), 0 0 26px color-mix(in srgb, var(--game-accent) 13%, transparent);
+}
+
+.cardSelect,
+.cardTitleButton {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cardSelect {
+  display: block;
+  width: 100%;
+}
+
+.desktopCardThumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #11131a;
+}
+
+.desktopCardThumb img {
+  object-fit: cover;
+  transition: transform .2s ease;
+}
+
+.desktopGameCard:hover .desktopCardThumb img,
+.desktopGameCard:focus-within .desktopCardThumb img {
+  transform: scale(1.018);
+}
+
+.desktopCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 76px;
+  padding: 12px 13px 12px 16px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.cardTitleButton {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.cardType {
+  color: color-mix(in srgb, var(--game-accent) 74%, white);
+  font-size: 8px;
+  line-height: 1;
+}
+
+.cardTitleButton strong {
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardPlayLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 0 9px 0 13px;
+  border: 1px solid color-mix(in srgb, var(--game-accent) 62%, white 7%);
+  border-radius: 999px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.cardPlayLink .playGlyph {
+  width: 25px;
+  height: 25px;
+  font-size: 8px;
+  color: var(--game-accent);
+}
+
+.desktopFooter,
+.mobileFooter {
+  color: rgba(255,255,255,.45);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 850;
+  letter-spacing: .19em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.desktopFooter {
+  padding: 32px 0 5px;
+}
+
+.hub :focus-visible {
+  outline: 3px solid var(--active-accent);
+  outline-offset: 3px;
+}
+
+.previewOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+  background: rgba(0,0,0,.86);
+}
+
+.previewSheet {
+  width: min(440px, 94vw);
+  max-height: 94svh;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 22px;
+  background: #0d0f17;
+  box-shadow: 0 34px 110px rgba(0,0,0,.54);
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 62px;
+  padding: 10px 12px 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.previewHeader > div {
+  display: grid;
+  gap: 4px;
+}
+
+.previewHeader small {
+  color: var(--active-accent);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.previewHeader strong { font-size: 14px; }
+
+.previewHeader button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  background: #151822;
+  color: #fff;
+  font: inherit;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.previewVideo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  max-height: calc(94svh - 62px);
+  background: #000;
+}
+
+.previewVideo iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .desktopMain { padding-right: 24px; padding-left: 24px; }
+  .desktopFeatured {
+    grid-template-columns: minmax(250px, .7fr) minmax(0, 1.3fr);
+    gap: 22px;
+    min-height: 460px;
+    padding: 25px;
+  }
+  .desktopFeaturedInfo { padding-left: 4px; }
+  .desktopFeaturedInfo h1 { font-size: clamp(39px, 5vw, 58px); }
+}
+
+@media (max-width: 760px) {
+  .desktopExperience { display: none; }
+
+  .mobileExperience {
+    display: block;
+    min-height: 100svh;
+    background: #05060b;
+  }
+
+  .mobileTopbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    min-height: 68px;
+    padding: 9px max(16px, env(safe-area-inset-right)) 9px max(16px, env(safe-area-inset-left));
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    background: rgba(5,6,11,.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .brandLockup strong { font-size: 25px; }
+  .brandLockup span { font-size: 9px; }
+
+  .mobileHomeLink {
+    min-width: 46px;
+    min-height: 38px;
+    border-radius: 12px;
+    font-size: 10px;
+    letter-spacing: .08em;
+  }
+
+  .mobileMain {
+    padding: 14px max(14px, env(safe-area-inset-right)) calc(26px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+
+  .mobileFeatured {
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--active-accent) 64%, white 6%);
+    border-radius: 23px;
+    background: #090b12;
+    box-shadow: 0 20px 54px rgba(0,0,0,.34), 0 0 24px color-mix(in srgb, var(--active-accent) 12%, transparent);
+  }
+
+  .mobileFeaturedArt {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #11131a;
+  }
+
+  .mobileFeaturedInfo {
+    padding: 18px 17px 17px;
+    border-top: 1px solid rgba(255,255,255,.07);
+  }
+
+  .mobileFeaturedInfo .gameType {
+    margin-bottom: 7px;
+    font-size: 8px;
+  }
+
+  .mobileFeaturedInfo h1 {
+    margin: 0;
+    font-size: clamp(29px, 9vw, 39px);
+    line-height: .98;
+    letter-spacing: -.045em;
+  }
+
+  .mobileFeaturedInfo > p:last-of-type {
+    margin: 10px 0 0;
+    max-width: 35ch;
+    color: rgba(255,255,255,.62);
+    font-size: 13px;
+    line-height: 1.43;
+  }
+
+  .mobileActions {
+    margin-top: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    min-height: 52px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .mobileLibrary {
+    padding-top: 28px;
+  }
+
+  .mobileLibraryHeader {
+    padding: 0 2px;
+  }
+
+  .mobileLibraryHeader h2 {
+    font-size: 22px;
+  }
+
+  .mobileRows {
+    display: grid;
+    gap: 11px;
+  }
+
+  .mobileGameRow {
+    --game-accent: #fff;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px;
+    gap: 10px;
+    align-items: center;
+    min-height: 90px;
+    padding: 8px 9px 8px 8px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 18px;
+    background: #0b0e16;
+  }
+
+  .mobileRowSelect {
+    display: grid;
+    grid-template-columns: 126px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    min-width: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    text-align: left;
+  }
+
+  .mobileRowThumb {
+    position: relative;
+    display: block;
+    width: 126px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 13px;
+    background: #11131a;
+  }
+
+  .mobileRowThumb img { object-fit: cover; }
+
+  .mobileRowTitle {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .mobileRowTitle small {
+    color: color-mix(in srgb, var(--game-accent) 72%, white);
+    font-size: 7px;
+    line-height: 1;
+  }
+
+  .mobileRowTitle strong {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.13;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mobileRowPlay {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid color-mix(in srgb, var(--game-accent) 62%, white 7%);
+    border-radius: 50%;
+    color: var(--game-accent);
+    text-decoration: none;
+  }
+
+  .mobileRowPlay .playGlyph {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    font-size: 11px;
+  }
+
+  .mobileFooter {
+    padding: 28px 0 0;
+  }
+
+  .previewOverlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .previewSheet {
+    width: 100%;
+    max-height: 96svh;
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .previewVideo {
+    max-height: calc(96svh - 62px - env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 360px) {
+  .mobileMain {
+    padding-right: max(11px, env(safe-area-inset-right));
+    padding-left: max(11px, env(safe-area-inset-left));
+  }
+
+  .mobileFeatured { border-radius: 20px; }
+  .mobileFeaturedInfo { padding: 16px 14px 14px; }
+
+  .mobileGameRow {
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 7px;
+    min-height: 82px;
+  }
+
+  .mobileRowSelect {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .mobileRowThumb { width: 108px; border-radius: 11px; }
+  .mobileRowPlay { width: 40px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featureImage,
+  .primaryButton,
+  .secondaryButton,
+  .desktopGameCard,
+  .desktopCardThumb img {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}

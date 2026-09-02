@@ -11,9 +11,13 @@ import { GlobalBrandBackdrop } from '@/components/GlobalBrandBackdrop';
 export function AppFrame({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const isHome = pathname === '/';
-    const hasDedicatedHeroArtwork = isHome || pathname === '/cadenz';
-
+    const isGames = pathname === '/games';
+    const hasDedicatedHeroArtwork = isHome || pathname === '/cadenz' || isGames;
     const isFounder = pathname === '/founder' || pathname.startsWith('/founder/');
+
+    if (isGames) {
+        return <div className="relative min-h-screen">{children}</div>;
+    }
 
     if (isFounder) {
         return (

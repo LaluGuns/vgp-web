@@ -42,8 +42,9 @@ export const mainNavGroups: NavGroup[] = [
         key: 'apps',
         name: 'Apps',
         href: FLOW_APP_URL,
-        activePrefixes: ['/flow', '/cadenz', '/lab'],
+        activePrefixes: ['/flow', '/cadenz', '/lab', '/games'],
         children: [
+            { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
             { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
             { name: 'CADENZ', href: '/cadenz', description: 'Cadence music app for runners and cyclists', status: 'Coming Soon' },
             { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },

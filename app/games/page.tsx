@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/games`,
     siteName: 'Virzy Guns Production',
     type: 'website',
-    images: [{ url: '/games/tap-groove-home.webp', width: 1600, height: 900, alt: 'VGP Games' }],
+    images: [{ url: '/games/tap-groove-home.webp', width: 960, height: 540, alt: 'VGP Games' }],
   },
   twitter: {
     card: 'summary_large_image',
