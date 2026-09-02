@@ -11,7 +11,7 @@ const games = [
     type: 'Ear game',
     cue: 'Two melodies. One note changed. Catch it by ear.',
     href: 'https://htd.virzyguns.com',
-    image: '/games/thumb/hear-the-difference',
+    image: '/games/hear-the-difference.jpg',
     imageAlt: 'Hear the Difference game artwork',
     accent: '#f1bd2b',
     previewId: 'MT78Q9kogpM',
@@ -22,7 +22,7 @@ const games = [
     type: 'Arcade',
     cue: 'Line it up, keep the tower alive, and beat your last run.',
     href: 'https://blockstacker.virzyguns.com',
-    image: '/games/thumb/block-stacker',
+    image: '/games/block-stacker.jpg',
     imageAlt: 'Block Stacker game artwork with colorful stacked blocks',
     accent: '#5dddc3',
     previewId: '7gWp__E7d_c',
@@ -33,14 +33,14 @@ const games = [
     type: 'Rhythm',
     cue: 'Pick a track, follow the lane, and stay locked to the beat.',
     href: 'https://tapgroove.virzyguns.com',
-    image: '/games/thumb/tap-groove',
+    image: '/games/tap-groove-home.jpg',
     imageAlt: 'Tap Groove home screen with track selection and the Tap Groove logo',
     accent: '#ff4f9a',
     previewId: 'HV4rdhrGfMk',
   },
 ] as const;
 
-const socialImage = `${siteUrl}/games/thumb/tap-groove`;
+const socialImage = `${siteUrl}/games/tap-groove-home.jpg`;
 
 export const metadata: Metadata = {
   title: 'VGP Games | Play in Your Browser',
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/games`,
     siteName: 'Virzy Guns Production',
     type: 'website',
-    images: [{ url: socialImage, width: 480, height: 270, alt: 'VGP Games' }],
+    images: [{ url: socialImage, width: 360, height: 203, alt: 'VGP Games' }],
   },
   twitter: {
     card: 'summary_large_image',
