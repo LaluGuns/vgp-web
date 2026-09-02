@@ -5,6 +5,7 @@ import test from "node:test";
 const read = (path) => readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 
 const core = read("lib/google-play/core.ts");
+const voided = read("lib/google-play/voided.ts");
 const refundReview = read("lib/google-play/refund-review.ts");
 const googleApi = read("lib/google-play/google-api.ts");
 const rateLimit = read("lib/security/rate-limit.ts");
@@ -43,6 +44,13 @@ test("server configured base plan is fail closed", () => {
   assert.match(core, /if \(requiredBasePlan && requiredBasePlan !== basePlanId\)/);
 });
 
+test("deferred replacements keep the currently funded line and linked tokens cannot double-entitle", () => {
+  assert.match(core, /line with the furthest valid expiry is the current entitlement/);
+  assert.match(core, /expireLinkedPurchaseToken/);
+  assert.match(core, /SUBSCRIPTION_STATE_PENDING_PURCHASE_CANCELED/);
+  assert.match(core, /Linked Google Play purchase ownership conflict/);
+});
+
 test("current RTDN subscription notification set includes pending purchase cancellation", () => {
   assert.match(core, /20: "google_play_subscription_pending_purchase_cancelled"/);
   assert.match(rtdn, /verifyPubSubPushBearer/);
@@ -52,8 +60,15 @@ test("current RTDN subscription notification set includes pending purchase cance
 test("voided purchase reconciliation uses current Android Publisher pagination and chargeback reason", () => {
   assert.match(core, /"pageSelection\.maxResults"/);
   assert.match(core, /"pageSelection\.token"/);
-  assert.match(core, /Number\(item\.voidedReason\) === 7/);
-  assert.doesNotMatch(core, /Number\(item\.voidedReason\) === 1/);
+  assert.match(voided, /Number\(item\.voidedReason\) === 7/);
+  assert.doesNotMatch(voided, /Number\(item\.voidedReason\) === 1/);
+});
+
+test("voided purchases revoke only grants tied to the exact paid subscription", () => {
+  assert.match(voided, /contains\("plan_snapshot", \{ subscription_id: data\.id \}\)/);
+  assert.match(voided, /lte\("granted_at", occurredAt\)/);
+  assert.match(voided, /subscription_chargeback/);
+  assert.match(voided, /subscription_refunded/);
 });
 
 test("pending refund review uses orders.reviewrefund and is idempotent", () => {
