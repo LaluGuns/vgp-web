@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 import {
+  claimGooglePlayRtdn,
+  completeGooglePlayRtdn,
+  failGooglePlayRtdn,
   queuePendingRefundReview,
   reconcileVoidedPurchase,
   rtdnEventName,
@@ -19,6 +22,13 @@ function occurredAtFor(rtdn: any, publishTime?: string) {
     : publishTime || new Date().toISOString();
 }
 
+function notificationKind(rtdn: any) {
+  if (rtdn?.pendingRefundReviewNotification) return "pending_refund_review";
+  if (rtdn?.voidedPurchaseNotification) return "voided_purchase";
+  if (rtdn?.subscriptionNotification) return "subscription";
+  return "other";
+}
+
 export async function POST(req: Request) {
   try {
     await verifyPubSubPushBearer(req.headers.get("authorization"));
@@ -36,7 +46,8 @@ export async function POST(req: Request) {
     subscription?: string;
   };
   const encoded = envelope?.message?.data;
-  if (!encoded || encoded.length > 128_000) {
+  const messageId = envelope?.message?.messageId?.trim() || "";
+  if (!encoded || encoded.length > 128_000 || !messageId || messageId.length > 256) {
     return NextResponse.json({ error: "invalid_pubsub_payload" }, { status: 400 });
   }
 
@@ -50,17 +61,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "package_mismatch" }, { status: 422 });
   }
 
+  const kind = notificationKind(rtdn);
   const occurredAt = occurredAtFor(rtdn, envelope?.message?.publishTime);
 
-  const pendingRefund = rtdn?.pendingRefundReviewNotification;
-  if (pendingRefund) {
-    const pendingRefundToken = String(pendingRefund.pendingRefundToken || "").trim();
-    const orderId = String(pendingRefund.orderId || "").trim();
-    if (!pendingRefundToken || !orderId) {
-      return NextResponse.json({ error: "invalid_pending_refund_review" }, { status: 400 });
-    }
+  let claimed = false;
+  try {
+    claimed = await claimGooglePlayRtdn(messageId, kind);
+  } catch (error) {
+    console.error("google_play_rtdn_claim_failed", messageId, error);
+    return NextResponse.json({ error: "rtdn_dedupe_unavailable" }, { status: 503 });
+  }
+  if (!claimed) {
+    return NextResponse.json({ received: true, duplicate: true });
+  }
 
-    try {
+  try {
+    const pendingRefund = rtdn?.pendingRefundReviewNotification;
+    if (pendingRefund) {
+      const pendingRefundToken = String(pendingRefund.pendingRefundToken || "").trim();
+      const orderId = String(pendingRefund.orderId || "").trim();
+      if (!pendingRefundToken || !orderId) throw new Error("invalid_pending_refund_review");
+
       const queued = await queuePendingRefundReview({
         pendingRefundToken,
         orderId,
@@ -73,65 +94,56 @@ export async function POST(req: Request) {
         status: "active",
         userId: queued.userId,
         plan: "unknown",
-        eventId: envelope?.message?.messageId || queued.providerReviewId,
+        eventId: messageId,
         occurredAt,
         provider: "google_play",
         platform: "server",
       });
+      await completeGooglePlayRtdn(messageId);
       return NextResponse.json({
         received: true,
         pendingRefundReview: true,
         queued: true,
         deadlineAt: queued.deadlineAt,
       });
-    } catch (error) {
-      console.error("google_play_chargeback_review_failed", envelope?.message?.messageId, error);
-      return NextResponse.json({ error: "chargeback_review_queue_failed" }, { status: 500 });
-    }
-  }
-
-  const voided = rtdn?.voidedPurchaseNotification;
-  if (voided) {
-    if (Number(voided.productType) !== 1) {
-      return NextResponse.json({ received: true, ignored: true, reason: "non_subscription_void" });
-    }
-    const purchaseToken = String(voided.purchaseToken || "").trim();
-    const orderId = String(voided.orderId || "").trim();
-    if (!purchaseToken || !orderId) {
-      return NextResponse.json({ error: "invalid_voided_purchase" }, { status: 400 });
     }
 
-    try {
+    const voided = rtdn?.voidedPurchaseNotification;
+    if (voided) {
+      if (Number(voided.productType) !== 1) {
+        await completeGooglePlayRtdn(messageId);
+        return NextResponse.json({ received: true, ignored: true, reason: "non_subscription_void" });
+      }
+      const purchaseToken = String(voided.purchaseToken || "").trim();
+      const orderId = String(voided.orderId || "").trim();
+      if (!purchaseToken || !orderId) throw new Error("invalid_voided_purchase");
+
       const found = await reconcileVoidedPurchase({
         purchaseToken,
         orderId,
         voidedTimeMillis: String(new Date(occurredAt).getTime()),
       });
-      return NextResponse.json({
-        received: true,
-        voidedPurchase: true,
-        reconciled: found,
-      });
-    } catch (error) {
-      console.error("google_play_voided_rtdn_failed", envelope?.message?.messageId, error);
-      return NextResponse.json({ error: "voided_purchase_reconcile_failed" }, { status: 500 });
+      if (!found) throw new Error("voided_purchase_not_yet_known");
+      await completeGooglePlayRtdn(messageId);
+      return NextResponse.json({ received: true, voidedPurchase: true, reconciled: true });
     }
-  }
 
-  const subscription = rtdn?.subscriptionNotification;
-  if (!subscription?.purchaseToken) {
+    const subscription = rtdn?.subscriptionNotification;
+    if (subscription?.purchaseToken) {
+      await verifyAndPersistPlayPurchase({
+        purchaseToken: String(subscription.purchaseToken),
+        sourceEvent: rtdnEventName(Number(subscription.notificationType || 0)),
+        providerUpdatedAt: occurredAt,
+      });
+      await completeGooglePlayRtdn(messageId);
+      return NextResponse.json({ received: true });
+    }
+
+    await completeGooglePlayRtdn(messageId);
     return NextResponse.json({ received: true, ignored: true });
-  }
-
-  try {
-    await verifyAndPersistPlayPurchase({
-      purchaseToken: String(subscription.purchaseToken),
-      sourceEvent: rtdnEventName(Number(subscription.notificationType || 0)),
-      providerUpdatedAt: occurredAt,
-    });
-    return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("google_play_rtdn_sync_failed", envelope?.message?.messageId, error);
-    return NextResponse.json({ error: "rtdn_sync_failed" }, { status: 500 });
+    await failGooglePlayRtdn(messageId, error);
+    console.error("google_play_rtdn_processing_failed", messageId, error);
+    return NextResponse.json({ error: "rtdn_processing_failed" }, { status: 500 });
   }
 }
