@@ -12,6 +12,13 @@ export type { SubscriptionPurchaseV2, VoidedPurchase } from "@/lib/google-play/c
 export { reconcileVoidedPurchase } from "@/lib/google-play/voided";
 
 export {
+  claimGooglePlayRtdn,
+  cleanupGooglePlayRtdn,
+  completeGooglePlayRtdn,
+  failGooglePlayRtdn,
+} from "@/lib/google-play/rtdn-dedupe";
+
+export {
   listPendingRefundReviews,
   queuePendingRefundReview,
   reviewPendingRefund,
