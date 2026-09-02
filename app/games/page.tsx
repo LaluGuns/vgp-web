@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import GameArcade from './GameArcade';
 import styles from './games.module.css';
 
+// Local JPEG thumbnails are served directly to keep Safari decoding predictable.
 const siteUrl = 'https://www.virzyguns.com';
 
 const games = [
