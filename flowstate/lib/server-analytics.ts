@@ -1,8 +1,15 @@
 export type SubscriptionAnalyticsEvent =
   | "subscription_activated"
+  | "subscription_renewed"
+  | "subscription_recovered"
   | "subscription_cancelled"
+  | "subscription_past_due"
+  | "subscription_grace_period"
+  | "subscription_expired"
+  | "subscription_revoked"
   | "subscription_refunded"
-  | "subscription_chargeback";
+  | "subscription_chargeback"
+  | "subscription_chargeback_review";
 
 type SubscriptionEventInput = {
   eventName: string;
@@ -11,6 +18,8 @@ type SubscriptionEventInput = {
   plan?: string | null;
   eventId?: string | null;
   occurredAt?: string | null;
+  provider?: "lemonsqueezy" | "google_play" | string | null;
+  platform?: "web" | "android" | "server" | string | null;
   acquisition?: {
     sessionAcquisition?: string | null;
     firstTouchChannel?: string | null;
@@ -27,19 +36,29 @@ export function subscriptionAnalyticsEvent(
   eventName: string,
   status?: string | null,
 ): SubscriptionAnalyticsEvent | null {
-  const normalizedEvent = eventName.toLowerCase();
+  const event = eventName.toLowerCase();
   const normalizedStatus = status?.toLowerCase() ?? "";
 
-  if (normalizedEvent.includes("chargeback")) return "subscription_chargeback";
-  if (normalizedEvent === "subscription_payment_refunded" || normalizedStatus === "refunded") {
-    return "subscription_refunded";
+  if (event.includes("chargeback_review")) return "subscription_chargeback_review";
+  if (event.includes("chargeback")) return "subscription_chargeback";
+  if (event.includes("refund") || normalizedStatus === "refunded") return "subscription_refunded";
+  if (event.includes("revoked")) return "subscription_revoked";
+  if (event.includes("expired") || normalizedStatus === "expired") return "subscription_expired";
+  if (event.includes("renewed")) return "subscription_renewed";
+  if (event.includes("recovered") || event.includes("restarted") || event.includes("resumed") || event.includes("unpaused")) {
+    return "subscription_recovered";
   }
-  if (normalizedEvent === "subscription_cancelled" || normalizedStatus === "cancelled") {
+  if (event.includes("cancelled") || event.includes("canceled") || normalizedStatus === "cancelled") {
     return "subscription_cancelled";
   }
+  if (event.includes("grace_period")) return "subscription_grace_period";
+  if (event.includes("on_hold") || event.includes("account_hold") || event.includes("paused") || normalizedStatus === "past_due") {
+    return "subscription_past_due";
+  }
   if (
-    ["subscription_created", "subscription_resumed", "subscription_unpaused"].includes(normalizedEvent)
-    && ["active", "on_trial", "trialing"].includes(normalizedStatus)
+    event.includes("activated") ||
+    event === "subscription_created" ||
+    ["active", "on_trial", "trialing"].includes(normalizedStatus)
   ) {
     return "subscription_activated";
   }
@@ -54,9 +73,8 @@ function analyticsConfig() {
 }
 
 /**
- * Best-effort server capture. Billing state is already committed before this
- * runs, so analytics downtime must never make Lemon Squeezy retry a valid
- * entitlement update. `$insert_id` keeps provider retries idempotent.
+ * Best-effort server capture. Entitlement state is committed before analytics,
+ * so analytics downtime never blocks provider retries or user access.
  */
 export async function captureSubscriptionEvent(input: SubscriptionEventInput): Promise<void> {
   const event = subscriptionAnalyticsEvent(input.eventName, input.status);
@@ -65,8 +83,7 @@ export async function captureSubscriptionEvent(input: SubscriptionEventInput): P
   const { key, host } = analyticsConfig();
   if (!key) return;
 
-  const insertId = input.eventId
-    || `${input.eventName}:${input.userId}:${input.occurredAt || "unknown"}`;
+  const insertId = input.eventId || `${input.eventName}:${input.userId}:${input.occurredAt || "unknown"}`;
 
   try {
     await fetch(`${host}/capture/`, {
@@ -78,6 +95,10 @@ export async function captureSubscriptionEvent(input: SubscriptionEventInput): P
         properties: {
           distinct_id: input.userId,
           $insert_id: insertId,
+          site_scope: "flow",
+          funnel: "flow",
+          provider: input.provider || (input.eventName.startsWith("google_play_") ? "google_play" : "lemonsqueezy"),
+          platform: input.platform || "server",
           plan: input.plan || "unknown",
           provider_event: input.eventName,
           subscription_status: input.status || "unknown",
@@ -98,6 +119,6 @@ export async function captureSubscriptionEvent(input: SubscriptionEventInput): P
       signal: AbortSignal.timeout(2_500),
     });
   } catch {
-    // Deliberately non-blocking: connector health is monitored separately.
+    // Deliberately non-blocking.
   }
 }
