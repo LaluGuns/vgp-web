@@ -11,8 +11,8 @@ const games = [
     type: 'Ear game',
     cue: 'Two melodies. One note changed. Catch it by ear.',
     href: 'https://htd.virzyguns.com',
-    image: '/games/hear-the-difference.webp',
-    imageAlt: 'Hear the Difference game artwork',
+    image: 'https://i.ytimg.com/vi/MT78Q9kogpM/hqdefault.jpg',
+    imageAlt: 'Hear the Difference gameplay preview',
     accent: '#f1bd2b',
     previewId: 'MT78Q9kogpM',
   },
@@ -22,8 +22,8 @@ const games = [
     type: 'Arcade',
     cue: 'Line it up, keep the tower alive, and beat your last run.',
     href: 'https://blockstacker.virzyguns.com',
-    image: '/games/block-stacker.webp',
-    imageAlt: 'Block Stacker game artwork with colorful stacked blocks',
+    image: 'https://i.ytimg.com/vi/7gWp__E7d_c/hqdefault.jpg',
+    imageAlt: 'Block Stacker gameplay preview',
     accent: '#5dddc3',
     previewId: '7gWp__E7d_c',
   },
@@ -33,12 +33,14 @@ const games = [
     type: 'Rhythm',
     cue: 'Pick a track, follow the lane, and stay locked to the beat.',
     href: 'https://tapgroove.virzyguns.com',
-    image: '/games/tap-groove-home.webp',
-    imageAlt: 'Tap Groove home screen with track selection and the Tap Groove logo',
+    image: 'https://i.ytimg.com/vi/HV4rdhrGfMk/hqdefault.jpg',
+    imageAlt: 'Tap Groove gameplay preview',
     accent: '#ff4f9a',
     previewId: 'HV4rdhrGfMk',
   },
 ] as const;
+
+const socialImage = 'https://i.ytimg.com/vi/HV4rdhrGfMk/hqdefault.jpg';
 
 export const metadata: Metadata = {
   title: 'VGP Games | Play in Your Browser',
@@ -51,13 +53,13 @@ export const metadata: Metadata = {
     url: `${siteUrl}/games`,
     siteName: 'Virzy Guns Production',
     type: 'website',
-    images: [{ url: '/games/tap-groove-home.webp', width: 960, height: 540, alt: 'VGP Games' }],
+    images: [{ url: socialImage, width: 480, height: 360, alt: 'VGP Games' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'VGP Games | 100% Play. 100% VGP.',
     description: 'A growing browser game playground from Virzy Guns Production.',
-    images: ['/games/tap-groove-home.webp'],
+    images: [socialImage],
   },
 };
 
