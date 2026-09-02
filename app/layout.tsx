@@ -10,6 +10,9 @@ import './globals.css';
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://www.virzyguns.com'),
+    other: {
+        'google-adsense-account': 'ca-pub-9018533091343425',
+    },
     title: {
         template: '%s | Virzy Guns Production',
         default: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
