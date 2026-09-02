@@ -32,6 +32,16 @@ type SubscriptionEventInput = {
   };
 };
 
+/**
+ * Maps provider events into the stable commercial analytics contract.
+ *
+ * Do not infer activation from status alone. Providers emit routine update
+ * events with an "active" status, and counting those as activations inflates
+ * acquisition/conversion metrics. Legacy Lemon Squeezy resume/unpause events
+ * intentionally stay in the activation bucket so existing Flow dashboards do
+ * not silently change historical semantics. Google Play recovery events are
+ * explicit and may use the richer recovered bucket.
+ */
 export function subscriptionAnalyticsEvent(
   eventName: string,
   status?: string | null,
@@ -45,23 +55,34 @@ export function subscriptionAnalyticsEvent(
   if (event.includes("revoked")) return "subscription_revoked";
   if (event.includes("expired") || normalizedStatus === "expired") return "subscription_expired";
   if (event.includes("renewed")) return "subscription_renewed";
-  if (event.includes("recovered") || event.includes("restarted") || event.includes("resumed") || event.includes("unpaused")) {
+
+  if (
+    event.includes("google_play_subscription_recovered") ||
+    event.includes("google_play_subscription_restarted")
+  ) {
     return "subscription_recovered";
   }
+
   if (event.includes("cancelled") || event.includes("canceled") || normalizedStatus === "cancelled") {
     return "subscription_cancelled";
   }
   if (event.includes("grace_period")) return "subscription_grace_period";
-  if (event.includes("on_hold") || event.includes("account_hold") || event.includes("paused") || normalizedStatus === "past_due") {
+  if (event.includes("on_hold") || event.includes("account_hold") || event.includes("paused")) {
     return "subscription_past_due";
   }
+
   if (
-    event.includes("activated") ||
     event === "subscription_created" ||
-    ["active", "on_trial", "trialing"].includes(normalizedStatus)
+    event === "subscription_resumed" ||
+    event === "subscription_unpaused" ||
+    event.includes("google_play_subscription_activated") ||
+    event.includes("google_play_subscription_purchased")
   ) {
-    return "subscription_activated";
+    return ["active", "on_trial", "trialing"].includes(normalizedStatus)
+      ? "subscription_activated"
+      : null;
   }
+
   return null;
 }
 
