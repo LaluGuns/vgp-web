@@ -30,7 +30,9 @@ function normalizeInternalPath(href: string): string {
 
 function routeFromPath(path: string): MobileRoute | "external" {
   const pathname = path.split("?")[0].split("#")[0];
-  const clean = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, "");
+  // Strip a locale only when it is a complete path segment. Without the
+  // lookahead, /app was incorrectly parsed as locale /ap + route p.
+  const clean = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?(?=\/|$)/, "");
   const segment = (clean.replace(/^\//, "").split("/")[0] || "app").toLowerCase();
   return INTERNAL_ROUTES.has(segment) ? segment as MobileRoute : "external";
 }
