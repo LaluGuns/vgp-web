@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 
 const WEB_ORIGIN = "https://flow.virzyguns.com";
 const ROUTE_EVENT = "flow-mobile-route";
+const INTERNAL_ROUTES = new Set(["app", "login", "pricing", "insights"]);
+
+type MobileRoute = "app" | "login" | "pricing" | "insights";
 
 function preferredLocale(): string {
   try {
@@ -25,24 +28,29 @@ function normalizeInternalPath(href: string): string {
   return href;
 }
 
-function routeKind(path: string): "app" | "login" | "external" {
-  const clean = path.split("?")[0].replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, "");
-  if (clean === "/app" || clean === "" || clean === "/") return "app";
-  if (clean === "/login") return "login";
-  return "external";
+function routeFromPath(path: string): MobileRoute | "external" {
+  const pathname = path.split("?")[0].split("#")[0];
+  const clean = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, "");
+  const segment = (clean.replace(/^\//, "").split("/")[0] || "app").toLowerCase();
+  return INTERNAL_ROUTES.has(segment) ? segment as MobileRoute : "external";
+}
+
+function queryFromPath(path: string): string {
+  const query = path.includes("?") ? path.slice(path.indexOf("?") + 1).split("#")[0] : "";
+  return query ? `?${query}` : "";
 }
 
 function hashFor(path: string): string {
-  const kind = routeKind(path);
-  if (kind === "login") return `#/login${path.includes("?") ? `?${path.split("?")[1]}` : ""}`;
-  return "#/app";
+  const route = routeFromPath(path);
+  if (route === "external") return "#/app";
+  return `#/${route}${queryFromPath(path)}`;
 }
 
 export function mobileNavigate(rawHref: string, replace = false): void {
   const href = normalizeInternalPath(rawHref);
-  const kind = routeKind(href);
+  const route = routeFromPath(href);
 
-  if (kind === "external" || /^https?:\/\//i.test(href)) {
+  if (route === "external" || (/^https?:\/\//i.test(href) && !href.startsWith(WEB_ORIGIN))) {
     const target = /^https?:\/\//i.test(href) ? href : `${WEB_ORIGIN}${href}`;
     const nativeOpen = (window as any).Capacitor?.Plugins?.FlowNative?.openExternal;
     if (typeof nativeOpen === "function") {
@@ -59,16 +67,19 @@ export function mobileNavigate(rawHref: string, replace = false): void {
   window.dispatchEvent(new Event(ROUTE_EVENT));
 }
 
+function routeFromHash(hash: string): MobileRoute {
+  const route = hash.replace(/^#\//, "").split("?")[0].toLowerCase();
+  return INTERNAL_ROUTES.has(route) ? route as MobileRoute : "app";
+}
+
 function mobilePathname(): string {
   const locale = preferredLocale();
-  const hash = window.location.hash || "#/app";
-  return hash.startsWith("#/login") ? `/${locale}/login` : `/${locale}/app`;
+  return `/${locale}/${routeFromHash(window.location.hash || "#/app")}`;
 }
 
 function mobileSearch(): string {
   const hash = window.location.hash || "";
-  const query = hash.includes("?") ? hash.slice(hash.indexOf("?") + 1) : "";
-  return query;
+  return hash.includes("?") ? hash.slice(hash.indexOf("?") + 1) : "";
 }
 
 function useRouteVersion(): number {
@@ -93,8 +104,11 @@ export function usePathname(): string {
 }
 
 export function useSearchParams(): URLSearchParams {
-  useRouteVersion();
-  return useMemo(() => new URLSearchParams(typeof window === "undefined" ? "" : mobileSearch()), [typeof window === "undefined" ? "" : window.location.hash]);
+  const version = useRouteVersion();
+  return useMemo(
+    () => new URLSearchParams(typeof window === "undefined" ? "" : mobileSearch()),
+    [version],
+  );
 }
 
 export function useParams(): Record<string, string> {
