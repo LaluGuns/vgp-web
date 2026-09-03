@@ -7,9 +7,15 @@ on:
     paths:
       - ".github/workflows/flow-mobile-android-bootstrap.yml"
       - "flowstate/mobile/**"
+      - "!flowstate/mobile/android/**"
       - "flowstate/capacitor.config.ts"
       - "flowstate/package.json"
       - "flowstate/package-lock.json"
+      - "flowstate/app/**"
+      - "flowstate/components/**"
+      - "flowstate/hooks/**"
+      - "flowstate/lib/**"
+      - "flowstate/public/**"
 
 permissions:
   contents: write
@@ -109,3 +115,58 @@ jobs:
           fi
           git commit -m "Generate verified Flow Capacitor Android project"
           git push origin HEAD:flow-android-hybrid-v1
+
+      - name: Package Codex-ready hybrid authority
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf artifacts
+          mkdir -p artifacts
+          git ls-files -z flowstate | xargs -0 zip -q artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip
+          cp flowstate/mobile/android/app/build/outputs/apk/debug/app-debug.apk artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk
+          sha256sum artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk > artifacts/SHA256SUMS.txt
+          HEAD_SHA="$(git rev-parse HEAD)"
+          cat > artifacts/FLOW_ANDROID_HYBRID_CODEX_HANDOFF.md <<EOF
+          # Flow Android Hybrid Codex Handoff
+
+          Authority branch: flow-android-hybrid-v1
+          Authority commit: ${HEAD_SHA}
+          Package: com.virzyguns.flow
+          Architecture: Capacitor hybrid. Shared Flow web pages and app/globals.css are the UI authority. Do not rebuild the UI in Compose.
+
+          Verified in CI before packaging:
+          - mobile source authority
+          - TypeScript mobile typecheck
+          - production Vite mobile bundle
+          - production dependency audit at high severity
+          - clean Capacitor Android generation
+          - native overlay application
+          - Google Play Billing 9.1.0
+          - Media3 1.11.0
+          - assembleDebug
+          - testDebugUnitTest
+          - lintDebug
+          - generated Android secret scan
+
+          Windows/Codex continuation after extracting the source ZIP:
+
+              cd flowstate
+              npm ci
+              npm run mobile:verify
+              npm run mobile:typecheck
+              npm run mobile:build
+              npx cap sync android
+              cd mobile\android
+              gradlew.bat assembleDebug testDebugUnitTest lintDebug
+
+          Do not claim release-ready until physical-device smoke, Google Play test purchase, PENDING behavior, restore, background audio, lock-screen controls, timer notification, auth callback, signed AAB, and Play Internal Testing have been verified.
+          EOF
+
+      - name: Upload Codex-ready Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-android-hybrid-codex-ready
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 14
