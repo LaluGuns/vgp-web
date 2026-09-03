@@ -20,6 +20,13 @@ const config: CapacitorConfig = {
     cleartext: false,
     errorPath: "offline.html",
   },
+  plugins: {
+    // Bundled with @capacitor/core. Native fetch/XHR avoids weakening Flow's
+    // production CORS policy just to serve the local WebView application.
+    CapacitorHttp: {
+      enabled: true,
+    },
+  },
 };
 
 export default config;
