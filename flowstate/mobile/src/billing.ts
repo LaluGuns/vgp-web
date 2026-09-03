@@ -1,5 +1,6 @@
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAppStore } from "@/lib/stores/app-store";
+import type { FlowMobileBillingRuntime } from "@/lib/mobile/runtime";
 import { flowBilling } from "./native-bridge";
 
 export type FlowPlayPlan = "monthly" | "yearly";
@@ -240,4 +241,27 @@ export async function restorePlayPurchases() {
     hasPending,
     verified,
   };
+}
+
+export function installPlayBillingRuntime(): void {
+  if (typeof window === "undefined") return;
+  const runtime: FlowMobileBillingRuntime = {
+    loadPlans: loadPlayPlans,
+    purchase: async (plan) => {
+      const result = await purchasePlayPlan(plan);
+      return {
+        state: result.state,
+        entitled: result.entitlement?.entitled === true,
+      };
+    },
+    restore: async () => {
+      const result = await restorePlayPurchases();
+      return {
+        state: result.entitled ? "PURCHASED" : result.hasPending ? "PENDING" : "NOT_OWNED",
+        entitled: result.entitled,
+        hasPending: result.hasPending,
+      };
+    },
+  };
+  window.__FLOW_MOBILE_BILLING__ = runtime;
 }
