@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { WebGLBackground } from "@/components/scenes/webgl-background";
 import { BILLING, type BillingInterval } from "@/lib/billing";
@@ -13,6 +13,11 @@ import { useTranslation } from "@/hooks/use-translation";
 import { getCheckoutAcquisitionContext, track } from "@/lib/analytics";
 import { esPtPricingCopy } from "@/lib/marketing/es-pt-visible-copy";
 import type { SeoRouteLocale } from "@/lib/marketing/seo-registry";
+import {
+  flowMobileBillingRuntime,
+  isFlowNativeShell,
+  type MobileBillingPlan,
+} from "@/lib/mobile/runtime";
 
 const SAFE_CHECKOUT_COPY: Record<string, string> = {
   "en-US": "Secure checkout by Lemon Squeezy (Merchant of Record). The final amount, currency, and checkout terms appear before payment.",
@@ -34,20 +39,40 @@ const INTERVAL_SUFFIXES: Record<string, Record<BillingInterval, string>> = {
 export default function PricingPage() {
   const { t, locale, setLocale } = useTranslation();
   const pathname = usePathname();
+  const router = useRouter();
   const routeLocale = pathname.split("/")[1] || locale;
   const regionalPricing = esPtPricingCopy(routeLocale);
-  
+  const nativeShell = isFlowNativeShell();
+
   const [interval, setInterval] = useState<BillingInterval>("monthly");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [promoInput, setPromoInput] = useState("");
   const [isPromoApplied, setIsPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState("");
+  const [playPlans, setPlayPlans] = useState<MobileBillingPlan[]>([]);
+  const [playPlansLoading, setPlayPlansLoading] = useState(false);
+  const [playNeedsSignIn, setPlayNeedsSignIn] = useState(false);
+
   const intervalSuffix = INTERVAL_SUFFIXES[routeLocale]?.[interval]
     ?? INTERVAL_SUFFIXES[routeLocale.split("-")[0]]?.[interval]
     ?? BILLING[interval].suffix;
+  const selectedPlayPlan = playPlans.find((plan) => plan.plan === interval);
+
+  const playAnnualSavingsPercent = useMemo(() => {
+    const monthly = playPlans.find((plan) => plan.plan === "monthly")?.priceAmountMicros ?? 0;
+    const yearly = playPlans.find((plan) => plan.plan === "yearly")?.priceAmountMicros ?? 0;
+    if (monthly <= 0 || yearly <= 0 || yearly >= monthly * 12) return 0;
+    return Math.round((1 - yearly / (monthly * 12)) * 100);
+  }, [playPlans]);
 
   useEffect(() => {
+    if (nativeShell) {
+      setIsPromoApplied(false);
+      setPromoError("");
+      return;
+    }
     const code = promoInput.trim().toUpperCase();
     if (code === FLOW_PRICING.promoCode) {
       setIsPromoApplied(true);
@@ -60,23 +85,107 @@ export default function PricingPage() {
         setPromoError("");
       }
     }
-  }, [promoInput, regionalPricing?.invalidPromo, t]);
+  }, [promoInput, regionalPricing?.invalidPromo, t, nativeShell]);
+
+  useEffect(() => {
+    if (!nativeShell) return;
+    const runtime = flowMobileBillingRuntime();
+    if (!runtime) {
+      setError("Google Play billing is unavailable on this device.");
+      return;
+    }
+    let cancelled = false;
+    setPlayPlansLoading(true);
+    setPlayNeedsSignIn(false);
+    runtime.loadPlans()
+      .then((plans) => {
+        if (cancelled) return;
+        setPlayPlans(plans);
+        setError("");
+      })
+      .catch((loadError) => {
+        if (cancelled) return;
+        const message = loadError instanceof Error ? loadError.message : String(loadError);
+        if (message.includes("SIGN_IN_REQUIRED")) {
+          setPlayNeedsSignIn(true);
+          setError("");
+        } else {
+          setError("Google Play plans are temporarily unavailable. Please try again.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setPlayPlansLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [nativeShell]);
 
   const perks = [
-    regionalPricing?.sounds ?? t("pricing.perks.sounds", "Extra ambient sounds — fire & rain, river, waterfall, city, vinyl"),
+    regionalPricing?.sounds ?? t("pricing.perks.sounds", "Extra ambient sounds: fire & rain, river, waterfall, city, vinyl"),
     regionalPricing?.scenes ?? t("pricing.perks.scenes", "Every visual scene and theme"),
     regionalPricing?.music ?? t("pricing.perks.music", "New original music added every month"),
     regionalPricing?.support ?? t("pricing.perks.support", "Directly support an independent producer"),
   ];
 
-  async function handleCheckout() {
+  async function handleNativeCheckout() {
+    if (playNeedsSignIn) {
+      router.push(`/${routeLocale}/login?next=/${routeLocale}/pricing`);
+      return;
+    }
+    const runtime = flowMobileBillingRuntime();
+    if (!runtime) {
+      setError("Google Play billing is unavailable on this device.");
+      return;
+    }
+    if (!selectedPlayPlan) {
+      setError("Google Play has not returned this plan yet. Please try again.");
+      return;
+    }
+
     setError("");
+    setNotice("");
+    setLoading(true);
+    try {
+      track("checkout_started", { interval, provider: "google_play" });
+      const result = await runtime.purchase(interval);
+      if (result.state === "PENDING") {
+        setNotice("Payment is pending in Google Play. Flow Pro will unlock only after Google confirms the purchase.");
+        return;
+      }
+      if (result.entitled === true) {
+        track("checkout_completed", { interval, provider: "google_play" });
+        router.replace(`/${routeLocale}/app`);
+        return;
+      }
+      setError("Google Play completed the checkout, but Flow could not verify the entitlement yet. Use Restore Purchases or try again shortly.");
+    } catch (purchaseError) {
+      const message = purchaseError instanceof Error ? purchaseError.message : String(purchaseError);
+      if (message.includes("SIGN_IN_REQUIRED")) {
+        router.push(`/${routeLocale}/login?next=/${routeLocale}/pricing`);
+        return;
+      }
+      if (message.includes("USER_CANCELED") || message.includes("USER_CANCELLED")) {
+        setNotice("Purchase cancelled. Nothing was charged by Flow.");
+        return;
+      }
+      setError(t("pricing.error.generic", "Something went wrong. Please try again."));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleCheckout() {
+    if (nativeShell) {
+      await handleNativeCheckout();
+      return;
+    }
+
+    setError("");
+    setNotice("");
     setLoading(true);
     try {
       track("checkout_started", { interval, promo: isPromoApplied });
-
-      // Price is server-authoritative (lib/security/checkout.ts) — the client
-      // only sends the interval and promo code.
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -87,7 +196,6 @@ export default function PricingPage() {
         }),
       });
       if (res.status === 401) {
-        // Guest tapped Continue → send them to sign in, then straight back here.
         window.location.href = `/${routeLocale}/login?next=/${routeLocale}/pricing`;
         return;
       }
@@ -116,13 +224,45 @@ export default function PricingPage() {
         window.location.href = data.url;
         return;
       }
-      setError(t("pricing.error.unavailable", "Checkout isn't available yet — try again soon."));
+      setError(t("pricing.error.unavailable", "Checkout isn't available yet. Try again soon."));
     } catch {
       setError(t("pricing.error.generic", "Something went wrong. Please try again."));
     } finally {
       setLoading(false);
     }
   }
+
+  async function handleRestore() {
+    const runtime = flowMobileBillingRuntime();
+    if (!runtime) return;
+    setLoading(true);
+    setError("");
+    setNotice("");
+    try {
+      const result = await runtime.restore();
+      if (result.entitled) {
+        setNotice("Flow Pro restored successfully.");
+        router.replace(`/${routeLocale}/app`);
+      } else if (result.hasPending) {
+        setNotice("A Google Play purchase is still pending. Pro will unlock after Google confirms it.");
+      } else {
+        setNotice("No active Flow Pro purchase was found on this Google Play account.");
+      }
+    } catch (restoreError) {
+      const message = restoreError instanceof Error ? restoreError.message : String(restoreError);
+      if (message.includes("SIGN_IN_REQUIRED")) {
+        router.push(`/${routeLocale}/login?next=/${routeLocale}/pricing`);
+      } else {
+        setError("Restore Purchases could not be completed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const displayedPrice = nativeShell
+    ? selectedPlayPlan?.displayPrice ?? (playNeedsSignIn ? "Google Play" : "...")
+    : formatUsd(priceCents(interval, isPromoApplied));
 
   return (
     <>
@@ -134,7 +274,6 @@ export default function PricingPage() {
           </Link>
 
           <div className="glass-card p-7 space-y-6">
-            {/* Header */}
             <div className="text-center space-y-2">
               <div className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-primary">
                 <Sparkles className="h-3 w-3 animate-pulse" /> {t("pricing.fixed.tagline", "Flow Pro")}
@@ -145,7 +284,6 @@ export default function PricingPage() {
               </p>
             </div>
 
-            {/* Billing interval */}
             <div className="flex items-center justify-center gap-1 p-1 rounded-xl bg-black/30 border border-white/5 w-fit mx-auto">
               {(Object.keys(BILLING) as BillingInterval[]).map((k) => (
                 <button
@@ -166,76 +304,72 @@ export default function PricingPage() {
               ))}
             </div>
 
-            {/* Amount display */}
             <div className="text-center space-y-1.5">
-              {isPromoApplied ? (
+              {!nativeShell && isPromoApplied ? (
                 <div className="space-y-1">
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-xl line-through text-white/30 tabular-nums">
-                      {formatUsd(priceCents(interval))}
-                    </span>
-                    <span className="text-4xl font-extrabold text-emerald-400 tabular-nums drop-shadow-[0_0_15px_rgba(52,211,153,0.3)] animate-pulse">
-                      {formatUsd(priceCents(interval, true))}
-                    </span>
-                    <span className="text-base font-normal text-muted-foreground/60">
-                      {intervalSuffix}
-                    </span>
+                    <span className="text-xl line-through text-white/30 tabular-nums">{formatUsd(priceCents(interval))}</span>
+                    <span className="text-4xl font-extrabold text-emerald-400 tabular-nums drop-shadow-[0_0_15px_rgba(52,211,153,0.3)] animate-pulse">{displayedPrice}</span>
+                    <span className="text-base font-normal text-muted-foreground/60">{intervalSuffix}</span>
                   </div>
                   <div className="inline-flex items-center justify-center">
                     <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-400">
-                      {regionalPricing?.promoApplied ?? t("pricing.promoApplied", "Promo applied — 50% off")}
+                      {regionalPricing?.promoApplied ?? t("pricing.promoApplied", "Promo applied: 50% off")}
                     </span>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-baseline justify-center gap-2 tabular-nums">
-                  <span className="text-4xl font-bold text-white">
-                    {formatUsd(priceCents(interval))}
-                  </span>
-                  <span className="text-base font-normal text-muted-foreground/60">
-                    {intervalSuffix}
-                  </span>
+                  <span className="text-4xl font-bold text-white">{displayedPrice}</span>
+                  {!playNeedsSignIn && <span className="text-base font-normal text-muted-foreground/60">{intervalSuffix}</span>}
                 </div>
               )}
-              {interval === "yearly" && (
+              {interval === "yearly" && ((!nativeShell && STANDARD_ANNUAL_SAVINGS_PERCENT > 0) || (nativeShell && playAnnualSavingsPercent > 0)) && (
                 <p className="text-[10px] text-primary/80 font-mono mt-1.5 uppercase tracking-wider">
-                  {regionalPricing?.saveYearly ?? t("pricing.saveYearly", `Save ${STANDARD_ANNUAL_SAVINGS_PERCENT}% compared to monthly`)}
+                  {nativeShell
+                    ? `Save ${playAnnualSavingsPercent}% compared to monthly`
+                    : regionalPricing?.saveYearly ?? t("pricing.saveYearly", `Save ${STANDARD_ANNUAL_SAVINGS_PERCENT}% compared to monthly`)}
                 </p>
               )}
             </div>
 
-            {/* CTA */}
-            <Button className="w-full h-12 text-sm" onClick={handleCheckout} disabled={loading}>
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-apple-loader" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
-              {regionalPricing?.button ?? t("pricing.button", "Continue")} · {formatUsd(priceCents(interval, isPromoApplied))}{intervalSuffix}
+            <Button className="w-full h-12 text-sm" onClick={handleCheckout} disabled={loading || (nativeShell && playPlansLoading)}>
+              {(loading || (nativeShell && playPlansLoading)) ? <Loader2 className="h-4 w-4 animate-apple-loader" /> : <Sparkles className="h-4 w-4" />}
+              {nativeShell && playNeedsSignIn
+                ? "Sign in to continue"
+                : `${regionalPricing?.button ?? t("pricing.button", "Continue")} · ${displayedPrice}${nativeShell && !selectedPlayPlan ? "" : intervalSuffix}`}
             </Button>
             {error && <p className="text-xs text-rose-400/80 text-center">{error}</p>}
+            {notice && <p className="text-xs text-primary/80 text-center leading-relaxed">{notice}</p>}
 
-            {/* Promo Code Input */}
-            <div className="pt-3 pb-1 border-t border-white/5 space-y-2">
-              <label htmlFor="promo-input" className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground/50">
-                {regionalPricing?.promoCode ?? t("pricing.promoCode", "Have a Promo Code?")}
-              </label>
-              <div className="flex gap-2">
-                <input
-                  id="promo-input"
-                  type="text"
-                  value={promoInput}
-                  onChange={(e) => setPromoInput(e.target.value)}
-                  placeholder={regionalPricing?.promoPlaceholder ?? t("pricing.promoPlaceholder", "Enter promo code")}
-                  className="flex-1 bg-white/[0.03] border border-white/10 hover:border-white/20 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder:text-white/20 focus:outline-none transition-all duration-300"
-                />
+            {nativeShell ? (
+              <div className="pt-3 border-t border-white/5 text-center space-y-2">
+                <p className="text-[10px] text-muted-foreground/50 leading-relaxed">
+                  Plans and localized prices come directly from Google Play. Promo codes shown on the web checkout do not change Play Store subscriptions.
+                </p>
+                <button type="button" onClick={handleRestore} disabled={loading} className="text-[10px] font-semibold text-primary/80 hover:text-primary disabled:opacity-50">
+                  Restore Purchases
+                </button>
               </div>
-              {promoError && (
-                <p className="text-[9px] font-mono text-rose-400/80">{promoError}</p>
-              )}
-            </div>
+            ) : (
+              <div className="pt-3 pb-1 border-t border-white/5 space-y-2">
+                <label htmlFor="promo-input" className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground/50">
+                  {regionalPricing?.promoCode ?? t("pricing.promoCode", "Have a Promo Code?")}
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="promo-input"
+                    type="text"
+                    value={promoInput}
+                    onChange={(e) => setPromoInput(e.target.value)}
+                    placeholder={regionalPricing?.promoPlaceholder ?? t("pricing.promoPlaceholder", "Enter promo code")}
+                    className="flex-1 bg-white/[0.03] border border-white/10 hover:border-white/20 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder:text-white/20 focus:outline-none transition-all duration-300"
+                  />
+                </div>
+                {promoError && <p className="text-[9px] font-mono text-rose-400/80">{promoError}</p>}
+              </div>
+            )}
 
-            {/* Perks */}
             <div className="pt-2 space-y-2 border-t border-white/5">
               <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50 pt-3">
                 {regionalPricing?.supportUnlocks ?? t("pricing.supportUnlocks", "Your support gets you")}
@@ -249,12 +383,13 @@ export default function PricingPage() {
             </div>
 
             <p className="text-[10px] text-muted-foreground/50 text-center leading-relaxed">
-              {regionalPricing?.secure
-                ?? SAFE_CHECKOUT_COPY[routeLocale]
-                ?? t("pricing.secure", "Secure checkout via Lemon Squeezy (Merchant of Record). The final amount, currency, and checkout terms appear before payment.")}
+              {nativeShell
+                ? "Subscription checkout is handled by Google Play. Flow Pro unlocks only after the purchase is verified by the Flow server."
+                : regionalPricing?.secure
+                  ?? SAFE_CHECKOUT_COPY[routeLocale]
+                  ?? t("pricing.secure", "Secure checkout via Lemon Squeezy (Merchant of Record). The final amount, currency, and checkout terms appear before payment.")}
             </p>
 
-            {/* Language Selector Dropdown */}
             <div className="flex justify-center max-w-[180px] mx-auto py-1">
               <select
                 value={routeLocale}
