@@ -194,6 +194,36 @@ function Assert-NoNativeLibraries {
   return 0
 }
 
+function Normalize-CertificateFingerprint {
+  param([Parameter(Mandatory=$true)][string]$Value)
+  return ($Value -replace '[^0-9A-Fa-f]', '').ToLowerInvariant()
+}
+
+function Get-AabSignerSha256 {
+  param([Parameter(Mandatory=$true)][string]$BundlePath)
+
+  $output = (& keytool -printcert -jarfile $BundlePath 2>&1 | Out-String)
+  if ($LASTEXITCODE -ne 0) { throw "Unable to inspect AAB signer certificate." }
+  $match = [regex]::Match($output, '(?im)SHA256:\s*([0-9A-Fa-f:]{64,})')
+  if (-not $match.Success) { throw "Unable to resolve AAB signer SHA-256 fingerprint." }
+  $fingerprint = Normalize-CertificateFingerprint $match.Groups[1].Value
+  if ($fingerprint.Length -ne 64) { throw "Unexpected AAB signer SHA-256 fingerprint format." }
+  return $fingerprint
+}
+
+function Get-ApkSignerSha256 {
+  param([Parameter(Mandatory=$true)][string]$ApkPath)
+
+  $output = (& $ApkSignerPath verify --verbose --print-certs $ApkPath 2>&1 | Out-String)
+  if ($LASTEXITCODE -ne 0) { throw "APK signature verification failed.`n$output" }
+  Write-Host $output.Trim()
+  $match = [regex]::Match($output, '(?im)Signer #1 certificate SHA-256 digest:\s*([0-9A-Fa-f]+)')
+  if (-not $match.Success) { throw "Unable to resolve APK signer SHA-256 fingerprint." }
+  $fingerprint = Normalize-CertificateFingerprint $match.Groups[1].Value
+  if ($fingerprint.Length -ne 64) { throw "Unexpected APK signer SHA-256 fingerprint format." }
+  return $fingerprint
+}
+
 function Get-GradleVersion {
   Push-Location $AndroidRoot
   try {
@@ -210,6 +240,13 @@ Assert-ReleaseEnvironment
 $gitCommit = Assert-CleanGitAuthority
 $manifestVerified = Test-SourceManifest
 $authority = Read-BuildAuthority
+
+if ([bool]$manifestVerified -ne [bool]($null -ne $authority)) {
+  throw "Packaged source provenance is incomplete. SOURCE_MANIFEST_SHA256.txt and BUILD_AUTHORITY.json must be present together."
+}
+if (-not $manifestVerified -and -not $gitCommit) {
+  throw "No verifiable source authority found. Use the CI Codex-ready archive or a clean Git checkout."
+}
 
 if ($authority) {
   if ($authority.package -ne "com.virzyguns.flow") { throw "Unexpected package in BUILD_AUTHORITY.json" }
@@ -306,7 +343,14 @@ try {
     if (-not (Test-Path $BuiltApk)) { throw "Signed release APK was not produced" }
 
     Invoke-Checked jarsigner -verify -strict -certs $BuiltAab
-    Invoke-Checked $ApkSignerPath verify --verbose --print-certs $BuiltApk
+    $aabSignerSha256 = Get-AabSignerSha256 -BundlePath $BuiltAab
+    $apkSignerSha256 = Get-ApkSignerSha256 -ApkPath $BuiltApk
+    if ($aabSignerSha256 -ne $cert.Sha256) {
+      throw "AAB signer certificate mismatch. Expected Flow upload certificate $($cert.Sha256), got $aabSignerSha256."
+    }
+    if ($apkSignerSha256 -ne $cert.Sha256) {
+      throw "APK signer certificate mismatch. Expected Flow upload certificate $($cert.Sha256), got $apkSignerSha256."
+    }
     $nativeLibraryCount = Assert-NoNativeLibraries -BundlePath $BuiltAab
 
     $version = Get-VersionInfo
@@ -369,6 +413,9 @@ try {
       apkBytes = (Get-Item $FinalApk).Length
       uploadCertificateSha256 = $cert.Sha256
       uploadCertificateSha1 = $cert.Sha1
+      aabSignerCertificateSha256 = $aabSignerSha256
+      apkSignerCertificateSha256 = $apkSignerSha256
+      signerCertificateMatchVerified = $true
       nativeSharedLibraryCount = $nativeLibraryCount
       jarsignerStrictVerified = $true
       apkSignerVerified = $true
