@@ -67,6 +67,9 @@ jobs:
       - name: Verify mobile source authority
         run: npm run mobile:verify
 
+      - name: Run mobile regression tests
+        run: npm run mobile:test
+
       - name: Typecheck mobile bundle
         run: npm run mobile:typecheck
 
