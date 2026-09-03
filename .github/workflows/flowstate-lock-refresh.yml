@@ -1,0 +1,32 @@
+name: Flowstate lock refresh
+
+on:
+  push:
+    branches:
+      - flow-google-play-rc3-hardening
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-lock:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: flowstate/package-lock.json
+      - name: Refresh lockfile without install scripts
+        working-directory: flowstate
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Show secure fast-uri resolution
+        working-directory: flowstate
+        run: npm ls fast-uri && npm audit --omit=dev --audit-level=high
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flowstate-refreshed-package-lock
+          path: flowstate/package-lock.json
+          if-no-files-found: error
+          retention-days: 1
