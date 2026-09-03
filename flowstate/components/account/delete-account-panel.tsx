@@ -101,7 +101,7 @@ export function DeleteAccountPanel() {
           </div>
 
           <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-xs leading-5 text-white/50">
-            Limited de-identified transaction, refund-review, or issued-license records may be retained where required for accounting, fraud prevention, legal obligations, or license defense. They are no longer linked to an active Flow account.
+            Limited transaction and refund-review records may be de-identified and retained where required for accounting, fraud prevention, legal obligations, or dispute handling. Issued Creator Music license records may retain licensee details where needed to preserve an already-issued license or defend legal rights. The active Flow account link is removed.
           </div>
 
           {!configured ? (
