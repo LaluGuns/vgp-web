@@ -7,23 +7,10 @@ export { classifyAcquisition } from "@/lib/analytics-acquisition";
  *
  * - No-ops entirely unless NEXT_PUBLIC_POSTHOG_KEY is set.
  * - localStorage persistence only (no cookies, no cross-site tracking).
- * - Autocapture OFF — only the explicit, typed events below are sent.
- * - Session recording OFF by default (can be enabled server-side per project).
+ * - Autocapture OFF — only explicit product events are sent.
+ * - Session recording OFF.
  * - Respects Do Not Track.
- *
- * Event taxonomy (keep this list the single source of truth):
- *   $pageview            — route change (sent by AnalyticsProvider)
- *   session_started      — focus block begun             { mode }
- *   session_completed    — focus block finished          { duration_min, mode }
- *   session_skipped      — focus block abandoned early   { duration_min, mode }
- *   guest_gate_shown     — sign-in gate shown to guest   { count }
- *   guest_sign_in_clicked— guest tapped sign-in in gate  { }
- *   paywall_viewed       — upgrade prompt shown          { source }
- *   upgrade_clicked      — pricing CTA clicked           { source }
- *   checkout_started     — checkout attempt started      { interval, provider }
- *   checkout_redirected  — reached Lemon Squeezy checkout { interval }
- *   checkout_completed   — verified native store purchase { interval, provider }
- *   theme_changed        — interface theme switched      { theme }
+ * - Flow account IDs, email addresses, and names are never sent to PostHog.
  */
 
 const KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY || "";
@@ -76,7 +63,6 @@ export function getOrCreateAcquisitionSession(path: string, isTopLevelEntry = fa
     const savedRaw = window.sessionStorage.getItem(ACQUISITION_SESSION_KEY);
     const saved = savedRaw ? JSON.parse(savedRaw) as AcquisitionSession : null;
     const expired = shouldStartNewAcquisitionSession(saved, isTopLevelEntry);
-    // Direct/internal navigation does not overwrite a live acquisition source.
     const shouldReplace = expired || (!saved || saved.channel === "direct" || saved.channel === "internal") && (channel !== "direct" && channel !== "internal");
     const next: AcquisitionSession = shouldReplace
       ? { id: sessionId(), channel, referrerHost: referrerHost(referrer), landingPath: path, startedAt: now, lastSeenAt: now, seoLandingTracked: false }
@@ -131,7 +117,7 @@ export function initAnalytics(): void {
     api_host: HOST,
     persistence: "localStorage",
     autocapture: false,
-    capture_pageview: false, // sent manually on route change
+    capture_pageview: false,
     capture_pageleave: true,
     disable_session_recording: true,
     respect_dnt: true,
@@ -164,7 +150,7 @@ export function trackPageview(path: string, isTopLevelEntry = false): void {
   posthog.capture("$pageview", { $current_url: window.location.origin + path, ...context });
   if (acquisition?.channel === "organic" && !acquisition.seoLandingTracked) {
     posthog.capture("seo_landing_view", context);
-    try { window.sessionStorage.setItem(ACQUISITION_SESSION_KEY, JSON.stringify({ ...acquisition, seoLandingTracked: true })); } catch { /* non-essential */ }
+    try { window.sessionStorage.setItem(ACQUISITION_SESSION_KEY, JSON.stringify({ ...acquisition, seoLandingTracked: true })); } catch {}
   }
 }
 
@@ -221,10 +207,8 @@ export function track(event: EventName, props?: AnalyticsProperties): void {
 
 export function identifyUser(userId: string | null): void {
   if (!initialized) return;
-  if (userId) {
-    // ID only — never email/name; profiles stay pseudonymous in analytics.
-    posthog.identify(userId);
-  } else {
-    posthog.reset();
-  }
+  // Intentionally never identify PostHog with a Flow account UUID. Product
+  // analytics remain anonymous and device/session-scoped. On sign-out or
+  // deletion, reset the anonymous analytics identity and local persistence.
+  if (!userId) posthog.reset();
 }
