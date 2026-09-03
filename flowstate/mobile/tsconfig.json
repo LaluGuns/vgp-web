@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "plugins": [],
+    "types": ["vite/client"],
+    "baseUrl": "..",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite.config.ts",
+    "capacitor.config.ts"
+  ]
+}
