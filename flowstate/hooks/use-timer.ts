@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useTimerStore, type TimerPhase } from "@/lib/stores/timer-store";
 
 // Short synthesized chime for phase transitions. Uses a dedicated lazy AudioContext
-// so we never depend on a missing /sounds/bell.mp3 asset (which 404'd before).
+// so we never depend on a missing /sounds/bell.mp3 asset.
 let chimeCtx: AudioContext | null = null;
 function playPhaseChime(nextPhase: TimerPhase) {
   try {
@@ -15,7 +15,6 @@ function playPhaseChime(nextPhase: TimerPhase) {
     const ctx = chimeCtx;
     if (ctx.state === "suspended") ctx.resume().catch(() => {});
     const now = ctx.currentTime;
-    // Rising two-note cue for focus ("lock in"), falling for break ("ease off").
     const freqs = nextPhase === "focus" ? [660, 880] : [880, 660];
     freqs.forEach((f, i) => {
       const osc = ctx.createOscillator();
@@ -32,7 +31,7 @@ function playPhaseChime(nextPhase: TimerPhase) {
       osc.stop(t + 0.55);
     });
   } catch {
-    /* audio not unlocked yet — ignore */
+    /* audio not unlocked yet, ignore */
   }
 }
 
@@ -43,13 +42,11 @@ export function useTimerTick() {
 
   useEffect(() => {
     if (status === "running") {
-      tick(); // Sync immediately
+      tick();
       intervalRef.current = setInterval(tick, 1000);
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+    } else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
     return () => {
       if (intervalRef.current) {
@@ -79,14 +76,16 @@ export function useTimerNotification() {
 
   useEffect(() => {
     if (prevPhaseRef.current !== phase && status === "running") {
-      // Music keeps playing across phases on purpose — it used to be paused here and
-      // never resumed, so it died permanently after the first block. The chime + the
-      // notification are what signal the transition now.
-      if ("Notification" in window && Notification.permission === "granted") {
-        const msg =
-          phase === "focus"
-            ? "Break over — time to lock in."
-            : "Nice session! Take a break.";
+      // Native shells schedule their own Android/iOS notification. The browser
+      // notification stays web-only so a phase transition never double-fires.
+      if (
+        window.__FLOW_MOBILE__ !== true &&
+        "Notification" in window &&
+        Notification.permission === "granted"
+      ) {
+        const msg = phase === "focus"
+          ? "Break over. Time to lock in."
+          : "Nice session! Take a break.";
         new Notification("Flowstate", { body: msg, icon: "/icons/icon-192.png" });
       }
 
@@ -110,6 +109,6 @@ export function useTimerDocumentTitle() {
     const s = secondsRemaining % 60;
     const time = `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     const label = phase === "focus" ? "Focus" : "Break";
-    document.title = `${time} — ${label} | Flowstate`;
+    document.title = `${time}: ${label} | Flowstate`;
   }, [secondsRemaining, status, phase]);
 }
