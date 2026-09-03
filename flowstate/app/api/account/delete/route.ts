@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       {
         deleted: true,
         retainedRecords:
-          "Limited de-identified transaction, refund-review, or issued-license records may be retained where required for legal, accounting, fraud-prevention, or license-defense purposes.",
+          "Limited transaction and refund-review records may be de-identified and retained for legal, accounting, or fraud-prevention purposes. Issued Creator Music license records may retain licensee details where necessary to preserve license validity or defend legal rights.",
       },
       {
         status: 200,
