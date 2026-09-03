@@ -20,8 +20,9 @@ export { classifyAcquisition } from "@/lib/analytics-acquisition";
  *   guest_sign_in_clicked— guest tapped sign-in in gate  { }
  *   paywall_viewed       — upgrade prompt shown          { source }
  *   upgrade_clicked      — pricing CTA clicked           { source }
- *   checkout_started     — checkout POST fired           { interval, promo }
+ *   checkout_started     — checkout attempt started      { interval, provider }
  *   checkout_redirected  — reached Lemon Squeezy checkout { interval }
+ *   checkout_completed   — verified native store purchase { interval, provider }
  *   theme_changed        — interface theme switched      { theme }
  */
 
@@ -177,6 +178,7 @@ type EventName =
   | "upgrade_clicked"
   | "checkout_started"
   | "checkout_redirected"
+  | "checkout_completed"
   | "theme_changed"
   | "seo_landing_view"
   | "seo_cta_clicked"
