@@ -4,6 +4,7 @@ import styles from './games.module.css';
 
 // Local JPEG thumbnails are served directly to keep Safari decoding predictable.
 // Production release marker: verified same-origin game artwork.
+// Redeploy marker: 2026-09-03.
 const siteUrl = 'https://www.virzyguns.com';
 
 const games = [
