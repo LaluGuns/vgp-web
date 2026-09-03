@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.net.Uri;
 
 import androidx.core.content.ContextCompat;
+import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
@@ -117,7 +118,7 @@ public class FlowAudioPlugin extends Plugin {
       long duration = mediaController.getDuration();
       JSObject out = new JSObject();
       out.put("currentSeconds", Math.max(0L, mediaController.getCurrentPosition()) / 1000.0);
-      out.put("durationSeconds", duration > 0 && duration != Player.TIME_UNSET ? duration / 1000.0 : 0.0);
+      out.put("durationSeconds", duration > 0 && duration != C.TIME_UNSET ? duration / 1000.0 : 0.0);
       out.put("playing", mediaController.isPlaying());
       out.put("ended", mediaController.getPlaybackState() == Player.STATE_ENDED);
       call.resolve(out);
@@ -164,7 +165,7 @@ public class FlowAudioPlugin extends Plugin {
         controller = ready;
         action.accept(ready);
       } catch (ExecutionException error) {
-        call.reject("Unable to connect to Flow audio service", error.getCause());
+        call.reject("Unable to connect to Flow audio service", error);
       } catch (InterruptedException error) {
         Thread.currentThread().interrupt();
         call.reject("Flow audio connection interrupted", error);
