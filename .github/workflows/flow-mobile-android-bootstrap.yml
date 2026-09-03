@@ -21,8 +21,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: flow-mobile-android-bootstrap
-  cancel-in-progress: false
+  group: flow-mobile-android-bootstrap-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   bootstrap-android:
@@ -96,6 +96,8 @@ jobs:
           grep -q 'billing:9.1.0' mobile/android/app/build.gradle
           grep -q 'media3-session:1.11.0' mobile/android/app/build.gradle
           grep -q 'targetSdkVersion = 36' mobile/android/variables.gradle
+          grep -q '"CapacitorHttp"' mobile/android/app/src/main/assets/capacitor.config.json
+          grep -q '"enabled": true' mobile/android/app/src/main/assets/capacitor.config.json
           if grep -R -n -E 'SUPABASE_SERVICE_ROLE|GOOGLE_PLAY_SERVICE_ACCOUNT|PRIVATE_KEY|CRON_SECRET|LEMONSQUEEZY_WEBHOOK_SECRET' mobile/android/app/src/main; then
             echo 'Server secret identifier leaked into generated Android source'
             exit 1
@@ -141,7 +143,7 @@ jobs:
           - production Vite mobile bundle
           - production dependency audit at high severity
           - clean Capacitor Android generation
-          - native overlay application
+          - native HTTP transport for HTTPS API calls
           - Google Play Billing 9.1.0
           - Media3 1.11.0
           - assembleDebug
