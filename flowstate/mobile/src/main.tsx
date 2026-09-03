@@ -12,6 +12,8 @@ import "../../app/globals.css";
 import "./mobile-shell.css";
 
 import FlowstatePage from "@/app/[lang]/app/page";
+import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
+import { AudioDriver } from "@/components/audio/audio-driver";
 import { LocaleProvider } from "@/hooks/use-translation";
 import type { Locale } from "@/lib/translations/dictionaries";
 import { installMobileRuntime } from "./runtime";
@@ -55,6 +57,8 @@ function MobileRoot() {
 
   return (
     <LocaleProvider initialLocale={locale}>
+      <AnalyticsProvider />
+      <AudioDriver />
       {route === "login" ? <MobileLoginPage /> : <FlowstatePage />}
     </LocaleProvider>
   );
