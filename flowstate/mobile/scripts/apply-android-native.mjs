@@ -4,10 +4,12 @@ import { fileURLToPath } from "node:url";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const mobileRoot = path.resolve(scriptDir, "..");
+const flowRoot = path.resolve(mobileRoot, "..");
 const androidRoot = path.join(mobileRoot, "android");
 const appRoot = path.join(androidRoot, "app");
 const overlayRoot = path.join(mobileRoot, "native", "android");
 const javaRoot = path.join(appRoot, "src", "main", "java", "com", "virzyguns", "flow");
+const resRoot = path.join(appRoot, "src", "main", "res");
 
 function mustExist(file) {
   if (!fs.existsSync(file)) throw new Error(`Required Android bootstrap file missing: ${file}`);
@@ -16,6 +18,14 @@ function mustExist(file) {
 function replaceOrThrow(content, pattern, replacement, label) {
   if (!pattern.test(content)) throw new Error(`Unable to patch ${label}`);
   return content.replace(pattern, replacement);
+}
+
+function walk(directory) {
+  if (!fs.existsSync(directory)) return [];
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(directory, entry.name);
+    return entry.isDirectory() ? walk(full) : [full];
+  });
 }
 
 mustExist(androidRoot);
@@ -57,6 +67,28 @@ if (!buildGradle.includes(dependencyMarker)) {
 }
 fs.writeFileSync(buildGradlePath, buildGradle);
 
+// Use the exact Flow brand icon already owned by the web/PWA source. Keeping the
+// binary authority in public/icons means Android does not drift into a second
+// independently maintained brand asset set.
+const flowIconSource = path.join(flowRoot, "public", "icons", "icon-512.png");
+mustExist(flowIconSource);
+const drawableNoDpi = path.join(resRoot, "drawable-nodpi");
+fs.mkdirSync(drawableNoDpi, { recursive: true });
+fs.copyFileSync(flowIconSource, path.join(drawableNoDpi, "flow_app_icon.png"));
+
+// Capacitor generates branded-placeholder splash bitmaps for every density and
+// orientation. Remove them and replace the resource with a deterministic Flow
+// splash: the product's dark canvas plus the shared Flow icon at a safe size.
+for (const file of walk(resRoot)) {
+  if (path.basename(file) === "splash.png") fs.rmSync(file);
+}
+const drawableRoot = path.join(resRoot, "drawable");
+fs.mkdirSync(drawableRoot, { recursive: true });
+fs.writeFileSync(
+  path.join(drawableRoot, "splash.xml"),
+  `<?xml version="1.0" encoding="utf-8"?>\n<layer-list xmlns:android="http://schemas.android.com/apk/res/android">\n    <item>\n        <shape android:shape="rectangle">\n            <solid android:color="#07040d" />\n        </shape>\n    </item>\n    <item android:width="160dp" android:height="160dp" android:gravity="center">\n        <bitmap android:src="@drawable/flow_app_icon" android:gravity="fill" />\n    </item>\n</layer-list>\n`,
+);
+
 const manifestPath = path.join(appRoot, "src", "main", "AndroidManifest.xml");
 let manifest = fs.readFileSync(manifestPath, "utf8");
 const permissions = [
@@ -74,6 +106,19 @@ for (const permission of permissions) {
     );
   }
 }
+
+manifest = replaceOrThrow(
+  manifest,
+  /android:icon="[^"]+"/,
+  'android:icon="@drawable/flow_app_icon"',
+  "Flow launcher icon",
+);
+manifest = replaceOrThrow(
+  manifest,
+  /android:roundIcon="[^"]+"/,
+  'android:roundIcon="@drawable/flow_app_icon"',
+  "Flow round launcher icon",
+);
 
 if (!manifest.includes('android:scheme="com.virzyguns.flow"')) {
   manifest = manifest.replace(
@@ -103,11 +148,15 @@ for (const expected of ["FlowNativePlugin.class", "FlowBillingPlugin.class", "Fl
 for (const expected of ["billing:9.1.0", "media3-exoplayer:1.11.0", "media3-session:1.11.0"]) {
   if (!generatedGradle.includes(expected)) throw new Error(`Android Gradle missing ${expected}`);
 }
-for (const expected of ["FlowPlaybackService", "FlowNotificationReceiver", "com.virzyguns.flow"]) {
+for (const expected of ["FlowPlaybackService", "FlowNotificationReceiver", "com.virzyguns.flow", "@drawable/flow_app_icon"]) {
   if (!generatedManifest.includes(expected)) throw new Error(`Android manifest missing ${expected}`);
+}
+for (const brandedAsset of [path.join(drawableNoDpi, "flow_app_icon.png"), path.join(drawableRoot, "splash.xml")]) {
+  mustExist(brandedAsset);
 }
 
 console.log("FLOW ANDROID NATIVE OVERLAY APPLY PASS");
 console.log("SDK: min 26 / compile 36 / target 36");
 console.log("Billing: Google Play Billing 9.1.0");
 console.log("Audio: Media3 1.11.0");
+console.log("Branding: shared Flow icon + dark Flow splash");
