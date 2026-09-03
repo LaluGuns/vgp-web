@@ -14,6 +14,7 @@ import "./mobile-shell.css";
 import FlowstatePage from "@/app/[lang]/app/page";
 import PricingPage from "@/app/[lang]/pricing/page";
 import InsightsPage from "@/app/[lang]/(app)/insights/page";
+import { DeleteAccountPanel } from "@/components/account/delete-account-panel";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
 import { ProductProviders } from "@/components/layout/product-providers";
 import { LocaleProvider } from "@/hooks/use-translation";
@@ -25,7 +26,7 @@ import { NativeTimerRuntime } from "./native-timer-runtime";
 
 const ROUTE_EVENT = "flow-mobile-route";
 const BASE_LOCALES = new Set(["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it"]);
-type MobileRoute = "app" | "login" | "pricing" | "insights";
+type MobileRoute = "app" | "login" | "pricing" | "insights" | "delete-account";
 
 function preferredLocale(): Locale {
   try {
@@ -39,10 +40,10 @@ function preferredLocale(): Locale {
 
 function routeFromHash(hash: string): MobileRoute {
   const route = hash.replace(/^#\//, "").split("?")[0].toLowerCase();
-  return route === "login" || route === "pricing" || route === "insights" ? route : "app";
+  return route === "login" || route === "pricing" || route === "insights" || route === "delete-account" ? route : "app";
 }
 
-function ProductRoute({ route }: { route: Exclude<MobileRoute, "login"> }) {
+function ProductRoute({ route }: { route: Exclude<MobileRoute, "login" | "delete-account"> }) {
   return (
     <ProductProviders>
       <NativeTimerRuntime />
@@ -73,7 +74,11 @@ function MobileRoot() {
   return (
     <LocaleProvider initialLocale={locale}>
       <AnalyticsProvider />
-      {route === "login" ? <MobileLoginPage /> : <ProductRoute route={route} />}
+      {route === "login"
+        ? <MobileLoginPage />
+        : route === "delete-account"
+          ? <DeleteAccountPanel />
+          : <ProductRoute route={route} />}
     </LocaleProvider>
   );
 }
