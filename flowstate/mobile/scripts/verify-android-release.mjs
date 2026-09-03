@@ -21,6 +21,13 @@ const manifest = read(path.join(appRoot, "src", "main", "AndroidManifest.xml"));
 const appGradle = read(path.join(appRoot, "build.gradle"));
 const variables = read(path.join(androidRoot, "variables.gradle"));
 const capacitor = read(path.join(flowRoot, "capacitor.config.ts"));
+const mobileMain = read(path.join(mobileRoot, "src", "main.tsx"));
+const mobileNavigation = read(path.join(mobileRoot, "src", "shims", "next-navigation.ts"));
+const accountButton = read(path.join(flowRoot, "components", "auth", "account-button.tsx"));
+const deletePanel = read(path.join(flowRoot, "components", "account", "delete-account-panel.tsx"));
+const deleteApi = read(path.join(flowRoot, "app", "api", "account", "delete", "route.ts"));
+const deleteWebPage = read(path.join(flowRoot, "app", "[lang]", "delete-account", "page.tsx"));
+const privacyPage = read(path.join(flowRoot, "app", "[lang]", "legal", "privacy", "page.tsx"));
 
 assert(appGradle.includes('applicationId "com.virzyguns.flow"'), "Release package must be com.virzyguns.flow");
 assert(appGradle.includes("versionCode 1"), "Flow V1 must use versionCode 1");
@@ -61,6 +68,20 @@ assert(capacitor.includes("webContentsDebuggingEnabled: false"), "WebView debugg
 assert(capacitor.includes("cleartext: false"), "Capacitor cleartext transport must remain disabled");
 assert(capacitor.includes("CapacitorHttp"), "Native HTTPS transport must remain enabled");
 
+for (const [source, expected, message] of [
+  [mobileMain, '"delete-account"', "Mobile app must render the delete-account route"],
+  [mobileNavigation, '"delete-account"', "Mobile navigation must keep account deletion inside the app"],
+  [accountButton, 'href="/delete-account"', "Signed-in account menu must expose account deletion"],
+  [deletePanel, 'fetch("/api/account/delete"', "Delete-account UI must call the authenticated deletion endpoint"],
+  [deletePanel, "acknowledgeSubscriptions", "Delete-account UI must warn that external subscriptions are separate"],
+  [deleteApi, "auth.admin.deleteUser", "Deletion endpoint must delete the Supabase Auth user"],
+  [deleteApi, "confirmation_mismatch", "Deletion endpoint must require destructive confirmation"],
+  [deleteWebPage, "DeleteAccountPanel", "A public web account-deletion resource is required for Google Play"],
+  [privacyPage, 'href="/delete-account"', "Privacy policy must link to account deletion"],
+]) {
+  assert(source.includes(expected), message);
+}
+
 const sourceTree = [
   path.join(mobileRoot, "src"),
   path.join(mobileRoot, "native"),
@@ -90,4 +111,5 @@ console.log("Package: com.virzyguns.flow");
 console.log("Version: 1.0.0 (1)");
 console.log("SDK: min 26 / compile 36 / target 36");
 console.log("Billing: Google Play Billing 9.1.0");
+console.log("Account deletion: in-app + public web path gated");
 console.log("Signing: environment-only upload key");
