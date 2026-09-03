@@ -18,6 +18,8 @@ const required = [
   "mobile/vite.config.ts",
   "mobile/src/main.tsx",
   "mobile/src/runtime.ts",
+  "mobile/src/billing.ts",
+  "mobile/src/native-timer-runtime.tsx",
   "mobile/src/native-bridge.ts",
   "mobile/src/mobile-login.tsx",
   "mobile/src/mobile-shell.css",
@@ -30,7 +32,10 @@ const required = [
   "mobile/native/android/FlowNotificationReceiver.java",
   "mobile/scripts/apply-android-native.mjs",
   "app/[lang]/app/page.tsx",
+  "app/[lang]/pricing/page.tsx",
+  "app/[lang]/(app)/insights/page.tsx",
   "app/globals.css",
+  "components/layout/product-providers.tsx",
 ];
 for (const file of required) assert(exists(file), `missing ${file}`);
 
@@ -50,9 +55,19 @@ assert(!/server\s*:\s*\{[\s\S]*?url\s*:/m.test(capacitor), "remote server.url is
 
 const main = read("mobile/src/main.tsx");
 assert(main.includes('FlowstatePage from "@/app/[lang]/app/page"'), "mobile UI must import the real Flow web workspace");
+assert(main.includes('PricingPage from "@/app/[lang]/pricing/page"'), "mobile UI must reuse the real Flow pricing screen");
+assert(main.includes('InsightsPage from "@/app/[lang]/(app)/insights/page"'), "mobile UI must reuse the real Flow insights screen");
 assert(main.includes('"../../app/globals.css"'), "mobile bundle must import the real Flow global design system");
-assert(main.includes("<AudioDriver />"), "shared audio lifecycle must mount in the mobile shell");
+assert(main.includes("<ProductProviders>"), "shared product lifecycle must mount through ProductProviders");
+assert(main.includes("<NativeTimerRuntime />"), "native timer lifecycle must mount in the product shell");
+assert(main.includes("installPlayBillingRuntime();"), "Play billing runtime must be installed before rendering");
 assert(main.includes("<AnalyticsProvider />"), "shared analytics lifecycle must mount in the mobile shell");
+
+const productProviders = read("components/layout/product-providers.tsx");
+assert(productProviders.includes("<AudioDriver />"), "shared audio lifecycle must remain inside ProductProviders");
+assert(productProviders.includes("<UpgradePrompt />"), "shared entitlement upgrade surface must remain inside ProductProviders");
+assert(productProviders.includes("<GuestGate />"), "shared guest gate must remain inside ProductProviders");
+assert(productProviders.includes("<ThemeProvider />"), "shared theme lifecycle must remain inside ProductProviders");
 
 const vite = read("mobile/vite.config.ts");
 assert(vite.includes('"@/lib/audio/hls-player"'), "mobile bundle must route shared audio calls through the native adapter");
@@ -71,6 +86,11 @@ const bridge = read("mobile/src/native-bridge.ts");
 for (const plugin of ["FlowNative", "FlowBilling", "FlowAudio"]) {
   assert(bridge.includes(plugin), `${plugin} bridge contract missing`);
 }
+
+const billingRuntime = read("mobile/src/billing.ts");
+assert(billingRuntime.includes('"PENDING"'), "mobile billing runtime must fail closed for pending purchases");
+assert(billingRuntime.includes("/api/android/play-entitlement"), "mobile billing must verify purchases through the backend");
+assert(billingRuntime.includes("obfuscatedAccountId"), "mobile billing must use the server-derived Play account binding");
 
 const billingNative = read("mobile/native/android/FlowBillingPlugin.java");
 assert(billingNative.includes("enableAutoServiceReconnection"), "Play Billing automatic reconnection missing");
@@ -109,7 +129,7 @@ for (const scope of ["mobile/src", "mobile/native"]) {
 
 if (!process.exitCode) {
   console.log("FLOW MOBILE SOURCE VERIFY PASS");
-  console.log("UI authority: app/[lang]/app/page.tsx + app/globals.css");
+  console.log("UI authority: shared Flow web pages + app/globals.css");
   console.log("App ID: com.virzyguns.flow");
   console.log("Billing authority: server verification + server acknowledgement only");
 }
