@@ -56,6 +56,33 @@ fs.writeFileSync(variablesPath, variables);
 
 const buildGradlePath = path.join(appRoot, "build.gradle");
 let buildGradle = fs.readFileSync(buildGradlePath, "utf8");
+buildGradle = replaceOrThrow(buildGradle, /versionCode\s+\d+/, "versionCode 1", "versionCode");
+buildGradle = replaceOrThrow(buildGradle, /versionName\s+"[^"]+"/, 'versionName "1.0.0"', "versionName");
+
+const signingMarker = "// FLOW RELEASE SIGNING";
+if (!buildGradle.includes(signingMarker)) {
+  buildGradle = replaceOrThrow(
+    buildGradle,
+    /apply plugin: 'com\.android\.application'\n/,
+    `apply plugin: 'com.android.application'\n\n${signingMarker}\ndef flowUploadStoreFile = System.getenv('FLOW_UPLOAD_STORE_FILE')\ndef flowUploadStorePassword = System.getenv('FLOW_UPLOAD_STORE_PASSWORD')\ndef flowUploadKeyAlias = System.getenv('FLOW_UPLOAD_KEY_ALIAS')\ndef flowUploadKeyPassword = System.getenv('FLOW_UPLOAD_KEY_PASSWORD')\ndef flowSigningConfigured = [flowUploadStoreFile, flowUploadStorePassword, flowUploadKeyAlias, flowUploadKeyPassword].every { value -> value != null && !value.trim().isEmpty() }\n`,
+    "release signing environment",
+  );
+
+  buildGradle = replaceOrThrow(
+    buildGradle,
+    /\n    buildTypes \{/,
+    `\n    if (flowSigningConfigured) {\n        signingConfigs {\n            release {\n                storeFile file(flowUploadStoreFile)\n                storePassword flowUploadStorePassword\n                keyAlias flowUploadKeyAlias\n                keyPassword flowUploadKeyPassword\n            }\n        }\n    }\n\n    buildTypes {`,
+    "release signing config",
+  );
+
+  buildGradle = replaceOrThrow(
+    buildGradle,
+    /release \{\n            minifyEnabled false/,
+    `release {\n            debuggable false\n            if (flowSigningConfigured) signingConfig signingConfigs.release\n            minifyEnabled false`,
+    "release build type signing",
+  );
+}
+
 const dependencyMarker = "// FLOW HYBRID NATIVE DEPENDENCIES";
 if (!buildGradle.includes(dependencyMarker)) {
   buildGradle = replaceOrThrow(
@@ -130,7 +157,7 @@ const generatedGradle = fs.readFileSync(buildGradlePath, "utf8");
 for (const expected of ["FlowNativePlugin.class", "FlowBillingPlugin.class", "FlowAudioPlugin.class"]) {
   if (!fs.readFileSync(generatedMain, "utf8").includes(expected)) throw new Error(`MainActivity missing ${expected}`);
 }
-for (const expected of ["billing:9.1.0", "media3-exoplayer:1.11.0", "media3-session:1.11.0"]) {
+for (const expected of ["billing:9.1.0", "media3-exoplayer:1.11.0", "media3-session:1.11.0", 'versionName "1.0.0"', "FLOW_UPLOAD_STORE_FILE"]) {
   if (!generatedGradle.includes(expected)) throw new Error(`Android Gradle missing ${expected}`);
 }
 for (const expected of ["FlowPlaybackService", "FlowNotificationReceiver", "com.virzyguns.flow", "@drawable/flow_app_icon", 'android:allowBackup="false"']) {
@@ -141,8 +168,9 @@ for (const brandedAsset of [path.join(drawableNoDpi, "flow_app_icon.png"), path.
 }
 
 console.log("FLOW ANDROID NATIVE OVERLAY APPLY PASS");
+console.log("Version: 1.0.0 (1)");
 console.log("SDK: min 26 / compile 36 / target 36");
 console.log("Billing: Google Play Billing 9.1.0");
 console.log("Audio: Media3 1.11.0");
 console.log("Branding: shared Flow icon + dark Flow splash");
-console.log("Security: app data backup disabled");
+console.log("Security: app data backup disabled, release signing from environment only");
