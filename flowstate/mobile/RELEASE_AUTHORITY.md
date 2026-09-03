@@ -91,7 +91,7 @@ powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.
 
 The private upload key stays under `%LOCALAPPDATA%\Flow\release-credentials`. It must never be stored in GitHub, Drive, a build artifact, or chat.
 
-The signed release script requires Windows, Node.js 24.x, and JDK 21. It performs a clean dependency install, source/regression/typecheck/build/audit gates, native overlay and Capacitor sync, release verification, signed release APK and AAB builds, debug and release unit tests, release lint, strict AAB signature verification, upload-certificate fingerprinting, and a native-library guard.
+The signed release script requires Windows, Node.js 24.x, and JDK 21. It performs a clean dependency install, source/regression/typecheck/build/audit gates, native overlay and Capacitor sync, release verification, signed release APK and AAB builds, debug and release unit tests, release lint, AAB signature verification, exact AAB/APK signer-certificate fingerprint matching, and a native-library guard.
 
 A successful signed run writes only release outputs under `artifacts\android-release`:
 
