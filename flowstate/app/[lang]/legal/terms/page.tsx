@@ -64,7 +64,7 @@ export default function TermsPage() {
 
       <h2>9. Termination and account deletion</h2>
       <p>
-        We may suspend accounts that materially violate these Terms. You may stop using Flow at any time. You can permanently delete your account and account-linked data from the <Link href="/delete-account">Delete account</Link> page in Flow or on the web. Limited de-identified transaction, refund-review, or issued-license records may be retained where required for accounting, fraud prevention, legal obligations, or license defense.
+        We may suspend accounts that materially violate these Terms. You may stop using Flow at any time. You can permanently delete your account and account-linked data from the <Link href="/delete-account">Delete account</Link> page in Flow or on the web. Limited transaction or refund-review records may be de-identified and retained for legitimate accounting, fraud-prevention, or legal needs. Issued Creator Music license records may retain licensee details where needed to preserve the validity of an already-issued license or defend legal rights; the active Flow account link is removed.
       </p>
 
       <h2>10. Changes and governing law</h2>
