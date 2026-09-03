@@ -79,8 +79,11 @@ try {
   try {
     if (-not $SkipNpmCi) { Invoke-Checked npm ci }
     Invoke-Checked npm run mobile:verify
+    Invoke-Checked npm run mobile:test
     Invoke-Checked npm run mobile:typecheck
     Invoke-Checked npm run mobile:build
+    Invoke-Checked npm audit --omit=dev --audit-level=high
+    Invoke-Checked npm run mobile:apply:android
     Invoke-Checked npx cap sync android
     Invoke-Checked npm run mobile:verify:android-release
 
@@ -93,7 +96,7 @@ try {
     $BuiltAab = Join-Path $AndroidRoot "app\build\outputs\bundle\release\app-release.aab"
     if (-not (Test-Path $BuiltAab)) { throw "Signed release AAB was not produced" }
 
-    Invoke-Checked jarsigner -verify $BuiltAab
+    Invoke-Checked jarsigner -verify -strict -certs $BuiltAab
 
     $FinalAab = Join-Path $Artifacts "flow-android-v1.0.0-build1-signed.aab"
     Copy-Item -Force $BuiltAab $FinalAab
