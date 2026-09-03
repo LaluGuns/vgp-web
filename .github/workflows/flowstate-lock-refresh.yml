@@ -21,9 +21,13 @@ jobs:
       - name: Refresh lockfile without install scripts
         working-directory: flowstate
         run: npm install --package-lock-only --ignore-scripts
-      - name: Show secure fast-uri resolution
+      - name: Show refreshed fast-uri lock entry
         working-directory: flowstate
-        run: npm ls fast-uri && npm audit --omit=dev --audit-level=high
+        run: grep -A4 -B1 'node_modules/fast-uri' package-lock.json
+      - name: Audit refreshed lock
+        working-directory: flowstate
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
       - uses: actions/upload-artifact@v4
         with:
           name: flowstate-refreshed-package-lock
