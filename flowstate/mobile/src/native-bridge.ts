@@ -14,6 +14,7 @@ export interface FlowNativePlugin {
   requestNotificationPermission?: () => Promise<{ granted: boolean }>;
   scheduleFocusDeadline?: (options: { id: string; deadlineEpochMs: number; title: string; body: string }) => Promise<void>;
   cancelFocusDeadline?: (options: { id: string }) => Promise<void>;
+  setKeepScreenOn?: (options: { enabled: boolean }) => Promise<void>;
 }
 
 export interface FlowBillingPurchaseOptions {

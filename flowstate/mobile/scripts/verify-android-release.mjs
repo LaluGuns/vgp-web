@@ -28,6 +28,8 @@ const deletePanel = read(path.join(flowRoot, "components", "account", "delete-ac
 const deleteApi = read(path.join(flowRoot, "app", "api", "account", "delete", "route.ts"));
 const deleteWebPage = read(path.join(flowRoot, "app", "[lang]", "delete-account", "page.tsx"));
 const privacyPage = read(path.join(flowRoot, "app", "[lang]", "legal", "privacy", "page.tsx"));
+const nativePlugin = read(path.join(mobileRoot, "native", "android", "FlowNativePlugin.java"));
+const shellCss = read(path.join(mobileRoot, "src", "mobile-shell.css"));
 
 assert(appGradle.includes('applicationId "com.virzyguns.flow"'), "Release package must be com.virzyguns.flow");
 assert(appGradle.includes("versionCode 1"), "Flow V1 must use versionCode 1");
@@ -61,6 +63,9 @@ assert(manifest.includes('android:foregroundServiceType="mediaPlayback"'), "Medi
 assert(manifest.includes(".FlowPlaybackService"), "Flow playback service is missing");
 assert(manifest.includes(".FlowNotificationReceiver"), "Flow notification receiver is missing");
 assert(manifest.includes("@drawable/flow_app_icon"), "Flow launcher branding is missing");
+assert(!manifest.includes("android:screenOrientation=\"portrait\""), "Flow must allow landscape Desk Mode");
+assert(nativePlugin.includes("FLAG_KEEP_SCREEN_ON"), "Native Desk Mode keep-screen-on support is missing");
+assert(shellCss.includes("(orientation: landscape) and (max-height: 600px)"), "Landscape Desk Mode CSS is missing");
 
 assert(capacitor.includes('loggingBehavior: "none"'), "Capacitor release logging must be disabled");
 assert(capacitor.includes("allowMixedContent: false"), "Mixed content must remain disabled");

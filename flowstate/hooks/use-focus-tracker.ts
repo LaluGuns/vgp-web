@@ -66,7 +66,7 @@ export function useFocusTracker() {
 
     if (focusEnding) {
       if (fs.startedAt !== null) {
-        const completed = phase !== "focus"; // moved to a break = completed; idle reset = gave up
+        const completed = useTimerStore.getState().lastTransitionReason === "elapsed";
         const summary = fs.finalizeSession(completed);
         if (summary) {
           const activeTaskId = useTaskStore.getState().activeTaskId;

@@ -24,7 +24,8 @@
     "mobile:sync:android": "npm run mobile:build && npx cap sync android",
     "mobile:prepare:android": "npm run mobile:build && npm run mobile:apply:android && npx cap sync android",
     "worker:sync-catalog": "npx wrangler r2 object put flowstate-audio/tracks/catalog.json --file public/tracks/catalog.json --content-type application/json --remote --force --config worker/wrangler.toml",
-    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml"
+    "worker:deploy": "npx wrangler deploy --config worker/wrangler.toml",
+    "mobile:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test mobile/scripts/*.test.mjs"
   },
   "dependencies": {
     "@capacitor/app": "8.1.1",

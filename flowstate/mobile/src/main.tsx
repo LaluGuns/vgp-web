@@ -71,14 +71,22 @@ function MobileRoot() {
     };
   }, []);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-flow-route", route);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [route]);
+
   return (
     <LocaleProvider initialLocale={locale}>
       <AnalyticsProvider />
-      {route === "login"
-        ? <MobileLoginPage />
-        : route === "delete-account"
-          ? <DeleteAccountPanel />
-          : <ProductRoute route={route} />}
+      <div className={`flow-mobile-route flow-mobile-route-${route}`} data-flow-route={route}>
+        {route === "login"
+          ? <MobileLoginPage />
+          : route === "delete-account"
+            ? <DeleteAccountPanel />
+            : <ProductRoute route={route} />}
+      </div>
     </LocaleProvider>
   );
 }
@@ -86,12 +94,14 @@ function MobileRoot() {
 installMobileRuntime();
 installPlayBillingRuntime();
 
-CapacitorApp.addListener("backButton", ({ canGoBack }) => {
-  if (canGoBack || window.history.length > 1) {
-    window.history.back();
-  } else {
-    CapacitorApp.minimizeApp();
+CapacitorApp.addListener("backButton", () => {
+  const route = routeFromHash(window.location.hash || "#/app");
+  if (route !== "app") {
+    history.replaceState(null, "", "#/app");
+    window.dispatchEvent(new Event(ROUTE_EVENT));
+    return;
   }
+  CapacitorApp.minimizeApp();
 }).catch(() => {});
 
 const root = document.getElementById("root");

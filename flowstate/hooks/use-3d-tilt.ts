@@ -18,9 +18,12 @@ export function use3dTilt(maxTilt = 1.5) {
   const reduced =
     typeof window !== "undefined" &&
     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const coarsePointer =
+    typeof window !== "undefined" &&
+    (window.__FLOW_MOBILE__ === true || window.matchMedia?.("(pointer: coarse)").matches);
 
   function onMouseMove(e: React.MouseEvent<HTMLElement>) {
-    if (reduced) return;
+    if (reduced || coarsePointer) return;
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

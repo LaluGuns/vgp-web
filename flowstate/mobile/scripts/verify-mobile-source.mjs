@@ -23,6 +23,8 @@ const required = [
   "mobile/src/native-bridge.ts",
   "mobile/src/mobile-login.tsx",
   "mobile/src/mobile-shell.css",
+  "mobile/scripts/timer-transition.test.mjs",
+  "lib/stores/timer-transitions.ts",
   "mobile/src/shims/hls-player.ts",
   "mobile/native/android/MainActivity.java",
   "mobile/native/android/FlowNativePlugin.java",
@@ -46,6 +48,7 @@ assert(pkg.devDependencies?.["@capacitor/cli"] === "8.5.1", "Capacitor CLI must 
 assert(pkg.scripts?.["mobile:build"], "mobile:build script missing");
 assert(pkg.scripts?.["mobile:typecheck"], "mobile:typecheck script missing");
 assert(pkg.scripts?.["mobile:apply:android"], "mobile:apply:android script missing");
+assert(pkg.scripts?.["mobile:test"], "mobile:test regression script missing");
 
 const capacitor = read("capacitor.config.ts");
 assert(capacitor.includes('appId: "com.virzyguns.flow"'), "Android package/appId drifted");
@@ -62,6 +65,30 @@ assert(main.includes("<ProductProviders>"), "shared product lifecycle must mount
 assert(main.includes("<NativeTimerRuntime />"), "native timer lifecycle must mount in the product shell");
 assert(main.includes("installPlayBillingRuntime();"), "Play billing runtime must be installed before rendering");
 assert(main.includes("<AnalyticsProvider />"), "shared analytics lifecycle must mount in the mobile shell");
+
+const shellCss = read("mobile/src/mobile-shell.css");
+for (const invariant of [
+  "(orientation: landscape) and (max-height: 600px)",
+  ".flow-workspace-grid",
+  ".flow-workspace-timer",
+  "data-flow-desk-mode",
+  "--flow-viewport-height",
+]) {
+  assert(shellCss.includes(invariant), `mobile responsive/Desk Mode invariant missing: ${invariant}`);
+}
+
+const timerStore = read("lib/stores/timer-store.ts");
+const focusTracker = read("hooks/use-focus-tracker.ts");
+assert(timerStore.includes('lastTransitionReason: "manual_skip"'), "manual Skip transition must be explicit");
+assert(timerStore.includes('lastTransitionReason: "elapsed"'), "natural elapsed transition must be explicit");
+assert(focusTracker.includes('lastTransitionReason === "elapsed"'), "focus credit must be granted only for elapsed completion");
+
+const nativeTimerRuntime = read("mobile/src/native-timer-runtime.tsx");
+assert(nativeTimerRuntime.includes("setKeepScreenOn"), "Desk Mode must keep the screen on only through the native bridge");
+assert(nativeTimerRuntime.includes("max-height: 600px"), "Desk Mode native lifecycle breakpoint drifted");
+
+const nativePlugin = read("mobile/native/android/FlowNativePlugin.java");
+assert(nativePlugin.includes("FLAG_KEEP_SCREEN_ON"), "Android Desk Mode keep-screen-on implementation missing");
 
 const productProviders = read("components/layout/product-providers.tsx");
 assert(productProviders.includes("<AudioDriver />"), "shared audio lifecycle must remain inside ProductProviders");

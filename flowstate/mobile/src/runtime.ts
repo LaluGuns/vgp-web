@@ -41,6 +41,27 @@ function installApiProxy(): void {
   (window as any).__FLOW_FETCH_PROXY_INSTALLED__ = true;
 }
 
+function syncViewportMetrics(): void {
+  const viewport = window.visualViewport;
+  const height = viewport?.height ?? window.innerHeight;
+  document.documentElement.style.setProperty("--flow-viewport-height", `${Math.round(height)}px`);
+  document.documentElement.toggleAttribute(
+    "data-flow-landscape",
+    window.matchMedia("(orientation: landscape)").matches,
+  );
+}
+
+function installViewportMetrics(): void {
+  if ((window as any).__FLOW_VIEWPORT_METRICS_INSTALLED__) return;
+  const sync = () => syncViewportMetrics();
+  sync();
+  window.visualViewport?.addEventListener("resize", sync);
+  window.visualViewport?.addEventListener("scroll", sync);
+  window.addEventListener("resize", sync);
+  window.addEventListener("orientationchange", sync);
+  (window as any).__FLOW_VIEWPORT_METRICS_INSTALLED__ = true;
+}
+
 function applyPersistedTheme(): void {
   const valid = ["glass", "studio", "editorial", "terminal"];
   let theme = "glass";
@@ -62,6 +83,7 @@ export function installMobileRuntime(): void {
   document.documentElement.setAttribute("data-flow-mobile", "true");
   applyPersistedTheme();
   installApiProxy();
+  installViewportMetrics();
 
   if (!window.location.hash) {
     history.replaceState(null, "", "#/app");

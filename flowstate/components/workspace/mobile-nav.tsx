@@ -20,7 +20,7 @@ export function WorkspaceMobileNav({
   const { t } = useTranslation();
 
   return (
-    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm h-16 glass-pill flex items-center justify-around z-40 px-3 shadow-[0_16px_40px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-2xl border border-white/10 bg-black/40 rounded-full">
+    <div className="flow-mobile-nav md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm h-16 glass-pill flex items-center justify-around z-40 px-3 shadow-[0_16px_40px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-2xl border border-white/10 bg-black/40 rounded-full">
       {/* Tasks Tab */}
       <button
         onClick={() => setMobileTab("tasks")}

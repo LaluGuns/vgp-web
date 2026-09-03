@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.view.WindowManager;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
@@ -98,6 +99,23 @@ public class FlowNativePlugin extends Plugin {
     JSObject out = new JSObject();
     out.put("granted", getPermissionState("notifications") == PermissionState.GRANTED);
     call.resolve(out);
+  }
+
+  @PluginMethod
+  public void setKeepScreenOn(PluginCall call) {
+    boolean enabled = Boolean.TRUE.equals(call.getBoolean("enabled", false));
+    if (getActivity() == null) {
+      call.reject("Activity unavailable");
+      return;
+    }
+    getActivity().runOnUiThread(() -> {
+      if (enabled) {
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      } else {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      }
+      call.resolve();
+    });
   }
 
   @PluginMethod

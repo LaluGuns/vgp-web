@@ -47,6 +47,28 @@ export function NativeTimerRuntime() {
     });
   }, [status, phase, currentSessionId, expectedEndTime]);
 
+  useEffect(() => {
+    const native = flowNative();
+    if (!native?.setKeepScreenOn) return;
+
+    const media = window.matchMedia("(orientation: landscape) and (max-height: 600px)");
+    const sync = () => {
+      const enabled = status === "running" && media.matches;
+      document.documentElement.toggleAttribute("data-flow-desk-mode", media.matches);
+      void native.setKeepScreenOn?.({ enabled }).catch(() => {});
+    };
+
+    sync();
+    media.addEventListener?.("change", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      media.removeEventListener?.("change", sync);
+      window.removeEventListener("resize", sync);
+      document.documentElement.removeAttribute("data-flow-desk-mode");
+      void native.setKeepScreenOn?.({ enabled: false }).catch(() => {});
+    };
+  }, [status]);
+
   useEffect(() => () => {
     const native = flowNative();
     const id = scheduledIdRef.current;

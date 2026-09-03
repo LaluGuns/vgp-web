@@ -268,7 +268,7 @@ export function TimerDisplay() {
 
   return (
     <div
-      className="flex flex-col items-center gap-5 w-full select-none"
+      className="flow-timer-display flex flex-col items-center gap-5 w-full select-none"
       style={{ "--primary": lampHsl } as React.CSSProperties}
     >
       {/* Non-glass interface styles bring their own centerpiece machine
@@ -328,7 +328,7 @@ export function TimerDisplay() {
           t={t}
         />
       ) : (
-      <div className="relative w-[280px] h-[280px] flex items-center justify-center shrink-0">
+      <div className="flow-timer-dial relative w-[280px] h-[280px] flex items-center justify-center shrink-0">
         {/* Glass lens backing (Liquid Glass Dome) */}
         <div className="absolute inset-[15px] rounded-full glass-dome transform-gpu pointer-events-none z-0" />
 
@@ -424,7 +424,7 @@ export function TimerDisplay() {
         {/* Central HUD */}
         <div className="absolute inset-0 pointer-events-none z-30 select-none text-center">
           {/* Phase Badge */}
-          <div className="absolute top-[50px] left-1/2 -translate-x-1/2 pointer-events-auto">
+          <div className="flow-timer-phase absolute top-[50px] left-1/2 -translate-x-1/2 pointer-events-auto">
             <div
               className={cn(
                 "px-3.5 py-1 rounded-full border bg-black/40 border-white/[0.06] backdrop-blur-sm flex items-center gap-2",
@@ -450,7 +450,7 @@ export function TimerDisplay() {
           </div>
 
           <span
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[52%] text-[5.2rem] font-sans font-semibold tracking-tight text-white leading-none tabular-nums pointer-events-auto"
+            className="flow-timer-time absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[52%] text-[5.2rem] font-sans font-semibold tracking-tight text-white leading-none tabular-nums pointer-events-auto"
             style={{
               filter: isFocus
                 ? `drop-shadow(0px 2px 8px rgba(0,0,0,0.5)) drop-shadow(0px 4px 20px ${SCENE_THEMES[scene]?.shadowColor ?? "rgba(88,196,255,0.4)"})`
@@ -461,7 +461,7 @@ export function TimerDisplay() {
           </span>
 
           {/* Bottom Context / Task label */}
-          <div className="absolute bottom-[46px] left-1/2 -translate-x-1/2 w-full max-w-[230px] h-10 flex items-center justify-center px-4 pointer-events-auto">
+          <div className="flow-timer-context absolute bottom-[46px] left-1/2 -translate-x-1/2 w-full max-w-[230px] h-10 flex items-center justify-center px-4 pointer-events-auto">
             {isFocus && bookmark ? (
               <span
                 className={cn(
@@ -502,7 +502,7 @@ export function TimerDisplay() {
           </button>
         </div>
       ) : (
-        <div className="flex items-center gap-6 px-6 py-2.5 !rounded-full z-20 transform-gpu glass-card border-t-white/30 border-l-white/20">
+        <div className="flow-timer-controls flex items-center gap-6 px-6 py-2.5 !rounded-full z-20 transform-gpu glass-card border-t-white/30 border-l-white/20">
           <Button
             variant="ghost"
             size="icon"
@@ -546,7 +546,7 @@ export function TimerDisplay() {
       )}
 
       {/* Preset pills & Autopilot lock controls (Tightly styled inside the card) */}
-      <div className="flex flex-col items-center gap-3.5 mt-2 shrink-0 select-none">
+      <div className="flow-timer-settings flex flex-col items-center gap-3.5 mt-2 shrink-0 select-none">
         <TimerSettings />
         <AutopilotToggle />
       </div>

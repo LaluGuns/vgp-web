@@ -37,14 +37,14 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
   }
 
   return (
-    <header className="h-14 flex items-center justify-between pb-4 shrink-0 select-none z-20">
+    <header className="flow-workspace-header h-14 flex items-center justify-between pb-4 shrink-0 select-none z-20">
       {/* Left: Live clock on desktop */}
-      <div className="hidden md:flex items-center gap-3 w-40">
+      <div className="flow-header-left hidden md:flex items-center gap-3 w-40">
         <LiveClock />
       </div>
 
       {/* Mobile Language Selector */}
-      <div className="flex md:hidden items-center w-24">
+      <div className="flow-header-language flex md:hidden items-center w-24">
         <select
           value={locale}
           onChange={(e) => setLocale(e.target.value as any)}
@@ -65,7 +65,7 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
       </div>
 
       {/* Center: Title/Logo */}
-      <div className="flex items-center gap-2 group cursor-pointer select-none">
+      <div className="flow-header-logo flex items-center gap-2 group cursor-pointer select-none">
         <Image
           src="/icons/flowstate-logo.png"
           alt="Flow"
@@ -80,7 +80,7 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
       </div>
 
       {/* Right: Account + Tour Guide + Fullscreen */}
-      <div className="flex justify-end items-center gap-2 w-auto md:w-52">
+      <div className="flow-header-actions flex justify-end items-center gap-2 w-auto md:w-52">
         <AccountButton />
 
         {/* Onboarding Tour Button */}
@@ -88,7 +88,7 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
           onClick={onStartTour}
           aria-label="Start guided tour"
           title="Start Tour Guide"
-          className="group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 shadow-[inset_0_1px_rgba(255,255,255,0.05),0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 active:scale-90"
+          className="flow-header-secondary group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 shadow-[inset_0_1px_rgba(255,255,255,0.05),0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 active:scale-90"
         >
           <HelpCircle className="h-4 w-4 text-[#00e5ff] group-hover:text-cyan-300 transition-colors" />
         </button>
@@ -96,7 +96,7 @@ export function WorkspaceHeader({ onStartTour }: { onStartTour: () => void }) {
           onClick={toggleFullscreen}
           aria-label={t("dashboard.player.toggleFullscreen", "Toggle fullscreen")}
           title={t("dashboard.player.fullscreen", "Fullscreen")}
-          className="group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 shadow-[inset_0_1px_rgba(255,255,255,0.05),0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 active:scale-90"
+          className="flow-header-secondary group relative flex items-center justify-center w-9 h-9 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 shadow-[inset_0_1px_rgba(255,255,255,0.05),0_2px_8px_rgba(0,0,0,0.1)] transition-all duration-300 active:scale-90"
         >
           <div className="relative w-4 h-4 flex items-center justify-center">
             <div

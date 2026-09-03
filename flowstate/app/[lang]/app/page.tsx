@@ -104,7 +104,7 @@ export default function FlowstatePage() {
   // (and browsers increasingly auto-deny it).
   const notificationAskedRef = useRef(false);
   useEffect(() => {
-    if (timerStatus !== "running" || notificationAskedRef.current) return;
+    if (timerStatus !== "running" || notificationAskedRef.current || window.__FLOW_MOBILE__ === true) return;
     notificationAskedRef.current = true;
     if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
@@ -139,26 +139,26 @@ export default function FlowstatePage() {
       {/* Full screen, immersive application layout */}
       <div
         style={(uiTheme === "glass" ? { "--primary": SCENE_THEMES[scene]?.primary } : {}) as React.CSSProperties}
-        className="w-full max-w-full h-screen flex relative select-none overflow-hidden bg-transparent p-5 gap-5"
+        className="flow-workspace-shell w-full max-w-full h-screen flex relative select-none overflow-hidden bg-transparent p-5 gap-5"
       >
 
         {/* Left SideNav Sidebar (Stitch premium theme spec) */}
         <WorkspaceSidebar activeTourTarget={activeTourTarget} />
 
         {/* Right Side: Main Content Area */}
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <div className="flow-workspace-main flex-1 flex flex-col h-full overflow-hidden">
 
           {/* Header — Clean Apple-style bar */}
           <WorkspaceHeader onStartTour={startTour} />
 
           {/* Main Application Workspace Content */}
-          <div className="flex-1 overflow-hidden md:overflow-y-auto custom-scrollbar z-10 pr-1">
-            <div className="min-h-full grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch animate-slide-in-left relative w-full h-[calc(100vh-180px)] md:h-auto overflow-hidden md:overflow-visible">
+          <div className="flow-workspace-scroll flex-1 overflow-hidden md:overflow-y-auto custom-scrollbar z-10 pr-1">
+            <div className="flow-workspace-grid min-h-full grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch animate-slide-in-left relative w-full h-[calc(100vh-180px)] md:h-auto overflow-hidden md:overflow-visible">
 
             {/* ═══ Column 1: Tasks List (3/12 cols) ═══ */}
             <div
               className={cn(
-                "col-span-12 md:col-span-3 md:h-full flex flex-col tilt-container liquid-tab-panel",
+                "flow-workspace-tasks col-span-12 md:col-span-3 md:h-full flex flex-col tilt-container liquid-tab-panel",
                 "absolute inset-0 w-full h-full md:relative md:inset-auto md:w-auto md:h-full",
                 mobileTab === "tasks"
                   ? "translate-x-0 opacity-100 z-10 pointer-events-auto"
@@ -182,7 +182,7 @@ export default function FlowstatePage() {
             {/* ═══ Column 2: Timer & Progress (5/12 cols) ═══ */}
             <div
               className={cn(
-                "col-span-12 md:col-span-5 md:h-full flex flex-col gap-3 md:gap-5 overflow-y-auto scrollbar-hide pb-28 md:pb-0 pr-0.5 liquid-tab-panel",
+                "flow-workspace-focus col-span-12 md:col-span-5 md:h-full flex flex-col gap-3 md:gap-5 overflow-y-auto scrollbar-hide pb-28 md:pb-0 pr-0.5 liquid-tab-panel",
                 "absolute inset-0 w-full h-full md:relative md:inset-auto md:w-auto md:h-full",
                 mobileTab === "focus"
                   ? "translate-x-0 opacity-100 z-10 pointer-events-auto"
@@ -193,16 +193,16 @@ export default function FlowstatePage() {
             >
 
               {/* Daily Progress widget with 3D Tilt */}
-              <DailyProgressCard />
+              <div className="flow-workspace-daily"><DailyProgressCard /></div>
 
               {/* Sleek Collapsible Genre Selector */}
-              <GenreSelector />
+              <div className="flow-workspace-genre"><GenreSelector /></div>
 
               {/* Timer Display with 3D Tilt */}
               <div
                 id="tour-timer"
                 className={cn(
-                  "flex-none md:flex-1 flex flex-col justify-center items-center py-4 md:py-6 px-4 md:px-5 glass-card min-h-[360px] md:min-h-0 overflow-visible md:overflow-hidden relative tilt-container transition-all duration-300",
+                  "flow-workspace-timer flex-none md:flex-1 flex flex-col justify-center items-center py-4 md:py-6 px-4 md:px-5 glass-card min-h-[360px] md:min-h-0 overflow-visible md:overflow-hidden relative tilt-container transition-all duration-300",
                   timerStatus === "running" && "card-glow-active",
                   activeTourTarget === "timer" && "ring-2 ring-[#00e5ff] shadow-[0_0_30px_rgba(0,229,255,0.4)] border-[#00e5ff]/40"
                 )}
@@ -216,7 +216,7 @@ export default function FlowstatePage() {
             {/* ═══ Column 3: Atmosphere Panel (4/12 cols) ═══ */}
             <div
               className={cn(
-                "col-span-12 md:col-span-4 md:h-full flex flex-col overflow-hidden relative liquid-tab-panel",
+                "flow-workspace-atmosphere col-span-12 md:col-span-4 md:h-full flex flex-col overflow-hidden relative liquid-tab-panel",
                 "absolute inset-0 w-full h-full md:relative md:inset-auto md:w-auto md:h-full",
                 mobileTab === "atmosphere"
                   ? "translate-x-0 opacity-100 z-10 pointer-events-auto"

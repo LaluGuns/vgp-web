@@ -5,17 +5,28 @@
   --flow-safe-right: env(safe-area-inset-right, 0px);
   --flow-safe-bottom: env(safe-area-inset-bottom, 0px);
   --flow-safe-left: env(safe-area-inset-left, 0px);
+  --flow-viewport-height: 100dvh;
+}
+
+html,
+body,
+#root,
+.flow-mobile-route {
+  width: 100%;
+  min-width: 100%;
+  margin: 0;
+  background: hsl(var(--background));
 }
 
 html,
 body,
 #root {
-  width: 100%;
-  min-width: 100%;
-  height: 100%;
+  height: var(--flow-viewport-height);
+  min-height: var(--flow-viewport-height);
+}
+
+.flow-mobile-route {
   min-height: 100%;
-  margin: 0;
-  background: hsl(var(--background));
 }
 
 html[data-flow-mobile="true"],
@@ -28,14 +39,15 @@ html[data-flow-mobile="true"] body {
 
 html[data-flow-mobile="true"] body {
   box-sizing: border-box;
-  padding-top: var(--flow-safe-top);
-  padding-right: var(--flow-safe-right);
-  padding-bottom: var(--flow-safe-bottom);
-  padding-left: var(--flow-safe-left);
+  padding: 0;
 }
 
 html[data-flow-mobile="true"] .h-screen {
-  height: calc(100dvh - var(--flow-safe-top) - var(--flow-safe-bottom));
+  height: var(--flow-viewport-height);
+}
+
+html[data-flow-mobile="true"] .min-h-screen {
+  min-height: var(--flow-viewport-height);
 }
 
 html[data-flow-mobile="true"] input,
@@ -47,4 +59,324 @@ html[data-flow-mobile="true"] select {
 html[data-flow-mobile="true"] a,
 html[data-flow-mobile="true"] button {
   -webkit-touch-callout: none;
+}
+
+/* Native shell owns its safe area. Keep web components visually identical while
+   moving only the outer workspace away from camera cutouts and gesture areas. */
+html[data-flow-mobile="true"] .flow-workspace-shell {
+  height: var(--flow-viewport-height) !important;
+  padding-top: max(12px, var(--flow-safe-top)) !important;
+  padding-right: max(12px, var(--flow-safe-right)) !important;
+  padding-bottom: max(12px, var(--flow-safe-bottom)) !important;
+  padding-left: max(12px, var(--flow-safe-left)) !important;
+  gap: 12px !important;
+}
+
+html[data-flow-mobile="true"] .flow-workspace-grid {
+  height: calc(var(--flow-viewport-height) - 106px - var(--flow-safe-top) - var(--flow-safe-bottom)) !important;
+}
+
+/* Non-workspace routes must be allowed to scroll. The old global overflow lock
+   clipped pricing, login and destructive account controls on short devices. */
+html[data-flow-mobile="true"][data-flow-route="login"],
+html[data-flow-mobile="true"][data-flow-route="pricing"],
+html[data-flow-mobile="true"][data-flow-route="insights"],
+html[data-flow-mobile="true"][data-flow-route="delete-account"] {
+  overflow: auto;
+  overscroll-behavior-y: contain;
+}
+
+html[data-flow-mobile="true"][data-flow-route="login"] body,
+html[data-flow-mobile="true"][data-flow-route="pricing"] body,
+html[data-flow-mobile="true"][data-flow-route="insights"] body,
+html[data-flow-mobile="true"][data-flow-route="delete-account"] body,
+html[data-flow-mobile="true"][data-flow-route="login"] #root,
+html[data-flow-mobile="true"][data-flow-route="pricing"] #root,
+html[data-flow-mobile="true"][data-flow-route="insights"] #root,
+html[data-flow-mobile="true"][data-flow-route="delete-account"] #root,
+html[data-flow-mobile="true"][data-flow-route="login"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="pricing"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="insights"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="delete-account"] .flow-mobile-route {
+  height: auto;
+  min-height: var(--flow-viewport-height);
+  overflow: visible;
+}
+
+html[data-flow-mobile="true"][data-flow-route="login"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="pricing"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="insights"] .flow-mobile-route,
+html[data-flow-mobile="true"][data-flow-route="delete-account"] .flow-mobile-route {
+  padding-top: var(--flow-safe-top);
+  padding-right: var(--flow-safe-right);
+  padding-bottom: max(16px, var(--flow-safe-bottom));
+  padding-left: var(--flow-safe-left);
+}
+
+/* Portrait phone header. Center the brand independently from variable account
+   button width and remove browser-only chrome that otherwise collides. */
+@media (max-width: 767px) and (orientation: portrait) {
+  html[data-flow-mobile="true"] .flow-workspace-header {
+    display: grid !important;
+    grid-template-columns: minmax(54px, 1fr) auto minmax(54px, 1fr);
+    align-items: center;
+    height: 48px !important;
+    padding-bottom: 8px !important;
+    gap: 8px;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-language {
+    width: auto !important;
+    min-width: 0;
+    justify-self: start;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-logo {
+    justify-self: center;
+    min-width: 0;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-logo img {
+    max-width: 92px;
+    height: 24px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-actions {
+    width: auto !important;
+    min-width: 0;
+    justify-self: end;
+    gap: 4px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-secondary {
+    display: none !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-grid {
+    height: calc(var(--flow-viewport-height) - 92px - var(--flow-safe-top) - var(--flow-safe-bottom)) !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-mobile-nav {
+    bottom: max(14px, var(--flow-safe-bottom)) !important;
+  }
+}
+
+/* Android Desk Mode. A phone in landscape crosses Tailwind's md breakpoint,
+   which used to expose the desktop sidebar and break the workspace. These rules
+   intentionally recompose the same shared Task, Timer and Atmosphere components
+   into a compact three-column desk surface. */
+@media (orientation: landscape) and (max-height: 600px) {
+  html[data-flow-mobile="true"] .flow-workspace-shell {
+    padding-top: max(6px, var(--flow-safe-top)) !important;
+    padding-right: max(8px, var(--flow-safe-right)) !important;
+    padding-bottom: max(6px, var(--flow-safe-bottom)) !important;
+    padding-left: max(8px, var(--flow-safe-left)) !important;
+    gap: 8px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-sidebar,
+  html[data-flow-mobile="true"] .flow-mobile-nav,
+  html[data-flow-mobile="true"] .flow-workspace-daily,
+  html[data-flow-mobile="true"] .flow-workspace-genre,
+  html[data-flow-mobile="true"] .flow-header-secondary,
+  html[data-flow-mobile="true"] .flow-header-left {
+    display: none !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-header {
+    display: grid !important;
+    grid-template-columns: minmax(70px, 1fr) auto minmax(70px, 1fr);
+    align-items: center;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 2px 5px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-language {
+    display: flex !important;
+    width: auto !important;
+    justify-self: start;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-language select {
+    min-height: 28px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-logo {
+    justify-self: center;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-logo img {
+    height: 22px !important;
+    max-width: 88px;
+  }
+
+  html[data-flow-mobile="true"] .flow-header-actions {
+    width: auto !important;
+    min-width: 0;
+    justify-self: end;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-scroll {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-grid {
+    display: grid !important;
+    grid-template-columns: minmax(160px, 3fr) minmax(270px, 5fr) minmax(210px, 4fr) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    height: calc(var(--flow-viewport-height) - 52px - var(--flow-safe-top) - var(--flow-safe-bottom)) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-tasks,
+  html[data-flow-mobile="true"] .flow-workspace-focus,
+  html[data-flow-mobile="true"] .flow-workspace-atmosphere {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    overflow: hidden !important;
+    z-index: 10 !important;
+    padding: 0 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-tasks {
+    grid-column: 1 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-focus {
+    grid-column: 2 !important;
+    gap: 0 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-atmosphere {
+    grid-column: 3 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-tasks > .glass-card,
+  html[data-flow-mobile="true"] .flow-workspace-atmosphere > .glass-card {
+    padding: 10px !important;
+    border-radius: 20px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-timer {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    padding: 4px 8px !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-display {
+    height: 100%;
+    min-height: 0;
+    justify-content: center;
+    gap: 5px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-dial {
+    width: min(49vh, 218px) !important;
+    height: min(49vh, 218px) !important;
+    min-width: 0 !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-time {
+    font-size: clamp(2.7rem, 11vh, 4.1rem) !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-phase {
+    top: 17% !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-context {
+    bottom: 12% !important;
+    max-width: 78% !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-controls {
+    gap: 14px !important;
+    padding: 4px 14px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-controls button {
+    transform: scale(0.9);
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-settings {
+    display: none !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-atmosphere .glass-card > div:first-child {
+    padding-bottom: 6px !important;
+    margin-bottom: 7px !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-workspace-atmosphere .glass-card > div:nth-child(2) {
+    margin-bottom: 7px !important;
+    height: 34px !important;
+  }
+}
+
+/* Extra-short landscape phones need the timer to remain operable instead of
+   scaling the whole WebView. */
+@media (orientation: landscape) and (max-height: 420px) {
+  html[data-flow-mobile="true"] .flow-workspace-grid {
+    grid-template-columns: minmax(145px, 2.8fr) minmax(245px, 5.2fr) minmax(190px, 4fr) !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-dial {
+    width: min(44vh, 176px) !important;
+    height: min(44vh, 176px) !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-time {
+    font-size: clamp(2.25rem, 10vh, 3.25rem) !important;
+  }
+
+  html[data-flow-mobile="true"] .flow-timer-controls {
+    margin-top: -3px;
+  }
+}
+
+/* Burn-in mitigation while Desk Mode stays running for a long block. The drift
+   is intentionally tiny and disabled for reduced-motion users. */
+@media (orientation: landscape) and (max-height: 600px) and (prefers-reduced-motion: no-preference) {
+  html[data-flow-mobile="true"][data-flow-desk-mode] .flow-timer-time {
+    animation: flow-desk-drift 180s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes flow-desk-drift {
+  0% { margin-left: -1px; margin-top: 0; }
+  50% { margin-left: 1px; margin-top: 1px; }
+  100% { margin-left: 0; margin-top: -1px; }
+}
+
+/* When the software keyboard opens, visualViewport shrinks. Keep the floating
+   portrait nav from covering form fields and task input. */
+@media (max-width: 767px) {
+  html[data-flow-mobile="true"]:has(input:focus, textarea:focus, select:focus) .flow-mobile-nav {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translate(-50%, 24px) !important;
+  }
 }

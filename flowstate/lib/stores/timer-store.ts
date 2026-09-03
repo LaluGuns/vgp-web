@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { phaseAfter, phaseSeconds, type TimerTransitionReason } from "./timer-transitions";
 
 export type TimerMode = "pomodoro" | "deep_work" | "custom" | "stopwatch";
 export type TimerPhase = "focus" | "short_break" | "long_break";
@@ -54,6 +55,7 @@ interface TimerState {
   sessionsCompleted: number;
   currentSessionId: string | null;
   expectedEndTime: number | null;
+  lastTransitionReason: TimerTransitionReason;
 
   start: () => void;
   pause: () => void;
@@ -63,29 +65,6 @@ interface TimerState {
   tick: () => void;
   setPreset: (key: string) => void;
   setCustom: (preset: Partial<TimerPreset>) => void;
-}
-
-function getPhaseSeconds(preset: TimerPreset, phase: TimerPhase): number {
-  switch (phase) {
-    case "focus":
-      return preset.focusMinutes * 60;
-    case "short_break":
-      return preset.shortBreakMinutes * 60;
-    case "long_break":
-      return preset.longBreakMinutes * 60;
-  }
-}
-
-function nextPhase(
-  currentPhase: TimerPhase,
-  sessionsCompleted: number,
-  preset: TimerPreset
-): TimerPhase {
-  if (currentPhase !== "focus") return "focus";
-  const nextCount = sessionsCompleted + 1;
-  return nextCount % preset.longBreakInterval === 0
-    ? "long_break"
-    : "short_break";
 }
 
 export const useTimerStore = create<TimerState>()(
@@ -99,16 +78,18 @@ export const useTimerStore = create<TimerState>()(
       sessionsCompleted: 0,
       currentSessionId: null,
       expectedEndTime: null,
+      lastTransitionReason: "none",
 
       start: () => {
         const { preset, phase } = get();
-        const total = getPhaseSeconds(preset, phase);
+        const total = phaseSeconds(preset, phase);
         set({
           status: "running",
           secondsRemaining: total,
           totalSeconds: total,
           currentSessionId: crypto.randomUUID(),
           expectedEndTime: Date.now() + total * 1000,
+          lastTransitionReason: "none",
         });
       },
 
@@ -123,7 +104,7 @@ export const useTimerStore = create<TimerState>()(
 
       reset: () => {
         const { preset } = get();
-        const total = getPhaseSeconds(preset, "focus");
+        const total = phaseSeconds(preset, "focus");
         set({
           status: "idle",
           phase: "focus",
@@ -131,38 +112,49 @@ export const useTimerStore = create<TimerState>()(
           totalSeconds: total,
           currentSessionId: null,
           expectedEndTime: null,
+          lastTransitionReason: "reset",
         });
       },
 
       skip: () => {
         const { phase, sessionsCompleted, preset } = get();
-        const wasWork = phase === "focus";
-        const newCompleted = wasWork
-          ? sessionsCompleted + 1
-          : sessionsCompleted;
-        const newPhase = nextPhase(phase, sessionsCompleted, preset);
-        const total = getPhaseSeconds(preset, newPhase);
-        const shouldAutoStart = wasWork
-          ? preset.autoStartBreaks
-          : preset.autoStartFocus;
+        const wasFocus = phase === "focus";
+        const newPhase = phaseAfter(phase, sessionsCompleted, preset, false);
+        const total = phaseSeconds(preset, newPhase);
+        const shouldAutoStart = wasFocus ? preset.autoStartBreaks : preset.autoStartFocus;
         set({
           phase: newPhase,
           secondsRemaining: total,
           totalSeconds: total,
-          sessionsCompleted: newCompleted,
+          sessionsCompleted,
           status: shouldAutoStart ? "running" : "idle",
           currentSessionId: shouldAutoStart ? crypto.randomUUID() : null,
           expectedEndTime: shouldAutoStart ? Date.now() + total * 1000 : null,
+          lastTransitionReason: "manual_skip",
         });
       },
 
       tick: () => {
-        const { expectedEndTime, status } = get();
+        const { expectedEndTime, status, phase, sessionsCompleted, preset } = get();
         if (status !== "running" || !expectedEndTime) return;
         const now = Date.now();
         const remaining = Math.max(0, Math.ceil((expectedEndTime - now) / 1000));
         if (remaining <= 0) {
-          get().skip();
+          const wasFocus = phase === "focus";
+          const newCompleted = wasFocus ? sessionsCompleted + 1 : sessionsCompleted;
+          const newPhase = phaseAfter(phase, sessionsCompleted, preset, wasFocus);
+          const total = phaseSeconds(preset, newPhase);
+          const shouldAutoStart = wasFocus ? preset.autoStartBreaks : preset.autoStartFocus;
+          set({
+            phase: newPhase,
+            secondsRemaining: total,
+            totalSeconds: total,
+            sessionsCompleted: newCompleted,
+            status: shouldAutoStart ? "running" : "idle",
+            currentSessionId: shouldAutoStart ? crypto.randomUUID() : null,
+            expectedEndTime: shouldAutoStart ? Date.now() + total * 1000 : null,
+            lastTransitionReason: "elapsed",
+          });
         } else {
           set({ secondsRemaining: remaining });
         }
@@ -181,6 +173,7 @@ export const useTimerStore = create<TimerState>()(
           sessionsCompleted: 0,
           currentSessionId: null,
           expectedEndTime: null,
+          lastTransitionReason: "preset_change",
         });
       },
 
@@ -196,6 +189,7 @@ export const useTimerStore = create<TimerState>()(
           totalSeconds: total,
           currentSessionId: null,
           expectedEndTime: null,
+          lastTransitionReason: "preset_change",
         });
       },
     }),
