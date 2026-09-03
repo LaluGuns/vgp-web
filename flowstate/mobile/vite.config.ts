@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     resolve: {
       alias: {
+        "@/lib/audio/hls-player": path.resolve(mobileRoot, "src/shims/hls-player.ts"),
         "@": flowRoot,
         "next/link": path.resolve(mobileRoot, "src/shims/next-link.tsx"),
         "next/navigation": path.resolve(mobileRoot, "src/shims/next-navigation.ts"),
