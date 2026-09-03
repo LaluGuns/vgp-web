@@ -18,6 +18,18 @@ async function authenticatedUser(req: Request) {
   return error ? null : data.user;
 }
 
+function configuredProducts() {
+  const monthlyProductId = process.env.GOOGLE_PLAY_MONTHLY_PRODUCT_ID?.trim();
+  const monthlyBasePlanId = process.env.GOOGLE_PLAY_MONTHLY_BASE_PLAN_ID?.trim();
+  const yearlyProductId = process.env.GOOGLE_PLAY_YEARLY_PRODUCT_ID?.trim();
+  const yearlyBasePlanId = process.env.GOOGLE_PLAY_YEARLY_BASE_PLAN_ID?.trim();
+  if (!monthlyProductId || !monthlyBasePlanId || !yearlyProductId || !yearlyBasePlanId) return null;
+  return [
+    { plan: "monthly" as const, productId: monthlyProductId, basePlanId: monthlyBasePlanId },
+    { plan: "yearly" as const, productId: yearlyProductId, basePlanId: yearlyBasePlanId },
+  ];
+}
+
 export async function POST(req: Request) {
   const user = await authenticatedUser(req);
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -43,9 +55,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "rate_limit_unavailable" }, { status: 503 });
   }
 
+  const products = configuredProducts();
+  if (!products) {
+    return NextResponse.json({ error: "google_play_products_not_configured" }, { status: 503 });
+  }
+
   try {
     const obfuscatedAccountId = await bindPlayAccount(user.id);
-    return NextResponse.json({ registered: true, obfuscatedAccountId });
+    return NextResponse.json({ registered: true, obfuscatedAccountId, products });
   } catch (error) {
     console.error("google_play_account_binding_failed", error);
     return NextResponse.json({ error: "billing_account_binding_failed" }, { status: 500 });
