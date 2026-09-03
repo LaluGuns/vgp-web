@@ -6,11 +6,17 @@ import react from "@vitejs/plugin-react";
 const mobileRoot = path.dirname(fileURLToPath(import.meta.url));
 const flowRoot = path.resolve(mobileRoot, "..");
 
+// These are intentionally public client credentials. The modern Supabase
+// publishable key is designed to ship in browser/mobile clients. Server-only
+// service-role credentials remain forbidden from the mobile source tree.
+const DEFAULT_SUPABASE_URL = "https://ogkrxrpwulvgyghckree.supabase.co";
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_3flxZ2lmsHP5JkZa45Oo_g_15DjFCla";
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, flowRoot, "");
   const publicEnv = {
-    NEXT_PUBLIC_SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    NEXT_PUBLIC_SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? DEFAULT_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? DEFAULT_SUPABASE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_POSTHOG_KEY: env.NEXT_PUBLIC_POSTHOG_KEY ?? process.env.NEXT_PUBLIC_POSTHOG_KEY ?? "",
     NEXT_PUBLIC_POSTHOG_HOST: env.NEXT_PUBLIC_POSTHOG_HOST ?? process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com",
   };
