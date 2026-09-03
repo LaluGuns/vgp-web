@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 
 const WEB_ORIGIN = "https://flow.virzyguns.com";
 const ROUTE_EVENT = "flow-mobile-route";
-const INTERNAL_ROUTES = new Set(["app", "login", "pricing", "insights"]);
+const INTERNAL_ROUTES = new Set(["app", "login", "pricing", "insights", "delete-account"]);
 
-type MobileRoute = "app" | "login" | "pricing" | "insights";
+type MobileRoute = "app" | "login" | "pricing" | "insights" | "delete-account";
 
 function preferredLocale(): string {
   try {
@@ -30,8 +30,6 @@ function normalizeInternalPath(href: string): string {
 
 function routeFromPath(path: string): MobileRoute | "external" {
   const pathname = path.split("?")[0].split("#")[0];
-  // Strip a locale only when it is a complete path segment. Without the
-  // lookahead, /app was incorrectly parsed as locale /ap + route p.
   const clean = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?(?=\/|$)/, "");
   const segment = (clean.replace(/^\//, "").split("/")[0] || "app").toLowerCase();
   return INTERNAL_ROUTES.has(segment) ? segment as MobileRoute : "external";
