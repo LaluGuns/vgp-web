@@ -1,4 +1,5 @@
 export type FlowNativePlatform = "android" | "ios" | "web";
+export type FlowReplacementMode = "DEFERRED" | "CHARGE_FULL_PRICE" | "CHARGE_PRORATED_PRICE" | "KEEP_EXISTING";
 
 export interface NativePlatformContext {
   platform: FlowNativePlatform;
@@ -15,9 +16,19 @@ export interface FlowNativePlugin {
   cancelFocusDeadline?: (options: { id: string }) => Promise<void>;
 }
 
+export interface FlowBillingPurchaseOptions {
+  productId: string;
+  basePlanId: string;
+  offerId?: string;
+  obfuscatedAccountId: string;
+  oldPurchaseToken?: string;
+  oldProductId?: string;
+  replacementMode?: FlowReplacementMode;
+}
+
 export interface FlowBillingPlugin {
   getProducts?: (options: { productIds: string[] }) => Promise<{ products: unknown[] }>;
-  purchase?: (options: { productId: string; basePlanId?: string; offerId?: string; obfuscatedAccountId: string }) => Promise<{ state: string; purchaseToken?: string }>;
+  purchase?: (options: FlowBillingPurchaseOptions) => Promise<{ state: string; purchaseToken?: string; productId?: string }>;
   restore?: () => Promise<{ purchases: Array<{ productId: string; purchaseToken: string; state: string }> }>;
 }
 
