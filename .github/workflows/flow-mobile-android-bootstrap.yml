@@ -95,7 +95,10 @@ jobs:
             "ExpectedUploadCertSha256",
             "SOURCE_MANIFEST_SHA256.txt",
             "testReleaseUnitTest",
-            "jarsigner -verify -strict -certs",
+            "jarsigner -verify -certs",
+            "Get-AabSignerSha256",
+            "Get-ApkSignerSha256",
+            "signerCertificateMatchVerified",
             "FLOW_ANDROID_BUILD_RECEIPT.json",
             "Assert-NoNativeLibraries",
             "ApkSignerPath",
@@ -233,7 +236,7 @@ jobs:
 
               powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.ps1 -ExpectedUploadCertSha256 "<PLAY_SHA256>"
 
-          The script must fail closed on source-manifest drift, dirty Git authority, wrong Node/JDK versions, incomplete signing credentials, certificate mismatch, source/regression/typecheck/build/audit failures, native overlay drift, release lint/tests, signature verification, or unexpected native .so libraries.
+          The script must fail closed on source-manifest drift, dirty Git authority, wrong Node/JDK versions, incomplete signing credentials, certificate mismatch, source/regression/typecheck/build/audit failures, native overlay drift, release lint/tests, signature verification, signer-certificate mismatch, or unexpected native .so libraries.
 
           ## Valid output
 
