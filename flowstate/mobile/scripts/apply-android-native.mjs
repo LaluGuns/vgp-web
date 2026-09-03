@@ -67,18 +67,12 @@ if (!buildGradle.includes(dependencyMarker)) {
 }
 fs.writeFileSync(buildGradlePath, buildGradle);
 
-// Use the exact Flow brand icon already owned by the web/PWA source. Keeping the
-// binary authority in public/icons means Android does not drift into a second
-// independently maintained brand asset set.
 const flowIconSource = path.join(flowRoot, "public", "icons", "icon-512.png");
 mustExist(flowIconSource);
 const drawableNoDpi = path.join(resRoot, "drawable-nodpi");
 fs.mkdirSync(drawableNoDpi, { recursive: true });
 fs.copyFileSync(flowIconSource, path.join(drawableNoDpi, "flow_app_icon.png"));
 
-// Capacitor generates branded-placeholder splash bitmaps for every density and
-// orientation. Remove them and replace the resource with a deterministic Flow
-// splash: the product's dark canvas plus the shared Flow icon at a safe size.
 for (const file of walk(resRoot)) {
   if (path.basename(file) === "splash.png") fs.rmSync(file);
 }
@@ -107,18 +101,9 @@ for (const permission of permissions) {
   }
 }
 
-manifest = replaceOrThrow(
-  manifest,
-  /android:icon="[^"]+"/,
-  'android:icon="@drawable/flow_app_icon"',
-  "Flow launcher icon",
-);
-manifest = replaceOrThrow(
-  manifest,
-  /android:roundIcon="[^"]+"/,
-  'android:roundIcon="@drawable/flow_app_icon"',
-  "Flow round launcher icon",
-);
+manifest = replaceOrThrow(manifest, /android:allowBackup="[^"]+"/, 'android:allowBackup="false"', "Android backup policy");
+manifest = replaceOrThrow(manifest, /android:icon="[^"]+"/, 'android:icon="@drawable/flow_app_icon"', "Flow launcher icon");
+manifest = replaceOrThrow(manifest, /android:roundIcon="[^"]+"/, 'android:roundIcon="@drawable/flow_app_icon"', "Flow round launcher icon");
 
 if (!manifest.includes('android:scheme="com.virzyguns.flow"')) {
   manifest = manifest.replace(
@@ -148,7 +133,7 @@ for (const expected of ["FlowNativePlugin.class", "FlowBillingPlugin.class", "Fl
 for (const expected of ["billing:9.1.0", "media3-exoplayer:1.11.0", "media3-session:1.11.0"]) {
   if (!generatedGradle.includes(expected)) throw new Error(`Android Gradle missing ${expected}`);
 }
-for (const expected of ["FlowPlaybackService", "FlowNotificationReceiver", "com.virzyguns.flow", "@drawable/flow_app_icon"]) {
+for (const expected of ["FlowPlaybackService", "FlowNotificationReceiver", "com.virzyguns.flow", "@drawable/flow_app_icon", 'android:allowBackup="false"']) {
   if (!generatedManifest.includes(expected)) throw new Error(`Android manifest missing ${expected}`);
 }
 for (const brandedAsset of [path.join(drawableNoDpi, "flow_app_icon.png"), path.join(drawableRoot, "splash.xml")]) {
@@ -160,3 +145,4 @@ console.log("SDK: min 26 / compile 36 / target 36");
 console.log("Billing: Google Play Billing 9.1.0");
 console.log("Audio: Media3 1.11.0");
 console.log("Branding: shared Flow icon + dark Flow splash");
+console.log("Security: app data backup disabled");
