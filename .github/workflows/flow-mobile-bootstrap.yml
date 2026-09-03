@@ -18,7 +18,7 @@ on:
       - ".github/workflows/flow-mobile-bootstrap.yml"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: flow-mobile-hybrid-${{ github.ref }}
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: flow-android-hybrid-v1
+          ref: ${{ github.sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -43,23 +43,15 @@ jobs:
           cache: npm
           cache-dependency-path: flowstate/package-lock.json
 
-      - name: Refresh lockfile without lifecycle scripts
-        run: npm install --package-lock-only --ignore-scripts
-
-      - name: Commit lockfile refresh when needed
-        working-directory: .
+      - name: Verify committed lockfile
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- flowstate/package-lock.json; then
-            echo "Lockfile already current."
-            exit 0
+          npm install --package-lock-only --ignore-scripts
+          if ! git diff --exit-code -- package-lock.json; then
+            echo "package-lock.json is stale. Refresh and commit it before CI."
+            exit 1
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add flowstate/package-lock.json
-          git commit -m "Refresh Flow hybrid mobile lockfile"
-          git push origin HEAD:flow-android-hybrid-v1
 
       - name: Clean dependency install
         run: npm ci

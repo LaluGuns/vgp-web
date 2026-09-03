@@ -18,7 +18,7 @@ on:
       - "flowstate/public/**"
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: flow-mobile-android-bootstrap-${{ github.ref }}
@@ -35,7 +35,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: flow-android-hybrid-v1
+          ref: ${{ github.sha }}
 
       - uses: actions/setup-node@v4
         with:
@@ -82,14 +82,42 @@ jobs:
       - name: Verify Android Play release source
         run: npm run mobile:verify:android-release
 
+      - name: Validate Windows signed-build authority
+        working-directory: .
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $path = "flowstate/mobile/scripts/build-android-release.ps1"
+          $content = Get-Content $path -Raw
+          [scriptblock]::Create($content) | Out-Null
+          foreach ($required in @(
+            "CreateUploadKeyIfMissing",
+            "ExpectedUploadCertSha256",
+            "SOURCE_MANIFEST_SHA256.txt",
+            "testReleaseUnitTest",
+            "jarsigner -verify -strict -certs",
+            "FLOW_ANDROID_BUILD_RECEIPT.json",
+            "Assert-NoNativeLibraries",
+            "ApkSignerPath",
+            "Node.js 24",
+            "JDK 21",
+            "npm ci"
+          )) {
+            if (-not $content.Contains($required)) {
+              throw "Signed-build authority is missing required gate: $required"
+            }
+          }
+          Write-Host "Windows signed-build authority syntax/invariants PASS"
+
       - name: Compile debug and release gates
         shell: bash
         run: |
           set -euo pipefail
           cd mobile/android
           chmod +x gradlew
-          ./gradlew --no-daemon assembleDebug testDebugUnitTest lintDebug bundleRelease lintRelease
+          ./gradlew --no-daemon assembleDebug assembleRelease testDebugUnitTest testReleaseUnitTest lintDebug bundleRelease lintRelease
           test -f app/build/outputs/apk/debug/app-debug.apk
+          test -f app/build/outputs/apk/release/app-release-unsigned.apk
           test -f app/build/outputs/bundle/release/app-release.aab
 
       - name: Verify generated Android authority
@@ -119,89 +147,125 @@ jobs:
             exit 1
           fi
 
-      - name: Commit verified generated Android project
+          if unzip -Z1 mobile/android/app/build/outputs/bundle/release/app-release.aab | grep -E '\.so$'; then
+            echo 'Native .so libraries detected. Explicit Android 16 KB page-size verification is required before this release can pass.'
+            exit 1
+          fi
+          echo 'Native library gate PASS: no .so files in release AAB'
+
+      - name: Verify generated Android is committed
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add flowstate/mobile/android
-          if git diff --cached --quiet; then
-            echo "Generated Android project already matches source."
-            exit 0
+          if ! git diff --exit-code -- flowstate/mobile/android; then
+            echo "Generated Android project drifted from the committed authority."
+            echo "Regenerate it intentionally and commit the exact output before release CI can pass."
+            exit 1
           fi
-          git commit -m "Generate verified Flow Capacitor Android project"
-          git push origin HEAD:flow-android-hybrid-v1
 
-      - name: Package Codex-ready hybrid authority
+      - name: Package exact Codex-ready authority
         working-directory: .
         shell: bash
         run: |
           set -euo pipefail
           rm -rf artifacts
           mkdir -p artifacts
-          git ls-files -z flowstate | xargs -0 zip -q artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip
-          cp flowstate/mobile/android/app/build/outputs/apk/debug/app-debug.apk artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk
-          cp flowstate/mobile/android/app/build/outputs/bundle/release/app-release.aab artifacts/FLOW_ANDROID_HYBRID_RELEASE_UNSIGNED.aab
-          sha256sum artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk artifacts/FLOW_ANDROID_HYBRID_RELEASE_UNSIGNED.aab > artifacts/SHA256SUMS.txt
-          HEAD_SHA="$(git rev-parse HEAD)"
-          cat > artifacts/FLOW_ANDROID_HYBRID_CODEX_HANDOFF.md <<EOF
-          # Flow Android Hybrid Codex Handoff
+
+          HEAD_SHA="${GITHUB_SHA}"
+          SOURCE_MANIFEST="flowstate/mobile/SOURCE_MANIFEST_SHA256.txt"
+          BUILD_AUTHORITY="flowstate/mobile/BUILD_AUTHORITY.json"
+          INTERNAL_HANDOFF="flowstate/CODEX_ANDROID_BUILD_HANDOFF.md"
+
+          git ls-files -z flowstate | xargs -0 sha256sum > "${SOURCE_MANIFEST}"
+
+          cat > "${BUILD_AUTHORITY}" <<EOF
+          {
+            "product": "Flow",
+            "package": "com.virzyguns.flow",
+            "versionName": "1.0.0",
+            "versionCode": 1,
+            "minSdk": 26,
+            "compileSdk": 36,
+            "targetSdk": 36,
+            "branch": "flow-android-hybrid-v1",
+            "commit": "${HEAD_SHA}",
+            "sourceManifest": "mobile/SOURCE_MANIFEST_SHA256.txt",
+            "ciSigned": false,
+            "internalTestingPassed": false
+          }
+          EOF
+
+          cat > "${INTERNAL_HANDOFF}" <<EOF
+          # Flow Android Codex Build Handoff
+
+          This archive is the Android release source authority for Flow.
 
           Authority branch: flow-android-hybrid-v1
           Authority commit: ${HEAD_SHA}
           Package: com.virzyguns.flow
           Version: 1.0.0 (versionCode 1)
-          Target: Android 16 / API 36
-          Architecture: Capacitor hybrid. Shared Flow web pages and app/globals.css are the UI authority. Do not rebuild the UI in Compose.
+          Target: Android API 36
+          Architecture: Capacitor hybrid using the real Flow React UI. Do not recreate the UI in Compose, React Native, Flutter, or another design system.
 
-          Verified in CI before packaging:
-          - mobile source authority
-          - mobile regression tests, including Manual Skip non-completion
-          - TypeScript mobile typecheck
-          - production Vite mobile bundle
-          - production dependency audit at high severity
-          - clean Capacitor Android generation
-          - native HTTPS transport
-          - Google Play Billing 9.1.0
-          - Play Billing permission and billing-client manifest metadata in release merge
-          - Media3 1.11.0
-          - Android Desk Mode landscape + native keep-screen-on source gate
-          - assembleDebug
-          - testDebugUnitTest
-          - lintDebug
-          - bundleRelease
-          - lintRelease
-          - unsigned release AAB generation
-          - generated Android secret scan
+          ## Non-negotiable rules
 
-          The CI AAB is intentionally unsigned. Never store the Flow upload private key or passwords in GitHub or Drive.
+          - Build only from this extracted archive. Do not mix files from older Flow Android folders or ZIPs.
+          - Do not edit mobile/android as the primary source. Native authority is mobile/native/android plus mobile/scripts/apply-android-native.mjs.
+          - Do not store a private upload key, passwords, service-account JSON, or server secrets in the repo, Drive, build artifact, or chat.
+          - Do not create a new upload key implicitly. Preserve an existing Flow upload key if one already exists.
+          - Do not upload the CI unsigned AAB to Play.
+          - Do not call the app production-ready until Google Play Internal Testing and real-device gates pass.
 
-          Windows/Codex signed release build after extracting the source ZIP:
+          ## Signed build command
 
-              cd flowstate
+          Open PowerShell in the extracted flowstate folder.
+
+          Existing upload key:
+
               powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.ps1
 
-          On first run the script creates a dedicated Flow upload key under LOCALAPPDATA, stores its password only in a Windows DPAPI-encrypted credential file, runs all source/release gates, signs the release AAB, verifies the AAB signature strictly, and writes the final signed bundle under flowstate\artifacts\android-release.
+          First signing setup only, after confirming there is no existing Flow upload key/certificate to preserve:
 
-          Google Play final runtime gate:
-          - enroll/use Play App Signing
-          - upload the signed AAB to Internal Testing
-          - install from Play, not adb sideload, for billing verification
-          - verify portrait parity and compact landscape Desk Mode on a real device
-          - verify sign-in/auth callback
-          - verify monthly and yearly Play products and localized prices
-          - verify PURCHASED unlock only after server verification
-          - verify PENDING never unlocks until it becomes PURCHASED
-          - verify restore purchases
-          - verify cancel/renew/restart state refresh
-          - verify background audio and lock-screen controls
-          - verify timer notification permission and delivery
-          - verify no crash/ANR on at least one Android 13-15 device and an Android 16 emulator/device
+              powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.ps1 -CreateUploadKeyIfMissing
 
-          Do not promote beyond Internal Testing until those runtime checks pass.
+          If Google Play already shows an expected upload-certificate SHA-256, enforce it:
+
+              powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.ps1 -ExpectedUploadCertSha256 "<PLAY_SHA256>"
+
+          The script must fail closed on source-manifest drift, dirty Git authority, wrong Node/JDK versions, incomplete signing credentials, certificate mismatch, source/regression/typecheck/build/audit failures, native overlay drift, release lint/tests, signature verification, or unexpected native .so libraries.
+
+          ## Valid output
+
+          Only artifacts/android-release is release output. A successful run must contain:
+
+          - flow-android-v1.0.0-build1-signed.aab
+          - flow-android-v1.0.0-build1-signed.apk
+          - SHA256SUMS.txt
+          - FLOW_ANDROID_SIGNING_CERT.txt
+          - FLOW_UPLOAD_CERTIFICATE.pem
+          - FLOW_ANDROID_BUILD_RECEIPT.json
+
+          FLOW_ANDROID_BUILD_RECEIPT.json must still say internalTestingPassed=false. Internal Testing is a later manual/runtime gate.
           EOF
+
+          git ls-files -z flowstate | xargs -0 zip -q artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip
+          zip -q artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip "${SOURCE_MANIFEST}" "${BUILD_AUTHORITY}" "${INTERNAL_HANDOFF}"
+
+          cp flowstate/mobile/android/app/build/outputs/apk/debug/app-debug.apk artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk
+          cp flowstate/mobile/android/app/build/outputs/bundle/release/app-release.aab artifacts/FLOW_ANDROID_HYBRID_RELEASE_UNSIGNED.aab
+          cp "${SOURCE_MANIFEST}" artifacts/SOURCE_MANIFEST_SHA256.txt
+          cp "${BUILD_AUTHORITY}" artifacts/BUILD_AUTHORITY.json
+          cp "${INTERNAL_HANDOFF}" artifacts/FLOW_ANDROID_HYBRID_CODEX_HANDOFF.md
+
+          sha256sum \
+            artifacts/FLOW_ANDROID_HYBRID_CODEX_READY.zip \
+            artifacts/FLOW_ANDROID_HYBRID_DEBUG.apk \
+            artifacts/FLOW_ANDROID_HYBRID_RELEASE_UNSIGNED.aab \
+            artifacts/SOURCE_MANIFEST_SHA256.txt \
+            artifacts/BUILD_AUTHORITY.json \
+            artifacts/FLOW_ANDROID_HYBRID_CODEX_HANDOFF.md \
+            > artifacts/SHA256SUMS.txt
 
       - name: Upload Codex-ready Android artifact
         uses: actions/upload-artifact@v4
