@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
+      "process.env.NODE_ENV": JSON.stringify(mode === "production" ? "production" : "development"),
       "process.env.NEXT_PUBLIC_SUPABASE_URL": JSON.stringify(publicEnv.NEXT_PUBLIC_SUPABASE_URL),
       "process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY": JSON.stringify(publicEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY),
       "process.env.NEXT_PUBLIC_POSTHOG_KEY": JSON.stringify(publicEnv.NEXT_PUBLIC_POSTHOG_KEY),
