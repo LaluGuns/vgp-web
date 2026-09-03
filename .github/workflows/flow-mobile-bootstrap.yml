@@ -1,0 +1,69 @@
+name: Flow mobile hybrid verify
+
+on:
+  push:
+    branches:
+      - flow-android-hybrid-v1
+    paths:
+      - "flowstate/package.json"
+      - "flowstate/mobile/**"
+      - ".github/workflows/flow-mobile-bootstrap.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flow-mobile-hybrid-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify-mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: flowstate
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: flow-android-hybrid-v1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: flowstate/package-lock.json
+
+      - name: Refresh lockfile without lifecycle scripts
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Commit lockfile refresh when needed
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- flowstate/package-lock.json; then
+            echo "Lockfile already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flowstate/package-lock.json
+          git commit -m "Refresh Flow hybrid mobile lockfile"
+          git push origin HEAD:flow-android-hybrid-v1
+
+      - name: Clean dependency install
+        run: npm ci
+
+      - name: Verify mobile source authority
+        run: npm run mobile:verify
+
+      - name: Typecheck mobile bundle
+        run: npm run mobile:typecheck
+
+      - name: Build mobile web bundle
+        run: npm run mobile:build
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
