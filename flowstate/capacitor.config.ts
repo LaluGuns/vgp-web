@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: "com.virzyguns.flow",
   appName: "Flow",
   webDir: "mobile/dist",
-  loggingBehavior: "debug",
+  loggingBehavior: "none",
   backgroundColor: "#07040d",
   zoomEnabled: false,
   android: {
