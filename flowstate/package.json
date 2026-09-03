@@ -18,6 +18,7 @@
     "mobile:typecheck": "tsc -p mobile/tsconfig.json --noEmit",
     "mobile:build": "vite build --config mobile/vite.config.ts",
     "mobile:verify": "node mobile/scripts/verify-mobile-source.mjs",
+    "mobile:verify:android-release": "node mobile/scripts/verify-android-release.mjs",
     "mobile:add:android": "npx cap add android",
     "mobile:apply:android": "node mobile/scripts/apply-android-native.mjs",
     "mobile:sync:android": "npm run mobile:build && npx cap sync android",
