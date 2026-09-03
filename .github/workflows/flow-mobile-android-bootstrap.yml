@@ -6,6 +6,10 @@ on:
       - flow-android-hybrid-v1
     paths:
       - ".github/workflows/flow-mobile-android-bootstrap.yml"
+      - "flowstate/mobile/**"
+      - "flowstate/capacitor.config.ts"
+      - "flowstate/package.json"
+      - "flowstate/package-lock.json"
 
 permissions:
   contents: write
