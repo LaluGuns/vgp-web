@@ -8,6 +8,8 @@ const core = read("lib/google-play/core.ts");
 const voided = read("lib/google-play/voided.ts");
 const refundReview = read("lib/google-play/refund-review.ts");
 const googleApi = read("lib/google-play/google-api.ts");
+const pubSubAuth = read("lib/google-play/pubsub-auth.ts");
+const googlePlayIndex = read("lib/google-play/index.ts");
 const rateLimit = read("lib/security/rate-limit.ts");
 const playAccount = read("app/api/android/play-account/route.ts");
 const playEntitlement = read("app/api/android/play-entitlement/route.ts");
@@ -55,6 +57,16 @@ test("current RTDN subscription notification set includes pending purchase cance
   assert.match(core, /20: "google_play_subscription_pending_purchase_cancelled"/);
   assert.match(rtdn, /verifyPubSubPushBearer/);
   assert.match(rtdn, /package_mismatch/);
+});
+
+test("authenticated PubSub push is wired to the hardened verifier", () => {
+  assert.match(googlePlayIndex, /verifyPubSubPushBearer.*google-play\/pubsub-auth/s);
+  assert.match(pubSubAuth, /email_verified\?: boolean/);
+  assert.match(pubSubAuth, /payload\.email_verified !== true/);
+  assert.match(pubSubAuth, /header\.alg !== "RS256"/);
+  assert.match(pubSubAuth, /JWKS_CACHE_MS/);
+  assert.match(pubSubAuth, /fetchGoogleJwks\(true\)/);
+  assert.match(pubSubAuth, /payload\.iat < nowSeconds - 3_900/);
 });
 
 test("voided purchase reconciliation uses current Android Publisher pagination and chargeback reason", () => {
