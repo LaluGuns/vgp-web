@@ -48,7 +48,7 @@ export default function PrivacyPage() {
 
       <h2>5. Account deletion and retention</h2>
       <p>
-        You can permanently delete your Flow account from the <Link href="/delete-account">Delete account</Link> page in the app or on the web. Deletion removes the authentication account and account-linked Flow profile, tasks, focus sessions/history, statistics, presets, subscription records, and billing-account binding. Limited de-identified transaction, refund-review, or issued-license records may be retained where reasonably necessary for accounting, fraud prevention, legal obligations, dispute handling, or license defense. Those retained records are not linked to an active Flow account.
+        You can permanently delete your Flow account from the <Link href="/delete-account">Delete account</Link> page in the app or on the web. Deletion removes the authentication account and account-linked Flow profile, tasks, focus sessions/history, statistics, presets, subscription records, and billing-account binding. Limited transaction and refund-review records may be de-identified and retained where reasonably necessary for accounting, fraud prevention, legal obligations, or dispute handling. Issued Creator Music license records may retain licensee details where necessary to preserve the validity of an already-issued license or defend legal rights; the Flow account link itself is removed.
       </p>
 
       <h2>6. Subscription deletion note</h2>
