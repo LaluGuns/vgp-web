@@ -21,12 +21,20 @@ export interface FlowBillingPlugin {
   restore?: () => Promise<{ purchases: Array<{ productId: string; purchaseToken: string; state: string }> }>;
 }
 
+export interface FlowAudioState {
+  currentSeconds: number;
+  durationSeconds: number;
+  playing: boolean;
+  ended?: boolean;
+}
+
 export interface FlowAudioPlugin {
   load?: (options: { url: string; cacheKey: string; title: string; artist: string; premium: boolean }) => Promise<void>;
   play?: () => Promise<void>;
   pause?: () => Promise<void>;
   seek?: (options: { seconds: number }) => Promise<void>;
   setVolume?: (options: { value: number }) => Promise<void>;
+  getState?: () => Promise<FlowAudioState>;
   stop?: () => Promise<void>;
 }
 
