@@ -12,15 +12,20 @@ import "../../app/globals.css";
 import "./mobile-shell.css";
 
 import FlowstatePage from "@/app/[lang]/app/page";
+import PricingPage from "@/app/[lang]/pricing/page";
+import InsightsPage from "@/app/[lang]/(app)/insights/page";
 import { AnalyticsProvider } from "@/components/analytics/analytics-provider";
-import { AudioDriver } from "@/components/audio/audio-driver";
+import { ProductProviders } from "@/components/layout/product-providers";
 import { LocaleProvider } from "@/hooks/use-translation";
 import type { Locale } from "@/lib/translations/dictionaries";
+import { installPlayBillingRuntime } from "./billing";
 import { installMobileRuntime } from "./runtime";
 import { MobileLoginPage } from "./mobile-login";
+import { NativeTimerRuntime } from "./native-timer-runtime";
 
 const ROUTE_EVENT = "flow-mobile-route";
 const BASE_LOCALES = new Set(["en", "id", "es", "fr", "de", "ja", "ko", "zh", "pt", "ru", "it"]);
+type MobileRoute = "app" | "login" | "pricing" | "insights";
 
 function preferredLocale(): Locale {
   try {
@@ -32,8 +37,18 @@ function preferredLocale(): Locale {
   return (BASE_LOCALES.has(browser) ? browser : "en") as Locale;
 }
 
-function routeFromHash(hash: string): "app" | "login" {
-  return hash.startsWith("#/login") ? "login" : "app";
+function routeFromHash(hash: string): MobileRoute {
+  const route = hash.replace(/^#\//, "").split("?")[0].toLowerCase();
+  return route === "login" || route === "pricing" || route === "insights" ? route : "app";
+}
+
+function ProductRoute({ route }: { route: Exclude<MobileRoute, "login"> }) {
+  return (
+    <ProductProviders>
+      <NativeTimerRuntime />
+      {route === "pricing" ? <PricingPage /> : route === "insights" ? <InsightsPage /> : <FlowstatePage />}
+    </ProductProviders>
+  );
 }
 
 function MobileRoot() {
@@ -58,13 +73,13 @@ function MobileRoot() {
   return (
     <LocaleProvider initialLocale={locale}>
       <AnalyticsProvider />
-      <AudioDriver />
-      {route === "login" ? <MobileLoginPage /> : <FlowstatePage />}
+      {route === "login" ? <MobileLoginPage /> : <ProductRoute route={route} />}
     </LocaleProvider>
   );
 }
 
 installMobileRuntime();
+installPlayBillingRuntime();
 
 CapacitorApp.addListener("backButton", ({ canGoBack }) => {
   if (canGoBack || window.history.length > 1) {
