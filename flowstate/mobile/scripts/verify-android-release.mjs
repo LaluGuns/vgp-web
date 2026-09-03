@@ -61,7 +61,12 @@ assert(capacitor.includes("webContentsDebuggingEnabled: false"), "WebView debugg
 assert(capacitor.includes("cleartext: false"), "Capacitor cleartext transport must remain disabled");
 assert(capacitor.includes("CapacitorHttp"), "Native HTTPS transport must remain enabled");
 
-const sourceTree = [path.join(flowRoot, "mobile"), path.join(flowRoot, "capacitor.config.ts")];
+const sourceTree = [
+  path.join(mobileRoot, "src"),
+  path.join(mobileRoot, "native"),
+  path.join(appRoot, "src", "main"),
+  path.join(flowRoot, "capacitor.config.ts"),
+];
 const forbidden = /SUPABASE_SERVICE_ROLE|GOOGLE_PLAY_SERVICE_ACCOUNT_JSON|PRIVATE_KEY|CRON_SECRET|LEMONSQUEEZY_WEBHOOK_SECRET/;
 function walk(item) {
   if (!fs.existsSync(item)) return [];
@@ -73,10 +78,10 @@ function walk(item) {
   });
 }
 for (const file of sourceTree.flatMap(walk)) {
-  if (!/\.(?:java|kt|ts|tsx|js|mjs|json|xml|gradle|properties)$/i.test(file)) continue;
+  if (!/\.(?:java|kt|ts|tsx|js|mjs|json|xml|gradle|properties|html|css)$/i.test(file)) continue;
   const content = fs.readFileSync(file, "utf8");
-  if (forbidden.test(content) && !file.endsWith("verify-android-release.mjs")) {
-    throw new Error(`Server secret identifier detected in Android/mobile source: ${file}`);
+  if (forbidden.test(content)) {
+    throw new Error(`Server secret identifier detected in packaged Android/mobile source: ${file}`);
   }
 }
 
