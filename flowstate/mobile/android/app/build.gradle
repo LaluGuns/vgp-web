@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+// FLOW RELEASE SIGNING
+def flowUploadStoreFile = System.getenv('FLOW_UPLOAD_STORE_FILE')
+def flowUploadStorePassword = System.getenv('FLOW_UPLOAD_STORE_PASSWORD')
+def flowUploadKeyAlias = System.getenv('FLOW_UPLOAD_KEY_ALIAS')
+def flowUploadKeyPassword = System.getenv('FLOW_UPLOAD_KEY_PASSWORD')
+def flowSigningConfigured = [flowUploadStoreFile, flowUploadStorePassword, flowUploadKeyAlias, flowUploadKeyPassword].every { value -> value != null && !value.trim().isEmpty() }
+
 android {
     namespace = "com.virzyguns.flow"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -8,7 +15,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +23,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    if (flowSigningConfigured) {
+        signingConfigs {
+            release {
+                storeFile file(flowUploadStoreFile)
+                storePassword flowUploadStorePassword
+                keyAlias flowUploadKeyAlias
+                keyPassword flowUploadKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            debuggable false
+            if (flowSigningConfigured) signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
