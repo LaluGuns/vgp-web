@@ -1,0 +1,111 @@
+name: Flow Android hybrid bootstrap
+
+on:
+  push:
+    branches:
+      - flow-android-hybrid-v1
+    paths:
+      - ".github/workflows/flow-mobile-android-bootstrap.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flow-mobile-android-bootstrap
+  cancel-in-progress: false
+
+jobs:
+  bootstrap-android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: flowstate
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: flow-android-hybrid-v1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: flowstate/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Android SDK 36
+        shell: bash
+        run: |
+          set -euo pipefail
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Verify shared mobile source
+        run: |
+          npm run mobile:verify
+          npm run mobile:typecheck
+          npm run mobile:build
+
+      - name: Generate clean Capacitor Android project
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf mobile/android
+          cd mobile
+          npx cap add android
+
+      - name: Apply Flow native Android overlay
+        run: npm run mobile:apply:android
+
+      - name: Sync Flow bundle into Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd mobile
+          npx cap sync android
+
+      - name: Compile, unit test and lint Android
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd mobile/android
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug testDebugUnitTest lintDebug
+          test -f app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Verify generated Android authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'com.virzyguns.flow' mobile/android/app/src/main/AndroidManifest.xml
+          grep -q 'FlowBillingPlugin.class' mobile/android/app/src/main/java/com/virzyguns/flow/MainActivity.java
+          grep -q 'billing:9.1.0' mobile/android/app/build.gradle
+          grep -q 'media3-session:1.11.0' mobile/android/app/build.gradle
+          grep -q 'targetSdkVersion = 36' mobile/android/variables.gradle
+          if grep -R -n -E 'SUPABASE_SERVICE_ROLE|GOOGLE_PLAY_SERVICE_ACCOUNT|PRIVATE_KEY|CRON_SECRET|LEMONSQUEEZY_WEBHOOK_SECRET' mobile/android/app/src/main; then
+            echo 'Server secret identifier leaked into generated Android source'
+            exit 1
+          fi
+
+      - name: Commit verified generated Android project
+        working-directory: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add flowstate/mobile/android
+          if git diff --cached --quiet; then
+            echo "Generated Android project already matches source."
+            exit 0
+          fi
+          git commit -m "Generate verified Flow Capacitor Android project"
+          git push origin HEAD:flow-android-hybrid-v1
