@@ -61,6 +61,7 @@ jobs:
       - name: Verify shared mobile source
         run: |
           npm run mobile:verify
+          npm run mobile:test
           npm run mobile:typecheck
           npm run mobile:build
           npm audit --omit=dev --audit-level=high
@@ -157,6 +158,7 @@ jobs:
 
           Verified in CI before packaging:
           - mobile source authority
+          - mobile regression tests, including Manual Skip non-completion
           - TypeScript mobile typecheck
           - production Vite mobile bundle
           - production dependency audit at high severity
@@ -165,6 +167,7 @@ jobs:
           - Google Play Billing 9.1.0
           - Play Billing permission and billing-client manifest metadata in release merge
           - Media3 1.11.0
+          - Android Desk Mode landscape + native keep-screen-on source gate
           - assembleDebug
           - testDebugUnitTest
           - lintDebug
@@ -180,12 +183,13 @@ jobs:
               cd flowstate
               powershell -ExecutionPolicy Bypass -File .\mobile\scripts\build-android-release.ps1
 
-          On first run the script creates a dedicated Flow upload key under LOCALAPPDATA, stores its password only in a Windows DPAPI-encrypted credential file, runs all source/release gates, signs the release AAB, verifies the AAB signature, and writes the final signed bundle under flowstate\artifacts\android-release.
+          On first run the script creates a dedicated Flow upload key under LOCALAPPDATA, stores its password only in a Windows DPAPI-encrypted credential file, runs all source/release gates, signs the release AAB, verifies the AAB signature strictly, and writes the final signed bundle under flowstate\artifacts\android-release.
 
           Google Play final runtime gate:
           - enroll/use Play App Signing
           - upload the signed AAB to Internal Testing
           - install from Play, not adb sideload, for billing verification
+          - verify portrait parity and compact landscape Desk Mode on a real device
           - verify sign-in/auth callback
           - verify monthly and yearly Play products and localized prices
           - verify PURCHASED unlock only after server verification
