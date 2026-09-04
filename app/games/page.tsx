@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import GameArcade from './GameArcade';
 import styles from './games.module.css';
 
-// Local JPEG thumbnails are served directly to keep Safari decoding predictable.
-// Production release marker: verified same-origin game artwork.
-// Redeploy marker: 2026-09-03.
 const siteUrl = 'https://www.virzyguns.com';
 
 const games = [
@@ -14,7 +11,7 @@ const games = [
     type: 'Ear game',
     cue: 'Two melodies. One note changed. Catch it by ear.',
     href: 'https://htd.virzyguns.com',
-    image: '/games/hear-the-difference.jpg',
+    image: '/games/hear-the-difference.webp',
     imageAlt: 'Hear the Difference game artwork',
     accent: '#f1bd2b',
     previewId: 'MT78Q9kogpM',
@@ -25,7 +22,7 @@ const games = [
     type: 'Arcade',
     cue: 'Line it up, keep the tower alive, and beat your last run.',
     href: 'https://blockstacker.virzyguns.com',
-    image: '/games/block-stacker.jpg',
+    image: '/games/block-stacker.webp',
     imageAlt: 'Block Stacker game artwork with colorful stacked blocks',
     accent: '#5dddc3',
     previewId: '7gWp__E7d_c',
@@ -36,14 +33,14 @@ const games = [
     type: 'Rhythm',
     cue: 'Pick a track, follow the lane, and stay locked to the beat.',
     href: 'https://tapgroove.virzyguns.com',
-    image: '/games/tap-groove-home.jpg',
-    imageAlt: 'Tap Groove home screen with track selection and the Tap Groove logo',
+    image: '/games/tap-groove-home.webp',
+    imageAlt: 'Tap Groove logo over a neon rhythm-game scene',
     accent: '#ff4f9a',
     previewId: 'HV4rdhrGfMk',
   },
 ] as const;
 
-const socialImage = `${siteUrl}/games/tap-groove-home.jpg`;
+const socialImage = `${siteUrl}/games/tap-groove-home.webp`;
 
 export const metadata: Metadata = {
   title: 'VGP Games | Play in Your Browser',
@@ -56,7 +53,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/games`,
     siteName: 'Virzy Guns Production',
     type: 'website',
-    images: [{ url: socialImage, width: 360, height: 203, alt: 'VGP Games' }],
+    images: [{ url: socialImage, width: 1280, height: 720, alt: 'VGP Games' }],
   },
   twitter: {
     card: 'summary_large_image',

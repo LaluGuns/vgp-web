@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState, type CSSProperties } from 'react';
+import Link from 'next/link';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import styles from './games.module.css';
 
 type ArcadeGame = {
@@ -19,15 +20,35 @@ function PlayGlyph() {
   return <span aria-hidden="true" className={styles.playGlyph}>▶</span>;
 }
 
-function GameImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+function compactImage(src: string) {
+  return src.endsWith('.webp') ? src.replace(/\.webp$/, '-640.webp') : src;
+}
+
+function GameImage({
+  src,
+  alt,
+  className,
+  eager = false,
+  sizes = '100vw',
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  eager?: boolean;
+  sizes?: string;
+}) {
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
+      srcSet={`${compactImage(src)} 640w, ${src} 1280w`}
+      sizes={sizes}
+      width={1280}
+      height={720}
       alt={alt}
       className={className}
-      loading="eager"
+      loading={eager ? 'eager' : 'lazy'}
       decoding="async"
-      referrerPolicy="no-referrer"
       style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
     />
   );
@@ -39,6 +60,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
     return tapGrooveIndex >= 0 ? tapGrooveIndex : 0;
   });
   const [previewOpen, setPreviewOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const activeGame = games[activeIndex] ?? games[0];
 
   function choose(index: number) {
@@ -51,6 +73,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setPreviewOpen(false);
@@ -69,13 +92,13 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
     <section className={styles.hub} style={activeStyle} aria-label="VGP Games">
       <div className={styles.desktopExperience}>
         <header className={styles.desktopTopbar}>
-          <a href="/" className={styles.brandLockup} aria-label="VGP home">
+          <Link href="/" className={styles.brandLockup} aria-label="VGP home">
             <strong>VGP</strong>
             <span>Games</span>
-          </a>
+          </Link>
           <div className={styles.desktopTopbarRight}>
             <span className={styles.mantra}>100% Play. 100% VGP.</span>
-            <a href="/" className={styles.homeLink}>VGP Home</a>
+            <Link href="/" className={styles.homeLink}>VGP Home</Link>
           </div>
         </header>
 
@@ -101,7 +124,14 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
             </div>
 
             <div className={styles.desktopFeaturedMedia}>
-              <GameImage key={activeGame.slug} src={activeGame.image} alt={activeGame.imageAlt} className={styles.featureImage} />
+              <GameImage
+                key={activeGame.slug}
+                src={activeGame.image}
+                alt={activeGame.imageAlt}
+                className={styles.featureImage}
+                eager
+                sizes="(max-width: 1100px) 62vw, 900px"
+              />
             </div>
           </section>
 
@@ -131,7 +161,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                       onClick={() => choose(index)}
                     >
                       <span className={styles.desktopCardThumb}>
-                        <GameImage src={game.image} alt={game.imageAlt} />
+                        <GameImage src={game.image} alt={game.imageAlt} sizes="(max-width: 1100px) 33vw, 430px" />
                       </span>
                     </button>
                     <div className={styles.desktopCardFooter}>
@@ -156,17 +186,24 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
 
       <div className={styles.mobileExperience}>
         <header className={styles.mobileTopbar}>
-          <a href="/" className={styles.brandLockup} aria-label="VGP home">
+          <Link href="/" className={styles.brandLockup} aria-label="VGP home">
             <strong>VGP</strong>
             <span>Games</span>
-          </a>
-          <a href="/" className={styles.mobileHomeLink}>VGP</a>
+          </Link>
+          <Link href="/" className={styles.mobileHomeLink} style={{ minHeight: 44 }}>VGP</Link>
         </header>
 
         <div className={styles.mobileMain}>
           <section className={styles.mobileFeatured} aria-label={`Featured game: ${activeGame.title}`}>
             <div className={styles.mobileFeaturedArt}>
-              <GameImage key={activeGame.slug} src={activeGame.image} alt={activeGame.imageAlt} className={styles.featureImage} />
+              <GameImage
+                key={activeGame.slug}
+                src={activeGame.image}
+                alt={activeGame.imageAlt}
+                className={styles.featureImage}
+                eager
+                sizes="100vw"
+              />
             </div>
             <div className={styles.mobileFeaturedInfo}>
               <p className={styles.gameType}>{activeGame.type}</p>
@@ -201,16 +238,21 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                     className={styles.mobileGameRow}
                     style={{ '--game-accent': game.accent } as CSSProperties}
                   >
-                    <button type="button" className={styles.mobileRowSelect} onClick={() => choose(index)}>
+                    <button
+                      type="button"
+                      className={styles.mobileRowSelect}
+                      aria-label={`Feature ${game.title}`}
+                      onClick={() => choose(index)}
+                    >
                       <span className={styles.mobileRowThumb}>
-                        <GameImage src={game.image} alt="" />
+                        <GameImage src={game.image} alt="" sizes="126px" />
                       </span>
                       <span className={styles.mobileRowTitle}>
                         <small>{game.type}</small>
                         <strong>{game.title}</strong>
                       </span>
                     </button>
-                    <a href={game.href} className={styles.mobileRowPlay} aria-label={`Play ${game.title}`}>
+                    <a href={game.href} className={styles.mobileRowPlay} style={{ minWidth: 44, minHeight: 44 }} aria-label={`Play ${game.title}`}>
                       <PlayGlyph />
                     </a>
                   </article>
@@ -237,7 +279,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                 <small>Gameplay preview</small>
                 <strong>{activeGame.title}</strong>
               </div>
-              <button type="button" onClick={() => setPreviewOpen(false)} aria-label="Close preview">×</button>
+              <button ref={closeButtonRef} type="button" onClick={() => setPreviewOpen(false)} aria-label="Close preview">×</button>
             </div>
             <div className={styles.previewVideo}>
               <iframe
