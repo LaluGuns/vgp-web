@@ -112,7 +112,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                 <p className={styles.featureCue}>{activeGame.cue}</p>
               </div>
               <div className={styles.desktopActions}>
-                <a href={activeGame.href} className={styles.primaryButton}>
+                <a href={activeGame.href} target="_blank" rel="noopener noreferrer" className={styles.primaryButton}>
                   <span>Play</span>
                   <PlayGlyph />
                 </a>
@@ -169,7 +169,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                         <span className={styles.cardType}>{game.type}</span>
                         <strong>{game.title}</strong>
                       </button>
-                      <a href={game.href} className={styles.cardPlayLink} aria-label={`Play ${game.title}`}>
+                      <a href={game.href} target="_blank" rel="noopener noreferrer" className={styles.cardPlayLink} aria-label={`Play ${game.title}`}>
                         <span>Play</span>
                         <PlayGlyph />
                       </a>
@@ -210,7 +210,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
               <h1>{activeGame.title}</h1>
               <p>{activeGame.cue}</p>
               <div className={styles.mobileActions}>
-                <a href={activeGame.href} className={styles.primaryButton}>
+                <a href={activeGame.href} target="_blank" rel="noopener noreferrer" className={styles.primaryButton}>
                   <span>Play</span>
                   <PlayGlyph />
                 </a>
@@ -252,7 +252,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                         <strong>{game.title}</strong>
                       </span>
                     </button>
-                    <a href={game.href} className={styles.mobileRowPlay} style={{ minWidth: 44, minHeight: 44 }} aria-label={`Play ${game.title}`}>
+                    <a href={game.href} target="_blank" rel="noopener noreferrer" className={styles.mobileRowPlay} style={{ minWidth: 44, minHeight: 44 }} aria-label={`Play ${game.title}`}>
                       <PlayGlyph />
                     </a>
                   </article>
