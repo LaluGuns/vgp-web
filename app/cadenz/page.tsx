@@ -1,5 +1,8 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import CadenzClient from './CadenzClient';
+import { JsonLd } from '@/components/seo/JsonLd';
+
+const SITE_URL = 'https://www.virzyguns.com';
 
 export const metadata: Metadata = {
     title: 'CADENZ Running Music by BPM | 130-180 BPM',
@@ -45,6 +48,39 @@ export const metadata: Metadata = {
     },
 };
 
+const cadenzSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    '@id': `${SITE_URL}/cadenz#product`,
+    name: 'CADENZ',
+    url: `${SITE_URL}/cadenz`,
+    applicationCategory: 'HealthApplication',
+    description:
+        'A cadence-first music app from HealingWave Lab and Virzy Guns Production for runners and cyclists, built around original music and BPM targets.',
+    audience: [
+        {
+            '@type': 'Audience',
+            audienceType: 'Runners',
+        },
+        {
+            '@type': 'Audience',
+            audienceType: 'Cyclists',
+        },
+    ],
+    author: {
+        '@id': `${SITE_URL}/#organization`,
+    },
+    publisher: {
+        '@id': `${SITE_URL}/#organization`,
+    },
+    image: `${SITE_URL}/images/CADENZ_POSTER.jpg`,
+};
+
 export default function CadenzPage() {
-    return <CadenzClient />;
+    return (
+        <>
+            <JsonLd data={cadenzSchema} />
+            <CadenzClient />
+        </>
+    );
 }

@@ -119,6 +119,18 @@ export default async function RootLayout({
     return (
         <html lang={documentLang} className="lenis" data-scroll-behavior="smooth" suppressHydrationWarning>
             <head>
+                <link
+                    rel="alternate"
+                    type="application/json"
+                    href="/products/catalog.json"
+                    title="VGP Product Catalog"
+                />
+                <link
+                    rel="alternate"
+                    type="text/plain"
+                    href="/llms.txt"
+                    title="VGP LLM Discovery Index"
+                />
                 <script
                     nonce={nonce}
                     suppressHydrationWarning
@@ -143,13 +155,13 @@ export default async function RootLayout({
                 <OrganicDiscoveryAnalytics />
 
                 <NewsletterProvider>
-                        <SmoothScrollProvider>
-                            <LazyMotion features={domAnimation}>
-                                <AppFrame>
-                                    {children}
-                                </AppFrame>
-                            </LazyMotion>
-                        </SmoothScrollProvider>
+                    <SmoothScrollProvider>
+                        <LazyMotion features={domAnimation}>
+                            <AppFrame>
+                                {children}
+                            </AppFrame>
+                        </LazyMotion>
+                    </SmoothScrollProvider>
                 </NewsletterProvider>
             </body>
         </html>
