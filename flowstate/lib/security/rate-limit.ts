@@ -1,78 +1,87 @@
-/**
- * Lightweight fixed-window rate limiter.
- *
- * Default backend is in-memory (per-instance) — fine for a single Node process
- * and for dev. For multi-instance / serverless production, swap `MemoryStore`
- * for a Redis-backed store (ioredis with an atomic INCR + EXPIRE Lua script),
- * mirroring the pattern used in the main VGP repo. The `RateLimitStore`
- * interface keeps call sites unchanged.
- */
+import crypto from "node:crypto";
+import { createServiceClient } from "@/lib/supabase/server";
 
 export interface RateLimitResult {
   success: boolean;
   limit: number;
   remaining: number;
-  resetAt: number; // epoch ms
+  resetAt: number;
 }
 
-interface RateLimitStore {
-  hit(key: string, windowMs: number, limit: number): Promise<RateLimitResult>;
+function bucketHash(key: string): string {
+  return crypto.createHash("sha256").update(key).digest("hex");
 }
 
-class MemoryStore implements RateLimitStore {
-  private buckets = new Map<string, { count: number; resetAt: number }>();
-
-  constructor() {
-    // Periodic cleanup to bound memory (prevents the leak class of bug).
-    if (typeof setInterval !== "undefined") {
-      const t = setInterval(() => {
-        const now = Date.now();
-        for (const [k, v] of this.buckets) {
-          if (v.resetAt <= now) this.buckets.delete(k);
-        }
-      }, 60_000);
-      // Don't keep the event loop alive for this timer.
-      (t as { unref?: () => void }).unref?.();
-    }
-  }
-
-  async hit(key: string, windowMs: number, limit: number): Promise<RateLimitResult> {
-    const now = Date.now();
-    const existing = this.buckets.get(key);
-
-    if (!existing || existing.resetAt <= now) {
-      const resetAt = now + windowMs;
-      this.buckets.set(key, { count: 1, resetAt });
-      return { success: true, limit, remaining: limit - 1, resetAt };
-    }
-
-    existing.count += 1;
-    const remaining = Math.max(0, limit - existing.count);
-    return {
-      success: existing.count <= limit,
-      limit,
-      remaining,
-      resetAt: existing.resetAt,
-    };
-  }
+function validResetAt(value: unknown): number | null {
+  if (typeof value !== "string" || !value) return null;
+  const ms = new Date(value).getTime();
+  return Number.isFinite(ms) ? ms : null;
 }
-
-const store: RateLimitStore = new MemoryStore();
 
 /**
- * @param key    Unique key (e.g. `webhook:${ip}` or `signurl:${userId}`).
- * @param opts   limit = max requests per window; windowMs = window length.
+ * Distributed fixed-window limiter backed by Supabase/Postgres.
+ *
+ * The logical key is SHA-256 hashed before persistence. This keeps raw IP/user
+ * composites out of the rate-limit table and makes the limit shared across all
+ * Vercel instances.
+ *
+ * DB/RPC failure deliberately throws. Security-sensitive call sites should fail
+ * closed rather than silently falling back to a per-instance memory limiter.
  */
-export function rateLimit(
+export async function rateLimit(
   key: string,
-  opts: { limit: number; windowMs: number }
+  opts: { limit: number; windowMs: number },
 ): Promise<RateLimitResult> {
-  return store.hit(key, opts.windowMs, opts.limit);
+  if (!key || key.length > 2048) throw new Error("Invalid rate limit key");
+  if (!Number.isInteger(opts.limit) || opts.limit < 1 || opts.limit > 100_000) {
+    throw new Error("Invalid rate limit limit");
+  }
+  if (!Number.isInteger(opts.windowMs) || opts.windowMs < 1_000 || opts.windowMs > 86_400_000) {
+    throw new Error("Invalid rate limit window");
+  }
+
+  const supabase = await createServiceClient();
+  const { data, error } = await supabase.rpc("flowstate_consume_rate_limit", {
+    p_bucket_key: bucketHash(key),
+    p_limit: opts.limit,
+    p_window_ms: opts.windowMs,
+  });
+  if (error) throw error;
+
+  const row = Array.isArray(data) ? data[0] : data;
+  const resetAt = validResetAt(row?.reset_at);
+  const limit = Number(row?.limit_count);
+  const remaining = Number(row?.remaining);
+  if (
+    !row ||
+    typeof row.success !== "boolean" ||
+    !Number.isInteger(limit) ||
+    limit !== opts.limit ||
+    !Number.isInteger(remaining) ||
+    remaining < 0 ||
+    resetAt == null
+  ) {
+    throw new Error("Invalid rate limit backend response");
+  }
+
+  return {
+    success: row.success,
+    limit,
+    remaining,
+    resetAt,
+  };
 }
 
-/** Extract a best-effort client IP from request headers. */
+/**
+ * Best-effort client IP. Vercel's platform header is preferred when present.
+ * The IP is only used as part of a hashed rate-limit key and is never persisted raw.
+ */
 export function clientIp(headers: Headers): string {
-  const fwd = headers.get("x-forwarded-for");
-  if (fwd) return fwd.split(",")[0].trim();
-  return headers.get("x-real-ip") ?? "unknown";
+  const vercel = headers.get("x-vercel-forwarded-for");
+  if (vercel) return vercel.split(",")[0].trim().slice(0, 128);
+
+  const forwarded = headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim().slice(0, 128);
+
+  return (headers.get("x-real-ip") ?? "unknown").trim().slice(0, 128);
 }
