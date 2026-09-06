@@ -43,9 +43,9 @@ const games = [
     title: 'DIRIXA',
     type: 'Puzzle',
     cue: 'Clear open arrows, build Flow, and solve 180 tactile escape puzzles.',
-    href: 'https://play.google.com/store/apps/details?id=com.virzyguns.dirixa',
-    image: '/games/dirixa-icon.png',
-    imageAlt: 'DIRIXA arrow escape puzzle icon',
+    href: 'https://dirixa.virzyguns.com',
+    image: '/games/dirixa.webp',
+    imageAlt: 'DIRIXA arrow escape puzzle portal and board artwork',
     accent: '#ffd33d',
   },
 ] as const;
