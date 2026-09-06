@@ -75,7 +75,7 @@ export default function TermsPage() {
                     title: 'Disclaimer and liability',
                     content: (
                         <p>
-                            VGP services are provided on an "as available" basis to the extent permitted by law. Nothing in these Terms excludes rights or remedies that cannot legally be excluded. To the maximum extent permitted by law, PT Kreasi Virzy Nusantara is not responsible for indirect, incidental, special, or consequential losses arising from use of or inability to use a VGP service.
+                            VGP services are provided on an &quot;as available&quot; basis to the extent permitted by law. Nothing in these Terms excludes rights or remedies that cannot legally be excluded. To the maximum extent permitted by law, PT Kreasi Virzy Nusantara is not responsible for indirect, incidental, special, or consequential losses arising from use of or inability to use a VGP service.
                         </p>
                     ),
                 },
