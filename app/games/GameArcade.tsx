@@ -13,7 +13,7 @@ type ArcadeGame = {
   imageAlt: string;
   cue: string;
   accent: string;
-  previewId: string;
+  previewId?: string;
 };
 
 function PlayGlyph() {
@@ -116,10 +116,12 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                   <span>Play</span>
                   <PlayGlyph />
                 </a>
-                <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(true)}>
-                  <span>Watch preview</span>
-                  <PlayGlyph />
-                </button>
+                {activeGame.previewId ? (
+                  <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(true)}>
+                    <span>Watch preview</span>
+                    <PlayGlyph />
+                  </button>
+                ) : null}
               </div>
             </div>
 
@@ -214,10 +216,12 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
                   <span>Play</span>
                   <PlayGlyph />
                 </a>
-                <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(true)}>
-                  <span>Watch preview</span>
-                  <PlayGlyph />
-                </button>
+                {activeGame.previewId ? (
+                  <button type="button" className={styles.secondaryButton} onClick={() => setPreviewOpen(true)}>
+                    <span>Watch preview</span>
+                    <PlayGlyph />
+                  </button>
+                ) : null}
               </div>
             </div>
           </section>
@@ -265,7 +269,7 @@ export default function GameArcade({ games }: { games: readonly ArcadeGame[] }) 
         </div>
       </div>
 
-      {previewOpen ? (
+      {previewOpen && activeGame.previewId ? (
         <div className={styles.previewOverlay} role="presentation" onMouseDown={() => setPreviewOpen(false)}>
           <section
             className={styles.previewSheet}

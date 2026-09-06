@@ -38,13 +38,23 @@ const games = [
     accent: '#ff4f9a',
     previewId: 'HV4rdhrGfMk',
   },
+  {
+    slug: 'dirixa',
+    title: 'DIRIXA',
+    type: 'Puzzle',
+    cue: 'Clear open arrows, build Flow, and solve 180 tactile escape puzzles.',
+    href: 'https://play.google.com/store/apps/details?id=com.virzyguns.dirixa',
+    image: '/games/dirixa-icon.png',
+    imageAlt: 'DIRIXA arrow escape puzzle icon',
+    accent: '#ffd33d',
+  },
 ] as const;
 
 const socialImage = `${siteUrl}/games/tap-groove-home.webp`;
 
 export const metadata: Metadata = {
   title: 'VGP Games | Play in Your Browser',
-  description: 'Play VGP browser games from Virzy Guns Production, including Hear the Difference, Block Stacker, and Tap Groove.',
+  description: 'Play VGP browser games from Virzy Guns Production, including Hear the Difference, Block Stacker, Tap Groove, and DIRIXA.',
   alternates: { canonical: '/games' },
   robots: { index: true, follow: true },
   openGraph: {
