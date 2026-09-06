@@ -24,15 +24,19 @@ test("only configured variant IDs map to paid plans", () => {
   assert.equal(mapVariantToPlan("", variants), null);
 });
 
-test("dates and cancelled entitlements are handled conservatively", () => {
+test("dated subscriptions fail closed when their paid period is missing or ended", () => {
   assert.equal(validIsoDate("not-a-date"), null);
   assert.equal(validIsoDate("2026-07-12T00:00:00.000Z"), "2026-07-12T00:00:00.000Z");
   const now = Date.parse("2026-07-12T00:00:00.000Z");
-  assert.equal(isEntitlementActive("active", null, now), true);
+  assert.equal(isEntitlementActive("active", null, now), false);
+  assert.equal(isEntitlementActive("active", "2026-07-13T00:00:00.000Z", now), true);
   assert.equal(isEntitlementActive("cancelled", "2026-07-13T00:00:00.000Z", now), true);
   assert.equal(isEntitlementActive("cancelled", "2026-07-11T00:00:00.000Z", now), false);
   assert.equal(isEntitlementActive("cancelled", null, now), false);
   assert.equal(isEntitlementActive("past_due", "2026-07-13T00:00:00.000Z", now), false);
+  assert.equal(isEntitlementActive("active", null, now, "lifetime"), true);
+  assert.equal(isEntitlementActive("cancelled", null, now, "lifetime"), true);
+  assert.equal(isEntitlementActive("expired", null, now, "lifetime"), false);
 });
 
 test("profile plan selection preserves another valid subscription after a refund", () => {
@@ -42,7 +46,7 @@ test("profile plan selection preserves another valid subscription after a refund
     { status: "cancelled", plan: "monthly", current_period_end: future },
   ]), "monthly");
   assert.equal(selectActivePlan([
-    { status: "active", plan: "monthly" },
+    { status: "active", plan: "monthly", current_period_end: future },
     { status: "active", plan: "lifetime" },
   ]), "lifetime");
   assert.equal(selectActivePlan([{ status: "expired", plan: "yearly" }]), "free");

@@ -28,7 +28,7 @@ export function mapSubscriptionStatus(value: unknown): SubscriptionStatus | null
 
 export function mapVariantToPlan(
   variantId: unknown,
-  variants: { monthly?: string; yearly?: string; lifetime?: string }
+  variants: { monthly?: string; yearly?: string; lifetime?: string },
 ): SubscriptionPlan | null {
   const id = String(variantId ?? "");
   if (!id) return null;
@@ -47,16 +47,19 @@ export function validIsoDate(value: unknown): string | null {
 export function isEntitlementActive(
   status: SubscriptionStatus,
   endsAt: string | null,
-  now = Date.now()
+  now = Date.now(),
+  plan: SubscriptionPlan = "monthly",
 ): boolean {
-  if (status === "active" || status === "trialing") return true;
-  if (status !== "cancelled" || !endsAt) return false;
-  return new Date(endsAt).getTime() > now;
+  if (plan === "lifetime") {
+    return status === "active" || status === "trialing" || status === "cancelled";
+  }
+  if (!endsAt || new Date(endsAt).getTime() <= now) return false;
+  return status === "active" || status === "trialing" || status === "cancelled";
 }
 
 export function selectActivePlan(
   subscriptions: Array<{ status: unknown; plan: unknown; current_period_end?: unknown }>,
-  now = Date.now()
+  now = Date.now(),
 ): SubscriptionPlan | "free" {
   const priority: Record<SubscriptionPlan, number> = { monthly: 1, yearly: 2, lifetime: 3 };
   let selected: SubscriptionPlan | "free" = "free";
@@ -66,7 +69,7 @@ export function selectActivePlan(
     const plan = subscription.plan;
     if (!status || (plan !== "monthly" && plan !== "yearly" && plan !== "lifetime")) continue;
     const endsAt = validIsoDate(subscription.current_period_end);
-    if (!isEntitlementActive(status, endsAt, now)) continue;
+    if (!isEntitlementActive(status, endsAt, now, plan)) continue;
     if (selected === "free" || priority[plan] > priority[selected]) selected = plan;
   }
 

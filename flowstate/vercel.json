@@ -2,5 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "buildCommand": "next build",
-  "installCommand": "npm install --include=dev"
+  "installCommand": "npm install --include=dev",
+  "crons": [
+    {
+      "path": "/api/cron/google-play-voided",
+      "schedule": "0 3 * * *"
+    }
+  ]
 }
