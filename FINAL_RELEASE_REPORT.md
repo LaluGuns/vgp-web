@@ -102,8 +102,19 @@ Required DIRIXA privacy URL:
 
 `https://www.virzyguns.com/privacy/dirixa`
 
-The Play Console privacy URL was not changed during this execution because no authenticated Google Play Console connector or browser session was available in the current tool environment. No claim is made that the Play Console field has been updated.
+Play Console readback on 2026-09-06 confirmed the DIRIXA app field is saved with exactly this URL. The field is disabled after save. Publication overview shows one pending change, `Kirim 1 perubahan untuk ditinjau`, for this privacy URL. Play also shows the existing production review in progress since 6 September. Sending the pending change now would cancel and restart that review, so it was left pending to avoid resetting the production review.
+
+Verification performed:
+
+- Correct app header: `DIRIXA: Arrow Escape Puzzle`
+- Package: `com.virzyguns.dirixa`
+- Previous field readback: `https://www.virzyguns.com/privacy`
+- Saved field readback: `https://www.virzyguns.com/privacy/dirixa`
+- Publication overview pending row matches the exact URL
+- Live URL `https://www.virzyguns.com/privacy/dirixa` returned HTTP 200 and showed DIRIXA-specific policy text for PT Kreasi Virzy Nusantara, package `com.virzyguns.dirixa`, and Google Mobile Ads processing
+
+Current Play state: production submission 1 remains `Sedang ditinjau`; the privacy URL change is saved but pending a separate review submission.
 
 ## Final legal status
 
-DIRIXA RC13 legal pages are implemented, merged, deployed, and publicly verified. The only remaining external action is updating the Google Play Console privacy-policy field to the product-specific DIRIXA privacy URL when authenticated Play Console access is available.
+DIRIXA RC13 legal pages are implemented, merged, deployed, and publicly verified. Play Console now stores the DIRIXA-specific privacy URL. The URL change remains one pending publication change because Play warned that submitting it now would cancel and restart the active production review.
