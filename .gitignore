@@ -49,3 +49,10 @@ reports/
 .headroom-venv/
 .headroom-cache/
 .headroom-proxy.*
+
+# Local IDE state and transient dev-server output
+.vs/
+server-*.log
+server-*.txt
+stdout.txt
+stderr.txt

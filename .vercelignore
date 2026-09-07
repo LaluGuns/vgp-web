@@ -28,9 +28,24 @@
 # cannot match app/api/founder/flowstate/ or any other nested path.
 /flowstate/
 
+# Non-runtime source and QA material. Keep in Git, never upload to vgp-web.
+/audit/
+/docs/
+/plugins/
+/cloudflare/
+/.vs/
+
+# Accidental backup copies that are not Next.js route/module entrypoints.
+/lib/catalog/index (1).ts
+/app/ja-JP/studio/beats/page (1).tsx
+
 # Scratch and working notes (root level only)
 /scratch/
 /.playwright-cli/
+/server-*.log
+/server-*.txt
+/stdout.txt
+/stderr.txt
 
 # Build output and caches — these legitimately appear nested, so they stay
 # unanchored on purpose.
