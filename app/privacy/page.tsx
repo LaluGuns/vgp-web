@@ -69,6 +69,39 @@ export default function PrivacyPage() {
                     ),
                 },
                 {
+                    title: 'Cookies, local storage, and analytics',
+                    content: (
+                        <>
+                            <p>
+                                The public site does not currently require an account. Some features use browser local storage for preferences, bookmarks, newsletter state, or an anonymous analytics identifier. Your browser controls whether local storage and cookies are accepted; clearing them can reset those preferences.
+                            </p>
+                            <p>
+                                When configured, VGP uses PostHog for aggregate product and acquisition analytics. The site sends event context such as the page path and interaction type; it is not intended to receive newsletter message contents or payment credentials. Embedded BeatStars players and YouTube previews may also process technical information under their own policies when you load them.
+                            </p>
+                        </>
+                    ),
+                },
+                {
+                    title: 'Advertising and Google AdSense',
+                    content: (
+                        <>
+                            <p>
+                                VGP may place Google AdSense ads on selected game-related pages after the relevant publisher account and site review steps are complete. Ads are not intended to be placed indiscriminately across the website, and this policy does not mean that an ad is currently being served on every page.
+                            </p>
+                            <p>
+                                If Google ads are served, Google and other third-party vendors may use cookies, local storage, or similar technologies to serve and measure ads, including ads based on a user&apos;s prior visits to this website or other websites. Google&apos;s use of advertising cookies enables Google and its partners to serve ads based on those visits. The vendors that may be involved include Google and the advertising partners available through Google&apos;s publisher products; their processing is governed by their own policies.
+                            </p>
+                            <p>
+                                Users can manage or opt out of personalized advertising through{' '}
+                                <a className="text-sky-100 underline decoration-sky-200/30 underline-offset-4 hover:text-white" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>{' '}
+                                or, where available,{' '}
+                                <a className="text-sky-100 underline decoration-sky-200/30 underline-offset-4 hover:text-white" href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">aboutads.info</a>.
+                                Users in regions where consent is required may also be shown a consent message before relevant advertising technologies are used. VGP will use a Google-supported consent solution where required for the chosen ad configuration.
+                            </p>
+                        </>
+                    ),
+                },
+                {
                     title: 'BeatStars and external services',
                     content: (
                         <p>
@@ -108,11 +141,16 @@ export default function PrivacyPage() {
                     ),
                 },
                 {
-                    title: 'Policy updates',
+                    title: 'Product-specific notices and policy updates',
                     content: (
-                        <p>
-                            This policy may be updated when public services or applicable requirements change. Material updates will be posted on this page with a revised effective date.
-                        </p>
+                        <>
+                            <p>
+                                Founder OS provider connections and workspace data are covered by the separate <Link className="text-sky-100 underline decoration-sky-200/30 underline-offset-4 hover:text-white" href="/founder-os/privacy">Founder OS Privacy Policy</Link>. Product-specific notices for apps or games may add detail for their own data flows.
+                            </p>
+                            <p>
+                                This policy may be updated when public services or applicable requirements change. Material updates will be posted on this page with a revised effective date.
+                            </p>
+                        </>
                     ),
                 },
             ]}
