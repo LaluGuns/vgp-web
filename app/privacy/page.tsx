@@ -25,7 +25,7 @@ export default function PrivacyPage() {
             eyebrow="Virzy Guns Production"
             title="Privacy Policy"
             summary="This policy explains how Virzy Guns Production handles information on its public website and public VGP-operated services. Product-specific notices apply where a product has its own data flows."
-            effectiveDate="August 8, 2026"
+            effectiveDate="September 8, 2026"
             sections={[
                 {
                     title: 'Scope and operator',
