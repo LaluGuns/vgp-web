@@ -54,7 +54,7 @@ const games = [
     title: 'Rivet Works',
     type: 'Factory optimization',
     cue: 'Build the line, find the constraint, and rebuild smarter.',
-    href: 'https://rivet-works.vgunaone.workers.dev',
+    href: 'https://rivetworks.virzyguns.com',
     image: '/games/rivet-works.webp',
     imageAlt: 'Rivet Works factory machines and conveyors on a blueprint grid',
     accent: '#ffb51b',
