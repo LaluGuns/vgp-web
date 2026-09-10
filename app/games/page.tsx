@@ -43,11 +43,21 @@ const games = [
     slug: 'dirixa',
     title: 'DIRIXA',
     type: 'Puzzle',
-    cue: 'Clear open arrows, build Flow, and solve 180 tactile escape puzzles.',
+    cue: 'Open the route, move the Flow, and clear the board one decision at a time.',
     href: 'https://dirixa.virzyguns.com',
     image: '/games/dirixa.webp',
     imageAlt: 'DIRIXA arrow escape puzzle portal and board artwork',
     accent: '#ffd33d',
+  },
+  {
+    slug: 'rivet-works',
+    title: 'Rivet Works',
+    type: 'Factory optimization',
+    cue: 'Build the line, find the constraint, and rebuild smarter.',
+    href: 'https://play.google.com/store/apps/details?id=com.virzyguns.rivetworks',
+    image: '/games/rivet-works.webp',
+    imageAlt: 'Rivet Works factory machines and conveyors on a blueprint grid',
+    accent: '#ffb51b',
   },
 ] as const;
 
@@ -55,7 +65,7 @@ const socialImage = `${siteUrl}/games/tap-groove-home.webp`;
 
 export const metadata: Metadata = {
   title: 'VGP Games | Play in Your Browser',
-  description: 'Play VGP browser games from Virzy Guns Production, including Hear the Difference, Block Stacker, Tap Groove, and DIRIXA.',
+  description: 'Play VGP games from Virzy Guns Production: audio puzzles, precision arcade, rhythm, arrow escape, and factory optimization.',
   alternates: { canonical: '/games' },
   robots: { index: true, follow: true },
   openGraph: {
@@ -114,28 +124,33 @@ export default function GamesPage() {
       <section className={styles.infoSection} aria-labelledby="game-guides-title">
         <div className={styles.infoInner}>
           <p className={styles.infoEyebrow}>Before you play</p>
-          <h2 id="game-guides-title">Four games, four ways to play</h2>
-          <p className={styles.infoLead}>Each VGP game is made for a short, focused session. Choose a game below to understand the objective before opening its separate play site.</p>
+          <h2 id="game-guides-title">Five games, five ways to play</h2>
+          <p className={styles.infoLead}>Each VGP game turns a focused idea into a clean challenge. Choose a game below, learn the objective, then open the play site.</p>
           <div className={styles.guideGrid}>
             <article className={styles.guideCard}>
               <h3>Hear the Difference</h3>
-              <p>Listen to Melody A, compare Melody B, then choose the one position that changed. Replay is available, but the 12-second answer clock keeps running.</p>
-              <p className={styles.guideMeta}>Solo: one miss ends the run · Daily: five puzzles · Versus: seven rounds</p>
+              <p>Listen close, compare the melodies, and find the one note that moved before the clock runs out.</p>
+              <p className={styles.guideMeta}>Solo, Daily, and Versus modes</p>
             </article>
             <article className={styles.guideCard}>
               <h3>Block Stacker</h3>
-              <p>Tap to place the moving block. Only the overlapping part survives, so accurate timing keeps the tower alive and builds a combo.</p>
+              <p>Place each moving block cleanly. The overlap keeps the tower alive, and sharper timing builds the streak.</p>
               <p className={styles.guideMeta}>Modes: Solo and Daily Challenge</p>
             </article>
             <article className={styles.guideCard}>
               <h3>Tap Groove</h3>
-              <p>Choose a track and difficulty, then follow the on-screen rhythm lane after the countdown. The game prepares the audio before play begins.</p>
+              <p>Choose a track, lock to the lane after the countdown, and keep the groove alive through every section.</p>
               <p className={styles.guideMeta}>Difficulty: Easy, Normal, Hard, Expert</p>
             </article>
             <article className={styles.guideCard}>
               <h3>DIRIXA</h3>
-              <p>Clear arrow escape puzzles by opening a route through the board. The current web release contains 180 tactile puzzles and tracks daily progress.</p>
+              <p>Open a route through the arrow board, move the Flow, and make each decision count across 180 tactile puzzles.</p>
               <p className={styles.guideMeta}>Puzzle goal: open the path and keep the Flow moving</p>
+            </article>
+            <article className={styles.guideCard}>
+              <h3>Rivet Works</h3>
+              <p>Build a production chain, spot the bottleneck, and tune the machine that actually matters. Every rebuild makes the next line stronger.</p>
+              <p className={styles.guideMeta}>Android game · eight languages · optional purchases</p>
             </article>
           </div>
           <nav className={styles.infoLinks} aria-label="VGP Games legal and company links">
