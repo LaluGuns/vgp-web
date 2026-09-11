@@ -1,5 +1,8 @@
 ﻿import type { Metadata } from 'next';
 import MasterclassClient from './MasterclassClient';
+import { JsonLd } from '@/components/seo/JsonLd';
+
+const SITE_URL = 'https://www.virzyguns.com';
 
 export const metadata: Metadata = {
     title: 'Music Production Masterclass | VGP',
@@ -18,6 +21,27 @@ export const metadata: Metadata = {
     },
 };
 
+const masterclassSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    '@id': `${SITE_URL}/studio/masterclass#product`,
+    name: 'VGP Music Production Masterclass',
+    url: `${SITE_URL}/studio/masterclass`,
+    description:
+        'Upcoming practical producer education covering workflow, sound design, mixing, mastering, trap production, and release decisions.',
+    provider: {
+        '@id': `${SITE_URL}/#organization`,
+    },
+    author: {
+        '@id': `${SITE_URL}/#founder`,
+    },
+};
+
 export default function MasterclassPage() {
-    return <MasterclassClient />;
+    return (
+        <>
+            <JsonLd data={masterclassSchema} />
+            <MasterclassClient />
+        </>
+    );
 }

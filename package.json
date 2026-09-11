@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "validate:ai-discovery": "node scripts/validate-ai-discovery.mjs"
     },
     "dependencies": {
         "@splinetool/react-spline": "^4.1.0",
