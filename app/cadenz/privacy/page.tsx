@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { PolicyPage } from '@/components/policies/PolicyPage';
 
 export const metadata: Metadata = {
@@ -23,8 +24,8 @@ export default function CadenzPrivacyPage() {
         <PolicyPage
             eyebrow="CADENZ · Virzy Guns Production"
             title="Privacy Policy"
-            summary="CADENZ is currently pre-launch. This is the canonical product privacy URL. The policy below describes the current app data flows; any release-specific processor details will be reconciled here before public release."
-            effectiveDate="upon public launch"
+            summary="This policy describes the current CADENZ app data flows and privacy controls, including how users can request account and associated-data deletion."
+            effectiveDate="September 27, 2026"
             sections={[
                 {
                     title: 'Operator and scope',
@@ -89,15 +90,17 @@ export default function CadenzPrivacyPage() {
                                 <li>RevenueCat for subscription management.</li>
                                 <li>Apple App Store and Google Play for payment processing.</li>
                                 <li>Sentry for crash and diagnostic reporting when configured for the release.</li>
+                                <li>Amazon S3 and Amazon CloudFront for private audio delivery; Supabase Storage may be used as an alternative delivery path.</li>
                             </ul>
                             <p>
-                                CADENZ uses private, server-authorized audio delivery. The final underlying production storage/CDN provider will be reflected on this page before public release if additional disclosure is required.
+                                Private audio is delivered through Amazon CloudFront backed by AWS S3 when selected by server configuration; Supabase Storage is available as a configured fallback. Audio is authorized server-side with short-lived signed URLs.
                             </p>
                         </>
                     ),
                 },
                 {
                     title: 'Your controls',
+                    id: 'data-deletion',
                     content: (
                         <ul className={listClass}>
                             <li>Update supported profile information in the app.</li>
@@ -105,7 +108,8 @@ export default function CadenzPrivacyPage() {
                             <li>Revoke route-sync consent from Settings for future eligible route synchronization.</li>
                             <li>Revoke location, background-location, or motion permission in device settings.</li>
                             <li>Delete your CADENZ account from Settings. Local finalization may retry if an interrupted cleanup cannot complete immediately.</li>
-                            <li>Contact the owner using the email shown below for privacy or data requests.</li>
+                            <li>Request deletion of your CADENZ account and associated account data at <Link className="font-semibold text-sky-100 underline underline-offset-4" href="/cadenz/delete-account">the CADENZ account deletion page</Link>. This request can be sent without signing in to or reinstalling the app.</li>
+                            <li>Contact the owner using the email shown below for other privacy or data requests.</li>
                         </ul>
                     ),
                 },
@@ -127,10 +131,10 @@ export default function CadenzPrivacyPage() {
                     content: (
                         <>
                             <p>
-                                CADENZ is not designed or marketed as a service for children. Any age-specific requirement that applies to the final release jurisdiction will be reflected in the effective release policy rather than guessed in this pre-launch notice.
+                                CADENZ is not designed or marketed as a service for children. This policy does not set an age threshold. Follow age requirements that apply under local law or in the store where you access CADENZ.
                             </p>
                             <p>
-                                This page may be updated before launch as release infrastructure and store disclosures are finalized. Material post-launch changes will be reflected here with an updated policy date.
+                                This page may be updated as CADENZ data flows, service providers, or applicable requirements change. Material updates will be reflected here with a revised effective date.
                             </p>
                         </>
                     ),
