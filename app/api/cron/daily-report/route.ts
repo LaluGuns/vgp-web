@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
                 }
             );
             if (apiRes.ok) {
-                const data = await apiRes.json();
+                const data: any = await apiRes.json();
                 const score = Math.round((data.lighthouseResult?.categories?.performance?.score || 0) * 100);
                 if (score > 0) {
                     pageSpeedScore = score;
