@@ -39,6 +39,10 @@
     "node_modules",
     "flowstate",
     "cloudflare",
-    "scripts"
+    "scripts",
+    "release-clones",
+    "worktrees",
+    ".codex-temp",
+    ".codex-worktrees"
   ]
 }
