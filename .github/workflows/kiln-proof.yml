@@ -1,0 +1,154 @@
+name: kiln-proof
+
+on:
+  push:
+    branches:
+      - tmp-kiln-proof-20261002
+
+jobs:
+  kiln-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Kiln
+        uses: actions/checkout@v4
+        with:
+          repository: matthew-kissinger/kiln
+          ref: v0.9.0
+          path: kiln
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+
+      - name: Install Kiln dependencies
+        working-directory: kiln
+        run: bun install --frozen-lockfile
+
+      - name: Author conveyor source
+        shell: bash
+        run: |
+          cat > kiln/conveyor.kiln.js <<'EOF'
+          const meta = { name: 'RivetWorksConveyor', category: 'prop' };
+
+          function build() {
+            const root = createRoot('RivetWorksConveyor');
+
+            const frame = gameMaterial(0x2f343a, { metalness: 0.7, roughness: 0.38 });
+            const frameDark = gameMaterial(0x181b1f, { metalness: 0.55, roughness: 0.52 });
+            const rollerMat = gameMaterial(0x8a9199, { metalness: 0.8, roughness: 0.32 });
+            const beltMat = gameMaterial(0x24272b, { roughness: 0.82 });
+            const motorMat = gameMaterial(0x4b5560, { metalness: 0.65, roughness: 0.4 });
+            const accent = gameMaterial(0xd56b2f, { metalness: 0.25, roughness: 0.48 });
+
+            const L = 3.2;
+            const W = 1.0;
+            const deckY = 0.92;
+            const railZ = W / 2 + 0.08;
+
+            createPart('BeltTop', boxGeo(L, 0.055, W), beltMat, {
+              position: [0, deckY, 0],
+              parent: root,
+            });
+
+            for (const z of [-railZ, railZ]) {
+              createPart(`SideRail_${z < 0 ? 'L' : 'R'}`, boxGeo(L + 0.12, 0.16, 0.08), frame, {
+                position: [0, deckY + 0.06, z],
+                parent: root,
+              });
+            }
+
+            const rollerCount = 12;
+            for (let i = 0; i < rollerCount; i++) {
+              const x = -L / 2 + 0.16 + i * ((L - 0.32) / (rollerCount - 1));
+              createPart(`Roller_${i + 1}`, cylinderGeo(0.075, 0.075, W + 0.10, 18), rollerMat, {
+                position: [x, deckY - 0.055, 0],
+                rotation: [90, 0, 0],
+                parent: root,
+              });
+            }
+
+            const legXs = [-1.15, 1.15];
+            for (const x of legXs) {
+              for (const z of [-0.40, 0.40]) {
+                createPart(`Leg_${x < 0 ? 'A' : 'B'}_${z < 0 ? 'L' : 'R'}`, boxGeo(0.10, 0.84, 0.10), frameDark, {
+                  position: [x, 0.44, z],
+                  parent: root,
+                });
+                createPart(`Foot_${x < 0 ? 'A' : 'B'}_${z < 0 ? 'L' : 'R'}`, boxGeo(0.30, 0.07, 0.22), frameDark, {
+                  position: [x, 0.035, z],
+                  parent: root,
+                });
+              }
+              createPart(`CrossBeam_${x < 0 ? 'A' : 'B'}`, boxGeo(0.12, 0.10, 0.90), frame, {
+                position: [x, 0.48, 0],
+                parent: root,
+              });
+            }
+
+            createPart('LowerBrace', boxGeo(2.45, 0.08, 0.10), frameDark, {
+              position: [0, 0.36, 0],
+              parent: root,
+            });
+
+            createPart('MotorBody', cylinderGeo(0.20, 0.20, 0.42, 24), motorMat, {
+              position: [1.28, 0.62, 0.64],
+              rotation: [90, 0, 0],
+              parent: root,
+            });
+            createPart('MotorCap', cylinderGeo(0.16, 0.16, 0.08, 24), accent, {
+              position: [1.28, 0.62, 0.89],
+              rotation: [90, 0, 0],
+              parent: root,
+            });
+            createPart('Gearbox', boxGeo(0.34, 0.34, 0.34), frame, {
+              position: [1.28, 0.62, 0.38],
+              parent: root,
+            });
+
+            createPart('GuardPlate', boxGeo(0.55, 0.42, 0.05), accent, {
+              position: [1.28, 0.68, 0.59],
+              parent: root,
+            });
+
+            return root;
+          }
+          EOF
+
+      - name: Render Kiln teaching example
+        working-directory: kiln
+        env:
+          KILN_RENDER: cpu
+        run: |
+          mkdir -p out
+          bun run kiln render examples/crate.kiln.js --out out/crate.glb --views out/crate-sheet.png --render cpu --json | tee out/crate.json
+
+      - name: Render custom conveyor with Kiln
+        working-directory: kiln
+        env:
+          KILN_RENDER: cpu
+        run: |
+          bun run kiln render conveyor.kiln.js --out out/conveyor.glb --views out/conveyor-sheet.png --render cpu --json | tee out/conveyor.json
+
+      - name: Record proof
+        working-directory: kiln
+        run: |
+          {
+            echo "Kiln version/tag: v0.9.0"
+            echo "Bun: $(bun --version)"
+            echo "Node: $(node --version)"
+            echo
+            ls -lh out
+            echo
+            sha256sum out/*
+          } | tee out/proof.txt
+
+      - name: Upload proof artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiln-proof-artifacts
+          path: |
+            kiln/out/
+            kiln/conveyor.kiln.js
+          if-no-files-found: error
