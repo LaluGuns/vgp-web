@@ -26,7 +26,7 @@ jobs:
         working-directory: kiln
         run: bun install --frozen-lockfile
 
-      - name: Author conveyor source
+      - name: Author conveyor source after QA review
         shell: bash
         run: |
           cat > kiln/conveyor.kiln.js <<'EOF'
@@ -62,8 +62,8 @@ jobs:
             const rollerCount = 12;
             for (let i = 0; i < rollerCount; i++) {
               const x = -L / 2 + 0.16 + i * ((L - 0.32) / (rollerCount - 1));
-              createPart(`Roller_${i + 1}`, cylinderGeo(0.075, 0.075, W + 0.10, 18), rollerMat, {
-                position: [x, deckY - 0.055, 0],
+              createPart(`Roller_${i + 1}`, cylinderGeo(0.075, 0.075, W + 0.04, 18), rollerMat, {
+                position: [x, deckY - 0.105, 0],
                 rotation: [90, 0, 0],
                 parent: root,
               });
@@ -87,28 +87,30 @@ jobs:
               });
             }
 
-            createPart('LowerBrace', boxGeo(2.45, 0.08, 0.10), frameDark, {
-              position: [0, 0.36, 0],
+            for (const z of [-0.40, 0.40]) {
+              createPart(`LowerBrace_${z < 0 ? 'L' : 'R'}`, boxGeo(2.35, 0.08, 0.08), frameDark, {
+                position: [0, 0.36, z],
+                parent: root,
+              });
+            }
+
+            const driveX = 1.45;
+            createPart('Gearbox', boxGeo(0.30, 0.32, 0.30), frame, {
+              position: [driveX, 0.62, 0.37],
               parent: root,
             });
-
-            createPart('MotorBody', cylinderGeo(0.20, 0.20, 0.42, 24), motorMat, {
-              position: [1.28, 0.62, 0.64],
+            createPart('MotorBody', cylinderGeo(0.18, 0.18, 0.36, 24), motorMat, {
+              position: [driveX, 0.62, 0.69],
               rotation: [90, 0, 0],
               parent: root,
             });
-            createPart('MotorCap', cylinderGeo(0.16, 0.16, 0.08, 24), accent, {
-              position: [1.28, 0.62, 0.89],
+            createPart('MotorCap', cylinderGeo(0.145, 0.145, 0.07, 24), accent, {
+              position: [driveX, 0.62, 0.905],
               rotation: [90, 0, 0],
               parent: root,
             });
-            createPart('Gearbox', boxGeo(0.34, 0.34, 0.34), frame, {
-              position: [1.28, 0.62, 0.38],
-              parent: root,
-            });
-
-            createPart('GuardPlate', boxGeo(0.55, 0.42, 0.05), accent, {
-              position: [1.28, 0.68, 0.59],
+            createPart('DriveMount', boxGeo(0.38, 0.08, 0.46), accent, {
+              position: [driveX, 0.39, 0.52],
               parent: root,
             });
 
@@ -147,7 +149,7 @@ jobs:
       - name: Upload proof artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: kiln-proof-artifacts
+          name: kiln-proof-artifacts-r2
           path: |
             kiln/out/
             kiln/conveyor.kiln.js
