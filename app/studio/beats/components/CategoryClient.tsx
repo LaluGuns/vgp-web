@@ -2,17 +2,21 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { m } from 'framer-motion';
-import { ArrowDown, ExternalLink, ShoppingBag } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionShell } from '@/components/editorial/EditorialPrimitives';
-import { revealUp } from '@/lib/motion-presets';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import { CategoryDef, BeatProduct } from '@/lib/catalog';
-import { getBeatSummary } from '@/lib/seo/beat-copy';
 import { getGenreTheme } from '@/lib/genre-theme';
-import { getEditorialBeatWorld } from '@/lib/catalog/beatstars-genre-index';
-import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
 import BeatStarsCheckoutModal from './BeatStarsCheckoutModal';
+import { StorePlayerProvider } from './BeatStorePlayer';
+import { BeatStoreRow } from './BeatStoreRow';
+import { toBeatRow } from './beat-row-data';
+
+const rowCopy = {
+    'en-US': { play: 'Play', pause: 'Pause', license: 'License' },
+    'ja-JP': { play: '再生', pause: '一時停止', license: 'ライセンス' },
+    'de-DE': { play: 'Abspielen', pause: 'Pausieren', license: 'Lizenz' },
+} as const;
 
 interface CategoryClientProps {
     category: CategoryDef;
@@ -65,156 +69,117 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
     const soundChar = category.soundCharacter[locale] || category.soundCharacter['en-US'] || '';
     const vocalFit = category.recommendedVocalFit[locale] || category.recommendedVocalFit['en-US'] || '';
 
-    return (
-        <PageTransition>
-            <article className={`editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24 ${categoryTheme.world}`}>
-                <div className="mx-auto mb-5 flex max-w-7xl items-center justify-between px-6">
-                    <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                        <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
-                        <span>/</span>
-                        <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">{text.beats}</Link>
-                        <span>/</span>
-                        <span className="text-white/60">{title}</span>
-                    </nav>
+    const rows = beats.map((beat) => toBeatRow(beat, getLocalePath(`/studio/beats/${beat.slug}`)));
+    const licenseBeatById = (beatId: string) => {
+        const beat = beats.find((item) => item.id === beatId);
+        if (beat) openCheckout([beat]);
+    };
 
-                    <div className="flex items-center gap-2 text-xs text-white/50">
-                        <Link href={`/studio/beats/${category.slug}`} className={`hover:text-white transition ${locale === 'en-US' ? 'text-white font-bold' : ''}`}>EN</Link>
-                        <span>|</span>
-                        <Link href={`/ja-JP/studio/beats/${category.slug}`} className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-white font-bold' : ''}`}>JA</Link>
-                        <span>|</span>
-                        <Link href={`/de-DE/studio/beats/${category.slug}`} className={`hover:text-white transition ${locale === 'de-DE' ? 'text-white font-bold' : ''}`}>DE</Link>
+    return (
+        <StorePlayerProvider locale={locale} onLicense={licenseBeatById}>
+        <PageTransition>
+            <article className="editorial-shell min-h-screen pb-28 pt-6 text-white sm:pt-10">
+                <div className="px-4 sm:px-6">
+                    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 text-sm text-white/55">
+                        <nav aria-label="Breadcrumb" className="flex items-center gap-2">
+                            <Link href={getLocalePath('/studio/beats')} className="transition-colors hover:text-white">{text.beats}</Link>
+                            <span aria-hidden="true">/</span>
+                            <span className="text-white/80">{title}</span>
+                        </nav>
+                        <div className="flex items-center gap-4" aria-label="Language">
+                            {([
+                                ['en-US', `/studio/beats/${category.slug}`, 'EN'],
+                                ['ja-JP', `/ja-JP/studio/beats/${category.slug}`, 'JA'],
+                                ['de-DE', `/de-DE/studio/beats/${category.slug}`, 'DE'],
+                            ] as const).map(([code, href, label]) => (
+                                <Link
+                                    key={code}
+                                    href={href}
+                                    hrefLang={code}
+                                    aria-current={locale === code ? 'page' : undefined}
+                                    className={`inline-flex min-h-11 items-center transition-colors hover:text-white ${locale === code ? 'text-white underline decoration-white/40 underline-offset-[6px]' : ''}`}
+                                >
+                                    {label}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                <SectionShell id="category-intro" className="!py-6 sm:!py-8 lg:!py-10">
-                    <div className={`mx-auto max-w-7xl overflow-hidden rounded-lg border px-5 py-7 sm:px-8 sm:py-9 ${categoryTheme.surface}`}>
-                        <p className={`text-xs font-semibold ${categoryTheme.tag}`}>
-                            VGP Beat Store / {category.primaryGenre}
+                <header data-enter="" className="border-b border-white/10 px-4 pb-14 pt-8 sm:px-6 lg:pb-20">
+                    <div className="mx-auto max-w-7xl">
+                        <p className="inline-flex items-center gap-2 text-sm text-white/55">
+                            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: categoryTheme.accentHex }} aria-hidden="true" />
+                            {category.primaryGenre}
                         </p>
-                        <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                            <div className="max-w-3xl">
-                                <h1 className="font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-                                    {title}
-                                </h1>
-                                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70 sm:text-base">
-                                    {shortDesc}
-                                </p>
-                            </div>
-                            <p className="max-w-xs border-l border-white/15 pl-4 text-sm leading-6 text-white/60 sm:pb-1">
-                                {text.muted}
-                            </p>
+                        <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.96] tracking-[-0.045em]">
+                            {title}
+                        </h1>
+                        <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{shortDesc}</p>
+                        <p className="mt-3 max-w-2xl text-sm leading-6 text-white/50">{text.storeDescription}</p>
+                        <div className="mt-9">
+                            <button
+                                type="button"
+                                onClick={() => document.getElementById('matching-beats')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="group/button inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-[background-color,transform] duration-200 hover:bg-white/85 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+                            >
+                                {text.storeCta}
+                                <ArrowDown className="h-4 w-4 transition-transform duration-300 group-hover/button:translate-y-0.5" aria-hidden="true" />
+                            </button>
                         </div>
                     </div>
-                </SectionShell>
+                </header>
 
-                <SectionShell id="official-store-link" className="!py-6 sm:!py-8">
-                    <div className="mx-auto flex max-w-7xl flex-col gap-4 rounded-md border border-white/[0.1] bg-white/[0.02] px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
-                        <p className="max-w-2xl text-sm leading-6 text-white/65">
-                            {text.storeDescription}
-                        </p>
-                        <button
-                            type="button"
-                            onClick={() => document.getElementById('matching-beats')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white transition hover:bg-white/[0.07]"
-                        >
-                            {text.storeCta}
-                            <ArrowDown className="h-3.5 w-3.5" aria-hidden="true" />
-                        </button>
-                    </div>
-                </SectionShell>
-
-                {/* Matching Beats Inventory */}
-                <SectionShell id="matching-beats" className="!py-8 sm:!py-10">
+                <section id="matching-beats" aria-labelledby="matching-heading" className="scroll-mt-24 px-4 py-14 sm:px-6 lg:py-20">
                     <div className="mx-auto max-w-7xl">
-                        <h2 className="font-display text-2xl font-semibold text-white mb-6">
+                        <h2 id="matching-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                             {text.available(beats.length)}
                         </h2>
-
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {beats.map((beat) => {
-                                const editorialWorld = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
-                                const theme = getGenreTheme(editorialWorld);
-                                return (
-                                    <article
-                                        key={beat.id}
-                                        className={`group relative flex min-h-[20.5rem] flex-col gap-3 overflow-hidden rounded-lg border p-4 transition before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] sm:p-5 ${theme.world} ${theme.card} ${theme.edge}`}
-                                    >
-                                        <div className="h-[8.25rem]">
-                                            <div className={`flex items-center justify-between text-xs font-semibold ${theme.tag}`}>
-                                                <span className="flex items-center gap-2 "><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{editorialWorld}</span>
-                                                <span className="font-mono text-white/40">#{beat.beatstarsTrackId}</span>
-                                            </div>
-                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition hover:text-white">{beat.title}</h3>
-                                            <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
-                                                {getBeatSummary(beat, locale)}
-                                            </p>
-                                        </div>
-
-                                        <BeatStarsAudioPlayer
-                                            trackId={beat.beatstarsTrackId}
-                                            productUrl={beat.beatstarsProductUrl}
-                                            beatTitle={beat.title}
-                                            locale={locale}
-                                            showArtwork
-                                        />
-
-                                        <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
-                                            <Link
-                                                href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-white/15 px-3 font-semibold text-white/80 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                            >
-                                                {text.details}
-                                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                                            </Link>
-                                            <button
-                                                type="button"
-                                                onClick={() => openCheckout([beat])}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md bg-white px-3 font-semibold text-slate-950 transition hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                            >
-                                                {text.buy(beat.licenses[0]?.price || '')}
-                                                <ShoppingBag className="h-3 w-3" aria-hidden="true" />
-                                            </button>
-                                        </div>
-                                    </article>
-                                );
-                            })}
-                        </div>
+                        <ol className="mt-8 divide-y divide-white/[0.06] border-y border-white/10">
+                            {rows.map((row, index) => (
+                                <BeatStoreRow
+                                    key={row.beatId}
+                                    beat={row}
+                                    queue={rows}
+                                    index={index + 1}
+                                    labels={{
+                                        play: rowCopy[locale].play,
+                                        pause: rowCopy[locale].pause,
+                                        license: rowCopy[locale].license,
+                                        shortlist: '',
+                                        shortlisted: '',
+                                        shortlistFull: '',
+                                        details: text.details,
+                                    }}
+                                    onLicense={() => openCheckout([beats[index]])}
+                                />
+                            ))}
+                        </ol>
                     </div>
-                </SectionShell>
+                </section>
 
-                {/* Category Educational Content & Vocal Guidance */}
-                <SectionShell id="guidance" className="border-t border-white/10 py-14">
-                    <div className="mx-auto max-w-7xl grid gap-8 md:grid-cols-2">
-                        <div className="rounded-md border border-white/10 bg-white/[0.02] p-6">
-                            <h3 className="text-lg font-semibold text-white">{text.sound}</h3>
-                            <p className="mt-3 text-xs leading-6 text-white/70">
-                                {soundChar}
-                            </p>
+                <section data-reveal="" aria-label={`${text.sound} · ${text.vocal}`} className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                    <dl className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 md:gap-16">
+                        <div>
+                            <dt className="text-xl font-semibold text-white">{text.sound}</dt>
+                            <dd className="mt-3 text-base leading-7 text-white/70">{soundChar}</dd>
                         </div>
-
-                        <div className="rounded-md border border-white/10 bg-white/[0.02] p-6">
-                            <h3 className="text-lg font-semibold text-white">{text.vocal}</h3>
-                            <p className="mt-3 text-xs leading-6 text-white/70">
-                                {vocalFit}
-                            </p>
+                        <div>
+                            <dt className="text-xl font-semibold text-white">{text.vocal}</dt>
+                            <dd className="mt-3 text-base leading-7 text-white/70">{vocalFit}</dd>
                         </div>
-                    </div>
-                </SectionShell>
+                    </dl>
+                </section>
 
-                {/* Licensing Cross-Link */}
-                <SectionShell id="licensing-cta" className="border-t border-white/10 py-10 text-center">
-                    <div className="mx-auto max-w-2xl">
-                        <h3 className="text-xl font-semibold text-white">{text.licensingTitle}</h3>
-                        <p className="mt-2 text-sm text-white/60">{text.licensingSub}</p>
-                        <Link
-                            href={getLocalePath('/studio/beats/licensing')}
-                            className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/[0.07]"
-                        >
-                            {text.licensingCta}
-                            <ExternalLink className="h-4 w-4" />
-                        </Link>
+                <section data-reveal="" className="border-t border-white/10 px-4 py-16 sm:px-6">
+                    <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h2 className="text-xl font-semibold text-white">{text.licensingTitle}</h2>
+                            <p className="mt-2 max-w-xl text-base leading-7 text-white/65">{text.licensingSub}</p>
+                        </div>
+                        <TextLink href={getLocalePath('/studio/beats/licensing')}>{text.licensingCta}</TextLink>
                     </div>
-                </SectionShell>
+                </section>
 
                 <BeatStarsCheckoutModal
                     open={checkoutOpen}
@@ -224,5 +189,6 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                 />
             </article>
         </PageTransition>
+        </StorePlayerProvider>
     );
 }

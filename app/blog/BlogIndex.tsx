@@ -85,6 +85,8 @@ function ArticleRow({
     );
 }
 
+const PAGE_SIZE = 20;
+
 export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -136,6 +138,11 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
             return matchesCategory && matchesSearch && matchesBookmark;
         });
     }, [articles, selectedCategory, searchQuery, showBookmarkedOnly, bookmarkedSlugs]);
+
+    // Show the library in pages of 20. The count resets whenever the filters change.
+    const filterKey = `${selectedCategory}|${searchQuery}|${showBookmarkedOnly}`;
+    const [limit, setLimit] = useState({ key: filterKey, count: PAGE_SIZE });
+    const visibleCount = limit.key === filterKey ? limit.count : PAGE_SIZE;
 
     const showFeaturedArticle = Boolean(featuredArticle && !searchQuery && selectedCategory === 'all' && !showBookmarkedOnly);
     const libraryArticles = showFeaturedArticle
@@ -237,7 +244,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
 
                                 {libraryArticles.length > 0 ? (
                                     <ul className="divide-y divide-white/10">
-                                        {libraryArticles.map((article) => (
+                                        {libraryArticles.slice(0, visibleCount).map((article) => (
                                             <ArticleRow
                                                 key={article.slug}
                                                 article={article}
@@ -247,7 +254,24 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                             />
                                         ))}
                                     </ul>
-                                ) : (
+                                ) : null}
+
+                                {libraryArticles.length > visibleCount ? (
+                                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-8">
+                                        <button
+                                            type="button"
+                                            onClick={() => setLimit({ key: filterKey, count: visibleCount + PAGE_SIZE })}
+                                            className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/60 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        >
+                                            Show more articles
+                                        </button>
+                                        <p className="text-sm text-white/50">
+                                            {visibleCount} of {libraryArticles.length}
+                                        </p>
+                                    </div>
+                                ) : null}
+
+                                {libraryArticles.length === 0 ? (
                                     <div className="py-16">
                                         <p className="text-lg text-white/75">
                                             {showBookmarkedOnly
@@ -264,7 +288,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                             Show all articles
                                         </button>
                                     </div>
-                                )}
+                                ) : null}
                             </div>
 
                             <aside className="lg:col-span-3 lg:col-start-10 lg:pt-10">

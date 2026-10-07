@@ -15,13 +15,13 @@ import {
     officialBeatStarsGenreOptions,
 } from '@/lib/catalog/beatstars-genre-index';
 import { trackBeatEvent } from '@/lib/analytics';
-import { formatBeatTitle } from '@/lib/beat-title';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
 import { getGenreTheme } from '@/lib/genre-theme';
 import { PUBLIC_CONFIRMED_LICENSES } from '@/lib/licensing-registry';
 import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
 import { StorePlayerProvider, type StoreTrack } from './components/BeatStorePlayer';
 import { BeatStoreRow, type BeatRowData } from './components/BeatStoreRow';
+import { toBeatRow } from './components/beat-row-data';
 import BeatStarsCheckoutModal from './components/BeatStarsCheckoutModal';
 import BeatStoreGuide, {
     type BeatFinderPreset,
@@ -597,25 +597,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     };
 
     const shortlistedBeats = beatsCatalog.filter((beat) => shortlistedBeatIds.includes(beat.id));
-    const visibleRows: BeatRowData[] = visibleBeats.map((beat) => {
-        const metadata = beatStarsFilterIndex[beat.beatstarsTrackId];
-        const genre = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
-        const { name, detail } = formatBeatTitle(beat.title);
-        const musicalKey = metadata?.key && metadata.key !== 'None' ? metadata.key : undefined;
-        return {
-            beatId: beat.id,
-            trackId: beat.beatstarsTrackId,
-            name,
-            detail,
-            meta: [genre, metadata?.bpm ? `${metadata.bpm} BPM` : undefined, musicalKey].filter(Boolean).join(' · '),
-            price: beat.licenses[0]?.price || '$15',
-            href: getLocalePath(`/studio/beats/${beat.slug}`),
-            genre,
-            accentHex: getGenreTheme(genre).accentHex,
-            bpm: metadata?.bpm ?? undefined,
-            musicalKey,
-        };
-    });
+    const visibleRows: BeatRowData[] = visibleBeats.map((beat) => toBeatRow(beat, getLocalePath(`/studio/beats/${beat.slug}`)));
     const playerQueue: StoreTrack[] = visibleRows;
     const selectedGenreLabel = selectedGenre === 'all'
         ? t.filterAll
