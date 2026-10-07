@@ -46,9 +46,9 @@ export const mainNavGroups: NavGroup[] = [
         href: FLOW_APP_URL,
         activePrefixes: ['/flow', '/cadenz', '/mycamscan', '/lab', '/games'],
         children: [
-            { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
+            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Running and cycling music that keeps your cadence, on Google Play', status: 'Available', external: true },
             { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
-            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Cadence music app for runners and cyclists', status: 'Available', external: true },
+            { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
             { name: 'MyCamScan', href: '/mycamscan', description: 'Private document scanner with on-device OCR and searchable PDF', status: 'Coming Soon' },
             { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },
         ],
