@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AppWindow, Home, Headphones, BookOpen, Menu } from 'lucide-react';
+import { AudioWaveform, Home, Headphones, UserRound, Menu } from 'lucide-react';
 
 const itemClass =
     'relative flex min-h-12 flex-col items-center justify-center gap-1 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60';
@@ -16,9 +16,9 @@ export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
 
     const navItems = [
         { name: 'Home', href: '/', icon: Home, exact: true },
+        { name: 'Story', href: '/about', icon: UserRound },
+        { name: 'HealingWave', href: '/healingwave', icon: AudioWaveform },
         { name: 'Beats', href: '/studio/beats', icon: Headphones },
-        { name: 'Apps', href: '/flow', icon: AppWindow },
-        { name: 'Learn', href: '/learn', icon: BookOpen },
     ];
 
     const isItemActive = (href: string, exact?: boolean) => {

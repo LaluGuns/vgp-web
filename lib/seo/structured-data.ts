@@ -45,7 +45,8 @@ export const organizationSchema = {
         height: 1024,
     },
     description:
-        'Virzy Guns Production is a music-tech ecosystem for songs, premium beats, custom production, functional audio, Flow, CADENZ, books, and producer education.',
+        'Virzy Guns Production, founded in 2020 by Virzy Guns, makes records, licenses beats and builds HealingWave: music made to help people focus, move and recover, including the CADENZ and Flow apps.',
+    foundingDate: '2020',
     founder: {
         '@type': 'Person',
         name: 'Virzy Guns',
@@ -72,7 +73,7 @@ export const websiteSchema = {
     name: 'Virzy Guns Production',
     url: SITE_URL,
     description:
-        'Songs, premium beats, custom production, functional audio, Flow, CADENZ, books, and producer education by Virzy Guns.',
+        'Virzy Guns, producer and founder of Virzy Guns Production, building HealingWave with CADENZ and Flow. Beats, studio services and free production writing.',
     publisher: {
         '@type': 'Organization',
         name: 'Virzy Guns Production',

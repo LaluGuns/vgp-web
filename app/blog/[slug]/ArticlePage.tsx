@@ -245,7 +245,7 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                                 <div>
                                     <h2 id="author-heading" className="text-base font-semibold text-white">Written by Virzy Guns</h2>
                                     <p className="mt-1 text-sm leading-6 text-white/65">
-                                        Songwriter and producer, founder of Virzy Guns Production and HealingWave Lab.
+                                        Songwriter and producer, founder of Virzy Guns Production. Now building HealingWave.
                                     </p>
                                     <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
                                         <TextLink href="/studio/beats">Browse beats</TextLink>

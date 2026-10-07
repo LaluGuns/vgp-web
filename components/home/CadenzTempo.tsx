@@ -1,20 +1,86 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { Pause, Play } from 'lucide-react';
 
 const MIN_BPM = 130;
 const MAX_BPM = 180;
 const STEPS = 4;
+const LOOKAHEAD_S = 0.12;
+
+/** A short, soft kick: a sine that drops in pitch and fades out. */
+function scheduleKick(context: AudioContext, time: number, accent: boolean) {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(accent ? 150 : 120, time);
+    oscillator.frequency.exponentialRampToValueAtTime(45, time + 0.12);
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(accent ? 0.55 : 0.35, time + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.18);
+    oscillator.connect(gain).connect(context.destination);
+    oscillator.start(time);
+    oscillator.stop(time + 0.2);
+}
 
 /**
- * A small metronome for the CADENZ section: pick a pace and the light keeps
- * that beat, which is what the app does with its music.
+ * A small metronome for the CADENZ section: pick a pace, press play and hear
+ * the beat CADENZ would run its music on. The light keeps the same tempo.
  */
 export function CadenzTempo() {
     const [bpm, setBpm] = useState(160);
+    const [playing, setPlaying] = useState(false);
+    const [cycle, setCycle] = useState(0);
     const sliderId = useId();
+    const contextRef = useRef<AudioContext | null>(null);
+    const timerRef = useRef<number | null>(null);
+    const nextBeatRef = useRef(0);
+    const beatIndexRef = useRef(0);
+    const bpmRef = useRef(bpm);
+
+    useEffect(() => {
+        bpmRef.current = bpm;
+    }, [bpm]);
+
+    const stop = useCallback(() => {
+        if (timerRef.current) window.clearInterval(timerRef.current);
+        timerRef.current = null;
+        setPlaying(false);
+    }, []);
+
+    const start = useCallback(async () => {
+        const AudioContextClass =
+            window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!AudioContextClass) return;
+
+        const context = contextRef.current ?? new AudioContextClass();
+        contextRef.current = context;
+        if (context.state === 'suspended') await context.resume();
+
+        nextBeatRef.current = context.currentTime + 0.05;
+        beatIndexRef.current = 0;
+        setCycle((value) => value + 1);
+
+        timerRef.current = window.setInterval(() => {
+            while (nextBeatRef.current < context.currentTime + LOOKAHEAD_S) {
+                scheduleKick(context, nextBeatRef.current, beatIndexRef.current % STEPS === 0);
+                nextBeatRef.current += 60 / bpmRef.current;
+                beatIndexRef.current += 1;
+            }
+        }, 25);
+        setPlaying(true);
+    }, []);
+
+    useEffect(() => () => {
+        if (timerRef.current) window.clearInterval(timerRef.current);
+        void contextRef.current?.close();
+    }, []);
+
     const beatStyle = { '--beat': `${60 / bpm}s` } as CSSProperties;
+    // Restart the light whenever the tempo changes or playback starts, so it
+    // lines up with the first kick.
+    const phaseKey = `${bpm}-${cycle}`;
 
     return (
         <div className="mt-9 max-w-xl rounded-[6px] border border-white/10 bg-[#0a0e12] p-5 sm:p-6" style={beatStyle}>
@@ -29,20 +95,28 @@ export function CadenzTempo() {
                     </p>
                 </div>
 
-                {/* key restarts the animations so they stay in phase after a change */}
-                <div key={`pulse-${bpm}`} className="relative mb-2 h-4 w-4 shrink-0" aria-hidden="true">
+                <button
+                    type="button"
+                    onClick={() => (playing ? stop() : void start())}
+                    aria-pressed={playing}
+                    className="group/play relative mb-1 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sky-300 text-[#050607] transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e12]"
+                >
                     <span
-                        className="absolute inset-0 rounded-full bg-sky-300/60"
+                        key={`ring-${phaseKey}`}
+                        className="absolute inset-0 rounded-full bg-sky-300/50"
                         style={{ animation: 'vgp-ring var(--beat) cubic-bezier(0.16, 1, 0.3, 1) infinite' }}
+                        aria-hidden="true"
                     />
-                    <span
-                        className="absolute inset-0 rounded-full bg-sky-300"
-                        style={{ animation: 'vgp-beat var(--beat) ease-out infinite' }}
-                    />
-                </div>
+                    {playing ? (
+                        <Pause className="relative h-5 w-5" aria-hidden="true" />
+                    ) : (
+                        <Play className="relative ml-0.5 h-5 w-5" aria-hidden="true" />
+                    )}
+                    <span className="sr-only">{playing ? 'Stop the beat' : 'Play the beat'}</span>
+                </button>
             </div>
 
-            <div key={`steps-${bpm}`} className="mt-5 grid h-8 grid-cols-4 gap-1.5" aria-hidden="true">
+            <div key={`steps-${phaseKey}`} className="mt-5 grid h-8 grid-cols-4 gap-1.5" aria-hidden="true">
                 {Array.from({ length: STEPS }, (_, step) => (
                     <span
                         key={step}

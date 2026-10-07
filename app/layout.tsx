@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     },
     title: {
         template: '%s | Virzy Guns Production',
-        default: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
+        default: 'Virzy Guns | Producer and founder of HealingWave',
     },
     description:
-        'Buy premium beats, use Flow for deep work, preview CADENZ cadence music, and learn music production through books, articles, and courses by Virzy Guns.',
+        'Virzy Guns is a producer and the founder of Virzy Guns Production, now building HealingWave: music made to help people focus, move and recover, starting with CADENZ and Flow. Beats and studio services too.',
     alternates: {
         canonical: '/',
     },
@@ -69,9 +69,9 @@ export const metadata: Metadata = {
         apple: '/branding/logo-tg.jpg',
     },
     openGraph: {
-        title: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
+        title: 'Virzy Guns | Producer and founder of HealingWave',
         description:
-            'Premium beats, the Flow focus app, CADENZ cadence music, and practical producer education by Virzy Guns.',
+            'Producer turned founder. HealingWave makes music people can use to focus, move and recover.',
         url: 'https://www.virzyguns.com',
         siteName: 'Virzy Guns Production',
         images: [
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
                 url: '/branding/og-image.png',
                 width: 1200,
                 height: 630,
-                alt: 'Virzy Guns Production — beats, Flow, CADENZ and producer education',
+                alt: 'Virzy Guns Production',
             },
         ],
         locale: 'en_US',
@@ -87,9 +87,9 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Virzy Guns Production | Beats, Flow, CADENZ & Producer Education',
+        title: 'Virzy Guns | Producer and founder of HealingWave',
         description:
-            'Premium beats, the Flow focus app, CADENZ cadence music, and practical producer education by Virzy Guns.',
+            'Producer turned founder. HealingWave makes music people can use to focus, move and recover.',
         images: ['/branding/og-image.png'],
         creator: '@virzyguns',
     },
