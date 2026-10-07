@@ -82,6 +82,8 @@ footer-only.
   BeatStars Publishing, in partnership with Sony Music Publishing." Never
   "signed to Sony" or a Sony logo.
 - HealingWave never claims to treat or cure anything.
+- Never show where Virzy Guns lives or is based. The founder treats it as
+  private.
 
 ## Shared building blocks
 

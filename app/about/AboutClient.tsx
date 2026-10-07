@@ -41,7 +41,6 @@ const facts = [
     { label: 'Founded Virzy Guns Production', value: String(VGP_FOUNDED) },
     { label: 'Songwriter ranking on Muso.ai', value: 'Top 10%' },
     { label: 'Publishing', value: 'BeatStars Publishing, with Sony Music Publishing' },
-    { label: 'Based in', value: 'Lombok, Indonesia' },
 ];
 
 const work = [
