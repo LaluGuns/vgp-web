@@ -1,3 +1,4 @@
+import { formatBeatTitle } from '@/lib/beat-title';
 import type { BeatProduct } from '@/lib/catalog';
 import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
 import { getEditorialBeatWorld } from '@/lib/catalog/beatstars-genre-index';
@@ -153,7 +154,10 @@ function getTitleCue(title: string, locale: BeatLocale) {
 }
 
 export function getBeatStory(beat: BeatProduct, locale: BeatLocale) {
-    const title = localizedTitle(beat, locale);
+    // The page heading already shows the full title, so the story uses the
+    // clean name ("808 Danger Line", not "808 Danger Line - Cyberpunk Trap
+    // Type Beat") and does not repeat the search descriptors.
+    const title = formatBeatTitle(localizedTitle(beat, locale)).name;
     const genre = displayGenre(beat);
     const factLine = trackFactLine(beat, locale);
     const arrangement = arrangementCue(beat, locale);
@@ -165,7 +169,7 @@ export function getBeatStory(beat: BeatProduct, locale: BeatLocale) {
             '最初は8小節のバースを録り、次にサビの音域を重ねると声との相性を確認できます。',
             '低域と競合しない声の位置を探しながら、フックのキーワードを早めに置く使い方が効果的です。',
         ];
-        return `${title}はVirzy Gunsによる${genre}インストゥルメンタルです。${factLine} ${getTitleCue(beat.title, locale)} ${arrangement} ${uses[variations]} プレビューで声との相性を確認し、最新ライセンス条件をこのページ内のBeatStars公式チェックアウトで確定できます。`;
+        return `${title}はVirzy Gunsによる${genre}インストゥルメンタルです。${factLine} ${getTitleCue(title, locale)} ${arrangement} ${uses[variations]} プレビューで声との相性を確認し、最新ライセンス条件をこのページ内のBeatStars公式チェックアウトで確定できます。`;
     }
 
     if (locale === 'de-DE') {
@@ -174,7 +178,7 @@ export function getBeatStory(beat: BeatProduct, locale: BeatLocale) {
             'Nimm zuerst acht Takte Verse auf und lege danach die Hook-Lage darüber, um den Stimmumfang zu testen.',
             'Setze die Schlüsselzeile der Hook früh und suche einen Vocal-Bereich, der nicht mit dem Low-End kollidiert.',
         ];
-        return `${title} ist ein ${genre}-Instrumental von Virzy Guns. ${factLine} ${getTitleCue(beat.title, locale)} ${arrangement} ${uses[variations]} Hör die Vorschau mit deiner Vocalidee an und bestätige die aktuellen Lizenzbedingungen im eingebetteten offiziellen BeatStars-Checkout.`;
+        return `${title} ist ein ${genre}-Instrumental von Virzy Guns. ${factLine} ${getTitleCue(title, locale)} ${arrangement} ${uses[variations]} Hör die Vorschau mit deiner Vocalidee an und bestätige die aktuellen Lizenzbedingungen im eingebetteten offiziellen BeatStars-Checkout.`;
     }
 
     const uses = [
@@ -182,7 +186,7 @@ export function getBeatStory(beat: BeatProduct, locale: BeatLocale) {
         'Record an eight-bar verse first, then layer the hook range over it to check how the track carries your voice.',
         'Place the hook’s key line early and find a vocal register that stays clear of the low end.',
     ];
-    return `${title} is a ${genre} instrumental produced by Virzy Guns. ${factLine} ${getTitleCue(beat.title, locale)} ${arrangement} ${uses[variations]} Preview it with your vocal idea, then confirm the current license terms in the embedded official BeatStars checkout.`;
+    return `${title} is a ${genre} instrumental produced by Virzy Guns. ${factLine} ${getTitleCue(title, locale)} ${arrangement} ${uses[variations]} Preview it with your vocal idea, then confirm the current license terms in the embedded official BeatStars checkout.`;
 }
 
 export function getBeatMetaDescription(beat: BeatProduct, locale: BeatLocale) {
