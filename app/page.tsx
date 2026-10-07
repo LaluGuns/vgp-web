@@ -24,9 +24,9 @@ const journey: JourneyChapter[] = [
         title: 'Producer',
         body: 'I learned to make records the slow way: drums, 808s, vocals, mix, master, then start again. Muso.ai lists 526 producer credits and 550 as primary artist, and ranks me in the top 10% of songwriters.',
         image: {
-            src: '/images/virzy-guns-producer.jpg',
-            alt: 'Virzy Guns in blue light',
-            className: 'object-[50%_20%]',
+            src: '/images/virzy-guns-dp.jpg',
+            alt: 'Virzy Guns portrait in blue light with the name VIRZY GUNS',
+            className: 'object-center',
         },
     },
     {

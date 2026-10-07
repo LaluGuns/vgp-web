@@ -71,15 +71,15 @@ export default function AboutClient() {
                         </div>
 
                         <figure data-enter="" style={delay(100)} className="lg:col-span-5">
-                            <div className="relative aspect-[4/5] overflow-hidden rounded-[6px] bg-black">
+                            <div className="relative aspect-square overflow-hidden rounded-[6px] bg-black">
                                 <Image
-                                    src="/images/virzy-guns-producer.jpg"
-                                    alt="Virzy Guns in blue light"
+                                    src="/images/virzy-guns-dp.jpg"
+                                    alt="Virzy Guns portrait in blue light with the name VIRZY GUNS"
                                     fill
                                     priority
                                     sizes="(min-width: 1024px) 40vw, 100vw"
                                     data-enter="settle"
-                                    className="object-cover object-[50%_20%]"
+                                    className="object-cover"
                                 />
                             </div>
                         </figure>
