@@ -4,24 +4,13 @@
  * Producer Library & Book Index Page
  */
 
-import { m } from 'framer-motion';
 import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
-import { EditorialButton } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton, TextLink } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
-const fadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
-};
-
-const stagger = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-};
-
 const chapters = [
-    { number: '01', title: 'The Trap Framework', desc: 'Structure, rhythm operating system, and the grid.' },
+    { number: '01', title: 'The Trap Framework', desc: 'Song structure, the rhythm grid and how a trap beat is built.' },
     { number: '02', title: 'The Low End', desc: '808 tuning, relationship with kick, sidechain, and translation.' },
     { number: '03', title: 'The Recording Session', desc: 'Microphone selection, distance, and fixing issues before mixing.' },
     { number: '04', title: 'Vocal Processing', desc: 'EQ moves, compression, saturation, de-essing, and spatial design.' },
@@ -29,12 +18,7 @@ const chapters = [
     { number: '06', title: 'Mastering for Streaming', desc: 'Loudness metering, peak levels, limiting, and final delivery.' },
 ];
 
-const features = [
-    { label: '80+ Pages', detail: 'Comprehensive coverage' },
-    { label: 'PDF Format', detail: 'Read on any device' },
-    { label: '6 Chapters', detail: 'Structured learning' },
-    { label: 'Actionable', detail: 'Real-world examples' },
-];
+const facts = ['80+ pages', 'PDF for any device', '6 chapters'];
 
 const bookJsonLd = {
     '@context': 'https://schema.org',
@@ -63,132 +47,74 @@ export default function GuidesPage() {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(bookJsonLd) }}
                 />
-                {/* Hero */}
-                <section className="relative overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28">
 
-                    <div className="relative mx-auto max-w-5xl">
-                        <m.div
-                            variants={stagger}
-                            initial="hidden"
-                            animate="visible"
-                            className="relative z-10 grid items-center gap-10 lg:grid-cols-[1fr_auto]"
-                        >
-                            {/* Left Column: Details */}
-                            <div>
-                                <m.div variants={fadeUp} className="flex items-center gap-3">
-                                    <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/70">
-                                        VGP Producer Library
-                                    </span>
-                                    <span className="rounded-full bg-sky-400/20 px-2.5 py-0.5 text-[10px] font-semibold text-sky-200 ring-1 ring-sky-400/30">
-                                        PDF Book · Coming Soon
-                                    </span>
-                                </m.div>
-
-                                <m.h1 variants={fadeUp} className="mt-4 font-display text-4xl font-semibold leading-[1.05] text-white sm:text-6xl md:text-7xl">
-                                    Music Production Guide: Trap Edition
-                                </m.h1>
-
-                                <m.p variants={fadeUp} className="mt-5 max-w-lg text-base leading-7 text-white/70 sm:text-lg">
-                                    A practical guide for turning creative instinct into repeatable decisions for drums, 808s, vocals, mixing, and mastering.
-                                </m.p>
-
-                                <m.p variants={fadeUp} className="mt-3 text-sm font-semibold text-white/60">
-                                    By <span className="text-white">Virzy Guns</span>
-                                </m.p>
-
-                                {/* CTAs */}
-                                <m.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
-                                    <EditorialButton onClick={openPopup}>Notify Me</EditorialButton>
-                                    <EditorialButton href="/blog" variant="ghost">Read Free Articles</EditorialButton>
-                                </m.div>
-
-                                {/* Social Proof Features */}
-                                <m.div variants={fadeUp} className="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 sm:grid-cols-4">
-                                    {features.map((f) => (
-                                        <div key={f.label}>
-                                            <p className="text-sm font-bold text-white">{f.label}</p>
-                                            <p className="text-xs text-white/55">{f.detail}</p>
-                                        </div>
-                                    ))}
-                                </m.div>
+                <section className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+                    <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
+                        <div className="lg:col-span-7">
+                            <p className="text-sm text-white/55">PDF, coming soon</p>
+                            <h1 className="mt-4 max-w-[16ch] font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
+                                Music Production Guide: Trap Edition
+                            </h1>
+                            <p className="mt-6 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                                A practical guide for turning creative instinct into decisions you can repeat, from drums and
+                                808s to vocals, mixing and mastering.
+                            </p>
+                            <p className="mt-3 text-sm text-white/60">
+                                By <span className="text-white">Virzy Guns</span>
+                            </p>
+                            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+                                <EditorialButton onClick={openPopup}>Email me at launch</EditorialButton>
+                                <TextLink href="/blog">Read the free articles</TextLink>
                             </div>
-
-                            {/* Right Column: Book Cover Visual (Single Column Centered on Mobile) */}
-                            <m.div
-                                variants={fadeUp}
-                                className="relative mx-auto mt-4 w-full max-w-[280px] lg:mt-0 lg:max-w-none"
-                            >
-                                <div className="relative mx-auto max-w-[560px]">
-                                    <div className="absolute inset-x-8 bottom-0 h-16 rounded-[50%] bg-sky-400/20 blur-3xl" />
-                                    <div className="relative z-10 mx-auto w-[260px] max-w-[82vw] overflow-hidden rounded-xl bg-neutral-950 shadow-2xl ring-1 ring-white/10 sm:w-[320px]">
-                                        <Image
-                                            src="/ebooks/trap-guide-book-cover.jpg"
-                                            alt="Music Production Guide: Trap Edition book cover"
-                                            width={815}
-                                            height={1058}
-                                            priority
-                                            sizes="(max-width: 640px) 260px, 320px"
-                                            className="h-auto w-full"
-                                        />
-                                    </div>
-                                </div>
-                            </m.div>
-                        </m.div>
-                    </div>
-                </section>
-
-                {/* Chapters */}
-                <section className="border-y border-white/[0.06] bg-white/[0.018] px-4 py-16 sm:px-6">
-                    <div className="mx-auto max-w-5xl">
-                        <m.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={stagger}
-                        >
-                            <m.p variants={fadeUp} className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/65">
-                                Syllabus Breakdown
-                            </m.p>
-                            <m.h2 variants={fadeUp} className="mb-10 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                                Table of Contents
-                            </m.h2>
-                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                {chapters.map((ch) => (
-                                    <m.div
-                                        key={ch.number}
-                                        variants={fadeUp}
-                                        className="rounded-lg border border-white/[0.09] bg-white/[0.03] p-6 transition hover:border-sky-200/25 hover:bg-white/[0.045]"
-                                    >
-                                        <p className="mb-3 text-2xl font-black text-white/10">{ch.number}</p>
-                                        <h3 className="mb-2 text-sm font-bold leading-snug text-white">{ch.title}</h3>
-                                        <p className="text-xs leading-6 text-white/65">{ch.desc}</p>
-                                    </m.div>
+                            <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-2 border-t border-white/10 pt-6 text-sm text-white/70">
+                                {facts.map((fact) => (
+                                    <li key={fact}>{fact}</li>
                                 ))}
+                            </ul>
+                        </div>
+
+                        <div className="lg:col-span-4 lg:col-start-9">
+                            <div className="mx-auto w-full max-w-[320px] overflow-hidden rounded-[4px] border border-white/10">
+                                <Image
+                                    src="/ebooks/trap-guide-book-cover.jpg"
+                                    alt="Cover of Music Production Guide: Trap Edition by Virzy Guns"
+                                    width={815}
+                                    height={1058}
+                                    priority
+                                    sizes="320px"
+                                    className="h-auto w-full"
+                                />
                             </div>
-                        </m.div>
+                        </div>
                     </div>
                 </section>
 
-                {/* Pre-order / Availability CTA */}
-                <section className="px-4 py-16 text-center sm:px-6">
-                    <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="mx-auto max-w-lg"
-                    >
-                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/65">
-                            Pre-Order & Access
+                <section aria-labelledby="contents-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                        <h2 id="contents-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
+                            Contents
+                        </h2>
+                        <ol className="divide-y divide-white/10 border-y border-white/10 lg:col-span-8">
+                            {chapters.map((chapter) => (
+                                <li key={chapter.number} className="grid gap-2 py-6 sm:grid-cols-[3rem_1fr]">
+                                    <span className="font-display text-lg font-semibold tabular-nums text-white/50">{chapter.number}</span>
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-white">{chapter.title}</h3>
+                                        <p className="mt-1 text-base leading-7 text-white/65">{chapter.desc}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
+                </section>
+
+                <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+                    <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="max-w-xl text-base leading-7 text-white/70">
+                            The release date is not set yet. Leave your email and you will get one message when the PDF is out.
                         </p>
-                        <div className="mb-2 flex items-baseline justify-center gap-3">
-                            <span className="text-4xl font-black text-white">TBA</span>
-                        </div>
-                        <p className="mb-8 text-sm text-white/65">
-                            Format: PDF eBook. Coming soon to the VGP Producer Library.
-                        </p>
-                        <EditorialButton onClick={openPopup}>Notify Me On Launch</EditorialButton>
-                    </m.div>
+                        <EditorialButton onClick={openPopup}>Email me at launch</EditorialButton>
+                    </div>
                 </section>
             </article>
         </PageTransition>

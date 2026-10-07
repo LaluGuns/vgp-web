@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'CADENZ Privacy Policy | Virzy Guns Production',
         description: 'Privacy information for the CADENZ app.',
-        url: 'https://virzyguns.com/cadenz/privacy',
+        url: 'https://www.virzyguns.com/cadenz/privacy',
     },
     robots: {
         index: true,

@@ -56,7 +56,7 @@ export const socialData = [
                 alt=""
                 width={16}
                 height={16}
-                className="h-4 w-4 object-contain opacity-60 brightness-0 invert transition-opacity group-hover:opacity-100"
+                className="h-5 w-5 object-contain opacity-60 grayscale transition-opacity group-hover:opacity-100"
             />
         )
     },

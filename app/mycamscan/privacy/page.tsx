@@ -4,11 +4,11 @@ import { PolicyPage } from '@/components/policies/PolicyPage';
 export const metadata: Metadata = {
     title: "MyCamScan Privacy Policy",
     description: "How MyCamScan handles your information: documents and OCR stay on your device, on-device text recognition, Google AdMob ads, and your privacy choices.",
-    alternates: { canonical: "https://virzyguns.com/mycamscan/privacy" },
+    alternates: { canonical: "https://www.virzyguns.com/mycamscan/privacy" },
     openGraph: {
         title: "MyCamScan Privacy Policy | Virzy Guns Production",
         description: "Privacy policy for the MyCamScan app.",
-        url: "https://virzyguns.com/mycamscan/privacy",
+        url: "https://www.virzyguns.com/mycamscan/privacy",
     },
     robots: {
         index: true,
@@ -172,7 +172,7 @@ export default function MyCamScanPrivacyPage() {
                     title: "Bahasa Indonesia: Kebijakan Privasi MyCamScan",
                     content: (
                         <>
-                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/40">Tanggal berlaku: 30 September 2026 · Terakhir diperbarui: 30 September 2026</p>
+                            <p className="text-sm text-white/55">Tanggal berlaku: 30 September 2026 · Terakhir diperbarui: 30 September 2026</p>
                             <p>Kebijakan ini menjelaskan apa yang terjadi pada informasi Anda saat menggunakan MyCamScan, aplikasi pemindai dokumen gratis untuk Android (paket <code className="rounded bg-white/10 px-1 py-0.5 text-[0.9em] text-sky-100">com.virzyguns.mycamscan</code>). Jika ada bagian yang kurang jelas, hubungi kami (bagian 15).</p>
                             <h3 className="pt-4 text-lg font-semibold text-white">1. Siapa kami</h3>
                             <p>Aplikasi ini diterbitkan oleh <strong className="font-semibold text-white/85">PT Kreasi Virzy Nusantara (Virzy Guns Production)</strong> (&quot;kami&quot;), organisasi yang berbasis di Indonesia.</p>

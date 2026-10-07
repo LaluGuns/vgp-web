@@ -1,16 +1,6 @@
-'use client';
-
-/**
- * Category Page Client Component
- * Filtered article grid by category
- */
-
 import Link from 'next/link';
-import { m } from 'framer-motion';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionHeader } from '@/components/ui/SectionHeader';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { staggerParent, staggerChild } from '@/lib/motion-presets';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
 interface CategoryPageProps {
@@ -19,133 +9,78 @@ interface CategoryPageProps {
     allCategories: Category[];
 }
 
-const categoryColors: Record<string, string> = {
-    'production-tips': 'text-primary',
-    'licensing-guide': 'text-sky-200',
-    'genre-guides': 'text-cyan-200',
-};
+const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+function formatDate(value: string) {
+    const date = new Date(`${value}T00:00:00Z`);
+    return Number.isNaN(date.getTime()) ? value : dateFormat.format(date);
+}
 
 export function CategoryPage({ category, articles, allCategories }: CategoryPageProps) {
     return (
         <PageTransition>
-            {/* Hero */}
-            <section className="py-16 px-6 text-center">
-                <div className="max-w-3xl mx-auto">
-                    <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <Link
-                            href="/blog"
-                            className="mono-label text-dim-grey hover:text-white transition-colors mb-4 inline-block"
-                        >
-                            Back to blog
-                        </Link>
-                        <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-hero mb-4 ${categoryColors[category.slug]}`}>
+            <main className="editorial-shell text-white">
+                <section className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
+                    <div className="mx-auto max-w-7xl">
+                        <TextLink href="/blog">All articles</TextLink>
+                        <h1 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
                             {category.name}
                         </h1>
-                        <p className="text-cool-grey text-lg">
+                        <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
                             {category.description}
                         </p>
-                    </m.div>
-                </div>
-            </section>
-
-            {/* Category Navigation */}
-            <section className="px-6 py-4">
-                <div className="max-w-5xl mx-auto">
-                    <div className="flex flex-wrap gap-3 justify-center">
-                        <Link
-                            href="/blog"
-                            className="px-5 py-2 rounded-full text-sm font-medium bg-white/5 text-dim-grey hover:text-white hover:bg-white/10 transition-all duration-200"
-                        >
-                            All Articles
-                        </Link>
-                        {allCategories.map((cat) => (
-                            <Link
-                                key={cat.slug}
-                                href={`/blog/category/${cat.slug}`}
-                                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${cat.slug === category.slug
-                                        ? 'bg-primary text-obsidian'
-                                        : 'bg-white/5 text-dim-grey hover:text-white hover:bg-white/10'
-                                    }`}
-                            >
-                                {cat.name}
-                            </Link>
-                        ))}
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Articles Grid */}
-            <section className="py-12 px-6 bg-carbon">
-                <div className="max-w-5xl mx-auto">
-                    <m.div
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                        variants={staggerParent}
-                        initial="hidden"
-                        animate="visible"
-                    >
-                        {articles.map((article) => (
-                            <m.div key={article.slug} variants={staggerChild}>
-                                <Link href={`/blog/${article.slug}`}>
-                                    <GlassCard className="h-full" padding="md" hover>
-                                        <span className={`mono-label text-xs ${categoryColors[article.category]}`}>
-                                            {category.name}
-                                        </span>
-                                        <h3 className="text-lg font-semibold mt-2 mb-2 tracking-apple leading-snug">
-                                            {article.title}
-                                        </h3>
-                                        <p className="text-cool-grey text-sm mb-4 line-clamp-2">
-                                            {article.excerpt}
-                                        </p>
-                                        <div className="flex items-center gap-3 text-xs text-dim-grey mt-auto pt-3 border-t border-white/5">
-                                            <span>{article.readingTime} min</span>
-                                            <span>/</span>
-                                            <span>{new Date(article.publishedAt).toLocaleDateString('en-US', {
-                                                month: 'short',
-                                                day: 'numeric'
-                                            })}</span>
-                                        </div>
-                                    </GlassCard>
-                                </Link>
-                            </m.div>
-                        ))}
-                    </m.div>
+                <section className="px-4 pb-20 sm:px-6">
+                    <div className="mx-auto max-w-7xl">
+                        <nav aria-label="Article categories" className="-mx-4 flex gap-2 overflow-x-auto border-y border-white/10 px-4 py-5 sm:mx-0 sm:flex-wrap sm:px-0">
+                            {allCategories.map((cat) => {
+                                const active = cat.slug === category.slug;
+                                return (
+                                    <Link
+                                        key={cat.slug}
+                                        href={`/blog/category/${cat.slug}`}
+                                        aria-current={active ? 'page' : undefined}
+                                        className={`flex min-h-10 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                                            active ? 'border-white/70 text-white' : 'border-white/10 text-white/60 hover:border-white/25 hover:text-white'
+                                        }`}
+                                    >
+                                        {cat.name}
+                                    </Link>
+                                );
+                            })}
+                        </nav>
 
-                    {articles.length === 0 && (
-                        <div className="text-center py-12">
-                            <p className="text-dim-grey">No articles in this category yet.</p>
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* CTA */}
-            <section className="py-16 px-6 text-center">
-                <div className="max-w-2xl mx-auto">
-                    <m.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-2xl font-bold mb-4">Ready to Find Your Beat?</h2>
-                        <p className="text-cool-grey mb-6">
-                            Browse our catalog of premium instrumentals.
-                        </p>
-                        <Link
-                            href="/studio/beats"
-                            className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-obsidian font-medium rounded-full hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all duration-200"
-                        >
-                            Browse Beats
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </Link>
-                    </m.div>
-                </div>
-            </section>
+                        {articles.length > 0 ? (
+                            <ul className="max-w-4xl divide-y divide-white/10">
+                                {articles.map((article) => (
+                                    <li key={article.slug}>
+                                        <Link
+                                            href={`/blog/${article.slug}`}
+                                            className="group block py-7 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        >
+                                            <span className="text-xs text-white/50">
+                                                {formatDate(article.publishedAt)} · {article.readingTime} min read
+                                            </span>
+                                            <span className="mt-2 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                                {article.title}
+                                            </span>
+                                            <span className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">
+                                                {article.excerpt}
+                                            </span>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="py-16 text-lg text-white/75">
+                                No articles in this category yet. <TextLink href="/blog" inline>Browse all articles</TextLink>.
+                            </p>
+                        )}
+                    </div>
+                </section>
+            </main>
         </PageTransition>
     );
 }

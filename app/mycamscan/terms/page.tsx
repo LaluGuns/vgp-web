@@ -4,11 +4,11 @@ import { PolicyPage } from '@/components/policies/PolicyPage';
 export const metadata: Metadata = {
     title: "MyCamScan Terms of Use",
     description: "Terms of Use for MyCamScan, the private on-device document scanner and searchable-PDF app for Android by Kreasi Virzy Nusantara.",
-    alternates: { canonical: "https://virzyguns.com/mycamscan/terms" },
+    alternates: { canonical: "https://www.virzyguns.com/mycamscan/terms" },
     openGraph: {
         title: "MyCamScan Terms of Use | Virzy Guns Production",
         description: "Terms of Use for the MyCamScan app.",
-        url: "https://virzyguns.com/mycamscan/terms",
+        url: "https://www.virzyguns.com/mycamscan/terms",
     },
     robots: {
         index: true,
@@ -149,7 +149,7 @@ export default function MyCamScanTermsPage() {
                     title: "Bahasa Indonesia: Ketentuan Penggunaan MyCamScan",
                     content: (
                         <>
-                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/40">Tanggal berlaku: 30 September 2026 · Terakhir diperbarui: 30 September 2026</p>
+                            <p className="text-sm text-white/55">Tanggal berlaku: 30 September 2026 · Terakhir diperbarui: 30 September 2026</p>
                             <p>Ketentuan Penggunaan (&quot;Ketentuan&quot;) ini adalah perjanjian antara Anda dan <strong className="font-semibold text-white/85">PT Kreasi Virzy Nusantara (Virzy Guns Production)</strong> (&quot;kami&quot;), penerbit aplikasi MyCamScan untuk Android (paket <code className="rounded bg-white/10 px-1 py-0.5 text-[0.9em] text-sky-100">com.virzyguns.mycamscan</code>, &quot;Aplikasi&quot;). Dengan memasang atau menggunakan Aplikasi, Anda menyetujui Ketentuan ini. Jika tidak setuju, jangan gunakan Aplikasi. Baca juga <a className="font-semibold text-sky-100 underline decoration-sky-200/30 underline-offset-4 hover:text-white" href="https://virzyguns.com/mycamscan/privacy" target="_blank" rel="noopener noreferrer">Kebijakan Privasi</a> kami.</p>
                             <h3 className="pt-4 text-lg font-semibold text-white">1. Lisensi penggunaan Aplikasi</h3>
                             <p>Kami memberi Anda lisensi pribadi, non-eksklusif, tidak dapat dialihkan, dan dapat dicabut untuk memasang dan menggunakan Aplikasi pada perangkat yang Anda miliki atau kendalikan, untuk memindai dokumen secara sah untuk keperluan pribadi atau usaha Anda, selama Anda mematuhi Ketentuan ini. Aplikasi dilisensikan, bukan dijual. Kami dan pemberi lisensi kami mempertahankan semua hak atas Aplikasi, kode, desain, nama, dan logonya, kecuali hak yang secara tegas diberikan di sini. Komponen pihak ketiga (termasuk perangkat lunak sumber terbuka dan komponen Google) diatur oleh lisensinya masing-masing; tidak ada ketentuan di sini yang membatasi hak Anda berdasarkan lisensi tersebut.</p>

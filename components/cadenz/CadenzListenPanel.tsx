@@ -1,10 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { Check, ExternalLink, ListMusic, Youtube } from 'lucide-react';
 
-import { useNewsletter } from '@/components/context/NewsletterContext';
 import { trackOrganicEvent } from '@/lib/analytics';
+import { CADENZ_PLAY_URL } from '@/lib/vgp-ecosystem';
 import {
   CADENZ_YOUTUBE_MUSIC_EMBED_URL,
   CADENZ_YOUTUBE_THUMBNAIL,
@@ -35,144 +34,112 @@ export function CadenzListenPanel({
   asset: CadenzMusicAsset;
   headingLevel?: 'h2' | 'h3';
 }) {
-  const { openPopup } = useNewsletter();
   const Heading = headingLevel;
 
   return (
-    <section
-      className="overflow-hidden rounded-[1.75rem] border border-cyan-200/15 bg-[linear-gradient(145deg,rgba(7,30,42,0.96),rgba(2,8,14,0.98))] shadow-[0_28px_100px_rgba(0,0,0,0.34)]"
-      aria-labelledby={`cadenz-listen-${asset.bpm}`}
-    >
-      <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
-        <div className="relative min-h-[20rem] overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.14),rgba(2,8,14,0.98)_72%)] lg:min-h-full lg:border-b-0 lg:border-r">
+    <section className="grid gap-10 border-y border-white/10 py-12 lg:grid-cols-12" aria-labelledby={`cadenz-listen-${asset.bpm}`}>
+      <div className="lg:col-span-5">
+        <div className="relative aspect-video overflow-hidden rounded-[6px] border border-white/10 bg-black">
           <Image
             src={CADENZ_YOUTUBE_THUMBNAIL}
-            alt="CADENZ running cadence thumbnail from YouTube Music"
+            alt="CADENZ running cadence cover art"
             fill
             sizes="(min-width: 1024px) 34vw, 100vw"
             quality={90}
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(1,7,12,0.9)_100%)]" />
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-100/70">YouTube Music thumbnail</p>
-              <p className="mt-1 text-sm font-semibold text-white">{asset.artist}</p>
-            </div>
-            <span className="rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-xs font-semibold text-white/80 backdrop-blur">
-              {asset.bpm} BPM
-            </span>
+        </div>
+        <p className="mt-3 text-xs text-white/55">
+          {asset.artist} · {asset.bpm} BPM · 1-hour track
+        </p>
+      </div>
+
+      <div className="lg:col-span-7">
+        <p className="text-xs font-medium text-sky-300">Exact ISRC match</p>
+        <Heading id={`cadenz-listen-${asset.bpm}`} className="mt-2 text-2xl font-semibold leading-tight text-white sm:text-3xl">
+          {asset.title}
+        </Heading>
+        <p className="mt-3 max-w-xl text-base leading-7 text-white/70">{asset.sessionSummary}</p>
+
+        <dl className="mt-5 flex flex-wrap gap-x-10 gap-y-3 text-sm">
+          <div>
+            <dt className="text-xs text-white/50">Artist</dt>
+            <dd className="mt-1 text-white/85">{asset.artist}</dd>
           </div>
+          <div>
+            <dt className="text-xs text-white/50">ISRC</dt>
+            <dd className="mt-1 font-mono text-white/85">{asset.isrc}</dd>
+          </div>
+        </dl>
+
+        <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <a
+            href={asset.spotifyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => outbound('spotify_track', asset.bpm, 'verified_track_card')}
+            data-organic-cta
+            data-destination-type="spotify_track"
+            data-source-position="verified_track_card"
+            className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#1ed760] px-6 text-sm font-semibold text-[#07150c] transition-colors hover:bg-[#5bea83] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+          >
+            <SpotifyMark />
+            Listen on Spotify
+          </a>
+          <a
+            href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => outbound('youtube_playlist', asset.bpm, 'verified_track_card')}
+            data-organic-cta
+            data-destination-type="youtube_playlist"
+            data-source-position="verified_track_card"
+            className="text-sm font-medium text-white underline decoration-white/30 underline-offset-[6px] hover:decoration-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          >
+            Open the playlist on YouTube Music
+          </a>
         </div>
 
-        <div className="p-5 sm:p-7 lg:p-8">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-100">
-              <Check className="h-3.5 w-3.5" aria-hidden="true" />
-              Exact ISRC
-            </span>
-            <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/55">
-              1-hour track
-            </span>
+        <div className="mt-8 overflow-hidden rounded-[6px] border border-white/10 bg-black">
+          <div className="relative aspect-video">
+            <iframe
+              src={CADENZ_YOUTUBE_MUSIC_EMBED_URL}
+              title="CADENZ 11 BPM running cadence album on YouTube Music"
+              className="absolute inset-0 h-full w-full"
+              loading="lazy"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              onLoad={() =>
+                trackOrganicEvent('music_preview_started', {
+                  bpm: asset.bpm,
+                  destination_type: 'youtube_playlist',
+                  source_position: 'youtube_playlist_embed',
+                })
+              }
+            />
           </div>
+        </div>
+        <p className="mt-3 text-sm leading-6 text-white/60">
+          Full 11-BPM album playlist embedded. The Spotify button opens the exact track for {asset.bpm} BPM.
+        </p>
 
-          <Heading id={`cadenz-listen-${asset.bpm}`} className="mt-5 text-2xl font-semibold leading-tight text-white sm:text-3xl">
-            {asset.title}
-          </Heading>
-          <p className="mt-3 text-sm leading-7 text-white/65">
-            {asset.sessionSummary}
+        <div className="mt-8 border-t border-white/10 pt-6">
+          <p className="text-base leading-7 text-white/75">
+            CADENZ plays this music at your running or cycling cadence.
           </p>
-
-          <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
-            <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
-              <dt className="uppercase tracking-[0.14em] text-white/40">Artist</dt>
-              <dd className="mt-1.5 font-semibold text-white/85">{asset.artist}</dd>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
-              <dt className="uppercase tracking-[0.14em] text-white/40">ISRC</dt>
-              <dd className="mt-1.5 font-mono text-white/75">{asset.isrc}</dd>
-            </div>
-          </dl>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <a
-              href={asset.spotifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => outbound('spotify_track', asset.bpm, 'verified_track_card')}
-              data-organic-cta
-              data-destination-type="spotify_track"
-              data-source-position="verified_track_card"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#1ed760] px-5 py-3 text-sm font-bold text-[#07150c] transition hover:bg-[#5bea83] focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              <SpotifyMark />
-              Listen on Spotify
-              <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
-            <a
-              href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => outbound('youtube_playlist', asset.bpm, 'verified_track_card')}
-              data-organic-cta
-              data-destination-type="youtube_playlist"
-              data-source-position="verified_track_card"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.05] px-5 py-3 text-sm font-semibold text-white transition hover:border-red-300/40 hover:bg-red-300/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              <Youtube className="h-5 w-5 text-red-300" aria-hidden="true" />
-              Open YouTube Music
-              <ExternalLink className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </div>
-
-          <div className="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-black shadow-[0_18px_60px_rgba(0,0,0,0.3)]">
-            <div className="relative aspect-video overflow-hidden bg-[#050b10]">
-              <iframe
-                src={CADENZ_YOUTUBE_MUSIC_EMBED_URL}
-                title="CADENZ 11 BPM running cadence album on YouTube Music"
-                className="absolute inset-0 h-full w-full"
-                loading="lazy"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-                onLoad={() =>
-                  trackOrganicEvent('music_preview_started', {
-                    bpm: asset.bpm,
-                    destination_type: 'youtube_playlist',
-                    source_position: 'youtube_playlist_embed',
-                  })
-                }
-              />
-            </div>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-200/10 bg-red-200/[0.045] px-4 py-3">
-            <p className="inline-flex items-center gap-2 text-xs font-semibold text-white/75"><ListMusic className="h-4 w-4 text-red-200" aria-hidden="true" /> Full 11-BPM album playlist embedded</p>
-            <a
-              href={asset.youtube?.playlistUrl ?? CADENZ_YOUTUBE_MUSIC_PLAYLIST_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => outbound('youtube_playlist', asset.bpm, 'youtube_playlist_fallback')}
-              data-organic-cta
-              data-destination-type="youtube_playlist"
-              data-source-position="youtube_playlist_fallback"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-red-100 underline decoration-red-200/40 underline-offset-4 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              Open in YouTube Music
-              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-            </a>
-          </div>
-          <p className="mt-3 text-[11px] leading-5 text-white/40">The full owner-supplied CADENZ album playlist stays embedded here. The Spotify link above remains the exact ISRC match for this BPM page.</p>
-
-          <button
-            type="button"
-            onClick={openPopup}
+          <a
+            href={CADENZ_PLAY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => outbound('google_play', asset.bpm, 'listen_panel')}
             data-organic-cta
-            data-destination-type="cadenz_waitlist"
+            data-destination-type="google_play"
             data-source-position="listen_panel"
-            className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-cyan-200/20 bg-cyan-200/[0.07] px-5 py-3 text-sm font-semibold text-cyan-50 transition hover:border-cyan-200/40 hover:bg-cyan-200/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200"
+            className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-white underline decoration-white/30 underline-offset-[6px] hover:decoration-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
           >
-            Get CADENZ launch updates
-          </button>
+            Get CADENZ on Google Play
+          </a>
         </div>
       </div>
     </section>

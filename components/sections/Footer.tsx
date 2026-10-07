@@ -37,7 +37,7 @@ export function Footer() {
                             alt="Virzy Guns Production"
                             width={280}
                             height={280}
-                            className="h-auto w-36 opacity-85 sm:w-40"
+                            className="h-auto w-36 opacity-90 mix-blend-lighten sm:w-40"
                             sizes="160px"
                         />
                         <p className="mt-8 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white sm:text-4xl">

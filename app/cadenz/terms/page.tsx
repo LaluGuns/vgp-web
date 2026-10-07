@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'CADENZ Terms of Service | Virzy Guns Production',
         description: 'Terms for using the CADENZ app.',
-        url: 'https://virzyguns.com/cadenz/terms',
+        url: 'https://www.virzyguns.com/cadenz/terms',
     },
     robots: {
         index: true,

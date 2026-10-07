@@ -6,16 +6,14 @@ import type { ReactNode } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { CreditsStrip } from '@/components/editorial/CreditsStrip';
 import {
     CADENZ_APP_URL,
     CADENZ_PLAY_URL,
     FLOW_APP_URL,
-    catalogCredentials,
     founderStatement,
 } from '@/lib/vgp-ecosystem';
 import { useNewsletter } from '@/components/context/NewsletterContext';
-
-const MUSO_PROFILE_URL = catalogCredentials[0].href;
 
 function Availability({ children, live = false }: { children: ReactNode; live?: boolean }) {
     return (
@@ -76,31 +74,7 @@ export default function HomePage() {
                 </section>
 
                 {/* Credits: real numbers from Muso.ai, each linked to the source. */}
-                <section aria-labelledby="credits-heading" className="mt-16 border-y border-white/10 px-4 sm:px-6 lg:mt-20">
-                    <div className="mx-auto flex max-w-7xl flex-col gap-6 py-8 lg:flex-row lg:items-center lg:justify-between">
-                        <h2 id="credits-heading" className="text-sm text-white/60">
-                            Verified credits on{' '}
-                            <a
-                                href={MUSO_PROFILE_URL}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
-                            >
-                                Muso.ai
-                            </a>
-                        </h2>
-                        <dl className="grid grid-cols-2 gap-x-8 gap-y-5 sm:grid-cols-4 lg:gap-x-14">
-                            {catalogCredentials.map((item) => (
-                                <div key={item.label}>
-                                    <dt className="text-xs text-white/55">{item.label}</dt>
-                                    <dd className="mt-1 font-display text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
-                                        {item.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
-                    </div>
-                </section>
+                <CreditsStrip className="mt-16 lg:mt-20" />
 
                 {/* Beat store: the main product, so it gets the widest treatment. */}
                 <section aria-labelledby="beats-heading" className="px-4 py-20 sm:px-6 lg:py-28">

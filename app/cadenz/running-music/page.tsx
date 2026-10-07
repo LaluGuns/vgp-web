@@ -1,10 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { ArrowRight, AudioLines, CircleGauge, Headphones, Sparkles } from "lucide-react";
 
 import { CadenzListenPanel } from "@/components/cadenz/CadenzListenPanel";
 import { CadenzTempoOrbit } from "@/components/cadenz/CadenzTempoOrbit";
+import { CADENZ_APP_URL, CADENZ_PLAY_URL } from "@/lib/vgp-ecosystem";
 import {
   CADENZ_BPM_COVERAGE,
   CADENZ_BPM_TITLES,
@@ -63,7 +63,7 @@ export default async function CadenzRunningMusicHub({ searchParams }: { searchPa
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "CADENZ", item: `${SITE_URL}/cadenz` },
+          { "@type": "ListItem", position: 1, name: "CADENZ", item: CADENZ_APP_URL },
           { "@type": "ListItem", position: 2, name: "Running music by BPM", item: `${SITE_URL}${CADENZ_HUB_PATH}` },
         ],
       },
@@ -71,59 +71,58 @@ export default async function CadenzRunningMusicHub({ searchParams }: { searchPa
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#020509] text-white selection:bg-[#b8ff48] selection:text-[#071006]">
+    <main className="editorial-shell min-h-screen text-white">
       <script nonce={nonce} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-48 top-20 h-[34rem] w-[34rem] rounded-full bg-cyan-400/[0.08] blur-[120px]" />
-        <div className="absolute -right-40 top-[30rem] h-[34rem] w-[34rem] rounded-full bg-violet-500/[0.09] blur-[130px]" />
-        <div className="absolute inset-0 opacity-[0.14] [background-image:linear-gradient(rgba(103,232,249,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(103,232,249,.12)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_78%)]" />
-      </div>
 
-      <div className="relative mx-auto max-w-[90rem] px-4 pb-24 pt-10 sm:px-6 lg:px-10 lg:pt-14">
-        <nav className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/45" aria-label="Breadcrumb">
-          <Link href="/cadenz" className="transition hover:text-cyan-100" data-organic-cta data-destination-type="cadenz" data-source-position="breadcrumb">CADENZ</Link>
-          <span aria-hidden="true">/</span><span className="text-white/75">Running music</span>
+      <div className="px-4 pb-24 pt-10 sm:px-6 sm:pt-14">
+        <div className="mx-auto max-w-7xl">
+        <nav className="flex items-center gap-2 text-sm text-white/55" aria-label="Breadcrumb">
+          <a href={CADENZ_APP_URL} className="underline decoration-white/30 underline-offset-4 hover:text-white" data-organic-cta data-destination-type="cadenz" data-source-position="breadcrumb">CADENZ</a>
+          <span aria-hidden="true">/</span>
+          <span className="text-white/80">Running music</span>
         </nav>
 
-        <header className="mt-10 grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#b8ff48]/25 bg-[#b8ff48]/[0.07] px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d7ff9d]">
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Verified rhythm collection
-            </div>
-            <h1 className="mt-6 max-w-3xl text-[clamp(3.25rem,7.4vw,7.25rem)] font-semibold leading-[0.88] tracking-[-0.065em]">
-              Running music <span className="mt-2 block bg-[linear-gradient(90deg,#67e8f9,#b8ff48_55%,#a78bfa)] bg-clip-text text-transparent">by BPM.</span>
+        <header className="mt-8 grid items-center gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-6">
+            <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,6.5vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
+              Running music by BPM.
             </h1>
-            <p className="mt-7 max-w-xl text-base leading-8 text-white/62 sm:text-lg">Pick a pulse, open the exact Spotify track, or browse the shared CADENZ playlist on YouTube Music. The map covers 130–180 BPM and six tempo pages connect to exact Virzy Guns tracks.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={cadenzBpmPath(170)} data-organic-cta data-destination-type="bpm_collection" data-source-position="hub_hero_primary" className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[#b8ff48] px-6 py-3.5 text-sm font-extrabold text-[#081006] transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                Start at 170 BPM <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <p className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+              Pick a tempo, open the exact Spotify track, or play the whole CADENZ album on YouTube Music. The map covers 11
+              tempos from 130 to 180 BPM, and 6 of them link to a verified Virzy Guns track.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+              <Link href={cadenzBpmPath(170)} data-organic-cta data-destination-type="bpm_collection" data-source-position="hub_hero_primary" className="inline-flex min-h-12 items-center rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]">
+                Start at 170 BPM
               </Link>
-              <Link href="/cadenz" data-organic-cta data-destination-type="cadenz" data-source-position="hub_hero_secondary" className="inline-flex min-h-13 items-center justify-center rounded-xl border border-white/14 bg-white/[0.045] px-6 py-3.5 text-sm font-semibold transition hover:border-cyan-200/35 hover:bg-cyan-200/[0.07] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-200">Discover the CADENZ app</Link>
+              <a href={CADENZ_PLAY_URL} target="_blank" rel="noopener noreferrer" data-organic-cta data-destination-type="google_play" data-source-position="hub_hero_secondary" className="text-sm font-medium text-white underline decoration-white/30 underline-offset-[6px] hover:decoration-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                Get CADENZ on Google Play
+              </a>
             </div>
-            <p className="mt-5 max-w-lg text-xs leading-6 text-white/40">BPM is the musical tempo. SPM is your steps per minute. They can line up one beat per step, but your natural stride and comfort come first.</p>
+            <p className="mt-8 max-w-lg text-sm leading-6 text-white/55">
+              BPM is the tempo of the music. SPM is your steps per minute. They can line up one beat per step, but your natural stride comes first.
+            </p>
           </div>
-          <CadenzTempoOrbit selectedBpm={selectedBpm} />
+          <div className="lg:col-span-6">
+            <CadenzTempoOrbit selectedBpm={selectedBpm} />
+          </div>
         </header>
 
-        <section className="mt-16 grid grid-cols-2 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] sm:grid-cols-4" aria-label="Collection summary">
-          <div className="p-5 sm:p-6"><CircleGauge className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">11</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">tempo points</p></div>
-          <div className="border-l border-white/10 p-5 sm:p-6"><Headphones className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">6</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">exact Spotify tracks</p></div>
-          <div className="border-l border-white/10 p-5 sm:p-6"><AudioLines className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">1</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">YouTube Music playlist</p></div>
-          <div className="border-l border-white/10 p-5 sm:p-6"><Sparkles className="h-4 w-4 text-cyan-200/75" aria-hidden="true" /><p className="mt-4 text-3xl font-semibold">130–180</p><p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">BPM range</p></div>
-        </section>
-
-        <section className="mt-20" aria-labelledby="tempo-deck-title">
-          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-            <div><p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#b8ff48]/75">Tempo deck</p><h2 id="tempo-deck-title" className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">Choose how today moves.</h2></div>
-            <p className="max-w-md text-sm leading-7 text-white/50">Green points open a verified track page. The remaining tempos stay in this map until an exact destination is ready.</p>
+        <section className="mt-20 border-t border-white/10 pt-12" aria-labelledby="tempo-deck-title">
+          <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+            <h2 id="tempo-deck-title" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">Pick a tempo</h2>
+            <p className="max-w-xl text-base leading-7 text-white/65 lg:col-span-7">
+              Tempos marked exact track open a page with the verified song. The others stay on this map until a matching release is verified.
+            </p>
           </div>
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
             {CADENZ_BPM_COVERAGE.map((bpm) => {
               const exact = isCadenzIndexableBpm(bpm);
               const active = bpm === selectedBpm;
               return (
-                <Link key={bpm} href={bpmHref(bpm)} data-organic-cta data-destination-type={exact ? "bpm_collection" : "bpm_hub_state"} data-source-position="tempo_deck" aria-current={active ? "page" : undefined} className={`group relative min-h-32 overflow-hidden rounded-2xl border p-4 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-100 ${active ? "border-cyan-100/60 bg-cyan-100/[0.11]" : exact ? "border-[#b8ff48]/20 bg-[#b8ff48]/[0.035] hover:-translate-y-1 hover:border-[#b8ff48]/50" : "border-white/10 bg-white/[0.025] hover:-translate-y-1 hover:border-cyan-200/25"}`}>
-                  <span className="absolute right-3 top-3 h-2 w-2 rounded-full bg-current opacity-55" /><span className="block text-3xl font-semibold tracking-[-0.04em]">{bpm}</span><span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/38">BPM</span><span className={`mt-5 block text-[10px] font-semibold uppercase tracking-[0.12em] ${exact ? "text-[#cfff86]" : "text-white/35"}`}>{exact ? "Exact track" : "Explore tempo"}</span>
+                <Link key={bpm} href={bpmHref(bpm)} data-organic-cta data-destination-type={exact ? "bpm_collection" : "bpm_hub_state"} data-source-position="tempo_deck" aria-current={active ? "page" : undefined} className={`flex min-h-24 flex-col justify-between rounded-[6px] border p-4 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${active ? "border-white/70 bg-white/[0.04]" : "border-white/10 hover:border-white/30"}`}>
+                  <span><span className="font-display text-3xl font-semibold tabular-nums tracking-[-0.03em]">{bpm}</span> <span className="text-xs text-white/55">BPM</span></span>
+                  <span className={`text-xs font-medium ${exact ? "text-sky-300" : "text-white/50"}`}>{exact ? "Exact track" : "Map point"}</span>
                 </Link>
               );
             })}
@@ -132,21 +131,40 @@ export default async function CadenzRunningMusicHub({ searchParams }: { searchPa
 
         <div className="mt-20">
           {selectedAsset ? <CadenzListenPanel asset={selectedAsset} /> : (
-            <section className="grid gap-7 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8 lg:grid-cols-[0.72fr_1.28fr]" aria-labelledby="tempo-preview-title">
-              <div className="flex min-h-56 flex-col justify-between rounded-2xl border border-cyan-200/15 bg-[radial-gradient(circle_at_50%_42%,rgba(34,211,238,.2),rgba(4,16,25,.92)_68%)] p-6"><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-100/55">Map point</span><div><p className="text-7xl font-semibold tracking-[-0.07em]">{selectedBpm}</p><p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-100/55">BPM</p></div></div>
-              <div><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Catalog language</p><h2 id="tempo-preview-title" className="mt-3 text-3xl font-semibold">A useful tempo, without a fake destination.</h2><p className="mt-4 text-sm leading-7 text-white/58">These source-backed titles explain how {selectedBpm} BPM can be framed. CADENZ will not invent a Spotify or YouTube URL before an exact asset is verified.</p><ul className="mt-6 grid gap-3 sm:grid-cols-2">{CADENZ_BPM_TITLES[selectedBpm].map((title) => <li key={title} className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm leading-6 text-white/72">{title}</li>)}</ul></div>
+            <section className="grid gap-10 border-y border-white/10 py-12 lg:grid-cols-12" aria-labelledby="tempo-preview-title">
+              <div className="lg:col-span-4">
+                <p className="font-display text-7xl font-semibold tabular-nums tracking-[-0.05em]">{selectedBpm}</p>
+                <p className="mt-1 text-sm text-white/55">BPM, map point</p>
+              </div>
+              <div className="lg:col-span-8">
+                <h2 id="tempo-preview-title" className="text-2xl font-semibold sm:text-3xl">Tracks at {selectedBpm} BPM in the catalog</h2>
+                <p className="mt-4 max-w-xl text-base leading-7 text-white/70">
+                  These tracks exist at this tempo. A direct listening link appears here once the exact release is verified, so no link is guessed.
+                </p>
+                <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+                  {CADENZ_BPM_TITLES[selectedBpm].map((title) => <li key={title} className="py-3 text-base text-white/80">{title}</li>)}
+                </ul>
+              </div>
             </section>
           )}
         </div>
 
-        <section className="mt-20 grid gap-4 lg:grid-cols-2" aria-labelledby="bpm-spm-title">
-          <article className="rounded-[1.5rem] border border-cyan-200/15 bg-cyan-200/[0.045] p-6 sm:p-8"><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-cyan-100/60">The music</p><h2 id="bpm-spm-title" className="mt-3 text-2xl font-semibold">BPM sets the pulse.</h2><p className="mt-4 text-sm leading-7 text-white/58">Beats per minute describes how fast the music moves. Choose a track because the pulse feels clear for your session, not because one number is universal.</p></article>
-          <article className="rounded-[1.5rem] border border-violet-300/15 bg-violet-300/[0.045] p-6 sm:p-8"><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-violet-200/65">Your movement</p><h2 className="mt-3 text-2xl font-semibold">SPM tracks the steps.</h2><p className="mt-4 text-sm leading-7 text-white/58">Steps per minute is personal and changes with pace, terrain, fatigue, and body mechanics. Use music as a cue; never force a stride that feels wrong.</p></article>
+        <section className="mt-20 grid gap-10 border-t border-white/10 pt-12 lg:grid-cols-2" aria-labelledby="bpm-spm-title">
+          <div>
+            <h2 id="bpm-spm-title" className="text-2xl font-semibold">BPM sets the pulse</h2>
+            <p className="mt-3 max-w-xl text-base leading-7 text-white/70">Beats per minute is how fast the music moves. Pick a track because the pulse feels clear for today, not because one number suits everyone.</p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold">SPM is your steps</h2>
+            <p className="mt-3 max-w-xl text-base leading-7 text-white/70">Steps per minute is personal. It changes with pace, terrain, fatigue and how you move. Use the music as a cue and never force a stride that feels wrong.</p>
+          </div>
         </section>
 
-        <footer className="mt-16 flex flex-col justify-between gap-5 border-t border-white/10 pt-8 text-sm text-white/45 sm:flex-row sm:items-center">
-          <Link href="/cadenz" className="transition hover:text-cyan-100">About the CADENZ app</Link><div className="flex flex-wrap gap-x-4 gap-y-2">{exactBpms.map((bpm) => <Link key={bpm} href={cadenzBpmPath(bpm)} className="transition hover:text-[#b8ff48]">{bpm} BPM</Link>)}</div>
+        <footer className="mt-16 flex flex-col justify-between gap-5 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:items-center">
+          <a href={CADENZ_APP_URL} className="underline decoration-white/30 underline-offset-4 hover:text-white">About the CADENZ app</a>
+          <div className="flex flex-wrap gap-x-5 gap-y-2">{exactBpms.map((bpm) => <Link key={bpm} href={cadenzBpmPath(bpm)} className="hover:text-white">{bpm} BPM</Link>)}</div>
         </footer>
+        </div>
       </div>
     </main>
   );

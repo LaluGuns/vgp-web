@@ -16,9 +16,25 @@ function isExternal(href: string) {
     return href.startsWith('http');
 }
 
-/** Underlined text link. External URLs open in a new tab. */
-export function TextLink({ href, children, className = '' }: { href: string; children: ReactNode; className?: string }) {
-    const classes = `${textLinkClass} ${className}`.trim();
+const inlineLinkClass =
+    'text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60';
+
+/**
+ * Underlined text link. External URLs open in a new tab. `inline` keeps the
+ * surrounding font size, for links inside a sentence.
+ */
+export function TextLink({
+    href,
+    children,
+    className = '',
+    inline = false,
+}: {
+    href: string;
+    children: ReactNode;
+    className?: string;
+    inline?: boolean;
+}) {
+    const classes = `${inline ? inlineLinkClass : textLinkClass} ${className}`.trim();
 
     if (isExternal(href)) {
         return (
