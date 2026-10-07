@@ -8,6 +8,7 @@ import { PageTransition } from '@/components/PageTransition';
 import { SocialDock } from '@/components/SocialDock';
 import {
     CADENZ_APP_URL,
+    CADENZ_PLAY_URL,
     FLOW_APP_URL,
     catalogCredentials,
     founderStatement,
@@ -197,13 +198,14 @@ export default function HomePage() {
                                 </div>
                                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
                                     <h3 className="text-2xl font-semibold">CADENZ</h3>
-                                    <Availability>Coming to iOS and Android</Availability>
+                                    <Availability live>On Google Play</Availability>
                                 </div>
                                 <p className="mt-3 text-base leading-7 text-white/70">
                                     Music matched to your running or cycling cadence, so the beat sits on your stride.
                                 </p>
-                                <div className="mt-5">
+                                <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
                                     <TextLink href={CADENZ_APP_URL}>Visit cadenz.virzyguns.com</TextLink>
+                                    <TextLink href={CADENZ_PLAY_URL}>Get it on Google Play</TextLink>
                                 </div>
                             </article>
                         </div>

@@ -42,12 +42,12 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === 'production',
     },
     allowedDevOrigins: ['127.0.0.1', 'localhost'],
-    // The CADENZ landing page now lives on its own site. /cadenz/privacy,
-    // /cadenz/terms, /cadenz/delete-account and /cadenz/running-music stay here:
-    // the store listings and search results point at them.
+    // The CADENZ landing page lives at cadenz.virzyguns.com, a one-page static
+    // site. /cadenz/privacy, /cadenz/terms, /cadenz/delete-account and
+    // /cadenz/running-music have no counterpart there, so they stay here.
     async redirects() {
         return [
-            { source: '/cadenz', destination: 'https://cadenz.virzyguns.com', permanent: false },
+            { source: '/cadenz', destination: 'https://cadenz.virzyguns.com', permanent: true },
         ];
     },
     async headers() {

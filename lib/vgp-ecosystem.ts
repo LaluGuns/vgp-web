@@ -27,6 +27,7 @@ export interface NavGroup {
 
 export const FLOW_APP_URL = 'https://flow.virzyguns.com';
 export const CADENZ_APP_URL = 'https://cadenz.virzyguns.com';
+export const CADENZ_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.cadenz.app';
 
 export const mainNavGroups: NavGroup[] = [
     {
@@ -47,7 +48,7 @@ export const mainNavGroups: NavGroup[] = [
         children: [
             { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
             { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
-            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Cadence music app for runners and cyclists', status: 'Coming Soon', external: true },
+            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Cadence music app for runners and cyclists', status: 'Available', external: true },
             { name: 'MyCamScan', href: '/mycamscan', description: 'Private document scanner with on-device OCR and searchable PDF', status: 'Coming Soon' },
             { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },
         ],
@@ -105,11 +106,11 @@ export const ecosystemCards = [
         title: 'CADENZ',
         eyebrow: 'Movement Audio App',
         href: CADENZ_APP_URL,
-        cta: 'Preview CADENZ',
+        cta: 'Visit CADENZ',
         Icon: Activity,
         description:
             'A cadence music app with original VGP music for runners and cyclists.',
-        status: 'Coming Soon',
+        status: 'On Google Play',
         external: true,
     },
     {
@@ -168,7 +169,7 @@ export const cadenzHighlights = [
     'CADENZ by HealingWave Lab',
     'Cadence music for running and cycling',
     'VGP original music',
-    'Coming soon',
+    'On Google Play',
 ];
 
 export const healingWaveModules = [
@@ -185,7 +186,7 @@ export const healingWaveModules = [
     },
     {
         name: 'CADENZ',
-        availability: 'Coming soon',
+        availability: 'On Google Play',
         platform: 'Running and Cycling',
         description:
             'Tempo-matched cadence music with original VGP music for runners and cyclists.',

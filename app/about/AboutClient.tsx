@@ -172,7 +172,7 @@ export default function AboutClient() {
                         </p>
                         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                             <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
-                            <EditorialButton href={CADENZ_APP_URL} variant="ghost">Preview CADENZ</EditorialButton>
+                            <EditorialButton href={CADENZ_APP_URL} variant="ghost">Visit CADENZ</EditorialButton>
                         </div>
                     </div>
                 </SectionShell>
