@@ -51,8 +51,8 @@ export function BeatStoreRow({
     queue,
     index,
     labels,
-    isShortlisted,
-    shortlistDisabled,
+    isShortlisted = false,
+    shortlistDisabled = false,
     onToggleShortlist,
     onLicense,
 }: {
@@ -60,9 +60,10 @@ export function BeatStoreRow({
     queue: StoreTrack[];
     index: number;
     labels: { play: string; pause: string; shortlist: string; shortlisted: string; shortlistFull: string; license: string; details: string };
-    isShortlisted: boolean;
-    shortlistDisabled: boolean;
-    onToggleShortlist: () => void;
+    isShortlisted?: boolean;
+    shortlistDisabled?: boolean;
+    /** Leave out to hide the release-kit bookmark. */
+    onToggleShortlist?: () => void;
     onLicense: () => void;
 }) {
     const { current, isPlaying, isLoading, play } = useStorePlayer();
@@ -114,6 +115,7 @@ export function BeatStoreRow({
             <span className="hidden font-mono text-xs text-white/60 md:block">{beat.musicalKey ?? '–'}</span>
 
             <div className="flex items-center justify-end gap-1.5">
+{onToggleShortlist ? (
                 <button
                     type="button"
                     onClick={onToggleShortlist}
@@ -127,6 +129,7 @@ export function BeatStoreRow({
                 >
                     <Bookmark className={`h-4 w-4 ${isShortlisted ? 'fill-current' : ''}`} aria-hidden="true" />
                 </button>
+                ) : null}
                 <button
                     type="button"
                     onClick={onLicense}
