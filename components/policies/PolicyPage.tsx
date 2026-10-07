@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { founderEmail } from '@/lib/founder-contact';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
 
 export type PolicySection = {
     id?: string;
@@ -57,12 +58,9 @@ export function PolicyPage({
                         <p className="mt-4 text-base leading-8 text-white/75">
                             Virzy Guns Production is operated by Virzy Guns. Send questions, privacy requests and data
                             deletion requests to{' '}
-                            <a
-                                className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
-                                href={`mailto:${founderEmail}`}
-                            >
+                            <TextLink href={`mailto:${founderEmail}`} inline>
                                 {founderEmail}
-                            </a>
+                            </TextLink>
                             .
                         </p>
                     </section>

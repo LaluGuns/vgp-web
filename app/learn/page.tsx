@@ -55,7 +55,7 @@ export default function LearnHubPage() {
                     secondary={{ label: 'Trap Edition guide', href: '/book' }}
                 />
 
-                <section aria-labelledby="formats-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                <section data-reveal="" aria-labelledby="formats-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="formats-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
                             Three formats
@@ -75,7 +75,7 @@ export default function LearnHubPage() {
                     </div>
                 </section>
 
-                <section aria-labelledby="latest-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                <section data-reveal="" aria-labelledby="latest-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <h2 id="latest-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
@@ -105,7 +105,7 @@ export default function LearnHubPage() {
                     </div>
                 </section>
 
-                <section aria-labelledby="book-heading" className="border-t border-white/10 px-4 pb-24 pt-16 sm:px-6 lg:pt-20">
+                <section data-reveal="" aria-labelledby="book-heading" className="border-t border-white/10 px-4 pb-24 pt-16 sm:px-6 lg:pt-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center">
                         <div className="relative mx-auto w-full max-w-xs overflow-hidden rounded-[4px] border border-white/10 lg:col-span-4 lg:mx-0">
                             <Image

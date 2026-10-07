@@ -72,7 +72,7 @@ export default function StudioPage() {
                 </div>
             </div>
 
-            <section aria-labelledby="services-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+            <section data-reveal="" aria-labelledby="services-heading" className="px-4 py-20 sm:px-6 lg:py-28">
                 <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                     <div className="lg:col-span-4">
                         <h2 id="services-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
@@ -99,7 +99,7 @@ export default function StudioPage() {
                 </div>
             </section>
 
-            <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+            <section data-reveal="" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
                 <p className="mx-auto max-w-7xl text-base leading-7 text-white/65">
                     Learning to produce? The masterclass series is in the works.{' '}
                     <TextLink href="/studio/masterclass" inline>See what it covers</TextLink>

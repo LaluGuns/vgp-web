@@ -48,7 +48,7 @@ export default function GuidesPage() {
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(bookJsonLd) }}
                 />
 
-                <section className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+                <section data-enter="" className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
                         <div className="lg:col-span-7">
                             <p className="text-sm text-white/55">PDF, coming soon</p>
@@ -89,7 +89,7 @@ export default function GuidesPage() {
                     </div>
                 </section>
 
-                <section aria-labelledby="contents-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                <section data-reveal="" aria-labelledby="contents-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="contents-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
                             Contents
@@ -108,7 +108,7 @@ export default function GuidesPage() {
                     </div>
                 </section>
 
-                <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+                <section data-reveal="" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
                     <div className="mx-auto flex max-w-7xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                         <p className="max-w-xl text-base leading-7 text-white/70">
                             The release date is not set yet. Leave your email and you will get one message when the PDF is out.

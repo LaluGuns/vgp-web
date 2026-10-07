@@ -45,9 +45,23 @@ readable text.
 - **Type.** System SF stack (`--font-display`). Hierarchy from size and
   weight: display `clamp(2.5rem, 6vw, 4.75rem)`, section headings 30-48px,
   body 16-18px at 1.6-1.75 line height, 45-75 characters per line.
-- **Motion.** State changes only (menus, dropdowns, modals) at 120-200ms
-  ease-out. No scroll reveals, hover lifts, scale-on-hover or looping
-  animation. `prefers-reduced-motion` is honored globally.
+- **Motion.** The site should feel alive, not static (the founder asked for
+  this after a fully still version felt boring). The vocabulary, all in
+  `app/globals.css`:
+  - `data-enter` on hero blocks: rise and fade on load, staggered with
+    `--enter-delay`. `data-enter="settle"` on a hero photo eases it from 1.06.
+  - `data-reveal` on sections below the fold: `components/MotionObserver.tsx`
+    hides them only if they start off screen, then eases them in once.
+    Stagger with `--reveal-delay`. Never gate content on framer-motion
+    `whileInView`; it left Beat Store sections blank before.
+  - `.vgp-zoom` on image frames: the photo scales to 1.04 when its section
+    (`group`) is hovered.
+  - `.vgp-link` underline sweep, `buttonMotionClass` press and
+    `ButtonArrow` nudge from `EditorialPrimitives`.
+  - Looping animation only where it means something: the CADENZ tempo
+    widget pulses at the chosen BPM.
+  No hover lifts, glow or parallax. Everything is off under
+  `prefers-reduced-motion`.
 - **Imagery.** Use the real assets in `public/` (founder portrait, CADENZ
   poster, chrome logo, book cover, app icons, game art). No stock or
   generated filler.
@@ -58,5 +72,7 @@ readable text.
 ## Shared building blocks
 
 `components/editorial/EditorialPrimitives.tsx`: `PageHeader`,
-`SectionShell`, `EditorialButton`, `TextLink`. Reuse these before writing new
+`SectionShell`, `EditorialButton`, `TextLink`. A `mailto:` href on
+`TextLink` or `EditorialButton` renders `EmailChooser` (Gmail, mail app or
+copy address). Reuse these before writing new
 page chrome.

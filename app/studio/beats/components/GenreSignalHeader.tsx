@@ -97,7 +97,7 @@ export default function GenreSignalHeader({
     const reduceMotion = useReducedMotion();
 
     return (
-        <header className="relative overflow-hidden border-b border-white/10 px-4 sm:px-6">
+        <header data-enter="" className="relative overflow-hidden border-b border-white/10 px-4 sm:px-6">
             <div className="relative mx-auto grid max-w-7xl gap-7 pb-10 pt-6 sm:pb-14 sm:pt-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:pb-16 lg:pt-10">
                 <div>
                     <p className="text-xs font-semibold text-white/55">{text.eyebrow}</p>

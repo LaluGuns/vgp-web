@@ -174,9 +174,9 @@ export function ArticlePage({ article, category, related }: ArticlePageProps) {
                 <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
                         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-white/55">
-                            <Link href="/blog" className="underline decoration-white/30 underline-offset-4 hover:text-white">Articles</Link>
+                            <Link href="/blog" className="vgp-link hover:text-white">Articles</Link>
                             <span aria-hidden="true">/</span>
-                            <Link href={`/blog/category/${article.category}`} className="underline decoration-white/30 underline-offset-4 hover:text-white">
+                            <Link href={`/blog/category/${article.category}`} className="vgp-link hover:text-white">
                                 {category?.name || article.category}
                             </Link>
                         </nav>

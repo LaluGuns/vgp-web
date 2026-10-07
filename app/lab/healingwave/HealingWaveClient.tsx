@@ -21,7 +21,7 @@ export default function HealingWaveClient() {
                     secondary={{ label: 'Visit CADENZ', href: CADENZ_APP_URL }}
                 />
 
-                <section aria-labelledby="products-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                <section data-reveal="" aria-labelledby="products-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <h2 id="products-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
@@ -56,7 +56,7 @@ export default function HealingWaveClient() {
                     </div>
                 </section>
 
-                <section aria-labelledby="cadenz-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-24">
+                <section data-reveal="" aria-labelledby="cadenz-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-24">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center">
                         <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-5 lg:mx-0">
                             <Image
@@ -84,13 +84,13 @@ export default function HealingWaveClient() {
                     </div>
                 </section>
 
-                <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+                <section data-reveal="" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
                     <p className="mx-auto max-w-7xl text-base leading-7 text-white/65">
                         Want the lab notes when there is something new?{' '}
                         <button
                             type="button"
                             onClick={openPopup}
-                            className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                            className="text-white vgp-link focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                         >
                             Get them by email
                         </button>

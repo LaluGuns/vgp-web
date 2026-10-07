@@ -20,7 +20,7 @@ export function CategoryPage({ category, articles, allCategories }: CategoryPage
     return (
         <PageTransition>
             <main className="editorial-shell text-white">
-                <section className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
+                <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
                         <TextLink href="/blog">All articles</TextLink>
                         <h1 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">

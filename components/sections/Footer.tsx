@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { socialData } from '@/components/socialLinks';
 import { mainNavGroups } from '@/lib/vgp-ecosystem';
+import { EmailChooser } from '@/components/editorial/EmailChooser';
 
 const navGroupLinks = (key: 'studio' | 'apps' | 'learn') =>
     mainNavGroups.find((group) => group.key === key)?.children.map(({ name, href }) => ({ name, href })) ?? [];
@@ -82,9 +83,9 @@ export function Footer() {
                                                         {link.name}
                                                     </a>
                                                 ) : mailto ? (
-                                                    <a href={link.href} className={linkClass}>
+                                                    <EmailChooser href={link.href} className={linkClass} placement="top">
                                                         {link.name}
-                                                    </a>
+                                                    </EmailChooser>
                                                 ) : (
                                                     <Link href={link.href} className={linkClass}>
                                                         {link.name}
