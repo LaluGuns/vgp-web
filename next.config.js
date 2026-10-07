@@ -31,8 +31,9 @@ const nextConfig = {
     compress: true,
     poweredByHeader: false,
     images: {
-        domains: [],
         formats: ['image/webp', 'image/avif'],
+        // 90 is used by the CADENZ cover art; Next 16 rejects qualities not listed here.
+        qualities: [75, 90],
     },
     experimental: {
         optimizeCss: false,
