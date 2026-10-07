@@ -26,6 +26,7 @@ export interface NavGroup {
 }
 
 export const FLOW_APP_URL = 'https://flow.virzyguns.com';
+export const CADENZ_APP_URL = 'https://cadenz.virzyguns.com';
 
 export const mainNavGroups: NavGroup[] = [
     {
@@ -46,7 +47,7 @@ export const mainNavGroups: NavGroup[] = [
         children: [
             { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
             { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
-            { name: 'CADENZ', href: '/cadenz', description: 'Cadence music app for runners and cyclists', status: 'Coming Soon' },
+            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Cadence music app for runners and cyclists', status: 'Coming Soon', external: true },
             { name: 'MyCamScan', href: '/mycamscan', description: 'Private document scanner with on-device OCR and searchable PDF', status: 'Coming Soon' },
             { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },
         ],
@@ -103,12 +104,13 @@ export const ecosystemCards = [
     {
         title: 'CADENZ',
         eyebrow: 'Movement Audio App',
-        href: '/cadenz',
+        href: CADENZ_APP_URL,
         cta: 'Preview CADENZ',
         Icon: Activity,
         description:
             'A cadence music app with original VGP music for runners and cyclists.',
         status: 'Coming Soon',
+        external: true,
     },
     {
         title: 'HealingWave Lab',
@@ -189,7 +191,8 @@ export const healingWaveModules = [
             'Tempo-matched cadence music with original VGP music for runners and cyclists.',
         features: ['Cadence targets', 'BPM based music', 'Motion flow', 'Training rhythm'],
         note: 'Built to keep cadence targets clear while the music carries the session.',
-        href: '/cadenz',
+        href: CADENZ_APP_URL,
+        external: true,
     },
     {
         name: 'HealingWave Gym',

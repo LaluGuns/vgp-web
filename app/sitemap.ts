@@ -30,7 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/de-DE/studio/beats/licensing',
         '/studio/masterclass',
         '/lab/healingwave',
-        '/cadenz',
         '/mycamscan',
         '/mycamscan/privacy',
         '/mycamscan/terms',

@@ -10,7 +10,7 @@ import {
     PageHeader,
     SectionShell,
 } from '@/components/editorial/EditorialPrimitives';
-import { founderBio, founderStatement } from '@/lib/vgp-ecosystem';
+import { CADENZ_APP_URL, founderBio, founderStatement } from '@/lib/vgp-ecosystem';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
 const pillars = [
@@ -172,7 +172,7 @@ export default function AboutClient() {
                         </p>
                         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                             <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
-                            <EditorialButton href="/cadenz" variant="ghost">Preview CADENZ</EditorialButton>
+                            <EditorialButton href={CADENZ_APP_URL} variant="ghost">Preview CADENZ</EditorialButton>
                         </div>
                     </div>
                 </SectionShell>

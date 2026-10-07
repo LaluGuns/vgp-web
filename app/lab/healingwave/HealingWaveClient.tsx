@@ -11,7 +11,7 @@ import {
     SectionShell,
 } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
-import { FLOW_APP_URL, healingWaveModules } from '@/lib/vgp-ecosystem';
+import { CADENZ_APP_URL, FLOW_APP_URL, healingWaveModules } from '@/lib/vgp-ecosystem';
 import { revealUp, staggerParent, staggerChild } from '@/lib/motion-presets';
 
 const iconMap = [Focus, Timer, Activity];
@@ -28,7 +28,7 @@ export default function HealingWaveClient() {
                     mutedTitle="research and product studio."
                     description="HealingWave Lab is the parent research studio by Virzy Guns developing functional audio for focus, cadence, and recovery."
                     primary={{ label: 'Open Flow App', href: FLOW_APP_URL }}
-                    secondary={{ label: 'Preview CADENZ', href: '/cadenz' }}
+                    secondary={{ label: 'Preview CADENZ', href: CADENZ_APP_URL }}
                 />
 
                 <SectionShell className="pt-4">
@@ -51,7 +51,7 @@ export default function HealingWaveClient() {
                             </p>
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                 <EditorialButton href={FLOW_APP_URL}>Open Flow App</EditorialButton>
-                                <EditorialButton href="/cadenz" variant="ghost">Preview CADENZ</EditorialButton>
+                                <EditorialButton href={CADENZ_APP_URL} variant="ghost">Preview CADENZ</EditorialButton>
                             </div>
                         </m.div>
 
