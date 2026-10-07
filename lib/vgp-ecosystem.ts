@@ -1,14 +1,3 @@
-import {
-    Activity,
-    BookOpen,
-    GraduationCap,
-    Headphones,
-    Library,
-    Newspaper,
-    Timer,
-    UserRound,
-} from 'lucide-react';
-
 export interface NavChild {
     name: string;
     href: string;
@@ -18,200 +7,106 @@ export interface NavChild {
 }
 
 export interface NavGroup {
-    key: 'studio' | 'apps' | 'learn' | 'about';
+    key: 'story' | 'healingwave' | 'studio' | 'writing';
     name: string;
     href: string;
+    /** A group with no children renders as a plain link. */
     children: NavChild[];
+    /** Paths that light the group up, matched as prefixes. */
     activePrefixes?: string[];
+    /** Paths that light the group up only on an exact match. */
+    activeExact?: string[];
 }
 
 export const FLOW_APP_URL = 'https://flow.virzyguns.com';
 export const CADENZ_APP_URL = 'https://cadenz.virzyguns.com';
 export const CADENZ_PLAY_URL = 'https://play.google.com/store/apps/details?id=com.cadenz.app';
+export const HEALINGWAVE_PATH = '/healingwave';
+
+/** Year Virzy Guns Production was founded. */
+export const VGP_FOUNDED = 2020;
 
 export const mainNavGroups: NavGroup[] = [
+    {
+        key: 'story',
+        name: 'Story',
+        href: '/about',
+        children: [],
+        activeExact: ['/about'],
+    },
+    {
+        key: 'healingwave',
+        name: 'HealingWave',
+        href: HEALINGWAVE_PATH,
+        activePrefixes: [HEALINGWAVE_PATH, '/flow'],
+        children: [
+            { name: 'The mission', href: HEALINGWAVE_PATH, description: 'Why HealingWave exists and what it is building' },
+            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Music that keeps your running or cycling cadence', status: 'Available', external: true },
+            { name: 'Flow', href: FLOW_APP_URL, description: 'A focus timer scored with original VGP music', status: 'Available', external: true },
+        ],
+    },
     {
         key: 'studio',
         name: 'Studio',
         href: '/studio',
+        activePrefixes: ['/studio/beats', '/ja-JP/studio/beats', '/de-DE/studio/beats'],
+        activeExact: ['/studio'],
         children: [
-            { name: 'Studio Overview', href: '/studio', description: 'Custom production, mixing, and mastering' },
-            { name: 'Beat Store', href: '/studio/beats', description: 'Browse and license beats across trap, drill, phonk, synthwave, R&B, club, pop, and more', status: 'Available' },
-            { name: 'Licensing Info', href: '/studio/beats/licensing', description: 'Clear terms for non-exclusive & exclusive rights' },
+            { name: 'Beat Store', href: '/studio/beats', description: 'License beats in trap, drill, phonk, synthwave, R&B, club and pop' },
+            { name: 'Services', href: '/studio', description: 'Custom production, mixing and mastering' },
+            { name: 'Licensing', href: '/studio/beats/licensing', description: 'What each license lets you do' },
         ],
     },
     {
-        key: 'apps',
-        name: 'Apps',
-        href: FLOW_APP_URL,
-        activePrefixes: ['/flow', '/cadenz', '/mycamscan', '/lab', '/games'],
-        children: [
-            { name: 'CADENZ', href: CADENZ_APP_URL, description: 'Running and cycling music that keeps your cadence, on Google Play', status: 'Available', external: true },
-            { name: 'Flow', href: FLOW_APP_URL, description: 'Deep-work focus timer with original VGP audio', status: 'Available', external: true },
-            { name: 'Games', href: '/games', description: 'Music, rhythm, and arcade games you can play in the browser', status: 'Available' },
-            { name: 'MyCamScan', href: '/mycamscan', description: 'Private document scanner with on-device OCR and searchable PDF', status: 'Coming Soon' },
-            { name: 'HealingWave Lab', href: '/lab/healingwave', description: 'Parent functional audio research studio' },
-        ],
-    },
-    {
-        key: 'learn',
-        name: 'Learn',
+        key: 'writing',
+        name: 'Writing',
         href: '/learn',
+        activePrefixes: ['/learn', '/blog', '/book', '/studio/masterclass'],
         children: [
-            { name: 'Learn Hub', href: '/learn', description: 'Overview of articles, books, and courses' },
-            { name: 'Articles', href: '/blog', description: 'Free production notes, 808 physics, and licensing guides', status: 'Free' },
-            { name: 'Books', href: '/book', description: 'Structured PDF producer manuals and guides', status: 'Coming Soon' },
-            { name: 'Courses', href: '/studio/masterclass', description: 'Producer masterclasses and workflow modules', status: 'Coming Soon' },
-        ],
-    },
-    {
-        key: 'about',
-        name: 'About',
-        href: '/about',
-        children: [
-            { name: 'Virzy Guns & Mission', href: '/about', description: 'The founder story and production system' },
+            { name: 'Articles', href: '/blog', description: 'Free notes on production, mixing and licensing', status: 'Free' },
+            { name: 'Trap Edition guide', href: '/book', description: 'An 80+ page PDF for producers', status: 'Coming Soon' },
+            { name: 'Masterclasses', href: '/studio/masterclass', description: 'Video lessons on the production workflow', status: 'Coming Soon' },
         ],
     },
 ];
 
-export const siteNav = mainNavGroups.map(({ name, href }) => ({ name, href }));
-
-export const studioNav = mainNavGroups
-    .find((group) => group.key === 'studio')
-    ?.children.map(({ name, href }) => ({ name, href })) ?? [];
-
-export const ecosystemCards = [
-    {
-        title: 'VGP Studio',
-        eyebrow: 'Beats and Services',
-        href: '/studio/beats',
-        cta: 'Browse Beats',
-        Icon: Headphones,
-        description:
-            'Premium beats, custom production, mixing, mastering, and sound design by Virzy Guns.',
-        status: 'Available',
-    },
-    {
-        title: 'Flow App',
-        eyebrow: 'Deep Work Focus',
-        href: FLOW_APP_URL,
-        cta: 'Open Flow',
-        Icon: Timer,
-        description:
-            'A focus timer with original VGP music, ambient sound, and session stats for long work blocks.',
-        status: 'Available',
-        external: true,
-    },
-    {
-        title: 'CADENZ',
-        eyebrow: 'Movement Audio App',
-        href: CADENZ_APP_URL,
-        cta: 'Visit CADENZ',
-        Icon: Activity,
-        description:
-            'A cadence music app with original VGP music for runners and cyclists.',
-        status: 'On Google Play',
-        external: true,
-    },
-    {
-        title: 'HealingWave Lab',
-        eyebrow: 'Functional Audio Studio',
-        href: '/lab/healingwave',
-        cta: 'Explore Lab',
-        Icon: Activity,
-        description:
-            'Parent research studio developing functional audio for focus, cadence, and recovery.',
-        status: 'Research',
-    },
-    {
-        title: 'Learn Hub',
-        eyebrow: 'Producer Education',
-        href: '/learn',
-        cta: 'Explore Learn Hub',
-        Icon: GraduationCap,
-        description:
-            'Central hub for free articles, producer guidebooks, and upcoming video masterclasses.',
-        status: 'Available',
-    },
-    {
-        title: 'Articles',
-        eyebrow: 'Editorial Library',
-        href: '/blog',
-        cta: 'Read Articles',
-        Icon: Newspaper,
-        description:
-            'Free tutorials on trap drums, 808 physics, mixing decisions, and beat licensing.',
-        status: 'Free',
-    },
-    {
-        title: 'Books',
-        eyebrow: 'Producer Library',
-        href: '/book',
-        cta: 'View Books',
-        Icon: Library,
-        description:
-            'Music production manuals and workbooks for producers who want cleaner decisions.',
-        status: 'Available',
-    },
-    {
-        title: 'About VGP',
-        eyebrow: 'Founder & Mission',
-        href: '/about',
-        cta: 'Read Our Story',
-        Icon: UserRound,
-        description:
-            'Meet Virzy Guns, the founder shaping the studio, lab, products, and learning system.',
-        status: 'Founder',
-    },
-];
-
-export const cadenzHighlights = [
-    'CADENZ by HealingWave Lab',
-    'Cadence music for running and cycling',
-    'VGP original music',
-    'On Google Play',
+/** Smaller projects. Linked from the footer only. */
+export const moreProjects: NavChild[] = [
+    { name: 'Games', href: '/games' },
+    { name: 'MyCamScan', href: '/mycamscan' },
 ];
 
 export const healingWaveModules = [
     {
-        name: 'Flow',
-        availability: 'Available now',
-        platform: 'Web Application',
+        name: 'CADENZ',
+        availability: 'On Google Play',
+        platform: 'Running and cycling',
         description:
-            'A browser-based functional audio focus timer for deep work, focus sessions, and study listening.',
-        features: ['Focus timers', 'Custom presets', 'Session stats', 'Study listening'],
-        note: 'Designed for quiet, repeatable listening sessions with minimal distraction.',
-        href: FLOW_APP_URL,
+            'Pick a tempo from 130 to 180 BPM and CADENZ plays original VGP music on that beat, or follows your cadence on AUTO.',
+        features: ['130 to 180 BPM', 'AUTO and LOCK modes', 'Running and cycling'],
+        href: CADENZ_APP_URL,
         external: true,
     },
     {
-        name: 'CADENZ',
-        availability: 'On Google Play',
-        platform: 'Running and Cycling',
+        name: 'Flow',
+        availability: 'Available now',
+        platform: 'Web app',
         description:
-            'Tempo-matched cadence music with original VGP music for runners and cyclists.',
-        features: ['Cadence targets', 'BPM based music', 'Motion flow', 'Training rhythm'],
-        note: 'Built to keep cadence targets clear while the music carries the session.',
-        href: CADENZ_APP_URL,
+            'A focus timer for long work blocks. Original VGP tracks and ambient sound, with an honest count of the sessions you finish.',
+        features: ['Focus timer', 'Custom presets', 'Session stats'],
+        href: FLOW_APP_URL,
         external: true,
     },
     {
         name: 'HealingWave Gym',
         availability: 'Research concept',
-        platform: 'Strength Training',
+        platform: 'Strength training',
         description:
-            'An exploratory concept for workout audio sessions organizing intensity, rhythm, and recovery cues.',
-        features: ['Workout modes', 'Tempo sets', 'Session logs', 'Sound presets'],
-        note: 'Exploration on how intensity and recovery can shape a workout session.',
-        href: '/lab/healingwave',
+            'An early idea for workout audio that paces intensity, rest and recovery. Nothing to download yet.',
+        features: ['Workout modes', 'Tempo sets', 'Recovery cues'],
+        href: HEALINGWAVE_PATH,
     },
 ];
-
-export const founderStatement =
-    'Virzy Guns founded VGP to connect music, technology, movement, and education under one deliberate creative system. Art leads; science makes the decisions sharper.';
-
-export const founderBio =
-    'Virzy Guns is the founder and creative director of Virzy Guns Production. He builds the bridge between songs, premium beats, functional audio, CADENZ, books, and producer education; his songwriting and production credentials support the work without defining its limits.';
 
 export const catalogCredentials = [
     {

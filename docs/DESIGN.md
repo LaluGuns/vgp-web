@@ -69,6 +69,20 @@ readable text.
   forced triads, no buzzwords, no invented numbers. Only translate ja-JP and
   de-DE strings with a native check.
 
+## Story and voice
+
+The site is Virzy Guns' founder site: producer, founder of Virzy Guns
+Production (2020), now building HealingWave. Menu: Story, HealingWave,
+Studio, Writing, with Get CADENZ as the button. Games and MyCamScan are
+footer-only.
+
+- Write in the first person ("I"), as Virzy Guns.
+- Social proof is the Muso.ai credits only. No other artists' releases.
+- Publishing, exact wording: "My publishing is administered through
+  BeatStars Publishing, in partnership with Sony Music Publishing." Never
+  "signed to Sony" or a Sony logo.
+- HealingWave never claims to treat or cure anything.
+
 ## Shared building blocks
 
 `components/editorial/EditorialPrimitives.tsx`: `PageHeader`,

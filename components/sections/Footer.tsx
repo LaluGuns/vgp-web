@@ -1,23 +1,24 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { socialData } from '@/components/socialLinks';
-import { mainNavGroups } from '@/lib/vgp-ecosystem';
+import { VGP_FOUNDED, mainNavGroups, moreProjects, type NavGroup } from '@/lib/vgp-ecosystem';
 import { EmailChooser } from '@/components/editorial/EmailChooser';
 
-const navGroupLinks = (key: 'studio' | 'apps' | 'learn') =>
+const navGroupLinks = (key: NavGroup['key']) =>
     mainNavGroups.find((group) => group.key === key)?.children.map(({ name, href }) => ({ name, href })) ?? [];
 
 const footerGroups = [
+    { title: 'HealingWave', links: navGroupLinks('healingwave') },
     { title: 'Studio', links: navGroupLinks('studio') },
-    { title: 'Apps', links: navGroupLinks('apps') },
-    { title: 'Learn', links: navGroupLinks('learn') },
+    { title: 'Writing', links: navGroupLinks('writing') },
     {
-        title: 'Company',
+        title: 'Virzy Guns',
         links: [
-            { name: 'About Virzy Guns', href: '/about' },
+            { name: 'Story', href: '/about' },
+            { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
+            ...moreProjects.map(({ name, href }) => ({ name, href })),
             { name: 'Privacy', href: '/privacy' },
             { name: 'Terms', href: '/terms' },
-            { name: 'Contact', href: 'mailto:founder@virzyguns.com' },
         ],
     },
 ];
@@ -41,13 +42,11 @@ export function Footer() {
                             className="h-auto w-36 opacity-90 mix-blend-lighten sm:w-40"
                             sizes="160px"
                         />
-                        <p className="mt-8 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white sm:text-4xl">
-                            100% Art.
-                            <br />
-                            <span className="text-white/50">100% Science.</span>
+                        <p className="mt-8 max-w-sm font-display text-2xl font-semibold leading-snug tracking-[-0.02em] text-white sm:text-3xl">
+                            Music that leaves people better than it found them.
                         </p>
                         <p className="mt-5 max-w-sm text-sm leading-7 text-white/60">
-                            Songs, beats, apps and producer guides by Virzy Guns.
+                            I started Virzy Guns Production in {VGP_FOUNDED} to make records. HealingWave is what I am building with it now.
                         </p>
 
                         <ul className="mt-6 flex flex-wrap items-center gap-1" aria-label="Virzy Guns on social media">

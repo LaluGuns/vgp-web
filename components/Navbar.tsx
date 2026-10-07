@@ -100,8 +100,10 @@ export function Navbar() {
             ? '/de-DE/studio/beats'
             : '/studio/beats';
     const isBeatStoreHome = pathname === beatStoreBase;
-    const isCadenzPage = pathname.startsWith('/cadenz');
-    const isFlowContext = pathname.startsWith('/flow') || pathname.startsWith('/lab');
+    const isFlowContext = pathname.startsWith('/flow');
+    // The ja-JP and de-DE stores keep their own translated menu. The English
+    // store is part of the main site and uses the main menu.
+    const useStoreNav = isBeatStore && beatStoreLocale !== 'en-US';
 
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -119,11 +121,9 @@ export function Navbar() {
 
     const cta = isBeatStore
         ? { label: beatNav.cta, href: `${beatStoreBase}#beats-inventory` }
-        : isCadenzPage
-            ? { label: 'Get CADENZ', href: CADENZ_PLAY_URL }
-            : isFlowContext
-                ? { label: 'Open Flow', href: FLOW_APP_URL }
-                : { label: 'Browse beats', href: '/studio/beats' };
+        : isFlowContext
+            ? { label: 'Open Flow', href: FLOW_APP_URL }
+            : { label: 'Get CADENZ', href: CADENZ_PLAY_URL };
     const ctaIsExternal = cta.href.startsWith('http');
 
     useEffect(() => {
@@ -313,9 +313,9 @@ export function Navbar() {
             <nav ref={navRef} aria-label="Main navigation" className="px-4 sm:px-6">
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">
                     <Link
-                        href={isBeatStore ? beatStoreBase : '/'}
+                        href={useStoreNav ? beatStoreBase : '/'}
                         className={`flex min-w-0 items-center gap-3 rounded-md ${focusRing}`}
-                        aria-label={isBeatStore ? beatNav.brand : 'Virzy Guns Production home'}
+                        aria-label={useStoreNav ? beatNav.brand : 'Virzy Guns, home'}
                     >
                         <Image
                             src="/branding/logo-tg.png"
@@ -326,13 +326,13 @@ export function Navbar() {
                             priority
                         />
                         <span className="truncate text-sm font-semibold text-white">
-                            <span className="sm:hidden">{isBeatStore ? beatNav.shortBrand : 'Virzy Guns'}</span>
-                            <span className="hidden sm:inline">{isBeatStore ? beatNav.brand : 'Virzy Guns Production'}</span>
+                            <span className="sm:hidden">{useStoreNav ? beatNav.shortBrand : 'Virzy Guns'}</span>
+                            <span className="hidden sm:inline">{useStoreNav ? beatNav.brand : 'Virzy Guns'}</span>
                         </span>
                     </Link>
 
                     <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
-                        {isBeatStore
+                        {useStoreNav
                             ? beatStoreItems.map((item) =>
                                 item.kind === 'link' ? (
                                     <Link
@@ -355,8 +355,12 @@ export function Navbar() {
                                 ),
                             )
                             : mainNavGroups.map((group) => {
-                                if (group.key === 'about') {
-                                    const active = isActive(group.href, true);
+                                const isGroupActive =
+                                    (group.activeExact?.includes(pathname) ?? false) ||
+                                    (group.activePrefixes?.some((prefix) => isActive(prefix)) ?? false);
+
+                                if (group.children.length === 0) {
+                                    const active = isGroupActive;
                                     return (
                                         <Link
                                             key={group.key}
@@ -370,7 +374,6 @@ export function Navbar() {
                                 }
 
                                 const isOpen = openGroup === group.key;
-                                const isGroupActive = group.activePrefixes?.some((prefix) => isActive(prefix)) ?? isActive(group.href);
                                 const panelId = `${menuId}-${group.key}`;
 
                                 return (
@@ -494,7 +497,7 @@ export function Navbar() {
                         className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none sm:px-6 lg:hidden"
                     >
                         <div className="mx-auto grid max-w-7xl gap-8">
-                            {isBeatStore ? (
+                            {useStoreNav ? (
                                 <ul className="divide-y divide-white/[0.06]">
                                     {beatStoreItems.map((item) => (
                                         <li key={item.label}>
@@ -520,7 +523,17 @@ export function Navbar() {
                                     ))}
                                 </ul>
                             ) : (
-                                mainNavGroups.map((group) => (
+                                mainNavGroups.map((group) => group.children.length === 0 ? (
+                                    <Link
+                                        key={group.key}
+                                        href={group.href}
+                                        onClick={closeAll}
+                                        aria-current={pathname === group.href ? 'page' : undefined}
+                                        className={`${mobileRowClass(pathname === group.href)} border-b border-white/[0.06] text-lg`}
+                                    >
+                                        {group.name}
+                                    </Link>
+                                ) : (
                                     <section key={group.key} aria-labelledby={`${menuId}-${group.key}-heading`}>
                                         <h2 id={`${menuId}-${group.key}-heading`} className="text-xs font-medium text-white/50">
                                             {group.name}

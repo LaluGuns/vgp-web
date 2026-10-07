@@ -48,6 +48,8 @@ const nextConfig = {
             { source: '/cadenz', destination: 'https://cadenz.virzyguns.com', permanent: true },
             { source: '/cadenz/running-music', destination: 'https://cadenz.virzyguns.com', permanent: true },
             { source: '/cadenz/running-music/:path*', destination: 'https://cadenz.virzyguns.com', permanent: true },
+            { source: '/lab', destination: '/healingwave', permanent: true },
+            { source: '/lab/healingwave', destination: '/healingwave', permanent: true },
         ];
     },
     async headers() {

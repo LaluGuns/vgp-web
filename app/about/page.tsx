@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import AboutClient from './AboutClient';
 
 export const metadata: Metadata = {
-    title: 'About Virzy Guns | Founder of Virzy Guns Production',
+    title: { absolute: 'Story | Virzy Guns, producer and founder' },
     description:
-        'Meet Virzy Guns, founder and creative director of a music-tech ecosystem spanning VGP Studio, HealingWave Lab, CADENZ, books, and producer education.',
+        'Virzy Guns is a songwriter and producer who started Virzy Guns Production in 2020 and now builds HealingWave, music made to help people focus, move and recover.',
     keywords: [
         'Virzy Guns',
         'top 10% songwriter',
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
         canonical: '/about',
     },
     openGraph: {
-        title: 'About Virzy Guns | Founder of Virzy Guns Production',
+        title: 'Story | Virzy Guns, producer and founder',
         description:
-            'Meet the founder behind VGP Studio, HealingWave Lab, CADENZ, books, premium beats, and producer education.',
+            'From making records to making music that helps. The story behind Virzy Guns Production and HealingWave.',
         url: 'https://www.virzyguns.com/about',
     },
 };

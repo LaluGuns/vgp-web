@@ -30,11 +30,11 @@ export function SubscribePopup() {
             };
         }
 
-        if (pathname.startsWith('/lab/healingwave')) {
+        if (pathname.startsWith('/healingwave')) {
             return {
-                title: 'HealingWave Lab notes',
-                description: 'Research notes on focus and cadence audio, plus Flow and CADENZ updates.',
-                button: 'Get lab notes',
+                title: 'HealingWave updates',
+                description: 'New releases, CADENZ and Flow updates, and what the research turns up.',
+                button: 'Get updates',
                 subscriberName: 'HealingWave Subscriber',
                 tags: ['cadenz'],
             };
@@ -61,8 +61,8 @@ export function SubscribePopup() {
         }
 
         return {
-            title: 'Studio updates by email',
-            description: 'New beats, Flow and CADENZ updates, and news about the producer guides.',
+            title: 'Follow the build',
+            description: 'News from Virzy Guns: HealingWave, CADENZ and Flow updates, new beats and the producer guides.',
             button: 'Get updates',
             subscriberName: 'VGP Subscriber',
             tags: [] as string[],
