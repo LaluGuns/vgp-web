@@ -1,280 +1,172 @@
-'use client';
-
-import { m } from 'framer-motion';
-import {
-    CheckCircle2,
-    Globe2,
-    Headphones,
-    LineChart,
-    Palette,
-    Timer,
-    Waves,
-} from 'lucide-react';
+import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
-import {
-    CinematicBackdrop,
-    EditorialButton,
-    SectionShell,
-} from '@/components/editorial/EditorialPrimitives';
-import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
+import { EditorialButton, TextLink } from '@/components/editorial/EditorialPrimitives';
+import { FLOW_APP_URL } from '@/lib/vgp-ecosystem';
 
-const heroSignals = [
-    'Music produced in-house by Virzy Guns',
-    'Free tier, no account required',
-    'Stats that only count what they measure',
-];
+const facts = ['Music by Virzy Guns', 'Free tier, no account', 'Stats count measured minutes only'];
 
 const features = [
     {
-        title: 'Music made in-house',
-        body: 'Every track in Flow is produced by Virzy Guns. No AI-generated filler, no stock library loops. The catalog is written, mixed, and mastered specifically for long deep-work sessions.',
-        Icon: Headphones,
-    },
-    {
-        title: 'Pomodoro, built for deep work',
-        body: 'A focus timer that runs the classic pomodoro cadence or longer deep-work blocks. Start a session, let the music carry it, and let the timer handle the discipline.',
-        Icon: Timer,
+        title: 'Pomodoro or longer blocks',
+        body: 'Run the classic pomodoro rhythm or longer deep-work blocks. Start a session and let the timer handle the discipline.',
     },
     {
         title: 'Four visual themes',
-        body: 'Glass, Studio, Terminal, and Editorial. Pick the room you want to work in, from soft translucency to a bare command line.',
-        Icon: Palette,
+        body: 'Glass, Studio, Terminal and Editorial. Pick the room you want to work in, from soft translucency to a bare command line.',
     },
     {
         title: 'Honest stats',
-        body: 'Flow reports measured minutes only. It never guesses whether you were "really" focused, and it never shames you for switching tabs. If the timer ran, it counts.',
-        Icon: LineChart,
+        body: 'Flow reports measured minutes only. It never guesses whether you were really focused and never shames you for switching tabs. If the timer ran, it counts.',
     },
     {
         title: 'Eleven languages',
-        body: 'The full interface ships in eleven languages, so the app reads naturally wherever you work from.',
-        Icon: Globe2,
+        body: 'The whole interface is translated, so it reads naturally wherever you work from.',
     },
     {
-        title: 'Zero-friction start',
-        body: 'Open the site, press play, work. The free tier needs no account, no email, and no onboarding tour before the first session.',
-        Icon: Waves,
+        title: 'Nothing in the way',
+        body: 'Open the site, press play, work. The free tier needs no account, no email and no onboarding tour.',
     },
 ];
 
-const freeFeatures = [
-    'Focus music and pomodoro timer',
-    'No account, no email required',
-    'Session stats, measured minutes only',
-    'Core visual theme',
-];
-
-const proFeatures = [
-    'Full in-house music catalog',
-    'All four visual themes',
-    'Longer session history and stats',
-    'Supports new music being produced',
+const plans = [
+    {
+        name: 'Flow Free',
+        price: '$0',
+        note: 'Everything you need for a real session.',
+        items: ['Focus music and pomodoro timer', 'No account or email', 'Session stats, measured minutes only', 'Core visual theme'],
+        action: { label: 'Start free', primary: false },
+    },
+    {
+        name: 'Flow Pro',
+        price: '$9.99 a month',
+        note: 'Or $59.99 a year, which works out to two months free.',
+        items: ['The full in-house catalog', 'All four visual themes', 'Longer session history and stats', 'Pays for new music being produced'],
+        action: { label: 'Go Pro in Flow', primary: true },
+    },
 ];
 
 export default function FlowClient() {
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white">
-                <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 lg:pb-20 lg:pt-16">
-                    <CinematicBackdrop />
-
-                    <div className="relative z-10 mx-auto max-w-7xl">
-                        <m.div
-                            variants={staggerParent}
-                            initial="hidden"
-                            animate="visible"
-                            className="mx-auto max-w-3xl text-center"
-                        >
-                            <m.p
-                                variants={staggerChild}
-                                className="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/70"
-                            >
-                                Flow by Virzy Guns
-                            </m.p>
-
-                            <m.h1
-                                variants={staggerChild}
-                                className="font-display text-5xl font-semibold leading-[0.98] text-white sm:text-6xl lg:text-[5.5rem]"
-                            >
-                                Deep work,
-                                <br />
-                                <span className="text-sky-200">scored properly.</span>
-                            </m.h1>
-
-                            <m.p
-                                variants={staggerChild}
-                                className="mx-auto mt-7 max-w-2xl text-base leading-8 text-white/75 sm:text-xl sm:leading-9"
-                            >
-                                Flow pairs a pomodoro timer with focus music produced in-house
-                                by Virzy Guns. Open it, press play, and let the session run.
-                                No account needed to start.
-                            </m.p>
-
-                            <m.div
-                                variants={staggerChild}
-                                className="mt-9 flex flex-col justify-center gap-3 sm:flex-row"
-                            >
-                                <EditorialButton href="https://flow.virzyguns.com">
+                <section className="px-4 pt-10 sm:px-6 sm:pt-14">
+                    <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
+                        <div className="lg:col-span-6">
+                            <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,6.5vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
+                                Deep work, scored properly.
+                            </h1>
+                            <p className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                                Flow pairs a pomodoro timer with focus music produced in-house by Virzy Guns. Open it,
+                                press play and let the session run. You do not need an account to start.
+                            </p>
+                            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+                                <EditorialButton href={FLOW_APP_URL} withArrow>
                                     Open Flow
                                 </EditorialButton>
-                                <EditorialButton href="/lab/healingwave" variant="ghost">
-                                    Explore HealingWave
-                                </EditorialButton>
-                            </m.div>
-
-                            <m.div
-                                variants={staggerChild}
-                                className="mt-10 grid gap-3 sm:grid-cols-3"
-                            >
-                                {heroSignals.map((signal) => (
-                                    <div key={signal} className="liquid-glass-soft rounded-lg px-4 py-3 text-left">
-                                        <CheckCircle2 className="mb-3 h-4 w-4 text-sky-200/75" aria-hidden="true" />
-                                        <p className="text-sm font-semibold leading-6 text-white/75">{signal}</p>
-                                    </div>
-                                ))}
-                            </m.div>
-                        </m.div>
-                    </div>
-                </section>
-
-                <SectionShell className="pt-10">
-                    <div className="mb-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
-                            What is inside
-                        </p>
-                        <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-6xl">
-                            The music is the product. The timer keeps it honest.
-                        </h2>
-                    </div>
-
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {features.map((feature) => (
-                            <m.article
-                                key={feature.title}
-                                variants={revealUp}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                className="liquid-glass flex h-full flex-col rounded-lg p-6"
-                            >
-                                <div className="mb-8 flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
-                                    <feature.Icon className="h-5 w-5" aria-hidden="true" />
-                                </div>
-                                <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
-                                <p className="mt-4 text-sm leading-7 text-white/70">{feature.body}</p>
-                            </m.article>
-                        ))}
-                    </div>
-                </SectionShell>
-
-                <SectionShell>
-                    <div className="mb-10 max-w-3xl">
-                        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
-                            Pricing
-                        </p>
-                        <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-6xl">
-                            Free to focus. Pro for the full catalog.
-                        </h2>
-                    </div>
-
-                    <div className="grid gap-4 lg:grid-cols-2">
-                        <m.div
-                            variants={revealUp}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            className="liquid-glass flex h-full flex-col rounded-lg p-6 sm:p-8"
-                        >
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">
-                                Flow Free
-                            </p>
-                            <p className="mt-4 font-display text-4xl font-semibold text-white">
-                                $0
-                            </p>
-                            <p className="mt-2 text-sm leading-7 text-white/60">
-                                Everything you need to run a real session, forever free.
-                            </p>
-                            <ul className="mt-6 grid flex-1 gap-3">
-                                {freeFeatures.map((item) => (
-                                    <li key={item} className="flex items-start gap-3 text-sm leading-7 text-white/75">
-                                        <CheckCircle2 className="mt-1.5 h-4 w-4 shrink-0 text-sky-200/75" aria-hidden="true" />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                            <div className="mt-8">
-                                <EditorialButton href="https://flow.virzyguns.com" variant="ghost">
-                                    Start free
-                                </EditorialButton>
-                            </div>
-                        </m.div>
-
-                        <m.div
-                            variants={revealUp}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            className="liquid-glass-strong flex h-full flex-col rounded-lg border border-sky-200/20 p-6 sm:p-8"
-                        >
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/80">
-                                Flow Pro
-                            </p>
-                            <p className="mt-4 font-display text-4xl font-semibold text-white">
-                                $9.99
-                                <span className="text-base font-normal text-white/60"> / month</span>
-                            </p>
-                            <p className="mt-2 text-sm leading-7 text-white/60">
-                                Or $59.99 per year — two months on the house.
-                            </p>
-                            <ul className="mt-6 grid flex-1 gap-3">
-                                {proFeatures.map((item) => (
-                                    <li key={item} className="flex items-start gap-3 text-sm leading-7 text-white/75">
-                                        <CheckCircle2 className="mt-1.5 h-4 w-4 shrink-0 text-sky-200/75" aria-hidden="true" />
-                                        <span>{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                            <div className="mt-8">
-                                <EditorialButton href="https://flow.virzyguns.com">
-                                    Go Pro in Flow
-                                </EditorialButton>
-                            </div>
-                        </m.div>
-                    </div>
-                </SectionShell>
-
-                <SectionShell className="pb-24">
-                    <div className="liquid-glass-strong rounded-lg p-6 sm:p-8">
-                        <div className="max-w-3xl">
-                            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/75">
-                                Why I built this
-                            </p>
-                            <h2 className="font-display text-4xl font-semibold leading-[1.04] text-white sm:text-5xl">
-                                I make music for a living. This is the music I work to.
-                            </h2>
-                            <p className="mt-5 text-base leading-8 text-white/75">
-                                Every focus app I tried treated the music as an afterthought:
-                                stock loops, generic lo-fi, or an AI playlist with no author
-                                behind it. I already produce records, so I built the tool I
-                                wanted — a timer that respects the session and a catalog I
-                                wrote myself, tuned for staying under the work instead of on
-                                top of it. The stats are honest because I do not believe a
-                                hidden browser tab means you stopped thinking.
-                            </p>
-                            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                                <EditorialButton href="https://flow.virzyguns.com">
-                                    Open Flow
-                                </EditorialButton>
-                                <EditorialButton
-                                    href="/blog/i-built-flow-deep-work-music-and-a-pomodoro-timer"
-                                    variant="ghost"
-                                >
+                                <TextLink href="/blog/i-built-flow-deep-work-music-and-a-pomodoro-timer">
                                     Read the launch note
-                                </EditorialButton>
+                                </TextLink>
+                            </div>
+                        </div>
+                        <div className="lg:col-span-6">
+                            <div className="flex aspect-[16/10] items-center justify-center rounded-[6px] border border-white/10 bg-[#0a0e12] px-[16%]">
+                                <Image
+                                    src="/branding/flowstate-logo.png"
+                                    alt="Flow logo"
+                                    width={768}
+                                    height={270}
+                                    priority
+                                    sizes="(min-width: 1024px) 34vw, 68vw"
+                                    className="h-auto w-full"
+                                />
                             </div>
                         </div>
                     </div>
-                </SectionShell>
+
+                    <ul className="mx-auto mt-14 grid max-w-7xl gap-px overflow-hidden border-y border-white/10 sm:grid-cols-3">
+                        {facts.map((fact) => (
+                            <li key={fact} className="py-5 text-sm font-medium text-white/75 sm:pr-6">
+                                {fact}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+
+                <section aria-labelledby="music-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+                    <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12">
+                        <div className="lg:col-span-5">
+                            <h2 id="music-heading" className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">
+                                The music is the product. The timer keeps it honest.
+                            </h2>
+                            <p className="mt-6 text-lg leading-8 text-white/75">
+                                Every track in Flow is written, mixed and mastered by Virzy Guns for long work sessions.
+                                No AI filler and no stock library loops.
+                            </p>
+                        </div>
+                        <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:col-span-7">
+                            {features.map((feature) => (
+                                <div key={feature.title} className="border-t border-white/10 pt-5">
+                                    <dt className="text-lg font-semibold text-white">{feature.title}</dt>
+                                    <dd className="mt-2 text-base leading-7 text-white/65">{feature.body}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </div>
+                </section>
+
+                <section aria-labelledby="pricing-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
+                    <div className="mx-auto max-w-7xl">
+                        <h2 id="pricing-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                            Free to focus. Pro for the full catalog.
+                        </h2>
+                        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+                            {plans.map((plan) => (
+                                <div key={plan.name} className="flex flex-col rounded-[6px] border border-white/10 bg-[#0a0e12] p-6 sm:p-8">
+                                    <h3 className="text-base font-semibold text-white">{plan.name}</h3>
+                                    <p className="mt-3 font-display text-3xl font-semibold tracking-tight text-white">{plan.price}</p>
+                                    <p className="mt-2 text-sm leading-6 text-white/60">{plan.note}</p>
+                                    <ul className="mt-6 grid flex-1 gap-2.5 border-t border-white/10 pt-6 text-base leading-7 text-white/75">
+                                        {plan.items.map((item) => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                    <div className="mt-8">
+                                        {plan.action.primary ? (
+                                            <EditorialButton href={FLOW_APP_URL}>{plan.action.label}</EditorialButton>
+                                        ) : (
+                                            <TextLink href={FLOW_APP_URL}>{plan.action.label}</TextLink>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                <section aria-labelledby="why-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                        <h2 id="why-heading" className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl lg:col-span-5">
+                            I make music for a living. This is the music I work to.
+                        </h2>
+                        <figure className="lg:col-span-6 lg:col-start-7">
+                            <blockquote className="text-lg leading-8 text-white/75">
+                                <p>
+                                    Every focus app I tried treated the music as an afterthought: stock loops, generic lo-fi or
+                                    an AI playlist with no author behind it. I already produce records, so I built the tool I
+                                    wanted. A timer that respects the session, and a catalog I wrote myself, tuned to stay under
+                                    the work instead of on top of it. The stats are honest because I do not believe a hidden
+                                    browser tab means you stopped thinking.
+                                </p>
+                            </blockquote>
+                            <figcaption className="mt-5 text-sm text-white/55">Virzy Guns, founder</figcaption>
+                            <div className="mt-8">
+                                <EditorialButton href={FLOW_APP_URL} withArrow>
+                                    Open Flow
+                                </EditorialButton>
+                            </div>
+                        </figure>
+                    </div>
+                </section>
             </article>
         </PageTransition>
     );

@@ -31,8 +31,9 @@ const nextConfig = {
     compress: true,
     poweredByHeader: false,
     images: {
-        domains: [],
         formats: ['image/webp', 'image/avif'],
+        // 90 is used by the CADENZ cover art; Next 16 rejects qualities not listed here.
+        qualities: [75, 90],
     },
     experimental: {
         optimizeCss: false,
@@ -42,6 +43,14 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === 'production',
     },
     allowedDevOrigins: ['127.0.0.1', 'localhost'],
+    // The CADENZ landing page lives at cadenz.virzyguns.com, a one-page static
+    // site. /cadenz/privacy, /cadenz/terms, /cadenz/delete-account and
+    // /cadenz/running-music have no counterpart there, so they stay here.
+    async redirects() {
+        return [
+            { source: '/cadenz', destination: 'https://cadenz.virzyguns.com', permanent: true },
+        ];
+    },
     async headers() {
         return [
             {

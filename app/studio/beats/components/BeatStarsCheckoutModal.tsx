@@ -120,7 +120,7 @@ export default function BeatStarsCheckoutModal({
 
     return createPortal(
                 <div
-                    className="fixed inset-0 z-[200] flex items-stretch justify-center bg-[#01060b]/82 sm:items-center sm:p-4"
+                    className="fixed inset-0 z-[200] flex items-stretch justify-center bg-[#0a0e12] sm:items-center sm:p-4"
                     onMouseDown={(event) => {
                         if (event.target === event.currentTarget) onClose();
                     }}
@@ -131,11 +131,11 @@ export default function BeatStarsCheckoutModal({
                         aria-modal="true"
                         aria-labelledby={titleId}
                         aria-describedby={descriptionId}
-                        className="flex h-[100dvh] w-full flex-col overflow-hidden bg-[#031019] shadow-[0_45px_140px_rgba(0,0,0,0.7)] outline-none sm:h-[min(92dvh,900px)] sm:max-w-6xl sm:rounded-3xl sm:border sm:border-sky-200/20"
+                        className="flex h-[100dvh] w-full flex-col overflow-hidden bg-[#0a0e12] outline-none sm:h-[min(92dvh,900px)] sm:max-w-6xl sm:rounded-3xl sm:border sm:border-sky-200/20"
                     >
-                        <header className="relative flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#071923] px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))] sm:px-5 sm:py-4">
+                        <header className="relative flex shrink-0 items-start justify-between gap-4 border-b border-white/10 bg-[#0a0e12] px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))] sm:px-5 sm:py-4">
                             <div className="min-w-0 pr-11">
-                                <p className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-sky-200/70">
+                                <p className="flex items-center gap-2 text-[9px] font-semibold text-white/60">
                                     <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                                     {text.eyebrow}
                                 </p>
@@ -158,18 +158,18 @@ export default function BeatStarsCheckoutModal({
                         </header>
 
                         <div className="flex shrink-0 items-center gap-2 overflow-x-auto border-b border-white/10 bg-black/20 px-3 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-violet-300/20 bg-violet-400/[0.08] px-3 py-1.5 text-[10px] font-semibold text-violet-100">
+                            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-violet-300/20 bg-violet-400/[0.08] px-3 py-1.5 text-xs font-semibold text-violet-100">
                                 <Gift className="h-3.5 w-3.5" aria-hidden="true" />
                                 {text.dealTitle}
                             </span>
-                            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-sky-200/15 bg-sky-300/[0.06] px-3 py-1.5 text-[10px] font-semibold text-sky-100">
+                            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-white">
                                 <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
                                 {text.selected} · {beatSelections.length}
                             </span>
-                            <span className="hidden truncate text-[10px] text-white/42 md:block">{text.dealText}</span>
+                            <span className="hidden truncate text-xs text-white/42 md:block">{text.dealText}</span>
                         </div>
 
-                        <div className="relative min-h-0 flex-1 bg-[#02070d]">
+                        <div className="relative min-h-0 flex-1 bg-[#0a0e12]">
                             {activeSelection ? (
                                 <div className="flex h-full min-h-0 flex-col p-2 sm:p-3">
                                     {beatSelections.length > 1 ? (
@@ -185,7 +185,7 @@ export default function BeatStarsCheckoutModal({
                                                         onClick={() => setActiveTrackId(beat.trackId)}
                                                         className={`min-h-9 max-w-64 shrink-0 truncate rounded-lg border px-3 text-xs font-semibold transition ${
                                                             isActive
-                                                                ? 'border-sky-200/45 bg-sky-300/[0.1] text-white'
+                                                                ? 'border-white/15 bg-white/[0.04] text-white'
                                                                 : 'border-white/10 bg-white/[0.025] text-white/50 hover:text-white'
                                                         }`}
                                                     >
@@ -195,10 +195,10 @@ export default function BeatStarsCheckoutModal({
                                             })}
                                         </div>
                                     ) : null}
-                                    <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-white/10 bg-black">
+                                    <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border border-white/10 bg-black">
                                         <div className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-white/[0.025] px-3 py-2">
                                             <p className="truncate text-xs font-semibold text-white">{activeSelection.title}</p>
-                                            <span className="shrink-0 font-mono text-[10px] text-white/38">#{activeSelection.trackId}</span>
+                                            <span className="shrink-0 font-mono text-xs text-white/38">#{activeSelection.trackId}</span>
                                         </div>
                                         <iframe
                                             key={activeSelection.trackId}
@@ -221,13 +221,13 @@ export default function BeatStarsCheckoutModal({
                             )}
                         </div>
 
-                        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-white/10 bg-[#04131d] px-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2 sm:px-4 sm:py-2.5">
-                            <p className="hidden text-[11px] text-white/42 sm:block">{text.footer}</p>
+                        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-white/10 bg-[#0a0e12] px-3 pb-[max(0.65rem,env(safe-area-inset-bottom))] pt-2 sm:px-4 sm:py-2.5">
+                            <p className="hidden text-xs text-white/42 sm:block">{text.footer}</p>
                             <a
                                 href={activeSelection?.productUrl || beatStarsStoreUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="ml-auto inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/12 px-3 text-xs font-semibold text-white/65 transition hover:border-sky-200/35 hover:text-white"
+                                className="ml-auto inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/12 px-3 text-xs font-semibold text-white/65 transition hover:border-white/30 hover:text-white"
                             >
                                 {text.external}
                                 <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

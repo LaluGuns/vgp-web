@@ -1,9 +1,8 @@
 import Image from 'next/image';
 
 /**
- * Root-site brand watermark. The Flow product itself lives in the separate
- * flowstate app/subdomain, so this component intentionally belongs only to
- * the VGP root shell.
+ * Logo watermark behind the founder dashboard. Public pages dropped it when
+ * they moved to the flat design in docs/DESIGN.md.
  */
 export function GlobalBrandBackdrop() {
     return (

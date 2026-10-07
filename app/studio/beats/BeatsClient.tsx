@@ -7,7 +7,7 @@ import { Bookmark, Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, 
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
-import { catalogCredentials } from '@/lib/vgp-ecosystem';
+import { CreditsStrip, MUSO_PROFILE_URL } from '@/components/editorial/CreditsStrip';
 import { categories, beatsCatalog, type BeatProduct } from '@/lib/catalog';
 import {
     getEditorialBeatWorld,
@@ -443,9 +443,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
             return () => window.cancelAnimationFrame(frame);
         }
 
-        if (window.localStorage.getItem('vgp-beat-store-guide-seen')) return;
-        const timer = window.setTimeout(() => setGuideOpen(true), 900);
-        return () => window.clearTimeout(timer);
+        // The guide opens on request only (navbar "How it works" or ?panel=).
     }, []);
 
     useEffect(() => {
@@ -636,30 +634,27 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
     return (
         <PageTransition>
-            <article className="editorial-shell flex min-h-screen flex-col text-white pt-24 pb-20">
-                {/* Language Switcher Navbar */}
-                <div className="mx-auto max-w-5xl px-6 mb-4 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/30 bg-sky-400/15 px-3.5 py-1.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-400/25 hover:text-white"
-                        >
-                            <ChevronLeft className="h-3.5 w-3.5" />
-                            {locale === 'ja-JP' ? 'VGPホームに戻る' : locale === 'de-DE' ? 'Zurück zur Startseite' : 'Back to VGP Home'}
-                        </Link>
-                        <span className="hidden sm:inline text-xs font-semibold uppercase tracking-wider text-sky-200/60">
-                            Virzy Guns Production
-                        </span>
+            <article className="editorial-shell flex min-h-screen flex-col pb-20 pt-6 text-white sm:pt-10">
+                {/* Language switcher */}
+                <nav aria-label="Language" className="px-4 sm:px-6">
+                    <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/55">
+                        {([
+                            ['en-US', '/studio/beats', 'English'],
+                            ['ja-JP', '/ja-JP/studio/beats', '日本語'],
+                            ['de-DE', '/de-DE/studio/beats', 'Deutsch'],
+                        ] as const).map(([code, href, label]) => (
+                            <Link
+                                key={code}
+                                href={href}
+                                hrefLang={code}
+                                aria-current={locale === code ? 'page' : undefined}
+                                className={`inline-flex min-h-11 items-center transition-colors hover:text-white ${locale === code ? 'text-white underline decoration-white/40 underline-offset-[6px]' : ''}`}
+                            >
+                                {label}
+                            </Link>
+                        ))}
                     </div>
-
-                    <div className="flex items-center gap-2 text-xs font-medium text-white/50 bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10">
-                        <Link href="/studio/beats" className={`hover:text-white transition ${locale === 'en-US' ? 'text-sky-200 font-bold' : ''}`}>English (EN)</Link>
-                        <span>|</span>
-                        <Link href="/ja-JP/studio/beats" className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-sky-200 font-bold' : ''}`}>日本語 (JA)</Link>
-                        <span>|</span>
-                        <Link href="/de-DE/studio/beats" className={`hover:text-white transition ${locale === 'de-DE' ? 'text-sky-200 font-bold' : ''}`}>Deutsch (DE)</Link>
-                    </div>
-                </div>
+                </nav>
 
                 <GenreSignalHeader
                     locale={locale}
@@ -675,45 +670,29 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 />
 
                 {/* Verified Credentials */}
-                <SectionShell id="credentials" className="order-[50] border-y border-white/[0.08] bg-white/[0.012] py-10 sm:py-12">
-                    <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/55">
-                                {t.credentialsTag}
-                            </p>
-                            <h2 className="mt-3 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">
-                                {t.credentialsTitle}
-                            </h2>
-                            <p className="mt-3 max-w-md text-xs leading-6 text-white/55 sm:text-sm">
-                                {t.credentialsSub}
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4">
-                            {catalogCredentials.map((item) => (
-                                <a
-                                    key={item.label}
-                                    href={item.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group border-t border-white/[0.1] pt-3 transition hover:border-sky-200/40 focus:outline-none"
-                                >
-                                    <p className="text-xl font-semibold leading-none text-white">{item.value}</p>
-                                    <p className="mt-2 flex items-center gap-1 text-[11px] leading-4 text-white/55 transition group-hover:text-sky-100">
-                                        {item.label}
-                                        <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                                    </p>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </SectionShell>
+                <CreditsStrip
+                    id="beat-store-credits"
+                    className="order-[50] mt-6"
+                    heading={(
+                        <>
+                            {t.credentialsTitle}{' '}
+                            <a
+                                href={MUSO_PROFILE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                            >
+                                Muso.ai
+                            </a>
+                        </>
+                    )}
+                />
 
                 {/* Genre Category Cards */}
                 <SectionShell id="catalog-categories" className="order-[20] border-b border-white/[0.08] py-12">
-                    <div className="mx-auto max-w-5xl">
+                    <div className="mx-auto max-w-7xl">
                         <div className="max-w-2xl mb-8">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.categoriesTag}</p>
+                            <p className="text-xs font-semibold text-white/60">{t.categoriesTag}</p>
                             <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">{t.categoriesTitle}</h2>
                             <p className="mt-2 text-xs leading-6 text-white/70 sm:text-sm">
                                 {t.categoriesSub}
@@ -727,11 +706,11 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <Link
                                         key={cat.slug}
                                         href={getLocalePath(`/studio/beats/${cat.slug}`)}
-                                        className={`group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-2xl border p-5 transition hover:-translate-y-1 ${theme.world} ${theme.card}`}
+                                        className={`group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-lg border p-5 transition ${theme.world} ${theme.card}`}
                                     >
                                         <div className="absolute inset-x-5 top-0 h-px opacity-80" style={{ backgroundColor: theme.accentHex }} aria-hidden="true" />
                                         <div>
-                                            <span className={`text-[11px] font-semibold uppercase tracking-wider ${theme.tag}`}>{cat.primaryGenre}</span>
+                                            <span className={`text-xs font-semibold ${theme.tag}`}>{cat.primaryGenre}</span>
                                             <h3 className="mt-2 text-xl font-bold text-white transition group-hover:text-white">{cat.localizedName[locale] || cat.name}</h3>
                                             <p className="mt-3 text-xs leading-5 text-white/62">{cat.shortDescription[locale] || cat.shortDescription['en-US']}</p>
                                         </div>
@@ -748,24 +727,24 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
                 {/* Clean Beats Inventory by Genre (Organized Filter at the Bottom) */}
                 <SectionShell id="beats-inventory" className="order-10 py-10 sm:py-12">
-                    <div className="mx-auto max-w-5xl">
+                    <div className="mx-auto max-w-7xl">
                         <div className="mb-7 flex flex-col gap-5">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.catalogTag}</p>
+                                <p className="text-xs font-semibold text-white/60">{t.catalogTag}</p>
                                 <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">{t.catalogTitle}</h2>
                                 <p className="mt-2 max-w-2xl text-xs leading-6 text-white/70 sm:text-sm">
                                     {t.catalogSub}
                                 </p>
-                                <p className="mt-3 text-[11px] font-medium tracking-wide text-sky-100/60 sm:text-xs">
+                                <p className="mt-3 text-xs font-medium text-white/60 sm:text-xs">
                                     {t.catalogMeta}
                                 </p>
                             </div>
 
-                            <div className="space-y-3 rounded-2xl border border-white/[0.1] bg-[#06131c]/80 p-3 shadow-[0_18px_50px_rgba(0,0,0,0.16)] sm:p-4">
+                            <div className="space-y-3 rounded-lg border border-white/[0.1] bg-[#0a0e12] p-3 sm:p-4">
                                 <div className="grid gap-3 lg:grid-cols-[minmax(16rem,0.72fr)_1.28fr]">
                                     <label className="relative block">
                                         <span className="sr-only">{catalogText.search}</span>
-                                        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sky-200/60" aria-hidden="true" />
+                                        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" aria-hidden="true" />
                                         <input
                                             type="search"
                                             value={query}
@@ -774,7 +753,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 setCurrentPage(1);
                                             }}
                                             placeholder={catalogText.search}
-                                            className="min-h-11 w-full rounded-xl border border-white/10 bg-[#03111a] py-2 pl-10 pr-10 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-sky-200/60 focus:ring-2 focus:ring-sky-200/20"
+                                            className="min-h-11 w-full rounded-md border border-white/10 bg-[#0a0e12] py-2 pl-10 pr-10 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-white/50 focus:ring-2 focus:ring-sky-200/20"
                                         />
                                         {query ? (
                                             <button
@@ -784,7 +763,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setCurrentPage(1);
                                                 }}
                                                 aria-label={catalogText.clear}
-                                                className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-white/50 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-white/50 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 <X className="h-4 w-4" aria-hidden="true" />
                                             </button>
@@ -796,7 +775,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             type="button"
                                             onClick={() => scrollGenres('left')}
                                             aria-label={catalogText.scrollGenresLeft}
-                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                         >
                                             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                                         </button>
@@ -807,7 +786,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setSelectedGenre('all');
                                                     setCurrentPage(1);
                                                 }}
-                                                className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
+                                                className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
                                                     selectedGenre === 'all'
                                                         ? getGenreTheme(t.filterAll).filter
                                                         : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
@@ -823,7 +802,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                         setShowGenrePanel(true);
                                                         setCurrentPage(1);
                                                     }}
-                                                    className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${getGenreTheme(selectedOfficialGenre.label).filter}`}
+                                                    className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${getGenreTheme(selectedOfficialGenre.label).filter}`}
                                                 >
                                                     <span className={`h-1.5 w-1.5 rounded-full ${getGenreTheme(selectedOfficialGenre.label).dot}`} aria-hidden="true" />
                                                     {selectedOfficialGenre.label}
@@ -839,7 +818,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                             setSelectedGenre(genre.id);
                                                             setCurrentPage(1);
                                                         }}
-                                                        className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
+                                                        className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
                                                             selectedGenre === genre.id
                                                                 ? theme.filter
                                                                 : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
@@ -855,7 +834,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             type="button"
                                             onClick={() => scrollGenres('right')}
                                             aria-label={catalogText.scrollGenresRight}
-                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                         >
                                             <ChevronRight className="h-4 w-4" aria-hidden="true" />
                                         </button>
@@ -863,7 +842,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             type="button"
                                             onClick={() => setShowGenrePanel((current) => !current)}
                                             aria-expanded={showGenrePanel}
-                                            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl border border-sky-200/25 bg-sky-300/[0.07] px-3.5 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.13] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border border-white/15 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-white/[0.07] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                         >
                                             {showGenrePanel ? catalogText.closeGenres : catalogText.moreGenres}
                                             <ChevronDown className={`h-3.5 w-3.5 transition ${showGenrePanel ? 'rotate-180' : ''}`} aria-hidden="true" />
@@ -872,8 +851,8 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </div>
 
                                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-3">
-                                    <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-                                        <SlidersHorizontal className="h-3.5 w-3.5 text-sky-200/65" aria-hidden="true" />
+                                    <p className="flex items-center gap-2 text-xs font-semibold text-white/42">
+                                        <SlidersHorizontal className="h-3.5 w-3.5 text-white/60" aria-hidden="true" />
                                         {catalogText.filterLabel}
                                     </p>
                                     <div className="flex items-center gap-2">
@@ -896,7 +875,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             type="button"
                                             onClick={() => setShowAdvancedFilters((current) => !current)}
                                             aria-expanded={showAdvancedFilters}
-                                            className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.035] px-3 text-xs font-semibold text-white/68 transition hover:border-sky-200/30 hover:text-white"
+                                            className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.035] px-3 text-xs font-semibold text-white/68 transition hover:border-white/30 hover:text-white"
                                         >
                                             {showAdvancedFilters ? catalogText.filtersClose : catalogText.filtersOpen}
                                             <ChevronDown className={`h-3.5 w-3.5 transition ${showAdvancedFilters ? 'rotate-180' : ''}`} aria-hidden="true" />
@@ -905,8 +884,8 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </div>
 
                                 {showAdvancedFilters ? (
-                                    <div className="grid gap-3 rounded-xl border border-white/[0.09] bg-black/20 p-3 sm:grid-cols-2 lg:grid-cols-4">
-                                        <label className="space-y-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/45">
+                                    <div className="grid gap-3 rounded-md border border-white/[0.09] bg-black/20 p-3 sm:grid-cols-2 lg:grid-cols-4">
+                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
                                             <span>{catalogText.tempo}</span>
                                             <select
                                                 value={tempoFilter}
@@ -914,7 +893,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setTempoFilter(event.target.value as TempoFilter);
                                                     setCurrentPage(1);
                                                 }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#03111a] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-sky-200/55"
+                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
                                             >
                                                 <option value="all">{catalogText.allTempos}</option>
                                                 <option value="under-90">&lt; 90 BPM</option>
@@ -923,7 +902,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 <option value="130-plus">130+ BPM</option>
                                             </select>
                                         </label>
-                                        <label className="space-y-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/45">
+                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
                                             <span>{catalogText.key}</span>
                                             <select
                                                 value={keyFilter}
@@ -931,13 +910,13 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setKeyFilter(event.target.value);
                                                     setCurrentPage(1);
                                                 }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#03111a] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-sky-200/55"
+                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
                                             >
                                                 <option value="all">{catalogText.allKeys}</option>
                                                 {availableKeys.map((key) => <option key={key} value={key}>{key}</option>)}
                                             </select>
                                         </label>
-                                        <label className="space-y-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/45">
+                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
                                             <span>{catalogText.vibe}</span>
                                             <select
                                                 value={vibeFilter}
@@ -945,13 +924,13 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setVibeFilter(event.target.value as VibeFilter);
                                                     setCurrentPage(1);
                                                 }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#03111a] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-sky-200/55"
+                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
                                             >
                                                 <option value="all">{catalogText.allVibes}</option>
                                                 {Object.keys(vibeMatchers).map((vibe) => <option key={vibe} value={vibe}>{vibe}</option>)}
                                             </select>
                                         </label>
-                                        <label className="space-y-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/45">
+                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
                                             <span>{catalogText.duration}</span>
                                             <select
                                                 value={durationFilter}
@@ -959,7 +938,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setDurationFilter(event.target.value as DurationFilter);
                                                     setCurrentPage(1);
                                                 }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#03111a] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-sky-200/55"
+                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
                                             >
                                                 <option value="all">{catalogText.allDurations}</option>
                                                 <option value="short">{catalogText.shortDuration}</option>
@@ -971,9 +950,9 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 ) : null}
 
                                 {showGenrePanel ? (
-                                    <div className="rounded-xl border border-white/[0.09] bg-black/20 p-3 sm:p-4">
+                                    <div className="rounded-md border border-white/[0.09] bg-black/20 p-3 sm:p-4">
                                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-200/70">
+                                            <p className="text-xs font-semibold text-white/60">
                                                 {catalogText.popularGenres}
                                             </p>
                                             <label className="relative block sm:w-64">
@@ -984,7 +963,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     value={genreQuery}
                                                     onChange={(event) => setGenreQuery(event.target.value)}
                                                     placeholder={catalogText.genreSearch}
-                                                    className="min-h-9 w-full rounded-lg border border-white/10 bg-[#03111a] py-1.5 pl-9 pr-3 text-xs text-white placeholder:text-white/35 outline-none transition focus:border-sky-200/60"
+                                                    className="min-h-9 w-full rounded-lg border border-white/10 bg-[#0a0e12] py-1.5 pl-9 pr-3 text-xs text-white placeholder:text-white/35 outline-none transition focus:border-white/50"
                                                 />
                                             </label>
                                         </div>
@@ -1010,7 +989,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                             <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${theme.dot}`} aria-hidden="true" />
                                                             <span className="truncate">{genre.label}</span>
                                                         </span>
-                                                        <span className="font-mono text-[10px] text-white/35">{genre.count}</span>
+                                                        <span className="font-mono text-xs text-white/35">{genre.count}</span>
                                                     </button>
                                                 );
                                             })}
@@ -1019,7 +998,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAllOfficialGenres((current) => !current)}
-                                                className="mt-3 text-xs font-semibold text-sky-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="mt-3 text-xs font-semibold text-white transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 {showAllOfficialGenres ? catalogText.showPopularGenres : catalogText.showAllGenres}
                                             </button>
@@ -1028,9 +1007,9 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 ) : null}
                             </div>
 
-                            <div className="flex flex-col gap-4 rounded-2xl border border-violet-300/20 bg-[linear-gradient(105deg,rgba(76,29,149,0.2),rgba(14,116,144,0.12))] p-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex flex-col gap-4 rounded-lg border border-violet-300/20 p-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div className="flex items-start gap-3">
-                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-200/20 bg-violet-300/10 text-violet-100">
+                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-violet-200/20 bg-violet-300/10 text-violet-100">
                                         <Gift className="h-4 w-4" aria-hidden="true" />
                                     </span>
                                     <div>
@@ -1041,7 +1020,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 <button
                                     type="button"
                                     onClick={() => shortlistedBeats.length ? openCheckout(shortlistedBeats) : openGuide('finder')}
-                                    className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-xl border border-violet-200/20 bg-white/[0.06] px-4 text-xs font-semibold text-white transition hover:bg-white/[0.1]"
+                                    className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-violet-200/20 bg-white/[0.06] px-4 text-xs font-semibold text-white transition hover:bg-white/[0.1]"
                                 >
                                     {shortlistedBeats.length ? catalogText.promoCta : catalogText.guide}
                                     <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1055,7 +1034,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                         </div>
 
                         {shortlistedBeats.length ? (
-                            <div className="sticky top-24 z-20 mb-4 flex flex-col gap-4 rounded-2xl border border-sky-200/30 bg-[#071923]/95 p-4 shadow-[0_18px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+                            <div className="sticky top-24 z-20 mb-4 flex flex-col gap-4 rounded-lg border border-white/15 bg-[#0a0e12] p-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div className="min-w-0">
                                     <p className="text-sm font-semibold text-white">{catalogText.shortlistTitle(shortlistedBeats.length)}</p>
                                     <p className="mt-1 text-xs text-white/55">{catalogText.shortlistText(shortlistedBeats.length)}</p>
@@ -1065,7 +1044,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 key={beat.id}
                                                 type="button"
                                                 onClick={() => toggleShortlist(beat)}
-                                                className="inline-flex max-w-48 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] text-white/70 transition hover:border-rose-200/30 hover:text-white"
+                                                className="inline-flex max-w-48 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-white/70 transition hover:border-rose-200/30 hover:text-white"
                                             >
                                                 <span className="truncate">{beat.title}</span>
                                                 <X className="h-3 w-3 shrink-0" aria-hidden="true" />
@@ -1077,7 +1056,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <button
                                         type="button"
                                         onClick={() => setShortlistedBeatIds([])}
-                                        className="inline-flex min-h-10 items-center justify-center rounded-xl border border-white/10 px-3 text-xs font-semibold text-white/60 transition hover:border-white/20 hover:text-white"
+                                        className="inline-flex min-h-10 items-center justify-center rounded-md border border-white/10 px-3 text-xs font-semibold text-white/60 transition hover:border-white/20 hover:text-white"
                                     >
                                         {catalogText.clearShortlist}
                                     </button>
@@ -1091,7 +1070,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             });
                                             openCheckout(shortlistedBeats);
                                         }}
-                                        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-sky-200 px-4 text-xs font-semibold text-slate-950 transition hover:bg-sky-100"
+                                        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-white px-4 text-xs font-semibold text-slate-950 transition hover:bg-white/85"
                                     >
                                         {catalogText.shortlistCta}
                                         <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1111,35 +1090,35 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 return (
                                     <article
                                         key={beat.id}
-                                        className={`group relative flex min-h-[22rem] flex-col gap-3 overflow-hidden rounded-2xl border p-4 shadow-[0_18px_45px_rgba(0,0,0,0.18)] transition duration-300 before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(0,0,0,0.3)] sm:p-5 ${theme.world} ${theme.card} ${theme.edge} ${isShortlisted ? 'ring-1 ring-sky-200/65' : ''}`}
+                                        className={`group relative flex min-h-[22rem] flex-col gap-3 overflow-hidden rounded-lg border p-4 transition duration-300 before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] sm:p-5 ${theme.world} ${theme.card} ${theme.edge} ${isShortlisted ? 'ring-1 ring-white/15' : ''}`}
                                     >
                                         <div className="h-[8.25rem]">
-                                            <div className={`flex items-center justify-between text-[11px] font-semibold ${theme.tag}`}>
-                                                <span className="flex items-center gap-2 uppercase tracking-wider"><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{editorialWorld}</span>
+                                            <div className={`flex items-center justify-between text-xs font-semibold ${theme.tag}`}>
+                                                <span className="flex items-center gap-2 "><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{editorialWorld}</span>
                                                 <button
                                                     type="button"
                                                     onClick={() => toggleShortlist(beat)}
                                                     disabled={isShortlistFull}
                                                     aria-pressed={isShortlisted}
                                                     title={isShortlistFull ? catalogText.shortlistFull : undefined}
-                                                    className={`inline-flex min-h-7 items-center gap-1.5 rounded-full border px-2.5 text-[10px] font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 ${
+                                                    className={`inline-flex min-h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
                                                         isShortlisted
-                                                            ? 'border-sky-200/40 bg-sky-300/15 text-sky-100'
-                                                            : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-sky-200/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35'
+                                                            ? 'border-white/15 bg-white/[0.04] text-white'
+                                                            : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35'
                                                     }`}
                                                 >
                                                     <Bookmark className={`h-3 w-3 ${isShortlisted ? 'fill-current' : ''}`} aria-hidden="true" />
                                                     {isShortlisted ? catalogText.shortlisted : catalogText.shortlist}
                                                 </button>
                                             </div>
-                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition group-hover:text-sky-100">{beat.title}</h3>
+                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition hover:text-white">{beat.title}</h3>
                                             <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
                                                 {getBeatSummary(beat, locale)}
                                             </p>
                                         </div>
 
                                         {metadata ? (
-                                            <div className="flex flex-wrap gap-1.5 text-[10px] font-medium text-white/52">
+                                            <div className="flex flex-wrap gap-1.5 text-xs font-medium text-white/52">
                                                 {metadata.bpm ? <span className="rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.bpm} BPM</span> : null}
                                                 {metadata.key && metadata.key !== 'None' ? <span className="rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.key}</span> : null}
                                                 {metadata.genres[0] ? <span className="max-w-32 truncate rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.genres[0]}</span> : null}
@@ -1157,7 +1136,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
                                             <Link
                                                 href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl border border-white/15 px-3 font-semibold text-white/80 transition hover:border-sky-200/40 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-white/15 px-3 font-semibold text-white/80 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 {t.viewBeatPage}
                                                 <ExternalLink className="h-3 w-3" />
@@ -1165,7 +1144,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             <button
                                                 type="button"
                                                 onClick={() => openCheckout([beat])}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-xl bg-sky-200 px-3 font-semibold text-slate-950 transition hover:bg-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md bg-white px-3 font-semibold text-slate-950 transition hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 {catalogText.checkout} · {beat.licenses[0]?.price || '$15'}
                                                 <ShoppingBag className="h-3 w-3" aria-hidden="true" />
@@ -1176,12 +1155,12 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             })}
                             </div>
                         ) : (
-                            <div className="rounded-xl border border-dashed border-white/[0.14] px-5 py-12 text-center">
+                            <div className="rounded-md border border-dashed border-white/[0.14] px-5 py-12 text-center">
                                 <p className="text-sm text-white/65">{catalogText.noResults}</p>
                                 <button
                                     type="button"
                                     onClick={resetFilters}
-                                    className="mt-4 text-xs font-semibold text-sky-200 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200"
+                                    className="mt-4 text-xs font-semibold text-white transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                 >
                                     {catalogText.reset}
                                 </button>
@@ -1194,7 +1173,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     type="button"
                                     onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                                     disabled={currentPage === 1}
-                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-sky-200/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
                                 >
                                     <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
                                     {catalogText.previous}
@@ -1204,7 +1183,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     type="button"
                                     onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
                                     disabled={currentPage === pageCount}
-                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-sky-200/40 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-white/12 px-3 py-2 text-xs font-semibold text-white/75 transition hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
                                 >
                                     {catalogText.next}
                                     <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1216,35 +1195,30 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
 
                 {/* Non-Exclusive Licenses */}
                 <SectionShell className="order-[30] border-y border-white/[0.08] bg-white/[0.015] py-12">
-                    <div className="mx-auto max-w-5xl">
+                    <div className="mx-auto max-w-7xl">
                         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.licensesTag}</p>
+                                <p className="text-xs font-semibold text-white/60">{t.licensesTag}</p>
                                 <h2 className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl">{t.licensesTitle}</h2>
                             </div>
                             <Link
                                 href={getLocalePath('/studio/beats/licensing')}
-                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-200 hover:underline"
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-white hover:underline"
                             >
                                 {t.readLicensing}
                                 <ExternalLink className="h-3.5 w-3.5" />
                             </Link>
                         </div>
 
-                        <m.div
+                        <div
                             className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-                            variants={staggerParent}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
                         >
                             {localizedLicenses.map((license) => (
-                                <m.article
+                                <article
                                     key={license.name}
-                                    variants={staggerChild}
-                                    className="relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.1] bg-white/[0.025] p-5 transition hover:border-sky-200/25 hover:bg-white/[0.04]"
+                                    className="relative flex h-full flex-col overflow-hidden rounded-md border border-white/[0.1] bg-white/[0.025] p-5 transition hover:border-white/30 hover:bg-white/[0.04]"
                                 >
-                                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-200/70">{license.name}</p>
+                                    <p className="text-xs font-semibold text-white/60">{license.name}</p>
                                     <p className="mt-3 text-3xl font-semibold text-white">{license.price}</p>
                                     <div className="mt-3 space-y-1 text-xs text-white/60">
                                         <p>{license.copies}</p>
@@ -1253,7 +1227,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     <div className="mt-4 flex-1 space-y-2 border-t border-white/[0.08] pt-3">
                                         {license.features.map((feature) => (
                                             <div key={feature} className="flex items-start gap-2 text-xs leading-5 text-white/70">
-                                                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sky-200" aria-hidden="true" />
+                                                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" aria-hidden="true" />
                                                 <span>{feature}</span>
                                             </div>
                                         ))}
@@ -1262,28 +1236,24 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         type="button"
                                         onClick={() => openCheckout(shortlistedBeats)}
                                         disabled={!shortlistedBeats.length}
-                                        className="mt-5 inline-flex items-center justify-between gap-2 rounded-lg border border-sky-200/25 bg-sky-300/[0.07] px-3 py-2 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.15] disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="mt-5 inline-flex items-center justify-between gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         {shortlistedBeats.length ? t.chooseBeatstars : catalogText.chooseBeatFirst}
                                         <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
                                     </button>
-                                </m.article>
+                                </article>
                             ))}
-                        </m.div>
+                        </div>
                     </div>
                 </SectionShell>
 
                 {/* Private Commissions */}
                 <SectionShell id="private-commissions" className="order-[60] py-12">
-                    <m.div
-                        className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start"
-                        variants={revealUp}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
+                    <div
+                        className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start"
                     >
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/70">{t.commissionsTag}</p>
+                            <p className="text-xs font-semibold text-white/60">{t.commissionsTag}</p>
                             <h2 className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl">{t.commissionsTitle}</h2>
                             <p className="mt-3 text-xs leading-6 text-white/70 sm:text-sm">{t.commissionsSub}</p>
                             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -1291,7 +1261,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     href={instagramDmUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-sky-200/30 bg-sky-300/[0.08] px-4 py-2.5 text-xs font-semibold text-sky-100 transition hover:bg-sky-300/[0.15]"
+                                    className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-white/[0.07]"
                                 >
                                     <Instagram className="h-3.5 w-3.5" />
                                     {t.dmExclusive}
@@ -1304,7 +1274,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                     )}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-xs font-semibold text-white/75 transition hover:text-white"
+                                    className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-2.5 text-xs font-semibold text-white/75 transition hover:text-white"
                                 >
                                     <Mail className="h-3.5 w-3.5" />
                                     {t.emailExclusive}
@@ -1313,15 +1283,15 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                         </div>
 
                         <div className="grid gap-x-6 gap-y-2.5 border-t border-white/[0.08] pt-6 sm:grid-cols-2 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-                            <p className="sm:col-span-2 text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/55">{t.exclusiveIncludes}</p>
+                            <p className="sm:col-span-2 text-xs font-semibold text-white/60">{t.exclusiveIncludes}</p>
                             {exclusiveBenefits[locale].map((item) => (
                                 <div key={item} className="flex items-start gap-2 text-xs leading-5 text-white/70">
-                                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-sky-200" aria-hidden="true" />
+                                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white" aria-hidden="true" />
                                     <span>{item}</span>
                                 </div>
                             ))}
                         </div>
-                    </m.div>
+                    </div>
                 </SectionShell>
 
                 <BeatStoreGuide

@@ -1,18 +1,14 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
-import { m } from 'framer-motion';
-import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
-import { socialData } from '@/components/SocialDock';
-import { FLOW_APP_URL, mainNavGroups } from '@/lib/vgp-ecosystem';
+import { socialData } from '@/components/socialLinks';
+import { mainNavGroups } from '@/lib/vgp-ecosystem';
 
 const navGroupLinks = (key: 'studio' | 'apps' | 'learn') =>
     mainNavGroups.find((group) => group.key === key)?.children.map(({ name, href }) => ({ name, href })) ?? [];
 
 const footerGroups = [
     { title: 'Studio', links: navGroupLinks('studio') },
-    { title: 'Apps', links: navGroupLinks('apps').map((link) => link.name === 'Flow' ? { ...link, href: FLOW_APP_URL } : link) },
+    { title: 'Apps', links: navGroupLinks('apps') },
     { title: 'Learn', links: navGroupLinks('learn') },
     {
         title: 'Company',
@@ -25,110 +21,90 @@ const footerGroups = [
     },
 ];
 
+const linkClass =
+    'text-sm text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative border-t border-white/[0.08] px-4 py-16 sm:px-6 md:py-20">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-200/25 to-transparent" />
-
-            <m.div
-                className="mx-auto max-w-7xl"
-                variants={revealUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-            >
-                <div className="grid min-w-0 gap-12 lg:grid-cols-[1.1fr_1.4fr]">
-                    <div className="min-w-0">
+        <footer className="border-t border-white/10 px-4 pb-10 pt-16 sm:px-6 md:pt-20">
+            <div className="mx-auto max-w-7xl">
+                <div className="grid min-w-0 gap-12 lg:grid-cols-12">
+                    <div className="min-w-0 lg:col-span-5">
                         <Image
                             src="/branding/vgp-logo-chrome-full.png"
                             alt="Virzy Guns Production"
                             width={280}
                             height={280}
-                            className="mb-8 h-auto w-44 opacity-80 saturate-[0.82] sm:w-52"
-                            sizes="208px"
+                            className="h-auto w-36 opacity-90 mix-blend-lighten sm:w-40"
+                            sizes="160px"
                         />
-                        <h2 className="font-display text-4xl font-normal leading-none text-white sm:text-5xl">
+                        <p className="mt-8 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white sm:text-4xl">
                             100% Art.
                             <br />
-                            <span className="text-white/40">100% Science.</span>
-                        </h2>
-                        <p className="mt-5 max-w-md text-sm leading-7 text-white/50">
-                            Virzy Guns Production is home to songs, premium beats, functional audio, CADENZ, books, and producer education by Virzy Guns.
+                            <span className="text-white/50">100% Science.</span>
+                        </p>
+                        <p className="mt-5 max-w-sm text-sm leading-7 text-white/60">
+                            Songs, beats, apps and producer guides by Virzy Guns.
                         </p>
 
-                        <div className="mt-8 flex items-center gap-3">
+                        <ul className="mt-6 flex flex-wrap items-center gap-1" aria-label="Virzy Guns on social media">
                             {socialData.map((social) => (
-                                <m.a
-                                    key={social.name}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="liquid-glass-soft flex h-10 w-10 items-center justify-center rounded-full text-white/40 transition hover:border-sky-200/30 hover:text-sky-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/60"
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.96 }}
-                                    aria-label={social.name}
-                                >
-                                    {social.icon}
-                                </m.a>
+                                <li key={social.name}>
+                                    <a
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={social.name}
+                                        className="group -ml-2 flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                    >
+                                        {social.icon}
+                                    </a>
+                                </li>
                             ))}
-                        </div>
+                        </ul>
                     </div>
 
-                    <m.div
-                        className="grid min-w-0 grid-cols-2 gap-8 sm:grid-cols-4"
-                        variants={staggerParent}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                    >
+                    <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 lg:col-span-7">
                         {footerGroups.map((group) => (
-                            <m.div key={group.title} variants={staggerChild}>
-                                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
-                                    {group.title}
-                                </p>
-                                <nav className="grid gap-2.5" aria-label={`${group.title} links`}>
+                            <nav key={group.title} aria-label={`${group.title} links`}>
+                                <p className="text-sm font-medium text-white">{group.title}</p>
+                                <ul className="mt-4 grid gap-3">
                                     {group.links.map((link) => {
                                         const external = link.href.startsWith('http');
                                         const mailto = link.href.startsWith('mailto:');
-                                        const className =
-                                            'text-sm text-white/50 transition hover:text-white focus:outline-none focus-visible:text-white';
 
-                                        return external ? (
-                                            <a
-                                                key={link.name}
-                                                href={link.href}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={className}
-                                            >
-                                                {link.name}
-                                            </a>
-                                        ) : mailto ? (
-                                            <a key={link.name} href={link.href} className={className}>
-                                                {link.name}
-                                            </a>
-                                        ) : (
-                                            <Link key={link.name} href={link.href} className={className}>
-                                                {link.name}
-                                            </Link>
+                                        return (
+                                            <li key={link.name}>
+                                                {external ? (
+                                                    <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                                                        {link.name}
+                                                    </a>
+                                                ) : mailto ? (
+                                                    <a href={link.href} className={linkClass}>
+                                                        {link.name}
+                                                    </a>
+                                                ) : (
+                                                    <Link href={link.href} className={linkClass}>
+                                                        {link.name}
+                                                    </Link>
+                                                )}
+                                            </li>
                                         );
                                     })}
-                                </nav>
-                            </m.div>
+                                </ul>
+                            </nav>
                         ))}
-                    </m.div>
+                    </div>
                 </div>
 
-                <div className="mt-14 flex flex-col gap-3 border-t border-white/[0.08] pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
-                    <p>Copyright {currentYear} Virzy Guns Production. All rights reserved.</p>
-                    <p>100% Art. 100% Science.</p>
-                </div>
-            </m.div>
+                <p className="mt-14 border-t border-white/10 pt-6 text-xs text-white/50">
+                    © {currentYear} Virzy Guns Production
+                </p>
+            </div>
 
-            <div className="h-20 md:hidden" />
+            <div className="h-20 md:hidden" aria-hidden="true" />
         </footer>
     );
 }

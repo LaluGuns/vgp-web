@@ -19,6 +19,8 @@ so its deploy is still run from the repo root, not from inside `flowstate/`.
 
 Team scope for every CLI call: `team_vZ1cAICvozAQbmxhCCoEDCFl`
 
+Visual and copy rules for the public root site live in `docs/DESIGN.md`.
+
 ## Deploying
 
 `main` is the only source of truth. Always branch from it.

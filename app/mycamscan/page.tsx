@@ -1,23 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
-import {
-    Camera,
-    CheckCircle2,
-    Contrast,
-    CreditCard,
-    FileArchive,
-    FileSearch,
-    FileText,
-    PenLine,
-    ScanLine,
-    ScanText,
-    ShieldCheck,
-    Zap,
-} from 'lucide-react';
-import { CinematicBackdrop, EditorialButton, SectionShell } from '@/components/editorial/EditorialPrimitives';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
 
-const PAGE_URL = 'https://virzyguns.com/mycamscan';
+const PAGE_URL = 'https://www.virzyguns.com/mycamscan';
 
 export const metadata: Metadata = {
     title: 'MyCamScan | Document Scanner, OCR and Searchable PDF',
@@ -61,89 +46,75 @@ export const metadata: Metadata = {
 };
 
 const features = [
-    { title: 'Fast scan', body: 'Point, capture and get a clean page in seconds.', Icon: Zap },
-    { title: 'Max Quality capture', body: '3-frame capture for the sharpest result on detailed pages.', Icon: Camera },
-    { title: 'Auto crop and enhance', body: 'Edges are found and the page is cleaned up automatically.', Icon: ScanLine },
-    { title: 'On-device OCR', body: 'Text recognition runs on your phone, not on a server.', Icon: ScanText },
-    { title: 'Searchable PDF', body: 'Export PDFs with selectable, searchable text.', Icon: FileSearch },
-    { title: 'ID card mode', body: 'Capture both sides of an ID card onto one page.', Icon: CreditCard },
-    { title: 'Signature', body: 'Sign a document right in the app.', Icon: PenLine },
-    { title: 'PDF compression', body: 'Shrink files for email and messaging.', Icon: FileArchive },
-    { title: 'No watermark', body: 'Your exports are clean, with nothing added to the page.', Icon: Contrast },
-    { title: 'No account', body: 'Nothing to sign up for. Your scans stay on your device.', Icon: ShieldCheck },
+    { title: 'Fast scan', body: 'Point, capture and get a clean page in seconds.' },
+    { title: 'Max Quality capture', body: 'Three frames are combined for the sharpest result on detailed pages.' },
+    { title: 'Auto crop and enhance', body: 'Edges are found and the page is cleaned up automatically.' },
+    { title: 'On-device OCR', body: 'Text recognition runs on your phone, not on a server.' },
+    { title: 'Searchable PDF', body: 'Export PDFs with selectable, searchable text.' },
+    { title: 'ID card mode', body: 'Capture both sides of an ID card onto one page.' },
+    { title: 'Signature', body: 'Sign a document right in the app.' },
+    { title: 'PDF compression', body: 'Shrink files for email and messaging.' },
+    { title: 'No watermark', body: 'Exports stay clean, with nothing added to the page.' },
+    { title: 'No account', body: 'Nothing to sign up for. Your scans stay on your device.' },
 ];
-
-const linkClass =
-    'font-semibold text-sky-100 underline decoration-sky-200/30 underline-offset-4 hover:text-white';
 
 export default function MyCamScanPage() {
     return (
         <article className="editorial-shell min-h-screen text-white">
-            <section className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
-                <CinematicBackdrop />
-                <div className="relative z-10 mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-                    <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/60">
-                            MyCamScan · Virzy Guns Production
-                        </p>
-                        <h1 className="mt-5 font-display text-4xl font-normal leading-[1.02] text-white sm:text-6xl">
+            <section className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+                <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
+                    <div className="lg:col-span-7">
+                        <p className="text-sm text-white/55">Coming soon on Google Play</p>
+                        <h1 className="mt-4 font-display text-[clamp(2.75rem,6.5vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
                             MyCamScan
                         </h1>
-                        <p className="mt-4 text-xl font-semibold text-white/85 sm:text-2xl">
-                            Scan documents, OCR, searchable PDF, private on-device
+                        <p className="mt-5 max-w-xl text-xl leading-8 text-white/80 sm:text-2xl sm:leading-9">
+                            Scan paper into searchable PDFs, privately, on your Android phone.
                         </p>
-                        <p className="mt-6 max-w-2xl text-base leading-8 text-white/60 sm:text-lg">
-                            A document scanner for Android that turns paper into clean, searchable PDFs. Text
-                            recognition runs on your phone and your scans stay on your device.
+                        <p className="mt-5 max-w-xl text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
+                            Text recognition runs on the device and the scans never leave it. No account and no watermark.
                         </p>
-                        <div className="mt-8 flex flex-wrap items-center gap-3">
-                            <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-sky-300/30 bg-sky-300/10 px-5 py-2.5 text-sm font-semibold text-sky-100">
-                                <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
-                                Coming soon on Google Play
-                            </span>
-                            <EditorialButton href="/mycamscan/privacy" variant="ghost">Privacy Policy</EditorialButton>
-                            <EditorialButton href="/mycamscan/terms" variant="ghost">Terms of Use</EditorialButton>
+                        <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+                            <TextLink href="/mycamscan/privacy">Privacy Policy</TextLink>
+                            <TextLink href="/mycamscan/terms">Terms of Use</TextLink>
                         </div>
                     </div>
-                    <div className="mx-auto w-full max-w-[16rem]">
+                    <div className="lg:col-span-4 lg:col-start-9">
                         <Image
                             src="/images/mycamscan-app-icon.png"
                             alt="MyCamScan app icon"
                             width={512}
                             height={512}
                             priority
-                            className="h-auto w-full rounded-[22%] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.55)]"
+                            sizes="(min-width: 1024px) 280px, 224px"
+                            className="mx-auto h-auto w-56 rounded-[22%] border border-white/10 lg:w-full lg:max-w-[280px]"
                         />
                     </div>
                 </div>
             </section>
 
-            <SectionShell className="pt-4">
-                <div className="mb-8 flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-sky-200/70" aria-hidden="true" />
-                    <h2 className="font-display text-3xl font-normal text-white sm:text-4xl">What it does</h2>
+            <section aria-labelledby="features-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                    <h2 id="features-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
+                        What it does
+                    </h2>
+                    <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:col-span-8">
+                        {features.map(({ title, body }) => (
+                            <div key={title} className="border-t border-white/10 pt-5">
+                                <dt className="text-lg font-semibold text-white">{title}</dt>
+                                <dd className="mt-2 text-base leading-7 text-white/65">{body}</dd>
+                            </div>
+                        ))}
+                    </dl>
                 </div>
-                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {features.map(({ title, body, Icon }) => (
-                        <li key={title} className="liquid-glass rounded-lg p-6">
-                            <Icon className="h-5 w-5 text-sky-200/70" aria-hidden="true" />
-                            <h3 className="mt-4 text-lg font-semibold text-white">{title}</h3>
-                            <p className="mt-2 text-sm leading-7 text-white/60">{body}</p>
-                        </li>
-                    ))}
-                </ul>
-            </SectionShell>
+            </section>
 
-            <section className="px-4 pb-20 sm:px-6 sm:pb-24">
-                <div className="liquid-glass-strong mx-auto max-w-4xl rounded-lg p-6 sm:p-8">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200/55">Legal</p>
-                    <p className="mt-4 text-sm leading-7 text-white/60 sm:text-base sm:leading-8">
-                        Read the{' '}
-                        <Link className={linkClass} href="/mycamscan/privacy">Privacy Policy</Link> and the{' '}
-                        <Link className={linkClass} href="/mycamscan/terms">Terms of Use</Link>. Both are also
-                        available in Bahasa Indonesia at the end of each page.
-                    </p>
-                </div>
+            <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+                <p className="mx-auto max-w-7xl text-base leading-7 text-white/65">
+                    The <TextLink href="/mycamscan/privacy" inline>Privacy Policy</TextLink> and{' '}
+                    <TextLink href="/mycamscan/terms" inline>Terms of Use</TextLink> are also available in Bahasa Indonesia
+                    at the end of each page.
+                </p>
             </section>
         </article>
     );

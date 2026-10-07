@@ -1,13 +1,12 @@
 'use client';
 
-import { useId, useRef, useState, useEffect, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AnimatePresence, m } from 'framer-motion';
-import { ChevronDown, CircleHelp, Home, ListMusic, Menu, SlidersHorizontal, X } from 'lucide-react';
-import { FLOW_APP_URL, mainNavGroups } from '@/lib/vgp-ecosystem';
-import { springFast } from '@/lib/motion-presets';
+import { ChevronDown, Menu, X } from 'lucide-react';
+import { CADENZ_PLAY_URL, FLOW_APP_URL, mainNavGroups, type NavChild } from '@/lib/vgp-ecosystem';
 
 const beatStoreNavCopy = {
     'en-US': {
@@ -45,8 +44,49 @@ const beatStoreNavCopy = {
     },
 } as const;
 
+const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+
+// Most items are live, so only the exceptions get a label.
+function StatusText({ status }: { status: NavChild['status'] }) {
+    if (!status || status === 'Available') return null;
+    return (
+        <span className="shrink-0 text-xs font-medium text-white/50">
+            {status === 'Coming Soon' ? 'Coming soon' : status}
+        </span>
+    );
+}
+
+function NavItemLink({
+    item,
+    className,
+    onNavigate,
+    current,
+    children,
+}: {
+    item: NavChild;
+    className: string;
+    onNavigate: () => void;
+    current?: boolean;
+    children: ReactNode;
+}) {
+    if (item.external || item.href.startsWith('http')) {
+        return (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" onClick={onNavigate} className={className}>
+                {children}
+            </a>
+        );
+    }
+
+    return (
+        <Link href={item.href} onClick={onNavigate} aria-current={current ? 'page' : undefined} className={className}>
+            {children}
+        </Link>
+    );
+}
+
 export function Navbar() {
     const pathname = usePathname();
+    const router = useRouter();
     const beatStoreLocale = pathname.startsWith('/ja-JP/')
         ? 'ja-JP'
         : pathname.startsWith('/de-DE/')
@@ -60,6 +100,8 @@ export function Navbar() {
             ? '/de-DE/studio/beats'
             : '/studio/beats';
     const isBeatStoreHome = pathname === beatStoreBase;
+    const isCadenzPage = pathname.startsWith('/cadenz');
+    const isFlowContext = pathname.startsWith('/flow') || pathname.startsWith('/lab');
 
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -69,13 +111,23 @@ export function Navbar() {
     const mobilePanelRef = useRef<HTMLDivElement>(null);
     const mobileTriggerRef = useRef<HTMLButtonElement>(null);
     const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-    const mobilePanelId = useId();
+    const openedByHover = useRef(false);
+    const closeTimer = useRef<number | null>(null);
     const hadMobileMenuOpen = useRef(false);
+    const menuId = useId();
+    const mobilePanelId = `${menuId}-mobile`;
 
-    const isAppPage = pathname.startsWith('/flow') || pathname.startsWith('/cadenz') || pathname.startsWith('/lab');
+    const cta = isBeatStore
+        ? { label: beatNav.cta, href: `${beatStoreBase}#beats-inventory` }
+        : isCadenzPage
+            ? { label: 'Get CADENZ', href: CADENZ_PLAY_URL }
+            : isFlowContext
+                ? { label: 'Open Flow', href: FLOW_APP_URL }
+                : { label: 'Browse beats', href: '/studio/beats' };
+    const ctaIsExternal = cta.href.startsWith('http');
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 18);
+        const handleScroll = () => setScrolled(window.scrollY > 8);
         handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
@@ -87,6 +139,7 @@ export function Navbar() {
         return () => window.removeEventListener('vgp:open-mobile-menu', handleOpenMobileMenu);
     }, []);
 
+    // Close every menu after navigation.
     useEffect(() => {
         const frame = requestAnimationFrame(() => {
             setMobileOpen(false);
@@ -96,7 +149,11 @@ export function Navbar() {
         return () => cancelAnimationFrame(frame);
     }, [pathname]);
 
-    // Lock body scroll when mobile menu is open
+    useEffect(() => () => {
+        if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    }, []);
+
+    // Lock body scroll while the mobile menu is open and move focus into it.
     useEffect(() => {
         if (mobileOpen) {
             hadMobileMenuOpen.current = true;
@@ -106,19 +163,19 @@ export function Navbar() {
                 cancelAnimationFrame(frame);
                 document.body.style.overflow = '';
             };
-        } else {
-            document.body.style.overflow = '';
-            if (hadMobileMenuOpen.current) {
-                hadMobileMenuOpen.current = false;
-                mobileTriggerRef.current?.focus();
-            }
+        }
+
+        document.body.style.overflow = '';
+        if (hadMobileMenuOpen.current) {
+            hadMobileMenuOpen.current = false;
+            mobileTriggerRef.current?.focus();
         }
         return () => {
             document.body.style.overflow = '';
         };
     }, [mobileOpen]);
 
-    // Close dropdowns on pointerdown outside or Escape key
+    // Close menus on a pointer press outside them, or on Escape.
     useEffect(() => {
         if (!openGroup && !mobileOpen) return;
 
@@ -131,11 +188,13 @@ export function Navbar() {
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                event.preventDefault();
+            if (event.key !== 'Escape') return;
+            event.preventDefault();
+            if (openGroup) {
+                triggerRefs.current[openGroup]?.focus();
                 setOpenGroup(null);
-                setMobileOpen(false);
             }
+            setMobileOpen(false);
         };
 
         document.addEventListener('pointerdown', handlePointerDown);
@@ -146,6 +205,44 @@ export function Navbar() {
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, [openGroup, mobileOpen]);
+
+    const cancelClose = () => {
+        if (closeTimer.current) {
+            window.clearTimeout(closeTimer.current);
+            closeTimer.current = null;
+        }
+    };
+
+    const openOnHover = (key: string) => {
+        cancelClose();
+        if (openGroup === key) return;
+        openedByHover.current = true;
+        setOpenGroup(key);
+    };
+
+    // A menu opened by hover closes when the pointer leaves. One opened (or
+    // pinned) by a click stays until a second click, Escape, or a click outside.
+    const closeOnLeave = () => {
+        if (!openedByHover.current) return;
+        cancelClose();
+        closeTimer.current = window.setTimeout(() => setOpenGroup(null), 140);
+    };
+
+    const toggleOnClick = (key: string) => {
+        cancelClose();
+        if (openGroup === key && !openedByHover.current) {
+            setOpenGroup(null);
+            return;
+        }
+        openedByHover.current = false;
+        setOpenGroup(key);
+    };
+
+    const closeOnFocusLeave = (event: FocusEvent<HTMLDivElement>) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setOpenGroup(null);
+        }
+    };
 
     const handleMobilePanelKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
         if (event.key !== 'Tab') return;
@@ -178,257 +275,208 @@ export function Navbar() {
             window.dispatchEvent(new CustomEvent(`vgp:open-${panel}-guide`));
             return;
         }
-        window.location.assign(`${beatStoreBase}?panel=${panel}`);
+        router.push(`${beatStoreBase}?panel=${panel}`);
     };
 
+    const closeAll = () => {
+        setOpenGroup(null);
+        setMobileOpen(false);
+    };
+
+    const desktopItemClass = (active: boolean) =>
+        `inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors ${focusRing} ${
+            active ? 'text-white' : 'text-white/65 hover:text-white'
+        }`;
+
+    const mobileRowClass = (active: boolean) =>
+        `flex min-h-12 w-full items-center justify-between gap-3 py-2 text-left text-base font-medium transition-colors ${focusRing} ${
+            active ? 'text-white' : 'text-white/80 hover:text-white'
+        }`;
+
+    const beatStoreItems: Array<
+        | { kind: 'link'; label: string; href: string; active: boolean }
+        | { kind: 'panel'; label: string; mobileLabel?: string; panel: 'store' | 'finder' }
+    > = [
+        { kind: 'link', label: beatNav.home, href: '/', active: false },
+        { kind: 'link', label: beatNav.browse, href: `${beatStoreBase}#beats-inventory`, active: false },
+        { kind: 'panel', label: beatNav.finder, panel: 'finder' },
+        { kind: 'link', label: beatNav.licensing, href: `${beatStoreBase}/licensing`, active: pathname.endsWith('/licensing') },
+        { kind: 'panel', label: beatNav.how, mobileLabel: beatNav.howMobile, panel: 'store' },
+    ];
+
     return (
-        <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
-            <nav
-                ref={navRef}
-                className={`liquid-glass-soft mx-auto h-14 max-w-5xl overflow-visible rounded-full !bg-[#03131d] px-3 py-2 transition duration-300 ${
-                    scrolled
-                        ? 'border-sky-200/20 shadow-[0_18px_60px_rgba(0,0,0,0.46)]'
-                        : 'shadow-[0_12px_40px_rgba(0,0,0,0.28)]'
-                }`}
-                aria-label="Main navigation"
-            >
-                <div className="flex h-full items-center justify-between gap-3">
-                    {/* Brand Logo */}
+        <header
+            className={`fixed inset-x-0 top-0 z-50 border-b bg-[#050607]/90 pt-[env(safe-area-inset-top)] backdrop-blur-md transition-colors duration-200 ${
+                scrolled || mobileOpen ? 'border-white/10' : 'border-transparent'
+            }`}
+        >
+            <nav ref={navRef} aria-label="Main navigation" className="px-4 sm:px-6">
+                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">
                     <Link
                         href={isBeatStore ? beatStoreBase : '/'}
-                        className="flex min-w-0 flex-1 items-center gap-2 rounded-full pr-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 sm:gap-3 sm:pr-3 lg:flex-none"
+                        className={`flex min-w-0 items-center gap-3 rounded-md ${focusRing}`}
                         aria-label={isBeatStore ? beatNav.brand : 'Virzy Guns Production home'}
                     >
                         <Image
                             src="/branding/logo-tg.png"
-                            alt="VGP"
-                            width={36}
-                            height={36}
-                            className="h-8 w-8 shrink-0 object-contain opacity-90 saturate-[0.4] contrast-125 sm:h-9 sm:w-9"
+                            alt=""
+                            width={32}
+                            height={32}
+                            className="h-9 w-9 shrink-0 object-contain brightness-0 invert"
                             priority
                         />
-                        <span className="min-w-0 truncate text-xs font-semibold text-white sm:text-sm">
+                        <span className="truncate text-sm font-semibold text-white">
                             <span className="sm:hidden">{isBeatStore ? beatNav.shortBrand : 'Virzy Guns'}</span>
                             <span className="hidden sm:inline">{isBeatStore ? beatNav.brand : 'Virzy Guns Production'}</span>
                         </span>
                     </Link>
 
-                    {/* Desktop Navigation Groups (Studio, Apps, Learn, About) */}
                     <div className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
-                        {isBeatStore ? (
-                            <>
-                                <Link
-                                    href="/"
-                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full bg-sky-400/10 border border-sky-400/20 px-3 text-xs font-semibold text-sky-200 transition hover:bg-sky-400/20 hover:text-white"
-                                >
-                                    <Home className="h-3.5 w-3.5" aria-hidden="true" />
-                                    {beatNav.home}
-                                </Link>
-                                <Link
-                                    href={`${beatStoreBase}#beats-inventory`}
-                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
-                                >
-                                    <ListMusic className="h-3.5 w-3.5" aria-hidden="true" />
-                                    {beatNav.browse}
-                                </Link>
-                                <button
-                                    type="button"
-                                    onClick={() => openBeatStorePanel('finder')}
-                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
-                                >
-                                    <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
-                                    {beatNav.finder}
-                                </button>
-                                <Link
-                                    href={`${beatStoreBase}/licensing`}
-                                    className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition ${
-                                        pathname.endsWith('/licensing')
-                                            ? 'bg-white/[0.08] text-white'
-                                            : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
-                                    }`}
-                                >
-                                    {beatNav.licensing}
-                                </Link>
-                                <button
-                                    type="button"
-                                    onClick={() => openBeatStorePanel('store')}
-                                    className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-xs font-semibold text-white/65 transition hover:bg-white/[0.05] hover:text-white"
-                                >
-                                    <CircleHelp className="h-3.5 w-3.5" aria-hidden="true" />
-                                    {beatNav.how}
-                                </button>
-                            </>
-                        ) : mainNavGroups.map((group) => {
-                            const isGroupActive = group.activePrefixes?.some((prefix) => isActive(prefix)) ?? pathname.startsWith(group.href);
-
-                            if (group.key === 'about') {
-                                return (
+                        {isBeatStore
+                            ? beatStoreItems.map((item) =>
+                                item.kind === 'link' ? (
                                     <Link
-                                        key={group.key}
-                                        href={group.href}
-                                        aria-current={isActive(group.href, true) ? 'page' : undefined}
-                                        className={`inline-flex h-9 items-center whitespace-nowrap rounded-full px-3.5 text-xs font-semibold transition ${
-                                            isActive(group.href, true)
-                                                ? 'bg-white/[0.08] text-white'
-                                                : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
-                                        }`}
+                                        key={item.label}
+                                        href={item.href}
+                                        aria-current={item.active ? 'page' : undefined}
+                                        className={desktopItemClass(item.active)}
                                     >
-                                        {group.name}
+                                        {item.label}
                                     </Link>
-                                );
-                            }
-
-                            const isOpen = openGroup === group.key;
-
-                            return (
-                                <div
-                                    key={group.key}
-                                    className="relative py-1"
-                                    onMouseEnter={() => setOpenGroup(group.key)}
-                                    onMouseLeave={() => setOpenGroup(null)}
-                                >
+                                ) : (
                                     <button
-                                        ref={(el) => {
-                                            triggerRefs.current[group.key] = el;
-                                        }}
+                                        key={item.label}
                                         type="button"
-                                        onClick={() => setOpenGroup(isOpen ? null : group.key)}
-                                        aria-expanded={isOpen}
-                                        aria-haspopup="menu"
-                                        className={`inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 text-xs font-semibold transition ${
-                                            isGroupActive || isOpen
-                                                ? 'bg-white/[0.08] text-white'
-                                                : 'text-white/65 hover:bg-white/[0.05] hover:text-white'
-                                        }`}
+                                        onClick={() => openBeatStorePanel(item.panel)}
+                                        className={desktopItemClass(false)}
                                     >
-                                        <span>{group.name}</span>
-                                        <ChevronDown
-                                            className={`h-3.5 w-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-                                            aria-hidden="true"
-                                        />
+                                        {item.label}
                                     </button>
+                                ),
+                            )
+                            : mainNavGroups.map((group) => {
+                                if (group.key === 'about') {
+                                    const active = isActive(group.href, true);
+                                    return (
+                                        <Link
+                                            key={group.key}
+                                            href={group.href}
+                                            aria-current={active ? 'page' : undefined}
+                                            className={desktopItemClass(active)}
+                                        >
+                                            {group.name}
+                                        </Link>
+                                    );
+                                }
 
-                                    <AnimatePresence>
-                                        {isOpen && (
-                                            <m.div
-                                                initial={{ opacity: 0, y: 4, scale: 0.98 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: 4, scale: 0.98 }}
-                                                transition={{ duration: 0.18, ease: 'easeOut' }}
-                                                className="absolute left-0 top-full pt-1.5 z-[90] w-64"
-                                            >
-                                                <div
-                                                    role="menu"
-                                                    className="liquid-glass-strong rounded-xl p-2 shadow-[0_22px_70px_rgba(0,0,0,0.55)] border border-white/15 bg-[#03131d]/98 backdrop-blur-xl"
+                                const isOpen = openGroup === group.key;
+                                const isGroupActive = group.activePrefixes?.some((prefix) => isActive(prefix)) ?? isActive(group.href);
+                                const panelId = `${menuId}-${group.key}`;
+
+                                return (
+                                    <div
+                                        key={group.key}
+                                        className="relative"
+                                        onMouseEnter={() => openOnHover(group.key)}
+                                        onMouseLeave={closeOnLeave}
+                                        onBlur={closeOnFocusLeave}
+                                    >
+                                        <button
+                                            ref={(el) => {
+                                                triggerRefs.current[group.key] = el;
+                                            }}
+                                            type="button"
+                                            onClick={() => toggleOnClick(group.key)}
+                                            aria-expanded={isOpen}
+                                            aria-controls={panelId}
+                                            className={desktopItemClass(isGroupActive || isOpen)}
+                                        >
+                                            {group.name}
+                                            <ChevronDown
+                                                className={`h-3.5 w-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`}
+                                                aria-hidden="true"
+                                            />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {isOpen ? (
+                                                <m.div
+                                                    id={panelId}
+                                                    initial={{ opacity: 0, y: 4 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: 4 }}
+                                                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                                                    className="absolute left-0 top-full z-[90] w-80 pt-2"
                                                 >
-                                                    {group.children.map((sub) => {
-                                                        const isExternal = sub.external || sub.href.startsWith('http');
-                                                        const linkClasses = `block rounded-lg px-3.5 py-2.5 transition focus:outline-none ${
-                                                            isActive(sub.href, true)
-                                                                ? 'bg-white/[0.09] text-white'
-                                                                : 'hover:bg-white/[0.06] text-white/70 hover:text-white'
-                                                        }`;
-
-                                                        return isExternal ? (
-                                                            <a
-                                                                key={sub.href}
-                                                                href={sub.href}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                role="menuitem"
-                                                                onClick={() => setOpenGroup(null)}
-                                                                className={linkClasses}
-                                                            >
-                                                                <div className="flex items-center justify-between gap-2">
-                                                                    <span className="text-xs font-semibold text-white">{sub.name}</span>
-                                                                    {sub.status && (
-                                                                        <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[10px] font-medium text-sky-200 ring-1 ring-sky-400/30">
-                                                                            {sub.status}
+                                                    <ul className="rounded-lg border border-white/10 bg-[#0a0e12] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
+                                                        {group.children.map((item) => {
+                                                            const current = !item.external && isActive(item.href, true);
+                                                            return (
+                                                                <li key={item.href}>
+                                                                    <NavItemLink
+                                                                        item={item}
+                                                                        current={current}
+                                                                        onNavigate={() => setOpenGroup(null)}
+                                                                        className={`block rounded-md px-3 py-2.5 transition-colors hover:bg-white/[0.05] ${focusRing} ${
+                                                                            current ? 'bg-white/[0.06]' : ''
+                                                                        }`}
+                                                                    >
+                                                                        <span className="flex items-baseline justify-between gap-3">
+                                                                            <span className="text-sm font-semibold text-white">{item.name}</span>
+                                                                            <StatusText status={item.status} />
                                                                         </span>
-                                                                    )}
-                                                                </div>
-                                                                {sub.description && (
-                                                                    <p className="mt-0.5 line-clamp-1 text-[11px] text-white/45">
-                                                                        {sub.description}
-                                                                    </p>
-                                                                )}
-                                                            </a>
-                                                        ) : (
-                                                            <Link
-                                                                key={sub.href}
-                                                                href={sub.href}
-                                                                role="menuitem"
-                                                                onClick={() => setOpenGroup(null)}
-                                                                className={linkClasses}
-                                                            >
-                                                                <div className="flex items-center justify-between gap-2">
-                                                                    <span className="text-xs font-semibold text-white">{sub.name}</span>
-                                                                    {sub.status && (
-                                                                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide ${
-                                                                            sub.status === 'Available'
-                                                                                ? 'bg-sky-400/15 text-sky-200 ring-1 ring-sky-400/30'
-                                                                                : sub.status === 'Free'
-                                                                                    ? 'bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/30'
-                                                                                    : 'bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/30'
-                                                                        }`}>
-                                                                            {sub.status}
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-                                                                {sub.description && (
-                                                                    <p className="mt-0.5 line-clamp-1 text-[11px] text-white/45">
-                                                                        {sub.description}
-                                                                    </p>
-                                                                )}
-                                                            </Link>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </m.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            );
-                        })}
+                                                                        {item.description ? (
+                                                                            <span className="mt-0.5 block text-xs leading-5 text-white/55">
+                                                                                {item.description}
+                                                                            </span>
+                                                                        ) : null}
+                                                                    </NavItemLink>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ul>
+                                                </m.div>
+                                            ) : null}
+                                        </AnimatePresence>
+                                    </div>
+                                );
+                            })}
                     </div>
 
-                    {/* Contextual Desktop CTA Button */}
-                    <div className="hidden items-center gap-2 lg:flex">
-                        {isAppPage ? (
+                    <div className="hidden lg:block">
+                        {ctaIsExternal ? (
                             <a
-                                href={FLOW_APP_URL}
+                                href={cta.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-sky-300/30 bg-sky-400/15 px-4 text-xs font-semibold text-sky-100 transition hover:bg-sky-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300"
+                                className={`inline-flex h-10 items-center whitespace-nowrap rounded-full bg-white px-4 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 ${focusRing}`}
                             >
-                                Open Flow
+                                {cta.label}
                             </a>
                         ) : (
                             <Link
-                                href={isBeatStore ? `${beatStoreBase}#beats-inventory` : '/studio/beats'}
-                                className="inline-flex h-9 items-center whitespace-nowrap rounded-full border border-white/15 bg-white px-4 text-xs font-semibold text-[#030405] transition hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                href={cta.href}
+                                className={`inline-flex h-10 items-center whitespace-nowrap rounded-full bg-white px-4 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 ${focusRing}`}
                             >
-                                {isBeatStore ? beatNav.cta : 'Browse Beats'}
+                                {cta.label}
                             </Link>
                         )}
                     </div>
 
-                    {/* Mobile Menu Trigger Button */}
                     <button
                         type="button"
                         onClick={() => setMobileOpen((open) => !open)}
                         ref={mobileTriggerRef}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white lg:hidden"
+                        className={`-mr-2 flex h-11 w-11 items-center justify-center rounded-md text-white lg:hidden ${focusRing}`}
                         aria-expanded={mobileOpen}
                         aria-controls={mobilePanelId}
-                        aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                     >
-                        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        {mobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}
                     </button>
                 </div>
             </nav>
 
-            {/* Mobile Navigation Drawer */}
             <AnimatePresence>
                 {mobileOpen ? (
                     <m.div
@@ -437,137 +485,87 @@ export function Navbar() {
                         tabIndex={-1}
                         role="dialog"
                         aria-modal="true"
-                        aria-label="Mobile navigation"
+                        aria-label="Site menu"
                         onKeyDown={handleMobilePanelKeyDown}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={springFast}
-                        className="liquid-glass-strong mx-auto mt-2 max-h-[calc(100dvh-5.75rem)] max-w-7xl overflow-y-auto overscroll-contain rounded-2xl border border-white/10 bg-[#03131d]/98 p-4 shadow-2xl outline-none backdrop-blur-2xl lg:hidden"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15, ease: 'easeOut' }}
+                        className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none sm:px-6 lg:hidden"
                     >
-                        <div className="grid gap-5">
+                        <div className="mx-auto grid max-w-7xl gap-8">
                             {isBeatStore ? (
-                                <div className="grid gap-1">
-                                    <Link
-                                        href="/"
-                                        onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg bg-sky-400/10 border border-sky-400/20 px-4 py-3 text-sm font-semibold text-sky-200 transition hover:bg-sky-400/20"
-                                    >
-                                        <Home className="h-4 w-4" aria-hidden="true" />
-                                        {beatNav.home}
-                                    </Link>
-                                    <Link
-                                        href={`${beatStoreBase}#beats-inventory`}
-                                        onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
-                                    >
-                                        <ListMusic className="h-4 w-4" aria-hidden="true" />
-                                        {beatNav.browse}
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        onClick={() => openBeatStorePanel('finder')}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
-                                    >
-                                        <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-                                        {beatNav.finder}
-                                    </button>
-                                    <Link
-                                        href={`${beatStoreBase}/licensing`}
-                                        onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 items-center rounded-lg px-4 py-3 text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
-                                    >
-                                        {beatNav.licensing}
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        onClick={() => openBeatStorePanel('store')}
-                                        className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-white/80 transition hover:bg-white/[0.06] hover:text-white"
-                                    >
-                                        <CircleHelp className="h-4 w-4" aria-hidden="true" />
-                                        {beatNav.howMobile}
-                                    </button>
-                                </div>
+                                <ul className="divide-y divide-white/[0.06]">
+                                    {beatStoreItems.map((item) => (
+                                        <li key={item.label}>
+                                            {item.kind === 'link' ? (
+                                                <Link
+                                                    href={item.href}
+                                                    onClick={closeAll}
+                                                    aria-current={item.active ? 'page' : undefined}
+                                                    className={mobileRowClass(item.active)}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openBeatStorePanel(item.panel)}
+                                                    className={mobileRowClass(false)}
+                                                >
+                                                    {item.mobileLabel ?? item.label}
+                                                </button>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
                             ) : (
                                 mainNavGroups.map((group) => (
-                                    <div key={group.key} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3">
-                                        <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-wider text-sky-200/60">
+                                    <section key={group.key} aria-labelledby={`${menuId}-${group.key}-heading`}>
+                                        <h2 id={`${menuId}-${group.key}-heading`} className="text-xs font-medium text-white/50">
                                             {group.name}
-                                        </p>
-                                        <div className="grid gap-1">
-                                            {group.children.map((sub) => {
-                                                const isExternal = sub.external || sub.href.startsWith('http');
-                                                const linkClasses = `flex min-h-11 items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                                                    isActive(sub.href, true)
-                                                        ? 'bg-white/[0.09] text-white'
-                                                        : 'text-white/70 hover:bg-white/[0.05] hover:text-white'
-                                                }`;
-
-                                                return isExternal ? (
-                                                    <a
-                                                        key={sub.href}
-                                                        href={sub.href}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        onClick={() => setMobileOpen(false)}
-                                                        className={linkClasses}
-                                                    >
-                                                        <span className="truncate">{sub.name}</span>
-                                                        {sub.status && (
-                                                            <span className="ml-2 rounded-full bg-sky-400/20 px-2 py-0.5 text-[10px] font-medium text-sky-200 shrink-0">
-                                                                {sub.status}
-                                                            </span>
-                                                        )}
-                                                    </a>
-                                                ) : (
-                                                    <Link
-                                                        key={sub.href}
-                                                        href={sub.href}
-                                                        onClick={() => setMobileOpen(false)}
-                                                        className={linkClasses}
-                                                    >
-                                                        <span className="truncate">{sub.name}</span>
-                                                        {sub.status && (
-                                                            <span className={`ml-2 rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0 ${
-                                                                sub.status === 'Available'
-                                                                    ? 'bg-sky-400/20 text-sky-200'
-                                                                    : sub.status === 'Free'
-                                                                        ? 'bg-emerald-400/20 text-emerald-200'
-                                                                        : 'bg-amber-400/20 text-amber-200'
-                                                            }`}>
-                                                                {sub.status}
-                                                            </span>
-                                                        )}
-                                                    </Link>
+                                        </h2>
+                                        <ul className="mt-1 divide-y divide-white/[0.06]">
+                                            {group.children.map((item) => {
+                                                const current = !item.external && isActive(item.href, true);
+                                                return (
+                                                    <li key={item.href}>
+                                                        <NavItemLink
+                                                            item={item}
+                                                            current={current}
+                                                            onNavigate={closeAll}
+                                                            className={mobileRowClass(current)}
+                                                        >
+                                                            <span className="truncate">{item.name}</span>
+                                                            <StatusText status={item.status} />
+                                                        </NavItemLink>
+                                                    </li>
                                                 );
                                             })}
-                                        </div>
-                                    </div>
+                                        </ul>
+                                    </section>
                                 ))
                             )}
 
-                            {/* Mobile Contextual Action Bar */}
-                            <div className="border-t border-white/10 pt-3">
-                                {isAppPage ? (
-                                    <a
-                                        href={FLOW_APP_URL}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 w-full items-center justify-center rounded-xl bg-sky-400/20 border border-sky-300/30 text-sm font-semibold text-sky-100 transition active:scale-[0.98]"
-                                    >
-                                        Open Flow App
-                                    </a>
-                                ) : (
-                                    <Link
-                                        href="/studio/beats"
-                                        onClick={() => setMobileOpen(false)}
-                                        className="flex min-h-11 w-full items-center justify-center rounded-xl bg-white text-sm font-semibold text-[#030405] transition active:scale-[0.98]"
-                                    >
-                                        Browse Beats
-                                    </Link>
-                                )}
-                            </div>
+                            {ctaIsExternal ? (
+                                <a
+                                    href={cta.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={closeAll}
+                                    className={`flex min-h-12 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-[#050607] ${focusRing}`}
+                                >
+                                    {cta.label}
+                                </a>
+                            ) : (
+                                <Link
+                                    href={cta.href}
+                                    onClick={closeAll}
+                                    className={`flex min-h-12 w-full items-center justify-center rounded-full bg-white text-sm font-semibold text-[#050607] ${focusRing}`}
+                                >
+                                    {cta.label}
+                                </Link>
+                            )}
                         </div>
                     </m.div>
                 ) : null}

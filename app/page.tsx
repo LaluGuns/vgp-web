@@ -2,334 +2,262 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { m } from 'framer-motion';
-import { ArrowRight, BookOpen, Headphones, Timer } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SocialDock } from '@/components/SocialDock';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { CreditsStrip } from '@/components/editorial/CreditsStrip';
 import {
-    CinematicBackdrop,
-    EditorialButton,
-    SectionShell,
-} from '@/components/editorial/EditorialPrimitives';
-import { VGPBrandHeroMedia } from '@/components/editorial/VGPBrandHeroMedia';
-import { FLOW_APP_URL, catalogCredentials, founderStatement } from '@/lib/vgp-ecosystem';
-import { staggerChild, staggerParent } from '@/lib/motion-presets';
+    CADENZ_APP_URL,
+    CADENZ_PLAY_URL,
+    FLOW_APP_URL,
+    founderStatement,
+} from '@/lib/vgp-ecosystem';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
-const visitorPaths = [
-    {
-        title: 'Make Music',
-        description: 'Browse beats, licensing, custom production, mixing, and mastering.',
-        cta: 'Browse Beats',
-        href: '/studio/beats',
-        Icon: Headphones,
-    },
-    {
-        title: 'Focus or Move',
-        description: 'Use Flow for deep work or preview CADENZ for running and cycling.',
-        cta: 'Open Flow',
-        href: FLOW_APP_URL,
-        Icon: Timer,
-    },
-    {
-        title: 'Learn Production',
-        description: 'Read free articles, explore books, or view upcoming courses.',
-        cta: 'Explore Learn Hub',
-        href: '/learn',
-        Icon: BookOpen,
-    },
-];
-
-const featuredProducts = [
-    {
-        title: 'VGP Studio Beats',
-        eyebrow: 'Commercial Music Catalog',
-        href: '/studio/beats',
-        cta: 'Browse & License Beats',
-        status: 'Available Now',
-        statusColor: 'bg-sky-400/20 text-sky-200 border-sky-400/30',
-        description: 'Premium beats across trap, drill, phonk, synthwave, R&B, club, pop, and more, with instant licensing, trackouts, and commercial rights.',
-    },
-    {
-        title: 'Flow App',
-        eyebrow: 'Deep Work Focus',
-        href: FLOW_APP_URL,
-        cta: 'Open Flow App',
-        status: 'Available Now',
-        statusColor: 'bg-sky-400/20 text-sky-200 border-sky-400/30',
-        description: 'A browser-based focus timer with original VGP audio, ambient sound, and honest session stats.',
-    },
-    {
-        title: 'CADENZ',
-        eyebrow: 'Movement Audio',
-        href: '/cadenz',
-        cta: 'Preview CADENZ',
-        status: 'Coming Soon',
-        statusColor: 'bg-amber-400/20 text-amber-200 border-amber-400/30',
-        description: 'A cadence music app connecting original VGP music with running and cycling rhythm.',
-    },
-];
+function Availability({ children, live = false }: { children: ReactNode; live?: boolean }) {
+    return (
+        <p className={`text-xs font-medium ${live ? 'text-sky-300' : 'text-white/50'}`}>{children}</p>
+    );
+}
 
 export default function HomePage() {
     const { openPopup } = useNewsletter();
 
     return (
         <PageTransition>
-            <main className="editorial-shell relative min-h-screen overflow-hidden text-white">
-                <SocialDock />
+            <main className="relative min-h-screen overflow-hidden bg-[#050607] text-white">
+                {/* Hero: the founder portrait is the page's one image-led moment. */}
+                <section className="px-4 pt-24 sm:px-6 sm:pt-28 lg:pt-32">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+                        <div className="lg:col-span-7 lg:pb-14">
+                            <h1 className="max-w-[13ch] font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
+                                Premium beats and music tools by Virzy Guns.
+                            </h1>
+                            <p className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                                Original beats in trap, drill, phonk, synthwave, R&amp;B, club and pop, licensed on the spot.
+                                The same studio makes Flow for deep work, CADENZ for running and cycling, and guides for
+                                producers learning the craft.
+                            </p>
+                            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+                                <Link
+                                    href="/studio/beats"
+                                    className="inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+                                >
+                                    Browse beats
+                                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                                </Link>
+                                <TextLink href={FLOW_APP_URL}>Open Flow</TextLink>
+                            </div>
+                        </div>
 
-                {/* Section 1: Visitor-Centered Hero */}
-                <section className="relative overflow-hidden bg-[#030405] px-4 pb-12 pt-24 sm:px-6 sm:pb-16 sm:pt-28 lg:pt-32">
-                    <CinematicBackdrop />
-
-                    <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-12 px-2 sm:px-6 lg:min-h-[570px] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-10 xl:px-0">
-                        {/* LEFT CONTENT */}
-                        <m.div
-                            variants={staggerParent}
-                            initial={false}
-                            animate="visible"
-                            className="relative z-20 min-w-0"
-                        >
-                            <m.p variants={staggerChild} className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-white/55">
-                                100% Art. 100% Science.
-                            </m.p>
-
-                            <m.p variants={staggerChild} className="mb-4 text-xs font-bold tracking-[0.28em] text-sky-300">
-                                VIRZY GUNS PRODUCTION
-                            </m.p>
-
-                            <m.h1
-                                variants={staggerChild}
-                                className="max-w-[580px] font-display text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl lg:text-[4.2rem]"
-                            >
-                                <span className="block">Buy premium beats.</span>
-                                <span className="block text-white/90">Focus better.</span>
-                                <span className="block text-white/75">Learn music production.</span>
-                            </m.h1>
-
-                            <m.p variants={staggerChild} className="mt-6 max-w-[570px] text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
-                                Original beats across trap, drill, phonk, synthwave, R&amp;B, club, pop, and more, plus the Flow focus app and practical production resources by Virzy Guns.
-                            </m.p>
-
-                            <m.div variants={staggerChild} className="mt-8 flex flex-wrap items-center gap-3">
-                                <EditorialButton href="/studio/beats">Browse Beats</EditorialButton>
-                                <EditorialButton href={FLOW_APP_URL} variant="ghost">Open Flow</EditorialButton>
-                            </m.div>
-                        </m.div>
-
-                        {/* RIGHT PRODUCT AREA */}
-                        <div className="relative isolate min-w-0 w-full">
-                            {/* Original hero artwork stays intact; CSS only controls its dissolve. */}
-                            <div
-                                className="pointer-events-none absolute right-[-5rem] top-1/2 z-0 h-[620px] w-[1100px] -translate-y-1/2 select-none opacity-40 blur-[0.35px] sm:right-[-7rem] sm:h-[700px] sm:w-[1240px]"
-                                style={{
-                                    maskImage: 'radial-gradient(ellipse at center, black 0%, black 52%, transparent 88%)',
-                                    WebkitMaskImage: 'radial-gradient(ellipse at center, black 0%, black 52%, transparent 88%)',
-                                }}
-                            >
+                        <figure className="lg:col-span-5">
+                            <div className="relative aspect-[5/4] overflow-hidden rounded-[6px] bg-black sm:aspect-[4/3] lg:aspect-[4/5]">
                                 <Image
-                                    src="/images/vgp-brand-hero-v2.png"
-                                    alt=""
+                                    src="/images/founder.jpg"
+                                    alt="Black and white portrait of Virzy Guns"
                                     fill
                                     priority
-                                    sizes="1240px"
-                                    className="object-contain"
+                                    sizes="(min-width: 1024px) 40vw, 100vw"
+                                    className="object-cover object-[50%_25%]"
+                                />
+                                <div
+                                    className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#050607] to-transparent"
                                     aria-hidden="true"
                                 />
                             </div>
+                            <figcaption className="mt-3 text-xs text-white/50">
+                                Virzy Guns, founder and producer
+                            </figcaption>
+                        </figure>
+                    </div>
+                </section>
 
-                    {/* PRODUCT CARDS - NORMAL DOCUMENT FLOW */}
-                    <VGPBrandHeroMedia />
+                {/* Credits: real numbers from Muso.ai, each linked to the source. */}
+                <CreditsStrip className="mt-16 lg:mt-20" />
+
+                {/* Beat store: the main product, so it gets the widest treatment. */}
+                <section aria-labelledby="beats-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
+                        <div className="lg:col-span-5">
+                            <Availability live>Open now</Availability>
+                            <h2 id="beats-heading" className="mt-3 font-display text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
+                                The beat store
+                            </h2>
+                            <p className="mt-5 max-w-md text-base leading-7 text-white/70">
+                                Pick a beat, choose a license and download it straight away. Trackouts and exclusive
+                                rights are there when a record needs them. For a track built from scratch, or a mix
+                                and master, book the studio.
+                            </p>
+                            <div className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
+                                <TextLink href="/studio/beats">Browse beats</TextLink>
+                                <TextLink href="/studio/beats/licensing">License terms</TextLink>
+                                <TextLink href="/studio">Studio services</TextLink>
+                            </div>
+                        </div>
+                        <div className="relative aspect-[16/9] overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-7">
+                            <Image
+                                src="/images/vgp-brand-hero-v2.png"
+                                alt="Virzy Guns Production logo in brushed metal"
+                                fill
+                                sizes="(min-width: 1024px) 58vw, 100vw"
+                                className="object-cover"
+                            />
                         </div>
                     </div>
                 </section>
 
-                {/* Section 2: Choose What You Need */}
-                <SectionShell id="choose" className="pt-6">
-                    <div className="mb-8">
-                        <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
-                            Navigation Pathways
-                        </span>
-                        <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
-                            Choose what you need.
+                {/* Apps: Flow is live, CADENZ lives on its own site now. */}
+                <section aria-labelledby="apps-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
+                    <div className="mx-auto max-w-7xl">
+                        <h2 id="apps-heading" className="max-w-2xl font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                            Two apps, both scored with VGP music.
                         </h2>
-                    </div>
 
-                    <div className="grid gap-4 md:grid-cols-3">
-                        {visitorPaths.map((path) => {
-                            const { Icon } = path;
-                            return (
-                                <Link
-                                    key={path.title}
-                                    href={path.href}
-                                    className="group flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-sky-200/30 hover:bg-white/[0.05]"
-                                >
-                                    <div>
-                                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-sky-100">
-                                            <Icon size={20} />
-                                        </div>
-                                        <h3 className="text-xl font-semibold text-white">{path.title}</h3>
-                                        <p className="mt-2 text-sm leading-6 text-white/65">{path.description}</p>
-                                    </div>
-                                    <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-sky-200 group-hover:text-white">
-                                        <span>{path.cta}</span>
-                                        <ArrowRight size={14} />
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </SectionShell>
+                        <div className="mt-12 grid gap-14 lg:grid-cols-12 lg:gap-12">
+                            <article className="lg:col-span-7">
+                                <div className="flex aspect-[16/10] items-center justify-center rounded-[6px] border border-white/10 bg-[#0a0e12] px-[18%]">
+                                    <Image
+                                        src="/branding/flowstate-logo.png"
+                                        alt="Flow logo"
+                                        width={768}
+                                        height={270}
+                                        sizes="(min-width: 1024px) 38vw, 64vw"
+                                        className="h-auto w-full"
+                                    />
+                                </div>
+                                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
+                                    <h3 className="text-2xl font-semibold">Flow</h3>
+                                    <Availability live>Available now</Availability>
+                                </div>
+                                <p className="mt-3 max-w-lg text-base leading-7 text-white/70">
+                                    A focus timer for long work blocks. It plays original VGP tracks and ambient sound,
+                                    and keeps an honest count of the sessions you finish.
+                                </p>
+                                <div className="mt-5">
+                                    <TextLink href={FLOW_APP_URL}>Open Flow</TextLink>
+                                </div>
+                            </article>
 
-                {/* Section 3: Current Featured Products */}
-                <SectionShell id="featured" className="pt-8">
-                    <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
-                                Featured Catalog
-                            </span>
-                            <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
-                                Products and tools.
-                            </h2>
+                            <article className="lg:col-span-5">
+                                <div className="relative aspect-[4/5] overflow-hidden rounded-[6px] border border-white/10 bg-black">
+                                    <Image
+                                        src="/images/CADENZ_POSTER.jpg"
+                                        alt="CADENZ poster: a cyclist with a road bike next to the CADENZ running screen"
+                                        fill
+                                        sizes="(min-width: 1024px) 34vw, 100vw"
+                                        className="object-cover object-top"
+                                    />
+                                </div>
+                                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
+                                    <h3 className="text-2xl font-semibold">CADENZ</h3>
+                                    <Availability live>On Google Play</Availability>
+                                </div>
+                                <p className="mt-3 text-base leading-7 text-white/70">
+                                    Music matched to your running or cycling cadence, so the beat sits on your stride.
+                                </p>
+                                <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
+                                    <TextLink href={CADENZ_APP_URL}>Visit cadenz.virzyguns.com</TextLink>
+                                    <TextLink href={CADENZ_PLAY_URL}>Get it on Google Play</TextLink>
+                                </div>
+                            </article>
                         </div>
-                        <p className="text-xs font-medium text-white/50">
-                            Clearly separated by current availability.
+
+                        <p className="mt-14 border-t border-white/10 pt-6 text-sm leading-7 text-white/60">
+                            Also from the studio:{' '}
+                            <Link href="/games" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">browser games</Link>,{' '}
+                            <Link href="/mycamscan" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">MyCamScan</Link>{' '}
+                            and the{' '}
+                            <Link href="/lab/healingwave" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">HealingWave Lab</Link>.
                         </p>
                     </div>
+                </section>
 
-                    <div className="grid gap-4 md:grid-cols-3">
-                        {featuredProducts.map((prod) => (
-                            <div
-                                key={prod.title}
-                                className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-white/20"
-                            >
-                                <div>
-                                    <div className="flex items-center justify-between gap-3">
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-sky-200/60">
-                                            {prod.eyebrow}
-                                        </span>
-                                        <span className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold ${prod.statusColor}`}>
-                                            {prod.status}
-                                        </span>
-                                    </div>
-                                    <h3 className="mt-4 text-xl font-semibold text-white">{prod.title}</h3>
-                                    <p className="mt-3 text-sm leading-6 text-white/65">{prod.description}</p>
-                                </div>
-                                <div className="mt-8">
+                {/* Learn: the book cover carries the section; content is a plain list. */}
+                <section aria-labelledby="learn-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-28">
+                    <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:gap-16">
+                        <div className="relative mx-auto aspect-[815/1054] w-full max-w-sm overflow-hidden rounded-[4px] border border-white/10 lg:col-span-4 lg:mx-0">
+                            <Image
+                                src="/ebooks/trap-guide-book-cover.jpg"
+                                alt="Cover of Music Production Guide: Trap Edition by Virzy Guns"
+                                fill
+                                sizes="(min-width: 1024px) 28vw, 384px"
+                                className="object-cover"
+                            />
+                        </div>
+
+                        <div className="lg:col-span-8 lg:pt-4">
+                            <h2 id="learn-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                                Learn how the records are made.
+                            </h2>
+                            <p className="mt-5 max-w-xl text-base leading-7 text-white/70">
+                                Notes from the studio on drums, 808s, mixing and licensing. The articles are free.
+                            </p>
+
+                            <ul className="mt-10 divide-y divide-white/10 border-y border-white/10">
+                                <li>
                                     <Link
-                                        href={prod.href}
-                                        className="inline-flex items-center gap-2 text-xs font-semibold text-sky-200 transition hover:text-white"
+                                        href="/blog/trap-beats-anatomy-of-the-perfect-808"
+                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
                                     >
-                                        <span>{prod.cta}</span>
-                                        <ArrowRight size={14} />
+                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                            Trap Beats: Anatomy of the Perfect 808
+                                        </span>
+                                        <span className="shrink-0 text-xs text-white/50">Free article</span>
                                     </Link>
-                                </div>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/book"
+                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                                    >
+                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                            Music Production Guide: Trap Edition
+                                        </span>
+                                        <span className="shrink-0 text-xs text-white/50">80+ page PDF, coming soon</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/studio/masterclass"
+                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                                    >
+                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                            Producer masterclasses
+                                        </span>
+                                        <span className="shrink-0 text-xs text-white/50">Coming soon</span>
+                                    </Link>
+                                </li>
+                            </ul>
+
+                            <div className="mt-8">
+                                <TextLink href="/learn">Go to the Learn hub</TextLink>
                             </div>
-                        ))}
-                    </div>
-                </SectionShell>
-
-                {/* Section 4: Proof and Founder Credibility */}
-                <SectionShell id="credentials" className="border-y border-white/[0.08] bg-white/[0.012] py-12 sm:py-14">
-                    <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-                        <div>
-                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
-                                Verified Track Record
-                            </span>
-                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-                                Credentials behind the work.
-                            </h2>
-                            <p className="mt-4 max-w-md text-sm leading-7 text-white/60">
-                                Virzy Guns is the founder shaping songs, beats, audio tools, and learning systems. Verified credits support the catalog.
-                            </p>
                         </div>
+                    </div>
+                </section>
 
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4">
-                            {catalogCredentials.map((item) => (
-                                <a
-                                    key={item.label}
-                                    href={item.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group border-t border-white/[0.1] pt-4 transition hover:border-sky-200/40 focus:outline-none"
+                {/* Closing: founder statement and the newsletter, nothing else. */}
+                <section aria-labelledby="founder-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32 lg:pt-24">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                        <h2 id="founder-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">
+                            Why the studio exists
+                        </h2>
+                        <div className="lg:col-span-6 lg:col-start-7">
+                            <p className="text-lg leading-8 text-white/75">{founderStatement}</p>
+                            <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+                                <button
+                                    type="button"
+                                    onClick={openPopup}
+                                    className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-colors hover:border-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
                                 >
-                                    <p className="text-2xl font-semibold leading-none text-white sm:text-3xl">{item.value}</p>
-                                    <p className="mt-2 text-xs leading-5 text-white/65 transition group-hover:text-sky-100">{item.label}</p>
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </SectionShell>
-
-                {/* Section 5: Latest Learning Content Preview */}
-                <SectionShell id="learn-preview" className="pt-8">
-                    <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
-                                Producer Education
-                            </span>
-                            <h2 className="mt-2 font-display text-3xl font-semibold text-white sm:text-4xl">
-                                Latest guides and articles.
-                            </h2>
-                        </div>
-                        <Link href="/learn" className="text-xs font-semibold text-sky-200 hover:underline">
-                            Explore full Learn Hub &rarr;
-                        </Link>
-                    </div>
-
-                    <div className="grid gap-4 md:grid-cols-2">
-                        <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6">
-                            <div>
-                                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-300">Free Article</span>
-                                <h3 className="mt-3 text-xl font-semibold text-white">Trap Beats: Anatomy of the Perfect 808</h3>
-                                <p className="mt-3 text-sm leading-6 text-white/65">
-                                    Learn what makes an 808 work as a melodic instrument, rhythmic driver, and the emotional foundation of a trap record.
-                                </p>
-                            </div>
-                            <div className="mt-6">
-                                <Link href="/blog/trap-beats-anatomy-of-the-perfect-808" className="text-xs font-semibold text-sky-200 hover:text-white">
-                                    Read Article &rarr;
-                                </Link>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.03] p-6">
-                            <div>
-                                <span className="text-xs font-semibold uppercase tracking-wider text-amber-200">PDF Book · Coming Soon</span>
-                                <h3 className="mt-3 text-xl font-semibold text-white">Music Production Guide: Trap Edition</h3>
-                                <p className="mt-3 text-sm leading-6 text-white/65">
-                                    80+ page practical guide for drums, 808s, vocals, mixing balance, and release mastering.
-                                </p>
-                            </div>
-                            <div className="mt-6">
-                                <Link href="/book" className="text-xs font-semibold text-sky-200 hover:text-white">
-                                    View Book Details &rarr;
-                                </Link>
+                                    Get release notes by email
+                                </button>
+                                <TextLink href="/about">Read the founder story</TextLink>
                             </div>
                         </div>
                     </div>
-                </SectionShell>
-
-                {/* Section 6: Founder Context & Final CTA */}
-                <SectionShell className="pb-20">
-                    <div className="liquid-glass-strong grid gap-8 rounded-2xl p-6 sm:p-10 lg:grid-cols-[1fr_1fr]">
-                        <div>
-                            <span className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-200/60">
-                                Founder Philosophy
-                            </span>
-                            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-                                Art leads; science makes the decisions sharper.
-                            </h2>
-                            <p className="mt-4 text-sm leading-7 text-white/70">
-                                {founderStatement}
-                            </p>
-                        </div>
-                        <div className="flex flex-col justify-center gap-4">
-                            <EditorialButton href="/studio/beats">Browse Beats & Studio</EditorialButton>
-                            <EditorialButton onClick={openPopup} variant="ghost">Join Newsletter Updates</EditorialButton>
-                        </div>
-                    </div>
-                </SectionShell>
+                </section>
             </main>
         </PageTransition>
     );
