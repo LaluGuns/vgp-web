@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { m } from 'framer-motion';
-import { Bookmark, Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Gift, Instagram, Mail, Search, ShoppingBag, SlidersHorizontal, X } from 'lucide-react';
+import { Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Gift, Instagram, Mail, Search, ShoppingBag, SlidersHorizontal, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
@@ -15,12 +15,13 @@ import {
     officialBeatStarsGenreOptions,
 } from '@/lib/catalog/beatstars-genre-index';
 import { trackBeatEvent } from '@/lib/analytics';
-import { getBeatSummary } from '@/lib/seo/beat-copy';
+import { formatBeatTitle } from '@/lib/beat-title';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
 import { getGenreTheme } from '@/lib/genre-theme';
 import { PUBLIC_CONFIRMED_LICENSES } from '@/lib/licensing-registry';
 import beatStarsFilterIndexJson from '@/data/beatstars-filter-index.json';
-import BeatStarsAudioPlayer from './components/BeatStarsAudioPlayer';
+import { StorePlayerProvider, type StoreTrack } from './components/BeatStorePlayer';
+import { BeatStoreRow, type BeatRowData } from './components/BeatStoreRow';
 import BeatStarsCheckoutModal from './components/BeatStarsCheckoutModal';
 import BeatStoreGuide, {
     type BeatFinderPreset,
@@ -186,6 +187,12 @@ const exclusiveBenefits = {
 } as const;
 
 const instagramDmUrl = 'https://ig.me/m/virzyguns';
+
+const rowCopy = {
+    'en-US': { play: 'Play', pause: 'Pause', license: 'License', columns: ['#', '', 'Title', 'Genre', 'BPM', 'Key', ''] },
+    'ja-JP': { play: '再生', pause: '一時停止', license: 'ライセンス', columns: ['#', '', 'タイトル', 'ジャンル', 'BPM', 'キー', ''] },
+    'de-DE': { play: 'Abspielen', pause: 'Pausieren', license: 'Lizenz', columns: ['#', '', 'Titel', 'Genre', 'BPM', 'Tonart', ''] },
+} as const;
 const PAGE_SIZE = 24;
 
 type BeatFilterMetadata = {
@@ -583,7 +590,33 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     }), [durationFilter, keyFilter, query, selectedGenre, tempoFilter, vibeFilter]);
     const pageCount = Math.max(1, Math.ceil(filteredBeats.length / PAGE_SIZE));
     const visibleBeats = filteredBeats.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+    const getLocalePath = (path: string) => {
+        if (locale === 'ja-JP') return `/ja-JP${path}`;
+        if (locale === 'de-DE') return `/de-DE${path}`;
+        return path;
+    };
+
     const shortlistedBeats = beatsCatalog.filter((beat) => shortlistedBeatIds.includes(beat.id));
+    const visibleRows: BeatRowData[] = visibleBeats.map((beat) => {
+        const metadata = beatStarsFilterIndex[beat.beatstarsTrackId];
+        const genre = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
+        const { name, detail } = formatBeatTitle(beat.title);
+        const musicalKey = metadata?.key && metadata.key !== 'None' ? metadata.key : undefined;
+        return {
+            beatId: beat.id,
+            trackId: beat.beatstarsTrackId,
+            name,
+            detail,
+            meta: [genre, metadata?.bpm ? `${metadata.bpm} BPM` : undefined, musicalKey].filter(Boolean).join(' · '),
+            price: beat.licenses[0]?.price || '$15',
+            href: getLocalePath(`/studio/beats/${beat.slug}`),
+            genre,
+            accentHex: getGenreTheme(genre).accentHex,
+            bpm: metadata?.bpm ?? undefined,
+            musicalKey,
+        };
+    });
+    const playerQueue: StoreTrack[] = visibleRows;
     const selectedGenreLabel = selectedGenre === 'all'
         ? t.filterAll
         : selectedOfficialGenre?.label
@@ -595,7 +628,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const minBpm = filteredBpms.length ? Math.min(...filteredBpms) : 64;
     const maxBpm = filteredBpms.length ? Math.max(...filteredBpms) : 190;
     const bpmRange = minBpm === maxBpm ? String(minBpm) : `${minBpm}–${maxBpm}`;
-    const bpmMidpoint = (minBpm + maxBpm) / 2;
     const hasAdvancedFilters = tempoFilter !== 'all' || keyFilter !== 'all' || vibeFilter !== 'all' || durationFilter !== 'all';
 
     const toggleShortlist = (beat: BeatProduct) => {
@@ -626,15 +658,16 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
         setCurrentPage(1);
     };
 
-    const getLocalePath = (path: string) => {
-        if (locale === 'ja-JP') return `/ja-JP${path}`;
-        if (locale === 'de-DE') return `/de-DE${path}`;
-        return path;
+
+    const licenseBeatById = (beatId: string) => {
+        const beat = beatsCatalog.find((item) => item.id === beatId);
+        if (beat) openCheckout([beat]);
     };
 
     return (
+        <StorePlayerProvider locale={locale} onLicense={licenseBeatById}>
         <PageTransition>
-            <article className="editorial-shell flex min-h-screen flex-col pb-20 pt-6 text-white sm:pt-10">
+            <article className="editorial-shell flex min-h-screen flex-col pb-28 pt-6 text-white sm:pt-10">
                 {/* Language switcher */}
                 <nav aria-label="Language" className="px-4 sm:px-6">
                     <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/55">
@@ -661,9 +694,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     genreLabel={selectedGenreLabel}
                     isAllGenres={selectedGenre === 'all'}
                     resultCount={filteredBeats.length}
-                    totalCount={beatsCatalog.length}
                     bpmRange={bpmRange}
-                    bpmMidpoint={bpmMidpoint}
                     checkoutCount={shortlistedBeats.length}
                     onGuideOpen={() => openGuide('store')}
                     onCheckoutOpen={() => openCheckout(shortlistedBeats)}
@@ -730,13 +761,9 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     <div className="mx-auto max-w-7xl">
                         <div className="mb-7 flex flex-col gap-5">
                             <div>
-                                <p className="text-xs font-semibold text-white/60">{t.catalogTag}</p>
-                                <h2 className="mt-2 font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">{t.catalogTitle}</h2>
+                                <h2 className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl">{t.catalogTitle}</h2>
                                 <p className="mt-2 max-w-2xl text-xs leading-6 text-white/70 sm:text-sm">
                                     {t.catalogSub}
-                                </p>
-                                <p className="mt-3 text-xs font-medium text-white/60 sm:text-xs">
-                                    {t.catalogMeta}
                                 </p>
                             </div>
 
@@ -1007,9 +1034,9 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 ) : null}
                             </div>
 
-                            <div className="flex flex-col gap-4 rounded-lg border border-violet-300/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex flex-col gap-4 rounded-[6px] border border-white/10 p-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div className="flex items-start gap-3">
-                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-violet-200/20 bg-violet-300/10 text-violet-100">
+                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 text-white/80">
                                         <Gift className="h-4 w-4" aria-hidden="true" />
                                     </span>
                                     <div>
@@ -1020,7 +1047,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 <button
                                     type="button"
                                     onClick={() => shortlistedBeats.length ? openCheckout(shortlistedBeats) : openGuide('finder')}
-                                    className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-md border border-violet-200/20 bg-white/[0.06] px-4 text-xs font-semibold text-white transition hover:bg-white/[0.1]"
+                                    className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-white/20 px-4 text-xs font-semibold text-white transition hover:border-white/60"
                                 >
                                     {shortlistedBeats.length ? catalogText.promoCta : catalogText.guide}
                                     <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1079,80 +1106,40 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                             </div>
                         ) : null}
 
-                        {visibleBeats.length ? (
-                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {visibleBeats.map((beat) => {
-                                const editorialWorld = getEditorialBeatWorld(beat.beatstarsTrackId) || beat.primaryGenre;
-                                const theme = getGenreTheme(editorialWorld);
-                                const metadata = beatStarsFilterIndex[beat.beatstarsTrackId];
-                                const isShortlisted = shortlistedBeatIds.includes(beat.id);
-                                const isShortlistFull = shortlistedBeatIds.length >= 3 && !isShortlisted;
-                                return (
-                                    <article
-                                        key={beat.id}
-                                        className={`group relative flex min-h-[22rem] flex-col gap-3 overflow-hidden rounded-lg border p-4 transition duration-300 before:pointer-events-none before:absolute before:inset-x-5 before:top-0 before:h-px before:content-[''] sm:p-5 ${theme.world} ${theme.card} ${theme.edge} ${isShortlisted ? 'ring-1 ring-white/15' : ''}`}
-                                    >
-                                        <div className="h-[8.25rem]">
-                                            <div className={`flex items-center justify-between text-xs font-semibold ${theme.tag}`}>
-                                                <span className="flex items-center gap-2 "><span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />{editorialWorld}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => toggleShortlist(beat)}
-                                                    disabled={isShortlistFull}
-                                                    aria-pressed={isShortlisted}
-                                                    title={isShortlistFull ? catalogText.shortlistFull : undefined}
-                                                    className={`inline-flex min-h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
-                                                        isShortlisted
-                                                            ? 'border-white/15 bg-white/[0.04] text-white'
-                                                            : 'border-white/10 bg-white/[0.03] text-white/50 hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-35'
-                                                    }`}
-                                                >
-                                                    <Bookmark className={`h-3 w-3 ${isShortlisted ? 'fill-current' : ''}`} aria-hidden="true" />
-                                                    {isShortlisted ? catalogText.shortlisted : catalogText.shortlist}
-                                                </button>
-                                            </div>
-                                            <h3 className="mt-2 h-12 line-clamp-2 text-lg font-bold leading-snug text-white transition hover:text-white">{beat.title}</h3>
-                                            <p className="mt-1.5 h-10 line-clamp-2 text-xs leading-5 text-white/60">
-                                                {getBeatSummary(beat, locale)}
-                                            </p>
-                                        </div>
-
-                                        {metadata ? (
-                                            <div className="flex flex-wrap gap-1.5 text-xs font-medium text-white/52">
-                                                {metadata.bpm ? <span className="rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.bpm} BPM</span> : null}
-                                                {metadata.key && metadata.key !== 'None' ? <span className="rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.key}</span> : null}
-                                                {metadata.genres[0] ? <span className="max-w-32 truncate rounded-full border border-white/10 bg-black/20 px-2 py-1">{metadata.genres[0]}</span> : null}
-                                            </div>
-                                        ) : null}
-
-                                        <BeatStarsAudioPlayer
-                                            trackId={beat.beatstarsTrackId}
-                                            productUrl={beat.beatstarsProductUrl}
-                                            beatTitle={beat.title}
-                                            locale={locale}
-                                            showArtwork
-                                        />
-
-                                        <div className="mt-auto grid grid-cols-[0.95fr_1.05fr] gap-2 pt-1 text-xs">
-                                            <Link
-                                                href={getLocalePath(`/studio/beats/${beat.slug}`)}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-white/15 px-3 font-semibold text-white/80 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                            >
-                                                {t.viewBeatPage}
-                                                <ExternalLink className="h-3 w-3" />
-                                            </Link>
-                                            <button
-                                                type="button"
-                                                onClick={() => openCheckout([beat])}
-                                                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md bg-white px-3 font-semibold text-slate-950 transition hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                            >
-                                                {catalogText.checkout} · {beat.licenses[0]?.price || '$15'}
-                                                <ShoppingBag className="h-3 w-3" aria-hidden="true" />
-                                            </button>
-                                        </div>
-                                    </article>
-                                );
-                            })}
+                        {visibleRows.length ? (
+                            <div>
+                                <div className="hidden grid-cols-[1.5rem_3rem_minmax(0,1fr)_9rem_3.5rem_3rem_10.5rem] gap-x-4 border-b border-white/10 px-3 pb-3 text-xs text-white/45 md:grid" aria-hidden="true">
+                                    {rowCopy[locale].columns.map((column, index) => (
+                                        <span key={index} className={index === 0 ? 'text-right' : ''}>{column}</span>
+                                    ))}
+                                </div>
+                                <ol className="divide-y divide-white/[0.06]">
+                                    {visibleRows.map((row, index) => {
+                                        const beat = visibleBeats[index];
+                                        const isShortlisted = shortlistedBeatIds.includes(beat.id);
+                                        return (
+                                            <BeatStoreRow
+                                                key={row.beatId}
+                                                beat={row}
+                                                queue={playerQueue}
+                                                index={(currentPage - 1) * PAGE_SIZE + index + 1}
+                                                labels={{
+                                                    play: rowCopy[locale].play,
+                                                    pause: rowCopy[locale].pause,
+                                                    license: rowCopy[locale].license,
+                                                    shortlist: catalogText.shortlist,
+                                                    shortlisted: catalogText.shortlisted,
+                                                    shortlistFull: catalogText.shortlistFull,
+                                                    details: t.viewBeatPage,
+                                                }}
+                                                isShortlisted={isShortlisted}
+                                                shortlistDisabled={shortlistedBeatIds.length >= 3 && !isShortlisted}
+                                                onToggleShortlist={() => toggleShortlist(beat)}
+                                                onLicense={() => openCheckout([beat])}
+                                            />
+                                        );
+                                    })}
+                                </ol>
                             </div>
                         ) : (
                             <div className="rounded-md border border-dashed border-white/[0.14] px-5 py-12 text-center">
@@ -1310,5 +1297,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                 />
             </article>
         </PageTransition>
+        </StorePlayerProvider>
     );
 }
