@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
-import { m } from 'framer-motion';
-import { Check, Gift, Mail, Instagram, ShoppingBag } from 'lucide-react';
+import { Check, Gift, Mail, Instagram, Pause, Play, ShoppingBag } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SectionShell } from '@/components/editorial/EditorialPrimitives';
-import { revealUp } from '@/lib/motion-presets';
+import { formatBeatTitle } from '@/lib/beat-title';
 import { type BeatLicense, BeatProduct, beatsCatalog } from '@/lib/catalog';
 import {
     getEditorialBeatWorld,
@@ -16,7 +14,9 @@ import { trackBeatEvent } from '@/lib/analytics';
 import { getBeatStory } from '@/lib/seo/beat-copy';
 import { getFounderGmailComposeUrl } from '@/lib/founder-contact';
 import { getGenreTheme } from '@/lib/genre-theme';
-import BeatStarsAudioPlayer from './BeatStarsAudioPlayer';
+import { StorePlayerProvider, useStorePlayer, type StoreTrack } from './BeatStorePlayer';
+import { BeatStoreRow } from './BeatStoreRow';
+import { toBeatRow } from './beat-row-data';
 import BeatStarsCheckoutModal from './BeatStarsCheckoutModal';
 import BeatStarsTrackArtwork from './BeatStarsTrackArtwork';
 import BeatStarsTrackMeta from './BeatStarsTrackMeta';
@@ -176,299 +176,251 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         return path;
     };
 
-    const playerTitle = locale === 'ja-JP' ? '試聴' : locale === 'de-DE' ? 'Vorschau' : 'Preview';
-    const playerSub = locale === 'ja-JP' ? 'BeatStars公式オーディオ' : locale === 'de-DE' ? 'Offizielles BeatStars-Audio' : 'Official BeatStars audio';
+    const { name: displayName, detail: displayDetail } = formatBeatTitle(beat.title);
+    const thisRow = toBeatRow(beat, getLocalePath(`/studio/beats/${beat.slug}`));
+    const relatedRows = relatedBeats.map((related) => toBeatRow(related, getLocalePath(`/studio/beats/${related.slug}`)));
+    const queue = [thisRow, ...relatedRows];
+    const [checkoutBeat, setCheckoutBeat] = useState(beat);
+    const openCheckoutFor = (beatId: string) => {
+        const target = beatsCatalog.find((item) => item.id === beatId) || beat;
+        setCheckoutBeat(target);
+        setCheckoutOpen(true);
+    };
+    const rowLabels = {
+        play: playLabel[locale].play,
+        pause: playLabel[locale].pause,
+        license: playLabel[locale].license,
+        shortlist: '',
+        shortlisted: '',
+        shortlistFull: '',
+        details: text.relatedCta,
+    };
 
     return (
+        <StorePlayerProvider locale={locale} onLicense={openCheckoutFor}>
         <PageTransition>
-            <article className={`editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24 ${genreTheme.world}`}>
-                {/* Language Selector & Breadcrumbs */}
-                <div className="mx-auto mb-5 flex max-w-7xl items-center justify-between px-6">
-                    <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                        <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
-                        <span>/</span>
-                        <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">{text.beats}</Link>
-                        <span>/</span>
-                        <span className="text-white/60">{beat.title}</span>
-                    </nav>
-
-                    <div className="flex items-center gap-2 text-xs text-white/50 bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10">
-                        <Link href={`/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'en-US' ? 'text-white font-bold' : ''}`}>EN</Link>
-                        <span>|</span>
-                        <Link href={`/ja-JP/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-white font-bold' : ''}`}>JA</Link>
-                        <span>|</span>
-                        <Link href={`/de-DE/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'de-DE' ? 'text-white font-bold' : ''}`}>DE</Link>
+            <article className="editorial-shell min-h-screen pb-28 pt-6 text-white sm:pt-10">
+                <div className="px-4 sm:px-6">
+                    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 text-sm text-white/55">
+                        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2">
+                            <Link href={getLocalePath('/studio/beats')} className="shrink-0 transition-colors hover:text-white">{text.beats}</Link>
+                            <span aria-hidden="true">/</span>
+                            <span className="truncate text-white/80">{displayName}</span>
+                        </nav>
+                        <div className="flex items-center gap-4" aria-label="Language">
+                            {([
+                                ['en-US', `/studio/beats/${beat.slug}`, 'EN'],
+                                ['ja-JP', `/ja-JP/studio/beats/${beat.slug}`, 'JA'],
+                                ['de-DE', `/de-DE/studio/beats/${beat.slug}`, 'DE'],
+                            ] as const).map(([code, href, label]) => (
+                                <Link
+                                    key={code}
+                                    href={href}
+                                    hrefLang={code}
+                                    aria-current={locale === code ? 'page' : undefined}
+                                    className={`inline-flex min-h-11 items-center transition-colors hover:text-white ${locale === code ? 'text-white underline decoration-white/40 underline-offset-[6px]' : ''}`}
+                                >
+                                    {label}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Hero Product Stage */}
-                <SectionShell id="beat-hero" className="!py-6 sm:!py-8 lg:!py-10">
-                    <div className="mx-auto max-w-7xl">
-                        <div className={`grid gap-6 rounded-lg border p-4 sm:p-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:p-7 ${genreTheme.surface}`}>
-                            {/* Left: Cover Art & Integrated Track Player */}
-                            <m.div
-                                className="space-y-5"
-                                variants={revealUp}
-                                initial="hidden"
-                                animate="visible"
-                            >
-                                <div className="relative aspect-square w-full overflow-hidden rounded-md bg-black/40 border border-white/10">
-                                    <BeatStarsTrackArtwork
-                                        trackId={beat.beatstarsTrackId}
-                                        title={beat.title}
-                                        fallback={<div className="relative flex h-full flex-col justify-between overflow-hidden p-7">
-                                            <div className="absolute inset-0 " aria-hidden="true" />
-                                            <div className="relative flex items-center justify-between text-xs font-semibold text-white/60">
-                                                <span>Virzy Guns</span>
-                                                <span>{text.officialRelease}</span>
-                                            </div>
-                                            <div className="relative">
-                                                <p className="text-xs font-semibold text-white/60">{editorialWorld}</p>
-                                                <h2 className="mt-3 max-w-sm font-display text-3xl font-semibold leading-[0.95] tracking-tight text-white sm:text-4xl">{beat.title}</h2>
-                                            </div>
-                                        </div>}
-                                    />
-                                </div>
-
-                                {/* Official Embedded BeatStars Track Player Widget */}
-                                <div className="overflow-hidden rounded-md border border-white/10 bg-black">
-                                    <div className="flex justify-between border-b border-white/10 bg-black/40 px-3 py-2 text-xs font-medium text-white/55">
-                                        <span>{playerTitle}</span>
-                                        <span>{playerSub}</span>
-                                    </div>
-                                    {beat.beatstarsTrackId ? (
-                                        <BeatStarsAudioPlayer
-                                            trackId={beat.beatstarsTrackId}
-                                            productUrl={beat.beatstarsProductUrl}
-                                            beatTitle={beat.title}
-                                            locale={locale}
-                                            autoLoad
-                                            showArtwork
-                                        />
-                                    ) : (
-                                        <div className="flex min-h-[140px] items-center justify-center px-4 text-center text-xs text-white/60">
-                                            {text.previewUnavailable}
+                <section className="px-4 pb-16 pt-8 sm:px-6 lg:pb-24">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:gap-14">
+                        {/* Artwork and preview */}
+                        <div data-enter="" className="lg:col-span-5">
+                            <div className="relative aspect-square w-full overflow-hidden rounded-[6px] border border-white/10 bg-[#0a0e12]">
+                                <BeatStarsTrackArtwork
+                                    trackId={beat.beatstarsTrackId}
+                                    title={beat.title}
+                                    fallback={
+                                        <div className="flex h-full flex-col justify-end p-7">
+                                            <span className="h-1 w-12 rounded-full" style={{ backgroundColor: genreTheme.accentHex }} aria-hidden="true" />
+                                            <p className="mt-4 max-w-sm font-display text-3xl font-semibold leading-tight tracking-tight text-white">{displayName}</p>
                                         </div>
-                                    )}
-                                </div>
+                                    }
+                                />
+                            </div>
+                            <PreviewButton row={thisRow} queue={queue} labels={playLabel[locale]} />
+                            <p className="mt-3 text-xs text-white/50">
+                                {text.producer}: <span className="text-white/80">{beat.producer}</span> · {text.powered}
+                            </p>
+                        </div>
 
-                                <div className="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-white/50">
-                                    <span>{text.producer}: <strong className="text-white">{beat.producer}</strong></span>
-                                    <span>{text.powered}</span>
-                                </div>
-                            </m.div>
+                        {/* Details and license */}
+                        <div data-enter="" style={{ '--enter-delay': '120ms' } as CSSProperties} className="lg:col-span-7">
+                            <p className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-white/55">
+                                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: genreTheme.accentHex }} aria-hidden="true" />
+                                {[editorialWorld, ...officialGenres.slice(0, 3)].join(' · ')}
+                            </p>
+                            <h1 className="mt-4 font-display text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[0.98] tracking-[-0.04em]">
+                                {displayName}
+                            </h1>
+                            {displayDetail ? <p className="mt-3 text-lg text-white/60">{displayDetail}</p> : null}
+                            <div className="mt-5">
+                                <BeatStarsTrackMeta trackId={beat.beatstarsTrackId} locale={locale} />
+                            </div>
+                            <p className="mt-6 max-w-2xl text-base leading-7 text-white/70">{description}</p>
 
-                            {/* Right: Beat Info & License Selector */}
-                            <m.div variants={revealUp} initial="hidden" animate="visible" className="space-y-6 py-1 lg:pl-2">
-                                <div>
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
-                                            {editorialWorld}
-                                        </span>
-                                        {officialGenres.slice(0, 3).map((genre) => (
-                                            <span
-                                                key={genre}
-                                                className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/55"
-                                            >
-                                                {genre}
-                                            </span>
-                                        ))}
-                                        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
-                                            {text.ready}
-                                        </span>
-                                    </div>
-                                    <h1 className="mt-4 font-display text-3xl font-bold leading-[1.02] tracking-[-0.04em] text-white sm:text-[2.7rem]">
-                                        {beat.title}
-                                    </h1>
-                                    <p className="mt-3 text-sm leading-7 text-white/70 sm:text-base">
-                                        {description}
-                                    </p>
-                                    <div className="mt-4">
-                                        <BeatStarsTrackMeta trackId={beat.beatstarsTrackId} locale={locale} />
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-3 rounded-lg border border-violet-300/20 p-4">
-                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-violet-200/20 bg-violet-300/10 text-violet-100">
-                                        <Gift className="h-4 w-4" aria-hidden="true" />
-                                    </span>
-                                    <div>
-                                        <p className="text-sm font-semibold text-white">{text.promoTitle}</p>
-                                        <p className="mt-1 text-xs leading-5 text-white/60">{text.promoText}</p>
-                                    </div>
-                                </div>
-
-                                {/* License selection matrix */}
-                                <div className="space-y-3">
-                                    <p className="text-xs text-white/60 font-semibold">{text.selectTier}</p>
-                                    <div className="grid gap-2 sm:grid-cols-2">
-                                        {licenseOptions.map((lic) => {
-                                            const isSelected = selectedLicense.id === lic.id;
-                                            return (
+                            <div className="mt-10 border-t border-white/10 pt-8">
+                                <h2 className="text-sm font-medium text-white/60">{text.selectTier}</h2>
+                                <ul className="mt-4 divide-y divide-white/[0.08] overflow-hidden rounded-[6px] border border-white/10" role="radiogroup" aria-label={text.selectTier}>
+                                    {licenseOptions.map((lic) => {
+                                        const isSelected = selectedLicense.id === lic.id;
+                                        return (
+                                            <li key={lic.id}>
                                                 <button
-                                                    key={lic.id}
+                                                    type="button"
+                                                    role="radio"
+                                                    aria-checked={isSelected}
                                                     onClick={() => handleLicenseSelection(lic)}
-                                                    className={`relative flex min-h-[5.25rem] items-center justify-between overflow-hidden rounded-md border p-4 text-left transition ${
-                                                        isSelected
-                                                            ? 'border-white/15 bg-white/[0.04] text-white shadow-lg'
-                                                            : 'border-white/10 bg-white/[0.02] text-white/70 hover:border-white/20 hover:bg-white/[0.04]'
+                                                    className={`flex w-full items-center gap-4 px-4 py-4 text-left transition-colors focus:outline-none focus-visible:bg-white/[0.06] ${
+                                                        isSelected ? 'bg-white/[0.06]' : 'hover:bg-white/[0.03]'
                                                     }`}
                                                 >
-                                                    <div>
-                                                        <p className="text-sm font-semibold">{lic.name}</p>
-                                                        <p className="text-xs text-white/50">{lic.streamingLimit}</p>
-                                                    </div>
-                                                    <p className="text-lg font-bold text-white">{lic.price}</p>
+                                                    <span
+                                                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${isSelected ? 'border-sky-300' : 'border-white/30'}`}
+                                                        aria-hidden="true"
+                                                    >
+                                                        {isSelected ? <span className="h-2 w-2 rounded-full bg-sky-300" /> : null}
+                                                    </span>
+                                                    <span className="min-w-0 flex-1">
+                                                        <span className="block text-sm font-semibold text-white">{lic.name}</span>
+                                                        <span className="block truncate text-xs text-white/50">{lic.streamingLimit}</span>
+                                                    </span>
+                                                    <span className="font-display text-xl font-semibold tabular-nums text-white">{lic.price}</span>
                                                 </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
 
-                                {/* Active License Terms & Honest BeatStars CTA */}
-                                <div className="rounded-lg border border-white/15 bg-white/[0.04] p-5 space-y-4">
-                                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                                        <span className="text-sm font-semibold text-white">{text.includes(selectedLicense.name)}</span>
-                                        <span className="text-xl font-bold text-white">{selectedLicense.price}</span>
-                                    </div>
-                                    <ul className="grid gap-2 text-xs text-white/80 sm:grid-cols-2">
-                                        <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
-                                            <span>{text.formats}: {selectedLicense.fileFormats.join(', ')}</span>
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
-                                            <span>{text.streams}: {selectedLicense.streamingLimit}</span>
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
-                                            <span>{text.sales}: {selectedLicense.salesLimit}</span>
-                                        </li>
-                                        <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
-                                            <span>{text.stems}: {selectedLicense.includesStems ? text.stemsIncluded : text.stemsNotIncluded}</span>
-                                        </li>
-                                    </ul>
+                                <dl className="mt-6 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+                                    {[
+                                        [text.formats, selectedLicense.fileFormats.join(', ')],
+                                        [text.streams, selectedLicense.streamingLimit],
+                                        [text.sales, selectedLicense.salesLimit],
+                                        [text.stems, selectedLicense.includesStems ? text.stemsIncluded : text.stemsNotIncluded],
+                                    ].map(([label, value]) => (
+                                        <div key={label} className="flex gap-2">
+                                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-white/60" aria-hidden="true" />
+                                            <dt className="text-white/55">{label}:</dt>
+                                            <dd className="text-white/85">{value}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
 
-                                    <p className="flex items-center gap-2 rounded-md border border-violet-200/15 bg-violet-300/[0.08] px-3 py-2 text-xs text-violet-100">
-                                        <Gift className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                                        {text.promoCheckout}
-                                    </p>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCheckoutBeat(beat);
+                                        handleCheckoutClick(selectedLicense.name, selectedLicense.price);
+                                    }}
+                                    className="group/button mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-[background-color,transform] duration-200 hover:bg-white/85 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607] sm:w-auto"
+                                >
+                                    {text.checkout(selectedLicense.name, selectedLicense.price)}
+                                    <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+                                </button>
+                                <p className="mt-4 flex items-start gap-2 text-sm text-white/55">
+                                    <Gift className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                                    <span><span className="text-white/80">{text.promoTitle}.</span> {text.promoText}</span>
+                                </p>
+                            </div>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => handleCheckoutClick(selectedLicense.name, selectedLicense.price)}
-                                        className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-white text-black font-semibold text-sm transition hover:bg-white/85 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                            <div className="mt-10 border-t border-white/10 pt-8">
+                                <h2 className="text-sm font-medium text-white/60">{text.exclusiveEyebrow}</h2>
+                                <p className="mt-2 max-w-xl text-sm leading-6 text-white/70">{text.exclusiveText}</p>
+                                <div className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-3">
+                                    <a href={instagramDmUrl} target="_blank" rel="noopener noreferrer" className="vgp-link inline-flex items-center gap-2 text-sm font-medium text-white">
+                                        <Instagram className="h-4 w-4" aria-hidden="true" />
+                                        {text.instagram}
+                                    </a>
+                                    <a
+                                        href={getFounderGmailComposeUrl(text.emailSubject(beat.title), text.emailBody(beat.title))}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="vgp-link inline-flex items-center gap-2 text-sm font-medium text-white"
                                     >
-                                        {text.checkout(selectedLicense.name, selectedLicense.price)}
-                                        <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-                                    </button>
+                                        <Mail className="h-4 w-4" aria-hidden="true" />
+                                        {text.email}
+                                    </a>
                                 </div>
-
-                                {/* Exclusive License IG DM / Email Option */}
-                                <div className="rounded-md border border-white/15 bg-white/[0.04] p-5 space-y-3">
-                                    <p className="text-white font-semibold text-xs ">
-                                        {text.exclusiveEyebrow}
-                                    </p>
-                                    <p className="text-xs text-white/70 leading-5">
-                                        {text.exclusiveText}
-                                    </p>
-                                    <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center">
-                                        <a
-                                            href={instagramDmUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white hover:bg-white/[0.07] transition"
-                                        >
-                                            <Instagram className="h-3.5 w-3.5" />
-                                            {text.instagram}
-                                        </a>
-                                        <a
-                                            href={getFounderGmailComposeUrl(
-                                                text.emailSubject(beat.title),
-                                                text.emailBody(beat.title),
-                                            )}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10 transition"
-                                        >
-                                            <Mail className="h-3.5 w-3.5" />
-                                            {text.email}
-                                        </a>
-                                    </div>
-                                </div>
-                            </m.div>
+                            </div>
                         </div>
                     </div>
-                </SectionShell>
+                </section>
 
-                {/* Sound Character & Licensing Information */}
-                <SectionShell id="specs" className="border-t border-white/10 py-14">
-                    <div className="mx-auto max-w-7xl grid gap-10 md:grid-cols-2">
+                <section data-reveal="" className="border-t border-white/10 px-4 py-14 sm:px-6">
+                    <dl className="mx-auto grid max-w-7xl gap-6 text-sm sm:grid-cols-2">
                         <div>
-                            <h2 className="font-display text-2xl font-semibold text-white">{text.sound}</h2>
-                            <p className="mt-4 text-sm leading-7 text-white/70">{description}</p>
-                            <div className="mt-6 space-y-3 text-xs text-white/60">
-                                <p><strong className="text-white">{text.tags}:</strong> {beat.tags.join(', ')}</p>
-                                <p><strong className="text-white">{text.credit}:</strong> {selectedLicense.creditString}</p>
-                            </div>
+                            <dt className="text-white/50">{text.tags}</dt>
+                            <dd className="mt-1 text-white/80">{beat.tags.join(', ')}</dd>
                         </div>
-
-                        <div className="rounded-md border border-white/10 bg-white/[0.02] p-6 space-y-4">
-                            <h3 className="text-sm font-semibold text-white/60">{text.licensing}</h3>
-                            <div className="space-y-3 text-xs text-white/70">
-                                <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">{text.selected}</span>
-                                    <span className="text-sm font-semibold text-white">{selectedLicense.name}: {selectedLicense.streamingLimit}</span>
-                                </div>
-                                <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">{text.formatsIncluded}</span>
-                                    <span className="text-sm font-semibold text-white">{selectedLicense.fileFormats.join(', ')}</span>
-                                </div>
-                                <div className="border-b border-white/5 pb-2">
-                                    <span className="text-white/40 block">{text.officialCheckout}</span>
-                                    <span className="text-sm font-semibold text-white">{text.officialCheckoutDetail}</span>
-                                </div>
-                            </div>
+                        <div>
+                            <dt className="text-white/50">{text.credit}</dt>
+                            <dd className="mt-1 text-white/80">{selectedLicense.creditString}</dd>
                         </div>
-                    </div>
-                </SectionShell>
+                    </dl>
+                </section>
 
-                {/* Related Beats in Genre */}
-                {relatedBeats.length > 0 && (
-                    <SectionShell id="related-beats" className="border-t border-white/10 py-14">
+                {relatedRows.length > 0 ? (
+                    <section data-reveal="" aria-labelledby="related-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                         <div className="mx-auto max-w-7xl">
-                            <h2 className="mb-6 font-display text-2xl font-semibold text-white">{text.related(editorialWorld)}</h2>
-                            <div className="grid gap-4 sm:grid-cols-3">
-                                {relatedBeats.map((relBeat) => (
-                                    <Link
-                                        key={relBeat.id}
-                                        href={getLocalePath(`/studio/beats/${relBeat.slug}`)}
-                                        className="group rounded-md border border-white/10 bg-white/[0.02] p-4 transition hover:border-white/30 hover:bg-white/[0.04]"
-                                    >
-                                        <p className="text-xs text-white/60 font-semibold">
-                                            {getEditorialBeatWorld(relBeat.beatstarsTrackId) || relBeat.primaryGenre}
-                                        </p>
-                                        <h3 className="mt-1 text-base font-semibold text-white hover:text-white transition">{relBeat.title}</h3>
-                                        <p className="mt-2 text-xs text-white/50">{text.relatedCta} →</p>
-                                    </Link>
+                            <h2 id="related-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                                {text.related(editorialWorld)}
+                            </h2>
+                            <ol className="mt-8 divide-y divide-white/[0.06] border-y border-white/10">
+                                {relatedRows.map((row, index) => (
+                                    <BeatStoreRow
+                                        key={row.beatId}
+                                        beat={row}
+                                        queue={queue}
+                                        index={index + 1}
+                                        labels={rowLabels}
+                                        onLicense={() => openCheckoutFor(row.beatId)}
+                                    />
                                 ))}
-                            </div>
+                            </ol>
                         </div>
-                    </SectionShell>
-                )}
+                    </section>
+                ) : null}
 
                 <BeatStarsCheckoutModal
                     open={checkoutOpen}
                     onClose={() => setCheckoutOpen(false)}
                     locale={locale}
                     beatSelections={[{
-                        trackId: beat.beatstarsTrackId,
-                        title: beat.title,
-                        productUrl: beat.beatstarsProductUrl,
+                        trackId: checkoutBeat.beatstarsTrackId,
+                        title: checkoutBeat.title,
+                        productUrl: checkoutBeat.beatstarsProductUrl,
                     }]}
                 />
             </article>
         </PageTransition>
+        </StorePlayerProvider>
+    );
+}
+
+const playLabel = {
+    'en-US': { play: 'Play preview', pause: 'Pause preview', license: 'License' },
+    'ja-JP': { play: 'プレビューを再生', pause: 'プレビューを一時停止', license: 'ライセンス' },
+    'de-DE': { play: 'Vorschau abspielen', pause: 'Vorschau pausieren', license: 'Lizenz' },
+} as const;
+
+/** Big preview button under the artwork, wired to the shared store player. */
+function PreviewButton({ row, queue, labels }: { row: StoreTrack; queue: StoreTrack[]; labels: { play: string; pause: string } }) {
+    const { current, isPlaying, isLoading, play } = useStorePlayer();
+    const active = current?.trackId === row.trackId && (isPlaying || isLoading);
+    return (
+        <button
+            type="button"
+            onClick={() => play(row, queue)}
+            className="group/button mt-5 inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/60 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        >
+            {active ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="ml-0.5 h-4 w-4" aria-hidden="true" />}
+            {active ? labels.pause : labels.play}
+        </button>
     );
 }

@@ -2,11 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { m } from 'framer-motion';
 import { Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Gift, Instagram, Mail, Search, ShoppingBag, SlidersHorizontal, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
-import { revealUp, staggerChild, staggerParent } from '@/lib/motion-presets';
 import { CreditsStrip, MUSO_PROFILE_URL } from '@/components/editorial/CreditsStrip';
 import { categories, beatsCatalog, type BeatProduct } from '@/lib/catalog';
 import {

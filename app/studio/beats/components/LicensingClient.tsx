@@ -116,31 +116,26 @@ export default function LicensingClient({ locale = 'en-US' }: LicensingClientPro
                 </SectionShell>
 
                 {/* FAQ Section */}
-                <SectionShell id="faq" className="border-t border-white/10 py-14">
-                    <div className="mx-auto max-w-3xl space-y-6">
-                        <h2 className="font-display text-2xl font-semibold text-white text-center">{text.faq}</h2>
-
-                        <div className="space-y-4">
-                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
-                                <h3 className="text-base font-semibold text-white">{text.exclusiveQ}</h3>
-                                <p className="mt-2 text-xs leading-6 text-white/70">
-                                    {text.exclusiveA}
-                                </p>
-                            </div>
-
-                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
-                                <h3 className="text-base font-semibold text-white">{text.platformsQ}</h3>
-                                <p className="mt-2 text-xs leading-6 text-white/70">
-                                    {text.platformsA}
-                                </p>
-                            </div>
-
-                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
-                                <h3 className="text-base font-semibold text-white">{text.stemsQ}</h3>
-                                <p className="mt-2 text-xs leading-6 text-white/70">
-                                    {text.stemsA}
-                                </p>
-                            </div>
+                <SectionShell id="faq" className="border-t border-white/10 py-16 lg:py-20">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                        <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl lg:col-span-4">{text.faq}</h2>
+                        <div className="divide-y divide-white/10 border-y border-white/10 lg:col-span-7 lg:col-start-6">
+                            {([
+                                [text.exclusiveQ, text.exclusiveA],
+                                [text.platformsQ, text.platformsA],
+                                [text.stemsQ, text.stemsA],
+                            ] as const).map(([question, answer]) => (
+                                <details key={question} className="group py-1 [&_summary::-webkit-details-marker]:hidden">
+                                    <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-6 py-4 text-lg font-semibold text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                                        {question}
+                                        <span className="relative h-4 w-4 shrink-0 text-white/60" aria-hidden="true">
+                                            <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-current" />
+                                            <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-current transition-transform duration-300 group-open:scale-y-0" />
+                                        </span>
+                                    </summary>
+                                    <p className="max-w-2xl pb-6 text-base leading-7 text-white/70">{answer}</p>
+                                </details>
+                            ))}
                         </div>
                     </div>
                 </SectionShell>

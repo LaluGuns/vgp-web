@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { PageHeader, TextLink } from '@/components/editorial/EditorialPrimitives';
 import { founderEmail } from '@/lib/founder-contact';
+import { CreditsStrip } from '@/components/editorial/CreditsStrip';
 
 export const metadata: Metadata = {
     title: 'VGP Studio | Beats and Production by Virzy Guns',
     description:
-        'VGP Studio offers premium beats, custom production, mixing, mastering, and sound design by Virzy Guns, ranked top 10% songwriter and top 25% producer.',
+        'Beats, custom production, mixing and mastering by Virzy Guns, ranked in the top 10% of songwriters and top 25% of producers on Muso.ai.',
     keywords: [
         'VGP Studio',
         'Virzy Guns beats',
@@ -54,23 +54,12 @@ export default function StudioPage() {
         <article className="editorial-shell min-h-screen text-white">
             <PageHeader
                 title="VGP Studio"
-                description="Beats, custom production, mixing and mastering by Virzy Guns. License a beat today, or bring a record and work on it together."
+                description="Beats, custom production, mixing and mastering. License a beat today, or bring me a record and we will finish it together."
                 primary={{ label: 'Browse beats', href: '/studio/beats' }}
                 secondary={{ label: 'Email the studio', href: `mailto:${founderEmail}` }}
             />
 
-            <div className="px-4 sm:px-6">
-                <div className="relative mx-auto aspect-[16/7] max-w-7xl overflow-hidden rounded-[6px] border border-white/10 bg-black">
-                    <Image
-                        src="/images/vgp-brand-hero-v2.png"
-                        alt="Virzy Guns Production logo in brushed metal"
-                        fill
-                        priority
-                        sizes="(min-width: 1280px) 1280px, 100vw"
-                        className="object-cover"
-                    />
-                </div>
-            </div>
+            <CreditsStrip />
 
             <section data-reveal="" aria-labelledby="services-heading" className="px-4 py-20 sm:px-6 lg:py-28">
                 <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">

@@ -84,6 +84,8 @@ footer-only.
 - HealingWave never claims to treat or cure anything.
 - Never show where Virzy Guns lives or is based. The founder treats it as
   private.
+- Use only the two founder photos already in `public/images` (`founder.jpg`,
+  `virzy-guns-dp.jpg`). Do not add more personal photos.
 
 ## Shared building blocks
 
