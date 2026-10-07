@@ -680,7 +680,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 href={MUSO_PROFILE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                                className="text-white vgp-link"
                             >
                                 Muso.ai
                             </a>
@@ -708,7 +708,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         href={getLocalePath(`/studio/beats/${cat.slug}`)}
                                         className={`group relative flex min-h-52 flex-col justify-between overflow-hidden rounded-lg border p-5 transition ${theme.world} ${theme.card}`}
                                     >
-                                        <div className="absolute inset-x-5 top-0 h-px opacity-80" style={{ backgroundColor: theme.accentHex }} aria-hidden="true" />
+                                        <div className="absolute inset-x-5 top-0 h-px origin-left scale-x-[0.35] opacity-80 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100" style={{ backgroundColor: theme.accentHex }} aria-hidden="true" />
                                         <div>
                                             <span className={`text-xs font-semibold ${theme.tag}`}>{cat.primaryGenre}</span>
                                             <h3 className="mt-2 text-xl font-bold text-white transition group-hover:text-white">{cat.localizedName[locale] || cat.name}</h3>

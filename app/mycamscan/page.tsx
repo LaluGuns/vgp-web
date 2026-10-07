@@ -61,7 +61,7 @@ const features = [
 export default function MyCamScanPage() {
     return (
         <article className="editorial-shell min-h-screen text-white">
-            <section className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
+            <section data-enter="" className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
                 <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
                     <div className="lg:col-span-7">
                         <p className="text-sm text-white/55">Coming soon on Google Play</p>
@@ -93,7 +93,7 @@ export default function MyCamScanPage() {
                 </div>
             </section>
 
-            <section aria-labelledby="features-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+            <section data-reveal="" aria-labelledby="features-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                 <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                     <h2 id="features-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
                         What it does
@@ -109,7 +109,7 @@ export default function MyCamScanPage() {
                 </div>
             </section>
 
-            <section className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
+            <section data-reveal="" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6">
                 <p className="mx-auto max-w-7xl text-base leading-7 text-white/65">
                     The <TextLink href="/mycamscan/privacy" inline>Privacy Policy</TextLink> and{' '}
                     <TextLink href="/mycamscan/terms" inline>Terms of Use</TextLink> are also available in Bahasa Indonesia

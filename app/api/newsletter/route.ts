@@ -5,6 +5,7 @@ import { signToken } from '@/lib/tokens';
 import { getAppBaseUrl, hasValidRequestOrigin } from '@/lib/auth';
 import redis from '@/lib/redis';
 import { z } from 'zod';
+import { buildWelcomeEmail } from '@/lib/email/welcome-email';
 
 function getDefaultNameFromEmail(email: string): string {
     if (!email || typeof email !== 'string') return 'Producer';
@@ -252,45 +253,13 @@ export async function POST(request: NextRequest) {
         });
 
         // 2. Send Welcome Email to Subscriber
+        const welcome = buildWelcomeEmail({ tags: parsedTags, baseUrl, unsubscribeUrl });
         await transporter.sendMail({
             from: `"Virzy Guns Production" <${process.env.SMTP_USER}>`,
             to: subscriberEmail,
-            subject: `Welcome to the Inner Circle 🛡️`,
-            text: `Welcome to VGP, ${subscriberName}. You're now on the list for exclusive beats and updates. Unsubscribe here: ${unsubscribeUrl}`,
-            html: `
-                <div style="background-color: #000000; color: #ffffff; font-family: 'Courier New', monospace; padding: 40px 20px;">
-                    <div style="max-w-md mx-auto border border-gray-800 p-8 rounded-lg" style="border: 1px solid #333;">
-                        <h1 style="color: #00E5FF; text-align: center; letter-spacing: 2px; margin-bottom: 30px;">VIRZY GUNS PRODUCTION</h1>
-                        
-                        <p style="font-size: 16px; line-height: 1.6; color: #cccccc;">
-                            Welcome, <strong>${escapedName}</strong>.
-                        </p>
-                        
-                        <p style="font-size: 16px; line-height: 1.6; color: #cccccc;">
-                            You've successfully joined the VGP Inner Circle. You are now prioritized for:
-                        </p>
-                        
-                        <ul style="color: #888888; padding-left: 20px; margin-bottom: 30px;">
-                            <li style="margin-bottom: 10px;">Exclusive Beat Drops 🎹</li>
-                            <li style="margin-bottom: 10px;">HealingWave R&D Updates 🧠</li>
-                            <li style="margin-bottom: 10px;">Private Promo Codes 💎</li>
-                        </ul>
-                        
-                        <div style="text-align: center; margin-top: 40px;">
-                            <a href="${baseUrl}/studio/beats" style="background-color: #00E5FF; color: #000000; padding: 15px 30px; text-decoration: none; font-weight: bold; font-family: sans-serif; border-radius: 4px; display: inline-block;">
-                                BROWSE STUDIO
-                            </a>
-                        </div>
-                        
-                        <hr style="border-color: #333; margin-top: 60px; margin-bottom: 20px;">
-                        
-                        <div style="text-align: center; font-size: 11px; color: #555555;">
-                            © ${new Date().getFullYear()} Virzy Guns Production.<br>
-                            To unsubscribe, <a href="${unsubscribeUrl}" style="color: #00E5FF; text-decoration: underline;">click here</a>.
-                        </div>
-                    </div>
-                </div>
-            `,
+            subject: welcome.subject,
+            text: welcome.text,
+            html: welcome.html,
         });
 
         return NextResponse.json({ success: true });

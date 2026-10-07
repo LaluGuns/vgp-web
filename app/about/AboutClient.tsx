@@ -27,7 +27,7 @@ export default function AboutClient() {
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white">
-                <section className="px-4 pt-10 sm:px-6 sm:pt-14">
+                <section data-enter="" className="px-4 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
                         <div className="lg:col-span-7 lg:pb-12">
                             <h1 className="font-display text-[clamp(3rem,8vw,6.5rem)] font-semibold leading-[0.92] tracking-[-0.045em]">
@@ -65,7 +65,7 @@ export default function AboutClient() {
 
                 <CreditsStrip className="mt-16 lg:mt-20" />
 
-                <section aria-labelledby="story-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+                <section data-reveal="" aria-labelledby="story-heading" className="px-4 py-20 sm:px-6 lg:py-28">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="story-heading" className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl lg:col-span-5">
                             Art leads. Science sharpens the decision.
@@ -84,7 +84,7 @@ export default function AboutClient() {
                     </div>
                 </section>
 
-                <section aria-labelledby="work-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
+                <section data-reveal="" aria-labelledby="work-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="work-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">
                             Where the work goes
@@ -107,7 +107,7 @@ export default function AboutClient() {
                     </div>
                 </section>
 
-                <section aria-labelledby="contact-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
+                <section data-reveal="" aria-labelledby="contact-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
                     <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-12">
                         <h2 id="contact-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">
                             Get in touch
@@ -115,12 +115,9 @@ export default function AboutClient() {
                         <div className="lg:col-span-6 lg:col-start-7">
                             <p className="text-lg leading-8 text-white/75">
                                 For custom production, collaborations or press, email{' '}
-                                <a
-                                    href={`mailto:${founderEmail}`}
-                                    className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
-                                >
+                                <TextLink href={`mailto:${founderEmail}`} inline>
                                     {founderEmail}
-                                </a>
+                                </TextLink>
                                 .
                             </p>
                             <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">

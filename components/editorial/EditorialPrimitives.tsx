@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { EmailChooser } from '@/components/editorial/EmailChooser';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
@@ -10,14 +11,27 @@ const focusRing =
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]';
 
 const textLinkClass =
-    'text-sm font-medium text-white underline decoration-white/30 underline-offset-[6px] transition-colors hover:decoration-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050607]';
+    'vgp-link text-sm font-medium text-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050607]';
+
+/** Pill button base: a soft press and an arrow that leans forward on hover. */
+export const buttonMotionClass =
+    'group/button inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-[background-color,border-color,transform] duration-200 active:scale-[0.97]';
+
+export function ButtonArrow() {
+    return (
+        <ArrowRight
+            className="h-4 w-4 transition-transform duration-300 ease-out group-hover/button:translate-x-1"
+            aria-hidden="true"
+        />
+    );
+}
 
 function isExternal(href: string) {
     return href.startsWith('http');
 }
 
 const inlineLinkClass =
-    'text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60';
+    'vgp-link text-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60';
 
 /**
  * Underlined text link. External URLs open in a new tab. `inline` keeps the
@@ -46,9 +60,9 @@ export function TextLink({
 
     if (href.startsWith('mailto:')) {
         return (
-            <a href={href} className={classes}>
+            <EmailChooser href={href} className={classes} wrapperClassName={className}>
                 {children}
-            </a>
+            </EmailChooser>
         );
     }
 
@@ -91,14 +105,22 @@ export function EditorialButton({
             ? 'bg-white text-[#050607] hover:bg-white/85'
             : 'border border-white/25 text-white hover:border-white/60';
 
-    const className = `inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors ${variantClass} ${focusRing}`;
+    const className = `${buttonMotionClass} ${variantClass} ${focusRing}`;
 
     const content = (
         <>
             <span>{children}</span>
-            {withArrow ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : null}
+            {withArrow ? <ButtonArrow /> : null}
         </>
     );
+
+    if (href?.startsWith('mailto:')) {
+        return (
+            <EmailChooser href={href} className={className}>
+                {content}
+            </EmailChooser>
+        );
+    }
 
     if (href && isExternal(href)) {
         return (
@@ -133,7 +155,7 @@ export function SectionShell({
     id?: string;
 }) {
     return (
-        <section id={id} className={`relative px-4 py-14 sm:px-6 sm:py-16 lg:py-20 ${className}`}>
+        <section data-reveal="" id={id} className={`relative px-4 py-14 sm:px-6 sm:py-16 lg:py-20 ${className}`}>
             <div className="relative mx-auto max-w-7xl">{children}</div>
         </section>
     );
@@ -159,7 +181,7 @@ export function PageHeader({
     secondary?: { label: string; href?: string; onClick?: () => void };
 }) {
     return (
-        <section className="px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-14">
+        <section data-enter="" className="px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-14">
             <div className="mx-auto max-w-7xl">
                 {eyebrow ? <p className="text-sm text-white/55">{eyebrow}</p> : null}
                 <h1 className={`${eyebrow ? 'mt-4' : ''} max-w-[18ch] font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em] text-white`}>

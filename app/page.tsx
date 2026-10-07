@@ -2,10 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
-import { ArrowRight } from 'lucide-react';
+import type { CSSProperties, ReactNode } from 'react';
 import { PageTransition } from '@/components/PageTransition';
-import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { ButtonArrow, TextLink, buttonMotionClass } from '@/components/editorial/EditorialPrimitives';
+import { CadenzTempo } from '@/components/home/CadenzTempo';
 import { CreditsStrip } from '@/components/editorial/CreditsStrip';
 import {
     CADENZ_APP_URL,
@@ -14,6 +14,9 @@ import {
     founderStatement,
 } from '@/lib/vgp-ecosystem';
 import { useNewsletter } from '@/components/context/NewsletterContext';
+
+const delay = (ms: number) => ({ '--enter-delay': `${ms}ms` }) as CSSProperties;
+const revealDelay = (ms: number) => ({ '--reveal-delay': `${ms}ms` }) as CSSProperties;
 
 function Availability({ children, live = false }: { children: ReactNode; live?: boolean }) {
     return (
@@ -31,36 +34,37 @@ export default function HomePage() {
                 <section className="px-4 pt-24 sm:px-6 sm:pt-28 lg:pt-32">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
                         <div className="lg:col-span-7 lg:pb-14">
-                            <h1 className="max-w-[13ch] font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
+                            <h1 data-enter="" style={delay(0)} className="max-w-[13ch] font-display text-[clamp(2.75rem,7vw,5.5rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
                                 CADENZ and premium beats by Virzy Guns.
                             </h1>
-                            <p className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+                            <p data-enter="" style={delay(140)} className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
                                 CADENZ plays original VGP music at your running or cycling cadence, and it is out now on
                                 Google Play. The same studio licenses beats in trap, drill, phonk, synthwave, R&amp;B, club and
                                 pop, and makes Flow for deep work.
                             </p>
-                            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+                            <div data-enter="" style={delay(260)} className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                                 <a
                                     href={CADENZ_PLAY_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+                                    className={`${buttonMotionClass} bg-white text-[#050607] hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]`}
                                 >
                                     Get CADENZ
-                                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                                    <ButtonArrow />
                                 </a>
                                 <TextLink href="/studio/beats">Browse beats</TextLink>
                             </div>
                         </div>
 
-                        <figure className="lg:col-span-5">
-                            <div className="relative aspect-[5/4] overflow-hidden rounded-[6px] bg-black sm:aspect-[4/3] lg:aspect-[4/5]">
+                        <figure data-enter="" style={delay(80)} className="lg:col-span-5">
+                            <div className="vgp-zoom relative aspect-[5/4] overflow-hidden rounded-[6px] bg-black sm:aspect-[4/3] lg:aspect-[4/5]">
                                 <Image
                                     src="/images/founder.jpg"
                                     alt="Black and white portrait of Virzy Guns"
                                     fill
                                     priority
                                     sizes="(min-width: 1024px) 40vw, 100vw"
+                                    data-enter="settle"
                                     className="object-cover object-[50%_25%]"
                                 />
                                 <div
@@ -76,9 +80,9 @@ export default function HomePage() {
                 </section>
 
                 {/* CADENZ: the lead product, right after the hero. */}
-                <section aria-labelledby="cadenz-heading" className="mt-16 border-t border-white/10 px-4 py-20 sm:px-6 lg:mt-20 lg:py-28">
+                <section aria-labelledby="cadenz-heading" className="group mt-16 border-t border-white/10 px-4 py-20 sm:px-6 lg:mt-20 lg:py-28">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
-                        <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-5 lg:mx-0 lg:max-w-none">
+                        <div data-reveal="" className="vgp-zoom relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-5 lg:mx-0 lg:max-w-none">
                             <Image
                                 src="/images/CADENZ_POSTER.jpg"
                                 alt="CADENZ poster: a cyclist with a road bike next to the CADENZ running screen"
@@ -87,7 +91,7 @@ export default function HomePage() {
                                 className="object-cover object-top"
                             />
                         </div>
-                        <div className="lg:col-span-6 lg:col-start-7">
+                        <div data-reveal="" style={revealDelay(120)} className="lg:col-span-6 lg:col-start-7">
                             <Availability live>On Google Play</Availability>
                             <h2 id="cadenz-heading" className="mt-3 font-display text-5xl font-semibold tracking-[-0.04em] sm:text-6xl">
                                 CADENZ
@@ -100,12 +104,13 @@ export default function HomePage() {
                                 Leave it on AUTO and the music follows your cadence, or LOCK it to hold a steady pace.
                                 It works for running and for cycling.
                             </p>
+                            <CadenzTempo />
                             <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                                 <a
                                     href={CADENZ_PLAY_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex min-h-12 items-center rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+                                    className={`${buttonMotionClass} bg-white text-[#050607] hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]`}
                                 >
                                     Get it on Google Play
                                 </a>
@@ -119,9 +124,9 @@ export default function HomePage() {
                 <CreditsStrip />
 
                 {/* Beat store: the studio's catalog. */}
-                <section aria-labelledby="beats-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+                <section aria-labelledby="beats-heading" className="group px-4 py-20 sm:px-6 lg:py-28">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
-                        <div className="lg:col-span-5">
+                        <div data-reveal="" className="lg:col-span-5">
                             <Availability live>Open now</Availability>
                             <h2 id="beats-heading" className="mt-3 font-display text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
                                 The beat store
@@ -137,7 +142,7 @@ export default function HomePage() {
                                 <TextLink href="/studio">Studio services</TextLink>
                             </div>
                         </div>
-                        <div className="relative aspect-[16/9] overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-7">
+                        <div data-reveal="" style={revealDelay(120)} className="vgp-zoom relative aspect-[16/9] overflow-hidden rounded-[6px] border border-white/10 bg-black lg:col-span-7">
                             <Image
                                 src="/images/vgp-brand-hero-v2.png"
                                 alt="Virzy Guns Production logo in brushed metal"
@@ -150,10 +155,10 @@ export default function HomePage() {
                 </section>
 
                 {/* Flow: the second app, also scored with VGP music. */}
-                <section aria-labelledby="flow-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
+                <section aria-labelledby="flow-heading" className="group border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
                     <div className="mx-auto max-w-7xl">
                         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-                            <div className="flex aspect-[16/10] items-center justify-center rounded-[6px] border border-white/10 bg-[#0a0e12] px-[18%] lg:col-span-7">
+                            <div data-reveal="" className="vgp-zoom flex aspect-[16/10] items-center justify-center overflow-hidden rounded-[6px] border border-white/10 bg-[#0a0e12] px-[18%] lg:col-span-7">
                                 <Image
                                     src="/branding/flowstate-logo.png"
                                     alt="Flow logo"
@@ -163,7 +168,7 @@ export default function HomePage() {
                                     className="h-auto w-full"
                                 />
                             </div>
-                            <div className="lg:col-span-4 lg:col-start-9">
+                            <div data-reveal="" style={revealDelay(120)} className="lg:col-span-4 lg:col-start-9">
                                 <Availability live>Available now</Availability>
                                 <h2 id="flow-heading" className="mt-3 font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                                     Flow
@@ -180,18 +185,18 @@ export default function HomePage() {
 
                         <p className="mt-14 border-t border-white/10 pt-6 text-sm leading-7 text-white/60">
                             Also from the studio:{' '}
-                            <Link href="/games" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">browser games</Link>,{' '}
-                            <Link href="/mycamscan" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">MyCamScan</Link>{' '}
+                            <Link href="/games" className="text-white vgp-link">browser games</Link>,{' '}
+                            <Link href="/mycamscan" className="text-white vgp-link">MyCamScan</Link>{' '}
                             and the{' '}
-                            <Link href="/lab/healingwave" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white">HealingWave Lab</Link>.
+                            <Link href="/lab/healingwave" className="text-white vgp-link">HealingWave Lab</Link>.
                         </p>
                     </div>
                 </section>
 
                 {/* Learn: the book cover carries the section; content is a plain list. */}
-                <section aria-labelledby="learn-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-28">
+                <section aria-labelledby="learn-heading" className="group border-t border-white/10 px-4 py-20 sm:px-6 lg:py-28">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:gap-16">
-                        <div className="relative mx-auto aspect-[815/1054] w-full max-w-sm overflow-hidden rounded-[4px] border border-white/10 lg:col-span-4 lg:mx-0">
+                        <div data-reveal="" className="vgp-zoom relative mx-auto aspect-[815/1054] w-full max-w-sm overflow-hidden rounded-[4px] border border-white/10 lg:col-span-4 lg:mx-0">
                             <Image
                                 src="/ebooks/trap-guide-book-cover.jpg"
                                 alt="Cover of Music Production Guide: Trap Edition by Virzy Guns"
@@ -201,7 +206,7 @@ export default function HomePage() {
                             />
                         </div>
 
-                        <div className="lg:col-span-8 lg:pt-4">
+                        <div data-reveal="" style={revealDelay(120)} className="lg:col-span-8 lg:pt-4">
                             <h2 id="learn-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                                 Learn how the records are made.
                             </h2>
@@ -213,9 +218,9 @@ export default function HomePage() {
                                 <li>
                                     <Link
                                         href="/blog/trap-beats-anatomy-of-the-perfect-808"
-                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                                        className="group/row flex flex-col gap-1 py-6 transition-colors hover:bg-white/[0.02] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
                                     >
-                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                        <span className="text-lg font-semibold transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/row:translate-x-2">
                                             Trap Beats: Anatomy of the Perfect 808
                                         </span>
                                         <span className="shrink-0 text-xs text-white/50">Free article</span>
@@ -224,9 +229,9 @@ export default function HomePage() {
                                 <li>
                                     <Link
                                         href="/book"
-                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                                        className="group/row flex flex-col gap-1 py-6 transition-colors hover:bg-white/[0.02] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
                                     >
-                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                        <span className="text-lg font-semibold transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/row:translate-x-2">
                                             Music Production Guide: Trap Edition
                                         </span>
                                         <span className="shrink-0 text-xs text-white/50">80+ page PDF, coming soon</span>
@@ -235,9 +240,9 @@ export default function HomePage() {
                                 <li>
                                     <Link
                                         href="/studio/masterclass"
-                                        className="group flex flex-col gap-1 py-6 transition-colors sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                                        className="group/row flex flex-col gap-1 py-6 transition-colors hover:bg-white/[0.02] sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
                                     >
-                                        <span className="text-lg font-semibold group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                        <span className="text-lg font-semibold transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/row:translate-x-2">
                                             Producer masterclasses
                                         </span>
                                         <span className="shrink-0 text-xs text-white/50">Coming soon</span>
@@ -255,16 +260,16 @@ export default function HomePage() {
                 {/* Closing: founder statement and the newsletter, nothing else. */}
                 <section aria-labelledby="founder-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32 lg:pt-24">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
-                        <h2 id="founder-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">
+                        <h2 data-reveal="" id="founder-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-5">
                             Why the studio exists
                         </h2>
-                        <div className="lg:col-span-6 lg:col-start-7">
+                        <div data-reveal="" style={revealDelay(120)} className="lg:col-span-6 lg:col-start-7">
                             <p className="text-lg leading-8 text-white/75">{founderStatement}</p>
                             <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
                                 <button
                                     type="button"
                                     onClick={openPopup}
-                                    className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-colors hover:border-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+                                    className={`${buttonMotionClass} border border-white/25 text-white hover:border-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]`}
                                 >
                                     Get release notes by email
                                 </button>

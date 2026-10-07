@@ -151,7 +151,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
     return (
         <PageTransition>
             <main className="editorial-shell text-white">
-                <section className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
+                <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
                         <h1 className="font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
                             Articles
@@ -259,7 +259,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                         <button
                                             type="button"
                                             onClick={resetFilters}
-                                            className="mt-4 text-sm font-medium text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                                            className="mt-4 text-sm font-medium text-white vgp-link"
                                         >
                                             Show all articles
                                         </button>

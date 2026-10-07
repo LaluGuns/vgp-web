@@ -27,7 +27,7 @@ export function CreditsStrip({
                                 href={MUSO_PROFILE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white"
+                                className="text-white vgp-link"
                             >
                                 Muso.ai
                             </a>

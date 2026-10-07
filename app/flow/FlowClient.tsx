@@ -49,7 +49,7 @@ export default function FlowClient() {
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white">
-                <section className="px-4 pt-10 sm:px-6 sm:pt-14">
+                <section data-enter="" className="px-4 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
                         <div className="lg:col-span-6">
                             <h1 className="max-w-[12ch] font-display text-[clamp(2.75rem,6.5vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
@@ -92,7 +92,7 @@ export default function FlowClient() {
                     </ul>
                 </section>
 
-                <section aria-labelledby="music-heading" className="px-4 py-20 sm:px-6 lg:py-28">
+                <section data-reveal="" aria-labelledby="music-heading" className="px-4 py-20 sm:px-6 lg:py-28">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12">
                         <div className="lg:col-span-5">
                             <h2 id="music-heading" className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl">
@@ -114,7 +114,7 @@ export default function FlowClient() {
                     </div>
                 </section>
 
-                <section aria-labelledby="pricing-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
+                <section data-reveal="" aria-labelledby="pricing-heading" className="border-t border-white/10 px-4 py-20 sm:px-6 lg:py-24">
                     <div className="mx-auto max-w-7xl">
                         <h2 id="pricing-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                             Free to focus. Pro for the full catalog.
@@ -143,7 +143,7 @@ export default function FlowClient() {
                     </div>
                 </section>
 
-                <section aria-labelledby="why-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
+                <section data-reveal="" aria-labelledby="why-heading" className="border-t border-white/10 px-4 pb-24 pt-20 sm:px-6 lg:pb-32">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="why-heading" className="font-display text-3xl font-semibold leading-tight tracking-[-0.03em] sm:text-4xl lg:col-span-5">
                             I make music for a living. This is the music I work to.

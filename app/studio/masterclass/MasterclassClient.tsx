@@ -41,7 +41,7 @@ export default function MasterclassClient() {
                     secondary={{ label: 'Read the Trap Edition guide', href: '/book' }}
                 />
 
-                <section aria-labelledby="curriculum-heading" className="border-t border-white/10 px-4 pb-24 pt-16 sm:px-6 lg:pt-20">
+                <section data-reveal="" aria-labelledby="curriculum-heading" className="border-t border-white/10 px-4 pb-24 pt-16 sm:px-6 lg:pt-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <h2 id="curriculum-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl lg:col-span-4">
                             Planned modules
