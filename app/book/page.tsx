@@ -7,7 +7,7 @@
 import { m } from 'framer-motion';
 import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
-import { CinematicBackdrop, EditorialButton } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
 const fadeUp = {
@@ -65,7 +65,6 @@ export default function GuidesPage() {
                 />
                 {/* Hero */}
                 <section className="relative overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28">
-                    <CinematicBackdrop />
 
                     <div className="relative mx-auto max-w-5xl">
                         <m.div

@@ -15,7 +15,7 @@ import {
     ShieldCheck,
     Zap,
 } from 'lucide-react';
-import { CinematicBackdrop, EditorialButton, SectionShell } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton, SectionShell } from '@/components/editorial/EditorialPrimitives';
 
 const PAGE_URL = 'https://virzyguns.com/mycamscan';
 
@@ -80,7 +80,6 @@ export default function MyCamScanPage() {
     return (
         <article className="editorial-shell min-h-screen text-white">
             <section className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
-                <CinematicBackdrop />
                 <div className="relative z-10 mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/60">

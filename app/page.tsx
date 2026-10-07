@@ -5,7 +5,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { SocialDock } from '@/components/SocialDock';
+import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import {
     CADENZ_APP_URL,
     CADENZ_PLAY_URL,
@@ -16,25 +16,6 @@ import {
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
 const MUSO_PROFILE_URL = catalogCredentials[0].href;
-
-function TextLink({ href, children }: { href: string; children: ReactNode }) {
-    const className =
-        'text-sm font-medium text-white underline decoration-white/30 underline-offset-[6px] transition-colors hover:decoration-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050607]';
-
-    if (href.startsWith('http')) {
-        return (
-            <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-                {children}
-            </a>
-        );
-    }
-
-    return (
-        <Link href={href} className={className}>
-            {children}
-        </Link>
-    );
-}
 
 function Availability({ children, live = false }: { children: ReactNode; live?: boolean }) {
     return (
@@ -48,8 +29,6 @@ export default function HomePage() {
     return (
         <PageTransition>
             <main className="relative min-h-screen overflow-hidden bg-[#050607] text-white">
-                <SocialDock />
-
                 {/* Hero: the founder portrait is the page's one image-led moment. */}
                 <section className="px-4 pt-24 sm:px-6 sm:pt-28 lg:pt-32">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">

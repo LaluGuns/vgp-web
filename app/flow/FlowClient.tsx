@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import {
-    CinematicBackdrop,
     EditorialButton,
     SectionShell,
 } from '@/components/editorial/EditorialPrimitives';
@@ -76,7 +75,6 @@ export default function FlowClient() {
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white">
                 <section className="relative overflow-hidden px-4 pb-16 pt-12 sm:px-6 lg:pb-20 lg:pt-16">
-                    <CinematicBackdrop />
 
                     <div className="relative z-10 mx-auto max-w-7xl">
                         <m.div

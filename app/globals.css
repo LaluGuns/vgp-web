@@ -9,7 +9,14 @@
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 :root {
-  --bg: #02070c;
+  /* Public-site tokens. Rules for using them live in docs/DESIGN.md. */
+  --bg: #050607;
+  --surface: #0a0e12;
+  --surface-strong: #0e1318;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --accent: #7dd3fc;
+
   --bg-soft: #04111b;
   --surface-editorial: rgba(8, 24, 36, 0.58);
   --surface-editorial-strong: rgba(10, 34, 50, 0.68);
@@ -90,6 +97,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 html.lenis {
@@ -785,7 +793,28 @@ body::before {
   letter-spacing: 0;
 }
 
+/* Public pages sit on one flat background (docs/DESIGN.md). */
 .editorial-shell {
+  background: var(--bg);
+}
+
+/* Flat surfaces. The class names are kept so existing markup picks up the
+   new look without per-file edits. */
+.liquid-glass,
+.liquid-glass-strong,
+.liquid-glass-soft {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.liquid-glass-strong {
+  background: var(--surface-strong);
+}
+
+/* The founder dashboard keeps its original glass treatment. AppFrame wraps
+   /founder routes in .founder-legacy. */
+.founder-legacy .editorial-shell {
   background:
     radial-gradient(circle at 52% 0%, color-mix(in srgb, var(--dash-accent-strong) 22%, transparent), transparent 32rem),
     radial-gradient(circle at 84% 18%, rgba(14, 165, 233, 0.13), transparent 28rem),
@@ -793,10 +822,9 @@ body::before {
     linear-gradient(180deg, #03111b 0%, #02070c 52%, #03111b 100%);
 }
 
-.liquid-glass,
-.liquid-glass-strong,
-.liquid-glass-soft {
-  position: relative;
+.founder-legacy .liquid-glass,
+.founder-legacy .liquid-glass-strong,
+.founder-legacy .liquid-glass-soft {
   border: 1px solid color-mix(in srgb, var(--dash-accent) 15%, transparent);
   background:
     radial-gradient(circle at 12% 8%, color-mix(in srgb, var(--dash-accent) 18%, transparent), transparent 34%),
@@ -811,7 +839,7 @@ body::before {
   -webkit-backdrop-filter: blur(26px) saturate(1.45);
 }
 
-.liquid-glass-strong {
+.founder-legacy .liquid-glass-strong {
   background:
     radial-gradient(circle at 12% 6%, color-mix(in srgb, var(--dash-accent) 22%, transparent), transparent 36%),
     linear-gradient(135deg, rgba(12, 48, 70, 0.92), rgba(2, 14, 23, 0.8) 50%, rgba(5, 36, 55, 0.76)),
@@ -823,7 +851,7 @@ body::before {
     0 0 58px rgba(14, 165, 233, 0.06);
 }
 
-.liquid-glass-soft {
+.founder-legacy .liquid-glass-soft {
   background:
     radial-gradient(circle at 10% 4%, color-mix(in srgb, var(--dash-accent) 14%, transparent), transparent 32%),
     linear-gradient(135deg, rgba(8, 34, 51, 0.78), rgba(2, 13, 22, 0.66) 50%, rgba(5, 30, 45, 0.58)),
@@ -834,9 +862,9 @@ body::before {
     0 0 34px rgba(14, 165, 233, 0.035);
 }
 
-.liquid-glass::before,
-.liquid-glass-strong::before,
-.liquid-glass-soft::before {
+.founder-legacy .liquid-glass::before,
+.founder-legacy .liquid-glass-strong::before,
+.founder-legacy .liquid-glass-soft::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -849,9 +877,9 @@ body::before {
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .liquid-glass,
-  .liquid-glass-strong,
-  .liquid-glass-soft {
+  .founder-legacy .liquid-glass,
+  .founder-legacy .liquid-glass-strong,
+  .founder-legacy .liquid-glass-soft {
     background: rgba(7, 9, 13, 0.92);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

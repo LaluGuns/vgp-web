@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
-import { ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 
@@ -17,14 +17,14 @@ export function SubscribePopup() {
     const requestControllerRef = useRef<AbortController | null>(null);
     const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pathname = usePathname();
+    // subscriberName and tags feed segmentation in the founder dashboard, so
+    // they stay fixed even when the visible copy changes.
     const popupCopy = (() => {
         if (pathname.startsWith('/cadenz')) {
             return {
-                eyebrow: 'CADENZ updates',
-                title: 'Join the CADENZ waitlist',
-                description:
-                    'Get CADENZ release news, HealingWave notes, and VGP music-tech updates. No spam, no hard selling.',
-                button: 'Join CADENZ waitlist',
+                title: 'CADENZ updates by email',
+                description: 'New tempo collections, app updates and running music from VGP.',
+                button: 'Get CADENZ updates',
                 subscriberName: 'CADENZ Waitlist',
                 tags: ['cadenz'],
             };
@@ -32,11 +32,9 @@ export function SubscribePopup() {
 
         if (pathname.startsWith('/lab/healingwave')) {
             return {
-                eyebrow: 'HealingWave updates',
-                title: 'Join HealingWave updates',
-                description:
-                    'Get CADENZ news, functional audio notes, and release updates from VGP. No spam, no hard selling.',
-                button: 'Join updates',
+                title: 'HealingWave Lab notes',
+                description: 'Research notes on focus and cadence audio, plus Flow and CADENZ updates.',
+                button: 'Get lab notes',
                 subscriberName: 'HealingWave Subscriber',
                 tags: ['cadenz'],
             };
@@ -44,11 +42,9 @@ export function SubscribePopup() {
 
         if (pathname.startsWith('/book') || pathname.startsWith('/books')) {
             return {
-                eyebrow: 'VGP Library',
-                title: 'Join the book waitlist',
-                description:
-                    'Get the launch note for the Trap Edition guide, plus practical production articles from VGP. No spam, no hard selling.',
-                button: 'Join book waitlist',
+                title: 'Get the book launch email',
+                description: 'One email when the Trap Edition guide comes out, plus new production articles.',
+                button: 'Notify me',
                 subscriberName: 'Book Waitlist',
                 tags: ['book_buyer'],
             };
@@ -56,22 +52,18 @@ export function SubscribePopup() {
 
         if (pathname.startsWith('/blog')) {
             return {
-                eyebrow: 'VGP notes',
-                title: 'Join VGP reading updates',
-                description:
-                    'Get practical production notes, CADENZ updates, and new VGP articles. No spam, no hard selling.',
-                button: 'Join reading updates',
+                title: 'New articles by email',
+                description: 'Production notes from the studio when a new article goes up.',
+                button: 'Get new articles',
                 subscriberName: 'VGP Blog Subscriber',
                 tags: [] as string[],
             };
         }
 
         return {
-            eyebrow: 'VGP updates',
-            title: 'Join VGP updates',
-            description:
-                'Get CADENZ release notes, new beats, books, and practical production updates from Virzy Guns. No spam, no hard selling.',
-            button: 'Join updates',
+            title: 'Studio updates by email',
+            description: 'New beats, Flow and CADENZ updates, and news about the producer guides.',
+            button: 'Get updates',
             subscriberName: 'VGP Subscriber',
             tags: [] as string[],
         };
@@ -191,7 +183,7 @@ export function SubscribePopup() {
         } catch (error) {
             if (error instanceof DOMException && error.name === 'AbortError') return;
             setStatus('error');
-            setErrorMessage('Network error. Please try again.');
+            setErrorMessage('Check your connection and try again.');
         } finally {
             if (requestControllerRef.current === controller) {
                 requestControllerRef.current = null;
@@ -215,9 +207,10 @@ export function SubscribePopup() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
                         onClick={handleClose}
                         aria-hidden="true"
-                        className="absolute inset-0 bg-black/45 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/70"
                     />
 
                     <m.div
@@ -226,94 +219,91 @@ export function SubscribePopup() {
                         aria-modal="true"
                         aria-labelledby="popup-title"
                         aria-describedby="popup-description"
-                        initial={{ opacity: 0, scale: 0.96, y: 18 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.96, y: 18 }}
-                        className="relative w-full max-w-md overflow-hidden rounded-lg border border-white/10 bg-[#08090d] shadow-[0_28px_80px_rgba(0,0,0,0.42)]"
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        className="relative w-full max-w-md rounded-lg border border-white/10 bg-[#0a0e12] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.5)] sm:p-8"
                     >
-                        <div className="relative border-b border-white/10 bg-white/[0.035] px-6 py-5">
-                            <p className="mb-2 text-sm font-medium text-white/45">{popupCopy.eyebrow}</p>
-                            <h3 id="popup-title" className="text-2xl font-semibold leading-tight text-white">
-                                {popupCopy.title}
-                            </h3>
-                            <button
-                                type="button"
-                                onClick={handleClose}
-                                aria-label="Close dialog"
-                                className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-md text-white/45 transition-colors hover:bg-white/10 hover:text-white"
-                            >
-                                <X size={18} />
-                            </button>
-                        </div>
+                        <button
+                            type="button"
+                            onClick={handleClose}
+                            aria-label="Close"
+                            className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                        >
+                            <X size={18} aria-hidden="true" />
+                        </button>
 
-                        <div className="p-6">
-                            <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-                                {statusMessage}
-                            </p>
-                            <p id="popup-description" className="mb-6 text-sm leading-7 text-white/60">
-                                {popupCopy.description}
-                            </p>
+                        <h2 id="popup-title" className="pr-10 text-2xl font-semibold leading-tight tracking-[-0.02em] text-white">
+                            {popupCopy.title}
+                        </h2>
+                        <p id="popup-description" className="mt-3 text-sm leading-6 text-white/70">
+                            {popupCopy.description}
+                        </p>
+                        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+                            {statusMessage}
+                        </p>
 
-                            {status === 'success' ? (
-                                <m.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center"
-                                >
-                                    <p className="mb-1 font-semibold text-emerald-800">You are on the list.</p>
-                                    <p className="text-xs text-emerald-700">Check your email for confirmation.</p>
-                                </m.div>
-                            ) : (
-                                <form onSubmit={handleSubmit} className="space-y-4">
+                        {status === 'success' ? (
+                            <div className="mt-6 border-t border-white/10 pt-5">
+                                <p className="font-semibold text-white">You are on the list.</p>
+                                <p className="mt-1 text-sm text-white/65">Check your inbox for the confirmation email.</p>
+                            </div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                                <input
+                                    type="text"
+                                    name="website"
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                    className="hidden"
+                                    aria-hidden="true"
+                                />
+                                <div>
+                                    <label htmlFor="newsletter-email" className="text-sm font-medium text-white">
+                                        Email
+                                    </label>
                                     <input
-                                        type="text"
-                                        name="website"
-                                        tabIndex={-1}
-                                        autoComplete="off"
-                                        className="hidden"
-                                        aria-hidden="true"
+                                        ref={emailInputRef}
+                                        id="newsletter-email"
+                                        name="email"
+                                        type="email"
+                                        inputMode="email"
+                                        autoComplete="email"
+                                        spellCheck={false}
+                                        required
+                                        placeholder="you@example.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        aria-invalid={status === 'error' ? true : undefined}
+                                        aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
+                                        className="mt-2 w-full rounded-md border border-white/15 bg-[#050607] px-4 py-3 text-white placeholder-white/35 transition-colors focus:border-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                                     />
-                                    <div>
-                                        <label htmlFor="newsletter-email" className="sr-only">
-                                            Email address
-                                        </label>
-                                        <input
-                                            ref={emailInputRef}
-                                            id="newsletter-email"
-                                            type="email"
-                                            required
-                                            placeholder="Enter your best email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400/20"
-                                        />
-                                    </div>
+                                </div>
 
-                                    {status === 'error' && (
-                                        <p className="text-xs text-red-600">{errorMessage}</p>
-                                    )}
-
-                                    <button
-                                        type="submit"
-                                        disabled={status === 'loading'}
-                                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-white py-3 font-semibold text-[#1d1d1f] transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                        {status === 'loading' ? (
-                                            <span>Processing...</span>
-                                        ) : (
-                                            <>
-                                                <span>{popupCopy.button}</span>
-                                                <ArrowRight size={17} />
-                                            </>
-                                        )}
-                                    </button>
-
-                                    <p className="text-center text-xs text-white/35">
-                                        We respect your privacy. Unsubscribe at any time.
+                                {status === 'error' && (
+                                    <p id="newsletter-error" className="text-sm text-red-300">
+                                        <span className="font-semibold">Not sent.</span> {errorMessage}
                                     </p>
-                                </form>
-                            )}
-                        </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={status === 'loading'}
+                                    className="flex min-h-12 w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e12] disabled:cursor-wait disabled:opacity-60"
+                                >
+                                    {status === 'loading' ? 'Sending…' : popupCopy.button}
+                                </button>
+
+                                <p className="text-xs leading-5 text-white/50">
+                                    Every email has an unsubscribe link. See the{' '}
+                                    <a href="/privacy" className="underline decoration-white/30 underline-offset-2 hover:text-white">
+                                        privacy policy
+                                    </a>
+                                    .
+                                </p>
+                            </form>
+                        )}
                     </m.div>
                 </div>
             )}

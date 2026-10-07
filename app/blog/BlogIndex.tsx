@@ -12,7 +12,6 @@ import {
     X,
 } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { CinematicBackdrop } from '@/components/editorial/EditorialPrimitives';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
@@ -238,7 +237,6 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
             <main className="editorial-shell relative max-w-full overflow-hidden text-white">
                 {/* Section 1: Editorial Header */}
                 <section className="relative overflow-hidden px-4 pb-8 pt-8 sm:px-6 sm:pb-12 sm:pt-12">
-                    <CinematicBackdrop />
 
                     <div className="relative z-10 mx-auto max-w-7xl">
                         <div className="max-w-3xl">

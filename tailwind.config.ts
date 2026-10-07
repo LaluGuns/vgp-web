@@ -9,7 +9,7 @@ const config: Config = {
         extend: {
             colors: {
                 // Core Brand Palette - Y3K Sovereign Minimalism
-                background: '#000000',
+                background: '#050607',
                 obsidian: '#000000',
                 graphite: '#050505',
                 carbon: '#0E0E10',

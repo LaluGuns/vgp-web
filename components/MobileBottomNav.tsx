@@ -4,11 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AppWindow, Home, Headphones, BookOpen, Menu } from 'lucide-react';
 
+const itemClass =
+    'relative flex min-h-12 flex-col items-center justify-center gap-1 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60';
+
 export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     const pathname = usePathname();
     const isBeatStore = /^\/(?:(?:ja-JP|de-DE)\/)?studio\/beats(?:\/|$)/.test(pathname);
 
-    // Hide if inside BeatStars store view to prevent overlap with audio player
+    // The beat store has its own sticky audio player in this spot.
     if (isBeatStore) return null;
 
     const navItems = [
@@ -33,11 +36,11 @@ export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
 
     return (
         <nav
-            aria-label="Mobile navigation"
-            className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#03131d]/95 pt-2 backdrop-blur-xl md:hidden shadow-[0_-10px_30px_rgba(0,0,0,0.5)]"
-            style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 10px)' }}
+            aria-label="Quick navigation"
+            className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#050607]/95 backdrop-blur-md md:hidden"
+            style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 6px)' }}
         >
-            <div className="mx-auto grid w-full max-w-md grid-cols-5 items-center px-2">
+            <div className="mx-auto grid w-full max-w-md grid-cols-5 px-2">
                 {navItems.map((item) => {
                     const active = isItemActive(item.href, item.exact);
                     const Icon = item.icon;
@@ -46,39 +49,25 @@ export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
                             key={item.name}
                             href={item.href}
                             aria-current={active ? 'page' : undefined}
-                            className="flex min-h-11 flex-col items-center gap-1 py-1 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 focus-visible:ring-inset"
+                            className={`${itemClass} ${active ? 'text-white' : 'text-white/55 hover:text-white'}`}
                         >
-                            <div
-                                className={`flex h-8 w-12 items-center justify-center rounded-full transition-all ${
-                                    active
-                                        ? 'bg-sky-400/20 text-sky-200 ring-1 ring-sky-400/30'
-                                        : 'text-white/45 hover:text-white'
-                                }`}
-                            >
-                                <Icon size={18} strokeWidth={active ? 2.5 : 2} />
-                            </div>
-                            <span
-                                className={`text-[10px] font-semibold tracking-tight ${
-                                    active ? 'text-white' : 'text-white/45'
-                                }`}
-                            >
-                                {item.name}
-                            </span>
+                            {active ? (
+                                <span className="absolute inset-x-5 top-0 h-0.5 rounded-full bg-white" aria-hidden="true" />
+                            ) : null}
+                            <Icon size={18} strokeWidth={active ? 2.25 : 1.75} aria-hidden="true" />
+                            <span className="text-[11px] font-medium">{item.name}</span>
                         </Link>
                     );
                 })}
 
-                {/* 5th Tab: Menu Trigger */}
                 <button
                     type="button"
                     onClick={handleMenuClick}
-                    className="flex min-h-11 flex-col items-center gap-1 py-1 text-center text-white/45 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200/70 focus-visible:ring-inset"
-                    aria-label="Open full menu"
+                    aria-haspopup="dialog"
+                    className={`${itemClass} text-white/55 hover:text-white`}
                 >
-                    <div className="flex h-8 w-12 items-center justify-center rounded-full text-white/45 hover:bg-white/10 hover:text-white transition-all">
-                        <Menu size={18} strokeWidth={2} />
-                    </div>
-                    <span className="text-[10px] font-semibold tracking-tight">Menu</span>
+                    <Menu size={18} strokeWidth={1.75} aria-hidden="true" />
+                    <span className="text-[11px] font-medium">Menu</span>
                 </button>
             </div>
         </nav>

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, BookOpen, GraduationCap, Newspaper, Sparkles } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { CinematicBackdrop, EditorialButton, PageHeader, SectionShell } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton, PageHeader, SectionShell } from '@/components/editorial/EditorialPrimitives';
 
 export const metadata: Metadata = {
     title: 'Learn Hub | Music Production Articles, Books & Courses | VGP',
