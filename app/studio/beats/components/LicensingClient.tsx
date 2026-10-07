@@ -48,21 +48,21 @@ export default function LicensingClient({ locale = 'en-US' }: LicensingClientPro
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
-                <div className="mx-auto max-w-5xl px-6 mb-8 flex items-center justify-between">
+                <div className="mx-auto max-w-7xl px-6 mb-8 flex items-center justify-between">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
                         <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
                         <span>/</span>
                         <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">{text.beats}</Link>
                         <span>/</span>
-                        <span className="text-sky-200/80">{text.title}</span>
+                        <span className="text-white/60">{text.title}</span>
                     </nav>
 
                     <div className="flex items-center gap-2 text-xs text-white/50">
-                        <Link href="/studio/beats/licensing" className={`hover:text-white transition ${locale === 'en-US' ? 'text-sky-200 font-bold' : ''}`}>EN</Link>
+                        <Link href="/studio/beats/licensing" className={`hover:text-white transition ${locale === 'en-US' ? 'text-white font-bold' : ''}`}>EN</Link>
                         <span>|</span>
-                        <Link href="/ja-JP/studio/beats/licensing" className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-sky-200 font-bold' : ''}`}>JA</Link>
+                        <Link href="/ja-JP/studio/beats/licensing" className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-white font-bold' : ''}`}>JA</Link>
                         <span>|</span>
-                        <Link href="/de-DE/studio/beats/licensing" className={`hover:text-white transition ${locale === 'de-DE' ? 'text-sky-200 font-bold' : ''}`}>DE</Link>
+                        <Link href="/de-DE/studio/beats/licensing" className={`hover:text-white transition ${locale === 'de-DE' ? 'text-white font-bold' : ''}`}>DE</Link>
                     </div>
                 </div>
 
@@ -75,37 +75,37 @@ export default function LicensingClient({ locale = 'en-US' }: LicensingClientPro
 
                 {/* License Matrix */}
                 <SectionShell id="license-matrix" className="py-10">
-                    <div className="mx-auto max-w-5xl">
+                    <div className="mx-auto max-w-7xl">
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                             {defaultLicenses.map((lic: BeatLicense) => (
                                 <div
                                     key={lic.id}
-                                    className="flex flex-col justify-between rounded-xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-sm"
+                                    className="flex flex-col justify-between rounded-md border border-white/10 bg-white/[0.02] p-6 "
                                 >
                                     <div>
                                         <div className="flex items-center justify-between">
                                             <h3 className="text-lg font-bold text-white">{lic.name}</h3>
-                                            <span className="text-xl font-bold text-sky-200">{lic.price}</span>
+                                            <span className="text-xl font-bold text-white">{lic.price}</span>
                                         </div>
                                         <div className="mt-4 space-y-2 text-xs text-white/70">
                                             <p className="font-semibold text-white">{text.files}: {lic.fileFormats.join(', ')}</p>
                                             <p className="flex items-center gap-2">
-                                                <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                                <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                                 <span>{text.streams}: {lic.streamingLimit}</span>
                                             </p>
                                             <p className="flex items-center gap-2">
-                                                <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                                <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                                 <span>{text.sales}: {lic.salesLimit}</span>
                                             </p>
                                             <p className="flex items-center gap-2">
-                                                <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                                <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                                 <span>{text.videos}: {lic.musicVideoLimit}</span>
                                             </p>
                                         </div>
                                     </div>
                                     <Link
                                         href={getLocalePath('/studio/beats')}
-                                        className="mt-6 flex items-center justify-center gap-1 rounded-lg border border-sky-200/30 bg-sky-300/10 py-2.5 text-xs font-semibold text-sky-200 transition hover:bg-sky-300/20"
+                                        className="mt-6 flex items-center justify-center gap-1 rounded-lg border border-white/15 bg-white/[0.04] py-2.5 text-xs font-semibold text-white transition hover:bg-white/[0.07]"
                                     >
                                         {text.browse(lic.name)}
                                     </Link>
@@ -121,21 +121,21 @@ export default function LicensingClient({ locale = 'en-US' }: LicensingClientPro
                         <h2 className="font-display text-2xl font-semibold text-white text-center">{text.faq}</h2>
 
                         <div className="space-y-4">
-                            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
                                 <h3 className="text-base font-semibold text-white">{text.exclusiveQ}</h3>
                                 <p className="mt-2 text-xs leading-6 text-white/70">
                                     {text.exclusiveA}
                                 </p>
                             </div>
 
-                            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
                                 <h3 className="text-base font-semibold text-white">{text.platformsQ}</h3>
                                 <p className="mt-2 text-xs leading-6 text-white/70">
                                     {text.platformsA}
                                 </p>
                             </div>
 
-                            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
+                            <div className="rounded-md border border-white/10 bg-white/[0.02] p-5">
                                 <h3 className="text-base font-semibold text-white">{text.stemsQ}</h3>
                                 <p className="mt-2 text-xs leading-6 text-white/70">
                                     {text.stemsA}

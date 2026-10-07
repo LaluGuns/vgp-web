@@ -183,28 +183,28 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
         <PageTransition>
             <article className={`editorial-shell min-h-screen pb-16 pt-20 text-white sm:pt-24 ${genreTheme.world}`}>
                 {/* Language Selector & Breadcrumbs */}
-                <div className="mx-auto mb-5 flex max-w-5xl items-center justify-between px-6">
+                <div className="mx-auto mb-5 flex max-w-7xl items-center justify-between px-6">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
                         <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
                         <span>/</span>
                         <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">{text.beats}</Link>
                         <span>/</span>
-                        <span className="text-sky-200/80">{beat.title}</span>
+                        <span className="text-white/60">{beat.title}</span>
                     </nav>
 
                     <div className="flex items-center gap-2 text-xs text-white/50 bg-white/[0.03] px-3 py-1.5 rounded-full border border-white/10">
-                        <Link href={`/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'en-US' ? 'text-sky-200 font-bold' : ''}`}>EN</Link>
+                        <Link href={`/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'en-US' ? 'text-white font-bold' : ''}`}>EN</Link>
                         <span>|</span>
-                        <Link href={`/ja-JP/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-sky-200 font-bold' : ''}`}>JA</Link>
+                        <Link href={`/ja-JP/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'ja-JP' ? 'text-white font-bold' : ''}`}>JA</Link>
                         <span>|</span>
-                        <Link href={`/de-DE/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'de-DE' ? 'text-sky-200 font-bold' : ''}`}>DE</Link>
+                        <Link href={`/de-DE/studio/beats/${beat.slug}`} className={`hover:text-white transition ${locale === 'de-DE' ? 'text-white font-bold' : ''}`}>DE</Link>
                     </div>
                 </div>
 
                 {/* Hero Product Stage */}
                 <SectionShell id="beat-hero" className="!py-6 sm:!py-8 lg:!py-10">
-                    <div className="mx-auto max-w-5xl">
-                        <div className={`grid gap-6 rounded-[1.75rem] border bg-[linear-gradient(145deg,rgba(9,25,35,0.92),rgba(2,8,13,0.98))] p-4 shadow-[0_35px_100px_rgba(0,0,0,0.3)] sm:p-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:p-7 ${genreTheme.surface}`}>
+                    <div className="mx-auto max-w-7xl">
+                        <div className={`grid gap-6 rounded-lg border p-4 sm:p-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:p-7 ${genreTheme.surface}`}>
                             {/* Left: Cover Art & Integrated Track Player */}
                             <m.div
                                 className="space-y-5"
@@ -212,18 +212,18 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 initial="hidden"
                                 animate="visible"
                             >
-                                <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-black/40 border border-white/10">
+                                <div className="relative aspect-square w-full overflow-hidden rounded-md bg-black/40 border border-white/10">
                                     <BeatStarsTrackArtwork
                                         trackId={beat.beatstarsTrackId}
                                         title={beat.title}
-                                        fallback={<div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.28),transparent_30%),radial-gradient(circle_at_86%_82%,rgba(168,85,247,0.2),transparent_34%),linear-gradient(145deg,#071923,#02070d_62%,#050a12)] p-7">
-                                            <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,0.06)_42%,transparent_43%)]" aria-hidden="true" />
-                                            <div className="relative flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.24em] text-sky-100/75">
+                                        fallback={<div className="relative flex h-full flex-col justify-between overflow-hidden p-7">
+                                            <div className="absolute inset-0 " aria-hidden="true" />
+                                            <div className="relative flex items-center justify-between text-xs font-semibold text-white/60">
                                                 <span>Virzy Guns</span>
                                                 <span>{text.officialRelease}</span>
                                             </div>
                                             <div className="relative">
-                                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200/70">{editorialWorld}</p>
+                                                <p className="text-xs font-semibold text-white/60">{editorialWorld}</p>
                                                 <h2 className="mt-3 max-w-sm font-display text-3xl font-semibold leading-[0.95] tracking-tight text-white sm:text-4xl">{beat.title}</h2>
                                             </div>
                                         </div>}
@@ -231,8 +231,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 </div>
 
                                 {/* Official Embedded BeatStars Track Player Widget */}
-                                <div className="overflow-hidden rounded-xl border border-white/10 bg-black">
-                                    <div className="flex justify-between border-b border-white/10 bg-black/40 px-3 py-2 text-[10px] font-medium text-white/55">
+                                <div className="overflow-hidden rounded-md border border-white/10 bg-black">
+                                    <div className="flex justify-between border-b border-white/10 bg-black/40 px-3 py-2 text-xs font-medium text-white/55">
                                         <span>{playerTitle}</span>
                                         <span>{playerSub}</span>
                                     </div>
@@ -262,7 +262,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                             <m.div variants={revealUp} initial="hidden" animate="visible" className="space-y-6 py-1 lg:pl-2">
                                 <div>
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <span className="rounded-full border border-sky-200/30 bg-sky-300/10 px-3 py-1 text-xs font-semibold text-sky-200">
+                                        <span className="rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white">
                                             {editorialWorld}
                                         </span>
                                         {officialGenres.slice(0, 3).map((genre) => (
@@ -288,8 +288,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-3 rounded-2xl border border-violet-300/20 bg-[linear-gradient(105deg,rgba(76,29,149,0.2),rgba(14,116,144,0.1))] p-4">
-                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-violet-200/20 bg-violet-300/10 text-violet-100">
+                                <div className="flex items-start gap-3 rounded-lg border border-violet-300/20 p-4">
+                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-violet-200/20 bg-violet-300/10 text-violet-100">
                                         <Gift className="h-4 w-4" aria-hidden="true" />
                                     </span>
                                     <div>
@@ -300,7 +300,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
 
                                 {/* License selection matrix */}
                                 <div className="space-y-3">
-                                    <p className="text-xs uppercase tracking-widest text-sky-200/70 font-semibold">{text.selectTier}</p>
+                                    <p className="text-xs text-white/60 font-semibold">{text.selectTier}</p>
                                     <div className="grid gap-2 sm:grid-cols-2">
                                         {licenseOptions.map((lic) => {
                                             const isSelected = selectedLicense.id === lic.id;
@@ -308,9 +308,9 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                                 <button
                                                     key={lic.id}
                                                     onClick={() => handleLicenseSelection(lic)}
-                                                    className={`relative flex min-h-[5.25rem] items-center justify-between overflow-hidden rounded-xl border p-4 text-left transition ${
+                                                    className={`relative flex min-h-[5.25rem] items-center justify-between overflow-hidden rounded-md border p-4 text-left transition ${
                                                         isSelected
-                                                            ? 'border-sky-200/60 bg-sky-300/[0.12] text-white shadow-lg'
+                                                            ? 'border-white/15 bg-white/[0.04] text-white shadow-lg'
                                                             : 'border-white/10 bg-white/[0.02] text-white/70 hover:border-white/20 hover:bg-white/[0.04]'
                                                     }`}
                                                 >
@@ -318,7 +318,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                                         <p className="text-sm font-semibold">{lic.name}</p>
                                                         <p className="text-xs text-white/50">{lic.streamingLimit}</p>
                                                     </div>
-                                                    <p className="text-lg font-bold text-sky-200">{lic.price}</p>
+                                                    <p className="text-lg font-bold text-white">{lic.price}</p>
                                                 </button>
                                             );
                                         })}
@@ -326,31 +326,31 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 </div>
 
                                 {/* Active License Terms & Honest BeatStars CTA */}
-                                <div className="rounded-2xl border border-sky-200/25 bg-sky-300/[0.06] p-5 shadow-[0_18px_44px_rgba(56,189,248,0.06)] space-y-4">
+                                <div className="rounded-lg border border-white/15 bg-white/[0.04] p-5 space-y-4">
                                     <div className="flex items-center justify-between border-b border-white/10 pb-3">
                                         <span className="text-sm font-semibold text-white">{text.includes(selectedLicense.name)}</span>
-                                        <span className="text-xl font-bold text-sky-200">{selectedLicense.price}</span>
+                                        <span className="text-xl font-bold text-white">{selectedLicense.price}</span>
                                     </div>
                                     <ul className="grid gap-2 text-xs text-white/80 sm:grid-cols-2">
                                         <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                             <span>{text.formats}: {selectedLicense.fileFormats.join(', ')}</span>
                                         </li>
                                         <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                             <span>{text.streams}: {selectedLicense.streamingLimit}</span>
                                         </li>
                                         <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                             <span>{text.sales}: {selectedLicense.salesLimit}</span>
                                         </li>
                                         <li className="flex items-center gap-2">
-                                            <Check className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                                            <Check className="h-3.5 w-3.5 text-white shrink-0" />
                                             <span>{text.stems}: {selectedLicense.includesStems ? text.stemsIncluded : text.stemsNotIncluded}</span>
                                         </li>
                                     </ul>
 
-                                    <p className="flex items-center gap-2 rounded-xl border border-violet-200/15 bg-violet-300/[0.08] px-3 py-2 text-xs text-violet-100">
+                                    <p className="flex items-center gap-2 rounded-md border border-violet-200/15 bg-violet-300/[0.08] px-3 py-2 text-xs text-violet-100">
                                         <Gift className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                                         {text.promoCheckout}
                                     </p>
@@ -358,7 +358,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                     <button
                                         type="button"
                                         onClick={() => handleCheckoutClick(selectedLicense.name, selectedLicense.price)}
-                                        className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-sky-200 text-black font-semibold text-sm transition hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-200"
+                                        className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-white text-black font-semibold text-sm transition hover:bg-white/85 focus:outline-none focus:ring-2 focus:ring-sky-200"
                                     >
                                         {text.checkout(selectedLicense.name, selectedLicense.price)}
                                         <ShoppingBag className="h-4 w-4" aria-hidden="true" />
@@ -366,8 +366,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                 </div>
 
                                 {/* Exclusive License IG DM / Email Option */}
-                                <div className="rounded-xl border border-sky-200/20 bg-sky-300/[0.04] p-5 space-y-3">
-                                    <p className="text-sky-200 font-semibold text-xs uppercase tracking-wider">
+                                <div className="rounded-md border border-white/15 bg-white/[0.04] p-5 space-y-3">
+                                    <p className="text-white font-semibold text-xs ">
                                         {text.exclusiveEyebrow}
                                     </p>
                                     <p className="text-xs text-white/70 leading-5">
@@ -378,7 +378,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                             href={instagramDmUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-sky-200/30 bg-sky-300/[0.1] px-4 py-2 text-xs font-semibold text-sky-100 hover:bg-sky-300/[0.2] transition"
+                                            className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-white hover:bg-white/[0.07] transition"
                                         >
                                             <Instagram className="h-3.5 w-3.5" />
                                             {text.instagram}
@@ -404,7 +404,7 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
 
                 {/* Sound Character & Licensing Information */}
                 <SectionShell id="specs" className="border-t border-white/10 py-14">
-                    <div className="mx-auto max-w-5xl grid gap-10 md:grid-cols-2">
+                    <div className="mx-auto max-w-7xl grid gap-10 md:grid-cols-2">
                         <div>
                             <h2 className="font-display text-2xl font-semibold text-white">{text.sound}</h2>
                             <p className="mt-4 text-sm leading-7 text-white/70">{description}</p>
@@ -414,8 +414,8 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                             </div>
                         </div>
 
-                        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 space-y-4">
-                            <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-200/70">{text.licensing}</h3>
+                        <div className="rounded-md border border-white/10 bg-white/[0.02] p-6 space-y-4">
+                            <h3 className="text-sm font-semibold text-white/60">{text.licensing}</h3>
                             <div className="space-y-3 text-xs text-white/70">
                                 <div className="border-b border-white/5 pb-2">
                                     <span className="text-white/40 block">{text.selected}</span>
@@ -437,19 +437,19 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                 {/* Related Beats in Genre */}
                 {relatedBeats.length > 0 && (
                     <SectionShell id="related-beats" className="border-t border-white/10 py-14">
-                        <div className="mx-auto max-w-5xl">
+                        <div className="mx-auto max-w-7xl">
                             <h2 className="mb-6 font-display text-2xl font-semibold text-white">{text.related(editorialWorld)}</h2>
                             <div className="grid gap-4 sm:grid-cols-3">
                                 {relatedBeats.map((relBeat) => (
                                     <Link
                                         key={relBeat.id}
                                         href={getLocalePath(`/studio/beats/${relBeat.slug}`)}
-                                        className="group rounded-xl border border-white/10 bg-white/[0.02] p-4 transition hover:border-sky-200/40 hover:bg-white/[0.04]"
+                                        className="group rounded-md border border-white/10 bg-white/[0.02] p-4 transition hover:border-white/30 hover:bg-white/[0.04]"
                                     >
-                                        <p className="text-xs text-sky-200/60 uppercase font-semibold">
+                                        <p className="text-xs text-white/60 font-semibold">
                                             {getEditorialBeatWorld(relBeat.beatstarsTrackId) || relBeat.primaryGenre}
                                         </p>
-                                        <h3 className="mt-1 text-base font-semibold text-white group-hover:text-sky-200 transition">{relBeat.title}</h3>
+                                        <h3 className="mt-1 text-base font-semibold text-white hover:text-white transition">{relBeat.title}</h3>
                                         <p className="mt-2 text-xs text-white/50">{text.relatedCta} →</p>
                                     </Link>
                                 ))}

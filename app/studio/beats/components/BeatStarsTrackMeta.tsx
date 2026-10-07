@@ -28,9 +28,9 @@ interface BeatStarsTrackMetaProps {
 
 function Metric({ icon: Icon, label, value }: { icon: typeof Gauge; label: string; value: string }) {
     return (
-        <div className="min-w-0 rounded-xl border border-white/[0.09] bg-black/15 px-3 py-2.5">
-            <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/45">
-                <Icon className="h-3 w-3 text-sky-200/70" aria-hidden="true" />
+        <div className="min-w-0 rounded-md border border-white/[0.09] bg-black/15 px-3 py-2.5">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-white/45">
+                <Icon className="h-3 w-3 text-white/60" aria-hidden="true" />
                 {label}
             </div>
             <p className="mt-1 truncate text-sm font-semibold text-white">{value}</p>
@@ -59,8 +59,8 @@ export default function BeatStarsTrackMeta({ trackId, locale }: BeatStarsTrackMe
 
     const genres = track.metadata.genres.slice(0, 2).join(' · ');
     return (
-        <section className="rounded-2xl border border-white/[0.1] bg-[#041018]/75 p-4 sm:p-5" aria-label={text.label}>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-sky-200/75">{text.label}</p>
+        <section className="rounded-lg border border-white/[0.1] bg-[#0a0e12] p-4 sm:p-5" aria-label={text.label}>
+            <p className="text-xs font-semibold text-white/60">{text.label}</p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 {track.metadata.bpm ? <Metric icon={Gauge} label={text.bpm} value={String(track.metadata.bpm)} /> : null}
                 {track.metadata.key ? <Metric icon={KeyRound} label={text.key} value={track.metadata.key} /> : null}
@@ -70,7 +70,7 @@ export default function BeatStarsTrackMeta({ trackId, locale }: BeatStarsTrackMe
             {track.metadata.tags.length ? (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                     {track.metadata.tags.slice(0, 6).map((tag) => (
-                        <span key={tag} className="rounded-full border border-white/[0.09] bg-white/[0.035] px-2.5 py-1 text-[11px] text-white/62">{tag}</span>
+                        <span key={tag} className="rounded-full border border-white/[0.09] bg-white/[0.035] px-2.5 py-1 text-xs text-white/62">{tag}</span>
                     ))}
                 </div>
             ) : null}

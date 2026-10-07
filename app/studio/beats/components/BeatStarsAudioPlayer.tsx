@@ -194,7 +194,7 @@ export default function BeatStarsAudioPlayer({
     ].filter(Boolean).join(' · ');
 
     return (
-        <div ref={containerRef} className="h-[104px] overflow-hidden rounded-xl border border-white/[0.1] bg-[#02080d] shadow-inner shadow-black/40">
+        <div ref={containerRef} className="h-[104px] overflow-hidden rounded-md border border-white/[0.1] bg-[#0a0e12] shadow-inner shadow-black/40">
             {hasFailed ? (
                 <div className="flex h-full flex-col items-center justify-center gap-1.5 px-4 text-center" aria-live="polite">
                     <AlertCircle className="h-4 w-4 text-amber-200/75" aria-hidden="true" />
@@ -203,14 +203,14 @@ export default function BeatStarsAudioPlayer({
                         href={productUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-200 transition hover:text-white"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-white transition hover:text-white"
                     >
                         {text.external}
                         <ExternalLink className="h-3 w-3" aria-hidden="true" />
                     </a>
                 </div>
             ) : !previewUrl ? (
-                <div className="flex h-full items-center justify-center gap-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/60" aria-live="polite">
+                <div className="flex h-full items-center justify-center gap-2 text-xs font-semibold text-white/60" aria-live="polite">
                     <LoaderCircle className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} aria-hidden="true" />
                     {text.loading}
                 </div>
@@ -238,10 +238,10 @@ export default function BeatStarsAudioPlayer({
                                 type="button"
                                 onClick={togglePlayback}
                                 aria-label={isPlaying ? text.pause : text.play}
-                                className={`absolute inset-0 inline-flex items-center justify-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 ${
+                                className={`absolute inset-0 inline-flex items-center justify-center transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
                                     showArtwork && artworkUrl
                                         ? 'bg-slate-950/55 text-white hover:bg-slate-950/35'
-                                        : 'bg-sky-200 text-slate-950 hover:bg-sky-100'
+                                        : 'bg-white text-slate-950 hover:bg-white/85'
                                 }`}
                             >
                                 {isPlaying ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="ml-0.5 h-4 w-4" aria-hidden="true" />}
@@ -249,10 +249,10 @@ export default function BeatStarsAudioPlayer({
                         </div>
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between gap-2">
-                                <p className="truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-sky-100/70">{text.label}</p>
-                                <span className="shrink-0 font-mono text-[10px] text-white/50">{formatTrackTime(currentTime)} / {formatTrackTime(duration)}</span>
+                                <p className="truncate text-xs font-semibold text-white/60">{text.label}</p>
+                                <span className="shrink-0 font-mono text-xs text-white/50">{formatTrackTime(currentTime)} / {formatTrackTime(duration)}</span>
                             </div>
-                            {metadata ? <p className="mt-1 truncate text-[10px] font-medium text-white/45">{metadata}</p> : null}
+                            {metadata ? <p className="mt-1 truncate text-xs font-medium text-white/45">{metadata}</p> : null}
                             <input
                                 type="range"
                                 min="0"

@@ -263,7 +263,7 @@ export default function BeatStoreGuide({
 
     return createPortal(
         <div
-            className="fixed inset-0 z-[190] flex items-stretch justify-center bg-[#01060b]/82 sm:items-center sm:p-4"
+            className="fixed inset-0 z-[190] flex items-stretch justify-center bg-[#0a0e12] sm:items-center sm:p-4"
             onMouseDown={(event) => {
                 if (event.target === event.currentTarget) closeGuide();
             }}
@@ -274,7 +274,7 @@ export default function BeatStoreGuide({
                 aria-modal="true"
                 aria-labelledby={titleId}
                 tabIndex={-1}
-                className="relative h-[100dvh] w-full max-w-4xl overflow-y-auto bg-[#04131d] px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] shadow-[0_40px_120px_rgba(0,0,0,0.65)] outline-none sm:h-auto sm:max-h-[92dvh] sm:rounded-3xl sm:border sm:border-sky-200/20 sm:p-7"
+                className="relative h-[100dvh] w-full max-w-4xl overflow-y-auto bg-[#0a0e12] px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] outline-none sm:h-auto sm:max-h-[92dvh] sm:rounded-3xl sm:border sm:border-sky-200/20 sm:p-7"
             >
                         <button
                             type="button"
@@ -286,20 +286,20 @@ export default function BeatStoreGuide({
                         </button>
 
                         <div className="pr-12">
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-200/70">{text.eyebrow}</p>
+                            <p className="text-xs font-semibold text-white/60">{text.eyebrow}</p>
                             <h2 id={titleId} className="mt-2 max-w-3xl font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">
                                 {mode === 'store' ? text.storeTitle : text.finderTitle}
                             </h2>
                         </div>
 
-                        <div className="sticky top-0 z-10 mt-5 grid grid-cols-2 rounded-xl border border-white/10 bg-[#04131d] p-1 sm:mt-6" role="tablist">
+                        <div className="sticky top-0 z-10 mt-5 grid grid-cols-2 rounded-md border border-white/10 bg-[#0a0e12] p-1 sm:mt-6" role="tablist">
                             <button
                                 type="button"
                                 role="tab"
                                 aria-selected={mode === 'store'}
                                 onClick={() => setMode('store')}
                                 className={`min-h-10 rounded-lg px-3 text-xs font-semibold transition ${
-                                    mode === 'store' ? 'bg-sky-200 text-slate-950' : 'text-white/55 hover:text-white'
+                                    mode === 'store' ? 'bg-white text-slate-950' : 'text-white/55 hover:text-white'
                                 }`}
                             >
                                 {text.storeTab}
@@ -310,7 +310,7 @@ export default function BeatStoreGuide({
                                 aria-selected={mode === 'finder'}
                                 onClick={() => setMode('finder')}
                                 className={`min-h-10 rounded-lg px-3 text-xs font-semibold transition ${
-                                    mode === 'finder' ? 'bg-sky-200 text-slate-950' : 'text-white/55 hover:text-white'
+                                    mode === 'finder' ? 'bg-white text-slate-950' : 'text-white/55 hover:text-white'
                                 }`}
                             >
                                 {text.finderTab}
@@ -323,11 +323,11 @@ export default function BeatStoreGuide({
                                     {text.steps.map((item, index) => {
                                         const Icon = stepIcons[index];
                                         return (
-                                            <article key={item.eyebrow} className="grid grid-cols-[2.5rem_1fr] gap-x-3 rounded-xl border border-white/10 bg-black/20 p-4 md:block md:rounded-2xl md:p-5">
-                                                <span className="row-span-3 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-sky-200/20 bg-sky-300/[0.08] text-sky-200 md:h-11 md:w-11">
+                                            <article key={item.eyebrow} className="grid grid-cols-[2.5rem_1fr] gap-x-3 rounded-md border border-white/10 bg-black/20 p-4 md:block md:rounded-lg md:p-5">
+                                                <span className="row-span-3 inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] text-white md:h-11 md:w-11">
                                                     <Icon className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />
                                                 </span>
-                                                <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-sky-200/65 md:mt-5 md:text-[10px] md:tracking-[0.18em]">{item.eyebrow}</p>
+                                                <p className="text-[9px] font-semibold text-white/60 md:mt-5 md:text-xs md:">{item.eyebrow}</p>
                                                 <h3 className="mt-1 text-sm font-semibold leading-snug text-white md:mt-2 md:text-base">{item.title}</h3>
                                                 <p className="mt-1.5 text-xs leading-5 text-white/58 md:mt-3">{item.body}</p>
                                             </article>
@@ -337,7 +337,7 @@ export default function BeatStoreGuide({
                                 <button
                                     type="button"
                                     onClick={browseCatalog}
-                                    className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-sky-200 px-5 text-xs font-semibold text-slate-950 transition hover:bg-sky-100 sm:w-auto"
+                                    className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 text-xs font-semibold text-slate-950 transition hover:bg-white/85 sm:w-auto"
                                 >
                                     {text.start}
                                     <Check className="h-4 w-4" aria-hidden="true" />
@@ -357,36 +357,36 @@ export default function BeatStoreGuide({
                                                 type="button"
                                                 aria-pressed={isSelected}
                                                 onClick={() => setPreset(presetId)}
-                                                className={`group rounded-xl border p-3 text-left transition sm:rounded-2xl sm:p-4 ${
+                                                className={`group rounded-md border p-3 text-left transition sm:rounded-lg sm:p-4 ${
                                                     isSelected
-                                                        ? 'border-sky-200/55 bg-sky-300/[0.1] shadow-[0_16px_45px_rgba(14,165,233,0.12)]'
+                                                        ? 'border-white/15 bg-white/[0.04] '
                                                         : 'border-white/10 bg-black/20 hover:border-white/25 hover:bg-white/[0.04]'
                                                 }`}
                                             >
                                                 <div className="flex items-start gap-3">
-                                                    <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
-                                                        isSelected ? 'border-sky-200/35 bg-sky-200 text-slate-950' : 'border-white/10 bg-white/[0.04] text-white/65'
+                                                    <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border ${
+                                                        isSelected ? 'border-white/15 bg-white text-slate-950' : 'border-white/10 bg-white/[0.04] text-white/65'
                                                     }`}>
                                                         <Icon className="h-4 w-4" aria-hidden="true" />
                                                     </span>
                                                     <span>
                                                         <span className="block text-sm font-semibold text-white">{item.title}</span>
                                                         <span className="mt-1 block text-xs leading-5 text-white/55">{item.description}</span>
-                                                        <span className="mt-3 block text-[10px] font-semibold uppercase tracking-[0.12em] text-sky-200/65">{item.cue}</span>
+                                                        <span className="mt-3 block text-xs font-semibold text-white/60">{item.cue}</span>
                                                     </span>
                                                 </div>
                                             </button>
                                         );
                                     })}
                                 </div>
-                                <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.025] p-4 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="mt-5 flex flex-col gap-3 rounded-lg border border-white/10 bg-white/[0.025] p-4 sm:flex-row sm:items-center sm:justify-between">
                                     <p className="text-xs text-white/55">
                                         {text.selected}: <strong className="text-white">{text.presets[preset].title}</strong>
                                     </p>
                                     <button
                                         type="button"
                                         onClick={applyPreset}
-                                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-200 px-5 text-xs font-semibold text-slate-950 transition hover:bg-sky-100"
+                                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-white px-5 text-xs font-semibold text-slate-950 transition hover:bg-white/85"
                                     >
                                         {text.apply}
                                         <ListFilter className="h-4 w-4" aria-hidden="true" />

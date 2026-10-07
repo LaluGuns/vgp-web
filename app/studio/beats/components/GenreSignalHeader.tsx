@@ -97,10 +97,10 @@ export default function GenreSignalHeader({
     const reduceMotion = useReducedMotion();
 
     return (
-        <header className={`relative overflow-hidden border-b border-white/[0.08] ${theme.world}`}>
-            <div className="relative mx-auto grid max-w-6xl gap-7 px-4 pb-10 pt-6 sm:px-6 sm:pb-14 sm:pt-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:pb-16 lg:pt-10">
+        <header className="relative overflow-hidden border-b border-white/10 px-4 sm:px-6">
+            <div className="relative mx-auto grid max-w-7xl gap-7 pb-10 pt-6 sm:pb-14 sm:pt-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:pb-16 lg:pt-10">
                 <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.23em] text-white/55">{text.eyebrow}</p>
+                    <p className="text-xs font-semibold text-white/55">{text.eyebrow}</p>
                     <h1 className="mt-3 max-w-3xl font-display text-[2.65rem] font-semibold leading-[0.96] tracking-[-0.045em] text-white sm:mt-4 sm:text-6xl">
                         {isAllGenres ? text.allTitle : text.genreTitle(genreLabel)}
                     </h1>
@@ -112,7 +112,7 @@ export default function GenreSignalHeader({
                         <button
                             type="button"
                             onClick={() => document.getElementById('beats-inventory')?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' })}
-                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 text-xs font-semibold text-slate-950 transition hover:bg-sky-100"
+                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-white px-4 text-xs font-semibold text-slate-950 transition hover:bg-white/85"
                         >
                             {text.browse}
                             <ArrowDown className="h-4 w-4" aria-hidden="true" />
@@ -120,7 +120,7 @@ export default function GenreSignalHeader({
                         <button
                             type="button"
                             onClick={onGuideOpen}
-                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/16 bg-white/[0.04] px-4 text-xs font-semibold text-white/75 transition hover:border-white/30 hover:text-white"
+                            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/16 bg-white/[0.04] px-4 text-xs font-semibold text-white/75 transition hover:border-white/30 hover:text-white"
                         >
                             <CircleHelp className="h-4 w-4" aria-hidden="true" />
                             {text.guide}
@@ -129,14 +129,14 @@ export default function GenreSignalHeader({
                             type="button"
                             onClick={onCheckoutOpen}
                             disabled={checkoutCount === 0}
-                            className={`col-span-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-semibold transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-40 sm:col-span-1 ${theme.surface}`}
+                            className={`col-span-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-4 text-xs font-semibold transition hover:brightness-125 disabled:cursor-not-allowed disabled:opacity-40 sm:col-span-1 ${theme.surface}`}
                         >
                             <ShoppingBag className="h-4 w-4" aria-hidden="true" />
                             {checkoutCount ? `${text.checkout} · ${checkoutCount}` : text.chooseBeat}
                         </button>
                     </div>
 
-                    <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-white/10 pt-4 text-[11px] text-white/52 sm:flex sm:flex-wrap sm:gap-x-6 sm:pt-5">
+                    <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-white/10 pt-4 text-xs text-white/52 sm:flex sm:flex-wrap sm:gap-x-6 sm:pt-5">
                         <span><strong className="font-mono text-white">{resultCount}</strong> {text.tracks}</span>
                         <span><strong className="font-mono text-white">{bpmRange}</strong> BPM</span>
                         <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />{text.metadata}</span>
@@ -144,13 +144,13 @@ export default function GenreSignalHeader({
                     </div>
                 </div>
 
-                <div className={`relative overflow-hidden rounded-3xl border p-4 shadow-[0_24px_70px_rgba(0,0,0,0.28)] sm:p-5 ${theme.surface}`}>
+                <div className={`relative overflow-hidden rounded-3xl border p-4 sm:p-5 ${theme.surface}`}>
                     <div className="flex items-center justify-between gap-4">
                         <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{text.catalogView}</p>
+                            <p className="text-xs font-semibold text-white/48">{text.catalogView}</p>
                             <p className="mt-1 text-sm font-semibold text-white">{genreLabel}</p>
                         </div>
-                        <span className="rounded-full border border-white/10 bg-black/15 px-3 py-1 font-mono text-[10px] text-white/55">{resultCount} / {totalCount}</span>
+                        <span className="rounded-full border border-white/10 bg-black/15 px-3 py-1 font-mono text-xs text-white/55">{resultCount} / {totalCount}</span>
                     </div>
                     <div className="mt-4 grid items-center gap-4 sm:grid-cols-[0.82fr_1.18fr]">
                         <m.div
@@ -165,22 +165,22 @@ export default function GenreSignalHeader({
                                 alt="Virzy Guns Production"
                                 fill
                                 sizes="(max-width: 640px) 230px, 200px"
-                                className="object-contain drop-shadow-[0_0_24px_rgba(125,211,252,0.2)]"
+                                className="object-contain drop-"
                             />
                         </m.div>
                         <div className="grid grid-cols-2 gap-2">
-                            <div className="rounded-2xl border border-white/10 bg-black/15 p-3">
-                                <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/38">{text.matches}</p>
+                            <div className="rounded-lg border border-white/10 bg-black/15 p-3">
+                                <p className="text-[9px] font-semibold text-white/38">{text.matches}</p>
                                 <p className="mt-1 font-mono text-xl font-semibold text-white">{resultCount}</p>
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-black/15 p-3">
-                                <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/38">{text.tempoPulse}</p>
+                            <div className="rounded-lg border border-white/10 bg-black/15 p-3">
+                                <p className="text-[9px] font-semibold text-white/38">{text.tempoPulse}</p>
                                 <p className="mt-1 font-mono text-sm font-semibold text-white">{bpmRange}</p>
                             </div>
-                            <div className="col-span-2 rounded-2xl border border-white/10 bg-black/15 p-3">
+                            <div className="col-span-2 rounded-lg border border-white/10 bg-black/15 p-3">
                                 <div className="flex items-center justify-between gap-3">
-                                    <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/38">{text.genre}</p>
-                                    <span className="font-mono text-[10px] text-white/45">{Math.round(bpmMidpoint)} BPM</span>
+                                    <p className="text-[9px] font-semibold text-white/38">{text.genre}</p>
+                                    <span className="font-mono text-xs text-white/45">{Math.round(bpmMidpoint)} BPM</span>
                                 </div>
                                 <p className="mt-1 truncate text-sm font-semibold text-white">{genreLabel}</p>
                             </div>
