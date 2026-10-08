@@ -376,3 +376,217 @@ body::before {
     transform: none;
   }
 }
+
+/* ── Articles (docs/ARTICLES.md) ─────────────────────────────────── */
+
+.article-content strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.article-content em {
+  font-style: italic;
+}
+
+.article-content .vgp-inline-link {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 200ms;
+}
+
+.article-content .vgp-inline-link:hover {
+  text-decoration-color: #fff;
+}
+
+.article-content .katex {
+  font-size: 1.05em;
+}
+
+.vgp-math .katex-display {
+  margin: 0;
+}
+
+/* Glossary terms: a dotted underline that opens a definition. */
+.vgp-term {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: help;
+  text-decoration: underline dotted rgba(255, 255, 255, 0.5);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: text-decoration-color 200ms;
+}
+
+.vgp-term:hover {
+  text-decoration-color: #fff;
+}
+
+.vgp-term:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.vgp-term-pop {
+  position: fixed;
+  inset: auto 16px 16px 16px;
+  margin: 0 auto;
+  max-width: 28rem;
+  width: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--surface-strong);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 18px 20px 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.vgp-term-pop::backdrop {
+  background: transparent;
+}
+
+.vgp-term-pop .vgp-term-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.vgp-term-pop .vgp-term-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 14px;
+}
+
+.vgp-term-pop a,
+.vgp-term-pop button {
+  font-size: 14px;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 4px;
+  background: none;
+  border: 0;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.vgp-term-pop .vgp-term-all {
+  display: inline-block;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+@media (min-width: 1024px) {
+  .vgp-term-pop {
+    inset: auto 24px 24px auto;
+    margin: 0;
+    width: 26rem;
+  }
+}
+
+/* Range inputs in the listening demos. */
+.vgp-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.vgp-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.vgp-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.vgp-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: #fff;
+  border: 0;
+}
+
+.vgp-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #fff;
+  border: 0;
+}
+
+.vgp-range:focus-visible {
+  outline: none;
+}
+
+.vgp-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+}
+
+.vgp-range:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+}
+
+.article-content .vgp-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+/* Article tables: rows stack as cards on phones (docs/ARTICLES.md). */
+@media (max-width: 639px) {
+  .vgp-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .vgp-table tr {
+    display: block;
+    padding: 12px 0;
+  }
+
+  .vgp-table td {
+    display: block;
+    padding: 2px 0;
+  }
+
+  .vgp-table td:first-child {
+    padding-bottom: 6px;
+    font-size: 15px;
+  }
+
+  .vgp-table td:not(:first-child)::before {
+    content: attr(data-label);
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .vgp-table td:empty {
+    display: none;
+  }
+}

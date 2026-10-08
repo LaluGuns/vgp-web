@@ -1,69 +1,153 @@
 import { BlogArticle } from '../blog-data';
 
+// 90 BPM: one 16th lasts 166.7 ms, so 20 ms is 0.12 of a step.
+const STEP_MS = 60000 / 90 / 4;
+const at = (ms: number) => Math.round((ms / STEP_MS) * 1000) / 1000;
+const EIGHT = [0, 1, 2, 3, 4, 5, 6, 7];
+const RANDOM_MS = [13, -17, 20, -5, -20, 8, 17, -12];
+
 export const post021: BlogArticle = {
     slug: 'why-tiny-timing-differences-create-human-feel',
-    title: 'Why Tiny Timing Differences Create Human Feel',
-    excerpt: 'Snapping every hi-hat and snare to a perfect grid kills the swing. Learn how microtiming offsets build a pocket that breathes.',
+    title: 'Why tiny timing differences create human feel',
+    excerpt: 'A small, consistent offset makes a part lean back or push. Random humanize and large offsets do the opposite. Here is how to size the lean in milliseconds.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
-    readingTime: 8,
-    seo: {
-        title: 'Why Tiny Timing Differences Create Human Feel | VGP Studio',
-        description: 'Discover how microtiming timing offsets create groove in your DAW. Learn how moving elements by ear after the grid locks creates a human pocket.',
-        keywords: ['human timing', 'microtiming', 'groove', 'beat making', 'music production', 'rhythm']
+    updatedAt: '2026-10-08',
+    readingTime: 7,
+    summary: [
+        'Microtiming is a feel control: a small, consistent lean makes a part sit back or push, while large offsets lower the groove.',
+        'At 90 BPM a 16th lasts 166.7 ms, so a 20 ms lean is 12 percent of a step, heard as together but no longer fused.',
+        'Move one secondary part by the same amount on every hit and keep the kick and snare as the anchor.',
+    ],
+    figures: {
+        lean: {
+            type: 'rhythm',
+            steps: 8,
+            perBeat: 4,
+            caption:
+                'Two beats at 90 BPM, where one 16th lasts 166.7 ms. The consistent lean moves every hat 20 ms late, so the hats sit behind the kick as one part. Random humanize scatters them up to 20 ms either side with no pattern.',
+            alt: 'A grid of two beats. Kick on beat one and snare on beat two sit on the grid. Below them, quantized hats on every 16th, hats all shifted slightly late by the same amount, and hats shifted early and late by different amounts.',
+            rows: [
+                { label: 'Kick', hits: [0] },
+                { label: 'Snare', hits: [4] },
+                { label: 'Hats, quantized', hits: EIGHT },
+                { label: 'Hats, lean', note: '+20 ms', hits: EIGHT.map((step) => ({ step, offset: at(20) })) },
+                { label: 'Hats, random', note: '±20 ms', hits: EIGHT.map((step) => ({ step, offset: at(RANDOM_MS[step]) })) },
+            ],
+        },
+        size: {
+            type: 'scale',
+            min: 0,
+            max: 180,
+            unit: 'ms',
+            ticks: [0, 60, 120, 180],
+            caption:
+                'A 20 ms lean against the length of a 16th note. Onsets up to about 30 ms apart still sound as if they start together, so the lean reads as feel rather than as a wrong note. A 16th is five to eight times longer than the lean, depending on tempo.',
+            alt: 'A line from 0 to 180 milliseconds. A shaded range from 0 to 30 ms is marked as still sounding together. Markers show a 20 ms lean, a 16th at 140 BPM at 107 ms and a 16th at 90 BPM at 167 ms.',
+            markers: [
+                { value: 20, label: '20 ms lean', strong: true },
+                { value: 107.1, label: '16th at 140 BPM' },
+                { value: 166.7, label: '16th at 90 BPM' },
+            ],
+            ranges: [{ from: 0, to: 30, label: 'Still sounds together' }],
+        },
     },
-    content: `## The snare that killed the groove
+    quiz: [
+        {
+            q: 'At 90 BPM, how long does one 16th note last?',
+            options: ['83.3 ms', '111.1 ms', '166.7 ms', '250 ms'],
+            answer: 2,
+            why: 'A beat lasts 60,000 / 90 = 666.7 ms and holds four 16ths, so each one lasts 166.7 ms.',
+        },
+        {
+            q: 'Why does random humanize often sound sloppy rather than played?',
+            options: [
+                'It pulls every note early, so the part rushes',
+                'It changes velocity on every hit as well as timing',
+                'It shifts the whole part late by one fixed amount',
+                'Each offset is unrelated to the ones before it',
+            ],
+            answer: 3,
+            why: 'Hennig and colleagues found that human timing errors are related from hit to hit. Independent random offsets have no pattern, so the part sounds unsure of where the beat is.',
+        },
+        {
+            q: 'In listening tests, what happened when the timing of a real performance was exaggerated?',
+            options: [
+                'Groove ratings dropped below the original',
+                'Groove ratings rose with the larger offsets',
+                'Groove ratings stayed level with the original',
+                'Listeners heard it as more human than before',
+            ],
+            answer: 0,
+            why: 'Senn and colleagues found groove ratings stayed high up to the performed amount of microtiming and dropped beyond it. Fully quantized versions rated as high as the originals.',
+        },
+    ],
+    content: `## Hook: the beat that went flat
 
-You snap the drums to the grid. The snare falls exactly on beat two and beat four. The hi-hats sit precisely on the sixteenth-note lines. Mathematically, it is perfect. But when you hit play, the song feels dead. The vocal sits on top of the beat instead of locking into it. The rhythm has no weight. It feels like an accountant programmed the drums instead of a human playing them.
+You record a drum part, select everything and quantize it to 100 percent. The snare lands exactly on beats two and four. The hats sit exactly on the 16th-note lines. On screen it is perfect. On playback something has gone flat. The vocal floats on top of the beat instead of sitting in it, and the hats tick like a clock.
 
-This happens because our ears do not want perfection. They want relationship. When every transient hits at the exact same millisecond, the brain registers the sound as synthetic and static. You did not fix the timing. You sterilized it.
+Quantizing did not break the timing. It removed a relationship. Before, the hats leaned slightly behind the kick, the same way on every hit, and that lean was part of the feel. After, every part shares the same instant, so nothing pushes and nothing sits back.
 
-## Why timing offsets dictate the groove
+## Why it matters: feel is a lean, not a wobble
 
-If you quantize every element to absolute points, you remove the natural tension between players. Human timing is not a failure to hit the grid. It is the conscious or subconscious decision to pull or push against it.
+Microtiming is the set of small offsets, from a few to a few tens of milliseconds, that place notes ahead of or behind the grid. Players use them on purpose. A drummer who sits behind the beat makes a groove feel relaxed. A percussionist who plays slightly ahead pushes it forward.
 
-When a drummer plays slightly behind the beat, they create a laid-back pocket. When a percussionist plays slightly ahead, they drive the track forward. In a digital environment, we must build these relationships manually. If you do not offset your tracks, your mix will sound flat. The instruments will fight for the exact same space in time, which causes transient masking. You lose separation. You lose the bounce.
+That does not make the grid the enemy. In listening tests, fully quantized versions of real bass and drum grooves were rated as grooving as much as the original performances, and exaggerated offsets lowered the ratings (Senn et al., 2016). Other studies found the same drop as offsets grew (Davies et al., 2013; Frühauf, Kopiez and Platz, 2013). Microtiming does not add groove by itself. It is a control for feel: it decides whether a part leans back or pushes, and it only works when it is small and consistent.
 
-## The science of microtiming
+::figure lean
 
-Groove relies on timing expectation. This concept is studied in cognitive musicology. Our brains constantly predict when the next beat will land. When a sound arrives slightly early or late, it violates that expectation in a controlled way. This trigger creates physical tension or release.
+::demo humanize
 
-Mathematically, we can express the timing offset of a note as:
+## Science model: how big an offset really is
 
-$$t_{\text{offset}} = t_{\text{actual}} - t_{\text{grid}}$$
+The offset of a note is its measured arrival minus its grid position:
 
-Where t_actual is the physical arrival time of the transient, and t_grid is the mathematical grid point. In human performances, this offset fluctuates between 5 and 15 milliseconds. 
+$$t_{\\text{offset}} = t_{\\text{actual}} - t_{\\text{grid}}$$
 
-If t_offset is positive, the note is late. This creates a relaxed feel. If it is negative, the note is early. This drives the energy up. These timing deviations also affect wave phase relationships. When multiple transients hit simultaneously, their wave peaks align. This increases the cumulative peak level. By spreading the transients by a few milliseconds, you reduce the peak level on the master fader. You gain headroom.
+A positive offset is late and a negative one early. To judge its size, compare it with the length of one grid step. A 16th note lasts:
 
-## Nudging your hi-hats in the DAW
+$$t_{16} = \\frac{60\\,000}{4 \\times \\text{BPM}} \\ \\text{ms}$$
 
-This experiment takes five minutes. It will show you how to break the rigid grid without making your beat sound sloppy.
+At 90 BPM that is 166.7 ms, so a 20 ms lean is 12 percent of a step. That is far too small to hear as a wrong note, but large enough to change how two parts sit together. Rasch (1978) found that notes starting up to about 30 ms apart still sound as if they start together, yet the ear uses that head start to hear them as separate sounds (Moore, 2012). A hat 20 ms behind the kick still lands with it, but the two stop fusing into one hit.
 
-1. Program a basic kick and snare pattern. Quantize them both to the hard grid to hold the foundation.
-2. Load a hi-hat loop or program a straight sixteenth-note pattern. Quantize it.
-3. Turn off your DAW snap-to-grid function. Change your track delay setting or manually select all the hi-hat notes.
-4. Nudge the hi-hat track late by 8 milliseconds. Play the loop. You will hear the hi-hats start to slide behind the kick.
-5. Now nudge them early by 6 milliseconds. The beat will suddenly feel urgent.
-6. Find the sweet spot where the hats sit in a pocket that makes your head nod.
+::figure size
 
-## The mistake of random humanization
+The pattern of the offsets matters as much as their size. Hennig and colleagues (2011) measured human rhythmic performance and found that timing errors are not independent from hit to hit. They drift in slow waves, so each error is related to the ones before it, even many beats back. Listeners preferred a beat humanized with that kind of related drift over one humanized with plain random offsets, the kind most humanize functions use.
 
-Many producers think human feel is just random timing. They select their MIDI notes and apply a random humanize algorithm. This is a mistake. 
+## DAW experiment: consistent lean against random drift
 
-Human drum timing is not random. A real drummer does not randomly hit the snare 10 milliseconds late and then the next one 12 milliseconds early. They have consistency. Their hand movements follow a physical arc. A drummer might consistently lean late on the snare to make the backbeat feel heavy, while keeping their kick locked to the bass player. 
+1. Set the tempo to 90 BPM. Program a kick on beats one and three, a snare on two and four and closed hats on every 16th. Quantize all three to 100 percent.
+2. Duplicate the hat track and mute the copy. It is your quantized reference.
+3. On the active hat track, set the track delay to +20 ms and loop four bars. The hats now sit 12 percent of a 16th behind the kick.
+4. Change the track delay to -15 ms and loop the same four bars.
+5. Set the track delay back to 0 and run your DAW's humanize or randomize function on the hat notes with a range of 20 ms either way.
+6. Compare the random version with the +20 ms version. Both reach the same maximum distance from the grid.
+7. Keep the version that sounds like one player, and leave the kick and snare quantized.
 
-Randomization just creates a sloppy performance. It lacks intent. The brain detects the lack of purpose and rejects the groove.
+The +20 ms hats sit back and the -15 ms hats push, and both sound deliberate. The random version covers the same range and sounds loose, because no two hits agree on where the beat is.
 
-## Keep the foundation locked
+## Common mistake: random humanize as a shortcut
 
-Build a pocket by establishing a clear relationship between elements. You do not need to move everything off the grid. 
+The common mistake is selecting every note and running a random humanize to make it feel played. Random offsets jump independently from one hit to the next: 12 ms late, then 10 ms early, then on the grid. A real player does not do that. Their timing drifts, and when they lean, they lean the same way for a reason, such as a snare that sits a little late on every backbeat while the kick stays with the bass.
 
-Keep your kick and snare locked to the grid lines. They are the anchor points. Once the foundation is stable, select one secondary element like hi-hats or shakers. Move that element by ear. Listen to the track from across the room. If it forces a natural head nod, you have found the pocket.
+The second mistake is assuming that more offset means more feel. Past the amount a good player would use, offsets stop sounding like a lean and start sounding like a mistake, and listeners rate the groove lower.
+
+## Producer takeaway: lock the anchor, lean one part
+
+Keep the kick and snare tight to the grid unless you have a reason to move them. They are the anchor the listener locks to. Then choose one secondary part, such as hats, shaker or a percussion loop, and move all of it by the same small amount. Set it by ear, not by eye, and check it from across the room. If the part sounds like one player with an attitude, keep it. If it sounds like two players disagreeing, pull it back toward the grid.
 
 ## References
 
-* MIT OpenCourseWare. Vibrations and Waves. Fall 2016.
-* Huron, D. (2006). Sweet Anticipation: Music and the Psychology of Expectation. MIT Press.
-* Senior, M. Mixing Secrets for the Small Studio. Routledge.`
+- Davies, M., Madison, G., Silva, P., & Gouyon, F. (2013). The effect of microtiming deviations on the perception of groove in short rhythms. *Music Perception*, 30(5), 497-510.
+- Frühauf, J., Kopiez, R., & Platz, F. (2013). Music on the timing grid: The influence of microtiming on the perceived groove quality of a simple drum pattern performance. *Musicae Scientiae*, 17(2), 246-260.
+- Hennig, H., Fleischmann, R., Fredebohm, A., Hagmayer, Y., Nagler, J., Witt, A., Theis, F. J., & Geisel, T. (2011). The nature and perception of fluctuations in human musical rhythms. *PLoS ONE*, 6(10), e26457.
+- Moore, B. C. J. (2012). *An Introduction to the Psychology of Hearing* (6th ed.). Emerald.
+- Rasch, R. A. (1978). The perception of simultaneous notes such as in polyphonic music. *Acustica*, 40, 21-33.
+- Senn, O., Kilchenmann, L., von Georgi, R., & Bullerjahn, C. (2016). The effect of expert performance microtiming on listeners' experience of groove in swing or funk music. *Frontiers in Psychology*, 7, 1487.
+`,
+    seo: {
+        title: 'Why tiny timing differences create human feel | VGP Studio',
+        description: 'How microtiming offsets of a few milliseconds shape feel, why random humanize sounds sloppy, and how to set a consistent lean in your DAW.',
+        keywords: ['microtiming', 'human timing', 'humanize', 'groove', 'quantize', 'drum programming'],
+    },
 };

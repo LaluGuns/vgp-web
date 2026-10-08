@@ -1,63 +1,134 @@
 import { BlogArticle } from '../blog-data';
 
+// Level envelopes of five verse hits and five chorus hits twice as loud (6 dB), with the
+// chorus peaks at the ceiling. The push is 4 dB (x 1.585) into a 50:1 limiter, ceiling 0.86.
+const SONG = {
+    kind: 'hits' as const,
+    at: [0.03, 0.12, 0.21, 0.3, 0.39, 0.53, 0.62, 0.71, 0.8, 0.89],
+    amp: [0.37, 0.37, 0.37, 0.37, 0.37, 0.74, 0.74, 0.74, 0.74, 0.74],
+    decay: 22,
+    outline: true,
+};
+
 export const post069: BlogArticle = {
     slug: 'the-final-loudness-push-that-can-cost-emotion',
     title: 'The final loudness push steals emotion',
-    excerpt: 'Why pushing the final limiter for maximum loudness can cost you the emotional impact of the mix, and how to find the sweet spot.',
+    excerpt: 'The last few decibels of limiting raise the verse more than the chorus. How the final push closes the lift your song depends on, and where to stop.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-09',
-    readingTime: 8,
-    content: `## The limiter trap
+    updatedAt: '2026-10-08',
+    readingTime: 5,
+    summary: [
+        'A limiter turns down the loudest material most, so pushing into it raises the verse more than the chorus and shrinks the lift between them.',
+        'With normalization on, the pushed master plays back at the same loudness as before, so the listener gets the smaller lift without the extra level.',
+        'Push in 1 dB steps at matched level, write down the verse to chorus difference, and stop when it starts to close.',
+    ],
+    figures: {
+        lift: {
+            type: 'signal',
+            caption:
+                'A simulated limiter: hits in a quiet verse and a chorus 6 dB louder, pushed 4 dB into the ceiling. The verse rises the full 4 dB and the chorus about 1 dB, so the step between them shrinks from about 6 dB to about 3 dB of average level.',
+            alt: 'Two level plots of ten hits, five quiet then five loud. Before the push the chorus hits are twice as tall as the verse hits and just reach the ceiling. After the push the verse hits are much taller and the chorus hits are flattened at the ceiling, nearly the same height.',
+            rows: [
+                {
+                    label: 'Before the push',
+                    unipolar: true,
+                    traces: [SONG],
+                    lines: [{ y: 0.86, label: 'Ceiling' }],
+                    marks: [{ t: 0.5, label: 'Chorus starts' }],
+                },
+                {
+                    label: 'After a 4 dB push into the limiter',
+                    unipolar: true,
+                    traces: [
+                        { ...SONG, muted: true, label: 'Before' },
+                        { ...SONG, label: 'After', gain: 1.585, compress: { threshold: 0.5426, ratio: 50, attack: 0, release: 0.06 } },
+                    ],
+                    lines: [{ y: 0.86, label: 'Ceiling' }],
+                    marks: [{ t: 0.5, label: 'Chorus starts' }],
+                },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'You push 4 dB more into the master limiter. Which part of the song comes up the most?',
+            options: ['The loudest chorus', 'The quieter verse', 'Every section equally', 'The drum transients'],
+            answer: 1,
+            why: 'Most of the verse sits under the ceiling, so it rises the full 4 dB. The chorus was already near the ceiling, so the limiter holds it back.',
+        },
+        {
+            q: 'With normalization on, what does the listener get from your extra push?',
+            options: [
+                'More punch in the drums at the same loudness',
+                'A louder track than the songs around it',
+                'Its lost dynamics restored by the service',
+                'The same loudness and a smaller chorus lift',
+            ],
+            answer: 3,
+            why: 'Normalization turns the louder master back down to the same playback level, so only the side effects of the push remain.',
+        },
+        {
+            q: 'In the 1 dB step experiment, what do you hold constant after each step?',
+            options: ['The chorus short-term reading', 'The verse short-term reading', 'The integrated loudness reading', 'The limiter\'s gain reduction'],
+            answer: 0,
+            why: 'Matching the chorus level removes the loudness difference, so the only change you hear, and see on the meter, is the verse catching up.',
+        },
+    ],
+    content: `## Hook: the chorus that stopped lifting
 
-You work on a mix for weeks. The dynamics are dialed, and the transition from the verse to the chorus has a physical lift. Then, during mastering, you load a limiter on the master bus. You pull down the threshold to hit a competitive target like minus seven LUFS. The meter shows the number, but the chorus no longer lifts. The vocal feels squashed into the instrumental, the snare loses its snap, and the emotional climax is gone.
+The mix works. The verse holds back, and when the chorus arrives everything rises: the drums open up, the vocal climbs, the song lifts. Then comes the last step. You put a limiter on the master and push for a loud number, and somewhere in the last few decibels the lift disappears. The chorus is barely louder than the verse. It is simply there.
 
-This scenario is common in modern home studios. Producers treat Loudness Units Full Scale (LUFS) as a target to hit, rather than a measurement of average energy. Chasing a specific number often leads to over-processing. This ruins the transient details that make drums punch and vocals breathe.
+That lift is often the emotional point of the song. The final push is where you are most likely to lose it, because each extra decibel looks small on the meter and sounds better at first, simply because it is louder.
 
-## Why headroom matters in a master
+## Why it matters: a limiter turns the loud parts down most
 
-When you compress a track to reach a specific loudness level, you alter the transient response of the audio. Streaming platforms normalize volume during playback, which means they lower loud tracks to match their reference level. If your master is squashed to minus seven LUFS and the platform normalizes it to minus fourteen, the listener hears a quiet track that lacks dynamics. A dynamic master peaking at minus eleven LUFS will sound punchier and louder on the platform because it retains its transient energy.
+A limiter does the most work on the loudest material. Push its input up 4 dB and the quiet verse comes up the full 4 dB, because most of it stays under the ceiling. The chorus was already at the ceiling, so it comes up much less. The step between them gets smaller.
 
-Managing this balance determines how well your master translates to consumer systems. A squashed master sounds small on phones and earbuds because the speaker struggles to reproduce the flattened transients. A dynamic master keeps its transient impact. This helps the drums cut through small speakers. The final push is where your taste gets tested. Let the dynamics frame the emotional narrative.
+::figure lift
 
-## Crest factor mechanics
+On a streaming service with normalization on, the louder master is then turned back down to the same playback loudness as before; Spotify's default turns every louder master down to -14 LUFS. The listener gets the smaller lift without the extra level.
 
-The primary technical measurement of dynamic range in a master is the crest factor. This is the difference between the peak level and the average RMS level of the audio signal. The formula for calculating this relationship is straightforward:
+::demo normalization
 
-$$\\text{Crest Factor (dB)} = L_{\\text{peak}} - L_{\\text{RMS}}$$
+## Science model: micro and macro dynamics
 
-Here, $L_{\\text{peak}}$ represents the peak amplitude in decibels, and $L_{\\text{RMS}}$ represents the root-mean-square amplitude over a specific time window. 
+Two kinds of dynamics are at stake. Micro dynamics are the transients inside each bar: the crack of the snare above its body, the consonant at the front of a sung word. Macro dynamics are the level steps between sections: verse to chorus, breakdown to drop.
 
-When you apply limiting, you lower the peaks ($L_{\\text{peak}}$) and raise the average level ($L_{\\text{RMS}}$). This decreases the crest factor. A low crest factor means the transient peaks have been shaved off. This reduces the transient-to-average ratio, making transient-heavy instruments like drums lose their impact. The auditory system uses transient spikes to perceive punch and localization. Without them, the stereo soundstage collapses.
+The final limiter changes both. Short transients cross the ceiling first, so the first decibels of gain reduction mostly shave micro dynamics, and the drums get blunter. Push further and the limiter stays engaged through the whole chorus while the verse passes untouched, which is the loss of macro dynamics in the figure. You can watch it happen on a short-term loudness meter, which averages over 3 seconds: the gap between the verse and chorus readings closes as you push.
 
-## The level-matched transition test
+The crest factor, peak level minus RMS level in decibels, tracks the first effect. The ceiling holds the peak level where it is while the push raises the RMS level, so the crest factor falls with every extra decibel.
 
-To hear what limiting does to your transient peaks, you must remove the volume difference. This test takes ten minutes and reveals how much density your mix can handle.
+## DAW experiment: find the last good decibel
 
-1. Export your final mix with no limiter on the master bus.
-2. Load that mix back into your DAW, copy it to a new track, and insert your limiter.
-3. Pull the limiter threshold down until the meter reads your target loudness (such as minus eight integrated LUFS).
-4. Insert a gain plugin after the limiter and lower the output by the amount of gain reduction applied (usually four to six decibels) to match the level of the unlimiter track.
-5. Play both tracks and switch between them, focusing on the transition from the verse to the chorus.
+1. Loop the verse into the chorus. On the master, insert your limiter with a -1 dBTP ceiling, then a gain plugin, then a loudness meter showing short-term LUFS.
+2. Set the limiter so it barely touches the chorus peaks. Note the short-term reading at the end of the verse and in the middle of the chorus.
+3. Raise the limiter input by 1 dB, then lower the gain plugin until the chorus reading is back where it was.
+4. Note the verse reading again and listen to the chorus entrance.
+5. Repeat steps 3 and 4 in 1 dB steps, writing down the verse to chorus difference each time.
+6. Stop at the first step where the chorus entrance feels smaller, then go back 1 dB. That is your push.
 
-Look for changes in the drum transients and vocal depth. If the kick sounds small or the vocal loses its front-to-back position, the limiter is working too hard. Back off the threshold until the limited version matches the transient punch of the original mix.
+Because the chorus level stays the same, you hear only what the limiter is doing, and the written difference shows the lift closing before your ears get used to it.
 
-## The target chase mistake
+## Common mistake: judging the push at its own level
 
-The most common mistake is chasing a single number for every genre. A heavy electronic track can handle a high density because the synthesizers are continuous, but an acoustic track needs space to breathe. Pushing an acoustic ballad to minus eight LUFS creates distortion and removes the emotional space between notes.
+The usual mistake is judging each extra decibel by bypassing the limiter, so the pushed version is always louder in the comparison. Louder tends to sound fuller and more exciting at first, and that impression wins every time unless the levels are matched.
 
-Producers also assume that louder masters sound better. This is a psychological illusion called loudness bias. The human ear perceives louder sounds as having more low end and clarity, but this advantage disappears once the playback volume is matched.
+The second mistake is pushing an acoustic or vocal-led song as far as a dense electronic track. Sustained synths and distorted guitars hide limiting. A piano, a voice and the sound of a room expose it. The song decides how far the push can go.
 
-## Producer takeaway
+## Producer takeaway: keep the lift
 
-Use the meter to check for technical errors, but trust your ears to set the threshold. Your limiter settings should depend on the style of the song, not a standard number. Protect the transient shape of your drums and let the music determine the final level. Only keep the loudness push if the song retains its emotional movement and depth.
+Before the final push, note how far the chorus rises above the verse. Push only in matched-level steps, and stop when that distance starts closing. If the song needs more density, build it earlier in the mix, where you choose what gets denser, instead of asking the last limiter to flatten everything at once. Why the heavier version tends to lose once levels are matched is covered in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization).
 
 ## References
-- International Telecommunication Union. ITU-R BS.1770 audio programme loudness and true-peak level. https://www.itu.int/rec/R-REC-BS.1770/
-- Spotify for Artists. Loudness normalization. https://artists.spotify.com/help/article/loudness-normalization
+
+- European Broadcasting Union. (2023). *Tech 3341: Loudness metering: 'EBU Mode' metering to supplement EBU R 128 loudness normalization*. EBU. https://tech.ebu.ch/docs/tech/tech3341.pdf
+- Katz, B. (2015). *Mastering Audio: The Art and the Science* (3rd ed.). Focal Press.
+- Spotify for Artists. *Loudness normalization on Spotify*. https://support.spotify.com/artists/article/loudness-normalization/
 `,
     seo: {
-        title: 'The Last Loudness Push Steals Emotion | VGP Studio',
-        description: 'Why pushing the final limiter for maximum loudness can cost you the emotional impact of the mix, and how to find the sweet spot using crest factor calibration.',
-        keywords: ['mastering headroom', 'dynamic loss', 'limiting', 'crest factor', 'audio engineering', 'loudness normalization']
-    }
+        title: 'The final loudness push steals emotion | VGP Studio',
+        description: 'Why the last decibels of master limiting raise the verse more than the chorus, and a matched-level method to find where your loudness push should stop.',
+        keywords: ['master limiting', 'macro dynamics', 'loudness push', 'crest factor', 'short-term loudness', 'loudness normalization'],
+    },
 };

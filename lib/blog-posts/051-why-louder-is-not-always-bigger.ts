@@ -3,63 +3,139 @@ import { BlogArticle } from '../blog-data';
 export const post051: BlogArticle = {
     slug: 'why-louder-is-not-always-bigger',
     title: 'Why louder is not always bigger in a mix',
-    excerpt: 'Confusing volume with quality leads to squashed, fatigue-inducing mixes. This guide details the psychoacoustics of loudness bias and shows you how to use level-matching to make honest mixing choices.',
+    excerpt: 'A plugin that adds one decibel sounds like an upgrade even when it changes nothing else. Level-match every A/B so you keep only the moves that help.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The trap of the volume bump
+    summary: [
+        'A version that is about 1 dB louder tends to sound fuller and better, so an A/B that is not level-matched tells you nothing about the processing.',
+        'At moderate levels, 10 dB more sounds roughly twice as loud, and the low end grows fastest, which is why louder reads as bigger.',
+        'Match loudness within a fraction of a decibel before every bypass test, and mix at one fixed monitoring level.',
+    ],
+    figures: {
+        bias: {
+            type: 'flow',
+            caption:
+                'How loudness bias builds up in a session. Each step feels like an improvement, but what you keep rewarding is level, and the headroom shrinks every round.',
+            alt: 'Four steps in a loop: insert a compressor, EQ or saturator, its output comes out slightly louder, the A/B sounds better, you keep it and add the next plugin, then back to the first step.',
+            steps: [
+                { label: 'Insert a compressor, EQ or saturator' },
+                { label: 'Output comes out a little louder', note: 'Sometimes by less than 1 dB' },
+                { label: 'A/B: it sounds better', note: 'Fuller, closer, more exciting' },
+                { label: 'Keep it and add the next plugin' },
+            ],
+            loop: { to: 0, label: 'Headroom shrinks each round' },
+        },
+        sones: {
+            type: 'bars',
+            caption:
+                'Perceived loudness for a level rise, from the rule that 10 dB more sounds about twice as loud. One extra decibel makes a sound only about 7 percent louder, close to the smallest change most people can detect.',
+            alt: 'Four bars on a scale from 1 to 2 times as loud. Plus 1 dB is 1.07 times, plus 3 dB is 1.23 times, plus 6 dB is 1.52 times and plus 10 dB is 2 times.',
+            min: 1,
+            max: 2,
+            bars: [
+                { label: '+1 dB', value: 1.07, display: '1.07 ×' },
+                { label: '+3 dB', value: 1.23, display: '1.23 ×' },
+                { label: '+6 dB', value: 1.52, display: '1.52 ×' },
+                { label: '+10 dB', value: 2, display: '2 ×' },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'A plugin raises the output by 1 dB. By the 10 dB rule of thumb, how much louder does it sound?',
+            options: ['About 7 percent louder', 'About 10 percent louder', 'About 12 percent louder', 'About 26 percent louder'],
+            answer: 0,
+            why: 'Loudness doubles for every 10 dB, so 1 dB gives 2 to the power 0.1, about 1.07. That is small enough to be heard as "better" rather than "louder".',
+        },
+        {
+            q: 'Why does a slightly louder version tend to sound fuller, not only louder?',
+            options: [
+                'Plugins add harmonics as soon as their output gain is raised',
+                'Louder signals seem to spread wider across the stereo field',
+                'A gain rise lifts the upper harmonics more than the fundamental',
+                'Loudness in the bass grows faster with level than in the mids',
+            ],
+            answer: 3,
+            why: 'The equal-loudness contours bunch together in the bass, so a small rise in level adds more perceived low end than midrange.',
+        },
+        {
+            q: 'At matched loudness you cannot pick the compressed version in a blind test. What does that tell you?',
+            options: [
+                'It needs more makeup gain before the difference is audible',
+                'The compressor is not helping, so ease off or remove it',
+                'The attack should be faster so it reaches the transients',
+                'The monitors need turning up until the compression shows',
+            ],
+            answer: 1,
+            why: 'Once level is out of the comparison, only the processing is left. If you cannot hear it helping, it is not earning its place.',
+        },
+    ],
+    content: `## Hook: the one-decibel upgrade
 
-You load a compressor on a lead vocal, crank the output, and think the performance is suddenly warmer and more intimate. It happens on drums, synth pads, and master buses. Every time you insert a new processor and it adds a decibel of gain, your brain registers an instant upgrade. This is the oldest trick in the audio book. Your ears are lying to you. They are mistaking volume for quality.
+You load a compressor on a lead vocal, nudge the output up and the performance suddenly sounds warmer and closer. The same thing happens on drums, pads and the master bus. Every time a new plugin adds a little gain, your brain registers an upgrade.
 
-When a plugin makes a track louder, it sounds better for about five seconds. Then the illusion fades. You keep mixing, adding more plugins, boosting more gains, and eventually your master fader is clipping. You look at your meter, and you have zero headroom left. Yet, the mix sounds flat, small, and congested. By chasing the volume bump in solo, you have slowly destroyed the dynamic range of the session. The mix is not actually bigger, it is just louder and more fatiguing.
+A few minutes later the effect wears off, so you reach for the next plugin. By the end of the session the master meter is pinned, the headroom is gone and the mix sounds flat and crowded. Nothing got bigger. Everything got louder, and your ears kept rewarding the level.
 
-## Why loudness bias ruins your master
+## Why it matters: you keep rewarding level
 
-Loudness bias is a biological reality. The human auditory system does not perceive frequencies equally across different volume levels. This behavior is mapped by the equal loudness contours, which show that our ears are far less sensitive to low and high frequencies at low volumes. When you turn a sound up, the bass and treble feel more present. The mix feels fuller simply because you changed the level, not because your compression or equalization settings actually improved the tone.
+When you compare a processed sound with its bypassed version and the processed one is louder, the comparison is rigged. You will keep a setting because it is louder, even if it added a harsh resonance or flattened the transients. Across a full session the small gains add up, and you end up pulling the master fader down or squashing the stereo bus with a limiter to make room.
 
-When you do not match the input and output levels of your processors, you cannot make an honest judgment. You will keep a plugin setting simply because it is louder, even if the processing introduced harsh mid-range resonance or killed the natural punch of the transients. In a full multitrack session, these small volume increases accumulate. Your headroom disappears, forcing you to pull down your master fader or squash the stereo bus with a limiter, resulting in a narrow and lifeless final product.
+::figure bias
 
-## The mathematics of perceived level
+Try it yourself. One side of this test is 1 dB louder. Pick the one you prefer before you check which it was.
 
-The relationship between physical sound pressure level, measured in decibels, and perceived loudness is logarithmic. A general rule of thumb is that a change of 10 decibels is perceived as a doubling of loudness.
+::demo loudness-bias
 
-$$\\text{Loudness change} = 2^{\\frac{\\Delta L}{10}}$$
+## Science model: how level turns into loudness
 
-Where $\\Delta L$ is the change in sound pressure level in decibels. This means even a tiny increase of 0.5 decibels is enough to trigger a positive bias in your brain, making you believe the processed sound is superior. To bypass this bias, you must reduce the output gain of your plugin to match the input level within a fraction of a decibel.
+Perceived loudness does not follow level in a straight line. Stevens (1955) found that, at moderate levels, loudness grows as a power of sound intensity, which works out to a handy rule of thumb: 10 dB more sounds about twice as loud. For a level change $\\Delta L$ in decibels, the loudness ratio is roughly:
 
-## A five minute gain matching experiment
+$$\\frac{N_2}{N_1} = 2^{\\Delta L / 10}$$
 
-To calibrate your ears against loudness bias, set up this quick level-matching test in your workstation.
+Here $N$ is loudness in sones. One extra decibel gives $2^{0.1} \\approx 1.07$, a sound about 7 percent louder. The smallest level change most people can detect is roughly 0.5 to 1 dB (Moore, 2012), so a 1 dB jump sits right at the edge of what you notice as louder. It tends to register as fuller or clearer instead.
 
-1. Select a raw drum loop or a vocal track in your session and insert a compressor.
-2. Set the compressor with a fast attack and a high ratio to squash the peaks by about 4 to 6 decibels.
-3. Use the makeup gain or output control on the compressor plugin to level-match the processed signal with the raw signal. Use a loudness meter to verify that the integrated loudness matches within 0.2 LUFS.
-4. Set up a quick key command to bypass the plugin, then close your eyes and click it repeatedly until you lose track of whether the plugin is active or bypassed.
-5. Listen closely to the transient impact of the snare drum or the clarity of the vocal consonants. Decide which state sounds more open and dynamic.
+::figure sones
 
-If the raw track actually sounds better when volume is matched, your compression settings are destroying the mix. Adjust the threshold or ratio until the processed version provides control without losing the size of the original sound.
+The fullness has a cause. The ear is not equally sensitive at all frequencies, and the shape of that sensitivity changes with level, as the equal-loudness contours show (Fletcher and Munson, 1933; ISO 226:2023). In the bass the contours bunch together, so loudness there grows faster with level than in the midrange. Turn a mix up a little and the low end seems to grow more than the rest. That is why louder so easily reads as bigger.
 
-## The solo fader misconception
+## DAW experiment: the level-matched bypass test
 
-The most common error is adjusting your processors while listening to the track in solo. A kick drum might sound huge and deep when soloed and boosted, but once you bring back the bass, guitars, and vocals, that low-end boost turns into mud. You end up turning the fader down anyway, meaning you wasted headroom and introduced phase distortion for a sound that does not fit the collective picture.
+This takes ten minutes and shows you how strong the bias is on your own material.
 
-Another issue is monitoring too loudly. If you mix at high volumes, your ears flatten their frequency response, making everything sound balanced. When the listener plays your song at a conversational level, the bass and highs will seem to drop off completely, leaving a thin and mid-heavy mix.
+1. Insert a compressor on a vocal or a drum bus. Set the ratio to 4:1, attack 10 ms, release 100 ms, and lower the threshold until you see 4 to 6 dB of gain reduction. Turn off any auto makeup gain.
+2. Put a loudness meter after the compressor and loop the loudest eight bars. Note the short-term loudness with the compressor bypassed.
+3. Enable the compressor and raise the makeup gain until the reading matches the bypassed one within 0.2 LU.
+4. Now add 1 dB more makeup gain and toggle bypass a few times. Notice which version you prefer.
+5. Remove that extra 1 dB. Ask someone to toggle bypass for you, or toggle until you lose track, and pick the better version with your eyes closed. Do ten rounds and write down your picks.
+6. If you could not pick the compressed version reliably, raise the threshold or lower the ratio until you can hear it helping, or take it out.
 
-## Dynamic balance is the real scale
+With the extra decibel, the processed version wins almost every time. At matched level the choice gets harder, and the answer you get is about the compression itself.
 
-Real mix size is an illusion created by the contrast between quiet and loud elements, not by pushing everything to the ceiling. If you want a chorus to feel massive, the verse before it must be quieter and narrower. Level-matching every plugin ensures that you only keep processing that improves the tone, controls the dynamics, or fits the element into the arrangement.
+## Common mistake: judging in solo and too loud
 
-Calibrate your monitoring level to a consistent conversational volume, around 70 to 75 decibels. This prevents ear fatigue and keeps your frequency perception stable. Make it a habit to check your faders at this low level to confirm that the lead vocal and snare remain the clear focus of the mix.
+The first mistake is setting processors in solo. A kick boosted on its own sounds huge, but once the bass, guitars and vocal return that low-end boost turns into mud and you pull the fader down anyway. You spent headroom on a sound that does not fit the mix.
+
+The second is monitoring too loud. At high levels the ear's response is flatter, so the bass and the extreme top sound fuller than they will at a normal listening level. Mix there and you tend to hold back the low end, and the track sounds thin when someone plays it quietly.
+
+## Producer takeaway: make every comparison fair
+
+Treat every bypass button as a loudness test until you have matched the levels. Most plugins have an output control for this; use it before you decide anything. Pick one moderate monitoring level, mark it on your volume knob and come back to it, so your sense of balance has a stable reference.
+
+Size in a mix comes from contrast between quiet and loud, narrow and wide, not from pushing everything to the ceiling. If you want the chorus to feel big, make sure the verse before it leaves room for it to grow.
 
 ## References
 
-* Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
-* Ronan, M., Ma, Z., Mc Namara, D., Gunes, H., & Reiss, J. D. (2018). *Automatic Minimisation of Masking in Multitrack Audio using Subgroups*. arXiv preprint arXiv:1803.09960.
-* Senior, M. (2011). *Mixing Secrets for the Small Studio*. Routledge.
+- Fletcher, H., & Munson, W. A. (1933). Loudness, its definition, measurement and calculation. *Journal of the Acoustical Society of America*, 5, 82-108.
+- ISO 226:2023. *Acoustics: Normal equal-loudness-level contours*. International Organization for Standardization.
+- Moore, B. C. J. (2012). *An Introduction to the Psychology of Hearing* (6th ed.). Emerald.
+- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
+- Stevens, S. S. (1955). The measurement of loudness. *Journal of the Acoustical Society of America*, 27(5), 815-829.
 `,
     seo: {
-        title: 'Why Louder is Not Always Bigger in a Mix | VGP Studio',
-        description: 'Confusing volume with quality leads to squashed, fatigue-inducing mixes. Learn the psychoacoustics of loudness bias and how to level-match plugins.',
-        keywords: ['loudness vs size', 'loudness bias', 'mixing psychology', 'gain matching', 'equal loudness contour', 'Fletcher Munson']
-    }
+        title: 'Why louder is not always bigger in a mix | VGP Studio',
+        description: 'Loudness bias makes a plugin that adds 1 dB sound like an upgrade. How level becomes loudness, and how to level-match every A/B so you judge the processing.',
+        keywords: ['loudness bias', 'level matching', 'gain matching', 'equal loudness contours', 'Fletcher Munson', 'mixing psychology'],
+    },
 };

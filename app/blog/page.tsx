@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { articles, categories, getFeaturedArticles } from '@/lib/blog-data';
 import { BlogIndex, type BlogListItem } from './BlogIndex';
+import { learningPaths } from '@/lib/blog/paths';
 import type { BlogArticle } from '@/lib/blog-data';
 
 const toListItem = ({ slug, title, excerpt, category, publishedAt, readingTime, seo }: BlogArticle): BlogListItem => ({
@@ -42,6 +43,12 @@ export default function BlogPage() {
             articles={articles.map(toListItem)}
             categories={categories}
             featured={featured.map(toListItem)}
+            paths={learningPaths.map((p) => ({
+                slug: p.category.slug,
+                name: p.category.name,
+                description: p.category.description,
+                lessons: p.articles.map((a) => a.slug),
+            }))}
         />
     );
 }

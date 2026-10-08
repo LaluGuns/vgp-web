@@ -3,71 +3,147 @@ import { BlogArticle } from '../blog-data';
 export const post088: BlogArticle = {
     slug: 'why-vibe-needs-measurable-decisions',
     title: 'Why vibe needs measurable decisions',
-    excerpt: 'Vibe is not a mystery. It is the result of concrete audio decisions. Learn how to translate emotional feelings into technical parameters and make your mixes repeatable.',
+    excerpt: 'Warm, muddy and punchy are useful words once each one points at something you can measure. Change one parameter, match the level and compare fast.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The trap of vague adjustments
+    summary: [
+        'Most mix words point at something you can measure, such as energy in one frequency region or how fast a hit decays.',
+        'Chasing a word by ear alone drifts, because louder sounds fuller and detailed memory of a sound fades within seconds.',
+        'Change one parameter, match loudness, compare fast and keep a log of what each word turned out to mean.',
+    ],
+    figures: {
+        words: {
+            type: 'spectrum',
+            mode: 'gain',
+            db: 6,
+            caption:
+                'Two words as two EQ moves: a broad 3 dB cut at 300 Hz, Q 1, for mud, and a narrower 3 dB cut at 3.5 kHz, Q 2, for harshness. Starting points to test, not rules.',
+            alt: 'EQ gain curves over frequency. A broad dip centred at 300 Hz and a narrower dashed dip at 3.5 kHz. Shaded bands mark the mud region from 200 to 500 Hz and the harsh region from 2 to 5 kHz.',
+            curves: [
+                { label: 'Less muddy', kind: 'eq', bands: [{ type: 'bell', freq: 300, gain: -3, q: 1 }] },
+                { label: 'Less harsh', kind: 'eq', dashed: true, bands: [{ type: 'bell', freq: 3500, gain: -3, q: 2 }] },
+            ],
+            bands: [
+                { from: 200, to: 500, label: 'Mud' },
+                { from: 2000, to: 5000, label: 'Harsh' },
+            ],
+        },
+        loop: {
+            type: 'flow',
+            caption:
+                'Turning a feeling into a decision. If the matched check says no, the word was pointing at a different property, so you go back to the property step instead of to random knobs.',
+            alt: 'Four steps: a feeling, a measurable property, one parameter and a matched check. An arrow runs from the check back to the property step.',
+            steps: [
+                { label: 'A feeling', note: '"The chorus feels muddy"' },
+                { label: 'A property: too much 200 to 500 Hz' },
+                { label: 'One parameter', note: 'Bell at 300 Hz, Q 1, cut 3 dB' },
+                { label: 'Matched check' },
+            ],
+            loop: { to: 1, label: 'Other property' },
+        },
+    },
+    quiz: [
+        {
+            q: 'You add a "warmth" plugin and the vocal feels warmer. What should you check first?',
+            options: [
+                'Whether its output got louder, since louder sounds fuller',
+                'Whether the plugin models a famous console or tape machine',
+                'Whether its harmonics show up on a spectrum analyzer',
+                'Whether it offers oversampling to keep the highs clean',
+            ],
+            answer: 0,
+            why: 'The ear hears low frequencies grow faster than the midrange as level rises, so a small level increase reads as warmth. Match the output level before you decide.',
+        },
+        {
+            q: 'Why is "warmer than half an hour ago" a poor test?',
+            options: [
+                'Warmth is a matter of taste, so no test of it is reliable',
+                'Analog-modelled plugins drift in tone as the session runs',
+                'Half an hour is too short for a tone change to settle in',
+                'Memory for the sound fades in seconds, and the ear adapts',
+            ],
+            answer: 3,
+            why: 'You are comparing a sound with a description of a sound. Switch between versions within seconds, at the same point in the song.',
+        },
+        {
+            q: 'A 3 dB cut at 300 Hz on the vocal did not make the chorus less muddy at matched level. What next?',
+            options: [
+                'Deepen the vocal cut to 9 dB so the mud has to clear',
+                'Undo it and look for the buildup in the pad or bass',
+                'Add tape saturation to the mix bus to glue the chorus',
+                'Raise the vocal fader so it cuts through the low mids',
+            ],
+            answer: 1,
+            why: 'The word was right, but the property sat somewhere else. Mud is often a sum of several parts in the same range, not one track.',
+        },
+    ],
+    content: `## Hook: the vague adjustment trap
 
-You are listening to your chorus, and it does not feel right. You tell yourself that the vocal lacks "warmth" or the snare drum needs more "vibe." To solve this feeling, you load a vintage tape plugin and compress the channel again. When you bypass the processing, the vocal is louder but muddy, and the snare drum has lost its transient punch. You spent thirty minutes tweaking knobs, but the track does not sound better. It is just more complicated.
+You are listening to the chorus and it does not feel right. You tell yourself the vocal lacks warmth or the snare needs more vibe. So you load a vintage tape plugin and compress the channel again. When you bypass the chain, the vocal is louder but muddier, and the snare has lost its crack. You spent thirty minutes turning knobs and the track is not better, only more complicated.
 
-This is the vague adjustment trap. Producers often chase subjective feelings with random physical moves. When you cannot connect an emotional goal to a specific technical parameter, your mixing becomes a guessing game.
+The problem was not the feeling. The feeling was real. The problem was chasing it with moves that were not connected to anything you could check.
 
-## Why it matters in the session
+## Why it matters: you cannot repeat an accident
 
-Chasing vibe without a plan ruins good tracks. You end up stacking redundant processing plugins on your tracks, which drains your computer's CPU power and introduces unwanted phase distortion. You lose your perspective and your ears adapt to the cumulative mud of your processing chain.
+Chasing vibe without a plan stacks processing that fights itself. Each plugin changes level and tone a little, your ears adapt to the result and the chain grows because nothing ever clearly fails.
 
-More importantly, your success becomes an accident. If you build a great mix by turning random knobs for six hours, you will not be able to repeat that result in your next session. Professional engineering requires translating a subjective request, whether from your own gut or a client, into a precise physical action in your DAW.
+Worse, success becomes an accident. If you build a great mix by turning knobs for six hours, you cannot repeat it on the next song, and you cannot explain it to anyone. Engineering means translating a feeling, from your own gut or from an artist, into a move you can name, test and repeat.
 
-## Science model: translating feelings into parameters
+::figure loop
 
-Vibe is not magic. It is the result of physical acoustics and signal mathematics. Every subjective description used by musicians has a direct physical equivalent in frequency, time, or amplitude.
+## Science model: why vague words drift
 
-To make consistent decisions, you must map emotional vocabulary to specific technical handles. The table below translates common producer terms into precise DAW actions:
+Most words producers use for sound do point at something measurable. Brightness is mostly about how much energy sits high in the spectrum. Mud usually means a buildup in the low mids. Punch is mostly about the transient at the start of a hit. Some words are vaguer than others, and two people can mean different things by the same one, so treat any mapping as a starting point you check.
 
-| Subjective request | Physical symptom | Technical solution |
-| :--- | :--- | :--- |
-| The vocal sounds "muddy" | Excess energy in the low-mid frequencies | Apply a narrow EQ cut between 200 Hz and 400 Hz |
-| The snare lacks "punch" | The transient is flattened by fast compression | Lengthen the compressor attack time to 15-30 ms |
-| The track lacks "depth" | All elements are dry and forward in the stereo field | Lower the level of background tracks and use a plate reverb send |
-| The synth sounds "harsh" | High-frequency buildup during loud sections | Use a dynamic EQ to tame the 2 kHz to 4 kHz range |
+The trouble starts when you chase a word by feel alone, because hearing has three habits that send you in circles.
 
-When you connect emotional feedback to these technical variables, you stop guessing. You hear a problem, name the parameter, and make the adjustment.
+Louder reads as better. The ear's sensitivity across frequencies changes with level, as the equal-loudness contours show (Fletcher and Munson, 1933; ISO 226:2023). Turn something up and its low end seems to grow faster than its midrange, so it sounds warmer and fuller. Any plugin that adds a little gain passes the warmth test.
 
-## DAW experiment: the single-variable test
+Memory is short. Detailed memory for the sound itself lasts only seconds (Cowan, 1984). "Warmer than it was half an hour ago" compares a sound with a description.
 
-To train your ears in this translation process, run this single-variable test in your DAW tonight.
+The ear adapts. Listeners discount spectral colour that stays constant in what they have just heard (Kiefte and Kluender, 2008), so a bright mix can stop sounding bright the longer you loop it.
 
-1. Select a loop in your project that feels flat or lacks movement.
-2. Write down one specific emotional change you want to make. Do not use vague terms like "make it better." Write something like "make the groove feel more urgent."
-3. Choose the single parameter that controls this feeling. For groove urgency, the parameter is the compressor release time on the drum bus.
-4. Set your loop playing. 
-5. Adjust only that one parameter. Turn the release knob from slow to fast. Listen to how the tail of the drums pumps and changes the feel of the pocket.
-6. Do not adjust any other control. Keep EQs and volume levels static.
-7. Verify if the emotional goal was achieved.
+The cure for all three is the same: pin the word to one property, change one parameter, match the level and compare within seconds. These are common starting points:
 
-By isolating one control, you learn its exact influence on the track's vibe. You realize that a fast compressor release adds excitement, while a slow release keeps the performance controlled.
+- **Muddy**: a buildup around 200 to 500 Hz. Test a broad 2 to 3 dB cut, Q about 1, on the parts that pile up there.
+- **No punch**: the transient is clamped by compression. Test a slower attack, about 10 to 30 ms, or less gain reduction.
+- **Harsh**: a buildup around 2 to 5 kHz in the loud parts. Test a narrower cut, or a dynamic EQ band that acts only when it gets loud.
+- **Flat, no depth**: everything dry and equally forward. Test lower background parts, a reverb send and a little less top end on them.
 
-## Common mistake: over-processing instead of targeting
+::figure words
 
-The most common error in home studios is using saturation to fix balance problems. Producers assume that adding tape harmonics or console simulators will glue a disjointed arrangement.
+## DAW experiment: one word, one parameter
 
-This is a mistake. Saturation adds harmonic complexity, which can make a busy mix sound even more cluttered. Vibe is built on levels and arrangement focus, not on plugin algorithms. If your kick drum does not sit right with your bass line, adding a vintage saturator to the master bus will only distort the problem.
+1. Pick a section that feels wrong and write the problem as one word and one place: "the chorus vocal is muddy".
+2. Translate it into a property you can check: "too much energy between 200 and 500 Hz".
+3. Duplicate the track and mute the copy, so you have an untouched version to compare against.
+4. On the original, make one move: an EQ bell at 300 Hz, Q 1, cut 3 dB.
+5. Adjust the output gain until the loudness of the two versions matches within about 0.5 dB on a loudness meter.
+6. Switch between them every few seconds over the same eight bars and write down whether the word still fits.
+7. If it worked, keep the move and note the setting next to the word. If not, undo it and test another property for the same word, such as the pad or bass in the same range.
+
+After a few sessions, the log tells you what "muddy" or "harsh" means on your speakers and in your genre.
+
+## Common mistake: saturation as glue for a balance problem
+
+A common error is reaching for saturation to fix a balance problem, on the idea that tape or console harmonics will glue a disjointed arrangement. Saturation adds harmonics, which can make a busy mix more crowded. If the kick does not sit with the bass, a vintage saturator on the master bus only distorts the problem. Vibe is mostly built from levels, arrangement and a few targeted moves.
 
 ## Producer takeaway: name the variable
 
-The play is to give your vibe handles. When a track feels wrong, do not reach for a plugin. Take a breath, listen closely, and name the variable. Is it tempo or texture? 
-
-Once you have identified the parameter, make a clean, targeted adjustment. If the track is muddy, cut the low mids. If it is dry, add a short reverb send. By keeping your choices simple and technical, you protect your creative energy and build mixes that translate.
+When a track feels wrong, do not reach for a plugin first. Listen, find the word, then ask which property it points to. Make one clean, targeted move, check it at matched level and keep it or undo it. Keeping the moves simple and named is what lets a good mix happen twice.
 
 ## References
 
-- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Routledge.
-- Katz, B. (2012). *Mastering Audio: The Art and the Science*. Routledge.
+- Cowan, N. (1984). On short and long auditory stores. *Psychological Bulletin*, 96(2), 341-370.
+- Fletcher, H., & Munson, W. A. (1933). Loudness, its definition, measurement and calculation. *Journal of the Acoustical Society of America*, 5, 82-108.
+- ISO 226:2023. *Acoustics: Normal equal-loudness-level contours*. International Organization for Standardization.
+- Kiefte, M., & Kluender, K. R. (2008). Absorption of reliable spectral characteristics in auditory perception. *Journal of the Acoustical Society of America*, 123(1), 366-376.
 `,
     seo: {
-        title: 'Translating Music Vibe into Mixing Decisions | VGP Studio',
-        description: 'Vibe is not a mystery. Learn how to map subjective terms like punchy, warm, and muddy to technical DAW parameters for repeatable mixes.',
-        keywords: ['vibe in production', 'mixing tips', 'audio frequency map', 'equalizer settings', 'home studio workflow']
-    }
+        title: 'Why vibe needs measurable decisions | VGP Studio',
+        description: 'How to turn vague mix words like muddy, harsh and warm into measurable decisions: one property, one parameter, a level-matched check and a decision log.',
+        keywords: ['mixing decisions', 'mix vocabulary', 'EQ starting points', 'level matching', 'home studio workflow'],
+    },
 };

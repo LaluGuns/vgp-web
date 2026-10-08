@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
 import { PageHeader, TextLink } from '@/components/editorial/EditorialPrimitives';
 import { articles, categories } from '@/lib/blog-data';
+import { learningPaths } from '@/lib/blog/paths';
+import { glossary } from '@/lib/blog/glossary';
 
 export const metadata: Metadata = {
     title: 'Learn Hub | Music Production Articles, Books & Courses | VGP',
@@ -18,7 +20,7 @@ const formats = [
     {
         title: 'Articles',
         status: `Free, ${articles.length} so far`,
-        description: 'Short breakdowns on drums, 808s, songwriting, vocals, mixing and beat licensing.',
+        description: `Lessons in ${learningPaths.length} learning paths, from songwriting to mastering and the science of sound, with diagrams, listening demos, DAW experiments and quizzes.`,
         href: '/blog',
         cta: 'Read the articles',
     },
@@ -81,8 +83,9 @@ export default function LearnHubPage() {
                             <h2 id="latest-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                                 Latest articles
                             </h2>
-                            <div className="mt-5">
+                            <div className="mt-5 flex flex-col items-start gap-3">
                                 <TextLink href="/blog">All articles</TextLink>
+                                <TextLink href="/learn/glossary">Glossary of {glossary.length} terms</TextLink>
                             </div>
                         </div>
                         <ul className="divide-y divide-white/10 border-y border-white/10 lg:col-span-8">

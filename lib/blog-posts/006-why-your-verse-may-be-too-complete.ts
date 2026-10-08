@@ -3,63 +3,144 @@ import { BlogArticle } from '../blog-data';
 export const post006: BlogArticle = {
     slug: 'why-your-verse-may-be-too-complete',
     title: 'The verse is stealing the chorus',
-    excerpt: 'Is your verse resolving too early? Learn how to use open loops to keep listeners hooked and make your choruses feel massive.',
+    excerpt: 'A verse that ends on the home chord with its story told leaves the chorus nothing to do. Leave it open and the chorus becomes the answer.',
     category: 'songwriting',
     publishedAt: '2026-06-03',
-    readingTime: 7,
+    updatedAt: '2026-10-08',
+    readingTime: 6,
+    summary: [
+        'A verse that cadences on the I chord with its story told gives the listener the payoff before the chorus arrives.',
+        'Ending the verse on V sets up a strong expectation of I, and the chorus gets the job of delivering it.',
+        'Hold back the title, the hook sound and the ad-libs so the chorus has something new to give.',
+    ],
+    figures: {
+        tension: {
+            type: 'curve',
+            caption:
+                'A sketch, not a measurement. A verse that cadences on I releases its tension a bar before the chorus, so the chorus has nothing to resolve. Ending on V holds the tension until the chorus downbeat delivers I.',
+            alt: 'Two lines from the start of the verse to the chorus downbeat. A solid line for a verse ending on V rises to a peak at the last bar and drops at the chorus. A dashed line for a verse ending on I falls at the last bar and rises a little at the chorus.',
+            x: ['Verse starts', 'Halfway', 'Last bar', 'Chorus downbeat'],
+            xShort: ['Start', 'Half', 'Last bar', 'Chorus'],
+            yLabel: 'Tension',
+            series: [
+                { label: 'Verse ends on V', values: [0.3, 0.45, 0.85, 0.25] },
+                { label: 'Verse ends on I', values: [0.3, 0.45, 0.15, 0.3], dashed: true },
+            ],
+        },
+        payout: {
+            type: 'arrangement',
+            caption:
+                'The premature payout. The synth hook and the ad-libs already play in the verse, so the chorus adds almost nothing and its density barely rises. Move those two rows so they start at the chorus.',
+            alt: 'Arrangement grid for a verse and a chorus. Drums, bass, chords, lead vocal, synth hook and ad-libs all play in both sections at similar levels, and the density bar is nearly the same height for both.',
+            density: true,
+            sections: [
+                { label: 'Verse', bars: 8 },
+                { label: 'Chorus', bars: 8 },
+            ],
+            layers: [
+                { label: 'Drums', levels: [0.75, 0.85] },
+                { label: 'Bass', levels: [0.7, 0.8] },
+                { label: 'Chords', levels: [0.7, 0.75] },
+                { label: 'Vocal', levels: [0.85, 0.9] },
+                { label: 'Synth hook', levels: [0.8, 0.8] },
+                { label: 'Ad-libs', levels: [0.6, 0.6] },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Your verse ends on a C chord in C major, right before a chorus that starts on C. What is the simplest fix?',
+            options: [
+                'Push the last verse bar up 2 dB',
+                'End the verse on G, which is V',
+                'Turn the last C into a Cmaj7',
+                'Start the chorus on the F chord',
+            ],
+            answer: 1,
+            why: 'G is the V chord in C. It points strongly back to C, so the listener waits for the chorus to deliver the home chord instead of hearing it a bar early.',
+        },
+        {
+            q: 'Why does a verse that ends on V make the chorus feel necessary?',
+            options: [
+                'V takes the song into a new key for a bar',
+                'V is the least pleasant chord in the key',
+                'V predicts I, and the chorus delivers it',
+                'V clashes with the melody until the chorus',
+            ],
+            answer: 2,
+            why: 'V to I is one of the most expected moves in tonal music. Ending on V sets up that expectation and leaves it open, and the chorus downbeat resolves it.',
+        },
+        {
+            q: 'Your best synth hook first plays in verse one. What does this cost the chorus?',
+            options: [
+                'Its new element, as the hook is already known',
+                'Nothing, as long as the chorus is mixed louder',
+                'Its clarity, because the synth masks the vocal',
+                'Its key, because the hook already sets the tonic',
+            ],
+            answer: 0,
+            why: 'A chorus feels like an arrival partly because something new arrives with it. If the hook sound is already familiar from the verse, the chorus has to rely on level and layering instead.',
+        },
+    ],
     content: `## Hook: the satisfying verse
 
-You spend hours on your verse. You write a beautiful, self-contained chord progression. You lay down a perfect vocal melody that starts with a question and resolves to a comfortable home chord at the end of the eighth bar. 
+You spend hours on your verse. You write a beautiful chord progression and a vocal melody that opens with a question and settles on the home chord at the end of the eighth bar.
 
-When you play the track from start to finish, the verse feels like a complete song. But when the chorus arrives, it feels flat and unnecessary. The listener has already received all the emotional payoff they needed in the first thirty seconds. Your verse is stealing the chorus.
+Played from the top, the verse feels like a complete song. Then the chorus arrives and sounds flat and unnecessary. The listener got the payoff in the first thirty seconds. Your verse is stealing the chorus.
 
-## Why it matters: narrative tension and song momentum
+## Why it matters: a finished verse leaves the chorus nothing to do
 
-A song is a journey, not a collection of independent sections. If your verse wraps up its story and its harmonic structure too neatly, the listener feels satisfied. 
+A song works as a sequence, where each section sets up the next. If the verse wraps up its harmony, its melody and its story, the chorus arrives as a second song instead of an answer.
 
-This satisfaction is a dangerous signal. It tells the listener they can turn off the track. The momentum dies, and the transition to the chorus feels forced. To keep people listening, you must use open loops that leave the listener hanging as they wait for the resolution that only the chorus can provide.
+In a session the symptom is a chorus you keep thickening because it feels small, when the problem is eight bars earlier. The verse resolved, so the chorus has no tension to release, and no amount of layering replaces that.
 
-## Science model: the Zeigarnik effect and temporal closure
+## Science model: cadences close, V points forward
 
-This cognitive response is explained by the psychology of open loops, which is linked to the Zeigarnik effect and Huron's analyses of temporal expectation (2006). The Zeigarnik effect shows that the human brain remembers incomplete or interrupted tasks better than completed ones. 
+In tonal music, a phrase that ends on the I chord, especially through V to I, is heard as closed. A phrase that ends on V is heard as open. Huron (2006) explains this through learned expectation: V is followed by I so often that hearing V makes the listener predict I. Meyer (1956) argued that much of the feeling in music comes from expectations that are set up and then delayed. A verse that ends on V sets up the strongest expectation in the key and leaves it hanging. The chorus downbeat, on I, resolves it.
 
-We have a cognitive urge to find closure. 
+::demo cadence
 
-When you hear a musical phrase that does not resolve, your brain holds onto it. Bregman (1990) describes how the brain groups auditory sequences over time. 
+Huron's ITPRA theory also describes a tension response before an expected event: as the moment approaches, the listener's attention and arousal rise in preparation. A verse ending on V gives that response somewhere to go. A verse ending on I spends it a bar early.
 
-If a sequence is left unfinished, the brain remains in an active state of prediction and expects the resolution. An open loop keeps the listener's attention locked onto the song.
+::figure tension
 
-## DAW experiment: the verse gate test
+You will often read that this works because of the Zeigarnik effect, the claim that people remember unfinished tasks better than finished ones. A 2025 meta-analysis found no reliable memory advantage for unfinished tasks, only a general tendency to go back to them (Ghibellini and Meier, 2025). You do not need it here. Musical expectation explains the pull on its own.
 
-This ten-minute experiment will show you how to open up your verse arrangement.
+The same logic applies to the lyric. If the last verse line already states the main idea of the song, the chorus has to repeat it rather than reveal it.
 
-1. Open your session and navigate to the final bar of your verse.
-2. Locate the final chord of the progression. If it is the tonic chord, or the root note, delete it.
-3. Replace it with a dominant chord, like the five chord, or a suspended chord that leaves the harmony unresolved.
-4. Now, look at your vocal track. Mute the last word of the verse vocal line.
-5. Alternatively, change the pitch of the last vocal note so it ends on a rising scale degree.
-6. Play the transition. You will feel a physical pull toward the chorus downbeat. The silence or the tension at the end of the verse creates a vacuum that makes the chorus entry hit like an explosion.
+## DAW experiment: the open verse
+
+1. Loop the last four bars of the verse into the first bar of the chorus.
+2. Find the last chord of the verse. If it is I (C in C major), change it to V (G), or play Gsus4 for two beats and resolve to G for the last two.
+3. Change the last melody note of the verse to 2 or 7 (D or B in C major), which both sit inside the G chord.
+4. Check that the chorus starts on the I chord, so the resolution lands on its downbeat.
+5. Read the last verse line on its own. If it states the title or the main idea, move that line into the chorus and write a verse line that sets it up: a question, a situation or a detail.
+6. If an instrumental hook or an ad-lib first appears in the verse, mute it there so it first appears in the chorus.
+7. Play the old and new versions back to back from the start of the verse.
+
+The new verse should pull toward the chorus, and the I chord and the title should land as the answer. The old version sounds finished a bar too soon.
 
 ## Common mistake: the premature payout
 
-The most common mistake is the choice to give away the best vocal ad-lib or the primary synth hook in the verse. Producers often get excited about a great sound and place it in the first section. This is a premature payout. When the chorus arrives, you have no fresh elements to introduce. 
+The most common mistake is giving away the best sound or the best ad-lib in the verse. A great sound shows up early in the writing process, so it ends up in the first section. When the chorus arrives, there is nothing fresh left to introduce.
 
-Another mistake is the resolution of the lyric story in the verse. If you explain the entire message of the song in the first verse, the chorus has nothing left to say.
+::figure payout
+
+The second mistake is resolving the lyric story in the verse. If the first verse explains the whole message, the chorus can only restate it.
 
 ## Producer takeaway: a verse is a runway
 
-A verse should move, not finish the record early. It is not a complete song, it is the runway designed to make the chorus feel necessary. 
-
-Keep your chord progressions open-ended, and avoid landing on the home chord too soon. Save your best vocal runs and your widest panning for the chorus. Give the hook a job: to resolve the questions asked by the verse.
+A verse should move toward the chorus, not finish the record early. Keep the end of the progression open, usually on V, and avoid landing on the home chord until the chorus downbeat. Save the title, the hook sound and the best ad-libs for the chorus, and give the chorus its job: to answer what the verse asked.
 
 ## References
 
-- Bregman, A. S. (1990). Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press.
-- Huron, D. (2006). Sweet Anticipation: Music and the Psychology of Expectation. MIT Press.
+- Ghibellini, R., & Meier, B. (2025). Interruption, recall and resumption: A meta-analysis of the Zeigarnik and Ovsiankina effects. *Humanities and Social Sciences Communications*, 12, 962. https://doi.org/10.1057/s41599-025-05000-w
+- Huron, D. (2006). *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press.
+- Meyer, L. B. (1956). *Emotion and Meaning in Music*. University of Chicago Press.
 `,
     seo: {
         title: 'The verse is stealing the chorus',
-        description: 'Is your verse resolving too early? Learn how to use open loops to keep listeners hooked and make your choruses feel massive.',
-        keywords: ['verse arrangement', 'open loops', 'narrative tension', 'songwriting tips', 'expectation in music']
-    }
+        description: 'A verse that ends on the home chord with its story told leaves the chorus nothing to do. End it on V and hold back the hook so the chorus answers it.',
+        keywords: ['verse writing', 'half cadence', 'song structure', 'musical expectation', 'songwriting tips'],
+    },
 };

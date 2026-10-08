@@ -3,68 +3,153 @@ import { BlogArticle } from '../blog-data';
 export const post054: BlogArticle = {
     slug: 'why-depth-is-a-contrast-illusion',
     title: 'Depth needs contrast to exist',
-    excerpt: 'Learn how to create realistic depth in your mix using contrast rather than piling on effects. This guide explains how level, tone, and ambience cues work together to place sounds in a three-dimensional field.',
+    excerpt: 'Reverb on everything flattens a mix. Depth comes from contrast: a dry, bright, close part next to quieter, darker and wetter parts further back.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The flat mix trap
+    summary: [
+        'Depth only exists by comparison, so a mix needs a dry, close anchor before anything can sound far away.',
+        'Distance has several cues at once: lower level, less direct sound against the room, and a darker tone.',
+        'Move background parts back with all the cues together, and keep the lead dry and bright.',
+    ],
+    figures: {
+        stage: {
+            type: 'stereo',
+            title: 'Front to back',
+            caption:
+                'A depth map seen from above. The lead vocal is dry and bright at the front. Each row further back is a little quieter, darker and wetter, and the difference between the rows is what reads as depth.',
+            alt: 'Top-down view between two speakers. The lead vocal sits centre front, kick and snare just behind it, guitar and keys left and right in the middle, and a wide, faded pad at the back.',
+            items: [
+                { label: 'Lead vocal', pan: 0, depth: 0.08 },
+                { label: 'Kick and snare', pan: 0, depth: 0.3 },
+                { label: 'Guitar', pan: -0.6, depth: 0.5, fade: 0.25 },
+                { label: 'Keys', pan: 0.6, depth: 0.55, fade: 0.3 },
+                { label: 'Pad', pan: 0, depth: 0.9, width: 0.8, fade: 0.55 },
+            ],
+        },
+        arrivals: {
+            type: 'signal',
+            caption:
+                'What reaches you from a close and a distant source in the same room. The room’s reverberant level is about the same in both. Moving away mostly lowers the direct sound and shortens the gap before the room arrives.',
+            alt: 'Two level plots over time. In the close source, a tall direct spike is followed by a clear gap and then a lower reverb tail. In the distant source, the direct spike is much smaller and the tail starts almost at once at nearly the same height.',
+            rows: [
+                {
+                    label: 'Close source',
+                    unipolar: true,
+                    traces: [
+                        { kind: 'envelope', label: 'Direct sound', points: [[0, 0], [0.04, 0], [0.045, 0.95], [0.08, 0.05], [0.12, 0]] },
+                        { kind: 'envelope', label: 'Room', dashed: true, points: [[0, 0], [0.17, 0], [0.18, 0.32], [0.35, 0.2], [0.6, 0.09], [0.85, 0.03], [1, 0.01]] },
+                    ],
+                },
+                {
+                    label: 'Distant source',
+                    unipolar: true,
+                    traces: [
+                        { kind: 'envelope', label: 'Direct sound', points: [[0, 0], [0.04, 0], [0.045, 0.36], [0.08, 0.02], [0.12, 0]] },
+                        { kind: 'envelope', label: 'Room', dashed: true, points: [[0, 0], [0.06, 0], [0.07, 0.3], [0.25, 0.2], [0.5, 0.09], [0.75, 0.03], [1, 0.01]] },
+                    ],
+                },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'A singer moves from 2 m to 4 m away in an open field. How much does the direct sound drop?',
+            options: ['About 3 dB', 'About 6 dB', 'About 9 dB', 'About 12 dB'],
+            answer: 1,
+            why: 'Sound pressure falls with 1/r, so doubling the distance lowers the level by 20 × log10(2), about 6 dB.',
+        },
+        {
+            q: 'In a room, why does a distant source sound wetter than a close one?',
+            options: [
+                'The reverb gets louder as the source moves away from you',
+                "A distant source excites more of the room's reflections",
+                'Air absorbs the highs, and the dull tone reads as reverb',
+                'The direct sound falls while the room level holds steady',
+            ],
+            answer: 3,
+            why: 'The reverberant level in a room changes little with position, but the direct sound falls with distance, so the ratio of direct to reverberant sound drops.',
+        },
+        {
+            q: 'Every track goes to the same reverb at the same send level. What happens to depth?',
+            options: [
+                'All parts land at one distance, with no front or back',
+                'The mix gains depth in step with the level of the send',
+                'Depth grows, since every part now has its own space',
+                'The mix gets wider, while the depth stays the same',
+            ],
+            answer: 0,
+            why: 'Depth is a difference between parts. The same treatment on everything puts the whole band in one place, just further away.',
+        },
+    ],
+    content: `## Hook: the flat mix trap
 
-You finish a mix, but it feels like a flat sheet of paper. Everything is sitting right in front of the listener's face. To create depth, you start loading reverb plugins onto your vocals, guitars, synths, and drums. You turn up the sends, hoping to push some elements into the background. Instead of a deep, three-dimensional mix, you end up with a muddy, washed-out mess. The track feels even smaller, and the instruments are buried in a cloud of reflections.
+You finish a mix and it feels like a flat sheet of paper, with everything right in front of the listener's face. To get depth you put reverb on the vocal, the guitars, the synths and the drums, and turn up the sends to push some parts back. Instead of a deep mix you get a washed-out one. The track feels smaller, and every part is buried in the same cloud of reflections.
 
-Depth is not created by the sheer quantity of reverb you apply. It is created by contrast. In a physical space, you cannot perceive distance unless you have a reference point. If every single instrument is washed in reverb, the listener has no dry foreground anchor to compare the wet signals to. The entire mix collapses onto a single, muddy plane. To make something sound far away, something else must sound bone-dry and right in front of the speakers.
+Depth does not come from the amount of reverb. It comes from contrast. You can only hear that something is far away if something else is clearly close. If every part is wet, there is no dry foreground to compare against, and the whole mix collapses onto one plane.
 
-## The acoustic cues of distance
+## Why it matters: depth is a comparison
 
-Human ears use level, tone, and ambience cues to calculate the distance of a sound source. In the physical world, as a sound source moves further away from a listener, it undergoes predictable acoustic changes.
+A listener does not measure distances in a mix. They compare. The lead that is dry, bright and loud sits in front because the parts around it are quieter, darker and wetter. Remove that difference and the brain has nothing to rank.
 
-First, the sound becomes quieter. Second, it loses high-frequency energy because air molecules absorb high frequencies more rapidly than low frequencies. This is called air absorption, and it makes distant sounds sound darker. Third, the ratio of direct-to-reverberant sound changes. A nearby sound has a high level of direct sound and very few reflections, while a distant sound consists mostly of room reflections. Fourth, transients lose their sharpness because the direct wave is diffused by reflections.
+::figure stage
 
-## The physics of air absorption
+The same reverb on everything does not create depth. It moves the whole band into one room at one distance. To build front and back, the parts need different treatments, and at least one part has to stay close.
 
-The attenuation of sound pressure level over distance in a free field follows the inverse square law.
+## Science model: the cues the ear uses for distance
 
-$$p \\propto \\frac{1}{r}$$
+Several acoustic cues tell the ear how far away a source is, and they work together (Zahorik, Brungart and Bronkhorst, 2005).
 
-Where $p$ is the sound pressure and $r$ is the distance from the source. In addition to this geometric spreading, frequency-dependent attenuation occurs due to air absorption. The high frequencies decay exponentially:
+The first is level. In open air, sound pressure falls with distance $r$ as $1/r$, so moving from distance $r_1$ out to $r_2$ lowers the level by:
 
-$$I(r) = I_0 e^{-\\alpha(f) r}$$
+$$\\Delta L = 20 \\log_{10} \\frac{r_2}{r_1}$$
 
-Where $\\alpha(f)$ is the absorption coefficient, which increases with frequency $f$. This means that a sound source at 10 meters has significantly less energy above 10kHz compared to a source at 1 meter. You can emulate this in your DAW by using a low-pass filter to darken background tracks.
+At twice the distance, the direct sound is about 6 dB lower. Level alone is a weak cue, though, because you rarely know how loud the source was to begin with.
 
-## Building a front to back stage
+The second is the balance between direct and reflected sound. In a room the reverberant level stays roughly the same wherever the source is, while the direct sound keeps falling as the source moves away. A close source is mostly direct sound; a distant one is mostly room. The time gap between the direct sound and the first reflections also shrinks as the source moves away, which is why pre-delay helps keep a part forward.
 
-Create a three-dimensional field in your mix by setting up a structured foreground, midground, and background.
+::figure arrivals
 
-1. Identify the single most important element that must touch the listener's face. In modern production, this is usually the lead vocal or the kick and snare drums.
-2. Strip all reverb sends and delay effects from this lead element. Keep it dry and centered.
-3. Select your background elements, such as backing vocals, acoustic guitars, or synth pads.
-4. Apply a low-pass filter to these background elements, rolling off the highs above 8kHz to 10kHz to simulate air absorption.
-5. Send these background tracks to a stereo reverb bus. Set the reverb to 100% wet with a pre-delay of 0 milliseconds, which tells the brain that the sound source is far away from the microphone.
-6. Slowly turn up the send levels of the background tracks until they sit behind the lead vocal.
+The third is tone. A distant source sounds darker, mostly because more of what reaches you is reverberant sound, which has bounced off surfaces that soak up high frequencies. Air takes off a noticeable amount of top end only over longer distances. Transients also soften, because the reflections smear the sharp start of each sound.
 
-This simple layout establishes a clear contrast between the dry, bright foreground and the wet, dark background.
+Hear how pre-delay, decay and level move one melody forward and back.
 
-## The mistake of the global reverb bus
+::demo reverb
 
-The most common error is sending every track to the same reverb bus with the same send levels. While this can sometimes glue a sterile track together, it does not create depth. It just places the entire band in the same room at the same distance, maintaining a two-dimensional balance.
+## DAW experiment: build a front-to-back stage
 
-Another mistake is neglecting pre-delay. If you want a vocal to sound close but still have a tail, you must use a pre-delay of 30 to 50 milliseconds. This delays the arrival of the reverb reflections, letting the dry transient of the vocal speak clearly before the room space enters, keeping the vocal in the foreground.
+Use a section where at least four parts play together.
 
-## Maintain your foreground anchors
+1. Pick the one part that should touch the listener, usually the lead vocal. Remove its reverb and delay sends for this test and keep it in the centre.
+2. Create a reverb return with a room or hall, 100% wet, about 1.8 s decay and 0 ms pre-delay.
+3. Pick two or three background parts, such as a pad, backing vocals or a rhythm guitar. Put a low-pass filter at 8 kHz, 12 dB per octave, on each.
+4. Lower each of those faders by 3 dB.
+5. Send them to the reverb. Raise each send until the part sits behind the vocal, and give the part you want furthest back, often the pad, the most.
+6. Mute the reverb return and listen, then unmute it and bypass the low-pass filters instead.
 
-If you want a mix that feels deep, you must defend your dry elements. Do not be afraid of bone-dry sounds. A dry vocal or drum transient is what gives a track its punch and energy.
+With only one cue, the parts either get washed out or simply quieter. With level, tone and reverb working together, they settle into clear rows behind the dry vocal.
 
-Verify your spatial illusion by collapsing the mix to mono and turning your monitors down to a whisper. If your foreground anchor still sits in front of the background wash at low volumes, your depth cues are balanced. If the reverb tail swallows the lead element, pull down the reverb returns.
+## Common mistake: one reverb, one send level
+
+The most common error is sending every track to the same reverb at the same level. It can glue a sterile track together, but it does not create depth. It places the whole band in the same spot.
+
+The second is giving the front part no pre-delay. If the lead vocal needs a tail, delay the reverb by 30 to 50 ms so the dry start of each word arrives on its own before the room. The vocal keeps its place at the front, as the [lesson on reverb and emotional distance](/blog/why-reverb-can-push-emotion-forward-or-backward) explains.
+
+## Producer takeaway: protect your dry anchors
+
+A deep mix needs dry parts. Do not be afraid of a bone-dry vocal or a dry drum transient: they are what gives the track punch, and they are the reference that makes everything else sound far away.
+
+Check the result at a very low monitoring level. If the lead still sits in front of the background wash, the depth cues are balanced. If the reverb swallows it, pull the reverb returns down before you reach for more processing.
 
 ## References
 
-* Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
-* Ronan, M., Ma, Z., Mc Namara, D., Gunes, H., & Reiss, J. D. (2018). *Automatic Minimisation of Masking in Multitrack Audio using Subgroups*. arXiv preprint arXiv:1803.09960.
-* Senior, M. (2011). *Mixing Secrets for the Small Studio*. Routledge.
+- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
+- Zahorik, P., Brungart, D. S., & Bronkhorst, A. W. (2005). Auditory distance perception in humans: A summary of past and present research. *Acta Acustica united with Acustica*, 91(3), 409-420.
 `,
     seo: {
-        title: 'Why Depth is a Contrast Illusion | VGP Studio',
-        description: 'Creating mix depth requires contrast, not just reverb. Learn how level, tone, and ambience cues place sounds in a three-dimensional field.',
-        keywords: ['mix depth', 'mixing psychology', 'reverb predelay', 'foreground anchor', 'air absorption', 'contrast illusion']
-    }
+        title: 'Depth needs contrast to exist | VGP Studio',
+        description: 'Reverb on everything flattens a mix. How level, direct-to-reverberant ratio and tone tell the ear distance, and how to build a front-to-back stage.',
+        keywords: ['mix depth', 'distance cues', 'direct to reverberant ratio', 'reverb pre-delay', 'inverse square law', 'front to back'],
+    },
 };

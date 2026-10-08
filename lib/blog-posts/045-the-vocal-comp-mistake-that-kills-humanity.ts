@@ -2,69 +2,138 @@ import { BlogArticle } from '../blog-data';
 
 export const post045: BlogArticle = {
     slug: 'the-vocal-comp-mistake-that-kills-humanity',
-    title: 'The vocal comp mistake that kills humanity',
-    excerpt: 'Over-editing and piecing together micro-takes can rob a vocal of its natural emotional flow. Learn why performance continuity matters and how to comp for feeling rather than pitch.',
+    title: 'Comp vocals in phrases, not syllables',
+    excerpt: 'A comp stitched word by word can be flawless and still feel cold. Build it from whole lines of one strong take and cut where the ear cannot follow the join.',
     category: 'vocal-production',
     publishedAt: '2026-06-07',
-    readingTime: 5,
-    content: `## The flawless, lifeless vocal
+    updatedAt: '2026-10-08',
+    readingTime: 6,
+    summary: [
+        'A sung line is one physical gesture, so level, tone and pitch move together across it. A word-by-word comp breaks that shape at every splice.',
+        'A crossfade removes the click at a join. It does not remove a jump in tone or intensity between two takes.',
+        'Start from the best whole take, swap whole lines, and cut just before hard consonants or in breaths.',
+    ],
+    figures: {
+        arc: {
+            type: 'curve',
+            caption:
+                'The intensity of one line, drawn as a shape. Sung in one take it rises to the big word and falls away. Built word by word from different takes, it jumps at every join, so the line no longer seems to be going anywhere.',
+            alt: 'A curve across six words of a line. The solid curve for one take rises steadily to a peak on word five and falls on word six. The dashed curve for a word-by-word comp zigzags up and down from word to word.',
+            x: ['Word 1', 'Word 2', 'Word 3', 'Word 4', 'Word 5', 'Word 6'],
+            xShort: ['1', '2', '3', '4', '5', '6'],
+            yLabel: 'Intensity',
+            series: [
+                { label: 'One take', values: [0.35, 0.45, 0.58, 0.74, 0.9, 0.55] },
+                { label: 'Word-by-word comp', values: [0.55, 0.3, 0.72, 0.48, 0.86, 0.36], dashed: true },
+            ],
+        },
+        workflow: {
+            type: 'flow',
+            caption: 'A comping order that keeps the performance. Most of the line comes from one take, and every swap is a whole line unless a smaller one is unavoidable.',
+            alt: 'Five steps: record full passes, pick a base take by feel, swap whole lines, cut at consonants or breaths, play it top to bottom. An arrow from the last step back to swapping lines is labelled "swap again".',
+            steps: [
+                { label: 'Record full passes' },
+                { label: 'Pick a base take by feel' },
+                { label: 'Swap whole lines' },
+                { label: 'Cut at consonants or breaths' },
+                { label: 'Play it top to bottom' },
+            ],
+            loop: { to: 2, label: 'Swap again' },
+        },
+    },
+    quiz: [
+        {
+            q: 'Where is the safest place to cut between two vocal takes?',
+            options: [
+                'Halfway through a long vowel, where it is steady',
+                'On the downbeat, where the drums hide the join',
+                'On the loudest note, where it masks the join',
+                'Just before a hard consonant, or in a breath',
+            ],
+            answer: 3,
+            why: 'A plosive starts with a brief closure, a moment of near silence, and a breath is a natural break. A cut in a vowel exposes any change in pitch or tone between the takes.',
+        },
+        {
+            q: 'A crossfade at a splice hides the click. What does it not hide?',
+            options: [
+                'A pop from a cut away from a zero crossing',
+                'A jump in tone or intensity between takes',
+                'A tiny gap of silence at the edit point',
+                'A small step in DC offset between regions',
+            ],
+            answer: 1,
+            why: 'The crossfade only smooths the join itself. If the two takes differ in colour, distance or energy, that difference is still there on either side of it.',
+        },
+        {
+            q: 'A phrase has the best delivery of the session, but one held note is slightly flat. What is the better move?',
+            options: [
+                'Keep the phrase and correct that one note',
+                'Swap in that note from an in-tune weaker take',
+                'Record the phrase again until it is in tune',
+                'Copy the same phrase in from the first chorus',
+            ],
+            answer: 0,
+            why: 'Pitch on one note can be corrected afterwards. The delivery of the phrase cannot be added later, so keep the take that has it.',
+        },
+    ],
+    content: `## Hook: the perfect comp that feels cold
 
-Modern DAWs make it easy to slice a vocal performance into tiny fragments. You can record ten takes of a vocal, line up the comp lanes, and select the best words or syllables from each take. The result is a vocal track that is technically perfect: every note is in tune and every transient is aligned to the grid. 
+Comping in a DAW makes it easy to slice a vocal into tiny pieces. Record ten takes, stack them in comp lanes, and pick the best word or even the best syllable from each. The result has every note in tune and every word clean.
 
-Yet, when you play it back in the mix, the performance feels cold. The technical perfection has erased the emotion, leaving a vocal that sounds like a sampler instead of a human.
+Then it plays in the mix and the performance feels cold. It sounds like a sampled instrument playing the melody, not a person telling you something.
 
-## Believability over technical perfection
+## Why it matters: a line is one gesture
 
-Listeners do not connect with pitch accuracy or grid alignment. They connect with the singer's emotional flow. When you comp a vocal word by word, you destroy the natural phrasing and dynamic arc of the performance. 
+Singing a line is one physical gesture. Breath pressure builds, the voice gets brighter as it gets louder, and the singer leans into the big word and pulls back on the soft one. All of that changes together across the phrase, and that shared movement is what gives a line its arc.
 
-The transition from a verse to a chorus requires a physical change in the singer's body. Their breath pressure increases, their throat opens, and their posture shifts. If you stitch together a line using syllables from different takes recorded minutes apart, these physical transitions do not align. The vocal sounds disjointed, and the listener subconsciously senses the edit, which destroys their connection to the song.
+Takes recorded minutes apart differ in all of it. The singer is in a slightly different mood, a little closer to the mic or further away, fresher or more tired. Stitch one line from five takes and those differences meet at every join. A crossfade removes the click, but it does not remove a jump in level, tone or intent. Listeners rarely pick out an edit as an edit. They hear a singer who seems to change their mind on every word.
 
-## The acoustics of performance continuity
+::figure arc
 
-Singing is a physical event with continuous acoustic transitions. The throat muscles and vocal tract configuration change fluidly across a phrase. In An Introduction to the Psychology of Hearing, Brian Moore describes how the human ear is highly sensitive to fast variations in spectral envelope and modulation. 
+## Science model: what travels with a take
 
-If we model the continuity of a vocal take, we see that the physical parameters are linked:
+Several things belong to a take and do not survive being cut into pieces:
 
-\`\`\`text
-Acoustic Coherence = F0 Contour + Vocal Tract Resonance + Breath Pressure
-\`\`\`
+- **Level and arc.** The line rises and falls in one shape.
+- **Tone.** Louder singing is brighter, and moving closer to a directional mic adds bass through the proximity effect, so the same word from another take can have a different colour.
+- **Pitch path.** The way a singer slides from one note into the next belongs to that take. A cut between notes can join an approach from one take to a landing from another.
+- **Breath and timing.** A phrase is timed around the breath before it.
 
-When you make micro-edits across different takes, you disrupt this coherence. The fundamental frequency (F0) contour and vocal tract resonances shift abruptly. The splices may be crossfaded perfectly to avoid clicks, but the sudden changes in throat texture and chest resonance remain. Mike Senior notes in Mixing Secrets for the Small Studio that a piecemeal vocal comp lacks a unified groove, sounding like a collection of parts rather than a single performance.
+The ear is quick to notice the tone changes. In auditory scene analysis, sounds that change smoothly tend to be heard as one continuing source, while an abrupt change in timbre is a cue that a new sound has started (Bregman, 1990). A word whose colour jumps away from its neighbours can stand out even when its pitch and level match.
 
-## The continuous take comparison
+This also tells you where to cut. A plosive such as p, t or k starts with a brief closure, a moment of near silence, so a join placed just before it is hard to hear. An s is noise, so a short crossfade inside it hides well, and a breath is a natural break. A cut in the middle of a vowel exposes every difference between the two takes.
 
-To check if your edits have stripped the life from a vocal, run this test:
+## DAW experiment: comp against one take
 
-1. Solo your edited vocal comp track.
-2. Place a single, unedited take of the same performance on a channel below it.
-3. Bypass all pitch correction, gates, and compressors on both channels.
-4. Listen to the continuous, unedited take from start to finish.
-5. Listen to your edited comp take.
+1. Choose one section and listen to every full take without looking at waveforms or pitch graphs. Pick the one with the best delivery, even if it has a few mistakes.
+2. Make that take the base of a new comp lane.
+3. Mark only real problems: a wrong word, a pitch miss too large to correct, a noise.
+4. Replace each marked line with the same whole line from one other take. Where a smaller swap is unavoidable, cut just before a hard consonant or in a breath and use a crossfade of about 5 to 10 ms.
+5. Bounce the result and compare it with your word-by-word comp, with no tuning or compression on either, at matched level.
+6. Listen closely to the last word of each line and to the entry into the chorus.
 
-Even if the unedited take has a few pitch imperfections, it will almost always feel more convincing and human. The volume contours and breath rhythm flow naturally, holding the listener's attention in a way the stitched comp cannot.
+The base-take comp should hold together as one performance, with lines that build and land. The word-by-word comp may be cleaner on paper and still sound as if it has no direction.
 
-## The pitch priority mistake
+## Common mistake: comping for pitch first
 
-A common mistake is comping a vocal based only on pitch accuracy. Producers often cut up a great, emotional phrase just because one note is slightly flat, replacing it with a technically correct note from a weaker take. This compromises the character of the entire performance for a pitch correction that could have been handled with a simple plugin.
+The most common mistake is choosing pieces by pitch accuracy. A great, emotional phrase gets cut up because one note is slightly flat, and the note is replaced with an in-tune one from a weaker take. Pitch on one note can be corrected afterwards. The delivery of a phrase cannot be added later.
 
-## Comp in longer blocks
+The second mistake is comping with your eyes. Pitch graphs and waveforms show you which take is tidy, not which one is convincing. Choose by ear first, then look.
 
-To maintain performance continuity, change your vocal comping workflow:
+## Producer takeaway: start from the best whole take
 
-- Comp for phrasing, attitude, and message first. Pitch can be corrected, but attitude cannot.
-- Choose longer contiguous blocks of audio. Try to use at least two consecutive lines from the same take to preserve natural breathing and timbre.
-- Avoid cutting in the middle of words or vowel sounds. If you must edit, place your cuts during natural breaths or consonant transients.
-- Correct minor pitch errors on a great take using manual pitch correction tools, rather than replacing the notes with pieces from other takes.
+Comp for delivery and meaning first, then fix pitch on the take you kept. Use whole lines from as few takes as you can, and keep at least two consecutive lines from one take where possible, so the breathing and tone carry through. Cut before hard consonants or in breaths, never in the middle of a vowel. Mike Senior's chapter on comping in *Mixing Secrets for the Small Studio* is a good companion to this workflow.
 
-By comping in longer blocks, you preserve the singer's physical performance, ensuring the final vocal sounds believable and human.
+::figure workflow
 
 ## References
 
-- Moore, B. C. J. (2012). An Introduction to the Psychology of Hearing. Brill.
-- Senior, M. (2011). Mixing Secrets for the Small Studio. Routledge.`,
+- Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
+- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
+`,
     seo: {
-        title: 'How Vocal Comping Can Kill the Emotion | VGP',
-        description: 'Micro-comping vocals destroys performance continuity. Learn how to comp vocals for emotional flow and believability instead of technical perfection.',
-        keywords: ['vocal comping', 'vocal editing tips', 'performance continuity', 'vocal tracking', 'mixing vocals', 'music production workflow']
-    }
+        title: 'Comp Vocals in Phrases, Not Syllables | VGP',
+        description: 'Word-by-word vocal comps break the shape of a performance. Learn why takes do not splice cleanly and how to comp from whole lines of one strong take.',
+        keywords: ['vocal comping', 'vocal editing tips', 'comp lanes', 'vocal tracking', 'crossfades', 'music production workflow'],
+    },
 };

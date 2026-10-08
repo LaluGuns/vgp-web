@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { articles, categories, getCategoryBySlug, getArticlesByCategory } from '@/lib/blog-data';
+import { categories, getCategoryBySlug } from '@/lib/blog-data';
+import { getPath } from '@/lib/blog/paths';
 import { CategoryPage } from './CategoryPage';
 
 interface Props {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     return {
-        title: `${category.name} | VGP Studio Blog`,
+        title: `${category.name}: a learning path | VGP Studio Blog`,
         description: category.description,
         alternates: {
             canonical: `/blog/category/${category.slug}`,
@@ -46,13 +47,7 @@ export default async function BlogCategoryPage({ params }: Props) {
         notFound();
     }
 
-    const categoryArticles = getArticlesByCategory(categorySlug);
+    const path = getPath(categorySlug) ?? { category, articles: [] };
 
-    return (
-        <CategoryPage
-            category={category}
-            articles={categoryArticles}
-            allCategories={categories}
-        />
-    );
+    return <CategoryPage category={category} path={path} allCategories={categories} />;
 }

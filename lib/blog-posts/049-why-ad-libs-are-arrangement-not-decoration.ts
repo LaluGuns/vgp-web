@@ -3,68 +3,134 @@ import { BlogArticle } from '../blog-data';
 export const post049: BlogArticle = {
     slug: 'why-ad-libs-are-arrangement-not-decoration',
     title: 'Ad-libs are arrangement moves',
-    excerpt: 'Unstructured background vocals and ad-libs often crowd the main vocal, causing listener fatigue. This guide applies auditory stream segregation science to show you how to arrange ad-libs as purposeful call-and-response elements.',
+    excerpt: 'Ad-libs that sing over the lead compete with it for attention. Put them in the gaps, away from the centre, and they push the song forward instead.',
     category: 'vocal-production',
     publishedAt: '2026-06-07',
-    readingTime: 8,
+    updatedAt: '2026-10-08',
+    readingTime: 5,
+    summary: [
+        'A listener can follow one line of words at a time, and an ad-lib in the same voice as the lead is the hardest kind to separate.',
+        'Time is the strongest separator: an ad-lib that lands in the gaps of the lead needs little else.',
+        'Give each ad-lib a slot, a position and a register, and cut the ones that sing words over the lead.',
+    ],
     seo: {
         title: 'Ad-libs Are Arrangement Moves | VGP Studio',
-        description: 'Learn how to arrange vocal ad-libs to avoid crowding the main vocal. Apply auditory stream segregation for a clean vocal mix.',
-        keywords: ['vocal ad-libs', 'auditory scene organization', 'vocal arrangement', 'vocal production', 'stream segregation', 'call and response']
+        description: 'Ad-libs that overlap the lead compete for attention. Learn how timing, panning and register separate vocal parts, and how to arrange ad-libs as answers.',
+        keywords: ['vocal ad-libs', 'vocal arrangement', 'call and response', 'stream segregation', 'informational masking', 'vocal production'],
     },
-    content: `## The crowded vocal bus
+    figures: {
+        gaps: {
+            type: 'rhythm',
+            caption:
+                'One bar of a chorus. The lead sings through the first three beats and leaves beat four open. An ad-lib on top of the lead competes with its words. The same ad-lib moved into the gap answers it.',
+            alt: 'A 16-step grid with three rows. The lead has hits across the first three beats and none in beat four. The first ad-lib row has hits in the middle of the lead phrase. The second ad-lib row has hits only in beat four.',
+            rows: [
+                { label: 'Lead', hits: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10], note: 'words' },
+                { label: 'Ad-lib on top', hits: [{ step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 6, level: 0.7 }, { step: 9, level: 0.7 }], note: 'competes' },
+                { label: 'Ad-lib in the gap', hits: [{ step: 12, level: 0.8 }, { step: 13, level: 0.8 }, { step: 14, level: 0.8 }], note: 'answers' },
+            ],
+        },
+        stage: {
+            type: 'stereo',
+            title: 'A vocal stage with room for ad-libs',
+            caption:
+                'The lead owns the centre and the front. Answering ad-libs sit wide and further back, and doubles of key words tuck behind the lead, so every part has its own place.',
+            alt: 'Top-down mix view. The lead sits in the centre at the front. A word double sits behind it, dimmer. Ad-libs sit far left and far right, further back and dimmer.',
+            items: [
+                { label: 'Lead', pan: 0, depth: 0.1 },
+                { label: 'Word double', pan: 0, depth: 0.42, fade: 0.45 },
+                { label: 'Ad-lib L', pan: -0.8, depth: 0.62, fade: 0.3 },
+                { label: 'Ad-lib R', pan: 0.8, depth: 0.62, fade: 0.3 },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Why is an ad-lib harder to separate from the lead than a second singer would be?',
+            options: [
+                "It sits in the same frequencies, so it masks the lead's words",
+                'It is sung with more energy, so it pulls focus from the lead',
+                'It is the same voice, so the brain has few cues to split them',
+                'Its extra reverb smears into the lead and blurs both parts',
+            ],
+            answer: 2,
+            why: 'Two phrases from the same talker are the hardest pair to tell apart. Same timbre, same range and same mic leave the brain little to group them by.',
+        },
+        {
+            q: 'Which change separates an ad-lib from the lead most reliably?',
+            options: [
+                'Panning it to the centre, behind the lead',
+                'Panning it hard to one side of the mix',
+                "Turning it up to match the lead's level",
+                'Moving it into a gap where the lead rests',
+            ],
+            answer: 3,
+            why: 'Parts that start at different moments separate most easily. In the gap there are no competing words, so the ad-lib reads as an answer.',
+        },
+        {
+            q: "An ad-lib has to overlap the lead's words. What makes it least distracting?",
+            options: [
+                'New lyrics in the same register as the lead',
+                'A held vowel, set lower and off to the side',
+                'Its own words, turned up so they read clearly',
+                'A dry take panned to the centre with the lead',
+            ],
+            answer: 1,
+            why: 'Without competing words there is less for the listener to follow, and lower level, a side position and more reverb all help it sound like a separate, supporting part.',
+        },
+    ],
+    content: `## Hook: the hook got busier and smaller
 
-Your lead vocal is great. The delivery is emotional, and the tuning is solid. But then the ad-libs start. You recorded three tracks of background shouts and vocal harmonies. When you mix them in, the lead vocal disappears. The song sounds like a busy train station. You try to turn down the ad-libs, but then the hook loses its energy. You try to pan them, but the stereo field just feels messy and unfocused.
+The lead vocal is great. The delivery is right and the tuning is solid. Then you add three tracks of ad-libs and harmonies, recorded in one pass over the whole song, and the lead disappears. The hook sounds like a crowd. Turning the ad-libs down loses the energy, and panning them just makes the stereo picture messy.
 
-This happens because you treat ad-libs as decoration. You think that if you have empty space, you just need to fill it with vocal noise. But the brain cannot follow two vocal parts at the same time if they are fighting for attention. To make your vocal arrangement work, you must design your ad-libs as arrangement moves.
+The ad-libs are being treated as decoration, something to fill every space. A listener can only follow one line of words at a time. Ad-libs work when they are arranged: placed in time, in space and in register so they answer the lead instead of talking over it.
 
-## Why vocal clutter kills attention
+## Why it matters: two sets of words at once
 
-When background vocals play at the same time as the main vocal melody, they create cognitive clutter. The listener is forced to choose between the lyrics of the lead vocal and the melody of the ad-lib. This splits the listener's focus and leads to rapid ear fatigue.
+When an ad-lib sings words over the lead's words, the listener has to choose which to follow. Speech research shows how hard that gets when the voices are alike. When Brungart (2001) asked listeners to pick out a target phrase against one competing phrase, they did worst when both came from the same talker and best when the two talkers were of different sexes. Most of the difficulty came from confusing the two voices, not from one covering the other's frequencies.
 
-Ad-libs must support the lead vocal, not compete with it. They should act as a response to the lead's call. If the lead is active, the ad-libs must be silent. If the lead pauses, the ad-libs can step forward. This creates a rhythmic pocket that keeps the listener engaged.
+An ad-lib is usually the same singer on the same mic, which is the hardest case of all. So ad-libs that carry words should stay out of the lead's words. Ad-libs that must overlap should stop being new words: a held vowel, a shout, or a repeat of the lead's last word.
 
-## The science of auditory stream segregation
+::figure gaps
 
-Auditory scene analysis explains how the brain separates a complex sound wave into individual streams. This is auditory stream segregation. The brain groups sounds based on four cues: pitch difference, timing offsets, spatial location, and harmonic structure.
+## Science model: what separates two vocal parts
 
-We can express the auditory separation threshold mathematically using a grouping metric:
+Auditory scene analysis describes the cues the brain uses to split a mixture of sound into separate streams (Bregman, 1990). For two vocal parts, these are the ones you control:
 
-$$S_{\text{segregation}} = w_1 \Delta f + w_2 \Delta t + w_3 \Delta p$$
+- **Time.** Parts that start at different moments separate most easily. An ad-lib in a gap of the lead needs little other help.
+- **Register.** An octave up or down, or a clearly different range, sets a part apart.
+- **Position.** Sound from a different direction is easier to follow on its own. In Cherry's 1953 experiments, two messages played to separate ears were far easier to tell apart than two messages mixed together. Panning in a mix is a milder version of the same cue.
+- **Timbre and depth.** A filtered, distorted or more reverberant ad-lib sounds like a different source from a dry, full lead.
 
-Where Delta f is the pitch difference, Delta t is the timing offset, and Delta p is the panning distance.
+No formula adds these up, and you do not need all of them at once. Use as many as it takes for the ad-lib to sound like a reply, starting with time.
 
-If S_segregation is low, the brain fuses the lead vocal and the ad-libs into a single, confusing stream.
+::figure stage
 
-To prevent this fusion, you must maximize these differences. You pan the ad-libs wide (high Delta p). You pitch them an octave lower or higher (high Delta f). And most importantly, you align them to land in the gaps of the lead vocal (high Delta t). This tells the brain that the ad-libs are a separate, supporting stream.
+## DAW experiment: clear the gaps
 
-## The strict-alignment test
+1. Loop the chorus of your song.
+2. Mute every ad-lib and backing vocal, and drop a marker at each point where the lead pauses.
+3. Unmute them and cut any ad-lib that sings words while the lead sings words.
+4. Move the remaining phrases so they start after the lead's phrase ends, or so they repeat the lead's last word.
+5. Pan the answering ad-libs 60 to 100 percent left and right, high-pass them at about 150 Hz, and send them 3 to 6 dB more to the reverb or delay than the lead.
+6. Compare the result with the original arrangement at the same overall level.
 
-Use this test to clean up your vocal arrangement.
+The ad-libs should now sound like answers that drive the groove, and the lead should read clearly through the whole chorus.
 
-1. Open your DAW and loop the chorus of your song.
-2. Select all your ad-lib and background vocal tracks.
-3. Mute all of them. Listen to the lead vocal. Notice where the singer pauses to take a breath.
-4. Unmute the ad-libs.
-5. Use your DAW's scissors tool to cut out any ad-lib audio that plays at the same time as the lead vocal notes.
-6. Align the remaining ad-lib phrases so they start exactly after the lead vocal phrase ends.
-7. Pan the ad-lib tracks hard left and hard right (80% to 100% width).
-8. Listen to the mix. The ad-libs will now sound like a clean call-and-response that drives the groove, without masking the lead vocal.
+## Common mistake: ad-libbing through the whole song
 
-## The mistake of continuous recording
+Artists often record ad-libs in one continuous pass, singing along with the lead and adding shouts and harmonies from start to finish. Keep all of it and you have a second lead vocal that never stops, competing with every line.
 
-Producers often let the artist record ad-libs in one continuous take. The artist sings along with the lead, adding background harmonies and shouts throughout the entire song.
+Edit the pass like any other part. Keep the phrases that land in the gaps and a few doubles on key words, and delete the rest. With fewer ad-libs, each one gets noticed.
 
-This is a mistake. Continuous ad-libs are not an arrangement. They are just clutter. They mask the lead vocal transients and create phase conflicts in the mid-range. Edit your ad-libs. Keep only the phrases that land in the pauses. Delete the rest.
+## Producer takeaway: give every ad-lib a slot
 
-## Ad-libs are arrangement moves
-
-Give each ad-lib a position and a timing offset.
-
-Pan them wide to keep the center of the mix clear for the lead. Use a low-cut filter to remove low-end mud, and use a heavy reverb or delay to push them back in the depth stage. Treat ad-libs as instruments that play only when the lead is silent.
+Treat each ad-lib as an arrangement part with a time slot, a position and a register. Keep the centre and the lead's words for the lead. Ad-libs that answer in the gaps, from the sides and a little further back, push the song forward instead of crowding it.
 
 ## References
 
-* Bregman, A. S. (1990). Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press.
-* Senior, M. (2026). Mixing Secrets for the Small Studio. Routledge.`
+- Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
+- Brungart, D. S. (2001). Informational and energetic masking effects in the perception of two simultaneous talkers. *Journal of the Acoustical Society of America*, 109(3), 1101-1109.
+- Cherry, E. C. (1953). Some experiments on the recognition of speech, with one and with two ears. *Journal of the Acoustical Society of America*, 25(5), 975-979.
+`,
 };

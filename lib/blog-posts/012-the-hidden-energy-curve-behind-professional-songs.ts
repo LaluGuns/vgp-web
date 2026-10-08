@@ -2,51 +2,147 @@ import { BlogArticle } from '../blog-data';
 
 export const post012: BlogArticle = {
     slug: 'the-hidden-energy-curve-behind-professional-songs',
-    title: 'Professional songs ride an energy curve',
-    excerpt: 'A flat arrangement is a boring arrangement. Learn how to map a dynamic energy curve that keeps your listeners hooked.',
+    title: 'Draw the energy curve before you mix',
+    excerpt: 'When verse and chorus are equally full, no master chain can make the chorus bigger. Rate each section, draw the curve, and fix it in the arrangement.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
-    readingTime: 7,
+    updatedAt: '2026-10-08',
+    readingTime: 6,
+    summary: [
+        'A chorus feels big because of the step up from the section before it, and the arrangement has to leave room for that step.',
+        'Listeners remember a song by its peaks, its end and the moments that rise above what came just before, so a flat song gives them little to hold on to.',
+        'Rate every section from 1 to 5, draw the line, and mute verse parts until the chorus sits a clear step above.',
+    ],
+    figures: {
+        curve: {
+            type: 'curve',
+            caption:
+                'A sketch, not a measurement. The shaped song drops back after each chorus so the next step up has somewhere to go, and saves its biggest step for the end. The flat one hovers near the same level all the way through.',
+            alt: 'Two lines over nine sections from intro to final chorus. The solid shaped line rises into each chorus, falls back in verse 2 and the bridge, and peaks at the final chorus. The dashed flat line stays almost level.',
+            x: ['Intro', 'Verse 1', 'Pre', 'Chorus 1', 'Verse 2', 'Pre', 'Chorus 2', 'Bridge', 'Final'],
+            xShort: ['In', 'V1', 'Pre', 'C1', 'V2', 'Pre', 'C2', 'Br', 'C3'],
+            yLabel: 'Energy',
+            series: [
+                { label: 'Shaped', values: [0.25, 0.35, 0.55, 0.8, 0.4, 0.6, 0.85, 0.45, 1] },
+                { label: 'Flat', dashed: true, values: [0.6, 0.64, 0.66, 0.7, 0.65, 0.66, 0.7, 0.64, 0.72] },
+            ],
+        },
+        map: {
+            type: 'arrangement',
+            caption:
+                'One arrangement that draws the shaped curve. Each step up adds parts or raises them, the bridge strips back to keys, pad and vocal, and the final chorus adds harmonies on top of the full chorus.',
+            alt: 'Arrangement grid across intro, verse, pre-chorus, chorus, bridge and final chorus. Density rises from intro to chorus, falls in the bridge and is highest in the final chorus, where harmonies join.',
+            density: true,
+            sections: [
+                { label: 'Intro', short: 'In', bars: 4 },
+                { label: 'Verse', bars: 8 },
+                { label: 'Pre', bars: 4 },
+                { label: 'Chorus', bars: 8 },
+                { label: 'Bridge', short: 'Br', bars: 4 },
+                { label: 'Final', bars: 8 },
+            ],
+            layers: [
+                { label: 'Drums', levels: [0, 0.6, 0.7, 1, 0, 1] },
+                { label: 'Bass', levels: [0, 0.7, 0.7, 1, 0, 1] },
+                { label: 'Keys', levels: [0.8, 0.6, 0.6, 0.7, 0.8, 0.8] },
+                { label: 'Guitar', levels: [0, 0, 0.5, 0.8, 0, 0.9] },
+                { label: 'Pad', levels: [0, 0, 0.4, 0.7, 0.6, 0.8] },
+                { label: 'Vocal', levels: [0, 0.8, 0.8, 1, 0.7, 1] },
+                { label: 'Harmony', levels: [0, 0, 0, 0, 0, 0.9] },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Verse and chorus are equally dense and both push the master limiter. What does that do to the chorus?',
+            options: [
+                'It sounds bigger, because the limiter works harder',
+                'It gets raised by the limiter to balance the verse',
+                'It gets wider, as the limiter lifts the side signal',
+                'It comes out as full as the verse, with no step up',
+            ],
+            answer: 3,
+            why: 'A limiter holds both sections under the same ceiling. If they are equally full going in, they come out much the same, and the difference has to come from what the verse leaves out.',
+        },
+        {
+            q: 'Rozin and colleagues (2004) asked listeners how intense a piece had felt. What shaped the remembered intensity most?',
+            options: [
+                'The total length of the piece',
+                'The average level of the piece',
+                'The peak, the end and the rises',
+                'How the opening ten seconds felt',
+            ],
+            answer: 2,
+            why: 'Remembered intensity leaned on the peak, the end and rises, while length mattered very little. A step up into a chorus is exactly that kind of rise.',
+        },
+        {
+            q: 'Your rating sheet reads verse 4, pre-chorus 4, chorus 4. What is the first fix to try?',
+            options: [
+                'Mute two supporting parts in the verse',
+                'Add a riser and a crash into the chorus',
+                'Push the limiter harder in the chorus',
+                'Add another synth layer to the chorus',
+            ],
+            answer: 0,
+            why: 'The chorus has no room to grow because the verse already fills it. Lowering the verse creates the step without making the chorus more crowded.',
+        },
+    ],
     content: `## Hook: the flat mix that puts listeners to sleep
 
-You finish a mix where the transients are clean and the low end is level. Yet when you listen to the track from start to finish, it feels like a flat line. The song lacks movement. It has no journey. You expect the chorus to explode, but it just sounds like a slightly louder version of the verse. This is a sign that you built a flat energy curve. It is a common issue that makes even a polished mix sound amateur. You can keep adding plugins, but no compressor will fix a song that does not move.
+You finish a mix with clean transients and a solid low end. Then you listen from start to finish and the song feels like a flat line. You expect the chorus to explode, and it sounds like a slightly louder version of the verse. Nothing is wrong with any single sound. The problem is the shape of the whole song.
 
-## Why it matters: dynamic range is crushed in the arrangement
+You can keep adding plugins, but no compressor will fix a song that does not move.
 
-When your arrangement is flat, the mix suffers. If the verse is as dense as the chorus, the master bus compressor is working at 4dB of gain reduction all the time. This leaves no headroom for the chorus downbeat to punch through. The limiter clamps down hard on the entire song. This squashes the transients. You lose the kick drum and the sub bass when the chorus arrives. To get a heavy chorus, you must create a contrast. The verse must be sparse to give the chorus room to explode. The final master will translate better because the master limiter is not constantly fighting a wall of static frequencies.
+## Why it matters: the master cannot create the step
 
-## Science model: expectation and auditory streaming
+Energy is what a listener feels as the size of a section. It comes from several things at once: loudness, how many parts are playing, how busy the rhythm is, how high the melody sits and how wide the stereo image is. You cannot read it off one meter, but you can rate it by ear.
 
-This behavior is explained by Bregman's principles of auditory scene analysis (1990). The human ear can only track a few acoustic streams at one time. When the number of elements stays constant, the brain habituates to the sound. The listener tunes out because their sensory system stops processing the loop. According to Huron's studies on music psychology (2006), emotional responses are tied to expectation over time. Contrast creates tension. When you break a pattern or step up the density, the brain releases dopamine. This makes the listener pay attention. A record needs a road, not a pile of moments.
+When the verse is as full as the chorus, both sections hit the bus compressor and the master limiter the same way. A limiter holds everything under one ceiling, so two equally full sections come out about equally loud and equally dense. The chorus can only feel bigger if the verse leaves something out. That is an arrangement decision, and it has to be made before the mix.
+
+::figure curve
+
+## Science model: habituation, expectation and remembered peaks
+
+The ear responds less to a sound that does not change. This is habituation, and it is why a section that keeps the same parts at the same level for a long time starts to fade from attention even while it plays.
+
+Huron (2006) describes listening as constant prediction. Tension builds while an expected change has not arrived yet, and the arrival feels better because of the tension before it. A pre-chorus that holds back and a chorus that delivers use that contrast. A flat song gives the listener nothing to anticipate.
+
+Memory works the same way. Rozin, Rozin and Goldberg (2004) had listeners press a pressure-sensitive button to show how intense the music felt from moment to moment, then asked them later how intense each piece had been. The remembered intensity leaned on the peak, the end and the moments that were more intense than the moments just before. How long a passage lasted made little difference. A step up into a chorus is exactly the kind of moment listeners keep. A record needs a road, not a pile of moments.
+
+::figure map
 
 ## DAW experiment: the energy rating test
 
-1. Open your DAW session and locate the arrangement timeline.
-2. Label each section clearly: intro, verse, pre-chorus, chorus, and bridge.
-3. Listen to each section and assign it an energy rating from 1 to 5 based on the active tracks.
-4. If your verse is a 4 and your chorus is a 4, you must make a change.
-5. Mute two supporting instruments in the verse, such as the rhythm guitar and the pad synth.
-6. Verify that the verse rating drops to a 2, creating a clear step up when the chorus hits.
-7. Open a utility plugin on your main instrument bus and automate the gain down by 1dB during the verse, letting it return to 0dB on the chorus downbeat.
-8. Check the master fader to make sure the chorus peak level is identical, but notice how the perceived size increases.
+1. Put a marker at the start of every section: intro, verse, pre-chorus, chorus, bridge and final chorus.
+2. Play each section on its own and rate its energy from 1 to 5. Judge how full, loud and busy it feels, not how good it is.
+3. Write the ratings down in order and sketch them as a line on paper. Two neighbouring sections with the same number, where you want a lift, are the problem.
+4. If the verse and the chorus share a rating, mute two supporting parts in the verse, such as a rhythm guitar and a pad.
+5. Rate the verse again. It should now sit a clear step below the chorus.
+6. Put a loudness meter on the master and read short-term LUFS in the middle of the verse and the middle of the chorus. The verse should now read lower, so the gap to the chorus is wider than before.
+7. For a smaller version of the same move, automate the instrument bus 1 dB down through the verse and back to 0 dB on the chorus downbeat.
 
-## Common mistake: the flat stack trap
+Play the song through. The chorus should feel like an arrival, and nothing on the master chain has changed.
 
-Amateur producers think that more layers equal more energy. They stack synths to make a verse sound bigger, but this just clutters the mix. Stacking synths fills up the frequency spectrum and leaves no room for the vocals. Another mistake is keeping the drum pattern identical throughout the song. If the kick and snare play the same groove from the start to the outro, the song feels static. Listeners will skip the track because their brains predict every beat.
+## Common mistake: making the verse bigger to keep it interesting
+
+The most common mistake is stacking parts to make a verse feel more exciting. It works for a few bars, then the chorus arrives with nowhere left to go. Extra layers in the verse also fill the range the vocal needs.
+
+The second mistake is keeping the drum pattern identical from the first bar to the last. Drums carry a lot of the energy, so a pattern that never changes keeps the curve flat even when other parts come and go. Change the hi-hat part, open the snare up in the pre-chorus or drop the kick in the bridge.
+
+A flat line is not always wrong. Ambient, lo-fi and some techno move through small changes over long spans. The curve there is gentle, but it still moves.
 
 ## Producer takeaway: design a road instead of a pile of moments
 
-Plan your arrangement density before you touch a mixing fader. Keep your verses lean and let your choruses own the highest density step. This dynamic movement is what makes a song feel alive.
+Plan the energy of every section before you touch a mixing fader. Keep the verses lean, let the choruses own the highest step and save one more step for the final chorus. If you can draw the curve of your song on paper and it goes somewhere, the mix has something to work with.
 
 ## References
 
-- Bregman, A. S. (1990). Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press.
-- Huron, D. (2006). Sweet Anticipation: Music and the Psychology of Expectation. MIT Press.
-- Ronan, M., Ma, Z., Mc Namara, D., Gunes, H., & Reiss, J. D. (2018). Automatic Minimisation of Masking in Multitrack Audio using Subgroups.
+- Huron, D. (2006). *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press.
+- Rozin, A., Rozin, P., & Goldberg, E. (2004). The feeling of music past: How listeners remember musical affect. *Music Perception*, 22(1), 15-39.
 `,
     seo: {
-        title: 'Professional songs ride an energy curve',
-        description: 'Learn how to map a dynamic energy curve that keeps your listeners hooked. Master arrangement density, expectation, and contrast.',
-        keywords: ['song energy curve', 'expectation over time', 'auditory scene analysis', 'producer tips', 'arrangement density']
-    }
+        title: 'Draw the energy curve before you mix',
+        description: 'A chorus feels big because of the step up from the verse. Rate each section, draw the energy curve and fix a flat song in the arrangement.',
+        keywords: ['song energy curve', 'arrangement density', 'song structure', 'verse and chorus contrast', 'habituation'],
+    },
 };

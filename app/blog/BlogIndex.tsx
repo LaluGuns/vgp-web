@@ -7,16 +7,26 @@ import { Bookmark, Search, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import type { BlogArticle, Category } from '@/lib/blog-data';
+import { useReadArticles } from '@/components/blog/article/useReadArticles';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
     seo: { keywords: string[] };
 };
 
+/** A learning path as the index needs it: lessons in order, by slug. */
+export interface PathSummary {
+    slug: string;
+    name: string;
+    description: string;
+    lessons: string[];
+}
+
 interface BlogIndexProps {
     articles: BlogListItem[];
     categories: Category[];
     featured: BlogListItem[];
+    paths: PathSummary[];
 }
 
 const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
@@ -53,11 +63,13 @@ function ArticleRow({
     article,
     categoryName,
     isBookmarked,
+    isRead,
     onToggleBookmark,
 }: {
     article: BlogListItem;
     categoryName: string;
     isBookmarked: boolean;
+    isRead: boolean;
     onToggleBookmark: () => void;
 }) {
     return (
@@ -68,6 +80,7 @@ function ArticleRow({
             >
                 <span className="text-xs text-white/50">
                     {categoryName} · {formatDate(article.publishedAt)} · {article.readingTime} min read
+                    {isRead ? ' · Read' : ''}
                 </span>
                 <span className="mt-2 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                     {article.title}
@@ -92,7 +105,51 @@ function ArticleRow({
 
 const PAGE_SIZE = 20;
 
-export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
+function LearningPaths({ paths, read }: { paths: PathSummary[]; read: string[] }) {
+    return (
+        <section aria-labelledby="paths-heading" className="px-4 pb-14 sm:px-6">
+            <div className="mx-auto max-w-7xl">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <h2 id="paths-heading" className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
+                        Learning paths
+                    </h2>
+                    <p className="text-sm text-white/55">Each path is a set of lessons meant to be read in order.</p>
+                </div>
+                <ul className="mt-6 grid border-t border-white/10 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3">
+                    {paths.map((path) => {
+                        const done = path.lessons.filter((slug) => read.includes(slug)).length;
+                        return (
+                            <li key={path.slug} className="border-b border-white/10">
+                                <Link
+                                    href={`/blog/category/${path.slug}`}
+                                    className="group block py-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                >
+                                    <span className="flex items-baseline justify-between gap-4">
+                                        <span className="text-lg font-semibold text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                            {path.name}
+                                        </span>
+                                        <span className="shrink-0 text-xs tabular-nums text-white/50">
+                                            {done > 0 ? `${done} of ${path.lessons.length} read` : `${path.lessons.length} lessons`}
+                                        </span>
+                                    </span>
+                                    <span className="mt-1.5 line-clamp-2 block text-sm leading-6 text-white/60">{path.description}</span>
+                                    {done > 0 ? (
+                                        <span className="mt-3 block h-0.5 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden="true">
+                                            <span className="block h-full bg-white/70" style={{ width: `${(done / path.lessons.length) * 100}%` }} />
+                                        </span>
+                                    ) : null}
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+        </section>
+    );
+}
+
+export function BlogIndex({ articles, categories, featured, paths }: BlogIndexProps) {
+    const read = useReadArticles();
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [showBookmarkedOnly, setShowBookmarkedOnly] = useState<boolean>(false);
@@ -169,13 +226,18 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                             Articles
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
-                            Production notes from the studio: drums, 808s, songwriting, vocals, mixing and beat licensing.
-                            All free to read.
+                            Lessons from the studio on songwriting, groove, sound design, vocals, mixing and the science of sound.
+                            Most lessons come with diagrams, an experiment to try in your DAW and a short quiz. All free to read.
                         </p>
                     </div>
                 </section>
 
+                <LearningPaths paths={paths} read={read} />
+
                 <section id="vgp-reading-room" aria-label="Article library" className="px-4 pb-20 sm:px-6">
+                    <div className="mx-auto max-w-7xl pb-4">
+                        <h2 className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">All articles</h2>
+                    </div>
                     <div className="mx-auto max-w-7xl">
                         <div className="grid gap-5 border-y border-white/10 py-5">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -255,6 +317,7 @@ export function BlogIndex({ articles, categories, featured }: BlogIndexProps) {
                                                 article={article}
                                                 categoryName={getCategoryName(article.category)}
                                                 isBookmarked={bookmarkedSlugs.includes(article.slug)}
+                                                isRead={read.includes(article.slug)}
                                                 onToggleBookmark={() => toggleBookmark(article.slug)}
                                             />
                                         ))}

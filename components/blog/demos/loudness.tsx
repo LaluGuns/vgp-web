@@ -1,0 +1,248 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { fadeOut, midi, pluck, sequence, type Engine } from './engine';
+import { playDrumStep } from './dynamics';
+import { PlayButton, Readout, Segmented, usePlayer } from './ui';
+
+const BPM = 92;
+const STEPS = 32;
+
+function playLoopStep(ctx: BaseAudioContext, dest: AudioNode, step: number, time: number, stepDur: number) {
+    playDrumStep(ctx, dest, step % 16, time, stepDur);
+    if (step % 8 === 2) for (const n of step < 16 ? [57, 60, 64] : [53, 57, 60]) pluck(ctx, dest, time, midi(n), stepDur * 3, 0.9);
+}
+
+type Master = 'dynamic' | 'loud';
+
+/** Builds one of the two masters between `input` and the returned output node. */
+function masterChain(ctx: BaseAudioContext, input: AudioNode, kind: Master): AudioNode {
+    if (kind === 'dynamic') {
+        const glue = ctx.createDynamicsCompressor();
+        glue.threshold.value = -12;
+        glue.ratio.value = 2;
+        glue.attack.value = 0.03;
+        glue.release.value = 0.15;
+        input.connect(glue);
+        return glue;
+    }
+    // Pushed 14 dB into a hard clipper: louder, with the peaks shaved flat.
+    const push = ctx.createGain();
+    push.gain.value = 10 ** (14 / 20);
+    const clip = ctx.createWaveShaper();
+    const curve = new Float32Array(2048);
+    for (let i = 0; i < curve.length; i++) curve[i] = Math.max(-0.5, Math.min(0.5, (i / (curve.length - 1)) * 2 - 1));
+    clip.curve = curve;
+    clip.oversample = '4x';
+    input.connect(push).connect(clip);
+    return clip;
+}
+
+/** Integrated loudness of a rendered loop, K-weighted as in ITU-R BS.1770 (ungated). */
+async function measure(kind: Master, sampleRate: number): Promise<number> {
+    const stepDur = 60 / BPM / 4;
+    const seconds = stepDur * STEPS + 0.5;
+    const ctx = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
+    const src = ctx.createGain();
+    const out = masterChain(ctx, src, kind);
+    const shelf = ctx.createBiquadFilter();
+    shelf.type = 'highshelf';
+    shelf.frequency.value = 1681.97;
+    shelf.gain.value = 4;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 38.13;
+    hp.Q.value = 0.5;
+    out.connect(shelf).connect(hp).connect(ctx.destination);
+    for (let step = 0; step < STEPS; step++) playLoopStep(ctx, src, step, 0.05 + step * stepDur, stepDur);
+    const buffer = await ctx.startRendering();
+    const data = buffer.getChannelData(0);
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) sum += data[i] * data[i];
+    return -0.691 + 10 * Math.log10(sum / data.length);
+}
+
+/**
+ * The same loop as a dynamic master and a loud, clipped master. Turn on
+ * streaming-style normalization and both play at the same loudness, so
+ * the clipped one loses its only advantage.
+ */
+export function NormalizationDemo() {
+    const [which, setWhich] = useState<Master>('loud');
+    const [normalize, setNormalize] = useState(false);
+    const [lufs, setLufs] = useState<Record<Master, number> | null>(null);
+    const nodes = useRef<{ ctx: AudioContext; gains: Record<Master, GainNode>; level: Record<Master, GainNode> } | null>(null);
+
+    const levelFor = (kind: Master, norm: boolean, measured: Record<Master, number> | null) => {
+        if (!norm || !measured) return 1;
+        // Normalization turns the louder master down to match the quieter one.
+        const target = Math.min(measured.dynamic, measured.loud);
+        return 10 ** ((target - measured[kind]) / 20);
+    };
+
+    const player = usePlayer(({ ctx, out }: Engine) => {
+        const master = ctx.createGain();
+        master.gain.value = 0.7;
+        master.connect(out);
+        const src = ctx.createGain();
+        const gains = {} as Record<Master, GainNode>;
+        const level = {} as Record<Master, GainNode>;
+        for (const kind of ['dynamic', 'loud'] as Master[]) {
+            const select = ctx.createGain();
+            select.gain.value = kind === which ? 1 : 0;
+            const lvl = ctx.createGain();
+            lvl.gain.value = levelFor(kind, normalize, lufs);
+            masterChain(ctx, src, kind).connect(lvl).connect(select).connect(master);
+            gains[kind] = select;
+            level[kind] = lvl;
+        }
+        nodes.current = { ctx, gains, level };
+        const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, src, step, time, dur));
+        if (!lufs) {
+            void Promise.all([measure('dynamic', ctx.sampleRate), measure('loud', ctx.sampleRate)]).then(([dynamic, loud]) => {
+                const measured = { dynamic, loud };
+                setLufs(measured);
+            });
+        }
+        return () => {
+            seq.stop();
+            nodes.current = null;
+            fadeOut(ctx, master);
+        };
+    });
+
+    const apply = (next: { which?: Master; normalize?: boolean }, measured = lufs) => {
+        const w = next.which ?? which;
+        const norm = next.normalize ?? normalize;
+        if (next.which) setWhich(w);
+        if (next.normalize !== undefined) setNormalize(norm);
+        const n = nodes.current;
+        if (!n) return;
+        const t = n.ctx.currentTime;
+        for (const kind of ['dynamic', 'loud'] as Master[]) {
+            n.gains[kind].gain.setTargetAtTime(kind === w ? 1 : 0, t, 0.01);
+            n.level[kind].gain.setTargetAtTime(levelFor(kind, norm, measured), t, 0.02);
+        }
+    };
+
+    const fmt = (v: number) => `${v.toFixed(1)} LUFS`;
+    const diff = lufs ? lufs.loud - lufs.dynamic : 0;
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <Segmented
+                    label="Master"
+                    value={which}
+                    onChange={(v) => apply({ which: v })}
+                    options={[
+                        { value: 'dynamic', label: 'Dynamic master' },
+                        { value: 'loud', label: 'Loud, clipped master' },
+                    ]}
+                />
+            </div>
+            <Segmented
+                label="Normalization"
+                value={normalize ? 'on' : 'off'}
+                onChange={(v) => apply({ normalize: v === 'on' })}
+                options={[
+                    { value: 'off', label: 'Normalization off' },
+                    { value: 'on', label: 'Normalization on, like streaming' },
+                ]}
+            />
+            <Readout
+                items={[
+                    { label: 'Dynamic master', value: lufs ? fmt(lufs.dynamic) : player.playing ? 'Measuring' : '–' },
+                    { label: 'Loud master', value: lufs ? fmt(lufs.loud) : player.playing ? 'Measuring' : '–' },
+                    { label: 'Normalization turns the loud one down', value: lufs ? `${diff.toFixed(1)} dB` : '–' },
+                ]}
+            />
+            <p className="text-sm leading-6 text-white/60">
+                Loudness is measured in your browser from this exact loop. With normalization on, switch masters and listen to the snare: the clipped master is no
+                louder any more, only flatter.
+            </p>
+        </div>
+    );
+}
+
+/**
+ * A blind A/B of the same loop where one side is 1 dB louder. Pick the
+ * one that sounds better, then see which was louder.
+ */
+export function LevelAbDemo() {
+    const [louder, setLouder] = useState<'a' | 'b'>(() => (Math.random() < 0.5 ? 'a' : 'b'));
+    const [side, setSide] = useState<'a' | 'b'>('a');
+    const [pick, setPick] = useState<'a' | 'b' | null>(null);
+    const nodes = useRef<{ ctx: AudioContext; gain: GainNode } | null>(null);
+    const gainFor = (s: 'a' | 'b', l: 'a' | 'b') => (s === l ? 10 ** (1 / 20) : 1);
+
+    const player = usePlayer(({ ctx, out }: Engine) => {
+        const gain = ctx.createGain();
+        gain.gain.value = gainFor(side, louder) * 0.8;
+        gain.connect(out);
+        nodes.current = { ctx, gain };
+        const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, gain, step, time, dur));
+        return () => {
+            seq.stop();
+            nodes.current = null;
+            fadeOut(ctx, gain);
+        };
+    });
+
+    const listen = (s: 'a' | 'b') => {
+        setSide(s);
+        const n = nodes.current;
+        if (n) n.gain.gain.setTargetAtTime(gainFor(s, louder) * 0.8, n.ctx.currentTime, 0.01);
+    };
+
+    const newRound = () => {
+        const next = Math.random() < 0.5 ? 'a' : 'b';
+        setLouder(next);
+        setPick(null);
+        const n = nodes.current;
+        if (n) n.gain.gain.setTargetAtTime(gainFor(side, next) * 0.8, n.ctx.currentTime, 0.01);
+    };
+
+    return (
+        <div className="space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <Segmented
+                    label="Listen to"
+                    value={side}
+                    onChange={listen}
+                    options={[
+                        { value: 'a', label: 'Listen to A' },
+                        { value: 'b', label: 'Listen to B' },
+                    ]}
+                />
+            </div>
+            <div>
+                <p className="mb-2 text-sm font-medium text-white/85">Which one sounds better?</p>
+                <Segmented
+                    label="Your pick"
+                    value={pick}
+                    onChange={(v) => setPick(v)}
+                    options={[
+                        { value: 'a', label: 'A sounds better' },
+                        { value: 'b', label: 'B sounds better' },
+                    ]}
+                />
+            </div>
+            <div aria-live="polite">
+                {pick ? (
+                    <p className="text-base leading-7 text-white/80">
+                        <span className="font-semibold text-white">{louder.toUpperCase()} was 1 dB louder.</span> Nothing else was different.{' '}
+                        {pick === louder ? 'You picked the louder one, which is what loudness bias predicts.' : 'You resisted the louder one this round.'}{' '}
+                        <button type="button" onClick={newRound} className="vgp-link text-white">
+                            Try another round
+                        </button>
+                    </p>
+                ) : (
+                    <p className="text-sm text-white/55">The answer appears after you pick.</p>
+                )}
+            </div>
+        </div>
+    );
+}

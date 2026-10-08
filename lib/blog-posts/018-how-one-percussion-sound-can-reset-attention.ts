@@ -2,50 +2,136 @@ import { BlogArticle } from '../blog-data';
 
 export const post018: BlogArticle = {
     slug: 'how-one-percussion-sound-can-reset-attention',
-    title: 'One tiny percussion hit can reset attention',
-    excerpt: 'Loud drum fills are ruining your transitions. Learn how to use a single percussion sound to reset the listener\'s attention and keep the groove moving.',
+    title: 'One small percussion hit can reset attention',
+    excerpt: 'A loop the listener can predict fades into the background. One dry, unexpected hit at the end of the phrase pulls their attention back without stopping the groove.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
-    readingTime: 7,
-    content: `## Hook: the predictable drum fill trap
+    updatedAt: '2026-10-08',
+    readingTime: 5,
+    summary: [
+        'The brain registers a sound that breaks an established pattern even when the listener is not paying attention, and a clear break can pull attention back.',
+        'A single dry hit marks the end of a phrase without covering the vocal or stopping the groove the way a long fill can.',
+        'Keep it short, quiet and in a new place, and change it often enough that it never becomes part of the loop.',
+    ],
+    figures: {
+        bar: {
+            type: 'rhythm',
+            caption:
+                'Bar four of a four-bar phrase. The top two rows are the groove, which keeps playing in the single-hit version: one dry rim click on the last sixteenth before the next downbeat. A fill would replace beats three and four with eight hits.',
+            alt: 'Four rows on a 16-step grid. Kick and snare hits sit on steps 1, 5, 9, 11 and 13. Hats play eighth notes. A fill row has eight rising sixteenths over beats three and four. A one-hit row has a single hit on the last step.',
+            rows: [
+                { label: 'Kick, snare', hits: [0, 4, 8, 10, 12] },
+                { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: '8ths' },
+                {
+                    label: 'Fill',
+                    note: 'beats 3 and 4',
+                    hits: [8, 9, 10, 11, 12, 13, 14, 15].map((step, i) => ({ step, level: 0.55 + i * 0.06 })),
+                },
+                { label: 'One hit', hits: [{ step: 15, level: 0.5 }], note: 'dry rim' },
+            ],
+        },
+        reset: {
+            type: 'flow',
+            caption:
+                'Why one hit works. A repeating loop becomes predictable and the brain responds to it less. A sound that breaks the pattern produces an automatic response and can pull attention back to the groove just as the next phrase starts.',
+            alt: 'Four boxes with arrows: the loop repeats, the brain predicts it and responds less, one sound breaks the pattern, attention comes back to the groove.',
+            steps: [
+                { label: 'The loop repeats', note: 'Four bars, the same pattern' },
+                { label: 'The brain predicts it', note: 'Responses to it shrink' },
+                { label: 'One sound breaks the pattern', note: 'Registered even without attention' },
+                { label: 'Attention returns', note: 'The groove sounds present again' },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'What is the mismatch negativity?',
+            options: [
+                'A drop in perceived loudness when two sounds overlap',
+                'A phase cancellation between the kick and the bass',
+                'A brain response to a pattern break, even unattended',
+                'A brain response that needs the listener\'s full attention',
+            ],
+            answer: 2,
+            why: 'Näätänen and colleagues (2007) review decades of work showing the auditory system flags deviant sounds automatically. That is why one unexpected hit can be noticed while the listener is focused on the vocal.',
+        },
+        {
+            q: 'You add the same rim click at the end of every four-bar phrase for the whole song. What happens?',
+            options: [
+                'It joins the pattern and stops standing out',
+                'It gets more effective each time it returns',
+                'The vocal gets clearer at every phrase ending',
+                'The tempo seems to rise slightly at each turn',
+            ],
+            answer: 0,
+            why: 'A deviant only stands out against a regularity. Repeat it in the same place and it becomes the regularity, so move it, change the sound, or leave it out of some phrases.',
+        },
+        {
+            q: 'Why can a big tom fill bury the end of a vocal line when one rim click does not?',
+            options: [
+                'Toms clash with the key the vocal is sung in',
+                'Rim clicks sit above the range a vocal uses',
+                'Fills are panned to the centre, over the vocal',
+                'The fill covers the vocal range for beats',
+            ],
+            answer: 3,
+            why: 'Snares and toms share much of the vocal range, and a fill keeps them sounding for beats at a time, so they mask the last words. A single short hit occupies a tiny slice of time.',
+        },
+    ],
+    content: `## Hook: the predictable drum fill
 
-You have a four-bar loop that is starting to feel repetitive. To fix it, you place a massive snare roll at the end of the phrase. You add a tom fill and a cymbal crash. When you play the track, the groove is broken. The vocal is buried under the drum clutter. The mix feels like it stopped to let the drummer show off, which kills the momentum of the track. This is the transition overload trap. You spent your transition adding noise, but a single percussion sound can reset attention.
+You have a four-bar loop that is starting to feel repetitive. To fix it, you put a big snare roll at the end of the phrase, then a tom fill and a crash. When you play the track, the groove stops to let the drummer show off. The last words of the vocal line disappear under the fill, and the next phrase starts from a standstill.
 
-## Why it matters: keeping the groove locked while resetting the ear
+A fill is a real tool, and a good one at the right moment. But most phrase endings need much less. Often one percussion sound in the right place does the job.
 
-Loud drum fills ruin the pocket of your beat. They occupy the same mid-range frequencies as the lead vocal, causing masking. By using a single, unexpected percussion sound, you reset the listener's focus without breaking the groove. The backbeat keeps moving. The vocal remains clear because there is no wall of snare hits to block it. This keeps the mix clean and prevents the master fader from peaking.
+## Why it matters: marking the turn without stopping the groove
 
-## Science model: cognitive novelty and stream resetting
+The job at the end of a phrase is to tell the listener that something is about to start again. A long fill does that by taking over: it replaces the groove for a beat or two, and snares and toms put a lot of energy into the same range as the vocal. If the vocal line ends there, its last words get masked.
 
-This is explained by Bregman's theories on auditory scene analysis (1990). The human brain is designed to ignore continuous, repetitive patterns. Once the loop is established, the brain stops processing it. If you introduce a massive drum fill, the brain must build a new auditory stream. This distracts from the vocal. However, if you place a single, dry percussion hit on a key beat, the brain registers the novelty. The brain resets its attention to the main groove. According to Ronan et al. (2018), keeping these details small avoids frequency masking, maintaining the clarity of the mix.
+A single unexpected hit does the same job with much less. The kick, snare and hats keep going, the vocal stays clear, and one short sound tells the listener the phrase is turning.
+
+::figure bar
+
+## Science model: the brain notices what breaks a pattern
+
+The auditory system keeps track of regularities. When a sound breaks a pattern that has been established, the brain produces a measurable response called the mismatch negativity, and it does so even when the listener is paying attention to something else (Näätänen et al., 2007). A strong enough deviant can pull attention toward it.
+
+That is the mechanism behind one well-placed hit. After a few bars, the loop is predictable, and the ear responds less and less to it. A rim click on the last sixteenth of bar four breaks the pattern. The listener does not need to be listening to the drums to notice it, and the moment of attention it creates lands on the downbeat of the next phrase.
+
+Entries are especially easy to notice. Huron (1989) found that listeners detected a voice entering a texture more easily than one leaving it. A sound that has not been heard before in the loop is an entry by definition.
+
+::figure reset
 
 ## DAW experiment: the single percussion transition test
 
-1. Open your DAW session and locate a section transition.
-2. Mute all complex snare rolls, tom fills, and cymbal sweeps.
-3. Locate the final beat of the section.
-4. Place a single, dry percussion sound on that final beat. Use a woodblock, a rimshot, or a metallic click.
-5. Make sure the sound is short and has no reverb.
-6. Play the transition from the verse to the pre-chorus.
-7. Notice how the loop feels less automatic and the groove keeps moving.
-8. Compare this with the original drum fill version to see which has more pocket.
+1. Find a section transition and loop the last two bars before it and the first bar after it.
+2. Mute the snare rolls, tom fills and cymbal sweeps at the end of the section.
+3. On the last sixteenth before the downbeat, place one short percussion sound: a woodblock, a rim click or a metallic tick.
+4. Remove any reverb or delay from that sound so it stays short and dry.
+5. Set its level well below the snare so it sits in the background.
+6. Play the transition and compare it with the fill version.
+7. Move the hit to a different sixteenth in the next phrase so it does not become part of the pattern.
+
+The groove should keep moving through the turn while the loop sounds less automatic, and the vocal should stay clear to its last word.
 
 ## Common mistake: cluttering every transition
 
-The most common mistake is using massive drum fills every four bars. Producers clutter transitions because they fear repetition, but this ruins the pocket. Another mistake is making the percussion sound too loud. It should be a quiet detail in the background, not a lead instrument.
+The most common mistake is a big fill every four bars. It comes from fear of repetition, but a fill in the same place every time becomes its own predictable pattern, and the groove keeps stopping.
+
+The second mistake is making the percussion hit too loud. It works because it is a small surprise in the background. Turned up to lead level, it becomes a distraction instead of a signal. The same goes for repeating it: the same hit in the same place for the whole song becomes part of the loop and stops breaking it.
 
 ## Producer takeaway: small sounds hit hard when they arrive on purpose
 
-A tiny sound in the right spot beats a loud drum fill. Place one small percussion sound at the section turn to reset the listener's focus.
+A tiny sound in the right spot can do what a loud fill does, without stopping the song. Place one short, dry hit at the turn of the phrase, keep it quiet, and change where it lands so it stays a surprise. Save the big fills for the transitions that need them.
 
 ## References
 
-- Bregman, A. S. (1990). Auditory Scene Analysis: The Perceptual Organization of Sound. MIT Press.
-- Ronan, M., Ma, Z., Mc Namara, D., Gunes, H., & Reiss, J. D. (2018). Automatic Minimisation of Masking in Multitrack Audio using Subgroups.
+- Huron, D. (1989). Voice denumerability in polyphonic music of homogeneous timbres. *Music Perception*, 6(4), 361-382.
+- Näätänen, R., Paavilainen, P., Rinne, T., & Alho, K. (2007). The mismatch negativity (MMN) in basic research of central auditory processing: A review. *Clinical Neurophysiology*, 118(12), 2544-2590.
 `,
     seo: {
-        title: 'One tiny percussion hit can reset attention',
-        description: 'Loud drum fills are ruining your transitions. Learn how to use a single percussion sound to reset the listener\'s attention and keep the groove moving.',
-        keywords: ['percussion ear candy', 'novelty and timing', 'beat making', 'mixing groove', 'producer tips']
-    }
+        title: 'One small percussion hit can reset attention',
+        description: 'Why a single dry percussion hit at the end of a phrase can pull attention back to the groove, and when it beats a big drum fill.',
+        keywords: ['percussion ear candy', 'drum fills', 'mismatch negativity', 'arrangement transitions', 'groove'],
+    },
 };

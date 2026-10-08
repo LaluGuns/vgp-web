@@ -9,7 +9,8 @@ function getNewCategory(id) {
     if (id >= 31 && id <= 40) return 'sound-design';
     if (id >= 41 && id <= 50) return 'vocal-production';
     if (id >= 51 && id <= 70) return 'mixing-mastering';
-    if (id >= 71 && id <= 90) return 'producer-psychology';
+    if (id >= 71 && id <= 80) return 'music-psychology';
+    if (id >= 81 && id <= 90) return 'producer-psychology';
     if (id >= 91 && id <= 100) return 'audio-science';
     return null;
 }

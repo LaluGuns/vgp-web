@@ -3,64 +3,125 @@ import { BlogArticle } from '../blog-data';
 export const post005: BlogArticle = {
     slug: 'the-one-note-hook-that-still-works',
     title: 'One note can own the hook',
-    excerpt: 'You do not need complex melodies to write a hit. Learn how a single note, combined with the right rhythm and tone, can create an unforgettable hook.',
+    excerpt: 'A one-note hook has no melody to lean on, so its rhythm, words and delivery carry all of its identity. Write the rhythm first and test it alone.',
     category: 'songwriting',
     publishedAt: '2026-06-03',
-    readingTime: 7,
+    updatedAt: '2026-10-08',
+    readingTime: 6,
+    summary: [
+        'For most tunes, rhythm alone is a weak cue: listeners recognise familiar songs far better from their pitches than from their rhythm.',
+        'A one-note hook is the rhythm-only version of a melody, so it works only when the rhythm, the words and the delivery are distinctive.',
+        'Anchor the phrase on a downbeat, then place accents between the beats; moderate syncopation tends to make people want to move most.',
+    ],
+    figures: {
+        placement: {
+            type: 'rhythm',
+            caption:
+                'One note in three rhythms over a bar. On the beat it is steady but anonymous. With a downbeat anchor and accents between the beats it pulls against the pulse. With no note on any beat, the listener can lose track of where the beat is.',
+            alt: 'Three rows on a 16-step grid. The first has a hit on each of the four beats. The second has hits on the downbeat and on steps between the later beats. The third has hits only on steps between the beats.',
+            rows: [
+                { label: 'On the beat', note: 'Steady, anonymous', hits: [0, 4, 8, 12] },
+                {
+                    label: 'Anchored',
+                    note: 'Off-beat accents',
+                    hits: [0, 3, { step: 6, level: 0.5 }, 10, { step: 11, level: 0.5 }, 14],
+                },
+                { label: 'All off the beat', note: 'No anchor', hits: [1, 3, 6, 9, 11, 14] },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Why does a one-note hook need an unusually distinctive rhythm?',
+            options: [
+                'It gives up pitch, the cue tunes are known by',
+                'A single repeated note is hard to sing in tune',
+                'Rhythm is the cue listeners remember tunes by',
+                'Repeated notes sound like a drum part to the ear',
+            ],
+            answer: 0,
+            why: 'In the Hébert and Peretz study, listeners named far more familiar tunes from their pitches than from their rhythm. A one-note hook keeps only the weaker cue, so the rhythm has to be memorable on its own.',
+        },
+        {
+            q: 'Your one-note hook sounds dull. What is the most likely fix?',
+            options: [
+                'Add a fast five-note run at the end of the phrase',
+                'Quantize every note so it lands right on the beat',
+                'Put accents off the beat, leave one beat empty',
+                'Raise the whole line an octave for more energy',
+            ],
+            answer: 2,
+            why: 'With only one pitch, the rhythm is the identity. A line that sits on every beat gives the ear nothing to catch; a few off-beat accents give it shape.',
+        },
+        {
+            q: 'Why can syncopating every note of the hook backfire?',
+            options: [
+                'Off-beat notes are harder for the singer to tune',
+                'Syncopation works best at slow, relaxed tempos',
+                'Off-beat notes get masked by the hi-hat pattern',
+                'With no note on a strong beat, the pulse fades',
+            ],
+            answer: 3,
+            why: 'Syncopation is felt against a beat. In the Witek study, medium syncopation made people want to move most; when nothing confirms the beat, the pull disappears.',
+        },
+    ],
     content: `## Hook: the pitch overload
 
-You sit at your keyboard, searching for a chorus hook. You write a melody that rises over the first chord, drops down a minor third, and then resolves with a rapid run of five notes. 
+You sit at your keyboard looking for a chorus hook. You write a melody that rises over the first chord, drops a minor third and then finishes with a quick run of five notes.
 
-It sounds sophisticated in your head. However, when you listen to the session, the line feels weak. It lacks punch, and you cannot remember it five minutes after you mute the track. A complex melody makes it impossible for the listener to lock onto a single focus.
+It sounds clever in your head. In the session it feels weak. It has no punch, and five minutes after you mute the track you cannot remember how it went. There is a lot to follow and nothing that grabs.
 
-## Why it matters: transient definition and memory retention
+## Why it matters: rhythm has to do the work
 
-When a hook contains too many pitch changes, the listener's brain spends its cognitive resources on the analysis of intervals. This is especially true on small speakers like phones or laptops. These devices cannot reproduce the low-end weight or the complex chord extensions, which leaves only the vocal transients and midrange timbre to carry the song. 
+A one-note hook removes pitch from the hook. That sounds like a shortcut, and it is harder than it looks. Hébert and Peretz (1997) played familiar tunes to listeners in two stripped versions: the pitches in even note lengths, or the rhythm on a single pitch. Listeners named far more tunes from the pitches than from the rhythm. For most melodies, rhythm on its own is a weak cue.
 
-If your hook is a fast run of notes, the transients get blurred, and the melody loses its definition. A simple, rhythmic hook cuts through the noise because it relies on the pocket, not the scale.
+That is the warning. A one-note hook is exactly the rhythm-only version of a melody. If its rhythm is ordinary, nothing identifies it. It works only when the rhythm is distinctive, the words are strong and the singer delivers the line with confidence. When those are there, the hook has an advantage: there are no intervals to learn, so it is easy to sing back.
 
-## Science model: cognitive efficiency and rhythmic dominance
+## Science model: syncopation is the main surprise left
 
-This is explained by Juslin and Västfjäll's research on musical emotion (2008) and Huron's analyses of expectation (2006). The human brain processes rhythm and pitch in different areas of the auditory cortex. 
+Huron (2006) treats expectation in time the same way as expectation in pitch: the brain predicts when the next event will land as well as what it will be. The meter makes strong beats the most likely places for notes. A note placed between the beats, while the beat carries on underneath, is syncopation: a small surprise in time.
 
-Rhythm is processed earlier and is more closely tied to the motor cortex, which explains why we tap our feet to a beat before we can identify the melody. 
+In a one-note hook, that is the main musical surprise left, so where you put the accents decides whether the line has character. More is not always better. Witek and colleagues (2014) played listeners drum breaks with different amounts of syncopation. Breaks with a medium amount made people want to move most and gave the most pleasure, while breaks with very little or a great deal of syncopation scored lower. A rhythm needs enough on the beat to confirm the pulse, and enough off it to pull against it.
 
-When you limit your hook to a single pitch, you reduce the brain's cognitive workload. The brain does not need to analyze interval changes. Instead, it can focus entirely on the rhythmic syncopation and the vocal timbre. 
+::figure placement
 
-Huron (2006) points out that simple, repetitive structures are easier to store in our working memory. This means the listener can recall the hook after only one listen, which is the definition of a catchphrase.
+::demo syncopation
 
-## DAW experiment: the desk tap test
+The words do the rest. With no melody to carry the line, the consonants give each note its attack and the vowels give it length, and the meaning of the words becomes the thing the listener remembers.
 
-This ten-minute experiment will help you test the rhythmic power of your hook.
+## DAW experiment: the one-note rewrite
 
-1. Open your current session and isolate your main vocal hook.
-2. Mute the audio and look at the MIDI notes or the audio waveform.
-3. Tap the exact rhythm of the vocal line on your desk.
-4. If the rhythm alone is not recognizable or does not feel like it has a groove, the hook relies too much on pitch changes.
-5. Now, create a new MIDI track with a simple, punchy synthesizer sound.
-6. Write a four-bar phrase on a single note, with a complete focus on syncopation. Put notes on the offbeats and leave open spaces on the downbeats.
-7. Play this back over your drum loop. You will find that this one-note line has more attitude and memory power than a complex melody.
+1. Mute your current hook and tap its rhythm on the desk or a drum pad over the beat. Notice how much of its character survives without the pitches.
+2. Create a MIDI track with a short, punchy synth sound, set the grid to 16th notes and keep your song tempo.
+3. Write a two-bar phrase on one note in the middle of the singer's range. Put the first note on the downbeat of bar 1.
+4. Place the next accents between the beats: one a 16th before beat 2, one an eighth after beat 3. Leave at least one beat in each bar with no note on it.
+5. Vary only velocity and length: accents at velocity 110, other notes at 70, and one long note to end the phrase.
+6. Loop four bars over your drums. Then copy the phrase and move only its last note up one scale step.
+7. Compare the one-note line, the two-note version and your original hook at the same level.
+
+If the one-note line sounds dull, the rhythm is too regular, not the pitch. Once it has character on one note, the second note at the end sounds like an event instead of decoration.
 
 ## Common mistake: the virtuosic bias
 
-The most common mistake is the belief that simple writing is lazy writing. Producers often feel they must show off their musical knowledge with complex chord scales or rapid vocal runs. This is the virtuosic bias, and it leads to cluttered hooks that the average listener cannot sing along with. 
+The most common mistake is believing that simple writing is lazy writing. Producers feel they have to show their knowledge with complex scales or fast vocal runs. The result is a hook the average listener cannot sing back.
 
-Another mistake is the neglect of the performance attitude. A one-note hook only works when the vocalist delivers the line with absolute confidence and distinct tone.
+The opposite mistake is syncopating everything. If no note lands on a strong beat, the listener loses the pulse, and the off-beat accents stop sounding off the beat. Keep an anchor, usually the downbeat of the phrase, and let the rest pull away from it.
 
-## Producer takeaway: rhythm beats pitch
+A one-note hook also exposes the performance. Without a melody to hide behind, a hesitant delivery or a soft consonant shows at once.
 
-A small melody can still have a loud personality. If you want a hook that sticks forever, prioritize the rhythmic pocket over pitch complexity. 
+## Producer takeaway: write the rhythm first
 
-Make the rhythm speak before you start adding notes. If the hook is punchy on a single note, it will be unstoppable when you add a second or third note. Start simple, build the groove, and let the attitude carry the weight.
+Before you choose pitches, find a rhythm that has character when you tap it. If the hook works on one note, adding a second or third note later is easy and each one will count. If it does not, more notes will only decorate a weak rhythm.
 
 ## References
 
-- Huron, D. (2006). Sweet Anticipation: Music and the Psychology of Expectation. MIT Press.
-- Juslin, P. N., & Västfjäll, D. (2008). Emotional responses to music: The need to consider many different mechanisms. Behavioral and Brain Sciences, 31(5), 559-575.
+- Hébert, S., & Peretz, I. (1997). Recognition of music in long-term memory: Are melodic and temporal patterns equal partners? *Memory & Cognition*, 25(4), 518-533.
+- Huron, D. (2006). *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press.
+- Witek, M. A. G., Clarke, E. F., Wallentin, M., Kringelbach, M. L., & Vuust, P. (2014). Syncopation, body-movement and pleasure in groove music. *PLOS ONE*, 9(4), e94446.
 `,
     seo: {
         title: 'One note can own the hook',
-        description: 'You do not need complex melodies to write a hit. Learn how a single note, combined with the right rhythm and tone, can create an unforgettable hook.',
-        keywords: ['one note hook', 'songwriting tips', 'rhythmic identity', 'auditory memory', 'producer tips']
-    }
+        description: 'A one-note hook lives on rhythm, words and delivery. Learn why rhythm alone is a weak cue and how syncopation gives a single note an identity.',
+        keywords: ['one note hook', 'syncopation', 'rhythmic hook', 'melody memory', 'songwriting tips'],
+    },
 };

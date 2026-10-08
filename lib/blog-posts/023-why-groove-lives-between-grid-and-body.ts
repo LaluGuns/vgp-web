@@ -1,68 +1,160 @@
 import { BlogArticle } from '../blog-data';
 
+// 90 BPM: one 16th lasts 166.7 ms, so 20 ms is 0.12 of a step.
+const LEAN = 0.12;
+
 export const post023: BlogArticle = {
     slug: 'why-groove-lives-between-grid-and-body',
-    title: 'Why Groove Lives Between Grid and Body',
-    excerpt: 'Snapping every instrument to the exact same grid line chokes the life out of your rhythm. Learn how to build a pocket that feels played.',
+    title: 'Why groove lives between grid and body',
+    excerpt: 'The grid marks where a sound starts. Your body hears where its beat lands. Build the pocket from that gap, and correct for your own clapping bias.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
-    readingTime: 8,
-    seo: {
-        title: 'Why Groove Lives Between Grid and Body | VGP Studio',
-        description: 'Understand the relationship between DAW grids and human timing. Learn why a playable groove pocket requires anchor points and floating percussion.',
-        keywords: ['groove pocket', 'timing expectation', 'beat making', 'music production', 'rhythm', 'quantization']
+    updatedAt: '2026-10-08',
+    readingTime: 6,
+    summary: [
+        'The grid marks where a sound starts, but listeners hear its beat later and more loosely when the attack is slow or the sound is long.',
+        'A pocket needs a clear anchor, usually kick and backbeat, with the other parts leaning around it on purpose.',
+        'When you set offsets by clapping along, measure your own early bias against a bare click first and subtract it.',
+    ],
+    figures: {
+        attack: {
+            type: 'signal',
+            caption:
+                "Both sounds start on the same grid line. The snare's energy arrives at once, so listeners place its beat on the line. The pad takes time to rise, so listeners place its beat later and less precisely (Danielsen et al., 2019).",
+            alt: 'Two level plots. A snare envelope jumps to full level at the grid line and decays quickly. A pad envelope starts at the same grid line and rises slowly, with a second marker later than the grid where its beat is felt.',
+            rows: [
+                {
+                    label: 'Snare: fast attack, short',
+                    unipolar: true,
+                    traces: [{ kind: 'hits', at: [0.2], decay: 12, outline: true }],
+                    marks: [{ t: 0.2, label: 'Grid' }],
+                },
+                {
+                    label: 'Pad: slow attack, long',
+                    unipolar: true,
+                    traces: [
+                        {
+                            kind: 'envelope',
+                            points: [
+                                [0, 0],
+                                [0.2, 0],
+                                [0.55, 0.85],
+                                [1, 0.8],
+                            ],
+                        },
+                    ],
+                    marks: [
+                        { t: 0.2, label: 'Grid' },
+                        { t: 0.42, label: 'Felt beat' },
+                    ],
+                },
+            ],
+        },
+        pocket: {
+            type: 'rhythm',
+            steps: 8,
+            perBeat: 4,
+            caption:
+                'Two beats at 90 BPM, where a 16th lasts 166.7 ms. Kick and snare mark the beat on the grid. The slow pad starts 20 ms early to make up for its rise. The shaker sits 20 ms late on every hit, 12 percent of a step, with quieter hits in between, so it leans as one consistent part.',
+            alt: 'A grid of two beats. Kick on beat one and snare on beat two sit on the grid. A pad hit on beat one is shifted slightly early. Shaker hits on every 16th are all shifted slightly late, alternating loud and quiet.',
+            rows: [
+                { label: 'Kick', hits: [0] },
+                { label: 'Snare', hits: [4] },
+                { label: 'Pad', note: '-20 ms', hits: [{ step: 0, offset: -LEAN }] },
+                {
+                    label: 'Shaker',
+                    note: '+20 ms',
+                    hits: [0, 1, 2, 3, 4, 5, 6, 7].map((step) => ({ step, offset: LEAN, level: step % 2 === 0 ? 1 : 0.45 })),
+                },
+            ],
+        },
     },
-    content: `## The cage of the perfect snap
+    quiz: [
+        {
+            q: 'A pad with a slow attack starts exactly on the grid line. Where do listeners tend to hear its beat?',
+            options: ['Right on the line, in a narrow window', 'Earlier than the line, in a narrow window', 'Later than the line, in a wider window', 'Later than the line, in a narrow window'],
+            answer: 2,
+            why: 'Danielsen and colleagues found that slow and long sounds are placed later than their onset and with more spread. The perceived beat is a window, not a point.',
+        },
+        {
+            q: 'When people tap along to a steady click, where do their taps usually land?',
+            options: [
+                'Behind the click, by tens of milliseconds',
+                'Ahead of the click, by tens of milliseconds',
+                'On the click, within a millisecond or two',
+                'Either side of the click, with no clear trend',
+            ],
+            answer: 1,
+            why: "This is the negative mean asynchrony described in Repp's review of tapping studies. Aligning parts to raw claps copies that anticipation into the track.",
+        },
+        {
+            q: 'In the corrected clap test, why do you first record a take against the click alone?',
+            options: [
+                'To measure your own tapping bias',
+                'To check that the click is in time',
+                'To warm up before the real take',
+                'To set the input level for claps',
+            ],
+            answer: 0,
+            why: 'The first take shows how early you tap anyway. Subtracting it leaves only the shift that the track itself causes.',
+        },
+    ],
+    content: `## Hook: the clean line that does not move
 
-You snap every track in your session to the grid. The kick, the bass, the snare, and the synth chords all align perfectly. You look at the DAW screen and see a clean line of transients. But when you listen, the beat feels like it has been choked. It has no bounce. It has no groove. 
+You snap every track to the grid. Kick, bass, snare and chords all start on the same lines, and the arrange window shows one clean column of transients. Then you play it and nothing moves. The beat is correct and your body ignores it.
 
-This happens because you built a grid instead of a pocket. The grid is a mathematical abstraction. It is a straight line of divisions. The human body does not move in straight lines. It moves in physical arcs that slow down and speed up. When you snap every instrument to the exact same point, you remove the natural tension between the grid and the muscle.
+The grid measures where a sound starts. Your body responds to where it feels the beat land, and those are not always the same place. Groove, the pleasant urge to move with music (Janata, Tomic and Haberman, 2012), lives in the gap between the two.
 
-## Why a flat grid ruins the mix
+## Why it matters: the eye aligns starts, the ear hears beats
 
-Snapping everything to the same grid line does not make the track tighter. It makes the track smaller. When multiple transients hit at the exact same millisecond, they collide. The kick drum transient fights the bass transient, which also fights the piano transient. 
+Aligning by eye assumes that the beat of every sound sits at the start of its waveform. That holds for a snare. It does not hold for a pad, a soft bass or a breathy vocal. Danielsen and colleagues (2019) asked listeners to line up clicks with sounds of different shapes, and to tap along with them. Sounds with a fast attack and a short decay were placed close to their onset, in a narrow band. Sounds with a slow attack or a long duration were placed later and with far more spread. The authors describe the perceived beat of a sound as a beat bin: a window with a shape, rather than a single instant.
 
-This collision causes transient masking. You lose the definition of each instrument. To compensate, you turn the volume up, which quickly clips your master bus. 
+So a session that looks aligned can feel smeared. The snare lands on the line, the slow pad lands later, and the body has to pick. A good pocket gives it something clear to pick, then lets the other parts lean around it on purpose.
 
-By letting instruments sit slightly off-grid, you spread the transients out in time. This timing offset creates depth and separation. The brain can resolve each instrument because they do not hit at the same instant. The mix gains natural clarity without excessive EQ.
+::figure attack
 
-## The science of timing expectation
+## Science model: anchors and leaning parts
 
-Groove lives in timing expectation. When we listen to a beat, our auditory cortex establishes a template of the rhythm. We predict when the next major accent will fall. 
+Your body locks to the parts with the clearest beat, usually the kick and the backbeat. Janata and colleagues found that music rated high in groove also drew spontaneous movement, and that groove went with how easily people could move in time with it. A clear anchor makes that coupling easy. Once it is stable, other parts can sit early or late against it and be heard as feel rather than error.
 
-If a secondary percussion element arrives slightly early or late, it violates that prediction. This timing violation triggers a physical reaction. We feel a pull or a push against the main anchor. We can represent this relationship with a simple conceptual ratio:
+::figure pocket
 
-$$\text{Pocket Tension} = \frac{\text{Anchor Stability}}{\text{Support Offset}}$$
+The demo below moves one part against an otherwise fixed beat. Here it is the snare, while the kick and hats stay on the grid. Notice how a few milliseconds change the attitude of the whole bar.
 
-Where Anchor Stability is the predictability of the downbeat, and Support Offset is the displacement of secondary parts. 
+::demo late-snare
 
-If the anchor is weak, the rhythm falls apart. If the support offset is zero, the rhythm becomes flat. You need both. The body feels the tension between the rigid anchor and the floating percussion. That relationship is what actually makes a track feel playable.
+There is a catch when you set offsets by tapping or clapping along. When people tap with a steady beat, their taps land ahead of it on average, usually by tens of milliseconds (Repp, 2005). If you line percussion up with your raw claps, you copy your own anticipation into the track. The fix is to measure that bias first and keep only the difference the music causes.
 
-## The vocal pocket test
+## DAW experiment: the corrected clap test
 
-This simple test takes five minutes. It will show you how to find a physical pocket without looking at your DAW grid lines.
+1. Loop eight bars of your track and mute everything except the click. Record yourself clapping, or tapping a pad, on every beat. Do not quantize.
+2. Zoom in and note how far your hits sit from the grid on average. Most people land early.
+3. Mute the click and play the vocal, kick and snare. Record a second take, clapping where the vocal makes you want to clap.
+4. Note the average offset of this take and subtract the first. Say you were 20 ms early to the click and 5 ms early to the track: the track pulls you 15 ms later.
+5. Move your shaker or tambourine by that difference, here +15 ms, using track delay.
+6. Compare it with the quantized shaker at matched level, with the full track playing.
 
-1. Loop a section of your track containing the lead vocal, the kick drum, and the snare.
-2. Turn off the computer monitor or close your eyes.
-3. Stand up and clap along with the track. Try to place your claps exactly where the vocal wants to land.
-4. Record your claps to a MIDI track. Do not quantize them.
-5. Open your eyes and look at the recorded MIDI notes. You will likely see that your claps are consistently late or early relative to the grid.
-6. Align your tambourines, shakers, or secondary hats to this physical timing pattern rather than the mathematical grid.
+The shaker should now sit where your body places the beat in this track. If the difference was close to zero, the grid already matched the track, which is a useful answer too.
 
-## The quantize-everything mistake
+## Common mistake: quantizing every layer
 
-The biggest mistake is quantizing every layer. Producers think they are cleaning up the mix when they snap the shakers, the tambourines, the hats, and the bass to the grid. 
+The usual mistake is snapping every layer to the grid at 100 percent and calling it clean. Tambourines, shakers and hats played by hand carry the player's lean. Strip it out and the track still works, but it loses the push or sit-back that made it sound like people playing together.
 
-This process kills the pocket. The tambourine and the shaker need to float. They are fluid instruments. When you force them onto the grid, you strip them of their natural momentum. The track becomes stiff. It loses its bounce.
+The opposite mistake is aligning slow sounds by the start of their waveform. A pad or a bowed bass placed exactly on the line sounds late, because its beat lands after its start. Nudge slow-attack parts a little early and judge them by ear against the kick.
 
-## Anchor the downbeat and let the rest lean
+## Producer takeaway: anchor the beat, then let the rest lean
 
-Keep the foundation stable while letting the decoration move. Lock your kick drum and snare to the grid lines. They are the reference anchors. 
-
-Once the downbeats are locked, let the bass, the hi-hats, and the shakers float around the grid. Do not quantize them by more than 50% if they were played live. If you are programming them, shift them manually by ear. The groove will instantly feel like a band playing in the same room.
+Lock the kick and backbeat first. They are the reference the body uses. Then let the bass, hats and percussion lean around them. For played parts, try partial quantize at 50 to 75 percent strength, which pulls notes toward the grid but keeps the direction of each one. For programmed parts, move a whole part by a consistent amount, by ear. When the track makes you move without looking at the screen, stop editing.
 
 ## References
 
-* Huron, D. (2006). Sweet Anticipation: Music and the Psychology of Expectation. MIT Press.
-* Senior, M. Mixing Secrets for the Small Studio. Routledge.`
+- Danielsen, A., Nymoen, K., Anderson, E., Câmara, G. S., Langerød, M. T., Thompson, M. R., & London, J. (2019). Where is the beat in that note? Effects of attack, duration, and frequency on the perceived timing of musical and quasi-musical sounds. *Journal of Experimental Psychology: Human Perception and Performance*, 45(3), 402-418.
+- Janata, P., Tomic, S. T., & Haberman, J. M. (2012). Sensorimotor coupling in music and the psychology of the groove. *Journal of Experimental Psychology: General*, 141(1), 54-75.
+- Repp, B. H. (2005). Sensorimotor synchronization: A review of the tapping literature. *Psychonomic Bulletin & Review*, 12(6), 969-992.
+`,
+    seo: {
+        title: 'Why groove lives between grid and body | VGP Studio',
+        description: 'Why a session aligned by eye can feel smeared, how slow attacks shift the felt beat, and a clap test that corrects for your own timing bias.',
+        keywords: ['groove pocket', 'perceived timing', 'quantization', 'beat making', 'rhythm', 'microtiming'],
+    },
 };

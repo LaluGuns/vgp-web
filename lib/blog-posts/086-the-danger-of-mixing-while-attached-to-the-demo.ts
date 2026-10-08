@@ -3,74 +3,139 @@ import { BlogArticle } from '../blog-data';
 export const post086: BlogArticle = {
     slug: 'danger-of-mixing-attached-to-the-demo',
     title: 'The danger of mixing while attached to the demo',
-    excerpt: 'Stuck trying to replicate your rough demo mix? Familiarity bias tricks your brain into loving mistakes. Learn how to let go of demo attachment and build cleaner mixes.',
+    excerpt: 'Fifty plays of a rough bounce make its flaws sound like the song. Here is how familiarity builds attachment, and how to keep the feeling without the clutter.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
-    readingTime: 6,
-    content: `## The trap of the rough reference
+    updatedAt: '2026-10-08',
+    readingTime: 7,
+    summary: [
+        'Every play of the rough bounce makes its details more expected, so a cleaner mix feels wrong before you have judged it.',
+        'Background listening kept raising liking with every play in one study, which is why weeks of car plays make a demo hard to beat.',
+        'Write down what the demo does well, rebuild without it, then compare at matched level and with a listener who never heard it.',
+    ],
+    figures: {
+        exposure: {
+            type: 'curve',
+            caption:
+                'The shape of the findings for real music in Szpunar, Schellenberg and Pliner (2004). Heard in the background, liking kept rising with plays. Heard with full attention, it rose and then fell. Shapes only, not measured values.',
+            alt: 'Two curves of liking over first play, a few plays, more plays and many plays. The background listening curve keeps rising. The dashed focused listening curve rises, then falls.',
+            x: ['First play', 'A few plays', 'More plays', 'Many plays'],
+            xShort: ['First', 'A few', 'More', 'Many'],
+            yLabel: 'Liking',
+            series: [
+                { label: 'Background listening', values: [0.3, 0.5, 0.66, 0.8] },
+                { label: 'Focused listening', values: [0.3, 0.58, 0.52, 0.36], dashed: true },
+            ],
+        },
+        expect: {
+            type: 'flow',
+            caption:
+                'How demo attachment builds. Each play makes the rough version more expected, so any departure from it feels wrong first and gets judged second.',
+            alt: 'Four steps with an arrow from the last back to the first: play the rough again and again, its details become expected, the new mix changes them, the change feels like a mistake, then back to the rough.',
+            steps: [
+                { label: 'Play the rough again and again' },
+                { label: 'Its details become expected', note: 'The boxy snare, the vocal level in bar 9' },
+                { label: 'The new mix changes them', note: 'Cleaner, but different' },
+                { label: 'The change feels like a mistake' },
+            ],
+            loop: { to: 0, label: 'Back to the rough' },
+        },
+    },
+    quiz: [
+        {
+            q: 'You played the rough bounce in the car for weeks. Why might the clean mix feel wrong at first?',
+            options: [
+                'Background plays wore out your liking for the song as a whole',
+                'The rough captured the song\'s vision, and the clean mix lost it',
+                'Its details became expected, so a change feels like a mistake',
+                'Weeks of road noise dulled your hearing, so new mixes sound off',
+            ],
+            answer: 2,
+            why: 'Familiarity tends to raise liking, and detailed knowledge of one version sets up expectations that any change breaks. Neither tells you whether the change is better.',
+        },
+        {
+            q: 'You want to judge the rough fairly against the new mix. Which habit makes attachment least likely?',
+            options: [
+                'Playing the rough in the background through the week',
+                'Stopping repeat plays and comparing at matched level',
+                'Playing the rough a little louder than the new mix',
+                'Playing the rough before every session to stay inspired',
+            ],
+            answer: 1,
+            why: 'Fewer exposures mean less familiarity built up, and matched level stops the louder version from winning by default.',
+        },
+        {
+            q: 'A rough vocal has boxy room tone. How do you decide whether it is character or a flaw?',
+            options: [
+                'Ask if you would add it on purpose to a clean take',
+                'Keep it, since the first take is the most honest one',
+                'Remove it, since any room sound on a vocal is a flaw',
+                'Solo it and judge whether it sounds bad on its own',
+            ],
+            answer: 0,
+            why: 'Character is something you would choose. If you would never add the boxiness to a clean take, it is a flaw you got used to.',
+        },
+    ],
+    content: `## Hook: defending a memory
 
-You have probably spent three weeks writing a song. You listened to the rough export at least fifty times on your phone or in your car. When the session is finally ready for a professional mix, you find yourself fighting the engineers or your own ears. Every clean volume balance sounds cold. Every dynamic adjustment feels like it is stripping away the soul of the track. You are not defending the artistic vision of the song. You are defending a memory.
+You spent three weeks writing a song and played the rough export at least fifty times on your phone and in the car. Now the session is ready to mix, and you find yourself fighting the engineer, or your own ears. Every clean balance sounds cold. Every dynamic change feels like it strips away the soul of the track. You are not defending the vision of the song. You are defending a memory.
 
-This is the demo love trap. It is a psychological state where a producer becomes emotionally bound to the specific balance and acoustic errors of an early rough draft. Because you have heard the track in this state repeatedly, your brain has categorized those specific flaws as essential parts of the musical identity. When you try to improve the sonic quality, the brain resists.
+Studio people call this demo-itis: getting attached to the balance, sounds and mistakes of a rough version after living with it. Because you have heard the song only in that state, its flaws have become part of what the song is to you, and any improvement registers as a loss.
 
-## Why it matters in the mix
+## Why it matters: the audience never heard the demo
 
-When you mix with demo attachment, you make decisions based on comfort rather than quality. You waste hours trying to make a high-end compressor replicate the cheap, squashed transient response of a stock limiter on your demo mix bus. You might reject a clean vocal sound because you miss the boxy room resonance that was captured on a cheap dynamic microphone during the writing phase. 
+Attachment makes you mix for comfort instead of quality. You spend hours trying to make a good compressor recreate the squashed sound of a stock limiter on the demo's master bus. You reject a clean vocal because you miss the boxy resonance of the room you wrote in.
 
-This holding pattern holds back the translation of your record. The audience does not share your nostalgia. They have never heard your demo. They will listen to the song on Spotify next to commercial productions, and they will judge the final master on its own merits. If your mix maintains muddy low mids simply because you got used to them, the track will sound amateur on consumer systems.
+The audience does not share that history. They will hear the song next to other finished records, and they will judge the mix on its own. A low-mid buildup you kept because you got used to it will sound like a buildup to everyone else.
 
-## Science model: familiarity bias and memory
+Attachment is not always wrong. A rough take can have a performance or an energy the polished version lost, and the lesson on [trusting a rough idea](/blog/psychology-of-trusting-a-rough-idea) is about protecting that. The work is telling the two apart.
 
-This attachment is driven by familiarity bias, which is also known in psychology as the mere-exposure effect. The brain is an efficiency engine that prefers stimuli it has processed before. Each time you listen to a specific audio file, the auditory cortex builds stronger neural paths to recognize those exact relationships of frequency and volume.
+## Science model: familiarity feels like rightness
 
-In a DAW session, this manifests as a false calibration of your ears. The table below outlines how memory bias alters your perception of common mix elements:
+The mere-exposure effect is the starting point. Zajonc (1968) proposed that repeated exposure to a stimulus is enough to make people like it more, and a meta-analysis of two decades of experiments found the effect to be reliable, with more complex stimuli showing stronger effects (Bornstein, 1989). Nobody has to tell you the rough is good. Hearing it is enough.
 
-| Element in rough mix | Psychological reaction | Physical reality |
-| :--- | :--- | :--- |
-| Muddy low end (200Hz buildup) | Warmth and fullness | Clutters the bass line and reduces overall headroom |
-| Harsh vocal transients | Energy and excitement | Causes ear fatigue on consumer headphones |
-| Out-of-balance levels | Quirky charm | Masks critical melodic details and kills groove rhythm |
+Music adds a twist. Szpunar, Schellenberg and Pliner (2004) played pieces to listeners different numbers of times. When people heard real music incidentally, while doing something else, liking rose with exposure. When they listened with full attention, liking for the same kind of music rose and then fell. Weeks of car and phone plays of your own rough are often closer to the first kind of listening.
 
-When these errors are repeated during the production loop, they become the reference point for what is correct. Any change to these elements is perceived as an error, even if the change is a technical improvement.
+::figure exposure
 
-## DAW experiment: the demo mute test
+Huron (2006) separates expectations based on general knowledge of a style from veridical expectations, which come from knowing a particular piece. Fifty plays build that second kind for one specific version of your song: the vocal level in bar 9, the slightly late snare, the boxy room tone. A cleaner mix breaks those expectations, and a broken expectation registers as something wrong before you have judged whether it is better. That is an application of the idea to a mix rather than a tested result, but it matches how demo-itis feels.
 
-To break this neural feedback loop, you must force your brain to hear the session with fresh ears. Run this 15 minute calibration test in your DAW tonight.
+::figure expect
 
-1. Open your current mixing session. Import your latest rough demo bounce onto a new audio track.
-2. Route this rough track directly to your main outputs, bypassing your master channel processing.
-3. Mute the rough track. Hide it from your session view completely.
-4. Open the active tracks of your song. Select all faders and pull them down to silence.
-5. Set a timer for 10 minutes. 
-6. Rebuild the mix balance from scratch. Focus purely on the relationship between the lead vocal and the kick drum. Do not listen to the rough mix.
-7. Once the timer rings, unmute the rough mix for a quick A/B comparison. 
+## DAW experiment: rebuild without the rough
 
-Listen to how much wider and more dynamic your new mix is compared to the rough demo. You will notice that the muddy midrange buildup you used to defend now sounds like a technical mistake.
+1. Play the rough once and write down the two or three things that make it work, for example "sub weight in the chorus" and "vocal right in front". This list is the brief for the mix.
+2. Import the rough onto a track routed straight to your outputs, mute it and hide or collapse it.
+3. Pull every fader in the song down and start a 20-minute timer.
+4. Rebuild the balance from scratch. Start with the lead vocal and the kick, then add one part at a time. Do not play the rough during this step.
+5. When the timer rings, bounce the new balance.
+6. Match the loudness of the rough and the new bounce with a loudness meter and compare the same chorus, switching every few seconds. Check the new mix against your list from step 1, item by item.
+7. Play both, level-matched and named only "one" and "two", to someone who has never heard the song, and ask which they prefer.
 
-## Common mistake: defending technical errors
+You will usually find the new balance cleaner, with a few items from your list that need to be brought back on purpose. The fresh listener has no fifty plays behind them, so their choice shows which version works on its own.
 
-The most common error producers make is branding technical flaws as creative character. They will argue that a vocal recording sounds more authentic because it has excessive sibilance or room noise. While raw performances are valuable, leaving technical errors uncorrected rarely improves the emotional impact of a song.
+## Common mistake: calling flaws character
 
-This error is often just a mask for insecurity. Committing to a clean, commercial balance requires making definitive choices. Reverting to the demo mix is a safe path because it avoids the risk of finishing the song. 
+The most common version of this trap is relabelling technical problems as authenticity: excessive sibilance, room noise or a muddy low end that "sounds more real". Raw performances are valuable, and some roughness is a choice. But leaving a problem in because you are used to it rarely helps the song.
 
-## Producer takeaway: isolate the core feeling
+A simple test separates the two. Imagine a clean recording of the same take. Would you add this sound to it on purpose? If yes, it is character, and you should keep it and maybe make it clearer. If no, it is a flaw you got used to.
 
-The play is to protect the feeling of the demo without copying its clutter. Before you throw away the rough mix, write down the specific elements that gave the track its energy. It is usually a simple list.
+## Producer takeaway: keep the feeling, drop the clutter
 
-- The weight of the sub bass in the chorus.
-- The forward presence of the lead vocal.
+Protect what the demo does well without copying its clutter. The list from the experiment is usually short, two or three things like the weight of the sub in the chorus and the forward vocal. Rebuild those on purpose with better tools, and let the rest of the rough mix go.
 
-Once you have identified these emotional anchors, focus on translating them cleanly. Rebuild the vocal presence with high-quality compression instead of keeping a boxy recording. Let the rest of the rough mix go. Your job is to improve the song, not to repeat your past decisions.
+Once mixing starts, stop playing the rough between sessions. Every extra play makes it harder to beat. Your job is to make the song better, not to repeat its first draft.
 
 ## References
 
-- Katz, B. (2012). *Mastering Audio: The Art and the Science*. Routledge.
-- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Routledge.
-- TikTok Newsroom. (2020). *How TikTok recommends videos #ForYou*. official platform documentation.
+- Bornstein, R. F. (1989). Exposure and affect: Overview and meta-analysis of research, 1968-1987. *Psychological Bulletin*, 106(2), 265-289.
+- Huron, D. (2006). *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press.
+- Szpunar, K. K., Schellenberg, E. G., & Pliner, P. (2004). Liking and memory for musical stimuli as a function of exposure. *Journal of Experimental Psychology: Learning, Memory, and Cognition*, 30(2), 370-381.
+- Zajonc, R. B. (1968). Attitudinal effects of mere exposure. *Journal of Personality and Social Psychology Monograph Supplement*, 9(2, Pt. 2), 1-27.
 `,
     seo: {
-        title: 'How Demo Attachment Can Ruin Your Mix | VGP Studio',
-        description: 'Stuck trying to recreate your rough demo balance? Learn how familiarity bias tricks your brain into loving technical errors and how to fix it.',
-        keywords: ['demo attachment', 'mere exposure effect', 'mixing tips', 'music production workflow', 'cognitive bias in audio']
-    }
+        title: 'How demo attachment can ruin your mix | VGP Studio',
+        description: 'Why producers get attached to rough demo mixes: mere exposure, familiarity and expectation, and a rebuild routine that keeps the feeling without the flaws.',
+        keywords: ['demo attachment', 'demoitis', 'mere exposure effect', 'rough mix', 'mixing psychology', 'music familiarity'],
+    },
 };

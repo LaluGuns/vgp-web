@@ -3,63 +3,150 @@ import { BlogArticle } from '../blog-data';
 export const post053: BlogArticle = {
     slug: 'how-eq-becomes-attention-design',
     title: 'EQ is attention design',
-    excerpt: 'EQ is not just about correcting frequencies; it is about directing the listener\'s attention. This guide explains how spectral contrast controls cognitive focus and shows you how to design a clear hierarchy in your mix.',
+    excerpt: 'Boost the presence range on every track and nothing stands out. Use EQ to build contrast, so the part that matters is the one the ear can follow.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The battle for focus
+    summary: [
+        'Boosting presence on every track removes the contrast that tells the ear where to listen.',
+        'Pick one lead per section and give it the 2 to 5 kHz range, where the ear is most sensitive.',
+        'Make room with small cuts on the supporting parts at the lead’s key frequency, then check at a whisper.',
+    ],
+    figures: {
+        complementary: {
+            type: 'spectrum',
+            mode: 'gain',
+            caption:
+                'Complementary EQ, drawn from the real filter maths. The lead gets a gentle 2 dB lift at 3 kHz and the pad gives up 3 dB at the same place. The lead now sits 5 dB further above the pad in that band, with only 2 dB of boost.',
+            alt: 'Two EQ curves from 20 Hz to 20 kHz. The lead curve rises 2 dB in a broad bump centred on 3 kHz. The dashed pad curve dips 3 dB at the same frequency. A shaded band marks 2 to 5 kHz.',
+            bands: [{ from: 2000, to: 5000, label: 'Most sensitive range' }],
+            db: 6,
+            curves: [
+                { kind: 'eq', label: 'Lead', bands: [{ type: 'bell', freq: 3000, gain: 2, q: 1 }] },
+                { kind: 'eq', label: 'Pad', dashed: true, bands: [{ type: 'bell', freq: 3000, gain: -3, q: 1 }] },
+            ],
+        },
+        window: {
+            type: 'spectrum',
+            mode: 'gain',
+            caption:
+                'The listening window from the experiment: a 12 dB per octave high-pass at 800 Hz and low-pass at 4 kHz. Both edges are 3 dB down, and the bass and air drop away fast outside them.',
+            alt: 'A band-pass response from 20 Hz to 20 kHz. It is flat between about 1 and 3 kHz, 3 dB down at the marked 800 Hz and 4 kHz points, and falls steeply below and above.',
+            db: 24,
+            marks: [
+                { f: 800, label: '800 Hz' },
+                { f: 4000, label: '4 kHz' },
+            ],
+            curves: [
+                {
+                    kind: 'eq',
+                    label: 'Listening window on the master',
+                    bands: [
+                        { type: 'highpass', freq: 800, q: 0.707 },
+                        { type: 'lowpass', freq: 4000, q: 0.707 },
+                    ],
+                },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'The lead vocal, the guitar and the synth all have a 3 dB boost at 4 kHz. What happens?',
+            options: [
+                'Each one gets clearer, as it does when soloed',
+                'Only the vocal benefits, because it is loudest',
+                'The guitar wins, since its pick attack sits there',
+                'None stands out, and the mix just turns harsher',
+            ],
+            answer: 3,
+            why: 'Contrast is what lets the ear pick a lead. Three parts boosted in the same place are as close to each other as before, only louder and harsher.',
+        },
+        {
+            q: 'Why do so many clarity decisions happen between about 2 and 5 kHz?',
+            options: [
+                'Small speakers and earbuds lose most of what sits below 2 kHz',
+                'The ear is most sensitive there, as the ear canal resonates',
+                'Streaming codecs keep that range and discard most of the rest',
+                'Most instruments put their fundamental notes in that range',
+            ],
+            answer: 1,
+            why: 'The equal-loudness contours dip lowest around 3 to 4 kHz. Small level differences there are easy to hear, so whoever owns that range draws attention.',
+        },
+        {
+            q: 'Why cut the supporting parts at the lead’s key frequency instead of only boosting the lead?',
+            options: [
+                'Boosting the lead would push the master bus into clipping',
+                'A boost smears the timing of the consonants in the lead',
+                'It adds contrast in that band without raising the level',
+                'Cuts add a phase shift that makes the lead sound brighter',
+            ],
+            answer: 2,
+            why: 'What the ear follows is the difference between the lead and its background in that band. A cut on the background raises that difference and keeps the lead’s own tone and the overall level unchanged.',
+        },
+    ],
+    content: `## Hook: everything is bright, nothing is clear
 
-You want your lead synth, your acoustic guitar, and your vocal to all sound bright and present. You open your equalizer on each track and add a gentle boost around 3kHz to 5kHz, which is the range where clarity lives. Individually, each track sounds better. When you play them together, however, the mix turns into a harsh, fatiguing wall of sound. The elements are no longer distinct, and your ears get tired after a single listen.
+You want the lead synth, the acoustic guitar and the vocal all to sound present. So each one gets a gentle EQ boost somewhere around 3 to 5 kHz. Soloed, every track sounds better. Together they turn into a harsh wall, nothing stands out, and your ears are tired after one pass.
 
-This is because you treated equalization as a corrective tool for individual tracks rather than an attention design tool for the whole mix. A mix is not a collection of isolated sounds that need to be made perfect. It is a set of decisions about focus. When you boost the presence range of every instrument, you tell the listener to look everywhere at once, which means they end up looking nowhere.
+Each track got EQ as if it were the only one. A mix is a set of decisions about focus: at any moment the listener can follow only one or two parts closely. Boost the presence of everything and you ask them to listen everywhere at once.
 
-## The psychology of spectral contrast
+## Why it matters: attention follows contrast
 
-Auditory scene analysis shows that our brains organize sound based on acoustic cues. One of the most powerful cues for focus is spectral contrast. The human ear naturally concentrates on a sound source that displays high contrast against the surrounding frequency background. If the background elements are dark and dull, a bright lead vocal stands out effortlessly. If the background instruments are just as bright as the lead vocal, the contrast disappears, and the brain struggles to separate the tracks.
+The ear separates a mix into parts using the differences between them: in pitch range, timing, location and tone (Bregman, 1990). A part that stands apart from its surroundings is easy to follow. A part that has the same brightness as everything around it blends into the group.
 
-To guide the listener's attention, you must design a hierarchy. If you want an instrument to be the hero, you must deliberately make the supporting tracks less present in the hero's key frequency range. This means your EQ curves should be complementary. If you boost the lead vocal at 2kHz, you should consider cutting the electric guitar and synth pad at 2kHz.
+That makes EQ a tool for hierarchy. If you want one part to lead, the parts around it need to be a little less present in its key range. Boost the lead at 3 kHz and cut the pad and guitar at 3 kHz, and the difference between them in that band grows from both sides.
 
-## The mathematics of spectral contrast
+::figure complementary
 
-We can model the contrast between the target signal and the background masking noise as a ratio of spectral energy within a specific critical band.
+## Science model: the range where the ear listens hardest
 
-$$C_{\\text{spectral}} = \\frac{E_{\\text{target}}(f)}{E_{\\text{background}}(f)}$$
+The ear is not equally sensitive across the spectrum. The equal-loudness contours dip lowest around 3 to 4 kHz (ISO 226:2023), partly because the ear canal resonates near 3 kHz. Level differences in that region are the easiest to hear, which is why vocal intelligibility, pick attack and synth bite all live there, and why it fills up so quickly.
 
-Where $E_{\\text{target}}(f)$ is the energy of the lead instrument at frequency $f$, and $E_{\\text{background}}(f)$ is the combined energy of all other instruments at that same frequency. To increase the spectral contrast, you can either increase the energy of the target signal or decrease the energy of the background noise. Decreasing the background energy is far more effective because it preserves headroom and prevents the master bus from clipping.
+What decides whether the lead wins in that range is not its absolute level but its level relative to the background in the same band. You can raise that difference by boosting the lead or by cutting the background. Cutting the background keeps the overall level where it was and leaves the lead's own tone alone, so you get the contrast without spending headroom.
 
-## Isolating the midrange attention
+To do any of this you need to find frequencies by ear. Sweep the narrow boost below and stop where it sounds most obvious, then check the number.
 
-Verify that your EQ settings are actually directing the listener's focus by setting up a bandpass test in your workstation.
+::demo eq-sweep
 
-1. Group all your melodic instruments and lead vocals to a stereo bus.
-2. Insert a bandpass filter or a combination of high-pass and low-pass filters on your master output. Set the filters to pass only the frequencies between 800Hz and 4kHz. This window contains the core presence of the vocal and the main melodies.
-3. Play the mix and listen to the relative levels of your tracks within this narrow frequency window.
-4. If you cannot clearly distinguish the lead vocal from the synths and guitars in this band, adjust your equalizers.
-5. Apply subtle cuts to the supporting instruments at the exact frequency where the lead vocal is most defined.
-6. Bypass the bandpass filter and check if the vocal sits clearly on top of the full-frequency mix.
+Judging the balance in that range is easier when the low end and the air are out of the way. A temporary band-pass on the master lets you hear only the window where most of the competition happens.
 
-This process ensures that the core midrange of your song is balanced before you worry about sub-bass rumbles or high-end air.
+::figure window
 
-## The trap of individual equalization
+## DAW experiment: build a clear hierarchy
 
-The most common mistake is mixing with the solo button active. When you solo an acoustic guitar, you naturally want to make it sound full-range. You add low end for warmth and high end for sparkle. Once you unmute the bass guitar and the cymbals, that low-end warmth clashes with the bass, and the high-end sparkle fights the hi-hats. You are forced to undo your work.
+Pick one section and decide which part leads it. Usually it is the vocal; in a drop it may be a synth hook.
 
-Another error is boosting multiple tracks at the exact same frequency. If your snare drum, vocal, and lead guitar all have EQ boosts at 4kHz, they will mask each other, creating a buildup that sounds harsh and clinical.
+1. Insert an EQ on the lead. Set a bell to +6 dB with Q 3 and sweep it between 1 and 6 kHz in the full mix. Stop where the lead sounds most like itself: clearest words, sharpest attack.
+2. Note that frequency, then reduce the bell to +2 dB and widen it to Q 1.
+3. On each supporting part that competes there, such as guitar, pad or keys, cut 2 to 3 dB at the same frequency with Q 1.
+4. On the pad, add a low-pass filter at about 6 kHz so its top end leaves room for the vocal air and the hi-hats.
+5. Put a high-pass at 800 Hz and a low-pass at 4 kHz on the master, both 12 dB per octave. Check that the lead sits clearly on top inside this window, then remove both filters.
+6. Turn your monitors down until the music is barely audible. The lead should be the last thing you can still follow.
 
-## Let the backing tracks go dark
+With the cuts in place, the lead reads clearly even with less total boost, and the supporting parts still sound full once everything plays.
 
-To make your lead elements shine, you must accept that some instruments need to sound dark or thin when soloed. A synth pad does not need to cover the entire spectrum. It exists to provide harmony and texture behind the melody. Use a high-cut filter to roll off the high frequencies of the pad above 5kHz to make space for the vocal and hi-hats.
+## Common mistake: EQ in solo
 
-Listen to your mix at a very quiet volume, almost to the point where the music disappears. At this level, only the most prominent elements will cut through. If the lead vocal is the last thing you hear as you turn the volume down, your attention design is working. If a synth or guitar is masking the vocal at low volumes, pull down the faders or adjust the EQs of those competing tracks.
+The most common mistake is shaping parts with the solo button on. Soloed, an acoustic guitar seems to need low-end warmth and top-end sparkle. Unmute the bass and the cymbals and that warmth clashes with the bass while the sparkle fights the hi-hats, and you end up undoing your work.
+
+The second is boosting several parts at the same frequency. If the snare, the vocal and the lead guitar all lift 4 kHz, they mask each other there and the mix turns harsh without anything becoming clearer.
+
+## Producer takeaway: let the supporting parts go dark
+
+To make the lead shine, accept that some parts will sound dull or thin when soloed. A pad does not need to cover the whole spectrum. It is there for harmony and texture behind the melody, and it does that job just as well with its top end rolled off.
+
+Use the whisper test at the end of every session. Turn the volume down until the music almost disappears. If the lead is the last thing you hear, the hierarchy works. If a synth or a guitar outlasts it, pull that part down in the lead's range or lower its fader.
 
 ## References
 
-* Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
-* Senior, M. (2011). *Mixing Secrets for the Small Studio*. Routledge.
+- Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
+- ISO 226:2023. *Acoustics: Normal equal-loudness-level contours*. International Organization for Standardization.
+- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
-        title: 'EQ is Attention Design | VGP Studio',
-        description: 'Discover how spectral contrast controls cognitive focus. Learn to use EQ as a spotlight, brightening your lead track while damping backing tracks.',
-        keywords: ['EQ attention', 'spectral contrast', 'auditory scene analysis', 'mixing psychology', 'vocal presence', 'complementary EQ']
-    }
+        title: 'EQ is attention design | VGP Studio',
+        description: 'Boosting presence on every track removes contrast. How complementary EQ and the ear’s 2 to 5 kHz sensitivity let you decide which part the listener follows.',
+        keywords: ['EQ attention', 'complementary EQ', 'mix hierarchy', 'presence range', 'vocal clarity', 'mixing psychology'],
+    },
 };

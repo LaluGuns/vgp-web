@@ -6,13 +6,76 @@ export const post102: BlogArticle = {
     excerpt: 'City Pop works in video because it can suggest movement, color, and late-night optimism without asking the viewer to stop and listen. Here is how I produce it for that job.',
     category: 'genre-guides',
     publishedAt: '2026-07-19',
-    readingTime: 6,
+    readingTime: 5,
     featured: true,
+    updatedAt: '2026-10-08',
+    summary: [
+        'City Pop helps a video because it suggests movement and color without asking the viewer to stop and listen.',
+        'Keep the first eight bars legible: rhythm section, harmony and one identity sound.',
+        'Mark new sections by removing a layer or revoicing a chord, so editors get landmarks without a big drop.',
+    ],
+    figures: {
+        cue: {
+            type: 'arrangement',
+            caption: 'A cue shaped for an edit. The opening stays legible under a voiceover, the fullest section lands under b-roll, and layers drop out when dialogue returns.',
+            alt: 'Arrangement grid of a City Pop cue: a sparse intro, a fuller section, the fullest lift, a short stripped breath, then the fuller section again.',
+            density: true,
+            sections: [
+                { label: 'Intro', short: 'In', bars: 8 },
+                { label: 'Section A', short: 'A', bars: 8 },
+                { label: 'Lift', short: 'Lift', bars: 8 },
+                { label: 'Breath', short: 'Br', bars: 4 },
+                { label: 'Section A', short: 'A', bars: 8 },
+            ],
+            layers: [
+                { label: 'Drums', levels: [0.5, 0.7, 0.9, 0.3, 0.7] },
+                { label: 'Bass', levels: [0.6, 0.7, 0.9, 0.4, 0.7] },
+                { label: 'Chords', levels: [0.7, 0.7, 0.8, 0.6, 0.7] },
+                { label: 'Lead', levels: [0, 0.4, 0.8, 0, 0.4] },
+                { label: 'Fills', levels: [0, 0.2, 0.7, 0, 0.2] },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Why keep the first eight bars of a creator cue sparse?',
+            options: [
+                'To make the full arrangement hit harder later',
+                'To leave room for narration or captions on top',
+                'To follow the City Pop habit of drumless intros',
+                'To keep the level low enough for phone speakers',
+            ],
+            answer: 1,
+            why: 'A spoken intro or a headline needs room. Rhythm, harmony and one identity sound give the edit a color without competing with it.',
+        },
+        {
+            q: 'What is a creator-friendly way to mark a new section?',
+            options: [
+                'Hitting a big drop after a long riser',
+                'Switching to double time for a section',
+                'Adding a vocal hook over the chords',
+                'Pulling out one layer for four bars',
+            ],
+            answer: 3,
+            why: 'Small changes give editors landmarks to cut to without forcing the footage to follow the music.',
+        },
+        {
+            q: 'You hear a City Pop track on a streaming service. Can you use it in your published video?',
+            options: [
+                'Only with a license that covers your video',
+                'Yes, if you credit the artist in the caption',
+                'Yes, if the clip you use is under one minute',
+                'Only if you listen on a paid streaming plan',
+            ],
+            answer: 0,
+            why: 'Listening and using a recording in your work are different permissions. Flow Creator Music provides the license path for its eligible catalog.',
+        },
+    ],
     content: `## City Pop has a job in a creator edit
 
 City Pop is easy to reduce to a list of sounds: chorus guitar, glossy keys, tidy bass, a little sunset nostalgia. Those sounds matter, but they are not why the genre works so well underneath a travel cut, a desk setup, a fashion reel, or a night-drive sequence.
 
-For creators, the useful part is its forward motion. A good City Pop arrangement can feel bright and specific without taking the narration, captions, or image sequence away from the viewer. That is the production target I use for the City Pop material in Flow Creator Music, curated by Chill Music Division — a division of Virzy Guns Production.
+For creators, the useful part is its forward motion. A good City Pop arrangement can feel bright and specific without taking the narration, captions, or image sequence away from the viewer. That is the production target I use for the City Pop material in Flow Creator Music, curated by Chill Music Division, a division of Virzy Guns Production.
 
 ## Start with the edit, not a playlist reference
 
@@ -37,13 +100,15 @@ Chorus and modulation are useful when they create width around the middle of the
 
 The most creator-friendly City Pop cues change without announcing every change. Instead of a dramatic drop, I will often remove a layer for four bars, shift the guitar voicing, or open the room around the snare. Those moves give editors landmarks without forcing their footage to obey the music.
 
+::figure cue
+
 That restraint also makes looping and short-form extracts more forgiving. A creator can use the opening under voiceover, move into a fuller section for b-roll, then return to a quieter passage without the track feeling like a radio single cut in half.
 
 ## Use it with the right license
 
 Listening on a streaming service and using a recording in a published video are different things. Flow Creator Music is royalty-free with an active Flow Pro creator license; it is not a promise that every City Pop recording on the internet is free to reuse.
 
-The creator catalog is designed for background use in videos, livestreams, podcasts, study-with-me sessions, and technology content under the applicable terms. If you are choosing music for a project, use the <a href="https://flow.virzyguns.com/en/creator-music/city-pop" style="color:#7dd3fc;text-decoration:underline">Flow City Pop creator catalog</a> for the license and download path. Chill Music Division's <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> is a listening and discovery destination; it is not the source of a creator license.
+The creator catalog is designed for background use in videos, livestreams, podcasts, study-with-me sessions, and technology content under the applicable terms. If you are choosing music for a project, use the [Flow City Pop creator catalog](https://flow.virzyguns.com/en/creator-music/city-pop) for the license and download path. Chill Music Division's [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is a listening and discovery destination; it is not the source of a creator license.
 
 ## Producer takeaway
 

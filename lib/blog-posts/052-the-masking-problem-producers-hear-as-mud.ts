@@ -3,63 +3,159 @@ import { BlogArticle } from '../blog-data';
 export const post052: BlogArticle = {
     slug: 'the-masking-problem-producers-hear-as-mud',
     title: 'Mud is often masking, not dirt',
-    excerpt: 'Boosting your vocal fader to fight mid-range clutter just creates a harsh, messy mix. This guide explains the physics of simultaneous masking and provides a session move to carve space for the lead vocal.',
+    excerpt: 'Mud is rarely one bad track. It is several parts piling up in the low mids and hiding each other. Find the pile-up and thin the parts that do not need it.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The phantom midrange clutter
+    summary: [
+        'Mud is usually several parts each adding a little low-mid energy, which together mask everything near them.',
+        'The ear sorts sound into bands only about 57 Hz wide near 300 Hz, and a loud low band also hides frequencies above it.',
+        'Clear mud on the supporting parts with small, staggered cuts and high-pass filters instead of pushing the vocal.',
+    ],
+    figures: {
+        pileup: {
+            type: 'spectrum',
+            mode: 'level',
+            caption:
+                'Where the energy of five common parts sits. Each one is modest on its own, but the guitar, keys and pad all peak between 200 and 500 Hz, and that overlap is what you hear as mud.',
+            alt: 'Energy over frequency for bass, guitar, keys, pad and vocal. The guitar, keys and pad humps overlap heavily in a shaded band from 200 to 500 Hz, with the bass just below and the vocal centred higher, around 1.2 kHz.',
+            bands: [{ from: 200, to: 500, label: 'Low mids' }],
+            curves: [
+                { kind: 'hump', center: 100, width: 0.7, level: 0.6, label: 'Bass', muted: true },
+                { kind: 'hump', center: 260, width: 0.8, level: 0.55, label: 'Guitar' },
+                { kind: 'hump', center: 340, width: 0.9, level: 0.5, label: 'Keys' },
+                { kind: 'hump', center: 420, width: 1, level: 0.5, label: 'Pad' },
+                { kind: 'hump', center: 1200, width: 1.3, level: 0.65, label: 'Vocal', dashed: true },
+            ],
+        },
+        cuts: {
+            type: 'spectrum',
+            mode: 'gain',
+            caption:
+                'Two cleanup EQs drawn from the real filter maths. The guitar keeps its body at 300 Hz but loses 3 dB there, the pad gives up 4 dB a little higher at 450 Hz, and both lose the rumble they never needed. The vocal is not touched.',
+            alt: 'EQ curves from 20 Hz to 20 kHz. The guitar curve rolls off below 100 Hz and dips 3 dB at 300 Hz. The dashed pad curve rolls off below 150 Hz and dips 4 dB at 450 Hz. Both are flat above 1 kHz, where a marker shows the vocal centre.',
+            marks: [{ f: 1200, label: 'Vocal centre' }],
+            curves: [
+                {
+                    kind: 'eq',
+                    label: 'Guitar',
+                    bands: [
+                        { type: 'highpass', freq: 100, q: 0.707 },
+                        { type: 'bell', freq: 300, gain: -3, q: 1.4 },
+                    ],
+                },
+                {
+                    kind: 'eq',
+                    label: 'Pad',
+                    dashed: true,
+                    bands: [
+                        { type: 'highpass', freq: 150, q: 0.707 },
+                        { type: 'bell', freq: 450, gain: -4, q: 1.4 },
+                    ],
+                },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Every part sounds clean in solo, but the full mix is muddy. What is the most likely cause?',
+            options: [
+                'One of the tracks was recorded badly',
+                'The vocal lacks presence around 3 kHz',
+                'Their low mids add up in the same bands',
+                'The kick and bass share the same low end',
+            ],
+            answer: 2,
+            why: 'Mud is a sum. Each part adds a little energy in the same low-mid bands, and together they mask the detail of everything near them.',
+        },
+        {
+            q: 'Why can a heavy pile-up around 250 Hz blur a vocal’s detail higher up?',
+            options: [
+                'The ear’s bands are wider up high, so the pile-up reaches them',
+                'Masking spreads upward from a loud band into higher ones',
+                'Low notes ring longer, so they smear the vocal’s consonants',
+                'The pile-up phase-cancels the upper harmonics of the voice',
+            ],
+            answer: 1,
+            why: 'A masker hides sounds above its own frequency much more than sounds below it, and the spread grows as the masker gets louder.',
+        },
+        {
+            q: 'Near 300 Hz the auditory filter is about 57 Hz wide. A guitar peaks at 280 Hz and keys at 320 Hz. What follows?',
+            options: [
+                'They share one auditory band and compete for it',
+                'They are 40 Hz apart, so each gets its own band',
+                'The louder one cancels the quieter one by phase',
+                'They sum to 6 dB more, like two copies of a signal',
+            ],
+            answer: 0,
+            why: 'The two peaks are 40 Hz apart, less than one filter width. The ear cannot fully separate them, so the stronger one masks the weaker.',
+        },
+    ],
+    content: `## Hook: the buried vocal
 
-Your lead vocal is buried. It sounds muffled, dark, and lacks presence in the hook. Your immediate instinct is to grab the vocal track, open an equalizer, and boost the high-mid frequencies around 2kHz to 5kHz. Or you just turn the vocal fader up by 3 decibels. Suddenly, the vocal cuts through, but now the guitars sound thin, the synths feel piercing, and the whole mix has a harsh texture. You bypassed the actual issue and created a new one.
+Your lead vocal sounds muffled in the hook. You open an EQ and boost 3 kHz, or you push the fader up 3 dB. The vocal pokes through, but now it sounds harsh and sits on top of the track, and the mix still feels thick and cloudy.
 
-The mud you are hearing is rarely a problem with the vocal itself. The vocal may be recorded beautifully through an expensive microphone in a treated room. The real issue is the arrangement surrounding it. When multiple instruments like synthesizers, acoustic guitars, and keyboard pads sit in the same frequency range as the vocal, they crowd the spectrum. This is not dirt or bad recording quality, it is simultaneous frequency masking.
+The vocal was rarely the problem. It may be a great recording. What you are hearing is the arrangement around it: guitars, keys and a pad that each put a little energy in the same range. That is not dirt or a bad recording. It is masking, and it builds up out of parts that each sound fine on their own.
 
-## The mechanics of simultaneous masking
+## Why it matters: mud is a sum
 
-Simultaneous masking is a psychoacoustic phenomenon where one sound becomes inaudible or difficult to resolve due to the presence of another sound in the same frequency band. This occurs because the human cochlea acts as a frequency analyzer, dividing sound into critical bands. When two signals enter the same critical band at the same time, the stronger signal stimulates the auditory nerve fibers, blocking the weaker signal from being registered by the brain.
+Solo any one of those parts and it sounds clean. The guitar has body, the keys have warmth, the pad fills the space. The trouble starts when they play together. Most melodic parts carry a lot of their energy between about 200 and 500 Hz, so three or four of them in the same section stack up there.
 
-This masking effect is strongest when the frequencies of the two sounds are very close. If your lead vocal has its primary energy between 500Hz and 3kHz, and you have a stereo synth pad playing chords with dense harmonic energy in that exact same window, the synth pad will mask the vocal. Turning up the vocal fader does not solve this auditory conflict, it just forces the listener's brain to work harder to separate the sources, leading to ear fatigue.
+::figure pileup
 
-## Measuring spectral overlap
+The stack does not sound like "too much 300 Hz" while you work on single tracks. It sounds like the vocal lost its words, the bass lost its shape and the whole mix got cloudy. So you reach for the vocal, the part that is suffering, instead of the parts that are causing it.
 
-To understand how masking works, we can look at the spectral overlap between the target signal and the masking noise. The masked threshold, which is the quietest level at which a sound can be heard in the presence of a masker, increases as the masker level increases.
+## Science model: auditory bands and upward spread
 
-$$T_m \\propto L_{\\text{masker}}$$
+The inner ear analyses sound with a bank of overlapping filters. Each one responds to a narrow range of frequencies, and two sounds that land in the same filter compete for it. Glasberg and Moore (1990) give the width of one of these filters, its equivalent rectangular bandwidth, as:
 
-Where $T_m$ is the masked threshold of the signal and $L_{\\text{masker}}$ is the sound level of the masking signal. If the masker is 6 decibels louder, the signal must be turned up by roughly the same amount to remain intelligible. Instead of raising the vocal level, reducing the level of the masker in that specific frequency range lowers the masked threshold, exposing the vocal without losing mix headroom.
+$$\\text{ERB} = 24.7 \\left( \\frac{4.37 f}{1000} + 1 \\right)$$
 
-## A step by step masking cleanup
+with $f$ in hertz. At 300 Hz that is about 57 Hz. A guitar peaking at 280 Hz and keys at 320 Hz sit inside one filter, and the ear cannot fully pull them apart. Within a band, the louder sound sets the masked threshold: the quieter one has to rise with it to stay audible (Fastl and Zwicker, 2007).
 
-Carve a clean pocket for your lead vocal by isolating the frequency conflicts on your backing instruments.
+Masking also spreads, and unevenly. A loud sound hides frequencies above its own much more than frequencies below, and the spread widens as the masker gets louder (Wegel and Lane, 1924). A dense low-mid pile-up therefore veils more than the low mids. It blurs the lower part of the vocal and the attack of the bass notes too.
 
-1. Solo your lead vocal and identify its most important frequency zone. For most vocals, this is the presence region between 1kHz and 3kHz, where consonant clarity resides.
-2. Route all your mid-range instruments, such as synths, guitars, and keys, to a single stereo aux channel or folder bus.
-3. Insert an equalizer on this instrument group bus.
-4. Set up a parametric band with a medium bandwidth, a Q value of about 1.5, centered around 1.5kHz.
-5. Play the full mix and slowly pull the gain of this band down by 2 to 3 decibels.
-6. Bypass the equalizer on the instrument bus to check the result.
+Hear the same principle in the demo below. The lead never changes level; only the pad around it does.
 
-You should hear the vocal lock into the mix and gain clarity, even though you did not touch the vocal channel. The background instruments will still sound full because they retain their low-end weight and high-end sizzle.
+::demo masking
 
-## The myth of the magic vocal boost
+## DAW experiment: find the pile-up and thin it
 
-Many producers believe they can fix a muddy mix by putting a dynamic compressor on the vocal and compressing it heavily to make it steady. While compression keeps the level consistent, it does not solve the frequency overlap. A heavily compressed vocal fighting a dense synth pad will just sound squashed and unnatural, sitting on top of the music like a karaoke track rather than blending into the mix.
+Use the densest section of the song, with every part playing.
 
-Another mistake is high-passing every backing track at 300Hz. While this removes low-end mud, it also strips the warmth and body from your guitars and synths, leaving the mix sounding thin and sterile. The goal is surgical reduction in the presence range, not cutting the entire low end of your instrumental.
+1. Loop the busiest eight bars and set your monitors to a moderate level you can hold.
+2. On the first supporting part, a guitar or keys, insert an EQ with a bell at +8 dB and Q 4. Sweep it slowly between 150 and 600 Hz with the full mix playing.
+3. Stop where the boost makes the mix boom or cloud over the most. Turn that boost into a 3 dB cut and widen the Q to about 1.4.
+4. Repeat on the next part, a pad or a second guitar. Pick a cut point at least a few semitones away from the first one, so each part keeps its body somewhere.
+5. On every part that does not carry the bass line, add a high-pass filter at 80 Hz. Raise it until the part sounds thin in the mix, then back it off by about a third.
+6. Bypass all these EQs at once and compare at matched loudness.
 
-## Defend the vocal pocket
+With the cuts in, the vocal words and the bass notes come forward although neither fader moved. Bypass them and the cloud returns.
 
-Your lead vocal is the most important element of the song. It must be protected from competing tracks. This does not mean you must make your backing tracks sound weak. It means you must design a hierarchy where the vocal sits in a dedicated pocket.
+## Common mistake: fixing the victim
 
-Use mono monitoring to check your work. When you sum your mix to mono, the spatial separation of your stereo panning disappears, forcing all elements to the center. If the vocal is clear and distinct in mono, it will sound incredible and wide in stereo. If it disappears in mono, you still have masking conflicts to resolve.
+The common reflex is to fix the vocal: boost its presence or compress it hard. Compression keeps its level steady but does not move the competing energy, so a squashed vocal sitting over a thick pad still sounds pasted on top of the music. Presence boosts make it harsher without clearing the cloud underneath.
+
+The opposite mistake is high-passing every backing track at 300 Hz. The mud disappears, and so does the warmth. Small, staggered cuts keep each part full in its own place, which a blanket high-pass cannot do.
+
+::figure cuts
+
+## Producer takeaway: subtract before you add
+
+When something is buried, look first for the parts that cover it, and take a little out of each where they overlap. A few decibels on three tracks clears more than six decibels on the one you want to hear.
+
+Check the result in mono as well. Panning separates parts in stereo and hides some masking; in mono that help is gone, so it is the stricter test. If the vocal and bass still read clearly in mono, the low mids are under control.
 
 ## References
 
-* Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
-* Ronan, M., Ma, Z., Mc Namara, D., Gunes, H., & Reiss, J. D. (2018). *Automatic Minimisation of Masking in Multitrack Audio using Subgroups*. arXiv preprint arXiv:1803.09960.
+- Fastl, H., & Zwicker, E. (2007). *Psychoacoustics: Facts and Models* (3rd ed.). Springer.
+- Glasberg, B. R., & Moore, B. C. J. (1990). Derivation of auditory filter shapes from notched-noise data. *Hearing Research*, 47(1-2), 103-138.
+- Wegel, R. L., & Lane, C. E. (1924). The auditory masking of one pure tone by another and its probable relation to the dynamics of the inner ear. *Physical Review*, 23, 266-285.
 `,
     seo: {
-        title: 'Mud is Often Masking Not Dirt | VGP Studio',
-        description: 'Boosting vocal presence to fight mud clutters the mix. Learn how simultaneous masking works and how to carve space for the lead vocal.',
-        keywords: ['frequency masking', 'simultaneous masking', 'vocal clarity', 'mixing mud', 'auditory scene analysis', 'eq techniques']
-    }
+        title: 'Mud is often masking, not dirt | VGP Studio',
+        description: 'Mud is several parts piling up in the low mids and masking each other. How auditory bands and upward spread of masking work, and how to thin the pile-up.',
+        keywords: ['frequency masking', 'mixing mud', 'low mids', 'critical band', 'upward spread of masking', 'eq techniques'],
+    },
 };

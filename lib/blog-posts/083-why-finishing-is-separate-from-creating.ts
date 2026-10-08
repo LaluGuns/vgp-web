@@ -2,60 +2,136 @@ import { BlogArticle } from '../blog-data';
 
 export const post083: BlogArticle = {
     slug: 'why-finishing-is-separate-from-creating',
-    title: 'Finishing uses a different brain state',
-    excerpt: 'Finishing music is a separate mental task from creating it. Learn how to stop task-switching, set a clear finish line, and export more finished tracks.',
+    title: 'Why finishing needs its own session',
+    excerpt: 'Writing asks you to accept rough sounds. Finishing asks you to judge them. Try to do both in the same minute and the song stays a four-bar loop.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
+    updatedAt: '2026-10-08',
     readingTime: 6,
-    content: `## The trap of the creative loop
+    summary: [
+        'Creative work cycles between making rough material and judging it, and every switch between the two costs time and accuracy.',
+        'In a writing session, judge only keep or replace. In a finishing session, write nothing new.',
+        'Finish in passes: listen once, write three fixes, make only those and bounce.',
+    ],
+    figures: {
+        stall: {
+            type: 'flow',
+            caption: 'How a song stays at four bars. Every stop to fix a sound costs the next idea, so the loop gets more polished and never gets longer.',
+            alt: 'Four steps with an arrow from the last back to the first: write four bars, hear a flaw and stop to fix it, lose the next idea, loop the same four bars again.',
+            steps: [
+                { label: 'Write four bars' },
+                { label: 'Hear a flaw, stop to fix it', note: 'Sweep an EQ on the kick' },
+                { label: 'Lose the next idea', note: 'The verse melody is gone' },
+                { label: 'Loop the same four bars' },
+            ],
+            loop: { to: 0, label: 'Next night' },
+        },
+        cycle: {
+            type: 'flow',
+            caption:
+                'Creative work alternates between generating rough material and exploring what it could become (Finke, Ward and Smith, 1992). It goes wrong when you judge every sound in the middle of making it.',
+            alt: 'Three steps with an arrow from the last back to the first: generate rough parts, explore what they are and what they need, decide to keep, cut or change, then generate again.',
+            steps: [
+                { label: 'Generate rough parts' },
+                { label: 'Explore', note: 'What is this? What does it need?' },
+                { label: 'Decide: keep, cut or change' },
+            ],
+            loop: { to: 0, label: 'Next idea' },
+        },
+    },
+    quiz: [
+        {
+            q: 'Why does stopping mid-idea to EQ the kick hurt the writing?',
+            options: [
+                'A heavy EQ eats CPU, so the session lags while you write',
+                'Willpower drains with each EQ choice, leaving none for the verse',
+                'EQ moves made on a soloed kick rarely hold up in the full mix',
+                'Each switch costs time and accuracy, and the idea slips away',
+            ],
+            answer: 3,
+            why: 'Responses are slower and more error-prone right after a task switch. In a writing session, the thing you lose is the next idea, which existed only in your head.',
+        },
+        {
+            q: 'During the three-fix pass you notice a fourth problem. What do you do?',
+            options: [
+                'Fix it now while you still remember it',
+                'Write it on the list for the next pass',
+                'Swap it in for the smallest of the three',
+                'Add a new layer that covers the problem',
+            ],
+            answer: 1,
+            why: 'The limit is what turns the pass into a finished bounce. The fourth problem goes on the next list, where it competes with everything else for a place.',
+        },
+        {
+            q: 'Which session plan fits the way creative work cycles?',
+            options: [
+                'Write rough parts, then judge them in a separate pass',
+                'Judge each sound the moment you make it, then move on',
+                'Mix the first eight bars fully before writing more',
+                'Hold off all judgment until the master is finished',
+            ],
+            answer: 0,
+            why: 'Generating and judging both matter. Batching them keeps each one from interrupting the other.',
+        },
+    ],
+    content: `## Hook: the four-bar loop that never grows
 
-You are in the middle of writing a new track. You have a great four-bar chord progression on a synth pad and a basic drum loop. But instead of writing the verse melody or structuring the arrangement, you stop. You open an EQ plugin, solo the kick drum, and spend the next twenty minutes sweeping a narrow filter band to find a mud frequency. Then you add a delay to the synth, tweak the feedback parameters, and search for a vocal sample. Two hours later, you are still listening to the same four-bar loop, but the creative spark is gone. You close the project and add it to your folder of unfinished beats.
+You are writing a new track. There is a good four-bar chord progression on a pad and a basic drum loop. Instead of writing the verse melody, you stop. You open an EQ, solo the kick and spend twenty minutes sweeping a narrow band to find the mud. Then you put a delay on the pad, tweak the feedback and go looking for a vocal sample. Two hours later you are still listening to the same four bars, the spark is gone and the project joins the folder of unfinished beats.
 
-This happens because you are mixing writing and editing. The mental state required to generate new musical ideas is different from the state required to clean up and finish a song. Trying to do both at once guarantees that your tracks will stay stuck in loop purgatory.
+The problem is that you were doing two jobs at once. Making new material and finishing it ask for different things from you, and doing both in the same minute keeps a song stuck in the loop.
 
-## Why it matters in the mix
+## Why it matters: two jobs that pull against each other
 
-When you jump between writing and editing, you exhaust your brain. This task-switching is a quiet killer of creative flow. Generating ideas requires a relaxed, open mind that is willing to accept imperfect sounds to keep the momentum going. Finishing a track, however, requires a critical, analytical eye that makes hard choices about balance and structure.
+Generating ideas works best when you accept rough sounds so you can keep moving. Placeholder drums and a preset pad are fine, because the question is whether the part is worth having. Finishing asks the opposite: a critical ear that makes hard calls about balance, structure and detail.
 
-If you try to edit your sounds before you have a complete song structure, you lose the big picture. You waste hours polishing an eight-bar section that might not even fit the final arrangement. A finished song is a decision trail. If you do not lock your choices down step by step, you leave the project open forever.
+When you mix both, each interrupts the other. You polish eight bars that may not survive the arrangement, and you lose the ideas that would have told you what the arrangement is. A finished song is a trail of decisions made in order: what the parts are, then where they go, then how they sound.
 
-## Science model: the cost of task-switching
+::figure stall
 
-This problem is rooted in workflow psychology and cognitive science. The human brain cannot multi-task. When you switch from writing a melody to editing a waveform, you are not doing both at once. Instead, your brain has to shut down one cognitive program and load another.
+## Science model: generate, explore, and pay for every switch
 
-This switch has a high cost. Studies show that task-switching drains your mental energy and lowers your focus. In the studio, this means you lose the emotional connection to the music. Your ears get tired, and you lose the ability to evaluate whether the song is actually good. By separating your creative sessions from your editing passes, you keep your focus sharp and make better decisions.
+Creativity researchers describe the same two jobs. In the Geneplore model, Finke, Ward and Smith (1992) split creative thinking into a generative phase, which produces rough, half-formed structures, and an exploratory phase, which examines them and works out what they could become. The phases alternate, and both are needed.
 
-## DAW experiment: the three-fix limit
+Brain imaging points the same way. Ellamil and colleagues (2012) scanned art students while they designed book covers, alternating between generating ideas and evaluating them. Generating leaned on regions in the medial temporal lobe, which support memory retrieval. Evaluating recruited executive and default network regions together. The two modes use the brain differently, so moving between them is a real change of gear.
 
-To train your brain to finish music, you must set clear boundaries for each session. Try this three-fix workflow in your DAW.
+Changing gear has a price. In task-switching experiments, people are slower and make more errors right after a switch, and preparing in advance reduces that cost without removing it (Monsell, 2003). In a lab the cost is measured on simple tasks. In a writing session it shows up as the verse melody you were about to find before you opened the EQ.
 
-1. Open a rough project that has a complete structure but needs to be finished.
-2. Listen to the track once from start to finish. Do not stop to adjust plugins or levels.
-3. Write down exactly three specific fixes on a physical notepad. For example: "Adjust vocal level in the chorus, shorten the snare decay, and clean up the bass low-end."
-4. Open the DAW and make only those three fixes. Do not open any new tracks, do not add creative effects, and do not swap sounds.
-5. Once those three fixes are complete, export the mix immediately.
+The practical answer is to batch the modes. Write in one pass, where the only judgment is keep or replace. Finish in another, where new parts are off the table.
 
-By limiting your repair list, you force yourself to focus on major balances rather than endless minor adjustments. The project leaves the loop, and you move closer to a finished master.
+::figure cycle
+
+## DAW experiment: the three-fix pass
+
+Use a project that already runs from intro to outro but feels unfinished.
+
+1. Play the song once from start to end with your hands off the mouse. Do not stop to change anything.
+2. Write exactly three fixes on paper, each one specific enough to check: "lead vocal up 1 to 2 dB in chorus 2", "shorten the snare decay", "high-pass the pad at 150 Hz".
+3. Make only those three fixes. No new tracks, no new sounds and no new effects.
+4. Write any other problem you notice on the next page of the notepad and leave it alone.
+5. Bounce the song as soon as the third fix is done, with the date in the file name.
+6. At the start of the next session, repeat from step 1 with a new list of three.
+
+Each pass ends with a complete, better bounce. Over a few passes the fixes on your list get smaller. When the three fixes are changes you can no longer pick in a blind, level-matched comparison, the song is finished.
 
 ## Common mistake: mixing while writing
 
-The most common mistake producers make is loading mixing plugins on their channels before the arrangement is complete. They load compressors and EQs on their tracks while they are still searching for a baseline melody.
+The most common version of this trap is loading compressors and EQs on every channel while you are still looking for the bass line. Every processed sound feels like a commitment, and you start defending parts because of the time you spent on them.
 
-This is a trap. You cannot evaluate a structure while you are still writing the parts. Using placeholder sounds and keeping the mixer closed is the fastest way to get the skeleton of the song down. The technical cleanup should only happen once the emotional foundation of the song is locked in.
+Placeholder sounds and a closed mixer are the fastest way to get the skeleton of a song down. Shape a sound during writing only when the sound itself is the idea, such as a bass patch the whole song is built around.
 
-## Producer takeaway: define the finish line
+## Producer takeaway: define the finish line before you open the session
 
-Great records are built by choosing progress over perfection. Before you open a session, define exactly what the goal is. If it is a writing session, do not touch a mixing plugin. If it is a finishing session, do not write new parts.
-
-Write down your goals, stick to the pass, and print the mix the moment the emotional impact is clear. This discipline is what separates productive producers from those with folders full of unfinished loops.
+Before you open a project, decide which kind of session it is and write it in the project notes. In a writing session, keep going even when a sound is rough. In a finishing session, do not write new parts. Decide in advance what finished means for this song, for example "three fixes in a row that I cannot hear blind", and stop when you get there.
 
 ## References
-- Katz, B. (2012). *Mastering Audio: The Art and the Science*. Routledge.
-- TikTok Newsroom. (2020). *How TikTok recommends videos #ForYou*. official platform documentation.
+
+- Ellamil, M., Dobson, C., Beeman, M., & Christoff, K. (2012). Evaluative and generative modes of thought during the creative process. *NeuroImage*, 59, 1783-1794.
+- Finke, R. A., Ward, T. B., & Smith, S. M. (1992). *Creative Cognition: Theory, Research, and Applications*. MIT Press.
+- Monsell, S. (2003). Task switching. *Trends in Cognitive Sciences*, 7(3), 134-140.
 `,
     seo: {
-        title: 'Creative Mode vs Finishing Mode in Music Production | VGP Studio',
-        description: 'Stuck in a four-bar loop? Learn the cognitive science of task-switching in the studio and how to separate writing from mixing to finish more tracks.',
-        keywords: ['finishing music', 'music production psychology', 'workflow psychology', 'DAW arrangement tips', 'beatmaker productivity']
-    }
+        title: 'Why finishing needs its own session | VGP Studio',
+        description: 'Why switching between writing and mixing stalls songs, what research on creative cognition and task switching shows, and a three-fix pass to finish tracks.',
+        keywords: ['finishing music', 'task switching', 'creative workflow', 'music production psychology', 'arrangement workflow'],
+    },
 };

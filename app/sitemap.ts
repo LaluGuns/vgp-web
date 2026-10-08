@@ -36,6 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/games',
         '/book',
         '/blog',
+        '/learn/glossary',
     ].map((route) => ({
         url: `${baseUrl}${route}`,
         changeFrequency: route.includes('/studio/beats') ? ('daily' as const) : ('monthly' as const),

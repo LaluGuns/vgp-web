@@ -6,8 +6,57 @@ export const post104: BlogArticle = {
     excerpt: 'Neo Synthwave can make a coding session or product walkthrough feel dimensional without turning every scene into a trailer. The difference is in the arrangement.',
     category: 'genre-guides',
     publishedAt: '2026-07-19',
-    readingTime: 6,
+    readingTime: 4,
     featured: true,
+    updatedAt: '2026-10-08',
+    summary: [
+        'For technology content, Neo Synthwave should feel alive without demanding attention.',
+        'Treat the arpeggio as a clock: regular, limited in range, with space in the pattern.',
+        'Save the bright lead for moments the edit has earned, like a reveal or a finished build.',
+    ],
+    figures: {
+        clock: {
+            type: 'rhythm',
+            caption: 'An arpeggio that fills every 16th competes for attention. Leaving gaps keeps the pulse while giving the viewer somewhere to rest.',
+            alt: 'Step grid. A busy arpeggio plays all sixteen steps. A clock-like arpeggio plays eight with gaps. Kick on every beat, snare on beats two and four.',
+            rows: [
+                { label: 'Busy arpeggio', hits: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+                { label: 'Arpeggio as a clock', hits: [0, 2, 3, 6, 8, 10, 11, 14] },
+                { label: 'Kick', hits: [0, 4, 8, 12] },
+                { label: 'Snare', hits: [4, 12] },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'Why does a trailer-style synthwave cue work badly under a twenty-minute tutorial?',
+            options: [
+                'It is mixed too quietly to survive laptop speakers',
+                'It tires viewers and pulls focus from the lesson',
+                'Its long builds are hard to loop for twenty minutes',
+                'Tutorials need acoustic instruments to feel calm',
+            ],
+            answer: 1,
+            why: 'A huge snare and a constantly rising arpeggio can carry a fifteen-second reveal. Over twenty minutes they pull attention away from the information.',
+        },
+        {
+            q: 'What makes an arpeggio work like a clock?',
+            options: [
+                'A wide register and constant modulation',
+                'A new pattern at the start of every bar',
+                'A regular, narrow line with gaps in it',
+                'A dense run of straight sixteenth notes',
+            ],
+            answer: 2,
+            why: 'Regular and simple sustains motion without inviting the viewer to track every note.',
+        },
+        {
+            q: 'Where should the bright lead appear?',
+            options: ['From the very first bar of the cue', 'Under the spoken explanation', 'Only in the last bars of the outro', 'At a moment the edit has earned'],
+            answer: 3,
+            why: 'Held back, the lead lands as an event at a reveal or a finished build. In between, pads, a restrained arpeggio and rhythm carry the identity, which gives the creator more ways to use one track.',
+        },
+    ],
     content: `## Technology content needs momentum, not a trailer score
 
 Neo Synthwave is a natural fit for coding videos, product walkthroughs, futuristic motion graphics, and long late-night work sessions. It has pulse, color, and enough forward movement to make a static screen feel active.
@@ -21,6 +70,8 @@ For Flow Creator Music, I approach Neo Synthwave as functional arrangement: musi
 Arpeggios are one of the genre's strongest tools because they imply motion even when the harmonic rhythm is slow. For a coding or technology edit, I use them like a clock: regular enough to sustain attention, simple enough that the viewer does not start tracking every note.
 
 That normally means a limited register, a pattern with negative space, and automation that evolves over long sections rather than every bar. It keeps the scene moving without competing with code on screen or a spoken explanation.
+
+::figure clock
 
 ## Make the low end dependable
 
@@ -38,7 +89,7 @@ That dynamic range gives creators more options. A single track can support an ex
 
 Neo Synthwave in Flow Creator Music is royalty-free with an active Flow Pro creator license for the uses described in the terms. That license is the route for video, livestream, podcast, study-with-me, and eligible technology content.
 
-Start with the <a href="https://flow.virzyguns.com/en/creator-music/neo-synthwave" style="color:#7dd3fc;text-decoration:underline">Neo Synthwave creator catalog</a> when you need a preview, the correct download, and license information. Chill Music Division — a division of Virzy Guns Production — also has a <a href="https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy" style="color:#7dd3fc;text-decoration:underline">Spotify artist profile</a> for listening and discovery. A Spotify stream is not a creator-use license, and no claim is made that every Flow catalog track is available there.
+Start with the [Neo Synthwave creator catalog](https://flow.virzyguns.com/en/creator-music/neo-synthwave) when you need a preview, the correct download, and license information. Chill Music Division, a division of Virzy Guns Production, also has a [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) for listening and discovery. A Spotify stream is not a creator-use license, and no claim is made that every Flow catalog track is available there.
 
 ## Producer takeaway
 

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getArticleBySlug, getAllSlugs, articles, getCategoryBySlug } from '@/lib/blog-data';
+import { articles, getArticleBySlug, getAllSlugs, getCategoryBySlug } from '@/lib/blog-data';
+import { validateAll } from '@/lib/blog/validate';
 import { ogImage } from '@/lib/og';
 import { ArticlePage } from './ArticlePage';
 
@@ -8,8 +9,15 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
-// Generate static paths for all articles
+// Generate static paths for all articles. Broken lessons fail the build here.
 export async function generateStaticParams() {
+    const problems = validateAll(articles);
+    if (problems.length) {
+        const message = `Article problems:\n${problems.join('\n')}`;
+        // Fail the production build; in development, report and keep the other articles browsable.
+        if (process.env.NODE_ENV === 'production') throw new Error(message);
+        console.error(message);
+    }
     return getAllSlugs().map((slug) => ({ slug }));
 }
 
@@ -62,10 +70,6 @@ export default async function BlogArticlePage({ params }: Props) {
 
     const category = getCategoryBySlug(article.category);
 
-    // Get related articles (same category, excluding current)
-    const related = articles
-        .filter((a) => a.category === article.category && a.slug !== slug)
-        .slice(0, 2);
 
     // JSON-LD structured data for SEO
     const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
@@ -122,7 +126,6 @@ export default async function BlogArticlePage({ params }: Props) {
             <ArticlePage
                 article={article}
                 category={category}
-                related={related}
             />
         </>
     );

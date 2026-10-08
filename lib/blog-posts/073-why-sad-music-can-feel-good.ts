@@ -1,64 +1,194 @@
 import { BlogArticle } from '../blog-data';
 
+// Level envelope of one sung phrase, shared by both rows.
+const VOICE = {
+    kind: 'envelope' as const,
+    label: 'Voice',
+    points: [
+        [0, 0],
+        [0.03, 0.85],
+        [0.14, 0.62],
+        [0.2, 0.78],
+        [0.34, 0.55],
+        [0.42, 0.7],
+        [0.5, 0.05],
+        [0.52, 0],
+        [1, 0],
+    ] as [number, number][],
+};
+
 export const post073: BlogArticle = {
     slug: 'why-sad-music-can-feel-good',
     title: 'Sad music feels good when it feels safe',
-    excerpt: 'Why sad music can evoke positive emotions when it feels safe, and how to mix melancholic chords with intimate vocal textures.',
-    category: 'producer-psychology',
+    excerpt: 'Listeners enjoy sad songs when the sadness is beautiful and carries no real threat. What the research shows, and how vocal distance changes how a sad song lands.',
+    category: 'music-psychology',
     publishedAt: '2026-06-10',
-    readingTime: 8,
-    content: `## The reverb distance
+    updatedAt: '2026-10-08',
+    readingTime: 7,
+    summary: [
+        'Listeners usually hear more sadness in a sad song than they feel, and what they feel is often mixed: tender, nostalgic, even pleasant.',
+        'The pleasure seems to come from beauty, empathy and sadness with no real loss attached. The popular prolactin explanation was a hypothesis, and its author has since rejected it.',
+        'More reverb pushes a singer further away. For a sad lyric, try a short, quiet reverb before reaching for a hall.',
+    ],
+    figures: {
+        path: {
+            type: 'flow',
+            caption:
+                'One way to read the research on enjoying sad music. The listener recognizes sadness, nothing is actually lost, and the feeling that results is often mixed rather than purely sad.',
+            alt: 'Five steps: the music has sad cues, the listener recognizes sadness, nothing real is at stake, beauty and empathy come in, and the listener feels something mixed.',
+            steps: [
+                { label: 'Sad cues', note: 'Slow, low, soft, minor, dark timbre' },
+                { label: 'Sadness recognized', note: 'This sounds sad' },
+                { label: 'Nothing at stake', note: 'No real loss or threat' },
+                { label: 'Beauty and empathy', note: 'Being moved, compassion' },
+                { label: 'Mixed feeling', note: 'Sad and pleasant at once' },
+            ],
+        },
+        distance: {
+            type: 'signal',
+            caption:
+                'The same sung phrase with two reverb settings. With a short plate low in the mix, the direct voice dominates and the singer sounds close. With a long, loud hall, the reverb carries nearly as much energy as the voice, which the ear reads as distance.',
+            alt: 'Two level plots of one phrase. In both, the solid voice envelope rises and falls over the first half. In the top plot a dashed reverb envelope stays low and dies soon after the phrase. In the bottom plot the dashed reverb rises almost to the voice level and fades slowly to the end.',
+            rows: [
+                {
+                    label: 'Short plate, low send',
+                    unipolar: true,
+                    traces: [
+                        VOICE,
+                        {
+                            kind: 'envelope',
+                            label: 'Reverb',
+                            dashed: true,
+                            points: [
+                                [0.03, 0],
+                                [0.1, 0.12],
+                                [0.5, 0.1],
+                                [0.64, 0],
+                                [1, 0],
+                            ],
+                        },
+                    ],
+                },
+                {
+                    label: 'Long hall, high send',
+                    unipolar: true,
+                    traces: [
+                        VOICE,
+                        {
+                            kind: 'envelope',
+                            label: 'Reverb',
+                            dashed: true,
+                            points: [
+                                [0.03, 0],
+                                [0.18, 0.45],
+                                [0.5, 0.52],
+                                [0.75, 0.25],
+                                [1, 0.04],
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    quiz: [
+        {
+            q: 'What did Kawakami and colleagues (2013) find when listeners rated sad music?',
+            options: [
+                'Listeners felt even more tragic than the music itself sounded to them',
+                'Listeners felt less tragic and more romantic than the music sounded',
+                'The sad pieces produced almost no felt emotion in the listeners',
+                'Listeners felt exactly as tragic as they judged the music to sound',
+            ],
+            answer: 1,
+            why: 'Perceived and felt emotion came apart. The music sounded tragic, while listeners reported feeling more romantic and less tragic than that.',
+        },
+        {
+            q: 'What is the current status of the idea that prolactin explains why sad music feels good?',
+            options: [
+                'It was confirmed with blood tests in several large studies',
+                'It was shown to hold for minor-key songs but not major ones',
+                'It is the accepted account, backed by brain imaging studies',
+                'It was a hypothesis, and its author has since rejected it',
+            ],
+            answer: 3,
+            why: 'Huron proposed it in 2011 as a possible explanation. A 2018 review rated the biological evidence as weak to non-existent, and Huron later called the theory wrong himself.',
+        },
+        {
+            q: 'Why does a long, loud hall reverb make a singer sound further away?',
+            options: [
+                'The ear judges distance from the balance of reverb to direct sound',
+                'Reverb smears the voice\'s pitch, which the ear reads as distance',
+                'The hall\'s stereo spread pulls the voice wide and away from center',
+                'A long tail delays the voice, and the ear hears the delay as distance',
+            ],
+            answer: 0,
+            why: 'The direct-to-reverberant ratio is one of the main distance cues. The more the reverb weighs against the direct voice, the further away the source seems.',
+        },
+    ],
+    content: `## Hook: the cathedral on the ballad
 
-You write a melancholic ballad. You write a slow chord progression in a minor key and record a personal vocal. To make the performance sound more emotional, you load a large cathedral reverb on the vocal track. You set the mix to forty percent, thinking the vast space will emphasize the sadness. Instead, the vocal feels distant, the listener fails to connect, and the song feels melodramatic. The issue is that the reverb has pushed the singer away, destroying the connection between the performer and the listener.
+You write a slow song in a minor key and record a vocal that means something to you. To make it feel sadder, you put a long cathedral reverb on the voice and push the send until the tail fills every gap. Played back, the singer sounds far away. The song tips into melodrama, and the listener watches it rather than feeling it.
 
-Sad music does not make people depressed. Listeners use melancholy in song as an emotional release. However, to make this connection work, the listener must trust the singer. Physical distance destroys this trust.
+People listen to sad songs on purpose, again and again, and many say they enjoy them. That pleasure seems to depend on the sadness feeling safe and beautiful. A production choice that pushes the singer into the distance can work against both.
 
-## Why intimacy matters in melancholic songs
+## Why it matters: hearing sadness is not feeling it
 
-Listeners respond to close, dry sounds as if a friend is speaking nearby. Intimacy makes vulnerability feel safe. If a vocalist sounds like they are whispering in your ear, the brain registers the communication as personal.
+A listener can recognize that a song is sad without feeling sad. Kawakami and colleagues (2013) asked listeners to rate sad pieces twice: once for the emotion the music expressed and once for what they felt. The music sounded tragic, but listeners reported feeling less tragic than that, and more romantic and light-hearted. The same song held two different emotions at once.
 
-When you drown the vocal in reverb, you place the singer in a massive, empty room. The listener no longer feels like they are sharing a private space with the artist. The song loses its vulnerability and sounds like an theatrical performance. Managing the spatial design of a sad song determines how deeply the listener connects with the lyrics.
+That matters for production. A sad song does not need to make the listener miserable. It needs to make sadness feel close enough to care about and beautiful enough to stay with.
 
-## Prolactin and comfort mechanics
+## Science model: why sadness in music can be pleasant
 
-The positive response to sad music is rooted in human physiology. When a person experiences real-world sadness or pain, the brain releases a hormone called prolactin. This hormone acts as a physical painkiller and psychological consolidator, helping to restore emotional balance. 
+Sachs, Damasio and Habibi (2015) reviewed the research and concluded that sad music tends to be enjoyed when the sadness it evokes is not felt as a threat, when the music is heard as beautiful, and when it gives the listener something back: comfort, a way to manage mood, a sense of empathy or a memory. Vuoskoski and colleagues (2012) found that sad excerpts evoked sadness alongside nostalgia, peacefulness and wonder, and that listeners high in empathy and openness liked them more. Huron and Vuoskoski (2020) suggest that for many listeners the pleasant part is compassion, a warm feeling toward the imagined sufferer.
 
-When a listener hears sad music, the auditory system registers the markers of melancholy (such as slow tempo, low pitch, and quiet dynamics). The brain activates the same hormonal response:
+::figure path
 
-$$\\text{Consolation Response} = g(\\text{Acoustic Proximity}, \\text{Autonomic Safety})$$
+You may have read that the hormone prolactin explains all this. That idea comes from a paper by Huron (2011), who proposed that prolactin, which rises during sadness and may have a consoling effect, could make music-induced sadness pleasant for some listeners. It was a hypothesis, not a finding. A later review rated the biological evidence for this kind of account as weak to non-existent, and the psychological evidence as moderate (Eerola et al., 2018). Huron has since published a short note titled "The prolactin theory of sad-music enjoyment is wrong" (Huron, 2023).
 
-Because the brain knows there is no actual real-world threat, the listener experiences the comforting effects of the prolactin release without the pain of real tragedy. Acoustic proximity (close, dry vocals) and autonomic safety (familiar chord patterns) maximize this release by reinforcing the feeling of safety.
+Distance is where production comes in. The ear judges how far away a source is partly from the balance between the direct sound and the reverberation (Zahorik, Brungart and Bronkhorst, 2005). The more reverb relative to direct sound, the further away the singer seems. Whether a closer voice makes a listener more empathetic has not been tested in the same way, so treat that part as craft rather than science.
 
-## The close vocal experiment
+::figure distance
 
-You can test how vocal proximity changes the emotional weight of a track. This test takes ten minutes in your DAW.
+::demo reverb
 
-1. Open your melancholic project and identify the lead vocal channel.
-2. Mute any large hall or cathedral reverb plugins inserted on the vocal track.
-3. Apply a compressor with a fast attack and medium release to keep the vocal level stable and consistent.
-4. Set up a plate reverb on a send bus, keeping the decay time short (between zero point eight and one point two seconds).
-5. Apply a high-pass filter to the reverb return at two hundred hertz and a low-pass filter at five kilohertz to keep the reverb out of the frequency extremes.
-6. Blend the reverb send at a low level (around minus eighteen decibels) so the vocal remains front and center.
+## DAW experiment: bring the singer closer
 
-Listen to the track. The vocal will feel much closer to the listener. The dry performance lets the natural mouth sounds and breathing details cut through, which increases the perceived honesty of the vocal.
+This takes about ten minutes on a slow song with a lead vocal.
 
-## The muddy foundation mistake
+1. On the lead vocal, bypass the long hall or cathedral reverb and note its send level.
+2. Create a new send to a plate reverb. Set the decay to 1.0 second and the pre-delay to 25 ms.
+3. On the plate return, add a high-pass filter at 200 Hz and a low-pass filter at 5 kHz.
+4. Start the send at -18 dB and raise it until you can just hear the tail in the gaps between lines, then stop.
+5. Render 30 seconds of the chorus with each reverb and match their loudness by ear or with a loudness meter, so the hall version is not simply louder.
+6. Play both versions to someone who has not heard the song. Ask which singer sounds like they are singing to them, and which version they would play again.
 
-A common mistake is letting the low end get messy. Producers assume that a sad song needs to sound soft, so they cut the sub bass and boost the low mids of pads. This creates mud, which clutters the vocal frequencies. Sad does not mean weak. A solid bass foundation is necessary to anchor the emotional chords.
+The plate version should sound closer, with breaths and consonants audible. The hall version sounds bigger and further away. Neither is right for every song. Choose the one that fits the lyric.
 
-Another mistake is using massive reverb tails to hide a poor vocal recording. If the singer is out of tune, fix the pitch or record another take. Do not use spatial effects to mask the performance.
+## Common mistake: stacking every sad signal
 
-## Producer takeaway
+The most common mistake is pushing every sad cue to the maximum at once: very slow, very dark, very wet, every note sung at full intensity. Each cue tells the listener the song is sad, and together they can sound like a performance of sadness. Listeners recognize it and feel less. Leave some cues neutral and let one or two carry the mood.
 
-Intimacy drives the narrative. Keep the lead vocal dry and close to build trust. Layer warm, mid-heavy pads behind minor chords to support the vocal without competing for space. Make sure your low-mid warmth does not muddy the vocal range on consumer speakers. Keep the close vocal style only if it makes the listener feel connected to the performer.
+The second mistake is using a big reverb to hide a weak take. If a note is out of tune, tune it or sing it again. A long tail does not fix the performance, and it moves the singer away from the listener.
+
+## Producer takeaway: make sadness close and beautiful
+
+Treat a sad song as an invitation, not a weight. Keep the lead voice near enough that the listener can hear it breathe, and let the arrangement stay warm rather than harsh. Use space to support the mood, not to stand in for it. Keep the closer vocal if the lyric starts to sound like it is addressed to the listener. If the song loses its scale, add reverb back one step at a time.
 
 ## References
-- Koelsch. Brain correlates of music-evoked emotions. Nature Reviews Neuroscience. https://doi.org/10.1038/nrn3666
-- Huron. Sweet Anticipation: Music and the Psychology of Expectation. MIT Press. https://mitpress.mit.edu/9780262582780/sweet-anticipation/
+
+- Eerola, T., Vuoskoski, J. K., Peltola, H.-R., Putkinen, V., & Schäfer, K. (2018). An integrative review of the enjoyment of sadness associated with music. *Physics of Life Reviews*, 25, 100-121.
+- Huron, D. (2011). Why is sad music pleasurable? A possible role for prolactin. *Musicae Scientiae*, 15(2), 146-158.
+- Huron, D. (2023). The prolactin theory of sad-music enjoyment is wrong. *Empirical Musicology Review*, 17(1), 69-70.
+- Huron, D., & Vuoskoski, J. K. (2020). On the enjoyment of sad music: Pleasurable compassion theory and the role of trait empathy. *Frontiers in Psychology*, 11, 1060.
+- Kawakami, A., Furukawa, K., Katahira, K., & Okanoya, K. (2013). Sad music induces pleasant emotion. *Frontiers in Psychology*, 4, 311.
+- Sachs, M. E., Damasio, A., & Habibi, A. (2015). The pleasures of sad music: A systematic review. *Frontiers in Human Neuroscience*, 9, 404.
+- Vuoskoski, J. K., Thompson, W. F., McIlwain, D., & Eerola, T. (2012). Who enjoys listening to sad music and why? *Music Perception*, 29(3), 311-317.
+- Zahorik, P., Brungart, D. S., & Bronkhorst, A. W. (2005). Auditory distance perception in humans: A summary of past and present research. *Acta Acustica united with Acustica*, 91(3), 409-420.
 `,
     seo: {
-        title: 'Why Sad Music Can Feel Good | VGP Studio',
-        description: 'Why sad music can evoke positive emotions when it feels safe, and how to mix melancholic chords with intimate vocal textures.',
-        keywords: ['sad music psychology', 'prolactin release', 'vocal intimacy', 'reverb tips', 'music emotion', 'audio engineering']
-    }
+        title: 'Why sad music can feel good | VGP Studio',
+        description: 'Why listeners enjoy sad songs, what the research does and does not support, and how reverb and vocal distance change the way a sad song lands.',
+        keywords: ['sad music psychology', 'perceived and felt emotion', 'vocal intimacy', 'reverb distance', 'music emotion', 'music psychology'],
+    },
 };
