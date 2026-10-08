@@ -83,10 +83,13 @@ log(`Captions: ${vo.length} cues, the narration as spoken`);
 const exe = [process.env.CHROME_PATH, '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'].find((p) => p && fs.existsSync(p));
 const browser = exe ? await chromium.launch({ executablePath: exe }) : await chromium.launch({ channel: 'chrome' });
 
-/** The lesson page at phone size, for the end card. Cached in out/film3/lesson/. */
+/**
+ * The lesson's Listen demo at phone size, for the end card: idle, then three
+ * moments after Play is pressed. Cached in out/film3/lesson/.
+ */
 async function lesson() {
     const dir = path.join(OUT, 'lesson');
-    const meta = path.join(dir, 'lesson.json');
+    const meta = path.join(dir, 'demo.json');
     if (fs.existsSync(meta) && !args.includes('--refresh-lesson')) return JSON.parse(fs.readFileSync(meta, 'utf8'));
     fs.mkdirSync(dir, { recursive: true });
     const p = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
@@ -104,38 +107,30 @@ async function lesson() {
         await p.close();
         return null;
     }
-    for (let y = 0; y < 14000; y += 600) {
-        await p.evaluate((v) => scrollTo(0, v), y);
-        await p.waitForTimeout(100);
-    }
-    await p.evaluate(() => scrollTo(0, 0));
-    await p.waitForTimeout(800);
-    const info = await p.evaluate(() => {
+    // Bring the demo up under the site header, let it settle.
+    await p.evaluate(() => {
         const s = document.querySelector('section[aria-label^="Listen"]');
-        const b = s?.querySelector('button')?.getBoundingClientRect();
-        return { demoTop: s ? Math.round(s.getBoundingClientRect().top + scrollY) : 2500, play: b ? [b.left, b.top + scrollY, b.width, b.height] : [37, 3425, 94, 44] };
+        scrollTo(0, s.getBoundingClientRect().top + scrollY - 76);
     });
-    await p.screenshot({ path: path.join(dir, 'header.png'), clip: { x: 0, y: 0, width: 390, height: 65 } });
-    await p.screenshot({ path: path.join(dir, 'nav.png'), clip: { x: 0, y: 844 - 55, width: 390, height: 55 } });
-    // The page itself without its fixed bars, which the film draws on top.
-    await p.addStyleTag({ content: 'header.fixed, nav.fixed, .fixed.top-0.h-0\\.5 { visibility: hidden !important }' });
-    await p.screenshot({ path: path.join(dir, 'page.jpg'), type: 'jpeg', quality: 84, fullPage: true, clip: { x: 0, y: 0, width: 390, height: info.demoTop + 1100 } });
+    await p.waitForTimeout(1200);
+    const play = await p.evaluate(() => {
+        const b = document.querySelector('section[aria-label^="Listen"] button').getBoundingClientRect();
+        return [b.left, b.top, b.width, b.height];
+    });
+    await p.screenshot({ path: path.join(dir, 'idle.jpg'), type: 'jpeg', quality: 86 });
+    await p.click('section[aria-label^="Listen"] button');
+    for (let k = 1; k <= 3; k++) {
+        await p.waitForTimeout(350);
+        await p.screenshot({ path: path.join(dir, `play${k}.jpg`), type: 'jpeg', quality: 86 });
+    }
     await p.close();
-    const out = { url, captured: new Date().toISOString().slice(0, 10), ...info };
+    const out = { url, captured: new Date().toISOString().slice(0, 10), play, images: ['idle', 'play1', 'play2', 'play3'] };
     fs.writeFileSync(meta, JSON.stringify(out, null, 1));
     return out;
 }
 const L = await lesson();
-const lessonData = L
-    ? {
-          page: `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson/page.jpg')).toString('base64')}`,
-          header: `data:image/png;base64,${fs.readFileSync(path.join(OUT, 'lesson/header.png')).toString('base64')}`,
-          nav: `data:image/png;base64,${fs.readFileSync(path.join(OUT, 'lesson/nav.png')).toString('base64')}`,
-          demoTop: L.demoTop,
-          play: L.play,
-      }
-    : null;
-log(L ? `End card: ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
+const lessonData = L ? { play: L.play, images: Object.fromEntries(L.images.map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
+log(L ? `End card: the Listen demo of ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}

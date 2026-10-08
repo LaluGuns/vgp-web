@@ -58,7 +58,7 @@ run measured.
 
 ## Film 3: the narrated short
 
-A 72 second, 1080 x 1920 short for TikTok and Reels on the same lesson, in
+A 76 second, 1080 x 1920 short for TikTok and Reels on the same lesson, in
 an illustrated explainer style: a snare, a compressor, and inside it a small
 robot whose hand rides the fader. Narrated (ElevenLabs, voice "Cedric M,
 Engaging Documentary Narrator", model `eleven_multilingual_v2`), with real
@@ -78,12 +78,12 @@ out of git. Put them in `scripts/promo/assets/` (ignored):
 npm run film3                    # sound, stills, video and checks
 npm run film3 -- --stills        # contact sheets only
 npm run film3 -- --frames 12.5,31 --tag check
-npm run film3 -- --refresh-lesson   # re-capture the lesson page for the end card
+npm run film3 -- --refresh-lesson   # re-capture the lesson's Listen demo for the end card
 ```
 
 Writes to `out/film3/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
-`contact.png` (one still per scene), `seconds.png` (one per second) and
-`VERIFY.md`. `film3/timeline.mjs` places every line, demo, effect and
+`contact.png` (one still per scene), `seconds.png` (one per second),
+`cover.png` (for the profile grid) and `VERIFY.md`. `film3/timeline.mjs` places every line, demo, effect and
 scene; `film3/audio.mjs` mixes the sound and hands the picture the levels
 and gain reduction it computed, so the shapes on screen are the drums you
 hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.

@@ -12,7 +12,8 @@ const HERE = path.dirname(new URL(import.meta.url).pathname);
 export const ASSETS = path.join(HERE, '../assets');
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
 
-// Detector: RMS over 3 ms of the mono sum, the level the compressor reacts to.
+// Detector: RMS over 3 ms of the mono sum, centred so it has no lag (the
+// lesson's model reads the envelope itself). The level the compressor reacts to.
 const DETECT = 0.003;
 // Picture data resolution.
 const VIS = 1000;
@@ -36,14 +37,16 @@ function mixIn(dst, src, t0, gain = 1, rate = 1) {
     }
 }
 
-function rmsEnv(mono, win = DETECT) {
+/** RMS over `win` seconds; `centred` puts the window around each sample, so the level has no lag. */
+function rmsEnv(mono, win = DETECT, centred = false) {
     const w = Math.round(win * RATE);
     const out = new Float32Array(mono.length);
+    const lag = centred ? Math.floor(w / 2) : 0;
     let s = 0;
-    for (let i = 0; i < mono.length; i++) {
-        s += mono[i] * mono[i];
+    for (let i = 0; i < mono.length + lag; i++) {
+        if (i < mono.length) s += mono[i] * mono[i];
         if (i >= w) s -= mono[i - w] * mono[i - w];
-        out[i] = Math.sqrt(Math.max(0, s) / w);
+        if (i - lag >= 0) out[i - lag] = Math.sqrt(Math.max(0, s) / w);
     }
     return out;
 }
@@ -86,7 +89,17 @@ export function voPlacements() {
     return TIMELINE.vo.map((p) => {
         const c = CUES.segments.find((s) => s.id === p.id);
         if (!c) throw new Error(`no cue ${p.id}`);
-        return { id: p.id, at: p.at, dur: c.to - c.from, from: c.from, to: c.to, text: c.show ?? c.text, words: c.words.map((w) => ({ w: w.w, s: p.at + w.s, e: p.at + w.e })) };
+        // Cuts (source seconds) come out of the line: words inside are dropped,
+        // words after move up.
+        const cuts = c.cuts ?? [];
+        const removed = cuts.reduce((a, [x, y]) => a + (y - x), 0);
+        const shift = (src) => cuts.reduce((a, [x, y]) => a + (src >= y ? y - x : 0), 0);
+        const inCut = (src) => cuts.some(([x, y]) => src > x && src < y);
+        // A kept word that starts inside a cut starts where the cut ends.
+        const clampOut = (src) => cuts.reduce((v, [x, y]) => (v > x && v < y ? y : v), src);
+        const place = (src) => p.at + clampOut(src) - c.from - shift(clampOut(src));
+        const words = c.words.filter((w) => !inCut(c.from + (w.s + w.e) / 2)).map((w) => ({ w: w.w, s: place(c.from + w.s), e: place(c.from + w.e) }));
+        return { id: p.id, at: p.at, dur: c.to - c.from - removed, from: c.from, to: c.to, cuts, text: c.show ?? c.text, words };
     });
 }
 
@@ -223,15 +236,19 @@ export function renderAudio(wavPath) {
     const placed = voPlacements();
     const fade = at(0.008);
     for (const p of placed) {
-        // A little room either side of the measured pause, inside the silence.
-        const a = at(Math.max(0, p.from - 0.03));
-        const b = at(Math.min(p.to + 0.08, voSrc.L.length / RATE));
-        const clip = voSrc.L.slice(a, b);
-        for (let k = 0; k < fade; k++) {
-            clip[k] *= k / fade;
-            clip[clip.length - 1 - k] *= k / fade;
+        // A little room either side of the measured pause, inside the silence;
+        // cuts are joined with short crossfades.
+        const bounds = [Math.max(0, p.from - 0.03), ...p.cuts.flat(), Math.min(p.to + 0.08, voSrc.L.length / RATE)];
+        let dst = p.at - 0.03;
+        for (let k = 0; k < bounds.length; k += 2) {
+            const piece = voSrc.L.slice(at(bounds[k]), at(bounds[k + 1]));
+            const xf = k === 0 ? fade : at(0.012);
+            const xl = k + 2 >= bounds.length ? fade : at(0.012);
+            for (let q = 0; q < xf; q++) piece[q] *= q / xf;
+            for (let q = 0; q < xl; q++) piece[piece.length - 1 - q] *= q / xl;
+            mixIn(vo, piece, dst);
+            dst += piece.length / RATE - (k + 2 < bounds.length ? 0.012 : 0);
         }
-        mixIn(vo, clip, p.at - 0.03);
     }
     // Rumble out, then the usual voice chain: a gentle compressor and a
     // look-ahead peak limiter, so speech peaks sit about 11 dB over its
@@ -251,9 +268,9 @@ export function renderAudio(wavPath) {
         mixIn(dR, S[h.voice].R, h.t, VELOCITY[h.voice]);
     }
     // Scale the detector so the snare's crack reads 1.0.
-    const snareEnv = rmsEnv(mono(S.snare.L, S.snare.R));
+    const snareEnv = rmsEnv(mono(S.snare.L, S.snare.R), DETECT, true);
     const ref = Math.max(...snareEnv);
-    const env = rmsEnv(mono(dL, dR)).map((v) => v / ref);
+    const env = rmsEnv(mono(dL, dR), DETECT, true).map((v) => v / ref);
     const demoAt = new Int16Array(n).fill(-1);
     TIMELINE.demos.forEach((d, j) => demoAt.fill(j, at(d.at), at(d.at + d.bars * TIMELINE.bar + 0.35)));
     // Each demo's compressor is warmed up on one bar of the same groove, so
@@ -389,6 +406,11 @@ export function renderAudio(wavPath) {
         lone[k] = { gr: decimate(g, 0, 0.25, SLOW_VIS), out: decimate(sn.map((v, i) => v * undb(-g[i])), 0, 0.25, SLOW_VIS) };
     }
     const snare = { rate: SLOW_VIS, env: decimate(sn, 0, 0.25, SLOW_VIS), ...lone };
+    // Each demo's snares up close (150 ms from the onset): level in, level out
+    // before makeup. The picture multiplies by makeupDb for what you hear.
+    for (const d of demos) {
+        d.zooms = hits.filter((h) => h.demo === d.id && h.voice === 'snare').map((h) => ({ t: h.t, env: decimate(env, h.t, h.t + 0.15, SLOW_VIS), out: decimate(out, h.t, h.t + 0.15, SLOW_VIS), gr: decimate(gr, h.t, h.t + 0.15, SLOW_VIS) }));
+    }
     const measures = {
         voLufs,
         voRawLufs: rawLufs,

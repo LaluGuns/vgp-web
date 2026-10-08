@@ -23,9 +23,9 @@ const P = {
     amber: '#fbbf24',
     amber2: '#f59e0b',
     amberDim: 'rgba(251,191,36,0.22)',
-    violet: '#7468ee',
-    violetHi: '#9d94ff',
-    violetLo: '#4b3fb8',
+    violet: '#4f6fa8',
+    violetHi: '#86a3d6',
+    violetLo: '#2c4475',
     steel: '#d3dbe8',
     steelLo: '#8d9ab0',
     steelDk: '#5b6880',
@@ -171,7 +171,7 @@ function ground(g, t, glow = 0) {
     g.save();
     g.globalAlpha = 0.85;
     planet(g, W * 0.98 + 10 * Math.sin(t * 0.06), H * 0.1, 330, 2.3);
-    planet(g, -W * 0.06, H * 0.84 + 8 * Math.sin(t * 0.05), 420, -0.6);
+    planet(g, -W * 0.1, H * 1.04 + 8 * Math.sin(t * 0.05), 440, -0.9);
     g.restore();
     const c = g.createRadialGradient(W / 2, H * 0.4, 0, W / 2, H * 0.4, H * 0.55);
     c.addColorStop(0, `rgba(70,130,230,${0.2 + 0.18 * glow})`);
@@ -316,7 +316,7 @@ function snareDrum(g, x, y, s, { stick = -0.6, ring = 9, squash = 0 } = {}) {
         for (let k = 0; k < 3; k++) {
             const a = ring - k * 0.07;
             if (a < 0) continue;
-            g.strokeStyle = `rgba(116,104,238,${0.55 * (1 - a / 0.6)})`;
+            g.strokeStyle = `rgba(79,111,168,${0.6 * (1 - a / 0.6)})`;
             g.lineWidth = 5;
             g.beginPath();
             g.ellipse(40, -4, 30 + a * 420, (30 + a * 420) * 0.23, 0, 0, Math.PI * 2);
@@ -455,21 +455,12 @@ function compressorBox(g, x, y, s, { k = 0, value = '', gr = 0, glow = 0 } = {})
     g.fillStyle = P.face;
     g.fill();
     knob(g, -92, 0, 50, k, { glow });
-    label(g, 'Attack', -92, 84, { size: 30, weight: 600, color: P.ink2, align: 'center', family: BODY });
+    label(g, 'Attack', -92, 96, { size: 32, weight: 600, color: P.ink2, align: 'center', family: BODY });
     // Value display.
-    rr(g, 10, -64, 148, 58, 12);
+    rr(g, 10, -36, 148, 72, 14);
     g.fillStyle = '#071021';
     g.fill();
-    label(g, value, 84, -24, { size: 34, weight: 600, color: P.cyan, align: 'center' });
-    // Gain reduction meter: ten segments, lit from the left.
-    const lit = clamp(gr / 18) * 10;
-    for (let i = 0; i < 10; i++) {
-        rr(g, 12 + i * 14.6, 18, 10, 40, 4);
-        g.fillStyle = i < lit ? P.cyan : P.ink5;
-        g.globalAlpha = i < lit ? clamp(lit - i) * 0.8 + 0.2 : 1;
-        g.fill();
-        g.globalAlpha = 1;
-    }
+    label(g, value, 84, 13, { size: 38, weight: 600, color: P.cyan, align: 'center' });
     // Jacks.
     for (const sx of [-200, 200]) {
         rr(g, sx - 12, 24, 24, 40, 8);
@@ -530,13 +521,7 @@ function fader(g, x, top, bottom, gr, { ticks = true, size = 1 } = {}) {
             label(g, d === 0 ? '0 dB' : `−${d}`, x + 130 * size, ty + 10 * size, { size: 30 * size, weight: 500, color: P.ink3, align: 'left', family: BODY });
         }
     }
-    // The part of the slot the cap has travelled: cyan, the gain it took.
     const cy = faderCapY(top, bottom, gr);
-    if (gr > 0.05) {
-        rr(g, x - 5 * size, top + 40, 10 * size, cy - top - 40, 5 * size);
-        g.fillStyle = P.cyan;
-        g.fill();
-    }
     shadow(g, x + 8, cy + 30 * size, 110 * size, 26 * size, 0.7);
     rr(g, x - 80 * size, cy - 38 * size, 160 * size, 76 * size, 16 * size);
     const cg = g.createLinearGradient(0, cy - 38 * size, 0, cy + 38 * size);
@@ -657,6 +642,87 @@ function robot(g, base, hand, { open = 0, look = null, lid = 0, s = 1, arm = 460
     g.restore();
 }
 
+/** The robot's dome with its one eye; `base` is the middle of its flat bottom. */
+function robotDome(g, base, { look = null, lid = 0, s = 1 } = {}) {
+    shadow(g, base.x, base.y + 10 * s, 150 * s, 22 * s, 0.8);
+    g.fillStyle = P.devHi;
+    g.beginPath();
+    g.arc(base.x, base.y, 110 * s, Math.PI, 0);
+    g.closePath();
+    g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.08)';
+    g.beginPath();
+    g.arc(base.x - 26 * s, base.y - 38 * s, 64 * s, Math.PI * 1.05, Math.PI * 1.55);
+    g.lineTo(base.x - 26 * s, base.y - 38 * s);
+    g.fill();
+    rr(g, base.x - 118 * s, base.y - 6 * s, 236 * s, 20 * s, 10 * s);
+    g.fillStyle = P.dev;
+    g.fill();
+    g.strokeStyle = P.steelLo;
+    g.lineWidth = 6 * s;
+    g.beginPath();
+    g.moveTo(base.x + 46 * s, base.y - 98 * s);
+    g.lineTo(base.x + 66 * s, base.y - 146 * s);
+    g.stroke();
+    g.fillStyle = P.cyan;
+    g.beginPath();
+    g.arc(base.x + 68 * s, base.y - 150 * s, 10 * s, 0, Math.PI * 2);
+    g.fill();
+    const ex = base.x - 6 * s;
+    const ey = base.y - 54 * s;
+    g.fillStyle = P.dark;
+    g.beginPath();
+    g.arc(ex, ey, 46 * s, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#f1f5fb';
+    g.beginPath();
+    g.arc(ex, ey, 38 * s, 0, Math.PI * 2);
+    g.fill();
+    let ox = 0;
+    let oy = 0;
+    if (look) {
+        const la = Math.atan2(look.y - ey, look.x - ex);
+        ox = Math.cos(la) * 14 * s;
+        oy = Math.sin(la) * 14 * s;
+    }
+    g.fillStyle = P.cyan2;
+    g.beginPath();
+    g.arc(ex + ox, ey + oy, 19 * s, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = P.dark;
+    g.beginPath();
+    g.arc(ex + ox * 1.15, ey + oy * 1.15, 9 * s, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = '#ffffff';
+    g.beginPath();
+    g.arc(ex + ox - 6 * s, ey + oy - 7 * s, 4.5 * s, 0, Math.PI * 2);
+    g.fill();
+    if (lid > 0) {
+        g.save();
+        g.beginPath();
+        g.arc(ex, ey, 39 * s, 0, Math.PI * 2);
+        g.clip();
+        g.fillStyle = P.devHi;
+        g.fillRect(ex - 46 * s, ey - 46 * s, 92 * s, 92 * s * lid);
+        g.restore();
+    }
+}
+
+/**
+ * The robot on a shelf above its fader, reaching down with a telescopic arm.
+ * `capTop` is the top edge of the fader cap; `grip` 0..1 closes the glove on
+ * it, and an open glove hovers above the cap.
+ */
+function robotTop(g, x, shelfY, capTop, { grip = 1, look = null, lid = 0, s = 0.75, reach = 1 } = {}) {
+    const lift = (1 - grip) * 40 * s;
+    const wrist = { x, y: lerp(shelfY + 40 * s, capTop - 52 * s - lift, reach) };
+    const mid = { x, y: lerp(shelfY + 8 * s, wrist.y, 0.5) };
+    tube(g, { x, y: shelfY + 4 * s }, mid, s * 1.25);
+    tube(g, mid, wrist, s * 0.85);
+    glove(g, wrist.x, wrist.y, s, 1 - grip, Math.PI / 2);
+    robotDome(g, { x, y: shelfY }, { look, lid, s });
+}
+
 function tube(g, p, q, s) {
     g.lineCap = 'round';
     g.strokeStyle = P.steelDk;
@@ -752,7 +818,7 @@ function meter(g, x, top, bottom, level, thr, { w = 96, segs = 28 } = {}) {
         const y = bottom - (i + 1) * h;
         rr(g, x - w / 2, y + 3, w, h - 6, 6);
         const on = v <= level;
-        g.fillStyle = on ? (v > thr ? P.amber : P.cyan) : P.ink5;
+        g.fillStyle = on ? (v > thr ? P.ink : P.cyan) : P.ink5;
         g.fill();
     }
 }

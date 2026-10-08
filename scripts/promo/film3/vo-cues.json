@@ -551,7 +551,7 @@
   },
   {
    "id": "slips",
-   "text": "The crack slips past, and only the body gets turned down.",
+   "text": "The crack slips past, and the body gets turned down.",
    "from": 38.142,
    "to": 41.624,
    "words": [
@@ -610,7 +610,14 @@
      "s": 3.118,
      "e": 3.478
     }
-   ]
+   ],
+   "cuts": [
+    [
+     40.12,
+     40.4
+    ]
+   ],
+   "note": "\"only\" cut out (40.12-40.40 s in the source): the 30 ms attack trims the crack a little, so \"only the body\" overstated it."
   },
   {
    "id": "punch",
