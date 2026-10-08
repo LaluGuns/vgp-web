@@ -1,6 +1,17 @@
 import { Metadata } from 'next';
 import { articles, categories, getFeaturedArticles } from '@/lib/blog-data';
-import { BlogIndex } from './BlogIndex';
+import { BlogIndex, type BlogListItem } from './BlogIndex';
+import type { BlogArticle } from '@/lib/blog-data';
+
+const toListItem = ({ slug, title, excerpt, category, publishedAt, readingTime, seo }: BlogArticle): BlogListItem => ({
+    slug,
+    title,
+    excerpt,
+    category,
+    publishedAt,
+    readingTime,
+    seo: { keywords: seo.keywords },
+});
 
 export const metadata: Metadata = {
     title: 'Music Production Articles | VGP Reading Room',
@@ -28,9 +39,9 @@ export default function BlogPage() {
 
     return (
         <BlogIndex
-            articles={articles}
+            articles={articles.map(toListItem)}
             categories={categories}
-            featured={featured}
+            featured={featured.map(toListItem)}
         />
     );
 }

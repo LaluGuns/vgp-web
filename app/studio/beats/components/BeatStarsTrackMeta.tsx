@@ -41,7 +41,7 @@ export default function BeatStarsTrackMeta({ trackId, locale }: BeatStarsTrackMe
     }, [trackId]);
 
     if (!track) {
-        return <p className="text-xs text-white/45" aria-live="polite">{text.loading}</p>;
+        return <p className="text-xs text-white/60" aria-live="polite">{text.loading}</p>;
     }
 
     const genres = track.metadata.genres.slice(0, 2).join(' · ');

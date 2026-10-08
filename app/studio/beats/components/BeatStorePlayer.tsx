@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element -- BeatStars supplies short-lived artwork URLs, so artwork is rendered directly. */
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import Hls from 'hls.js';
+import type Hls from 'hls.js';
 import { LoaderCircle, Pause, Play, ShoppingBag, SkipBack, SkipForward, X } from 'lucide-react';
 import { trackBeatEvent } from '@/lib/analytics';
 import { formatTrackTime, getBeatStarsTrack } from './beatstars-track-data';
@@ -100,14 +100,18 @@ export function StorePlayerProvider({
 
             if (audio.canPlayType('application/vnd.apple.mpegurl')) {
                 audio.src = data.previewUrl;
-            } else if (Hls.isSupported()) {
-                const hls = new Hls({ enableWorker: true, startLevel: -1 });
+            } else {
+                // hls.js is ~200 KB, so it loads on the first play, not with the page.
+                const { default: HlsPlayer } = await import('hls.js');
+                if (request !== requestRef.current) return;
+                if (!HlsPlayer.isSupported()) throw new Error('HLS unsupported');
+                const hls = new HlsPlayer({ enableWorker: true, startLevel: -1 });
                 hlsRef.current = hls;
                 // Wait for the manifest before play(), or Chrome rejects it
                 // with "no supported source".
                 await new Promise<void>((resolve, reject) => {
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => resolve());
-                    hls.on(Hls.Events.ERROR, (_event, info) => {
+                    hls.on(HlsPlayer.Events.MANIFEST_PARSED, () => resolve());
+                    hls.on(HlsPlayer.Events.ERROR, (_event, info) => {
                         if (info.fatal) {
                             setHasFailed(true);
                             reject(new Error(info.details));
@@ -117,8 +121,6 @@ export function StorePlayerProvider({
                     hls.attachMedia(audio);
                 });
                 if (request !== requestRef.current) return;
-            } else {
-                throw new Error('HLS unsupported');
             }
 
             try {

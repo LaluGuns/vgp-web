@@ -784,6 +784,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         type="button"
                                         onClick={() => setShowAdvancedFilters((current) => !current)}
                                         aria-expanded={showAdvancedFilters}
+                                        aria-label={showAdvancedFilters ? catalogText.filtersClose : catalogText.filtersOpen}
                                         className={`inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:px-5 ${
                                             showAdvancedFilters || advancedFilterCount ? 'border-white/60 text-white' : 'border-white/15 text-white/75 hover:border-white/40 hover:text-white'
                                         }`}
