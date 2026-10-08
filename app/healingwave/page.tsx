@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ogImage } from '@/lib/og';
 import HealingWaveClient from './HealingWaveClient';
 
 export const metadata: Metadata = {
@@ -13,6 +14,11 @@ export const metadata: Metadata = {
         title: 'HealingWave by Virzy Guns | Music that does people good',
         description: 'Music made to help people focus, move and recover. By Virzy Guns.',
         url: 'https://www.virzyguns.com/healingwave',
+        images: [ogImage({ kicker: 'HealingWave', title: 'Music that does people good.', sub: 'Music made to help people focus, move and recover.' })],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        images: [ogImage({ kicker: 'HealingWave', title: 'Music that does people good.', sub: 'Music made to help people focus, move and recover.' }).url],
     },
 };
 

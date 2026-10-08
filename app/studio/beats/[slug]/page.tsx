@@ -16,6 +16,7 @@ import BeatDetailClient from '../components/BeatDetailClient';
 import CategoryClient from '../components/CategoryClient';
 import LicensingClient from '../components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
+import { beatShareCard } from '@/lib/og';
 import {
     getEditorialBeatWorld,
     getOfficialBeatStarsGenres,
@@ -92,21 +93,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
                 description,
                 url: `${SITE_URL}/studio/beats/${beat.slug}`,
                 siteName: 'Virzy Guns Production',
-                images: [
-                    {
-                        url: beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`,
-                        width: 1024,
-                        height: 1024,
-                        alt: beat.title,
-                    },
-                ],
+                images: [beatShareCard(beat, editorialWorld)],
                 type: 'music.song',
             },
             twitter: {
                 card: 'summary_large_image',
                 title: `${title} | ${editorialWorld} Beat by Virzy Guns`,
                 description,
-                images: [beat.coverImageUrl || `${SITE_URL}/branding/vgp-logo-chrome-full.png`],
+                images: [beatShareCard(beat, editorialWorld).url],
             },
         };
     }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ogImage } from '@/lib/og';
 import BeatsClient from './BeatsClient';
 
 const SITE_URL = 'https://www.virzyguns.com';
@@ -34,21 +35,14 @@ export const metadata: Metadata = {
             'Browse official instrumentals by Virzy Guns, compare license options, and buy directly through the official BeatStars store.',
         url: `${SITE_URL}/studio/beats`,
         siteName: 'Virzy Guns Production',
-        images: [
-            {
-                url: `${SITE_URL}/branding/vgp-logo-chrome-full.png`,
-                width: 1024,
-                height: 1024,
-                alt: 'Virzy Guns Production Beat Store',
-            },
-        ],
+        images: [ogImage({ kicker: 'Beat Store', title: 'Beats by Virzy Guns.', sub: '300+ beats. Trap, drill, phonk, synthwave, R&B, club and pop. Licenses from $15.' })],
         type: 'website',
     },
     twitter: {
         card: 'summary_large_image',
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats for Sale | Virzy Guns',
         description: 'Browse official instrumentals, compare licenses, and buy directly through the official BeatStars store.',
-        images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
+        images: [ogImage({ kicker: 'Beat Store', title: 'Beats by Virzy Guns.', sub: '300+ beats. Trap, drill, phonk, synthwave, R&B, club and pop. Licenses from $15.' }).url],
     },
 };
 

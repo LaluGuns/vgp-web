@@ -6,6 +6,7 @@ import { AppFrame } from '@/components/AppFrame';
 import { NewsletterProvider } from '@/components/context/NewsletterContext';
 import { headers } from 'next/headers';
 import { founderSchema, organizationSchema, websiteSchema } from '@/lib/seo/structured-data';
+import { ogImage } from '@/lib/og';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -74,14 +75,7 @@ export const metadata: Metadata = {
             'Producer turned founder. HealingWave makes music people can use to focus, move and recover.',
         url: 'https://www.virzyguns.com',
         siteName: 'Virzy Guns Production',
-        images: [
-            {
-                url: '/branding/og-image.png',
-                width: 1200,
-                height: 630,
-                alt: 'Virzy Guns Production',
-            },
-        ],
+        images: [ogImage({ title: 'Music should leave you better than it found you.', sub: 'Producer and founder. Now building HealingWave.' })],
         locale: 'en_US',
         type: 'website',
     },
@@ -90,7 +84,7 @@ export const metadata: Metadata = {
         title: 'Virzy Guns | Producer and founder of HealingWave',
         description:
             'Producer turned founder. HealingWave makes music people can use to focus, move and recover.',
-        images: ['/branding/og-image.png'],
+        images: [ogImage({ title: 'Music should leave you better than it found you.', sub: 'Producer and founder. Now building HealingWave.' }).url],
         creator: '@virzyguns',
     },
     robots: {
