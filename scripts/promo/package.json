@@ -1,0 +1,14 @@
+{
+  "name": "vgp-promo",
+  "private": true,
+  "description": "Carousels and explainer films for the VGP blog lessons. See README.md.",
+  "type": "module",
+  "scripts": {
+    "carousel": "tsx --tsconfig tsconfig.json carousel/carousel.tsx",
+    "film": "node film/render.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.64.0",
+    "tsx": "4.23.15"
+  }
+}
