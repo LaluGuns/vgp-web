@@ -318,7 +318,7 @@ export function Navbar() {
                         aria-label={useStoreNav ? beatNav.brand : 'Virzy Guns, home'}
                     >
                         <Image
-                            src="/branding/logo-tg.png"
+                            src="/branding/logo-tg-64.png"
                             alt=""
                             width={32}
                             height={32}

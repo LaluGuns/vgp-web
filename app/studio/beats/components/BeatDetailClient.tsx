@@ -266,11 +266,11 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
 
                             <div className="mt-10 border-t border-white/10 pt-8">
                                 <h2 className="text-sm font-medium text-white/60">{text.selectTier}</h2>
-                                <ul className="mt-4 divide-y divide-white/[0.08] overflow-hidden rounded-[6px] border border-white/10" role="radiogroup" aria-label={text.selectTier}>
+                                <div className="mt-4 divide-y divide-white/[0.08] overflow-hidden rounded-[6px] border border-white/10" role="radiogroup" aria-label={text.selectTier}>
                                     {licenseOptions.map((lic) => {
                                         const isSelected = selectedLicense.id === lic.id;
                                         return (
-                                            <li key={lic.id}>
+                                            <div key={lic.id}>
                                                 <button
                                                     type="button"
                                                     role="radio"
@@ -292,10 +292,10 @@ export default function BeatDetailClient({ beat, locale = 'en-US' }: BeatDetailC
                                                     </span>
                                                     <span className="font-display text-xl font-semibold tabular-nums text-white">{lic.price}</span>
                                                 </button>
-                                            </li>
+                                            </div>
                                         );
                                     })}
-                                </ul>
+                                </div>
 
                                 <dl className="mt-6 grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
                                     {[

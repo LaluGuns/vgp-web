@@ -8,10 +8,15 @@ import { PageTransition } from '@/components/PageTransition';
 import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 
+/** The list only needs these fields; full article bodies stay on the server. */
+export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
+    seo: { keywords: string[] };
+};
+
 interface BlogIndexProps {
-    articles: BlogArticle[];
+    articles: BlogListItem[];
     categories: Category[];
-    featured: BlogArticle[];
+    featured: BlogListItem[];
 }
 
 const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
@@ -50,7 +55,7 @@ function ArticleRow({
     isBookmarked,
     onToggleBookmark,
 }: {
-    article: BlogArticle;
+    article: BlogListItem;
     categoryName: string;
     isBookmarked: boolean;
     onToggleBookmark: () => void;

@@ -64,9 +64,9 @@ export const metadata: Metadata = {
     publisher: 'Virzy Guns Production',
     category: 'music',
     icons: {
-        icon: '/branding/logo-tg.jpg',
-        shortcut: '/branding/logo-tg.jpg',
-        apple: '/branding/logo-tg.jpg',
+        icon: { url: '/branding/favicon-48.png', sizes: '48x48', type: 'image/png' },
+        shortcut: '/branding/favicon-48.png',
+        apple: { url: '/branding/apple-touch-icon.png', sizes: '180x180' },
     },
     openGraph: {
         title: 'Virzy Guns | Producer and founder of HealingWave',
