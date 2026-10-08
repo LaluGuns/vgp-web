@@ -1,7 +1,8 @@
 /**
- * Shared drawing helpers for article figures. Monochrome on the dark
- * surface (docs/DESIGN.md): white at a few opacities, hairline grids,
- * dashed lines for "before" or reference states.
+ * Shared drawing helpers for article figures, on the dark surface
+ * (docs/DESIGN.md). The data the caption asks you to look at is drawn in
+ * the site accent; text, axes, grids and "before" states stay white or
+ * grey, and dashed lines mark reference states.
  */
 
 import type { ReactNode, SVGProps } from 'react';
@@ -16,7 +17,12 @@ export const C = {
     lane: 'rgba(255,255,255,0.035)',
     fill: 'rgba(255,255,255,0.08)',
     fillStrong: 'rgba(255,255,255,0.18)',
+    /** `--accent`: the data in focus. */
+    accent: '#7dd3fc',
+    accentFill: 'rgba(125,211,252,0.12)',
 };
+
+export const accentAlpha = (a: number) => `rgba(125,211,252,${a.toFixed(2)})`;
 
 export const FS = 12;
 export const DASH = '5 4';
@@ -201,6 +207,8 @@ export interface LegendItem {
     label: string;
     dashed?: boolean;
     muted?: boolean;
+    /** Line colour when it is neither the accent nor muted. */
+    stroke?: string;
     /** Draw a filled swatch instead of a line. */
     swatch?: string;
 }
@@ -239,7 +247,7 @@ export function legend(
                             x2={lx + 18}
                             y1={ly - 4}
                             y2={ly - 4}
-                            stroke={item.muted ? C.faint : C.ink}
+                            stroke={item.stroke ?? (item.muted ? C.faint : C.accent)}
                             strokeWidth={1.8}
                             strokeDasharray={item.dashed ? DASH : undefined}
                         />

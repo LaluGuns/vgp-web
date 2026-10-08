@@ -177,18 +177,18 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
             })}
             {paths.map(({ trace, d, area }, i) => (
                 <g key={i}>
-                    {area ? <path d={area} fill={trace.muted ? C.lane : C.fill} /> : null}
+                    {area ? <path d={area} fill={trace.muted ? C.lane : C.accentFill} /> : null}
                     <path
                         d={d}
                         fill="none"
-                        stroke={trace.muted ? C.faint : C.ink}
+                        stroke={trace.muted ? C.faint : C.accent}
                         strokeWidth={trace.muted ? 1.4 : 1.8}
                         strokeDasharray={trace.dashed ? DASH : undefined}
                         strokeLinejoin="round"
                     />
                 </g>
             ))}
-            {aliasPath ? <path d={aliasPath} fill="none" stroke={C.ink} strokeWidth={1.8} strokeDasharray={DASH} /> : null}
+            {aliasPath ? <path d={aliasPath} fill="none" stroke={C.accent} strokeWidth={1.8} strokeDasharray={DASH} /> : null}
             {samples?.hold ? (
                 <path
                     d={sampled
@@ -352,7 +352,7 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
 
     const clipId = `spectrum-clip-${++clipCounter}`;
     const curveNode = (curve: SpectrumCurve, i: number) => {
-        const stroke = curve.muted ? C.faint : C.ink;
+        const stroke = curve.muted ? C.faint : C.accent;
         const dash = curve.dashed ? DASH : undefined;
         if (curve.kind === 'harmonics') {
             const roll = curve.rolloff ?? 1;
@@ -393,7 +393,7 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
         const fill = curve.kind === 'hump' && !curve.dashed;
         return (
             <g key={i}>
-                {fill ? <path d={`${d}L${right},${bottom}L${left},${bottom}Z`} fill={curve.muted ? C.lane : C.fill} /> : null}
+                {fill ? <path d={`${d}L${right},${bottom}L${left},${bottom}Z`} fill={curve.muted ? C.lane : C.accentFill} /> : null}
                 <path d={d} fill="none" stroke={stroke} strokeWidth={curve.muted ? 1.4 : 2} strokeDasharray={dash} />
             </g>
         );
@@ -532,7 +532,7 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
                         key={i}
                         d={linePath(pts)}
                         fill="none"
-                        stroke={linear ? C.faint : C.ink}
+                        stroke={linear ? C.faint : C.accent}
                         strokeWidth={linear ? 1.4 : 2}
                         strokeDasharray={linear || c.dashed ? DASH : undefined}
                     />

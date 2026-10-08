@@ -1,12 +1,12 @@
 import type { ArrangementFigure, BarsFigure, CurveFigure, ScaleFigure } from '@/lib/blog/types';
-import { Arrowhead, C, DASH, FS, Label, Svg, clamp, legend, linePath, smoothPath, textWidth } from './svg';
+import { Arrowhead, C, DASH, FS, Label, Svg, accentAlpha, clamp, legend, linePath, smoothPath, textWidth } from './svg';
 
 // ── Curve: a qualitative shape over named points (energy, tension) ──
 
 export function Curve({ spec, w }: { spec: CurveFigure; w: number }) {
     const narrow = w < 480;
     const labels = narrow && spec.xShort ? spec.xShort : spec.x;
-    const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed }));
+    const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, stroke: s.dashed ? C.soft : undefined }));
     const leg = legend(named, 0, 14, w);
     const top = leg.height + 30;
     const h = top + (narrow ? 150 : 180) + 34 + (spec.xLabel ? 18 : 0);
@@ -45,17 +45,17 @@ export function Curve({ spec, w }: { spec: CurveFigure; w: number }) {
                 return (
                     <g key={si}>
                         {si === 0 && !s.dashed ? (
-                            <path d={`${d}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} fill={C.fill} />
+                            <path d={`${d}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} fill={C.accentFill} />
                         ) : null}
                         <path
                             d={d}
                             fill="none"
-                            stroke={s.dashed ? C.soft : C.ink}
+                            stroke={s.dashed ? C.soft : C.accent}
                             strokeWidth={s.dashed ? 1.6 : 2}
                             strokeDasharray={s.dashed ? DASH : undefined}
                         />
                         {si === 0 && !s.dashed
-                            ? pts.map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.6} fill={C.ink} />)
+                            ? pts.map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2.6} fill={C.accent} />)
                             : null}
                     </g>
                 );
@@ -107,7 +107,7 @@ export function Bars({ spec, w }: { spec: BarsFigure; w: number }) {
                             </Label>
                         )}
                         <rect x={x0} y={barY} width={x1 - x0} height={14} rx={2} fill={C.lane} />
-                        <rect x={base} y={barY} width={Math.max(2, end - base)} height={14} rx={2} fill={bar.dim ? C.fillStrong : C.strong} />
+                        <rect x={base} y={barY} width={Math.max(2, end - base)} height={14} rx={2} fill={bar.dim ? C.fillStrong : C.accent} />
                         <rect x={end + 4} y={barY - 1} width={textWidth(bar.display ?? fmt(bar.value)) + 8} height={16} rx={2} fill="#0a0e12" />
                         <Label x={end + 8} y={barY + 11} fill={bar.dim ? C.soft : C.ink}>
                             {bar.display ?? fmt(bar.value)}
@@ -203,7 +203,7 @@ export function Scale({ spec, w }: { spec: ScaleFigure; w: number }) {
                 return (
                     <g key={`${marker.label}-${marker.value}`}>
                         {lane > 0 ? <line x1={x} x2={x} y1={ly + 4} y2={axisY - 5} stroke={C.grid} /> : null}
-                        <circle cx={x} cy={axisY} r={marker.strong ? 4.5 : 3.5} fill={marker.strong ? C.ink : C.strong} />
+                        <circle cx={x} cy={axisY} r={marker.strong ? 4.5 : 3.5} fill={marker.strong ? C.accent : C.strong} />
                         <Label x={x} y={ly} anchor={anchor} fill={marker.strong ? C.ink : C.text} weight={marker.strong ? 600 : undefined}>
                             {marker.label}
                         </Label>
@@ -311,7 +311,7 @@ export function Arrangement({ spec, w }: { spec: ArrangementFigure; w: number })
                                     width={col.width - 4}
                                     height={rowH - 4}
                                     rx={2}
-                                    fill={`rgba(255,255,255,${(0.16 + 0.68 * clamp(level, 0, 1)).toFixed(2)})`}
+                                    fill={accentAlpha(0.14 + 0.76 * clamp(level, 0, 1))}
                                 />
                             );
                         })}

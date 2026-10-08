@@ -1,5 +1,5 @@
 import type { FlowFigure, NotesFigure, RhythmFigure, StereoFigure } from '@/lib/blog/types';
-import { Arrowhead, C, DASH, FS, Label, Lines, Svg, textWidth, wrapText } from './svg';
+import { Arrowhead, C, DASH, FS, Label, Lines, Svg, accentAlpha, textWidth, wrapText } from './svg';
 
 // ── Rhythm: hits on a step grid, with swing and timing offsets ──
 
@@ -71,7 +71,7 @@ export function Rhythm({ spec, w }: { spec: RhythmFigure; w: number }) {
                                     {Math.abs(shift) > 0.02 ? (
                                         <rect x={gx} y={laneY + laneH - 3 - bh} width={bw} height={bh} rx={1.5} fill="none" stroke={C.faint} strokeDasharray="2 2" />
                                     ) : null}
-                                    <rect x={x} y={laneY + laneH - 3 - bh} width={bw} height={bh} rx={1.5} fill={level < 0.6 ? C.soft : C.ink} />
+                                    <rect x={x} y={laneY + laneH - 3 - bh} width={bw} height={bh} rx={1.5} fill={Math.abs(shift) > 0.02 ? accentAlpha(level < 0.6 ? 0.55 : 1) : level < 0.6 ? C.soft : C.ink} />
                                 </g>
                             );
                         })}
@@ -124,7 +124,7 @@ export function Stereo({ spec, w }: { spec: StereoFigure; w: number }) {
                 const x = cx + item.pan * span;
                 const y = front - (item.depth ?? 0.3) * (front - back);
                 const alpha = 1 - (item.fade ?? 0) * 0.78;
-                const color = `rgba(255,255,255,${(0.92 * alpha).toFixed(2)})`;
+                const color = accentAlpha(0.95 * alpha);
                 const widthPx = (item.width ?? 0) * span;
                 const right = item.pan > 0.45;
                 const labelX = right ? x - Math.max(10, widthPx) - 6 : x + Math.max(10, widthPx) + 6;
@@ -326,7 +326,7 @@ export function Notes({ spec, w }: { spec: NotesFigure; w: number }) {
                 const fits = note.label && textWidth(note.label, 10) + 6 < width && rowH >= 11;
                 return (
                     <g key={i}>
-                        <rect x={x} y={y} width={width} height={rowH - 2} rx={2} fill={note.muted ? 'rgba(255,255,255,0.38)' : C.strong} />
+                        <rect x={x} y={y} width={width} height={rowH - 2} rx={2} fill={note.muted ? 'rgba(255,255,255,0.38)' : C.accent} />
                         {fits ? (
                             <Label x={x + 4} y={y + rowH / 2 + 2.5} size={10} fill="#050607" weight={600}>
                                 {note.label}

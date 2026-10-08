@@ -23,7 +23,7 @@ Defined in `app/globals.css` (`:root`) and mirrored in Tailwind where needed.
 | `--surface` | `#0a0e12` | Panels, menus, modals, image frames |
 | `--surface-strong` | `#0e1318` | A surface that sits on a surface |
 | `--line` | `white/10` | Hairline borders and dividers |
-| `--accent` | `#7dd3fc` (sky-300) | Real states only: Open now, Available, On Google Play. Also focus rings |
+| `--accent` | `#7dd3fc` (sky-300) | Real states only: Open now, Available, On Google Play, a demo that is playing. Also focus rings, and the data in article figures (below) |
 
 Text steps: `white`, `white/75`, `white/60`, `white/50`. Nothing dimmer for
 readable text.
@@ -62,6 +62,11 @@ readable text.
     widget pulses at the chosen BPM.
   No hover lifts, glow or parallax. Everything is off under
   `prefers-reduced-motion`.
+- **Article figures.** Drawn like a meter: the data the caption asks you
+  to look at (the trace, curve, melody, bar or moved hit) is in the
+  accent, everything else is white or grey. "Before" and reference states
+  are grey or dashed. One accent only, so the colour always means "look
+  here". Tokens live in `components/blog/figures/svg.tsx`.
 - **Imagery.** Use the real assets in `public/` (founder portrait, CADENZ
   poster, chrome logo, book cover, app icons, game art). No stock or
   generated filler.
