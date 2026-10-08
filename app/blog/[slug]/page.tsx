@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getArticleBySlug, getAllSlugs, articles, getCategoryBySlug } from '@/lib/blog-data';
+import { ogImage } from '@/lib/og';
 import { ArticlePage } from './ArticlePage';
 
 interface Props {
@@ -24,7 +25,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
-    const imageUrl = 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png';
 
     return {
         title: article.seo.title,
@@ -41,20 +41,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             publishedTime: article.publishedAt,
             modifiedTime: article.updatedAt ?? article.publishedAt,
             authors: ['Virzy Guns'],
-            images: [
-                {
-                    url: imageUrl,
-                    width: 1024,
-                    height: 1024,
-                    alt: 'Virzy Guns Production',
-                },
-            ],
+            images: [ogImage({ kicker: 'Notes from the studio', title: article.title, sub: `${article.readingTime} min read · Virzy Guns` })],
         },
         twitter: {
             card: 'summary_large_image',
             title: article.title,
             description: article.excerpt,
-            images: [imageUrl],
+            images: [ogImage({ kicker: 'Notes from the studio', title: article.title, sub: `${article.readingTime} min read · Virzy Guns` }).url],
         },
     };
 }
