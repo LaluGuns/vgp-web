@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton, TextLink } from '@/components/editorial/EditorialPrimitives';
 
 const PAGE_URL = 'https://www.virzyguns.com/mycamscan';
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.virzyguns.mycamscan';
 
 export const metadata: Metadata = {
     title: 'MyCamScan | Document Scanner, OCR and Searchable PDF',
@@ -64,7 +65,7 @@ export default function MyCamScanPage() {
             <section data-enter="" className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
                 <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
                     <div className="lg:col-span-7">
-                        <p className="text-sm text-white/55">Coming soon on Google Play</p>
+                        <p className="text-sm text-sky-300">On Google Play</p>
                         <h1 className="mt-4 font-display text-[clamp(2.75rem,6.5vw,5.25rem)] font-semibold leading-[0.96] tracking-[-0.04em]">
                             MyCamScan
                         </h1>
@@ -75,8 +76,10 @@ export default function MyCamScanPage() {
                             Text recognition runs on the device and the scans never leave it. No account and no watermark.
                         </p>
                         <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+                            <EditorialButton href={PLAY_URL} withArrow>
+                                Get it on Google Play
+                            </EditorialButton>
                             <TextLink href="/mycamscan/privacy">Privacy Policy</TextLink>
-                            <TextLink href="/mycamscan/terms">Terms of Use</TextLink>
                         </div>
                     </div>
                     <div className="lg:col-span-4 lg:col-start-9">

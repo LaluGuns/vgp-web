@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Gift, Instagram, Mail, Search, ShoppingBag, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown, ChevronLeft, ChevronRight, ExternalLink, Gift, Instagram, Mail, Search, ShoppingBag, SlidersHorizontal, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { SectionShell } from '@/components/editorial/EditorialPrimitives';
 import { CreditsStrip, MUSO_PROFILE_URL } from '@/components/editorial/CreditsStrip';
@@ -428,7 +428,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const [checkoutBeatSelections, setCheckoutBeatSelections] = useState<Array<{ trackId: string; title: string; productUrl: string }>>([]);
     const [guideOpen, setGuideOpen] = useState(false);
     const [guideMode, setGuideMode] = useState<BeatGuideMode>('store');
-    const genreScrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -519,12 +518,6 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
         });
     };
 
-    const scrollGenres = (direction: 'left' | 'right') => {
-        const container = genreScrollRef.current;
-        if (!container) return;
-
-        container.scrollLeft += direction === 'left' ? -260 : 260;
-    };
 
     const signatureGenres = [
         { id: 'signature:cyberpunk-trap', label: 'Cyberpunk Trap' },
@@ -609,6 +602,17 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
     const maxBpm = filteredBpms.length ? Math.max(...filteredBpms) : 190;
     const bpmRange = minBpm === maxBpm ? String(minBpm) : `${minBpm}–${maxBpm}`;
     const hasAdvancedFilters = tempoFilter !== 'all' || keyFilter !== 'all' || vibeFilter !== 'all' || durationFilter !== 'all';
+    const advancedFilterCount = [tempoFilter, keyFilter, vibeFilter, durationFilter].filter((value) => value !== 'all').length;
+    const tempoLabels: Record<string, string> = { 'under-90': '< 90 BPM', '90-109': '90–109 BPM', '110-129': '110–129 BPM', '130-plus': '130+ BPM' };
+    const durationLabels: Record<string, string> = { short: catalogText.shortDuration, standard: catalogText.standardDuration, long: catalogText.longDuration };
+    const activeFilters = [
+        selectedGenre !== 'all' ? { key: 'genre', label: selectedGenreLabel, clear: () => setSelectedGenre('all') } : null,
+        query.trim() ? { key: 'query', label: `“${query.trim()}”`, clear: () => setQuery('') } : null,
+        tempoFilter !== 'all' ? { key: 'tempo', label: tempoLabels[tempoFilter], clear: () => setTempoFilter('all') } : null,
+        keyFilter !== 'all' ? { key: 'key', label: keyFilter, clear: () => setKeyFilter('all') } : null,
+        vibeFilter !== 'all' ? { key: 'vibe', label: vibeFilter, clear: () => setVibeFilter('all') } : null,
+        durationFilter !== 'all' ? { key: 'duration', label: durationLabels[durationFilter], clear: () => setDurationFilter('all') } : null,
+    ].filter((filter): filter is { key: string; label: string; clear: () => void } => filter !== null);
 
     const toggleShortlist = (beat: BeatProduct) => {
         const isShortlisted = shortlistedBeatIds.includes(beat.id);
@@ -727,7 +731,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                         </div>
                                         <div className={`mt-5 flex items-center gap-1 text-xs font-semibold ${theme.tag}`}>
                                             {t.categoryCta(cat.localizedName[locale] || cat.name)}
-                                            <ExternalLink className="h-3 w-3" />
+                                            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
                                         </div>
                                     </Link>
                                 );
@@ -747,11 +751,11 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                 </p>
                             </div>
 
-                            <div className="space-y-3 rounded-lg border border-white/[0.1] bg-[#0a0e12] p-3 sm:p-4">
-                                <div className="grid gap-3 lg:grid-cols-[minmax(16rem,0.72fr)_1.28fr]">
-                                    <label className="relative block">
+                            <div className="space-y-5">
+                                <div className="flex gap-3">
+                                    <label className="relative block min-w-0 flex-1">
                                         <span className="sr-only">{catalogText.search}</span>
-                                        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" aria-hidden="true" />
+                                        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" aria-hidden="true" />
                                         <input
                                             type="search"
                                             value={query}
@@ -760,7 +764,7 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                 setCurrentPage(1);
                                             }}
                                             placeholder={catalogText.search}
-                                            className="min-h-11 w-full rounded-md border border-white/10 bg-[#0a0e12] py-2 pl-10 pr-10 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-white/50 focus:ring-2 focus:ring-sky-200/20"
+                                            className="min-h-12 w-full rounded-full border border-white/15 bg-transparent py-2 pl-11 pr-11 text-base text-white placeholder:text-white/40 outline-none transition-colors focus:border-white/50 sm:text-sm"
                                         />
                                         {query ? (
                                             <button
@@ -770,233 +774,98 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                                     setCurrentPage(1);
                                                 }}
                                                 aria-label={catalogText.clear}
-                                                className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-white/50 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                                className="absolute right-3 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-white/50 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 <X className="h-4 w-4" aria-hidden="true" />
                                             </button>
                                         ) : null}
                                     </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowAdvancedFilters((current) => !current)}
+                                        aria-expanded={showAdvancedFilters}
+                                        className={`inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:px-5 ${
+                                            showAdvancedFilters || advancedFilterCount ? 'border-white/60 text-white' : 'border-white/15 text-white/75 hover:border-white/40 hover:text-white'
+                                        }`}
+                                    >
+                                        <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+                                        <span className="hidden sm:inline">{showAdvancedFilters ? catalogText.filtersClose : catalogText.filtersOpen}</span>
+                                        {advancedFilterCount ? (
+                                            <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-sky-300 px-1 text-xs font-semibold text-[#050607]">{advancedFilterCount}</span>
+                                        ) : null}
+                                    </button>
+                                </div>
 
-                                    <div className="flex min-w-0 items-center gap-1.5">
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollGenres('left')}
-                                            aria-label={catalogText.scrollGenresLeft}
-                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                        >
-                                            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-                                        </button>
-                                        <div ref={genreScrollRef} className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setSelectedGenre('all');
-                                                    setCurrentPage(1);
-                                                }}
-                                                className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
-                                                    selectedGenre === 'all'
-                                                        ? getGenreTheme(t.filterAll).filter
-                                                        : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
-                                                }`}
-                                            >
-                                                <span className={`h-1.5 w-1.5 rounded-full ${getGenreTheme(t.filterAll).dot}`} aria-hidden="true" />
-                                                {t.filterAll}
-                                            </button>
-                                            {selectedOfficialGenre ? (
+
+                                {/* Genres: one row of chips; scrolls sideways on small screens. */}
+                                <div className="-mx-4 overflow-x-auto px-4 [mask-image:linear-gradient(to_right,transparent,black_16px,black_calc(100%-24px),transparent)] [scrollbar-width:none] sm:mx-0 sm:overflow-visible sm:px-0 sm:[mask-image:none] [&::-webkit-scrollbar]:hidden">
+                                    <div role="group" aria-label={catalogText.signatureGenres} className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
+                                        {[{ id: 'all', label: t.filterAll }, ...(selectedOfficialGenre ? [{ id: selectedOfficialGenre.id, label: selectedOfficialGenre.label }] : []), ...signatureGenres].map((genre) => {
+                                            const active = selectedGenre === genre.id;
+                                            return (
                                                 <button
+                                                    key={genre.id}
                                                     type="button"
+                                                    aria-pressed={active}
                                                     onClick={() => {
-                                                        setShowGenrePanel(true);
+                                                        setSelectedGenre(genre.id);
                                                         setCurrentPage(1);
                                                     }}
-                                                    className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${getGenreTheme(selectedOfficialGenre.label).filter}`}
+                                                    className={`inline-flex min-h-10 shrink-0 items-center rounded-full px-4 text-sm font-medium whitespace-nowrap transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                                                        active ? 'bg-white text-[#050607]' : 'border border-white/15 text-white/70 hover:border-white/40 hover:text-white'
+                                                    }`}
                                                 >
-                                                    <span className={`h-1.5 w-1.5 rounded-full ${getGenreTheme(selectedOfficialGenre.label).dot}`} aria-hidden="true" />
-                                                    {selectedOfficialGenre.label}
+                                                    {genre.label}
                                                 </button>
-                                            ) : null}
-                                            {signatureGenres.map((genre) => {
-                                                const theme = getGenreTheme(genre.label);
-                                                return (
-                                                    <button
-                                                        key={genre.id}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setSelectedGenre(genre.id);
-                                                            setCurrentPage(1);
-                                                        }}
-                                                        className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3.5 py-2 text-xs font-semibold whitespace-nowrap transition ${
-                                                            selectedGenre === genre.id
-                                                                ? theme.filter
-                                                                : 'border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white'
-                                                        }`}
-                                                    >
-                                                        <span className={`h-1.5 w-1.5 rounded-full ${theme.dot}`} aria-hidden="true" />
-                                                        {genre.label}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => scrollGenres('right')}
-                                            aria-label={catalogText.scrollGenresRight}
-                                            className="inline-flex h-11 w-9 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/65 transition hover:border-white/30 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                                        >
-                                            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-                                        </button>
+                                            );
+                                        })}
                                         <button
                                             type="button"
                                             onClick={() => setShowGenrePanel((current) => !current)}
                                             aria-expanded={showGenrePanel}
-                                            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border border-white/15 bg-white/[0.04] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-white/[0.07] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                            className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full px-3 text-sm font-medium whitespace-nowrap text-white vgp-link focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                         >
                                             {showGenrePanel ? catalogText.closeGenres : catalogText.moreGenres}
-                                            <ChevronDown className={`h-3.5 w-3.5 transition ${showGenrePanel ? 'rotate-180' : ''}`} aria-hidden="true" />
+                                            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showGenrePanel ? 'rotate-180' : ''}`} aria-hidden="true" />
                                         </button>
                                     </div>
                                 </div>
-
-                                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-3">
-                                    <p className="flex items-center gap-2 text-xs font-semibold text-white/42">
-                                        <SlidersHorizontal className="h-3.5 w-3.5 text-white/60" aria-hidden="true" />
-                                        {catalogText.filterLabel}
-                                    </p>
-                                    <div className="flex items-center gap-2">
-                                        {hasAdvancedFilters ? (
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setTempoFilter('all');
-                                                    setKeyFilter('all');
-                                                    setVibeFilter('all');
-                                                    setDurationFilter('all');
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="min-h-9 rounded-lg px-3 text-xs font-semibold text-white/50 transition hover:text-white"
-                                            >
-                                                {catalogText.reset}
-                                            </button>
-                                        ) : null}
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowAdvancedFilters((current) => !current)}
-                                            aria-expanded={showAdvancedFilters}
-                                            className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.035] px-3 text-xs font-semibold text-white/68 transition hover:border-white/30 hover:text-white"
-                                        >
-                                            {showAdvancedFilters ? catalogText.filtersClose : catalogText.filtersOpen}
-                                            <ChevronDown className={`h-3.5 w-3.5 transition ${showAdvancedFilters ? 'rotate-180' : ''}`} aria-hidden="true" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {showAdvancedFilters ? (
-                                    <div className="grid gap-3 rounded-md border border-white/[0.09] bg-black/20 p-3 sm:grid-cols-2 lg:grid-cols-4">
-                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
-                                            <span>{catalogText.tempo}</span>
-                                            <select
-                                                value={tempoFilter}
-                                                onChange={(event) => {
-                                                    setTempoFilter(event.target.value as TempoFilter);
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
-                                            >
-                                                <option value="all">{catalogText.allTempos}</option>
-                                                <option value="under-90">&lt; 90 BPM</option>
-                                                <option value="90-109">90–109 BPM</option>
-                                                <option value="110-129">110–129 BPM</option>
-                                                <option value="130-plus">130+ BPM</option>
-                                            </select>
-                                        </label>
-                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
-                                            <span>{catalogText.key}</span>
-                                            <select
-                                                value={keyFilter}
-                                                onChange={(event) => {
-                                                    setKeyFilter(event.target.value);
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
-                                            >
-                                                <option value="all">{catalogText.allKeys}</option>
-                                                {availableKeys.map((key) => <option key={key} value={key}>{key}</option>)}
-                                            </select>
-                                        </label>
-                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
-                                            <span>{catalogText.vibe}</span>
-                                            <select
-                                                value={vibeFilter}
-                                                onChange={(event) => {
-                                                    setVibeFilter(event.target.value as VibeFilter);
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
-                                            >
-                                                <option value="all">{catalogText.allVibes}</option>
-                                                {Object.keys(vibeMatchers).map((vibe) => <option key={vibe} value={vibe}>{vibe}</option>)}
-                                            </select>
-                                        </label>
-                                        <label className="space-y-1.5 text-xs font-semibold text-white/45">
-                                            <span>{catalogText.duration}</span>
-                                            <select
-                                                value={durationFilter}
-                                                onChange={(event) => {
-                                                    setDurationFilter(event.target.value as DurationFilter);
-                                                    setCurrentPage(1);
-                                                }}
-                                                className="min-h-10 w-full rounded-lg border border-white/10 bg-[#0a0e12] px-3 text-xs font-medium normal-case tracking-normal text-white outline-none transition focus:border-white/50"
-                                            >
-                                                <option value="all">{catalogText.allDurations}</option>
-                                                <option value="short">{catalogText.shortDuration}</option>
-                                                <option value="standard">{catalogText.standardDuration}</option>
-                                                <option value="long">{catalogText.longDuration}</option>
-                                            </select>
-                                        </label>
-                                    </div>
-                                ) : null}
 
                                 {showGenrePanel ? (
-                                    <div className="rounded-md border border-white/[0.09] bg-black/20 p-3 sm:p-4">
+                                    <div className="vgp-pop border-y border-white/10 py-5">
                                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                            <p className="text-xs font-semibold text-white/60">
-                                                {catalogText.popularGenres}
-                                            </p>
-                                            <label className="relative block sm:w-64">
+                                            <p className="text-sm text-white/60">{catalogText.popularGenres}</p>
+                                            <label className="relative block sm:w-72">
                                                 <span className="sr-only">{catalogText.genreSearch}</span>
-                                                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" aria-hidden="true" />
+                                                <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/40" aria-hidden="true" />
                                                 <input
                                                     type="search"
                                                     value={genreQuery}
                                                     onChange={(event) => setGenreQuery(event.target.value)}
                                                     placeholder={catalogText.genreSearch}
-                                                    className="min-h-9 w-full rounded-lg border border-white/10 bg-[#0a0e12] py-1.5 pl-9 pr-3 text-xs text-white placeholder:text-white/35 outline-none transition focus:border-white/50"
+                                                    className="min-h-10 w-full rounded-full border border-white/15 bg-transparent py-1.5 pl-10 pr-3 text-base text-white placeholder:text-white/40 outline-none transition-colors focus:border-white/50 sm:text-sm"
                                                 />
                                             </label>
                                         </div>
-                                        <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                                        <div className="mt-4 flex flex-wrap gap-2">
                                             {visibleOfficialGenres.map((genre) => {
-                                                const theme = getGenreTheme(genre.label);
+                                                const active = selectedGenre === genre.id;
                                                 return (
                                                     <button
                                                         key={genre.id}
                                                         type="button"
+                                                        aria-pressed={active}
                                                         onClick={() => {
                                                             setSelectedGenre(genre.id);
                                                             setCurrentPage(1);
                                                             setShowGenrePanel(false);
                                                         }}
-                                                        className={`flex min-h-10 items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left text-xs font-semibold transition ${
-                                                            selectedGenre === genre.id
-                                                                ? theme.filter
-                                                                : 'border-white/[0.09] bg-white/[0.025] text-white/65 hover:border-white/20 hover:text-white'
+                                                        className={`inline-flex min-h-9 items-center gap-2 rounded-full px-3.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                                                            active ? 'bg-white text-[#050607]' : 'border border-white/10 text-white/70 hover:border-white/35 hover:text-white'
                                                         }`}
                                                     >
-                                                        <span className="inline-flex min-w-0 items-center gap-2">
-                                                            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${theme.dot}`} aria-hidden="true" />
-                                                            <span className="truncate">{genre.label}</span>
-                                                        </span>
-                                                        <span className="font-mono text-xs text-white/35">{genre.count}</span>
+                                                        {genre.label}
+                                                        <span className={`font-mono text-xs tabular-nums ${active ? 'text-[#050607]/60' : 'text-white/35'}`}>{genre.count}</span>
                                                     </button>
                                                 );
                                             })}
@@ -1005,33 +874,72 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                                             <button
                                                 type="button"
                                                 onClick={() => setShowAllOfficialGenres((current) => !current)}
-                                                className="mt-3 text-xs font-semibold text-white transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                                className="vgp-link mt-4 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 {showAllOfficialGenres ? catalogText.showPopularGenres : catalogText.showAllGenres}
                                             </button>
                                         ) : null}
                                     </div>
                                 ) : null}
-                            </div>
 
-                            <div className="flex flex-col gap-4 rounded-[6px] border border-white/10 p-4 sm:flex-row sm:items-center sm:justify-between">
-                                <div className="flex items-start gap-3">
-                                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 text-white/80">
-                                        <Gift className="h-4 w-4" aria-hidden="true" />
-                                    </span>
-                                    <div>
-                                        <p className="text-sm font-semibold text-white">{catalogText.promoTitle}</p>
-                                        <p className="mt-1 text-xs leading-5 text-white/60">{catalogText.promoText}</p>
+                                {showAdvancedFilters ? (
+                                    <div className="vgp-pop grid grid-cols-2 gap-3 border-y border-white/10 py-5 sm:gap-4 lg:grid-cols-4">
+                                        {([
+                                            { label: catalogText.tempo, value: tempoFilter, set: (value: string) => setTempoFilter(value as TempoFilter), options: [['all', catalogText.allTempos], ['under-90', '< 90 BPM'], ['90-109', '90–109 BPM'], ['110-129', '110–129 BPM'], ['130-plus', '130+ BPM']] },
+                                            { label: catalogText.key, value: keyFilter, set: setKeyFilter, options: [['all', catalogText.allKeys], ...availableKeys.map((key) => [key, key])] },
+                                            { label: catalogText.vibe, value: vibeFilter, set: (value: string) => setVibeFilter(value as VibeFilter), options: [['all', catalogText.allVibes], ...Object.keys(vibeMatchers).map((vibe) => [vibe, vibe])] },
+                                            { label: catalogText.duration, value: durationFilter, set: (value: string) => setDurationFilter(value as DurationFilter), options: [['all', catalogText.allDurations], ['short', catalogText.shortDuration], ['standard', catalogText.standardDuration], ['long', catalogText.longDuration]] },
+                                        ] as Array<{ label: string; value: string; set: (value: string) => void; options: string[][] }>).map((filter) => (
+                                            <label key={filter.label} className="block">
+                                                <span className="text-xs text-white/50">{filter.label}</span>
+                                                <select
+                                                    value={filter.value}
+                                                    onChange={(event) => {
+                                                        filter.set(event.target.value);
+                                                        setCurrentPage(1);
+                                                    }}
+                                                    className="mt-1.5 min-h-11 w-full rounded-[6px] border border-white/15 bg-[#0a0e12] px-3 text-sm text-white outline-none transition-colors focus:border-white/50"
+                                                >
+                                                    {filter.options.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                                                </select>
+                                            </label>
+                                        ))}
                                     </div>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => shortlistedBeats.length ? openCheckout(shortlistedBeats) : openGuide('finder')}
-                                    className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-full border border-white/20 px-4 text-xs font-semibold text-white transition hover:border-white/60"
-                                >
-                                    {shortlistedBeats.length ? catalogText.promoCta : catalogText.guide}
-                                    <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
-                                </button>
+                                ) : null}
+
+                                {activeFilters.length ? (
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        {activeFilters.map((filter) => (
+                                            <button
+                                                key={filter.key}
+                                                type="button"
+                                                onClick={() => {
+                                                    filter.clear();
+                                                    setCurrentPage(1);
+                                                }}
+                                                className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-white/[0.08] px-3 text-xs text-white/85 transition-colors hover:bg-white/[0.14] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                            >
+                                                {filter.label}
+                                                <X className="h-3 w-3" aria-hidden="true" />
+                                            </button>
+                                        ))}
+                                        <button type="button" onClick={resetFilters} className="vgp-link ml-1 text-xs font-medium text-white/70 hover:text-white">
+                                            {catalogText.reset}
+                                        </button>
+                                    </div>
+                                ) : null}
+
+                                <p className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/55">
+                                    <Gift className="h-4 w-4 shrink-0 text-white/70" aria-hidden="true" />
+                                    <span><span className="font-medium text-white/85">{catalogText.promoTitle}.</span> {catalogText.promoText}</span>
+                                    <button
+                                        type="button"
+                                        onClick={() => shortlistedBeats.length ? openCheckout(shortlistedBeats) : openGuide('finder')}
+                                        className="vgp-link text-sm font-medium text-white"
+                                    >
+                                        {shortlistedBeats.length ? catalogText.promoCta : catalogText.guide}
+                                    </button>
+                                </p>
                             </div>
                         </div>
 
