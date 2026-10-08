@@ -73,7 +73,7 @@ export const mainNavGroups: NavGroup[] = [
 /** Smaller projects. Linked from the footer only. */
 export const moreProjects: NavChild[] = [
     { name: 'Games', href: '/games' },
-    { name: 'MyCamScan', href: '/mycamscan' },
+    { name: 'MyCamScan', href: '/mycamscan', status: 'Available' },
 ];
 
 export const healingWaveModules = [
