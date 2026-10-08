@@ -39,5 +39,5 @@ which carries its own references, or from a calculation listed here.
 - Plots are linear level. "Slowed down" views: level in (outline) and level
   out before makeup (fill). "Listen" views: level out after the demo's
   makeup gain, energy-averaged over 3 ms, as heard.
-- Narration: one ElevenLabs take; "only" cut out of "and only the body gets
-  turned down" (`film3/vo-cues.json`, `cuts`).
+- Narration: ElevenLabs `eleven_v4`, voice Michael C. Vincent, take 1 of 4
+  (`film3/vo-cues.json` records the choice), cued with `film3/cue_vo.py`.

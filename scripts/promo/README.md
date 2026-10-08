@@ -60,9 +60,9 @@ run measured.
 
 A 76 second, 1080 x 1920 short for TikTok and Reels on the same lesson, in
 an illustrated explainer style: a snare, a compressor, and inside it a small
-robot whose hand rides the fader. Narrated (ElevenLabs, voice "Cedric M,
-Engaging Documentary Narrator", model `eleven_multilingual_v2`), with real
-drum samples through the compressor the picture shows.
+robot whose hand rides the fader. Narrated in American English (ElevenLabs
+`eleven_v4`, voice Michael C. Vincent, prompt in `film3/narration-prompt.txt`),
+with real drum samples through the compressor the picture shows.
 
 The samples and the narration are licensed or generated material and stay
 out of git. Put them in `scripts/promo/assets/` (ignored):
@@ -71,8 +71,11 @@ out of git. Put them in `scripts/promo/assets/` (ignored):
   under `samples` (Diamonds Snare 4 C#, Kick 15 E, Closed Hihat 5 and 11,
   Crash 1, KEYS Dusty (C), Gems Vol 10 Nightfall 120 BPM A# Min Keys).
 - `assets/vo/narration.mp3`: the narration take. `film3/vo-cues.json` holds
-  where each line sits in that file and when each word is spoken, so a new
-  take needs new cues.
+  where each line sits in that file and when each word is spoken. For a new
+  take, cue it against `film3/script.txt` (needs `faster-whisper`):
+  `python film3/cue_vo.py assets/vo/narration.mp3 film3/script.txt film3/vo-cues.json`,
+  then adjust the `vo` placements in `film3/timeline.mjs` if line lengths
+  changed.
 
 ```
 npm run film3                    # sound, stills, video and checks

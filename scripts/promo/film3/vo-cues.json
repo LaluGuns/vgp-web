@@ -1,983 +1,1028 @@
 {
  "source": "assets/vo/narration.mp3",
- "voice": "Cedric M – Engaging Documentary Narrator (ElevenLabs)",
- "model": "eleven_multilingual_v2",
- "note": "from/to: seconds in the source file, cut at measured pauses (ffmpeg silencedetect, -38 dB, 180 ms). Word times s/e are relative to `from`, from a local faster-whisper small.en pass; the narration matches the script word for word.",
+ "note": "from/to: seconds in the source file, cut where the voice starts and stops (10 ms energy frames). Word times s/e are relative to `from`, from a local faster-whisper small.en pass aligned to the script; words the recognizer missed are interpolated.",
+ "missed_words": 1,
  "segments": [
   {
    "id": "same-snare",
-   "text": "Same snare.",
-   "from": 0.0,
-   "to": 0.676,
+   "text": "Same snare. Same compressor.",
+   "from": 0.17,
+   "to": 2.07,
    "words": [
     {
      "w": "Same",
-     "s": 0,
-     "e": 0.3
+     "s": 0.0,
+     "e": 0.25
     },
     {
      "w": "snare.",
-     "s": 0.3,
-     "e": 0.676
-    }
-   ]
-  },
-  {
-   "id": "same-comp",
-   "text": "Same compressor.",
-   "from": 1.384,
-   "to": 2.177,
-   "words": [
+     "s": 0.25,
+     "e": 0.71
+    },
     {
      "w": "Same",
-     "s": 0.036,
-     "e": 0.216
+     "s": 1.19,
+     "e": 1.31
     },
     {
      "w": "compressor.",
-     "s": 0.216,
-     "e": 0.756
+     "s": 1.31,
+     "e": 1.83
     }
    ]
   },
   {
    "id": "listen",
    "text": "Listen.",
-   "from": 3.005,
-   "to": 3.275,
+   "from": 2.63,
+   "to": 2.94,
    "words": [
     {
      "w": "Listen.",
-     "s": 0.015,
-     "e": 0.235
+     "s": 0.03,
+     "e": 0.27
     }
    ]
   },
   {
    "id": "flat",
    "text": "One sounds flat.",
-   "from": 4.181,
-   "to": 5.079,
+   "from": 3.44,
+   "to": 4.37,
    "words": [
     {
      "w": "One",
-     "s": 0,
-     "e": 0.139
+     "s": 0.14,
+     "e": 0.18
     },
     {
      "w": "sounds",
-     "s": 0.139,
-     "e": 0.439
+     "s": 0.18,
+     "e": 0.5
     },
     {
      "w": "flat.",
-     "s": 0.439,
-     "e": 0.799
+     "s": 0.5,
+     "e": 0.9
     }
    ]
   },
   {
    "id": "punchy",
    "text": "One sounds punchy.",
-   "from": 5.741,
-   "to": 6.753,
+   "from": 4.68,
+   "to": 5.7,
    "words": [
     {
      "w": "One",
-     "s": 0,
-     "e": 0.159
+     "s": 0.0,
+     "e": 0.2
     },
     {
      "w": "sounds",
-     "s": 0.159,
-     "e": 0.479
+     "s": 0.2,
+     "e": 0.52
     },
     {
      "w": "punchy.",
-     "s": 0.479,
-     "e": 1.012
+     "s": 0.52,
+     "e": 1.02
     }
    ]
   },
   {
    "id": "knob",
-   "text": "And only one knob changed.",
-   "from": 7.507,
-   "to": 8.922,
+   "text": "And only ONE knob changed.",
+   "from": 6.1,
+   "to": 7.95,
    "words": [
     {
      "w": "And",
-     "s": 0,
-     "e": 0.113
+     "s": 0.0,
+     "e": 0.1
     },
     {
      "w": "only",
-     "s": 0.113,
-     "e": 0.413
+     "s": 0.1,
+     "e": 0.42
     },
     {
-     "w": "one",
-     "s": 0.413,
-     "e": 0.693
+     "w": "ONE",
+     "s": 0.42,
+     "e": 0.8
     },
     {
      "w": "knob",
-     "s": 0.693,
-     "e": 0.893
+     "s": 0.8,
+     "e": 1.12
     },
     {
      "w": "changed.",
-     "s": 0.893,
-     "e": 1.273
+     "s": 1.12,
+     "e": 1.7
     }
    ]
   },
   {
    "id": "hand",
    "text": "Picture a tiny hand inside the compressor, resting on a fader.",
-   "from": 9.672,
-   "to": 13.034,
+   "from": 8.38,
+   "to": 11.85,
    "words": [
     {
      "w": "Picture",
-     "s": 0.028,
-     "e": 0.128
+     "s": 0.08,
+     "e": 0.1
     },
     {
      "w": "a",
-     "s": 0.128,
-     "e": 0.428
+     "s": 0.1,
+     "e": 0.44
     },
     {
      "w": "tiny",
-     "s": 0.428,
-     "e": 0.668
+     "s": 0.44,
+     "e": 0.74
     },
     {
      "w": "hand",
-     "s": 0.668,
-     "e": 0.948
+     "s": 0.74,
+     "e": 1.16
     },
     {
      "w": "inside",
-     "s": 0.948,
-     "e": 1.268
+     "s": 1.16,
+     "e": 1.52
     },
     {
      "w": "the",
-     "s": 1.268,
-     "e": 1.448
+     "s": 1.52,
+     "e": 1.72
     },
     {
      "w": "compressor,",
-     "s": 1.448,
-     "e": 1.908
+     "s": 1.72,
+     "e": 2.2
     },
     {
      "w": "resting",
-     "s": 1.908,
-     "e": 2.628
+     "s": 2.44,
+     "e": 2.7
     },
     {
      "w": "on",
-     "s": 2.628,
-     "e": 2.908
+     "s": 2.7,
+     "e": 2.92
     },
     {
      "w": "a",
-     "s": 2.908,
-     "e": 3.028
+     "s": 2.92,
+     "e": 3.08
     },
     {
      "w": "fader.",
-     "s": 3.028,
-     "e": 3.288
+     "s": 3.08,
+     "e": 3.34
     }
    ]
   },
   {
    "id": "watch",
    "text": "It watches the level.",
-   "from": 13.909,
-   "to": 14.807,
+   "from": 12.24,
+   "to": 13.2,
    "words": [
     {
      "w": "It",
-     "s": 0,
-     "e": 0.131
+     "s": 0.0,
+     "e": 0.08
     },
     {
      "w": "watches",
-     "s": 0.131,
-     "e": 0.431
+     "s": 0.08,
+     "e": 0.38
     },
     {
      "w": "the",
-     "s": 0.431,
-     "e": 0.631
+     "s": 0.38,
+     "e": 0.64
     },
     {
      "w": "level.",
-     "s": 0.631,
-     "e": 0.871
+     "s": 0.64,
+     "e": 0.9
     }
    ]
   },
   {
    "id": "pull",
-   "text": "When a hit crosses the threshold, the hand pulls the fader down.",
-   "from": 15.689,
-   "to": 18.869,
+   "text": "When a hit crosses the threshold... the hand pulls the fader down.",
+   "from": 13.66,
+   "to": 17.07,
    "words": [
     {
      "w": "When",
-     "s": 0,
-     "e": 0.131
+     "s": 0.0,
+     "e": 0.1
     },
     {
      "w": "a",
-     "s": 0.131,
-     "e": 0.271
+     "s": 0.1,
+     "e": 0.24
     },
     {
      "w": "hit",
-     "s": 0.271,
-     "e": 0.411
-    },
-    {
-     "w": "crosses",
-     "s": 0.411,
-     "e": 0.671
-    },
-    {
-     "w": "the",
-     "s": 0.671,
-     "e": 0.911
-    },
-    {
-     "w": "threshold,",
-     "s": 0.911,
-     "e": 1.311
-    },
-    {
-     "w": "the",
-     "s": 1.831,
-     "e": 2.011
-    },
-    {
-     "w": "hand",
-     "s": 2.011,
-     "e": 2.231
-    },
-    {
-     "w": "pulls",
-     "s": 2.231,
-     "e": 2.451
-    },
-    {
-     "w": "the",
-     "s": 2.451,
-     "e": 2.611
-    },
-    {
-     "w": "fader",
-     "s": 2.611,
-     "e": 2.851
-    },
-    {
-     "w": "down.",
-     "s": 2.851,
-     "e": 3.131
-    }
-   ]
-  },
-  {
-   "id": "parts",
-   "text": "But every hit has two parts:",
-   "from": 19.775,
-   "to": 21.476,
-   "words": [
-    {
-     "w": "But",
-     "s": 0,
-     "e": 0.085
-    },
-    {
-     "w": "every",
-     "s": 0.085,
-     "e": 0.425
-    },
-    {
-     "w": "hit",
-     "s": 0.425,
-     "e": 0.645
-    },
-    {
-     "w": "has",
-     "s": 0.645,
-     "e": 0.845
-    },
-    {
-     "w": "two",
-     "s": 0.845,
-     "e": 1.125
-    },
-    {
-     "w": "parts:",
-     "s": 1.125,
-     "e": 1.605
-    }
-   ]
-  },
-  {
-   "id": "crack",
-   "text": "a sharp crack at the front, and",
-   "from": 22.115,
-   "to": 23.522,
-   "words": [
-    {
-     "w": "a",
-     "s": 0,
-     "e": 0.105
-    },
-    {
-     "w": "sharp",
-     "s": 0.105,
-     "e": 0.365
-    },
-    {
-     "w": "crack",
-     "s": 0.365,
-     "e": 0.685
-    },
-    {
-     "w": "at",
-     "s": 0.685,
-     "e": 0.905
-    },
-    {
-     "w": "the",
-     "s": 0.905,
-     "e": 1.045
-    },
-    {
-     "w": "front,",
-     "s": 1.045,
-     "e": 1.265
-    },
-    {
-     "w": "and",
-     "s": 1.265,
-     "e": 1.407
-    }
-   ]
-  },
-  {
-   "id": "body",
-   "text": "a longer body behind it.",
-   "from": 24.208,
-   "to": 25.744,
-   "words": [
-    {
-     "w": "a",
-     "s": 0.132,
-     "e": 0.272
-    },
-    {
-     "w": "longer",
-     "s": 0.272,
-     "e": 0.572
-    },
-    {
-     "w": "body",
-     "s": 0.572,
-     "e": 0.912
-    },
-    {
-     "w": "behind",
-     "s": 0.912,
-     "e": 1.272
-    },
-    {
-     "w": "it.",
-     "s": 1.272,
-     "e": 1.536
-    }
-   ]
-  },
-  {
-   "id": "attack",
-   "text": "Attack is how fast the hand grabs.",
-   "from": 26.685,
-   "to": 28.534,
-   "words": [
-    {
-     "w": "Attack",
-     "s": 0,
-     "e": 0.335
-    },
-    {
-     "w": "is",
-     "s": 0.335,
-     "e": 0.535
-    },
-    {
-     "w": "how",
-     "s": 0.535,
-     "e": 0.755
-    },
-    {
-     "w": "fast",
-     "s": 0.755,
-     "e": 0.995
-    },
-    {
-     "w": "the",
-     "s": 0.995,
-     "e": 1.155
-    },
-    {
-     "w": "hand",
-     "s": 1.155,
-     "e": 1.355
-    },
-    {
-     "w": "grabs.",
-     "s": 1.355,
-     "e": 1.675
-    }
-   ]
-  },
-  {
-   "id": "fast",
-   "text": "At one millisecond, it catches the crack and squashes it.",
-   "from": 29.311,
-   "to": 32.922,
-   "words": [
-    {
-     "w": "At",
-     "s": 0,
-     "e": 0.149
-    },
-    {
-     "w": "one",
-     "s": 0.149,
-     "e": 0.429
-    },
-    {
-     "w": "millisecond,",
-     "s": 0.429,
-     "e": 1.189
-    },
-    {
-     "w": "it",
-     "s": 1.529,
-     "e": 1.729
-    },
-    {
-     "w": "catches",
-     "s": 1.729,
-     "e": 2.049
-    },
-    {
-     "w": "the",
-     "s": 2.049,
-     "e": 2.289
-    },
-    {
-     "w": "crack",
-     "s": 2.289,
-     "e": 2.509
-    },
-    {
-     "w": "and",
-     "s": 2.509,
-     "e": 2.889
-    },
-    {
-     "w": "squashes",
-     "s": 2.889,
-     "e": 3.269
-    },
-    {
-     "w": "it.",
-     "s": 3.269,
-     "e": 3.611
-    }
-   ]
-  },
-  {
-   "id": "slow",
-   "text": "At thirty milliseconds, it's late on purpose.",
-   "from": 33.949,
-   "to": 36.793,
-   "words": [
-    {
-     "w": "At",
-     "s": 0,
-     "e": 0.151
-    },
-    {
-     "w": "thirty",
-     "s": 0.151,
-     "e": 0.531
-    },
-    {
-     "w": "milliseconds,",
-     "s": 0.531,
-     "e": 1.031
-    },
-    {
-     "w": "it's",
-     "s": 1.531,
-     "e": 1.851
-    },
-    {
-     "w": "late",
-     "s": 1.851,
-     "e": 2.071
-    },
-    {
-     "w": "on",
-     "s": 2.071,
-     "e": 2.271
-    },
-    {
-     "w": "purpose.",
-     "s": 2.271,
-     "e": 2.651
-    }
-   ]
-  },
-  {
-   "id": "slips",
-   "text": "The crack slips past, and the body gets turned down.",
-   "from": 38.142,
-   "to": 41.624,
-   "words": [
-    {
-     "w": "The",
-     "s": 0,
-     "e": 0.098
-    },
-    {
-     "w": "crack",
-     "s": 0.098,
-     "e": 0.298
-    },
-    {
-     "w": "slips",
-     "s": 0.298,
-     "e": 0.578
-    },
-    {
-     "w": "past,",
-     "s": 0.578,
-     "e": 0.998
-    },
-    {
-     "w": "and",
-     "s": 1.778,
-     "e": 1.938
-    },
-    {
-     "w": "only",
-     "s": 1.938,
-     "e": 2.198
-    },
-    {
-     "w": "the",
-     "s": 2.198,
-     "e": 2.358
-    },
-    {
-     "w": "body",
-     "s": 2.358,
-     "e": 2.598
-    },
-    {
-     "w": "gets",
-     "s": 2.598,
-     "e": 2.818
-    },
-    {
-     "w": "turned",
-     "s": 2.818,
-     "e": 3.118
-    },
-    {
-     "w": "down.",
-     "s": 3.118,
-     "e": 3.478
-    }
-   ],
-   "cuts": [
-    [
-     40.12,
-     40.4
-    ]
-   ],
-   "note": "\"only\" cut out (40.12-40.40 s in the source): the 30 ms attack trims the crack a little, so \"only the body\" overstated it."
-  },
-  {
-   "id": "punch",
-   "text": "That's punch.",
-   "from": 42.429,
-   "to": 43.038,
-   "words": [
-    {
-     "w": "That's",
-     "s": 0,
-     "e": 0.251
-    },
-    {
-     "w": "punch.",
-     "s": 0.251,
-     "e": 0.431
-    }
-   ]
-  },
-  {
-   "id": "release",
-   "text": "Release is how fast the hand lets go.",
-   "from": 43.988,
-   "to": 45.739,
-   "words": [
-    {
-     "w": "Release",
-     "s": 0.192,
-     "e": 0.292
-    },
-    {
-     "w": "is",
-     "s": 0.292,
-     "e": 0.492
-    },
-    {
-     "w": "how",
-     "s": 0.492,
-     "e": 0.652
-    },
-    {
-     "w": "fast",
-     "s": 0.652,
-     "e": 0.872
-    },
-    {
-     "w": "the",
-     "s": 0.872,
-     "e": 1.052
-    },
-    {
-     "w": "hand",
-     "s": 1.052,
-     "e": 1.252
-    },
-    {
-     "w": "lets",
-     "s": 1.252,
-     "e": 1.392
-    },
-    {
-     "w": "go.",
-     "s": 1.392,
-     "e": 1.751
-    }
-   ]
-  },
-  {
-   "id": "hold",
-   "text": "Let go too slowly, and it's still holding on when the next hit arrives.",
-   "from": 46.707,
-   "to": 50.657,
-   "words": [
-    {
-     "w": "Let",
-     "s": 0,
-     "e": 0.153
-    },
-    {
-     "w": "go",
-     "s": 0.153,
-     "e": 0.373
-    },
-    {
-     "w": "too",
-     "s": 0.373,
-     "e": 0.593
-    },
-    {
-     "w": "slowly,",
-     "s": 0.593,
-     "e": 0.973
-    },
-    {
-     "w": "and",
-     "s": 1.433,
-     "e": 1.733
-    },
-    {
-     "w": "it's",
-     "s": 1.733,
-     "e": 1.933
-    },
-    {
-     "w": "still",
-     "s": 1.933,
-     "e": 2.133
-    },
-    {
-     "w": "holding",
-     "s": 2.133,
-     "e": 2.473
-    },
-    {
-     "w": "on",
-     "s": 2.473,
-     "e": 2.713
-    },
-    {
-     "w": "when",
-     "s": 2.713,
-     "e": 2.873
-    },
-    {
-     "w": "the",
-     "s": 2.873,
-     "e": 2.993
-    },
-    {
-     "w": "next",
-     "s": 2.993,
-     "e": 3.193
-    },
-    {
-     "w": "hit",
-     "s": 3.193,
-     "e": 3.373
-    },
-    {
-     "w": "arrives.",
-     "s": 3.373,
-     "e": 3.753
-    }
-   ]
-  },
-  {
-   "id": "flatgroove",
-   "text": "The whole groove goes flat.",
-   "from": 51.585,
-   "to": 52.821,
-   "words": [
-    {
-     "w": "The",
-     "s": 0,
-     "e": 0.075
-    },
-    {
-     "w": "whole",
-     "s": 0.075,
-     "e": 0.335
-    },
-    {
-     "w": "groove",
-     "s": 0.335,
-     "e": 0.575
-    },
-    {
-     "w": "goes",
-     "s": 0.575,
-     "e": 0.855
-    },
-    {
-     "w": "flat.",
-     "s": 0.855,
-     "e": 1.155
-    }
-   ]
-  },
-  {
-   "id": "fresh",
-   "text": "Let go in time, and every hit starts fresh.",
-   "from": 53.899,
-   "to": 56.941,
-   "words": [
-    {
-     "w": "Let",
-     "s": 0,
-     "e": 0.141
-    },
-    {
-     "w": "go",
-     "s": 0.141,
-     "e": 0.341
-    },
-    {
-     "w": "in",
-     "s": 0.341,
-     "e": 0.501
-    },
-    {
-     "w": "time,",
-     "s": 0.501,
-     "e": 0.781
-    },
-    {
-     "w": "and",
-     "s": 1.361,
-     "e": 1.601
-    },
-    {
-     "w": "every",
-     "s": 1.601,
-     "e": 1.921
-    },
-    {
-     "w": "hit",
-     "s": 1.921,
-     "e": 2.141
-    },
-    {
-     "w": "starts",
-     "s": 2.141,
-     "e": 2.461
-    },
-    {
-     "w": "fresh.",
-     "s": 2.461,
-     "e": 2.861
-    }
-   ]
-  },
-  {
-   "id": "rule-a",
-   "text": "Attack shapes the hit.",
-   "from": 57.7,
-   "to": 58.938,
-   "words": [
-    {
-     "w": "Attack",
-     "s": 0.36,
+     "s": 0.24,
      "e": 0.36
     },
     {
-     "w": "shapes",
+     "w": "crosses",
      "s": 0.36,
      "e": 0.7
     },
     {
      "w": "the",
      "s": 0.7,
-     "e": 0.92
+     "e": 0.94
+    },
+    {
+     "w": "threshold...",
+     "s": 0.94,
+     "e": 1.38
+    },
+    {
+     "w": "the",
+     "s": 1.82,
+     "e": 1.98
+    },
+    {
+     "w": "hand",
+     "s": 1.98,
+     "e": 2.22
+    },
+    {
+     "w": "pulls",
+     "s": 2.22,
+     "e": 2.48
+    },
+    {
+     "w": "the",
+     "s": 2.48,
+     "e": 2.72
+    },
+    {
+     "w": "fader",
+     "s": 2.72,
+     "e": 2.96
+    },
+    {
+     "w": "down.",
+     "s": 2.96,
+     "e": 3.32
+    }
+   ]
+  },
+  {
+   "id": "parts",
+   "text": "But every hit has two parts:",
+   "from": 17.51,
+   "to": 19.09,
+   "words": [
+    {
+     "w": "But",
+     "s": 0.0,
+     "e": 0.09
+    },
+    {
+     "w": "every",
+     "s": 0.09,
+     "e": 0.39
+    },
+    {
+     "w": "hit",
+     "s": 0.39,
+     "e": 0.61
+    },
+    {
+     "w": "has",
+     "s": 0.61,
+     "e": 0.81
+    },
+    {
+     "w": "two",
+     "s": 0.81,
+     "e": 1.03
+    },
+    {
+     "w": "parts:",
+     "s": 1.03,
+     "e": 1.43
+    }
+   ]
+  },
+  {
+   "id": "crack",
+   "text": "a sharp crack at the front,",
+   "from": 19.48,
+   "to": 20.78,
+   "words": [
+    {
+     "w": "a",
+     "s": 0.0,
+     "e": 0.12
+    },
+    {
+     "w": "sharp",
+     "s": 0.12,
+     "e": 0.34
+    },
+    {
+     "w": "crack",
+     "s": 0.34,
+     "e": 0.68
+    },
+    {
+     "w": "at",
+     "s": 0.68,
+     "e": 0.84
+    },
+    {
+     "w": "the",
+     "s": 0.84,
+     "e": 0.98
+    },
+    {
+     "w": "front,",
+     "s": 0.98,
+     "e": 1.22
+    }
+   ]
+  },
+  {
+   "id": "body",
+   "text": "and a longer body behind it.",
+   "from": 21.04,
+   "to": 22.45,
+   "words": [
+    {
+     "w": "and",
+     "s": 0.0,
+     "e": 0.08
+    },
+    {
+     "w": "a",
+     "s": 0.08,
+     "e": 0.22
+    },
+    {
+     "w": "longer",
+     "s": 0.22,
+     "e": 0.48
+    },
+    {
+     "w": "body",
+     "s": 0.48,
+     "e": 0.84
+    },
+    {
+     "w": "behind",
+     "s": 0.84,
+     "e": 1.2
+    },
+    {
+     "w": "it.",
+     "s": 1.2,
+     "e": 1.41
+    }
+   ]
+  },
+  {
+   "id": "attack",
+   "text": "Attack is how fast the hand grabs.",
+   "from": 22.93,
+   "to": 25.1,
+   "words": [
+    {
+     "w": "Attack",
+     "s": 0.0,
+     "e": 0.29
+    },
+    {
+     "w": "is",
+     "s": 0.29,
+     "e": 0.57
+    },
+    {
+     "w": "how",
+     "s": 0.57,
+     "e": 0.77
+    },
+    {
+     "w": "fast",
+     "s": 0.77,
+     "e": 1.11
+    },
+    {
+     "w": "the",
+     "s": 1.11,
+     "e": 1.33
+    },
+    {
+     "w": "hand",
+     "s": 1.33,
+     "e": 1.57
+    },
+    {
+     "w": "grabs.",
+     "s": 1.57,
+     "e": 1.89
+    }
+   ]
+  },
+  {
+   "id": "fast",
+   "text": "At one millisecond, it catches the crack — and squashes it.",
+   "from": 25.49,
+   "to": 28.6,
+   "words": [
+    {
+     "w": "At",
+     "s": 0.0,
+     "e": 0.11
+    },
+    {
+     "w": "one",
+     "s": 0.11,
+     "e": 0.37
+    },
+    {
+     "w": "millisecond,",
+     "s": 0.37,
+     "e": 0.99
+    },
+    {
+     "w": "it",
+     "s": 1.05,
+     "e": 1.19
+    },
+    {
+     "w": "catches",
+     "s": 1.19,
+     "e": 1.43
+    },
+    {
+     "w": "the",
+     "s": 1.43,
+     "e": 1.67
+    },
+    {
+     "w": "crack",
+     "s": 1.67,
+     "e": 2.01
+    },
+    {
+     "w": "—",
+     "s": 2.01,
+     "e": 2.01
+    },
+    {
+     "w": "and",
+     "s": 2.01,
+     "e": 2.47
+    },
+    {
+     "w": "squashes",
+     "s": 2.47,
+     "e": 2.87
+    },
+    {
+     "w": "it.",
+     "s": 2.87,
+     "e": 3.11
+    }
+   ]
+  },
+  {
+   "id": "slow",
+   "text": "At thirty milliseconds, it's late on purpose.",
+   "from": 29.08,
+   "to": 31.49,
+   "words": [
+    {
+     "w": "At",
+     "s": 0.0,
+     "e": 0.1
+    },
+    {
+     "w": "thirty",
+     "s": 0.1,
+     "e": 0.44
+    },
+    {
+     "w": "milliseconds,",
+     "s": 0.44,
+     "e": 0.86
+    },
+    {
+     "w": "it's",
+     "s": 1.36,
+     "e": 1.48
+    },
+    {
+     "w": "late",
+     "s": 1.48,
+     "e": 1.64
+    },
+    {
+     "w": "on",
+     "s": 1.64,
+     "e": 1.84
+    },
+    {
+     "w": "purpose.",
+     "s": 1.84,
+     "e": 2.16
+    }
+   ]
+  },
+  {
+   "id": "slips",
+   "text": "Most of the crack slips past, and the body gets turned down.",
+   "from": 31.74,
+   "to": 34.76,
+   "words": [
+    {
+     "w": "Most",
+     "s": 0.04,
+     "e": 0.16
+    },
+    {
+     "w": "of",
+     "s": 0.16,
+     "e": 0.32
+    },
+    {
+     "w": "the",
+     "s": 0.32,
+     "e": 0.48
+    },
+    {
+     "w": "crack",
+     "s": 0.48,
+     "e": 0.66
+    },
+    {
+     "w": "slips",
+     "s": 0.66,
+     "e": 0.96
+    },
+    {
+     "w": "past,",
+     "s": 0.96,
+     "e": 1.34
+    },
+    {
+     "w": "and",
+     "s": 1.68,
+     "e": 1.82
+    },
+    {
+     "w": "the",
+     "s": 1.82,
+     "e": 1.9
+    },
+    {
+     "w": "body",
+     "s": 1.9,
+     "e": 2.14
+    },
+    {
+     "w": "gets",
+     "s": 2.14,
+     "e": 2.36
+    },
+    {
+     "w": "turned",
+     "s": 2.36,
+     "e": 2.62
+    },
+    {
+     "w": "down.",
+     "s": 2.62,
+     "e": 3.02
+    }
+   ]
+  },
+  {
+   "id": "punch",
+   "text": "That's punch.",
+   "from": 35.22,
+   "to": 36.09,
+   "words": [
+    {
+     "w": "That's",
+     "s": 0.02,
+     "e": 0.4
+    },
+    {
+     "w": "punch.",
+     "s": 0.4,
+     "e": 0.62
+    }
+   ]
+  },
+  {
+   "id": "release",
+   "text": "Release is how fast the hand lets go.",
+   "from": 36.45,
+   "to": 38.45,
+   "words": [
+    {
+     "w": "Release",
+     "s": 0.21,
+     "e": 0.29
+    },
+    {
+     "w": "is",
+     "s": 0.29,
+     "e": 0.47
+    },
+    {
+     "w": "how",
+     "s": 0.47,
+     "e": 0.69
+    },
+    {
+     "w": "fast",
+     "s": 0.69,
+     "e": 0.97
+    },
+    {
+     "w": "the",
+     "s": 0.97,
+     "e": 1.17
+    },
+    {
+     "w": "hand",
+     "s": 1.17,
+     "e": 1.37
+    },
+    {
+     "w": "lets",
+     "s": 1.37,
+     "e": 1.55
+    },
+    {
+     "w": "go.",
+     "s": 1.55,
+     "e": 1.95
+    }
+   ]
+  },
+  {
+   "id": "hold",
+   "text": "Let go too slowly, and it's still holding on when the next hit arrives.",
+   "from": 38.75,
+   "to": 42.35,
+   "words": [
+    {
+     "w": "Let",
+     "s": 0.01,
+     "e": 0.11
+    },
+    {
+     "w": "go",
+     "s": 0.11,
+     "e": 0.29
+    },
+    {
+     "w": "too",
+     "s": 0.29,
+     "e": 0.55
+    },
+    {
+     "w": "slowly,",
+     "s": 0.55,
+     "e": 0.99
+    },
+    {
+     "w": "and",
+     "s": 1.21,
+     "e": 1.35
+    },
+    {
+     "w": "it's",
+     "s": 1.35,
+     "e": 1.53
+    },
+    {
+     "w": "still",
+     "s": 1.53,
+     "e": 1.71
+    },
+    {
+     "w": "holding",
+     "s": 1.71,
+     "e": 2.03
+    },
+    {
+     "w": "on",
+     "s": 2.03,
+     "e": 2.29
+    },
+    {
+     "w": "when",
+     "s": 2.29,
+     "e": 2.45
+    },
+    {
+     "w": "the",
+     "s": 2.45,
+     "e": 2.57
+    },
+    {
+     "w": "next",
+     "s": 2.57,
+     "e": 2.81
+    },
+    {
+     "w": "hit",
+     "s": 2.81,
+     "e": 2.97
+    },
+    {
+     "w": "arrives.",
+     "s": 2.97,
+     "e": 3.43
+    }
+   ]
+  },
+  {
+   "id": "squashed",
+   "text": "So the next crack gets squashed too.",
+   "from": 42.72,
+   "to": 44.52,
+   "words": [
+    {
+     "w": "So",
+     "s": 0.0,
+     "e": 0.1
+    },
+    {
+     "w": "the",
+     "s": 0.1,
+     "e": 0.22
+    },
+    {
+     "w": "next",
+     "s": 0.22,
+     "e": 0.46
+    },
+    {
+     "w": "crack",
+     "s": 0.46,
+     "e": 0.76
+    },
+    {
+     "w": "gets",
+     "s": 0.76,
+     "e": 0.98
+    },
+    {
+     "w": "squashed",
+     "s": 0.98,
+     "e": 1.36
+    },
+    {
+     "w": "too.",
+     "s": 1.36,
+     "e": 1.74
+    }
+   ]
+  },
+  {
+   "id": "fresh",
+   "text": "Let go in time, and every hit starts fresh.",
+   "from": 44.9,
+   "to": 47.53,
+   "words": [
+    {
+     "w": "Let",
+     "s": 0.0,
+     "e": 0.16
+    },
+    {
+     "w": "go",
+     "s": 0.16,
+     "e": 0.34
+    },
+    {
+     "w": "in",
+     "s": 0.34,
+     "e": 0.52
+    },
+    {
+     "w": "time,",
+     "s": 0.52,
+     "e": 0.86
+    },
+    {
+     "w": "and",
+     "s": 1.08,
+     "e": 1.28
+    },
+    {
+     "w": "every",
+     "s": 1.28,
+     "e": 1.54
+    },
+    {
+     "w": "hit",
+     "s": 1.54,
+     "e": 1.76
+    },
+    {
+     "w": "starts",
+     "s": 1.76,
+     "e": 2.08
+    },
+    {
+     "w": "fresh.",
+     "s": 2.08,
+     "e": 2.44
+    }
+   ]
+  },
+  {
+   "id": "rule-a",
+   "text": "Attack shapes the hit.",
+   "from": 47.88,
+   "to": 48.96,
+   "words": [
+    {
+     "w": "Attack",
+     "s": 0.32,
+     "e": 0.32
+    },
+    {
+     "w": "shapes",
+     "s": 0.32,
+     "e": 0.64
+    },
+    {
+     "w": "the",
+     "s": 0.64,
+     "e": 0.88
     },
     {
      "w": "hit.",
-     "s": 0.92,
-     "e": 1.14
+     "s": 0.88,
+     "e": 1.08
     }
    ]
   },
   {
    "id": "rule-r",
    "text": "Release shapes the groove.",
-   "from": 59.699,
-   "to": 60.974,
+   "from": 49.36,
+   "to": 50.66,
    "words": [
     {
      "w": "Release",
-     "s": 0.261,
-     "e": 0.281
+     "s": 0.22,
+     "e": 0.28
     },
     {
      "w": "shapes",
-     "s": 0.281,
-     "e": 0.601
+     "s": 0.28,
+     "e": 0.68
     },
     {
      "w": "the",
-     "s": 0.601,
-     "e": 0.821
+     "s": 0.68,
+     "e": 0.88
     },
     {
      "w": "groove.",
-     "s": 0.821,
-     "e": 1.121
+     "s": 0.88,
+     "e": 1.18
+    }
+   ]
+  },
+  {
+   "id": "again",
+   "text": "Now listen again.",
+   "from": 51.12,
+   "to": 51.98,
+   "words": [
+    {
+     "w": "Now",
+     "s": 0.0,
+     "e": 0.14
+    },
+    {
+     "w": "listen",
+     "s": 0.14,
+     "e": 0.4
+    },
+    {
+     "w": "again.",
+     "s": 0.4,
+     "e": 0.8
     }
    ]
   },
   {
    "id": "cta",
-   "text": "The full lesson, with a demo you can play, is free at virzy guns dot com.",
-   "from": 61.754,
-   "to": 66.86,
+   "text": "The full lesson, with a demo you can play, is free on the Virzy Guns blog.",
+   "from": 52.39,
+   "to": 56.53,
    "words": [
     {
      "w": "The",
-     "s": 0.006,
-     "e": 0.106
+     "s": 0.0,
+     "e": 0.09
     },
     {
      "w": "full",
-     "s": 0.106,
-     "e": 0.366
+     "s": 0.09,
+     "e": 0.33
     },
     {
      "w": "lesson,",
-     "s": 0.366,
-     "e": 0.786
+     "s": 0.33,
+     "e": 0.71
     },
     {
      "w": "with",
-     "s": 1.306,
-     "e": 1.446
+     "s": 0.71,
+     "e": 1.01
     },
     {
      "w": "a",
-     "s": 1.446,
-     "e": 1.606
+     "s": 1.01,
+     "e": 1.15
     },
     {
      "w": "demo",
-     "s": 1.606,
-     "e": 1.826
+     "s": 1.15,
+     "e": 1.35
     },
     {
      "w": "you",
-     "s": 1.826,
-     "e": 2.106
+     "s": 1.35,
+     "e": 1.57
     },
     {
      "w": "can",
-     "s": 2.106,
-     "e": 2.286
+     "s": 1.57,
+     "e": 1.75
     },
     {
      "w": "play,",
-     "s": 2.286,
-     "e": 2.606
+     "s": 1.75,
+     "e": 2.09
     },
     {
      "w": "is",
-     "s": 2.946,
-     "e": 3.206
+     "s": 2.09,
+     "e": 2.45
     },
     {
      "w": "free",
-     "s": 3.206,
-     "e": 3.506
+     "s": 2.45,
+     "e": 2.75
     },
     {
-     "w": "at",
-     "s": 3.506,
-     "e": 3.706
+     "w": "on",
+     "s": 2.75,
+     "e": 2.93
     },
     {
-     "w": "virzyguns.com.",
-     "s": 3.706,
-     "e": 5.086
+     "w": "the",
+     "s": 2.93,
+     "e": 3.09
+    },
+    {
+     "w": "Virzy",
+     "s": 3.09,
+     "e": 3.39
+    },
+    {
+     "w": "Guns",
+     "s": 3.39,
+     "e": 3.65
+    },
+    {
+     "w": "blog.",
+     "s": 3.65,
+     "e": 3.99
     }
    ],
-   "show": "The full lesson, with a demo you can play, is free at virzyguns.com."
+   "show": "The full lesson, with a demo you can play, is free on the Virzy Guns blog."
   }
- ]
+ ],
+ "voice": "Michael C. Vincent (ElevenLabs library voice, American English)",
+ "model": "eleven_v4, with audio tags for delivery (see script.txt)",
+ "take": "1 of 4; chosen for word accuracy (1.2% against the script), pace (174 words a minute) and pitch range (10.1 semitones)"
 }

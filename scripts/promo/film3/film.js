@@ -35,6 +35,9 @@ const ZR = D.snare.rate;
 const ZN = Math.round(0.15 * ZR);
 const CRACK = Math.round(0.02 * ZR);
 const sceneAt = (t) => TL.scenes.filter((s) => s.at <= t).pop();
+const SC = Object.fromEntries(TL.scenes.map((s) => [s.id, s.at]));
+const DRY = HITS.filter((h) => !h.demo).map((h) => h.t);
+const BUTTON = TL.sfx.find((s) => s.kind === 'button').at;
 const sceneEnd = (s) => {
     const i = TL.scenes.indexOf(s);
     return i + 1 < TL.scenes.length ? TL.scenes[i + 1].at : TL.duration;
@@ -234,7 +237,9 @@ const ST = { sn: { x: 300, y: 600, s: 1.05 }, cb: { x: 800, y: 640, s: 1.0 }, sc
 const knobK = (ms) => (Math.log10(ms) + 1) / 3;
 function attackMsAt(t) {
     const kw = wt('knob', 'knob');
-    const tw = [[4.98, 1], [5.2, 30], [kw + 0.05, 30], [kw + 0.25, 1], [kw + 0.45, 1], [kw + 0.65, 30], [64.9, 30], [65.0, 1], [66.98, 1], [67.2, 30]];
+    const a2 = demoBy.A2.at;
+    const b2 = demoBy.B2.at;
+    const tw = [[4.98, 1], [5.2, 30], [kw + 0.05, 30], [kw + 0.25, 1], [kw + 0.45, 1], [kw + 0.65, 30], [a2 - 0.1, 30], [a2, 1], [b2 - 0.02, 1], [b2 + 0.2, 30]];
     return Math.exp(keys(t, tw.map(([a, b]) => [a, Math.log(b)])));
 }
 function grAt(t) {
@@ -302,15 +307,16 @@ function hookScope(t, alpha, replay) {
 }
 
 function drawStage(t) {
-    const replay = t >= 60;
-    const t0 = replay ? 64.2 : 0;
-    const t1 = replay ? 69.1 : 11.65;
+    const replay = t >= SC.rule;
+    const tDive = vEnd('knob') + 0.02;
+    const t0 = replay ? SC.replay : 0;
+    const t1 = replay ? SC.end : tDive + 0.4;
     if (t < t0 - 0.01 || t > t1 + 0.25) return;
     // Fade: in at the replay, out into the box or the end card.
-    const alpha = (replay ? E.out(seg(t, 64.32, 64.5)) : 1) * (1 - seg(t, t1 - 0.2, t1));
+    const alpha = (replay ? E.out(seg(t, SC.replay + 0.12, SC.replay + 0.3)) : 1) * (1 - seg(t, t1 - 0.2, t1));
     const kWord = wt('knob', 'knob');
     const push = replay ? 0 : E.inOut(seg(t, kWord - 0.6, kWord));
-    const dive = replay ? 0 : E.in(seg(t, 11.25, 11.65));
+    const dive = replay ? 0 : E.in(seg(t, tDive, tDive + 0.4));
     const fx = lerp(540, ST.cb.x + 84 * ST.cb.s, Math.max(push * 0.6, dive));
     const fy = lerp(960, ST.cb.y, Math.max(push * 0.6, dive));
     const z = lerp(1, 1.35, push) * (1 + 2.2 * dive);
@@ -323,7 +329,8 @@ function drawStage(t) {
     for (const h of HITS) if (h.voice === 'kick' && h.demo && t >= h.t && t - h.t < 0.2) kick = Math.max(kick, 1 - (t - h.t) / 0.2);
     const ring = lastSnare(t);
     snareDrum(g, ST.sn.x, ST.sn.y, ST.sn.s * (1 + 0.012 * kick), { stick: stickAt(t), ring, squash: ring < 0.12 ? 1 - ring / 0.12 : 0 });
-    const pop = replay ? 1 : E.outBack(seg(t, 1.22, 1.6));
+    const tBox = wt('same-snare', 'compressor') - 0.08;
+    const pop = replay ? 1 : E.outBack(seg(t, tBox, tBox + 0.38));
     if (pop > 0) {
         const pulses = [];
         for (const h of HITS) if ((h.voice === 'snare' || h.voice === 'kick') && t >= h.t && t - h.t < 0.3 && h.demo) pulses.push({ u: (t - h.t) / 0.3, a: 1 - (t - h.t) / 0.3 });
@@ -358,12 +365,13 @@ function insideState(t) {
     const inLevel = lerp(idle, high, surge);
     // What the fader lets out: everything, until the hand pulls it down.
     const outLevel = lerp(inLevel, IN.thr + 0.05 + 0.01 * Math.sin(t * 9), pull * surge);
-    return { inLevel, outLevel, gr: 9 * pull, pull, thrDraw: E.out(seg(t, 17.0, 17.45)) };
+    return { inLevel, outLevel, gr: 9 * pull, pull, thrDraw: E.out(seg(t, voBy.pull.at, voBy.pull.at + 0.45)) };
 }
 function drawInside(t) {
-    if (t < 11.62 || t > 20.65) return;
-    const a = E.out(seg(t, 11.64, 11.86)) * (1 - seg(t, 20.25, 20.45));
-    const z = lerp(1.25, 1, E.out(seg(t, 11.64, 12.3)));
+    const tIn = vEnd('knob') + 0.32;
+    if (t < tIn || t > SC.parts + 0.2) return;
+    const a = E.out(seg(t, tIn, tIn + 0.22)) * (1 - seg(t, SC.parts - 0.05, SC.parts + 0.15));
+    const z = lerp(1.25, 1, E.out(seg(t, tIn, tIn + 0.65)));
     g.save();
     g.globalAlpha = a;
     g.translate(540, 820);
@@ -419,8 +427,8 @@ function drawInside(t) {
 // ══ Parts: crack and body of one snare hit ══
 const PT = { x0: 110, x1: 970, top: 560, base: 1120 };
 function drawParts(t) {
-    if (t < 20.3 || t > 26.75) return;
-    const a = E.out(seg(t, 20.35, 20.55)) * (1 - seg(t, 26.5, 26.7));
+    if (t < SC.parts || t > SC.attack + 0.2) return;
+    const a = E.out(seg(t, SC.parts + 0.05, SC.parts + 0.25)) * (1 - seg(t, SC.attack - 0.05, SC.attack + 0.15));
     g.save();
     g.globalAlpha = a;
     label(g, 'One snare hit, up close', PT.x0, 360, { size: 48, weight: 800, color: P.ink });
@@ -434,7 +442,7 @@ function drawParts(t) {
         const x = lerp(PT.x0, PT.x1, ms / 150);
         label(g, ms === 150 ? '150 ms' : String(ms), x, PT.base + 56, { size: 36, weight: 600, color: P.ink2, align: ms === 150 ? 'right' : ms === 0 ? 'left' : 'center', family: BODY });
     }
-    const tHit = 20.62;
+    const tHit = DRY[1];
     const upto = clamp((t - tHit) / 0.15) * ZN;
     const cA = popIn(t, wt('crack', 'crack'));
     const bA = popIn(t, wt('body', 'body'));
@@ -467,8 +475,8 @@ const RG = { x0: 110, x1: 670, top: 600, base: 990, trTop: 1104, trBot: 1214, fa
 const SWEEPS = {
     fast: [[wt('fast', 'catches') - 0.1, 0], [wt('fast', 'squashes') - 0.35, 20], [vEnd('fast') + 0.15, 150]],
     slow: [[wt('slips', 'crack'), 0], [wt('slips', 'past') + 0.25, 20], [wt('slips', 'and'), 28], [vEnd('slips'), 150]],
-    hold: [[47.6, 0.4], [wt('hold', 'arrives') + 0.25, 1.62]],
-    fresh: [[55.55, 0.4], [wt('fresh', 'fresh') + 0.3, 1.62]],
+    hold: [[voBy.hold.at + 0.2, 0.4], [wt('hold', 'arrives') + 0.25, 1.62]],
+    fresh: [[voBy.fresh.at + 0.25, 0.4], [wt('fresh', 'fresh') + 0.3, 1.62]],
 };
 const LETGO = { from: wt('release', 'lets') + 0.05, dur: 0.75 };
 const COMPARE = { 'demo-slow': 'fast', 'demo-tempo': 'hold' };
@@ -533,8 +541,8 @@ function rigHeader(sc, t) {
 }
 
 function drawRig(t) {
-    if (t < 26.55 || t > 61.15) return;
-    const a = E.out(seg(t, 26.6, 26.85)) * (1 - seg(t, 60.95, 61.12));
+    if (t < SC.attack + 0.05 || t > SC.rule + 0.2) return;
+    const a = E.out(seg(t, SC.attack + 0.1, SC.attack + 0.35)) * (1 - seg(t, SC.rule, SC.rule + 0.17));
     const sc = sceneAt(t);
     const cur = sc.view === 'rig' ? sc : TL.scenes.filter((s) => s.view === 'rig').pop();
     const S = rigState(cur, t);
@@ -681,7 +689,7 @@ function drawRig(t) {
             const pk = S.zoom ? Math.max(...S.zoom.z.outS.slice(0, CRACK)) : 0;
             const second = S.zoom && S.zoom.z === demoBy.hold.zooms[1];
             tag(g, 'still holding', TX(o2) - 170, RG.trTop + 22, { x: TX(o2), y: TY(S.gr[Math.max(0, Math.floor(o2))]) }, { a: popIn(t, wt('hold', 'arrives') - 0.1), bg: P.ink, size: 36 });
-            if (second) tag(g, 'crack squashed', 380, laneY, { x: X(CRACK / 2), y: Yl(pk, LONE_MAX) }, { a: popIn(t, wt('flatgroove', 'flat') - 0.3), bg: P.dark, fg: P.amber, ring: P.amber, size: 38 });
+            if (second) tag(g, 'crack squashed', 380, laneY, { x: X(CRACK / 2), y: Yl(pk, LONE_MAX) }, { a: popIn(t, wt('squashed', 'squashed') - 0.3), bg: P.dark, fg: P.amber, ring: P.amber, size: 38 });
         }
         if (cur.id === 'fresh' && S.zoom) {
             const pk = Math.max(...S.zoom.z.outS.slice(0, CRACK));
@@ -701,8 +709,8 @@ function drawRig(t) {
 
 // ══ The rule ══
 function drawRule(t) {
-    if (t < 60.95 || t > 64.35) return;
-    const a = E.out(seg(t, 60.98, 61.18)) * (1 - seg(t, 64.18, 64.32));
+    if (t < SC.rule || t > SC.replay + 0.15) return;
+    const a = E.out(seg(t, SC.rule + 0.03, SC.rule + 0.23)) * (1 - seg(t, SC.replay - 0.02, SC.replay + 0.12));
     g.save();
     g.globalAlpha = a;
     const cards = [
@@ -770,18 +778,18 @@ function drawRule(t) {
 // ══ End: who made it, the lesson's demo on a phone, the address ══
 const PH = { x: 540, top: 330, w: 520, h: 860 };
 function drawEnd(t) {
-    if (t < 68.95) return;
-    const a = E.out(seg(t, 69.0, 69.3));
+    if (t < SC.end - 0.15) return;
+    const a = E.out(seg(t, SC.end - 0.1, SC.end + 0.2));
     g.save();
     g.globalAlpha = a;
-    const btn = bump(t, 75, 0.08, 0.6);
+    const btn = bump(t, BUTTON, 0.08, 0.6);
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
     const sw = PH.w - 28;
     const sh = PH.h - 28;
     const x0 = PH.x - PH.w / 2;
-    const lift = E.outBack(seg(t, 69.05, 69.6));
+    const lift = E.outBack(seg(t, SC.end - 0.05, SC.end + 0.5));
     g.save();
     g.translate(0, (1 - lift) * 100);
     const glow = g.createRadialGradient(PH.x, PH.top + PH.h / 2, 0, PH.x, PH.top + PH.h / 2, 640);
@@ -887,7 +895,7 @@ function subtitles(t) {
 }
 
 function badge(t) {
-    const a = 1 - seg(t, 68.7, 68.95);
+    const a = 1 - seg(t, SC.end - 0.4, SC.end - 0.15);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
@@ -902,7 +910,7 @@ function draw(t, { words = true } = {}) {
     // The room breathes with the kick while a demo plays.
     let kick = 0;
     for (const h of HITS) if (h.demo && h.voice === 'kick' && t >= h.t && t - h.t < 0.3) kick = Math.max(kick, 1 - (t - h.t) / 0.3);
-    ground(g, t, Math.max(bump(t, 59, 0.05, 0.9), 0.3 * kick));
+    ground(g, t, Math.max(bump(t, demoBy.tempo.at, 0.05, 0.9), 0.3 * kick));
     drawStage(t);
     drawInside(t);
     drawParts(t);

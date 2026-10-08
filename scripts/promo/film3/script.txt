@@ -1,0 +1,24 @@
+same-snare|Same snare. Same compressor.
+listen|Listen.
+flat|One sounds flat.
+punchy|One sounds punchy.
+knob|And only ONE knob changed.
+hand|Picture a tiny hand inside the compressor, resting on a fader.
+watch|It watches the level.
+pull|When a hit crosses the threshold... the hand pulls the fader down.
+parts|But every hit has two parts:
+crack|a sharp crack at the front,
+body|and a longer body behind it.
+attack|Attack is how fast the hand grabs.
+fast|At one millisecond, it catches the crack — and squashes it.
+slow|At thirty milliseconds, it's late on purpose.
+slips|Most of the crack slips past, and the body gets turned down.
+punch|That's punch.
+release|Release is how fast the hand lets go.
+hold|Let go too slowly, and it's still holding on when the next hit arrives.
+squashed|So the next crack gets squashed too.
+fresh|Let go in time, and every hit starts fresh.
+rule-a|Attack shapes the hit.
+rule-r|Release shapes the groove.
+again|Now listen again.
+cta|The full lesson, with a demo you can play, is free on the Virzy Guns blog.
