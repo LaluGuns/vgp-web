@@ -18,3 +18,21 @@ which carries its own references, or from a calculation listed here.
   Gain reduction is drawn in dB, 0 to 12 dB.
 - Loudness target for the soundtrack (-16 LUFS integrated, -1.5 dBTP) is the
   delivery spec in the explainer brief, measured with ffmpeg `ebur128`.
+
+## Film 3: the narrated short (lesson 057)
+
+- Same gain computer as film 2 (`film/model.mjs`, Giannoulis, Massberg and
+  Reiss 2012), run at 48 kHz on the real drum bus.
+- Detector: RMS over 3 ms of the mono drum bus, scaled so Snare 4's crack
+  reads 1.0 (0 dB). Threshold 0.12 (-18.4 dB), ratio 6:1. Attack 1 ms and
+  30 ms with a 60 ms release; release 2.5 s and 90 ms with a 30 ms attack.
+- Crack is the first 20 ms after a kick or snare onset, the part a 30 ms
+  attack lets through; body is what follows. Crack-to-body figures in
+  DECISIONS.md and VERIFY.md are RMS over 0-15 ms against 25-70 ms of one
+  snare, before and after the compressor.
+- Makeup gain per demo matches the compressed bar to the plain bar's
+  K-weighted loudness (BS.1770 gating), as the lesson says to judge.
+- "Slow motion" scenes replay the same numbers: one snare (0-150 ms) for
+  attack, and 0.4-1.62 s of the demo bar for release.
+- Delivery: -16 LUFS integrated, true peak at most -1.5 dBTP, measured with
+  ffmpeg `ebur128` on the delivered file.

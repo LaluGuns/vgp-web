@@ -56,6 +56,38 @@ Writes to `out/film/`: `master_16x9.mp4`, `cut_9x16.mp4`, `cut_1x1.mp4`,
 `contact.png`, `beats-<format>.png` and `VERIFY.md`, which records what the
 run measured.
 
+## Film 3: the narrated short
+
+A 72 second, 1080 x 1920 short for TikTok and Reels on the same lesson, in
+an illustrated explainer style: a snare, a compressor, and inside it a small
+robot whose hand rides the fader. Narrated (ElevenLabs, voice "Cedric M,
+Engaging Documentary Narrator", model `eleven_multilingual_v2`), with real
+drum samples through the compressor the picture shows.
+
+The samples and the narration are licensed or generated material and stay
+out of git. Put them in `scripts/promo/assets/` (ignored):
+
+- `assets/samples/`: the Cymatics files named in `film3/timeline.mjs`
+  under `samples` (Diamonds Snare 4 C#, Kick 15 E, Closed Hihat 5 and 11,
+  Crash 1, KEYS Dusty (C), Gems Vol 10 Nightfall 120 BPM A# Min Keys).
+- `assets/vo/narration.mp3`: the narration take. `film3/vo-cues.json` holds
+  where each line sits in that file and when each word is spoken, so a new
+  take needs new cues.
+
+```
+npm run film3                    # sound, stills, video and checks
+npm run film3 -- --stills        # contact sheets only
+npm run film3 -- --frames 12.5,31 --tag check
+npm run film3 -- --refresh-lesson   # re-capture the lesson page for the end card
+```
+
+Writes to `out/film3/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
+`contact.png` (one still per scene), `seconds.png` (one per second) and
+`VERIFY.md`. `film3/timeline.mjs` places every line, demo, effect and
+scene; `film3/audio.mjs` mixes the sound and hands the picture the levels
+and gain reduction it computed, so the shapes on screen are the drums you
+hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
+
 ## Files
 
 - `DECISIONS.md`: one line per creative call.
