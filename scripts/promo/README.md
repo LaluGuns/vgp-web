@@ -36,8 +36,11 @@ action with what the lesson contains and its sources.
 
 ## Film
 
-A 40 second explainer on attack and release (lesson 057), with sound and
-captions. One file, `film/timeline.mjs`, holds every beat, line, setting and
+A 32 second explainer on attack and release (lesson 057) at 120 BPM, with
+sound and captions. It opens on the hook (the same snare at 1 ms and 30 ms
+attack), explains crack, body, threshold, attack and release one bar each,
+proves it on the live loop, turns to release, and ends on the founder's
+picture with the tagline and the lesson. One file, `film/timeline.mjs`, holds every beat, line, setting and
 camera move; sound (`film/audio.mjs`) and picture (`film/film.js`) both read
 it and share one model (`film/model.mjs`), so the waveform on screen is the
 level of the drums you hear.

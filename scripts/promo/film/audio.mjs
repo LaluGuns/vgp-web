@@ -96,6 +96,34 @@ function voiceBuffer(voice, seed) {
     return out;
 }
 
+/** A noise sweep that rises into `t1` over `dur` seconds: the build before the key idea. */
+function riser(out, t1, dur, level) {
+    const i0 = Math.round((t1 - dur) * RATE);
+    const n = Math.round(dur * RATE);
+    const r = noise(n, 41);
+    let y = 0;
+    for (let k = 0; k < n; k++) {
+        const x = k / n;
+        const hz = 400 * (8000 / 400) ** x;
+        const a = 1 - Math.exp((-TAU * hz) / RATE);
+        y += a * (r[k] - y);
+        out[i0 + k] += level * x ** 2.2 * y;
+    }
+}
+
+/** A low hit on a downbeat: a falling sine and a short burst. */
+function impact(out, t0, level) {
+    const i0 = Math.round(t0 * RATE);
+    const n = Math.round(0.9 * RATE);
+    const r = noise(n, 43);
+    let ph = 0;
+    for (let k = 0; k < n && i0 + k < out.length; k++) {
+        const dt = k / RATE;
+        ph += (TAU * (38 + 40 * Math.exp(-dt / 0.08))) / RATE;
+        out[i0 + k] += level * (Math.min(1, dt / 0.002) * Math.exp(-dt / 0.32) * Math.sin(ph) + 0.35 * Math.exp(-dt / 0.05) * r[k]);
+    }
+}
+
 /** Soft bell: a sine plus an inharmonic partial, slow decay. */
 function bell(out, t0, hz, level) {
     const i0 = Math.round(t0 * RATE);
@@ -119,6 +147,14 @@ const CHORDS = [
     { bass: 41.2, pad: [207.65, 246.94, 329.63] },
 ];
 
+/** The bed is silent during the hook and swells in on the next downbeat. */
+function bedLevel(TL, t) {
+    const first = TL.scenes.find((s) => s.bed);
+    if (!first) return 0;
+    const start = (first.bar - 1) * TL.bar;
+    return t < start ? 0 : Math.min(1, (t - start) / 0.25);
+}
+
 function pad(out, TL) {
     const barN = Math.round(TL.bar * RATE);
     const ph = [0, 0, 0, 0, 0];
@@ -131,7 +167,7 @@ function pad(out, TL) {
         // Pad swells on each chord; bass restarts each bar with a soft pluck.
         const swell = Math.min(1, inChord / 0.35) * (0.8 + 0.2 * Math.exp(-inChord / 1.5));
         const pluck = Math.min(1, inBar / 0.012) * (0.55 + 0.45 * Math.exp(-inBar / 0.6));
-        const intro = Math.min(1, t / (TL.bar * 0.5));
+        const intro = bedLevel(TL, t);
         let v = 0;
         chord.pad.forEach((hz, k) => {
             ph[k] += (TAU * hz * (1 + 0.002 * Math.sin(TAU * 0.25 * t + k * 1.7))) / RATE;
@@ -184,6 +220,12 @@ export function renderAudio(TL, wavPath) {
         const t0 = (s.bar - 1) * TL.bar;
         [440, 554.37, 659.25].forEach((hz, k) => bell(mix, t0 + k * eighth, hz, 0.06));
         if (s.id === 'cta') bell(mix, t0 + 3 * eighth, 880, 0.07);
+    }
+    // A build and a hit on the key idea, and a hit under the end card.
+    for (const s of TL.scenes) {
+        const t0 = (s.bar - 1) * TL.bar;
+        if (s.riser) riser(mix, t0, TL.bar / 2, 0.12);
+        if (s.riser || s.impact) impact(mix, t0, 0.32);
     }
     // A tick where a setting changes: the moments the viewer should notice.
     TL.scenes.forEach((s, k) => {
@@ -255,7 +297,8 @@ function loudnessMatch(TL, bus, idx) {
         cnt[idx[i]]++;
     }
     const ms = sum.map((v, j) => v / Math.max(1, cnt[j]));
-    const ref = TL.scenes.map((s, j) => (!s.comp && j > 0 ? j : -1)).filter((j) => j >= 0);
+    // Reference: the plain loop, not the scene with the fader move.
+    const ref = TL.scenes.map((s, j) => (!s.comp && s.view !== 'knob' ? j : -1)).filter((j) => j >= 0);
     const refMs = ref.reduce((a, j) => a + ms[j], 0) / ref.length;
     return TL.scenes.map((s, j) => (s.comp ? 10 * Math.log10(refMs / ms[j]) : 0));
 }

@@ -12,7 +12,7 @@ import { once } from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
-import { FONTS_CSS, LOGO, ROOT, T } from '../shared/tokens.mjs';
+import { FONTS_CSS, REPO, ROOT, T } from '../shared/tokens.mjs';
 import { master, renderAudio } from './audio.mjs';
 import { TIMELINE } from './timeline.mjs';
 
@@ -86,10 +86,11 @@ log(`Captions: ${items.length} cues, longest line ${Math.max(...items.flatMap((i
 // ── Picture ──
 const modelSrc = fs.readFileSync(path.join(HERE, 'model.mjs'), 'utf8').replace(/^export /gm, '');
 const filmSrc = fs.readFileSync(path.join(HERE, 'film.js'), 'utf8');
-const logoUrl = `data:image/png;base64,${fs.readFileSync(LOGO).toString('base64')}`;
+// The artist picture with the Virzy Guns lettering, as on the site's home page.
+const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const page = (film) => `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
 html,body{margin:0;background:${T.bg}}canvas{display:block}</style></head><body><canvas id="film"></canvas>
-<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.T=${JSON.stringify(T)};window.FILM=${JSON.stringify(film)};window.LOGO_URL=${JSON.stringify(logoUrl)};</script>
+<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.T=${JSON.stringify(T)};window.FILM=${JSON.stringify(film)};window.DP_URL=${JSON.stringify(dpUrl)};</script>
 <script>${modelSrc}</script><script>${filmSrc}</script></body></html>`;
 fs.writeFileSync(path.join(OUT, 'preview.html'), page({ aspect: '16x9', reduced: false }));
 
