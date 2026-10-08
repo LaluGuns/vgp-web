@@ -1177,6 +1177,8 @@ export default function BeatsClient({ locale = 'en-US' }: BeatsClientProps) {
                     locale={locale}
                     initialMode={guideMode}
                     onApplyPreset={applyFinderPreset}
+                    licenses={localizedLicenses}
+                    licensingHref={getLocalePath('/studio/beats/licensing')}
                 />
                 <BeatStarsCheckoutModal
                     open={checkoutOpen}

@@ -24,7 +24,7 @@ const copy = {
         eyebrow: 'Virzy Guns beat store guide',
         storeTab: 'How the store works',
         finderTab: 'Beat finder',
-        storeTitle: 'From first listen to licensed files.',
+        storeTitle: 'From first listen to a licensed release.',
         finderTitle: 'Start with the job your beat needs to do.',
         finderBody: 'Pick the closest direction. We will apply a practical vibe filter, take you to the catalog, and leave BPM, key and length open for fine-tuning.',
         close: 'Close guide',
@@ -33,21 +33,33 @@ const copy = {
         selected: 'Selected direction',
         steps: [
             {
-                eyebrow: '01 / Shape the search',
-                title: 'Filter around the vocal.',
-                body: 'Use genre, BPM, key, vibe and duration to find the pocket that fits your writing pace.',
+                eyebrow: 'Find',
+                title: 'Narrow it to your voice.',
+                body: 'Pick a genre, then use Filters for tempo, key, vibe and length. Search works on titles, moods and tags.',
             },
             {
-                eyebrow: '02 / Audition and compare',
-                title: 'Save only the beats that create ideas.',
-                body: 'Preview directly from every card, inspect official track data, and keep up to three finalists in a release kit.',
+                eyebrow: 'Listen',
+                title: 'Press play on any row.',
+                body: 'The player stays pinned to the bottom while you scroll, and skips to the next beat when one ends. Bookmark up to three beats in your release kit.',
             },
             {
-                eyebrow: '03 / License securely',
-                title: 'Checkout through the official BeatStars player.',
-                body: 'Choose the exact track, review its current license options, add it to cart and pay without leaving this page.',
+                eyebrow: 'Choose',
+                title: 'Pick the license your release needs.',
+                body: 'Each tier sets how many streams, sales and videos you can do.',
+            },
+            {
+                eyebrow: 'License',
+                title: 'Pay in the official BeatStars checkout.',
+                body: 'It opens right here on the page. BeatStars takes the payment and delivers your files and license.',
             },
         ],
+        licensesTitle: 'Licenses at a glance',
+        licensesNote: 'Full terms are on the licensing page and in the BeatStars checkout.',
+        dealTitle: 'Buy 2, get 1 free',
+        dealBody: 'Add qualifying beats with the same license. BeatStars applies the discount in its cart.',
+        exclusiveTitle: 'Need it exclusive?',
+        exclusiveBody: 'Ask about availability first. Exclusive terms are confirmed in writing before you pay.',
+        licensingLink: 'Read the licensing terms',
         presets: {
             aggressive: {
                 title: 'Dark & aggressive',
@@ -84,21 +96,33 @@ const copy = {
         selected: '選択中の方向性',
         steps: [
             {
-                eyebrow: '01 / 検索を整える',
-                title: 'ボーカルに合う条件で絞る。',
-                body: 'ジャンル、BPM、キー、バイブ、長さから、作詞テンポと声に合うポケットを探します。',
+                eyebrow: '探す',
+                title: '声に合う条件で絞る。',
+                body: 'ジャンルを選び、フィルターでテンポ、キー、バイブ、長さを調整します。検索はタイトル、ムード、タグに対応しています。',
             },
             {
-                eyebrow: '02 / 試聴して比較',
-                title: 'アイデアが生まれるビートだけを残す。',
-                body: '各カードで試聴し、公式データを確認。最大3曲をリリース候補として比較できます。',
+                eyebrow: '聴く',
+                title: '気になる曲の再生ボタンを押す。',
+                body: 'プレーヤーは画面下に固定され、スクロール中も再生が続きます。曲が終わると次のビートへ進みます。最大3曲をリリース候補に保存できます。',
             },
             {
-                eyebrow: '03 / 安全にライセンス取得',
-                title: 'BeatStars公式プレーヤーで決済。',
-                body: '正しい曲の最新ライセンスを確認し、ページを離れずカート追加と決済を行えます。',
+                eyebrow: '選ぶ',
+                title: 'リリースに合うライセンスを選ぶ。',
+                body: 'ストリーミング数、販売数、ミュージックビデオの本数はライセンスごとに決まっています。',
+            },
+            {
+                eyebrow: '購入',
+                title: 'BeatStars公式チェックアウトで支払う。',
+                body: 'このページ内で開きます。決済とファイル・ライセンスの受け渡しはBeatStarsが行います。',
             },
         ],
+        licensesTitle: 'ライセンス一覧',
+        licensesNote: '詳細な条件はライセンスページとBeatStarsのチェックアウトで確認できます。',
+        dealTitle: '2曲購入で1曲無料',
+        dealBody: '対象曲を同じライセンスで追加してください。割引はBeatStarsのカートで適用されます。',
+        exclusiveTitle: '独占ライセンスをご希望ですか？',
+        exclusiveBody: 'まず提供状況をお問い合わせください。条件は支払い前に書面で確定します。',
+        licensingLink: 'ライセンス条件を読む',
         presets: {
             aggressive: {
                 title: 'ダーク＆アグレッシブ',
@@ -135,21 +159,33 @@ const copy = {
         selected: 'Gewählte Richtung',
         steps: [
             {
-                eyebrow: '01 / Suche formen',
-                title: 'Rund um die Vocal filtern.',
-                body: 'Genre, BPM, Tonart, Vibe und Länge helfen, den passenden Pocket für dein Schreibtempo zu finden.',
+                eyebrow: 'Finden',
+                title: 'Auf deine Stimme eingrenzen.',
+                body: 'Wähle ein Genre und nutze die Filter für Tempo, Tonart, Vibe und Länge. Die Suche findet Titel, Stimmungen und Tags.',
             },
             {
-                eyebrow: '02 / Anhören und vergleichen',
-                title: 'Nur Beats speichern, die sofort Ideen auslösen.',
-                body: 'Direkt auf jeder Karte anhören, offizielle Trackdaten prüfen und bis zu drei Favoriten im Release-Kit vergleichen.',
+                eyebrow: 'Anhören',
+                title: 'Bei jedem Beat auf Play drücken.',
+                body: 'Der Player bleibt unten fixiert, während du scrollst, und springt am Ende zum nächsten Beat. Bis zu drei Beats kannst du im Release-Kit merken.',
             },
             {
-                eyebrow: '03 / Sicher lizenzieren',
-                title: 'Checkout im offiziellen BeatStars-Player.',
-                body: 'Den exakten Track öffnen, aktuelle Lizenzoptionen prüfen, in den Warenkorb legen und auf dieser Seite bezahlen.',
+                eyebrow: 'Wählen',
+                title: 'Die Lizenz für deinen Release wählen.',
+                body: 'Jede Stufe legt fest, wie viele Streams, Verkäufe und Videos erlaubt sind.',
+            },
+            {
+                eyebrow: 'Lizenzieren',
+                title: 'Im offiziellen BeatStars-Checkout bezahlen.',
+                body: 'Er öffnet sich direkt auf dieser Seite. BeatStars wickelt die Zahlung ab und liefert Dateien und Lizenz.',
             },
         ],
+        licensesTitle: 'Lizenzen im Überblick',
+        licensesNote: 'Die vollständigen Bedingungen stehen auf der Lizenzseite und im BeatStars-Checkout.',
+        dealTitle: '2 kaufen, 1 gratis',
+        dealBody: 'Lege qualifizierte Beats mit derselben Lizenz in den Warenkorb. BeatStars verrechnet den Rabatt dort.',
+        exclusiveTitle: 'Exklusiv gewünscht?',
+        exclusiveBody: 'Frag zuerst nach der Verfügbarkeit. Exklusive Bedingungen werden vor der Zahlung schriftlich bestätigt.',
+        licensingLink: 'Lizenzbedingungen lesen',
         presets: {
             aggressive: {
                 title: 'Dunkel & aggressiv',
@@ -175,7 +211,7 @@ const copy = {
     },
 } as const;
 
-const stepIcons = [ListFilter, AudioLines, ShoppingBag];
+const stepIcons = [ListFilter, AudioLines, Check, ShoppingBag];
 const presetIcons = {
     aggressive: Zap,
     melodic: Sparkles,
@@ -189,6 +225,9 @@ interface BeatStoreGuideProps {
     locale: BeatLocale;
     initialMode?: BeatGuideMode;
     onApplyPreset?: (preset: BeatFinderPreset) => void;
+    /** License tiers to summarise, already localised by the store. */
+    licenses?: Array<{ name: string; price: string; streams: string; features: readonly string[] }>;
+    licensingHref?: string;
 }
 
 export default function BeatStoreGuide({
@@ -197,6 +236,8 @@ export default function BeatStoreGuide({
     locale,
     initialMode = 'store',
     onApplyPreset,
+    licenses = [],
+    licensingHref = '/studio/beats/licensing',
 }: BeatStoreGuideProps) {
     const text = copy[locale];
     const [mode, setMode] = useState<BeatGuideMode>(initialMode);
@@ -261,9 +302,14 @@ export default function BeatStoreGuide({
 
     if (!open) return null;
 
+    const tabClass = (active: boolean) =>
+        `relative min-h-11 px-1 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+            active ? 'text-white after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-white' : 'text-white/55 hover:text-white'
+        }`;
+
     return createPortal(
         <div
-            className="fixed inset-0 z-[190] flex items-stretch justify-center bg-[#0a0e12] sm:items-center sm:p-4"
+            className="fixed inset-0 z-[190] flex items-stretch justify-center bg-black/75 backdrop-blur-sm sm:items-center sm:p-6"
             onMouseDown={(event) => {
                 if (event.target === event.currentTarget) closeGuide();
             }}
@@ -274,126 +320,146 @@ export default function BeatStoreGuide({
                 aria-modal="true"
                 aria-labelledby={titleId}
                 tabIndex={-1}
-                className="relative h-[100dvh] w-full max-w-4xl overflow-y-auto bg-[#0a0e12] px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-[max(1rem,env(safe-area-inset-top))] outline-none sm:h-auto sm:max-h-[92dvh] sm:rounded-3xl sm:border sm:border-sky-200/20 sm:p-7"
+                className="vgp-pop relative h-[100dvh] w-full max-w-5xl overflow-y-auto bg-[#0a0e12] px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-[max(1.25rem,env(safe-area-inset-top))] shadow-[0_30px_80px_rgba(0,0,0,0.6)] outline-none sm:h-auto sm:max-h-[90dvh] sm:rounded-[8px] sm:border sm:border-white/10 sm:p-9"
             >
-                        <button
-                            type="button"
-                            onClick={closeGuide}
-                            aria-label={text.close}
-                            className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-black/20 text-white/55 transition hover:border-white/25 hover:text-white"
-                        >
-                            <X className="h-4 w-4" aria-hidden="true" />
-                        </button>
+                <button
+                    type="button"
+                    onClick={closeGuide}
+                    aria-label={text.close}
+                    className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] inline-flex h-10 w-10 items-center justify-center rounded-full text-white/55 transition hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:right-6 sm:top-6"
+                >
+                    <X className="h-5 w-5" aria-hidden="true" />
+                </button>
 
-                        <div className="pr-12">
-                            <p className="text-xs font-semibold text-white/60">{text.eyebrow}</p>
-                            <h2 id={titleId} className="mt-2 max-w-3xl font-display text-2xl font-semibold leading-tight text-white sm:text-3xl">
-                                {mode === 'store' ? text.storeTitle : text.finderTitle}
-                            </h2>
+                <div className="pr-12">
+                    <p className="text-sm text-white/55">{text.eyebrow}</p>
+                    <h2 id={titleId} className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-4xl">
+                        {mode === 'store' ? text.storeTitle : text.finderTitle}
+                    </h2>
+                </div>
+
+                <div className="sticky top-0 z-10 -mx-5 mt-6 flex gap-7 border-b border-white/10 bg-[#0a0e12] px-5 sm:-mx-9 sm:px-9" role="tablist">
+                    <button type="button" role="tab" aria-selected={mode === 'store'} onClick={() => setMode('store')} className={tabClass(mode === 'store')}>
+                        {text.storeTab}
+                    </button>
+                    <button type="button" role="tab" aria-selected={mode === 'finder'} onClick={() => setMode('finder')} className={tabClass(mode === 'finder')}>
+                        {text.finderTab}
+                    </button>
+                </div>
+
+                {mode === 'store' ? (
+                    <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-12">
+                        <ol className="relative lg:col-span-7">
+                            <span className="absolute bottom-3 left-[13px] top-3 w-px bg-white/10" aria-hidden="true" />
+                            {text.steps.map((item, index) => {
+                                const Icon = stepIcons[index] ?? Check;
+                                return (
+                                    <li key={item.eyebrow} className="relative grid grid-cols-[1.75rem_1fr] gap-x-5 pb-8 last:pb-0">
+                                        <span className="relative z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-[#0a0e12] text-xs font-semibold tabular-nums text-white">
+                                            {index + 1}
+                                        </span>
+                                        <div>
+                                            <p className="inline-flex items-center gap-2 text-xs text-sky-300">
+                                                <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                                                {item.eyebrow}
+                                            </p>
+                                            <h3 className="mt-1.5 text-lg font-semibold leading-snug text-white">{item.title}</h3>
+                                            <p className="mt-1.5 max-w-xl text-sm leading-6 text-white/65">{item.body}</p>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ol>
+
+                        <div className="space-y-8 lg:col-span-5">
+                            {licenses.length ? (
+                                <div>
+                                    <h3 className="text-sm font-medium text-white/60">{text.licensesTitle}</h3>
+                                    <dl className="mt-3 divide-y divide-white/[0.08] border-y border-white/10">
+                                        {licenses.map((license) => (
+                                            <div key={license.name} className="flex items-baseline justify-between gap-4 py-3">
+                                                <dt className="min-w-0">
+                                                    <span className="block text-sm font-semibold text-white">{license.name}</span>
+                                                    <span className="block truncate text-xs text-white/50">{[license.features[0], license.streams].filter(Boolean).join(' · ')}</span>
+                                                </dt>
+                                                <dd className="font-display text-lg font-semibold tabular-nums text-white">{license.price}</dd>
+                                            </div>
+                                        ))}
+                                    </dl>
+                                    <p className="mt-3 text-xs leading-5 text-white/50">
+                                        {text.licensesNote}{' '}
+                                        <a href={licensingHref} className="vgp-link text-white/80">{text.licensingLink}</a>
+                                    </p>
+                                </div>
+                            ) : null}
+
+                            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+                                <div>
+                                    <h3 className="text-sm font-semibold text-white">{text.dealTitle}</h3>
+                                    <p className="mt-1 text-sm leading-6 text-white/60">{text.dealBody}</p>
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-semibold text-white">{text.exclusiveTitle}</h3>
+                                    <p className="mt-1 text-sm leading-6 text-white/60">{text.exclusiveBody}</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="sticky top-0 z-10 mt-5 grid grid-cols-2 rounded-md border border-white/10 bg-[#0a0e12] p-1 sm:mt-6" role="tablist">
+                        <div className="flex flex-wrap items-center gap-x-7 gap-y-4 border-t border-white/10 pt-6 lg:col-span-12">
                             <button
                                 type="button"
-                                role="tab"
-                                aria-selected={mode === 'store'}
-                                onClick={() => setMode('store')}
-                                className={`min-h-10 rounded-lg px-3 text-xs font-semibold transition ${
-                                    mode === 'store' ? 'bg-white text-slate-950' : 'text-white/55 hover:text-white'
-                                }`}
+                                onClick={browseCatalog}
+                                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-[background-color,transform] duration-200 hover:bg-white/85 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e12]"
                             >
-                                {text.storeTab}
+                                {text.start}
                             </button>
-                            <button
-                                type="button"
-                                role="tab"
-                                aria-selected={mode === 'finder'}
-                                onClick={() => setMode('finder')}
-                                className={`min-h-10 rounded-lg px-3 text-xs font-semibold transition ${
-                                    mode === 'finder' ? 'bg-white text-slate-950' : 'text-white/55 hover:text-white'
-                                }`}
-                            >
+                            <button type="button" onClick={() => setMode('finder')} className="vgp-link text-sm font-medium text-white">
                                 {text.finderTab}
                             </button>
                         </div>
-
-                        {mode === 'store' ? (
-                            <div className="mt-6">
-                                <div className="grid gap-2.5 md:grid-cols-3 md:gap-3">
-                                    {text.steps.map((item, index) => {
-                                        const Icon = stepIcons[index];
-                                        return (
-                                            <article key={item.eyebrow} className="grid grid-cols-[2.5rem_1fr] gap-x-3 rounded-md border border-white/10 bg-black/20 p-4 md:block md:rounded-lg md:p-5">
-                                                <span className="row-span-3 inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/15 bg-white/[0.04] text-white md:h-11 md:w-11">
-                                                    <Icon className="h-4 w-4 md:h-5 md:w-5" aria-hidden="true" />
-                                                </span>
-                                                <p className="text-[9px] font-semibold text-white/60 md:mt-5 md:text-xs md:">{item.eyebrow}</p>
-                                                <h3 className="mt-1 text-sm font-semibold leading-snug text-white md:mt-2 md:text-base">{item.title}</h3>
-                                                <p className="mt-1.5 text-xs leading-5 text-white/58 md:mt-3">{item.body}</p>
-                                            </article>
-                                        );
-                                    })}
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={browseCatalog}
-                                    className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-white px-5 text-xs font-semibold text-slate-950 transition hover:bg-white/85 sm:w-auto"
-                                >
-                                    {text.start}
-                                    <Check className="h-4 w-4" aria-hidden="true" />
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="mt-6">
-                                <p className="max-w-3xl text-sm leading-6 text-white/62">{text.finderBody}</p>
-                                <div className="mt-4 grid gap-2.5 sm:mt-5 sm:grid-cols-2 sm:gap-3">
-                                    {(Object.keys(text.presets) as BeatFinderPreset[]).map((presetId) => {
-                                        const item = text.presets[presetId];
-                                        const Icon = presetIcons[presetId];
-                                        const isSelected = preset === presetId;
-                                        return (
-                                            <button
-                                                key={presetId}
-                                                type="button"
-                                                aria-pressed={isSelected}
-                                                onClick={() => setPreset(presetId)}
-                                                className={`group rounded-md border p-3 text-left transition sm:rounded-lg sm:p-4 ${
-                                                    isSelected
-                                                        ? 'border-white/15 bg-white/[0.04] '
-                                                        : 'border-white/10 bg-black/20 hover:border-white/25 hover:bg-white/[0.04]'
-                                                }`}
-                                            >
-                                                <div className="flex items-start gap-3">
-                                                    <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border ${
-                                                        isSelected ? 'border-white/15 bg-white text-slate-950' : 'border-white/10 bg-white/[0.04] text-white/65'
-                                                    }`}>
-                                                        <Icon className="h-4 w-4" aria-hidden="true" />
-                                                    </span>
-                                                    <span>
-                                                        <span className="block text-sm font-semibold text-white">{item.title}</span>
-                                                        <span className="mt-1 block text-xs leading-5 text-white/55">{item.description}</span>
-                                                        <span className="mt-3 block text-xs font-semibold text-white/60">{item.cue}</span>
-                                                    </span>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                <div className="mt-5 flex flex-col gap-3 rounded-lg border border-white/10 bg-white/[0.025] p-4 sm:flex-row sm:items-center sm:justify-between">
-                                    <p className="text-xs text-white/55">
-                                        {text.selected}: <strong className="text-white">{text.presets[preset].title}</strong>
-                                    </p>
+                    </div>
+                ) : (
+                    <div className="mt-8">
+                        <p className="max-w-2xl text-base leading-7 text-white/65">{text.finderBody}</p>
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2" role="radiogroup" aria-label={text.finderTab}>
+                            {(Object.keys(text.presets) as BeatFinderPreset[]).map((presetId) => {
+                                const item = text.presets[presetId];
+                                const Icon = presetIcons[presetId];
+                                const isSelected = preset === presetId;
+                                return (
                                     <button
+                                        key={presetId}
                                         type="button"
-                                        onClick={applyPreset}
-                                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-white px-5 text-xs font-semibold text-slate-950 transition hover:bg-white/85"
+                                        role="radio"
+                                        aria-checked={isSelected}
+                                        onClick={() => setPreset(presetId)}
+                                        className={`flex items-start gap-4 rounded-[6px] border p-4 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:p-5 ${
+                                            isSelected ? 'border-white/60 bg-white/[0.05]' : 'border-white/10 hover:border-white/30'
+                                        }`}
                                     >
-                                        {text.apply}
-                                        <ListFilter className="h-4 w-4" aria-hidden="true" />
+                                        <Icon className={`mt-0.5 h-5 w-5 shrink-0 ${isSelected ? 'text-sky-300' : 'text-white/50'}`} aria-hidden="true" />
+                                        <span>
+                                            <span className="block text-base font-semibold text-white">{item.title}</span>
+                                            <span className="mt-1 block text-sm leading-6 text-white/60">{item.description}</span>
+                                        </span>
                                     </button>
-                                </div>
-                            </div>
-                        )}
+                                );
+                            })}
+                        </div>
+                        <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-4 border-t border-white/10 pt-6">
+                            <button
+                                type="button"
+                                onClick={applyPreset}
+                                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-[background-color,transform] duration-200 hover:bg-white/85 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e12]"
+                            >
+                                {text.apply}
+                            </button>
+                            <p className="text-sm text-white/55">
+                                {text.selected}: <span className="text-white">{text.presets[preset].title}</span>
+                            </p>
+                        </div>
+                    </div>
+                )}
             </section>
         </div>,
         document.body,
