@@ -914,14 +914,14 @@ function draw(t, { words = true } = {}) {
 }
 
 /** Cover for the profile grid: the hook's verdict with one line over it. */
-function cover() {
+function drawCover() {
     draw(9.3, { words: false });
     label(g, 'Flat or punchy?', 540, 1420, { size: 92, weight: 800, color: P.ink, align: 'center' });
     label(g, 'One knob decides.', 540, 1520, { size: 64, weight: 700, color: P.cyan, align: 'center' });
 }
 
 window.seek = (t) => draw(t);
-window.cover = () => cover();
+window.cover = () => drawCover();
 window.filmReady = (async () => {
     await Promise.all(['600 54px', '800 74px', '700 34px', '500 30px'].map((f) => document.fonts.load(`${f} ${DISPLAY}`)));
     await Promise.all(['500 30px', '600 28px', '700 32px'].map((f) => document.fonts.load(`${f} ${BODY}`)));
