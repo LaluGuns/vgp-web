@@ -81,7 +81,7 @@ export const TIMELINE = {
     bass: [
         { id: 'hookClean', from: 0, to: 7, blend: 0, drums: true },
         { id: 'hookSat', from: 7, to: 11, blend: 0.5, drums: true },
-        { id: 'boost', from: 21, to: 24, blend: 0, boostDb: { cue: ['phone', 'turning'], dt: 0, to: 0.9, db: 6 }, duck: true },
+        { id: 'boost', from: 21, to: 23.5, blend: 0, boostDb: { cue: ['phone', 'turning'], dt: 0, to: 1.0, db: 10 }, duck: true },
         { id: 'grow', from: 31, to: 53, blend: { cue: ['grow', 'saturate'], dt: -0.05, to: 2.1, v: 0.5 }, duck: true },
         { id: 'againClean', from: 61, to: 65, blend: 0, drums: true },
         { id: 'againSat', from: 65, to: 69, blend: 0.5, drums: true },

@@ -68,3 +68,10 @@ One line per call, newest last.
 - The scope shows what the phone plays (the phone-filtered bass) over 80 ms, triggered on whole periods of the note so it stands still; brackets sit at the period measured by autocorrelation, and the amber dashed sine is the missing fundamental at the sub's own phase.
 - Air scene: equal loudness drawn as equal squeeze of the air (particle displacement and wavelength both scale with 1/f), with the cone travel arrows at 1x, 4x and 16x; motion slowed down 100 times.
 - Mix: drums dip 8 dB under the voice and the voice limiter's ceiling sits 9.5 dB over its loudness, so speech never reaches the master clipper's knee (now at 0.9 of the ceiling).
+- Film 4, after an independent review of the stills:
+  - The ladder's FFT window is gated to the sounding note (its 85 ms window never reaches the note before or after), which removes false 2x and 3x rungs that note edges smeared into the clean sub.
+  - The big ladder shows its level scale (-40 dB to 0 dB, "level →"); every ladder runs -40 to +10 dB, and the sub knob turns up 10 dB (the outline grows, the phone's window stays dark).
+  - Rung names sit at each rung's end on a dark chip and fade with their rung; the stack is titled "A plucked bass note", so its source is named.
+  - "So why can you hear it?" arrives on the payoff's downbeat, not before; the amber curve in the scope has its own legend ("the note you hear") on the frame it appears; in the ghost ladder the heard note replaces the sub's outline.
+  - The top-right planet moved off the titles; panels end at x 950; the phone scene got a title; sound rings never cross the phone; the screen's wave saturates with the bass; the cone's surround stretches with it; dim subtitle words raised for contrast.
+  - Kept: the end card is film 3's, unchanged, and its demo is the lesson's only one ("Hear saturation add size, not volume"); the rule card keeps the lesson's own words ("clean, mono", "parallel saturation, high-pass 120 Hz").

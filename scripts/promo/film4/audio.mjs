@@ -428,23 +428,31 @@ export function renderAudio(wavPath) {
     // sounds, in dB re the clean sub's fundamental at full level.
     const REF = undb(bassTrim);
     const sources = [...notes.map((q) => ({ t: q.t, end: q.t + q.dur + 0.04, f0: q.f0 })), ...plucks.map((p) => ({ t: p.t, end: p.t + p.dur, f0: p.f0 }))].sort((a, b) => a.t - b.t);
-    const f0At = (t) => {
-        let f = 0;
-        for (const s of sources) if (t >= s.t - 0.01 && t < s.end + 0.06) f = s.f0;
+    const srcAt = (t) => {
+        let f = null;
+        for (const s of sources) if (t >= s.t - 0.01 && t < s.end + 0.06) f = s;
         return f;
     };
     const frames = { rate: FR, f0: [], full: [], phone: [] };
     const nf = Math.round(TIMELINE.duration * FR);
     for (let k = 0; k < nf; k++) {
         const t = k / FR;
-        const f0 = f0At(t);
+        const src = srcAt(t);
+        const f0 = src?.f0 ?? 0;
         frames.f0.push(f0 ? Math.round(f0 * 100) / 100 : 0);
         if (!f0) {
             frames.full.push(null);
             frames.phone.push(null);
             continue;
         }
-        const c = at(t);
+        // The window is gated to the sounding note: its centre is kept far
+        // enough inside the note (15 ms past the onset, to its end) that the
+        // 85 ms window never reaches into the next or previous note, whose
+        // edges would smear into false harmonics.
+        const half = 0.0425;
+        const lo = src.t + 0.015 + half;
+        const hi = Math.max(lo, src.end - 0.04 - half);
+        const c = at(Math.min(hi, Math.max(lo, t)));
         const r = (a) => a.map((v) => Math.round(db(v / REF) * 10) / 10);
         frames.full.push(r(harmonics(bassTrack, c, f0, NH)));
         frames.phone.push(r(harmonics(bassPh, c, f0, NH)));

@@ -167,7 +167,7 @@ function ground(g, t, glow = 0) {
     g.fillRect(0, 0, W, H);
     g.save();
     g.globalAlpha = 0.85;
-    planet(g, W * 0.98 + 10 * Math.sin(t * 0.06), H * 0.1, 330, 2.3);
+    planet(g, W * 1.1 + 10 * Math.sin(t * 0.06), -H * 0.035, 330, 2.3);
     planet(g, -W * 0.1, H * 1.04 + 8 * Math.sin(t * 0.05), 440, -0.9);
     g.restore();
     const c = g.createRadialGradient(W / 2, H * 0.4, 0, W / 2, H * 0.4, H * 0.55);
@@ -408,8 +408,9 @@ function phoneBody(g, x, y, w, h, { grille = 0, screen = null } = {}) {
     g.fill();
     // Speaker grille: a row of slots at the bottom edge.
     const gy = y + h - 52;
-    for (let i = 0; i < 9; i++) {
-        const gx = x + w / 2 + (i - 4) * 22;
+    const slots = Math.min(9, Math.floor((w - 60) / 22) | 1);
+    for (let i = 0; i < slots; i++) {
+        const gx = x + w / 2 + (i - (slots - 1) / 2) * 22;
         rr(g, gx - 6, gy - 13, 12, 26, 6);
         g.fillStyle = grille > 0 ? `rgba(125,211,252,${0.25 + 0.75 * grille})` : '#1e2740';
         g.fill();
@@ -456,6 +457,18 @@ function coneSide(g, cx, cy, size, x, { body = P.devHi, cone = P.steel, stops = 
             g.fill();
         }
     }
+    // Surround (top and bottom) and spider stretch to wherever the cone is.
+    g.strokeStyle = P.steelDk;
+    g.lineWidth = Math.max(6, h * 0.04);
+    g.lineCap = 'round';
+    g.beginPath();
+    for (const sy of [-1, 1]) {
+        g.moveTo(cx + 3, cy + sy * h * 0.51);
+        g.lineTo(cx + 3 + x, cy + sy * h * 0.49);
+        g.moveTo(cx - d * 0.55, cy + sy * h * 0.12);
+        g.lineTo(cx - d * 0.55 + x, cy + sy * h * 0.09);
+    }
+    g.stroke();
     // The moving cone: diaphragm, dust cap and voice coil.
     g.save();
     g.translate(x, 0);
