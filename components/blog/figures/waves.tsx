@@ -1,5 +1,25 @@
 import type { EqBand, SignalFigure, SignalRow, SignalTrace, SineSpec, SpectrumCurve, SpectrumFigure, TransferFigure } from '@/lib/blog/types';
-import { C, DASH, Label, Svg, clamp, legend, linePath, textWidth } from './svg';
+import {
+    Axis,
+    C,
+    ClosingRule,
+    Corners,
+    Label,
+    Point,
+    RefLine,
+    Rule,
+    Svg,
+    Title,
+    accentFill,
+    clamp,
+    dialectOf,
+    draw,
+    legend,
+    linePath,
+    textWidth,
+    type Dialect,
+    type DialectProp,
+} from './svg';
 
 const TAU = Math.PI * 2;
 
@@ -107,22 +127,80 @@ function traceFn(trace: SignalTrace): (t: number) => number {
     };
 }
 
-function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number; w: number; h: number }) {
+/**
+ * The plot field behind a waveform. Technical: an oscilloscope screen with
+ * ten divisions, a subdivided centre line and registration corners. Music:
+ * five rulings at full, half and zero level, a staff. Mind: a dotted centre
+ * line and nothing else. Business: the row's rules.
+ */
+function SignalField({ d, x, y, w, h, mid, vy, unipolar }: { d: Dialect; x: number; y: number; w: number; h: number; mid: number; vy: (v: number) => number; unipolar?: boolean }) {
+    const levels = unipolar ? [0.25, 0.5, 0.75, 1] : [-1, -0.5, 0.5, 1];
+    switch (d.name) {
+        case 'technical':
+            return (
+                <g>
+                    <rect x={x} y={y} width={w} height={h} fill={C.lane} />
+                    {Array.from({ length: 9 }, (_, i) => (
+                        <Rule key={`v${i}`} d={d} x1={x + ((i + 1) * w) / 10} x2={x + ((i + 1) * w) / 10} y1={y} y2={y + h} />
+                    ))}
+                    {(unipolar ? [0.5] : [-0.5, 0.5]).map((v) => (
+                        <Rule key={`h${v}`} d={d} x1={x} x2={x + w} y1={vy(v)} y2={vy(v)} />
+                    ))}
+                    <Rule d={d} x1={x} x2={x + w} y1={mid} y2={mid} major />
+                    {/* The centre line is subdivided, five ticks to a division, as on a scope. */}
+                    <path
+                        d={Array.from({ length: 49 }, (_, i) => (i + 1) % 5 === 0 ? '' : `M${(x + ((i + 1) * w) / 50).toFixed(1)},${mid - 2}v4`).join('')}
+                        stroke="rgba(255,255,255,0.16)"
+                        strokeWidth={1}
+                    />
+                    <Corners d={d} x={x} y={y} w={w} h={h} />
+                </g>
+            );
+        case 'music':
+            return (
+                <g>
+                    {levels.map((v) => (
+                        <Rule key={v} d={d} x1={x} x2={x + w} y1={vy(v)} y2={vy(v)} />
+                    ))}
+                    <Rule d={d} x1={x} x2={x + w} y1={mid} y2={mid} major />
+                </g>
+            );
+        case 'mind':
+            return <Rule d={d} x1={x} x2={x + w} y1={mid} y2={mid} major />;
+        case 'business':
+            return (
+                <g>
+                    <line x1={x} x2={x + w} y1={y} y2={y} stroke={C.grid} />
+                    <line x1={x} x2={x + w} y1={y + h} y2={y + h} stroke={C.grid} />
+                    <Rule d={d} x1={x} x2={x + w} y1={mid} y2={mid} />
+                </g>
+            );
+    }
+}
+
+function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; y: number; w: number; h: number; delay: number; d: Dialect }) {
     const pad = 6;
     const mid = row.unipolar ? y + h - 4 : y + h / 2;
     const half = row.unipolar ? h - 10 : h / 2 - 5;
     const tx = (t: number) => x + pad + t * (w - pad * 2);
     const vy = (v: number) => mid - clamp(v, -1.08, 1.08) * half;
     const steps = Math.round(w * 1.5);
+    // Waveforms are dense, so their lines are a touch lighter than a curve's.
+    const traceW = d.line * 0.9;
 
     const paths = row.traces.map((trace) => {
         const fn = traceFn(trace);
         if (trace.kind === 'hits' && trace.outline) {
             const top: [number, number][] = [];
             for (let i = 0; i <= steps; i++) top.push([tx(i / steps), vy(fn(i / steps))]);
-            if (row.unipolar) return { trace, d: linePath(top), area: `${linePath(top)}L${tx(1)},${mid}L${tx(0)},${mid}Z` };
-            const bottom = top.map(([px, py]) => [px, mid + (mid - py)] as [number, number]).reverse();
-            return { trace, d: `${linePath(top)}M${linePath(bottom).slice(1)}`, area: `${linePath(top)}L${linePath(bottom).slice(1)}Z` };
+            if (row.unipolar) return { trace, lines: [linePath(top)], area: `${linePath(top)}L${tx(1)},${mid}L${tx(0)},${mid}Z` };
+            // Top and mirrored bottom edge as two paths, so both draw left to right together.
+            const bottom = top.map(([px, py]) => [px, mid + (mid - py)] as [number, number]);
+            return {
+                trace,
+                lines: [linePath(top), linePath(bottom)],
+                area: `${linePath(top)}L${linePath([...bottom].reverse()).slice(1)}Z`,
+            };
         }
         const pts: [number, number][] = [];
         if (trace.kind === 'envelope') {
@@ -130,7 +208,7 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
         } else {
             for (let i = 0; i <= steps; i++) pts.push([tx(i / steps), vy(fn(i / steps))]);
         }
-        return { trace, d: linePath(pts), area: undefined as string | undefined };
+        return { trace, lines: [linePath(pts)], area: undefined as string | undefined };
     });
 
     const samples = row.samples;
@@ -158,37 +236,47 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
 
     return (
         <g>
-            <rect x={x} y={y} width={w} height={h} rx={3} fill={C.lane} />
-            <line x1={x} x2={x + w} y1={mid} y2={mid} stroke={C.grid} />
+            <SignalField d={d} x={x} y={y} w={w} h={h} mid={mid} vy={vy} unipolar={row.unipolar} />
             {row.lines?.map((line) => (
-                <line key={line.label} x1={x} x2={x + w} y1={vy(line.y)} y2={vy(line.y)} stroke={C.soft} strokeDasharray={DASH} />
+                <RefLine key={line.label} d={d} x1={x} x2={x + w} y1={vy(line.y)} y2={vy(line.y)} />
             ))}
             {row.marks?.map((mark) => {
                 const mx = tx(mark.t);
                 const anchor = mx < x + 30 ? 'start' : mx > x + w - 30 ? 'end' : 'middle';
                 return (
                     <g key={mark.label}>
-                        <line x1={mx} x2={mx} y1={y} y2={y + h + 4} stroke={C.soft} strokeDasharray={DASH} />
+                        <RefLine d={d} x1={mx} x2={mx} y1={y} y2={y + h + 4} />
                         <Label x={mx} y={y + h + 18} anchor={anchor} fill={C.text}>
                             {mark.label}
                         </Label>
                     </g>
                 );
             })}
-            {paths.map(({ trace, d, area }, i) => (
-                <g key={i}>
-                    {area ? <path d={area} fill={trace.muted ? C.lane : C.accentFill} /> : null}
-                    <path
-                        d={d}
-                        fill="none"
-                        stroke={trace.muted ? C.faint : C.accent}
-                        strokeWidth={trace.muted ? 1.4 : 1.8}
-                        strokeDasharray={trace.dashed ? DASH : undefined}
-                        strokeLinejoin="round"
-                    />
-                </g>
-            ))}
-            {aliasPath ? <path d={aliasPath} fill="none" stroke={C.accent} strokeWidth={1.8} strokeDasharray={DASH} /> : null}
+            {paths.map(({ trace, lines, area }, i) => {
+                // Grey traces are context and stay put. A solid accent trace draws along its length; a dashed one fades.
+                const motion = trace.muted ? {} : draw(trace.dashed ? 'fade' : 'line', delay + i * 80);
+                return (
+                    <g key={i}>
+                        {area ? <path d={area} {...(trace.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', delay + 200) })} /> : null}
+                        {lines.map((path, k) => (
+                            <path
+                                key={k}
+                                d={path}
+                                fill="none"
+                                stroke={trace.muted ? C.faint : C.accent}
+                                strokeWidth={trace.muted ? 1.4 : traceW}
+                                strokeDasharray={trace.dashed ? d.refDash : undefined}
+                                strokeLinecap={d.cap}
+                                strokeLinejoin="round"
+                                {...motion}
+                            />
+                        ))}
+                    </g>
+                );
+            })}
+            {aliasPath ? (
+                <path d={aliasPath} fill="none" stroke={C.accent} strokeWidth={traceW} strokeDasharray={d.refDash} strokeLinecap={d.cap} {...draw('fade', delay + 300)} />
+            ) : null}
             {samples?.hold ? (
                 <path
                     d={sampled
@@ -200,12 +288,13 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
                     fill="none"
                     stroke={C.strong}
                     strokeWidth={1.6}
+                    strokeLinejoin={d.join}
                 />
             ) : null}
             {sampled.map(({ t, v }, k) => (
                 <g key={k}>
                     <line x1={tx(t)} x2={tx(t)} y1={mid} y2={vy(v)} stroke={C.faint} />
-                    <circle cx={tx(t)} cy={vy(v)} r={3} fill={C.ink} />
+                    <Point d={d} x={tx(t)} y={vy(v)} r={3} tone="ink" />
                 </g>
             ))}
             {/* Line labels sit on top of the traces, on a backing plate, so a waveform never hides them. */}
@@ -215,7 +304,7 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
                 const ty = above ? ly - 5 : ly + 14;
                 return (
                     <g key={`label-${line.label}`}>
-                        <rect x={x + w - textWidth(line.label) - 12} y={ty - 12} width={textWidth(line.label) + 10} height={15} rx={2} fill="#0a0e12" opacity={0.9} />
+                        <rect x={x + w - textWidth(line.label) - 12} y={ty - 12} width={textWidth(line.label) + 10} height={15} rx={2} fill={C.surface} opacity={0.9} />
                         <Label x={x + w - 4} y={ty} anchor="end" fill={C.text}>
                             {line.label}
                         </Label>
@@ -226,7 +315,8 @@ function SignalPlot({ row, x, y, w, h }: { row: SignalRow; x: number; y: number;
     );
 }
 
-export function Signal({ spec, w }: { spec: SignalFigure; w: number }) {
+export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; dialect?: DialectProp }) {
+    const d = dialectOf(dialect);
     const narrow = w < 480;
     const plotH = narrow ? 92 : 112;
     const labelH = 22;
@@ -239,15 +329,16 @@ export function Signal({ spec, w }: { spec: SignalFigure; w: number }) {
             .map((t) => ({ label: t.label!, dashed: t.dashed, muted: t.muted }));
         const top = y;
         const hasLabel = Boolean(row.label);
-        const leg = legend(named, 0, top + (hasLabel ? labelH + 14 : 14), w);
+        const leg = legend(named, 0, top + (hasLabel ? labelH + 14 : 14), w, d);
         const plotY = top + (hasLabel ? labelH : 0) + leg.height + (leg.height ? 8 : 0);
         rows.push({ row, top, plotY, leg });
         y = plotY + (row.unipolar ? plotH * 0.85 : plotH) + (row.marks?.length ? 24 : 0) + gap;
     }
-    const h = y - gap;
+    const ledger = d.name === 'business';
+    const h = y - gap + (ledger ? 10 : 0);
 
     return (
-        <Svg w={w} h={h} label={spec.alt}>
+        <Svg w={w} h={h} label={spec.alt} d={d}>
             {rows.map(({ row, top, plotY, leg }, i) => (
                 <g key={i}>
                     {row.label ? (
@@ -256,9 +347,10 @@ export function Signal({ spec, w }: { spec: SignalFigure; w: number }) {
                         </Label>
                     ) : null}
                     {leg.node}
-                    <SignalPlot row={row} x={0} y={plotY} w={w} h={row.unipolar ? plotH * 0.85 : plotH} />
+                    <SignalPlot row={row} x={0} y={plotY} w={w} h={row.unipolar ? plotH * 0.85 : plotH} delay={120 + i * 100} d={d} />
                 </g>
             ))}
+            <ClosingRule d={d} x1={0} x2={w} y={h - 4} />
         </Svg>
     );
 }
@@ -321,11 +413,24 @@ let clipCounter = 0;
 
 const fmtHz = (f: number) => (f >= 1000 ? `${Number((f / 1000).toFixed(1))}k` : `${f}`);
 
-export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
+/** Every 1-to-9 step of each decade inside the range: the lines of a log graticule. */
+function logLines(lo: number, hi: number): number[] {
+    const out: number[] = [];
+    for (let dec = 10 ** Math.floor(Math.log10(lo)); dec <= hi; dec *= 10) {
+        for (let k = 1; k <= 9; k++) {
+            const f = k * dec;
+            if (f >= lo && f <= hi) out.push(f);
+        }
+    }
+    return out;
+}
+
+export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number; dialect?: DialectProp }) {
+    const d = dialectOf(dialect);
     const narrow = w < 480;
     const [lo, hi] = spec.range ?? [20, 20000];
     const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed, muted: c.muted }));
-    const leg = legend(named, 0, 14, w);
+    const leg = legend(named, 0, 14, w, d);
     const gainMode = spec.mode === 'gain';
     const left = gainMode ? 40 : 4;
     const right = w - 4;
@@ -333,7 +438,8 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
     const top = leg.height + (spec.bands?.length || spec.marks?.length ? 30 : gainMode ? 24 : 12);
     const plotH = narrow ? 150 : 180;
     const bottom = top + plotH;
-    const h = bottom + 26;
+    const ledger = d.name === 'business';
+    const h = bottom + 26 + (ledger ? 8 : 0);
     const fx = (f: number) => left + ((Math.log10(f) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo))) * (right - left);
     const [dbLo, dbHi] = spec.dbRange ?? [-(spec.db ?? 12), spec.db ?? 12];
     const span = dbHi - dbLo;
@@ -353,7 +459,7 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
     const clipId = `spectrum-clip-${++clipCounter}`;
     const curveNode = (curve: SpectrumCurve, i: number) => {
         const stroke = curve.muted ? C.faint : C.accent;
-        const dash = curve.dashed ? DASH : undefined;
+        const dash = curve.dashed ? d.refDash : undefined;
         if (curve.kind === 'harmonics') {
             const roll = curve.rolloff ?? 1;
             const level = curve.level ?? 0.95;
@@ -364,7 +470,11 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
                         const f = curve.f0 * k;
                         if (f > hi) return null;
                         const v = level / k ** roll;
-                        return <line key={n} x1={fx(f)} x2={fx(f)} y1={bottom} y2={ly(v)} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} />;
+                        // Accent harmonics rise from the floor, lowest first.
+                        const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'rise', 120 + (300 * (fx(f) - left)) / (right - left));
+                        return (
+                            <line key={n} x1={fx(f)} x2={fx(f)} y1={bottom} y2={ly(v)} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} strokeLinecap={d.cap} {...motion} />
+                        );
                     })}
                 </g>
             );
@@ -389,18 +499,43 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
         const combSteps = curve.kind === 'comb' ? Math.max(N, Math.ceil(Math.min(20000, hi * (curve.delayMs / 1000) * 24))) : 0;
         const sampleAt = combSteps ? Array.from({ length: combSteps + 1 }, (_, i) => lo + ((hi - lo) * i) / combSteps) : freqs;
         const pts = sampleAt.map((f) => [fx(f), gainMode ? gy(value(f)) : ly(value(f))] as [number, number]);
-        const d = linePath(pts);
+        const path = linePath(pts);
         const fill = curve.kind === 'hump' && !curve.dashed;
+        // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed one fades.
+        const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'line', 120 + i * 100);
         return (
             <g key={i}>
-                {fill ? <path d={`${d}L${right},${bottom}L${left},${bottom}Z`} fill={curve.muted ? C.lane : C.accentFill} /> : null}
-                <path d={d} fill="none" stroke={stroke} strokeWidth={curve.muted ? 1.4 : 2} strokeDasharray={dash} />
+                {fill ? (
+                    <path d={`${path}L${right},${bottom}L${left},${bottom}Z`} {...(curve.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', 200 + i * 100) })} />
+                ) : null}
+                <path
+                    d={path}
+                    fill="none"
+                    stroke={stroke}
+                    strokeWidth={curve.muted ? 1.4 : d.line}
+                    strokeDasharray={dash}
+                    strokeLinecap={d.cap}
+                    strokeLinejoin="round"
+                    {...motion}
+                />
             </g>
         );
     };
 
+    // The frequency grid. Technical draws every 1-to-9 step of each decade, as an analyser does, with the labelled
+    // frequencies stronger; music and mind rule only the labelled ones; the ledger keeps its rules horizontal and
+    // marks the frequencies with short ticks on the floor, like a ruler.
+    const freqGrid =
+        d.name === 'technical'
+            ? logLines(lo, hi).map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={ticks.includes(f)} />)
+            : ledger
+              ? ticks.map((f) => <line key={f} x1={fx(f)} x2={fx(f)} y1={bottom} y2={bottom + 5} stroke={C.soft} />)
+              : ticks.map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={d.name === 'music'} opacity={d.name === 'music' ? 0.1 : undefined} />);
+    // Level mode has no value scale, so music and the ledger add plain quarter rulings for the eye.
+    const levelRules = !gainMode && (d.name === 'music' || ledger) ? [1, 2, 3, 4].map((k) => bottom - (k * (plotH - 8)) / 4) : [];
+
     return (
-        <Svg w={w} h={h} label={spec.alt}>
+        <Svg w={w} h={h} label={spec.alt} d={d}>
             {leg.node}
             {spec.bands?.map((band) => {
                 const a = fx(band.from);
@@ -408,26 +543,31 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
                 const mid = (a + b) / 2;
                 return (
                     <g key={band.label}>
-                        <rect x={a} y={top} width={b - a} height={plotH} fill={C.fill} />
+                        <rect x={a} y={top} width={b - a} height={plotH} rx={d.name === 'mind' ? 6 : 0} fill={C.fill} />
                         <Label x={clamp(mid, textWidth(band.label) / 2, w - textWidth(band.label) / 2)} y={top - 10} anchor="middle" fill={C.ink}>
                             {band.label}
                         </Label>
                     </g>
                 );
             })}
+            {freqGrid}
+            {levelRules.map((y) => (
+                <Rule key={y} d={d} x1={left} x2={right} y1={y} y2={y} />
+            ))}
             {ticks.map((f) => (
-                <g key={f}>
-                    <line x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} stroke={C.grid} />
-                    <Label x={fx(f)} y={bottom + 18} anchor={f === lo ? 'start' : f === hi ? 'end' : 'middle'}>
-                        {f === ticks[ticks.length - 1] ? `${fmtHz(f)} Hz` : fmtHz(f)}
-                    </Label>
-                </g>
+                <Label key={f} x={fx(f)} y={bottom + 18} anchor={f === lo ? 'start' : f === hi ? 'end' : 'middle'}>
+                    {f === ticks[ticks.length - 1] ? `${fmtHz(f)} Hz` : fmtHz(f)}
+                </Label>
             ))}
             {gainMode ? (
                 <g>
                     {dbTicks.map((db) => (
                         <g key={db}>
-                            <line x1={left} x2={right} y1={gy(db)} y2={gy(db)} stroke={db === 0 ? C.faint : C.grid} />
+                            {db === 0 ? (
+                                <Axis x1={left} x2={right} y1={gy(db)} y2={gy(db)} />
+                            ) : (
+                                <Rule d={d} x1={left} x2={right} y1={gy(db)} y2={gy(db)} major={d.name !== 'mind'} opacity={d.name === 'technical' ? 0.1 : undefined} />
+                            )}
                             <Label x={left - 6} y={gy(db) + 4} anchor="end">
                                 {db > 0 ? `+${db}` : db}
                             </Label>
@@ -438,14 +578,15 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
                     </Label>
                 </g>
             ) : (
-                <line x1={left} x2={right} y1={bottom} y2={bottom} stroke={C.faint} />
+                <Axis x1={left} x2={right} y1={bottom} y2={bottom} />
             )}
+            <Corners d={d} x={left} y={top} w={right - left} h={plotH} />
             {spec.marks?.map((mark, mi) => {
                 const x = fx(mark.f);
                 const flip = x > w - textWidth(mark.label) - 10;
                 return (
                     <g key={`${mi}-${mark.label}`}>
-                        <line x1={x} x2={x} y1={top} y2={bottom} stroke={C.soft} strokeDasharray={DASH} />
+                        <RefLine d={d} x1={x} x2={x} y1={top} y2={bottom} />
                         <Label x={flip ? x - 5 : x + 5} y={top - 10} anchor={flip ? 'end' : 'start'} fill={C.ink}>
                             {mark.label}
                         </Label>
@@ -458,13 +599,15 @@ export function Spectrum({ spec, w }: { spec: SpectrumFigure; w: number }) {
                 </clipPath>
             </defs>
             <g clipPath={`url(#${clipId})`}>{spec.curves.map(curveNode)}</g>
+            <ClosingRule d={d} x1={0} x2={w} y={h - 4} />
         </Svg>
     );
 }
 
 // ── Transfer: input level in, output level out ──
 
-export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
+export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number; dialect?: DialectProp }) {
+    const d = dialectOf(dialect);
     const narrow = w < 480;
     const size = narrow ? w - 56 : 300;
     const ox = 52;
@@ -474,11 +617,14 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
     const px = (v: number) => ox + ((v - lo) / (hi - lo)) * size;
     const py = (v: number) => oy + size - ((clamp(v, lo, hi) - lo) / (hi - lo)) * size;
     const ticks = db ? [-48, -36, -24, -12, 0] : [-1, -0.5, 0, 0.5, 1];
+    // Technical subdivides each 12 dB (or 0.5) division in four, like a measuring grid.
+    const minor = d.name === 'technical' ? Array.from({ length: 15 }, (_, i) => lo + ((i + 1) * (hi - lo)) / 16).filter((v) => !ticks.some((t) => Math.abs(t - v) < 1e-9)) : [];
+    const ledger = d.name === 'business';
     const legendX = narrow ? 0 : ox + size + 28;
     const legendY = narrow ? oy + size + 58 : oy + 16;
     const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed || c.kind === 'linear', muted: c.kind === 'linear' }));
-    const leg = legend(named, legendX, legendY, narrow ? w : w - legendX, !narrow);
-    const h = narrow ? legendY + leg.height : oy + size + 40;
+    const leg = legend(named, legendX, legendY, narrow ? w : w - legendX, d, !narrow);
+    const h = (narrow ? legendY + leg.height : oy + size + 40) + (ledger ? 8 : 0);
 
     const out = (c: TransferFigure['curves'][number], x: number) => {
         switch (c.kind) {
@@ -500,12 +646,23 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
 
     const N = 160;
     return (
-        <Svg w={w} h={h} label={spec.alt}>
-            <rect x={ox} y={oy} width={size} height={size} rx={3} fill={C.lane} />
+        <Svg w={w} h={h} label={spec.alt} d={d}>
+            {d.name === 'technical' ? <rect x={ox} y={oy} width={size} height={size} fill={C.lane} /> : null}
+            {minor.map((t) => (
+                <g key={`m${t}`}>
+                    <Rule d={d} x1={px(t)} x2={px(t)} y1={oy} y2={oy + size} />
+                    <Rule d={d} x1={ox} x2={ox + size} y1={py(t)} y2={py(t)} />
+                </g>
+            ))}
             {ticks.map((t) => (
                 <g key={t}>
-                    <line x1={px(t)} x2={px(t)} y1={oy} y2={oy + size} stroke={C.grid} />
-                    <line x1={ox} x2={ox + size} y1={py(t)} y2={py(t)} stroke={C.grid} />
+                    {ledger ? null : <Rule d={d} x1={px(t)} x2={px(t)} y1={oy} y2={oy + size} major={d.name !== 'mind'} opacity={d.name === 'technical' ? 0.1 : undefined} />}
+                    {ledger && t === lo ? (
+                        <Axis x1={ox} x2={ox + size} y1={py(t)} y2={py(t)} />
+                    ) : (
+                        <Rule d={d} x1={ox} x2={ox + size} y1={py(t)} y2={py(t)} major={d.name !== 'mind'} opacity={d.name === 'technical' ? 0.1 : ledger ? 0.1 : undefined} />
+                    )}
+                    {ledger ? <line x1={px(t)} x2={px(t)} y1={oy + size} y2={oy + size + 5} stroke={C.soft} /> : null}
                     <Label x={px(t)} y={oy + size + 16} anchor="middle">
                         {t}
                     </Label>
@@ -514,12 +671,13 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
                     </Label>
                 </g>
             ))}
-            <Label x={ox + size / 2} y={oy + size + 34} anchor="middle" fill={C.text}>
+            <Corners d={d} x={ox} y={oy} w={size} h={size} />
+            <Title d={d} x={ox + size / 2} y={oy + size + 34} anchor="middle">
                 {db ? 'Input level (dB)' : 'Input'}
-            </Label>
-            <Label x={10} y={oy + size / 2} anchor="middle" fill={C.text} transform={`rotate(-90 10 ${oy + size / 2})`}>
+            </Title>
+            <Title d={d} x={10} y={oy + size / 2} anchor="middle" transform={`rotate(-90 10 ${oy + size / 2})`}>
                 {db ? 'Output level (dB)' : 'Output'}
-            </Label>
+            </Title>
             {spec.curves.map((c, i) => {
                 const pts: [number, number][] = [];
                 for (let k = 0; k <= N; k++) {
@@ -527,14 +685,19 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
                     pts.push([px(x), py(out(c, x))]);
                 }
                 const linear = c.kind === 'linear';
+                // The unity line is a reference and stays put; accent curves draw from quiet to loud.
+                const motion = linear ? {} : draw(c.dashed ? 'fade' : 'line', 120 + i * 100);
                 return (
                     <path
                         key={i}
                         d={linePath(pts)}
                         fill="none"
                         stroke={linear ? C.faint : C.accent}
-                        strokeWidth={linear ? 1.4 : 2}
-                        strokeDasharray={linear || c.dashed ? DASH : undefined}
+                        strokeWidth={linear ? 1.4 : d.line}
+                        strokeDasharray={linear || c.dashed ? d.refDash : undefined}
+                        strokeLinecap={d.cap}
+                        strokeLinejoin={d.join}
+                        {...motion}
                     />
                 );
             })}
@@ -543,13 +706,14 @@ export function Transfer({ spec, w }: { spec: TransferFigure; w: number }) {
                 .slice(0, 1)
                 .map((c) => (
                     <g key="threshold">
-                        <line x1={px(c.threshold!)} x2={px(c.threshold!)} y1={oy} y2={oy + size} stroke={C.soft} strokeDasharray={DASH} />
+                        <RefLine d={d} x1={px(c.threshold!)} x2={px(c.threshold!)} y1={oy} y2={oy + size} />
                         <Label x={px(c.threshold!) - 5} y={oy + 14} anchor="end" fill={C.text}>
                             Threshold
                         </Label>
                     </g>
                 ))}
             {leg.node}
+            <ClosingRule d={d} x1={0} x2={w} y={h - 4} />
         </Svg>
     );
 }
