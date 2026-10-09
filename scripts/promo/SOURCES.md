@@ -77,3 +77,9 @@ which carries its own references, or from a calculation listed here.
 - The limiter faders draw the limiter's own gain from the render, slowed down.
 - Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master WAV
   and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
+- Narration: the founder's own voice, recorded on a phone (first take plus
+  pickups of five lines, joined; `assets/vo/`, not in git). Pauses inside
+  lines shortened by punctuation, loudness matched between the two sessions,
+  then time-stretched 10% with ffmpeg `atempo` (pitch kept) to 181 words a
+  minute; cued with `film5/cue_vo.py`. No synthetic voice is used, so the
+  platforms' AI-generated label does not apply.

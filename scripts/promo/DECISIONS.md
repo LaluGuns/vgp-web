@@ -83,3 +83,18 @@ One line per call, newest last.
   - Narration time-stretched by 6% (ffmpeg atempo, pitch kept) to make room for the guess beat and a replay that rings out: 165 to about 175 words a minute, inside the 165-185 target. Film length 58.5 s.
   - End card keeps film 3's elements (picture, name, tagline, phone with the Listen demo and the Play tap, address, lesson title); the phone is a little smaller to fit "Which one did you pick? Comment 1 or 2.", the phone drifts and the address pulses on the beat so the card is never still; the last 0.6 s fades the card out before frame one fades in.
   - Declined: moving the brand row below y 205 (the brief's top safe zone is 150 px); "link in bio" instead of the address (the brief fixes the address pill); shortening the CTA line (the founder's narration is final for now).
+- Round 1 panel (weighted 7.25, no factual error), fixes:
+  - Loop: the last 0.55 s plays version 1's build from just before the point where frame one starts, faded in, and the picture becomes frame one; an auto-replay continues the same build. The end-of-film swell is gone.
+  - Hook: 1.5 beats of build and 2.5 beats of drop (three kicks) per version, 3.75 s for both; until a version plays, both lanes show the same neutral silhouette (not data), so the hole appears only as it is heard; a 3-2-1 countdown on the beat; "Pick one" holds until the answer, no flicker; "same samples · matched loudness" under the lanes.
+  - Sound proof in the middle: after the fog line, each version's downbeat alone (0.35 s before to 0.23 s after), version 1 then version 2, with the matching row lit and a live playhead.
+  - Measurements land on their words and hold: "click 10.6 dB clearer in 2 · measured" from "lands" to the end of the ear scene; the limiter's slow motion reaches the kick on "down" and holds "−6.4 dB" and "−2.6 dB" to the scene's end; "the arrival is the payoff" on "arrival".
+  - Ear scene: labels moved to the gutters, none on top of bars; a cloud over each ear as thick as the fog (model) at the playhead; "1 of 3 · ears", "2 of 3 · the limiter", "3 of 3 · your brain" so the three reasons read as three.
+  - The robot is only the limiter; the brain scene has a listener's head with its prediction drawn as dots to the arc.
+  - Captions: pages never end on a weak word (a, of, for, the ...) and prefer to start on right, after, before ...; cues never overlap in captions.srt.
+  - Titles reveal in under 0.2 s.
+  - Demos 3 dB over the narration's loudness at the drop bar.
+  - Narration time-stretched by 10% in all (181 words a minute) to fit the guess beat and the stings; the film stays 58.5 s.
+  - 16th labelled "fog mostly gone" (the model's weight at 117 ms is 0.17, the lesson says a 32nd shortens masking and an 8th clears it).
+  - End card: the phone scrolls the lesson page from its top to the Listen demo, then Play is tapped on "play"; the closing prompt is an open question, "Which gap do you use? Comment below."
+  - VERIFY now states version 1's build level: its last bar is as loud as the drop bar before the limiter; the riser peaks in the last 8th.
+  - Declined: -14 LUFS delivery (the brief sets -16); cutting the CTA or rewording narration (the founder's take is final for now); "link in bio" (the brief fixes the address pill); restyling cyan (the brief makes cyan mean data, which includes the measured readouts and the Listen cue).
