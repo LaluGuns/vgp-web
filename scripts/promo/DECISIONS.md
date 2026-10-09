@@ -98,3 +98,16 @@ One line per call, newest last.
   - End card: the phone scrolls the lesson page from its top to the Listen demo, then Play is tapped on "play"; the closing prompt is an open question, "Which gap do you use? Comment below."
   - VERIFY now states version 1's build level: its last bar is as loud as the drop bar before the limiter; the riser peaks in the last 8th.
   - Declined: -14 LUFS delivery (the brief sets -16); cutting the CTA or rewording narration (the founder's take is final for now); "link in bio" (the brief fixes the address pill); restyling cyan (the brief makes cyan mean data, which includes the measured readouts and the Listen cue).
+- Round 2 panel (weighted 7.60, no factual error), fixes:
+  - Version 1's riser 2 dB lower (RISER_DB 0): its last build bar is now 0.8 dB under the drop bar before the limiter. The downbeat crash is tucked to -20 dB in both versions (a mix choice; it sits under the kick in both). Claims: limiter 5.5 against 2.1 dB (3.4 dB), click 13.9 dB clearer, phone check 100% and more, first kick 3.0 dB more prominent. A riser at -1 dB would leave claim 1 at 3.06 dB, too close to the threshold to trust.
+  - Replay tags point at the first kick with leaders and appear as it plays; "2 hits harder." appears with the voice; the countdown sits in the empty caption band.
+  - Ear scene: glosses for "riser" and "click" under the headline, once each; the buried click pulses while the measured result is up; the measured pill leaves before the model scene; in fresh the masking plot dims under the response bars.
+  - How: a playhead runs through the silence after the cut and the kick lands at the end of each gap, dimmed by the fog left (model): dim at the 32nd, fainter at the 16th, clear at the 8th.
+  - Brain: the arc leaves from above the build's end and the "next beat" bubble sits on its apex.
+  - End card: after the tap the phone eases in on the demo player; the lesson title wraps to two lines inside x 90-900.
+  - Loop: the last frames are drawn exactly as frame 0 (headline scale, highlight, brand), fading in over the end card's fade-out; drawAB and the badge now multiply alpha instead of overwriting it.
+  - Hook placeholder is a flat band, plainly not a waveform.
+  - Picture word cues and sound-effect cues fall back to a fraction of the line when a take words it differently, so a re-recorded script moves the picture without code changes.
+  - Demos 4 dB over the narration's loudness (5-6 dB pushes demo peaks into the master's clip ceiling).
+  - Narration changes the panel asks for are batched for the founder's re-take (see the reply to the founder); the current take stays until then.
+  - Declined: one bar of build per version (the brief caps the hook at 4.5 s for both), -13/-14 LUFS delivery (the brief sets -16), re-colouring cyan (the brief makes cyan mean data).
