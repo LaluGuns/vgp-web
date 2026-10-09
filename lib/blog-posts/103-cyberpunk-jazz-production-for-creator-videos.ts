@@ -2,106 +2,144 @@ import { BlogArticle } from '../blog-data';
 
 export const post103: BlogArticle = {
     slug: 'cyberpunk-jazz-production-for-creator-videos',
-    title: 'How I produce Cyberpunk Jazz for creator videos',
-    excerpt: 'Cyberpunk Jazz needs contrast: human phrasing against engineered space. The production challenge is keeping that tension useful beneath an edit.',
+    title: 'Cyberpunk Jazz: a human lead on a machine grid',
+    excerpt: 'The genre lives on one contrast: synth layers locked to the grid and a jazz lead that leans against it. How to place each layer, and how far to push the lean.',
     category: 'genre-guides',
     publishedAt: '2026-07-19',
-    readingTime: 4,
-    featured: true,
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
+    readingTime: 5,
     summary: [
-        'Cyberpunk Jazz works on contrast: human phrasing inside an engineered, synthetic room.',
-        'Use intentional microtiming, such as a slightly late snare, and keep the pulse dependable for editors.',
-        'Keep articulate midrange parts intermittent so a voiceover stays clear.',
+        'Keep the synth layers on the grid. They are the reference that makes the human parts audible as human.',
+        'Swing the ride and the lead together on the off-beats, and land the lead a few milliseconds behind the beats.',
+        'Keep the offsets small and consistent: listeners rate exaggerated timing lower, and random humanizing on every part sounds sloppy.',
     ],
     figures: {
+        layers: {
+            type: 'rhythm',
+            steps: 8,
+            perBeat: 2,
+            caption:
+                'One bar of a slow cue in 8ths. The synth hats stay on the grid. The ride swings its off-beats. The lead swings with the ride and lands a little behind each beat, the pattern Friberg and Sundström (2002) measured in jazz soloists at slow tempos.',
+            alt: 'Three lanes of eight steps. Synth hats on every 8th, exactly on the grid. Ride on beats 1, 2, 3 and 4 and on the off-beats after 2 and 4, with the off-beats drawn late. The lead on the beats drawn slightly late and on two off-beats drawn as late as the ride.',
+            rows: [
+                { label: 'Synth hats', note: 'on the grid', hits: [0, 1, 2, 3, 4, 5, 6, 7] },
+                { label: 'Ride', note: 'swung', swing: 0.62, hits: [0, 2, 3, 4, 6, 7] },
+                {
+                    label: 'Lead',
+                    note: 'behind the beat',
+                    swing: 0.62,
+                    focus: true,
+                    hits: [{ step: 0, offset: 0.1 }, 1, { step: 2, offset: 0.1 }, { step: 4, offset: 0.1 }, 5, { step: 6, offset: 0.1 }],
+                },
+            ],
+        },
         voice: {
             type: 'spectrum',
             mode: 'level',
-            caption: 'A voice carries most of its energy below 1 kHz, but much of its clarity comes from consonants in roughly the 1 to 4 kHz range. A bright keys part or sax-like lead that sits there covers the part of the voice that makes words easy to follow.',
-            alt: 'Frequency plot with a broad voiceover hump peaking around 500 Hz and reaching into the highs, a keys or lead hump centred near 1.5 kHz, a low pad hump, and a shaded band from 1 to 4 kHz where the voice and the lead overlap.',
+            caption:
+                'Where a voiceover and a jazz lead overlap. The voice carries most of its energy below 1 kHz, but much of what makes words easy to follow sits between 1 and 4 kHz. A sax-like lead or bright keys centred there cover that band, so they are the parts to drop under talking.',
+            alt: 'Frequency plot with a broad voiceover hump peaking around 500 Hz and reaching into the highs, a lead hump centred near 1.5 kHz drawn dashed, a low pad hump in grey, and a shaded band from 1 to 4 kHz.',
             curves: [
                 { kind: 'hump', center: 500, width: 1.5, level: 0.85, label: 'Voiceover' },
-                { kind: 'hump', center: 1500, width: 0.9, level: 0.7, label: 'Keys or lead', dashed: true },
-                { kind: 'hump', center: 180, width: 1.2, level: 0.5, label: 'Pad and texture', muted: true },
+                { kind: 'hump', center: 1500, width: 0.9, level: 0.7, label: 'Lead or keys', dashed: true },
+                { kind: 'hump', center: 180, width: 1.2, level: 0.5, label: 'Pad', muted: true },
             ],
             bands: [{ from: 1000, to: 4000, label: 'Speech clarity' }],
         },
     },
     quiz: [
         {
-            q: 'Why start a Cyberpunk Jazz cue with the environment?',
+            q: 'At 80 BPM an 8th note lasts 375 ms. You move the lead 15 ms behind each beat. What fraction of an 8th is that?',
+            options: ['About 4 percent', 'About 15 percent', 'About 25 percent', 'About 40 percent'],
+            answer: 0,
+            why: '15 / 375 = 0.04. That is enough to feel laid back and small enough that nobody hears the lead as late.',
+        },
+        {
+            q: 'Why keep the synth hats and arpeggio fully quantized?',
             options: [
-                'It proves to the viewer that the track is futuristic',
-                'It can stand in for the drum part under dialogue',
-                'It gives the harmonic instruments a place to exist',
-                'It covers any timing drift in the rhythm section',
+                'Quantized synths use less CPU in the session',
+                'Streaming services prefer quantized music',
+                'They give the ear a grid to hear the lean against',
+                'Swing only works on acoustic drum samples',
             ],
             answer: 2,
-            why: 'A dark pad or a filtered texture sets the room first. The jazz language then sits inside that space instead of floating on top of it.',
+            why: 'A lean is heard against something steady. If every layer drifts, there is no reference left and the cue just sounds loose.',
         },
         {
-            q: 'What keeps the rhythm human without losing the pulse an editor needs?',
+            q: 'You set a humanize function to 40 percent on every track. What usually happens?',
             options: [
-                'Nudging a few hits late, like the snare',
-                'Hard-quantizing the drums to the grid',
-                'Letting the timing wander at random',
-                'Pulling the drums out under the dialogue',
+                'The cue grooves harder because nothing is on the grid',
+                'The cue sounds sloppy because the offsets are random',
+                'Nothing audible changes at that small an amount',
+                'The tempo of the whole cue slowly drifts upward',
             ],
-            answer: 0,
-            why: 'A few deliberate offsets stop the surface sounding automated while the grid stays dependable for cutting.',
-        },
-        {
-            q: 'Why keep busy midrange leads intermittent under dialogue?',
-            options: [
-                'They make the low end muddy under the voice',
-                'They use up the headroom the voice needs',
-                'They are out of tune with the speaking voice',
-                'They mask the range that makes speech clear',
-            ],
-            answer: 3,
-            why: 'Consonants carry a lot of intelligibility in the upper midrange. Dense parts there compete with the voice, so they belong in short scenes without speech.',
+            answer: 1,
+            why: 'Random offsets on every part do not share a direction, so they read as mistakes. In listening tests, exaggerated timing deviations lowered groove ratings.',
         },
     ],
-    content: `## The point is friction
+    content: `## Hook: the cue that sounds like a preset demo
 
-Cyberpunk Jazz works when it feels both lived-in and artificial. A brushed pattern, a crooked chord voicing, or a human-sounding lead gives the listener something tactile. A precise low end, synthetic texture, and controlled space put that human element inside a futuristic city.
+You build a Cyberpunk Jazz cue for a night-city edit: a filtered synth arpeggio, a dark pad, a ride cymbal and a sax-like lead playing a minor phrase. Every note is quantized. It sounds clean and expensive, and it also sounds like a demo of the synth you used. Nothing in it feels played.
 
-That contrast is useful for creators making night footage, tech explainers, design films, game-adjacent edits, and quiet streams. It can establish a setting in seconds. It can also become too cinematic too quickly, which is why the production has to remain disciplined.
+So you select everything and hit humanize at 40 percent. Now it sounds as if the band had a long night. The arpeggio wobbles, the ride drifts against the hats, and the lead seems to be lost rather than relaxed.
 
-## Build the room before filling it
+## Why it matters: the genre is a contrast
 
-I usually start with the environment: a dark pad, a filtered mechanical texture, or a narrow field recording treatment. It is not there to prove that the music is futuristic. It is there to give the harmonic instruments a place to exist.
+Cyberpunk Jazz works when something human sits inside something built. The machine side is the synth arpeggio, the hats, the bass and the pad. The human side is the jazz part: a swung ride, comping keys, a lead that phrases like a horn player.
 
-Only after that do I add the jazz language. Minor extensions, suspended tones, and small chromatic movements can create tension without requiring a soloist to dominate the mix. For background music, I keep the harmonic movement readable and avoid stacking so many altered colors that the edit starts to feel anxious.
+The contrast only works if each side stays itself. Quantize everything and there is no human side. Loosen everything and there is no machine side, so the ear has nothing steady to hear the lean against. The job is to decide which layers hold the grid and which layers lean, and by how much.
 
-## Human timing, controlled system
+## Science model: how jazz players lean against the beat
 
-The rhythm section carries most of the genre's credibility. If every part is perfectly quantized, the cue becomes generic electronic noir. If every part drifts, it loses the dependable pulse an editor needs.
+Friberg and Sundström (2002) measured timing in jazz recordings. Drummers' ride patterns swung hard at slow tempos and moved toward even 8ths as the tempo rose. At slow tempos, soloists landed behind the drummer on the beats and in step with the drummer on the off-beats. The lean has a direction, and on the off-beats it lines up with the rhythm section.
 
-My compromise is intentional microtiming: a slightly late snare, a bass phrase with a little breath before the bar line, or a percussion accent that is not copied for every loop. The grid stays useful; the surface stops feeling automated.
+::figure layers
 
-## Leave an exit for the voiceover
+Small offsets go a long way. At 80 BPM an 8th note lasts 60,000 / 80 / 2 = 375 ms, so a lead 15 ms behind the beat is 4 percent of an 8th late: felt as relaxed, not heard as late.
 
-Creator music has to coexist with speech. I keep the most articulate midrange elements intermittent, especially anything around the presence area of a speaking voice. A sax-like synth, Rhodes-style keys, or noisy lead can be beautiful in an instrumental mix and still make subtitles feel harder to follow.
+Bigger is not better. Senn et al. (2016) scaled the timing deviations of real bass and drum performances up and down. Fully quantized and original versions were rated about equally for groove, and exaggerated deviations lowered the ratings. Davies et al. (2013) found the same drop as deviations grew in short rhythms. Microtiming gives a part a direction to lean in. It does not add groove by itself.
 
-The arrangement solves this more elegantly than a permanent EQ carve. Dense material appears in short scenes. When a section needs to support dialogue, the cue can return to pulse, atmosphere, and a simple harmonic guide.
+The [lesson on swing](/blog/swing-explained-without-mystical-language) covers how a swing setting moves the off-beats. Try it on a beat here, and listen for the point where swing stops leaning and starts limping.
+
+::demo swing
+
+## DAW experiment: one grid, two kinds of time
+
+Use a slow tempo, around 80 BPM, and a short minor phrase you can loop.
+
+1. Program the synth hats or arpeggio in straight 8ths and quantize them fully. This is your grid.
+2. Program a ride on beats 1, 2, 3 and 4 with off-beats after 2 and 4, and add swing to the 8ths until the off-beats lean late. Many DAWs call this 55 to 62 percent; set it by ear.
+3. Play or program the lead phrase and quantize it with the same swing as the ride.
+4. Select only the lead notes that fall on a beat and move them 10 to 20 ms late. Leave the off-beat notes with the ride.
+5. Loop and compare three versions: lead straight, lead swung with the ride, and lead swung and late on the beats.
+6. Push the late notes to 40 ms. Listen for the moment the lead stops sounding relaxed and starts sounding behind.
+7. Raise the tempo to 120 BPM and keep the same swing. If the short off-beat notes start to sound clipped, reduce the swing, the way the drummers in the recordings did.
+
+## Common mistake: humanizing every track
+
+A humanize function adds random offsets, and random offsets point in every direction at once. Apply it to every track and the synth layers lose the precision that made them sound synthetic, while the jazz parts get scattered offsets with no direction.
+
+The second mistake is making the lean too big because it is fun to hear. At 120 BPM an 8th lasts 250 ms, so a lead 50 ms behind is a fifth of an 8th late, and it sounds like a mistake. Keep the offsets small and consistent, and keep them on the parts that would be played by a person.
+
+The third is forgetting the job of the cue. Under a creator's voiceover, the lead and the bright keys sit right in the band that carries the words.
 
 ::figure voice
 
-## A mood is not a usage right
+Write the lead for the sections without talking, and let the grid layers and the ride carry the cue while someone speaks. The [lesson on City Pop under a voiceover](/blog/producing-city-pop-background-music-for-creators) shows how to dip that band when a part has to stay.
 
-The Cyberpunk Jazz catalog in Flow Creator Music is for creators who need a licensed background-music workflow rather than a moodboard. The relevant permission is royalty-free with an active Flow Pro creator license and is governed by the published terms.
+## Producer takeaway: decide who holds the grid
 
-Use the [Cyberpunk Jazz creator catalog](https://flow.virzyguns.com/en/creator-music/cyberpunk-jazz) to preview eligible music, access its license path, and download the correct assets. Chill Music Division is a division of Virzy Guns Production; its [Spotify profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is available for discovery, but streaming availability does not establish a license for published creator work.
+Before you touch timing, sort the layers into two groups. Synths, hats and bass hold the grid, quantized. Ride, keys and lead lean, by swing and a small, consistent lag on the beats. Check the lean against the grid, not in solo, and pull it back the moment it sounds like a mistake.
 
-## Producer takeaway
+## References
 
-The genre works when it balances personality and utility. Keep the room vivid, let the rhythm feel human, and make every dense moment optional enough that a creator can still tell their own story over it.
+- Davies, M., Madison, G., Silva, P., & Gouyon, F. (2013). The effect of microtiming deviations on the perception of groove in short rhythms. *Music Perception*, 30(5), 497-510.
+- Friberg, A., & Sundström, A. (2002). Swing ratios and ensemble timing in jazz performance: Evidence for a common rhythmic pattern. *Music Perception*, 19(3), 333-349.
+- Senn, O., Kilchenmann, L., von Georgi, R., & Bullerjahn, C. (2016). The effect of expert performance microtiming on listeners' experience of groove in swing or funk music. *Frontiers in Psychology*, 7, 1487.
 `,
     seo: {
-        title: 'Cyberpunk Jazz Background Music Production for Creators | Virzy Guns Production',
-        description: 'A producer-led look at Cyberpunk Jazz background music for videos and streams: human timing, engineered space, voiceover room, and creator licensing.',
-        keywords: ['cyberpunk jazz background music', 'cyberpunk music for videos', 'cyberpunk music for streams', 'cyberpunk jazz production', 'music for tech videos', 'Chill Music Division'],
+        title: 'Cyberpunk Jazz: a human lead on a machine grid | VGP Studio',
+        description: 'Cyberpunk Jazz lives on one contrast: synths on the grid, a jazz lead that leans. Where to swing, how far to lag, and why random humanize fails.',
+        keywords: ['cyberpunk jazz production', 'jazz swing timing', 'microtiming', 'behind the beat', 'humanize MIDI', 'cyberpunk music for videos'],
     },
 };

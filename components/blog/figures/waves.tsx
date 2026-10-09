@@ -10,15 +10,18 @@ import {
     Rule,
     Svg,
     Title,
-    accentFill,
+    areaFill,
     clamp,
     dialectOf,
     draw,
     legend,
     linePath,
+    placeInRows,
     textWidth,
+    type Anchor,
     type Dialect,
     type DialectProp,
+    type Placed,
 } from './svg';
 
 const TAU = Math.PI * 2;
@@ -178,8 +181,22 @@ function SignalField({ d, x, y, w, h, mid, vy, unipolar }: { d: Dialect; x: numb
     }
 }
 
+/** Where the labels of a row's marks go: under the plot, centred on their line, in a second row when two would touch. */
+function signalMarkLabels(row: SignalRow, w: number): Placed[] {
+    const pad = 6;
+    return placeInRows(
+        (row.marks ?? []).map((mark) => ({ x: pad + mark.t * (w - pad * 2), width: textWidth(mark.label), prefer: ['middle', 'start', 'end'] as Anchor[] })),
+        0,
+        w,
+        { offset: 4 },
+    );
+}
+
+const MARK_ROW = 15;
+
 function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; y: number; w: number; h: number; delay: number; d: Dialect }) {
     const pad = 6;
+    const markLabels = signalMarkLabels(row, w);
     const mid = row.unipolar ? y + h - 4 : y + h / 2;
     const half = row.unipolar ? h - 10 : h / 2 - 5;
     const tx = (t: number) => x + pad + t * (w - pad * 2);
@@ -240,13 +257,13 @@ function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; 
             {row.lines?.map((line) => (
                 <RefLine key={line.label} d={d} x1={x} x2={x + w} y1={vy(line.y)} y2={vy(line.y)} />
             ))}
-            {row.marks?.map((mark) => {
+            {row.marks?.map((mark, mi) => {
                 const mx = tx(mark.t);
-                const anchor = mx < x + 30 ? 'start' : mx > x + w - 30 ? 'end' : 'middle';
+                const place = markLabels[mi];
                 return (
                     <g key={mark.label}>
-                        <RefLine d={d} x1={mx} x2={mx} y1={y} y2={y + h + 4} />
-                        <Label x={mx} y={y + h + 18} anchor={anchor} fill={C.text}>
+                        <RefLine d={d} x1={mx} x2={mx} y1={y} y2={y + h + 4 + place.row * MARK_ROW} />
+                        <Label x={x + place.tx} y={y + h + 18 + place.row * MARK_ROW} anchor={place.anchor} fill={C.text}>
                             {mark.label}
                         </Label>
                     </g>
@@ -258,7 +275,8 @@ function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; 
                 return (
                     <g key={i}>
                         {area && (trace.muted || d.fillUnder) ? (
-                            <path d={area} {...(trace.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', delay + 200) })} />
+                            // The area fades in once its outline has drawn, never ahead of it.
+                            <path d={area} {...(trace.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', delay + i * 80 + 760) })} />
                         ) : null}
                         {lines.map((path, k) => (
                             <path
@@ -334,7 +352,8 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
         const leg = legend(named, 0, top + (hasLabel ? labelH + 14 : 14), w, d);
         const plotY = top + (hasLabel ? labelH : 0) + leg.height + (leg.height ? 8 : 0);
         rows.push({ row, top, plotY, leg });
-        y = plotY + (row.unipolar ? plotH * 0.85 : plotH) + (row.marks?.length ? 24 : 0) + gap;
+        const markRows = row.marks?.length ? Math.max(...signalMarkLabels(row, w).map((p) => p.row)) + 1 : 0;
+        y = plotY + (row.unipolar ? plotH * 0.85 : plotH) + (markRows ? 24 + (markRows - 1) * MARK_ROW : 0) + gap;
     }
     const ledger = d.name === 'business';
     const h = y - gap + (ledger ? 10 : 0);
@@ -445,13 +464,27 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     const gainMode = spec.mode === 'gain';
     const left = gainMode ? 40 : 4;
     const right = w - 4;
+    const fx = (f: number) => left + ((Math.log10(f) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo))) * (right - left);
+    // Band labels sit centred over their band; mark labels beside their line, the left one of a close pair
+    // to its left and the right one to its right, and up a row when they would still touch.
+    const bandLabels = (spec.bands ?? []).map((band) => {
+        const width = textWidth(band.label);
+        const cx = clamp((fx(band.from) + fx(band.to)) / 2, width / 2, w - width / 2);
+        return { cx, span: [cx - width / 2, cx + width / 2] as [number, number] };
+    });
+    const markLabels = placeInRows(
+        (spec.marks ?? []).map((mark) => ({ x: fx(mark.f), width: textWidth(mark.label), prefer: ['start', 'end'] as Anchor[] })),
+        0,
+        w,
+        { taken: bandLabels.map((b) => b.span) },
+    );
+    const labelRows = Math.max(0, ...markLabels.map((p) => p.row)) + 1;
     // Room above the plot for band or mark labels, or for the dB unit in gain mode.
-    const top = leg.height + (spec.bands?.length || spec.marks?.length ? 30 : gainMode ? 24 : 12);
+    const top = leg.height + (spec.bands?.length || spec.marks?.length ? 30 + (labelRows - 1) * 16 : gainMode ? 24 : 12);
     const plotH = narrow ? 150 : 180;
     const bottom = top + plotH;
     const ledger = d.name === 'business';
     const h = bottom + 26 + (ledger ? 8 : 0);
-    const fx = (f: number) => left + ((Math.log10(f) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo))) * (right - left);
     const [dbLo, dbHi] = spec.dbRange ?? [-(spec.db ?? 12), spec.db ?? 12];
     const span = dbHi - dbLo;
     const gy = (db: number) => top + 4 + ((dbHi - clamp(db, dbLo - span * 0.25, dbHi + span * 0.25)) / span) * (plotH - 8);
@@ -516,7 +549,8 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         return (
             <g key={i}>
                 {fill ? (
-                    <path d={`${path}L${right},${bottom}L${left},${bottom}Z`} {...(curve.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', 200 + i * 100) })} />
+                    // The area fades in once its line has drawn, never ahead of it.
+                    <path d={`${path}L${right},${bottom}L${left},${bottom}Z`} {...(curve.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', 120 + i * 100 + 760) })} />
                 ) : null}
                 <path
                     d={path}
@@ -547,14 +581,13 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
             {leg.node}
-            {spec.bands?.map((band) => {
+            {spec.bands?.map((band, bi) => {
                 const a = fx(band.from);
                 const b = fx(band.to);
-                const mid = (a + b) / 2;
                 return (
                     <g key={band.label}>
                         <rect x={a} y={top} width={b - a} height={plotH} rx={d.name === 'mind' ? 6 : 0} fill={C.fill} />
-                        <Label x={clamp(mid, textWidth(band.label) / 2, w - textWidth(band.label) / 2)} y={top - 10} anchor="middle" fill={C.ink}>
+                        <Label x={bandLabels[bi].cx} y={top - 10} anchor="middle" fill={C.ink}>
                             {band.label}
                         </Label>
                     </g>
@@ -593,11 +626,13 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
             <Corners d={d} x={left} y={top} w={right - left} h={plotH} />
             {spec.marks?.map((mark, mi) => {
                 const x = fx(mark.f);
-                const flip = x > w - textWidth(mark.label) - 10;
+                const place = markLabels[mi];
+                const ly = top - 10 - place.row * 16;
                 return (
                     <g key={`${mi}-${mark.label}`}>
-                        <RefLine d={d} x1={x} x2={x} y1={top} y2={bottom} />
-                        <Label x={flip ? x - 5 : x + 5} y={top - 10} anchor={flip ? 'end' : 'start'} fill={C.ink}>
+                        {/* A label up a row keeps its line running up to it. */}
+                        <RefLine d={d} x1={x} x2={x} y1={place.row ? ly - 4 : top} y2={bottom} />
+                        <Label x={place.tx} y={ly} anchor={place.anchor} fill={C.ink}>
                             {mark.label}
                         </Label>
                     </g>
@@ -673,7 +708,8 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
                         <Rule d={d} x1={ox} x2={ox + size} y1={py(t)} y2={py(t)} major={d.name !== 'mind'} opacity={d.name === 'technical' ? 0.1 : ledger ? 0.1 : undefined} />
                     )}
                     {ledger ? <line x1={px(t)} x2={px(t)} y1={oy + size} y2={oy + size + 5} stroke={C.soft} /> : null}
-                    <Label x={px(t)} y={oy + size + 16} anchor="middle">
+                    {/* The first input value starts at its tick, so it clears the lowest output value beside the corner. */}
+                    <Label x={t === lo ? px(t) - 1 : px(t)} y={oy + size + 16} anchor={t === lo ? 'start' : 'middle'}>
                         {t}
                     </Label>
                     <Label x={ox - 6} y={py(t) + 4} anchor="end">
