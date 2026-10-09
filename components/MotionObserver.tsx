@@ -7,28 +7,62 @@ import { useEffect } from 'react';
  * alone; elements below the fold are hidden, then eased in as they scroll into
  * view. New content (route changes, lazy sections) is picked up by a
  * MutationObserver. Does nothing under prefers-reduced-motion.
+ *
+ * `data-reveal="draw"` (article figures) is never hidden far from the
+ * screen: it is marked "pending" only as it nears the bottom edge, then
+ * "drawn" once it is 30% up the screen, which plays the one-time draw-in in
+ * app/globals.css. A figure on screen at load, or reached from above, is
+ * marked "shown" and never animates.
  */
 export function MotionObserver() {
     useEffect(() => {
         if (typeof IntersectionObserver === 'undefined') return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-        const intersection = new IntersectionObserver(
-            (entries) => {
+        const revealAs =
+            (state: 'shown' | 'drawn'): IntersectionObserverCallback =>
+            (entries, observer) => {
                 for (const entry of entries) {
                     if (!entry.isIntersecting) continue;
-                    entry.target.setAttribute('data-reveal-state', 'shown');
-                    intersection.unobserve(entry.target);
+                    entry.target.setAttribute('data-reveal-state', state);
+                    observer.unobserve(entry.target);
+                }
+            };
+        const intersection = new IntersectionObserver(revealAs('shown'), { rootMargin: '0px 0px -8% 0px' });
+        // A figure waits until it is well inside the screen, so the drawing is seen.
+        const drawing = new IntersectionObserver(revealAs('drawn'), { rootMargin: '0px 0px -30% 0px' });
+        // A figure stays fully drawn until it comes within 30% of a screen of the bottom edge, so a
+        // full-page capture or a quick look further down never shows it half-drawn. Only then, still
+        // off screen, is it held at the start of its draw-in. One reached from above stays as it is.
+        const approaching = new IntersectionObserver(
+            (entries, observer) => {
+                for (const entry of entries) {
+                    if (!entry.isIntersecting) continue;
+                    observer.unobserve(entry.target);
+                    if (entry.target.hasAttribute('data-reveal-state')) continue;
+                    if (entry.boundingClientRect.top < window.innerHeight * 0.92) {
+                        entry.target.setAttribute('data-reveal-state', 'shown');
+                        continue;
+                    }
+                    entry.target.setAttribute('data-reveal-state', 'pending');
+                    drawing.observe(entry.target);
                 }
             },
-            { rootMargin: '0px 0px -8% 0px' },
+            { rootMargin: '0px 0px 30% 0px' },
         );
 
         const scan = () => {
             const fold = window.innerHeight * 0.92;
             // Pending elements are re-observed too: a remount (Strict Mode,
             // fast refresh) disconnects the previous observer.
-            document.querySelectorAll('[data-reveal]:not([data-reveal-state="shown"])').forEach((element) => {
+            document.querySelectorAll('[data-reveal]:not([data-reveal-state="shown"]):not([data-reveal-state="drawn"])').forEach((element) => {
+                if (element.getAttribute('data-reveal') === 'draw') {
+                    // A pending figure is left to its observer, so it draws in instead of snapping on.
+                    if (element.getAttribute('data-reveal-state') === 'pending') drawing.observe(element);
+                    else if (element.getBoundingClientRect().top < fold) element.setAttribute('data-reveal-state', 'shown');
+                    else approaching.observe(element);
+                    return;
+                }
                 if (element.getBoundingClientRect().top < fold) {
                     element.setAttribute('data-reveal-state', 'shown');
                     return;
@@ -51,6 +85,8 @@ export function MotionObserver() {
             cancelAnimationFrame(frame);
             mutations.disconnect();
             intersection.disconnect();
+            drawing.disconnect();
+            approaching.disconnect();
         };
     }, []);
 
