@@ -133,9 +133,9 @@ Diana Deutsch came across the effect while fine-tuning spoken commentary for a C
 
 ::figure conditions
 
-In the second experiment, listeners heard the phrase once or ten times and then said it back. After one hearing they spoke it. After ten they sang it, and their pitches matched the original speech more closely than after one hearing. The sung versions were closer still to a simple tune in a key. So the listeners were hearing specific notes, and could sing them back. Deutsch's listeners had musical training, but Vanden Bosch der Nederlanden, Hannon and Snyder (2015) replicated the effect in casual listeners with none, and confirmed that transposing the repeats disrupts it.
+In the second experiment, listeners heard the phrase once or ten times and then said it back. After one hearing they spoke it. After ten they sang it, and their pitches matched the original speech more closely than after one hearing. The sung versions were closer still to a simple tune in a key. Ten repeats left listeners with specific notes in their heads. Deutsch's listeners had musical training, but Vanden Bosch der Nederlanden, Hannon and Snyder (2015) replicated the effect in casual listeners with none, and confirmed that transposing the repeats disrupts it.
 
-Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated, then matched each with a phrase from the same speaker that stayed speech. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) compared spoken phrases that differed in specific pitch and timing properties. Stable pitch targets made the transformation happen more often and sooner than scalar intervals did, and recurring contrasts between long and short syllables helped. A regular beat within and across repeats did not help.
+Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated, then matched each with a phrase from the same speaker that stayed speech. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) compared spoken phrases that differed in specific pitch and timing properties. Level pitch targets on the syllables made the transformation happen more often and sooner than making the steps between syllables match a musical scale, and recurring contrasts between long and short syllables helped. A regular beat within and across repeats did not help.
 
 ::figure glide
 
@@ -151,7 +151,7 @@ A reading that fits these results, and close to the one Margulis and colleagues 
 2. Loop it ten times with about one second of silence between repeats, with no beat underneath. Rate it from 1 (speech) to 5 (song) after the first and the tenth repeat.
 3. On the tenth repeat, hum along and record the hum on a new track.
 4. Convert the hum to MIDI with your DAW's audio-to-MIDI function, or find the notes by ear on a keyboard. Open the spoken take in a pitch editor and compare where each syllable sits and how far it glides.
-5. Duplicate the loop and transpose every second repeat up one semitone with formants preserved. Listen whether the tune fades, as it did in Deutsch's transposed condition.
+5. Duplicate the loop and transpose every second repeat up one semitone with formants preserved. Listen for whether the tune fades, as it did in Deutsch's transposed condition.
 6. Try a second line that glides a lot, such as an excited question, and compare how quickly each one turns.
 7. Write a sung hook from the MIDI notes with the same words. Play the spoken loop and the sung hook once each to someone who has not heard either, and ask what they heard in each.
 
