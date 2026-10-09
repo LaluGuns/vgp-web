@@ -123,7 +123,7 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
                     if (e.key === 'Enter' || e.key === ' ') warmEngine();
                 }}
                 data-demo-play=""
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                className="vgp-focus inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97]"
             >
                 {playing ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
                 {playing ? 'Stop' : label}
@@ -136,15 +136,22 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
     );
 }
 
-/** A visible label above a group of controls, with an optional note under them. */
-export function Field({ label, id, hint, children }: { label: string; id?: string; hint?: ReactNode; children: ReactNode }) {
+/**
+ * A visible label above a group of controls, with an optional note under them.
+ * `liveHint` announces the note when it changes (a note that follows the choice).
+ */
+export function Field({ label, id, hint, liveHint = false, children }: { label: string; id?: string; hint?: ReactNode; liveHint?: boolean; children: ReactNode }) {
     return (
         <div>
             <p id={id} className="mb-2 text-sm font-medium text-white/85">
                 {label}
             </p>
             {children}
-            {hint ? <p className="mt-2 text-xs leading-5 text-white/50">{hint}</p> : null}
+            {hint ? (
+                <p className="mt-2 text-xs leading-5 text-white/50" aria-live={liveHint ? 'polite' : undefined}>
+                    {hint}
+                </p>
+            ) : null}
         </div>
     );
 }
@@ -198,7 +205,7 @@ export function Slider({
 }
 
 const optionClass = (active: boolean) =>
-    `min-h-11 min-w-11 rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
+    `vgp-focus min-h-11 min-w-11 rounded-md border px-3.5 text-sm font-medium transition-colors ${
         active ? 'border-white/80 text-white' : 'border-white/10 text-white/60 hover:border-white/30 hover:text-white'
     }`;
 
@@ -213,12 +220,15 @@ export function Segmented<T extends string>({
     options,
     onChange,
     hint,
+    liveHint,
 }: {
     label: string;
     value: T;
     options: { value: T; label: string }[];
     onChange: (value: T) => void;
     hint?: ReactNode;
+    /** The hint describes the current choice: announce it when it changes. */
+    liveHint?: boolean;
 }) {
     const labelId = useId();
     const buttons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -239,7 +249,7 @@ export function Segmented<T extends string>({
     };
 
     return (
-        <Field label={label} id={labelId} hint={hint}>
+        <Field label={label} id={labelId} hint={hint} liveHint={liveHint}>
             <div role="radiogroup" aria-labelledby={labelId} className="flex flex-wrap gap-2">
                 {options.map((option, i) => (
                     <button
@@ -324,12 +334,17 @@ export function Meter({ label, value, text }: { label: string; value: number; te
     );
 }
 
-/** Numbers under their labels. Labels may wrap; the values always sit on one line, level with each other. */
-export function Readout({ items }: { items: { label: string; value: string }[] }) {
+/**
+ * Numbers under their labels. Labels may wrap; the values always sit on one
+ * line, level with each other. `live` announces new values to screen readers:
+ * only for values that follow the reader's settings, never a running meter.
+ */
+export function Readout({ items, live = false }: { items: { label: string; value: string }[]; live?: boolean }) {
     return (
-        <dl className="grid grid-cols-2 items-end gap-x-6 gap-y-3 sm:grid-cols-3">
+        <dl className="grid grid-cols-2 items-end gap-x-6 gap-y-3 sm:grid-cols-3" aria-live={live ? 'polite' : undefined}>
             {items.map((item) => (
-                <div key={item.label} className="min-w-0">
+                // Atomic, so a new value is read with its label.
+                <div key={item.label} className="min-w-0" aria-atomic={live || undefined}>
                     <dt className="text-xs leading-4 text-white/50">{item.label}</dt>
                     <dd className="mt-1 whitespace-nowrap text-lg font-semibold leading-6 tabular-nums text-white">{item.value}</dd>
                 </div>

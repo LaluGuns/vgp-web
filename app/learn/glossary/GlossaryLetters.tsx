@@ -37,7 +37,7 @@ export function GlossaryLetters({ letters }: { letters: string[] }) {
 
     return (
         <nav aria-label="Jump to letter" className="sticky top-16 z-10 -mx-4 border-y border-white/10 bg-[var(--bg)] sm:mx-0">
-            <div ref={row} className="vgp-scroll flex gap-0.5 overflow-x-auto px-4 py-1.5 sm:flex-wrap sm:px-0">
+            <div ref={row} className="vgp-scroll flex gap-0.5 overflow-x-auto px-4 py-1.5 sm:flex-wrap sm:px-1.5">
                 {letters.map((letter) => (
                     <a
                         key={letter}

@@ -543,6 +543,17 @@ body::before {
   figure figcaption {
     break-before: avoid;
   }
+
+  /* A heading stays with what follows it, and a table or figure is not split across pages when it fits on one. */
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  table,
+  figure {
+    break-inside: avoid;
+  }
 }
 
 /* ── Articles (docs/ARTICLES.md) ─────────────────────────────────── */
@@ -793,16 +804,17 @@ body::before {
   cursor: pointer;
 }
 
+/* The track is 3.5:1 on the demo panel (WCAG 1.4.11 asks 3:1 for a control's parts). */
 .vgp-range::-webkit-slider-runnable-track {
   height: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .vgp-range::-moz-range-track {
   height: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .vgp-range::-webkit-slider-thumb {
@@ -827,12 +839,13 @@ body::before {
   outline: none;
 }
 
+/* The same ring as .vgp-focus (2 px of accent, 3 px out), drawn round the thumb. */
 .vgp-range:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+  box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--accent);
 }
 
 .vgp-range:focus-visible::-moz-range-thumb {
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+  box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--accent);
 }
 
 /* Demo displays speak the lesson's figure dialect (docs/DESIGN.md, "Figure

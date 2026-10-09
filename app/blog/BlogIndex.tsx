@@ -449,7 +449,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         value={query}
                                         onChange={(e) => onQueryChange(e.target.value)}
                                         placeholder="Search: LUFS, 808, reverb"
-                                        className={`min-h-11 w-full rounded-md border border-white/40 bg-[#0a0e12] py-2.5 pl-10 text-white placeholder-white/55 focus:border-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 [&::-webkit-search-cancel-button]:appearance-none ${
+                                        className={`min-h-11 w-full rounded-md border border-white/40 bg-[#0a0e12] py-2.5 pl-10 text-white placeholder-white/55 vgp-focus focus:border-white/70 [&::-webkit-search-cancel-button]:appearance-none ${
                                             query ? 'pr-11' : 'pr-3'
                                         }`}
                                     />
@@ -477,7 +477,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
                             <div
                                 ref={chipRow}
-                                className="vgp-scroll -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+                                className="vgp-scroll -mx-4 -my-1.5 flex gap-2 overflow-x-auto px-4 py-1.5 sm:-mx-1.5 sm:flex-wrap sm:px-1.5"
                                 role="group"
                                 aria-label="Filter by path"
                             >

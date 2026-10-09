@@ -75,6 +75,9 @@ readable text.
 - **Imagery.** Use the real assets in `public/` (founder portrait, CADENZ
   poster, chrome logo, book cover, app icons, game art). No stock or
   generated filler.
+- **Focus.** One style everywhere: `.vgp-focus` in `app/globals.css`, a 2px
+  outline in the page's `--accent` with a 3px offset, shown only for
+  keyboard focus. `EditorialPrimitives` and `TapLink` already carry it.
 - **Copy.** Specific and plain. No em dashes, no "not just X, but Y", no
   forced triads, no buzzwords, no invented numbers. Only translate ja-JP and
   de-DE strings with a native check.

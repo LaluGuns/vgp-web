@@ -236,6 +236,7 @@ export function PhaseDemo() {
                 hint="At 55 Hz one cycle lasts about 18 ms, so about 9 ms of delay puts the layers half a cycle apart."
             />
             <Readout
+                live
                 items={[
                     { label: 'Phase difference at 55\u00a0Hz', value: `${Math.round(shift)}°` },
                     { label: 'Combined level at 55\u00a0Hz', value: levelDb },

@@ -310,9 +310,10 @@ function Strip({
     );
 }
 
+/** The key to a plot's traces. Hidden from screen readers: the plot's own label says what each trace is. */
 function Legend({ items }: { items: { kind: Trace['kind']; text: string }[] }) {
     return (
-        <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60">
+        <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
             {items.map((item) => (
                 <span key={item.text} className="inline-flex items-center gap-2">
                     <span
@@ -554,7 +555,7 @@ export function ParallelDemo() {
                 <Strip
                     traces={traces}
                     floor={-42}
-                    label="Peak level across one bar of the loop, on a decibel scale. The blend lifts the ghost notes and hat tails while the loudest hits stay close to the dry ones."
+                    label={`Peak level across one bar of the loop, on a decibel scale: the dry drums as a grey area and ${mode === 'solo' ? 'the crushed copy' : 'the dry drums plus the crushed copy'}, at the same loudness, as a line. The blend lifts the ghost notes and hat tails while the loudest hits stay close to the dry ones.`}
                     playhead={player.playing ? line : undefined}
                 />
                 <Legend
@@ -679,9 +680,19 @@ interface Hit {
 interface ShapeAnalysis {
     params: ShapeParams;
     trim: { shaper: number; comp: number };
+    /** dB each path still sits under the dry loop, where matching would push its peaks too high. */
+    short: { shaper: number; comp: number };
     hits: Hit[];
     ghostDb: number;
 }
+
+/**
+ * Matched for loudness, a boosted attack stands well above the dry hits.
+ * Each path may peak up to 3 dB over the dry loop; past that its matching
+ * stops, which keeps every setting under the demo's ceiling, and the demo
+ * says how much quieter that leaves the loop.
+ */
+const SHAPE_PEAK_ROOM = dbToGain(3);
 
 const HIT_COLUMNS = 90;
 /** Room above the dry hit's level in each panel, so a boosted attack has somewhere to go. */
@@ -704,10 +715,16 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
         twoBars(ctx, src, drums);
     });
     const ref = loudnessPower(dry, from, to);
-    const trim = {
-        shaper: Math.sqrt(ref / loudnessPower(shaped, from, to)),
-        comp: Math.sqrt(ref / loudnessPower(comped, from, to)),
+    const room = SHAPE_PEAK_ROOM * peakOf(dry, from, to);
+    const matched = (x: Float32Array) => {
+        const wanted = Math.sqrt(ref / loudnessPower(x, from, to));
+        const gain = Math.min(wanted, room / peakOf(x, from, to));
+        return { gain, short: gainToDb(wanted / gain) };
     };
+    const sm = matched(shaped);
+    const cm = matched(comped);
+    const trim = { shaper: sm.gain, comp: cm.gain };
+    const short = { shaper: sm.short, comp: cm.short };
     // Each panel is scaled to its own dry hit, so a ghost note and a full hit are drawn the same size.
     // The panels show what each processor does to the hit before loudness matching: the shaper's
     // gain as it is, the compressor's gain reduction without its built-in makeup gain.
@@ -727,7 +744,7 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
     const k = hit(0, 'Kick');
     const s = hit(12, 'Snare');
     const ghost = hit(15, 'Ghost note');
-    return { params, trim, hits: [k.hit, s.hit, ghost.hit], ghostDb: gainToDb(ghost.loudest / s.loudest) };
+    return { params, trim, short, hits: [k.hit, s.hit, ghost.hit], ghostDb: gainToDb(ghost.loudest / s.loudest) };
 }
 
 /**
@@ -828,6 +845,14 @@ export function TransientDemo() {
     };
 
     const names = { shaper: 'Transient shaper', comp: 'Compressor' };
+    const lagging = (['shaper', 'comp'] as const).filter((k) => analysis && analysis.short[k] >= 0.5);
+    const quieter = lagging.map((k, i) => `the ${names[k].toLowerCase()}${i ? '' : ' plays'} about ${Math.round(analysis?.short[k] ?? 0)} dB quieter`);
+    const levelNote =
+        lagging.length === 0
+            ? 'All three options play at the loudness of the dry loop.'
+            : lagging.length === 1
+              ? `At this setting ${quieter[0]} than the dry loop, as matching it fully would push its peaks past the demo's safe ceiling. The ${names[lagging[0] === 'shaper' ? 'comp' : 'shaper'].toLowerCase()} plays at the dry loop's loudness.`
+              : `At this setting ${quieter.join(' and ')} than the dry loop, as matching them fully would push their peaks past the demo's safe ceiling.`;
 
     return (
         <div className="space-y-6">
@@ -884,7 +909,7 @@ export function TransientDemo() {
                 hint="Turns the loop down before both processors and back up after them, so only what the processors see changes."
             />
             <p className="text-sm leading-6 text-white/60">
-                All three options play at the loudness of the dry loop. The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.
+                <span aria-live="polite">{levelNote}</span> The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.
                 Pull the level going in down to -24 dB. The loop no longer reaches the threshold, so the compressor does nothing, while the shaper still changes
                 every hit, ghost notes included.
             </p>
@@ -1147,7 +1172,11 @@ export function SidechainDemo() {
                     traces={traces}
                     floor={-24}
                     marks={[0, 0.25, 0.5, 0.75]}
-                    label="Gain applied to the bass and pad across one bar, from 0 dB at the top to -24 dB at the bottom. Dotted lines mark the kicks."
+                    label={
+                        mode === 'off'
+                            ? 'Gain applied to the bass and pad across one bar: no ducking, so it stays at 0 dB.'
+                            : `Gain applied to ${mode === 'lows' ? `the bass and pad below ${CROSSOVER} Hz` : 'the bass and pad'} across one bar, from 0 dB at the top to -24 dB at the bottom, dipping at each kick${mode === 'lows' ? `. Above ${CROSSOVER} Hz it stays at 0 dB` : ''}.`
+                    }
                     playhead={player.playing ? line : undefined}
                 />
                 <div className="mt-1 flex justify-between text-[11px] text-white/55" aria-hidden="true">
@@ -1169,7 +1198,7 @@ export function SidechainDemo() {
                     hint="How long the bass takes to come back. The kicks are 500 ms apart."
                 />
             </div>
-            <p className="text-sm leading-6 text-white/60">
+            <p className="text-sm leading-6 text-white/60" aria-live="polite">
                 {mode === 'off'
                     ? 'The kick and the bass hit at the same moment and share the low end. Turn ducking on and listen to the kick get its own space.'
                     : `The bass and pad are turned up ${Math.max(0, makeupDb).toFixed(1)} dB to make up for the dips, so they keep the same overall loudness. A short release tucks the bass under the kick. A long one makes it pump.`}
@@ -1682,7 +1711,7 @@ export function ClipRecoverDemo() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <p className="mb-1 text-xs text-white/60">Recorded: the converter stops at 0 dBFS</p>
+                    <WaveTitle title="Recorded: the converter stops at 0 dBFS" line={1} />
                     <Wave
                         line={1}
                         range={analysis ? Math.min(3, Math.max(1.3, peakOf(analysis.window.sent, 0, analysis.window.sent.length) * 1.08)) : 1.3}
@@ -1698,7 +1727,7 @@ export function ClipRecoverDemo() {
                     />
                 </div>
                 <div>
-                    <p className="mb-1 text-xs text-white/60">After the fader, next to the safe take</p>
+                    <WaveTitle title="After the fader, next to the safe take" line={fg} />
                     <Wave
                         line={fg}
                         range={
@@ -1757,6 +1786,22 @@ export function ClipRecoverDemo() {
     );
 }
 
+/**
+ * The title of a waveform and, on the same line, what its dotted lines mark.
+ * The key sits above the plot, so it never covers the trace.
+ */
+function WaveTitle({ title, line }: { title: string; line: number }) {
+    return (
+        <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 text-xs leading-5 text-white/60">
+            <p>{title}</p>
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap" aria-hidden="true">
+                <span className="w-3 border-t border-dotted border-white/70" />
+                {line >= 0.999 ? '0 dBFS' : `${gainToDb(line).toFixed(0)} dBFS`}
+            </span>
+        </div>
+    );
+}
+
 /** A short waveform on a linear scale, with dotted lines at plus and minus `line`. Anything past `range` runs off the frame. */
 function Wave({
     traces,
@@ -1778,12 +1823,8 @@ function Wave({
         for (let i = 0; i < data.length; i++) d += `${i ? 'L' : 'M'}${((i / (data.length - 1)) * w).toFixed(1)},${y(data[i] * gain).toFixed(1)}`;
         return d;
     };
-    // The label is HTML over the plot, so it stays the same size at any width.
     return (
-        <div className="relative">
-            <span className="pointer-events-none absolute left-1 text-[11px] leading-none text-white/60" style={{ top: `max(2px, calc(${(y(line) / h) * 100}% - 13px))` }} aria-hidden="true">
-                {line >= 0.999 ? '0 dBFS' : `${gainToDb(line).toFixed(0)} dBFS`}
-            </span>
+        <div>
             <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block overflow-hidden" role="img" aria-label={label}>
                 <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" />
                 {[line, -line].map((l) => (

@@ -7,11 +7,11 @@ import { EmailChooser } from '@/components/editorial/EmailChooser';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
-const focusRing =
-    'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]';
+/** The site's one focus style (.vgp-focus in app/globals.css): a 2 px outline in the page's accent. */
+const focusRing = 'vgp-focus';
 
 const textLinkClass =
-    'vgp-link text-sm font-medium text-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050607]';
+    'vgp-link vgp-focus text-sm font-medium text-white focus-visible:rounded-sm';
 
 /** Pill button base: a soft press and an arrow that leans forward on hover. */
 export const buttonMotionClass =
@@ -31,7 +31,7 @@ function isExternal(href: string) {
 }
 
 const inlineLinkClass =
-    'vgp-link text-white focus:outline-none focus-visible:rounded-sm focus-visible:ring-2 focus-visible:ring-white/60';
+    'vgp-link vgp-focus text-white focus-visible:rounded-sm';
 
 /**
  * Underlined text link. External URLs open in a new tab. `inline` keeps the

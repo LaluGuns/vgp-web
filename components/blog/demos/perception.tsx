@@ -879,6 +879,13 @@ function applyFx(n: FxNodes, s: FxSettings) {
     for (const g of n.fb) g.gain.setTargetAtTime(s.feedback / 100, t, 0.03);
 }
 
+/** What each effect does, under the choice. It changes with the choice, so it is announced. */
+const EFFECT_HINT: Record<FxMode, string> = {
+    plain: 'The tail of each line runs on under the start of the next.',
+    ducked: 'The reverb drops while the voice sings and swells in the gaps. Duck depth below sets how far.',
+    throw: 'No reverb. Only the last syllable of each line goes to a delay. Its feedback and time are below.',
+};
+
 /**
  * A vocal-like phrase into a long reverb. Duck the reverb with an envelope
  * follower on the dry phrase, or drop the reverb and throw only the last
@@ -1038,6 +1045,8 @@ export function ReverbDuckDemo() {
                     { value: 'ducked', label: 'Ducked reverb' },
                     { value: 'throw', label: 'Delay throw' },
                 ]}
+                hint={EFFECT_HINT[mode]}
+                liveHint
             />
             <LevelTrace
                 active={player.playing}
@@ -1080,9 +1089,8 @@ export function ReverbDuckDemo() {
                 />
             ) : null}
             <p className="text-sm leading-6 text-white/60">
-                The dry voice never changes. With plain reverb, the tail of each line runs under the start of the next. Ducked, the reverb drops while the voice sings
-                and swells in the gaps. The throw sends only the last syllable of each line to a filtered delay timed to the beat at {RD_BPM} BPM, so its repeats fill
-                the gap instead of sitting under the next line.
+                The dry voice never changes, only what the effect leaves under the next line. The throw&apos;s delay is filtered and timed to the beat at {RD_BPM}{' '}
+                BPM, so its repeats fill the gap instead.
             </p>
         </div>
     );
@@ -1393,7 +1401,9 @@ export function ChordContextDemo() {
                     ]}
                 />
             </div>
-            <p className="text-sm leading-6 text-white/60">{hint}</p>
+            <p className="text-sm leading-6 text-white/60" aria-live="polite">
+                {hint}
+            </p>
         </div>
     );
 }

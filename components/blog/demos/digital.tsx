@@ -366,7 +366,7 @@ export function LatencyDemo() {
                             tap();
                         }
                     }}
-                    className="flex h-24 w-24 select-none items-center justify-center rounded-[6px] border border-white/30 text-sm font-semibold text-white transition-[border-color,transform] duration-100 active:scale-95 active:border-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                    className="vgp-focus flex h-24 w-24 select-none items-center justify-center rounded-[6px] border border-white/30 text-sm font-semibold text-white transition-[border-color,transform] duration-100 active:scale-95 active:border-white"
                     aria-label={`Tap pad. The click plays ${latency} milliseconds after you tap.`}
                 >
                     Tap
