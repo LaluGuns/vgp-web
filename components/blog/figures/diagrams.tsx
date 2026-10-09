@@ -51,14 +51,15 @@ function Hit({
     floor: number;
     bw: number;
     bh: number;
-    tone: 'accent' | 'ink' | 'soft';
+    /** ink and soft: a loud and a quiet hit in a row with nothing in focus; context and contextSoft: in a row beside one in focus. */
+    tone: 'accent' | 'ink' | 'soft' | 'context' | 'contextSoft';
     opacity?: number;
     /** A hit's grid position before it was moved: an outline only. */
     ghost?: boolean;
     motion?: object;
 }) {
     // Grey hits are solid, so a drum line or a step rule behind one never shows through it.
-    const grey = tone === 'ink' ? solid(0.92) : solid(0.52);
+    const grey = solid(tone === 'ink' ? 0.92 : tone === 'soft' ? 0.52 : tone === 'context' ? 0.5 : 0.3);
     const paint = tone === 'accent' ? accentFill(opacity) : { fill: grey, fillOpacity: opacity < 1 ? opacity : undefined };
     const stroke = tone === 'accent' ? accentStroke(opacity) : { stroke: grey, strokeOpacity: opacity < 1 ? opacity : undefined };
     if (d.name === 'music') {
@@ -195,7 +196,8 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                             const x = gx + shift * stepW;
                             const moved = Math.abs(shift) > 0.02;
                             const accent = anyFocus ? lit : moved;
-                            const grey = level < 0.6 ? 'soft' : 'ink';
+                            // Beside a row in focus, every other row is context and stays grey; with nothing in focus, white and grey.
+                            const grey = anyFocus ? (level < 0.6 ? 'contextSoft' : 'context') : level < 0.6 ? 'soft' : 'ink';
                             const delay = 160 + (240 * step) / steps + ri * 40;
                             return (
                                 <g key={hi}>
@@ -622,7 +624,8 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
     const lo = Math.min(...pitches) - 1;
     const hi = Math.max(...pitches) + 1;
     const rows = hi - lo + 1;
-    const rowH = Math.max(9, Math.min(narrow ? 13 : 15, 260 / rows));
+    // A pitch row is tall enough for its 12-unit name when the range allows; with many rows, every other name is left out.
+    const rowH = Math.max(9, Math.min(narrow ? 14 : 15, 260 / rows));
     const labelCol = narrow ? 36 : 40;
     const chordH = spec.chords?.length ? 22 : 4;
     const totalBeats = Math.ceil(Math.max(...spec.notes.map((n) => n.start + n.length)) / perBar) * perBar;
@@ -670,7 +673,7 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
             })}
             {/* Skip a pitch name that would sit on top of the one above it. */}
             {used
-                .filter((pitch, i) => used.slice(0, i).every((kept) => yOf(pitch) - yOf(kept) >= 13))
+                .filter((pitch, i) => used.slice(0, i).every((kept) => yOf(pitch) - yOf(kept) >= 14))
                 .map((pitch) => (
                     <Label key={pitch} x={labelCol - 6} y={yOf(pitch) + rowH / 2 + 4} anchor="end">
                         {noteName(pitch)}

@@ -41,8 +41,8 @@ export const post056: BlogArticle = {
             unit: 'Hz',
             ticks: [0, 250, 500],
             markers: [
-                { value: 42, label: '42' },
-                { value: 125, label: '125' },
+                { value: 42, label: '42', strong: true },
+                { value: 125, label: '125', strong: true },
                 { value: 208, label: '208' },
                 { value: 292, label: '292' },
                 { value: 375, label: '375' },

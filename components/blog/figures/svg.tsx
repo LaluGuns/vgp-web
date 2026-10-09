@@ -88,14 +88,15 @@ export function draw(kind: DrawKind, delayMs = 0, vars?: Record<`--${string}`, s
 }
 
 /**
- * Label size in figure units. Phones draw the narrow layout 280 wide into a
- * box about 262 px wide at a 320 px screen, so 12 renders at about 11 px
- * there and 14 px at 390; nothing in a figure is set smaller.
+ * Label size in figure units. Phones draw the narrow layout 270 wide into a
+ * box 270 px wide at a 320 px screen (248 px inside an indented "Try it" or
+ * "Common mistake" block), so 12 renders at 11 to 12 px there and about
+ * 15 px at 390; nothing in a figure is set smaller.
  */
 export const FS = 12;
 
 /** Width the narrow (phone) layout is drawn at. Figure.tsx draws it; figures switch layout below 480. */
-export const NARROW_W = 280;
+export const NARROW_W = 270;
 
 /**
  * Width of a label in the system UI font, from rough widths per kind of
@@ -326,8 +327,9 @@ export function Barline({ x, y1, y2, kind = 'single', opacity = 0.5 }: { x: numb
 
 export type Tone = 'accent' | 'muted' | 'ink';
 
+// Grey marks are solid, so an axis or a rule behind one never shows through it.
 const toneFill = (tone: Tone, opacity = 1) =>
-    tone === 'accent' ? accentFill(opacity) : { fill: tone === 'ink' ? C.ink : C.strong, fillOpacity: opacity < 1 ? opacity : undefined };
+    tone === 'accent' ? accentFill(opacity) : { fill: solid(tone === 'ink' ? 0.92 : 0.75), fillOpacity: opacity < 1 ? opacity : undefined };
 
 /**
  * One value marked on a line or an axis. `r` is the size of a plain dot.
@@ -700,7 +702,8 @@ export function legend(
     let row = 0;
     const placed = items.map((item, i) => {
         const w = 24 + textWidth(item.label) + 16;
-        if (column ? i > 0 : cx + w - 16 > x + maxWidth && cx > x) {
+        // A few units of slack, since label widths are estimated.
+        if (column ? i > 0 : cx + w - 12 > x + maxWidth && cx > x) {
             cx = x;
             row++;
         }

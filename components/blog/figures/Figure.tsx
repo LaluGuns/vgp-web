@@ -35,9 +35,9 @@ function draw(spec: FigureSpec, w: number, dialect: Dialect) {
 /**
  * A diagram drawn twice: a narrow layout for phones and a wide one for
  * larger screens, so labels stay readable at both sizes instead of
- * shrinking with the drawing. The narrow one is drawn 280 wide, a little
- * wider than the box it gets on a 320 px phone, so its 12-unit labels
- * render at 11 px or more there. `dialect` is the lesson group's figure
+ * shrinking with the drawing. The narrow one is drawn 270 wide, the box it
+ * gets on a 320 px phone, so its 12-unit labels render at 12 px there and
+ * at 11 px or more inside an indented block. `dialect` is the lesson group's figure
  * language (lib/blog/dialects.ts); without one it is technical.
  *
  * `data-reveal="draw"`: when the figure scrolls into view, its accent data
@@ -47,7 +47,7 @@ export function Figure({ spec, number, dialect }: { spec: FigureSpec; number: nu
     const d = resolveDialect(dialect);
     return (
         <figure className="my-10">
-            <div data-reveal="draw" data-dialect={d.name} className="rounded-[6px] border border-white/10 bg-[var(--surface)] px-3 py-4 sm:px-5 sm:py-5">
+            <div data-reveal="draw" data-dialect={d.name} className="rounded-[6px] border border-white/10 bg-[var(--surface)] px-2 py-4 sm:px-5 sm:py-5">
                 <div className="sm:hidden">{draw(spec, NARROW_W, d)}</div>
                 <div className="hidden sm:block">{draw(spec, 600, d)}</div>
             </div>

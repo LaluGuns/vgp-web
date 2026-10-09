@@ -111,16 +111,26 @@ anything without one is technical.
   higher opacity than a hairline to be seen at all.
 - **Demos.** Plots, meters, step lanes and bar cells follow the dialect;
   controls (play, sliders, choices) are the same in every lesson.
+- **Focus.** Rhythm rows, flow steps and arrangement layers take
+  `focus: true`. Once any item in a figure is focused, it is in the accent
+  and the rest go grey; with none focused, all of them are. Bars, markers
+  and traces have the same switch under their own names (`strong`,
+  `muted: false`).
 - **Motion.** A figure draws in once when it is 30% up the screen: lines
   along their length (technical at a constant speed, like a scope beam),
-  bars grow, points pop, mind's focus rings close in on their points, moved
-  hits slide from their grid step. Never on a figure already on screen;
+  a shaded area fades in after its line, bars grow, points pop, mind's
+  focus rings close in on their points, moved hits slide from their grid
+  step, flow steps appear in order with their arrows drawing between them,
+  and arrangement cells rise into their rows. Never on a figure already on screen;
   off under reduced motion, with no script and in print. The end state is
   the server-rendered drawing. Turn it off by removing `data-reveal="draw"`
   in `components/blog/figures/Figure.tsx`.
 - **No stylesheet needed.** A figure is complete as a bare SVG: the accent
   is the root's `color` attribute and every dialect choice is an attribute,
   so the offline renderer gets the same marks and colours as the page.
+- **Print.** Figures print inverted with the hue turned back, so the
+  accent stays its own colour on white paper and text prints dark. The
+  fixed bars (navbar, reading progress) and the demos are hidden in print.
 - **New figure types** implement all four dialects before they ship.
 
 ## Story and voice

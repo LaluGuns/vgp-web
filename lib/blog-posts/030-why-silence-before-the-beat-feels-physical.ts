@@ -73,8 +73,8 @@ export const post030: BlogArticle = {
             markers: [
                 { value: 58.6, label: '32nd' },
                 { value: 117.2, label: '16th' },
-                { value: 234.4, label: '8th' },
-                { value: 468.8, label: 'Beat' },
+                { value: 234.4, label: '8th', strong: true },
+                { value: 468.8, label: 'Beat', strong: true },
             ],
             ranges: [{ from: 0, to: 200, label: 'Forward masking fades' }],
         },

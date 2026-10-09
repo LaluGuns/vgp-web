@@ -26,7 +26,7 @@ export const post063: BlogArticle = {
                 { label: 'Samples on the crests', traces: [{ ...TONE, phase: 90 }], samples: { count: 8 } },
                 {
                     label: 'Samples 45 degrees off the crests',
-                    traces: [{ ...TONE, phase: 45 }],
+                    traces: [{ ...TONE, phase: 45, muted: false }],
                     samples: { count: 8 },
                     lines: [{ y: 0.707, label: 'Sample peak' }],
                 },
