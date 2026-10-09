@@ -27,7 +27,7 @@ const BITS = [8, 12, 16, 24];
 export const post099: BlogArticle = {
     slug: 'bit-depth-is-about-noise-not-magic-warmth',
     title: 'Bit depth sets the noise floor',
-    excerpt: 'More bits do not make audio warmer or more detailed. Each one lowers the noise floor by about 6 dB. Learn what that means for recording and export.',
+    excerpt: 'More bits do not make audio warmer or more detailed. Each one lowers the noise floor by about 6 dB, and dither turns rounding error on quiet sounds into steady hiss.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',

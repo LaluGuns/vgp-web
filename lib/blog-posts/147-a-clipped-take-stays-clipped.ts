@@ -125,7 +125,7 @@ In a typical recording chain the microphone feeds a preamp, the preamp feeds the
 
 A converter with fixed-point output has a largest number it can report: full scale, or 0 dBFS. When the voltage from the preamp asks for more, every sample past that point is written as the maximum value and the top of the wave comes out flat (Pohlmann, 2011). The preamp has a ceiling of its own, its maximum output voltage, and a preamp driven past it flattens the wave before the converter ever sees it. Either way the damage is in the recording, and the DAW meter only reports it afterwards.
 
-That is also why a 32-bit float session does not rescue the take. A typical interface converter delivers fixed-point samples, so a clipped sample arrives as full scale, and float stores that full-scale value perfectly. [Float headroom](/blog/architecture-of-infinite-headroom-32-bit-float) protects you between plugins inside the DAW. It starts after the converter, which is where this problem began. Field recorders that merge two converters into one float file are the exception, and that lesson covers them too.
+That is also why a 32-bit float session does not rescue the take. A typical interface converter delivers fixed-point samples, so a clipped sample arrives as full scale, and float stores that full-scale value perfectly. [Float headroom](/blog/architecture-of-infinite-headroom-32-bit-float) protects you between plugins inside the DAW. It starts after the converter, which is where this problem began. Field recorders that merge two converters into one float file are the exception, which the float headroom lesson also covers.
 
 ## Science model: a fader is one multiplication
 

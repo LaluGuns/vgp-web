@@ -91,7 +91,7 @@ A high-pass set from a template does not know what the part plays. On a track wh
 
 ::figure lowest
 
-Two questions decide whether a high-pass belongs on a track. Is there energy below the part's lowest note? And is that energy causing a problem? Good targets are traffic and air-conditioning rumble, stand and floor thumps, handling noise, the low thud of a plosive, and sub energy on a synth patch that has no musical job. Small speakers barely reproduce some of it, but it still moves meters, uses headroom and makes compressors react, including a bus compressor that hears the whole mix (the [lesson on sidechain routing](/blog/sidechain-is-more-than-kick-ducking-bass) shows how to keep the lows from driving one). Anything at or above the lowest note is the part itself. Cutting there is a tone decision, made in the mix like any other EQ move.
+A high-pass belongs on a track when there is energy below the part's lowest note and that energy is causing a problem. Good targets are traffic and air-conditioning rumble, stand and floor thumps, handling noise, the low thud of a plosive, and sub energy on a synth patch that has no musical job. Small speakers barely reproduce some of it, but it still moves meters, uses headroom and makes compressors react, including a bus compressor that hears the whole mix (a [filter in the sidechain](/blog/sidechain-is-more-than-kick-ducking-bass) keeps the lows from driving one). Anything at or above the lowest note is the part itself. Cutting there is a tone decision, made in the mix like any other EQ move.
 
 ## Science model: from note to cutoff
 

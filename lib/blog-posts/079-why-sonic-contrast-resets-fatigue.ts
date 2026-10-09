@@ -64,7 +64,7 @@ export const post079: BlogArticle = {
             why: 'Normalization turns the whole file up or down by one amount. The difference between sections survives, so contrast you build into the arrangement reaches the listener.',
         },
         {
-            q: 'The same crash cymbal hits on every bar of the verse and again on the chorus downbeat, and the downbeat does not stand out. Going by the neuron recordings by Ulanovsky and colleagues, which change helps most?',
+            q: 'The same crash cymbal hits on every bar of the verse and again on the chorus downbeat, and the downbeat does not stand out. Which change do the neuron recordings by Ulanovsky and colleagues point to?',
             options: [
                 'Keep it on every bar, so the ear has learned it by the chorus',
                 'Drop it from the verse, so it is rare when the chorus starts',

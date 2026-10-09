@@ -42,7 +42,7 @@ const hits = (h: { at: number[]; amp: number[] }, scale = 0.8): SignalTrace => (
 export const post097: BlogArticle = {
     slug: 'what-convolution-reverb-is-doing',
     title: 'Convolution reverb copies a space',
-    excerpt: 'A convolution reverb plays your sound through a recording of how a room answers a single click. Learn what an impulse response captures and what it cannot.',
+    excerpt: 'A convolution reverb plays your sound through a recording of how a room answers a single click. It captures the space as one fixed snapshot, with no movement or drive.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',
@@ -147,6 +147,8 @@ To capture a response, engineers play an exponential sine sweep through a speake
 The model has limits. An impulse response captures one source position, one microphone position and one frozen moment. It cannot capture distortion or anything that moves. A convolution reverb has no modulation, and an impulse response of a guitar amp or an analog EQ copies only its frequency and phase response at one setting, not its drive or the way it changes with level.
 
 ## DAW experiment: turn any reverb into an impulse response
+
+You need an algorithmic reverb and a convolution reverb. If your DAW has no convolution reverb, a free one will do.
 
 1. In a 48 kHz session, put a one-sample click at full scale at the start of an audio track. Draw it with the pencil at sample zoom, or use the shortest click sample you have.
 2. Send it to an aux with your algorithmic reverb at 100% wet, modulation off and a decay of about 1.5 s. Bounce three seconds of the aux, starting at the click. That file is the reverb's impulse response.

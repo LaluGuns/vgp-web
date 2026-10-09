@@ -131,7 +131,7 @@ export const post046: BlogArticle = {
 
 You put pitch correction at the top of the vocal chain to clean up a few notes, and you set it fast because fast sounds tight. Now the vocal is in tune everywhere. It also sounds as if the singer cares a little less.
 
-Every note is on pitch now. The fast setting also turned the scoops, slides and vibrato into steps, and listeners hear that movement as part of the delivery.
+The fast setting turned the scoops and slides into steps and flattened the vibrato, and that movement carried part of how the line felt.
 
 ## Why it matters: sung pitch moves
 
@@ -154,6 +154,8 @@ A note sung at 432 Hz against an A4 of 440 Hz is about 32 cents flat. A correcto
 Retune speed sets roughly how quickly the plugin pulls the detected pitch to its target. At the fastest setting the correction is effectively instant, so transitions become steps and vibrato is flattened. At slower settings, quick movements such as vibrato and short scoops pass through before the correction catches them, while the average pitch of longer notes is still pulled to the target. Many plugins add controls that treat long and short notes differently, or leave notes alone when they are already close to the target. The names and scales of these controls vary between plugins, so judge by ear rather than by number.
 
 ## DAW experiment: sweep the retune speed
+
+You need an automatic pitch corrector with a retune speed control. Several DAWs include one, and free ones exist.
 
 1. Insert an automatic pitch corrector on the lead vocal and set it to the key and scale of the song. Use chromatic only if the melody uses notes outside the scale.
 2. Set retune speed to its fastest setting, 0 ms on plugins that use milliseconds, and loop a phrase with a held note and a slide.

@@ -6,7 +6,7 @@ const HITS = { kind: 'hits' as const, at: [0.04, 0.54], amp: [1, 0.85], decay: 8
 export const post057: BlogArticle = {
     slug: 'how-compression-changes-motion-not-level',
     title: 'Compression changes motion before level',
-    excerpt: 'Compression changes how a sound moves in time as well as how loud it is. Learn to set attack and release so a track breathes with the groove.',
+    excerpt: 'Compression changes how a sound moves in time as well as how loud it is. Attack decides whether the crack gets through, and release decides how the track breathes.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',

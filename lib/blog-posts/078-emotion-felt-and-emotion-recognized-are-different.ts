@@ -52,10 +52,10 @@ export const post078: BlogArticle = {
             options: [
                 'Felt scores sit above expressed ones, because a voice adds feeling',
                 'Felt scores move at random, with no link to the expressed ones',
-                'Felt scores rise and fall with expressed ones but sit below them',
                 'Felt and expressed scores come out the same on every version',
+                'Felt scores rise and fall with expressed ones but sit below them',
             ],
-            answer: 2,
+            answer: 3,
             why: 'The two ratings were closely related, but listeners heard more happiness or sadness in the music than they felt themselves. Schubert\'s review found felt ratings often the same as or lower than expressed ones, so felt scores below the expressed ones are the usual result.',
         },
         {
@@ -80,7 +80,7 @@ They recognized the emotion. They did not feel it. Music psychology treats those
 
 Gabrielsson (2002) separated perceived emotion, the emotion a listener hears the music express, from felt emotion, the change the music causes in the listener. The two can match, as when a sad song makes you sad. They can run opposite, as when a sad song gives you pleasure. Or they can be unrelated.
 
-How often do they match? Evans and Schubert (2008) asked listeners about familiar pieces and pieces they had chosen themselves. Felt and expressed emotion were the same in 61% of cases.
+Evans and Schubert (2008) checked how often the two match, asking listeners about familiar pieces and pieces they had chosen themselves. Felt and expressed emotion were the same in 61% of cases.
 
 ::figure match
 

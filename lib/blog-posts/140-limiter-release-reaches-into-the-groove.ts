@@ -129,7 +129,7 @@ The limiter did both of those things through one control. Its release decides wh
 
 A master limiter sees one signal, the whole mix. When a kick crosses the ceiling, the limiter cannot turn down the kick alone. It turns down the bass, the pad, the vocal and the hats that are playing at that moment, then lets them back up over the release time. Each kick leaves a dip in everything else, and the release sets its shape.
 
-On a drum loop in a mix session, release decides how the next hit lands, as the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) shows. On a master the more audible effect is often on the parts that do not trigger the limiter at all: the sustained bass under the kick and the off-beat hats that fall inside the dip.
+On a drum loop in a mix session, [release decides how the next hit lands](/blog/how-compression-changes-motion-not-level). On a master the more audible effect is often on the parts that do not trigger the limiter at all: the sustained bass under the kick and the off-beat hats that fall inside the dip.
 
 ::figure recovery
 

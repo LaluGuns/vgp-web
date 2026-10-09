@@ -17,7 +17,7 @@ export const post060: BlogArticle = {
         match: {
             type: 'scale',
             caption:
-                'An example of level matching. Your unmastered chorus reads -18 LUFS and the released reference reads -8 LUFS, so the reference goes down 10 dB before you compare anything.',
+                'An example of level matching. Your unmastered chorus reads -18 LUFS and sets the level. The released reference reads -8 LUFS, so it goes down 10 dB to meet your mix before you compare anything.',
             alt: 'A loudness line from -24 to 0 LUFS. Your mix is marked at -18 and the reference as released at -8. An arrow moves the reference down to -18, and a bar spans the 10 dB between them.',
             min: -24,
             max: 0,

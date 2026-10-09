@@ -136,7 +136,7 @@ If you never think about order, you end up fixing its side effects with more plu
 
 A clean digital EQ is linear and time-invariant. Two such filters in series multiply their frequency responses, and multiplication does not care about order, so any ordering of filters in series gives the same overall response (Smith, 2007). Two EQs, a high-pass and a shelf, a delay and an EQ: swap them freely. The same is not true of an EQ that models analog saturation, because that is no longer linear.
 
-A compressor is not linear. Its gain depends on the level it receives (Giannoulis, Massberg and Reiss, 2012), as in the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
+A compressor is not linear. Its gain depends on the level it receives (Giannoulis, Massberg and Reiss, 2012; see [how compression shapes motion](/blog/how-compression-changes-motion-not-level)), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
 
 On a steady note and at matched level, the tonal balance at the output ends up the same both ways: the lows sit 6 dB above the rest because the compressor turns every frequency down together. What changes is the gain movement. With the boost in front, the compressor works twice as hard and follows the low end, so the mids and highs dip twice as deep with every bass note. With the boost after it, the compressor reacts to the original signal and the boost shapes only the tone. The same logic is why a high-pass in front of a compressor is common: it stops rumble from steering the gain.
 
@@ -168,7 +168,7 @@ The EQ swap usually changes the movement more than the tone. The saturator swap 
 
 "EQ before compression" and "compression before saturation" get passed around as rules. They are starting points, and each one is right for some parts and wrong for others. The useful question is which stage should hear which version of the signal. Decide whether the compressor should react to the boosted low end, and whether the saturator should hear the raw dynamics or the evened ones, then order the chain to match.
 
-The other mistake is comparing two orders without matching levels. Swapping a compressor and an EQ often changes the output level, and the louder version tends to win, as the [lesson on loudness bias](/blog/why-louder-is-not-always-bigger) explains.
+The other mistake is comparing two orders without matching levels. Swapping a compressor and an EQ often changes the output level, and the louder version tends to win (see [loudness bias](/blog/why-louder-is-not-always-bigger)).
 
 ## Producer takeaway: ask what should drive what
 

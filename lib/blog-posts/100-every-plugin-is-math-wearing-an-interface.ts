@@ -2,8 +2,8 @@ import { BlogArticle } from '../blog-data';
 
 export const post100: BlogArticle = {
     slug: 'every-plugin-is-math-wearing-an-interface',
-    title: 'Every plugin is math with knobs',
-    excerpt: 'Under every plugin interface is an equation that turns input samples into output samples. Learn the four kinds of change a plugin can make, and test yours.',
+    title: 'Every plugin is maths with knobs',
+    excerpt: 'Under every plugin interface is an equation that turns input samples into output samples. A null test against your stock tools shows what a plugin really adds.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-09',
@@ -143,7 +143,7 @@ Look at an insert chain and strip the branding off each plugin. Ask whether it c
 - MIT OpenCourseWare. *6.003 Signals and Systems*, Fall 2011. https://ocw.mit.edu/courses/6-003-signals-and-systems-fall-2011/
 `,
     seo: {
-        title: 'Every plugin is math with knobs | VGP Studio',
+        title: 'Every plugin is maths with knobs | VGP Studio',
         description: 'The difference equations behind faders, delays and EQs, why saturation is the nonlinear part, and how a null test shows what a plugin really adds.',
         keywords: ['audio plugins math', 'digital signal processing', 'biquad filter', 'null test', 'difference equation', 'saturation'],
     },

@@ -85,23 +85,23 @@ export const post143: BlogArticle = {
         {
             q: 'Your chorus sits in C major and you end it G, then Am, hoping for a sad, final landing. It sounds like a question instead. Which change is most likely to make the Am land as a settled, dark ending?',
             options: [
-                'Put E major before it, so Am becomes the home chord',
                 'Swap the final Am for A major to give it more weight',
                 'Keep the G and voice the Am an octave lower',
+                'Put E major before it, so Am becomes the home chord',
                 'Keep the G and hold the Am for twice as long',
             ],
-            answer: 0,
+            answer: 2,
             why: 'After G in a C major context, Am works as vi in a deceptive cadence, so listeners who know the style expect C and hear a swerve. E to Am is V to i in A minor, which makes Am the home chord. Register and length change the colour, not the role.',
         },
         {
             q: 'A game studio wants a victory cadence that sounds happy to every player, including players who grew up with little Western-influenced music. What does the Papua New Guinea study by Smit and colleagues (2022) suggest about relying on a major cadence?',
             options: [
                 'It works for everyone, since happiness is built into the major triad',
-                'It may not read as happy to players with little Western-like exposure',
                 'It works only for players with musical training, wherever they grew up',
                 'It carries no emotion for anyone, so the choice of mode does not matter',
+                'It may not read as happy to players with little Western-like exposure',
             ],
-            answer: 1,
+            answer: 3,
             why: 'Major cadences were heard as happier in every community except the one with minimal exposure to Western-like music. The authors tie the effect to exposure, although they cannot exclude a universal part, so test the cue on the audience you are writing for.',
         },
     ],

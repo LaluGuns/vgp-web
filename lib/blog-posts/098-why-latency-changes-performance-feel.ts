@@ -6,7 +6,7 @@ const roundTrip = (n: number) => (2 * n * 1000) / 48000;
 export const post098: BlogArticle = {
     slug: 'why-latency-changes-performance-feel',
     title: 'Latency changes how a take feels',
-    excerpt: 'A few milliseconds of monitoring delay can make a good player sound stiff. Learn where latency comes from, how to work it out and how to track without it.',
+    excerpt: 'A few milliseconds of monitoring delay can make a good player sound stiff. Track at a small buffer or with direct monitoring, and raise the buffer again to mix.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',

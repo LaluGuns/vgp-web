@@ -99,10 +99,10 @@ export const post145: BlogArticle = {
             options: [
                 'Line A, because its pitch already moves like a melody',
                 'Whichever has the more even gaps between stressed syllables',
-                'Line B, because level syllables give the ear notes to hold',
                 'Either, once you tune the steps between syllables to a scale',
+                'Line B, because level syllables give the ear notes to hold',
             ],
-            answer: 2,
+            answer: 3,
             why: 'In Tierney and colleagues\' audiobook phrases, the ones that turned into song glided less inside each syllable, 27.6 against 40 semitones per second on average, and their stressed syllables were only slightly more regular in timing. Falk and colleagues found that level pitch on the syllables did more than fitting the steps to a scale.',
         },
         {
@@ -121,7 +121,7 @@ export const post145: BlogArticle = {
 
 You pull a spoken line from an old voice memo for an intro and loop it while you build the beat. Twenty minutes later you cannot hear it as talking any more. The words seem to sit on notes, and you are humming them. Then a friend walks in, hears the loop twice and asks who is talking.
 
-Hearing some spoken phrases over and over is enough to make them sound sung. After a hundred loops, you no longer hear the line the way a first-time listener does.
+Hearing some spoken phrases over and over is enough to make them sound sung, with no change to the audio.
 
 ## Why it matters: a tool and a trap
 
@@ -152,7 +152,7 @@ A reading that fits these results, and close to the one Margulis and colleagues 
 1. Record yourself saying a short line of five to eight syllables in a natural speaking voice, or take one from a voice memo you own. Trim it to about two seconds.
 2. Loop it ten times with about one second of silence between repeats, with no beat underneath. Rate it from 1 (speech) to 5 (song) after the first and the tenth repeat.
 3. On the tenth repeat, hum along and record the hum on a new track.
-4. Convert the hum to MIDI with your DAW's audio-to-MIDI function, or find the notes by ear on a keyboard. Open the spoken take in a pitch editor and compare where each syllable sits and how far it glides.
+4. Convert the hum to MIDI with your DAW's audio-to-MIDI function, or find the notes by ear on a keyboard. Open the spoken take in a pitch editor (a free one will do if your DAW has none) and compare where each syllable sits and how far it glides.
 5. Duplicate the loop and transpose each repeat between the first and the last by about one semitone, alternating up and down, with formants preserved. Listen for whether the tune fades, as it did in Deutsch's transposed condition.
 6. Try a second line that glides a lot, such as an excited question, and compare how quickly each one turns.
 7. Write a sung hook from the MIDI notes with the same words. Play the spoken loop and the sung hook once each to someone who has not heard either, and ask what they heard in each.

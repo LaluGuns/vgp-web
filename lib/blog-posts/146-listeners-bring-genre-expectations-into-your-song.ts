@@ -31,19 +31,19 @@ export const post146: BlogArticle = {
             max: 2,
             ticks: [-0.5, 0, 0.5, 1, 1.5, 2],
             caption:
-                'Mean accuracy of 40 North American college students in Hannon and Trehub\'s (2005b) adult experiment, scored as how much less similar they rated metre-breaking changes than metre-keeping ones. Zero is chance. They were accurate in Western metre and slightly below zero in Balkan metre. The group that played Balkan music at home scored 0.22 in the second session, which the authors still counted as chance.',
-            alt: 'A number line from minus 0.5 to 2 with a strong marker at 0 for chance. Balkan metre sits at minus 0.27, Balkan in the second session after home listening at 0.22, and Western metre at 1.79.',
+                'Mean accuracy of 40 college students, most raised in North America, in Hannon and Trehub\'s (2005b) adult experiment, scored as how much less similar they rated metre-breaking changes than metre-keeping ones. Zero is chance. They were accurate in Western metre and slightly below zero in Balkan metre. The group that played Balkan music at home scored 0.22 in the second session, which the authors still counted as chance.',
+            alt: 'A number line from minus 0.5 to 2 with a marker at 0 for chance. Strong markers show Balkan metre at minus 0.27 and Balkan in the second session, after home listening, at 0.22. Western metre sits at 1.79.',
             markers: [
-                { value: 0, label: 'Chance', strong: true },
-                { value: -0.27, label: 'Balkan metre' },
-                { value: 0.22, label: 'Balkan, session 2' },
+                { value: 0, label: 'Chance' },
+                { value: -0.27, label: 'Balkan metre', strong: true },
+                { value: 0.22, label: 'Balkan, session 2', strong: true },
                 { value: 1.79, label: 'Western metre' },
             ],
         },
     },
     quiz: [
         {
-            q: 'You make two edits to a 2+2+3 groove in seven, one that keeps the metre and one that breaks it. Going by Hannon and Trehub (2005a), who hears the difference: a friend raised on pop and house, or one raised on Balkan brass?',
+            q: 'You make two edits to a 2+2+3 groove in seven, one that keeps the metre and one that breaks it. If your friends respond like the adults Hannon and Trehub (2005a) tested, who hears the difference: the one raised on pop and house, or the one raised on Balkan brass?',
             options: [
                 'Both friends, since a broken bar is obvious in any metre',
                 'The Balkan-raised friend; the pop friend hears little change',
@@ -54,7 +54,7 @@ export const post146: BlogArticle = {
             why: 'North American adults told metre-keeping from metre-breaking changes apart in simple metre but not in the complex Balkan metre, while adults of Bulgarian or Macedonian origin managed both. Each listener judges the bar against the metres they learned.',
         },
         {
-            q: 'Before release you want a gut check on whether a turn in your bebop-style solo sounds like the style. Going by Hansen, Vuust and Pearce (2016), whose sense of being sure what comes next is most likely to match it?',
+            q: 'Before release you want to know how predictable the next turn in your bebop-style solo is, so you ask listeners how sure they are of where it goes. On the evidence of Hansen, Vuust and Pearce (2016), whose certainty is most likely to track it?',
             options: ['A jazz player', 'A classical pianist', 'A friend who does not play', 'All three about equally'],
             answer: 0,
             why: 'Both musician groups rated expectedness closer to a bebop-trained model than non-musicians did, but only the jazz musicians\' sense of certainty tracked the model. The groups were small, so treat it as a lead rather than a rule.',
@@ -83,7 +83,7 @@ When you decide that a move is too strange, too safe or just right, you consult 
 
 Pearce (2018) reviews the case that listeners absorb the statistical regularities of the music they hear and use them to predict what comes next. In that work, a computer model trained on one culture's music simulates the expectations of listeners from that culture, and training it on other music plausibly simulates listeners with other backgrounds. The probabilities come from each listener's own history. The lesson on [surprise](/blog/how-surprise-works-without-confusing-the-listener) shows how such predictions turn into a measure of surprise.
 
-Rhythm gives a clean test. Hannon and Trehub (2005a) played folk melodies in simple metres and in complex metres common in Balkan music, then tested listeners on altered versions that either kept or broke the original metre. North American adults told the two kinds of change apart in simple metre but not in the complex one. Adults of Bulgarian or Macedonian origin managed both, and so did 6-month-old infants. A follow-up (Hannon & Trehub, 2005b) tested 40 North American college students twice, one or two weeks apart. Those assigned to play a CD of Balkan folk music at home in between reported doing so about once a day, and in the second session they were still at chance on the complex metre. Infants about a year old, given similar home listening, learned to tell the changes apart. The authors concluded that the adults fitted the foreign rhythms into a Western even-beat frame.
+Rhythm gives a clean test. Hannon and Trehub (2005a) played folk melodies in simple metres and in complex metres common in Balkan music, then tested listeners on altered versions that either kept or broke the original metre. North American adults told the two kinds of change apart in simple metre but not in the complex one. Adults of Bulgarian or Macedonian origin managed both, and so did 6-month-old infants. A follow-up (Hannon & Trehub, 2005b) tested 40 college students, most raised in North America, in two sessions one or two weeks apart. Those assigned to play a CD of Balkan folk music at home in between reported doing so about once a day, and in the second session they were still at chance on the complex metre. Infants about a year old, given similar home listening, learned to tell the changes apart. The authors concluded that the adults fitted the foreign rhythms into a Western even-beat frame.
 
 ::figure meter
 

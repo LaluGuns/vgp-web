@@ -42,9 +42,9 @@ export const post063: BlogArticle = {
             unit: 'dBTP',
             ticks: [-3, -2, -1, 0, 1],
             markers: [
-                { value: 0, label: 'Full scale', strong: true },
-                { value: -1, label: 'R 128, Spotify' },
-                { value: -2, label: 'Codecs, loud masters' },
+                { value: 0, label: 'Full scale' },
+                { value: -1, label: 'R 128, Spotify', strong: true },
+                { value: -2, label: 'Codecs, loud masters', strong: true },
             ],
             ranges: [{ from: 0, to: 1, label: 'Clips' }],
         },

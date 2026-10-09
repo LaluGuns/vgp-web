@@ -145,6 +145,8 @@ Finally, averaging. A raw FFT display jumps with every block. Analyzers overlap 
 
 ## DAW experiment: resolve two tones
 
+You need a spectrum analyzer that lets you set the FFT size. Not every stock analyzer does, and free ones that do exist.
+
 1. In a 48 kHz session, put a sine generator at 1 kHz on one track and another at 1.05 kHz on a second track, both at -12 dBFS.
 2. Insert a spectrum analyzer on the master and set it to 1024 points with a Hann window.
 3. Look at 1 kHz: one wide bump. The two tones are 50 Hz apart, about one bin.

@@ -167,9 +167,11 @@ where $k$ is the attack control, positive to sharpen onsets and negative to soft
 
 ::figure followers
 
-Why does the front edge carry so much of what we call punch? In Fenton and Lee's perceptual model of punch, the score comes from the loudness of the transient part of a sound, separated from its steady part, weighted by onset time and frequency band. In their listening tests it correlated strongly with listeners' punch ratings (Fenton and Lee, 2019). Change the onset and you change the part of the sound that model listens to. How that onset relates to the average level is the subject of the [lesson on impact and level](/blog/the-difference-between-impact-and-level).
+Fenton and Lee's perceptual model of punch suggests why the front edge carries so much of it: the score comes from the loudness of the transient part of a sound, separated from its steady part, weighted by onset time and frequency band. In their listening tests it correlated strongly with listeners' punch ratings (Fenton and Lee, 2019). Change the onset and you change the part of the sound that model listens to. How that onset relates to the average level is the subject of the [lesson on impact and level](/blog/the-difference-between-impact-and-level).
 
 ## DAW experiment: one snare, two tools
+
+You need a transient shaper. Several DAWs include one, sometimes called an envelope shaper, and free ones exist.
 
 1. Pick a snare track with clear backbeats and some ghost notes, or a drum loop with loud and quiet hits. Loop two bars.
 2. Insert a compressor: ratio 4:1 or higher, attack around 20 to 30 ms, release short. Pull the threshold down until the backbeats show 4 to 6 dB of reduction, then add makeup gain until the loudness matches the bypassed track.

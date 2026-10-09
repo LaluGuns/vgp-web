@@ -89,7 +89,7 @@ export const post114: BlogArticle = {
     ],
     content: `## Hook: the red meter that does not distort
 
-A channel meter in your DAW is in the red, +6 dBFS on the peak display, and the track sounds clean. Years of advice say that anything over 0 dBFS is clipped and ruined, so what is going on?
+A channel meter in your DAW is in the red, +6 dBFS on the peak display, and the track sounds clean. Years of advice say that anything over 0 dBFS is clipped and ruined, and this track is not.
 
 The number format the DAW uses inside explains it. Most mix engines work in 32-bit floating point, and in floating point 0 dBFS is a reference level, not a wall. That headroom is real, but it ends at specific places, and those places are where overs turn into distortion.
 

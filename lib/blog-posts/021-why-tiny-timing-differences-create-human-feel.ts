@@ -9,7 +9,7 @@ const RANDOM_MS = [13, -17, 20, -5, -20, 8, 17, -12];
 export const post021: BlogArticle = {
     slug: 'why-tiny-timing-differences-create-human-feel',
     title: 'Why tiny timing differences create human feel',
-    excerpt: 'A small, consistent offset makes a part lean back or push. Random humanize and large offsets do the opposite. Learn to size the lean in milliseconds.',
+    excerpt: 'A small, consistent offset makes a part lean back or push. Random humanize and large offsets do the opposite. At 90 BPM, a 20 ms lean is 12 percent of a 16th.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',

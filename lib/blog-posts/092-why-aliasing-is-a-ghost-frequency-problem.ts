@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post092: BlogArticle = {
     slug: 'why-aliasing-is-a-ghost-frequency-problem',
     title: 'Why aliasing is a ghost frequency problem',
-    excerpt: 'That harsh digital top end is often aliasing. Learn how saturators and clippers create harmonics that fold back into your mix as ghost frequencies.',
+    excerpt: 'That harsh digital top end is often aliasing: saturators and clippers create harmonics above the Nyquist limit, and they fold back into your mix as ghost frequencies.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',
@@ -25,11 +25,11 @@ export const post092: BlogArticle = {
             ticks: [0, 12, 24, 36, 48, 60],
             markers: [
                 { value: 10, label: 'Tone' },
-                { value: 24, label: 'Nyquist', strong: true },
+                { value: 24, label: 'Nyquist' },
                 { value: 30, label: '3rd harmonic' },
                 { value: 50, label: '5th harmonic' },
-                { value: 18, label: 'Alias' },
-                { value: 2, label: 'Alias' },
+                { value: 18, label: 'Alias', strong: true },
+                { value: 2, label: 'Alias', strong: true },
             ],
             arrows: [
                 { from: 30, to: 18 },

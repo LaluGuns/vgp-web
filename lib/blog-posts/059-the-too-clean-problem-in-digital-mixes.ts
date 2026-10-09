@@ -96,7 +96,7 @@ A symmetric curve, like a tanh saturator or a hard clipper, has only odd terms, 
 
 ::figure harmonics
 
-The catch comes with more than one note. The same terms also create sum and difference frequencies, such as $f_1 + f_2$ and $f_2 - f_1$, which are not harmonics of either note. This intermodulation is why a heavily driven full mix turns muddy while a lightly driven one just gets denser (Reiss and McPherson, 2014; Zölzer, 2011).
+With more than one note, the same terms also create sum and difference frequencies, such as $f_1 + f_2$ and $f_2 - f_1$, which are not harmonics of either note. This intermodulation is why a heavily driven full mix turns muddy while a lightly driven one just gets denser (Reiss and McPherson, 2014; Zölzer, 2011).
 
 Hear it at matched level, so the harmonics are not confused with a louder signal:
 

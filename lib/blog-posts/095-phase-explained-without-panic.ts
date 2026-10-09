@@ -5,7 +5,7 @@ const A = { kind: 'sine' as const, cycles: 2, amp: 0.45 };
 export const post095: BlogArticle = {
     slug: 'phase-explained-without-panic',
     title: 'Phase is timing with consequences',
-    excerpt: 'Two copies of a sound add up or cancel depending on their timing. Learn how phase and polarity differ, and fix multi-mic low end before you reach for EQ.',
+    excerpt: 'Two copies of a sound add up or cancel depending on their timing. Fix polarity and alignment on related mics before you reach for EQ, then check the mix in mono.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',

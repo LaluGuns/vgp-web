@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post133: BlogArticle = {
     slug: 'stereo-low-end-is-a-translation-decision',
     title: 'Stereo low end is a translation decision',
-    excerpt: 'Some stereo bass survives a mono sum and some cancels. Learn which kinds of left-right difference are safe in the low end and where your bass gets summed.',
+    excerpt: 'Some stereo bass survives a mono sum and some cancels. A level difference between the channels sums safely; a detuned or anti-phase part does not.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
     readingTime: 7,

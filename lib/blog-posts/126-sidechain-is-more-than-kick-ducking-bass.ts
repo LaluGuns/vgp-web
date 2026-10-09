@@ -159,7 +159,7 @@ The second tool filters the key. A bus compressor that hears the full mix reacts
 
 The third uses a key nobody hears. A silent copy of the kick, its output switched off but still feeding the sidechain, keeps a pad pumping through a breakdown where the real kick stops, or pumps it on a rhythm the kick never plays.
 
-The fourth swaps the compressor for a gate, so the key opens the processor instead of pushing it down. Key a gate on a noise track from the snare and the noise sounds only with the snare hits, shaped by the gate's hold and release. A vocal keying a dynamic EQ band on the instruments is the same routing again. The [lesson on vocal pockets](/blog/the-mix-decision-that-makes-vocals-feel-expensive) builds that one step by step, and the [lesson on dynamic EQ and multiband compression](/blog/dynamic-eq-vs-multiband-compression) helps you pick the processor.
+The fourth swaps the compressor for a gate, so the key opens the processor instead of pushing it down. Key a gate on a noise track from the snare and the noise sounds only with the snare hits, shaped by the gate's hold and release. A vocal keying a dynamic EQ band on the instruments is the same routing again. That routing gets its own step-by-step lesson in [the vocal pocket](/blog/the-mix-decision-that-makes-vocals-feel-expensive), and [comparing dynamic EQ with multiband](/blog/dynamic-eq-vs-multiband-compression) helps you pick the processor.
 
 ## DAW experiment: four keys, one session
 

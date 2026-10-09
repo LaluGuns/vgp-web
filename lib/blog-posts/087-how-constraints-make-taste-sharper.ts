@@ -27,7 +27,7 @@ export const post087: BlogArticle = {
         five: {
             type: 'arrangement',
             caption:
-                'Five tracks, no layers. Contrast comes from which parts play in which section, so every entrance is heard as an event instead of being buried under a stack.',
+                'Five tracks, no layers. Contrast comes from which parts play in which section: the lead sits out the intro and verse and enters on the hook, so its entrance is heard as an event instead of being buried under a stack.',
             alt: 'Arrangement grid for five tracks across intro, verse, hook, break and final hook. Chords play throughout, drums and bass enter in the verse, the lead enters in the hook, the break drops the drums and the final hook brings everything back.',
             density: true,
             sections: [

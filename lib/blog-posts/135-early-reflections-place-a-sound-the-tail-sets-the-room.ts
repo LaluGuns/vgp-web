@@ -126,7 +126,7 @@ For a 1 s decay that is 33%. For a 2 s decay it is 58%. Half the energy is late 
 
 ::figure late
 
-Pre-delay pushes the same tail later. With 40 ms of pre-delay, only 40 ms of the reverb fits before the boundary, so the 2 s reverb goes from 58% late to 76% late. Pre-delay keeps the start of each word clean, as the [lesson on reverb and emotional distance](/blog/why-reverb-can-push-emotion-forward-or-backward) shows, but it moves reverb energy out of the early window, not into it.
+Pre-delay pushes the same tail later. With 40 ms of pre-delay, only 40 ms of the reverb fits before the boundary, so the 2 s reverb goes from 58% late to 76% late. [Pre-delay keeps the start of each word clean](/blog/why-reverb-can-push-emotion-forward-or-backward), but it moves reverb energy out of the early window, not into it.
 
 In the demo, try moving the decay with the level left alone, then the level with the decay left alone. Listen for whether the notes move back or the room around them grows.
 

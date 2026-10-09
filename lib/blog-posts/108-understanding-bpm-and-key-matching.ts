@@ -36,9 +36,9 @@ export const post108: BlogArticle = {
             ticks: [120, 130, 140, 150, 160],
             markers: [
                 { value: 124.7, label: '-2 semitones' },
-                { value: 132.1, label: '-1 semitone' },
-                { value: 140, label: 'Original', strong: true },
-                { value: 148.3, label: '+1 semitone' },
+                { value: 132.1, label: '-1 semitone', strong: true },
+                { value: 140, label: 'Original' },
+                { value: 148.3, label: '+1 semitone', strong: true },
                 { value: 157.1, label: '+2 semitones' },
             ],
         },
@@ -122,6 +122,8 @@ Hear the grid side of this: the same beat from 60 to 160 BPM. Notice which tempo
 ::demo tempo
 
 ## DAW experiment: match a sample, then set pitch correction
+
+Steps 5 to 7 need a pitch corrector with key and scale settings. Several DAWs include one, and free ones exist.
 
 1. Find the sample's tempo. Count the beats in the loop and time it: $\\text{BPM} = 60 \\times \\text{beats} / \\text{seconds}$. A four-bar loop has 16 beats, so if it lasts 6.86 seconds it is at about 140 BPM.
 2. Find its key with your DAW's detection or an online tool, then confirm by playing the root under it. Detection can report the relative major instead of the minor, because the notes are the same.

@@ -2,7 +2,7 @@ import { BlogArticle } from '../blog-data';
 
 export const post026: BlogArticle = {
     slug: 'the-math-of-a-head-nod',
-    title: 'The math of a head nod',
+    title: 'The maths of a head nod',
     excerpt: 'A head nod is a timed movement. Tempo converts to a nod rate, the kick and bass drive it, and steady anchors let the body predict the next beat.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
@@ -50,7 +50,7 @@ export const post026: BlogArticle = {
             why: '120 beats in 60 seconds is two per second, 2 Hz, and 60,000 / 120 = 500 ms per beat.',
         },
         {
-            q: 'Nobody in the room nods to your clean 92 BPM beat. Going by the motion-capture study by Burger and colleagues, which change is most likely to get heads moving?',
+            q: 'Nobody in the room nods to your clean 92 BPM beat. Which change would the motion-capture study by Burger and colleagues back to get heads moving?',
             options: [
                 'Push the tempo up to 100 BPM and leave the parts as they are',
                 'Add a long plate reverb to the kick and the snare',
@@ -132,7 +132,7 @@ Keep the beat period steady and clear, and make the kick and bass worth moving t
 - van Noorden, L., & Moelants, D. (1999). Resonance in the perception of musical pulse. *Journal of New Music Research*, 28(1), 43-66.
 `,
     seo: {
-        title: 'The math of a head nod | VGP Studio',
+        title: 'The maths of a head nod | VGP Studio',
         description: 'Tempo as a movement rate: why 120 BPM sits near walking pace, what drives head movement, and how steady anchors let the body predict the beat.',
         keywords: ['head nod groove', 'tempo and movement', 'pulse perception', 'sensorimotor synchronization', 'beat making', 'drum editing'],
     },

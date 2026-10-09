@@ -156,6 +156,8 @@ Compression on its own usually raises the ratio, because it turns the loud vowel
 
 ## DAW experiment: hear what the de-esser takes
 
+You need a de-esser. Not every DAW ships one, and free ones exist.
+
 1. Loop a fast, wordy section of the lead vocal with the full mix playing.
 2. Switch your de-esser to its listen or delta mode, if it has one, so you hear only what it removes.
 3. If you hear t, k, ch or sh in that signal, raise the detection frequency, narrow the band, or switch from wideband to split-band. Most voices put their s energy somewhere between 5 and 10 kHz.

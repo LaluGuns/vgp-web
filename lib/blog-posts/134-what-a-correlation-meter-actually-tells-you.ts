@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post134: BlogArticle = {
     slug: 'what-a-correlation-meter-actually-tells-you',
     title: 'What a correlation meter tells you',
-    excerpt: 'A correlation meter measures how alike the two channels are, weighted by energy. Learn the maths, what a reading predicts for mono and what it cannot see.',
+    excerpt: 'A correlation meter measures how alike the two channels are, weighted by energy. A reading forecasts the mono loss, but a quiet anti-phase part barely moves it.',
     category: 'audio-science',
     publishedAt: '2026-10-09',
     readingTime: 7,
@@ -142,6 +142,8 @@ One more relation ties the needle to mid/side. For channels of equal level, $r =
 ::demo width
 
 ## DAW experiment: calibrate your own meter
+
+You need a correlation meter. Some DAWs build one into a metering or imaging plugin; if yours does not, a free one will do.
 
 1. Put a correlation meter and a mono switch on the master, with the meter before the switch.
 2. Play a mono vocal centred and note the reading. Pan it 30% left and check that the reading does not change. Then pan it hard left and see what your meter shows.

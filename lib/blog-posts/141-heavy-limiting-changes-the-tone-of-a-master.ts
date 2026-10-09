@@ -186,7 +186,7 @@ export const post141: BlogArticle = {
 
 You push the limiter for the last few decibels, match the loudness and compare. The limited version has less weight in the kick and the bass, and the hats and the vocal's sibilance seem further forward. On the next song the same move does the opposite and the top end goes dull. You never touched an EQ.
 
-So what changed the tone? A broadband limiter applies one gain to the whole mix at each moment, and which moments it turns down depends on which part of the spectrum makes the peaks.
+The limiter changes the tone because it applies one gain to the whole mix at each moment, and which moments it turns down depends on which part of the spectrum makes the peaks.
 
 ## Why it matters: tone moves with the drive
 

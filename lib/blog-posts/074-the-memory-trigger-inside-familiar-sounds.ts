@@ -49,7 +49,7 @@ export const post074: BlogArticle = {
     },
     quiz: [
         {
-            q: 'An ad brief wants music that brings back viewers\' own memories. You can write an original or license a song most of them already know. Going by Janata, Tomic and Rakowski (2007), which has the better chance?',
+            q: 'An ad brief wants music that brings back viewers\' own memories. You can write an original or license a song most of them already know. Judging by the memory study of Janata, Tomic and Rakowski (2007), which has the better chance?',
             options: [
                 'The original, as long as it is slow, soft and in a minor key',
                 'The known song, since memories came mostly with familiar songs',
@@ -57,7 +57,7 @@ export const post074: BlogArticle = {
                 'Either, since any song brings back a memory about 30% of the time',
             ],
             answer: 1,
-            why: 'About 30% of the excerpts in the study evoked an autobiographical memory, and mostly when listeners already knew the song. Unfamiliar songs rarely did it, so a new song cannot plant a personal memory, whatever its tempo or texture.',
+            why: 'About 30% of the excerpts in the study evoked an autobiographical memory, and mostly when listeners already knew the song. Unfamiliar songs rarely did it, so a new song is unlikely to bring one back, whatever its tempo or texture.',
         },
         {
             q: 'Why can you not decide which memory a vinyl crackle will bring back?',
@@ -92,7 +92,7 @@ The idea was right. Familiar sounds can carry a listener to another time. The do
 
 Music often brings back personal memories. Juslin and Västfjäll (2008) list episodic memory as one of the main ways music stirs emotion: a piece brings back an event, and the feeling of that event returns with it. They also describe evaluative conditioning, where a sound takes on a feeling because it was often heard alongside something good or bad.
 
-In a study by Janata, Tomic and Rakowski (2007), about 30% of song excerpts evoked an autobiographical memory, and they did so mostly when listeners already knew the song. Unfamiliar songs rarely brought anything back. That sets the limit for a producer. You cannot plant a personal memory with a new song. You can only use sounds the listener has already learned to link with something.
+In a study by Janata, Tomic and Rakowski (2007), about 30% of song excerpts evoked an autobiographical memory, and they did so mostly when listeners already knew the song. Unfamiliar songs rarely brought anything back. That sets the limit for a producer: a new song is unlikely to bring back a personal memory, so what you can work with is sounds the listener has already learned to link with something.
 
 ::figure cue
 

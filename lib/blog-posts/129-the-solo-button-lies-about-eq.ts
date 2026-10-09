@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post129: BlogArticle = {
     slug: 'the-solo-button-lies-about-eq',
     title: 'Use solo to find problems, not to set tone',
-    excerpt: 'A part you EQ in solo is heard in the mix through everything around it. Learn what solo is good for and why tone decisions belong in context.',
+    excerpt: 'A part you EQ in solo is heard in the mix through everything around it. Use solo for clicks, noise and rings, and make tone decisions with the mix playing.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
     readingTime: 6,
@@ -100,7 +100,7 @@ You spend ten minutes on the acoustic guitar with solo on. A low shelf for body,
 
 A listener never presses your solo button. They hear every part through every other part, so a part's tone in the mix depends on what plays alongside it. A guitar can be full and warm in solo and thin in the mix, or thin in solo and exactly right in the mix.
 
-Solo is still the right tool for anything that belongs to one track alone: a click at an edit, a breath cut off mid-word, hiss, hum, a ring that keeps sounding after the note (the [lesson on resonance](/blog/why-resonance-can-sing-or-destroy-a-mix) shows how to hunt those). It is the wrong place to decide tone and level, because those depend on everything else.
+Solo is still the right tool for anything that belongs to one track alone: a click at an edit, a breath cut off mid-word, hiss, hum, a ring that keeps sounding after the note (see [how to hunt a ring](/blog/why-resonance-can-sing-or-destroy-a-mix)). It is the wrong place to decide tone and level, because those depend on everything else.
 
 ## Science model: masking decides which part of a sound you hear
 

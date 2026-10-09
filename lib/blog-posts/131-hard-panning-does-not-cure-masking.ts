@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post131: BlogArticle = {
     slug: 'hard-panning-does-not-cure-masking',
     title: 'Hard panning does not cure masking',
-    excerpt: 'Panning changes where a part comes from, not which bands it fills or when it plays. Learn why the help shrinks on speakers and disappears in mono.',
+    excerpt: 'Panning changes where a part comes from, not which bands it fills or when it plays. The help shrinks on speakers and disappears in mono, where the parts collide again.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
     readingTime: 7,
@@ -95,7 +95,7 @@ Masking happens when two sounds put energy into the same auditory bands at the s
 
 ::figure overlap
 
-Location still counts. It is one of several cues the ear uses to sort a mixture into sources, along with when notes start, pitch range and timbre (Bregman, 1990); the [lesson on attention](/blog/how-attention-moves-through-a-mix) covers how those cues decide what the listener follows. Two guitars that differ only in location lean on one cue, and that cue depends on the playback system.
+Location still counts. It is one of several cues the ear uses to sort a mixture into sources, along with when notes start, pitch range and timbre (Bregman, 1990), and together those cues decide [what the listener follows](/blog/how-attention-moves-through-a-mix). Two guitars that differ only in location lean on one cue, and that cue depends on the playback system.
 
 ## Science model: what each ear receives
 

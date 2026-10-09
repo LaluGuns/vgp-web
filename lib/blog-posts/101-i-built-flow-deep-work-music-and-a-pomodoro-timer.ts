@@ -50,15 +50,15 @@ export const post101: BlogArticle = {
             why: 'The stats report measured minutes only. Switching tabs does not mean you stopped working, so the app does not watch tabs or score attention, and the number is how long the timer ran.',
         },
         {
-            q: 'You are building a tracker for your own studio sessions and want numbers you can trust. Following the reasoning behind Flow\'s stats, what should it show?',
+            q: 'Your log shows 120 minutes on Monday and 60 on Tuesday. What can you conclude from those two numbers alone?',
             options: [
-                'A focus score from how long the DAW window stayed in front',
-                'The minutes the timer ran, with no guess about your attention',
-                'A drift alert each time you switch to another window',
-                'A productivity score from how many edits you make each hour',
+                'That Monday was the more focused and productive day',
+                'That you drifted for an hour on Tuesday, since it logged less',
+                'Only that the timer ran twice as long on Monday as on Tuesday',
+                'That Tuesday\'s music pulled more of your attention than Monday\'s',
             ],
-            answer: 1,
-            why: 'Window focus and edit counts are guesses about attention: you might be reading, writing elsewhere or thinking with your eyes closed. A timer can measure how long a session ran, and what an app cannot measure, it should not report.',
+            answer: 2,
+            why: 'Minutes record how long the timer ran. Tuesday\'s hour could hold your best work of the week and Monday could be mostly email, so the numbers cannot rank your focus, your output or the music.',
         },
     ],
     content: `## The session that started it

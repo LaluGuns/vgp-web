@@ -6,7 +6,7 @@ const CLOSE = { type: 'lowshelf' as const, freq: 300, gain: 9.5, q: 0.5 };
 export const post047: BlogArticle = {
     slug: 'why-proximity-effect-is-friend-and-trap',
     title: 'How proximity effect turns warmth into mud',
-    excerpt: 'Singing close to a directional mic adds bass that grows as the distance shrinks. Learn the physics, what the boost looks like and why a high-pass is the wrong fix.',
+    excerpt: 'Singing close to a directional mic adds bass that grows as the distance shrinks. A high-pass is the wrong shape to undo it, so set the distance at the source.',
     category: 'vocal-production',
     publishedAt: '2026-06-07',
     updatedAt: '2026-10-08',

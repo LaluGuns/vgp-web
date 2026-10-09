@@ -106,11 +106,11 @@ export const post120: BlogArticle = {
             why: 'The phase shift is 360° × 55 × 0.001, about 20 degrees. Half a cycle at 55 Hz takes about 9 ms, so the low end only cancels with a much larger offset or a polarity flip.',
         },
     ],
-    content: `## Hook: the disappearing low end
+    content: `## Hook: the amp track that makes the bass smaller
 
-You spend twenty minutes on the kick until it hits hard, and twenty more on the sub until it rumbles. Then you play them together and the low end caves in. It sounds thin and hollow, as if someone scooped out the bottom with an EQ.
+You record a bass through a DI and a mic on its amp at the same time, planning to blend the clean low end with the amp's growl. Each track sounds full on its own. Bring the amp up under the DI and the bass gets smaller instead of bigger: the low notes go hollow, as if someone scooped out the bottom with an EQ, and the closer the two tracks get in level, the less bottom is left.
 
-So you boost the lows on the kick and the lows on the sub, and now the mix is muddy and thin at once. Each part sounds right on its own. Together, the two signals work against each other, and before you can fix that you need to know whether you are dealing with polarity or phase. They are related, but they are not the same thing, and they need different fixes.
+The two signals work against each other, and before you can fix that you need to know whether you are dealing with polarity or phase. They are related, but they are not the same thing, and they need different fixes.
 
 ## Why it matters: only related signals cancel
 

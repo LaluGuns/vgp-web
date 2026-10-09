@@ -80,11 +80,11 @@ export const post023: BlogArticle = {
             q: 'You clap along to the click, then line a tambourine up with your raw claps without measuring anything. Where is the tambourine most likely to end up?',
             options: [
                 'Behind the beat, since each clap is a reaction to the click',
-                'Ahead of the beat, by tens of milliseconds on average',
                 'On the beat, within a millisecond or two of the click',
                 'Scattered either side of the beat, with no lean either way',
+                'Ahead of the beat, by tens of milliseconds on average',
             ],
-            answer: 1,
+            answer: 3,
             why: "When people tap with a steady beat, their taps land ahead of it on average, usually by tens of milliseconds (Repp, 2005). Aligning a part to raw claps copies that anticipation into the track, which is why the corrected clap test measures it first.",
         },
         {

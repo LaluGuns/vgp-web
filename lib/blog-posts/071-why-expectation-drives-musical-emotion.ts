@@ -32,7 +32,7 @@ export const post071: BlogArticle = {
         itpra: {
             type: 'flow',
             caption:
-                'Huron\'s five expectation responses around one event. Imagination and tension come before it. Prediction, reaction and appraisal follow it.',
+                'Huron\'s five expectation responses around one event. Imagination and tension come before it. Tension is the rise in arousal and attention just before the moment, and a held-back arrival stretches it out. Prediction, reaction and appraisal follow it.',
             alt: 'Five boxes in a row: imagination, tension, prediction, reaction, appraisal, each with a short note on when it happens and what it does.',
             steps: [
                 { label: 'Imagination', note: 'Long before: picturing the outcome' },

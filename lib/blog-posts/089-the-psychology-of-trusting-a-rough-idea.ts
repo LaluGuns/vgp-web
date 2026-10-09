@@ -30,7 +30,7 @@ export const post089: BlogArticle = {
         timing: {
             type: 'rhythm',
             caption:
-                'The same backbeat three ways. Hard quantize removes a consistent lean along with real mistakes. A consistent offset is a feel you can keep. Random drift is what quantize strength or a few hand edits should fix.',
+                'The same backbeat three ways. As played, the snare lands the same amount late on both hits: a consistent offset, and a feel you can keep. Hard quantize removes that lean along with real mistakes. Random drift is what quantize strength or a few hand edits should fix.',
             alt: 'Three rows of a one-bar grid with snare hits on beats 2 and 4. In the first row both hits sit slightly late by the same amount. In the second row both sit exactly on the grid. In the third row one hit is a little early and the other clearly late.',
             rows: [
                 { label: 'As played', focus: true, hits: [{ step: 4, offset: 0.3 }, { step: 12, offset: 0.3 }], note: 'Same lean every time' },
@@ -41,7 +41,7 @@ export const post089: BlogArticle = {
     },
     quiz: [
         {
-            q: 'A co-producer refuses to edit on the day they write, saying the creative network shuts off once the editing one switches on. Going by the imaging research, what should they watch instead?',
+            q: 'A co-producer refuses to edit on the day they write, saying the creative network shuts off once the editing one switches on. What does the imaging research say they should watch instead?',
             options: [
                 'Nothing: the creative network really does go quiet during edits',
                 'The question they ask while editing, since the networks work together',

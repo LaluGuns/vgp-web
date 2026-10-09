@@ -62,7 +62,7 @@ export const post037: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Your synth string patch has the right brightness, but it still sounds like a pad instead of a plucked string. Going by the timbre study by McAdams and colleagues, which control is most likely to change what instrument it seems to be?',
+            q: 'Your synth string patch has the right brightness, but it still sounds like a pad instead of a plucked string. According to the timbre study by McAdams and colleagues, which control does most to change what instrument it seems to be?',
             options: ['The attack time of the envelope', 'The stereo width of the patch', 'The output level of the synth', 'The sample rate of the session'],
             answer: 0,
             why: 'When listeners rate how different instrument sounds are, rise time comes out as one of the main dimensions, alongside where the energy sits in the spectrum. With the spectrum already right, a faster attack is what turns a swell into a pluck.',

@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post001: BlogArticle = {
     slug: 'why-the-first-3-seconds-decide-the-whole-song',
     title: 'Skip risk starts in the intro',
-    excerpt: 'Learn why the first seconds of your song decide whether a listener stays or skips, and how to open with one clear sonic promise.',
+    excerpt: 'About a quarter of streamed songs are skipped in the first five seconds. Open with one clear sound the listener can follow, and build from there.',
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
@@ -35,7 +35,7 @@ export const post001: BlogArticle = {
         },
         clear: {
             type: 'arrangement',
-            caption: 'A clear opening. One element states the identity, then each section adds something new, so every entrance feels like an arrival.',
+            caption: 'A clear opening. One element, the pluck, states the identity, then each section adds something new, so every entrance feels like an arrival.',
             alt: 'Arrangement grid for a clear intro. Only the pluck plays in a short intro, then drums and vocal enter in the verse and everything plays in the chorus.',
             density: true,
             sections: [
@@ -53,7 +53,7 @@ export const post001: BlogArticle = {
         },
         listening: {
             type: 'flow',
-            caption: 'What happens in the first moments of a track, before the listener has decided anything about the song.',
+            caption: 'What happens in the first moments of a track, before the listener has decided anything about the song. The brain sorts the sound into sources first: one clear sound is grouped almost at once, and a wall of sound takes longer.',
             alt: 'Four steps: the sound starts, the brain groups it into sources, the brain predicts what comes next, and the listener stays or skips.',
             steps: [
                 { label: 'Sound starts', note: 'Phone speaker, playlist, half attention' },

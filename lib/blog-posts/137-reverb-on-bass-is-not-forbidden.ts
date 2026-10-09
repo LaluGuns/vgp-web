@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post137: BlogArticle = {
     slug: 'reverb-on-bass-is-not-forbidden',
     title: 'How to put reverb on bass without mud',
-    excerpt: '"No reverb on bass" protects you from three real problems. Learn what they are, and how a filtered, short, narrow return lets the bass share the room with the band.',
+    excerpt: '"No reverb on bass" protects you from three real problems. A filtered, short, narrow return avoids all three and lets the bass share the room with the band.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
     readingTime: 7,

@@ -39,7 +39,7 @@ export const post076: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Five synth lines on the same patch play through the chorus, each with its own melody. Going by Huron\'s (1989) voice-counting study, what will most listeners hear?',
+            q: 'Five synth lines on the same patch play through the chorus, each with its own melody. If listeners count voices the way Huron\'s (1989) listeners did, what will most of them hear?',
             options: [
                 'All five lines, because each one has its own melody',
                 'More lines than you wrote, as the harmonics add parts',
@@ -72,11 +72,11 @@ export const post076: BlogArticle = {
             why: 'A small, broad cut on the backing reduces the overlap with the voice where its presence sits, so the vocal comes forward without its fader moving.',
         },
     ],
-    content: `## Hook: the crowded chorus
+    content: `## Hook: the friend who only heard the synth
 
-You mix a dense chorus: lead vocal, two electric guitars, a synth pad and a busy drum groove. You want everything to sound big, so you boost the midrange on every track. Played back, the chorus is a wall. The vocal sinks, the guitars lose their bite and the synth becomes irritating.
+You play a friend the new chorus: lead vocal, two electric guitars both playing fills, a synth arpeggio and a busy drum groove, every track with its midrange boosted so the section sounds big. When it ends they hum the arpeggio back to you, and they cannot repeat a single line of the lyric.
 
-Every part is asking for attention at the same moment and in the same frequency range. A listener can only follow so much at once, so the mix has to choose what they follow.
+Every part was asking for attention at the same moment and in the same frequency range, and a listener can only follow so much at once. A dense mix has to choose which part they follow, moment by moment.
 
 ## Why it matters: one stream in the foreground
 
@@ -103,6 +103,8 @@ The most reliable fix is to give the lead a range of its own. A small, broad cut
 ::demo masking
 
 ## DAW experiment: the quiet balance test
+
+Step 5 needs a dynamic EQ with an external sidechain input. If your DAW has none, use a free one, or let the 1.5 to 4 kHz band of a multiband compressor keyed from the vocal stand in.
 
 1. Loop the densest chorus of your song.
 2. Turn your monitors down until the music is barely louder than a quiet conversation.

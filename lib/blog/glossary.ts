@@ -133,7 +133,7 @@ export const glossary: GlossaryEntry[] = [
         id: 'crest-factor',
         term: 'Crest factor',
         forms: ['crest factor'],
-        definition: 'The gap between a signal’s peak level and its average level. Heavy limiting makes it smaller.',
+        definition: 'The gap between a signal\'s peak level and its average level. Heavy limiting makes it smaller.',
     },
     {
         id: 'gain-staging',
@@ -155,7 +155,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Transient',
         forms: ['transients', 'transient'],
         definition:
-            'The short, sharp start of a sound, like the crack of a snare or a pick hitting a string. It carries a lot of how hard a sound feels and how quickly the ear recognises it.',
+            'The short, sharp start of a sound, like the crack of a snare or a pick hitting a string. It carries a lot of how hard a sound feels and how quickly the ear recognizes it.',
     },
     {
         id: 'compressor',
@@ -262,7 +262,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'EQ',
         forms: ['EQ'],
         caseSensitive: true,
-        definition: 'Equalisation: turning chosen frequency ranges up or down.',
+        definition: 'Equalization: turning chosen frequency ranges up or down.',
         article: 'how-eq-becomes-attention-design',
     },
     {
@@ -301,7 +301,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Harmonics',
         forms: ['harmonics', 'overtones'],
         definition:
-            'Frequencies above a note’s fundamental. In pitched sounds they sit at whole-number multiples of it, and their balance is a large part of timbre.',
+            'Frequencies above a note\'s fundamental. In pitched sounds they sit at whole-number multiples of it, and their balance is a large part of timbre.',
     },
     {
         id: 'fundamental',
@@ -519,7 +519,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Bit depth',
         forms: ['bit depth', 'bit-depth'],
         definition:
-            'How many bits store each sample. Each bit adds about 6 dB between full scale and the quantisation noise floor: about 96 dB at 16-bit, about 144 dB at 24-bit.',
+            'How many bits store each sample. Each bit adds about 6 dB between full scale and the quantization noise floor: about 96 dB at 16-bit, about 144 dB at 24-bit.',
         article: 'bit-depth-is-about-noise-not-magic-warmth',
     },
     {
@@ -527,7 +527,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Dither',
         forms: ['dither', 'dithering'],
         definition:
-            'Very low-level noise added before reducing bit depth. It turns quantisation error, which can sound like gritty distortion on quiet sounds, into a steady, smooth hiss.',
+            'Very low-level noise added before reducing bit depth. It turns quantization error, which can sound like gritty distortion on quiet sounds, into a steady, smooth hiss.',
         article: 'bit-depth-is-about-noise-not-magic-warmth',
     },
     {

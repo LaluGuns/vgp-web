@@ -136,9 +136,9 @@ export const post115: BlogArticle = {
     ],
     content: `## Hook: the same three chords, two different songs
 
-You loop Dm7, G7 and Cmaj7 on a piano patch, each chord in root position with the root at the bottom. It sounds like an exercise from a theory book: every change is a block of four notes jumping to another block. Then you hear the same progression on an R&B record and the chords seem to melt into each other.
+You loop Dm7, G7 and Cmaj7 on a piano patch, each chord a four-note block in root position. It sounds like an exercise from a theory book: every change is one block jumping to the next. Then you hear the same progression on an R&B record and the chords seem to melt into each other.
 
-The chord symbols are the same on both. The record differs in its voicing (added ninths and thirteenths, each note moving to the nearest note of the next chord) and in drums that sit slightly behind the grid.
+The progression is the same ii-V-I on both. The record differs in its voicing (added ninths and thirteenths, each note moving to the nearest note of the next chord) and in drums that sit slightly behind the grid.
 
 ## Why it matters: the beat exists to carry a voice
 
@@ -188,7 +188,7 @@ The third is forgetting the singer. Electric piano voicings sit in the same midr
 
 ## Producer takeaway: move each note as little as it can
 
-Pick the chords, then voice them so the guide tones move by a half step or stay, and let the bass carry the roots. Place the snare a little late and leave the first kick on the grid. When the changes glide and the drums lean back, the keys stay under the singer. More on the drum side is in the [lesson on the late snare](/blog/the-late-snare-illusion-in-modern-records) and the [lesson on swing](/blog/swing-explained-without-mystical-language).
+Pick the chords, then voice them so the guide tones move by a half step or stay, and let the bass carry the roots. Place the snare a little late and leave the first kick on the grid. When the changes glide and the drums lean back, the keys stay under the singer. For more on the drum side, see the lessons on [the late snare](/blog/the-late-snare-illusion-in-modern-records) and [swing](/blog/swing-explained-without-mystical-language).
 
 ## References
 

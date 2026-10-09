@@ -109,7 +109,7 @@ PLR and PSR read the first kind; EBU Tech 3343 calls PLR "a measure of micro-dyn
 
 ## Science model: what each reading compares
 
-All of these start from the ITU-R BS.1770 loudness measurement, which the [lesson on LUFS](/blog/why-lufs-is-not-a-magic-number) walks through. They differ in what they compare and over how long.
+All of these start from the [ITU-R BS.1770 loudness measurement](/blog/why-lufs-is-not-a-magic-number). They differ in what they compare and over how long.
 
 PLR, the peak to loudness ratio, is the highest true peak in the whole file minus its integrated loudness, as the [lesson on loud masters after normalization](/blog/why-loud-masters-can-sound-smaller-after-normalization) works through. It is one number for the whole song. Because most masters sit against a fixed true-peak ceiling, PLR mostly restates the integrated loudness: with a -1 dBTP ceiling, a -9 LUFS master has a PLR of 8 dB and a -12 LUFS master has 11 dB. One stray peak can also set it, however rare.
 
@@ -141,7 +141,9 @@ The normalization demo isolates the first kind. With normalization on, both loop
 
 ## DAW experiment: pull the readings apart
 
-1. Put a loudness meter last on your master bus that shows integrated loudness, maximum true peak, LRA and short-term loudness. If it also shows PSR, use that.
+You need a loudness meter that shows LRA as well as integrated loudness, maximum true peak and short-term loudness. Some stock meters leave LRA out; free meters that follow EBU Tech 3342 show it.
+
+1. Put the loudness meter last on your master bus. If it also shows PSR, use that.
 2. Play the master from the first bar to the last. Write down integrated loudness, maximum true peak and LRA, and work out PLR as true peak minus integrated loudness.
 3. Loop the quietest verse, then the loudest chorus. For each, note the short-term loudness and the highest true peak, and work out PSR if the meter does not show it.
 4. Automate every verse down by 3 dB and play the whole song again. LRA goes up, the chorus PSR stays where it was, and integrated loudness drops a little.

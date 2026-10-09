@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post132: BlogArticle = {
     slug: 'mid-side-widening-moves-the-center-too',
     title: 'Mid/side widening moves the centre too',
-    excerpt: 'A side boost raises every part that is not dead centre, by up to 4 dB at +6 dB of side. Learn the maths, what it does to panning, and why mono never hears it.',
+    excerpt: 'A side boost raises every part that is not dead centre, by up to 4 dB at +6 dB of side. It changes your balance and your panning, and mono never hears it.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
     readingTime: 7,
@@ -140,6 +140,8 @@ In the demo, listen for two things: whether the centre feels smaller as the side
 ::demo width
 
 ## DAW experiment: measure your width move
+
+You need a mid/side utility with a side gain control. Several DAWs include one, and free ones exist.
 
 1. Put a mid/side utility on the mix bus with a side gain control, followed by a loudness meter and a mono switch.
 2. Loop the chorus and note the short-term loudness and how present the vocal feels.

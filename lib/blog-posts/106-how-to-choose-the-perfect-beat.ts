@@ -18,14 +18,14 @@ export const post106: BlogArticle = {
             type: 'scale',
             caption:
                 'A trap beat is written at 140 BPM, but its single snare per bar makes the pulse you nod to 70. Both sit either side of the range where a beat feels most natural to tap, a beat every 500 to 550 ms (van Noorden and Moelants, 1999), which is why the same beat can carry a slow flow or a fast one.',
-            alt: 'A tempo line from 50 to 160 BPM. A shaded range from 109 to 120 BPM is labelled 500 to 550 ms. A strong marker at 140 is labelled written, and an arrow runs from it down to a marker at 70 labelled felt.',
+            alt: 'A tempo line from 50 to 160 BPM. A shaded range from 109 to 120 BPM is labelled 500 to 550 ms. A marker at 140 is labelled written, and an arrow runs from it down to a strong marker at 70 labelled felt.',
             min: 50,
             max: 160,
             unit: 'BPM',
             ticks: [60, 90, 120, 150],
             markers: [
-                { value: 70, label: 'Felt: 70' },
-                { value: 140, label: 'Written: 140', strong: true },
+                { value: 70, label: 'Felt: 70', strong: true },
+                { value: 140, label: 'Written: 140' },
             ],
             arrows: [{ from: 140, to: 70 }],
             ranges: [{ from: 109, to: 120, label: '500-550 ms' }],

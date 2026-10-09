@@ -17,7 +17,7 @@ export const post016: BlogArticle = {
         ladder: {
             type: 'arrangement',
             caption:
-                'A density ladder. Each section adds at least one part on its first downbeat, so the density bar climbs in clear steps from intro to chorus instead of sliding up.',
+                'A density ladder. Each section adds at least one part on its first downbeat, the pad in the pre-chorus and the guitar and harmony in the chorus, so the density bar climbs in clear steps from intro to chorus instead of sliding up.',
             alt: 'Arrangement grid for intro, verse, pre-chorus and chorus. The intro has keys only, the verse adds drums, bass and vocal, the pre-chorus adds a pad, and the chorus adds guitar and harmony. The density bars climb in steps.',
             density: true,
             sections: [

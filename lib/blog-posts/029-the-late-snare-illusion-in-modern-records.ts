@@ -57,7 +57,7 @@ export const post029: BlogArticle = {
             why: 'A 16th lasts 60,000 / (4 × 90) = 166.7 ms, and 15 / 166.7 is 0.09.',
         },
         {
-            q: 'You set the snare 15 ms late for a laid-back feel, but it sounds like a programming slip, not a drummer leaning back. Going by Danielsen and colleagues\' drummer study, what do you try next?',
+            q: 'You set the snare 15 ms late for a laid-back feel, but it sounds like a programming slip, not a drummer leaning back. What would the drummer study by Danielsen and colleagues have you try next?',
             options: [
                 'Raise it 1 dB or pick a harder velocity layer',
                 'Move the hats late as well, so the beat shifts together',

@@ -39,14 +39,14 @@ export const post075: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In your remix the kick, bass and chords all avoid the beat, and friends say it does not make them want to move. Going by Witek and colleagues (2014), which edit is most likely to bring the urge back?',
+            q: 'In your remix the kick, bass and chords all avoid the beat, and friends say it does not make them want to move. Which edit fits the syncopation study by Witek and colleagues (2014), if you want that urge back?',
             options: [
                 'Push the hats off the beat too, so the whole kit pulls one way',
-                'Put the kick back on the downbeat, keep one or two accents off it',
                 'Apply a random humanize of 20 ms to every hit so it sounds played',
                 'Quantize every part onto the beat so the pattern is fully straight',
+                'Put the kick back on the downbeat, keep one or two accents off it',
             ],
-            answer: 1,
+            answer: 3,
             why: 'Wanting to move peaked at moderate syncopation and fell toward both ends. Your remix sits at the far end, so pull part of it back to the beat and keep some accents off it: a fully straight pattern lands at the other low end, and random timing does not bring back a beat to lean against.',
         },
         {

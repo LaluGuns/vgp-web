@@ -119,6 +119,8 @@ The first step is always the same: find the problem by ear and judge how wide it
 
 ## DAW experiment: one ring, two tools
 
+You need a dynamic EQ and a multiband compressor. Several DAWs ship only one of the two, and free versions of both exist.
+
 1. Pick a vocal or acoustic guitar with a harsh spot on a few notes. Loop a phrase that has both harsh and clean notes, with the mix playing.
 2. Sweep a bell at +6 dB and Q 5 to find the ring. Note the frequency, and note whether it bites on every note or only on some.
 3. Insert a dynamic EQ, put a bell at that frequency with Q 4, and lower the threshold until it cuts 3 to 4 dB on the harsh notes only.

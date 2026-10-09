@@ -54,7 +54,7 @@ export const post144: BlogArticle = {
             why: 'How much listeners said they listen to similar music had the largest weight on liking (0.55), ahead of the number of plays (0.46) and complexity (0.23), and liking rose with plays at every complexity level. A cold score from outside the style says a lot about the listener\'s history.',
         },
         {
-            q: 'Last week a friend heard your demo with the hook on piano. This week you play the same hook on a synth, mixed in with some new hooks. Going by Peretz and colleagues (1998), what should you expect?',
+            q: 'Last week a friend heard your demo with the hook on piano. This week you play the same hook on a synth, mixed in with some new hooks. What does the study by Peretz and colleagues (1998) lead you to expect?',
             options: [
                 'They are less likely to recognize it but like it about as much',
                 'They like it less and recognize it less, so keep the piano',

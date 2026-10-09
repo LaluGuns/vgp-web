@@ -48,7 +48,7 @@ export const post020: BlogArticle = {
         outro: {
             type: 'arrangement',
             caption:
-                'A long outro. After the final chorus, two repeats play the same parts at the same density, then a fade lowers everything together. The peak of the song is already over when the last third begins.',
+                'A long outro. After the final chorus, two repeats play the same parts at the same density and the vocal repeats the hook into the fade, which lowers everything together. The peak of the song is already over when the last third begins.',
             alt: 'Arrangement grid for bridge, final chorus, two repeats and a fade. Density is low in the bridge, highest in the final chorus, stays flat through both repeats, and drops in the fade.',
             density: true,
             sections: [
@@ -80,15 +80,15 @@ export const post020: BlogArticle = {
             why: 'Rozin and colleagues found that the length of a passage made little difference to remembered intensity, while the peak and the end weighed heavily. The repeats add time, the fade makes the quietest moment the last one, and a repeat at the same level is not a rise above what came before.',
         },
         {
-            q: 'You want the groove of a track to feel as if it carries on after the file ends. Which ending fits, according to the tapping study by Kopiez and colleagues (2015)?',
+            q: 'You want the groove of a track to feel as if it carries on after the file ends, without the outro dragging. Which ending fits both the tapping study and the memory studies in this lesson?',
             options: [
                 'A cold ending on one last hit, so the beat stays in their head',
-                'A short fade from a full chorus, so the pulse runs past the end',
                 'Any ending, since tapping stopped at the last beat either way',
                 'A long fade over three repeats, so the groove plays for longer',
+                'A short fade from a full chorus, so the pulse runs past the end',
             ],
-            answer: 1,
-            why: 'With the fade-out, listeners kept tapping after the recording had ended, and with an arranged ending they stopped before the last beat. Start the fade from a full section: extra identical repeats only add length, which barely counts in memory.',
+            answer: 3,
+            why: 'In the tapping study by Kopiez and colleagues, listeners kept tapping after a fade-out had ended and stopped before the last beat of an arranged ending. A long fade over three repeats is also a fade, but the memory studies found that extra length barely counts, so the repeats only make the quietest stretch the last impression.',
         },
         {
             q: 'Your fade starts halfway through the final chorus, before the last hook line. What is the problem?',

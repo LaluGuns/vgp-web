@@ -6,7 +6,7 @@ const wave = (f: number) => ({ label: f >= 1000 ? '1 kHz' : `${f} Hz`, value: C 
 export const post117: BlogArticle = {
     slug: 'why-your-low-end-lies-in-a-small-room',
     title: 'Why your low end lies in a small room',
-    excerpt: 'Below about 200 Hz a small room boosts some notes and swallows others, depending on where you sit. Learn to work out your room modes and mix bass you can trust.',
+    excerpt: 'Below about 200 Hz a small room boosts some notes and swallows others, depending on where you sit. EQ cannot fill a null, so work out your room modes first.',
     category: 'audio-science',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',

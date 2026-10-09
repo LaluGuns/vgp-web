@@ -24,9 +24,9 @@ export const post058: BlogArticle = {
             unit: 'ms',
             ticks: [0, 20, 40, 60],
             markers: [
-                { value: 0, label: 'Direct sound', strong: true },
+                { value: 0, label: 'Direct sound' },
                 { value: 9, label: 'Far singer' },
-                { value: 32, label: 'Close singer' },
+                { value: 32, label: 'Close singer', strong: true },
             ],
             ranges: [{ from: 0, to: 32, label: 'Gap: 32 ms' }],
         },
