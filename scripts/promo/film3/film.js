@@ -749,6 +749,21 @@ function drawRig(t) {
     const TX = (i) => RG.x0 + ((RG.x1 - RG.x0) * i) / (S.trN - 1);
     const TY = (gr) => RG.trTop + trH * clamp(gr / 18);
     const m = Math.floor(clamp(S.trPos, 0, S.trN));
+    if (S.kind === 'groove') {
+        // The 100 ms of the trace that the screen above shows slowed down.
+        const w = clamp((S.trPos - S.o2) / 40);
+        if (w > 0) {
+            const bx = TX(S.o2);
+            const bw = TX(S.o2 + 0.1 * D.rate) - bx;
+            g.save();
+            g.globalAlpha *= w;
+            g.fillStyle = 'rgba(251,191,36,0.16)';
+            g.fillRect(bx, RG.trTop - 6, bw, trH + 12);
+            g.fillStyle = P.amber;
+            g.fillRect(bx, RG.trTop - 6, bw, 4);
+            g.restore();
+        }
+    }
     if (m > 1) {
         g.beginPath();
         g.moveTo(RG.x0, RG.trTop);
@@ -810,22 +825,6 @@ function drawRig(t) {
         tag(g, 'release', 560, RG.trTop + 26, { x: TX(ri), y: TY(S.gr[ri]) }, { a: popIn(t, LETGO.from - 0.25), bg: P.ink, size: 36 });
     }
     if (S.kind === 'groove') {
-        // A wedge from the second snare on the trace up to the screen that magnifies it.
-        const w = clamp((S.trPos - S.o2) / 40);
-        if (w > 0) {
-            const ox = TX(S.o2);
-            g.save();
-            g.globalAlpha *= 0.55 * w;
-            g.strokeStyle = P.amber;
-            g.lineWidth = 2;
-            g.beginPath();
-            g.moveTo(ox - 6, RG.trBot + 6);
-            g.lineTo(RG.x0 - 40, RG.base + 40);
-            g.moveTo(ox + 6, RG.trBot + 6);
-            g.lineTo(RG.x1 + 40, RG.base + 40);
-            g.stroke();
-            g.restore();
-        }
         // The release time as a ruler, inside the trace card.
         const msPx = (RG.x1 - RG.x0) / ((STRIP.b - STRIP.a) * 1000);
         const rel = SETTINGS[cur.setting].release * 1000;
@@ -837,9 +836,16 @@ function drawRig(t) {
         g.beginPath();
         g.moveTo(RG.x0 + 80, ry - 8);
         g.lineTo(RG.x0 + 80, ry + 8);
+        const relText = `release ${msLabel(rel)}`;
+        font(g, 30, 600, BODY);
+        // Longer than the trace: the label sits in a break in the line, which runs on off the edge.
+        const lx = over ? RG.x0 + 116 : rx1 + 94;
+        const lw = g.measureText(relText).width;
         g.moveTo(RG.x0 + 80, ry);
-        g.lineTo(rx1 + (over ? 0 : 80), ry);
+        g.lineTo(over ? lx - 14 : rx1 + 80, ry);
         if (over) {
+            g.moveTo(lx + lw + 14, ry);
+            g.lineTo(rx1, ry);
             g.moveTo(rx1 - 12, ry - 9);
             g.lineTo(rx1, ry);
             g.lineTo(rx1 - 12, ry + 9);
@@ -848,7 +854,7 @@ function drawRig(t) {
             g.lineTo(rx1 + 80, ry + 8);
         }
         g.stroke();
-        label(g, `release ${msLabel(rel)}`, (over ? rx1 : rx1 + 80) + (over ? -150 : 14), ry + 10, { size: 30, weight: 600, color: P.ink2, align: 'left', family: BODY });
+        label(g, relText, lx, ry + 10, { size: 30, weight: 600, color: P.ink2, align: 'left', family: BODY });
         const pk = Math.min(Math.max(...S.z.outS.slice(0, CRACK)), MECH_MAX);
         if (cur.id === 'hold') {
             tag(g, 'still holding', TX(S.o2) - 160, RG.trTop + 26, { x: TX(S.o2), y: TY(S.gr[Math.max(0, Math.floor(S.o2))]) }, { a: popIn(t, wt('hold', 'arrives') - 0.1), bg: P.ink, size: 34 });
