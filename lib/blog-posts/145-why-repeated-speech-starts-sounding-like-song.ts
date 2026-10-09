@@ -6,7 +6,7 @@ export const post145: BlogArticle = {
     excerpt: 'Loop a spoken phrase and it can start to sound sung, with no change to the audio. What makes a phrase turn, who hears it, and how to mine it for a hook.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Loop a short spoken line exactly, with no pitch shifts or reordering, and hum the tune you start to hear: that tune already fits the words.',
         'Phrases with steady pitch inside each syllable turn into song most readily, so choose or edit spoken samples with that in mind.',
@@ -129,13 +129,13 @@ It also misleads you. After an hour of looping, you hear a tune that a first-tim
 
 ## Science model: exact repeats, level syllables and the listener
 
-Diana Deutsch found the effect in 1995 while editing spoken commentary for a CD and looping the phrase "sometimes behave so strangely". Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, ratings moved firmly toward song. When the repeats in between were transposed slightly, or when the syllables came in a jumbled order, the shift did not happen.
+Diana Deutsch came across the effect while fine-tuning spoken commentary for a CD of musical illusions, with the phrase "sometimes behave so strangely" on a loop. Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, ratings moved firmly toward song. When the repeats in between were transposed slightly, or when the syllables came in a jumbled order, the shift did not happen.
 
 ::figure conditions
 
-In the second experiment, listeners heard the phrase once or ten times and then said it back. After one hearing they spoke it. After ten they sang it, and their pitches matched the original speech more closely than after one hearing. The sung versions were closer still to a simple tune in a key. Repetition did more than make the phrase feel musical: listeners heard and reproduced specific notes. Deutsch's listeners had musical training, but Vanden Bosch der Nederlanden, Hannon and Snyder (2015) replicated the effect in casual listeners with none, and confirmed that transposing the repeats disrupts it.
+In the second experiment, listeners heard the phrase once or ten times and then said it back. After one hearing they spoke it. After ten they sang it, and their pitches matched the original speech more closely than after one hearing. The sung versions were closer still to a simple tune in a key. So the listeners were hearing specific notes, and could sing them back. Deutsch's listeners had musical training, but Vanden Bosch der Nederlanden, Hannon and Snyder (2015) replicated the effect in casual listeners with none, and confirmed that transposing the repeats disrupts it.
 
-Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated, then matched each with a phrase from the same speaker that stayed speech. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) edited the pitch and timing of spoken phrases directly. Stable pitch targets made the transformation happen more often and sooner than scalar intervals did, and recurring contrasts between long and short syllables helped. Making the beat perfectly regular did not.
+Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated, then matched each with a phrase from the same speaker that stayed speech. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) compared spoken phrases that differed in specific pitch and timing properties. Stable pitch targets made the transformation happen more often and sooner than scalar intervals did, and recurring contrasts between long and short syllables helped. A regular beat within and across repeats did not help.
 
 ::figure glide
 
@@ -143,7 +143,7 @@ The listener matters as well. Margulis, Simchy-Gross and Black (2015) played 24 
 
 ::figure ratings
 
-The picture that fits these results: once the words stop demanding attention, the ear treats the pitch pattern as a tune, and level syllables give it notes to hold. A small study set and a few phrases sit behind each finding, so expect your own phrases to vary.
+A reading that fits these results, and close to the one Margulis and colleagues give for the language effect, is that the more readily a phrase is processed as speech, the harder it is to hear as song. Level syllables then give the ear notes to hold. Each finding rests on small samples and a handful of phrases, so expect your own lines to vary.
 
 ## DAW experiment: mine a spoken line for its tune
 
@@ -159,9 +159,7 @@ The picture that fits these results: once the words stop demanding attention, th
 
 The first mistake is building a hook on a spoken sample because it sounds melodic after an hour of looping. Your listeners hear it far fewer times before the next section starts. If the tune matters, double it with an instrument, sing it, or let the sample repeat several times before the part that depends on it.
 
-The second mistake is chopping a spoken phrase into a new order every bar, or pitching each repeat to follow the chords, and then wondering why it stopped sounding like a melody. Deutsch's jumbled and transposed conditions are exactly those edits. Keep at least one exact, untouched repeat if you want the effect.
-
-Repetition is doing other work here too. The lesson on [repetition](/blog/why-repetition-becomes-addictive-instead-of-boring) covers how it changes attention to a hook in general.
+The second mistake is chopping a spoken phrase into a new order every bar, or pitching each repeat to follow the chords, and then wondering why it stopped sounding like a melody. Those edits are close to Deutsch's jumbled and transposed conditions. Keep at least one exact, untouched repeat if you want the effect.
 
 ## Producer takeaway: let the loop write the first draft
 
