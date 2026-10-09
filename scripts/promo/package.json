@@ -6,7 +6,8 @@
   "scripts": {
     "carousel": "tsx --tsconfig tsconfig.json carousel/carousel.tsx",
     "film": "node film/render.mjs",
-    "film3": "node film3/render.mjs"
+    "film3": "node film3/render.mjs",
+    "film4": "node film4/render.mjs"
   },
   "devDependencies": {
     "playwright-core": "1.64.0",
