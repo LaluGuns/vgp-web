@@ -94,13 +94,13 @@ export const post136: BlogArticle = {
         {
             q: 'Why keep clear delay repeats of a whole line out from under the next line?',
             options: [
-                'Delay repeats always add more low end than reverb',
-                'Repeats push the vocal bus into clipping faster',
-                'Repeats in time with the beat sound off the grid',
-                'It puts the same voice saying other words underneath',
+                'Repeats carry more low end than a reverb tail does',
+                'Each repeat gets louder as the feedback builds up',
+                'Repeats cancel the dry vocal through phase shifts',
+                'They put the same voice saying other words underneath',
             ],
             answer: 3,
-            why: 'In Brungart\'s (2001) tests a competing phrase interfered most with understanding when it came from the same talker. A clear repeat of the last line under the new one is exactly that case.',
+            why: 'In Brungart\'s (2001) tests a competing phrase interfered most with understanding when it came from the same talker. A clear repeat of the last line under the new one is a quieter version of that case.',
         },
     ],
     content: `## Hook: the plate that sounds great in solo
@@ -109,7 +109,7 @@ You put a long plate on the lead vocal and solo it. It sounds expensive: every p
 
 ## Why it matters: the tail is the same voice in the same band
 
-A reverb tail is mostly the last word, smeared over time. It has much the same spectrum as the voice, so it competes with the next words in exactly the bands they need. In solo nothing else is playing, and the overlap sounds like space. In the mix the tail adds to the guitars and keys that already cover those bands, and the start of the new line is where the old tail is loudest.
+A reverb tail is mostly the last word, smeared over time. It has much the same spectrum as the voice, so it competes with the next words in exactly the bands they need. In solo nothing else is playing, and the overlap sounds like space. In the mix the tail adds to the guitars and keys that already cover those bands, and the old tail is at its loudest during the first words of the new line, the ones the listener needs to catch.
 
 ::figure duck
 
@@ -129,11 +129,11 @@ With 0.4 s between lines, a 1 s reverb has fallen 24 dB, but a 3 s reverb has fa
 
 A compressor on the reverb return, keyed from the dry vocal, adds its gain reduction to that margin, and it does so only while the singer sings. At the start of the new line the dry vocal triggers the compressor and pulls the old tail down. When the line ends the compressor lets go, and the tail rises in the gap with its full decay. Eight dB of ducking turns the 3 s reverb's 8 dB of fade into 16 dB. The same sidechain idea works on many other pairs, as the [lesson on sidechain beyond kick and bass](/blog/sidechain-is-more-than-kick-ducking-bass) shows.
 
-A delay works differently. It makes discrete copies, and you choose when they land. With a feedback gain $k$, each repeat is $20 \\log_{10} k$ dB relative to the one before (Zölzer, 2011): feedback at 0.35 gives about -9 dB per repeat. The catch is what the copies contain. Brungart (2001) found that a competing phrase interfered most with understanding when it was spoken by the same talker as the target. A clear repeat of the last line under the new line is the same voice saying different words. So a delay is cleanest as a throw: sent only the last word, timed so the repeats fall in the gap.
+A delay works differently. It makes discrete copies, and you choose when they land. With a feedback gain $k$, each repeat is $20 \\log_{10} k$ dB relative to the one before (Zölzer, 2011): feedback at 0.35 gives about -9 dB per repeat. The catch is what the copies contain. Brungart (2001) found that a competing phrase interfered most with understanding when it was spoken by the same talker as the target. A clear repeat of the last line under the new line is a quieter version of the same thing: the same voice saying different words. That is why I use a delay mostly as a throw: sent only the last word, timed so the repeats fall in the gap.
 
 ::figure throw
 
-Play the phrase dry into the long reverb, then duck it, then swap it for the tempo delay. Listen each time to the first word of the next line.
+In the demo, switch between the plain reverb, the ducked reverb and the tempo delay, and listen each time to the first word of the next line. Its delay repeats the whole phrase, filtered thin, so it is not a throw; listen for whether the echoes stay behind the new words or crowd them.
 
 ::demo reverb-duck
 

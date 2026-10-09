@@ -89,13 +89,13 @@ export const post127: BlogArticle = {
 
 The chorus vocal stings on two notes, the high ones, where a harmonic lands on a ring near 3 kHz. You put a multiband compressor on the vocal, pick the upper-mid band and pull its threshold down until the sting goes. It works on those two notes. Then you notice the rest of the chorus: every loud line has lost a little presence, and the vocal seems to sit further back than it did in the verse.
 
-The multiband did what it was set up to do. Its band was wider than the problem, and its detector could not tell the ring from the healthy brightness around it. A dynamic EQ bell at the same frequency would have taken out the two notes and left the rest alone. A broad problem would have favoured the multiband.
+The multiband did what it was set up to do. Its band was wider than the problem, and its detector could not tell the ring from the healthy brightness around it. A dynamic EQ bell at the same frequency would have cut on those two notes and left most of the chorus alone. A broad problem would have favoured the multiband.
 
 ## Why it matters: same idea, different shapes
 
 Both processors turn part of the spectrum down when that part gets loud, so they are easy to treat as one tool with two interfaces. They differ in where they cut, what they listen to, and what they do to the signal while nothing is being cut. Pick the wrong one and you fix the problem while changing a lot of sound that had nothing wrong with it.
 
-A dynamic EQ band is a peaking or shelving filter whose gain is driven by a level detector, the same filter you know from a static EQ with the gain knob turned by a compressor (Zölzer, 2011). A multiband compressor splits the signal into bands with crossover filters, gives each band its own compressor, and adds the bands back together.
+A dynamic EQ band is a peaking or shelving filter, the same design a static parametric EQ uses (Zölzer, 2011), with its gain knob turned by a level detector instead of your hand. A multiband compressor splits the signal into bands with crossover filters, gives each band its own compressor, and adds the bands back together.
 
 ## Science model: cut shape, detector and crossovers
 
@@ -107,7 +107,7 @@ The detector matters as much as the cut. In many dynamic EQs the detector listen
 
 ::figure detector
 
-The dynamic EQ reacts to the ring and mostly ignores the 4 kHz peak. The multiband reacts to both equally, so it turns down the whole band on loud words that never rang. That is the dulled chorus from the hook.
+The dynamic EQ reacts to the ring and mostly ignores the 4 kHz peak. The multiband reacts to both equally, so it turns down the whole band on loud words that never rang, which is how the chorus in the hook lost its presence.
 
 The third difference shows up when nothing is being compressed. Many multiband compressors use Linkwitz-Riley crossovers, which add back to a flat level but behave like an all-pass filter: the phase shifts around each crossover frequency (Linkwitz, 1976). A peaking filter at 0 dB gain is a straight wire, so an idle dynamic bell changes nothing. On one track the crossover phase shift is hard to hear. It matters when the processed track is mixed with an unprocessed copy, the same trap the [lesson on filters](/blog/filters-are-shape-machines) describes. Linear-phase crossovers avoid it, at the cost of latency and some pre-ringing.
 
@@ -124,7 +124,7 @@ The first step is always the same: find the problem by ear and judge how wide it
 3. Insert a dynamic EQ, put a bell at that frequency with Q 4, and lower the threshold until it cuts 3 to 4 dB on the harsh notes only.
 4. On a duplicate track, insert a multiband compressor and set one band from about half an octave below the ring to an octave above it. Lower that band's threshold until the harsh notes get the same reduction.
 5. Level-match the two tracks and switch between them on the clean notes. Watch each gain reduction meter while those notes play.
-6. Set every band of the multiband to zero gain reduction, flip the duplicate's polarity, and play it against the dry track. The residual near the crossovers is phase shift from the crossover filters.
+6. Bypass the dynamic EQ on the original track. Set every band of the multiband to zero gain reduction, flip the duplicate's polarity and play the two together. What remains, around the crossover frequencies, is phase shift from the crossover filters. In a linear-phase mode it should almost vanish.
 
 On the harsh notes both versions remove the sting. On the clean notes the multiband keeps working and the presence drops, while the dynamic bell sits at zero.
 

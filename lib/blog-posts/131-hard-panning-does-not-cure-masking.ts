@@ -10,7 +10,7 @@ export const post131: BlogArticle = {
     summary: [
         'Judge separation on speakers and in mono as well as on headphones, because hard panning keeps two parts out of each other\'s ear only on headphones.',
         'When two parts still collide in mono, change what they play first: register, voicing or rhythm, then EQ the overlap.',
-        'Check which pan law your DAW uses, since with the common -3 dB law every hard-panned part drops 3 dB against the centre in a mono fold.',
+        'Check which pan law your DAW uses, since with a common -3 dB law every hard-panned part drops 3 dB against the centre in a mono fold.',
     ],
     figures: {
         overlap: {
@@ -44,12 +44,12 @@ export const post131: BlogArticle = {
         rhythm: {
             type: 'rhythm',
             caption:
-                'One bar of two guitar parts. When the right guitar copies the left, every onset lands together and the two fuse into one bigger guitar. When it answers on the off-beats, each part has moments of its own, and that separation survives the mono fold.',
-            alt: 'Three rows on a 16-step grid. Guitar L hits the four beats. Guitar R as a copy hits the same four beats. Guitar R as an answer hits the four off-beats between them.',
+                'One bar of two guitar parts. When the right guitar copies the left, every onset lands together and the two tend to fuse into one bigger guitar. When it answers on the off-beats, each part has moments of its own, and that separation survives the mono fold.',
+            alt: 'Three rows on a 16-step grid. Guitar L hits the four beats. The first version of guitar R hits the same four beats. The second version of guitar R hits the four off-beats between them.',
             rows: [
                 { label: 'Guitar L', hits: [0, 4, 8, 12] },
-                { label: 'Guitar R, copy', note: 'Same onsets, fuses', hits: [0, 4, 8, 12] },
-                { label: 'Guitar R, answer', note: 'Fills the gaps', hits: [2, 6, 10, 14] },
+                { label: 'Guitar R, same onsets', hits: [0, 4, 8, 12] },
+                { label: 'Guitar R, off-beats', hits: [2, 6, 10, 14] },
             ],
         },
     },
@@ -95,7 +95,7 @@ Masking happens when two sounds put energy into the same auditory bands at the s
 
 ::figure overlap
 
-Location still counts. The ear sorts a mixture into sources using several cues: where a sound comes from, when its notes start, its pitch range and its timbre (Bregman, 1990). Two parts that differ in many of these come apart easily. Two guitars that differ only in location lean on one cue, and that cue depends on the playback system.
+Location still counts. It is one of several cues the ear uses to sort a mixture into sources, along with when notes start, pitch range and timbre (Bregman, 1990); the [lesson on attention](/blog/how-attention-moves-through-a-mix) covers how those cues decide what the listener follows. Two guitars that differ only in location lean on one cue, and that cue depends on the playback system.
 
 ## Science model: what each ear receives
 
@@ -103,7 +103,7 @@ On headphones, a hard-left guitar reaches the left ear only. The right ear hears
 
 On speakers both ears hear both speakers. The hard-left guitar reaches your right ear too, a fraction of a millisecond later. At high frequencies the head shadows it and it arrives quieter; at low frequencies the head is small compared with the wavelength and barely shadows it at all (Moore, 2012). So one ear may have a cleaner view of the vocal in the highs, and the brain can use the timing difference between the ears to pull out a little more. In one lab study with virtual sources, listening with both ears instead of only the better ear lowered the level at which sentences were understood by about 2 to 4 dB against a single interferer (Hawley, Litovsky and Culling, 2004). That is real help, and it is about the size of a modest EQ move. It is a speech test under lab conditions, not a mix, so treat it as a rough scale.
 
-In mono the help is gone. Every part comes from one point, and only the non-spatial cues are left to separate them. The fold also changes the balance by an amount the pan law decides. With the common -3 dB law, a centred part sits at $\\cos 45^\\circ = 0.707$ in each channel and a hard-panned part at 1 in one channel. Folded as $(L + R)/2$:
+In mono the help is gone. Every part comes from one point, and only the non-spatial cues are left to separate them. The fold also changes the balance by an amount the pan law decides. With a common -3 dB law, a centred part sits at $\\cos 45^\\circ = 0.707$ in each channel and a hard-panned part at 1 in one channel. Folded as $(L + R)/2$:
 
 $$\\text{centre: } \\frac{0.707 + 0.707}{2} = 0.707 \\; (-3 \\text{ dB}), \\qquad \\text{hard side: } \\frac{1 + 0}{2} = 0.5 \\; (-6 \\text{ dB})$$
 
@@ -115,7 +115,7 @@ Separation also depends on what the parts play. Sounds whose notes start togethe
 
 ::figure rhythm
 
-The demo below frees a lead from a pad in the same range by cutting or ducking the pad. That fix works on the bands themselves, so it would hold in mono too.
+The demo below frees a lead from a pad in the same range without moving either one in the stereo field: it cuts the pad in one band or ducks it while the lead plays. Both fixes change the pad itself, so they would hold in mono too.
 
 ::demo masking
 

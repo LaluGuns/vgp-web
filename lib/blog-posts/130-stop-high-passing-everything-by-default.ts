@@ -15,13 +15,13 @@ export const post130: BlogArticle = {
     figures: {
         lowest: {
             type: 'scale',
-            min: 20,
+            min: 0,
             max: 220,
             unit: 'Hz',
-            ticks: [20, 60, 100, 140, 180, 220],
+            ticks: [0, 50, 100, 150, 200],
             caption:
                 'The lowest note of some common instruments, from the equal-tempered pitch of each note. A blanket high-pass at 100 Hz sits above the lowest notes of a piano, a bass, a cello and a guitar.',
-            alt: 'A number line from 20 to 220 hertz with markers for the lowest notes of piano at 27.5 Hz, bass guitar at 41.2 Hz, cello at 65.4 Hz, guitar at 82.4 Hz, viola at 130.8 Hz and violin at 196 Hz. A bold marker at 100 Hz shows a blanket high-pass.',
+            alt: 'A number line from 0 to 220 hertz with markers for the lowest notes of piano at 27.5 Hz, bass guitar at 41.2 Hz, cello at 65.4 Hz, guitar at 82.4 Hz, viola at 130.8 Hz and violin at 196 Hz. A bold marker at 100 Hz shows a blanket high-pass.',
             markers: [
                 { value: 27.5, label: 'Piano A0' },
                 { value: 41.2, label: 'Bass E1' },
@@ -101,7 +101,7 @@ $$f = 440 \\times 2^{(m - 69)/12}$$
 
 A guitar's low E is MIDI note 40, so $f = 440 \\times 2^{-29/12} \\approx 82.4$ Hz. A G2 at the bottom of a low verse melody is note 43, about 98 Hz.
 
-The cutoff of a high-pass is the point where the filter is already 3 dB down, and it still trims a little above that. For a Butterworth high-pass of order $n$, the usual EQ high-pass shape, the gain at frequency $f$ with cutoff $f_c$ is:
+The cutoff of a high-pass is the point where the filter is already 3 dB down, and it still trims a little above that. For a Butterworth high-pass of order $n$, a common EQ high-pass shape, the gain at frequency $f$ with cutoff $f_c$ is:
 
 $$G(f) = 10 \\log_{10} \\frac{(f/f_c)^{2n}}{1 + (f/f_c)^{2n}}$$
 

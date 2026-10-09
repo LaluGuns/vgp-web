@@ -157,7 +157,7 @@ The demo lets you hear both on one loop. Turn the shaper's attack up, then switc
 
 ## Science model: two followers and a difference
 
-A compressor's gain reduction is the overshoot above a fixed threshold times $1 - 1/R$, the arithmetic worked through in the [lesson on the 4:1 ratio](/blog/compression-ratio-what-4-to-1-actually-means). Turn the input up by 6 dB and the overshoot grows by 6 dB, so the gain reduction grows too, and a hit that was under the threshold may now cross it. The outcome depends on level.
+A compressor's gain reduction is the overshoot above a fixed threshold times $1 - 1/R$, where $R$ is the [ratio](/blog/compression-ratio-what-4-to-1-actually-means). Turn the input up by 6 dB and the overshoot grows by 6 dB, so the gain reduction grows too, and a hit that was under the threshold may now cross it. The outcome depends on level.
 
 A common transient shaper design, which SPL describes as differential envelope technology, runs two envelope followers on the same signal: one with a fast attack, one with a slow attack (White, 1998). At the start of a hit, the fast follower $L_f$ jumps up while the slow one $L_s$ lags behind. The gap between them, in decibels, sets the attack gain:
 

@@ -125,9 +125,9 @@ export const post126: BlogArticle = {
     ],
     content: `## Hook: filed under dance music
 
-The first sidechain example most producers see is a kick on every beat, a compressor on the bass or a pad, and a pumping sound that says club record. So "sidechain" gets filed as a genre effect, and the key input sits unused on every other compressor in the session.
+The mix bus compressor dips the cymbals and the vocal every time the kick lands, and you have lowered its ratio twice without fixing it. The only sidechain in the session is the one from the first tutorial you watched: the kick on the key input of a compressor on the bass, pumping like a club record. Every other key input in the session sits unused.
 
-Kick and bass is one use of a more general idea: a sidechain lets a processor listen to one signal and act on another. The same routing explains how a de-esser knows when to work, and why a bus compressor clamps down on every kick.
+Kick and bass is one use of a more general idea: a sidechain lets a processor listen to one signal and act on another. The same routing explains how a de-esser knows when to work, and how to stop that bus compressor reacting to every kick.
 
 ## Why it matters: one path decides when, the other decides what
 
@@ -135,7 +135,7 @@ Every compressor, expander and gate has two paths. The audio path carries the so
 
 ::figure path
 
-That split gives you two decisions. What goes into the control path sets when the processor acts. Where the gain stage sits sets what gets quieter. Most sidechain trouble comes from mixing the two up: filtering the key and expecting the output tone to change, or keying from the right source and ducking the wrong track.
+That split gives you two decisions. What goes into the control path sets when the processor acts. Where the gain stage sits sets what gets quieter. A lot of sidechain trouble comes from mixing the two up: filtering the key and expecting the output tone to change, or keying from the right source and ducking the wrong track.
 
 ## Science model: gain computed from somewhere else
 
@@ -143,7 +143,7 @@ A feed-forward compressor turns its input $x(t)$ down by a gain it computes from
 
 $$y(t) = x(t) \\cdot g\\left( k(t) \\right)$$
 
-On an ordinary insert the key $k(t)$ is $x(t)$ itself. With a sidechain it is another signal, or the same signal through a filter. Reiss and McPherson (2014) describe dynamics processing in these terms, with the gain following either the input or a secondary signal, and the same structure runs expanders and noise gates (Zölzer, 2011). Change only $k(t)$ and you get four different tools.
+On an ordinary insert the key $k(t)$ is $x(t)$ itself. With a sidechain it is another signal, or the same signal through a filter. Expanders and noise gates share this structure and differ only in the gain computer (Reiss and McPherson, 2014; Zölzer, 2011). Change only $k(t)$ and one compressor does three different jobs; swap its gain computer for a gate's and you get a fourth.
 
 The familiar one keys a compressor on the bass from the kick. Attack sets how fast the bass gets out of the way, and release sets how it comes back, which you hear as the groove. At 120 BPM a beat lasts 60,000 / 120 = 500 ms, so the bass has half a second to recover before the next kick moves it again.
 
@@ -176,7 +176,7 @@ The release that fits the beat lets the bass swell back into each kick instead o
 
 If the key is tapped after the kick's fader or its own compressor, every change you make to the kick changes how far the bass ducks. Ride the kick down 2 dB in the verse and the bass ducks less there, so it creeps up against the kick. Take the key before the fader where your DAW allows it, or use a ghost copy whose level never changes.
 
-The other mistake is expecting a filter in the key to change the sound. A 100 Hz high-pass in a bus compressor's sidechain does not thin the bus. If the low end of the output changed, the gain reduction changed, and that is what to listen for.
+The other mistake is ducking the whole bass when only its lows collide with the kick. A full-band duck also dips the upper harmonics, the part of the bass line you hear on small speakers, so the whole note pumps. Key a low band instead, with a dynamic EQ or the low band of a multiband compressor, and the kick gets its room while the rest of the bass stays steady. The demo above lets you compare the two.
 
 ## Producer takeaway: say the sentence first
 

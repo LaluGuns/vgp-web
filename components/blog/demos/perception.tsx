@@ -1129,8 +1129,10 @@ const toMode = (n: number, mode: Mode) => (mode === 'minor' && isModal(n) ? n - 
 const chordName = (c: Chord, mode: Mode) => (mode === 'minor' && c.notes.some(isModal) ? `${c.name}m` : c.name);
 
 const REGISTER_SHIFT: Record<Register, number> = { low: -12, middle: 0, high: 12 };
-// Rough loudness trims so the registers play at a similar loudness.
-const REGISTER_TRIM: Record<Register, number> = { low: 1.3, middle: 1, high: 0.75 };
+// Small trims so the three registers measure within about 1 dB of each other (K-weighted).
+const REGISTER_TRIM: Record<Register, number> = { low: 1, middle: 1, high: 1.1 };
+// Keeps this demo at the loudness of the other demos on the site.
+const CHORD_TRIM = 2.5;
 const TEMPO_BPM: Record<Tempo, number> = { slow: 60, fast: 140 };
 
 /** A soft keyboard note: a triangle with two quiet overtones that decays like a struck string. */
@@ -1226,7 +1228,7 @@ export function ChordContextDemo() {
     }, [part, leadIn]);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
-        const bus = ctx.createGain();
+        const bus = gainNode(ctx, CHORD_TRIM);
         bus.connect(out);
         let k = 0;
         restart.current = true;

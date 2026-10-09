@@ -1,8 +1,33 @@
 import { BlogArticle } from '../blog-data';
+import type { SignalTrace } from '../blog/types';
 
 // Four bass notes of uneven level, drawn as waveforms.
 const NOTES = { kind: 'hits' as const, at: [0.02, 0.27, 0.52, 0.77], amp: [1, 0.35, 0.85, 0.3], decay: 10, cycles: 40 };
 const COMP = { threshold: 0.3, ratio: 6, attack: 0.002, release: 0.04 };
+
+// Four bass notes whose low end drives a 4:1 compressor, 6 dB over its threshold (0.5 against 0.25).
+// A 6 dB low boost in front doubles what the detector hears.
+const LOW = { at: [0.04, 0.29, 0.54, 0.79], amp: 0.5, decay: 14 };
+const EQ_COMP = { threshold: 0.25, ratio: 4, release: 0.05 };
+
+// The same feed-forward model the figure renderer uses for `compress` (static curve in dB, instant
+// attack, one-pole release), returning the gain it applies to the whole signal.
+function gainTrace(boost: number, label: string, dashed = false): SignalTrace {
+    const n = 2000;
+    const toDb = (v: number) => 20 * Math.log10(Math.max(1e-5, v));
+    const release = Math.exp(-1 / (EQ_COMP.release * n));
+    const level = (t: number) => LOW.at.reduce((sum, at) => (t < at ? sum : sum + boost * LOW.amp * Math.exp(-LOW.decay * (t - at))), 0);
+    const points: [number, number][] = [];
+    let gr = 0;
+    for (let i = 0; i <= n; i++) {
+        const t = i / n;
+        const over = toDb(level(t)) - toDb(EQ_COMP.threshold);
+        const target = over > 0 ? over * (1 - 1 / EQ_COMP.ratio) : 0;
+        gr = target > gr ? target : release * gr + (1 - release) * target;
+        if (i % 4 === 0) points.push([t, 10 ** (-gr / 20)]);
+    }
+    return { kind: 'envelope', points, label, dashed };
+}
 
 export const post128: BlogArticle = {
     slug: 'plugin-order-changes-what-each-processor-hears',
@@ -12,7 +37,7 @@ export const post128: BlogArticle = {
     publishedAt: '2026-10-09',
     readingTime: 5,
     summary: [
-        'Order matters only when a processor reacts to level, like a compressor, limiter, gate or saturator; two clean EQs give the same result in either order.',
+        'Order matters when a processor reacts to level, like a compressor, limiter, gate or saturator; two clean EQs give the same result in either order.',
         'An EQ before a compressor changes what drives the gain; an EQ after it changes only the tone of what comes out.',
         'Put a compressor before a saturator for even distortion across notes, and after it when loud notes should bite harder; then compare both orders at matched level.',
     ],
@@ -43,16 +68,25 @@ export const post128: BlogArticle = {
             ],
         },
         eqcomp: {
-            type: 'bars',
+            type: 'signal',
             caption:
-                'One note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. A 6 dB low boost placed after the compressor leaves the gain reduction at 4.5 dB. The same boost placed before it doubles the reduction to 9 dB, and that extra 4.5 dB comes off every frequency, the mids and highs included.',
-            alt: 'Two bars on a scale from 0 to 10 dB. With the EQ after the compressor the gain reduction is 4.5 dB. With the EQ before it the gain reduction is 9 dB.',
-            min: 0,
-            max: 10,
-            unit: 'dB',
-            bars: [
-                { label: 'EQ after the compressor', value: 4.5, display: '4.5 dB' },
-                { label: 'EQ before the compressor', value: 9, display: '9 dB' },
+                'Four bass notes into a 4:1 compressor, drawn from a simulation. The bottom row is the gain the compressor applies to everything, mids and highs included. With the 6 dB low boost after the compressor, each note is 6 dB over and the gain dips about 4.5 dB. With the boost in front, the detector hears 12 dB over and the gain dips about 9 dB on every note.',
+            alt: 'Two plots across four bass notes. The first shows the low-end level of each note as a solid outline, with a dashed outline twice as tall for the boosted version, and a threshold line below both peaks. The second shows two gain lines starting at full level: the solid line dips a little at each note and recovers, the dashed line dips about twice as far.',
+            rows: [
+                {
+                    label: 'Low end into the detector',
+                    unipolar: true,
+                    lines: [{ y: EQ_COMP.threshold, label: 'Threshold' }],
+                    traces: [
+                        { kind: 'hits', at: LOW.at, amp: LOW.at.map(() => LOW.amp), decay: LOW.decay, outline: true, label: 'No boost' },
+                        { kind: 'hits', at: LOW.at, amp: LOW.at.map(() => 2 * LOW.amp), decay: LOW.decay, outline: true, dashed: true, label: '6 dB boost' },
+                    ],
+                },
+                {
+                    label: 'Gain on the whole signal',
+                    unipolar: true,
+                    traces: [gainTrace(1, 'EQ after the comp'), gainTrace(2, 'EQ before the comp', true)],
+                },
             ],
         },
     },
@@ -90,7 +124,7 @@ export const post128: BlogArticle = {
 
 You have an EQ and a compressor on a bass. Out of curiosity you drag the EQ below the compressor. Nothing else changes, same settings, same plugins, and the bass now sounds different: the low notes stop pulling the whole sound down, and the movement feels looser. Then you swap two EQs on the vocal and hear no difference at all.
 
-In a serial chain, every processor works on what the one before it hands over. That matters only when a processor reacts to level, and a clean EQ does not.
+In a serial chain, every processor works on what the one before it hands over. That matters when a processor reacts to level, and a clean EQ does not.
 
 ## Why it matters: order is part of the sound
 
@@ -104,9 +138,9 @@ A clean digital EQ is linear and time-invariant. Two such filters in series mult
 
 A compressor is not linear. Its gain depends on the level it receives (Giannoulis, Massberg and Reiss, 2012), as in the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
 
-::figure eqcomp
-
 On a steady note and at matched level, the tonal balance at the output ends up the same both ways: the lows sit 6 dB above the rest because the compressor turns every frequency down together. What changes is the gain movement. With the boost in front, the compressor works twice as hard and follows the low end, so the mids and highs dip twice as deep with every bass note. With the boost after it, the compressor reacts to the original signal and the boost shapes only the tone. The same logic is why a high-pass in front of a compressor is common: it stops rumble from steering the gain.
+
+::figure eqcomp
 
 Saturation is not linear either. A saturator bends loud input more than quiet input, so how much it distorts depends on the level that reaches it (Dutilleux, Dempwolf, Holters and Zölzer, 2011). Put a compressor first and every note reaches the saturator at a similar level, so the distortion is even. Put the saturator first and the distortion follows the performance, loud notes grittier than quiet ones, and the compressor then hears peaks that were already rounded off.
 

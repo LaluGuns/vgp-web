@@ -9,7 +9,7 @@ export const post129: BlogArticle = {
     readingTime: 4,
     summary: [
         'Use solo for things that belong to one track alone: clicks, edits, noise, hum and rings, then unsolo before you decide anything about tone or level.',
-        'In the mix a part is heard mostly through the bands nobody else covers, so boosting body that the bass and keys already mask adds mud, not fullness.',
+        'In the mix a part is heard mostly through the bands nobody else covers, so a boost where the bass and keys already cover it feeds the low-mid build-up and adds little you can hear as the part.',
         'Check what your DAW does to effect returns in solo, or mark them solo safe, so a soloed vocal is judged with its reverb.',
     ],
     figures: {
@@ -17,11 +17,11 @@ export const post129: BlogArticle = {
             type: 'spectrum',
             mode: 'level',
             caption:
-                'Shapes, not measurements. Soloed, the whole guitar is audible. In the mix its lower half sits under the bass and keys, so what the listener hears as guitar is mostly the upper part, where nothing else is as strong.',
-            alt: 'Energy over frequency. Two grey humps for the bass and the keys sit in the low and low-mid range. A filled hump for the guitar spans the low mids to the upper mids. A band over the low range is labelled covered in the mix, and a band over the upper mids is labelled heard as guitar.',
+                'Shapes, not measurements. Soloed, the whole guitar is audible. In the mix its lower part sits under the bass and keys, so what the listener hears as guitar is mostly the range above them, where nothing else is as strong.',
+            alt: 'Energy over frequency. Two grey humps for the bass and the keys sit in the low and low-mid range. A filled hump for the guitar spans the low mids to the upper mids. A band over the low range, where the bass and keys are stronger than the guitar, is labelled covered. A band from the mids upward, where the guitar is strongest, is labelled heard as guitar.',
             bands: [
-                { from: 60, to: 400, label: 'Covered in the mix' },
-                { from: 1500, to: 6000, label: 'Heard as guitar' },
+                { from: 40, to: 400, label: 'Covered' },
+                { from: 500, to: 6000, label: 'Heard as guitar' },
             ],
             curves: [
                 { kind: 'hump', center: 90, width: 0.9, level: 0.85, muted: true, label: 'Bass' },
@@ -34,8 +34,8 @@ export const post129: BlogArticle = {
             mode: 'gain',
             db: 6,
             caption:
-                'Two EQs for one acoustic guitar, drawn from the filter maths. The solo EQ adds a low shelf for body and a high shelf for air. The mix EQ removes the lows the bass already covers, trims the low mids and lifts the range where the guitar is still heard.',
-            alt: 'Gain over frequency. A dashed curve rises at both ends, with a lift below about 200 Hz and another above about 6 kHz. A solid curve falls away below 100 Hz, dips gently around 250 Hz and has a small lift around 3 kHz.',
+                'Two EQs for one acoustic guitar, drawn from the filter maths. The solo EQ adds a 4 dB low shelf for body and 3 dB of air. The mix EQ takes 4 dB out of the same low range, where the bass and keys already cover the guitar, and lifts 2 dB around 3 kHz, where the guitar is still heard.',
+            alt: 'Gain over frequency. A dashed curve is about 4 dB up in the lows, flat from about 400 Hz to 5 kHz and about 3 dB up at the top. A solid curve is about 4 dB down in the lows, flat through the low mids and lifted about 2 dB around 3 kHz.',
             curves: [
                 {
                     kind: 'eq',
@@ -50,8 +50,7 @@ export const post129: BlogArticle = {
                     kind: 'eq',
                     label: 'Mix EQ',
                     bands: [
-                        { type: 'highpass', freq: 90 },
-                        { type: 'bell', freq: 250, gain: -3, q: 1 },
+                        { type: 'lowshelf', freq: 180, gain: -4 },
                         { type: 'bell', freq: 3000, gain: 2, q: 1 },
                     ],
                 },
@@ -90,7 +89,7 @@ export const post129: BlogArticle = {
                 'Solo muted the reverb return, so you heard none of it',
             ],
             answer: 3,
-            why: 'In many DAWs solo mutes effect returns unless they are marked solo safe, so the vocal sounded dry in solo while its reverb was there all along.',
+            why: 'In some DAWs solo mutes effect returns unless they are marked solo safe, so the vocal sounded dry in solo while its reverb was there all along.',
         },
     ],
     content: `## Hook: the guitar that sounded great alone
@@ -115,7 +114,7 @@ This explains the guitar. Its low mids sit under the bass and keys, so the shelf
 
 It works the other way too. Some problems only exist together. Two parts that each sound clean can pile up in one range, and a bright part can sit right on top of the vocal's consonants. Neither shows up in solo.
 
-The demo uses a lead and a pad. Listen to how the pad, lush enough on its own, decides how clear the lead is.
+The demo puts a bright pad in the same range as a lead. Cut the pad or duck it and the lead comes forward without getting louder, which is the same effect from the other side: how clear a part sounds depends on what plays around it.
 
 ::demo masking
 
@@ -134,7 +133,7 @@ Version B often sounds smaller alone and works better in the mix. Version A ofte
 
 ## Common mistake: making every part complete
 
-The common mistake is trying to make each part sound finished on its own. A pad, a rhythm guitar or a keys part supports the song, and supporting parts can sound thin, dull or plain when soloed. The [lesson on EQ as attention design](/blog/how-eq-becomes-attention-design) covers how to decide which part leads. If every part gets body and air in solo, they all compete for the same bands and the mix turns thick and harsh at once.
+The common mistake is trying to make each part sound finished on its own. Supporting parts are allowed to sound plain in solo, as the [lesson on EQ as attention design](/blog/how-eq-becomes-attention-design) argues. If every part gets body and air in solo, they all compete for the same bands and the mix turns thick and harsh at once.
 
 ::figure eqs
 
