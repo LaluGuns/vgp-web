@@ -257,7 +257,9 @@ function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; 
                 const motion = trace.muted ? {} : draw(trace.dashed ? 'fade' : 'line', delay + i * 80);
                 return (
                     <g key={i}>
-                        {area ? <path d={area} {...(trace.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', delay + 200) })} /> : null}
+                        {area && (trace.muted || d.fillUnder) ? (
+                            <path d={area} {...(trace.muted ? { fill: C.lane } : { ...accentFill(), ...draw('fade', delay + 200) })} />
+                        ) : null}
                         {lines.map((path, k) => (
                             <path
                                 key={k}
@@ -413,13 +415,22 @@ let clipCounter = 0;
 
 const fmtHz = (f: number) => (f >= 1000 ? `${Number((f / 1000).toFixed(1))}k` : `${f}`);
 
-/** Every 1-to-9 step of each decade inside the range: the lines of a log graticule. */
-function logLines(lo: number, hi: number): number[] {
+/**
+ * Every 1-to-9 step of each decade inside the range: the lines of a log
+ * graticule. Where the steps crowd together near the top of a decade, a
+ * line closer than 5 px to the last one is left out, so the grid stays a
+ * texture at phone width.
+ */
+function logLines(lo: number, hi: number, fx: (f: number) => number): number[] {
     const out: number[] = [];
     for (let dec = 10 ** Math.floor(Math.log10(lo)); dec <= hi; dec *= 10) {
         for (let k = 1; k <= 9; k++) {
             const f = k * dec;
-            if (f >= lo && f <= hi) out.push(f);
+            if (f < lo || f > hi) continue;
+            // 1, 2 and 5 carry the labels, so they always stay.
+            const minor = k !== 1 && k !== 2 && k !== 5;
+            if (minor && ((out.length && fx(f) - fx(out[out.length - 1]) < 5) || fx(dec * 10) - fx(f) < 5)) continue;
+            out.push(f);
         }
     }
     return out;
@@ -500,7 +511,7 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         const sampleAt = combSteps ? Array.from({ length: combSteps + 1 }, (_, i) => lo + ((hi - lo) * i) / combSteps) : freqs;
         const pts = sampleAt.map((f) => [fx(f), gainMode ? gy(value(f)) : ly(value(f))] as [number, number]);
         const path = linePath(pts);
-        const fill = curve.kind === 'hump' && !curve.dashed;
+        const fill = curve.kind === 'hump' && !curve.dashed && (curve.muted || d.fillUnder);
         // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed one fades.
         const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'line', 120 + i * 100);
         return (
@@ -527,7 +538,7 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     // marks the frequencies with short ticks on the floor, like a ruler.
     const freqGrid =
         d.name === 'technical'
-            ? logLines(lo, hi).map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={ticks.includes(f)} />)
+            ? logLines(lo, hi, fx).map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={ticks.includes(f)} />)
             : ledger
               ? ticks.map((f) => <line key={f} x1={fx(f)} x2={fx(f)} y1={bottom} y2={bottom + 5} stroke={C.soft} />)
               : ticks.map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={d.name === 'music'} opacity={d.name === 'music' ? 0.1 : undefined} />);

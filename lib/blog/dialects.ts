@@ -41,8 +41,14 @@ export interface Dialect {
     marker: 'square' | 'head' | 'ring' | 'tick';
     /** Tabular numerals line up like a meter or a ledger column. */
     tabular: boolean;
-    /** Axis titles set in italic, the way a score sets expression marks. */
-    italicTitles: boolean;
+    /** Axis titles and small annotations in italic, the way a score sets its expression text. */
+    italic: boolean;
+    /**
+     * A faint accent area under a line (a curve, an envelope, a hump of
+     * energy). The two lit dialects keep it; score and ledger are ink on
+     * paper, so their lines stand alone.
+     */
+    fillUnder: boolean;
 }
 
 export const DIALECTS: Record<DialectName, Dialect> = {
@@ -59,7 +65,8 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         node: 2,
         marker: 'square',
         tabular: true,
-        italicTitles: false,
+        italic: false,
+        fillUnder: true,
     },
     /** Score paper: staff rulings, bar lines, note heads, round ends. */
     music: {
@@ -74,7 +81,8 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         node: 7,
         marker: 'head',
         tabular: false,
-        italicTitles: true,
+        italic: true,
+        fillUnder: false,
     },
     /** A field of attention: dotted rules, soft nodes, points held in a focus ring. */
     mind: {
@@ -89,7 +97,8 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         node: 'pill',
         marker: 'ring',
         tabular: false,
-        italicTitles: false,
+        italic: false,
+        fillUnder: true,
     },
     /** A ledger: ruled rows, a closing double rule, square ends, figures in a column. */
     business: {
@@ -104,7 +113,8 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         node: 0,
         marker: 'tick',
         tabular: true,
-        italicTitles: false,
+        italic: false,
+        fillUnder: false,
     },
 };
 

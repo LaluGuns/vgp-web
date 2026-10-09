@@ -83,7 +83,9 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                 const focus = si === 0 && !s.dashed;
                 return (
                     <g key={si}>
-                        {focus ? <path d={`${path}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} {...accentFill()} {...draw('fade', 200)} /> : null}
+                        {focus && d.fillUnder ? (
+                            <path d={`${path}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} {...accentFill()} {...draw('fade', 200)} />
+                        ) : null}
                         {s.dashed ? (
                             <path d={path} fill="none" stroke={C.soft} strokeWidth={1.6} strokeDasharray={d.refDash} strokeLinecap={d.cap} />
                         ) : (
@@ -97,7 +99,11 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                                 {...draw('line', 120 + si * 120)}
                             />
                         )}
-                        {focus ? pts.map(([x, y], i) => <Point key={i} d={d} x={x} y={y} delay={160 + (420 * i) / Math.max(1, n - 1)} />) : null}
+                        {focus
+                            ? pts.map(([x, y], i) => (
+                                  <Point key={i} d={d} x={x} y={y} r={d.marker === 'head' ? 3.1 : 2.6} delay={160 + (420 * i) / Math.max(1, n - 1)} />
+                              ))
+                            : null}
                     </g>
                 );
             })}
@@ -118,7 +124,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
 // ── Bars: horizontal bars on a shared scale ──
 
 /** Bar thickness by dialect: a meter, a held note, a soft bar, a ledger line. The value is always the bar's right edge. */
-const BAR_H = { technical: 14, music: 10, mind: 12, business: 10 } as const;
+const BAR_H = { technical: 14, music: 10, mind: 6, business: 10 } as const;
 
 export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialect?: DialectProp }) {
     const d = dialectOf(dialect);
@@ -137,6 +143,9 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
     const h = top + spec.bars.length * rowH + (narrow ? 0 : 6) + (ledger ? 8 : 0);
     const base = xAt(spec.min);
     const bh = BAR_H[d.name];
+    // Mind holds each value in a focus ring at the bar's end, so its value label steps past the ring.
+    const ring = d.marker === 'ring';
+    const after = ring ? 7 : 0;
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -157,14 +166,15 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                         </Label>
                         <Track d={d} x={x0} y={slotY} w={x1 - x0} h={14} />
                         <Bar d={d} x={base} y={barY} w={Math.max(2, end - base)} h={bh} tone={bar.dim ? 'dim' : 'accent'} delay={delay} />
+                        {ring ? <Point d={d} x={end} y={slotY + 7} r={3} tone={bar.dim ? 'muted' : 'accent'} delay={bar.dim ? undefined : delay + 420} /> : null}
                         {ledger ? (
                             <Label x={w} y={narrow ? y + 14 : slotY + 11} anchor="end" fill={bar.dim ? C.soft : C.ink} {...value}>
                                 {text}
                             </Label>
                         ) : (
                             <g {...value}>
-                                <rect x={end + 4} y={slotY - 1} width={textWidth(text) + 8} height={16} rx={2} fill={C.surface} />
-                                <Label x={end + 8} y={slotY + 11} fill={bar.dim ? C.soft : C.ink}>
+                                <rect x={end + 4 + after} y={slotY - 1} width={textWidth(text) + 8} height={16} rx={2} fill={C.surface} />
+                                <Label x={end + 8 + after} y={slotY + 11} fill={bar.dim ? C.soft : C.ink}>
                                     {text}
                                 </Label>
                             </g>
@@ -354,7 +364,10 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
     const gridBottom = gridTop + spec.layers.length * (rowH + 4);
     const h = gridBottom + 2 + (d.name === 'business' ? 6 : 0);
     const totalBars = spec.sections.reduce((sum, s) => sum + (s.bars ?? 8), 0);
-    const avail = w - labelCol;
+    const music = d.name === 'music';
+    // The score closes on a final bar line, so its grid stops short of the edge to leave room for it.
+    const gridRight = music ? w - 6 : w;
+    const avail = gridRight - labelCol;
     const cols: { x: number; width: number; label: string }[] = [];
     for (let i = 0, acc = 0; i < spec.sections.length; i++) {
         const s = spec.sections[i];
@@ -363,7 +376,6 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
     }
     const density = spec.sections.map((_, i) => spec.layers.reduce((sum, layer) => sum + (layer.levels[i] ?? 0), 0));
     const maxDensity = Math.max(1, ...density);
-    const music = d.name === 'music';
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -392,7 +404,7 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
                             {layer.label}
                         </Label>
                         {d.name === 'technical' ? <rect x={labelCol} y={y} width={avail} height={rowH} rx={cornerOf(d, rowH)} fill={C.lane} /> : null}
-                        {music || d.name === 'mind' ? <Rule d={d} x1={labelCol} x2={w} y1={y + rowH / 2} y2={y + rowH / 2} major={music} /> : null}
+                        {music || d.name === 'mind' ? <Rule d={d} x1={labelCol} x2={gridRight} y1={y + rowH / 2} y2={y + rowH / 2} major={music} /> : null}
                         {d.name === 'business' ? <line x1={0} x2={w} y1={y + rowH + 2} y2={y + rowH + 2} stroke={C.grid} /> : null}
                         {cols.map((col, ci) => {
                             const level = layer.levels[ci] ?? 0;

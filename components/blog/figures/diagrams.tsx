@@ -125,7 +125,7 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                         {narrow ? (
                             <text x={0} y={y + 13} fontSize={FS}>
                                 <tspan fill={C.text}>{row.label}</tspan>
-                                {row.note ? <tspan fill={C.soft}>{`  ${row.note}`}</tspan> : null}
+                                {row.note ? <tspan fill={C.soft} fontStyle={d.italic ? 'italic' : undefined}>{`  ${row.note}`}</tspan> : null}
                             </text>
                         ) : (
                             <g>
@@ -133,7 +133,7 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                                     {row.label}
                                 </Label>
                                 {row.note ? (
-                                    <Label x={0} y={laneY + 27} size={11}>
+                                    <Label x={0} y={laneY + 27} size={11} fontStyle={d.italic ? 'italic' : undefined}>
                                         {row.note}
                                     </Label>
                                 ) : null}
@@ -241,8 +241,9 @@ export function Stereo({ spec, w, dialect }: { spec: StereoFigure; w: number; di
     const front = h - 58;
     const back = 64;
     const speakerY = 30;
-    const stageL = cx - span - 14;
-    const stageR = cx + span + 14;
+    // The stage starts clear of the Back and Front labels.
+    const stageL = Math.max(cx - span - 14, 46);
+    const stageR = w - stageL;
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -398,7 +399,7 @@ function FlowHorizontal({ spec, w, d }: { spec: FlowFigure; w: number; d: Dialec
                         fill={C.ink}
                         lineHeight={16 / FS}
                     />
-                    {notes[i].length ? <Lines x={bx(i) + bw / 2} y={top + bh + 18} lines={notes[i]} anchor="middle" size={11} lineHeight={15 / 11} /> : null}
+                    {notes[i].length ? <Lines x={bx(i) + bw / 2} y={top + bh + 18} lines={notes[i]} anchor="middle" size={11} lineHeight={15 / 11} italic={d.italic} /> : null}
                     {i < n - 1 ? <Link d={d} x1={bx(i) + bw + 4} y1={top + bh / 2} x2={bx(i + 1) - 4} y2={top + bh / 2} angle={0} /> : null}
                 </g>
             ))}
@@ -472,7 +473,9 @@ function FlowVertical({ spec, w, d }: { spec: FlowFigure; w: number; d: Dialect 
                         </g>
                     ) : null}
                     <Lines x={indent} y={box.y + 26} lines={box.labels} fill={C.ink} lineHeight={16 / FS} />
-                    {box.notes.length ? <Lines x={indent} y={box.y + 26 + box.labels.length * 16 + 4} lines={box.notes} size={11} lineHeight={15 / 11} /> : null}
+                    {box.notes.length ? (
+                        <Lines x={indent} y={box.y + 26 + box.labels.length * 16 + 4} lines={box.notes} size={11} lineHeight={15 / 11} italic={d.italic} />
+                    ) : null}
                     {i < boxes.length - 1 ? <Link d={d} x1={bw / 2} y1={box.y + box.bh + 3} x2={bw / 2} y2={box.y + box.bh + gap - 3} angle={90} /> : null}
                 </g>
             ))}

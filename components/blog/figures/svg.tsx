@@ -137,9 +137,9 @@ export function Label({
     );
 }
 
-/** An axis title ("Energy ↑", "Input level (dB)"). Music sets it in italic, like an expression mark. */
+/** An axis title ("Energy ↑", "Input level (dB)"). Music sets it in italic, like the expression text in a score. */
 export function Title({ d, ...props }: { d: Dialect } & Parameters<typeof Label>[0]) {
-    return <Label fill={C.text} fontStyle={d.italicTitles ? 'italic' : undefined} {...props} />;
+    return <Label fill={C.text} fontStyle={d.italic ? 'italic' : undefined} {...props} />;
 }
 
 /** Multi-line label; `y` is the first baseline. */
@@ -152,6 +152,7 @@ export function Lines({
     fill = C.soft,
     lineHeight = 1.35,
     weight,
+    italic,
 }: {
     x: number;
     y: number;
@@ -161,9 +162,10 @@ export function Lines({
     fill?: string;
     lineHeight?: number;
     weight?: number;
+    italic?: boolean;
 }) {
     return (
-        <text x={x} y={y} fontSize={size} fill={fill} textAnchor={anchor} fontWeight={weight}>
+        <text x={x} y={y} fontSize={size} fill={fill} textAnchor={anchor} fontWeight={weight} fontStyle={italic ? 'italic' : undefined}>
             {lines.map((line, i) => (
                 <tspan key={i} x={x} dy={i === 0 ? 0 : size * lineHeight}>
                     {line}
@@ -319,13 +321,14 @@ export function Point({
             return <rect x={x - s / 2} y={y - s / 2} width={s} height={s} {...toneFill(tone, opacity)} {...motion} />;
         }
         case 'head': {
-            const rx = r * 1.45;
-            const ry = r * 1.02;
+            const rx = r * 1.6;
+            const ry = r * 1.15;
             // A note head leans back like an engraved one. The tilt is drawn into the path, so the
             // element keeps no transform attribute and can still pop in.
             const path = ellipsePath(x, y, rx, ry, -20);
+            // An engraved head sits on the paper with a hair of space round it, so a line running into it reads as joining.
             return tone === 'accent' ? (
-                <path d={path} {...accentFill(opacity)} {...motion} />
+                <path d={path} {...accentFill(opacity)} stroke={C.surface} strokeWidth={1.2} paintOrder="stroke" {...motion} />
             ) : (
                 <path d={path} fill={C.surface} stroke={tone === 'ink' ? C.ink : C.strong} strokeOpacity={opacity < 1 ? opacity : undefined} strokeWidth={1.3} {...motion} />
             );
