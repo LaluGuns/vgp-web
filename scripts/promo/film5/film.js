@@ -264,8 +264,9 @@ function drawAB(t, frame1 = false, noHead = false) {
     g.save();
     g.globalAlpha *= a;
     const [dA, dB] = replay ? [demoBy.A2, demoBy.B2] : [demoBy.A, demoBy.B];
-    const msA = -dA.pre * BEAT * 1000;
-    const msB = dA.post * BEAT * 1000;
+    // The replay uses the hook's window, so it is the same picture as the opening.
+    const msA = -demoBy.A.pre * BEAT * 1000;
+    const msB = demoBy.A.post * BEAT * 1000;
     const G = TL.guess;
     const tTwo = wt('hook', 'two');
     const guessing = !frame1 && !replay && t >= G.at && t < voBy.hook.at - 0.05;
@@ -316,8 +317,11 @@ function drawAB(t, frame1 = false, noHead = false) {
         // silhouette, so the eye cannot answer before the ear; the real
         // waveform lights up under the playhead.
         const upto = frame1 ? -1e9 : t >= d.to ? 1e9 : abProgress(d, t);
-        if (replay) wave(g, v, box, a0, b0, 1e9, { alpha: 0.3 * dim });
-        else if (upto < msB) silhouette(g, box, upto, a0, b0);
+        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.3 * dim });
+        else if (upto < msB) {
+            silhouette(g, box, upto, a0, b0);
+            if (upto < msA) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
+        }
         if (!frame1 && (t >= d.at || replay)) wave(g, v, box, a0, b0, upto, { alpha: dim });
         dashed(g, X(0), lane.y - lane.h / 2 - 6, X(0), lane.y + lane.h / 2 + 6, P.ink3, 3, [8, 8]);
         if (playing && upto < msB) {
@@ -337,15 +341,25 @@ function drawAB(t, frame1 = false, noHead = false) {
     if (guessing) {
         const k = Math.min(2, Math.floor((t - G.at) / BEAT));
         const p = ((t - G.at) % BEAT) / BEAT;
-        g.save();
-        g.translate(540, 1390);
-        const sc = 1 + 0.25 * Math.exp(-p / 0.15);
-        g.scale(sc, sc);
-        label(g, String(3 - k), 0, 0, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-        g.restore();
+        // Three dots that fill on the beat (no digits, which would read as version labels).
+        for (let i = 0; i < 3; i++) {
+            const x = 540 + (i - 1) * 70;
+            const on = i <= k;
+            const sc = i === k ? 1 + 0.35 * Math.exp(-p / 0.15) : 1;
+            g.beginPath();
+            g.arc(x, 1390, 18 * sc, 0, Math.PI * 2);
+            if (on) {
+                g.fillStyle = P.ink;
+                g.fill();
+            } else {
+                g.strokeStyle = P.ink3;
+                g.lineWidth = 4;
+                g.stroke();
+            }
+        }
     }
     // Both versions are the same samples at matched loudness; say so while the hook plays.
-    if (!replay && !noHead) label(g, 'same samples · matched loudness', 540, 1288, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: frame1 ? 1 : 1 - seg(t, SC.fog - 0.3, SC.fog - 0.05) });
+    if (!replay && !noHead) label(g, 'same samples · matched loudness', 540, 1288, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: frame1 ? 1 : 1 - seg(t, SC.fog - 0.3, SC.fog - 0.05) });
     // The notch, labelled once.
     if (zIn > 0) {
         const lane = AB.lanes[1];
@@ -495,7 +509,7 @@ function drawEar(t) {
         label(g, gloss ?? '1 of 3 · ears · masking (model, Moore 2012)', 540, 400, { size: 34, weight: 600, color: gloss ? P.ink : P.ink2, align: 'center', family: BODY });
     } else {
         headline(t, SC.fresh + 0.05, [['Silence'], ['resets'], ['your'], ['ears']], 300, { size: 84 });
-        label(g, '1 of 3 · ears · nerve response (model, Moore 2012)', 540, 400, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY });
+        label(g, '1 of 3 · ears · nerve response (model, Moore 2012)', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     }
     const S1 = demoBy.S1;
     const S2 = demoBy.S2;
@@ -516,9 +530,9 @@ function drawEar(t) {
         badgeNum(g, v, 64, row.y - row.h / 2 + 10, 32, { alpha: v === 1 ? r1 : r2 });
         earIcon(g, 150, row.y + 10, 0.85);
         earHaze(g, 150, row.y + 10, val(V[v].fog, clamp(reach, EAR.msA, EAR.msB)) * fogOn);
-        const sens = val(V[v].sens, clamp(reach, EAR.msA, 30));
+        const sens = val(V[v].sens, clamp(reach, EAR.msA, -1));
         sensMeter(g, 250, row.y + 10, 170, sens, meters);
-        label(g, 'sensitivity', 190, row.y + row.h / 2 + 52, { size: 34, weight: 600, color: P.cyan, align: 'center', alpha: meters, family: BODY });
+        label(g, 'ear sensitivity', 178, row.y + row.h / 2 + 52, { size: 34, weight: 600, color: P.cyan, align: 'center', alpha: meters, family: BODY });
     });
     msAxis(g, EAR.x0, EAR.x1, EAR.msA, EAR.msB, EAR.axisY, [-400, 0, 400]);
     const R1 = EAR.rows[0];
@@ -578,7 +592,7 @@ function drawEar(t) {
         g.stroke();
         g.restore();
     }
-    if (kM > 0) pill(g, `click ${fmt(D.claims[2].db)} dB clearer in 2 · measured`, 540, EAR.axisY + 112, { size: 36, bg: P.amber, fg: P.dark, alpha: kM, scale: E.outBack(kM), weight: 800 });
+    if (kM > 0) pill(g, `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, EAR.axisY + 112, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kM, scale: E.outBack(kM), weight: 800 });
     g.restore();
 }
 
@@ -591,7 +605,7 @@ function drawHand(t) {
     g.save();
     g.globalAlpha = a;
     headline(t, SC.hand + 0.1, [['The'], ['limiter'], ['is'], ['a'], ['hand']], 300, { size: 84 });
-    label(g, '2 of 3 · the limiter · its own gain, measured', 540, 400, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY });
+    label(g, '2 of 3 · the limiter · its own gain, measured', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     const tHand = wt('hand', 'hand');
     const tRiser = wt('hand', 'riser');
     const tEnd = wt('hand', 'arrives') + 0.35;
@@ -672,12 +686,12 @@ function drawHand(t) {
         g.restore();
     }
     const kR = popIn(t, tKick + 0.15, 0.3);
-    label(g, kR > 0 ? 'gain reduction on the first kick' : live ? `limiter gain, slowed down ${Math.round(slow)}×` : 'the limiter on the master bus', 540, HD.bottom + 72, { size: 36, weight: 700, color: P.ink2, align: 'center', family: BODY });
+    label(g, kR > 0 ? 'measured: gain reduction on the first kick' : live ? `limiter gain, slowed down ${Math.round(slow)}×` : 'the limiter on the master bus', 540, HD.bottom + 72, { size: 36, weight: 700, color: P.ink2, align: 'center', family: BODY });
     // Readouts: measured gain reduction on the first kick.
     if (kR > 0) {
         for (const f of HD.faders) {
             const gr = f.v === 1 ? D.r1.gr : D.r2.gr;
-            pill(g, `−${fmt(gr)} dB`, f.x, HD.bottom + 165, { size: 48, bg: P.cyan, fg: P.dark, alpha: kR, scale: E.outBack(kR), weight: 800 });
+            pill(g, `−${fmt(gr)} dB`, f.x, HD.bottom + 165, { size: 48, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kR, scale: E.outBack(kR), weight: 800 });
         }
     }
     g.restore();
@@ -720,7 +734,7 @@ function drawBrain(t) {
     g.save();
     g.globalAlpha = a;
     headline(t, SC.brain + 0.1, [['Predict'], ['the'], ['next'], ['beat']], 300, { size: 88 });
-    label(g, '3 of 3 · your brain · expectation (Huron 2006)', 540, 400, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY });
+    label(g, '3 of 3 · your brain · expectation (Huron 2006)', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     // Eight beats: the last bar and a half of the build, then the downbeat.
     const n = 8;
     const X = (i) => lerp(BR.x0, BR.x1, i / (n - 1));
@@ -825,7 +839,7 @@ function drawBrain(t) {
         g.fillStyle = P.ink2;
         for (let i = 1; i <= 4; i++) {
             const u = i / 5;
-            if (u > k * 1.4) break;
+            if (u > k * 1.4 || u > 0.6) break;
             g.beginPath();
             g.arc(lerp(330, X(6.5), u), lerp(640, BR.wave - 230, u), 5 + 3 * u, 0, Math.PI * 2);
             g.fill();
@@ -833,7 +847,7 @@ function drawBrain(t) {
     }
     g.restore();
     const kp = popIn(t, wt('brain', 'arrival') - 0.05, 0.3);
-    if (kp > 0) pill(g, 'the arrival is the payoff', 540, BR.dots + 200, { size: 42, bg: P.amber, fg: P.dark, alpha: kp, scale: E.outBack(kp), weight: 800 });
+    if (kp > 0) pill(g, 'the arrival is the payoff', 540, BR.dots + 200, { size: 42, bg: P.ink, fg: P.dark, alpha: kp, scale: E.outBack(kp), weight: 800 });
     g.restore();
 }
 
@@ -886,8 +900,8 @@ function drawHow(t) {
         rr(g, X(0), y, w, 80, 10);
         g.fillStyle = i === 2 ? P.cyan : 'rgba(125,211,252,0.35)';
         g.fill();
-        label(g, `${b.name} · ${b.ms.toFixed(1)} ms`, X(b.ms) + 24, y + 36, { size: 36, weight: 800, color: i === 2 ? P.cyan : P.ink, alpha: k });
-        label(g, b.note, X(b.ms) + 24, y + 76, { size: 34, weight: 600, color: P.ink2, alpha: k, family: BODY });
+        label(g, `${b.name} · ${b.ms.toFixed(1)} ms`, X(320), y + 36, { size: 36, weight: 800, color: i === 2 ? P.cyan : P.ink, alpha: k });
+        label(g, b.note, X(320), y + 76, { size: 36, weight: 600, color: P.ink2, alpha: k, family: BODY });
     });
     // Mute automation on the reverb return.
     // A playhead runs through the silence after the cut; at the end of each gap
@@ -896,9 +910,10 @@ function drawHow(t) {
     if (t > tSweep) {
         const cyc = 1.3;
         const ph = ((t - tSweep) % cyc) / cyc;
-        const ms = 300 * E.inOut(clamp(ph / 0.8));
+        const ms = 290 * E.inOut(clamp(ph / 0.8));
         g.fillStyle = P.ink;
         g.fillRect(X(ms) - 2, fogTop - 6, 4, fogBot - fogTop + 12);
+        void 0;
         blocks.forEach((b, i) => {
             if (ms < b.ms) return;
             const w = 1 - Math.log10(1 + Math.min(b.ms, 200) / 10) / Math.log10(21);
