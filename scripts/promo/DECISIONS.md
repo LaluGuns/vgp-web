@@ -46,3 +46,13 @@ One line per call, newest last.
   - Snares checked for a stronger natural crack: all ten Cymatics snares tried (Diamonds 1, 2, 4, 8, 13, 16 and eight from the Snares and ATLANTIS folders) are pre-limited. None gets flatter than dry under a 1 ms attack; the 30 ms advantage (4 to 8 dB) holds for all. Snare 4 stays.
 - Narration v2, at the founder's request (American English, cool, expressive, ElevenLabs' newest model): voice "Michael C. Vincent" (American library voice described as confident and expressive, built for explainers), model `eleven_v4`, a few audio tags for delivery (`film3/narration-prompt.txt`). It carries the corrected script ("Most of the crack slips past", "So the next crack gets squashed too", "Now listen again", "free on the Virzy Guns blog"). Of four takes, take 1: 1.2% word error against the script, 174 words a minute, 10.1 semitones of pitch range; take 2 was a little livelier but faster (181 wpm), and for a lesson the slower read wins.
 - Scene times now follow the narration (`wt()` word times and `vo` placements) instead of fixed seconds, and `film3/cue_vo.py` cues any new take: it aligns the script to recognized words and cuts each line in the longest silence between lines.
+- Film 3, second review (v4):
+  - Cold open: a strike at 0.0 s and another right after "snare", the title slamming in on the first.
+  - Listen comparisons draw the other setting dashed on top of the fill, crack included. Level-matched, the cracks of 1 ms and 30 ms peak at about the same height; the difference is the body (1 ms keeps it up, 30 ms drops it), so "flat" points at the 1 ms body and "punchy" at the 30 ms crack. A "+N dB crack" arrow between peaks was tried and dropped: after level matching it reads +0 to +2 dB, which is true of the peaks but not of the punch.
+  - Inside the box, soft snare hits drive the in meter; from the second, the hand pulls and the out meter stays near the threshold.
+  - The glove grips the cap with its fingers folded over the front, and opens with its fingers fanned; the closed eye is a lid line.
+  - Slowed-down views: 0 to 100 ms at twice the scale, the crack running off a soft top edge; a legend; tags in a lane with straight leaders. Hold and fresh wait for the second snare and magnify it from the trace.
+  - Every screen and its trace share one time scale: 100 ms, 150 ms, or 1.2 s for the four-hit release strips.
+  - The release scene's title has no value, so the viewer only tracks 2.5 s and 90 ms.
+  - Rule cards mark 30 ms and 90 ms with a check in neutral colours; amber stays the crack.
+  - Subtitles break into balanced lines and pages ("is free on the Virzy Guns blog" never splits the name); demos show a speaker and "Listen".
