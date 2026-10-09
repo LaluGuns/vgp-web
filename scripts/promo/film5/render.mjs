@@ -57,7 +57,7 @@ const M = audio.measures;
 const Q = M.res;
 const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
 log(`Audio master: ${m.I} LUFS integrated, ${m.TP} dBTP, LRA ${m.LRA} LU (gain ${gain.toFixed(1)} dB, clip ceiling ${ceiling.toFixed(1)} dBFS)`);
-log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 2 dB under the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
+log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 1 dB over the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
 log(`A/B: one 128 BPM build into a drop, rendered twice from the same samples. Version 2 mutes every build source and the build's reverb return ${f1(Q.gapMs)} ms (one 8th) before the downbeat with ${Q.fadeMs} ms fades; version 1 runs into the downbeat.`);
 log(`Song-bus limiter (both versions): ceiling ${LIMITER.ceilingDb} dBFS, look-ahead ${LIMITER.lookMs} ms, release ${LIMITER.releaseMs} ms, drive ${Q.driveDb} dB`);
 log(`Matching: version 1 turned ${Q.matchOffsetDb >= 0 ? 'up' : 'down'} ${Math.abs(Q.matchOffsetDb).toFixed(2)} dB to version 2's drop-bar loudness (${f1(Q[2].dropLufs)} LUFS, K-weighted, downbeat plus one bar)`);
@@ -69,15 +69,11 @@ log(`Claim 4, the first kick (K-weighted, first 50 ms) over the drop bar's loudn
 const pass = Q.claims[1].db >= 3 && Q.claims[2].db >= 10 && Q.claims[3].survive1 >= 0.8 && Q.claims[3].survive2 >= 0.8 && Q.claims[4].db > 0;
 log(`Claims 1-4: ${pass ? 'all pass' : 'NOT ALL PASS'}`);
 
-// ── Captions: one cue per narration line ──
 const ts = (t) => {
     const ms = Math.round(t * 1000);
     const p = (n, w = 2) => String(n).padStart(w, '0');
     return `${p(Math.floor(ms / 3600000))}:${p(Math.floor(ms / 60000) % 60)}:${p(Math.floor(ms / 1000) % 60)},${p(ms % 1000, 3)}`;
 };
-const vo = audio.data.vo;
-fs.writeFileSync(path.join(OUT, 'captions.srt'), vo.map((v, i) => `${i + 1}\n${ts(v.at)} --> ${ts(v.at + v.dur + 0.25)}\n${v.text}\n`).join('\n'));
-log(`Captions: ${vo.length} cues, the narration as spoken`);
 
 // ── Picture ──
 const exe = [process.env.CHROME_PATH, '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'].find((p) => p && fs.existsSync(p));
@@ -138,6 +134,18 @@ html,body{margin:0;background:${T.bg}}canvas{display:block}</style></head><body>
 <script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
 <script>${fs.readFileSync(path.join(HERE, 'art.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'film.js'), 'utf8')}</script></body></html>`;
 fs.writeFileSync(path.join(OUT, 'preview.html'), html);
+
+// ── Captions: one cue per caption page, as the film shows them ──
+{
+    const p = await browser.newPage({ viewport: { width: TIMELINE.width, height: TIMELINE.height } });
+    await p.setContent(html, { waitUntil: 'load' });
+    await p.evaluate(() => window.filmReady);
+    const cues = await p.evaluate(() => window.captionPages());
+    await p.close();
+    fs.writeFileSync(path.join(OUT, 'captions.srt'), cues.map((c, i) => `${i + 1}\n${ts(c.start)} --> ${ts(c.end)}\n${c.text}\n`).join('\n'));
+    const longest = Math.max(...cues.flatMap((c) => c.text.split('\n').map((l) => l.length)));
+    log(`Captions: ${cues.length} cues, the narration as spoken, paged as on screen (at most 2 lines; longest line ${longest} characters; longest cue ${Math.max(...cues.map((c) => c.end - c.start)).toFixed(1)} s)`);
+}
 
 async function open() {
     const p = await browser.newPage({ viewport: { width: TIMELINE.width, height: TIMELINE.height }, deviceScaleFactor: 1 });

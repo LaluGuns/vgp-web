@@ -170,7 +170,8 @@ function ground(g, t, glow = 0) {
     g.fillRect(0, 0, W, H);
     g.save();
     g.globalAlpha = 0.85;
-    planet(g, W * 0.98 + 10 * Math.sin(t * 0.06), H * 0.1, 330, 2.3);
+    // Top planet kept off screen below y 250, so it never crosses a headline.
+    planet(g, W + 120 + 10 * Math.sin(t * 0.06), -20, 300, 2.3);
     planet(g, -W * 0.1, H * 1.04 + 8 * Math.sin(t * 0.05), 440, -0.9);
     g.restore();
     const c = g.createRadialGradient(W / 2, H * 0.4, 0, W / 2, H * 0.4, H * 0.55);

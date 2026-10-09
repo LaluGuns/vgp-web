@@ -26,13 +26,16 @@ const dur = (id) => {
 const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
-const HOOK = { pre: 2, post: 2 };
-const REPLAY = { pre: 1.5, post: 1.5 };
+const HOOK = { pre: 2.5, post: 2 };
+const REPLAY = { pre: 1.5, post: 2 };
+// After the hook, two beats to pick 1 or 2 before the voice gives the answer.
+const GUESS = 2 * BEAT;
 const len = (d) => (d.pre + d.post) * BEAT;
 
-const LINE_GAP = 0.25;
+const LINE_GAP = 0.22;
 const vo = [];
-let t = len(HOOK) * 2 + 0.2;
+const guessAt = len(HOOK) * 2;
+let t = guessAt + GUESS + 0.1;
 for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
@@ -41,8 +44,9 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
 const replayAt = onGrid(t + dur('again') + 0.12);
 vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) / 1000 });
 const replayEnd = replayAt + 2 * len(REPLAY);
-vo.push({ id: 'cta', at: Math.round((replayEnd + 0.15) * 1000) / 1000 });
-const button = replayEnd + 0.15 + dur('cta') + 0.15;
+// The CTA waits for version 2's second kick to ring out.
+vo.push({ id: 'cta', at: Math.round((replayEnd + 0.45) * 1000) / 1000 });
+const button = replayEnd + 0.45 + dur('cta') + 0.15;
 
 export const TIMELINE = {
     fps: 60,
@@ -70,13 +74,16 @@ export const TIMELINE = {
     ],
     // Single sounds tied to the picture: `cue: [line, word]` lands on that word.
     sfx: [
+        // The guess: two ticks on the beat, "1 or 2?"
+        { at: guessAt, kind: 'tick' },
+        { at: guessAt + BEAT, kind: 'tick' },
         { cue: ['hook', 'two'], dt: -0.05, kind: 'pop', level: 0.8 },
         { cue: ['hook', 'hole'], dt: 0, kind: 'tick' },
         { cue: ['hook', 'quarter'], dt: 0, kind: 'pop', level: 0.6 },
         { cue: ['fog', 'loud'], dt: -0.2, kind: 'whoosh', level: 0.6 },
         { cue: ['fog', 'stops'], dt: 0.1, kind: 'tick' },
         { cue: ['fog', 'click'], dt: 0, kind: 'pop', level: 0.6 },
-        { cue: ['fresh', 'after'], dt: -0.2, kind: 'whoosh', level: 0.5 },
+
         { cue: ['fresh', 'full'], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['hand', 'your'], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['hand', 'hand'], dt: -0.1, kind: 'grab' },
@@ -95,13 +102,14 @@ export const TIMELINE = {
         { at: button + 0.15, kind: 'swell', to: button + 0.75 },
     ],
     button,
+    guess: { at: guessAt, dur: GUESS },
     // Scenes in order; each runs until the next one starts. `from: [line, word]`
     // starts a scene on a spoken word; `at` is used otherwise.
     scenes: [
         { id: 'ab', at: 0, view: 'ab', teaches: 'Hook: the same drop twice, 1 then 2.' },
         { id: 'notch', from: ['hook', 'number'], dt: -0.15, view: 'ab', teaches: 'Number 2 has a hole: less than a quarter second of silence.' },
-        { id: 'fog', from: ['fog', 'a'], dt: -0.3, view: 'fog', teaches: 'A loud riser leaves a fog (forward masking, model) for up to 200 ms; in 1 the click lands inside it.' },
-        { id: 'fresh', from: ['fresh', 'after'], dt: -0.25, view: 'fresh', teaches: 'After silence the ear responds fully (adaptation, model).' },
+        { id: 'fog', from: ['fog', 'a'], dt: -0.3, view: 'ear', teaches: 'A loud riser covers the click while it plays and leaves a fog (forward masking, model) for up to 200 ms; in 1 the click is buried, in 2 it is clear (measured: 10.6 dB).' },
+        { id: 'fresh', from: ['fresh', 'after'], dt: -0.25, view: 'ear', teaches: 'Same rows: after silence the ear responds fully, inside the riser only a little (adaptation, model).' },
         { id: 'hand', from: ['hand', 'your'], dt: -0.25, view: 'hand', teaches: 'The limiter is a hand on a fader: in 1 it is already down when the kick arrives.' },
         { id: 'brain', from: ['brain', 'silence'], dt: -0.3, view: 'brain', teaches: 'Silence leaves one thing to predict: the next beat. The arrival is the payoff.' },
         { id: 'how', from: ['how', 'at'], dt: -0.25, view: 'how', teaches: 'At 128 BPM cut everything an 8th early; reverb tails too.' },

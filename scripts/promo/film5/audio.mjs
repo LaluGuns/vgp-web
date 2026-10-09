@@ -289,11 +289,11 @@ export function renderAudio() {
     // ── The A/B: both versions, matched at the drop bar's loudness ──
     const { res, v } = measure();
     const match = { 1: undb(res.matchOffsetDb), 2: 1 };
-    // Demos sit 2 dB under the narration's loudness at the drop bar, so their
-    // peaks (-1 dBFS inside the song, 13 dB over its loudness) land where the
-    // voice's limiter puts speech peaks and the master never clips them.
+    // Demos sit 1 dB over the narration's loudness at the drop bar, so the A/B
+    // is the loudest thing in the film; their peaks (-1 dBFS inside the song,
+    // about 13 dB over its loudness) stay under the master's clipper.
     const dropLufs = res[2].dropLufs;
-    const demoGain = undb(voLufs - 2 - dropLufs);
+    const demoGain = undb(voLufs + 1 - dropLufs);
     const dL = new Float32Array(n);
     const dR = new Float32Array(n);
     for (const d of TIMELINE.demos) {
