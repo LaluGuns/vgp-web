@@ -6,7 +6,7 @@ export const post129: BlogArticle = {
     excerpt: 'A part you EQ in solo is heard in the mix through everything around it. Learn what solo is good for and why tone decisions belong in context.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 4,
     summary: [
         'Use solo for things that belong to one track alone: clicks, edits, noise, hum and rings, then unsolo before you decide anything about tone or level.',
         'In the mix a part is heard mostly through the bands nobody else covers, so boosting body that the bass and keys already mask adds mud, not fullness.',
@@ -18,7 +18,7 @@ export const post129: BlogArticle = {
             mode: 'level',
             caption:
                 'Shapes, not measurements. Soloed, the whole guitar is audible. In the mix its lower half sits under the bass and keys, so what the listener hears as guitar is mostly the upper part, where nothing else is as strong.',
-            alt: 'Energy over frequency. Two grey humps for the bass and the keys sit in the low and low-mid range. A highlighted hump for the guitar spans the low mids to the upper mids. A band over the low range is labelled covered in the mix, and a band over the upper mids is labelled heard as guitar.',
+            alt: 'Energy over frequency. Two grey humps for the bass and the keys sit in the low and low-mid range. A filled hump for the guitar spans the low mids to the upper mids. A band over the low range is labelled covered in the mix, and a band over the upper mids is labelled heard as guitar.',
             bands: [
                 { from: 60, to: 400, label: 'Covered in the mix' },
                 { from: 1500, to: 6000, label: 'Heard as guitar' },

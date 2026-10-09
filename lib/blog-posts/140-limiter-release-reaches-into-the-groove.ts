@@ -143,15 +143,15 @@ Here $GR_0$ is the reduction on the kick and $\\tau$ is the release time constan
 
 $$\\Delta t = \\frac{60}{\\text{BPM}}$$
 
-At 120 BPM a beat lasts 500 ms, so an off-beat hat lands 250 ms after the kick. With 4 dB on the kick, a 50 ms release has recovered completely by then. A 250 ms release still holds the hat $4 \\times e^{-1} \\approx 1.5$ dB down, and the bed rises by about 3 dB across each beat: that rise is the pumping you hear. A 1 s release holds everything about 3 dB down nearly all the time. That is clean and steady, but you need more drive to reach the same loudness.
+At 120 BPM a beat lasts 500 ms, so an off-beat hat lands 250 ms after the kick. With 4 dB on the kick, a 50 ms release has almost fully recovered by then. A 250 ms release still holds the hat $4 \\times e^{-1} \\approx 1.5$ dB down, and the bed rises by about 3 dB across each beat: that rise is the pumping you hear. A 1 s release holds everything about 3 dB down nearly all the time. That is clean and steady, but you need more drive to reach the same loudness.
 
-Release labels make this harder than it looks. MATLAB's audio toolbox, for example, defines attack and release as the time the gain takes to move from 10% to 90% of its final value, which for a one-pole smoother is $\\tau \\ln 9 \\approx 2.2\\tau$. Two plugins can both read 250 ms and recover at different speeds, so set release by ear against the tempo, not by number.
+MATLAB's Audio Toolbox, for example, defines attack and release as the time the gain takes to move from 10% to 90% of its final value, which for a one-pole smoother is $\\tau \\ln 9 \\approx 2.2\\tau$. Two plugins can both read 250 ms and recover at different speeds, so set release by ear against the tempo, not by number.
 
-Go the other way and the release becomes faster than the bass. A 50 Hz cycle lasts 20 ms, with a crest every 10 ms. If the gain recovers within a few milliseconds, it rises and falls with every crest, and the limiter starts reshaping the wave instead of riding its level. In my simulation of a 50 Hz sine driven 6 dB into the ceiling, a 1 ms release produced a third harmonic about 15 dB under the fundamental, against about 39 dB under with a 100 ms release. The fast version also came out about 1.3 dB louder at the same peak level, because it was behaving like a clipper. That extra loudness is why fast releases tend to win quick comparisons.
+Go the other way and the release becomes faster than the bass. A 50 Hz cycle lasts 20 ms, with a crest every 10 ms. If the gain recovers within a few milliseconds, it rises and falls with every crest, and the limiter starts reshaping the wave instead of riding its level. In my simulation of a 50 Hz sine driven 6 dB into the ceiling, a 1 ms release produced a third harmonic about 15 dB under the fundamental, against about 39 dB under with a 100 ms release. The fast version also came out about 1.3 dB louder at the same peak level, because it was behaving like a clipper.
 
 ::figure cycle
 
-Many limiters split the job between two stages: a fast one that catches short peaks and a slower release stage that follows the average level. FabFilter's documentation for its Pro-L 2 limiter describes that design and the trade-off plainly: short attack and long release settings are "safer and cleaner" but "can also cause pumping and reduce clarity", while long attack and short release can raise apparent loudness "at the expense of possible distortion". Program-dependent and auto modes still make that trade-off for you. They do not remove it.
+Many limiters split the job between two stages: a fast one that catches short peaks and a slower release stage that follows the average level. FabFilter's documentation for its Pro-L 2 limiter describes that design and the trade-off plainly: short attack and long release settings are "safer and cleaner" but "can also cause pumping and reduce clarity", while long attack and short release can raise apparent loudness "at the expense of possible distortion". Program-dependent and auto modes make that trade-off for you, so their choice still needs checking by ear.
 
 Listen to the space between the hits as you change the release, with the loudness held equal.
 
@@ -167,11 +167,11 @@ Listen to the space between the hits as you change the release, with the loudnes
 6. Keep raising the release until the swell turns into a steady turn-down. Rematch the loudness with the gain plugin each time you stop.
 7. Choose the shortest release where the bass stays clean and any pumping is gone or sits on the beat the way you want it. If the limiter has an auto mode, compare it with your choice at matched loudness.
 
-Between the two extremes there is often a range that does neither. In the simulation above, a 100 ms release kept the bass far cleaner than 1 ms and left the bed less than half a decibel down at the off-beat. On a fast, dense track that range can shrink to nothing, and then some of the peak control has to move earlier in the chain.
+Between the two extremes there is often a range that does neither. In the simulation above, a 100 ms release kept the bass far cleaner than 1 ms and left the bed less than half a decibel down at the off-beat.
 
 ## Common mistake: choosing the release that sounds loudest
 
-The common mistake is comparing releases without matching loudness. A short release lets the limiter work like a clipper, so the master gets louder at the same ceiling, and louder wins until you level-match. The distortion it buys often shows up later, on a phone speaker, as a rough bass.
+The common mistake is comparing releases without matching loudness. A short release lets the limiter work like a clipper, so the master gets louder at the same ceiling, and louder wins until you level-match. The harmonics it adds sit at three and five times the bass frequency, so they stay audible on small speakers that cannot play the bass note itself.
 
 The second mistake is reading the gain reduction meter instead of listening. A meter that bounces neatly in time can still be pumping the pad on every beat, and a meter that hardly moves can be holding the whole mix 3 dB down. Listen to what plays between the kicks. If you want the pump, a sidechain on the parts you choose, as in [sidechain is more than kick ducking bass](/blog/sidechain-is-more-than-kick-ducking-bass), gives you control the master limiter cannot.
 

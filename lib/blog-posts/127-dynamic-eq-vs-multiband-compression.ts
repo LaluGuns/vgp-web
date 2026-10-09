@@ -6,7 +6,7 @@ export const post127: BlogArticle = {
     excerpt: 'Both turn part of the spectrum down when it gets loud. They differ in the shape of the cut, what the detector hears and what happens at rest.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Before choosing a processor, find out how wide the problem is and when it happens, then pick the tool whose cut has that shape.',
         'A narrow ring on a few notes suits a dynamic bell, because its detector and its cut can both be as narrow as the ring.',

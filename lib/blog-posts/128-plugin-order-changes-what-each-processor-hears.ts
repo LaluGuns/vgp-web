@@ -10,7 +10,7 @@ export const post128: BlogArticle = {
     excerpt: 'Swap two EQs and nothing changes. Swap an EQ and a compressor, or a compressor and a saturator, and the sound does. Learn which orders matter and why.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Order matters only when a processor reacts to level, like a compressor, limiter, gate or saturator; two clean EQs give the same result in either order.',
         'An EQ before a compressor changes what drives the gain; an EQ after it changes only the tone of what comes out.',
@@ -88,9 +88,9 @@ export const post128: BlogArticle = {
     ],
     content: `## Hook: same plugins, different record
 
-You have an EQ and a compressor on a bass. Out of curiosity you drag the EQ below the compressor. Nothing else changes, same settings, same plugins, and the bass now sounds different: the low notes pump less, or more, and the tone feels a little off. Then you swap two EQs on the vocal and hear no difference at all.
+You have an EQ and a compressor on a bass. Out of curiosity you drag the EQ below the compressor. Nothing else changes, same settings, same plugins, and the bass now sounds different: the low notes stop pulling the whole sound down, and the movement feels looser. Then you swap two EQs on the vocal and hear no difference at all.
 
-Both results are correct, and the reason fits in one sentence: in a serial chain, every processor works on what the processor before it hands over, and that only matters when a processor reacts to level.
+In a serial chain, every processor works on what the one before it hands over. That matters only when a processor reacts to level, and a clean EQ does not.
 
 ## Why it matters: order is part of the sound
 
@@ -102,17 +102,17 @@ If you never think about order, you end up fixing its side effects with more plu
 
 A clean digital EQ is linear and time-invariant. Two such filters in series multiply their frequency responses, and multiplication does not care about order, so any ordering of filters in series gives the same overall response (Smith, 2007). Two EQs, a high-pass and a shelf, a delay and an EQ: swap them freely. The same is not true of an EQ that models analog saturation, because that is no longer linear.
 
-A compressor is not linear. Its gain depends on the level it receives, as in the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
+A compressor is not linear. Its gain depends on the level it receives (Giannoulis, Massberg and Reiss, 2012), as in the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
 
 ::figure eqcomp
 
-On a steady note, the tonal balance at the output ends up the same both ways: the lows sit 6 dB above the rest because the compressor turns every frequency down together. What changes is the gain movement. With the boost in front, the compressor works twice as hard and follows the low end, so the mids and highs now dip with every bass note. With the boost after it, the compressor reacts to the original signal and the boost shapes only the tone. The same logic is why a high-pass in front of a compressor is common: it stops rumble from steering the gain.
+On a steady note and at matched level, the tonal balance at the output ends up the same both ways: the lows sit 6 dB above the rest because the compressor turns every frequency down together. What changes is the gain movement. With the boost in front, the compressor works twice as hard and follows the low end, so the mids and highs dip twice as deep with every bass note. With the boost after it, the compressor reacts to the original signal and the boost shapes only the tone. The same logic is why a high-pass in front of a compressor is common: it stops rumble from steering the gain.
 
 Saturation is not linear either. A saturator bends loud input more than quiet input, so how much it distorts depends on the level that reaches it (Dutilleux, Dempwolf, Holters and Zölzer, 2011). Put a compressor first and every note reaches the saturator at a similar level, so the distortion is even. Put the saturator first and the distortion follows the performance, loud notes grittier than quiet ones, and the compressor then hears peaks that were already rounded off.
 
 ::figure drive
 
-The demo below runs bass and chords through a waveshaper at matched level. Move the drive and listen to how much the sound changes with the level going in. That level is exactly what the stage before a saturator decides.
+The demo runs bass and chords through a waveshaper at matched level. Move the drive and listen to how much the sound changes with the level going in. That level is exactly what the stage before a saturator decides.
 
 ::demo saturation
 
@@ -138,7 +138,7 @@ The other mistake is comparing two orders without matching levels. Swapping a co
 
 ## Producer takeaway: ask what should drive what
 
-For every nonlinear plugin in a chain, decide what it should hear. Fix level problems before the compressor, as in the [lesson on clip gain](/blog/clip-gain-and-automation-before-compression). Cut what should not steer the gain before it, and boost what is purely tonal after it. Put saturation after compression when you want the grit even, and before it when you want the grit to follow the playing. Keep the limiter last. Linear EQs can go anywhere; the order of the stages that react to level is a sound decision in its own right, and the [lesson on what plugins compute](/blog/every-plugin-is-math-wearing-an-interface) explains why two plugins can only be swapped freely when both are linear.
+For every nonlinear plugin in a chain, decide what it should hear. Fix level problems before the compressor, as in the [lesson on clip gain](/blog/clip-gain-and-automation-before-compression). Cut what should not steer the gain before it, and boost what is purely tonal after it. Put saturation after compression when you want the grit even, and before it when you want the grit to follow the playing. Keep the limiter last. Linear EQs can go anywhere. The [lesson on what plugins compute](/blog/every-plugin-is-math-wearing-an-interface) sorts plugins into linear and nonlinear changes, and that split decides whether their order matters.
 
 ## References
 
