@@ -164,18 +164,21 @@ function consonant(ctx: BaseAudioContext, dest: AudioNode, t: number, kind: 's' 
 
 // ── The short stereo mix shared by the width and monitor-level demos ──
 
-/** A pad whose left and right sides are detuned differently, so the channels never quite match. */
-function stereoPad(ctx: BaseAudioContext, left: AudioNode, right: AudioNode, t: number, notes: number[], dur: number, level = 1) {
-    const sides: [AudioNode, number[], number][] = [
-        [left, [-12, 5], 1500],
-        [right, [-5, 12], 1900],
+/**
+ * A pad voiced differently on each side and detuned differently, so the
+ * two channels share some notes but never quite match.
+ */
+function stereoPad(ctx: BaseAudioContext, left: AudioNode, right: AudioNode, t: number, voicing: { l: number[]; r: number[] }, dur: number, level = 1) {
+    const sides: [AudioNode, number[], number[], number][] = [
+        [left, voicing.l, [-12, 5], 1500],
+        [right, voicing.r, [-5, 12], 1900],
     ];
-    for (const [dest, detunes, cutoff] of sides) {
+    for (const [dest, notes, detunes, cutoff] of sides) {
         const lp = ctx.createBiquadFilter();
         lp.type = 'lowpass';
         lp.frequency.value = cutoff;
         const g = ctx.createGain();
-        const peak = 0.06 * level;
+        const peak = 0.075 * level;
         g.gain.setValueAtTime(0.0001, t);
         g.gain.exponentialRampToValueAtTime(peak, t + 0.3);
         g.gain.setValueAtTime(peak, t + dur - 0.25);
@@ -200,7 +203,7 @@ interface MixBus {
     center: GainNode;
     left: GainNode;
     right: GainNode;
-    /** Mostly left or mostly right, for the arpeggio. */
+    /** Mostly left or mostly right, with an echo on the other side, for the arpeggio. */
     leanLeft: GainNode;
     leanRight: GainNode;
     /** The finished left and right channels. */
@@ -208,6 +211,8 @@ interface MixBus {
     r: GainNode;
 }
 
+const MIX_BPM = 94;
+const MIX_STEPS = 32;
 // Keeps the mix at the loudness of the other demos on the site.
 const MIX_TRIM = 0.5;
 
@@ -225,21 +230,23 @@ function mixBus(ctx: BaseAudioContext): MixBus {
     bus.center.connect(bus.r);
     bus.left.connect(bus.l);
     bus.right.connect(bus.r);
+    const echo = (3 * 60) / MIX_BPM / 4;
     const lean = (from: GainNode, near: GainNode, far: GainNode) => {
-        from.connect(gainNode(ctx, 0.9)).connect(near);
-        from.connect(gainNode(ctx, 0.3)).connect(far);
+        from.connect(gainNode(ctx, 1)).connect(near);
+        from.connect(gainNode(ctx, 0.2)).connect(far);
+        const delay = ctx.createDelay(1);
+        delay.delayTime.value = echo;
+        from.connect(delay).connect(gainNode(ctx, 0.4)).connect(far);
     };
     lean(bus.leanLeft, bus.left, bus.right);
     lean(bus.leanRight, bus.right, bus.left);
     return bus;
 }
 
-const MIX_BPM = 94;
-const MIX_STEPS = 32;
-// Dm9, then Bbmaj9 over the bass.
+// Dm9, then Bbmaj9 over the bass, voiced differently left and right.
 const MIX_PAD = [
-    [53, 57, 60, 64],
-    [53, 57, 60, 62],
+    { l: [53, 57, 60, 64], r: [57, 62, 65, 69] },
+    { l: [53, 57, 60, 62], r: [58, 62, 65, 69] },
 ];
 const MIX_BASS = [38, 34];
 const MIX_ARP = [74, 77, 81, 76, 74, 77, 84, 81, 74, 77, 81, 72, 70, 74, 77, 81];
@@ -275,7 +282,7 @@ function playMixStep(ctx: BaseAudioContext, bus: MixBus, step: number, time: num
     }
     if (step % 2 === 0) {
         const i = step / 2;
-        pluck(ctx, i % 2 === 0 ? bus.leanLeft : bus.leanRight, time, midi(MIX_ARP[i]), stepDur * 1.6, 0.7);
+        pluck(ctx, i % 2 === 0 ? bus.leanLeft : bus.leanRight, time, midi(MIX_ARP[i]), stepDur * 1.6, 0.8);
     }
     for (const v of MIX_VOICE) if (v.at === step) sing(ctx, bus.center, time, midi(v.note), v.len * stepDur * 0.9, v.vowel, MIX_VOICE_LEVEL, v.to);
 }

@@ -18,11 +18,12 @@ export const post133: BlogArticle = {
             mode: 'level',
             caption:
                 'The harmonics of a bass note on A1 (55 Hz). The fundamental and the second harmonic sit in the sub band, while the harmonics that give the note its character run on up through the low mids. A split around 120 Hz is a common starting point, not a rule.',
-            alt: 'A row of harmonic lines starting at 55 Hz and falling in level up to about 900 Hz. A shaded band from 20 to 120 Hz is labelled sub, a second band from 120 Hz to 1.5 kHz is labelled harmonics.',
+            alt: 'A row of harmonic lines starting at 55 Hz and falling in level up to about 900 Hz. A dashed line at 120 Hz divides a shaded band labelled sub, from 20 to 120 Hz, from a band labelled harmonics, from 120 Hz to 1.5 kHz.',
             bands: [
                 { from: 20, to: 120, label: 'Sub' },
                 { from: 120, to: 1500, label: 'Harmonics' },
             ],
+            marks: [{ f: 120, label: '120 Hz' }],
             curves: [{ kind: 'harmonics', f0: 55, count: 16, rolloff: 1, level: 0.9, label: 'Bass, A1' }],
         },
         beat: {
@@ -105,7 +106,7 @@ A detune is not safe. Unison voices, a chorus, or a different oscillator in each
 
 Anti-phase content is the worst case. A side boost, a polarity flip on one channel or a phase-rotating widener puts some or all of the bass in opposite polarity on each side, and that part cancels in any sum, as the [mid/side lesson](/blog/mid-side-widening-moves-the-center-too) works out.
 
-None of this means the low end carries no spatial information. For sounds that contain low frequencies, the timing difference between the two ears is the cue listeners follow for direction; with the low frequencies removed, level and pinna cues take over (Wightman and Kistler, 1992). The ear can use those timing cues below roughly 1.5 kHz (Moore, 2012), which is where the harmonics of a bass sit. In the deepest octave, a small room adds its own pattern on top: the [room modes](/blog/why-your-low-end-lies-in-a-small-room) mix the output of both speakers, so a stereo difference down there tends to show up as a level change at your chair.
+Mono bass is often justified by saying the ear cannot locate low frequencies. That is only partly true. For sounds that contain low frequencies, the timing difference between the two ears is the cue listeners follow for direction; with the low frequencies removed, level and pinna cues take over (Wightman and Kistler, 1992). The ear can use those timing cues below roughly 1.5 kHz (Moore, 2012), which is where the harmonics of a bass sit. In the deepest octave, a small room adds its own pattern on top: the [room modes](/blog/why-your-low-end-lies-in-a-small-room) mix the output of both speakers, so a stereo difference down there tends to show up as a level change at your chair.
 
 ::figure split
 

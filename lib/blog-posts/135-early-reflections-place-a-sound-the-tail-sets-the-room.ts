@@ -15,7 +15,7 @@ export const post135: BlogArticle = {
     summary: [
         'A reverb send raises the early reflections and the tail by the same amount, so split them across two returns or two controls when you need one without the other.',
         'Use early reflections to put the sound itself in a space and make it wider while the words stay sharp, and use the tail to put the listener in the room.',
-        'The longer the decay, the more of the reverb lands after the first 80 ms, where it adds envelopment and costs clarity, so set the early part first and add tail only until the gaps feel right.',
+        'The longer the decay, the more of the reverb lands after the first 80 ms, where it costs clarity, so set the early part first and add tail only until the gaps feel right.',
     ],
     figures: {
         echogram: {
@@ -81,15 +81,15 @@ export const post135: BlogArticle = {
             why: 'Early energy arrives while the word is still sounding and supports it, as in Bradley, Sato and Picard\'s speech tests. A long tail puts most of its energy late, where it covers the gaps and the next words.',
         },
         {
-            q: 'Bradley and Soulodre (1995) found that the feeling of being surrounded by sound depends mostly on what?',
+            q: 'You want the chorus to surround the listener while the vocal itself stays the same width. Which part of the reverb do you raise?',
             options: [
-                'Reflections from the floor in the first 20 ms',
-                'Strong reflections from the sides after 80 ms',
-                'The level of the dry sound at the listener',
-                'High-frequency content in the first reflection',
+                'Early reflections from the sides, inside 80 ms',
+                'A wide late tail, arriving after 80 ms',
+                'The dry vocal against the rest of the band',
+                'One strong reflection, panned to the centre',
             ],
             answer: 1,
-            why: 'Their listeners reported more envelopment when strong lateral reflections arrived 80 ms or more after the direct sound. Early side reflections change how wide the source seems instead.',
+            why: 'Bradley and Soulodre (1995) found that envelopment depends on strong lateral sound arriving 80 ms or more after the direct sound. Early side reflections make the source itself seem wider instead.',
         },
     ],
     content: `## Hook: the vocal that is either pasted on or washed out
@@ -104,7 +104,7 @@ The early reflections arrive while the word is still sounding. They add to the d
 
 ::figure echogram
 
-Both of the reverbs in the figure push a vocal away from the speakers. The first does it mostly with early energy, so the voice gets a body and a place while the gaps stay fairly clean. The second does it with the tail, so you hear more room and less word. Which one you want depends on the song, but you can only choose if you can move them separately.
+Both of the reverbs in the figure push a vocal away from the speakers, because both lower the balance of direct to reverberant sound, one of the main [distance cues](/blog/why-depth-is-a-contrast-illusion). The first does it mostly with early energy, so the voice gets a body and a place while the gaps stay fairly clean. The second does it with the tail, so you hear more room and less word. Which one you want depends on the song, but you can only choose if you can move them separately.
 
 Many algorithmic reverbs have separate early and late level controls, or an early/late balance. If yours does not, use two returns: a small room with the decay as short as it goes for the early part, and a plate or hall for the tail.
 
@@ -116,7 +116,7 @@ $$C_{80} = 10 \\log_{10} \\frac{\\int_0^{80\\,\\text{ms}} p^2(t)\\,dt}{\\int_{80
 
 Here $p(t)$ is the sound pressure of the room's impulse response. The higher the number, the more the early energy outweighs the late.
 
-The two sides of the boundary do different jobs. Bradley, Sato and Picard (2003) added early reflections to speech in listening tests and found that they raised the effective signal-to-noise ratio, so listeners understood more words. In measured rooms for speech, early reflections added up to 9 dB of effective signal-to-noise ratio. Early energy that arrives from the sides also changes how wide the source seems: Barron and Marshall (1981) linked spatial impression in concert halls to early lateral reflections. The feeling of being surrounded is a later effect. Bradley and Soulodre (1995) found that listener envelopment depends on strong lateral reflections arriving 80 ms or more after the direct sound.
+The two sides of the boundary do different jobs. Bradley, Sato and Picard (2003) added early reflections to speech in listening tests and found that they raised the effective signal-to-noise ratio, so listeners understood more words. In their analysis of measured rooms for speech, early reflections raised the effective signal-to-noise ratio by up to 9 dB. Those were speech tests, but they are a reasonable guide for a lyric that has to get through a band. Early energy that arrives from the sides also changes how wide the source seems: Barron and Marshall (1981) linked spatial impression in concert halls to early lateral reflections. The feeling of being surrounded is a later effect. Bradley and Soulodre (1995) found that listener envelopment depends on strong lateral reflections arriving 80 ms or more after the direct sound.
 
 Decay time decides how much of a reverb ends up late. A tail that falls 60 dB in $T$ seconds keeps $10^{-6t/T}$ of its energy after time $t$, so for a simple exponential decay that starts with the dry sound, the share after 80 ms is:
 

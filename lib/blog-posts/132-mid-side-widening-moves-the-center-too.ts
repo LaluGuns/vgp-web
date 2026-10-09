@@ -101,7 +101,7 @@ export const post132: BlogArticle = {
 
 You put a stereo imager on the mix bus and push the width a little. The pads open out, the room around the drums gets bigger, the chorus feels expensive. Ten minutes later you notice the vocal sounds further away than it did, and the snare has lost some of its crack. You did not touch either of them.
 
-The width control turned them down, relative to everything around them. It is a balance control with a different label. To see why, you need the mid/side maths, and it is simpler than the plugin graphics suggest.
+The width control turned them down relative to everything around them, which makes it a balance control with a different label. The mid/side maths shows why, and it is simpler than the plugin graphics suggest.
 
 ## Why it matters: the side signal is full of instruments
 
@@ -111,7 +111,7 @@ $$M = \\frac{L + R}{2}, \\qquad S = \\frac{L - R}{2}, \\qquad L = M + S, \\qquad
 
 Some tools scale both by $1/\\sqrt{2}$ instead of 1/2. That changes the numbers on the M and S meters, but none of the conclusions below.
 
-A part in dead centre has $L = R$, so it lives entirely in $M$ and $S = 0$. Anything else has some side. A guitar panned hard left is $L = x$, $R = 0$, which gives $M = S = x/2$: half of that guitar is side signal. So the side channel holds far more than reverb and air. Every panned instrument, stereo synth patch and room mic is in there, in proportion to how far from the centre it sits.
+A part in dead centre has $L = R$, so it lives entirely in $M$ and $S = 0$. Anything else has some side. A guitar panned hard left is $L = x$, $R = 0$, which gives $M = S = x/2$: half of that guitar is side signal. So the side channel holds far more than reverb and air. Every panned instrument, stereo synth patch and room mic is in there, in proportion to how far from the centre it sits, so a width move on the mix bus is a level move on all of them.
 
 ## Science model: what a side boost does to each part
 
@@ -119,7 +119,7 @@ Multiply $S$ by a gain $g$ and decode. For the hard-left guitar with $g = 2$, a 
 
 $$L' = \\frac{x}{2} + 2 \\cdot \\frac{x}{2} = 1.5x, \\qquad R' = \\frac{x}{2} - 2 \\cdot \\frac{x}{2} = -0.5x$$
 
-The left channel rises 3.5 dB, and the right speaker, silent before, now plays an inverted copy of the guitar 9.5 dB below the left. That inverted leak is where the extra width comes from, and it is a large part of why heavy side boosts tend to sound phasey.
+The left channel rises 3.5 dB, and the right speaker, silent before, now plays an inverted copy of the guitar 9.5 dB below the left. That inverted leak is where the extra width comes from, and it is one reason heavy side boosts can sound phasey.
 
 ::figure leak
 
@@ -127,7 +127,7 @@ Now sum the power over both channels. Because $L^2 + R^2 = 2(M^2 + S^2)$, raisin
 
 ::figure balance
 
-That is how the centre moves. Its level is untouched, but everything around it came up by as much as 4 dB, so the vocal, kick, snare and bass sit relatively lower. Some wideners also turn the mid down to keep overall loudness steady, and then the centre drops in absolute level as well.
+So the centre moves without its level changing: everything around it came up by as much as 4 dB, and the vocal, kick, snare and bass now sit relatively lower. Some wideners also turn the mid down to keep overall loudness steady, and then the centre drops in absolute level as well.
 
 Panned parts move outward too. A guitar halfway left on a sine/cosine pan law has gains of 0.92 and 0.38, a 7.7 dB difference between the channels. After the same boost it is 1.19 and 0.11, a 20.6 dB difference.
 
@@ -153,7 +153,7 @@ Often the width you liked at +6 dB came with a quieter vocal you would never hav
 
 ## Common mistake: judging width at a higher level
 
-The wider version is louder in stereo, by up to 4 dB on wide material at +6 dB of side. Louder tends to sound better in a quick A/B, so an unmatched comparison tends to vote for more width. Match the loudness first.
+The wider version is louder in stereo, by up to 4 dB on wide material at +6 dB of side. [Louder tends to sound better](/blog/why-louder-is-not-always-bigger) in a quick A/B, so an unmatched comparison votes for more width. Match the loudness first.
 
 The other mistake is judging the side channel on its own. Soloed side sounds hollow on almost any mix, because it is only the difference between the channels, and it tells you little about the decoded stereo. Make the call on the normal stereo output and the mono fold. Keep the low end out of the boost unless you have checked what it does there; the [lesson on stereo low end](/blog/stereo-low-end-is-a-translation-decision) covers what to listen for.
 

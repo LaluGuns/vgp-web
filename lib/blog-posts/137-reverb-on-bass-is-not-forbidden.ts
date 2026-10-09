@@ -59,7 +59,7 @@ export const post137: BlogArticle = {
                 'The ear cannot hear pitch below 100 Hz',
             ],
             answer: 1,
-            why: 'Below about 500 Hz a critical band is roughly 100 Hz wide, so 55 Hz and 61.7 Hz are not heard as separate. They beat at the difference, about 7 times a second.',
+            why: 'Below about 500 Hz a critical band is roughly 100 Hz wide, so 55 Hz and 61.7 Hz are hard to hear as separate notes. They beat at the difference, about 7 times a second.',
         },
         {
             q: 'You high-pass the bass reverb return at 250 Hz, 12 dB per octave. What does the reverb still receive?',
@@ -81,13 +81,13 @@ The rule protects you from real problems. Put a full-range hall on the bass and 
 
 ## Why it matters: three ways a bass reverb goes wrong
 
-The first is overlap. A long tail is still ringing when the next note starts, and two low notes at once do not separate the way two high notes do. The second is coloration. The early reflections are short delayed copies of the bass, and a delayed copy added to the dry signal cancels some frequencies and boosts others. The third is width. A stereo reverb spreads its output across both channels, and low end in the sides is the part that suffers when the mix is folded to mono, as the [lesson on stereo low end](/blog/stereo-low-end-is-a-translation-decision) explains.
+The first is overlap. A long tail is still ringing when the next note starts, and two low notes at once do not separate the way two high notes do. The second is colouration. The early reflections are short delayed copies of the bass, and a delayed copy added to the dry signal cancels some frequencies and boosts others. The third is width. A stereo reverb spreads its output across both channels, and low end in the sides is the part that suffers when the mix is folded to mono, as the [lesson on stereo low end](/blog/stereo-low-end-is-a-translation-decision) explains.
 
 Each of these has its own fix, and none of them requires the bass to stay dry.
 
 ## Science model: critical bands, combs and harmonics
 
-The overlap problem comes from how the ear splits sound into bands. Below about 500 Hz, a critical band is roughly 100 Hz wide (Fastl and Zwicker, 2007). Two tones inside one band are not heard as two clear pitches. They beat at the difference between their frequencies, and closer together they turn rough. A1 is 55 Hz and B1 is 61.7 Hz, so a tail of A1 under a new B1 beats about 7 times a second.
+The overlap problem comes from how the ear splits sound into bands. Below about 500 Hz, a critical band is roughly 100 Hz wide (Fastl and Zwicker, 2007). Two tones inside one band are hard to hear as two clear pitches. A few hertz apart they beat at the difference between their frequencies, and further apart the beating speeds up into roughness. A1 is 55 Hz and B1 is 61.7 Hz, so a tail of A1 under a new B1 beats about 7 times a second.
 
 How loud the old tail still is depends on the decay time $T$ and the note length $d$. A tail falls 60 dB in $T$ seconds, so by the next note it is down:
 
@@ -95,7 +95,7 @@ $$\\Delta L = \\frac{60\\,d}{T} \\;\\text{dB}$$
 
 For eighth notes at 120 BPM, $d$ is 0.25 s. A 2.5 s hall is only 6 dB down when the next note arrives. A 0.5 s room is 30 dB down.
 
-The coloration problem is a comb filter. Add a copy delayed by $\\tau$ at relative level $a$, and the response is $|1 + a\\,e^{-j 2\\pi f \\tau}|$ (Zölzer, 2011). Notches fall where the copy arrives half a cycle late, at $f = 1/(2\\tau)$ and its odd multiples. For a 5 ms reflection that is 100 Hz, 300 Hz and 500 Hz. At half level the notches are $20 \\log_{10}(1 - 0.5) \\approx -6$ dB deep and the peaks $20 \\log_{10}(1.5) \\approx +3.5$ dB high.
+The colouration problem is a comb filter. Add a copy delayed by $\\tau$ at relative level $a$, and the response is $|1 + a\\,e^{-j 2\\pi f \\tau}|$ (Zölzer, 2011). Notches fall where the copy arrives half a cycle late, at $f = 1/(2\\tau)$ and its odd multiples. For a 5 ms reflection that is 100 Hz, 300 Hz and 500 Hz. At half level the notches are $20 \\log_{10}(1 - 0.5) \\approx -6$ dB deep and the peaks $20 \\log_{10}(1.5) \\approx +3.5$ dB high.
 
 ::figure comb
 

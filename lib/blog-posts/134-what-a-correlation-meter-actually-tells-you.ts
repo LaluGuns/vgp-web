@@ -63,14 +63,14 @@ export const post134: BlogArticle = {
             type: 'scale',
             caption:
                 'A mix where centred parts hold 90% of the energy and a pad in opposite polarity holds 10%. The meter averages them by energy and reads +0.8, which looks healthy, while the pad disappears completely in mono.',
-            alt: 'A line from -1 to +1. A marker at -1 is labelled pad, a marker at +1 is labelled vocal, drums and bass, and a larger marker at +0.8 is labelled meter.',
+            alt: 'A line from -1 to +1. A marker at -1 is labelled pad, 10%, a marker at +1 is labelled centre parts, 90%, and a larger marker at +0.8 is labelled meter.',
             min: -1,
             max: 1,
             ticks: [-1, -0.5, 0, 0.5, 1],
             markers: [
-                { value: -1, label: 'Pad' },
+                { value: -1, label: 'Pad, 10%' },
                 { value: 0.8, label: 'Meter +0.8', strong: true },
-                { value: 1, label: 'Vocal, drums, bass' },
+                { value: 1, label: 'Centre parts, 90%' },
             ],
         },
     },
@@ -103,13 +103,13 @@ export const post134: BlogArticle = {
 
 The correlation meter on your master sits happily near +1 through the verse. In the chorus it swings toward zero and keeps flicking below it. You panic, narrow the pads, pull the room mics in, and the chorus gets smaller. Another day, on another song, the needle never leaves +0.9 and the mix still falls apart on a phone.
 
-Both times the meter told the truth. It answered a narrower question than the one you were asking.
+Both times the meter was right about the question it answers, which is narrower than the one you were asking.
 
 ## Why it matters: one number for a whole stereo picture
 
 A correlation meter compresses everything about two channels into one value between -1 and +1. That number predicts something specific and useful about the mono fold. It says nothing about whether the width suits the song, how wide the image sounds, or which part is responsible. Read it as more than it is and you will mix to the needle.
 
-## Science model: the normalised cross-product
+## Science model: a normalized cross-product
 
 Over a short window, the meter computes
 
@@ -135,7 +135,7 @@ The meter is also an average weighted by energy. With several unrelated parts, e
 
 ::figure hidden
 
-What the number does not predict is how wide the image sounds. Kurozumi and Ohgushi (1983) played noise with controlled correlation from two loudspeakers. Judged width followed the size of the coefficient, while its sign changed how far away the image seemed. By that result a pad at -0.3 can sound about as wide as one at +0.3, yet the first loses 4.6 dB in mono and the second 1.9 dB. The study used noise, not music, but the warning carries: the sign answers a mono question and says little about width.
+What the number does not predict is how wide the image sounds. Kurozumi and Ohgushi (1983) played noise with controlled correlation from two loudspeakers. Judged width depended on the magnitude of the coefficient, with the image growing wider as the coefficient approached zero, while its sign changed how far away the image seemed. By that result a pad at -0.3 can sound about as wide as one at +0.3, yet the first loses 4.6 dB in mono and the second 1.9 dB. The study used noise, not music, but the warning carries: the sign answers a mono question and says little about width.
 
 One more relation ties the needle to mid/side. For channels of equal level, $r = (P_M - P_S)/(P_M + P_S)$, so the meter crosses zero exactly where side power equals mid power. In the demo, watch the needle fall toward that point as the side rises.
 
@@ -148,9 +148,9 @@ One more relation ties the needle to mid/side. For channels of equal level, $r =
 3. Duplicate a pad, invert the polarity of its right channel only and play it alone. The meter reads -1 and the mono fold is silent.
 4. Play a stereo reverb return alone. The needle hovers near 0 and moves around; in mono the reverb drops a few dB but does not turn hollow.
 5. Play the full chorus and note the reading. Mute the widest part and see how far the needle moves, then compare that part in stereo and mono by ear.
-6. On a pad, raise the side level until the meter reaches 0 and compare the mid and side meters at that point.
+6. On a pad, raise the side level until the meter reaches 0. If your utility shows mid and side levels, they read the same at that point.
 
-Expect the needle to move far less for quiet parts than your ears do in mono. That gap is the reason to listen.
+Expect the needle to move far less for quiet parts than your ears do in mono, which is why the last check is always by ear.
 
 ## Common mistake: mixing to the needle
 
@@ -158,9 +158,9 @@ One mistake is treating a threshold, such as "stay above +0.5", as a rule. A nat
 
 The other is trusting a positive reading on the full mix. Energy weighting lets a quiet anti-phase part hide behind a healthy number. A meter that shows correlation per frequency band helps, and a mono check with your ears helps more.
 
-## Producer takeaway: a forecast, not a verdict
+## Producer takeaway: read it as a mono forecast
 
-Use the reading as a mono forecast and a pointer. When it drops, find the part responsible, fold to mono and listen to what that part loses. Then decide whether the width earns its cost in the song. The meter can tell you that the channels disagree. Whether that disagreement belongs in the record is your call.
+Use the reading as a mono forecast and a pointer. When it drops, find the part responsible, fold to mono and listen to what that part loses. Then decide whether the width earns its cost in the song. The meter can tell you that the channels disagree, but whether that belongs in the record is your call.
 
 ## References
 
