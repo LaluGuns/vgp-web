@@ -1001,11 +1001,27 @@ function applyShape(
 ) {
     const t = n.ctx.currentTime;
     const g = dbToGain(a.params.level);
-    const set = (param: AudioParam, value: number) => (tau > 0 ? param.setTargetAtTime(value, t, tau) : param.setValueAtTime(value, t));
-    set(n.input.gain, g);
-    set(n.restore.gain, 1 / g);
-    set(n.shaperTrim.gain, a.trim.shaper);
-    set(n.compTrim.gain, a.trim.comp);
+    // The shaper's new law takes effect at once, so a trim coming down (a law with more boost)
+    // drops at once with it; gliding down after the boost would let the next hits overshoot the
+    // demo's ceiling for a moment. A trim going up glides, which can only be quieter.
+    const trim = (param: AudioParam, value: number) => {
+        if (tau > 0 && value >= param.value) return param.setTargetAtTime(value, t, tau);
+        param.cancelScheduledValues(t);
+        param.setValueAtTime(value, t);
+    };
+    // The level going in and its undoing move as one: two exponential ramps over the same 30 ms
+    // keep their product at exactly 1, where two gliding targets would let the loop through up
+    // to 12 dB too loud for a moment on a big step.
+    const ramp = (param: AudioParam, value: number) => {
+        if (tau <= 0) return param.setValueAtTime(value, t);
+        param.cancelScheduledValues(t);
+        param.setValueAtTime(param.value, t);
+        param.exponentialRampToValueAtTime(value, t + 0.03);
+    };
+    ramp(n.input.gain, g);
+    ramp(n.restore.gain, 1 / g);
+    trim(n.shaperTrim.gain, a.trim.shaper);
+    trim(n.compTrim.gain, a.trim.comp);
     n.shaper.law.curve = shaperLaw(a.params.attack, a.params.sustain);
     n.master.gain.setTargetAtTime(DRUM_LEVEL, t, 0.02);
 }
