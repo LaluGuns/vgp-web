@@ -1,12 +1,12 @@
-// Renders film 3, the narrated 9:16 short.
+// Renders film 5, the narrated 9:16 short on the gap before the drop.
 //
-//   npm run film3                       sound, stills, video, checks
-//   npm run film3 -- --stills           sound + contact sheets only
-//   npm run film3 -- --frames 12.5,30   single frames for review [--tag x]
-//   npm run film3 -- --refresh-lesson   re-capture the lesson page
+//   npm run film5                       sound, stills, video, checks
+//   npm run film5 -- --stills           sound + contact sheets only
+//   npm run film5 -- --frames 12.5,30   single frames for review [--tag x]
+//   npm run film5 -- --refresh-lesson   re-capture the lesson page
 //
 // Needs assets/ (see README): the Cymatics samples and the narration.
-// Output in out/film3/: short_9x16.mp4, audio.wav, captions.srt,
+// Output in out/film5/: short_9x16.mp4, audio.wav, captions.srt,
 // contact.png, seconds.png, cover.png and VERIFY.md (what was measured).
 import { execFileSync, spawn } from 'node:child_process';
 import { once } from 'node:events';
@@ -15,11 +15,12 @@ import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { FONTS_CSS, REPO, ROOT, T } from '../shared/tokens.mjs';
 import { ASSETS, master, renderAudio } from './audio.mjs';
-import { readAudio } from './dsp.mjs';
-import { SETTINGS, TIMELINE } from './timeline.mjs';
+import { BEAT, FILES, LIMITER, PRE, render as renderDrop } from './drop.mjs';
+import { readAudio, RATE } from './dsp.mjs';
+import { TIMELINE } from './timeline.mjs';
 
-const OUT = path.join(ROOT, 'out/film3');
-const HERE = path.join(ROOT, 'film3');
+const OUT = path.join(ROOT, 'out/film5');
+const HERE = path.join(ROOT, 'film5');
 fs.mkdirSync(OUT, { recursive: true });
 const args = process.argv.slice(2);
 const opt = (k) => (args.includes(k) ? args[args.indexOf(k) + 1] : null);
@@ -29,8 +30,8 @@ const log = (line) => {
     report.push(line);
 };
 
-for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.wav')])
-    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Film 3"`);
+for (const f of [...Object.values(FILES).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.wav')])
+    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Film 5"`);
 
 function measure(file) {
     const out = execFileSync('sh', ['-c', `ffmpeg -hide_banner -nostats -i "${file}" -af ebur128=peak=true:framelog=quiet -f null - 2>&1`], { encoding: 'utf8' });
@@ -40,7 +41,7 @@ function measure(file) {
 
 // ── Sound: mix, then master to -16 LUFS with true peak at most -1.5 dBTP ──
 const wav = path.join(OUT, 'audio.wav');
-const audio = renderAudio(null);
+const audio = renderAudio();
 let gain = 0;
 let ceiling = 0;
 let m;
@@ -53,21 +54,20 @@ for (let i = 0; i < 8; i++) {
     if (m.TP > -2.2) ceiling -= m.TP + 2.2 + 0.1;
 }
 const M = audio.measures;
+const Q = M.res;
+const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
 log(`Audio master: ${m.I} LUFS integrated, ${m.TP} dBTP, LRA ${m.LRA} LU (gain ${gain.toFixed(1)} dB, clip ceiling ${ceiling.toFixed(1)} dBFS)`);
-log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; plain drums set 4 dB under it; makeup per demo ${Object.entries(M.makeupDb).map(([k, v]) => `${k} ${v} dB`).join(', ')}`);
-log(`One snare, crack over body (RMS, 0-15 ms vs 25-70 ms): plain ${M.crackBody.plain} dB, 1 ms attack ${M.crackBody.FAST} dB, 30 ms attack ${M.crackBody.SLOW} dB`);
-{
-    // The same measure on the mastered track, snares of the hook (hats and keys included).
-    const { L: mL, R: mR } = readAudio(wav);
-    const rms = (a, b) => {
-        let q = 0;
-        for (let i = Math.round(a * 48000); i < Math.round(b * 48000); i++) q += ((mL[i] + mR[i]) / 2) ** 2;
-        return Math.sqrt(q / Math.round((b - a) * 48000));
-    };
-    const cb = (t) => 20 * Math.log10(rms(t, t + 0.015) / rms(t + 0.025, t + 0.07));
-    const avg = (ts) => (ts.reduce((p, t) => p + cb(t), 0) / ts.length).toFixed(1);
-    log(`Delivered hook, snare crack over body after mastering: 1 ms attack ${avg([3.5, 4.5])} dB, 30 ms attack ${avg([5.5, 6.5])} dB`);
-}
+log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 2 dB under the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
+log(`A/B: one 128 BPM build into a drop, rendered twice from the same samples. Version 2 mutes every build source and the build's reverb return ${f1(Q.gapMs)} ms (one 8th) before the downbeat with ${Q.fadeMs} ms fades; version 1 runs into the downbeat.`);
+log(`Song-bus limiter (both versions): ceiling ${LIMITER.ceilingDb} dBFS, look-ahead ${LIMITER.lookMs} ms, release ${LIMITER.releaseMs} ms, drive ${Q.driveDb} dB`);
+log(`Matching: version 1 turned ${Q.matchOffsetDb >= 0 ? 'up' : 'down'} ${Math.abs(Q.matchOffsetDb).toFixed(2)} dB to version 2's drop-bar loudness (${f1(Q[2].dropLufs)} LUFS, K-weighted, downbeat plus one bar)`);
+log(`Gap check: the last 8th before the downbeat sits ${f1(Q[1].gapDb)} dB (version 1) and ${f1(Q[2].gapDb)} dB (version 2) against the drop bar's loudness`);
+log(`Claim 1, limiter gain reduction on the first kick (mean over its first 20 ms): version 1 ${f1(Q[1].grMean)} dB, version 2 ${f1(Q[2].grMean)} dB, ${f1(Q.claims[1].db)} dB less with the gap (target 3 dB or more)`);
+log(`Claim 2, kick click 2-6 kHz over everything else in that band, first 20 ms: version 1 ${f1(Q[1].clickDb)} dB, version 2 ${f1(Q[2].clickDb)} dB, ${f1(Q.claims[2].db)} dB better with the gap (target 10 dB or more)`);
+log(`Claim 3, through the phone check (200 Hz high-pass, 24 dB/oct): the kick heard in its first 20 ms is ${f1(Q.claims[3].kickPhone)} dB louder with the gap (${f1(Q.claims[3].kickFull)} dB full band, ${Math.round(Q.claims[3].survive1 * 100)}% survives); the click advantage is ${f1(Q.claims[3].clickPhone)} dB (${Math.round(Q.claims[3].survive2 * 100)}% survives; target 80%)`);
+log(`Claim 4, the first kick (K-weighted, first 50 ms) over the drop bar's loudness at matched loudness: version 1 ${f1(Q[1].kickOverBar)} dB, version 2 ${f1(Q[2].kickOverBar)} dB, ${f1(Q.claims[4].db)} dB more prominent with the gap`);
+const pass = Q.claims[1].db >= 3 && Q.claims[2].db >= 10 && Q.claims[3].survive1 >= 0.8 && Q.claims[3].survive2 >= 0.8 && Q.claims[4].db > 0;
+log(`Claims 1-4: ${pass ? 'all pass' : 'NOT ALL PASS'}`);
 
 // ── Captions: one cue per narration line ──
 const ts = (t) => {
@@ -85,7 +85,7 @@ const browser = exe ? await chromium.launch({ executablePath: exe }) : await chr
 
 /**
  * The lesson's Listen demo at phone size, for the end card: idle, then three
- * moments after Play is pressed. Cached in out/film3/lesson/.
+ * moments after Play is pressed. Cached in out/film5/lesson/.
  */
 async function lesson() {
     const dir = path.join(OUT, 'lesson');
@@ -135,7 +135,7 @@ log(L ? `End card: the Listen demo of ${L.url}, captured ${L.captured}` : 'End c
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
 html,body{margin:0;background:${T.bg}}canvas{display:block}</style></head><body><canvas id="film"></canvas>
-<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.SETTINGS=${JSON.stringify(SETTINGS)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
+<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
 <script>${fs.readFileSync(path.join(HERE, 'art.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'film.js'), 'utf8')}</script></body></html>`;
 fs.writeFileSync(path.join(OUT, 'preview.html'), html);
 
@@ -170,7 +170,29 @@ if (opt('--frames')) {
     const o = await open();
     for (const t of opt('--frames').split(',')) fs.writeFileSync(path.join(dir, `${tag}-${t}.png`), await o.shot(Number(t)));
     await browser.close();
-    console.log(`wrote out/film3/frames/${tag}-*.png`);
+    console.log(`wrote out/film5/frames/${tag}-*.png`);
+    process.exit(0);
+}
+
+if (opt('--pack')) {
+    // Judge pack frames: every 0.5 s at 360 px (contact sheets), every scene at
+    // its start + 0.3 s at full size, and full-size crops of every plot at the
+    // moment it is most complete.
+    const dir = path.resolve(opt('--pack'));
+    fs.mkdirSync(dir, { recursive: true });
+    const o = await open();
+    const all = [];
+    for (let t = 0; t < TIMELINE.duration; t += 0.5) all.push({ png: await o.thumb(t, 360), caption: `${t.toFixed(1)} s` });
+    for (let i = 0; i * 32 < all.length; i++) await sheet(all.slice(i * 32, i * 32 + 32), 8, 180, path.relative(OUT, path.join(dir, `sheet-${String(i + 1).padStart(2, '0')}.png`)));
+    const scenes = await o.p.evaluate(() => window.sceneTimes());
+    for (const s of scenes) fs.writeFileSync(path.join(dir, `scene-${s.id}-${(s.start + 0.3).toFixed(2)}s.png`), await o.shot(s.start + 0.3));
+    for (const c of await o.p.evaluate(() => window.plotCrops())) {
+        await o.p.evaluate((x) => window.seek(x), c.t);
+        const { data } = await o.p.context().newCDPSession(o.p).then((cdp) => cdp.send('Page.captureScreenshot', { format: 'png', clip: { ...c.box, scale: 1 } }));
+        fs.writeFileSync(path.join(dir, `plot-${c.id}-${c.t.toFixed(2)}s.png`), Buffer.from(data, 'base64'));
+    }
+    await browser.close();
+    console.log(`wrote pack frames to ${dir}`);
     process.exit(0);
 }
 
@@ -230,20 +252,30 @@ if (!args.includes('--stills')) {
     log(`  delivered audio: ${enc.I} LUFS integrated, ${enc.TP} dBTP true peak after AAC`);
     log(`  decode errors: ${execFileSync('sh', ['-c', `ffmpeg -v error -i "${file}" -f null - 2>&1 | wc -l`], { encoding: 'utf8' }).trim()}`);
     const yavg = execFileSync('sh', ['-c', `ffmpeg -hide_banner -i "${file}" -vf signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=- -an -f null - 2>/dev/null | grep YAVG | cut -d= -f2`], { encoding: 'utf8' }).trim().split('\n').map(Number);
-    let jumps = 0;
+    const jumps = [];
     let worst = 0;
     for (let i = 1; i < yavg.length; i++) {
         const d = Math.abs(yavg[i] - yavg[i - 1]);
         worst = Math.max(worst, d);
-        if (d > 20) jumps++;
+        if (d > 20) jumps.push(`${(i / TIMELINE.fps).toFixed(2)} s (${d.toFixed(1)})`);
     }
-    log(`  flashes: ${jumps} frame-to-frame luma jumps over 20/255 (largest ${worst.toFixed(1)})`);
-    // Sync: the first kick of the hook is at 3.000 s in the timeline.
-    const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', '2.9', '-t', '0.3', '-i', file, '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
+    log(`  flashes: ${jumps.length} frame-to-frame luma jumps over 20/255${jumps.length ? `: ${jumps.join(', ')}` : ''} (largest ${worst.toFixed(1)})`);
+    // Sync: the hook's first kick is at its demo's downbeat. Cross-correlate the
+    // delivered audio around it with version 1 as rendered, and report the lag.
+    const d0 = TIMELINE.demos[0];
+    const down = d0.at + d0.pre * BEAT;
+    const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(down - 0.15), '-t', '0.3', '-i', file, '-ac', '1', '-ar', String(RATE), '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
     const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.byteLength / 4);
-    const peak = x.reduce((p, v) => Math.max(p, Math.abs(v)), 0);
-    const first = x.findIndex((v) => Math.abs(v) > peak * 0.3);
-    log(`  sync: first kick of the hook heard at ${(2.9 + first / 48000).toFixed(4)} s (timeline 3.0000 s)`);
+    const ref = renderDrop(false).out;
+    const y = Float32Array.from({ length: x.length }, (_, k) => ref.L[Math.round((PRE - 0.15) * RATE) + k] + ref.R[Math.round((PRE - 0.15) * RATE) + k]);
+    let best = 0;
+    let lag = 0;
+    for (let L = -240; L <= 240; L++) {
+        let c = 0;
+        for (let k = 300; k < x.length - 300; k++) c += x[k] * y[k - L];
+        if (c > best) [best, lag] = [c, L];
+    }
+    log(`  sync: the hook's first kick is heard ${((lag / RATE) * 1000).toFixed(2)} ms from its timeline time (${down.toFixed(4)} s); limit 2 ms`);
 }
 await browser.close();
-fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Film 3 checks\n\nMeasured by \`npm run film3\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);
+fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Film 5 checks\n\nMeasured by \`npm run film5\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);

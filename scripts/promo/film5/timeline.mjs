@@ -1,176 +1,111 @@
-// Film 3: the attack and release lesson as a narrated, illustrated short
-// for TikTok and Reels (1080 x 1920). One object holds every placement: the
-// narration lines, the drum demos and their compressor settings, sound
-// effects and scenes. Sound (audio.mjs) and picture (film.js) both read it.
+// Film 5: "Same drop. Which one hits harder?" A gap before the drop (lesson
+// 030) as a narrated, illustrated short for TikTok and Reels (1080 x 1920).
+// One object holds every placement: the narration lines, the A/B demos,
+// sound effects and scenes. Sound (audio.mjs) and picture (film.js) both read it.
 //
-// Idea: a compressor is a little hand on a fader. Attack is how fast it
-// grabs, release is how fast it lets go, and together they decide which part
-// of every hit survives.
-// Viewer outcome: "Slow attack keeps the crack, fast attack squashes it, and
-// release decides whether the groove breathes."
-// Hook: the same snare through the same compressor, twice, within 3 s.
+// Idea: cut everything an 8th note before the drop. In the silence the ear
+// recovers and the limiter lets go, so the kick lands with its full click,
+// right where the listener expects it.
+// Hook: the same drop twice, version 1 with the build running into the
+// downbeat, version 2 with a 234 ms gap, within 4 s.
 //
-// Times are seconds from the start of the film. The music grid is 120 BPM
-// with bar lines on odd seconds (1, 3, 5 ...), so every drum demo starts on a
-// downbeat of the keys loop underneath.
+// Times are seconds from the start of the film. The music grid is 128 BPM
+// from t = 0, so every demo starts on a beat of the bed underneath.
+// Narration lines are placed one after another from their measured lengths
+// (vo-cues.json), so a new take moves the picture with it.
+import fs from 'node:fs';
+import path from 'node:path';
+import { BAR, BEAT, BPM, GAP } from './drop.mjs';
 
-const base = { threshold: 0.12, ratio: 6 };
-export const SETTINGS = {
-    FAST: { ...base, attack: 0.001, release: 0.06, label: '1 ms attack' },
-    SLOW: { ...base, attack: 0.03, release: 0.06, label: '30 ms attack' },
-    HOLD: { ...base, attack: 0.03, release: 2.5, label: '2.5 s release' },
-    TEMPO: { ...base, attack: 0.03, release: 0.09, label: '90 ms release' },
+const HERE = path.dirname(new URL(import.meta.url).pathname);
+const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
+const dur = (id) => {
+    const c = CUES.segments.find((s) => s.id === id);
+    return c.to - c.from;
 };
+const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
+
+// Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
+const HOOK = { pre: 2, post: 2 };
+const REPLAY = { pre: 1.5, post: 1.5 };
+const len = (d) => (d.pre + d.post) * BEAT;
+
+const LINE_GAP = 0.25;
+const vo = [];
+let t = len(HOOK) * 2 + 0.2;
+for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
+    vo.push({ id, at: Math.round(t * 1000) / 1000 });
+    t += dur(id) + LINE_GAP;
+}
+// "Listen again" ends just before the replay, which starts on the grid.
+const replayAt = onGrid(t + dur('again') + 0.12);
+vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) / 1000 });
+const replayEnd = replayAt + 2 * len(REPLAY);
+vo.push({ id: 'cta', at: Math.round((replayEnd + 0.15) * 1000) / 1000 });
+const button = replayEnd + 0.15 + dur('cta') + 0.15;
 
 export const TIMELINE = {
     fps: 60,
     width: 1080,
     height: 1920,
-    duration: 76.5,
-    bpm: 120,
-    bar: 2,
-    gridOrigin: 1,
+    duration: Math.round((button + 0.75) * 100) / 100,
+    bpm: BPM,
+    beat: BEAT,
+    bar: BAR,
+    gapMs: Math.round(GAP * 10000) / 10,
     lesson: {
         url: 'virzyguns.com/blog',
-        slug: 'how-compression-changes-motion-not-level',
-        title: 'Compression changes motion before level',
+        slug: 'why-silence-before-the-beat-feels-physical',
+        title: 'A gap before the drop makes the downbeat hit harder',
         tagline: '100% Art. 100% Science.',
     },
-    samples: {
-        snare: 'Cymatics - Diamonds Snare 4 - C#.wav',
-        kick: 'Cymatics - Diamonds Kick 15 - E.wav',
-        hat: 'Cymatics - Diamonds Closed Hihat 5.wav',
-        hatSoft: 'Cymatics - Diamonds Closed Hihat 11.wav',
-        crash: 'Cymatics - Diamonds Crash 1.wav',
-        keys: 'Cymatics Gems Vol 10 - Nightfall - 120 BPM A# Min Keys.wav',
-        note: 'Cymatics - KEYS Dusty (C).wav',
-    },
-    // One bar of drums, 16 steps. Hats on every eighth, the off-beat ones
-    // softer, so there is something quiet between the hits for release to
-    // act on.
-    pattern: {
-        kick: [0, 7, 10],
-        snare: [4, 12],
-        hat: [0, 4, 8, 12],
-        hatSoft: [2, 6, 10, 14],
-    },
-
-    // Narration: `id` is a line in vo-cues.json, `at` where it starts.
-    vo: [
-        { id: 'same-snare', at: 0.3 },
-        { id: 'listen', at: 2.45 },
-        { id: 'flat', at: 7.15 },
-        { id: 'punchy', at: 8.35 },
-        { id: 'knob', at: 9.65 },
-        { id: 'hand', at: 12.2 },
-        { id: 'watch', at: 16.0 },
-        { id: 'pull', at: 17.3 },
-        { id: 'parts', at: 21.6 },
-        { id: 'crack', at: 23.45 },
-        { id: 'body', at: 25.0 },
-        { id: 'attack', at: 26.75 },
-        { id: 'fast', at: 29.25 },
-        { id: 'slow', at: 35.3 },
-        { id: 'slips', at: 38.0 },
-        { id: 'punch', at: 41.6 },
-        { id: 'release', at: 45.15 },
-        { id: 'hold', at: 47.35 },
-        { id: 'squashed', at: 51.1 },
-        { id: 'fresh', at: 55.3 },
-        { id: 'rule-a', at: 61.2 },
-        { id: 'rule-r', at: 62.55 },
-        { id: 'again', at: 64.05 },
-        { id: 'cta', at: 69.35 },
-    ],
-
-    // Drum demos, each on a bar line. `under`: seconds at the end during
-    // which narration plays over the drums, so they sit lower.
+    vo,
+    // A/B demos: the same drop rendered by drop.mjs, version 1 (no gap) and
+    // version 2 (gap), from `pre` beats before the downbeat to `post` after.
     demos: [
-        { id: 'A', at: 3, bars: 1, comp: 'FAST' },
-        { id: 'B', at: 5, bars: 1, comp: 'SLOW' },
-        { id: 'fast', at: 33, bars: 1, comp: 'FAST' },
-        { id: 'slow', at: 43, bars: 1, comp: 'SLOW' },
-        { id: 'hold', at: 53, bars: 1, comp: 'HOLD' },
-        { id: 'tempo', at: 59, bars: 2, comp: 'TEMPO', under: 2 },
-        // "Now listen again": the hook once more, now that the viewer knows what to listen for.
-        { id: 'A2', at: 65, bars: 1, comp: 'FAST' },
-        { id: 'B2', at: 67, bars: 1, comp: 'SLOW' },
+        { id: 'A', v: 1, at: 0, ...HOOK },
+        { id: 'B', v: 2, at: len(HOOK), ...HOOK },
+        { id: 'A2', v: 1, at: replayAt, ...REPLAY },
+        { id: 'B2', v: 2, at: replayAt + len(REPLAY), ...REPLAY },
     ],
-
-    // Keys loop under everything from the first demo to the button.
-    bed: { from: 3, to: 75 },
-
-    // Single sounds: `hit` is a dry snare, the rest are effects. An effect
-    // tied to the picture gives `cue: [line, word]` and `dt`, and lands when
-    // that word is spoken, where film.js shows the same thing.
+    // Single sounds tied to the picture: `cue: [line, word]` lands on that word.
     sfx: [
-        { at: 0.0, kind: 'hit' },
-        // A second strike right after the word "snare".
-        { cue: ['same-snare', 'snare'], dt: 0.32, kind: 'hit', level: 0.8 },
-        { cue: ['same-snare', 'compressor'], dt: -0.08, kind: 'pop' },
-        { at: 2.3, kind: 'pop', level: 0.6 },
-        { at: 5.0, kind: 'tick' },
-        { cue: ['flat', 'flat'], dt: 0, kind: 'pop', level: 0.6 },
-        { cue: ['punchy', 'punchy'], dt: 0, kind: 'pop', level: 0.6 },
-        { cue: ['knob', 'knob'], dt: 0.12, kind: 'tick' },
-        { cue: ['knob', 'knob'], dt: 0.52, kind: 'tick' },
-        { at: 11.55, kind: 'whoosh' },
-        { cue: ['hand', 'hand'], dt: -0.25, kind: 'pop', level: 0.7 },
-        { cue: ['watch', 'watches'], dt: -0.05, kind: 'blink' },
-        { cue: ['pull', 'when'], dt: 0.05, kind: 'tick' },
-        // Soft hits the meter and the hand react to inside the box.
-        { cue: ['pull', 'crosses'], dt: 0, kind: 'hit', level: 0.5 },
-        { cue: ['pull', 'pulls'], dt: -0.1, kind: 'hit', level: 0.5 },
-        { cue: ['pull', 'down'], dt: 0.35, kind: 'hit', level: 0.5 },
-        { cue: ['pull', 'down'], dt: 0.85, kind: 'hit', level: 0.5 },
-        { at: 21.15, kind: 'whoosh', level: 0.6 },
-        { at: 21.3, kind: 'hit' },
-        { cue: ['crack', 'crack'], dt: 0, kind: 'pop', level: 0.7 },
-        { cue: ['body', 'body'], dt: 0, kind: 'pop', level: 0.7 },
-        { at: 26.5, kind: 'whoosh', level: 0.6 },
-        { cue: ['attack', 'grabs'], dt: -0.05, kind: 'grab' },
-        { cue: ['fast', 'catches'], dt: -0.1, kind: 'grab' },
-        { cue: ['fast', 'squashes'], dt: 0, kind: 'pop', level: 0.6 },
-        { cue: ['slips', 'past'], dt: -0.2, kind: 'pop', level: 0.6 },
-        { cue: ['slips', 'and'], dt: 0.05, kind: 'grab', level: 0.7 },
-        { cue: ['slips', 'body'], dt: -0.1, kind: 'pop', level: 0.6 },
-        { cue: ['punch', 'punch'], dt: -0.1, kind: 'pop' },
-        { cue: ['release', 'lets'], dt: 0.05, kind: 'spring' },
-        { cue: ['hold', 'arrives'], dt: -0.1, kind: 'pop', level: 0.6 },
-        { cue: ['squashed', 'squashed'], dt: -0.3, kind: 'pop', level: 0.6 },
-        { cue: ['fresh', 'fresh'], dt: -0.1, kind: 'pop', level: 0.6 },
-        { at: 57.4, kind: 'swell', to: 59 },
-        { at: 59, kind: 'crash' },
-        { cue: ['rule-a', 'attack'], dt: -0.15, kind: 'pop', level: 0.7 },
-        { cue: ['rule-r', 'release'], dt: -0.15, kind: 'pop', level: 0.7 },
-        { at: 64.05, kind: 'pop' },
-        { at: 67, kind: 'tick' },
-        { at: 69.1, kind: 'whoosh' },
-        { at: 69.45, kind: 'pop', level: 0.7 },
+        { cue: ['hook', 'two'], dt: -0.05, kind: 'pop', level: 0.8 },
+        { cue: ['hook', 'hole'], dt: 0, kind: 'tick' },
+        { cue: ['hook', 'quarter'], dt: 0, kind: 'pop', level: 0.6 },
+        { cue: ['fog', 'loud'], dt: -0.2, kind: 'whoosh', level: 0.6 },
+        { cue: ['fog', 'stops'], dt: 0.1, kind: 'tick' },
+        { cue: ['fog', 'click'], dt: 0, kind: 'pop', level: 0.6 },
+        { cue: ['fresh', 'after'], dt: -0.2, kind: 'whoosh', level: 0.5 },
+        { cue: ['fresh', 'full'], dt: 0, kind: 'pop', level: 0.7 },
+        { cue: ['hand', 'your'], dt: -0.2, kind: 'whoosh', level: 0.5 },
+        { cue: ['hand', 'hand'], dt: -0.1, kind: 'grab' },
+        { cue: ['hand', 'down'], dt: 0, kind: 'grab', level: 0.7 },
+        { cue: ['brain', 'silence'], dt: -0.25, kind: 'whoosh', level: 0.5 },
+        { cue: ['brain', 'there'], dt: 0, kind: 'kick' },
+        { cue: ['brain', 'payoff'], dt: 0, kind: 'pop', level: 0.7 },
+        { cue: ['how', 'at'], dt: -0.2, kind: 'whoosh', level: 0.5 },
+        { cue: ['how', 'eighth'], dt: 0, kind: 'tick' },
+        { cue: ['how', 'tails'], dt: 0, kind: 'tick' },
+        { cue: ['again', 'listen'], dt: -0.1, kind: 'pop' },
+        { cue: ['cta', 'the'], dt: -0.25, kind: 'whoosh' },
         { cue: ['cta', 'play'], dt: 0.05, kind: 'tick' },
-        { at: 75, kind: 'button' },
+        { at: button, kind: 'button' },
+        // The last half second rises into the first frame, so a replay feels intended.
+        { at: button + 0.15, kind: 'swell', to: button + 0.75 },
     ],
-
-    // Scenes in order; each runs until the next one starts.
-    // view: what the stage draws (film.js).
+    button,
+    // Scenes in order; each runs until the next one starts. `from: [line, word]`
+    // starts a scene on a spoken word; `at` is used otherwise.
     scenes: [
-        { id: 'intro', at: 0, view: 'stage', teaches: 'Hook: same snare, same compressor.' },
-        { id: 'ab', at: 3, view: 'stage', teaches: 'Hook: 1 ms, then 30 ms, heard back to back.' },
-        { id: 'verdict', at: 7, view: 'stage', teaches: 'One is flat, one is punchy; only the attack knob moved.' },
-        { id: 'inside', at: 11.55, view: 'inside', teaches: 'A compressor is a hand on a fader that pulls down above the threshold.' },
-        { id: 'parts', at: 21.2, view: 'parts', teaches: 'A hit is a crack and a body.' },
-        { id: 'attack', at: 26.5, view: 'rig', setting: 'FAST', mode: 'intro', teaches: 'Attack: how fast the hand grabs.' },
-        { id: 'fast', at: 29.0, view: 'rig', setting: 'FAST', mode: 'slowmo', teaches: '1 ms catches the crack and squashes it.' },
-        { id: 'demo-fast', at: 33, view: 'rig', setting: 'FAST', mode: 'live', demo: 'fast', teaches: 'Heard: 1 ms attack.' },
-        { id: 'slow', at: 35, view: 'rig', setting: 'SLOW', mode: 'slowmo', teaches: '30 ms lets the crack past and turns the body down.' },
-        { id: 'demo-slow', at: 43, view: 'rig', setting: 'SLOW', mode: 'live', demo: 'slow', teaches: 'Heard: 30 ms attack. Punch.' },
-        { id: 'release', at: 45, view: 'rig', setting: 'SLOW', mode: 'letgo', teaches: 'Release: how fast the hand lets go.' },
-        { id: 'hold', at: 47.2, view: 'rig', setting: 'HOLD', mode: 'groove', teaches: 'Too slow: still holding when the next hit arrives.' },
-        { id: 'demo-hold', at: 53, view: 'rig', setting: 'HOLD', mode: 'live', demo: 'hold', teaches: 'Heard: 2.5 s release. Flat.' },
-        { id: 'fresh', at: 55, view: 'rig', setting: 'TEMPO', mode: 'groove', teaches: 'In time: every hit starts fresh.' },
-        { id: 'demo-tempo', at: 59, view: 'rig', setting: 'TEMPO', mode: 'live', demo: 'tempo', teaches: 'Heard: 90 ms release.' },
-        { id: 'rule', at: 60.95, view: 'rule', teaches: 'Attack shapes the hit. Release shapes the groove.' },
-        { id: 'replay', at: 63.95, view: 'stage', teaches: 'The hook again: now the viewer hears the crack.' },
-        { id: 'end', at: 69.1, view: 'end', teaches: 'Where the lesson is, and who made it.' },
+        { id: 'ab', at: 0, view: 'ab', teaches: 'Hook: the same drop twice, 1 then 2.' },
+        { id: 'notch', from: ['hook', 'number'], dt: -0.15, view: 'ab', teaches: 'Number 2 has a hole: less than a quarter second of silence.' },
+        { id: 'fog', from: ['fog', 'a'], dt: -0.3, view: 'fog', teaches: 'A loud riser leaves a fog (forward masking, model) for up to 200 ms; in 1 the click lands inside it.' },
+        { id: 'fresh', from: ['fresh', 'after'], dt: -0.25, view: 'fresh', teaches: 'After silence the ear responds fully (adaptation, model).' },
+        { id: 'hand', from: ['hand', 'your'], dt: -0.25, view: 'hand', teaches: 'The limiter is a hand on a fader: in 1 it is already down when the kick arrives.' },
+        { id: 'brain', from: ['brain', 'silence'], dt: -0.3, view: 'brain', teaches: 'Silence leaves one thing to predict: the next beat. The arrival is the payoff.' },
+        { id: 'how', from: ['how', 'at'], dt: -0.25, view: 'how', teaches: 'At 128 BPM cut everything an 8th early; reverb tails too.' },
+        { id: 'replay', from: ['again', 'listen'], dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
+        { id: 'end', from: ['cta', 'the'], dt: -0.2, view: 'end', teaches: 'Where the lesson is, and who made it.' },
     ],
 };

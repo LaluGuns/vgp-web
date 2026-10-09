@@ -216,7 +216,8 @@ function arrange(gap) {
     tr.verb = track();
     add(tr.verb, verbBuild, undb(-3));
     add(tr.verb, verbDrop, undb(-3));
-    tr.verbBuild = verbBuild;
+    tr.verbBuild = track();
+    add(tr.verbBuild, verbBuild, undb(-3));
     return tr;
 }
 
@@ -243,7 +244,7 @@ export function render(gap) {
     const out = { L: Float32Array.from(bus.L, (v, i) => v * gain[i]), R: Float32Array.from(bus.R, (v, i) => v * gain[i]) };
     const kick = mul(tr.kick);
     const rest = { L: Float32Array.from(out.L, (v, i) => v - kick.L[i]), R: Float32Array.from(out.R, (v, i) => v - kick.R[i]) };
-    const parts = Object.fromEntries(STEMS.map((k) => [k, mul(tr[k])]));
+    const parts = Object.fromEntries([...STEMS, 'verbBuild'].map((k) => [k, mul(tr[k])]));
     return { bus, out, gain, kick, rest, parts, T0: PRE };
 }
 

@@ -1,24 +1,20 @@
-// Film 3 soundtrack: the narration, Cymatics drums through the compressor
-// the picture shows, the Nightfall keys loop as a bed, and small effects.
-// Returns the stereo mix plus the data the picture draws from (levels, gain
-// reduction, hit times), so what is drawn is what is heard.
+// Film 5 soundtrack: the narration, the A/B drop from drop.mjs (version 1
+// runs into the downbeat, version 2 has the 234 ms gap), a bed that carries
+// the drop on under the voice, and small effects. Returns the stereo mix plus
+// the data the picture draws from (levels, limiter gain, the two hearing
+// models), so what is drawn is what is heard.
 import fs from 'node:fs';
 import path from 'node:path';
-import { compress } from '../film/model.mjs';
-import { biquad, db, loudness, mulberry32, noise, RATE, readAudio, undb, writeWav } from './dsp.mjs';
-import { SETTINGS, TIMELINE } from './timeline.mjs';
+import { BEAT, BAR, GAP, PRE, measure, samples } from './drop.mjs';
+import { biquad, butter, db, loudness, mulberry32, noise, RATE, readAudio, undb, writeWav } from './dsp.mjs';
+import { TIMELINE } from './timeline.mjs';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 export const ASSETS = path.join(HERE, '../assets');
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
 
-// Detector: RMS over 3 ms of the mono sum, centred so it has no lag (the
-// lesson's model reads the envelope itself). The level the compressor reacts to.
-const DETECT = 0.003;
-// Picture data resolution.
+// Picture data resolution: one value per millisecond.
 const VIS = 1000;
-const SLOW_VIS = 4000;
-
 const n = Math.ceil(TIMELINE.duration * RATE);
 const at = (t) => Math.round(t * RATE);
 
@@ -37,7 +33,7 @@ function mixIn(dst, src, t0, gain = 1, rate = 1) {
     }
 }
 
-/** RMS over `win` seconds; `centred` puts the window around each sample, so the level has no lag. */
+
 function rmsEnv(mono, win = DETECT, centred = false) {
     const w = Math.round(win * RATE);
     const out = new Float32Array(mono.length);
@@ -51,13 +47,14 @@ function rmsEnv(mono, win = DETECT, centred = false) {
     return out;
 }
 
+
 function mono(L, R) {
     const m = new Float32Array(L.length);
     for (let i = 0; i < L.length; i++) m[i] = 0.5 * (L[i] + R[i]);
     return m;
 }
 
-/** Average x over blocks so the picture gets `rate` values per second. */
+
 function decimate(x, from, to, rate) {
     const step = RATE / rate;
     const len = Math.round((to - from) * rate);
@@ -71,20 +68,10 @@ function decimate(x, from, to, rate) {
     return out;
 }
 
-export function hitsOf(demo) {
-    const step = TIMELINE.bar / 16;
-    const out = [];
-    for (let b = 0; b < demo.bars; b++)
-        for (const [voice, steps] of Object.entries(TIMELINE.pattern))
-            for (const s of steps) out.push({ voice, t: demo.at + b * TIMELINE.bar + s * step, demo: demo.id });
-    return out.sort((a, b) => a.t - b.t || a.voice.localeCompare(b.voice));
-}
 
-const VELOCITY = { kick: 1, snare: 1, hat: 0.5, hatSoft: 0.3 };
 // Effect peak level in dB relative to the narration's loudness.
-const FX_DB = { pop: 4, tick: 0, blink: -2, whoosh: 3, slide: 0, grab: 4, spring: 3 };
+const FX_DB = { pop: 4, tick: 0, blink: -2, whoosh: 3, slide: 0, grab: 4, spring: 3, kick: 2 };
 
-/** Placed narration lines: { id, at, dur, words: [{ w, s, e }] } in film time. */
 export function voPlacements() {
     return TIMELINE.vo.map((p) => {
         const c = CUES.segments.find((s) => s.id === p.id);
@@ -103,7 +90,6 @@ export function voPlacements() {
     });
 }
 
-/** Gain over time from a target level in dB, sampled every 10 ms and glided. */
 function levelCurve(targetDb, smooth = 0.08) {
     const g = new Float32Array(n);
     const a = Math.exp(-1 / (smooth * RATE));
@@ -187,11 +173,6 @@ function sfx(kind, seed, level = 1, to = 0) {
     return new Float32Array(0);
 }
 
-/**
- * Speech leveller, in place: RMS compressor (3:1 above loudness + 4 dB,
- * 5 ms attack, 100 ms release), then a 2 ms look-ahead limiter with its
- * ceiling 11 dB over the loudness.
- */
 function voiceChain(x, lufs) {
     const env = rmsEnv(x, 0.01);
     const thr = lufs + 4;
@@ -224,9 +205,54 @@ function voiceChain(x, lufs) {
     }
 }
 
-export function renderAudio(wavPath) {
-    const S = {};
-    for (const [k, f] of Object.entries(TIMELINE.samples)) S[k] = readAudio(path.join(ASSETS, 'samples', f));
+const DETECT = 0.005;
+
+/** Picture data for one version around its downbeat: WIN.from .. WIN.to seconds from it. */
+export const WIN = { from: -2.5 * BEAT, to: 2 * BEAT };
+
+/**
+ * Forward masking as drawn (a model after Moore, 2012): the masker's level
+ * (0..1 over a 40 dB range below the kick's peak), carried forward with a
+ * weight that falls on a log-time curve from 1 at the masker's offset to 0 at
+ * 200 ms, so most of it is gone after 100 ms and all of it by 200 ms.
+ */
+const FOG_MS = 200;
+function fogModel(maskerDb) {
+    const m = maskerDb.map((v) => Math.max(0, Math.min(1, (v + 40) / 40)));
+    const w = Array.from({ length: FOG_MS + 1 }, (_, k) => 1 - Math.log10(1 + k / 10) / Math.log10(1 + FOG_MS / 10));
+    const out = new Float32Array(m.length);
+    for (let i = 0; i < out.length; i++) {
+        let f = 0;
+        for (let k = 0; k <= FOG_MS && k <= i; k++) f = Math.max(f, m[i - k] * w[k]);
+        out[i] = f;
+    }
+    return out;
+}
+
+/**
+ * Adaptation as drawn (a model after Moore, 2012): a nerve's firing rate is
+ * highest at a sound's onset, sinks while it continues and recovers in
+ * silence. Drive is the level in dB over a 40 dB range; adaptation follows the
+ * drive within 40 ms and recovers over 150 ms. Returns { rate, sens } per ms.
+ */
+function adaptModel(levelDb) {
+    const drive = levelDb.map((v) => Math.max(0, Math.min(1, (v + 40) / 40)));
+    const rate = new Float32Array(drive.length);
+    const sens = new Float32Array(drive.length);
+    let a = 0;
+    for (let i = 0; i < drive.length; i++) {
+        const target = drive[i];
+        a += (target - a) * (target > a ? 1 - Math.exp(-1 / 40) : 1 - Math.exp(-1 / 150));
+        sens[i] = 1 - 0.75 * a;
+        rate[i] = drive[i] * sens[i];
+    }
+    return { rate: Array.from(rate, (v) => Math.round(v * 1000) / 1000), sens: Array.from(sens, (v) => Math.round(v * 1000) / 1000) };
+}
+
+const round = (a, k = 10000) => Array.from(a, (v) => Math.round(v * k) / k);
+
+export function renderAudio() {
+    const S = samples();
     const L = new Float32Array(n);
     const R = new Float32Array(n);
 
@@ -236,102 +262,93 @@ export function renderAudio(wavPath) {
     const placed = voPlacements();
     const fade = at(0.008);
     for (const p of placed) {
-        // A little room either side of the measured pause, inside the silence;
-        // cuts are joined with short crossfades.
         const bounds = [Math.max(0, p.from - 0.03), ...p.cuts.flat(), Math.min(p.to + 0.08, voSrc.L.length / RATE)];
         let dst = p.at - 0.03;
         for (let k = 0; k < bounds.length; k += 2) {
             const piece = voSrc.L.slice(at(bounds[k]), at(bounds[k + 1]));
-            const xf = k === 0 ? fade : at(0.012);
-            const xl = k + 2 >= bounds.length ? fade : at(0.012);
-            for (let q = 0; q < xf; q++) piece[q] *= q / xf;
-            for (let q = 0; q < xl; q++) piece[piece.length - 1 - q] *= q / xl;
+            for (let q = 0; q < fade; q++) {
+                piece[q] *= q / fade;
+                piece[piece.length - 1 - q] *= q / fade;
+            }
             mixIn(vo, piece, dst);
-            dst += piece.length / RATE - (k + 2 < bounds.length ? 0.012 : 0);
+            dst += piece.length / RATE;
         }
     }
-    // Cue-tied effects (and dry hits) land on their word.
     const sfxList = TIMELINE.sfx.map((s) => {
         if (!s.cue) return s;
         const p = placed.find((v) => v.id === s.cue[0]);
-        const w = p?.words.filter((x) => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === s.cue[1].toLowerCase())[0];
+        const w = p?.words.find((x) => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === s.cue[1].toLowerCase());
         if (!w) throw new Error(`sfx cue ${s.cue.join('/')} not found`);
         return { ...s, at: w.s + (s.dt ?? 0) };
     });
-    // Rumble out, then the usual voice chain: a gentle compressor and a
-    // look-ahead peak limiter, so speech peaks sit about 11 dB over its
-    // loudness and the master never has to clip the voice.
     biquad(vo, 'hp', 70);
     const rawLufs = loudness(vo);
     voiceChain(vo, rawLufs);
     const voLufs = loudness(vo);
 
-    // ── Drums through the compressor ──
+    // ── The A/B: both versions, matched at the drop bar's loudness ──
+    const { res, v } = measure();
+    const match = { 1: undb(res.matchOffsetDb), 2: 1 };
+    // Demos sit 2 dB under the narration's loudness at the drop bar, so their
+    // peaks (-1 dBFS inside the song, 13 dB over its loudness) land where the
+    // voice's limiter puts speech peaks and the master never clips them.
+    const dropLufs = res[2].dropLufs;
+    const demoGain = undb(voLufs - 2 - dropLufs);
     const dL = new Float32Array(n);
     const dR = new Float32Array(n);
-    const hits = TIMELINE.demos.flatMap(hitsOf);
-    const dryHits = sfxList.filter((s) => s.kind === 'hit').map((s) => ({ voice: 'snare', t: s.at, demo: null, level: s.level ?? 1 }));
-    for (const h of [...hits, ...dryHits]) {
-        mixIn(dL, S[h.voice].L, h.t, VELOCITY[h.voice] * (h.level ?? 1));
-        mixIn(dR, S[h.voice].R, h.t, VELOCITY[h.voice] * (h.level ?? 1));
-    }
-    // Scale the detector so the snare's crack reads 1.0.
-    const snareEnv = rmsEnv(mono(S.snare.L, S.snare.R), DETECT, true);
-    const ref = Math.max(...snareEnv);
-    const env = rmsEnv(mono(dL, dR), DETECT, true).map((v) => v / ref);
-    const demoAt = new Int16Array(n).fill(-1);
-    TIMELINE.demos.forEach((d, j) => demoAt.fill(j, at(d.at), at(d.at + d.bars * TIMELINE.bar + 0.35)));
-    // Each demo's compressor is warmed up on one bar of the same groove, so
-    // it starts where it would be in the middle of a song, not from rest.
-    const gr = new Float32Array(n);
-    const barN = at(TIMELINE.bar);
     for (const d of TIMELINE.demos) {
-        const a = at(d.at);
-        const b = Math.min(n, at(d.at + d.bars * TIMELINE.bar + 0.35));
-        const run = new Float32Array(barN + b - a);
-        run.set(env.subarray(a, a + barN), 0);
-        run.set(env.subarray(a, b), barN);
-        gr.set(compress(run, RATE, () => SETTINGS[d.comp]).subarray(barN), a);
+        const out = v[d.v].out;
+        const a = at(PRE - d.pre * BEAT);
+        const b = at(PRE + d.post * BEAT);
+        const g = demoGain * match[d.v];
+        const fi = at(0.004);
+        const fo = at(0.03);
+        for (let k = 0; k < b - a; k++) {
+            const env = Math.min(1, k / fi, (b - a - k) / fo);
+            const i = at(d.at) + k;
+            dL[i] += out.L[a + k] * g * env;
+            dR[i] += out.R[a + k] * g * env;
+        }
     }
 
-    // Makeup per demo: the compressed bar matches the plain bar's loudness,
-    // the lesson's "judge at matched level".
-    const plain = mono(dL, dR);
-    const comp = plain.map((v, i) => v * undb(-gr[i]));
-    const makeup = TIMELINE.demos.map((d) => loudness(plain, d.at, d.at + TIMELINE.bar) - loudness(comp, d.at, d.at + TIMELINE.bar));
-    // Plain drums sit 4 dB under the narration: a drum loop has about 20 dB
-    // between its loudness and its peaks, and at this level the 30 ms crack
-    // reaches the master ceiling with little rounding.
-    const drumTrim = voLufs - 4 - loudness(plain, TIMELINE.demos[0].at, TIMELINE.demos[0].at + TIMELINE.bar);
-    const demoEnd = (d) => d.at + d.bars * TIMELINE.bar;
-    const mk = levelCurve((t) => {
-        const j = demoAt[at(t)];
-        if (j < 0) return 0;
-        const d = TIMELINE.demos[j];
-        return makeup[j] - (d.under && t > demoEnd(d) - d.under ? 9 : 0);
-    }, 0.001);
-    for (let i = 0; i < n; i++) {
-        const g = undb(-gr[i] + drumTrim) * mk[i];
-        dL[i] *= g;
-        dR[i] *= g;
+    // ── Bed: the drop's bass and stabs (version 2), low-passed, carrying the
+    // song on under the voice; it stops for the replay and the button ──
+    const bedSrc = { L: new Float32Array(at(BAR)), R: new Float32Array(at(BAR)) };
+    for (const k of ['bass', 'stabs', 'verb']) {
+        const p = v[2].parts[k];
+        for (let i = 0; i < bedSrc.L.length; i++) {
+            bedSrc.L[i] += p.L[at(PRE + BAR) + i];
+            bedSrc.R[i] += p.R[at(PRE + BAR) + i];
+        }
     }
-
-    // ── Keys bed: loops every four bars, lower under the voice ──
-    const bed = TIMELINE.bed;
-    const loopLen = 4 * TIMELINE.bar;
+    butter(bedSrc.L, 'lp', 1400, 2);
+    butter(bedSrc.R, 'lp', 1400, 2);
     const bL = new Float32Array(n);
     const bR = new Float32Array(n);
-    for (let t = bed.from; t < bed.to; t += loopLen) {
-        const end = Math.min(S.keys.L.length, at(bed.to - t));
-        mixIn(bL, S.keys.L.subarray(0, end), t);
-        mixIn(bR, S.keys.R.subarray(0, end), t);
+    const bedFrom = TIMELINE.demos[1].at + (TIMELINE.demos[1].pre + TIMELINE.demos[1].post) * BEAT;
+    const replay = TIMELINE.demos[2].at;
+    const replayEnd = TIMELINE.demos[3].at + (TIMELINE.demos[3].pre + TIMELINE.demos[3].post) * BEAT;
+    const segs = [[bedFrom, replay], [replayEnd, TIMELINE.button]];
+    for (const [a, b] of segs) {
+        for (let t = a; t < b - 0.01; t += BAR) {
+            const len = Math.min(BAR, b - t);
+            const piece = { L: bedSrc.L.slice(0, at(len)), R: bedSrc.R.slice(0, at(len)) };
+            const xf = at(0.006);
+            for (let q = 0; q < xf; q++) for (const c of ['L', 'R']) {
+                piece[c][q] *= q / xf;
+                piece[c][piece[c].length - 1 - q] *= q / xf;
+            }
+            mixIn(bL, piece.L, t);
+            mixIn(bR, piece.R, t);
+        }
     }
-    const keysLufs = loudness(mono(bL, bR), bed.from, bed.from + loopLen);
-    // -9 dB alone, -11 under a demo, -15 under the voice; the voice wins.
+    const bedLufs = loudness(mono(bedSrc.L, bedSrc.R));
+    const demoEnd = (d) => d.at + (d.pre + d.post) * BEAT;
+    // -9 dB alone, -15 under the voice; the voice wins. Out under the demos.
     const voiceOn = (t) => placed.some((p) => t >= p.at - 0.12 && t <= p.at + p.dur + 0.25);
-    const demoOn = (t) => TIMELINE.demos.some((d) => t >= d.at && t <= demoEnd(d) + 0.3);
-    const bg = levelCurve((t) => (t > bed.to - 0.3 ? -60 : voiceOn(t) ? -15 : demoOn(t) ? -11 : -9), 0.12);
-    const bedTrim = voLufs - keysLufs;
+    const demoOn = (t) => TIMELINE.demos.some((d) => t >= d.at - 0.05 && t <= demoEnd(d) + 0.05);
+    const bg = levelCurve((t) => (demoOn(t) || t > TIMELINE.button - 0.05 ? -60 : voiceOn(t) ? -15 : -9), 0.06);
+    const bedTrim = voLufs - bedLufs;
     for (let i = 0; i < n; i++) {
         const g = undb(bedTrim) * bg[i];
         bL[i] *= g;
@@ -342,106 +359,86 @@ export function renderAudio(wavPath) {
     const fx = new Float32Array(n);
     const fxL = new Float32Array(n);
     const fxR = new Float32Array(n);
+    const semis = (k) => 2 ** (k / 12);
     sfxList.forEach((s, k) => {
-        if (s.kind === 'hit') return;
-        if (s.kind === 'crash') {
-            mixIn(fxL, S.crash.L, s.at, undb(drumTrim - 6));
-            mixIn(fxR, S.crash.R, s.at, undb(drumTrim - 6));
+        if (s.kind === 'kick') {
+            mixIn(fxL, S.kick.L, s.at, undb(voLufs + 2) / 0.9, semis(3));
+            mixIn(fxR, S.kick.R, s.at, undb(voLufs + 2) / 0.9, semis(3));
             return;
         }
         if (s.kind === 'swell') {
-            // The crash reversed, rising into the downbeat.
+            // The reverse impact rising into the loop point.
             const len = at(s.to - s.at);
-            for (const [src, dst] of [[S.crash.L, fxL], [S.crash.R, fxR]]) {
-                const rev = src.slice(0, len).reverse();
-                biquad(rev, 'lp', 5000);
-                rev.forEach((v, j) => (rev[j] = v * (j / len) ** 2));
-                mixIn(dst, rev, s.to - rev.length / RATE, undb(drumTrim - 14));
+            const src = S.swell;
+            let end = src.L.length - 1;
+            while (end > 0 && Math.abs(src.L[end]) < 0.02) end--;
+            for (const [c, dst] of [['L', fxL], ['R', fxR]]) {
+                const piece = src[c].slice(Math.max(0, end - len), end);
+                piece.forEach((x, j) => (piece[j] = x * (j / piece.length) ** 2));
+                mixIn(dst, piece, s.to - piece.length / RATE, undb(voLufs - 4) / 0.5);
             }
             return;
         }
         if (s.kind === 'button') {
-            // The last note: the Dusty keys one-shot, down a tone to A sharp, with a kick.
-            const rate = 2 ** (-2 / 12);
+            // The KEYS Dusty one-shot up three semitones to D#, with the kick.
             const trim = voLufs - 6 - loudness(mono(S.note.L, S.note.R));
-            mixIn(fxL, S.note.L, s.at, undb(trim), rate);
-            mixIn(fxR, S.note.R, s.at, undb(trim), rate);
-            mixIn(fxL, S.kick.L, s.at, undb(drumTrim - 3));
-            mixIn(fxR, S.kick.R, s.at, undb(drumTrim - 3));
+            mixIn(fxL, S.note.L, s.at, undb(trim), semis(3));
+            mixIn(fxR, S.note.R, s.at, undb(trim), semis(3));
+            mixIn(fxL, S.kick.L, s.at, undb(voLufs - 2) / 0.9, semis(3));
+            mixIn(fxR, S.kick.R, s.at, undb(voLufs - 2) / 0.9, semis(3));
             return;
         }
-        // Effects peak a few dB over the voice's loudness, well under its peaks.
         const buf = sfx(s.kind, 100 + k, s.level ?? 1);
-        const pk = buf.reduce((p, v) => Math.max(p, Math.abs(v)), 0) / (s.level ?? 1);
+        const pk = buf.reduce((p, x) => Math.max(p, Math.abs(x)), 0) / (s.level ?? 1);
         mixIn(fx, buf, s.at, undb(voLufs + FX_DB[s.kind]) / Math.max(pk, 1e-6));
     });
 
     // ── Sum ──
-    const mL = new Float32Array(n);
-    const mR = new Float32Array(n);
     for (let i = 0; i < n; i++) {
-        mL[i] = vo[i] + dL[i] + bL[i] + fx[i] + fxL[i];
-        mR[i] = vo[i] + dR[i] + bR[i] + fx[i] + fxR[i];
+        L[i] = vo[i] + dL[i] + bL[i] + fx[i] + fxL[i];
+        R[i] = vo[i] + dR[i] + bR[i] + fx[i] + fxR[i];
     }
-    const tail = at(1.2);
-    for (let k = 0; k < tail; k++) {
-        const g = (k / tail) ** 2;
-        mL[n - 1 - k] *= g;
-        mR[n - 1 - k] *= g;
-    }
-    if (wavPath) writeWav(wavPath, mL, mR);
 
-    // ── What the picture draws ──
-    const gain = Float32Array.from(gr, (v) => undb(-v));
-    const out = env.map((v, i) => v * gain[i]);
-    const demos = TIMELINE.demos.map((d, j) => {
-        const to = d.at + d.bars * TIMELINE.bar;
-        return { id: d.id, at: d.at, to, comp: d.comp, makeupDb: Math.round(makeup[j] * 10) / 10, env: decimate(env, d.at, to, VIS), out: decimate(out, d.at, to, VIS), gr: decimate(gr, d.at, to, VIS) };
-    });
-    // One snare alone through FAST and SLOW, for the slow-motion scenes.
-    const sn = snareEnv.map((v) => v / ref);
-    const lone = {};
-    for (const k of ['FAST', 'SLOW']) {
-        const g = compress(sn, RATE, () => SETTINGS[k]);
-        lone[k] = { gr: decimate(g, 0, 0.25, SLOW_VIS), out: decimate(sn.map((v, i) => v * undb(-g[i])), 0, 0.25, SLOW_VIS) };
+    // ── What the picture draws, per version, around its downbeat ──
+    const versions = {};
+    for (const k of [1, 2]) {
+        const r = v[k];
+        const g = match[k];
+        const a = PRE + WIN.from;
+        const b = PRE + WIN.to;
+        const m = (x) => mono(x.L, x.R).map((q) => q * g);
+        const out = m(r.out);
+        const kick = m(r.kick);
+        const build = ['riser', 'swell', 'drums', 'stabs', 'verbBuild'].map((p) => m(r.parts[p]));
+        // The build's sound (everything that was playing before the drop) up to the downbeat and its tails after it.
+        const masker = new Float32Array(out.length);
+        for (let i = 0; i < out.length; i++) {
+            if (i < at(PRE)) masker[i] = out[i] - kick[i];
+            else masker[i] = build[0][i] + build[1][i] + build[4][i] + (i < at(PRE) ? build[2][i] + build[3][i] : 0);
+        }
+        const peakOf = (x) => decimate(x.map(Math.abs), a, b, VIS);
+        const envDb = (x) => decimate(rmsEnv(x, DETECT, true), a, b, VIS).map((q) => db(q));
+        const refDb = Math.max(...envDb(kick));
+        const maskDb = envDb(masker).map((q) => q - refDb);
+        const mixDb = envDb(out).map((q) => q - refDb);
+        const gr = decimate(Float32Array.from(r.gain, (q) => -db(q)), a, b, VIS);
+        versions[k] = {
+            peak: peakOf(out),
+            kick: peakOf(kick),
+            masker: peakOf(masker),
+            gr,
+            fog: round(fogModel(maskDb), 1000),
+            ...adaptModel(mixDb),
+        };
     }
-    const snare = { rate: SLOW_VIS, env: decimate(sn, 0, 0.25, SLOW_VIS), ...lone };
-    // Each demo's snares up close (150 ms from the onset): level in, level out
-    // before makeup. The picture multiplies by makeupDb for what you hear.
-    for (const d of demos) {
-        d.zooms = hits.filter((h) => h.demo === d.id && h.voice === 'snare').map((h) => ({ t: h.t, env: decimate(env, h.t, h.t + 0.15, SLOW_VIS), out: decimate(out, h.t, h.t + 0.15, SLOW_VIS), gr: decimate(gr, h.t, h.t + 0.15, SLOW_VIS) }));
-    }
-    const measures = {
-        voLufs,
-        voRawLufs: rawLufs,
-        drumTrimDb: drumTrim,
-        bedTrimDb: bedTrim,
-        makeupDb: Object.fromEntries(TIMELINE.demos.map((d, j) => [d.id, Math.round(makeup[j] * 10) / 10])),
-        crackBody: crackBody(sn),
+    const claims = res.claims;
+    const measures = { voLufs, voRawLufs: rawLufs, demoGainDb: db(demoGain), res };
+    return {
+        L,
+        R,
+        data: { rate: VIS, win: WIN, gapMs: GAP * 1000, versions, claims: JSON.parse(JSON.stringify(claims)), r1: { gr: res[1].grMean, kickDb: res[1].kickDb, clickDb: res[1].clickDb }, r2: { gr: res[2].grMean, kickDb: res[2].kickDb, clickDb: res[2].clickDb }, vo: placed, sfx: sfxList },
+        measures,
     };
-    return { L: mL, R: mR, data: { rate: VIS, demos, snare, hits: [...hits, ...dryHits], vo: placed }, measures };
-}
-
-/**
- * What each attack leaves of one snare: crack (first 15 ms) over body (25 to
- * 70 ms), RMS, in dB, before and after the compressor. The gap between FAST
- * and SLOW is the difference the hook asks the viewer to hear.
- */
-function crackBody(sn) {
-    const rms = (x, a, b) => {
-        let q = 0;
-        const i0 = Math.round(a * RATE);
-        const i1 = Math.round(b * RATE);
-        for (let i = i0; i < i1; i++) q += x[i] * x[i];
-        return Math.sqrt(q / (i1 - i0));
-    };
-    const ratio = (x) => db(rms(x, 0, 0.015) / rms(x, 0.025, 0.07));
-    const res = { plain: ratio(sn) };
-    for (const k of ['FAST', 'SLOW']) {
-        const g = compress(sn, RATE, () => SETTINGS[k]);
-        res[k] = ratio(sn.map((v, i) => v * undb(-g[i])));
-    }
-    return Object.fromEntries(Object.entries(res).map(([k, v]) => [k, Math.round(v * 10) / 10]));
 }
 
 /**

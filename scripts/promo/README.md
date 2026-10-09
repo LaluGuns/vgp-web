@@ -98,3 +98,30 @@ hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 - `directions/directions.html`: the four looks considered, and why A won.
 - `fonts/`: Inter and Inter Display (SIL OFL, see `LICENSE-Inter.txt`),
   subset to Latin and embedded in every render.
+
+## Film 5: a gap before the drop
+
+A 59 second, 1080 x 1920 short for TikTok and Reels on lesson 030: the same
+128 BPM drop twice, version 1 with the build running into the downbeat and
+version 2 with everything cut one 8th note early, then why (forward masking,
+adaptation, the limiter, expectation) and how. Narrated by the founder.
+
+Assets (ignored by git) in `scripts/promo/assets/`:
+
+- `assets/samples/`: the Cymatics files named in `film5/drop.mjs` under `FILES`.
+- `assets/vo/narration.wav`: the narration. `film5/vo-cues.json` records where
+  each line sits in it; for a new take run
+  `python film5/cue_vo.py assets/vo/narration.wav film5/script.txt film5/vo-cues.json`.
+  `film5/timeline.mjs` places the lines from their measured lengths.
+
+```
+npm run film5                       # sound, stills, video and checks
+npm run film5 -- --stills           # contact sheets and cover only
+npm run film5 -- --frames 12.5,31 --tag check
+npm run film5 -- --refresh-lesson   # re-capture the lesson's Listen demo
+node film5/judge-pack.mjs round1    # pack for a review panel (after a render)
+```
+
+`film5/drop.mjs` builds and measures the A/B (claims 1 to 4 in `VERIFY.md`);
+`film5/audio.mjs` mixes the film and hands the picture the levels, limiter
+gain and the two hearing models; `film5/film.js` draws the scenes.
