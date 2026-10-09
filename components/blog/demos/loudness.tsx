@@ -1,9 +1,9 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fadeOut, midi, pluck, sequence, type Engine } from './engine';
 import { playDrumStep } from './dynamics';
-import { PlayButton, Readout, Segmented, usePlayer } from './ui';
+import { Answers, PlayButton, Readout, Segmented, usePlayer, whenIdle } from './ui';
 
 const BPM = 92;
 const STEPS = 32;
@@ -62,6 +62,23 @@ async function measure(kind: Master, sampleRate: number): Promise<number> {
     return -0.691 + 10 * Math.log10(sum / data.length);
 }
 
+/** Both masters' loudness, measured once per page from offline renders of this exact loop. */
+let loudnessJob: Promise<Record<Master, number>> | null = null;
+function measureBoth(): Promise<Record<Master, number>> {
+    loudnessJob ??= Promise.all([measure('dynamic', 48000), measure('loud', 48000)]).then(([dynamic, loud]) => ({ dynamic, loud }));
+    return loudnessJob;
+}
+
+/** Gain for one master: with normalization on, the louder master is turned down to match the quieter one. */
+function levelFor(kind: Master, norm: boolean, measured: Record<Master, number> | null): number {
+    if (!norm || !measured) return 1;
+    const target = Math.min(measured.dynamic, measured.loud);
+    return 10 ** ((target - measured[kind]) / 20);
+}
+
+/** Playback level, so the loud master sits with the other demos and the dynamic one stays under -8 dBFS. */
+const NORM_OUT = 1.4;
+
 /**
  * The same loop as a dynamic master and a loud, clipped master. Turn on
  * streaming-style normalization and both play at the same loudness, so
@@ -73,16 +90,21 @@ export function NormalizationDemo() {
     const [lufs, setLufs] = useState<Record<Master, number> | null>(null);
     const nodes = useRef<{ ctx: AudioContext; gains: Record<Master, GainNode>; level: Record<Master, GainNode> } | null>(null);
 
-    const levelFor = (kind: Master, norm: boolean, measured: Record<Master, number> | null) => {
-        if (!norm || !measured) return 1;
-        // Normalization turns the louder master down to match the quieter one.
-        const target = Math.min(measured.dynamic, measured.loud);
-        return 10 ** ((target - measured[kind]) / 20);
-    };
+    // Measure while the page is idle, so pressing play does not wait for it.
+    useEffect(() => {
+        let alive = true;
+        const cancel = whenIdle(() => {
+            void measureBoth().then((m) => alive && setLufs(m));
+        });
+        return () => {
+            alive = false;
+            cancel();
+        };
+    }, []);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
-        master.gain.value = 0.7;
+        master.gain.value = NORM_OUT;
         master.connect(out);
         const src = ctx.createGain();
         const gains = {} as Record<Master, GainNode>;
@@ -98,12 +120,7 @@ export function NormalizationDemo() {
         }
         nodes.current = { ctx, gains, level };
         const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, src, step, time, dur));
-        if (!lufs) {
-            void Promise.all([measure('dynamic', ctx.sampleRate), measure('loud', ctx.sampleRate)]).then(([dynamic, loud]) => {
-                const measured = { dynamic, loud };
-                setLufs(measured);
-            });
-        }
+        if (!lufs) void measureBoth().then(setLufs);
         return () => {
             seq.stop();
             nodes.current = null;
@@ -125,12 +142,19 @@ export function NormalizationDemo() {
         }
     };
 
+    // A measurement that lands while playing with normalization on goes live at once.
+    useEffect(() => {
+        const n = nodes.current;
+        if (!n || !lufs) return;
+        for (const kind of ['dynamic', 'loud'] as Master[]) n.level[kind].gain.setTargetAtTime(levelFor(kind, normalize, lufs), n.ctx.currentTime, 0.02);
+    }, [lufs, normalize]);
+
     const fmt = (v: number) => `${v.toFixed(1)} LUFS`;
     const diff = lufs ? lufs.loud - lufs.dynamic : 0;
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Master"
@@ -153,8 +177,8 @@ export function NormalizationDemo() {
             />
             <Readout
                 items={[
-                    { label: 'Dynamic master', value: lufs ? fmt(lufs.dynamic) : player.playing ? 'Measuring' : '–' },
-                    { label: 'Loud master', value: lufs ? fmt(lufs.loud) : player.playing ? 'Measuring' : '–' },
+                    { label: 'Dynamic master', value: lufs ? fmt(lufs.dynamic) : 'Measuring' },
+                    { label: 'Loud master', value: lufs ? fmt(lufs.loud) : 'Measuring' },
                     { label: 'Normalization turns the loud one down', value: lufs ? `${diff.toFixed(1)} dB` : '–' },
                 ]}
             />
@@ -206,7 +230,7 @@ export function LevelAbDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
@@ -218,18 +242,15 @@ export function LevelAbDemo() {
                     ]}
                 />
             </div>
-            <div>
-                <p className="mb-2 text-sm font-medium text-white/85">Which one sounds better?</p>
-                <Segmented
-                    label="Your pick"
-                    value={pick}
-                    onChange={(v) => setPick(v)}
-                    options={[
-                        { value: 'a', label: 'A sounds better' },
-                        { value: 'b', label: 'B sounds better' },
-                    ]}
-                />
-            </div>
+            <Answers
+                label="Which one sounds better?"
+                value={pick}
+                onChange={(v) => setPick(v)}
+                options={[
+                    { value: 'a', label: 'A sounds better' },
+                    { value: 'b', label: 'B sounds better' },
+                ]}
+            />
             <div aria-live="polite">
                 {pick ? (
                     <p className="text-base leading-7 text-white/80">

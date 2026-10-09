@@ -36,6 +36,19 @@ const PRESETS = {
 };
 
 /**
+ * A DynamicsCompressorNode turns its output up by its own makeup gain:
+ * (1 / its gain at full scale) to the power 0.6, so a low threshold and a
+ * high ratio make it louder than what went in. This undoes that (hard-knee
+ * value; the level matching below takes up the fraction of a dB the knee
+ * leaves), so the compressed path starts out no louder than the dry one.
+ */
+const undoMakeup = (threshold: number, ratio: number) => 10 ** ((0.6 * threshold * (1 - 1 / ratio)) / 20);
+
+/** The level matching may turn the compressed path up by at most 12 dB, and down a little to take up what the knee leaves. */
+const MATCH_MIN = 0.7;
+const MATCH_MAX = 4;
+
+/**
  * Drum loop through a compressor. The compressed path is level-matched
  * to the dry path, so switching compares shape, not loudness.
  */
@@ -46,7 +59,8 @@ export function CompressorDemo() {
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
     const [reduction, setReduction] = useState(0);
-    const nodes = useRef<{ comp: DynamicsCompressorNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
+    const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
+    const params = useRef({ threshold, ratio });
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const bus = ctx.createGain();
@@ -60,17 +74,21 @@ export function CompressorDemo() {
         comp.ratio.value = ratio;
         comp.attack.value = attack / 1000;
         comp.release.value = release / 1000;
+        const undo = ctx.createGain();
+        undo.gain.value = undoMakeup(threshold, ratio);
+        params.current = { threshold, ratio };
         const makeup = ctx.createGain();
         const pre = ctx.createAnalyser();
         const post = ctx.createAnalyser();
         pre.fftSize = post.fftSize = 2048;
         bus.connect(pre);
         bus.connect(dry).connect(master);
-        bus.connect(comp).connect(post);
-        comp.connect(makeup).connect(wet).connect(master);
+        bus.connect(comp).connect(undo);
+        undo.connect(post);
+        undo.connect(makeup).connect(wet).connect(master);
         dry.gain.value = mode === 'off' ? 1 : 0;
         wet.gain.value = mode === 'on' ? 1 : 0;
-        nodes.current = { comp, dry, wet, ctx };
+        nodes.current = { comp, undo, dry, wet, ctx };
 
         const seq = sequence(ctx, 92, 16, (step, time, dur) => playDrumStep(ctx, bus, step, time, dur));
         const a = new Float32Array(2048);
@@ -81,7 +99,7 @@ export function CompressorDemo() {
             smoothPre = smoothPre * 0.85 + rms(pre, a) * 0.15;
             smoothPost = smoothPost * 0.85 + rms(post, b) * 0.15;
             if (smoothPost > 1e-4) {
-                const target = Math.min(8, Math.max(1, smoothPre / smoothPost));
+                const target = Math.min(MATCH_MAX, Math.max(MATCH_MIN, smoothPre / smoothPost));
                 makeup.gain.setTargetAtTime(target, ctx.currentTime, 0.25);
             }
         }, 50);
@@ -99,10 +117,13 @@ export function CompressorDemo() {
     });
 
     const setParam = (name: 'threshold' | 'ratio' | 'attack' | 'release', value: number) => {
+        if (name === 'threshold' || name === 'ratio') params.current = { ...params.current, [name]: value };
         const n = nodes.current;
         if (!n) return;
         const v = name === 'attack' || name === 'release' ? value / 1000 : value;
         n.comp[name].setTargetAtTime(v, n.ctx.currentTime, 0.02);
+        // The node's own makeup gain moves with threshold and ratio; take it back out at the same rate.
+        n.undo.gain.setTargetAtTime(undoMakeup(params.current.threshold, params.current.ratio), n.ctx.currentTime, 0.02);
     };
 
     const applyMode = (next: Mode) => {
@@ -129,10 +150,10 @@ export function CompressorDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
-                    label="Compressor"
+                    label="Listen to"
                     value={mode}
                     onChange={applyMode}
                     options={[

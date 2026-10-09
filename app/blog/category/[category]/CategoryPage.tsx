@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { PageTransition } from '@/components/PageTransition';
 import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { TapLink } from '@/components/blog/article/TapLink';
 import { PathLessons } from '@/components/blog/paths/PathLessons';
 import { DialectMark } from '@/components/blog/figures/DialectMark';
 import type { Category } from '@/lib/blog-data';
@@ -11,10 +12,11 @@ interface CategoryPageProps {
     category: Category;
     path: LearningPath;
     allCategories: Category[];
+    glossaryCount: number;
 }
 
 /** A category read as a learning path, in lesson order. */
-export function CategoryPage({ category, path, allCategories }: CategoryPageProps) {
+export function CategoryPage({ category, path, allCategories, glossaryCount }: CategoryPageProps) {
     const lessons = path.articles.map((a) => ({
         slug: a.slug,
         title: a.title,
@@ -25,10 +27,12 @@ export function CategoryPage({ category, path, allCategories }: CategoryPageProp
 
     return (
         <PageTransition>
-            <main className="editorial-shell text-white">
+            <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
                 <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
-                        <TextLink href="/blog">All articles</TextLink>
+                        <nav aria-label="Breadcrumb" className="-my-3 text-sm font-medium text-white">
+                            <TapLink href="/blog">All lessons</TapLink>
+                        </nav>
                         {/* The group's mark: the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
                         <p className="mt-6 flex items-center gap-2 text-sm text-white/55">
                             <DialectMark dialect={dialectForCategory(category.slug)} />
@@ -38,6 +42,13 @@ export function CategoryPage({ category, path, allCategories }: CategoryPageProp
                             {category.name}
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{category.description}</p>
+                        <p className="mt-4 text-sm text-white/60">
+                            Stuck on a term?{' '}
+                            <Link href="/learn/glossary" className="vgp-link text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                                The glossary explains {glossaryCount} of them
+                            </Link>
+                            .
+                        </p>
                     </div>
                 </section>
 
@@ -47,7 +58,7 @@ export function CategoryPage({ category, path, allCategories }: CategoryPageProp
                             <PathLessons lessons={lessons} />
                         ) : (
                             <p className="py-16 text-lg text-white/75">
-                                No articles in this category yet. <TextLink href="/blog" inline>Browse all articles</TextLink>.
+                                No lessons in this path yet. <TextLink href="/blog" inline>Browse all lessons</TextLink>.
                             </p>
                         )}
 
@@ -60,7 +71,7 @@ export function CategoryPage({ category, path, allCategories }: CategoryPageProp
                                         <li key={cat.slug}>
                                             <Link
                                                 href={`/blog/category/${cat.slug}`}
-                                                className="flex min-h-10 items-center rounded-md border border-white/10 px-3.5 text-sm font-medium text-white/65 transition-colors hover:border-white/25 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                                className="flex min-h-11 items-center rounded-md border border-white/10 px-3.5 text-sm font-medium text-white/65 transition-colors hover:border-white/25 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                             >
                                                 {cat.name}
                                             </Link>

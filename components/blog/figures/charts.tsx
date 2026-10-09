@@ -61,7 +61,8 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
             {leg.node}
-            <Title dialect={d} x={0} y={top - 12}>
+            {/* Italic leans out past its start, so it starts a hair in. */}
+            <Title dialect={d} x={d.italic ? 2 : 0} y={top - 12}>
                 {spec.yLabel} ↑
             </Title>
             {/* The grid. These are shapes, not measurements, so no dialect adds a value scale. Technical and mind
@@ -365,6 +366,27 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
     const rangeTop = arcTop + arcsH + 4;
     const h = rangeTop + (spec.ranges?.length ?? 0) * 26 + 2 + (d.name === 'business' ? 6 : 0);
     const tickLabel = (t: number) => (spec.unit && t === ticks[ticks.length - 1] ? `${t} ${spec.unit}` : `${t}`);
+    const tickAnchor = (t: number): Anchor => (xAt(t) < 20 ? 'start' : xAt(t) > w - 40 ? 'end' : 'middle');
+    // Tick numbers that would run into each other on a phone are thinned: the ticks stay, every number that
+    // fits keeps its place, and the last one (it carries the unit) wins over its neighbour.
+    const labelled = (() => {
+        const span = (t: number) => {
+            const tw = textWidth(tickLabel(t));
+            const a = tickAnchor(t);
+            const from = a === 'start' ? xAt(t) : a === 'end' ? xAt(t) - tw : xAt(t) - tw / 2;
+            return [from, from + tw] as const;
+        };
+        const kept: number[] = [];
+        ticks.forEach((t, i) => {
+            const prev = kept[kept.length - 1];
+            if (prev === undefined || span(t)[0] - span(prev)[1] >= 8) kept.push(t);
+            else if (i === ticks.length - 1 && kept.length > 1) {
+                kept.pop();
+                if (span(t)[0] - span(kept[kept.length - 1])[1] >= 8) kept.push(t);
+            }
+        });
+        return new Set(kept);
+    })();
     // An instrument scale is graduated: unlabelled minor ticks between the numbered ones, when the step divides evenly.
     const minor = d.name === 'technical' && !spec.ticks ? minorTicks(ticks, spec.min, spec.max) : [];
 
@@ -385,9 +407,11 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                     ) : (
                         <line x1={xAt(t)} x2={xAt(t)} y1={axisY - 4} y2={axisY + 4} stroke={C.soft} />
                     )}
-                    <Label x={xAt(t)} y={axisY + 20} anchor={xAt(t) < 20 ? 'start' : xAt(t) > w - 40 ? 'end' : 'middle'}>
-                        {tickLabel(t)}
-                    </Label>
+                    {labelled.has(t) ? (
+                        <Label x={xAt(t)} y={axisY + 20} anchor={tickAnchor(t)}>
+                            {tickLabel(t)}
+                        </Label>
+                    ) : null}
                 </g>
             ))}
             {sorted.map((marker, i) => {
@@ -426,12 +450,17 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                 const y = rangeTop + i * 26;
                 const a = xAt(range.from);
                 const b = xAt(range.to);
-                const inside = textWidth(range.label) + 12 < b - a;
-                const after = b + 6 + textWidth(range.label) < w;
+                const tw = textWidth(range.label);
+                // Inside the range when it fits, else after it, else before it; with no room on either side it starts
+                // inside and runs on over the grey, which it reads clearly against.
+                const inside = tw + 12 < b - a;
+                const after = b + 6 + tw < w;
+                const before = a - 6 - tw >= 0;
+                const at = inside ? { x: a + 6, anchor: 'start' as const } : after ? { x: b + 6, anchor: 'start' as const } : before ? { x: a - 6, anchor: 'end' as const } : { x: Math.min(a + 6, w - tw), anchor: 'start' as const };
                 return (
                     <g key={range.label}>
                         <rect x={a} y={y} width={Math.max(2, b - a)} height={16} rx={cornerOf(d, 16, b - a)} fill={C.dim} />
-                        <Label x={inside ? a + 6 : after ? b + 6 : a - 6} y={y + 12} anchor={inside || after ? 'start' : 'end'} fill={inside ? C.ink : C.text}>
+                        <Label x={at.x} y={y + 12} anchor={at.anchor} fill={inside ? C.ink : C.text}>
                             {range.label}
                         </Label>
                     </g>
@@ -478,10 +507,6 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
     const labelCol = Math.min(narrow ? 76 : 110, Math.max(...spec.layers.map((l) => textWidth(l.label, size))) + 10);
     const rowH = narrow ? 22 : 24;
     const densityH = spec.density ? 40 : 0;
-    const headY = densityH + 16;
-    const gridTop = headY + 10;
-    const gridBottom = gridTop + spec.layers.length * (rowH + 4);
-    const h = gridBottom + 2 + (d.name === 'business' ? 6 : 0);
     const totalBars = spec.sections.reduce((sum, s) => sum + (s.bars ?? 8), 0);
     const music = d.name === 'music';
     // The score closes on a final bar line, so its grid stops short of the edge to leave room for it.
@@ -493,8 +518,19 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
         cols.push({ x: labelCol + (acc / totalBars) * avail, width: ((s.bars ?? 8) / totalBars) * avail, label: narrow && s.short ? s.short : s.label });
         acc += s.bars ?? 8;
     }
+    // Section names centred over their columns; when two would nearly touch on a phone, every other one steps up a row.
+    const heads = cols.map((col) => {
+        const width = textWidth(col.label, size);
+        const x = clamp(col.x + col.width / 2, width / 2, w - width / 2);
+        return { x, from: x - width / 2, to: x + width / 2 };
+    });
+    const stagger = heads.some((head, i) => i > 0 && head.from - heads[i - 1].to < 10);
     const density = spec.sections.map((_, i) => spec.layers.reduce((sum, layer) => sum + (layer.levels[i] ?? 0), 0));
     const maxDensity = Math.max(1, ...density);
+    const headY = densityH + 16 + (stagger ? 15 : 0);
+    const gridTop = headY + 10;
+    const gridBottom = gridTop + spec.layers.length * (rowH + 4);
+    const h = gridBottom + 2 + (d.name === 'business' ? 6 : 0);
     // With a layer in focus, the others are context and turn grey.
     const anyFocus = spec.layers.some((layer) => layer.focus);
 
@@ -512,7 +548,7 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
                 </g>
             ) : null}
             {cols.map((col, i) => (
-                <Label key={i} x={col.x + col.width / 2} y={headY} anchor="middle" size={size} fill={C.text}>
+                <Label key={i} x={heads[i].x} y={stagger && i % 2 === 0 ? headY - 15 : headY} anchor="middle" size={size} fill={C.text}>
                     {col.label}
                 </Label>
             ))}

@@ -105,8 +105,16 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
     const headH = (row: RhythmFigure['rows'][number]) => (narrow ? (noteBelow(row) ? 36 : 20) : 0);
     const rowGap = narrow ? 4 : 12;
     const top = 22;
-    const gridX = labelCol;
-    const gridW = w - labelCol;
+    // A hit pushed early off the first step still lands inside the figure: the grid starts that much further in.
+    const earliest = Math.min(
+        0,
+        ...spec.rows.flatMap((row) =>
+            row.hits.map((hit) => (typeof hit === 'number' ? 0 : (hit.step % 2 === 1 ? ((row.swing ?? 0.5) - 0.5) * 2 : 0) + (hit.offset ?? 0) + hit.step)),
+        ),
+    );
+    const lead = earliest < 0 ? Math.ceil((-earliest * (w - labelCol)) / (spec.steps ?? 16)) : 0;
+    const gridX = labelCol + lead;
+    const gridW = w - gridX;
     const stepW = gridW / steps;
     const ledger = d.name === 'business';
     const rowTops: number[] = [];
@@ -142,7 +150,7 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                                     <Label x={0} y={y + 13} fill={labelFill} weight={lit ? 600 : undefined}>
                                         {row.label}
                                     </Label>
-                                    <Label x={0} y={y + 29} size={noteSize} fontStyle={d.italic ? 'italic' : undefined}>
+                                    <Label x={d.italic ? 2 : 0} y={y + 29} size={noteSize} fontStyle={d.italic ? 'italic' : undefined}>
                                         {row.note}
                                     </Label>
                                 </g>
@@ -165,7 +173,7 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                                     {row.label}
                                 </Label>
                                 {row.note ? (
-                                    <Label x={0} y={laneY + 27} size={noteSize} fontStyle={d.italic ? 'italic' : undefined}>
+                                    <Label x={d.italic ? 2 : 0} y={laneY + 27} size={noteSize} fontStyle={d.italic ? 'italic' : undefined}>
                                         {row.note}
                                     </Label>
                                 ) : null}
@@ -301,9 +309,16 @@ export function Stereo({ spec, w, dialect }: { spec: StereoFigure; w: number; di
                 <g key={side}>
                     <rect x={cx + side * span - 9} y={speakerY - 9} width={18} height={18} rx={d.name === 'mind' ? 6 : 3} fill="none" stroke={C.soft} />
                     <circle cx={cx + side * span} cy={speakerY} r={4} fill={C.soft} />
-                    <Label x={cx + side * span + side * 16} y={speakerY + 4} anchor={side < 0 ? 'end' : 'start'}>
-                        {side < 0 ? 'Left' : 'Right'}
-                    </Label>
+                    {/* Beside its speaker, or under it on a phone, where the side has no room. */}
+                    {narrow ? (
+                        <Label x={cx + side * span} y={speakerY + 26} anchor="middle">
+                            {side < 0 ? 'Left' : 'Right'}
+                        </Label>
+                    ) : (
+                        <Label x={cx + side * span + side * 16} y={speakerY + 4} anchor={side < 0 ? 'end' : 'start'}>
+                            {side < 0 ? 'Left' : 'Right'}
+                        </Label>
+                    )}
                 </g>
             ))}
             <line x1={cx} x2={cx} y1={back - 10} y2={front + 10} stroke={C.grid} strokeDasharray={d.refDash} strokeLinecap={d.cap} />

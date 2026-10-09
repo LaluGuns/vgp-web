@@ -6,7 +6,7 @@
  * reader. The article text itself is rendered on the server.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Bookmark, Check, Copy, Share2 } from 'lucide-react';
 import { MasterclassShareModal } from '@/components/blog/MasterclassShareModal';
@@ -176,9 +176,10 @@ export function ArticleOutline({ slug, headings, accent = 'var(--accent)' }: { s
     );
 }
 
-export function OutlineList({ headings, active }: { headings: OutlineItem[]; active?: string }) {
+/** Section links. `touch` gives each link a 44 px row, for phones. */
+export function OutlineList({ headings, active, touch = false }: { headings: OutlineItem[]; active?: string; touch?: boolean }) {
     return (
-        <ol className="space-y-1">
+        <ol className={touch ? '' : 'space-y-1'}>
             {headings.map((h, i) => {
                 const isActive = active === h.id;
                 return (
@@ -186,16 +187,106 @@ export function OutlineList({ headings, active }: { headings: OutlineItem[]; act
                         <a
                             href={`#${h.id}`}
                             aria-current={isActive ? 'location' : undefined}
-                            className={`flex gap-3 border-l py-1.5 pl-3 text-sm leading-snug transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
-                                isActive ? 'border-white text-white' : 'border-white/10 text-white/55 hover:text-white'
-                            }`}
+                            className={`flex gap-3 border-l pl-3 text-sm leading-snug transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                                touch ? 'min-h-11 items-center py-2.5' : 'py-1.5'
+                            } ${isActive ? 'border-white text-white' : 'border-white/10 text-white/60 hover:text-white'}`}
                         >
-                            <span className="w-5 shrink-0 tabular-nums text-white/50">{i + 1}.</span>
+                            <span className="w-5 shrink-0 tabular-nums text-white/50" aria-hidden="true">
+                                {i + 1}.
+                            </span>
                             <span>{h.title}</span>
                         </a>
                     </li>
                 );
             })}
         </ol>
+    );
+}
+
+/**
+ * Phones have no outline beside the text, so once the reader is past the
+ * inline "In this article" list a small Contents button stays in reach,
+ * above the bottom navigation. It opens the section list as a sheet.
+ */
+export function MobileContents({ headings }: { headings: OutlineItem[] }) {
+    const [visible, setVisible] = useState(false);
+    const [active, setActive] = useState('');
+    const sheet = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        let frame = 0;
+        const update = () => {
+            frame = 0;
+            const start = document.getElementById('article-outline-inline');
+            const end = document.getElementById('article-end');
+            const pastStart = start ? start.getBoundingClientRect().bottom < 0 : window.scrollY > 600;
+            const beforeEnd = end ? end.getBoundingClientRect().top > window.innerHeight * 0.6 : true;
+            setVisible(pastStart && beforeEnd);
+            let current = '';
+            for (const heading of headings) {
+                const el = document.getElementById(heading.id);
+                if (el && el.getBoundingClientRect().top <= 140) current = heading.id;
+            }
+            setActive(current);
+        };
+        const onScroll = () => {
+            if (!frame) frame = requestAnimationFrame(update);
+        };
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        return () => {
+            cancelAnimationFrame(frame);
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onScroll);
+        };
+    }, [headings]);
+
+    if (headings.length < 2) return null;
+
+    return (
+        <div className="lg:hidden">
+            <button
+                type="button"
+                onClick={() => sheet.current?.togglePopover()}
+                aria-haspopup="dialog"
+                tabIndex={visible ? undefined : -1}
+                aria-hidden={visible ? undefined : true}
+                data-visible={visible ? '' : undefined}
+                className={`vgp-contents-button fixed right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 bg-[var(--surface-strong)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-[opacity,transform] duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
+                    visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
+                }`}
+            >
+                <span aria-hidden="true" className="flex flex-col gap-[3px]">
+                    <span className="block h-px w-3.5 bg-current" />
+                    <span className="block h-px w-3.5 bg-current" />
+                    <span className="block h-px w-2.5 bg-current" />
+                </span>
+                Contents
+            </button>
+            <div
+                ref={sheet}
+                id="article-contents"
+                {...({ popover: 'auto' } as Record<string, string>)}
+                role="dialog"
+                aria-label="In this article"
+                className="vgp-contents-pop"
+                onClick={(event) => {
+                    if ((event.target as HTMLElement).closest('a')) sheet.current?.hidePopover();
+                }}
+            >
+                <div className="mb-2 flex items-center justify-between gap-4">
+                    <p className="text-base font-semibold text-white">In this article</p>
+                    <button
+                        type="button"
+                        onClick={() => sheet.current?.hidePopover()}
+                        className="-mr-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-sm text-white/70 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                    >
+                        Close
+                    </button>
+                </div>
+                <OutlineList headings={headings} active={active} touch />
+            </div>
+        </div>
     );
 }

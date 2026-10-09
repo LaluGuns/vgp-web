@@ -64,6 +64,56 @@ function readSaved(): string[] {
     }
 }
 
+// Back from a lesson should land where the reader left the list. The App Router does not
+// restore scroll on Back, so remember the position per URL for this tab, and restore it
+// only when the list mounts because of a Back or Forward (a popstate just before).
+const SCROLL_KEY = 'vgp_lessons_scroll';
+let lastTraverse = 0;
+if (typeof window !== 'undefined') {
+    window.addEventListener('popstate', () => {
+        lastTraverse = Date.now();
+    });
+}
+
+function readScroll(): Record<string, number> {
+    try {
+        const value: unknown = JSON.parse(sessionStorage.getItem(SCROLL_KEY) || '{}');
+        return value && typeof value === 'object' ? (value as Record<string, number>) : {};
+    } catch {
+        return {};
+    }
+}
+
+function useListScrollMemory(pathname: string) {
+    useEffect(() => {
+        const here = () => location.pathname + location.search;
+        const saved = readScroll()[here()];
+        let frame = 0;
+        if (Date.now() - lastTraverse < 1500 && typeof saved === 'number') {
+            frame = requestAnimationFrame(() => window.scrollTo({ top: saved, behavior: 'instant' }));
+        }
+        let pending = 0;
+        const remember = () => {
+            if (pending) return;
+            pending = requestAnimationFrame(() => {
+                pending = 0;
+                if (location.pathname !== pathname) return;
+                try {
+                    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({ ...readScroll(), [here()]: Math.round(window.scrollY) }));
+                } catch {
+                    // Without storage, Back simply starts at the top.
+                }
+            });
+        };
+        window.addEventListener('scroll', remember, { passive: true });
+        return () => {
+            cancelAnimationFrame(frame);
+            cancelAnimationFrame(pending);
+            window.removeEventListener('scroll', remember);
+        };
+    }, [pathname]);
+}
+
 const chipClass = (active: boolean) =>
     `inline-flex min-h-11 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
         active ? 'border-white/70 text-white' : 'border-white/10 text-white/60 hover:border-white/25 hover:text-white'
@@ -192,6 +242,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const read = useReadArticles();
     const params = useSearchParams();
     const pathname = usePathname();
+    useListScrollMemory(pathname);
 
     const catParam = params.get('cat');
     const category = catParam && categories.some((c) => c.slug === catParam) ? catParam : 'all';
@@ -468,8 +519,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                                   ? `No lesson matches "${query}".`
                                                   : 'No lessons in this path yet.'}
                                         </p>
-                                        <button type="button" onClick={resetFilters} className="mt-4 min-h-11 text-sm font-medium text-white vgp-link">
-                                            Show all lessons
+                                        <button
+                                            type="button"
+                                            onClick={resetFilters}
+                                            className="mt-4 inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        >
+                                            <span className="vgp-link">Show all lessons</span>
                                         </button>
                                     </div>
                                 ) : null}

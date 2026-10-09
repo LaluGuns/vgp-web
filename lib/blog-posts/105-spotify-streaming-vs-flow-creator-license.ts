@@ -2,13 +2,12 @@ import { BlogArticle } from '../blog-data';
 
 export const post105: BlogArticle = {
     slug: 'spotify-streaming-vs-flow-creator-license',
-    title: 'Spotify streaming vs a Flow Creator License: what changes for creators',
-    excerpt: 'A stream lets you listen. A creator license defines a specific way to use eligible music in your published work. They solve different problems.',
+    title: 'Streaming a track vs licensing it for your video',
+    excerpt: 'A stream gives you listening access. Putting the recording under your own video needs a license that names that use. What changes, step by step, with the Flow catalog as the example.',
     category: 'licensing-guide',
     publishedAt: '2026-07-19',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 4,
-    featured: true,
     summary: [
         'Streaming a track gives you listening access. It does not give you permission to use the recording in your own published work.',
         'Flow Creator Music is royalty-free with an active Flow Pro creator license, for eligible City Pop, Cyberpunk Jazz and Neo Synthwave recordings.',
@@ -17,11 +16,11 @@ export const post105: BlogArticle = {
     figures: {
         paths: {
             type: 'flow',
-            caption: 'Two separate paths. Spotify is where you listen and discover. The Flow catalog is where an eligible recording, its license and its download come from.',
-            alt: 'Four steps from previewing a track in the Flow Creator Music catalog to publishing with the attribution line.',
+            caption: 'The license path for one track, from preview to publishing. The step that decides whether a video stays covered is the second: Flow Pro active when you first publish it. Streaming the same track on Spotify adds nothing to this path.',
+            alt: 'Four numbered steps: preview the track in the Flow Creator Music catalog, have Flow Pro active when you first publish, download through Flow and keep the grant record, publish with the exact attribution line. The second step is in the accent.',
             steps: [
                 { label: 'Preview in the Flow catalog', note: 'Only eligible tracks have a license path' },
-                { label: 'Flow Pro active when you publish', note: 'The license is tied to the subscription' },
+                { label: 'Flow Pro active when you publish', note: 'Covers work first published while Pro is active', focus: true },
                 { label: 'Download through Flow, keep the grant', note: 'Your record of what you used and when' },
                 { label: 'Publish with the attribution line', note: 'Exact wording, never translated' },
             ],
@@ -62,64 +61,63 @@ export const post105: BlogArticle = {
             why: 'The license covers background use in published creator work. Redistribution, including releasing the recording on a DSP, stays with Virzy Guns Production.',
         },
     ],
-    content: `## They are different products
+    content: `## Hook: the track you found on a playlist
 
-It is normal to discover a track on Spotify and then wonder whether it can sit behind a YouTube video, a livestream, a podcast or a sponsored reel. The answer is not in the play button.
+You are editing a sponsored coding tutorial at 1 a.m. and a Chill Music Division track comes up on a Spotify playlist. It is exactly the mood the edit needs. You pay for Spotify, the track is right there, and the sponsor wants the video out tomorrow.
 
-Streaming services provide listening access under their own terms. A creator license is a separate agreement that defines how eligible recordings may be used in published work. One is for discovery and listening; the other is for a specific background-music workflow.
+The play button gives you the sound. It does not give you permission to put that recording under a video someone paid you to make.
 
-The difference matters because a recording carries several rights, and a creator needs a permission trail that matches the work they publish.
+## Why it matters: listening and using are different permissions
 
-## What Spotify is for
+A streaming subscription is a license to listen, on the service's terms. Putting a recording into your own published work is a different use of the same copyright, and it needs a license that names that use. A recording carries rights in the composition and in the sound recording, and the owner decides who may use them and how.
 
-Chill Music Division is a division of Virzy Guns Production. Its [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is a place to hear releases and discover the project.
+So the question for any track is where the license for your use comes from. For Chill Music Division recordings, the [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is for listening and discovery. The license path for creator use is the Flow Creator Music catalog, and not every catalog track is on Spotify.
 
-It is not a download portal, a rights-clearance service, or proof that a track may be reused in a commercial or published creator project. We also do not claim that every track in the Flow Creator Music catalog is on Spotify. Where a track is available on a streaming service, listening there still does not replace a creator-use license.
+## How the creator license works
 
-## What Flow Creator Music is for
-
-Flow Creator Music provides a catalog and license path for eligible City Pop, Cyberpunk Jazz and Neo Synthwave recordings. With an active Flow Pro creator license, the intended uses include background music in eligible videos, livestreams, podcasts, study-with-me sessions and technology content, subject to the published terms.
+Flow Creator Music covers eligible City Pop, Cyberpunk Jazz and Neo Synthwave recordings, for users with an active Flow Pro plan who accept the license terms when a grant is created (Flow Creator License V1, 2026). The terms list the covered uses: background music in monetized videos, livestreams, podcasts, study-with-me and coding content, and social and creator videos.
 
 ::figure paths
 
-The workflow:
-
 1. Preview the music in the [Flow Creator Music catalog](https://flow.virzyguns.com/en/creator-music).
-2. Keep Flow Pro active when you first publish the work that uses the recording.
-3. Download the eligible asset through Flow and keep the grant or receipt.
-4. Use the required attribution, exactly as written:
+2. Have Flow Pro active when you first publish the work that uses the recording. Work first published while Pro was active, with a valid grant and the terms followed, stays licensed after an ordinary cancellation. New work needs Pro active again.
+3. Download the track through Flow and keep the grant record.
+4. Put the required attribution, exactly as written, in the video description, stream panel or podcast notes:
 
 \`\`\`
 Music: Flow Creator Music by Chill Music Division / Virzy Guns Production - https://flow.virzyguns.com/creator-music
 \`\`\`
 
-The music is royalty-free with an active Flow Pro creator license. That phrase describes the license model; it does not mean the recordings are copyright-free or public domain.
-
 | | Streaming on Spotify | Flow Creator License |
 | --- | --- | --- |
 | Listen | Yes | Yes |
-| Use as background music in your published work | No | Yes, for eligible tracks and covered uses |
+| Background music in your published work | No | Yes, for eligible tracks and covered uses |
 | Download the file | No | Yes, through Flow |
-| Record of permission | None | The grant or receipt |
+| Record of permission | None | The grant record |
 | Attribution | Not applicable | Required, exact wording |
 
 ## What the license does not allow
 
-Creator licenses are deliberately narrower than ownership. They do not transfer the master recording, publishing or composition rights from Virzy Guns Production. They do not permit standalone redistribution, resale, sublicensing, sampling, remixes, derivative songs, Content ID registration, or uploading the recordings to Spotify, Apple Music or another DSP under a creator's own name.
+The license is narrower than ownership. Rights in the master recording, publishing and composition stay with Virzy Guns Production. You may not register the music or a derivative with Content ID or another rights-management system, resell or redistribute the files as standalone music, sample or remix them, or upload them to a streaming service under your name. A library, template marketplace, app or game needs separate written permission.
 
-If your project is a game, an app, a music library, a template marketplace or another use outside the published creator workflow, ask for separate written permission rather than assuming the subscription covers it.
+## Common mistake: treating royalty-free as copyright-free
 
-## Why the distinction protects creators
+Royalty-free describes how you pay for the license: you do not pay per play. The recordings stay under copyright, and the terms still apply.
 
-A creator needs more than a screenshot of a playlist. They need to know which catalog item was eligible, which terms applied and where the file came from. That is why Flow separates discovery from licensing and makes the catalog, grant, download path and attribution rule explicit.
+The second mistake is keeping no record. A screenshot of a playlist proves you listened. The grant record proves which track you licensed and when, which is what you need if a platform or a sponsor asks.
 
-## Practical takeaway
+## Producer takeaway: listen anywhere, license at the source
 
-Use Spotify to listen to and discover Chill Music Division. Use Flow Creator Music when you need an eligible recording, a royalty-free Flow Pro creator license and the correct download path for published creator work. This article is a plain-language summary; the published terms are what apply.
+Use Spotify to listen and discover. When a track is going under published work, get it from the catalog that licenses it, keep the grant, and paste the attribution line exactly. This lesson is a plain-language summary; the published terms are what apply. For beats rather than background music, the [lesson on commercial and personal use](/blog/commercial-use-vs-personal-use) covers where the line falls.
+
+## References
+
+- Chill Music Division / Virzy Guns Production. (2026). *FLOW Creator License V1* (effective 19 July 2026). https://flow.virzyguns.com/en/license
+- US Copyright Office. (2021). *Circular 56A: Copyright Registration of Musical Compositions and Sound Recordings*. https://www.copyright.gov/circs/circ56a.pdf
 `,
     seo: {
-        title: 'Spotify Streaming vs Creator Music Licensing Explained | Virzy Guns Production',
-        description: 'Understand the difference between streaming music on Spotify and using eligible Flow Creator Music in videos, streams, podcasts, and technology content.',
+        title: 'Streaming a track vs licensing it for video | VGP Studio',
+        description: 'Streaming a track gives you listening access, not permission to use it in your video. How a creator license works, using the Flow catalog as the example.',
         keywords: ['spotify music license for youtube', 'spotify streaming vs music licensing', 'creator music license', 'royalty-free music license for creators', 'Flow Pro creator license', 'Chill Music Division'],
     },
 };

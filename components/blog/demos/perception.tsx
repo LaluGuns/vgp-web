@@ -1,9 +1,26 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer } from './ui';
+import {
+    LevelTrace,
+    Meter,
+    NoteRoll,
+    PlayButton,
+    Segmented,
+    Slider,
+    StepStrip,
+    accentAlpha,
+    blockPower,
+    canvas2d,
+    ruleDash,
+    useDialect,
+    useFrame,
+    usePlayer,
+    whenIdle,
+    type RollNote,
+} from './ui';
 
 // ── Small helpers ───────────────────────────────────────────────────
 
@@ -27,32 +44,6 @@ function gainNode(ctx: BaseAudioContext, value = 1): GainNode {
     return g;
 }
 
-/** A visible label above a control that has none of its own. */
-function Field({ label, children }: { label: string; children: ReactNode }) {
-    return (
-        <div>
-            <p className="mb-2 text-sm font-medium text-white/85">{label}</p>
-            {children}
-        </div>
-    );
-}
-
-/** Sizes a canvas for the screen and returns a context that draws in CSS pixels. */
-function canvas2d(c: HTMLCanvasElement | null): { g: CanvasRenderingContext2D; w: number; h: number } | null {
-    if (!c) return null;
-    const g = c.getContext('2d');
-    if (!g) return null;
-    const dpr = window.devicePixelRatio || 1;
-    const w = c.clientWidth;
-    const h = c.clientHeight;
-    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) {
-        c.width = Math.round(w * dpr);
-        c.height = Math.round(h * dpr);
-    }
-    g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    g.clearRect(0, 0, w, h);
-    return { g, w, h };
-}
 
 /** K-weighting from ITU-R BS.1770: a rough model of how loud a signal sounds. */
 function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
@@ -306,6 +297,17 @@ interface MidSidePower {
     side: number;
 }
 
+let midSideJob: Promise<MidSidePower> | null = null;
+
+/** The mix's mid and side power, measured once per page. Their ratio barely depends on the sample rate, so it can run before anything plays. */
+function midSidePower(): Promise<MidSidePower> {
+    midSideJob ??= measureMidSide(48000).catch((error: unknown) => {
+        midSideJob = null;
+        throw error;
+    });
+    return midSideJob;
+}
+
 /** K-weighted power of the mix's mid and side, rendered offline from the same notes. */
 async function measureMidSide(sampleRate: number): Promise<MidSidePower> {
     const stepDur = 60 / MIX_BPM / 4;
@@ -457,7 +459,6 @@ export function WidthDemo() {
     const [meters, setMeters] = useState<{ corr: number; mid: number; side: number } | null>(null);
     const scope = useRef<HTMLCanvasElement>(null);
     const nodes = useRef<WidthNodes | null>(null);
-    const measuring = useRef(false);
     const smooth = useRef({ ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 });
     const live = useRef<WidthSettings>({ sideDb, midDb, mono, matched, ms });
     useEffect(() => {
@@ -468,6 +469,20 @@ export function WidthDemo() {
     useEffect(() => {
         smooth.current.at = 0;
     }, [mono]);
+    // Measure the mix while the page is idle, so pressing play does not wait for it.
+    useEffect(() => {
+        let alive = true;
+        const cancel = whenIdle(() => {
+            midSidePower().then(
+                (m) => alive && setMs(m),
+                () => {},
+            );
+        });
+        return () => {
+            alive = false;
+            cancel();
+        };
+    }, []);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -511,14 +526,7 @@ export function WidthDemo() {
         applyWidth(n, live.current);
         smooth.current = { ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 };
 
-        if (!live.current.ms && !measuring.current) {
-            measuring.current = true;
-            void measureMidSide(ctx.sampleRate)
-                .then(setMs)
-                .finally(() => {
-                    measuring.current = false;
-                });
-        }
+        if (!live.current.ms) midSidePower().then(setMs, () => {});
         const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (step, time, dur) => playMixStep(ctx, bus, step, time, dur));
         return () => {
             seq.stop();
@@ -579,7 +587,7 @@ export function WidthDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Playback"
@@ -614,24 +622,22 @@ export function WidthDemo() {
                 />
                 <Slider label="Mid level" value={midDb} min={-12} max={0} onChange={setMidDb} format={(v) => fmtDb(v, 0)} />
             </div>
-            <Field label="Loudness">
-                <Segmented
-                    label="Loudness"
-                    value={matched ? 'matched' : 'raw'}
-                    onChange={(v) => setMatched(v === 'matched')}
-                    options={[
-                        { value: 'matched', label: 'Matched' },
-                        { value: 'raw', label: 'Not matched' },
-                    ]}
-                />
-                <p className="mt-2 text-xs leading-5 text-white/50">
-                    {matched
+            <Segmented
+                label="Loudness"
+                value={matched ? 'matched' : 'raw'}
+                onChange={(v) => setMatched(v === 'matched')}
+                options={[
+                    { value: 'matched', label: 'Matched' },
+                    { value: 'raw', label: 'Not matched' },
+                ]}
+                hint={
+                    matched
                         ? ms
                             ? `Matching changes the output by ${fmtDb(matchDb)} so the stereo mix stays at the same loudness.`
-                            : 'Matching starts once the mix has been measured, a moment after you press play.'
-                        : 'Raising the sides now also makes the mix louder, which can make wider seem better.'}
-                </p>
-            </Field>
+                            : 'Matching starts once the mix has been measured, a moment after the page loads.'
+                        : 'Raising the sides now also makes the mix louder, which can make wider seem better.'
+                }
+            />
             <p className="text-sm leading-6 text-white/60">
                 Drums, bass and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides come
                 up, the correlation falls toward 0 and the middle parts take a smaller share of the mix, so the voice and kick seem to sit further back. Switch to mono
@@ -717,18 +723,16 @@ export function MonitorLevelDemo() {
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <Field label="Playback level">
-                <Segmented
-                    label="Playback level"
-                    value={step}
-                    onChange={choose}
-                    options={[
-                        { value: 'quiet', label: 'Quiet, -24 dB' },
-                        { value: 'medium', label: 'Medium, -12 dB' },
-                        { value: 'loud', label: 'Loud, 0 dB' },
-                    ]}
-                />
-            </Field>
+            <Segmented
+                label="Playback level"
+                value={step}
+                onChange={choose}
+                options={[
+                    { value: 'quiet', label: 'Quiet, -24 dB' },
+                    { value: 'medium', label: 'Medium, -12 dB' },
+                    { value: 'loud', label: 'Loud, 0 dB' },
+                ]}
+            />
             <div className="space-y-4">
                 {BANDS.map((band, i) => {
                     const db = bands ? bands[i] + STEP_DB[step] : undefined;
@@ -783,24 +787,39 @@ const RD_TRIM = 0.8;
 const REVERB_LEVEL = 1.3;
 const THROW_LEVEL = 1;
 
-/** A generated stereo hall: decaying noise that also loses its top end as it fades. */
+const halls = new WeakMap<BaseAudioContext, AudioBuffer>();
+
+/**
+ * A generated stereo hall: decaying noise that also loses its top end as it
+ * fades. Built once per audio context. A running product for the decay and
+ * an integer noise generator keep it quick on a slow phone.
+ */
 function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
+    const cached = halls.get(ctx);
+    if (cached) return cached;
     const sr = ctx.sampleRate;
     const length = Math.max(1, Math.floor(sr * seconds));
     const buf = ctx.createBuffer(2, length, sr);
+    const decay = 10 ** (-3 / length);
+    const fadeIn = sr * 0.005;
     for (let c = 0; c < 2; c++) {
         const data = buf.getChannelData(c);
-        let seed = 7 + c * 7919;
+        let seed = (7 + c * 7919) | 0;
         let smooth = 0;
+        let env = 1;
         for (let i = 0; i < length; i++) {
-            seed = (seed * 16807) % 2147483647;
-            const white = (seed / 2147483647) * 2 - 1;
-            const x = i / length;
-            smooth += (white - smooth) * (0.9 - 0.55 * x);
+            // xorshift32: white noise from -1 to 1.
+            seed ^= seed << 13;
+            seed ^= seed >>> 17;
+            seed ^= seed << 5;
+            const white = seed / 2147483648;
+            smooth += (white - smooth) * (0.9 - (0.55 * i) / length);
             // -60 dB at the end, with a 5 ms fade in.
-            data[i] = smooth * Math.pow(10, -3 * x) * Math.min(1, i / (sr * 0.005));
+            data[i] = smooth * env * (i < fadeIn ? i / fadeIn : 1);
+            env *= decay;
         }
     }
+    halls.set(ctx, buf);
     return buf;
 }
 
@@ -857,49 +876,6 @@ function applyFx(n: FxNodes, s: FxSettings) {
     for (const g of n.fb) g.gain.setTargetAtTime(s.feedback / 100, t, 0.03);
 }
 
-const TRACE_POINTS = 120;
-
-function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32Array, head: number, dialect: Dialect) {
-    const s = canvas2d(c);
-    if (!s) return;
-    const { g, w, h } = s;
-    const floor = -48;
-    const top = -6;
-    const y = (db: number) => h - 2 - ((Math.max(floor, Math.min(top, db)) - floor) / (top - floor)) * (h - 4);
-    const x = (i: number) => (i / (TRACE_POINTS - 1)) * w;
-    g.strokeStyle = dialect.rule.dash ? 'rgba(255,255,255,0.26)' : 'rgba(255,255,255,0.08)';
-    g.lineWidth = dialect.rule.dash ? 1.4 : 1;
-    g.lineCap = dialect.rule.cap;
-    g.setLineDash(ruleDash(dialect));
-    for (const db of [-34, -20]) {
-        g.beginPath();
-        g.moveTo(0, y(db));
-        g.lineTo(w, y(db));
-        g.stroke();
-    }
-    g.setLineDash([]);
-    const at = (arr: Float32Array, i: number) => arr[(head + i) % TRACE_POINTS];
-    // The dry voice as a grey area.
-    g.beginPath();
-    g.moveTo(0, h);
-    for (let i = 0; i < TRACE_POINTS; i++) g.lineTo(x(i), y(at(dry, i)));
-    g.lineTo(w, h);
-    g.closePath();
-    g.fillStyle = 'rgba(255,255,255,0.16)';
-    g.fill();
-    // The effect return as the accent line.
-    g.beginPath();
-    for (let i = 0; i < TRACE_POINTS; i++) {
-        if (i === 0) g.moveTo(x(i), y(at(wet, i)));
-        else g.lineTo(x(i), y(at(wet, i)));
-    }
-    g.strokeStyle = dialect.accent;
-    g.lineWidth = 1.5;
-    g.lineCap = dialect.cap;
-    g.lineJoin = 'round';
-    g.stroke();
-}
-
 /**
  * A vocal-like phrase into a long reverb. Duck the reverb with an envelope
  * follower on the dry phrase, or drop the reverb and throw only the last
@@ -913,8 +889,6 @@ export function ReverbDuckDemo() {
     const [delayNote, setDelayNote] = useState<DelayNote>('dotted');
     const [feedback, setFeedback] = useState(35);
     const [duck, setDuck] = useState<number | null>(null);
-    const trace = useRef<HTMLCanvasElement>(null);
-    const history = useRef({ dry: new Float32Array(TRACE_POINTS).fill(-120), wet: new Float32Array(TRACE_POINTS).fill(-120), head: 0 });
     const nodes = useRef<FxNodes | null>(null);
     const live = useRef<FxSettings>({ mode, amount, depth, delayNote, feedback });
     useEffect(() => {
@@ -996,8 +970,6 @@ export function ReverbDuckDemo() {
         const n: FxNodes = { ctx, revOut, delOut, depthGain, dl, dr, fb, dryAn, wetAn, ctlAn, buf: new Float32Array(2048), ctl: new Float32Array(256) };
         nodes.current = n;
         applyFx(n, live.current);
-        history.current.dry.fill(-120);
-        history.current.wet.fill(-120);
 
         const seq = sequence(ctx, RD_BPM, RD_STEPS, (step, time, stepDur) => {
             for (const v of RD_PHRASE) {
@@ -1021,16 +993,17 @@ export function ReverbDuckDemo() {
         };
     });
 
+    // The trace reads the dry voice and the effect return as heard, after the playback trim.
+    const read = () => {
+        const n = nodes.current;
+        if (!n) return null;
+        const g = RD_TRIM * RD_TRIM;
+        return { context: blockPower(n.dryAn, n.buf) * g, focus: blockPower(n.wetAn, n.buf) * g };
+    };
+
     useFrame(player.playing, () => {
         const n = nodes.current;
         if (!n) return;
-        const h = history.current;
-        n.dryAn.getFloatTimeDomainData(n.buf);
-        h.dry[h.head] = powerDb(meanSquare(n.buf));
-        n.wetAn.getFloatTimeDomainData(n.buf);
-        h.wet[h.head] = powerDb(meanSquare(n.buf));
-        h.head = (h.head + 1) % TRACE_POINTS;
-        drawTrace(trace.current, h.dry, h.wet, h.head, dialect);
         n.ctlAn.getFloatTimeDomainData(n.ctl);
         const c = n.ctl[n.ctl.length - 1];
         setDuck(-20 * Math.log10(Math.max(1e-3, 1 - duckFloor(live.current) * c)));
@@ -1040,32 +1013,23 @@ export function ReverbDuckDemo() {
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <Field label="Effect">
-                <Segmented
-                    label="Effect"
-                    value={mode}
-                    onChange={setMode}
-                    options={[
-                        { value: 'plain', label: 'Plain reverb' },
-                        { value: 'ducked', label: 'Ducked reverb' },
-                        { value: 'throw', label: 'Delay throw' },
-                    ]}
-                />
-            </Field>
-            <div>
-                <canvas ref={trace} aria-hidden="true" className="vgp-plot block h-24 w-full" />
-                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
-                    <span className="inline-flex items-center gap-1.5">
-                        <span className="h-2.5 w-3 rounded-[1px] bg-white/25" />
-                        Dry voice
-                    </span>
-                    <span className="inline-flex items-center gap-1.5">
-                        <span className="h-0.5 w-3 bg-[var(--accent)]" />
-                        {mode === 'throw' ? 'Delay throw' : 'Reverb'}
-                    </span>
-                    <span>Last 6 seconds</span>
-                </div>
-            </div>
+            <Segmented
+                label="Effect"
+                value={mode}
+                onChange={setMode}
+                options={[
+                    { value: 'plain', label: 'Plain reverb' },
+                    { value: 'ducked', label: 'Ducked reverb' },
+                    { value: 'throw', label: 'Delay throw' },
+                ]}
+            />
+            <LevelTrace
+                active={player.playing}
+                read={read}
+                context="Dry voice"
+                focus={mode === 'throw' ? 'Delay throw' : 'Reverb'}
+                label={`Level over the last six seconds: the dry voice as a grey area and the ${mode === 'throw' ? 'delay throw' : 'reverb'} as a line.`}
+            />
             <Meter
                 label="Reverb turned down by"
                 value={mode === 'ducked' && duck !== null ? duck / 24 : 0}
@@ -1087,19 +1051,17 @@ export function ReverbDuckDemo() {
                 {mode === 'throw' ? <Slider label="Feedback" value={feedback} min={0} max={70} step={5} onChange={setFeedback} format={(v) => `${v}%`} /> : null}
             </div>
             {mode === 'throw' ? (
-                <Field label="Delay time">
-                    <Segmented
-                        label="Delay time"
-                        value={delayNote}
-                        onChange={setDelayNote}
-                        options={[
-                            { value: 'eighth', label: `1/8, ${Math.round(delaySeconds('eighth') * 1000)} ms` },
-                            { value: 'dotted', label: `Dotted 1/8, ${Math.round(delaySeconds('dotted') * 1000)} ms` },
-                            { value: 'quarter', label: `1/4, ${Math.round(delaySeconds('quarter') * 1000)} ms` },
-                        ]}
-                    />
-                    <p className="mt-2 text-xs leading-5 text-white/50">With a 1/4 note, the second repeat lands on the first word of the next line.</p>
-                </Field>
+                <Segmented
+                    label="Delay time"
+                    value={delayNote}
+                    onChange={setDelayNote}
+                    options={[
+                        { value: 'eighth', label: `1/8, ${Math.round(delaySeconds('eighth') * 1000)} ms` },
+                        { value: 'dotted', label: `Dotted 1/8, ${Math.round(delaySeconds('dotted') * 1000)} ms` },
+                        { value: 'quarter', label: `1/4, ${Math.round(delaySeconds('quarter') * 1000)} ms` },
+                    ]}
+                    hint="With a 1/4 note, the second repeat lands on the first word of the next line."
+                />
             ) : null}
             <p className="text-sm leading-6 text-white/60">
                 The dry voice never changes. With plain reverb, the tail of each line runs under the start of the next. Ducked, the reverb drops while the voice sings

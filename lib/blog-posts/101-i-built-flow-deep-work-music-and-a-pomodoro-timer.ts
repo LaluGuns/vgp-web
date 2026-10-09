@@ -2,16 +2,15 @@ import { BlogArticle } from '../blog-data';
 
 export const post101: BlogArticle = {
     slug: 'i-built-flow-deep-work-music-and-a-pomodoro-timer',
-    title: 'I built Flow: deep work music and a pomodoro timer, all produced in-house',
-    excerpt: 'Why I built a focus app around music I produce myself instead of AI playlists or stock loops, and why its stats refuse to guess whether you were focused.',
+    title: 'Studio note: why I built Flow',
+    excerpt: 'A focus timer paired with music I write and produce for long sessions, and why its stats only report what the timer measured.',
     category: 'producer-psychology',
     publishedAt: '2026-07-18',
-    readingTime: 5,
-    featured: true,
-    updatedAt: '2026-10-08',
+    readingTime: 4,
+    updatedAt: '2026-10-09',
     summary: [
         'Flow pairs a pomodoro timer with focus music I write, produce, mix and master myself.',
-        'Music for deep work has the opposite job of a streaming single: it should stay under your thinking, not grab it.',
+        'Music for deep work has the opposite job of a streaming single: it has to stay under your thinking.',
         'Flow reports measured minutes only. A hidden tab is not counted as losing focus.',
     ],
     figures: {
@@ -23,7 +22,7 @@ export const post101: BlogArticle = {
                 { label: 'Open Flow', note: 'No account on the free tier' },
                 { label: 'Press play', note: 'Focus music produced in-house' },
                 { label: 'Work', note: 'The timer stays out of the way' },
-                { label: 'See measured minutes', note: 'No focus scores, no guesses' },
+                { label: 'See measured minutes', note: 'Only what the timer measured', focus: true },
             ],
         },
     },
@@ -34,7 +33,7 @@ export const post101: BlogArticle = {
                 'It has to be loud enough to cover room noise',
                 'It has to avoid melody so it does not pull focus',
                 'It has to be mixed for headphones, not for speakers',
-                'It has to stay under your thinking, not grab it',
+                'It has to sit under your thinking for hours',
             ],
             answer: 3,
             why: 'A single is built to win attention fast. Session music has to be interesting enough that silence feels empty, and calm enough that you forget it is there.',
@@ -53,71 +52,52 @@ export const post101: BlogArticle = {
         {
             q: 'What does Flow Pro add to the free tier?',
             options: [
-                'The full catalog and every visual theme',
+                'The full catalogue and every visual theme',
                 'Focus scores built from your tab activity',
                 'A more precise timer than the free one',
                 'Sessions that start without an account',
             ],
             answer: 0,
-            why: 'The free tier is usable without an account. Flow Pro unlocks the full catalog and the other visual themes.',
+            why: 'The free tier is usable without an account. Flow Pro adds the full catalogue and the other visual themes.',
         },
     ],
-    content: `## The itch
+    content: `## The session that started it
 
-I spend most of my working life inside a DAW. Long sessions, repetitive decisions, and a constant fight for attention. Like a lot of people, I leaned on focus apps and lo-fi playlists to get through it. And like a lot of producers, I kept noticing the same thing: the music in those apps is an afterthought.
+I spend most of my working days inside a DAW: long sessions, small decisions, and a constant fight for attention. Like a lot of people, I used focus apps and lo-fi playlists to get through them, and I kept noticing the same thing. The timers were fine. The music was an afterthought: stock loops licensed in bulk, ambient beds nobody seemed to have written, playlists that changed character every few minutes and pulled my attention with them.
 
-Stock loops licensed in bulk. AI-generated ambient beds with no author behind them. Playlists that change character every three minutes and quietly pull your attention with them. The timer part of these apps is usually fine. The music part is filler.
-
-So I built the version I actually wanted. It is called Flow, it lives at [flow.virzyguns.com](https://flow.virzyguns.com), and there is a full breakdown on the [Flow product page](/flow).
+So I built the version I wanted. It is called Flow, it lives at [flow.virzyguns.com](https://flow.virzyguns.com), and the [Flow page](/flow) has the full details.
 
 ## What Flow is
 
-Flow is a deep work app with two halves that were designed together:
-
-- A pomodoro and deep-work timer that runs your session and stays out of the way.
-- A catalog of focus music that I write, produce, mix, and master myself.
+Flow has two halves that were designed together: a pomodoro and deep-work timer that runs your session and stays out of the way, and a catalogue of focus music that I write, produce, mix and master myself.
 
 ::figure session
 
-You open the site, press play, and work. The free tier needs no account and no email. If you want the full catalog and all the visual themes, Flow Pro is $9.99 a month or $59.99 a year.
+You open the site, press play and work. The free tier needs no account. Flow Pro adds the full catalogue and the other visual themes; current pricing is on the Flow page.
 
-## Why the music is the whole point
+## Why the music is the point
 
-This is the part I care about most, so let me be direct about it.
+A song made for streaming has to win attention fast. Music for a two-hour session has the opposite job. It has to be interesting enough that silence feels empty without it, and calm enough that you forget it is there.
 
-Every track in Flow is produced in-house. None of it is licensed from a library or generated. I sit down and write music specifically for long sessions: controlled dynamics, no sudden vocal hooks, arrangements that develop slowly enough to stay under your thinking instead of on top of it.
+That balance comes from production choices: controlled dynamics, no sudden vocal hooks, arrangements that change slowly. There is research behind some of it. Background sound that keeps changing disrupts verbal memory more than steady sound, and music with vocals disrupts it more than instrumental music. The [lesson on synthwave for coding videos](/blog/neo-synthwave-music-for-coding-and-tech-content) goes through those studies. I can only make those choices because I control the production, which is why every track in Flow is produced in-house.
 
-That matters for a simple reason. Music built for streaming playlists is engineered to grab attention in the first three seconds. Music built for deep work has the opposite job. It has to be interesting enough that silence feels empty without it, and boring enough that you forget it is there. That balance is a production decision, and you can only make it if you control the production.
+## A hidden tab is not lost focus
 
-It is also the honest answer to the obvious question: why would anyone pay for a focus app in 2026? Not for the timer. Timers are free everywhere. Flow Pro is closer to supporting a musician who ships a steady stream of session music than it is to renting a productivity tool.
+One design decision took me longest, and it ended in deleting code. An early build watched whether the browser tab was visible and told you when you had drifted off. I removed it. Switching tabs does not mean you stopped working: you might be reading a document, writing in another window or thinking with your eyes closed.
 
-## Honest stats, or: a hidden tab is not a failure
+So Flow reports measured minutes only. If the timer ran for 48 minutes, you get 48 minutes. There are no focus scores and no guilt pop-ups. What the app cannot measure, it does not report.
 
-One design decision took me the longest to get right, and it ended in deletion.
+## Small things from daily use
 
-An early build tried to detect whether you had "really" focused: it watched tab visibility and would tell you that you drifted off. I removed all of it. Switching to a hidden browser tab does not mean you stopped working. You might be reading a doc, writing in another window, or thinking with your eyes closed. An app that pretends to measure your mind is lying to you with a progress bar.
-
-So Flow reports measured minutes only. If the timer ran for 48 minutes, you get 48 minutes. No focus scores, no guilt popups, no invented metrics. What the app cannot measure, it does not report.
-
-## The small things
-
-A few details that came from using it every day myself:
-
-- **Four visual themes.** Glass, Studio, Terminal, and Editorial. Some days I want a soft translucent room; some days I want a bare command line and nothing else.
-- **Eleven languages.** The interface ships fully localized, because a focus tool should read like it was made for you.
-- **No onboarding.** The first session starts the moment you arrive. Accounts exist for people who want history and Pro, not as a gate.
+Flow has four visual themes, from a soft glass room to a bare terminal, because some days I want one and some days the other. The interface is translated into eleven languages. There is no onboarding: the first session starts when you arrive, and accounts exist for people who want history and Pro.
 
 ## What happens next
 
-Flow is live now. The free tier is genuinely usable, not a demo. New music lands in the catalog as I finish it, which is the part of this project I intend to never stop doing.
-
-If you spend your days in long sessions like I do, try it: [open Flow](https://flow.virzyguns.com) and run one honest pomodoro. If you want the details first, the [product page](/flow) covers features and pricing.
-
-Music carries the session. The timer just keeps the score.
+New music lands in the catalogue as I finish it, and that is the part of this project I intend to keep doing. If you work in long sessions, [open Flow](https://flow.virzyguns.com) and run one pomodoro with it.
 `,
     seo: {
-        title: 'I built Flow: deep work music + a pomodoro timer, produced in-house',
-        description: 'The story behind Flow by Virzy Guns: a deep work app pairing a pomodoro timer with focus music produced in-house, honest measured-only stats, and a free tier with no account.',
+        title: 'Studio note: why I built Flow | VGP Studio',
+        description: 'Why I built Flow: a pomodoro timer paired with focus music I produce myself, stats that report only measured minutes, and a free tier with no account.',
         keywords: ['Flow by Virzy Guns', 'deep work music', 'pomodoro timer app', 'focus music', 'founder story', 'in-house music production']
     }
 };

@@ -422,7 +422,7 @@ export function Bar({
             <rect x={x} y={y} width={w} height={h} rx={rx} {...paint} {...motion} />
             {d.name === 'business' ? (
                 <rect
-                    x={x + w - 1}
+                    x={x + w - 2}
                     y={y - 3}
                     width={2}
                     height={h + 6}

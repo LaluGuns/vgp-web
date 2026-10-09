@@ -5,6 +5,18 @@
  * so no demo can jump out louder than the reader set it.
  */
 
+/** Ceiling of the output limiter, in dBFS. */
+const LIMIT_DB = -6;
+const LIMIT_RATIO = 20;
+/**
+ * A DynamicsCompressorNode turns its whole output up by a makeup gain set by
+ * its threshold and ratio: (1 / its gain at full scale) to the power 0.6, in
+ * Chromium, WebKit and Gecko alike. The engine takes that back out after the
+ * limiter, and puts the same amount in front of it, so quiet material plays
+ * exactly as loud as before and the ceiling is LIMIT_DB, not 3.4 dB above it.
+ */
+const LIMIT_MAKEUP = 10 ** ((-0.6 * LIMIT_DB * (1 - 1 / LIMIT_RATIO)) / 20);
+
 export interface Engine {
     ctx: AudioContext;
     /** Connect demo output here. */
@@ -35,16 +47,18 @@ export function getEngine(): Engine {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new Ctor({ latencyHint: 'interactive' });
     const out = ctx.createGain();
-    out.gain.value = 0.5;
+    out.gain.value = 0.5 * LIMIT_MAKEUP;
     volumeNode = ctx.createGain();
     volumeNode.gain.value = curve(storedVolume());
     const limiter = ctx.createDynamicsCompressor();
-    limiter.threshold.value = -6;
+    limiter.threshold.value = LIMIT_DB;
     limiter.knee.value = 0;
-    limiter.ratio.value = 20;
+    limiter.ratio.value = LIMIT_RATIO;
     limiter.attack.value = 0.002;
     limiter.release.value = 0.12;
-    out.connect(volumeNode).connect(limiter).connect(ctx.destination);
+    const unMakeup = ctx.createGain();
+    unMakeup.gain.value = 1 / LIMIT_MAKEUP;
+    out.connect(volumeNode).connect(limiter).connect(unMakeup).connect(ctx.destination);
     engine = { ctx, out };
     return engine;
 }

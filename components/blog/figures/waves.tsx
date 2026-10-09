@@ -721,7 +721,7 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
             <Title dialect={d} x={ox + size / 2} y={oy + size + 34} anchor="middle">
                 {db ? 'Input level (dB)' : 'Input'}
             </Title>
-            <Title dialect={d} x={10} y={oy + size / 2} anchor="middle" transform={`rotate(-90 10 ${oy + size / 2})`}>
+            <Title dialect={d} x={13} y={oy + size / 2} anchor="middle" transform={`rotate(-90 13 ${oy + size / 2})`}>
                 {db ? 'Output level (dB)' : 'Output'}
             </Title>
             {spec.curves.map((c, i) => {

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, pad, sequence, snare, type Engine } from './engine';
-import { PlayButton, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { PlayButton, Segmented, Slider, StepStrip, useFrame, usePlayer } from './ui';
 
 type GrooveMode = 'swing' | 'snare' | 'tempo' | 'humanize' | 'syncopation';
 
@@ -83,12 +83,35 @@ export function GrooveDemo({ mode }: { mode: GrooveMode }) {
     };
 
     const p = PATTERNS[settings.pattern];
+    // Where each hit lands, in steps, exactly as the sequencer above plays it.
+    const stepMs = 60000 / settings.bpm / 4;
     const swingShift = (settings.swing - 50) / 50;
+    const drift = settings.humanMs / stepMs;
+    const snareShift = settings.snareMs / stepMs;
+    const syncopated = settings.pattern === 'syncopated';
+    const rows: Row[] = [
+        {
+            label: 'Hat',
+            hits: Array.from({ length: 16 }, (_, i) => {
+                const shift = (i % 2 === 1 ? swingShift : 0) + drift * HUMAN[i];
+                const strong = p.hatAccent.includes(i);
+                return { step: i, shift, strong, focus: Math.abs(shift) > 0.004 || (syncopated && strong && i % 4 !== 0) };
+            }),
+        },
+        {
+            label: 'Snare',
+            hits: p.snare.map((i) => {
+                const shift = snareShift + drift * HUMAN[i] * 0.6;
+                return { step: i, shift, strong: true, focus: Math.abs(shift) > 0.004 };
+            }),
+        },
+        { label: 'Kick', hits: p.kick.map((i) => ({ step: i, shift: 0, strong: true, focus: syncopated && i % 4 !== 0 })) },
+    ];
 
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <StepGrid current={current} pattern={p} swingShift={swingShift} snareShift={(settings.snareMs / 1000) / (60 / settings.bpm / 4)} />
+            <StepGrid current={current} rows={rows} />
             {mode === 'swing' ? (
                 <div className="space-y-4">
                     <Slider label="Swing" value={settings.swing} min={50} max={75} onChange={(v) => update({ swing: v })} format={(v) => `${v}%`} hint="50% is straight. Around 66% is a triplet feel." />
@@ -144,22 +167,13 @@ export function GrooveDemo({ mode }: { mode: GrooveMode }) {
     );
 }
 
-function StepGrid({
-    current,
-    pattern,
-    swingShift,
-    snareShift,
-}: {
-    current: number;
-    pattern: { kick: number[]; snare: number[]; hatAccent: number[] };
-    swingShift: number;
-    snareShift: number;
-}) {
-    const rows: { label: string; steps: number[]; shift: (s: number) => number }[] = [
-        { label: 'Hat', steps: Array.from({ length: 16 }, (_, i) => i), shift: (s) => (s % 2 === 1 ? swingShift : 0) },
-        { label: 'Snare', steps: pattern.snare, shift: () => snareShift },
-        { label: 'Kick', steps: pattern.kick, shift: () => 0 },
-    ];
+interface Row {
+    label: string;
+    /** `shift` in steps from the grid; `focus` marks a hit the demo moves or is about, drawn in the accent. */
+    hits: { step: number; shift: number; strong: boolean; focus: boolean }[];
+}
+
+function StepGrid({ current, rows }: { current: number; rows: Row[] }) {
     return (
         <div aria-hidden="true" className="space-y-1.5">
             {rows.map((row) => (
@@ -175,16 +189,13 @@ function StepGrid({
                                 className={`vgp-step border-l ${i % 4 === 0 ? 'border-white/25' : 'border-white/[0.07]'} ${current === i ? 'bg-white/[0.08]' : ''}`}
                             />
                         ))}
-                        {row.steps.map((step) => {
-                            const accent = row.label !== 'Hat' || pattern.hatAccent.includes(step);
-                            return (
-                                <span
-                                    key={step}
-                                    className={`vgp-hit absolute bottom-1 top-1 bg-current ${accent ? 'text-white/85' : 'text-white/40'}`}
-                                    style={{ left: `calc(${((step + row.shift(step)) / 16) * 100}% + 2px)`, width: 'calc(100% / 16 * 0.5)' }}
-                                />
-                            );
-                        })}
+                        {row.hits.map((hit) => (
+                            <span
+                                key={hit.step}
+                                className={`vgp-hit absolute bottom-1 top-1 bg-current ${hit.focus ? 'text-[var(--accent)]' : hit.strong ? 'text-white/85' : 'text-white/40'}`}
+                                style={{ left: `calc(${((hit.step + hit.shift) / 16) * 100}% + 2px)`, width: 'calc(100% / 16 * 0.5)' }}
+                            />
+                        ))}
                     </div>
                 </div>
             ))}
@@ -253,23 +264,23 @@ export function DropDemo() {
         if (elapsed >= 0) setBar(Math.floor(elapsed / c.barDur) % 4);
     });
 
-    const labels = ['Build', 'Build', 'Drop', 'Drop'];
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <div aria-hidden="true" className="grid grid-cols-4 gap-1.5">
-                {labels.map((label, i) => (
-                    <div
-                        key={i}
-                        className={`vgp-cell border px-3 py-2 text-xs transition-colors ${
-                            bar === i ? 'border-white/60 text-white' : 'border-white/10 text-white/50'
-                        }`}
-                    >
-                        Bar {i + 1} · {label}
-                    </div>
-                ))}
+            <div>
+                {/* The last beat of bar 2 drops out of its line when it is left silent. */}
+                <StepStrip
+                    current={bar}
+                    steps={[
+                        { key: 'b1', label: 'Build' },
+                        { key: 'b2', label: strip ? 'Build, thinned' : 'Build', part: gap ? 0.75 : 1, focus: gap || strip },
+                        { key: 'd1', label: 'Drop' },
+                        { key: 'd2', label: 'Drop' },
+                    ]}
+                />
+                <p className="mt-2 text-xs leading-5 text-white/50">Four bars at 118 BPM: two of build, two of drop.</p>
             </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-3">
+            <div>
                 <Segmented
                     label="Before the drop"
                     value={gap ? 'gap' : strip ? 'strip' : 'none'}

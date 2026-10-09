@@ -7,12 +7,11 @@ const tierNames = PUBLIC_CONFIRMED_LICENSES.map((t) => t.name).join(', ');
 export const post109: BlogArticle = {
     slug: 'beat-licensing-explained',
     title: 'Beat licensing explained: what you buy when you lease a beat',
-    excerpt: 'A beat license is permission to use an instrumental within set limits. Here is what that means, how the current tiers differ, and what to check before you release.',
+    excerpt: 'A beat license is permission to use someone else\'s composition and recording within set limits. What you get, what the producer keeps, and what to check before release.',
     category: 'licensing-guide',
     publishedAt: '2026-02-05',
-    updatedAt: '2026-10-08',
-    readingTime: 5,
-    featured: true,
+    updatedAt: '2026-10-09',
+    readingTime: 4,
     summary: [
         'A beat license is permission to use the beat under set terms. The producer keeps the copyright.',
         'Non-exclusive tiers differ in files, stream and copy caps, music videos, radio and paid performances.',
@@ -21,11 +20,11 @@ export const post109: BlogArticle = {
     figures: {
         rights: {
             type: 'flow',
-            caption: 'What a lease covers. You never buy the beat itself; you buy permission to release your song on it within the limits of your tier.',
+            caption: 'What a lease covers. The beat stays the producer\'s property. What you buy is the second step: written permission to release your song on it within the limits of your tier.',
             alt: 'Four steps: the producer owns the beat, you buy a license, you record your song, you release it within the license limits.',
             steps: [
                 { label: 'The producer owns the beat', note: 'Copyright stays with the producer' },
-                { label: 'You buy a license', note: 'Permission with written terms' },
+                { label: 'You buy a license', note: 'Permission with written terms', focus: true },
                 { label: 'You record your song', note: 'Your vocal and writing on the beat' },
                 { label: 'Release within the limits', note: 'Streams, copies, videos, radio, shows' },
             ],
@@ -66,54 +65,63 @@ export const post109: BlogArticle = {
             why: 'Upgrades and their terms have to be confirmed in writing. Asking early keeps the release covered.',
         },
     ],
-    content: `## What a beat license is
+    content: `## Hook: the song that outgrew its lease
 
-When you buy a beat online, you are not buying the beat. You are buying a license: written permission to record a song on the instrumental and release it within specific limits. The producer keeps the copyright in the beat.
+You lease a beat on the smallest tier, record a song on it the same night and put it out everywhere. For two months it does a few hundred plays a week. Then a short clip of the hook takes off, the streams climb past the number in your license, and a sync agency asks whether you can clear the song for an ad.
 
-That is why the license matters more than the price. It decides where your song can go, how far it can travel before you need to upgrade, and what you must do in return, such as crediting the producer.
+You go back to the license file you never opened. It says what you can do, how far the song can travel, and who owns what. The answer for the agency is in that file too.
+
+## Why it matters: a lease is permission with limits
+
+When you buy a beat online you are buying a license: written permission to record a song on the instrumental and release it within specific limits. The producer keeps the copyright in the beat. That is why the license matters more than the price. It decides where your song can go, how far it can travel before you need to upgrade, and what you owe in return, such as a credit.
 
 ::figure rights
 
+## What a song on a leased beat is made of
+
+US copyright law treats a musical composition and a sound recording as two separate works (US Copyright Office, 2021). The composition is the music and words: melody, harmony, rhythm, lyrics. The sound recording is one fixed performance of it. They can have different authors and different owners.
+
+A beat carries both: the producer's composition (the chords, the melody, the drum pattern) and the producer's recording of it. Your song adds your lyrics and topline to the composition and your vocal to the recording. A lease lets you combine your parts with the producer's and release the result. It does not hand you the producer's share of either.
+
 ## Non-exclusive and exclusive
 
-Most beat sales are non-exclusive leases. The producer can license the same beat to other artists, and each license carries caps: how many streams, how many copies, how many music videos, whether radio and paid shows are included.
+Most beat sales are non-exclusive leases. The producer can license the same beat to other artists, and each license carries caps: how many streams and copies, how many music videos, whether radio play and paid shows are included.
 
-An exclusive license is different. From the date of the deal, the producer stops licensing the beat to new buyers. What it includes, what happens to leases sold before it, and who owns what are all set by the contract, so an exclusive is agreed individually. Exclusive does not automatically mean you own the copyright.
+An exclusive license means that, from the date of the deal, the producer stops licensing the beat to new buyers. What it includes, what happens to leases sold before it and who owns what are all set by the contract, so an exclusive is agreed individually. Exclusive does not by itself mean you own the copyright.
 
 ## The current tiers
 
-These are the non-exclusive tiers for Virzy Guns beats right now (${tierNames}). The table is read from the same source as the beat store, so it is always current.
+These are the non-exclusive tiers for Virzy Guns beats right now (${tierNames}). The table is read from the same source as the beat store, so it stays current.
 
 ::licenses
 
-## How to choose a tier
+Choose from where the song is going. A first release to a small audience fits the smallest tier. WAV files, radio and paid performances are listed per tier in the table. If you or an engineer will mix from separate parts, choose a tier with stems. If you expect the song to travel, compare the caps with your plan before release.
 
-Start from where the song is going, not from the price.
+## Common mistake: releasing first, reading later
 
-- If you are writing, demoing or testing an idea with a small audience, the smallest tier covers a first release.
-- If you want WAV files, radio play or paid performances, check which tiers include them in the table.
-- If you or your engineer will mix the song from separate parts, choose a tier that includes stems.
-- If you expect the song to travel far, compare the caps with your plan before release rather than after.
+The most common mistake is the one in the hook. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
 
-## Before you release
+The second is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material in a reference file and lists music licensed without exclusivity as material that does not qualify (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
 
-1. Read the written license you receive at checkout. It is the document that applies, not a product summary or this article.
+The third is assuming that exclusive means you own the beat outright. Ownership depends on the contract, so read it before you sign.
+
+## Producer takeaway: read the license before the release
+
+1. Read the written license you receive at checkout. It is the document that applies, not a product summary or this lesson.
 2. Credit the beat as written in your license: ${credit}.
-3. Do not register a song made on a leased beat with Content ID unless your license says you may.
-4. Keep the license file with your release records.
-5. If the song approaches a cap, ask about an upgrade before you pass it, and get the answer in writing.
+3. Keep the license file with your release records.
+4. If the song approaches a cap, ask about an upgrade before you pass it, and get the answer in writing.
 
-## Common mistakes
+This lesson is a plain-language guide, not legal advice. If something about your use is unclear, ask before you release. You can browse beats and their licenses in the [beat store](/studio/beats), and the [lesson on what each license lets you do](/blog/what-rights-do-you-get-with-each-license) goes through each right in turn.
 
-The most common mistake is releasing first and reading the license later. A song that takes off on a small tier can pass its caps in weeks.
+## References
 
-The second is assuming that "exclusive" means you own the beat outright. Ownership depends on the contract, so read it before you sign.
-
-This article is a plain-language guide, not legal advice. If something about your use is unclear, ask before you release. You can browse beats and their licenses in the [beat store](/studio/beats).
+- US Copyright Office. (2021). *Circular 56A: Copyright Registration of Musical Compositions and Sound Recordings*. https://www.copyright.gov/circs/circ56a.pdf
+- YouTube Help. (n.d.). *Qualify for Content ID*. Retrieved 9 October 2026, from https://support.google.com/youtube/answer/1311402
 `,
     seo: {
-        title: 'Beat Licensing Explained: Leases, Exclusives and Current Tiers | VGP Studio',
-        description: 'What you buy when you lease a beat, how non-exclusive tiers differ, what exclusive rights mean, and what to check before you release.',
+        title: 'Beat licensing explained | VGP Studio',
+        description: 'What you buy when you lease a beat: two copyrights, the producer keeps both, and the limits of your tier. What to check before you release.',
         keywords: ['beat license', 'lease beat', 'exclusive beat', 'non-exclusive license', 'beat rights', 'music licensing'],
     },
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { clickTone, fadeOut, getEngine, midi, noiseBuffer, sequence, type Engine } from './engine';
-import { PlayButton, Readout, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
 
 const SWEEP_FROM = 500;
 const SWEEP_TO = 15000;
@@ -39,7 +39,8 @@ export function AliasingDemo() {
         const osc = ctx.createOscillator();
         const level = ctx.createGain();
         const master = ctx.createGain();
-        master.gain.value = 0.14;
+        // A pure tone is louder than its peak suggests: this puts it at about the loudness of the drum-loop demos.
+        master.gain.value = 0.22;
         osc.connect(level).connect(master).connect(out);
 
         let scheduledUntil = 0;
@@ -105,7 +106,7 @@ export function AliasingDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} label="Play sweep" />
                 <Segmented
                     label="Anti-alias filter"
@@ -138,43 +139,58 @@ export function AliasingDemo() {
     );
 }
 
-/** Input frequency across, stored frequency up. The fold is the alias. */
+/** Input frequency across, stored frequency up. The fold is the alias. Labels are HTML, so they stay readable at any width. */
 function FoldPlot({ rate, filter, input }: { rate: number; filter: Filter; input?: number }) {
-    const w = 320;
-    const h = 130;
-    const pad = { l: 4, r: 4, t: 10, b: 22 };
-    const fx = (f: number) => pad.l + ((f - SWEEP_FROM) / (SWEEP_TO - SWEEP_FROM)) * (w - pad.l - pad.r);
-    const fy = (f: number) => h - pad.b - (f / SWEEP_TO) * (h - pad.t - pad.b);
+    const d = useDialect();
+    // Percent of the plot: input from 500 Hz to 15 kHz across, stored frequency from 0 to 15 kHz up.
+    const px = (f: number) => ((f - SWEEP_FROM) / (SWEEP_TO - SWEEP_FROM)) * 100;
+    const py = (f: number) => 100 - (f / SWEEP_TO) * 100;
     const pts: string[] = [];
     for (let i = 0; i <= 120; i++) {
         const f = SWEEP_FROM + ((SWEEP_TO - SWEEP_FROM) * i) / 120;
         const s = stored(f, rate, filter);
         if (s.gain < 0.05) break;
-        pts.push(`${i === 0 ? 'M' : 'L'}${fx(f).toFixed(1)},${fy(s.freq).toFixed(1)}`);
+        pts.push(`${i === 0 ? 'M' : 'L'}${px(f).toFixed(2)},${py(s.freq).toFixed(2)}`);
     }
     const current = input !== undefined ? stored(input, rate, filter) : null;
     const nyq = rate / 2;
     return (
-        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="block max-w-md" role="img" aria-label="Plot of input frequency against the frequency that gets stored">
-            <rect x={pad.l} y={pad.t} width={w - pad.l - pad.r} height={h - pad.t - pad.b} rx={3} fill="rgba(255,255,255,0.035)" />
-            {nyq < SWEEP_TO ? (
-                <g>
-                    <line x1={fx(nyq)} x2={fx(nyq)} y1={pad.t} y2={h - pad.b} stroke="rgba(255,255,255,0.4)" strokeDasharray="4 4" />
-                    <text x={fx(nyq) + 5} y={pad.t + 12} fontSize={11} fill="rgba(255,255,255,0.6)">
-                        Nyquist
-                    </text>
-                </g>
-            ) : null}
-            <path d={pts.join('')} fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2} />
-            {/* --accent is the lesson group's (DemoSlot); a style, since presentation attributes do not take var(). */}
-            {current && current.gain >= 0.05 ? <circle cx={fx(input!)} cy={fy(current.freq)} r={5} style={{ fill: 'var(--accent)' }} /> : null}
-            <text x={pad.l} y={h - 6} fontSize={11} fill="rgba(255,255,255,0.55)">
-                Input frequency →
-            </text>
-            <text x={w - pad.r} y={h - 6} fontSize={11} fill="rgba(255,255,255,0.55)" textAnchor="end">
-                15 kHz
-            </text>
-        </svg>
+        <div>
+            <div className="vgp-plot relative h-32 w-full">
+                <div className="absolute inset-x-1 inset-y-2">
+                    <svg
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        className="block h-full w-full overflow-visible"
+                        role="img"
+                        aria-label={`Input frequency against the frequency that gets stored, at a ${rate / 1000} kHz sample rate${filter === 'filter' ? ' with the anti-alias filter' : ''}.${nyq < SWEEP_TO ? ` Above the Nyquist limit of ${nyq / 1000} kHz the stored tone ${filter === 'filter' ? 'is removed' : 'folds back down'}.` : ''}`}
+                    >
+                        {nyq < SWEEP_TO ? (
+                            <line x1={px(nyq)} x2={px(nyq)} y1={0} y2={100} stroke="rgba(255,255,255,0.4)" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
+                        ) : null}
+                        <path d={pts.join('')} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth={d.line} strokeLinecap={d.cap} strokeLinejoin={d.join} vectorEffect="non-scaling-stroke" />
+                    </svg>
+                    {nyq < SWEEP_TO ? (
+                        <span className="absolute top-0 ml-1.5 text-[11px] leading-none text-white/60" style={{ left: `${px(nyq)}%` }} aria-hidden="true">
+                            Nyquist
+                        </span>
+                    ) : null}
+                    {/* --accent is the lesson group's (DemoSlot). */}
+                    {current && input !== undefined && current.gain >= 0.05 ? (
+                        <span
+                            aria-hidden="true"
+                            className={`absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 bg-[var(--accent)] ${d.marker === 'square' || d.marker === 'tick' ? '' : 'rounded-full'}`}
+                            style={{ left: `${px(input)}%`, top: `${py(current.freq)}%` }}
+                        />
+                    ) : null}
+                </div>
+            </div>
+            <div className="mt-1 flex justify-between text-[11px] text-white/55" aria-hidden="true">
+                <span>500 Hz</span>
+                <span>Input frequency →</span>
+                <span>15 kHz</span>
+            </div>
+        </div>
     );
 }
 
@@ -189,6 +205,13 @@ function quantizer(bits: number): Float32Array<ArrayBuffer> {
     return curve;
 }
 
+/** Bit-depth demo timing: a new note every 1.6 s, each fading by 66 dB over 1.5 s, so its tail is long and quiet. */
+const NOTE_EVERY = 1.6;
+const NOTE_FADE = 1.5;
+/** The note goes into the converter at about -15 dBFS and is turned up afterwards by this much. */
+const BIT_PRE = 0.1;
+const BIT_POST = 7;
+
 /**
  * A quiet, decaying piano-like note stored at fewer and fewer bits.
  * Dither trades the gritty distortion for a steady hiss.
@@ -200,20 +223,24 @@ export function BitDepthDemo() {
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
-        // The note peaks around -20 dBFS, quiet enough for low bit depths to show.
         const pre = ctx.createGain();
-        pre.gain.value = 0.1;
+        pre.gain.value = BIT_PRE;
         const shaper = ctx.createWaveShaper();
         shaper.curve = quantizer(bits);
         const post = ctx.createGain();
-        post.gain.value = 2.5;
+        post.gain.value = BIT_POST;
+        // Triangular dither of plus or minus one step: two independent noises of half a step each.
         const ditherGain = ctx.createGain();
-        ditherGain.gain.value = dither ? 1 / 2 ** (bits - 1) : 0;
-        const noise = ctx.createBufferSource();
-        noise.buffer = noiseBuffer(ctx);
-        noise.loop = true;
-        noise.connect(ditherGain).connect(shaper);
-        noise.start();
+        ditherGain.gain.value = dither ? 0.5 / 2 ** (bits - 1) : 0;
+        const noises = [0, 0.97].map((offset) => {
+            const noise = ctx.createBufferSource();
+            noise.buffer = noiseBuffer(ctx);
+            noise.loop = true;
+            noise.connect(ditherGain);
+            noise.start(0, offset);
+            return noise;
+        });
+        ditherGain.connect(shaper);
         pre.connect(shaper).connect(post).connect(master).connect(out);
         nodes.current = { ctx, shaper, ditherGain };
         const notes = [60, 64, 67, 72];
@@ -232,18 +259,20 @@ export function BitDepthDemo() {
                 const g = ctx.createGain();
                 g.gain.setValueAtTime(0.0001, t);
                 g.gain.exponentialRampToValueAtTime(a, t + 0.005);
-                g.gain.exponentialRampToValueAtTime(0.0005, t + 2.2);
+                g.gain.exponentialRampToValueAtTime(0.0005, t + NOTE_FADE);
                 osc.connect(g).connect(pre);
                 osc.start(t);
-                osc.stop(t + 2.3);
+                osc.stop(t + NOTE_FADE + 0.1);
             }
         };
         play();
-        const timer = window.setInterval(play, 2400);
+        const timer = window.setInterval(play, NOTE_EVERY * 1000);
         return () => {
             window.clearInterval(timer);
             nodes.current = null;
-            fadeOut(ctx, master, () => noise.stop());
+            fadeOut(ctx, master, () => {
+                for (const n of noises) n.stop();
+            });
         };
     });
 
@@ -255,12 +284,12 @@ export function BitDepthDemo() {
         const n = nodes.current;
         if (!n) return;
         n.shaper.curve = quantizer(b);
-        n.ditherGain.gain.setTargetAtTime(d ? 1 / 2 ** (b - 1) : 0, n.ctx.currentTime, 0.01);
+        n.ditherGain.gain.setTargetAtTime(d ? 0.5 / 2 ** (b - 1) : 0, n.ctx.currentTime, 0.01);
     };
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Dither"
@@ -283,7 +312,7 @@ export function BitDepthDemo() {
             />
             <Readout
                 items={[
-                    { label: 'Quantisation noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
+                    { label: 'Quantization noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
                     { label: 'Steps between silence and full scale', value: (2 ** (bits - 1)).toLocaleString('en-US') },
                 ]}
             />
@@ -295,38 +324,33 @@ export function BitDepthDemo() {
 export function LatencyDemo() {
     const [latency, setLatency] = useState(0);
     const [taps, setTaps] = useState(0);
-    const [metronome, setMetronome] = useState(false);
     const live = useRef(latency);
     useEffect(() => {
         live.current = latency;
     }, [latency]);
-    const metro = useRef<{ stop: () => void } | null>(null);
 
     const tap = () => {
         const { ctx, out } = getEngine();
-        clickTone(ctx, out, ctx.currentTime + live.current / 1000, 900, 0.6);
+        clickTone(ctx, out, ctx.currentTime + live.current / 1000, 900, 0.9);
         setTaps((n) => n + 1);
     };
 
-    useEffect(() => () => metro.current?.stop(), []);
-
-    const toggleMetronome = () => {
-        if (metro.current) {
-            metro.current.stop();
-            metro.current = null;
-            setMetronome(false);
-            return;
-        }
-        const { ctx, out } = getEngine();
+    // The metronome is a demo like the others: starting another demo stops it.
+    const metronome = usePlayer(({ ctx, out }: Engine) => {
+        const bus = ctx.createGain();
+        bus.connect(out);
         const seq = sequence(ctx, 90, 16, (step, time) => {
-            if (step % 4 === 0) clickTone(ctx, out, time, step === 0 ? 2000 : 1500, 0.35);
+            if (step % 4 === 0) clickTone(ctx, bus, time, step === 0 ? 2000 : 1500, 0.7);
         });
-        metro.current = { stop: () => seq.stop() };
-        setMetronome(true);
-    };
+        return () => {
+            seq.stop();
+            fadeOut(ctx, bus);
+        };
+    });
 
     return (
         <div className="space-y-6">
+            <PlayButton playing={metronome.playing} onClick={metronome.toggle} label="Play metronome" />
             <div className="flex flex-wrap items-center gap-4">
                 <button
                     type="button"
@@ -345,14 +369,9 @@ export function LatencyDemo() {
                 >
                     Tap
                 </button>
-                <div className="space-y-2">
-                    <button type="button" onClick={toggleMetronome} aria-pressed={metronome} className="vgp-link text-sm font-medium text-white">
-                        {metronome ? 'Stop the metronome' : 'Tap along to a metronome'}
-                    </button>
-                    <p className="text-xs text-white/50" aria-live="polite">
-                        {taps > 0 ? `${taps} taps` : 'Tap the pad or press Space on it.'}
-                    </p>
-                </div>
+                <p className="min-w-0 flex-1 text-sm leading-6 text-white/60">
+                    {taps > 0 ? `${taps} ${taps === 1 ? 'tap' : 'taps'}.` : 'Tap the pad, or focus it and press Space, along with the metronome.'}
+                </p>
             </div>
             <Slider
                 label="Added latency"

@@ -3,11 +3,30 @@ import { notFound } from 'next/navigation';
 import { articles, getArticleBySlug, getAllSlugs, getCategoryBySlug } from '@/lib/blog-data';
 import { validateAll } from '@/lib/blog/validate';
 import { ogImage } from '@/lib/og';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import { ArticlePage } from './ArticlePage';
 
 interface Props {
     params: Promise<{ slug: string }>;
 }
+
+const SITE = 'https://www.virzyguns.com';
+const BRAND = ' | Virzy Guns Production';
+
+/**
+ * Lesson <title>: the lesson's SEO title without the old "| VGP Studio"
+ * suffix (the root layout's template adds the brand). The brand is kept
+ * only while the whole title stays within about 65 characters.
+ */
+function lessonTitle(seoTitle: string): Metadata['title'] {
+    const base = seoTitle.replace(/\s*\|\s*(?:VGP Studio|VGP Blog|VGP|Virzy Guns Production|Virzy Guns)\s*$/i, '').trim();
+    if (base.length + BRAND.length <= 65) return base;
+    if (base.length + ' | VGP'.length <= 65) return { absolute: `${base} | VGP` };
+    return { absolute: base };
+}
+
+const shareCard = (title: string, readingTime: number) =>
+    ogImage({ kicker: 'Lesson from the studio', title, sub: `${readingTime} min read · Virzy Guns` });
 
 // Generate static paths for all articles. Broken lessons fail the build here.
 export async function generateStaticParams() {
@@ -28,34 +47,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!article) {
         return {
-            title: 'Article Not Found | VGP Studio',
+            title: 'Lesson not found',
         };
     }
 
-    const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
+    const articleUrl = `${SITE}/blog/${article.slug}`;
+    const card = shareCard(article.title, article.readingTime);
 
     return {
-        title: article.seo.title,
+        title: lessonTitle(article.seo.title),
         description: article.seo.description,
         keywords: article.seo.keywords,
         alternates: {
             canonical: articleUrl,
         },
         openGraph: {
-            title: article.seo.title,
+            title: article.title,
             description: article.seo.description,
             type: 'article',
             url: articleUrl,
             publishedTime: article.publishedAt,
             modifiedTime: article.updatedAt ?? article.publishedAt,
             authors: ['Virzy Guns'],
-            images: [ogImage({ kicker: 'Notes from the studio', title: article.title, sub: `${article.readingTime} min read · Virzy Guns` })],
+            images: [card],
         },
         twitter: {
             card: 'summary_large_image',
             title: article.title,
-            description: article.excerpt,
-            images: [ogImage({ kicker: 'Notes from the studio', title: article.title, sub: `${article.readingTime} min read · Virzy Guns` }).url],
+            description: article.seo.description,
+            images: [card.url],
         },
     };
 }
@@ -70,10 +90,10 @@ export default async function BlogArticlePage({ params }: Props) {
 
     const category = getCategoryBySlug(article.category);
 
-
     // JSON-LD structured data for SEO
-    const articleUrl = `https://www.virzyguns.com/blog/${article.slug}`;
-    const imageUrl = 'https://www.virzyguns.com/branding/vgp-logo-chrome-full.png';
+    const articleUrl = `${SITE}/blog/${article.slug}`;
+    const logoUrl = `${SITE}/branding/vgp-logo-chrome-full.png`;
+    const card = shareCard(article.title, article.readingTime);
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Article',
@@ -84,21 +104,28 @@ export default async function BlogArticlePage({ params }: Props) {
             '@id': articleUrl,
         },
         url: articleUrl,
-        image: imageUrl,
+        image: {
+            '@type': 'ImageObject',
+            url: `${SITE}${card.url}`,
+            width: card.width,
+            height: card.height,
+        },
         datePublished: article.publishedAt,
         dateModified: article.updatedAt ?? article.publishedAt,
+        articleSection: category?.name,
+        keywords: article.seo.keywords.join(', '),
         author: {
             '@type': 'Person',
             name: 'Virzy Guns',
-            url: 'https://www.virzyguns.com/about',
+            url: `${SITE}/about`,
         },
         publisher: {
             '@type': 'Organization',
             name: 'Virzy Guns Production',
-            url: 'https://www.virzyguns.com',
+            url: SITE,
             logo: {
                 '@type': 'ImageObject',
-                url: imageUrl,
+                url: logoUrl,
             },
         },
     };
@@ -106,27 +133,18 @@ export default async function BlogArticlePage({ params }: Props) {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.virzyguns.com' },
-            { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://www.virzyguns.com/blog' },
-            { '@type': 'ListItem', position: 3, name: category?.name || article.category, item: `https://www.virzyguns.com/blog/category/${article.category}` },
+            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+            { '@type': 'ListItem', position: 2, name: 'Lessons', item: `${SITE}/blog` },
+            { '@type': 'ListItem', position: 3, name: category?.name || article.category, item: `${SITE}/blog/category/${article.category}` },
             { '@type': 'ListItem', position: 4, name: article.title, item: articleUrl },
         ],
     };
 
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-            />
-            <ArticlePage
-                article={article}
-                category={category}
-            />
+            <JsonLd data={jsonLd} />
+            <JsonLd data={breadcrumbJsonLd} />
+            <ArticlePage article={article} category={category} />
         </>
     );
 }

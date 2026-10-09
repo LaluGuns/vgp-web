@@ -7,6 +7,7 @@ import { Figure } from '@/components/blog/figures/Figure';
 import { DemoSlot } from '@/components/blog/demos/DemoSlot';
 import { ExperimentSteps } from './ExperimentSteps';
 import { LicenseTable } from './LicenseTable';
+import { ScrollRegion } from './ScrollRegion';
 
 const html = (value: string) => ({ __html: value });
 
@@ -69,11 +70,9 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
             );
         case 'math':
             return (
-                <div
-                    key={key}
-                    className="vgp-math my-8 overflow-x-auto border-y border-white/10 py-6 text-center text-base text-white sm:text-xl"
-                    dangerouslySetInnerHTML={html(block.html)}
-                />
+                <ScrollRegion key={key} label="Equation" className="vgp-math my-8 border-y border-white/10 py-6 text-center text-base text-white sm:text-xl">
+                    <div dangerouslySetInnerHTML={html(block.html)} />
+                </ScrollRegion>
             );
         case 'code':
             return (
@@ -83,8 +82,9 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
             );
         case 'table':
             // On phones each row becomes a small card, so nothing hides behind a sideways scroll.
+            // A cell too wide even for that (a long formula) scrolls inside the region.
             return (
-                <div key={key} className="vgp-table my-8 sm:overflow-x-auto sm:rounded-[6px] sm:border sm:border-white/10">
+                <ScrollRegion key={key} label="Table" className="vgp-table my-8 sm:rounded-[6px] sm:border sm:border-white/10">
                     <table className="w-full border-collapse text-left">
                         <thead>
                             <tr className="border-b border-white/20">
@@ -108,7 +108,7 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
                             ))}
                         </tbody>
                     </table>
-                </div>
+                </ScrollRegion>
             );
         case 'figure': {
             const spec = ctx.article.figures?.[block.id];
@@ -150,21 +150,27 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
                     <div className="text-white/90">{blocks}</div>
                 </section>
             );
-        case 'references':
+        case 'references': {
+            // The heading sits outside <summary>, so it stays a heading for screen readers.
+            const count = section.blocks.reduce((n, b) => n + (b.kind === 'ul' || b.kind === 'ol' ? b.items.length : b.kind === 'p' ? 1 : 0), 0);
             return (
-                <section {...labelled} className="mt-14">
-                    <details className="group border-t border-white/10 pt-4">
-                        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 text-base text-white">
-                            <h2 id={section.id} className="scroll-mt-28 text-base font-semibold">
-                                Sources
-                            </h2>
-                            <span className="text-sm text-white/55 group-open:hidden">Show</span>
-                            <span className="hidden text-sm text-white/55 group-open:inline">Hide</span>
+                <section {...labelled} className="mt-14 border-t border-white/10 pt-6">
+                    <h2 id={section.id} className="scroll-mt-28 text-base font-semibold text-white">
+                        Sources
+                    </h2>
+                    <details className="group">
+                        <summary className="flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 [&::-webkit-details-marker]:hidden">
+                            <span className="group-open:hidden">Show {count === 1 ? 'the source' : `all ${count}`}</span>
+                            <span className="hidden group-open:inline">Hide sources</span>
+                            <span aria-hidden="true" className="transition-transform group-open:rotate-180">
+                                ▾
+                            </span>
                         </summary>
-                        <div className="vgp-sources mt-2 text-sm leading-6 text-white/65">{blocks}</div>
+                        <div className="vgp-sources mt-1 text-sm leading-6 text-white/65">{blocks}</div>
                     </details>
                 </section>
             );
+        }
         default:
             return (
                 <section {...labelled} className={first ? 'mt-2' : 'mt-16'}>

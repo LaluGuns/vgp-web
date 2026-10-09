@@ -3,27 +3,30 @@ import { BlogArticle } from '../blog-data';
 export const post107: BlogArticle = {
     slug: 'essential-mixing-tips-for-home-recording',
     title: 'Mixing rap vocals recorded at home',
-    excerpt: 'A vocal chain for home recordings, in the order that works: clean-up EQ, de-essing, two gentle compressors, tone, then reverb and delay timed to the beat.',
+    excerpt: 'A bedroom vocal sounds distant because the room is recorded with it. How mic distance sets the room sound, and the chain order that keeps compressors reacting to the voice.',
     category: 'production-tips',
     publishedAt: '2026-01-28',
-    updatedAt: '2026-10-08',
-    readingTime: 7,
+    updatedAt: '2026-10-09',
+    readingTime: 5,
     summary: [
-        'Most home vocal problems are recorded in, so record close to the mic in the softest corner you have before you reach for plugins.',
+        'Each doubling of the distance to the mic costs about 6 dB of direct voice against the room, so record close, in the softest corner you have.',
         'Clean first, then control: high-pass, cut what sounds bad in context, de-ess, then let two compressors each do a little.',
         'Time delays to the tempo, 60,000 divided by the BPM for a quarter note in milliseconds, and filter the reverb so space never turns into mud.',
     ],
     figures: {
-        chain: {
-            type: 'flow',
-            caption: 'The vocal chain in order. Each stage hands a cleaner signal to the next, so the compressors react to the voice rather than to rumble or sharp S sounds.',
-            alt: 'Five steps in a row: clean-up EQ, de-esser, two compressors, tone, and sends to reverb and delay.',
-            steps: [
-                { label: 'Clean-up EQ', note: 'High-pass, cut boxiness' },
-                { label: 'De-esser', note: 'Tame S and T sounds' },
-                { label: 'Two compressors', note: 'Fast for peaks, slower to level' },
-                { label: 'Tone', note: 'Presence, air, saturation' },
-                { label: 'Sends', note: 'Reverb and delay' },
+        distance: {
+            type: 'bars',
+            min: -20,
+            max: 0,
+            unit: 'dB',
+            caption:
+                'Direct sound from the voice at the mic, relative to 10 cm, from the inverse square law: 20 log10 of the distance ratio. Each doubling costs 6 dB. The room\'s reflections arrive at roughly the same level wherever you stand in a small room, so the voice loses 6 dB against the room with every doubling.',
+            alt: 'Four bars for mic distance. 10 cm at 0 dB, 20 cm at minus 6 dB, 40 cm at minus 12 dB and 80 cm at minus 18.1 dB. The 10 cm bar is in the accent.',
+            bars: [
+                { label: '10 cm', value: 0, display: '0 dB' },
+                { label: '20 cm', value: -6, display: '-6.0 dB', dim: true },
+                { label: '40 cm', value: -12, display: '-12.0 dB', dim: true },
+                { label: '80 cm', value: -18.1, display: '-18.1 dB', dim: true },
             ],
         },
         eq: {
@@ -58,8 +61,8 @@ export const post107: BlogArticle = {
             alt: 'Four bars: quarter note 428.6 ms, dotted eighth 321.4 ms, eighth note 214.3 ms and sixteenth note 107.1 ms.',
             bars: [
                 { label: 'Quarter', value: 428.6, display: '428.6 ms' },
-                { label: 'Dotted eighth', value: 321.4, display: '321.4 ms' },
-                { label: 'Eighth', value: 214.3, display: '214.3 ms' },
+                { label: 'Dotted eighth', value: 321.4, display: '321.4 ms', dim: true },
+                { label: 'Eighth', value: 214.3, display: '214.3 ms', dim: true },
                 { label: 'Sixteenth', value: 107.1, display: '107.1 ms' },
             ],
         },
@@ -83,88 +86,83 @@ export const post107: BlogArticle = {
             why: 'Loud S sounds trigger gain reduction and pull down the word around them. Taming them first lets the compressor respond to the voice instead.',
         },
         {
-            q: 'Why use two gentle compressors instead of one working hard?',
-            options: [
-                'Each does a little, so neither pumps the voice',
-                'Two in a row make the vocal sound louder overall',
-                'The second one removes the distortion of the first',
-                'Two stages let you skip the de-esser entirely',
-            ],
-            answer: 0,
-            why: 'The fast one catches the peaks, so the slow one is not thrown around by them and can level the performance smoothly. Neither has to work hard enough to be heard.',
+            q: 'You record a take at 15 cm, then step back to 60 cm in the same room. How much direct voice do you lose against the room sound?',
+            options: ['About 6 dB', 'About 9 dB', 'About 12 dB', 'About 24 dB'],
+            answer: 2,
+            why: '60 cm is two doublings of 15 cm. The direct sound drops 6 dB per doubling while the room stays at about the same level, so the voice loses about 12 dB against the room.',
         },
     ],
-    content: `## Fix it before the mix
+    content: `## Hook: the vocal that sounds like a bedroom
 
-Most problems in a home vocal are recorded in, and the room causes more of them than the microphone does. A small, bare room adds short reflections that blur the words, and no plugin removes them cleanly. Record in the softest spot you have: a closet full of clothes, a duvet hung behind you, curtains and a sofa nearby. Stay close to the mic, about a hand's width away, with a pop filter in between.
+You record a verse in your bedroom with the mic on a stand in the middle of the room. Against the beat it sounds boxy and a step behind the music. You add an EQ boost for presence, a compressor, a bright reverb. The vocal gets louder and harsher and still sounds like it was recorded in a bedroom.
 
-Being close has a side effect. Most vocal mics are directional, and a directional mic boosts the bass as the source gets closer, the proximity effect. That is one reason the chain below starts with a filter.
+That is because it was. The room is in the recording, mixed into every word, and every plugin after it works on the room as well as the voice.
 
-Set the input so your loudest words peak well below 0 dBFS. At 24-bit, peaks around -10 dBFS leave plenty of headroom and still sit far above the noise of the interface. A take that clipped on the way in cannot be repaired later.
+## Why it matters: the room gets recorded with the voice
 
-## The chain, in order
+A mic picks up two things: the direct sound from your mouth and the sound that bounced off the walls, desk and ceiling before it arrived. In a small, bare room those reflections come back fast and strong, and they colour the voice in ways no plugin can separate out cleanly. EQ can turn a boxy band down, but it turns the voice down there too.
 
-The order matters more than the brand of each plugin.
+What you can control is the balance between the two when you record, and the order of the processing afterwards, so each stage reacts to the voice instead of to rumble or sharp S sounds.
 
-::figure chain
+## Science model: distance, then the chain
 
-## Clean up: filter, cut, de-ess
+The direct sound from a source falls with distance by the inverse square law: its level drops by $20 \\log_{10}(d_2/d_1)$ dB, about 6 dB for every doubling (Everest and Pohlmann, 2015). In a small room the reflected sound reaches the mic at roughly the same level wherever you stand. So every doubling of distance costs about 6 dB of voice against the room.
 
-**High-pass filter.** Rumble from footsteps, traffic, the mic stand and the proximity boost sits below the voice. Start a high-pass filter around 80 Hz and raise it until the voice begins to sound thin, then back it off a little. A deep voice may need it lower.
+::figure distance
 
-**Cut what sounds bad in context.** Boxiness often sits around 300 to 500 Hz and harshness around 2 to 4 kHz, but every voice and room is different. To find a problem, boost a narrow band by 8 to 10 dB and sweep it slowly. Stop where the problem jumps out, then turn the boost into a cut of 2 to 4 dB. Work quickly and check with the beat playing: after a few minutes of sweeping boosts, almost everything starts to sound wrong.
+That is why close miking, a hand's width away with a pop filter, is the first fix, and why soft furnishings around you help: a closet of clothes, a duvet hung behind you, curtains and a sofa. Being close has a side effect. Most vocal mics are directional, and a directional mic boosts the bass as the source gets closer, the proximity effect. Set the input so your loudest words peak around -10 dBFS at 24-bit: plenty of headroom, and still far above the interface's noise. A take that clipped on the way in stays clipped.
+
+Then the chain. A compressor reacts to whatever level it sees, including rumble below the voice and loud S sounds. Put it first and it turns the voice down every time a truck passes or an S arrives. Clean up first, then control:
+
+1. A high-pass filter around 80 to 100 Hz for rumble and the proximity boost.
+2. Small cuts where the room or voice sounds bad in context, often boxiness around 300 to 500 Hz.
+3. A de-esser, so S and T sounds, usually somewhere between 4 and 10 kHz, do not trigger the compressor.
+4. Compression, then tone: presence, air, gentle saturation.
+5. Reverb and delay on sends.
 
 ::figure eq
 
-**De-esser.** S, T and Ch sounds, the sibilants, carry a lot of high-frequency energy, usually somewhere between 4 and 10 kHz depending on the voice. Put a de-esser before the main compression so the compressor does not clamp down every time an S arrives, and set it so the loudest S sounds drop by a few dB. Too much and the voice sounds like it has a lisp. If compression brings the S sounds back up, a second, gentle de-esser after it can catch them.
+A common way to compress a rap vocal is two compressors each doing a little: a fast one catching only the loudest words by 2 to 4 dB, then a slower one levelling the performance by another 2 to 3 dB. Neither has to work hard enough to be heard. The [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) explains how attack and release shape each word.
 
-## Control: two compressors, each doing a little
-
-One compressor working hard on a rap vocal tends to pump and flatten the delivery. Two working gently sound more natural, because each one does only part of the job.
-
-1. **Peak catcher.** A fast compressor, FET-style if you have one. Ratio 4:1, attack under 1 ms, release around 50 to 100 ms. Set the threshold so only the loudest words get 2 to 4 dB of gain reduction.
-2. **Leveler.** A slower compressor, optical-style if you have one. Ratio 2:1 to 3:1, attack around 10 ms, release around 100 ms or auto. Aim for 2 to 3 dB of steady gain reduction through the verse.
-
-Because the first stage has already caught the peaks, the second is not thrown around by them and can ride the overall level smoothly. Compare against the bypassed vocal at matched loudness. Louder almost always sounds better at first, so makeup gain can hide a setting that made the vocal worse. There is more on this in [Compression changes motion before level](/blog/how-compression-changes-motion-not-level).
-
-## Tone: presence, air and saturation
-
-Shape the tone only now, once the clean-up has removed what you would otherwise be boosting.
-
-- If the words get lost in the beat, a broad boost of 1 to 3 dB somewhere around 3 to 5 kHz brings the consonants forward. Often the better fix is a cut in the beat where the vocal needs room, as explained in [why vocals drown even when the fader goes up](/blog/masking-why-vocals-drown-even-when-fader-goes-up).
-- A high shelf of 1 to 2 dB above about 10 kHz adds air. Check afterwards that the S sounds have not come back.
-- Gentle saturation adds harmonics, which makes the vocal sound denser and helps it read on small speakers. Drive it lightly and level-match before you judge it.
-
-## Space: reverb and delay on the beat
-
-A completely dry vocal can sound pasted on top of the beat. Use sends, so one reverb and one delay serve every vocal track.
-
-**Reverb.** A plate is a common choice for vocals: bright and dense. Keep the decay short for rap, under about 1.5 seconds, and longer for sung hooks. Filter the reverb return with a high-pass around 200 to 300 Hz and a low-pass around 6 to 8 kHz, so it adds space without mud or extra sibilance. A short pre-delay of a few tens of milliseconds keeps the start of each word dry and clear.
-
-**Delay.** Time it to the tempo so the echoes land on the grid. A quarter note in milliseconds is:
-
-$$t_{\\text{quarter}} = \\frac{60\\,000}{\\text{BPM}}$$
-
-Halve it for an eighth note, halve again for a sixteenth, and multiply the eighth by 1.5 for a dotted eighth.
+Time the delays to the beat. A quarter note lasts 60,000 / BPM milliseconds; halve it for an 8th, halve again for a 16th, and multiply the 8th by 1.5 for a dotted 8th.
 
 ::figure delays
 
-A sixteenth at 140 BPM, 107 ms, works as a slapback: one short echo that thickens the voice without washing it out. Longer delays work best as throws. Automate the send up on the last word of a line so it echoes into the gap, then bring it back down.
+A short reverb with a few tens of milliseconds of pre-delay keeps the start of each word dry. Try pre-delay, decay and level here, and listen for the point where the voice moves back.
 
-## The vocal bus and the last check
+::demo reverb
 
-Route the lead, doubles and ad-libs to one vocal bus. A little bus compression, 2:1 with a slow attack and about 1 dB of gain reduction, helps them sit together. Then check:
+## DAW experiment: hear the room, then build the chain
 
-- The high-pass is on every vocal track, not only the lead.
-- The S sounds are under control at loud and at quiet playback.
-- The reverb and delay returns are filtered.
-- If someone else will master the song, the mix peaks a few dB below 0 dBFS with no limiter on the mix bus.
+1. Record the same two lines twice: once with your mouth about 10 cm from the mic, once at about 40 cm. Match their levels and compare. The far take carries 12 dB more room against the voice.
+2. Move to the softest corner you have, hang a duvet behind you, and record the close take again. Compare it with the first close take.
+3. On the best take, add a high-pass filter. Raise it until the voice thins, then back it off a little.
+4. Boost a narrow band by 8 dB and sweep 200 Hz to 1 kHz with the beat playing. Where the box jumps out, turn it into a 2 to 4 dB cut.
+5. Add a de-esser and set it so the loudest S sounds drop by a few dB.
+6. Add the two compressors and watch each meter. Bypass both at matched loudness and check that the vocal sounds better at the same level.
+7. Send to a filtered reverb and a delay timed to the tempo. Automate the delay send up on the last word of a line.
 
-Inside a 32-bit float DAW the faders do not clip, but a 24-bit bounce and your audio interface do, so that last margin matters.
+## Common mistake: fixing the room with plugins
+
+The common mistake is recording far from the mic in a bare room and expecting EQ and reverb to fix it later. Boosting presence on a roomy take brings the reflections up with the voice. Adding reverb to a take that already has a room on it stacks two spaces, and the vocal moves further back.
+
+The second is a single compressor working hard. On a rap vocal it tends to pump and flatten the delivery, and with no de-esser in front it pulls whole words down on every S.
+
+The third is an unfiltered reverb return. High-pass it around 200 to 300 Hz and low-pass it around 6 to 8 kHz, so the space adds depth without mud or extra sibilance.
+
+## Producer takeaway: fix the distance before the chain
+
+Get the mic close and the room soft before you record, because that balance is fixed once it is on the take. Then clean before you control: filter, cut and de-ess first, so the compressors react to the voice. Time the echoes to the tempo and filter the space. If someone else will master the song, leave the mix peaking a few dB below 0 dBFS with no limiter on the mix bus.
+
+## References
+
+- Everest, F. A., & Pohlmann, K. C. (2015). *Master Handbook of Acoustics* (6th ed.). McGraw-Hill Education.
+- Izhaki, R. (2023). *Mixing Audio: Concepts, Practices, and Tools* (4th ed.). Focal Press.
+- Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
         title: 'Mixing rap vocals recorded at home | VGP Studio',
-        description: 'A home vocal chain in order: recording level, high-pass and clean-up EQ, de-essing, serial compression, tone, and reverb and delay timed to the tempo.',
+        description: 'Why bedroom vocals sound distant: mic distance and the room. Then the chain order that keeps compressors reacting to the voice, and delays timed to the beat.',
         keywords: ['home recording', 'mixing vocals', 'rap vocal chain', 'vocal EQ', 'serial compression', 'delay time calculator'],
     },
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, midi, pad, pluck, sequence, type Engine } from './engine';
-import { PlayButton, Segmented, useFrame, usePlayer } from './ui';
+import { NoteRoll, PlayButton, Segmented, StepStrip, useFrame, usePlayer, type RollNote } from './ui';
 
 type Ending = 'tonic' | 'dominant';
 
@@ -23,6 +23,16 @@ const PHRASE: number[][] = [
     [72, 0, 69, 0, 72, 0, 74, 0, 77, 0, 76, 0, 74, 0, 0, 0],
 ];
 
+/** The melody on a 64-step roll: each note lasts until the next one, the last note of each bar a half note. */
+const ROLL: RollNote[] = PHRASE.flatMap((bar, b) =>
+    bar.flatMap((pitch, i) => {
+        if (!pitch) return [];
+        let len = 1;
+        while (i + len < 16 && !bar[i + len] && len < 4) len++;
+        return [{ at: b * 16 + i, len, pitch }];
+    }),
+);
+
 /**
  * A four-bar phrase that ends on the home chord or stops on the
  * dominant. The same melody, a statement or a question.
@@ -33,15 +43,15 @@ export function CadenceDemo() {
     useEffect(() => {
         live.current = ending;
     }, [ending]);
-    const [bar, setBar] = useState(-1);
-    const clock = useRef<{ ctx: AudioContext; start: number; barDur: number } | null>(null);
+    const [step, setStep] = useState(-1);
+    const clock = useRef<{ ctx: AudioContext; start: number; stepDur: number } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const bus = ctx.createGain();
         bus.connect(out);
         const bpm = 84;
         const stepDur = 60 / bpm / 4;
-        clock.current = { ctx, start: ctx.currentTime + 0.08, barDur: stepDur * 16 };
+        clock.current = { ctx, start: ctx.currentTime + 0.08, stepDur };
         const seq = sequence(ctx, bpm, 64, (step, time) => {
             const barNo = Math.floor(step / 16);
             const inBar = step % 16;
@@ -61,7 +71,7 @@ export function CadenceDemo() {
         return () => {
             seq.stop();
             clock.current = null;
-            setBar(-1);
+            setStep(-1);
             fadeOut(ctx, bus);
         };
     });
@@ -70,13 +80,15 @@ export function CadenceDemo() {
         const c = clock.current;
         if (!c) return;
         const elapsed = c.ctx.currentTime - c.start;
-        if (elapsed >= 0) setBar(Math.floor(elapsed / c.barDur) % 4);
+        if (elapsed >= 0) setStep(Math.floor(elapsed / c.stepDur) % 64);
     });
 
-    const chords = [...BARS.map((b) => b.name), ENDINGS[ending].name];
+    const end = ENDINGS[ending];
+    const bar = step < 0 ? -1 : Math.floor(step / 16);
+    const last = ending === 'dominant' ? 'D, which leaves it open' : 'C, the home note';
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Phrase ending"
@@ -88,15 +100,15 @@ export function CadenceDemo() {
                     ]}
                 />
             </div>
-            <div aria-hidden="true" className="grid grid-cols-4 gap-1.5">
-                {chords.map((name, i) => (
-                    <div
-                        key={i}
-                        className={`vgp-cell border px-3 py-2 text-sm font-semibold transition-colors ${bar === i ? 'border-white/60 text-white' : 'border-white/10 text-white/55'}`}
-                    >
-                        {name}
-                    </div>
-                ))}
+            <div className="space-y-2">
+                <StepStrip current={bar} steps={[...BARS.map((b, i) => ({ key: `${i}`, label: b.name })), { key: 'end', label: end.name, focus: true }]} />
+                <NoteRoll
+                    notes={[...ROLL, { at: 48, len: 12, pitch: end.last, focus: true }]}
+                    slots={64}
+                    bars={[16, 32, 48]}
+                    current={step}
+                    label={`The melody over C, Am, F and ${end.name}. The last note is ${last}.`}
+                />
             </div>
             <p className="text-sm leading-6 text-white/60">
                 Stopping on G leaves the phrase asking a question, so the next phrase feels needed. Landing on C answers it.

@@ -98,6 +98,25 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  /* Keep focused and linked-to elements clear of the fixed header (WCAG 2.4.11). */
+  scroll-padding-top: 88px;
+}
+
+/* Phones also have the fixed bottom navigation (MobileBottomNav, md:hidden). */
+@media (max-width: 767.98px) {
+  html {
+    scroll-padding-bottom: 72px;
+  }
+
+  /* On a lesson, the Contents button sits just above it. */
+  html:has(.vgp-contents-button[data-visible]) {
+    scroll-padding-bottom: 128px;
+  }
+}
+
+/* The skip link focuses <main>; the jump itself needs no ring. */
+main[tabindex='-1']:focus {
+  outline: none;
 }
 
 html.lenis {
@@ -462,10 +481,67 @@ body::before {
   background-size: 100% 1px, 100% 1px;
 }
 
+/* Print. Chrome prints without background graphics by default, so the dark
+   page would come out as white and grey text on white paper. On paper the
+   site is dark ink on white instead: text is darkened, the fixed bars and
+   the listening demos (which need a speaker) are left out, and a figure is
+   inverted, since its marks are white and grey drawn for a dark surface,
+   with its hue turned back so the accent prints as a darker version of
+   the same colour. Every reveal and draw-in shows its end state. */
 @media print {
-  [data-reveal][data-reveal-state='pending'] {
-    opacity: 1;
-    transform: none;
+  @page { margin: 16mm 14mm; }
+
+  [data-reveal][data-reveal-state] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #161616 !important;
+  }
+
+  body [class*='text-white'],
+  body [class*='text-zinc'],
+  body [class*='text-[var(--text'],
+  .article-content strong,
+  .article-content em,
+  .article-content .vgp-code,
+  .article-content .vgp-inline-link {
+    color: #161616 !important;
+  }
+
+  .article-content .vgp-inline-link {
+    text-decoration-color: #8a8a8a;
+  }
+
+  body [class*='text-white/4'],
+  body [class*='text-white/5'],
+  body [class*='text-white/6'] {
+    color: #4a4a4a !important;
+  }
+
+  body [class*='border-white'] {
+    border-color: #d4d4d4 !important;
+  }
+
+  .fixed,
+  .vgp-demo {
+    display: none !important;
+  }
+
+  /* The frame's own surface is dropped first: a filtered element paints its
+     background even when backgrounds are off, and would print as a black box. */
+  [data-reveal='draw'] {
+    break-inside: avoid;
+    background: none !important;
+    border-color: #2b2b2b !important;
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  figure figcaption {
+    break-before: avoid;
   }
 }
 
@@ -557,12 +633,16 @@ body::before {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 8px 16px;
-  margin-top: 14px;
+  gap: 0 16px;
+  margin-top: 6px;
 }
 
+/* Each action is a 44 px tap target (WCAG 2.5.5); the underline stays on the words. */
 .vgp-term-pop a,
 .vgp-term-pop button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 14px;
   color: #fff;
   text-decoration: underline;
@@ -570,14 +650,67 @@ body::before {
   text-underline-offset: 4px;
   background: none;
   border: 0;
-  padding: 6px 0;
+  padding: 12px 0;
   cursor: pointer;
 }
 
+.vgp-term-pop button {
+  min-width: 44px;
+  justify-content: flex-end;
+}
+
+.vgp-term-pop :is(a, button):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 .vgp-term-pop .vgp-term-all {
-  display: inline-block;
-  margin-top: 2px;
-  color: rgba(255, 255, 255, 0.55);
+  margin-top: -6px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Lesson contents sheet on phones (ArticleChrome MobileContents). */
+.vgp-contents-button {
+  bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
+}
+
+@media (min-width: 768px) {
+  .vgp-contents-button {
+    bottom: 24px;
+  }
+}
+
+.vgp-contents-pop {
+  position: fixed;
+  inset: auto 16px 16px 16px;
+  margin: 0 auto;
+  max-width: 28rem;
+  width: auto;
+  max-height: min(70vh, 34rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--surface-strong);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px 12px 20px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.vgp-contents-pop::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* A display equation or table wider than the column fades at the right edge
+   until it is scrolled to the end (ArticleBody, ScrollRegion). */
+.vgp-scroll[data-overflow]:not([data-end]) {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+}
+
+.vgp-math.vgp-scroll[data-overflow] {
+  text-align: left;
 }
 
 @media (min-width: 1024px) {
@@ -589,12 +722,22 @@ body::before {
 }
 
 /* Range inputs in the listening demos. */
+/* A 44 px tall hit area (WCAG 2.5.5) that still takes 28 px of layout:
+   the negative margins keep the demos' measured heights and the track's
+   position unchanged. The slider in demos/ui.tsx carries mt-2 (8 px), which
+   the top margin absorbs. */
 .vgp-range {
   -webkit-appearance: none;
   appearance: none;
-  height: 28px;
+  height: 44px;
+  margin-top: -8px;
+  margin-bottom: -8px;
   background: transparent;
   cursor: pointer;
+}
+
+.vgp-range.mt-2 {
+  margin-top: 0;
 }
 
 .vgp-range::-webkit-slider-runnable-track {

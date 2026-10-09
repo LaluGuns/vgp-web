@@ -293,13 +293,14 @@ export default function HomePage() {
                                 What I have learned, written down.
                             </h2>
                             <p className="mt-5 max-w-xl text-base leading-7 text-white/70">
-                                Free articles on drums, 808s, mixing and licensing, and a full guide for producers on the way.
+                                Free lessons in learning paths, from songwriting and sound design to mixing, audio science and licensing,
+                                and a full guide for producers on the way.
                             </p>
                             <ul className="mt-10 divide-y divide-white/10 border-y border-white/10">
                                 {[
-                                    { label: 'Trap Beats: Anatomy of the Perfect 808', note: 'Free article', href: '/blog/trap-beats-anatomy-of-the-perfect-808' },
+                                    { label: 'Trap Beats: Anatomy of the Perfect 808', note: 'Free lesson', href: '/blog/trap-beats-anatomy-of-the-perfect-808' },
                                     { label: 'Music Production Guide: Trap Edition', note: '80+ page PDF, coming soon', href: '/book' },
-                                    { label: 'All articles', note: 'Free', href: '/blog' },
+                                    { label: 'All lessons', note: 'Free', href: '/blog' },
                                 ].map((row) => (
                                     <li key={row.href}>
                                         <Link

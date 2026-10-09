@@ -3,14 +3,14 @@ import { BlogArticle } from '../blog-data';
 export const post111: BlogArticle = {
     slug: 'commercial-use-vs-personal-use',
     title: 'Commercial use vs personal use: when you need a beat license',
-    excerpt: 'If money or promotion is involved, it is commercial use. Here is where the line falls for streaming, video, shows, social posts and client work.',
+    excerpt: 'If money or promotion is involved, it is commercial use. Where the line falls for streaming, video, shows, social posts, client work and background music.',
     category: 'licensing-guide',
     publishedAt: '2026-01-15',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 4,
     summary: [
         'Personal use means practice and private listening. Anything that earns money or promotes a release or a business is commercial use.',
-        'Putting a song on Spotify or Apple Music is commercial use, even with ten streams, because those services pay royalties.',
+        'Putting a song on Spotify or Apple Music is commercial use even at ten streams, because those services pay royalties.',
         'When a use is unclear, ask before you release and keep the answer in writing.',
     ],
     figures: {
@@ -19,7 +19,7 @@ export const post111: BlogArticle = {
             caption: 'One question decides most cases: does anyone earn money or promotion from the song? If yes, you need a license that covers that use.',
             alt: 'Four steps: ask whether money or promotion is involved; if yes it is commercial use; buy a license that covers the use; stay within its limits.',
             steps: [
-                { label: 'Money or promotion involved?', note: 'Royalties, ads, sales, fees, sponsors' },
+                { label: 'Money or promotion involved?', note: 'Royalties, ads, sales, fees, sponsors', focus: true },
                 { label: 'Then it is commercial use', note: 'Even at a small scale' },
                 { label: 'License that covers the use', note: 'Check the tier and its terms' },
                 { label: 'Stay within its limits', note: 'Ask before you pass a cap' },
@@ -61,42 +61,37 @@ export const post111: BlogArticle = {
             why: 'A written answer protects you and the producer. Assumptions are what lead to takedowns.',
         },
     ],
-    content: `## Can I put it on Spotify?
+    content: `## Hook: the free beat and the distributor form
 
-The most common question about free beats is whether a song made on one can go on Spotify. The short answer is no. Distributing a song to streaming services is commercial use, and commercial use needs a license.
+You found a free beat, wrote a song on it in an afternoon, and it came out better than anything you have paid for. The distributor's upload form asks you to confirm you own or have licensed everything in the track. The beat's page says "free for non-profit use". You hover over the checkbox.
 
-The line between personal and commercial use is easy to draw once you ask one question: does anyone earn money or promotion from this?
+That checkbox is the line between personal and commercial use, and it is easier to answer than it looks.
+
+## Why it matters: one question decides most cases
+
+Whether you need a license depends on what happens to the song, not on how many people hear it. Ask one question: does anyone earn money or promotion from this? If yes, you need a license that covers that use.
 
 ::figure line
 
+A released song carries two copyrights, the composition and the sound recording (US Copyright Office, 2021). A beat puts the producer's share of both inside your song, so whoever releases it needs the producer's permission for that use.
+
 ## Personal use
 
-Personal use means the song stays with you. Nobody is paid, nothing is sold, and the song is not distributed publicly.
-
-- Writing lyrics and practicing at home.
-- Recording a demo to send to the producer.
-- Sharing a rough mix privately with a collaborator.
+Personal use means the song stays with you. Nobody is paid, nothing is sold, and the song is not distributed publicly: writing and practising at home, a demo you send to the producer, a rough mix you share privately with a collaborator.
 
 ## Commercial use
 
-Commercial use is anything that earns money, builds a release or promotes a business.
+Commercial use is anything that earns money, builds a release or promotes a business. Uploading to Spotify or Apple Music counts at any scale, because those services pay royalties. So do ads on a video, download and physical sales, paid shows, a sponsored post for a brand, and client work where you are paid to make a video, an ad or a podcast.
 
-- **Streaming services.** Even ten streams on Spotify count, because the service pays royalties.
-- **Monetized video.** Ads on a YouTube video mean you earn from the music.
-- **Sales.** Downloads, CDs, vinyl, Bandcamp.
-- **Paid performances.** A show with ticket sales, a fee or a booking.
-- **Sponsored and promotional posts.** A video that promotes a product or a brand.
-- **Client work.** If you are paid to make a video, an ad or a podcast, the music is part of a commercial product.
+Background music in your own videos and streams is commercial too once the channel is monetized or sponsored. That case usually calls for a creator license rather than a beat lease: the [lesson on streaming versus a creator license](/blog/spotify-streaming-vs-flow-creator-license) covers how that works.
 
-## Gray areas
+## Grey areas
 
-**Free downloads.** Some beats come with a free download for non-commercial use. Follow the exact terms shown with that beat. A free download is not a license to release.
+Some beats come with a free download for non-commercial use. Follow the exact terms shown with that beat; a free download is not a license to release.
 
-**Non-monetized uploads.** Posting publicly without ads is still public distribution. Check the terms that came with the beat, and ask if they do not cover it.
+Posting publicly without ads is still public distribution. Check the terms that came with the beat, and ask if they do not cover it.
 
-**Social media.** A personal post and a paid brand post can look the same on screen. If a business pays for or benefits from the post, treat it as commercial.
-
-If a use is unclear, ask before you release and keep the answer in writing.
+A personal post and a paid brand post can look the same on screen. If a business pays for or benefits from the post, treat it as commercial.
 
 ## Quick reference
 
@@ -105,17 +100,28 @@ If a use is unclear, ask before you release and keep the answer in writing.
 | Demo at home | No | Nothing needed |
 | Demo sent to the producer | No | Nothing needed |
 | Release on Spotify or Apple Music | Yes | License that covers streams, within its cap |
-| Monetized YouTube video | Yes | License that covers music videos; check monetization terms |
+| Monetized YouTube video with your song | Yes | License that covers music videos; check monetization terms |
+| Background music in a monetized video | Yes | A creator license that covers it |
 | Paid gig | Yes | Tier that includes paid performances |
 | Sponsored or brand post | Yes | License that covers the use; ask if unsure |
 | Public upload with no money involved | Depends | Follow the terms shown with the beat, or ask first |
 
-## Bottom line
+## Common mistake: judging by audience size
 
-If money is involved, or you hope it will be, license the beat before release. The current tiers and their limits are in [Beat licensing explained](/blog/beat-licensing-explained) and in the [beat store](/studio/beats). This is a plain-language guide, not legal advice; the written license is what applies.
+The common mistake is thinking a small release is personal. Ten streams on Spotify still pay royalties, and a sponsored post with fifty views still promotes a business.
+
+The second is treating a credit as a license. Crediting the producer is usually required by a license, and it does not replace one.
+
+## Producer takeaway: license before the checkbox
+
+If money is involved, or you hope it will be, license the beat before release. When a use is unclear, ask before you release and keep the answer in writing. The current tiers and their limits are in the [lesson on beat licensing](/blog/beat-licensing-explained) and in the [beat store](/studio/beats). This is a plain-language guide, not legal advice; the written license is what applies.
+
+## References
+
+- US Copyright Office. (2021). *Circular 56A: Copyright Registration of Musical Compositions and Sound Recordings*. https://www.copyright.gov/circs/circ56a.pdf
 `,
     seo: {
-        title: 'Commercial vs Personal Use for Beats: When You Need a License | VGP Studio',
+        title: 'Commercial vs personal use of a beat | VGP Studio',
         description: 'Where the line between personal and commercial use falls for streaming, YouTube, shows, social posts and client work, and what to do when it is unclear.',
         keywords: ['commercial use', 'personal use', 'beat license', 'free beat spotify', 'music monetization', 'license requirements'],
     },

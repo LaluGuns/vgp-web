@@ -2,15 +2,70 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, rms, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, ruleDash, useDialect, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
-function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null; active: boolean; marker?: number }) {
+const SPECTRUM_POINTS = 160;
+/** Half of a sixth of an octave, as a frequency ratio. */
+const SIXTH = 2 ** (1 / 12);
+
+/** Analyser bins averaged for each point of a 1/6-octave smoothed spectrum. Narrow bands at the bottom interpolate between bins. */
+function smoothingBands(binCount: number, binHz: number): { lo: number; hi: number; at: number }[] {
+    return Array.from({ length: SPECTRUM_POINTS }, (_, k) => {
+        const f = 20 * 1000 ** (k / (SPECTRUM_POINTS - 1));
+        const lo = Math.max(1, Math.ceil(f / SIXTH / binHz));
+        const hi = Math.min(binCount - 1, Math.floor((f * SIXTH) / binHz));
+        return { lo, hi, at: Math.min(binCount - 1.001, f / binHz) };
+    });
+}
+
+/** dB per point: the mean power of the bins in each band. */
+function smoothed(data: Float32Array, bands: { lo: number; hi: number; at: number }[], out: Float32Array) {
+    for (let k = 0; k < bands.length; k++) {
+        const { lo, hi, at } = bands[k];
+        let power: number;
+        if (hi >= lo) {
+            power = 0;
+            for (let i = lo; i <= hi; i++) power += 10 ** (data[i] / 10);
+            power /= hi - lo + 1;
+        } else {
+            const i = Math.floor(at);
+            const t = at - i;
+            power = 10 ** (data[i] / 10) * (1 - t) + 10 ** (data[i + 1] / 10) * t;
+        }
+        out[k] = power > 1e-12 ? 10 * Math.log10(power) : -120;
+    }
+}
+
+interface Trace {
+    analyser: AnalyserNode;
+    data: Float32Array<ArrayBuffer>;
+    db: Float32Array;
+}
+
+/**
+ * A live spectrum, smoothed to sixth-octave bands so it reads as a shape.
+ * `analyser` is what the demo is about, drawn in the accent; `context`
+ * (optional) is drawn behind it as an opaque grey area.
+ */
+function Spectrum({
+    analyser,
+    context,
+    active,
+    marker,
+    label,
+}: {
+    analyser: AnalyserNode | null;
+    context?: AnalyserNode | null;
+    active: boolean;
+    marker?: number;
+    label: string;
+}) {
     // The lesson group's accent and rules (DemoSlot), so the live display matches the figures.
     const dialect = useDialect();
     const canvas = useRef<HTMLCanvasElement>(null);
-    const data = useRef<Float32Array<ArrayBuffer> | null>(null);
+    const traces = useRef<{ bands: { lo: number; hi: number; at: number }[]; key: string; list: Trace[] } | null>(null);
 
     useFrame(active, () => {
         const c = canvas.current;
@@ -26,9 +81,22 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
         }
         ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx2d.clearRect(0, 0, w, h);
-        if (!data.current || data.current.length !== analyser.frequencyBinCount) data.current = new Float32Array(analyser.frequencyBinCount);
-        analyser.getFloatFrequencyData(data.current);
-        const nyquist = analyser.context.sampleRate / 2;
+        const sources = context ? [context, analyser] : [analyser];
+        const key = `${analyser.frequencyBinCount}|${analyser.context.sampleRate}|${sources.length}`;
+        if (!traces.current || traces.current.key !== key || traces.current.list.some((t, i) => t.analyser !== sources[i])) {
+            traces.current = {
+                key,
+                bands: smoothingBands(analyser.frequencyBinCount, analyser.context.sampleRate / analyser.fftSize),
+                list: sources.map((a) => ({ analyser: a, data: new Float32Array(a.frequencyBinCount), db: new Float32Array(SPECTRUM_POINTS) })),
+            };
+        }
+        const { bands, list } = traces.current;
+        for (const t of list) {
+            t.analyser.getFloatFrequencyData(t.data);
+            smoothed(t.data, bands, t.db);
+        }
+        const x = (k: number) => (k / (SPECTRUM_POINTS - 1)) * w;
+        const y = (db: number) => h - ((Math.max(-100, Math.min(-10, db)) + 100) / 90) * h;
         const fx = (f: number) => (Math.log10(f / 20) / Math.log10(20000 / 20)) * w;
         ctx2d.strokeStyle = dialect.rule.dash ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.1)';
         ctx2d.lineWidth = dialect.rule.dash ? 1.4 : 1;
@@ -41,24 +109,39 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
             ctx2d.stroke();
         }
         ctx2d.setLineDash([]);
-        ctx2d.lineCap = 'butt';
-        ctx2d.beginPath();
-        let started = false;
-        for (let i = 1; i < data.current.length; i++) {
-            const f = (i * nyquist) / data.current.length;
-            if (f < 20 || f > 20000) continue;
-            const db = Math.max(-100, Math.min(-10, data.current[i]));
-            const y = h - ((db + 100) / 90) * h;
-            if (!started) {
-                ctx2d.moveTo(fx(f), y);
-                started = true;
-            } else ctx2d.lineTo(fx(f), y);
+        const curve = (db: Float32Array) => {
+            ctx2d.beginPath();
+            for (let k = 0; k < SPECTRUM_POINTS; k++) {
+                if (k === 0) ctx2d.moveTo(x(k), y(db[k]));
+                else ctx2d.lineTo(x(k), y(db[k]));
+            }
+        };
+        const focus = list[list.length - 1].db;
+        if (list.length > 1) {
+            // The context as an opaque grey area, so no rule shows through it.
+            curve(list[0].db);
+            ctx2d.lineTo(w, h);
+            ctx2d.lineTo(0, h);
+            ctx2d.closePath();
+            ctx2d.fillStyle = '#34383c';
+            ctx2d.fill();
+        } else if (dialect.fillUnder) {
+            curve(focus);
+            ctx2d.lineTo(w, h);
+            ctx2d.lineTo(0, h);
+            ctx2d.closePath();
+            ctx2d.fillStyle = accentAlpha(dialect, dialect.area);
+            ctx2d.fill();
         }
-        ctx2d.strokeStyle = 'rgba(255,255,255,0.85)';
+        curve(focus);
+        ctx2d.strokeStyle = dialect.accent;
         ctx2d.lineWidth = 1.5;
+        ctx2d.lineCap = dialect.cap;
+        ctx2d.lineJoin = 'round';
         ctx2d.stroke();
         if (marker) {
-            ctx2d.strokeStyle = dialect.accent;
+            ctx2d.strokeStyle = 'rgba(255,255,255,0.55)';
+            ctx2d.lineWidth = 1;
             ctx2d.setLineDash([4, 4]);
             ctx2d.beginPath();
             ctx2d.moveTo(fx(marker), 0);
@@ -69,25 +152,25 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
     });
 
     return (
-        <div aria-hidden="true">
-            <canvas ref={canvas} className="vgp-plot block h-28 w-full" />
-            <div className="relative mt-1 h-4 text-[11px] text-white/55">
+        <div>
+            <canvas ref={canvas} role="img" aria-label={label} className="vgp-plot block h-28 w-full" />
+            <div className="relative mt-1 h-4 text-[11px] text-white/55" aria-hidden="true">
                 {[
                     [20, '20 Hz'],
                     [100, '100'],
                     [1000, '1k'],
                     [10000, '10k'],
                     [20000, '20k'],
-                ].map(([f, label], i, all) => (
+                ].map(([f, text], i, all) => (
                     <span
-                        key={label}
+                        key={text}
                         className="absolute top-0"
                         style={{
                             left: `${(Math.log10(Number(f) / 20) / 3) * 100}%`,
                             transform: i === 0 ? 'none' : i === all.length - 1 ? 'translateX(-100%)' : 'translateX(-50%)',
                         }}
                     >
-                        {label}
+                        {text}
                     </span>
                 ))}
             </div>
@@ -166,13 +249,18 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
     const names: Record<FilterKind, string> = { lowpass: 'Low-pass', highpass: 'High-pass', peaking: 'Narrow boost' };
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 {types.length > 1 ? (
                     <Segmented label="Filter type" value={type} onChange={(v) => set({ type: v })} options={types.map((t) => ({ value: t, label: names[t] }))} />
                 ) : null}
             </div>
-            <Spectrum analyser={analyser} active={player.playing} marker={freq} />
+            <Spectrum
+                analyser={analyser}
+                active={player.playing}
+                marker={freq}
+                label={`Live spectrum of the filtered sound, from 20 Hz to 20 kHz. The dashed line marks the ${type === 'peaking' ? 'boost' : 'cutoff'} at ${fmtHz(freq)}.`}
+            />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider
                     label={type === 'peaking' ? 'Boost frequency' : 'Cutoff'}
@@ -196,8 +284,41 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
     );
 }
 
+const ENV_BPM = 92;
+const ENV_STEP = 60 / ENV_BPM / 4;
+/** Each note lasts a dotted eighth plus the release, as `pluck` plays it. */
+const noteLength = (attackMs: number, releaseMs: number) => Math.max(attackMs / 1000 + 0.05, ENV_STEP * 1.5 + releaseMs / 1000);
+/** The plot spans the longest note the sliders allow, about 1.05 s, rounded up. */
+const ENV_SPAN = 1.1;
+
+/**
+ * One note's level against time, as `pluck` shapes it: an exponential rise
+ * over the attack, then an exponential fall to silence by the end of the
+ * note. Linear in amplitude, the way a waveform's outline looks.
+ */
+function envelopePoints(attackMs: number, releaseMs: number): { rise: string; fall: string; area: string } {
+    const a = Math.max(0.002, attackMs / 1000);
+    const end = noteLength(attackMs, releaseMs);
+    const x = (t: number) => (t / ENV_SPAN) * 100;
+    const y = (v: number) => 100 - v * 92;
+    const floor = 0.0001;
+    const at = (t: number) => (t <= a ? floor * (1 / floor) ** (t / a) : (1 / floor) ** (-(t - a) / (end - a)));
+    const rise: string[] = [];
+    const fall: string[] = [];
+    for (let i = 0; i <= 40; i++) {
+        const t = (a * i) / 40;
+        rise.push(`${x(t).toFixed(2)},${y(at(t)).toFixed(2)}`);
+    }
+    for (let i = 0; i <= 80; i++) {
+        const t = a + ((end - a) * i) / 80;
+        fall.push(`${x(t).toFixed(2)},${y(at(t)).toFixed(2)}`);
+    }
+    return { rise: `M${rise.join('L')}`, fall: `M${fall.join('L')}`, area: `M0,100L${rise.join('L')}L${fall.join('L')}L${x(end).toFixed(2)},100Z` };
+}
+
 /** One synth phrase with an adjustable attack. The same notes, a different intent. */
 export function EnvelopeDemo() {
+    const dialect = useDialect();
     const [attack, setAttack] = useState(5);
     const [release, setRelease] = useState(250);
     const live = useRef({ attack, release });
@@ -209,10 +330,10 @@ export function EnvelopeDemo() {
         const bus = ctx.createGain();
         bus.connect(out);
         const phrase = [64, 0, 67, 0, 69, 0, 67, 64, 62, 0, 64, 0, 0, 0, 0, 0];
-        const seq = sequence(ctx, 92, 16, (step, time, dur) => {
+        const seq = sequence(ctx, ENV_BPM, 16, (step, time) => {
             const n = phrase[step];
             const { attack: a, release: r } = live.current;
-            if (n) pluck(ctx, bus, time, midi(n), Math.max(a / 1000 + 0.05, dur * 1.5 + r / 1000), 1.4, a / 1000);
+            if (n) pluck(ctx, bus, time, midi(n), noteLength(a, r), 1.4, a / 1000);
             if (step % 4 === 0) kick(ctx, bus, time, 0.35);
         });
         return () => {
@@ -221,22 +342,35 @@ export function EnvelopeDemo() {
         };
     });
 
-    const w = 300;
-    const h = 70;
-    const total = 600 + 300;
-    const ax = (attack / total) * w;
-    const sx = ((attack + 150) / total) * w;
-    const rx = Math.min(w, sx + (release / total) * w);
+    const shape = envelopePoints(attack, release);
+    const lineProps = { fill: 'none', strokeLinecap: dialect.cap, strokeLinejoin: dialect.join, vectorEffect: 'non-scaling-stroke' } as const;
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="block max-w-sm" role="img" aria-label={`Envelope with ${attack} ms attack and ${release} ms release`}>
-                <rect x={0} y={0} width={w} height={h} rx={3} fill="rgba(255,255,255,0.035)" />
-                <path d={`M0,${h - 4} L${ax},6 L${sx},${h * 0.45} L${rx},${h - 4}`} fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2} strokeLinejoin="round" />
-                <text x={Math.max(4, ax + 4)} y={16} fontSize={11} fill="rgba(255,255,255,0.6)">
-                    Attack
-                </text>
-            </svg>
+            <div>
+                <svg
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    className="vgp-plot block h-20 w-full"
+                    role="img"
+                    aria-label={`The level of one note over ${Math.round(ENV_SPAN * 1000)} milliseconds: it rises over ${attack} ms, then fades out over the rest of the note, ${Math.round(noteLength(attack, release) * 1000)} ms in all.`}
+                >
+                    {dialect.fillUnder ? <path d={shape.area} fill={accentAlpha(dialect, dialect.area)} stroke="none" /> : null}
+                    <path d={shape.fall} {...lineProps} stroke="rgba(255,255,255,0.6)" strokeWidth={1.5} />
+                    <path d={shape.rise} {...lineProps} stroke={dialect.accent} strokeWidth={2.25} />
+                </svg>
+                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
+                    <span className="inline-flex items-center gap-1.5">
+                        <span className="h-0.5 w-3 bg-[var(--accent)]" />
+                        Attack
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                        <span className="h-0.5 w-3 bg-white/60" />
+                        Fade to silence
+                    </span>
+                    <span>One note, {ENV_SPAN.toFixed(1)} seconds across</span>
+                </div>
+            </div>
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label="Attack" value={attack} min={1} max={400} onChange={setAttack} format={(v) => `${v} ms`} hint="Under 10 ms speaks. Over 100 ms swells." />
                 <Slider label="Release" value={release} min={20} max={800} step={10} onChange={setRelease} format={(v) => `${v} ms`} />
@@ -252,6 +386,7 @@ export function EnvelopeDemo() {
  */
 export function MaskingDemo() {
     const [fix, setFix] = useState<'none' | 'eq' | 'duck'>('none');
+    const [analysers, setAnalysers] = useState<{ lead: AnalyserNode; pad: AnalyserNode } | null>(null);
     const nodes = useRef<{ ctx: AudioContext; cut: BiquadFilterNode; duck: GainNode } | null>(null);
     const live = useRef(fix);
     useEffect(() => {
@@ -272,6 +407,14 @@ export function MaskingDemo() {
         const lead = ctx.createGain();
         lead.gain.value = 0.9;
         lead.connect(master);
+        // Each part's spectrum after its treatment, slow enough to read while the notes move.
+        const leadAn = ctx.createAnalyser();
+        const padAn = ctx.createAnalyser();
+        leadAn.fftSize = padAn.fftSize = 4096;
+        leadAn.smoothingTimeConstant = padAn.smoothingTimeConstant = 0.88;
+        lead.connect(leadAn);
+        duck.connect(padAn);
+        setAnalysers({ lead: leadAn, pad: padAn });
         nodes.current = { ctx, cut, duck };
         const melody = [76, 0, 79, 81, 0, 79, 76, 0, 74, 0, 76, 0, 72, 0, 0, 0];
         const seq = sequence(ctx, 96, 16, (step, time, dur) => {
@@ -294,6 +437,7 @@ export function MaskingDemo() {
         return () => {
             seq.stop();
             nodes.current = null;
+            setAnalysers(null);
             fadeOut(ctx, master);
         };
     });
@@ -322,6 +466,24 @@ export function MaskingDemo() {
                     { value: 'duck', label: 'Duck the pad under the lead' },
                 ]}
             />
+            <div>
+                <Spectrum
+                    analyser={analysers?.pad ?? null}
+                    context={analysers?.lead ?? null}
+                    active={player.playing}
+                    label="Live spectra of the lead, as a grey area, and of the pad, as a line. Cutting the pad at 1.4 kHz dips its line where the lead is strongest; ducking lowers the whole line while the lead plays."
+                />
+                <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
+                    <span className="inline-flex items-center gap-1.5">
+                        <span className="h-2.5 w-3 rounded-[1px] bg-[#34383c]" />
+                        Lead
+                    </span>
+                    <span className="inline-flex items-center gap-1.5">
+                        <span className="h-0.5 w-3 bg-[var(--accent)]" />
+                        Pad
+                    </span>
+                </div>
+            </div>
             <p className="text-sm leading-6 text-white/60">The lead never changes level. Only the pad does.</p>
         </div>
     );
@@ -414,7 +576,7 @@ export function SaturationDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Saturation"
@@ -427,7 +589,7 @@ export function SaturationDemo() {
                     ]}
                 />
             </div>
-            <Spectrum analyser={analyser} active={player.playing} />
+            <Spectrum analyser={analyser} active={player.playing} label="Live spectrum of the output, from 20 Hz to 20 kHz. Saturation adds harmonics that fill in the space above the notes." />
             <Slider label="Drive" value={drive} min={0} max={30} onChange={(v) => apply({ drive: v })} format={(v) => `${v} dB`} />
             <Meter label="Level-matching turned the output down by" value={Math.max(0, gr) / 24} text={`${Math.max(0, gr).toFixed(1)} dB`} />
         </div>

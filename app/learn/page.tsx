@@ -6,23 +6,39 @@ import { PageHeader, TextLink } from '@/components/editorial/EditorialPrimitives
 import { articles, categories } from '@/lib/blog-data';
 import { learningPaths } from '@/lib/blog/paths';
 import { glossary } from '@/lib/blog/glossary';
+import { ogImage } from '@/lib/og';
+
+const description = `${articles.length} free music production lessons in ${learningPaths.length} learning paths, a glossary of ${glossary.length} terms, and a book and a course on the way. By Virzy Guns.`;
+const card = ogImage({ kicker: 'Learn', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} paths · a glossary` });
 
 export const metadata: Metadata = {
-    title: 'Learn Hub | Music Production Articles, Books & Courses | VGP',
-    description:
-        'Practical music production education for beatmakers and producers. Access free articles, 808 tuning guides, producer manuals, and mixing courses by Virzy Guns.',
+    title: 'Learn music production',
+    description,
     alternates: {
         canonical: '/learn',
+    },
+    openGraph: {
+        title: 'Learn music production',
+        description,
+        type: 'website',
+        url: 'https://www.virzyguns.com/learn',
+        images: [card],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Learn music production',
+        description,
+        images: [card.url],
     },
 };
 
 const formats = [
     {
-        title: 'Articles',
+        title: 'Lessons',
         status: `Free, ${articles.length} so far`,
-        description: `Lessons in ${learningPaths.length} learning paths, from songwriting to mastering and the science of sound, with diagrams, listening demos, DAW experiments and quizzes.`,
+        description: `${learningPaths.length} learning paths, from songwriting to mastering and the science of sound, with diagrams, listening demos, DAW experiments and quizzes.`,
         href: '/blog',
-        cta: 'Read the articles',
+        cta: 'Browse the lessons',
     },
     {
         title: 'Music Production Guide: Trap Edition',
@@ -49,13 +65,39 @@ const latestArticles = [...articles]
 export default function LearnHubPage() {
     return (
         <PageTransition>
-            <main className="editorial-shell min-h-screen text-white">
+            <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
                 <PageHeader
                     title="Learn production"
-                    description="Free articles on drums, 808s, mixing and licensing by Virzy Guns, with a book and a course on the way."
-                    primary={{ label: 'Read the articles', href: '/blog' }}
-                    secondary={{ label: 'Trap Edition guide', href: '/book' }}
+                    description={`${articles.length} free lessons in ${learningPaths.length} paths: songwriting, arrangement, sound design, vocals, mixing and mastering, audio science, music psychology, producer mindset, production tips, genres and licensing. A book and a course are on the way.`}
+                    primary={{ label: 'Browse the lessons', href: '/blog' }}
+                    secondary={{ label: `Glossary of ${glossary.length} terms`, href: '/learn/glossary' }}
                 />
+
+                <section data-reveal="" aria-labelledby="paths-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
+                    <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
+                        <div className="lg:col-span-4">
+                            <h2 id="paths-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                                {learningPaths.length} learning paths
+                            </h2>
+                            <p className="mt-4 max-w-sm text-base leading-7 text-white/65">Each path is a set of lessons meant to be read in order.</p>
+                        </div>
+                        <ul className="grid border-t border-white/10 sm:grid-cols-2 sm:gap-x-10 lg:col-span-8">
+                            {learningPaths.map((path) => (
+                                <li key={path.category.slug} className="border-b border-white/10">
+                                    <Link
+                                        href={`/blog/category/${path.category.slug}`}
+                                        className="group flex min-h-11 items-baseline justify-between gap-4 py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                    >
+                                        <span className="text-lg font-semibold text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                            {path.category.name}
+                                        </span>
+                                        <span className="shrink-0 text-xs tabular-nums text-white/55">{path.articles.length} lessons</span>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
 
                 <section data-reveal="" aria-labelledby="formats-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
@@ -81,10 +123,10 @@ export default function LearnHubPage() {
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12">
                         <div className="lg:col-span-4">
                             <h2 id="latest-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
-                                Latest articles
+                                Latest lessons
                             </h2>
                             <div className="mt-5 flex flex-col items-start gap-3">
-                                <TextLink href="/blog">All articles</TextLink>
+                                <TextLink href="/blog">All lessons</TextLink>
                                 <TextLink href="/learn/glossary">Glossary of {glossary.length} terms</TextLink>
                             </div>
                         </div>

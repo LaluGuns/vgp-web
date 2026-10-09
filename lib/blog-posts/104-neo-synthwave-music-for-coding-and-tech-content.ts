@@ -49,8 +49,8 @@ export const post104: BlogArticle = {
             max: 650,
             unit: 'ms',
             caption:
-                'Delay times at 100 BPM, from 60,000 / 100 = 600 ms per beat. The dotted 8th, 450 ms, is the classic synthwave echo: its repeats land between the 16ths of the arpeggio, so with high feedback they fill the gaps.',
-            alt: 'Four bars: quarter note 600 ms, dotted 8th 450 ms, 8th note 300 ms and 16th note 150 ms. The dotted 8th bar is highlighted in the accent.',
+                'Delay times at 100 BPM, from 60,000 / 100 = 600 ms per beat. The dotted 8th, 450 ms, is the classic synthwave echo: each repeat lands three 16ths after its note, often on a step the arpeggio left empty, so with high feedback the echoes fill the gaps.',
+            alt: 'Four bars: quarter note 600 ms, dotted 8th 450 ms, 8th note 300 ms and 16th note 150 ms. The dotted 8th bar is in the accent, the others in grey.',
             bars: [
                 { label: 'Quarter', value: 600, display: '600 ms', dim: true },
                 { label: 'Dotted 8th', value: 450, display: '450 ms' },
@@ -81,11 +81,11 @@ export const post104: BlogArticle = {
             q: 'You leave gaps in the arpeggio, then add a dotted-8th delay at 60 percent feedback. What happens?',
             options: [
                 'The gaps stay open because the delay is in time',
+                'The kick loses its attack on every beat',
                 'The repeats fill the gaps with more changing notes',
                 'The arpeggio sounds narrower in stereo',
-                'The kick loses its attack on every beat',
             ],
-            answer: 1,
+            answer: 2,
             why: 'Each repeat is another note landing between the ones you played. High feedback stacks several of them, so the pattern gets busy again.',
         },
     ],
@@ -103,7 +103,7 @@ Synthwave makes this easy to get wrong, because its signature moves are about mo
 
 ## Science model: changing sounds disrupt more than steady ones
 
-Jones and Macken (1993) asked people to remember lists while tones they were told to ignore played in the background. A sequence of tones that kept changing in pitch disrupted recall. A single tone repeated over and over disrupted it much less. The finding gave its name to the changing-state idea: what disrupts verbal memory is sound that keeps changing from one moment to the next, not sound as such. Salamé and Baddeley (1989) found that music with vocals disrupted recall more than instrumental music, and both more than quiet.
+Jones and Macken (1993) asked people to remember lists while tones they were told to ignore played in the background. A sequence of tones that kept changing in pitch disrupted recall. A single tone repeated over and over disrupted it much less. The finding gave its name to the changing-state idea: the disruption comes from sound that keeps changing from one moment to the next. Salamé and Baddeley (1989) found that music with vocals disrupted recall more than instrumental music, and both more than quiet.
 
 These were memory tests in a lab, not coding sessions, so treat them as a direction rather than a rule. The direction is clear, though. An arpeggio that lands on a new pitch every 16th, across a wide range, is a strong changing-state signal. One that cycles a few close notes is closer to a steady one.
 
@@ -117,6 +117,10 @@ Echoes add notes. A tempo-synced delay is part of the synthwave sound, and at 10
 
 ::figure delay
 
+Brightness is the last lever. A low-pass filter on the arpeggio takes the edge off each new note and pushes the part behind the pad. Sweep one here and listen to how far down the cutoff can go before the part loses its shape.
+
+::demo filter
+
 ## DAW experiment: test your arpeggio on your own memory
 
 This is a rough version of the lab task. It will not prove anything, but it makes the effect easy to notice.
@@ -125,10 +129,8 @@ This is a rough version of the lab task. It will not prove anything, but it make
 2. Write ten random seven-digit numbers. Loop the music, read one number once, look away for ten seconds, then write it down. Do five numbers and count the digits you got in the right place.
 3. Narrow the arpeggio to three notes inside a fifth, add gaps as in the figure, and run the other five numbers.
 4. Add a dotted-8th delay, 450 ms, at 60 percent feedback. Listen to how the gaps fill. Bring the feedback down to about 20 percent and low-pass the delay return around 3 kHz.
-5. Low-pass the arpeggio itself until it sits behind the pad. The filter demo below lets you hear the same move on a test signal.
+5. Low-pass the arpeggio itself until it sits behind the pad.
 6. Keep the version you can work to, then check it still has enough motion to carry the video.
-
-::demo filter
 
 ## Common mistake: building every bar like a trailer
 

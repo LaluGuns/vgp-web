@@ -272,6 +272,8 @@ interface Trace {
 
 const VIEW_W = 240;
 const VIEW_H = 64;
+/** The grey of a "before" level, blended to opaque over the panel so the kick marks do not show through it. */
+const BEFORE_FILL = '#34383c';
 
 function tracePath(db: number[], floor: number, closed: boolean): string {
     const n = db.length;
@@ -310,7 +312,7 @@ function Strip({
                 ))}
                 {traces?.map((t, i) =>
                     t.kind === 'before' ? (
-                        <path key={i} d={tracePath(t.db, floor, true)} fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.4)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+                        <path key={i} d={tracePath(t.db, floor, true)} fill={BEFORE_FILL} stroke="rgba(255,255,255,0.4)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
                     ) : (
                         <path
                             key={i}
@@ -338,9 +340,10 @@ function Legend({ items }: { items: { kind: Trace['kind']; text: string }[] }) {
                 <span key={item.text} className="inline-flex items-center gap-2">
                     <span
                         aria-hidden="true"
+                        style={item.kind === 'before' ? { backgroundColor: BEFORE_FILL, boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)' } : undefined}
                         className={
                             item.kind === 'before'
-                                ? 'h-2.5 w-3 rounded-[1px] border border-white/40 bg-white/10'
+                                ? 'h-2.5 w-3'
                                 : item.kind === 'reference'
                                   ? 'w-3 border-t border-dashed border-white/60'
                                   : 'h-0.5 w-3 bg-[var(--accent)]'
@@ -557,7 +560,7 @@ export function ParallelDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
@@ -851,7 +854,7 @@ export function TransientDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
@@ -1410,7 +1413,7 @@ export function LimiterDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
@@ -1606,8 +1609,8 @@ async function analyseClip(input: number): Promise<ClipAnalysis> {
     };
 }
 
-/** Overall playback level. With the input and the fader both at maximum this stays at the other demos' level. */
-const CLIP_OUT = 0.26;
+/** Overall playback level: the safe take at the default fader peaks near the other demos, and nothing passes -8 dBFS with both sliders at maximum. */
+const CLIP_OUT = 1.04;
 
 /**
  * A phrase recorded too hot, clipped at the converter, then turned down
@@ -1688,7 +1691,7 @@ export function ClipRecoverDemo() {
 
     return (
         <div className="space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} />
                 <Segmented
                     label="Take"

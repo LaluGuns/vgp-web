@@ -46,6 +46,29 @@ const beatStoreNavCopy = {
 
 const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
 
+/**
+ * The first focusable element on every page: "Skip to content" jumps past
+ * the menu to the page's <main> (id="main" where a page sets it, otherwise
+ * the first <main>). Hidden until it has keyboard focus.
+ */
+function SkipLink() {
+    return (
+        <a
+            href="#main"
+            onClick={(event) => {
+                const target = document.getElementById('main') ?? document.querySelector('main');
+                if (!target) return;
+                event.preventDefault();
+                if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+                target.focus();
+            }}
+            className="sr-only rounded-md bg-white px-4 py-3 text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[60] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+        >
+            Skip to content
+        </a>
+    );
+}
+
 // Most items are live, so only the exceptions get a label.
 function StatusText({ status }: { status: NavChild['status'] }) {
     if (!status || status === 'Available') return null;
@@ -310,6 +333,7 @@ export function Navbar() {
                 scrolled || mobileOpen ? 'border-white/10' : 'border-transparent'
             }`}
         >
+            <SkipLink />
             <nav ref={navRef} aria-label="Main navigation" className="px-4 sm:px-6">
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">
                     <Link

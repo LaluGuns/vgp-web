@@ -365,7 +365,7 @@ export function NoteRoll({ notes, slots, bars, current, label }: { notes: RollNo
                 {bars.map((b) => (
                     <span
                         key={b}
-                        className={`absolute -bottom-3 -top-2 w-px ${d.rule.dash ? 'border-l border-dotted border-white/30' : 'bg-white/10'}`}
+                        className={`absolute -bottom-3 -top-2 ${d.rule.dash ? 'w-0 border-l border-dotted border-white/30' : 'w-px bg-white/10'}`}
                         style={{ left: `${(b / slots) * 100}%` }}
                     />
                 ))}
@@ -388,6 +388,8 @@ export function NoteRoll({ notes, slots, bars, current, label }: { notes: RollNo
 }
 
 const TRACE_POINTS = 120;
+/** The context area's grey, blended to opaque over the panel so no rule shows through it. */
+const TRACE_AREA = '#34383c';
 const powerDb = (p: number) => (p > 1e-12 ? 10 * Math.log10(p) : -120);
 
 /** Mean square of an analyser's current block. */
@@ -444,7 +446,7 @@ export function LevelTrace({
             <canvas ref={canvas} role="img" aria-label={label} className="vgp-plot block h-24 w-full" />
             <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
                 <span className="inline-flex items-center gap-1.5">
-                    <span className="h-2.5 w-3 rounded-[1px] bg-white/25" />
+                    <span className="h-2.5 w-3 rounded-[1px]" style={{ backgroundColor: TRACE_AREA }} />
                     {context}
                 </span>
                 <span className="inline-flex items-center gap-1.5">
@@ -500,7 +502,7 @@ function drawTrace(c: HTMLCanvasElement | null, context: Float32Array, focus: Fl
     for (let i = 0; i < TRACE_POINTS; i++) g.lineTo(x(i), y(at(context, i)));
     g.lineTo(w, h);
     g.closePath();
-    g.fillStyle = '#2f3236';
+    g.fillStyle = TRACE_AREA;
     g.fill();
     // What the demo is about, as the accent line.
     g.beginPath();

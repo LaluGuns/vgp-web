@@ -2,12 +2,12 @@ import { BlogArticle } from '../blog-data';
 
 export const post115: BlogArticle = {
     slug: 'rnb-instrumentals-smooth-progressions',
-    title: 'R&B instrumentals: extended chords, smooth voice leading and loose drums',
-    excerpt: 'How seventh and ninth chords, small voice-leading moves and slightly late drums give an R&B beat its smooth feel, with progressions to play today.',
+    title: 'R&B chords that glide: voice leading and a late snare',
+    excerpt: 'Why the same three chords sound stiff in block shapes and smooth on a record: shared notes, half-step moves, and drums that sit a few milliseconds back.',
     category: 'genre-guides',
     publishedAt: '2026-01-10',
-    updatedAt: '2026-10-08',
-    readingTime: 6,
+    updatedAt: '2026-10-09',
+    readingTime: 5,
     summary: [
         'Seventh and ninth chords share more notes with their neighbours, so the changes sound soft rather than abrupt.',
         'Voice each change so the third and seventh move a half step or stay put. In a ii-V-I that is one or two small moves per chord.',
@@ -15,14 +15,31 @@ export const post115: BlogArticle = {
     ],
     figures: {
         guide: {
-            type: 'flow',
+            type: 'notes',
             caption:
-                'A ii-V-I in C with the right hand voiced close together and the roots in the bass. From Dm9 to G13 only one note moves, C down to B. From G13 to Cmaj9 every note moves by a step or stays.',
-            alt: 'Three chords in a row with arrows. Dm9: D in the bass under F, A, C and E. G13: G under F, A, B and E. Cmaj9: C under E, G, B and D.',
-            steps: [
-                { label: 'Dm9', note: 'D under F A C E' },
-                { label: 'G13', note: 'G under F A B E. Only C moves, down to B.' },
-                { label: 'Cmaj9', note: 'C under E G B D. Each note moves a step or less.' },
+                'A ii-V-I in C, voiced close together over the roots. Grey notes are held over from the chord before; notes in the accent moved. From Dm9 to G13 only C falls to B. From G13 to Cmaj9 three notes step down and B stays.',
+            alt: 'Piano roll of three bars with the chords Dm9, G13 and Cmaj9 above it. Bass notes D2, G2 and C2. Bar 1: F4, A4, C5 and E5. Bar 2: F4, A4 and E5 held in grey and B4 in the accent. Bar 3: B4 held in grey, and E4, G4 and D5 in the accent.',
+            chords: [
+                { at: 0, label: 'Dm9' },
+                { at: 4, label: 'G13' },
+                { at: 8, label: 'Cmaj9' },
+            ],
+            notes: [
+                { start: 0, length: 4, pitch: 38, muted: true },
+                { start: 0, length: 4, pitch: 65, muted: true },
+                { start: 0, length: 4, pitch: 69, muted: true },
+                { start: 0, length: 4, pitch: 72, muted: true },
+                { start: 0, length: 4, pitch: 76, muted: true },
+                { start: 4, length: 4, pitch: 43, muted: true },
+                { start: 4, length: 4, pitch: 65, muted: true },
+                { start: 4, length: 4, pitch: 69, muted: true },
+                { start: 4, length: 4, pitch: 71, label: 'B' },
+                { start: 4, length: 4, pitch: 76, muted: true },
+                { start: 8, length: 4, pitch: 36, muted: true },
+                { start: 8, length: 4, pitch: 64, label: 'E' },
+                { start: 8, length: 4, pitch: 67, label: 'G' },
+                { start: 8, length: 4, pitch: 71, muted: true },
+                { start: 8, length: 4, pitch: 74, label: 'D' },
             ],
         },
         groove: {
@@ -57,6 +74,7 @@ export const post115: BlogArticle = {
                 {
                     label: 'Snare',
                     note: 'late',
+                    focus: true,
                     hits: [
                         { step: 4, offset: 0.12 },
                         { step: 12, offset: 0.12 },
@@ -116,69 +134,72 @@ export const post115: BlogArticle = {
             why: '20 / 166.7 = 0.12, about a tenth of a sixteenth. That is enough to feel laid back and too little to sound like a mistake.',
         },
     ],
-    content: `## Where the sound comes from
+    content: `## Hook: the same three chords, two different songs
 
-Rhythm and blues came into use in the late 1940s as a name for Black American popular music, and it fed into soul and funk in the 1960s and 1970s. In the 1990s, neo-soul brought jazz harmony, electric piano and loose, hip-hop-influenced drums back to the front. A lot of current R&B pairs those chords with trap-style drums and darker synths. Across all of it, the beat exists to carry a voice.
+You loop Dm7, G7 and Cmaj7 on a piano patch, each chord in root position with the root on top of the stack. It sounds like an exercise from a theory book: every change is a block of four notes jumping to another block. Then you hear the same three chords on an R&B record and they seem to melt into each other.
 
-## Harmony: sevenths and ninths
+The chords are identical. What changed is which notes are in them, how each note gets to the next chord, and how the drums sit underneath.
 
-A triad stacks three notes. A seventh chord adds a fourth note, a seventh above the root:
+## Why it matters: the beat exists to carry a voice
 
-- Cmaj7: C, E, G, B
-- Am7: A, C, E, G
-- Dm7: D, F, A, C
-- G7: G, B, D, F
+An R&B instrumental is a bed for a singer. Abrupt chord changes pull attention to the keys at the moment the singer wants it, and a stiff, fully quantized kit makes the whole bed feel rigid. The smooth sound people want from the genre comes from three moves you can make in any DAW: richer chords, small voice-leading steps, and drums that sit a little back.
 
-A ninth chord adds one more, a ninth above the root. Cmaj9 is C, E, G, B and D. Dm9 is D, F, A, C and E. Extended chords share more notes with their neighbours, so the changes sound soft rather than abrupt, and that softness is much of the colour of R&B. You do not need every note. The fifth adds little colour and is often left out, which makes room for the ninth without crowding your hands.
+## Science model: why small moves sound smooth
 
-## Voice leading: move every note as little as possible
+A triad stacks three notes. A seventh chord adds a fourth, a seventh above the root: Cmaj7 is C, E, G and B, Dm7 is D, F, A and C, G7 is G, B, D and F. A ninth chord adds one more, so Cmaj9 adds D and Dm9 adds E. The fifth adds little colour and is often left out, which makes room for the ninth.
 
-What makes a progression smooth is how each note moves to the next chord. The two notes that define a seventh chord are its third and its seventh, the guide tones. In a ii-V-I they move by a half step or not at all.
-
-- **Dm7 to G7.** The F, the third of Dm7, stays and becomes the seventh of G7. The C, the seventh of Dm7, falls a half step to B, the third of G7.
-- **G7 to Cmaj7.** The F falls a half step to E, the third of Cmaj7. The B stays and becomes the seventh of Cmaj7.
+Extended chords share more notes with their neighbours. Dm9 and G13, voiced as in the figure, share three of their four upper notes. The two notes that define a seventh chord are its third and seventh, the guide tones, and in a ii-V-I they move by a half step or not at all (Levine, 1995). The C of Dm7 falls to B, the third of G7; the F of G7 falls to E, the third of Cmaj7.
 
 ::figure guide
 
-Inversions help the bass do the same. An inversion puts a chord tone other than the root in the bass, such as Cmaj7 with E underneath. Play Fmaj7, then Cmaj7 over E, then Dm7, and the bass walks down F, E, D.
+The ear hears it that way because of how it groups notes. Huron (2001) showed that most traditional voice-leading rules follow from a few perceptual principles, one of them pitch proximity: a note followed by a nearby pitch is heard as the same line continuing. When every note of a chord moves a step or stays, the listener hears four lines gliding. When the whole block jumps, the lines break and the change is heard as an event.
 
-## Progressions to try
-
-Play each one in a loop on an electric piano and listen for the voice that moves.
-
-- **ii-V-I:** Dm9, G13, Cmaj9. The guide tones move by half steps.
-- **Walking down:** Fmaj7, Em7, Dm7, Cmaj7. The bass steps down F, E, D, C.
-- **Passing chord:** Cmaj7, C♯dim7, Dm7. The bass climbs C, C♯, D.
-- **Secondary dominant:** Cmaj7, A7, Dm7, G7. The C♯ in A7 rises to D.
-- **Borrowed minor iv:** Fmaj7, Fm7, Cmaj7. The A falls to A♭, then to G.
-
-The passing chord and the secondary dominant both borrow a note from outside the key, C♯, and resolve it up a half step into D. The borrowed iv takes its A♭ from C minor, which gives the change its bittersweet pull.
-
-## Drums: a little late and loose
-
-Fully quantized drums sit stiffly under these chords. The loose feel associated with neo-soul comes from two moves: swing on the sixteenths, and some hits placed slightly late.
-
-Swing of 50 percent is straight and 66 percent is a triplet shuffle. Settings in between, around 54 to 60 percent, lean without shuffling. For late hits, work out the size of a step first: at 90 BPM a sixteenth lasts 166.7 ms, so nudging the snare 15 to 20 ms late moves it about a tenth of a sixteenth. It feels laid back rather than wrong. Leave the first kick on the grid so the groove has an anchor, then try the second one a little later.
+The drums follow the same logic in time. A snare a few milliseconds late reads as relaxed, as long as the offset is small and consistent. At 90 BPM a 16th lasts 60,000 / 90 / 4 = 166.7 ms, so a snare 20 ms late is about a tenth of a 16th off the grid.
 
 ::figure groove
 
-Softer sounds help the feel: rimshots or snaps instead of a loud snare, and a shaker in place of hats in the verse. The ideas behind the lean are covered in [swing explained](/blog/swing-explained-without-mystical-language) and [the late snare illusion](/blog/the-late-snare-illusion-in-modern-records).
+Late is not automatically better. In listening tests, fully quantized versions of real grooves were rated about as highly as the played originals, and exaggerated offsets lowered the ratings (Davies et al., 2013; Senn et al., 2016). The lean sets the feel; it does not add groove by itself. Hear how far a snare can move before it sounds wrong.
 
-## Sounds: warm and close
+::demo late-snare
 
-The core palette is electric piano, such as Rhodes or Wurlitzer, a piano with a low-pass filter softening its top, warm analog-style pads and clean electric guitar with chorus. For bass, use a round sine or synth bass that follows the chord roots, or a played bass with slides. Where its energy sits depends on the note: E1 is 41.2 Hz and the E an octave up is 82.4 Hz.
+## DAW experiment: from block chords to gliding ones
 
-## Space for the voice
+Use an electric piano patch at 90 BPM.
 
-In the verse, strip the beat to drums, bass and one chord instrument. Automate a low-pass filter on the chords, lower in the verse and open in the chorus, so the chorus brightens without adding a part.
+1. Program Dm7, G7, Cmaj7, one bar each, in root position, and loop it. Note how each change sounds.
+2. Revoice it so the third and seventh move as little as possible: keep F from Dm7 into G7, drop C to B, then drop F to E into Cmaj7 and keep B.
+3. Add the extensions from the figure: E on top of Dm9, E and A over G13, D on top of Cmaj9. Drop the fifths if the chords get crowded.
+4. Put the roots in a separate bass part, so the keys can stay in the middle while the bass moves.
+5. Program a kick and snare on the grid, then move both snares 15 to 20 ms late and the second kick about 15 ms late. Leave the first kick on the grid.
+6. Push the snares to 40 ms late and listen for the moment the feel turns sloppy, then bring them back.
+7. Add a low-pass filter on the keys, around 1.5 kHz in the verse and opened to 8 kHz in the chorus.
+
+Progressions to try with the same method: Fmaj7, Em7, Dm7, Cmaj7 (the bass walks down); Cmaj7, C♯dim7, Dm7 (the bass climbs a half step at a time); Fmaj7, Fm7, Cmaj7 (A falls to A♭, then to G).
+
+## Common mistake: thick chords that jump
+
+The usual mistake is adding extensions without changing the voicing. A Dm9 in root position followed by a G13 in root position has the right notes and still jumps, because every voice leaps a fourth or fifth. The richer chord only sounds smooth when its notes move to nearby notes in the next one.
+
+The second mistake is too much lean. A humanize function on every drum, or snares 40 ms late at 90 BPM, sounds like an unsteady drummer. Keep the first kick as an anchor and move only the hits you choose, by the same amount every time.
+
+The third is forgetting the singer. Electric piano voicings sit in the same midrange as a vocal. Keep the verse to drums, bass and one chord instrument, and let the filter open for the chorus.
 
 ::figure filter
 
-Where the keys and the vocal overlap in the midrange, a gentle, broad cut of a few dB in the keys clears room without hollowing the chords. A dynamic EQ that dips the keys only while the vocal sings is gentler still. A little vinyl crackle or room noise, kept low and ducked by the kick, fills the silence without taking space from the singer.
+## Producer takeaway: move each note as little as it can
+
+Pick the chords, then voice them so the guide tones move by a half step or stay, and let the bass carry the roots. Place the snare a little late and leave the first kick on the grid. When the changes glide and the drums lean back, the singer has a bed to lie on instead of a wall of keys. More on the drum side is in the [lesson on the late snare](/blog/the-late-snare-illusion-in-modern-records) and the [lesson on swing](/blog/swing-explained-without-mystical-language).
+
+## References
+
+- Davies, M., Madison, G., Silva, P., & Gouyon, F. (2013). The effect of microtiming deviations on the perception of groove in short rhythms. *Music Perception*, 30(5), 497-510.
+- Huron, D. (2001). Tone and voice: A derivation of the rules of voice-leading from perceptual principles. *Music Perception*, 19(1), 1-64.
+- Levine, M. (1995). *The Jazz Theory Book*. Sher Music.
+- Senn, O., Kilchenmann, L., von Georgi, R., & Bullerjahn, C. (2016). The effect of expert performance microtiming on listeners' experience of groove in swing or funk music. *Frontiers in Psychology*, 7, 1487.
 `,
     seo: {
-        title: 'R&B instrumentals: extended chords, smooth voice leading and loose drums | VGP Studio',
-        description: 'Seventh and ninth chords, guide-tone voice leading in a ii-V-I, progressions to try, swung and slightly late drums, and arranging space for the vocal.',
+        title: 'R&B chords that glide | VGP Studio',
+        description: 'Why R&B chords sound smooth: shared notes, guide tones that move a half step, a few milliseconds of late snare, and room left for the singer.',
         keywords: ['r&b beats', 'r&b chord progressions', 'neo-soul chords', 'voice leading', 'ii-V-I', 'r&b drums'],
     },
 };
