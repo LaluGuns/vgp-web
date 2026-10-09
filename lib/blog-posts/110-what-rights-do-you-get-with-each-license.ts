@@ -96,7 +96,7 @@ Say you buy ${smallest?.name ?? 'the smallest tier'} and the song reaches ${n(sc
 
 ## Music videos
 
-Visuals are counted on their own, not as streams. ${smallest?.name ?? 'The smallest tier'} covers ${videos(smallest)}, so the second video in the hook needs ${twoVideos ? `a tier such as ${twoVideos.name}` : 'a written upgrade'} before the shoot.
+Visuals are counted on their own. ${smallest?.name ?? 'The smallest tier'} covers ${videos(smallest)}, so the second video in the hook needs ${twoVideos ? `a tier such as ${twoVideos.name}` : 'a written upgrade'} before the shoot.
 
 ## Paid performances
 

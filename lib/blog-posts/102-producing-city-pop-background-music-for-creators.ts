@@ -119,7 +119,7 @@ The Speech Intelligibility Index (ANSI S3.5-1997) predicts how much of a speech 
 
 Masking happens band by band: a louder sound raises the threshold for quieter sounds near its own frequency (Fastl and Zwicker, 2007). A slap bass at 100 Hz does little to the consonants of a voice. An electric piano chord at 1 to 3 kHz covers exactly the part of the voice that the index weights most.
 
-Words in the music add a second cost that is not about frequency. Salamé and Baddeley (1989) had people remember lists of digits while music played that they were told to ignore. Both kinds of music hurt recall compared with quiet, and vocal music hurt it more than instrumental music. Their task was not watching a video, but a viewer following a narrator is also holding words in memory. A sung hook under narration costs more than its level suggests.
+Words in the music add a second cost, separate from frequency. Salamé and Baddeley (1989) had people remember lists of digits while music played that they were told to ignore. Both kinds of music hurt recall compared with quiet, and vocal music hurt it more than instrumental music. Their task was not watching a video, but a viewer following a narrator is also holding words in memory. A sung hook under narration costs more than its level suggests.
 
 That points to two fixes. Take energy out of the speech band only while the voice is talking, and keep sung or busy lead lines for the moments without talking.
 

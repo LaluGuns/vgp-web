@@ -220,8 +220,8 @@ export function PhaseDemo() {
                     value={flipped ? 'flipped' : 'normal'}
                     onChange={(v) => setFlip(v === 'flipped')}
                     options={[
-                        { value: 'normal', label: 'Polarity normal' },
-                        { value: 'flipped', label: 'Polarity flipped' },
+                        { value: 'normal', label: 'Normal' },
+                        { value: 'flipped', label: 'Flipped' },
                     ]}
                 />
             </div>

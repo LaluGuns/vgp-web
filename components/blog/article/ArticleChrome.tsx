@@ -209,9 +209,17 @@ export function OutlineList({ headings, active, touch = false }: { headings: Out
  * above the bottom navigation. It opens the section list as a sheet.
  */
 export function MobileContents({ headings }: { headings: OutlineItem[] }) {
+    const [mounted, setMounted] = useState(false);
     const [visible, setVisible] = useState(false);
     const [active, setActive] = useState('');
     const sheet = useRef<HTMLDivElement>(null);
+
+    // Portalled to <body>: the page transition wrapper is transformed, which would pin a
+    // fixed child to the article instead of the screen.
+    useEffect(() => {
+        const frame = requestAnimationFrame(() => setMounted(true));
+        return () => cancelAnimationFrame(frame);
+    }, []);
 
     useEffect(() => {
         let frame = 0;
@@ -242,9 +250,9 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
         };
     }, [headings]);
 
-    if (headings.length < 2) return null;
+    if (headings.length < 2 || !mounted) return null;
 
-    return (
+    return createPortal(
         <div className="lg:hidden">
             <button
                 type="button"
@@ -287,6 +295,7 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
                 </div>
                 <OutlineList headings={headings} active={active} touch />
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 }

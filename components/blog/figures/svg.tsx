@@ -97,9 +97,23 @@ export const FS = 12;
 /** Width the narrow (phone) layout is drawn at. Figure.tsx draws it; figures switch layout below 480. */
 export const NARROW_W = 280;
 
-/** Rough width of a label in the system UI font. */
+/**
+ * Width of a label in the system UI font, from rough widths per kind of
+ * character (in em). Numbers are set in tabular figures in some dialects,
+ * which run wider than text, so a digit counts as 0.62.
+ */
 export function textWidth(text: string, size = FS) {
-    return text.length * size * 0.56;
+    let em = 0;
+    for (const ch of text) {
+        if (ch >= '0' && ch <= '9') em += 0.62;
+        else if (ch === ' ') em += 0.27;
+        else if ('il.,:;!|\'’()[]'.includes(ch)) em += 0.27;
+        else if ('mwMW%'.includes(ch)) em += 0.84;
+        else if (ch >= 'A' && ch <= 'Z') em += 0.66;
+        else if (ch >= 'a' && ch <= 'z') em += 0.54;
+        else em += 0.62;
+    }
+    return em * size;
 }
 
 export function wrapText(text: string, maxWidth: number, size = FS): string[] {

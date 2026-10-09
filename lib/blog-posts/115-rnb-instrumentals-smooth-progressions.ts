@@ -188,7 +188,7 @@ The third is forgetting the singer. Electric piano voicings sit in the same midr
 
 ## Producer takeaway: move each note as little as it can
 
-Pick the chords, then voice them so the guide tones move by a half step or stay, and let the bass carry the roots. Place the snare a little late and leave the first kick on the grid. When the changes glide and the drums lean back, the singer has a bed to lie on instead of a wall of keys. More on the drum side is in the [lesson on the late snare](/blog/the-late-snare-illusion-in-modern-records) and the [lesson on swing](/blog/swing-explained-without-mystical-language).
+Pick the chords, then voice them so the guide tones move by a half step or stay, and let the bass carry the roots. Place the snare a little late and leave the first kick on the grid. When the changes glide and the drums lean back, the keys stay under the singer. More on the drum side is in the [lesson on the late snare](/blog/the-late-snare-illusion-in-modern-records) and the [lesson on swing](/blog/swing-explained-without-mystical-language).
 
 ## References
 

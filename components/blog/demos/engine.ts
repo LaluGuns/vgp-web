@@ -38,6 +38,11 @@ export function storedVolume(): number {
     }
 }
 
+/** The engine if a demo has already started one, without creating it. */
+export function peekEngine(): Engine | null {
+    return engine;
+}
+
 /** Must be called from a click or key press the first time. */
 export function getEngine(): Engine {
     if (engine) {

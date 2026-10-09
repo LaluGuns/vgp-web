@@ -8,6 +8,7 @@ export const post051: BlogArticle = {
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',
     readingTime: 6,
+    featured: true,
     summary: [
         'A version that is about 1 dB louder tends to sound fuller and better, so an A/B that is not level-matched tells you nothing about the processing.',
         'At moderate levels, 10 dB more sounds roughly twice as loud, and the low end grows fastest, which is why louder reads as bigger.',

@@ -6,9 +6,8 @@ export const post112: BlogArticle = {
     excerpt: 'An 808 is a tuned bass note that hits like a drum. How to set its pitch, make it audible on a phone and keep it from fighting the kick.',
     category: 'genre-guides',
     publishedAt: '2026-02-03',
-    updatedAt: '2026-10-08',
-    readingTime: 7,
-    featured: true,
+    updatedAt: '2026-10-09',
+    readingTime: 5,
     summary: [
         'An 808 plays notes, so set the sampler\'s root note to the sample\'s real pitch and play it in the key of the beat.',
         'Distortion adds harmonics at whole-number multiples of the note, and on a phone those harmonics carry the bass line the speaker cannot play.',
@@ -114,67 +113,61 @@ export const post112: BlogArticle = {
             why: 'The harmonics are multiples of the note, so the distortion has to see the note. Filter first and there is almost nothing left to distort.',
         },
     ],
-    content: `## Where the 808 comes from
+    content: `## Hook: the 808 that disappears on a phone
 
-The name comes from the Roland TR-808 drum machine, released in 1980. Its bass drum is not a sample. It is an oscillator circuit that rings when it is triggered and dies away on its own, and turning up the decay lets it ring for a long time, going slightly flat as it does (Reid, 2002). Hip-hop producers tuned that long boom and played it as a bass line. Trap, which grew out of Southern US hip-hop around the turn of the 2000s, made it the main low-end sound.
+The beat sounds huge in the car. The 808 slides between notes, the floor shakes and the kick punches through. You send it to a friend, who plays it on a phone, and the bass line is gone: drums and hats over a hole. Back in the studio you notice something else. On the bars where the kick and the 808 hit together, the punch is thinner than on the bars where the kick plays alone.
 
-Today an 808 in a trap beat usually means a sample or synth patch built the same way: a tone close to a sine wave, a short click at the start and a long decaying tail. Treat it as a bass instrument that also hits like a drum.
+Both problems come from what an 808 is: a low, almost pure tone that plays notes and hits like a drum.
 
-## Pitch: tune to the beat, not to C
+## Why it matters: the 808 is a bass instrument
 
-Because the 808 plays notes, it has to be in the key of the beat. A common rule says every 808 must be tuned to C. That is a convenience: with every sample tuned to C, you can leave the sampler's root note on C. What matters is that the root note in the sampler matches the real pitch of the sample.
+The name comes from the Roland TR-808 drum machine, released in 1980. Its bass drum is an oscillator circuit that rings when triggered and dies away on its own; turn up the decay and it rings for a long time, going slightly flat as it does (Reid, 2002). Hip-hop producers tuned that long boom and played it as a bass line, and trap made it the main low-end sound. Today an 808 usually means a sample or synth patch built the same way: a tone close to a sine wave, a short click at the start and a long decaying tail.
 
-If a sample is really an F♯ and the sampler thinks it is a C, every note you play comes out six semitones off. Find the real pitch with a tuner or a spectrum analyzer on the tail, after the click, because the attack often starts higher and drops. Then set the root note to match, or retune the sample to C.
+So it has to be in the key of the beat, it has to be heard on small speakers that cannot play its fundamental, and it shares the lowest octave with the kick. Each of those is a separate job.
 
-The note decides where the energy sits. An 808 on F1 has its fundamental frequency at 43.7 Hz, on A1 at 55 Hz and on C2 at 65.4 Hz. A simple line follows the root of each chord and jumps up an octave for emphasis.
+## Science model: pitch, harmonics and polarity
 
-## Tail and glide
+Pitch first. A sampler plays a sample unchanged on its root note and shifts every other key from there. If a sample is really an F♯ and the sampler thinks it is a C, every note comes out six semitones off. The common rule that every 808 must be tuned to C is a convenience: it lets you leave the root note on C. What matters is that the root note matches the sample's real pitch. Find it with a tuner on the tail, after the click, because the attack often starts higher and drops.
 
-The tail fills the space between notes. At 140 BPM a beat lasts 428.6 ms, so a tail that rings for a second covers more than two beats. Sparse patterns can use a long tail. Busy patterns need a shorter decay, or the notes smear into a rumble. Set the sampler to mono so each new note cuts off the last one.
-
-Glide, or portamento, slides the pitch from one note to the next. In many samplers it works in mono or legato mode when two notes overlap. The glide time sets how long the slide takes: start around a sixteenth note, 107 ms at 140 BPM, and adjust by ear. Sliding 808 lines are also a signature of UK drill.
-
-## Distortion: make the bass audible on a phone
-
-A clean 808 is close to a sine, with almost all of its energy at the fundamental. A phone or laptop speaker cannot move enough air to play 43.7 Hz, so a clean 808 nearly disappears there. Distortion adds harmonics at whole-number multiples of the note:
+The note decides where the energy sits. An 808 on F1 has its fundamental at 43.7 Hz, on A1 at 55 Hz and on C2 at 65.4 Hz. A phone speaker cannot move enough air to play 43.7 Hz, so a clean 808 nearly vanishes there. Distortion adds harmonics at whole-number multiples of the note:
 
 $$f_n = n \\times f_0$$
 
-On F1 they land at 87.3, 131, 174.6 and 218.3 Hz and on up. A phone speaker plays the upper ones, and the ear infers the low note from their even spacing, an effect called the missing fundamental (Moore, 2012).
+On F1 they land at 87.3, 131, 174.6 and 218.3 Hz and up. A phone plays the upper ones, and the ear infers the low note from their even spacing, the missing fundamental (Moore, 2012).
 
 ::figure harmonics
 
-::demo saturation
-
-Soft saturation rounds the peaks of the wave and adds mostly lower harmonics. Hard clipping flattens the peaks and adds stronger high harmonics, which sounds brighter and more aggressive. A clipper that treats both halves of the wave the same adds only odd harmonics. Asymmetric, tube-style saturation adds even ones as well. Compare every setting at matched level, because the louder version tends to win at first.
+Soft saturation rounds the peaks and adds mostly lower harmonics. Hard clipping flattens them and adds stronger high harmonics, which sounds brighter and more aggressive. A clipper that treats both halves of the wave the same adds only odd harmonics; asymmetric, tube-style saturation adds even ones as well. Compare at matched level, because the louder version tends to win at first.
 
 ::figure clip
 
-Distort first, then filter. A common setup splits the 808 into two layers. The clean layer carries the sub. The copy goes through the distortion and then a high-pass filter around 100 Hz, so it adds only harmonics on top. Filter before the distortion and you remove the note the harmonics are made from. Keep everything below about 100 Hz in mono. Hard clipping also creates harmonics above the Nyquist limit that fold back as [aliasing](/blog/why-aliasing-is-a-ghost-frequency-problem), so turn on the clipper's oversampling if it has one.
+::demo saturation
 
-## The kick and the 808
+Polarity last. The kick and the 808 share the same low range, so when they hit together, how their waves line up decides whether they add or partly cancel. If one pushes the speaker out while the other pulls it in, the low end of the hit thins out. It rarely goes silent, because the two sounds have different pitches and decays, but the punch you expected is gone. The [lesson on phase and polarity](/blog/phase-vs-polarity-kick-bass-will-thank-you) shows the cancellation in detail.
 
-The kick and the 808 share the same low range, so when they hit together, how their waves line up decides whether they add or partly cancel. If one pushes the speaker out while the other pulls it in, the low end of the hit thins out. It rarely goes silent, because the two sounds have different pitches and decays, but the punch you expected is gone.
+## DAW experiment: build an 808 and test it on a phone
 
-- **Line up the starts.** Zoom in and check that the 808's first cycle moves in the same direction as the kick's. If it does not, flip the polarity of one and keep whichever sounds fuller. More in [phase vs polarity](/blog/phase-vs-polarity-kick-bass-will-thank-you).
-- **Give each one a job.** A kick that is mostly click with a short low end leaves the sustained bass to the 808. On some beats the 808 is the kick.
-- **Duck the 808 under the kick** with sidechain compression: a few dB, a fast attack and a release short enough that the 808 is back up as the kick dies away.
-- **Tune the kick to the key.** Fixed EQ slots, such as boosting the kick at 60 Hz and cutting the 808 there, stop working the moment the 808 plays a different note.
+1. Load one sine oscillator in a synth, in mono mode with glide on. Set the amp envelope to an attack near 0 ms, sustain at or near zero and a decay long enough to reach the next note.
+2. Add a pitch envelope that starts about an octave above the note and falls to it in the first few tens of milliseconds. That drop gives the attack its punch.
+3. Play a line in the key of your beat on F1 and A1, and check the pitch of the tail with a tuner.
+4. Duplicate the 808. Distort the copy, then high-pass it around 100 Hz after the distortion, so it adds only harmonics above the clean sub. Keep everything below about 100 Hz in mono.
+5. Bounce a few bars and play them on a phone. Mute the distorted copy and play them again. Listen for the bass line coming and going.
+6. Put a kick on the same beat as an 808 note. Zoom in on the first cycle of each and flip the 808's polarity. Keep whichever version sounds fuller.
+7. Add a sidechain compressor on the 808, keyed from the kick: a few dB of reduction, fast attack, and a release short enough that the 808 is back up as the kick dies away.
 
-## Programming the pattern
+## Common mistake: filtering before the distortion
 
-Do not double every kick with an 808. The two can share some hits while the 808 answers in the gaps. The hats carry the speed: eighth notes that break into rolls of sixteenths, triplets or 32nds. Vary the velocity or the pitch inside a roll so it moves instead of buzzing.
+A frequent mistake is putting the high-pass in front of the distortion to keep the low end clean. The harmonics are multiples of the note, so the distortion has to see the note. Filter first and there is almost nothing left to distort.
+
+Another is a fixed EQ slot, such as boosting the kick at 60 Hz and cutting the 808 there. It stops working the moment the 808 plays a different note. Give each sound a job instead: a kick that is mostly click with a short low end leaves the sustained bass to the 808, and on some beats the 808 is the kick.
+
+Hard clipping also creates harmonics above the Nyquist limit that fold back as [aliasing](/blog/why-aliasing-is-a-ghost-frequency-problem). Turn on the clipper's oversampling if it has one.
+
+## Producer takeaway: tune it, distort it, line it up
+
+Treat the 808 as a bass instrument that hits like a drum. Match the root note to the sample's real pitch, distort a copy so small speakers can hear the line, and check its polarity against the kick. Then program it with the drums: at 140 BPM a beat lasts 428.6 ms, so a tail that rings for a second covers more than two beats. Sparse patterns can use it; busy ones need a shorter decay. Let the 808 share some hits with the kick and answer in the gaps.
 
 ::figure pattern
-
-## Building your own
-
-You can make an 808 from scratch in any synth.
-
-1. One sine oscillator, in mono mode with glide on.
-2. An amp envelope with an attack near 0 ms, sustain at or near zero and a decay long enough to reach the next note.
-3. A fast pitch envelope that starts about an octave above the note and falls to it in the first few tens of milliseconds. That drop gives the attack its punch.
-4. Saturation after the oscillator, and the clean and distorted split described above.
 
 ## References
 

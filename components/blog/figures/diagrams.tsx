@@ -15,10 +15,12 @@ import {
     accentFill,
     accentStroke,
     arrowInset,
+    clamp,
     cornerOf,
     dialectOf,
     draw,
     headPath,
+    solid,
     textWidth,
     wrapText,
     type Dialect,
@@ -55,9 +57,10 @@ function Hit({
     ghost?: boolean;
     motion?: object;
 }) {
-    const paint =
-        tone === 'accent' ? accentFill(opacity) : { fill: tone === 'ink' ? C.ink : C.soft, fillOpacity: opacity < 1 ? opacity : undefined };
-    const stroke = tone === 'accent' ? accentStroke(opacity) : { stroke: tone === 'ink' ? C.ink : C.soft, strokeOpacity: opacity < 1 ? opacity : undefined };
+    // Grey hits are solid, so a drum line or a step rule behind one never shows through it.
+    const grey = tone === 'ink' ? solid(0.92) : solid(0.52);
+    const paint = tone === 'accent' ? accentFill(opacity) : { fill: grey, fillOpacity: opacity < 1 ? opacity : undefined };
+    const stroke = tone === 'accent' ? accentStroke(opacity) : { stroke: grey, strokeOpacity: opacity < 1 ? opacity : undefined };
     if (d.name === 'music') {
         // The same head as a music point, at most 9 wide, sitting on the drum line.
         const r = Math.min(bw, 9) / 3.2;
@@ -309,9 +312,9 @@ export function Stereo({ spec, w, dialect }: { spec: StereoFigure; w: number; di
                 <g key={side}>
                     <rect x={cx + side * span - 9} y={speakerY - 9} width={18} height={18} rx={d.name === 'mind' ? 6 : 3} fill="none" stroke={C.soft} />
                     <circle cx={cx + side * span} cy={speakerY} r={4} fill={C.soft} />
-                    {/* Beside its speaker, or under it on a phone, where the side has no room. */}
+                    {/* Beside its speaker: outside it, or on a phone, where the outside has no room, on its inner side. */}
                     {narrow ? (
-                        <Label x={cx + side * span} y={speakerY + 26} anchor="middle">
+                        <Label x={cx + side * (span - 16)} y={speakerY + 4} anchor={side < 0 ? 'start' : 'end'}>
                             {side < 0 ? 'Left' : 'Right'}
                         </Label>
                     ) : (
@@ -335,29 +338,33 @@ export function Stereo({ spec, w, dialect }: { spec: StereoFigure; w: number; di
             {spec.items.map((item, ii) => {
                 const x = cx + item.pan * span;
                 const y = front - (item.depth ?? 0.3) * (front - back);
-                const alpha = 1 - (item.fade ?? 0) * 0.78;
+                // Level lost is drawn as a smaller mark and a thinner spread, never as a faded accent,
+                // which would turn the colour muddy. The label greys with it.
+                const fade = clamp(item.fade ?? 0, 0, 1);
+                const alpha = 1 - fade * 0.78;
+                const scale = 1 - fade * 0.45;
                 const widthPx = (item.width ?? 0) * span;
                 const right = item.pan > 0.45;
                 const reach = Math.max(d.marker === 'ring' ? 12 : 10, widthPx);
                 const labelX = right ? x - reach - 6 : x + reach + 6;
-                const stroke = accentStroke(0.95 * alpha);
+                const stroke = { ...accentStroke(1), strokeWidth: 2 - fade };
                 return (
                     <g key={item.label}>
                         {/* The mark pops in place; its label is already there. */}
                         <g {...draw('pop', 160 + (360 * ii) / Math.max(1, spec.items.length - 1))}>
                             {widthPx > 0 ? (
                                 <g>
-                                    <line x1={x - widthPx} x2={x + widthPx} y1={y} y2={y} {...stroke} strokeWidth={2} strokeLinecap={d.cap} />
+                                    <line x1={x - widthPx} x2={x + widthPx} y1={y} y2={y} {...stroke} strokeLinecap={d.cap} />
                                     {d.name === 'mind' ? (
-                                        [-1, 1].map((s) => <circle key={s} cx={x + s * widthPx} cy={y} r={2.6} {...accentFill(0.95 * alpha)} />)
+                                        [-1, 1].map((s) => <circle key={s} cx={x + s * widthPx} cy={y} r={2.6 * scale} {...accentFill(1)} />)
                                     ) : (
                                         [-1, 1].map((s) => (
-                                            <line key={s} x1={x + s * widthPx} x2={x + s * widthPx} y1={y - 5} y2={y + 5} {...stroke} strokeWidth={2} strokeLinecap={d.cap} />
+                                            <line key={s} x1={x + s * widthPx} x2={x + s * widthPx} y1={y - 5 * scale} y2={y + 5 * scale} {...stroke} strokeLinecap={d.cap} />
                                         ))
                                     )}
                                 </g>
                             ) : null}
-                            <Point d={d} x={x} y={y} r={d.marker === 'ring' ? 4 : d.marker === 'head' ? 4.2 : d.marker === 'tick' ? 4 : 5} opacity={0.95 * alpha} />
+                            <Point d={d} x={x} y={y} r={(d.marker === 'ring' ? 4 : d.marker === 'head' ? 4.2 : d.marker === 'tick' ? 4 : 5) * scale} />
                         </g>
                         <Label x={labelX} y={y + 4} anchor={right ? 'end' : 'start'} fill={`rgba(255,255,255,${(0.75 * alpha + 0.1).toFixed(2)})`}>
                             {item.label}
@@ -690,7 +697,7 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
                             width={width}
                             height={rowH - 2}
                             rx={cornerOf(d, rowH - 2, width)}
-                            fill={note.muted ? 'rgba(255,255,255,0.38)' : C.accent}
+                            fill={note.muted ? solid(0.38) : C.accent}
                             {...(note.muted ? {} : draw('grow', delay))}
                         />
                         {fits ? (

@@ -8,6 +8,7 @@ export const post091: BlogArticle = {
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',
     readingTime: 7,
+    featured: true,
     summary: [
         'A sample rate sets the highest frequency a file can hold, half the rate. It does not make the audible range smoother.',
         'The converter plays one smooth wave through the samples. The staircase is only a drawing, and its steps are filtered away.',

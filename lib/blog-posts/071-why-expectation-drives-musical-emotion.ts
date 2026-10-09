@@ -8,6 +8,7 @@ export const post071: BlogArticle = {
     publishedAt: '2026-06-10',
     updatedAt: '2026-10-08',
     readingTime: 7,
+    featured: true,
     summary: [
         'Listeners predict what comes next all the time, and the moment just before an expected event is when attention and arousal peak.',
         'A short delay before a predictable arrival sharpens the pull toward it. A long delay with no clear target turns into a stall.',

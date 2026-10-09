@@ -1609,8 +1609,8 @@ async function analyseClip(input: number): Promise<ClipAnalysis> {
     };
 }
 
-/** Overall playback level: the safe take at the default fader peaks near the other demos, and nothing passes -8 dBFS with both sliders at maximum. */
-const CLIP_OUT = 1.04;
+/** Overall playback level: at the default settings the phrase is about as loud as the drum-loop demos. */
+const CLIP_OUT = 0.65;
 
 /**
  * A phrase recorded too hot, clipped at the converter, then turned down

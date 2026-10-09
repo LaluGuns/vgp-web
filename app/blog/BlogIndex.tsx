@@ -191,7 +191,7 @@ function LearningPaths({ paths, read, startHere }: { paths: PathSummary[]; read:
                                 <Link href={`/blog/${lesson.slug}`} className="vgp-link text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
                                     {lesson.pathName}, lesson 1
                                 </Link>{' '}
-                                ({lesson.readingTime} min)
+                                ({lesson.readingTime}&nbsp;min)
                             </span>
                         ))}
                         .
@@ -385,7 +385,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
                 <LearningPaths paths={paths} read={read} startHere={startHere} />
 
-                <section id="vgp-reading-room" aria-labelledby="library-heading" className="scroll-mt-24 px-4 pb-20 sm:px-6">
+                <section id="vgp-reading-room" aria-labelledby="library-heading" className="px-4 pb-20 sm:px-6">
                     <div className="mx-auto max-w-7xl pb-4">
                         <h2 id="library-heading" className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
                             All lessons
@@ -404,7 +404,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         type="search"
                                         value={query}
                                         onChange={(e) => onQueryChange(e.target.value)}
-                                        placeholder="Search: LUFS, 808, vocals, licensing…"
+                                        placeholder="Search: LUFS, 808, reverb…"
                                         className="min-h-11 w-full rounded-md border border-white/15 bg-[#0a0e12] py-2.5 pl-10 pr-11 text-white placeholder-white/55 focus:border-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                                     />
                                     {query ? (

@@ -40,14 +40,23 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, stroke: s.dashed ? C.soft : undefined }));
     const leg = legend(named, 0, 14, w, d);
     const top = leg.height + 30;
-    const h = top + (narrow ? 150 : 180) + 34 + (spec.xLabel ? 18 : 0);
     // A note head or a focus ring is wider than a square, so the first and last points sit further in.
     const inset = d.marker === 'head' || d.marker === 'ring' ? 8 : 4;
     const left = inset;
     const right = w - inset;
-    const bottom = h - 34 - (spec.xLabel ? 18 : 0);
     const n = spec.x.length;
     const xAt = (i: number) => left + (i * (right - left)) / Math.max(1, n - 1);
+    const xAnchor = (i: number): Anchor => (i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle');
+    // Point names that would nearly touch take turns on two rows.
+    const spans = labels.map((label, i) => {
+        const tw = textWidth(label);
+        const from = xAnchor(i) === 'start' ? xAt(i) : xAnchor(i) === 'end' ? xAt(i) - tw : xAt(i) - tw / 2;
+        return [from, from + tw];
+    });
+    const stagger = spans.some((sp, i) => i > 0 && sp[0] - spans[i - 1][1] < 8);
+    const below = 34 + (stagger ? 15 : 0) + (spec.xLabel ? 18 : 0);
+    const h = top + (narrow ? 150 : 180) + below;
+    const bottom = h - below;
     const yAt = (v: number) => bottom - clamp(v, 0, 1) * (bottom - top);
     const marks = spec.marks ?? [];
     const markLabels = placeInRows(
@@ -126,12 +135,12 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                 );
             })}
             {labels.map((label, i) => (
-                <Label key={i} x={xAt(i)} y={bottom + 20} anchor={i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'} fill={C.text}>
+                <Label key={i} x={xAt(i)} y={bottom + 20 + (stagger && i % 2 === 1 ? 15 : 0)} anchor={xAnchor(i)} fill={C.text}>
                     {label}
                 </Label>
             ))}
             {spec.xLabel ? (
-                <Title dialect={d} x={w - 4} y={bottom + 40} anchor="end" fill={C.soft}>
+                <Title dialect={d} x={w - 4} y={bottom + 40 + (stagger ? 15 : 0)} anchor="end" fill={C.soft}>
                     {spec.xLabel} →
                 </Title>
             ) : null}

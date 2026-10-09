@@ -1,7 +1,8 @@
 /**
  * Learning paths: each category read in a deliberate order, so a reader
  * can start at lesson one and keep going. Articles not listed in an
- * order follow the listed ones in catalog order.
+ * order follow the listed ones in catalogue order, unless OFF_PATH
+ * keeps them out of every path.
  */
 
 import { articles, categories, type BlogArticle, type Category } from '../blog-data';
@@ -79,7 +80,6 @@ const ORDER: Partial<Record<BlogArticle['category'], string[]>> = {
         'how-eq-becomes-attention-design',
         'stop-high-passing-everything-by-default',
         'why-depth-is-a-contrast-illusion',
-        'early-reflections-place-a-sound-the-tail-sets-the-room',
         'why-mono-reveals-what-stereo-hides',
         'mid-side-widening-moves-the-center-too',
         'stereo-low-end-is-a-translation-decision',
@@ -95,6 +95,7 @@ const ORDER: Partial<Record<BlogArticle['category'], string[]>> = {
         'sidechain-is-more-than-kick-ducking-bass',
         'plugin-order-changes-what-each-processor-hears',
         'why-reverb-can-push-emotion-forward-or-backward',
+        'early-reflections-place-a-sound-the-tail-sets-the-room',
         'when-reverb-masks-the-next-line',
         'reverb-on-bass-is-not-forbidden',
         'the-too-clean-problem-in-digital-mixes',
@@ -157,7 +158,6 @@ const ORDER: Partial<Record<BlogArticle['category'], string[]>> = {
         'danger-of-mixing-attached-to-the-demo',
         'why-finishing-is-separate-from-creating',
         'why-great-producers-protect-momentum',
-        'i-built-flow-deep-work-music-and-a-pomodoro-timer',
     ],
     'production-tips': [
         'how-to-choose-the-perfect-beat',
@@ -175,10 +175,17 @@ const ORDER: Partial<Record<BlogArticle['category'], string[]>> = {
     'licensing-guide': [
         'beat-licensing-explained',
         'what-rights-do-you-get-with-each-license',
-        'commercial-use-vs-personal-use',
         'spotify-streaming-vs-flow-creator-license',
+        'commercial-use-vs-personal-use',
     ],
 };
+
+/**
+ * Posts that stay in the library but on no learning path: studio notes
+ * and product stories, which are not lessons and should never be a
+ * path's "next lesson" or its last one.
+ */
+const OFF_PATH = new Set<string>(['i-built-flow-deep-work-music-and-a-pomodoro-timer']);
 
 export interface LearningPath {
     category: Category;
@@ -193,7 +200,7 @@ function buildPath(category: Category): LearningPath {
     };
     const sorted = articles
         .map((article, index) => ({ article, index }))
-        .filter(({ article }) => article.category === category.slug)
+        .filter(({ article }) => article.category === category.slug && !OFF_PATH.has(article.slug))
         .sort((a, b) => rank(a.article.slug) - rank(b.article.slug) || a.index - b.index)
         .map(({ article }) => article);
     return { category, articles: sorted };

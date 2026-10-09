@@ -76,8 +76,12 @@ function levelFor(kind: Master, norm: boolean, measured: Record<Master, number> 
     return 10 ** ((target - measured[kind]) / 20);
 }
 
-/** Playback level, so the loud master sits with the other demos and the dynamic one stays under -8 dBFS. */
-const NORM_OUT = 1.4;
+/**
+ * Playback level. The clipped master peaks low for how loud it is (that is
+ * the point), and at this level it is already the loudest demo on the site,
+ * about 4 LU above the drum-loop demos, so it is not raised to match peaks.
+ */
+const NORM_OUT = 0.7;
 
 /**
  * The same loop as a dynamic master and a loud, clipped master. Turn on
@@ -171,8 +175,8 @@ export function NormalizationDemo() {
                 value={normalize ? 'on' : 'off'}
                 onChange={(v) => apply({ normalize: v === 'on' })}
                 options={[
-                    { value: 'off', label: 'Normalization off' },
-                    { value: 'on', label: 'Normalization on, like streaming' },
+                    { value: 'off', label: 'Off' },
+                    { value: 'on', label: 'On, like streaming' },
                 ]}
             />
             <Readout
@@ -237,8 +241,8 @@ export function LevelAbDemo() {
                     value={side}
                     onChange={listen}
                     options={[
-                        { value: 'a', label: 'Listen to A' },
-                        { value: 'b', label: 'Listen to B' },
+                        { value: 'a', label: 'A' },
+                        { value: 'b', label: 'B' },
                     ]}
                 />
             </div>

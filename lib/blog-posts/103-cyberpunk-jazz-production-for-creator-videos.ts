@@ -95,9 +95,9 @@ Friberg and Sundström (2002) measured timing in jazz recordings. Drummers' ride
 
 ::figure layers
 
-Small offsets go a long way. At 80 BPM an 8th note lasts 60,000 / 80 / 2 = 375 ms, so a lead 15 ms behind the beat is 4 percent of an 8th late: felt as relaxed, not heard as late.
+Small offsets go a long way. At 80 BPM an 8th note lasts 60,000 / 80 / 2 = 375 ms, so a lead 15 ms behind the beat is 4 percent of an 8th late: small enough to feel relaxed without sounding late.
 
-Bigger is not better. Senn et al. (2016) scaled the timing deviations of real bass and drum performances up and down. Fully quantized and original versions were rated about equally for groove, and exaggerated deviations lowered the ratings. Davies et al. (2013) found the same drop as deviations grew in short rhythms. Microtiming gives a part a direction to lean in. It does not add groove by itself.
+Larger offsets hurt. Senn et al. (2016) scaled the timing deviations of real bass and drum performances up and down. Fully quantized and original versions were rated about equally for groove, and exaggerated deviations lowered the ratings. Davies et al. (2013) found the same drop as deviations grew in short rhythms. Microtiming gives a part a direction to lean in. It does not add groove by itself.
 
 The [lesson on swing](/blog/swing-explained-without-mystical-language) covers how a swing setting moves the off-beats. Try it on a beat here, and listen for the point where swing stops leaning and starts limping.
 
@@ -129,7 +129,7 @@ Write the lead for the sections without talking, and let the grid layers and the
 
 ## Producer takeaway: decide who holds the grid
 
-Before you touch timing, sort the layers into two groups. Synths, hats and bass hold the grid, quantized. Ride, keys and lead lean, by swing and a small, consistent lag on the beats. Check the lean against the grid, not in solo, and pull it back the moment it sounds like a mistake.
+Before you touch timing, sort the layers into two groups. Synths, hats and bass hold the grid, quantized. Ride, keys and lead lean, by swing and a small, consistent lag on the beats. Check the lean against the grid with everything playing, and pull it back the moment it sounds like a mistake.
 
 ## References
 

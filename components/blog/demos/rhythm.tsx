@@ -116,7 +116,7 @@ export function GrooveDemo({ mode }: { mode: GrooveMode }) {
                 <div className="space-y-4">
                     <Slider label="Swing" value={settings.swing} min={50} max={75} onChange={(v) => update({ swing: v })} format={(v) => `${v}%`} hint="50% is straight. Around 66% is a triplet feel." />
                     <Segmented
-                        label="Swing presets"
+                        label="Presets"
                         value={settings.swing === 50 ? 'straight' : settings.swing === 58 ? 'light' : settings.swing === 66 ? 'triplet' : 'custom'}
                         onChange={(v) => update({ swing: v === 'straight' ? 50 : v === 'light' ? 58 : 66 })}
                         options={[

@@ -186,6 +186,11 @@ const fmtHz = (f: number) => (f >= 1000 ? `${(f / 1000).toFixed(f >= 10000 ? 0 :
 
 type FilterKind = 'lowpass' | 'highpass' | 'peaking';
 
+/** Playback levels that put these sparser demos at about the loudness of the drum-loop demos. */
+const FILTER_OUT = 1.58;
+const ENVELOPE_OUT = 2.24;
+const MASKING_OUT = 1.41;
+
 /** A bright chord and noise through one filter, with the spectrum drawn live. */
 export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass', 'peaking'] }: { initial?: FilterKind; types?: FilterKind[] }) {
     const [type, setType] = useState<FilterKind>(initial);
@@ -196,6 +201,7 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
+        master.gain.value = FILTER_OUT;
         master.connect(out);
         const filter = ctx.createBiquadFilter();
         filter.type = type;
@@ -328,6 +334,7 @@ export function EnvelopeDemo() {
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const bus = ctx.createGain();
+        bus.gain.value = ENVELOPE_OUT;
         bus.connect(out);
         const phrase = [64, 0, 67, 0, 69, 0, 67, 64, 62, 0, 64, 0, 0, 0, 0, 0];
         const seq = sequence(ctx, ENV_BPM, 16, (step, time) => {
@@ -395,6 +402,7 @@ export function MaskingDemo() {
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
+        master.gain.value = MASKING_OUT;
         master.connect(out);
         const padBus = ctx.createGain();
         const cut = ctx.createBiquadFilter();

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
-import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, sequence, snare, type Engine } from './engine';
 import {
     LevelTrace,
     Meter,
@@ -237,7 +237,7 @@ function mixBus(ctx: BaseAudioContext): MixBus {
     return bus;
 }
 
-// Dm9, then Bbmaj9 over the bass, voiced differently left and right.
+// Dm9, then B♭maj9 over the bass, voiced differently left and right.
 const MIX_PAD = [
     { l: [53, 57, 60, 64], r: [57, 62, 65, 69] },
     { l: [53, 57, 60, 62], r: [58, 62, 65, 69] },
@@ -787,7 +787,7 @@ const RD_TRIM = 0.8;
 const REVERB_LEVEL = 1.3;
 const THROW_LEVEL = 1;
 
-const halls = new WeakMap<BaseAudioContext, AudioBuffer>();
+const halls = new WeakMap<BaseAudioContext, { seconds: number; buffer: AudioBuffer }>();
 
 /**
  * A generated stereo hall: decaying noise that also loses its top end as it
@@ -796,7 +796,7 @@ const halls = new WeakMap<BaseAudioContext, AudioBuffer>();
  */
 function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
     const cached = halls.get(ctx);
-    if (cached) return cached;
+    if (cached && cached.seconds === seconds) return cached.buffer;
     const sr = ctx.sampleRate;
     const length = Math.max(1, Math.floor(sr * seconds));
     const buf = ctx.createBuffer(2, length, sr);
@@ -819,7 +819,7 @@ function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
             env *= decay;
         }
     }
-    halls.set(ctx, buf);
+    halls.set(ctx, { seconds, buffer: buf });
     return buf;
 }
 
@@ -882,7 +882,6 @@ function applyFx(n: FxNodes, s: FxSettings) {
  * syllable of each line into a filtered tempo delay.
  */
 export function ReverbDuckDemo() {
-    const dialect = useDialect();
     const [mode, setMode] = useState<FxMode>('plain');
     const [amount, setAmount] = useState(60);
     const [depth, setDepth] = useState(12);
@@ -890,6 +889,15 @@ export function ReverbDuckDemo() {
     const [feedback, setFeedback] = useState(35);
     const [duck, setDuck] = useState<number | null>(null);
     const nodes = useRef<FxNodes | null>(null);
+    // If another demo has already started the audio, build the hall while the page is idle.
+    useEffect(
+        () =>
+            whenIdle(() => {
+                const engine = peekEngine();
+                if (engine) hallImpulse(engine.ctx, REVERB_SECONDS);
+            }),
+        [],
+    );
     const live = useRef<FxSettings>({ mode, amount, depth, delayNote, feedback });
     useEffect(() => {
         live.current = { mode, amount, depth, delayNote, feedback };
@@ -1090,9 +1098,9 @@ const TARGET: Chord = { name: 'C', bass: 48, notes: [60, 64, 67] };
 const CH = {
     F: { name: 'F', bass: 41, notes: [60, 65, 69] },
     G7: { name: 'G7', bass: 43, notes: [59, 65, 67] },
-    Bb: { name: 'Bb', bass: 46, notes: [62, 65, 70] },
+    Bb: { name: 'B♭', bass: 46, notes: [62, 65, 70] },
     Gm7: { name: 'Gm7', bass: 43, notes: [62, 65, 70] },
-    Ab: { name: 'Ab', bass: 44, notes: [60, 63, 68] },
+    Ab: { name: 'A♭', bass: 44, notes: [60, 63, 68] },
 } satisfies Record<string, Chord>;
 
 const LEAD_INS: Record<LeadIn, { label: string; chords: { chord: Chord; beats: number }[]; hint: string }> = {
@@ -1110,7 +1118,7 @@ const LEAD_INS: Record<LeadIn, { label: string; chords: { chord: Chord; beats: n
         hint: 'After F and G7, many listeners hear C as the end of the phrase, the place it was heading.',
     },
     away: {
-        label: 'F, Bb and Gm7',
+        label: 'F, B♭ and Gm7',
         chords: [
             { chord: CH.F, beats: 1 },
             { chord: CH.Bb, beats: 1 },
@@ -1119,12 +1127,12 @@ const LEAD_INS: Record<LeadIn, { label: string; chords: { chord: Chord; beats: n
         hint: 'These chords point toward F, so the same C can sound like a step on the way back to F.',
     },
     lift: {
-        label: 'Ab and Bb',
+        label: 'A♭ and B♭',
         chords: [
             { chord: CH.Ab, beats: 2 },
             { chord: CH.Bb, beats: 2 },
         ],
-        hint: 'Coming from Ab and Bb, C often sounds brighter and more lifted than it does after G7.',
+        hint: 'Coming from A♭ and B♭, C often sounds brighter and more lifted than it does after G7.',
     },
 };
 
@@ -1191,42 +1199,9 @@ function chordPlan(leadIn: LeadIn): { chord: Chord | null; beats: number }[] {
     return [...LEAD_INS[leadIn].chords, { chord: TARGET, beats: 3 }, { chord: null, beats: 1 }];
 }
 
-function MelodyRoll({ mode, current }: { mode: Mode; current: number }) {
-    // Drawn in the lesson's dialect, like the figures around it: its bar lines, note ends and accent.
-    const d = useDialect();
-    const w = 320;
-    const h = 92;
-    const slot = w / MELODY.length;
-    const lowest = 70;
-    const highest = 85;
-    const y = (n: number) => 8 + ((highest - n) / (highest - lowest)) * (h - 22);
-    const noteR = d.corner === 'pill' ? 3 : Math.min(d.corner, 3);
-    return (
-        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block max-w-md" role="img" aria-label={`The melody in ${mode}. The highlighted notes are the ones that change.`}>
-            {[0, 4, 8, 12].map((i) => (
-                <line
-                    key={i}
-                    x1={i * slot}
-                    x2={i * slot}
-                    y1={0}
-                    y2={h}
-                    stroke={d.rule.dash ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'}
-                    strokeWidth={d.rule.width}
-                    strokeDasharray={d.rule.dash || undefined}
-                    strokeLinecap={d.rule.cap}
-                />
-            ))}
-            {MELODY.map((n, i) => {
-                if (!n) return null;
-                const len = MELODY[i + 1] === 0 ? 2 : 1;
-                const note = toMode(n, mode);
-                const playing = i === current;
-                const fill = isModal(n) ? d.accent : playing ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)';
-                return <rect key={i} x={i * slot + 2} y={y(note) - 3} width={slot * len - 4} height={6} rx={noteR} fill={fill} opacity={playing || isModal(n) ? 1 : 0.85} />;
-            })}
-            {current >= 0 ? <rect x={current * slot} y={h - 6} width={slot} height={3} rx={1} fill="rgba(255,255,255,0.5)" /> : null}
-        </svg>
-    );
+/** The melody on a roll of eighths, in the chosen mode. The notes that change between major and minor are in the accent. */
+function melodyRoll(mode: Mode): RollNote[] {
+    return MELODY.flatMap((n, i) => (n ? [{ at: i, len: MELODY[i + 1] === 0 ? 2 : 1, pitch: toMode(n, mode), focus: isModal(n) }] : []));
 }
 
 /**
@@ -1336,67 +1311,53 @@ export function ChordContextDemo() {
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
-            <Field label="Listen to">
-                <Segmented
-                    label="Listen to"
-                    value={part}
-                    onChange={(v) => {
-                        setPart(v);
-                        setCurrent(-1);
-                    }}
-                    options={[
-                        { value: 'chord', label: 'One chord, different lead-ins' },
-                        { value: 'melody', label: 'One melody, major or minor' },
-                    ]}
-                />
-            </Field>
+            <Segmented
+                label="Listen to"
+                value={part}
+                onChange={(v) => {
+                    setPart(v);
+                    setCurrent(-1);
+                }}
+                options={[
+                    { value: 'chord', label: 'One chord, different lead-ins' },
+                    { value: 'melody', label: 'One melody, major or minor' },
+                ]}
+            />
             {part === 'chord' ? (
                 <>
-                    <Field label="Before the C chord">
-                        <Segmented
-                            label="Before the C chord"
-                            value={leadIn}
-                            onChange={(v) => {
-                                setLeadIn(v);
-                                setCurrent(-1);
-                            }}
-                            options={(Object.keys(LEAD_INS) as LeadIn[]).map((id) => ({ value: id, label: LEAD_INS[id].label }))}
-                        />
-                    </Field>
+                    <Segmented
+                        label="Before the C chord"
+                        value={leadIn}
+                        onChange={(v) => {
+                            setLeadIn(v);
+                            setCurrent(-1);
+                        }}
+                        options={(Object.keys(LEAD_INS) as LeadIn[]).map((id) => ({ value: id, label: LEAD_INS[id].label }))}
+                    />
                     <div>
-                        <div aria-hidden="true" className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${boxes.length}, minmax(0, 1fr))` }}>
-                            {boxes.map((chord, i) => {
-                                const target = i === boxes.length - 1;
-                                return (
-                                    <div
-                                        key={`${leadIn}-${i}`}
-                                        className={`vgp-cell border px-3 py-2 text-sm font-semibold transition-colors ${current === i ? 'border-white/60' : 'border-white/10'} ${
-                                            target ? 'text-[var(--accent)]' : current === i ? 'text-white' : 'text-white/55'
-                                        }`}
-                                    >
-                                        {chord.name}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <StepStrip current={current} steps={boxes.map((chord, i) => ({ key: `${leadIn}-${i}`, label: chord.name, focus: i === boxes.length - 1 }))} />
                         <p className="mt-2 text-xs leading-5 text-white/50">The C chord is played the same way every time.</p>
                     </div>
                 </>
             ) : (
                 <>
-                    <Field label="Mode">
-                        <Segmented
-                            label="Mode"
-                            value={mode}
-                            onChange={setMode}
-                            options={[
-                                { value: 'major', label: 'Major' },
-                                { value: 'minor', label: 'Minor' },
-                            ]}
-                        />
-                    </Field>
+                    <Segmented
+                        label="Mode"
+                        value={mode}
+                        onChange={setMode}
+                        options={[
+                            { value: 'major', label: 'Major' },
+                            { value: 'minor', label: 'Minor' },
+                        ]}
+                    />
                     <div>
-                        <MelodyRoll mode={mode} current={current} />
+                        <NoteRoll
+                            notes={melodyRoll(mode)}
+                            slots={MELODY.length}
+                            bars={[4, 8, 12]}
+                            current={current}
+                            label={`The melody in ${mode}. The notes in the accent are the ones that change between major and minor.`}
+                        />
                         <p className="mt-2 text-xs text-white/50" aria-hidden="true">
                             Chords: {MELODY_CHORDS.map((c) => chordName(c, mode)).join(', ')}
                         </p>
@@ -1404,29 +1365,25 @@ export function ChordContextDemo() {
                 </>
             )}
             <div className="grid gap-5 sm:grid-cols-2">
-                <Field label="Register">
-                    <Segmented
-                        label="Register"
-                        value={register}
-                        onChange={setRegister}
-                        options={[
-                            { value: 'low', label: 'Low' },
-                            { value: 'middle', label: 'Middle' },
-                            { value: 'high', label: 'High' },
-                        ]}
-                    />
-                </Field>
-                <Field label="Tempo">
-                    <Segmented
-                        label="Tempo"
-                        value={tempo}
-                        onChange={setTempo}
-                        options={[
-                            { value: 'slow', label: `Slow, ${TEMPO_BPM.slow} BPM` },
-                            { value: 'fast', label: `Fast, ${TEMPO_BPM.fast} BPM` },
-                        ]}
-                    />
-                </Field>
+                <Segmented
+                    label="Register"
+                    value={register}
+                    onChange={setRegister}
+                    options={[
+                        { value: 'low', label: 'Low' },
+                        { value: 'middle', label: 'Middle' },
+                        { value: 'high', label: 'High' },
+                    ]}
+                />
+                <Segmented
+                    label="Tempo"
+                    value={tempo}
+                    onChange={setTempo}
+                    options={[
+                        { value: 'slow', label: `Slow, ${TEMPO_BPM.slow} BPM` },
+                        { value: 'fast', label: `Fast, ${TEMPO_BPM.fast} BPM` },
+                    ]}
+                />
             </div>
             <p className="text-sm leading-6 text-white/60">{hint}</p>
         </div>

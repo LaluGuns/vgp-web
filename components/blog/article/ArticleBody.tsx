@@ -25,7 +25,7 @@ function Heading({ section }: { section: Section }) {
     return (
         <>
             {section.label ? <p className="mb-2 text-sm font-medium text-white/50">{section.label}</p> : null}
-            <h2 id={section.id} className="scroll-mt-28 text-2xl font-semibold leading-snug tracking-[-0.02em] text-white sm:text-3xl">
+            <h2 id={section.id} className="scroll-mt-8 text-2xl font-semibold leading-snug tracking-[-0.02em] text-white sm:text-3xl">
                 {section.title}
             </h2>
         </>
@@ -155,7 +155,7 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
             const count = section.blocks.reduce((n, b) => n + (b.kind === 'ul' || b.kind === 'ol' ? b.items.length : b.kind === 'p' ? 1 : 0), 0);
             return (
                 <section {...labelled} className="mt-14 border-t border-white/10 pt-6">
-                    <h2 id={section.id} className="scroll-mt-28 text-base font-semibold text-white">
+                    <h2 id={section.id} className="scroll-mt-8 text-base font-semibold text-white">
                         Sources
                     </h2>
                     <details className="group">

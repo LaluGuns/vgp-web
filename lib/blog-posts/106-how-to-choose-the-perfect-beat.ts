@@ -116,7 +116,7 @@ Hear how one beat changes character across tempos, and notice where your own poc
 1. Put the preview in a new session and set the project tempo to its listed BPM. Check that the grid lines up with the kick.
 2. Nod along without thinking and tap your pulse into a tap-tempo field. Note whether you land on the written tempo or half of it.
 3. Hum the hook you have in mind. If the top note strains, pitch the preview down one or two semitones just for this test and hum again.
-4. Record a rough eight-bar verse and the hook. Rough is fine: you are testing fit, not performance.
+4. Record a rough eight-bar verse and the hook. Rough is fine: you are testing fit.
 5. Play it back on a phone speaker at low volume. Write down every word you cannot follow, and what in the beat plays at that moment.
 6. Mute your vocal and listen to the verse alone. If the main melody never steps out, plan on asking for stems.
 7. Listen again the next morning, on the phone and in a car. If you still want to hear it, it is a contender.

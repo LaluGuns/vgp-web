@@ -497,6 +497,15 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     const ticks = (narrow ? [20, 100, 500, 2000, 10000] : [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000]).filter(
         (f) => f >= lo && f <= hi,
     );
+    // The unit rides on the last frequency, or on the first when the last has no room for it.
+    const unitAt = (() => {
+        const last = ticks[ticks.length - 1];
+        const prev = ticks[ticks.length - 2];
+        if (prev === undefined) return last;
+        const lastFrom = last === hi ? fx(last) - textWidth(`${fmtHz(last)} Hz`) : fx(last) - textWidth(`${fmtHz(last)} Hz`) / 2;
+        const prevTo = fx(prev) + textWidth(fmtHz(prev)) / 2;
+        return lastFrom - prevTo >= 8 ? last : ticks[0];
+    })();
     const N = Math.round(w * 1.2);
     const freqs = Array.from({ length: N + 1 }, (_, i) => lo * (hi / lo) ** (i / N));
 
@@ -599,7 +608,7 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
             ))}
             {ticks.map((f) => (
                 <Label key={f} x={fx(f)} y={bottom + 18} anchor={f === lo ? 'start' : f === hi ? 'end' : 'middle'}>
-                    {f === ticks[ticks.length - 1] ? `${fmtHz(f)} Hz` : fmtHz(f)}
+                    {f === unitAt ? `${fmtHz(f)} Hz` : fmtHz(f)}
                 </Label>
             ))}
             {gainMode ? (

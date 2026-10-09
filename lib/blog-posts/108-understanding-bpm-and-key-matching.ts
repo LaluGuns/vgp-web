@@ -146,8 +146,8 @@ Before you move a part between projects, check the tempo ratio and the key. Exac
 - Driedger, J., & Müller, M. (2016). A review of time-scale modification of music signals. *Applied Sciences*, 6(2), 57.
 `,
     seo: {
-        title: 'Matching tempo and key between beats, vocals and samples | VGP Studio',
-        description: 'Tempo as a grid, half and double time, time-stretching and varispeed maths, relative keys and the Camelot wheel, and setting pitch correction to the right scale.',
+        title: 'Matching tempo and key across beats and vocals | VGP Studio',
+        description: 'Tempo as a grid, half and double time, stretching and varispeed maths, relative keys on the Camelot wheel, and pitch correction set to the right scale.',
         keywords: ['BPM', 'key matching', 'Camelot wheel', 'half-time', 'time-stretching', 'pitch correction key'],
     },
 };

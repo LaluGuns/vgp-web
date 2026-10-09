@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post107: BlogArticle = {
     slug: 'essential-mixing-tips-for-home-recording',
     title: 'Mixing rap vocals recorded at home',
-    excerpt: 'A bedroom vocal sounds distant because the room is recorded with it. How mic distance sets the room sound, and the chain order that keeps compressors reacting to the voice.',
+    excerpt: 'A bedroom vocal sounds distant because the room is recorded with it. How mic distance sets that balance, and a chain order that keeps compressors on the voice.',
     category: 'production-tips',
     publishedAt: '2026-01-28',
     updatedAt: '2026-10-09',

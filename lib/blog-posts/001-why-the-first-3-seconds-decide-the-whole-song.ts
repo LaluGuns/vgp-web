@@ -8,6 +8,7 @@ export const post001: BlogArticle = {
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
     readingTime: 6,
+    featured: true,
     summary: [
         'In a large Spotify study, about a quarter of streamed songs were skipped within the first five seconds.',
         'A crowded intro makes the brain sort many sounds at once. One clear element is easy to follow and easy to want more of.',

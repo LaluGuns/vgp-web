@@ -127,7 +127,7 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
                 })}
             </ol>
             {/* Mounted from the start, so the final score is announced when it appears. */}
-            <div className="mt-10 flex min-h-11 flex-wrap items-center gap-x-6 gap-y-3">
+            <div className={answered === questions.length ? 'mt-10 flex min-h-11 flex-wrap items-center gap-x-6 gap-y-3' : ''}>
                 <p className="text-base text-white" aria-live="polite">
                     {answered === questions.length ? `${correct} of ${questions.length} right.` : ''}
                 </p>

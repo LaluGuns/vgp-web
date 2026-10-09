@@ -84,7 +84,7 @@ export default function GlossaryPage() {
                         <div className="max-w-3xl">
                             {letters.map((letter) => (
                                 <section key={letter} aria-labelledby={`letter-${letter}`} className="pt-8">
-                                    <h2 id={`letter-${letter}`} className="scroll-mt-36 text-sm font-medium text-white/55">
+                                    <h2 id={`letter-${letter}`} className="scroll-mt-10 text-sm font-medium text-white/55">
                                         {letter}
                                     </h2>
                                     <dl>
@@ -93,7 +93,7 @@ export default function GlossaryPage() {
                                             .map((term) => {
                                                 const article = term.article ? getArticleBySlug(term.article) : undefined;
                                                 return (
-                                                    <div key={term.id} id={term.id} className="scroll-mt-36 border-b border-white/10 py-6">
+                                                    <div key={term.id} id={term.id} className="scroll-mt-10 border-b border-white/10 py-6">
                                                         <dt className="text-lg font-semibold text-white">{term.term}</dt>
                                                         <dd className="mt-2 text-base leading-7 text-white/75">{term.definition}</dd>
                                                         {article ? (

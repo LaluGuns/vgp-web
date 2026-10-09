@@ -39,8 +39,9 @@ export function AliasingDemo() {
         const osc = ctx.createOscillator();
         const level = ctx.createGain();
         const master = ctx.createGain();
-        // A pure tone is louder than its peak suggests: this puts it at about the loudness of the drum-loop demos.
-        master.gain.value = 0.22;
+        // A pure tone is louder than its peak suggests: this puts it at about the loudness of the drum-loop
+        // demos (K-weighted), with its peaks near -29 dBFS at the default volume.
+        master.gain.value = 0.19;
         osc.connect(level).connect(master).connect(out);
 
         let scheduledUntil = 0;
@@ -109,7 +110,7 @@ export function AliasingDemo() {
             <div className="flex flex-wrap items-end justify-between gap-4">
                 <PlayButton playing={player.playing} onClick={player.toggle} label="Play sweep" />
                 <Segmented
-                    label="Anti-alias filter"
+                    label="Before the converter"
                     value={filter}
                     onChange={(v) => apply({ filter: v })}
                     options={[
@@ -123,8 +124,8 @@ export function AliasingDemo() {
                 value={rate}
                 onChange={(v) => apply({ rate: v })}
                 options={[
-                    { value: '16000', label: '16 kHz sample rate' },
-                    { value: '44100', label: '44.1 kHz sample rate' },
+                    { value: '16000', label: '16 kHz' },
+                    { value: '44100', label: '44.1 kHz' },
                 ]}
             />
             <FoldPlot rate={rateNum} filter={filter} input={now?.input} />
@@ -296,8 +297,8 @@ export function BitDepthDemo() {
                     value={dither ? 'on' : 'off'}
                     onChange={(v) => apply({ dither: v === 'on' })}
                     options={[
-                        { value: 'off', label: 'No dither' },
-                        { value: 'on', label: 'Dither on' },
+                        { value: 'off', label: 'Off' },
+                        { value: 'on', label: 'On' },
                     ]}
                 />
             </div>

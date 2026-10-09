@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post105: BlogArticle = {
     slug: 'spotify-streaming-vs-flow-creator-license',
     title: 'Streaming a track vs licensing it for your video',
-    excerpt: 'A stream gives you listening access. Putting the recording under your own video needs a license that names that use. What changes, step by step, with the Flow catalog as the example.',
+    excerpt: 'A stream gives you listening access. Using the recording under your own video needs a license that names that use, shown step by step with the Flow catalogue.',
     category: 'licensing-guide',
     publishedAt: '2026-07-19',
     updatedAt: '2026-10-09',
@@ -17,9 +17,9 @@ export const post105: BlogArticle = {
         paths: {
             type: 'flow',
             caption: 'The license path for one track, from preview to publishing. The step that decides whether a video stays covered is the second: Flow Pro active when you first publish it. Streaming the same track on Spotify adds nothing to this path.',
-            alt: 'Four numbered steps: preview the track in the Flow Creator Music catalog, have Flow Pro active when you first publish, download through Flow and keep the grant record, publish with the exact attribution line. The second step is in the accent.',
+            alt: 'Four numbered steps: preview the track in the Flow Creator Music catalogue, have Flow Pro active when you first publish, download through Flow and keep the grant record, publish with the exact attribution line. The second step is in the accent.',
             steps: [
-                { label: 'Preview in the Flow catalog', note: 'Only eligible tracks have a license path' },
+                { label: 'Preview in the Flow catalogue', note: 'Only eligible tracks have a license path' },
                 { label: 'Flow Pro active when you publish', note: 'Covers work first published while Pro is active', focus: true },
                 { label: 'Download through Flow, keep the grant', note: 'Your record of what you used and when' },
                 { label: 'Publish with the attribution line', note: 'Exact wording, never translated' },
@@ -71,7 +71,7 @@ The play button gives you the sound. It does not give you permission to put that
 
 A streaming subscription is a license to listen, on the service's terms. Putting a recording into your own published work is a different use of the same copyright, and it needs a license that names that use. A recording carries rights in the composition and in the sound recording, and the owner decides who may use them and how.
 
-So the question for any track is where the license for your use comes from. For Chill Music Division recordings, the [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is for listening and discovery. The license path for creator use is the Flow Creator Music catalog, and not every catalog track is on Spotify.
+So the question for any track is where the license for your use comes from. For Chill Music Division recordings, the [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is for listening and discovery. The license path for creator use is the Flow Creator Music catalogue, and not every catalogue track is on Spotify.
 
 ## How the creator license works
 
@@ -79,7 +79,7 @@ Flow Creator Music covers eligible City Pop, Cyberpunk Jazz and Neo Synthwave re
 
 ::figure paths
 
-1. Preview the music in the [Flow Creator Music catalog](https://flow.virzyguns.com/en/creator-music).
+1. Preview the music in the [Flow Creator Music catalogue](https://flow.virzyguns.com/en/creator-music).
 2. Have Flow Pro active when you first publish the work that uses the recording. Work first published while Pro was active, with a valid grant and the terms followed, stays licensed after an ordinary cancellation. New work needs Pro active again.
 3. Download the track through Flow and keep the grant record.
 4. Put the required attribution, exactly as written, in the video description, stream panel or podcast notes:
@@ -108,7 +108,7 @@ The second mistake is keeping no record. A screenshot of a playlist proves you l
 
 ## Producer takeaway: listen anywhere, license at the source
 
-Use Spotify to listen and discover. When a track is going under published work, get it from the catalog that licenses it, keep the grant, and paste the attribution line exactly. This lesson is a plain-language summary; the published terms are what apply. For beats rather than background music, the [lesson on commercial and personal use](/blog/commercial-use-vs-personal-use) covers where the line falls.
+Use Spotify to listen and discover. When a track is going under published work, get it from the catalogue that licenses it, keep the grant, and paste the attribution line exactly. This lesson is a plain-language summary; the published terms are what apply. For beats rather than background music, the [lesson on commercial and personal use](/blog/commercial-use-vs-personal-use) covers where the line falls.
 
 ## References
 
@@ -117,7 +117,7 @@ Use Spotify to listen and discover. When a track is going under published work, 
 `,
     seo: {
         title: 'Streaming a track vs licensing it for video | VGP Studio',
-        description: 'Streaming a track gives you listening access, not permission to use it in your video. How a creator license works, using the Flow catalog as the example.',
+        description: 'Streaming a track gives you listening access. Using it under your video needs a license: how a creator license works, with the Flow catalogue as the example.',
         keywords: ['spotify music license for youtube', 'spotify streaming vs music licensing', 'creator music license', 'royalty-free music license for creators', 'Flow Pro creator license', 'Chill Music Division'],
     },
 };

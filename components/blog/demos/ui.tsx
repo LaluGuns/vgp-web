@@ -182,7 +182,7 @@ export function Slider({
 }
 
 const optionClass = (active: boolean) =>
-    `min-h-11 rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
+    `min-h-11 min-w-11 rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
         active ? 'border-white/80 text-white' : 'border-white/10 text-white/60 hover:border-white/30 hover:text-white'
     }`;
 
