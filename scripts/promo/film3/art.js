@@ -390,7 +390,7 @@ function knob(g, x, y, r, k, { ticks = true, glow = 0 } = {}) {
         g.strokeStyle = `rgba(125,211,252,${0.5 * glow})`;
         g.lineWidth = 6;
         g.beginPath();
-        g.arc(0, 0, r * 1.5, 0, Math.PI * 2);
+        g.arc(0, 0, r * 1.3, 0, Math.PI * 2);
         g.stroke();
     }
     if (ticks) {
@@ -455,7 +455,7 @@ function compressorBox(g, x, y, s, { k = 0, value = '', gr = 0, glow = 0 } = {})
     g.fillStyle = P.face;
     g.fill();
     knob(g, -92, 0, 50, k, { glow });
-    label(g, 'Attack', -92, 96, { size: 32, weight: 600, color: P.ink2, align: 'center', family: BODY });
+    label(g, 'Attack', -92, 104, { size: 32, weight: 600, color: P.ink2, align: 'center', family: BODY });
     // Value display.
     rr(g, 10, -36, 148, 72, 14);
     g.fillStyle = '#071021';

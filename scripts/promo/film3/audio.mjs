@@ -99,7 +99,7 @@ export function voPlacements() {
         const clampOut = (src) => cuts.reduce((v, [x, y]) => (v > x && v < y ? y : v), src);
         const place = (src) => p.at + clampOut(src) - c.from - shift(clampOut(src));
         const words = c.words.filter((w) => !inCut(c.from + (w.s + w.e) / 2)).map((w) => ({ w: w.w, s: place(c.from + w.s), e: place(c.from + w.e) }));
-        return { id: p.id, at: p.at, dur: c.to - c.from - removed, from: c.from, to: c.to, cuts, text: c.show ?? c.text, words };
+        return { id: p.id, at: p.at, dur: c.to - c.from - removed, from: c.from, to: c.to, cuts, text: c.show ?? c.text, breaks: c.breaks ?? [], words };
     });
 }
 

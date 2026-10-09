@@ -1019,7 +1019,10 @@
      "e": 3.99
     }
    ],
-   "show": "The full lesson, with a demo you can play, is free on the Virzy Guns blog."
+   "show": "The full lesson, with a demo you can play, is free on the Virzy Guns blog.",
+   "breaks": [
+    9
+   ]
   }
  ],
  "voice": "Michael C. Vincent (ElevenLabs library voice, American English)",
