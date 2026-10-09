@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Search, X } from 'lucide-react';
@@ -217,14 +217,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         }
     }
 
-    const [bookmarkedSlugs, setBookmarkedSlugs] = useState<string[] | null>(null);
-    // Saved lessons live in this browser only. Read them on first use, after hydration.
-    const saved = bookmarkedSlugs ?? [];
-    const savedLoaded = useRef(false);
-    if (!savedLoaded.current && typeof window !== 'undefined' && bookmarkedSlugs === null) {
-        savedLoaded.current = true;
-        queueMicrotask(() => setBookmarkedSlugs(readSaved()));
-    }
+    // Saved lessons live in this browser only, so they load after hydration.
+    const [saved, setSaved] = useState<string[]>([]);
+    useEffect(() => {
+        const frame = requestAnimationFrame(() => setSaved(readSaved()));
+        return () => cancelAnimationFrame(frame);
+    }, []);
 
     const writeUrl = (next: { q?: string; cat?: string; sort?: Sort | null; saved?: boolean; n?: number | null }) => {
         const q = (next.q ?? query).trim();
@@ -254,14 +252,13 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const getCategoryName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? 'Lessons';
 
     const toggleBookmark = (slug: string) => {
-        const current = bookmarkedSlugs ?? readSaved();
-        const next = current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug];
+        const next = saved.includes(slug) ? saved.filter((item) => item !== slug) : [...saved, slug];
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
         } catch {
             // Saving is optional when browser storage is unavailable.
         }
-        setBookmarkedSlugs(next);
+        setSaved(next);
     };
 
     // Lesson order across the paths, and each lesson's number inside its path.

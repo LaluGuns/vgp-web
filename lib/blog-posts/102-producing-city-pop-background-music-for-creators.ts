@@ -7,7 +7,7 @@ export const post102: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-07-19',
     updatedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 4,
     summary: [
         'Speech intelligibility lives mostly between 1 and 4 kHz, so keys, guitar and lead lines compete with a voiceover far more than bass and kick do.',
         'Under narration, dip the music bus in that band, keyed from the voice, instead of pulling the whole cue down.',
@@ -21,7 +21,7 @@ export const post102: BlogArticle = {
             unit: '%',
             caption:
                 'How much each octave counts toward the Speech Intelligibility Index (ANSI S3.5-1997, octave-band procedure). The 1, 2 and 4 kHz octaves carry 71 percent of the weight between them. The 250 Hz octave, where bass and kick live, carries 6 percent.',
-            alt: 'Six bars for octave bands. 250 Hz 6 percent, 500 Hz 17 percent, 1 kHz 24 percent, 2 kHz 26 percent, 4 kHz 21 percent, 8 kHz 5 percent. The 1, 2 and 4 kHz bars are highlighted.',
+            alt: 'Six bars for octave bands. 250 Hz 6 percent, 500 Hz 17 percent, 1 kHz 24 percent, 2 kHz 26 percent, 4 kHz 21 percent, 8 kHz 5 percent. The 1, 2 and 4 kHz bars are drawn in the accent, the others in grey.',
             bars: [
                 { label: '250 Hz', value: 6, display: '6%', dim: true },
                 { label: '500 Hz', value: 17, display: '17%', dim: true },
