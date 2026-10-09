@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Search, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
-import { TextLink } from '@/components/editorial/EditorialPrimitives';
+import { TapLink } from '@/components/blog/article/TapLink';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
 
@@ -249,14 +249,29 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const sortParam = params.get('sort');
     // A path reads in lesson order; the whole library reads newest first.
     const defaultSort: Sort = category === 'all' ? 'new' : 'path';
-    const sort: Sort = sortParam === 'new' || sortParam === 'path' ? sortParam : defaultSort;
+    const chosenSort: Sort | null = sortParam === 'new' || sortParam === 'path' ? sortParam : null;
+    const sort: Sort = chosenSort ?? defaultSort;
     const showSaved = params.get('saved') === '1';
     const urlCount = Math.floor(Number(params.get('n')) / PAGE_SIZE) * PAGE_SIZE;
     const visibleCount = urlCount > PAGE_SIZE ? urlCount : PAGE_SIZE;
     const urlQuery = params.get('q') ?? '';
 
-    // The input keeps its own state so typing never waits on the router.
+    // The input keeps its own state so typing never waits on the router. Each q this
+    // component writes is pending until the URL catches up; a q that shows up in the URL
+    // without being written here (a link back to /blog) replaces what is in the box.
     const [query, setQuery] = useState(urlQuery);
+    const [pendingQueries, setPendingQueries] = useState<string[]>([]);
+    const [seenUrlQuery, setSeenUrlQuery] = useState(urlQuery);
+    if (urlQuery !== seenUrlQuery) {
+        setSeenUrlQuery(urlQuery);
+        const own = pendingQueries.indexOf(urlQuery);
+        if (own >= 0) {
+            setPendingQueries(pendingQueries.slice(own + 1));
+        } else {
+            setPendingQueries([]);
+            setQuery(urlQuery);
+        }
+    }
 
     // Saved lessons live in this browser only, so they load after hydration.
     const [saved, setSaved] = useState<string[]>([]);
@@ -269,7 +284,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         const q = (next.q ?? query).trim();
         const cat = next.cat ?? category;
         const nextSaved = next.saved ?? showSaved;
-        const nextSort = next.sort === undefined ? sortParam : next.sort;
+        const nextSort = next.sort === undefined ? chosenSort : next.sort;
         const n = next.n === undefined ? (urlCount > PAGE_SIZE ? urlCount : null) : next.n;
         const search = new URLSearchParams();
         if (q) search.set('q', q);
@@ -278,6 +293,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         if (nextSaved) search.set('saved', '1');
         if (n && n > PAGE_SIZE) search.set('n', String(n));
         const qs = search.toString();
+        if (q !== urlQuery) setPendingQueries((current) => [...current, q]);
         window.history.replaceState(null, '', qs ? `${pathname}?${qs}` : pathname);
     };
 
@@ -547,9 +563,11 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     <p className="mt-2 text-sm leading-6 text-white/65">
                                         The long version of these notes: 80+ pages on 808s, drums, mix balance and mastering.
                                     </p>
-                                    <div className="mt-4">
-                                        <TextLink href="/book">See the chapters</TextLink>
-                                    </div>
+                                    <p className="mt-1">
+                                        <TapLink href="/book" className="text-sm font-medium text-white">
+                                            See the chapters
+                                        </TapLink>
+                                    </p>
                                 </div>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ export function TapLink({ href, children, className = '' }: { href: string; chil
     return (
         <Link
             href={href}
-            className={`inline-flex min-h-11 items-center rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${className}`}
+            className={`inline-flex min-h-11 min-w-11 items-center rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${className}`}
         >
             <span className="vgp-link">{children}</span>
         </Link>

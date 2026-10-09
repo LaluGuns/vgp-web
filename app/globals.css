@@ -114,8 +114,9 @@ html {
   }
 }
 
-/* The skip link focuses <main>; the jump itself needs no ring. */
-main[tabindex='-1']:focus {
+/* The skip link focuses <main> (or the content block); the jump itself needs no ring. */
+main[tabindex='-1']:focus,
+[data-skip-target]:focus {
   outline: none;
 }
 

@@ -26,8 +26,10 @@ export function ScrollRegion({ label, className = '', children }: { label: strin
             if (!frame) frame = requestAnimationFrame(update);
         };
         schedule();
+        // Watch the content too: web fonts landing can widen an equation without resizing the box.
         const observer = new ResizeObserver(schedule);
         observer.observe(el);
+        el.querySelectorAll(':scope > *, :scope > * > *').forEach((child) => observer.observe(child));
         el.addEventListener('scroll', schedule, { passive: true });
         return () => {
             cancelAnimationFrame(frame);

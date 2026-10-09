@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
-import { PageHeader, TextLink } from '@/components/editorial/EditorialPrimitives';
+import { PageHeader } from '@/components/editorial/EditorialPrimitives';
+import { TapLink } from '@/components/blog/article/TapLink';
 import { articles, categories } from '@/lib/blog-data';
 import { learningPaths } from '@/lib/blog/paths';
 import { glossary } from '@/lib/blog/glossary';
@@ -70,7 +71,6 @@ export default function LearnHubPage() {
                     title="Learn production"
                     description={`${articles.length} free lessons in ${learningPaths.length} paths: songwriting, arrangement, sound design, vocals, mixing and mastering, audio science, music psychology, producer mindset, production tips, genres and licensing. A book and a course are on the way.`}
                     primary={{ label: 'Browse the lessons', href: '/blog' }}
-                    secondary={{ label: `Glossary of ${glossary.length} terms`, href: '/learn/glossary' }}
                 />
 
                 <section data-reveal="" aria-labelledby="paths-heading" className="border-t border-white/10 px-4 py-16 sm:px-6 lg:py-20">
@@ -80,6 +80,12 @@ export default function LearnHubPage() {
                                 {learningPaths.length} learning paths
                             </h2>
                             <p className="mt-4 max-w-sm text-base leading-7 text-white/65">Each path is a set of lessons meant to be read in order.</p>
+                            <p className="mt-3 max-w-sm text-sm leading-6 text-white/60">
+                                Stuck on a term?{' '}
+                                <TapLink href="/learn/glossary" className="text-white">
+                                    The glossary explains {glossary.length} of them
+                                </TapLink>
+                            </p>
                         </div>
                         <ul className="grid border-t border-white/10 sm:grid-cols-2 sm:gap-x-10 lg:col-span-8">
                             {learningPaths.map((path) => (
@@ -110,9 +116,11 @@ export default function LearnHubPage() {
                                     <p className="text-xs font-medium text-white/50">{format.status}</p>
                                     <h3 className="mt-2 text-xl font-semibold text-white">{format.title}</h3>
                                     <p className="mt-2 max-w-xl text-base leading-7 text-white/65">{format.description}</p>
-                                    <div className="mt-4">
-                                        <TextLink href={format.href}>{format.cta}</TextLink>
-                                    </div>
+                                    <p className="mt-1">
+                                        <TapLink href={format.href} className="text-sm font-medium text-white">
+                                            {format.cta}
+                                        </TapLink>
+                                    </p>
                                 </li>
                             ))}
                         </ul>
@@ -125,9 +133,9 @@ export default function LearnHubPage() {
                             <h2 id="latest-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                                 Latest lessons
                             </h2>
-                            <div className="mt-5 flex flex-col items-start gap-3">
-                                <TextLink href="/blog">All lessons</TextLink>
-                                <TextLink href="/learn/glossary">Glossary of {glossary.length} terms</TextLink>
+                            <div className="mt-3 flex flex-col items-start text-sm font-medium text-white">
+                                <TapLink href="/blog">All lessons</TapLink>
+                                <TapLink href="/learn/glossary">Glossary of {glossary.length} terms</TapLink>
                             </div>
                         </div>
                         <ul className="divide-y divide-white/10 border-y border-white/10 lg:col-span-8">
@@ -171,9 +179,11 @@ export default function LearnHubPage() {
                                 More than 80 pages on 808 tuning, vocal processing, mix balance and loudness for streaming.
                                 Written for producers who want a method they can repeat.
                             </p>
-                            <div className="mt-8">
-                                <TextLink href="/book">See what is inside</TextLink>
-                            </div>
+                            <p className="mt-6">
+                                <TapLink href="/book" className="text-sm font-medium text-white">
+                                    See what is inside
+                                </TapLink>
+                            </p>
                         </div>
                     </div>
                 </section>

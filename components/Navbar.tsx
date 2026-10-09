@@ -49,20 +49,25 @@ const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-wh
 /**
  * The first focusable element on every page: "Skip to content" jumps past
  * the menu to the page's <main> (id="main" where a page sets it, otherwise
- * the first <main>). Hidden until it has keyboard focus.
+ * the first <main>, otherwise the content right after this header). Hidden
+ * until it has keyboard focus.
  */
 function SkipLink() {
     return (
         <a
             href="#main"
             onClick={(event) => {
-                const target = document.getElementById('main') ?? document.querySelector('main');
+                const header = event.currentTarget.closest('header');
+                const target = document.getElementById('main') ?? document.querySelector('main') ?? (header?.nextElementSibling as HTMLElement | null);
                 if (!target) return;
                 event.preventDefault();
-                if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+                if (!target.hasAttribute('tabindex')) {
+                    target.setAttribute('tabindex', '-1');
+                    target.setAttribute('data-skip-target', '');
+                }
                 target.focus();
             }}
-            className="sr-only rounded-md bg-white px-4 py-3 text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[60] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+            className="sr-only rounded-md bg-white text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:px-4 focus:py-3 focus:left-4 focus:top-3 focus:z-[60] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
         >
             Skip to content
         </a>

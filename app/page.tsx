@@ -293,8 +293,8 @@ export default function HomePage() {
                                 What I have learned, written down.
                             </h2>
                             <p className="mt-5 max-w-xl text-base leading-7 text-white/70">
-                                Free lessons in learning paths, from songwriting and sound design to mixing, audio science and licensing,
-                                and a full guide for producers on the way.
+                                Free lessons in learning paths, from songwriting and sound design to mixing, audio science and
+                                licensing. A full guide for producers is on the way.
                             </p>
                             <ul className="mt-10 divide-y divide-white/10 border-y border-white/10">
                                 {[

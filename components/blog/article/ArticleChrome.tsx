@@ -207,10 +207,15 @@ export function OutlineList({ headings, active, touch = false }: { headings: Out
  * Phones have no outline beside the text, so once the reader is past the
  * inline "In this article" list a small Contents button stays in reach,
  * above the bottom navigation. It opens the section list as a sheet.
+ * While the reader scrolls down it steps aside; scrolling up (or reaching
+ * it with Tab) brings it back.
  */
 export function MobileContents({ headings }: { headings: OutlineItem[] }) {
     const [mounted, setMounted] = useState(false);
-    const [visible, setVisible] = useState(false);
+    // In the body of the lesson: the button exists and can take focus.
+    const [available, setAvailable] = useState(false);
+    // Shown: the reader last scrolled up.
+    const [shown, setShown] = useState(false);
     const [active, setActive] = useState('');
     const sheet = useRef<HTMLDivElement>(null);
 
@@ -223,13 +228,19 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
 
     useEffect(() => {
         let frame = 0;
+        let lastY = window.scrollY;
         const update = () => {
             frame = 0;
             const start = document.getElementById('article-outline-inline');
             const end = document.getElementById('article-end');
             const pastStart = start ? start.getBoundingClientRect().bottom < 0 : window.scrollY > 600;
             const beforeEnd = end ? end.getBoundingClientRect().top > window.innerHeight * 0.6 : true;
-            setVisible(pastStart && beforeEnd);
+            setAvailable(pastStart && beforeEnd);
+            const y = window.scrollY;
+            if (Math.abs(y - lastY) > 8) {
+                setShown(y < lastY);
+                lastY = y;
+            }
             let current = '';
             for (const heading of headings) {
                 const el = document.getElementById(heading.id);
@@ -258,11 +269,11 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
                 type="button"
                 onClick={() => sheet.current?.togglePopover()}
                 aria-haspopup="dialog"
-                tabIndex={visible ? undefined : -1}
-                aria-hidden={visible ? undefined : true}
-                data-visible={visible ? '' : undefined}
-                className={`vgp-contents-button fixed right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 bg-[var(--surface-strong)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-[opacity,transform] duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
-                    visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
+                tabIndex={available ? undefined : -1}
+                aria-hidden={available ? undefined : true}
+                data-visible={available && shown ? '' : undefined}
+                className={`vgp-contents-button fixed right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 bg-[var(--surface-strong)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-[opacity,transform] duration-200 focus:outline-none focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
+                    available && shown ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
                 }`}
             >
                 <span aria-hidden="true" className="flex flex-col gap-[3px]">

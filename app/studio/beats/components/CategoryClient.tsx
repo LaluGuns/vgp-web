@@ -130,7 +130,7 @@ export default function CategoryClient({ category, beats, locale = 'en-US' }: Ca
                     </div>
                 </header>
 
-                <section id="matching-beats" aria-labelledby="matching-heading" className="scroll-mt-24 px-4 py-14 sm:px-6 lg:py-20">
+                <section id="matching-beats" aria-labelledby="matching-heading" className="scroll-mt-2 px-4 py-14 sm:px-6 lg:py-20">
                     <div className="mx-auto max-w-7xl">
                         <h2 id="matching-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
                             {text.available(beats.length)}

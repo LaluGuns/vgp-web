@@ -9,7 +9,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import 'katex/dist/katex.min.css';
 import { PageTransition } from '@/components/PageTransition';
-import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import { ArticleBody, ArticleSources } from '@/components/blog/article/ArticleBody';
 import { ArticleActions, ArticleOutline, MobileContents, OutlineList } from '@/components/blog/article/ArticleChrome';
 import { Quiz } from '@/components/blog/article/Quiz';
@@ -253,9 +252,9 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                             <p className="mt-1 text-sm leading-6 text-white/65">
                                                 Songwriter and producer, founder of Virzy Guns Production. Now building HealingWave.
                                             </p>
-                                            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-                                                <TextLink href="/studio/beats">Browse beats</TextLink>
-                                                <TextLink href="/about">About Virzy Guns</TextLink>
+                                            <div className="mt-1 flex flex-wrap gap-x-6 text-sm font-medium text-white">
+                                                <TapLink href="/studio/beats">Browse beats</TapLink>
+                                                <TapLink href="/about">About Virzy Guns</TapLink>
                                             </div>
                                         </div>
                                     </section>

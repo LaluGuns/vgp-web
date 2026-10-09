@@ -41,7 +41,7 @@ export function PolicyPage({
                         <section
                             key={section.id ?? section.title}
                             id={section.id}
-                            className="scroll-mt-24 border-b border-white/10 py-10"
+                            className="scroll-mt-2 border-b border-white/10 py-10"
                         >
                             <h2 className="flex gap-4 text-xl font-semibold text-white">
                                 <span className="w-7 shrink-0 tabular-nums text-white/45">{index + 1}.</span>
