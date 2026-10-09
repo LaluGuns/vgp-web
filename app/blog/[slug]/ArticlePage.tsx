@@ -50,7 +50,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
     return (
         <PageTransition>
             <main className="editorial-shell text-white">
-                <article data-dialect={dialect.name} style={accentScope}>
+                <article style={accentScope}>
                     <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                         <div className="mx-auto max-w-7xl">
                             <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-white/55">

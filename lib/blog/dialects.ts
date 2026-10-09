@@ -16,7 +16,10 @@ export type DialectName = 'technical' | 'music' | 'mind' | 'business';
 
 export interface Dialect {
     name: DialectName;
-    /** The data the caption asks you to look at. Contrast on --surface: see ACCENT_CONTRAST. */
+    /**
+     * The data the caption asks you to look at. All four share one OKLCH
+     * lightness and chroma (about 0.83 and 0.10) and are over 10:1 on --surface.
+     */
     accent: string;
     /** Width of an accent line, in figure units (about px). */
     line: number;

@@ -481,11 +481,10 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
                         const f = curve.f0 * k;
                         if (f > hi) return null;
                         const v = level / k ** roll;
-                        // Accent harmonics rise from the floor, lowest first.
+                        // Accent harmonics rise from the floor, lowest first. Flat ends in every dialect, so a
+                        // harmonic stops exactly at its level and never reaches below the floor.
                         const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'rise', 120 + (300 * (fx(f) - left)) / (right - left));
-                        return (
-                            <line key={n} x1={fx(f)} x2={fx(f)} y1={bottom} y2={ly(v)} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} strokeLinecap={d.cap} {...motion} />
-                        );
+                        return <line key={n} x1={fx(f)} x2={fx(f)} y1={bottom} y2={ly(v)} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} {...motion} />;
                     })}
                 </g>
             );
@@ -542,8 +541,8 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
             : ledger
               ? ticks.map((f) => <line key={f} x1={fx(f)} x2={fx(f)} y1={bottom} y2={bottom + 5} stroke={C.soft} />)
               : ticks.map((f) => <Rule key={f} d={d} x1={fx(f)} x2={fx(f)} y1={top} y2={bottom} major={d.name === 'music'} opacity={d.name === 'music' ? 0.1 : undefined} />);
-    // Level mode has no value scale, so music and the ledger add plain quarter rulings for the eye.
-    const levelRules = !gainMode && (d.name === 'music' || ledger) ? [1, 2, 3, 4].map((k) => bottom - (k * (plotH - 8)) / 4) : [];
+    // Level mode has no value scale. The ledger still rules its rows, plain quarters for the eye.
+    const levelRules = !gainMode && ledger ? [1, 2, 3, 4].map((k) => bottom - (k * (plotH - 8)) / 4) : [];
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>

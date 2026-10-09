@@ -25,7 +25,7 @@ Defined in `app/globals.css` (`:root`) and mirrored in Tailwind where needed.
 | `--surface` | `#0a0e12` | Panels, menus, modals, image frames |
 | `--surface-strong` | `#0e1318` | A surface that sits on a surface |
 | `--line` | `white/10` | Hairline borders and dividers |
-| `--accent` | `#7dd3fc` (sky-300) | Real states only: Open now, Available, On Google Play, a demo that is playing. Also focus rings, and the data in article figures (below) |
+| `--accent` | `#7dd3fc` (sky-300) | Real states only: Open now, Available, On Google Play, a demo that is playing. Also focus rings, and the data in article figures (below). Inside a lesson it is the lesson group's accent (Figure dialects) |
 
 Text steps: `white`, `white/75`, `white/60`, `white/50`. Nothing dimmer for
 readable text.
@@ -64,17 +64,64 @@ readable text.
     widget pulses at the chosen BPM.
   No hover lifts, glow or parallax. Everything is off under
   `prefers-reduced-motion`.
-- **Article figures.** Drawn like a meter: the data the caption asks you
-  to look at (the trace, curve, melody, bar or moved hit) is in the
-  accent, everything else is white or grey. "Before" and reference states
-  are grey or dashed. One accent only, so the colour always means "look
-  here". Tokens live in `components/blog/figures/svg.tsx`.
+- **Article figures.** Drawn in the lesson group's dialect (Figure
+  dialects, below). In every dialect the data the caption asks you to look
+  at (the trace, curve, melody, bar or moved hit) is in the accent and
+  everything else is white or grey. "Before" and reference states are grey
+  or dashed. One accent per page, so the colour always means "look here".
+  Figures draw in once as they scroll into view. Tokens live in
+  `lib/blog/dialects.ts`, the drawing helpers in
+  `components/blog/figures/svg.tsx`.
 - **Imagery.** Use the real assets in `public/` (founder portrait, CADENZ
   poster, chrome logo, book cover, app icons, game art). No stock or
   generated filler.
 - **Copy.** Specific and plain. No em dashes, no "not just X, but Y", no
   forced triads, no buzzwords, no invented numbers. Only translate ja-JP and
   de-DE strings with a native check.
+
+## Figure dialects
+
+The owner's direction: each lesson group has its own accent and its own
+way of drawing, inside one family. A dialect changes how marks are drawn,
+never what they plot. Positions, values, labels, captions and alt text are
+the same in all four; grey is still context, dashed is still reference, the
+accent is still "look here". The group comes from the lesson's category;
+anything without one is technical.
+
+| Group | Categories | Accent | Reads as | Rules | A value is | Ends and type |
+| --- | --- | --- | --- | --- | --- | --- |
+| Technical | mixing-mastering, audio-science, sound-design, vocal-production, production-tips | `#7dd3fc` | An instrument panel | Hairline graticule, minor and major; every 1-9 step of a decade on spectra; registration corners on plots | A square | Square ends, 1.75 lines, tabular figures |
+| Music | songwriting, arrangement-groove, genre-guides | `#fdba74` | Score paper | Staff rulings, bar lines, a double bar at a mark, a final bar to close | A note head, hollow when not in focus; drum hits as heads with stems | Round ends, 2.25 lines, axis titles and notes in italic |
+| Mind | music-psychology, producer-psychology | `#f9abcb` | A field of attention | Dotted rules | A dot held in a focus ring | Round ends, soft nodes, a loop drawn as one arc |
+| Business | licensing-guide | `#8ad8af` | A ledger | Ruled rows, a header rule, a closing double rule | A tick; figures right-aligned in their own column; steps numbered | Square ends, tabular figures |
+
+- **Colour.** The four accents share one lightness and chroma (OKLCH about
+  0.83 and 0.10), so they read as one family, and each is over 10:1 on
+  `--surface`. Mind is rose, not violet: violet on black is the stock AI
+  look, and for deuteranopes it is nearly the same colour as sky.
+- **One accent per page.** Inside a lesson `--accent` is the group's, so
+  figures, demo displays, focus rings and the reading-progress bar all use
+  it. The navbar, buttons, the blog index and every non-blog page stay sky.
+- **The key.** The group's mark (its value glyph in its accent) sits beside
+  the category name on a lesson and on its learning path page. Nowhere
+  else.
+- **Lit and paper.** Technical and mind keep a faint accent area under a
+  line. Music and business are ink on paper, so their lines stand alone.
+- **Rules are texture.** They stay well under the data; mind's dots need a
+  higher opacity than a hairline to be seen at all.
+- **Demos.** Plots, meters, step lanes and bar cells follow the dialect;
+  controls (play, sliders, choices) are the same in every lesson.
+- **Motion.** A figure draws in once when it is 30% up the screen: lines
+  along their length (technical at a constant speed, like a scope beam),
+  bars grow, points pop, mind's focus rings close in on their points, moved
+  hits slide from their grid step. Never on a figure already on screen;
+  off under reduced motion, with no script and in print. The end state is
+  the server-rendered drawing. Turn it off by removing `data-reveal="draw"`
+  in `components/blog/figures/Figure.tsx`.
+- **No stylesheet needed.** A figure is complete as a bare SVG: the accent
+  is the root's `color` attribute and every dialect choice is an attribute,
+  so the offline renderer gets the same marks and colours as the page.
+- **New figure types** implement all four dialects before they ship.
 
 ## Story and voice
 

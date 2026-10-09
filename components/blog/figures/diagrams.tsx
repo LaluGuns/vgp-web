@@ -18,6 +18,7 @@ import {
     cornerOf,
     dialectOf,
     draw,
+    headPath,
     textWidth,
     wrapText,
     type Dialect,
@@ -58,18 +59,17 @@ function Hit({
         tone === 'accent' ? accentFill(opacity) : { fill: tone === 'ink' ? C.ink : C.soft, fillOpacity: opacity < 1 ? opacity : undefined };
     const stroke = tone === 'accent' ? accentStroke(opacity) : { stroke: tone === 'ink' ? C.ink : C.soft, strokeOpacity: opacity < 1 ? opacity : undefined };
     if (d.name === 'music') {
-        const r = Math.min(bw, 9) / 2.9;
-        const cx = x + r * 1.45;
-        const cy = floor - r * 1.1;
-        const stemX = cx + r * 1.3;
-        if (ghost)
-            return (
-                <ellipse cx={cx} cy={cy} rx={r * 1.45} ry={r * 1.02} fill={C.surface} stroke={C.faint} strokeWidth={1.2} strokeDasharray="2 2" />
-            );
+        // The same head as a music point, at most 9 wide, sitting on the drum line.
+        const r = Math.min(bw, 9) / 3.2;
+        const cx = x + r * 1.6;
+        const cy = floor - r * 1.25;
+        const stemX = cx + r * 1.38;
+        if (ghost) return <path d={headPath(cx, cy, r)} fill={C.surface} stroke={C.faint} strokeWidth={1.2} strokeDasharray="2 2" />;
         return (
             <g {...motion}>
-                <line x1={stemX} x2={stemX} y1={cy} y2={floor - bh} {...stroke} strokeWidth={1.5} strokeLinecap="round" />
-                <ellipse cx={cx} cy={cy} rx={r * 1.45} ry={r * 1.02} {...paint} />
+                {/* The stem's round end stops at the hit's level, not past it. */}
+                <line x1={stemX} x2={stemX} y1={cy - r * 0.35} y2={floor - bh + 0.75} {...stroke} strokeWidth={1.5} strokeLinecap="round" />
+                <path d={headPath(cx, cy, r)} {...paint} />
             </g>
         );
     }
@@ -543,7 +543,9 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
     const labelCol = narrow ? 34 : 40;
     const chordH = spec.chords?.length ? 22 : 4;
     const totalBeats = Math.ceil(Math.max(...spec.notes.map((n) => n.start + n.length)) / perBar) * perBar;
-    const gridW = w - labelCol;
+    const music = d.name === 'music';
+    // The score closes on a final bar line, so its roll stops short of the edge to leave room for it.
+    const gridW = w - labelCol - (music ? 6 : 0);
     const beatW = gridW / totalBeats;
     const top = chordH;
     const rollBottom = top + rows * rowH;
@@ -551,7 +553,6 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
     const h = rollBottom + 2 + (ledger ? 6 : 0);
     const yOf = (pitch: number) => top + (hi - pitch) * rowH;
     const used = Array.from(new Set(pitches)).sort((a, b) => b - a);
-    const music = d.name === 'music';
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -577,7 +578,11 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
             {Array.from({ length: totalBeats + 1 }, (_, b) => {
                 const x = labelCol + b * beatW;
                 if (music && b % perBar === 0)
-                    return <Barline key={b} x={b === totalBeats ? x : x} y1={top} y2={rollBottom} kind={b === totalBeats ? 'final' : 'single'} opacity={b === totalBeats ? 0.45 : 0.3} />;
+                    return b === totalBeats ? (
+                        <Barline key={b} x={w} y1={top} y2={rollBottom} kind="final" opacity={0.45} />
+                    ) : (
+                        <Barline key={b} x={x} y1={top} y2={rollBottom} opacity={0.3} />
+                    );
                 return <Rule key={b} d={d} x1={x} x2={x} y1={top} y2={rollBottom} major={b % perBar === 0} opacity={d.name === 'technical' ? (b % perBar === 0 ? 0.3 : 0.1) : undefined} />;
             })}
             {/* Skip a pitch name that would sit on top of the one above it. */}

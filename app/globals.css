@@ -364,9 +364,11 @@ body::before {
   from { opacity: 0.4; }
 }
 
+/* The gap is a hair longer than the line and the start a hair past it, so
+   a round line end never leaves a dot where nothing is drawn yet. */
 @keyframes vgp-draw-line {
-  from { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
-  to { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  from { stroke-dasharray: 1 1.01; stroke-dashoffset: 1.001; }
+  to { stroke-dasharray: 1 1.01; stroke-dashoffset: 0; }
 }
 
 @keyframes vgp-draw-grow {
@@ -407,7 +409,7 @@ body::before {
   }
 
   [data-reveal='draw'][data-reveal-state='pending'] svg { opacity: 0.4; }
-  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-line { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-line { stroke-dasharray: 1 1.01; stroke-dashoffset: 1.001; }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-grow { transform: scaleX(0); }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-rise { transform: scaleY(0); }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-pop { opacity: 0; transform: scale(0.4); }

@@ -22,8 +22,8 @@ export function DialectMark({ dialect, className = '' }: { dialect: Dialect | st
             ) : null}
             {d.marker === 'tick' ? (
                 <g fill="currentColor">
-                    <rect x={1} y={4.5} width={8.5} height={3} />
-                    <rect x={9} y={1.5} width={1.6} height={9} />
+                    <rect x={0.5} y={4} width={9} height={4} />
+                    <rect x={9} y={1} width={2} height={10} />
                 </g>
             ) : null}
         </svg>

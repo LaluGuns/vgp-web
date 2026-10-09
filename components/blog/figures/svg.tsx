@@ -71,7 +71,6 @@ export function draw(kind: DrawKind, delayMs = 0, vars?: Record<`--${string}`, s
 }
 
 export const FS = 12;
-export const DASH = '5 4';
 
 /** Rough width of a label in the system UI font. */
 export function textWidth(text: string, size = FS) {
@@ -321,11 +320,7 @@ export function Point({
             return <rect x={x - s / 2} y={y - s / 2} width={s} height={s} {...toneFill(tone, opacity)} {...motion} />;
         }
         case 'head': {
-            const rx = r * 1.6;
-            const ry = r * 1.15;
-            // A note head leans back like an engraved one. The tilt is drawn into the path, so the
-            // element keeps no transform attribute and can still pop in.
-            const path = ellipsePath(x, y, rx, ry, -20);
+            const path = headPath(x, y, r);
             // An engraved head sits on the paper with a hair of space round it, so a line running into it reads as joining.
             return tone === 'accent' ? (
                 <path d={path} {...accentFill(opacity)} stroke={C.surface} strokeWidth={1.2} paintOrder="stroke" {...motion} />
@@ -348,6 +343,13 @@ export function Point({
         }
     }
 }
+
+/**
+ * A note head centred on x, y, as wide as a dot of radius `r` is high times
+ * 3.2. It leans back like an engraved head; the tilt is drawn into the path,
+ * so the element keeps no transform attribute and can still be animated.
+ */
+export const headPath = (x: number, y: number, r: number) => ellipsePath(x, y, r * 1.6, r * 1.15, -20);
 
 /** An ellipse rotated by `deg`, as a path (four arcs), so it needs no transform. */
 function ellipsePath(cx: number, cy: number, rx: number, ry: number, deg: number) {
@@ -415,7 +417,7 @@ export function Track({ d, x, y, w, h }: { d: Dialect; x: number; y: number; w: 
         case 'music':
             return <line x1={x} x2={x + w} y1={y + h / 2} y2={y + h / 2} stroke={white(d.rule.major)} strokeLinecap="round" />;
         case 'mind':
-            return <Rule d={d} x1={x} x2={x + w} y1={y + h / 2} y2={y + h / 2} major />;
+            return <Rule d={d} x1={x} x2={x + w} y1={y + h / 2} y2={y + h / 2} />;
         case 'business':
             return null;
     }

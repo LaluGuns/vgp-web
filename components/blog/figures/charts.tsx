@@ -50,14 +50,11 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
             <Title dialect={d} x={0} y={top - 12}>
                 {spec.yLabel} ↑
             </Title>
-            {/* The grid. These are shapes, not measurements, so no dialect adds a value scale. */}
-            {d.name === 'music'
-                ? // Staff rulings across the plot; each point stands on a bar line.
-                  [0, 1, 2, 3].map((k) => <Rule key={`s${k}`} d={d} x1={0} x2={w} y1={top + (k * (bottom - top)) / 4} y2={top + (k * (bottom - top)) / 4} />)
-                : null}
+            {/* The grid. These are shapes, not measurements, so no dialect adds a value scale. Technical and mind
+                rule each point; music draws them as bar lines, a section to a bar; the ledger rules rows instead. */}
             {d.name === 'business'
                 ? [0, 1, 2, 3].map((k) => <Rule key={`r${k}`} d={d} x1={0} x2={w} y1={top + (k * (bottom - top)) / 4} y2={top + (k * (bottom - top)) / 4} />)
-                : spec.x.map((_, i) => <Rule key={i} d={d} x1={xAt(i)} x2={xAt(i)} y1={top} y2={bottom} major={d.name !== 'mind'} opacity={d.name === 'music' ? 0.12 : undefined} />)}
+                : spec.x.map((_, i) => <Rule key={i} d={d} x1={xAt(i)} x2={xAt(i)} y1={top} y2={bottom} major={d.name !== 'mind'} opacity={d.name === 'music' ? 0.14 : undefined} />)}
             <Corners d={d} x={0} y={top} w={w} h={bottom - top} />
             <Axis x1={0} x2={w} y1={bottom} y2={bottom} />
             {spec.marks?.map((mark) => {
@@ -134,7 +131,9 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
     const shown = (bar: BarsFigure['bars'][number]) => bar.display ?? fmt(bar.value);
     const labelCol = narrow ? 0 : Math.min(200, Math.max(...spec.bars.map((b) => textWidth(b.label))) + 16);
     // A ledger prints its figures in their own right-aligned column; elsewhere a value sits after its bar.
-    const valueCol = ledger ? (narrow ? 0 : Math.max(64, Math.max(...spec.bars.map((b) => textWidth(shown(b)))) + 20)) : 64;
+    // On a phone the column shares the label's line, so a label too long to share it sends every value back after its bar.
+    const column = ledger && !(narrow && spec.bars.some((b) => textWidth(b.label) + textWidth(shown(b)) + 16 > w));
+    const valueCol = column ? (narrow ? 0 : Math.max(64, Math.max(...spec.bars.map((b) => textWidth(shown(b)))) + 20)) : 64;
     const x0 = labelCol;
     const x1 = w - valueCol;
     const xAt = (v: number) => x0 + ((clamp(v, spec.min, spec.max) - spec.min) / (spec.max - spec.min)) * (x1 - x0);
@@ -167,7 +166,7 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                         <Track d={d} x={x0} y={slotY} w={x1 - x0} h={14} />
                         <Bar d={d} x={base} y={barY} w={Math.max(2, end - base)} h={bh} tone={bar.dim ? 'dim' : 'accent'} delay={delay} />
                         {ring ? <Point d={d} x={end} y={slotY + 7} r={3} tone={bar.dim ? 'muted' : 'accent'} delay={bar.dim ? undefined : delay + 420} /> : null}
-                        {ledger ? (
+                        {column ? (
                             <Label x={w} y={narrow ? y + 14 : slotY + 11} anchor="end" fill={bar.dim ? C.soft : C.ink} {...value}>
                                 {text}
                             </Label>
