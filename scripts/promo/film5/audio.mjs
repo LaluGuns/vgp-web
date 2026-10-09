@@ -231,7 +231,7 @@ export function renderAudio(wavPath) {
     const R = new Float32Array(n);
 
     // ── Narration ──
-    const voSrc = readAudio(path.join(ASSETS, 'vo', 'narration.mp3'));
+    const voSrc = readAudio(path.join(ASSETS, 'vo', 'narration.wav'));
     const vo = new Float32Array(n);
     const placed = voPlacements();
     const fade = at(0.008);

@@ -1,0 +1,746 @@
+{
+ "source": "assets/vo/narration.wav",
+ "note": "from/to: seconds in the source file, cut where the voice starts and stops (10 ms energy frames). Word times s/e are relative to `from`, from a local faster-whisper small.en pass aligned to the script; words the recognizer missed are interpolated.",
+ "missed_words": 5,
+ "segments": [
+  {
+   "id": "hook",
+   "text": "Number two. Same drop, but with a hole in it: less than a quarter second of silence right before the kick.",
+   "from": 2.14,
+   "to": 7.81,
+   "words": [
+    {
+     "w": "Number",
+     "s": 0.0,
+     "e": 0.32
+    },
+    {
+     "w": "two.",
+     "s": 0.32,
+     "e": 0.68
+    },
+    {
+     "w": "Same",
+     "s": 1.22,
+     "e": 1.26
+    },
+    {
+     "w": "drop,",
+     "s": 1.26,
+     "e": 1.6
+    },
+    {
+     "w": "but",
+     "s": 1.6,
+     "e": 1.8
+    },
+    {
+     "w": "with",
+     "s": 1.8,
+     "e": 1.96
+    },
+    {
+     "w": "a",
+     "s": 1.96,
+     "e": 2.1
+    },
+    {
+     "w": "hole",
+     "s": 2.1,
+     "e": 2.24
+    },
+    {
+     "w": "in",
+     "s": 2.24,
+     "e": 2.42
+    },
+    {
+     "w": "it:",
+     "s": 2.42,
+     "e": 2.84
+    },
+    {
+     "w": "less",
+     "s": 2.94,
+     "e": 3.14
+    },
+    {
+     "w": "than",
+     "s": 3.14,
+     "e": 3.38
+    },
+    {
+     "w": "a",
+     "s": 3.38,
+     "e": 3.5
+    },
+    {
+     "w": "quarter",
+     "s": 3.5,
+     "e": 3.72
+    },
+    {
+     "w": "second",
+     "s": 3.72,
+     "e": 4.06
+    },
+    {
+     "w": "of",
+     "s": 4.06,
+     "e": 4.32
+    },
+    {
+     "w": "silence",
+     "s": 4.32,
+     "e": 4.62
+    },
+    {
+     "w": "right",
+     "s": 4.62,
+     "e": 5.02
+    },
+    {
+     "w": "before",
+     "s": 5.02,
+     "e": 5.36
+    },
+    {
+     "w": "the",
+     "s": 5.36,
+     "e": 5.6
+    },
+    {
+     "w": "kick.",
+     "s": 5.6,
+     "e": 5.67
+    }
+   ]
+  },
+  {
+   "id": "fog",
+   "text": "A loud riser dulls your hearing for up to a fifth of a second after it stops. In number one, the kick's click lands right inside that fog.",
+   "from": 8.79,
+   "to": 16.9,
+   "words": [
+    {
+     "w": "A",
+     "s": 0.0,
+     "e": 0.11
+    },
+    {
+     "w": "loud",
+     "s": 0.45,
+     "e": 0.53
+    },
+    {
+     "w": "riser",
+     "s": 0.53,
+     "e": 0.79
+    },
+    {
+     "w": "dulls",
+     "s": 0.79,
+     "e": 1.05
+    },
+    {
+     "w": "your",
+     "s": 1.05,
+     "e": 1.33
+    },
+    {
+     "w": "hearing",
+     "s": 1.33,
+     "e": 1.79
+    },
+    {
+     "w": "for",
+     "s": 1.79,
+     "e": 2.17
+    },
+    {
+     "w": "up",
+     "s": 2.17,
+     "e": 2.33
+    },
+    {
+     "w": "to",
+     "s": 2.33,
+     "e": 2.49
+    },
+    {
+     "w": "a",
+     "s": 2.49,
+     "e": 2.73
+    },
+    {
+     "w": "fifth",
+     "s": 2.73,
+     "e": 2.87
+    },
+    {
+     "w": "of",
+     "s": 2.87,
+     "e": 3.11
+    },
+    {
+     "w": "a",
+     "s": 3.11,
+     "e": 3.33
+    },
+    {
+     "w": "second",
+     "s": 3.33,
+     "e": 3.65
+    },
+    {
+     "w": "after",
+     "s": 3.65,
+     "e": 3.95
+    },
+    {
+     "w": "it",
+     "s": 3.95,
+     "e": 4.15
+    },
+    {
+     "w": "stops.",
+     "s": 4.15,
+     "e": 4.47
+    },
+    {
+     "w": "In",
+     "s": 5.29,
+     "e": 5.33
+    },
+    {
+     "w": "number",
+     "s": 5.33,
+     "e": 5.49
+    },
+    {
+     "w": "one,",
+     "s": 5.49,
+     "e": 5.87
+    },
+    {
+     "w": "the",
+     "s": 6.03,
+     "e": 6.07
+    },
+    {
+     "w": "kick's",
+     "s": 6.07,
+     "e": 6.33
+    },
+    {
+     "w": "click",
+     "s": 6.33,
+     "e": 6.67
+    },
+    {
+     "w": "lands",
+     "s": 6.67,
+     "e": 7.07
+    },
+    {
+     "w": "right",
+     "s": 7.07,
+     "e": 7.31
+    },
+    {
+     "w": "inside",
+     "s": 7.31,
+     "e": 7.63
+    },
+    {
+     "w": "that",
+     "s": 7.63,
+     "e": 7.87
+    },
+    {
+     "w": "fog.",
+     "s": 7.87,
+     "e": 8.11
+    }
+   ]
+  },
+  {
+   "id": "fresh",
+   "text": "After silence, your ears give the next sound their full response.",
+   "from": 17.93,
+   "to": 22.1,
+   "words": [
+    {
+     "w": "After",
+     "s": 0.0,
+     "e": 0.27
+    },
+    {
+     "w": "silence,",
+     "s": 0.27,
+     "e": 0.93
+    },
+    {
+     "w": "your",
+     "s": 1.33,
+     "e": 1.49
+    },
+    {
+     "w": "ears",
+     "s": 1.49,
+     "e": 1.79
+    },
+    {
+     "w": "give",
+     "s": 1.79,
+     "e": 2.17
+    },
+    {
+     "w": "the",
+     "s": 2.17,
+     "e": 2.37
+    },
+    {
+     "w": "next",
+     "s": 2.37,
+     "e": 2.63
+    },
+    {
+     "w": "sound",
+     "s": 2.63,
+     "e": 2.99
+    },
+    {
+     "w": "their",
+     "s": 2.99,
+     "e": 3.19
+    },
+    {
+     "w": "full",
+     "s": 3.19,
+     "e": 3.41
+    },
+    {
+     "w": "response.",
+     "s": 3.41,
+     "e": 3.89
+    }
+   ]
+  },
+  {
+   "id": "hand",
+   "text": "Your limiter is a little hand on a fader, and the riser has it pulling everything down right as the kick arrives.",
+   "from": 22.91,
+   "to": 29.61,
+   "words": [
+    {
+     "w": "Your",
+     "s": 0.0,
+     "e": 0.15
+    },
+    {
+     "w": "limiter",
+     "s": 0.15,
+     "e": 0.57
+    },
+    {
+     "w": "is",
+     "s": 0.57,
+     "e": 0.85
+    },
+    {
+     "w": "a",
+     "s": 0.85,
+     "e": 1.03
+    },
+    {
+     "w": "little",
+     "s": 1.03,
+     "e": 1.21
+    },
+    {
+     "w": "hand",
+     "s": 1.21,
+     "e": 1.67
+    },
+    {
+     "w": "on",
+     "s": 1.67,
+     "e": 1.81
+    },
+    {
+     "w": "a",
+     "s": 1.81,
+     "e": 2.01
+    },
+    {
+     "w": "fader,",
+     "s": 2.01,
+     "e": 2.19
+    },
+    {
+     "w": "and",
+     "s": 2.19,
+     "e": 2.71
+    },
+    {
+     "w": "the",
+     "s": 2.71,
+     "e": 2.91
+    },
+    {
+     "w": "riser",
+     "s": 2.91,
+     "e": 3.13
+    },
+    {
+     "w": "has",
+     "s": 3.13,
+     "e": 3.69
+    },
+    {
+     "w": "it",
+     "s": 3.69,
+     "e": 3.87
+    },
+    {
+     "w": "pulling",
+     "s": 3.87,
+     "e": 4.17
+    },
+    {
+     "w": "everything",
+     "s": 4.17,
+     "e": 4.61
+    },
+    {
+     "w": "down",
+     "s": 4.61,
+     "e": 4.61
+    },
+    {
+     "w": "right",
+     "s": 4.61,
+     "e": 5.25
+    },
+    {
+     "w": "as",
+     "s": 5.25,
+     "e": 5.49
+    },
+    {
+     "w": "the",
+     "s": 5.49,
+     "e": 5.69
+    },
+    {
+     "w": "kick",
+     "s": 5.69,
+     "e": 5.89
+    },
+    {
+     "w": "arrives.",
+     "s": 5.89,
+     "e": 6.53
+    }
+   ]
+  },
+  {
+   "id": "brain",
+   "text": "Silence also leaves your brain one thing to predict: the next beat. Land the kick right there, and the arrival is the payoff.",
+   "from": 30.75,
+   "to": 39.18,
+   "words": [
+    {
+     "w": "Silence",
+     "s": 0.45,
+     "e": 0.45
+    },
+    {
+     "w": "also",
+     "s": 0.45,
+     "e": 1.01
+    },
+    {
+     "w": "leaves",
+     "s": 1.01,
+     "e": 1.35
+    },
+    {
+     "w": "your",
+     "s": 1.35,
+     "e": 1.63
+    },
+    {
+     "w": "brain",
+     "s": 1.63,
+     "e": 2.05
+    },
+    {
+     "w": "one",
+     "s": 2.05,
+     "e": 2.05
+    },
+    {
+     "w": "thing",
+     "s": 2.05,
+     "e": 2.51
+    },
+    {
+     "w": "to",
+     "s": 2.51,
+     "e": 2.91
+    },
+    {
+     "w": "predict:",
+     "s": 2.91,
+     "e": 3.13
+    },
+    {
+     "w": "the",
+     "s": 3.13,
+     "e": 3.71
+    },
+    {
+     "w": "next",
+     "s": 3.71,
+     "e": 3.97
+    },
+    {
+     "w": "beat.",
+     "s": 3.97,
+     "e": 4.33
+    },
+    {
+     "w": "Land",
+     "s": 5.03,
+     "e": 5.17
+    },
+    {
+     "w": "the",
+     "s": 5.17,
+     "e": 5.47
+    },
+    {
+     "w": "kick",
+     "s": 5.47,
+     "e": 5.67
+    },
+    {
+     "w": "right",
+     "s": 5.67,
+     "e": 5.95
+    },
+    {
+     "w": "there,",
+     "s": 5.95,
+     "e": 6.33
+    },
+    {
+     "w": "and",
+     "s": 6.33,
+     "e": 6.77
+    },
+    {
+     "w": "the",
+     "s": 6.77,
+     "e": 6.93
+    },
+    {
+     "w": "arrival",
+     "s": 6.93,
+     "e": 7.51
+    },
+    {
+     "w": "is",
+     "s": 7.51,
+     "e": 7.79
+    },
+    {
+     "w": "the",
+     "s": 7.79,
+     "e": 7.95
+    },
+    {
+     "w": "payoff.",
+     "s": 7.95,
+     "e": 8.41
+    }
+   ]
+  },
+  {
+   "id": "how",
+   "text": "At 128 BPM, cut everything an eighth note early. Reverb tails too.",
+   "from": 40.22,
+   "to": 46.25,
+   "words": [
+    {
+     "w": "At",
+     "s": 0.0,
+     "e": 0.1
+    },
+    {
+     "w": "128",
+     "s": 0.36,
+     "e": 0.84
+    },
+    {
+     "w": "BPM,",
+     "s": 0.84,
+     "e": 1.54
+    },
+    {
+     "w": "cut",
+     "s": 1.54,
+     "e": 2.14
+    },
+    {
+     "w": "everything",
+     "s": 2.14,
+     "e": 2.8
+    },
+    {
+     "w": "an",
+     "s": 2.8,
+     "e": 3.54
+    },
+    {
+     "w": "eighth",
+     "s": 3.54,
+     "e": 3.58
+    },
+    {
+     "w": "note",
+     "s": 3.58,
+     "e": 3.98
+    },
+    {
+     "w": "early.",
+     "s": 3.98,
+     "e": 4.48
+    },
+    {
+     "w": "Reverb",
+     "s": 5.04,
+     "e": 5.38
+    },
+    {
+     "w": "tails",
+     "s": 5.38,
+     "e": 5.68
+    },
+    {
+     "w": "too.",
+     "s": 5.68,
+     "e": 6.03
+    }
+   ]
+  },
+  {
+   "id": "again",
+   "text": "Listen again.",
+   "from": 47.62,
+   "to": 48.07,
+   "words": [
+    {
+     "w": "Listen",
+     "s": 0.0,
+     "e": 0.2
+    },
+    {
+     "w": "again.",
+     "s": 0.2,
+     "e": 0.45
+    }
+   ]
+  },
+  {
+   "id": "cta",
+   "text": "The full lesson, with a demo you can play, is free on the Virzy Guns blog.",
+   "from": 48.76,
+   "to": 55.13,
+   "words": [
+    {
+     "w": "The",
+     "s": 0.0,
+     "e": 0.64
+    },
+    {
+     "w": "full",
+     "s": 0.64,
+     "e": 0.88
+    },
+    {
+     "w": "lesson,",
+     "s": 0.88,
+     "e": 1.3
+    },
+    {
+     "w": "with",
+     "s": 1.3,
+     "e": 1.84
+    },
+    {
+     "w": "a",
+     "s": 1.84,
+     "e": 2.1
+    },
+    {
+     "w": "demo",
+     "s": 2.1,
+     "e": 2.4
+    },
+    {
+     "w": "you",
+     "s": 2.4,
+     "e": 2.74
+    },
+    {
+     "w": "can",
+     "s": 2.74,
+     "e": 2.98
+    },
+    {
+     "w": "play,",
+     "s": 2.98,
+     "e": 3.4
+    },
+    {
+     "w": "is",
+     "s": 3.4,
+     "e": 3.96
+    },
+    {
+     "w": "free",
+     "s": 3.96,
+     "e": 4.46
+    },
+    {
+     "w": "on",
+     "s": 4.46,
+     "e": 4.46
+    },
+    {
+     "w": "the",
+     "s": 4.46,
+     "e": 4.46
+    },
+    {
+     "w": "Virzy",
+     "s": 4.46,
+     "e": 4.7
+    },
+    {
+     "w": "Guns",
+     "s": 4.7,
+     "e": 5.7
+    },
+    {
+     "w": "blog.",
+     "s": 5.7,
+     "e": 6.32
+    }
+   ]
+  }
+ ]
+}

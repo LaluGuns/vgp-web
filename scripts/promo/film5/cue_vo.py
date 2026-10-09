@@ -134,7 +134,7 @@ def main(audio_path, script_path, out_path):
         out.append({'id': ln['id'], 'text': ln['text'], 'from': round(start, 3), 'to': round(end, 3), 'words': words})
     missed = sum(1 for j in match if j is None)
     doc = {
-        'source': 'assets/vo/narration.mp3',
+        'source': 'assets/vo/' + audio_path.split('/')[-1],
         'note': 'from/to: seconds in the source file, cut where the voice starts and stops (10 ms energy frames). Word times s/e are relative to `from`, from a local faster-whisper small.en pass aligned to the script; words the recognizer missed are interpolated.',
         'missed_words': missed,
         'segments': out,

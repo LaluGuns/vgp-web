@@ -29,7 +29,7 @@ const log = (line) => {
     report.push(line);
 };
 
-for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.mp3')])
+for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.wav')])
     if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Film 3"`);
 
 function measure(file) {
