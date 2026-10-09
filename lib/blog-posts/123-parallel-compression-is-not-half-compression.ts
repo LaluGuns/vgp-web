@@ -126,8 +126,6 @@ On a loud hit, the compressor has pulled the copy far down, so the dry path supp
 
 ::figure hits
 
-The blend fader therefore sets how much the quiet material is lifted, and the loud hits move much less than everything around them.
-
 Listen for two things in the demo as you raise the blend: the space between the hits and the front edge of each hit. The first should change a lot, the second very little.
 
 ::demo parallel
