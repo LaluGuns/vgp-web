@@ -102,8 +102,12 @@ interface OutlineItem {
     title: string;
 }
 
-/** Progress bar, active section and "read" marking. Renders the desktop outline. */
-export function ArticleOutline({ slug, headings }: { slug: string; headings: OutlineItem[] }) {
+/**
+ * Progress bar, active section and "read" marking. Renders the desktop outline.
+ * `accent` is the lesson group's accent, so the bar matches the figures; the bar
+ * is portalled to <body>, outside the article that scopes `--accent`.
+ */
+export function ArticleOutline({ slug, headings, accent = 'var(--accent)' }: { slug: string; headings: OutlineItem[]; accent?: string }) {
     const [mounted, setMounted] = useState(false);
     const [percent, setPercent] = useState(0);
     const [active, setActive] = useState(headings[0]?.id ?? '');
@@ -155,8 +159,8 @@ export function ArticleOutline({ slug, headings }: { slug: string; headings: Out
                 ? createPortal(
                       <div
                           aria-hidden="true"
-                          className="pointer-events-none fixed left-0 top-0 z-[9999] h-0.5 bg-sky-300"
-                          style={{ width: `${percent}%` }}
+                          className="pointer-events-none fixed left-0 top-0 z-[9999] h-0.5"
+                          style={{ width: `${percent}%`, background: accent }}
                       />,
                       document.body,
                   )

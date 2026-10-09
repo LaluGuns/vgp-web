@@ -4,6 +4,7 @@
  * save and share, checklists, quiz, listening demos) run in the browser.
  */
 
+import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import 'katex/dist/katex.min.css';
@@ -12,8 +13,10 @@ import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import { ArticleBody, ArticleSources } from '@/components/blog/article/ArticleBody';
 import { ArticleActions, ArticleOutline, OutlineList } from '@/components/blog/article/ArticleChrome';
 import { Quiz } from '@/components/blog/article/Quiz';
+import { DialectMark } from '@/components/blog/figures/DialectMark';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { parseArticle } from '@/lib/blog/content';
+import { dialectForCategory } from '@/lib/blog/dialects';
 import { glossaryFor } from '@/lib/blog/glossary';
 import { getPathPosition } from '@/lib/blog/paths';
 
@@ -39,11 +42,15 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
     const upcoming = position ? position.path.articles.slice(position.index + 2, position.index + 5) : [];
     const pathName = category?.name ?? article.category;
     const hasHearingNote = HEARING.test(article.content) || HEARING.test(article.excerpt);
+    // One accent per lesson (docs/DESIGN.md, "Figure dialects"): inside the article, --accent is the
+    // group's, so figures, demos, focus rings and the progress bar all speak the same colour.
+    const dialect = dialectForCategory(article.category);
+    const accentScope = { '--accent': dialect.accent } as CSSProperties;
 
     return (
         <PageTransition>
             <main className="editorial-shell text-white">
-                <article>
+                <article data-dialect={dialect.name} style={accentScope}>
                     <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                         <div className="mx-auto max-w-7xl">
                             <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-white/55">
@@ -51,9 +58,12 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     Articles
                                 </Link>
                                 <span aria-hidden="true">/</span>
-                                <Link href={`/blog/category/${article.category}`} className="vgp-link hover:text-white">
-                                    {pathName}
-                                </Link>
+                                <span className="inline-flex items-center gap-2">
+                                    <DialectMark dialect={dialect} />
+                                    <Link href={`/blog/category/${article.category}`} className="vgp-link hover:text-white">
+                                        {pathName}
+                                    </Link>
+                                </span>
                             </nav>
                             <h1 className="mt-6 max-w-4xl font-display text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em]">
                                 {article.title}
@@ -186,7 +196,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
 
                             <aside className="hidden lg:col-span-3 lg:col-start-10 lg:block">
                                 <div className="sticky top-28">
-                                    <ArticleOutline slug={article.slug} headings={headings} />
+                                    <ArticleOutline slug={article.slug} headings={headings} accent={dialect.accent} />
                                 </div>
                             </aside>
                         </div>

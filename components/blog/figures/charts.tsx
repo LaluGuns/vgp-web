@@ -47,7 +47,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
             {leg.node}
-            <Title d={d} x={0} y={top - 12}>
+            <Title dialect={d} x={0} y={top - 12}>
                 {spec.yLabel} ↑
             </Title>
             {/* The grid. These are shapes, not measurements, so no dialect adds a value scale. */}
@@ -113,7 +113,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                 </Label>
             ))}
             {spec.xLabel ? (
-                <Title d={d} x={w - 4} y={bottom + 40} anchor="end" fill={C.soft}>
+                <Title dialect={d} x={w - 4} y={bottom + 40} anchor="end" fill={C.soft}>
                     {spec.xLabel} →
                 </Title>
             ) : null}

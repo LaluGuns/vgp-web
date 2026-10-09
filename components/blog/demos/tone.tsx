@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, rms, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Segmented, Slider, ruleDash, useDialect, useFrame, usePlayer } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
 function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null; active: boolean; marker?: number }) {
+    // The lesson group's accent and rules (DemoSlot), so the live display matches the figures.
+    const dialect = useDialect();
     const canvas = useRef<HTMLCanvasElement>(null);
     const data = useRef<Float32Array<ArrayBuffer> | null>(null);
 
@@ -28,14 +30,18 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
         analyser.getFloatFrequencyData(data.current);
         const nyquist = analyser.context.sampleRate / 2;
         const fx = (f: number) => (Math.log10(f / 20) / Math.log10(20000 / 20)) * w;
-        ctx2d.strokeStyle = 'rgba(255,255,255,0.1)';
-        ctx2d.lineWidth = 1;
+        ctx2d.strokeStyle = dialect.rule.dash ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.1)';
+        ctx2d.lineWidth = dialect.rule.dash ? 1.4 : 1;
+        ctx2d.lineCap = dialect.rule.cap;
+        ctx2d.setLineDash(ruleDash(dialect));
         for (const f of [100, 1000, 10000]) {
             ctx2d.beginPath();
             ctx2d.moveTo(fx(f), 0);
             ctx2d.lineTo(fx(f), h);
             ctx2d.stroke();
         }
+        ctx2d.setLineDash([]);
+        ctx2d.lineCap = 'butt';
         ctx2d.beginPath();
         let started = false;
         for (let i = 1; i < data.current.length; i++) {
@@ -52,7 +58,7 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
         ctx2d.lineWidth = 1.5;
         ctx2d.stroke();
         if (marker) {
-            ctx2d.strokeStyle = '#7dd3fc';
+            ctx2d.strokeStyle = dialect.accent;
             ctx2d.setLineDash([4, 4]);
             ctx2d.beginPath();
             ctx2d.moveTo(fx(marker), 0);
@@ -64,7 +70,7 @@ function Spectrum({ analyser, active, marker }: { analyser: AnalyserNode | null;
 
     return (
         <div aria-hidden="true">
-            <canvas ref={canvas} className="block h-28 w-full rounded-[3px] bg-white/[0.035]" />
+            <canvas ref={canvas} className="vgp-plot block h-28 w-full" />
             <div className="relative mt-1 h-4 text-[11px] text-white/55">
                 {[
                     [20, '20 Hz'],

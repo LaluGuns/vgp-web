@@ -271,6 +271,8 @@ body::before {
    ------------------------------------------------------------------ */
 :root {
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Softer than expo, so a figure line is seen travelling (draw-in). */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Entrance keyframes start at opacity 0.01, not 0: Chrome ignores fully
@@ -347,6 +349,94 @@ body::before {
   .group:hover .vgp-zoom img,
   .vgp-zoom:hover img {
     transform: scale(1.04);
+  }
+}
+
+/* Article figures draw in once (docs/DESIGN.md, Motion). The frame does
+   not move. While a figure waits below the fold its grey drawing sits at
+   40% and its accent marks (the vgp-draw-* classes from
+   components/blog/figures/svg.tsx) are held at their start. When
+   MotionObserver marks it "drawn", the grey settles first and the accent
+   data draws in, lightly staggered by --draw-delay. The animations only
+   run from "drawn" and fill backwards, never forwards, so the end state is
+   the server-rendered drawing. Screen only: print gets the full figure. */
+@keyframes vgp-draw-base {
+  from { opacity: 0.4; }
+}
+
+@keyframes vgp-draw-line {
+  from { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  to { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+}
+
+@keyframes vgp-draw-grow {
+  from { transform: scaleX(0); }
+}
+
+@keyframes vgp-draw-rise {
+  from { transform: scaleY(0); }
+}
+
+@keyframes vgp-draw-pop {
+  from { opacity: 0; transform: scale(0.4); }
+}
+
+@keyframes vgp-draw-fade {
+  from { opacity: 0; }
+}
+
+/* A focus ring closes in on its point (mind dialect). */
+@keyframes vgp-draw-focus {
+  from { opacity: 0; transform: scale(2.2); }
+}
+
+@keyframes vgp-draw-slide {
+  from { transform: translateX(var(--draw-from, 0px)); }
+}
+
+.vgp-draw-grow { transform-box: fill-box; transform-origin: 0 50%; }
+.vgp-draw-rise { transform-box: fill-box; transform-origin: 50% 100%; }
+.vgp-draw-pop,
+.vgp-draw-focus { transform-box: fill-box; transform-origin: 50% 50%; }
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-reveal='draw'][data-reveal-state] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  [data-reveal='draw'][data-reveal-state='pending'] svg { opacity: 0.4; }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-line { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-grow { transform: scaleX(0); }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-rise { transform: scaleY(0); }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-pop { opacity: 0; transform: scale(0.4); }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-fade { opacity: 0; }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-focus { opacity: 0; transform: scale(2.2); }
+  [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-slide { transform: translateX(var(--draw-from, 0px)); }
+
+  [data-reveal='draw'][data-reveal-state='drawn'] svg {
+    animation: vgp-draw-base 400ms ease-out backwards;
+  }
+
+  [data-reveal='draw'][data-reveal-state='drawn'] :is(.vgp-draw-line, .vgp-draw-grow, .vgp-draw-rise, .vgp-draw-pop, .vgp-draw-fade, .vgp-draw-focus, .vgp-draw-slide) {
+    animation-delay: var(--draw-delay, 0ms);
+    animation-fill-mode: backwards;
+    animation-timing-function: var(--ease-out-quart);
+  }
+
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-line { animation-name: vgp-draw-line; animation-duration: 850ms; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-grow { animation-name: vgp-draw-grow; animation-duration: 700ms; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-rise { animation-name: vgp-draw-rise; animation-duration: 700ms; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-pop { animation-name: vgp-draw-pop; animation-duration: 450ms; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-fade { animation-name: vgp-draw-fade; animation-duration: 600ms; animation-timing-function: ease-out; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-focus { animation-name: vgp-draw-focus; animation-duration: 650ms; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-slide { animation-name: vgp-draw-slide; animation-duration: 700ms; }
+
+  /* Technical traces sweep at a constant speed, the way a scope beam does. */
+  [data-reveal='draw'][data-reveal-state='drawn'][data-dialect='technical'] .vgp-draw-line {
+    animation-duration: 760ms;
+    animation-timing-function: linear;
   }
 }
 
@@ -546,6 +636,92 @@ body::before {
 .vgp-range:focus-visible::-moz-range-thumb {
   box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
 }
+
+/* Demo displays speak the lesson's figure dialect (docs/DESIGN.md, "Figure
+   dialects"; lib/blog/dialects.ts). DemoSlot puts data-dialect on the panel.
+   Plots, meters, step lanes and bar cells follow it; the controls (play
+   button, sliders, choices) stay the same in every lesson. Corner ticks and
+   rulings are drawn with solid-colour background images, not gradients. */
+.vgp-plot { border-radius: 3px; background-color: rgba(255, 255, 255, 0.035); }
+.vgp-lane { border-radius: 3px; background-color: rgba(255, 255, 255, 0.035); }
+.vgp-cell { border-radius: 3px; }
+.vgp-hit { border-radius: 2px; }
+.vgp-meter { overflow: hidden; border-radius: 999px; }
+.vgp-meter-fill { border-radius: 999px; }
+
+/* Technical: an instrument display. Square, with registration corners. */
+[data-dialect='technical'] .vgp-plot {
+  --tick: rgba(255, 255, 255, 0.34);
+  border-radius: 1px;
+  background-image:
+    linear-gradient(var(--tick), var(--tick)), linear-gradient(var(--tick), var(--tick)),
+    linear-gradient(var(--tick), var(--tick)), linear-gradient(var(--tick), var(--tick)),
+    linear-gradient(var(--tick), var(--tick)), linear-gradient(var(--tick), var(--tick)),
+    linear-gradient(var(--tick), var(--tick)), linear-gradient(var(--tick), var(--tick));
+  background-size: 6px 1px, 1px 6px, 6px 1px, 1px 6px, 6px 1px, 1px 6px, 6px 1px, 1px 6px;
+  background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom;
+  background-repeat: no-repeat;
+}
+[data-dialect='technical'] :is(.vgp-lane, .vgp-hit, .vgp-meter, .vgp-meter-fill) { border-radius: 1px; }
+[data-dialect='technical'] .vgp-cell { border-radius: 2px; }
+
+/* Music: score paper. No field, the outer lines of a staff, note heads on a drum line. */
+[data-dialect='music'] .vgp-plot {
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(255, 255, 255, 0.14);
+}
+[data-dialect='music'] .vgp-cell { border-radius: 7px; }
+[data-dialect='music'] .vgp-lane {
+  border-radius: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)) left calc(100% - 7px) / 100% 1px no-repeat;
+}
+[data-dialect='music'] .vgp-step { border-color: transparent; }
+[data-dialect='music'] .vgp-step[data-beat] { border-color: rgba(255, 255, 255, 0.2); }
+[data-dialect='music'] .vgp-hit { background-color: transparent; border-radius: 0; }
+[data-dialect='music'] .vgp-hit::before,
+[data-dialect='music'] .vgp-hit::after { content: ''; position: absolute; background: currentColor; }
+/* Stem, then the head leaning back like an engraved one. */
+[data-dialect='music'] .vgp-hit::before { left: 7.6px; top: 0; bottom: 3px; width: 1.5px; border-radius: 1px; }
+[data-dialect='music'] .vgp-hit::after { left: 0; bottom: 0; width: 9px; height: 6.5px; border-radius: 50%; transform: rotate(-20deg); }
+
+/* Mind: a field of attention. Soft corners, steps as dots, hits as rounded marks. */
+[data-dialect='mind'] .vgp-plot,
+[data-dialect='mind'] .vgp-cell { border-radius: 10px; }
+[data-dialect='mind'] .vgp-lane { background-color: transparent; }
+[data-dialect='mind'] .vgp-step { position: relative; border-color: transparent; }
+[data-dialect='mind'] .vgp-step::after {
+  content: '';
+  position: absolute;
+  left: calc(25% + 0.5px);
+  bottom: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+[data-dialect='mind'] .vgp-step[data-beat]::after { left: 25%; width: 4px; height: 4px; bottom: -0.5px; background: rgba(255, 255, 255, 0.5); }
+[data-dialect='mind'] .vgp-hit { border-radius: 999px; }
+
+/* Business: a ledger. Ruled, square, closed with a double rule; a reading ends in a tick. */
+[data-dialect='business'] .vgp-plot {
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -3px 0 var(--surface),
+    inset 0 -4px 0 rgba(255, 255, 255, 0.3);
+}
+[data-dialect='business'] :is(.vgp-cell, .vgp-hit, .vgp-meter, .vgp-meter-fill) { border-radius: 0; }
+[data-dialect='business'] .vgp-lane {
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.14);
+}
+[data-dialect='business'] .vgp-meter { overflow: visible; }
+[data-dialect='business'] .vgp-meter-fill { position: relative; }
+[data-dialect='business'] .vgp-meter-fill::after { content: ''; position: absolute; right: -1px; top: -3px; bottom: -3px; width: 2px; background: #fff; }
 
 .article-content .vgp-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

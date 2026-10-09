@@ -1,8 +1,28 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Play, Square } from 'lucide-react';
+import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
 import { claim, getEngine, release, setVolume, storedVolume, type Engine } from './engine';
+
+/**
+ * The lesson group's dialect (lib/blog/dialects.ts), provided by DemoSlot.
+ * A demo's displays (plots, meters, step grids) draw in it, so a demo looks
+ * like the figures around it; its controls stay the same everywhere.
+ * Outside a lesson it is technical.
+ */
+export const DialectContext = createContext<Dialect>(DIALECTS.technical);
+
+export const useDialect = () => useContext(DialectContext);
+
+/** A dialect's accent at an opacity, for canvas fills. */
+export function accentAlpha(d: Dialect, opacity: number): string {
+    const n = parseInt(d.accent.slice(1), 16);
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${opacity})`;
+}
+
+/** Canvas line dash for grid rules: dotted in the mind dialect, solid elsewhere. */
+export const ruleDash = (d: Dialect): number[] => (d.rule.dash ? [0.01, 4] : []);
 
 /**
  * Starts and stops one demo. `start` builds the audio graph and returns
@@ -61,6 +81,7 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
                 {playing ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
                 {playing ? 'Stop' : label}
             </button>
+            {/* --accent is the lesson group's inside a lesson (DemoSlot), sky elsewhere. */}
             <span className="text-sm text-[var(--accent)]" aria-live="polite">
                 {playing ? 'Playing' : ''}
             </span>
@@ -150,7 +171,7 @@ export function Segmented<T extends string>({
     );
 }
 
-/** A level bar. `value` 0 to 1. */
+/** A level bar. `value` 0 to 1. Its ends follow the dialect (app/globals.css, `.vgp-meter`). */
 export function Meter({ label, value, text }: { label: string; value: number; text: string }) {
     return (
         <div>
@@ -158,8 +179,8 @@ export function Meter({ label, value, text }: { label: string; value: number; te
                 <span className="text-white/70">{label}</span>
                 <span className="tabular-nums text-white/85">{text}</span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/[0.06]" aria-hidden="true">
-                <div className="h-full rounded-full bg-white/75" style={{ width: `${Math.round(Math.min(1, Math.max(0, value)) * 100)}%` }} />
+            <div className="vgp-meter mt-2 h-2 bg-white/[0.06]" aria-hidden="true">
+                <div className="vgp-meter-fill h-full bg-white/75" style={{ width: `${Math.round(Math.min(1, Math.max(0, value)) * 100)}%` }} />
             </div>
         </div>
     );

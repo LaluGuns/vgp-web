@@ -1,8 +1,9 @@
 'use client';
 
-import { lazy, Suspense, useEffect, useRef, useState, type ComponentType, type LazyExoticComponent } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState, type ComponentType, type CSSProperties, type LazyExoticComponent } from 'react';
 import { demoCatalog, isDemoId, type DemoId } from '@/lib/blog/demos';
-import { VolumeRow } from './ui';
+import { resolveDialect } from '@/lib/blog/dialects';
+import { DialectContext, VolumeRow } from './ui';
 
 function Placeholder() {
     return (
@@ -51,8 +52,13 @@ const DEMOS: Record<DemoId, LazyExoticComponent<ComponentType>> = {
     'chord-context': demo(() => import('./perception').then((m) => ({ default: m.ChordContextDemo }))),
 };
 
-/** A listening demo in a framed panel. Its code loads when it nears the screen. */
-export function DemoSlot({ id }: { id: string }) {
+/**
+ * A listening demo in a framed panel. Its code loads when it nears the screen.
+ * `dialect` is the lesson group's (lib/blog/dialects.ts): the panel scopes
+ * `--accent` and `data-dialect` to it, so the demo's displays draw in the same
+ * language as the lesson's figures. Its controls stay the same everywhere.
+ */
+export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
     const ref = useRef<HTMLElement>(null);
     const [near, setNear] = useState(false);
 
@@ -75,17 +81,26 @@ export function DemoSlot({ id }: { id: string }) {
     if (!isDemoId(id)) return null;
     const meta = demoCatalog[id];
     const Demo = DEMOS[id];
+    const d = resolveDialect(dialect);
 
     return (
-        <section ref={ref} aria-label={`Listen: ${meta.title}`} className="my-12 rounded-[6px] border border-white/10 bg-[var(--surface)] px-5 py-6 sm:px-7 sm:py-7">
+        <section
+            ref={ref}
+            aria-label={`Listen: ${meta.title}`}
+            data-dialect={d.name}
+            style={{ '--accent': d.accent } as CSSProperties}
+            className="vgp-demo my-12 rounded-[6px] border border-white/10 bg-[var(--surface)] px-5 py-6 sm:px-7 sm:py-7"
+        >
             <p className="text-sm font-medium text-white/50">Listen</p>
             <h3 className="mt-1 text-xl font-semibold leading-snug text-white">{meta.title}</h3>
             <p className="mt-2 text-base leading-7 text-white/70">{meta.blurb}</p>
             <div className="mt-6 min-h-11">
                 {near ? (
-                    <Suspense fallback={<Placeholder />}>
-                        <Demo />
-                    </Suspense>
+                    <DialectContext.Provider value={d}>
+                        <Suspense fallback={<Placeholder />}>
+                            <Demo />
+                        </Suspense>
+                    </DialectContext.Provider>
                 ) : (
                     <Placeholder />
                 )}

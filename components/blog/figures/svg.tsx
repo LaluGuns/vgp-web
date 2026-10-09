@@ -138,8 +138,8 @@ export function Label({
 }
 
 /** An axis title ("Energy ↑", "Input level (dB)"). Music sets it in italic, like the expression text in a score. */
-export function Title({ d, ...props }: { d: Dialect } & Parameters<typeof Label>[0]) {
-    return <Label fill={C.text} fontStyle={d.italic ? 'italic' : undefined} {...props} />;
+export function Title({ dialect, ...props }: { dialect: Dialect } & Parameters<typeof Label>[0]) {
+    return <Label fill={C.text} fontStyle={dialect.italic ? 'italic' : undefined} {...props} />;
 }
 
 /** Multi-line label; `y` is the first baseline. */

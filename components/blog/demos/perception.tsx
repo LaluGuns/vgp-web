@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import type { Dialect } from '@/lib/blog/dialects';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Small helpers ───────────────────────────────────────────────────
 
-const ACCENT = '#7dd3fc';
 const dbToGain = (db: number) => 10 ** (db / 20);
 const powerDb = (p: number) => (p > 1e-12 ? 10 * Math.log10(p) : -120);
 
@@ -373,7 +373,7 @@ function applyWidth(n: WidthNodes, s: WidthSettings) {
     for (const g of n.match) g.gain.setTargetAtTime(match, t, 0.05);
 }
 
-function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array, scale: number) {
+function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array, scale: number, dialect: Dialect) {
     const s = canvas2d(c);
     if (!s) return;
     const { g, w, h } = s;
@@ -381,8 +381,11 @@ function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array
     const cy = h / 2;
     const rad = Math.min(w, h) / 2 - 2;
     const d = rad * Math.SQRT1_2;
-    g.strokeStyle = 'rgba(255,255,255,0.1)';
-    g.lineWidth = 1;
+    // The axes are rules, drawn in the lesson's dialect: dotted in mind lessons, solid elsewhere.
+    g.strokeStyle = dialect.rule.dash ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.1)';
+    g.lineWidth = dialect.rule.dash ? 1.4 : 1;
+    g.lineCap = dialect.rule.cap;
+    g.setLineDash(ruleDash(dialect));
     g.beginPath();
     g.moveTo(cx, cy - rad);
     g.lineTo(cx, cy + rad);
@@ -393,6 +396,7 @@ function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array
     g.moveTo(cx + d, cy - d);
     g.lineTo(cx - d, cy + d);
     g.stroke();
+    g.setLineDash([]);
     g.fillStyle = 'rgba(255,255,255,0.55)';
     g.font = '11px system-ui, sans-serif';
     g.fillText('L', 5, 13);
@@ -401,7 +405,7 @@ function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array
     if (scale <= 0) return;
     // Mid goes up, side goes across: mono is a vertical line, wide is a broad cloud.
     const k = (rad * 0.8) / scale;
-    g.fillStyle = 'rgba(125,211,252,0.55)';
+    g.fillStyle = accentAlpha(dialect, 0.55);
     for (let i = 0; i < l.length; i += 3) {
         const x = cx + (r[i] - l[i]) * k;
         const y = cy - (l[i] + r[i]) * k;
@@ -444,6 +448,7 @@ function CorrelationMeter({ value }: { value: number | null }) {
  * default, so wider cannot win just by being louder.
  */
 export function WidthDemo() {
+    const dialect = useDialect();
     const [sideDb, setSideDb] = useState(0);
     const [midDb, setMidDb] = useState(0);
     const [mono, setMono] = useState(false);
@@ -519,7 +524,7 @@ export function WidthDemo() {
             seq.stop();
             nodes.current = null;
             setMeters(null);
-            drawScope(scope.current, n.bufL, n.bufR, 0);
+            drawScope(scope.current, n.bufL, n.bufR, 0, dialect);
             fadeOut(ctx, master);
         };
     });
@@ -561,7 +566,7 @@ export function WidthDemo() {
             mid: sm.midDb,
             side: sm.sideDb,
         });
-        drawScope(scope.current, l, r, sm.scale);
+        drawScope(scope.current, l, r, sm.scale, dialect);
     });
 
     const levelMeter = (db: number | undefined) => ({
@@ -589,7 +594,7 @@ export function WidthDemo() {
             <CorrelationMeter value={meters ? meters.corr : null} />
             <div>
                 <div className="flex items-center gap-5">
-                    <canvas ref={scope} aria-hidden="true" className="block h-28 w-28 shrink-0 rounded-[3px] bg-white/[0.035]" />
+                    <canvas ref={scope} aria-hidden="true" className="vgp-plot block h-28 w-28 shrink-0" />
                     <div className="min-w-0 flex-1 space-y-4">
                         <Meter label="Mid signal" value={midMeter.value} text={midMeter.text} />
                         <Meter label="Side signal" value={sideMeter.value} text={sideMeter.text} />
@@ -854,7 +859,7 @@ function applyFx(n: FxNodes, s: FxSettings) {
 
 const TRACE_POINTS = 120;
 
-function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32Array, head: number) {
+function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32Array, head: number, dialect: Dialect) {
     const s = canvas2d(c);
     if (!s) return;
     const { g, w, h } = s;
@@ -862,14 +867,17 @@ function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32A
     const top = -6;
     const y = (db: number) => h - 2 - ((Math.max(floor, Math.min(top, db)) - floor) / (top - floor)) * (h - 4);
     const x = (i: number) => (i / (TRACE_POINTS - 1)) * w;
-    g.strokeStyle = 'rgba(255,255,255,0.08)';
-    g.lineWidth = 1;
+    g.strokeStyle = dialect.rule.dash ? 'rgba(255,255,255,0.26)' : 'rgba(255,255,255,0.08)';
+    g.lineWidth = dialect.rule.dash ? 1.4 : 1;
+    g.lineCap = dialect.rule.cap;
+    g.setLineDash(ruleDash(dialect));
     for (const db of [-34, -20]) {
         g.beginPath();
         g.moveTo(0, y(db));
         g.lineTo(w, y(db));
         g.stroke();
     }
+    g.setLineDash([]);
     const at = (arr: Float32Array, i: number) => arr[(head + i) % TRACE_POINTS];
     // The dry voice as a grey area.
     g.beginPath();
@@ -885,8 +893,10 @@ function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32A
         if (i === 0) g.moveTo(x(i), y(at(wet, i)));
         else g.lineTo(x(i), y(at(wet, i)));
     }
-    g.strokeStyle = ACCENT;
+    g.strokeStyle = dialect.accent;
     g.lineWidth = 1.5;
+    g.lineCap = dialect.cap;
+    g.lineJoin = 'round';
     g.stroke();
 }
 
@@ -896,6 +906,7 @@ function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32A
  * syllable of each line into a filtered tempo delay.
  */
 export function ReverbDuckDemo() {
+    const dialect = useDialect();
     const [mode, setMode] = useState<FxMode>('plain');
     const [amount, setAmount] = useState(60);
     const [depth, setDepth] = useState(12);
@@ -1019,7 +1030,7 @@ export function ReverbDuckDemo() {
         n.wetAn.getFloatTimeDomainData(n.buf);
         h.wet[h.head] = powerDb(meanSquare(n.buf));
         h.head = (h.head + 1) % TRACE_POINTS;
-        drawTrace(trace.current, h.dry, h.wet, h.head);
+        drawTrace(trace.current, h.dry, h.wet, h.head, dialect);
         n.ctlAn.getFloatTimeDomainData(n.ctl);
         const c = n.ctl[n.ctl.length - 1];
         setDuck(-20 * Math.log10(Math.max(1e-3, 1 - duckFloor(live.current) * c)));
@@ -1042,7 +1053,7 @@ export function ReverbDuckDemo() {
                 />
             </Field>
             <div>
-                <canvas ref={trace} aria-hidden="true" className="block h-24 w-full rounded-[3px] bg-white/[0.035]" />
+                <canvas ref={trace} aria-hidden="true" className="vgp-plot block h-24 w-full" />
                 <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-white/60" aria-hidden="true">
                     <span className="inline-flex items-center gap-1.5">
                         <span className="h-2.5 w-3 rounded-[1px] bg-white/25" />
@@ -1219,25 +1230,37 @@ function chordPlan(leadIn: LeadIn): { chord: Chord | null; beats: number }[] {
 }
 
 function MelodyRoll({ mode, current }: { mode: Mode; current: number }) {
+    // Drawn in the lesson's dialect, like the figures around it: its bar lines, note ends and accent.
+    const d = useDialect();
     const w = 320;
     const h = 92;
     const slot = w / MELODY.length;
     const lowest = 70;
     const highest = 85;
     const y = (n: number) => 8 + ((highest - n) / (highest - lowest)) * (h - 22);
+    const noteR = d.corner === 'pill' ? 3 : Math.min(d.corner, 3);
     return (
-        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="block max-w-md" role="img" aria-label={`The melody in ${mode}. The highlighted notes are the ones that change.`}>
-            <rect x={0} y={0} width={w} height={h} rx={3} fill="rgba(255,255,255,0.035)" />
+        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block max-w-md" role="img" aria-label={`The melody in ${mode}. The highlighted notes are the ones that change.`}>
             {[0, 4, 8, 12].map((i) => (
-                <line key={i} x1={i * slot} x2={i * slot} y1={0} y2={h} stroke="rgba(255,255,255,0.08)" />
+                <line
+                    key={i}
+                    x1={i * slot}
+                    x2={i * slot}
+                    y1={0}
+                    y2={h}
+                    stroke={d.rule.dash ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'}
+                    strokeWidth={d.rule.width}
+                    strokeDasharray={d.rule.dash || undefined}
+                    strokeLinecap={d.rule.cap}
+                />
             ))}
             {MELODY.map((n, i) => {
                 if (!n) return null;
                 const len = MELODY[i + 1] === 0 ? 2 : 1;
                 const note = toMode(n, mode);
                 const playing = i === current;
-                const fill = isModal(n) ? ACCENT : playing ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)';
-                return <rect key={i} x={i * slot + 2} y={y(note) - 3} width={slot * len - 4} height={6} rx={2} fill={fill} opacity={playing || isModal(n) ? 1 : 0.85} />;
+                const fill = isModal(n) ? d.accent : playing ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)';
+                return <rect key={i} x={i * slot + 2} y={y(note) - 3} width={slot * len - 4} height={6} rx={noteR} fill={fill} opacity={playing || isModal(n) ? 1 : 0.85} />;
             })}
             {current >= 0 ? <rect x={current * slot} y={h - 6} width={slot} height={3} rx={1} fill="rgba(255,255,255,0.5)" /> : null}
         </svg>
@@ -1385,7 +1408,7 @@ export function ChordContextDemo() {
                                 return (
                                     <div
                                         key={`${leadIn}-${i}`}
-                                        className={`rounded-[3px] border px-3 py-2 text-sm font-semibold transition-colors ${current === i ? 'border-white/60' : 'border-white/10'} ${
+                                        className={`vgp-cell border px-3 py-2 text-sm font-semibold transition-colors ${current === i ? 'border-white/60' : 'border-white/10'} ${
                                             target ? 'text-[var(--accent)]' : current === i ? 'text-white' : 'text-white/55'
                                         }`}
                                     >

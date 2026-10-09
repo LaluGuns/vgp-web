@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { BlogArticle } from '@/lib/blog-data';
 import type { Block, ParsedArticle, Section } from '@/lib/blog/content';
 import { getArticleBySlug } from '@/lib/blog-data';
+import { dialectForCategory } from '@/lib/blog/dialects';
 import { Figure } from '@/components/blog/figures/Figure';
 import { DemoSlot } from '@/components/blog/demos/DemoSlot';
 import { ExperimentSteps } from './ExperimentSteps';
@@ -112,10 +113,10 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
         case 'figure': {
             const spec = ctx.article.figures?.[block.id];
             if (!spec) return null;
-            return <Figure key={key} spec={spec} number={ctx.figureNumber()} />;
+            return <Figure key={key} spec={spec} number={ctx.figureNumber()} dialect={dialectForCategory(ctx.article.category)} />;
         }
         case 'demo':
-            return <DemoSlot key={key} id={block.id} />;
+            return <DemoSlot key={key} id={block.id} dialect={dialectForCategory(ctx.article.category).name} />;
         case 'licenses':
             return <LicenseTable key={key} />;
     }

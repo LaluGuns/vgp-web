@@ -92,7 +92,7 @@ export function CadenceDemo() {
                 {chords.map((name, i) => (
                     <div
                         key={i}
-                        className={`rounded-[3px] border px-3 py-2 text-sm font-semibold transition-colors ${bar === i ? 'border-white/60 text-white' : 'border-white/10 text-white/55'}`}
+                        className={`vgp-cell border px-3 py-2 text-sm font-semibold transition-colors ${bar === i ? 'border-white/60 text-white' : 'border-white/10 text-white/55'}`}
                     >
                         {name}
                     </div>

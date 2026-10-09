@@ -166,7 +166,8 @@ function FoldPlot({ rate, filter, input }: { rate: number; filter: Filter; input
                 </g>
             ) : null}
             <path d={pts.join('')} fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2} />
-            {current && current.gain >= 0.05 ? <circle cx={fx(input!)} cy={fy(current.freq)} r={5} fill="var(--accent)" /> : null}
+            {/* --accent is the lesson group's (DemoSlot); a style, since presentation attributes do not take var(). */}
+            {current && current.gain >= 0.05 ? <circle cx={fx(input!)} cy={fy(current.freq)} r={5} style={{ fill: 'var(--accent)' }} /> : null}
             <text x={pad.l} y={h - 6} fontSize={11} fill="rgba(255,255,255,0.55)">
                 Input frequency →
             </text>

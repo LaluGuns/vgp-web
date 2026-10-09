@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { PageTransition } from '@/components/PageTransition';
 import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import { PathLessons } from '@/components/blog/paths/PathLessons';
+import { DialectMark } from '@/components/blog/figures/DialectMark';
 import type { Category } from '@/lib/blog-data';
+import { dialectForCategory } from '@/lib/blog/dialects';
 import { lessonFeatures, type LearningPath } from '@/lib/blog/paths';
 
 interface CategoryPageProps {
@@ -27,7 +29,11 @@ export function CategoryPage({ category, path, allCategories }: CategoryPageProp
                 <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
                         <TextLink href="/blog">All articles</TextLink>
-                        <p className="mt-6 text-sm text-white/55">Learning path</p>
+                        {/* The group's mark: the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
+                        <p className="mt-6 flex items-center gap-2 text-sm text-white/55">
+                            <DialectMark dialect={dialectForCategory(category.slug)} />
+                            Learning path
+                        </p>
                         <h1 className="mt-2 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
                             {category.name}
                         </h1>

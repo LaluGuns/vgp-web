@@ -165,16 +165,22 @@ function StepGrid({
             {rows.map((row) => (
                 <div key={row.label} className="flex items-center gap-3">
                     <span className="w-10 shrink-0 text-xs text-white/50">{row.label}</span>
-                    <div className="relative grid h-7 flex-1 grid-cols-16 rounded-[3px] bg-white/[0.035]" style={{ gridTemplateColumns: 'repeat(16, minmax(0, 1fr))' }}>
+                    {/* The lane, steps and hits take the lesson's dialect (app/globals.css, .vgp-lane): a sequencer lane,
+                        a one-line drum staff with note heads, a row of dotted steps, or a ruled row. */}
+                    <div className="vgp-lane relative grid h-7 flex-1 grid-cols-16" style={{ gridTemplateColumns: 'repeat(16, minmax(0, 1fr))' }}>
                         {Array.from({ length: 16 }, (_, i) => (
-                            <span key={i} className={`border-l ${i % 4 === 0 ? 'border-white/25' : 'border-white/[0.07]'} ${current === i ? 'bg-white/[0.08]' : ''}`} />
+                            <span
+                                key={i}
+                                data-beat={i % 4 === 0 ? '' : undefined}
+                                className={`vgp-step border-l ${i % 4 === 0 ? 'border-white/25' : 'border-white/[0.07]'} ${current === i ? 'bg-white/[0.08]' : ''}`}
+                            />
                         ))}
                         {row.steps.map((step) => {
                             const accent = row.label !== 'Hat' || pattern.hatAccent.includes(step);
                             return (
                                 <span
                                     key={step}
-                                    className={`absolute bottom-1 top-1 rounded-[2px] ${accent ? 'bg-white/85' : 'bg-white/40'}`}
+                                    className={`vgp-hit absolute bottom-1 top-1 bg-current ${accent ? 'text-white/85' : 'text-white/40'}`}
                                     style={{ left: `calc(${((step + row.shift(step)) / 16) * 100}% + 2px)`, width: 'calc(100% / 16 * 0.5)' }}
                                 />
                             );
@@ -255,7 +261,7 @@ export function DropDemo() {
                 {labels.map((label, i) => (
                     <div
                         key={i}
-                        className={`rounded-[3px] border px-3 py-2 text-xs transition-colors ${
+                        className={`vgp-cell border px-3 py-2 text-xs transition-colors ${
                             bar === i ? 'border-white/60 text-white' : 'border-white/10 text-white/50'
                         }`}
                     >

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, fadeOut, hat, kick, midi, pad, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Readout, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
@@ -16,7 +16,6 @@ import { Meter, PlayButton, Readout, Segmented, Slider, useFrame, usePlayer } fr
 const RATE = 44100;
 /** Where the first step lands in an offline render. */
 const LEAD = 0.05;
-const ACCENT = '#7dd3fc';
 
 const dbToGain = (db: number) => 10 ** (db / 20);
 const gainToDb = (gain: number) => 20 * Math.log10(Math.max(gain, 1e-9));
@@ -301,8 +300,10 @@ function Strip({
     marks?: number[];
     playhead?: RefObject<HTMLDivElement>;
 }) {
+    // The lesson group's accent and line ends (DemoSlot), so the reading matches the figures.
+    const d = useDialect();
     return (
-        <div className="relative overflow-hidden rounded-[3px] bg-white/[0.035]">
+        <div className="vgp-plot relative overflow-hidden">
             <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} preserveAspectRatio="none" className={`block w-full ${className}`} role="img" aria-label={label}>
                 {marks?.map((m) => (
                     <line key={m} x1={m * VIEW_W} x2={m * VIEW_W} y1={0} y2={VIEW_H} stroke="rgba(255,255,255,0.18)" strokeWidth={1} strokeDasharray="2 3" vectorEffect="non-scaling-stroke" />
@@ -315,9 +316,10 @@ function Strip({
                             key={i}
                             d={tracePath(t.db, floor, false)}
                             fill="none"
-                            stroke={t.kind === 'after' ? ACCENT : 'rgba(255,255,255,0.5)'}
+                            stroke={t.kind === 'after' ? d.accent : 'rgba(255,255,255,0.5)'}
                             strokeWidth={t.kind === 'after' ? 1.5 : 1}
                             strokeDasharray={t.kind === 'reference' ? '4 4' : undefined}
+                            strokeLinecap={d.cap}
                             strokeLinejoin="round"
                             vectorEffect="non-scaling-stroke"
                         />
@@ -1787,6 +1789,7 @@ function Wave({
     range: number;
     label: string;
 }) {
+    const dialect = useDialect();
     const w = 300;
     const h = 110;
     const y = (v: number) => h / 2 - (v / range) * (h / 2 - 6);
@@ -1796,7 +1799,7 @@ function Wave({
         return d;
     };
     return (
-        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="block overflow-hidden rounded-[3px] bg-white/[0.035]" role="img" aria-label={label}>
+        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block overflow-hidden" role="img" aria-label={label}>
             <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" />
             {[line, -line].map((l) => (
                 <line key={l} x1={0} x2={w} y1={y(l)} y2={y(l)} stroke="rgba(255,255,255,0.35)" strokeDasharray="1 3" />
@@ -1809,7 +1812,8 @@ function Wave({
                     key={t.kind}
                     d={path(t.data, t.gain)}
                     fill="none"
-                    stroke={t.kind === 'after' ? ACCENT : 'rgba(255,255,255,0.55)'}
+                    stroke={t.kind === 'after' ? dialect.accent : 'rgba(255,255,255,0.55)'}
+                    strokeLinecap={dialect.cap}
                     strokeWidth={t.kind === 'after' ? 1.75 : 1.25}
                     strokeDasharray={t.kind === 'reference' ? '3 3' : undefined}
                     strokeLinejoin="round"
