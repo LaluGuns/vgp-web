@@ -6,7 +6,7 @@ export const post133: BlogArticle = {
     excerpt: 'Some stereo bass survives a mono sum and some cancels. Learn which kinds of left-right difference are safe in the low end and where your bass gets summed.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Ask what kind of difference sits between the channels in your low end: a level difference sums safely, a detune or an anti-phase part does not.',
         'Split the bass into a centred sub and wider harmonics instead of collapsing the whole sound to mono.',

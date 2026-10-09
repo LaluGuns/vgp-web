@@ -6,7 +6,7 @@ export const post129: BlogArticle = {
     excerpt: 'A part you EQ in solo is heard in the mix through everything around it. Learn what solo is good for and why tone decisions belong in context.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 6,
     summary: [
         'Use solo for things that belong to one track alone: clicks, edits, noise, hum and rings, then unsolo before you decide anything about tone or level.',
         'In the mix a part is heard mostly through the bands nobody else covers, so a boost where the bass and keys already cover it feeds the low-mid build-up and adds little you can hear as the part.',

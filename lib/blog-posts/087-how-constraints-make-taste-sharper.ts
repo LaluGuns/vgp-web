@@ -7,7 +7,7 @@ export const post087: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A constraint narrows the search, so your effort goes into the part instead of into choosing sounds.',
         'Research suggests the benefit has a peak: some limits help, and too many starve the work.',

@@ -7,7 +7,7 @@ export const post071: BlogArticle = {
     category: 'music-psychology',
     publishedAt: '2026-06-10',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     featured: true,
     summary: [
         'Listeners predict what comes next all the time, and the moment just before an expected event is when attention and arousal peak.',

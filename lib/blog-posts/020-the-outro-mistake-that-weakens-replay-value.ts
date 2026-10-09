@@ -7,7 +7,7 @@ export const post020: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Listeners remember a song by its overall impression, its peak and its end, and how long a passage lasts barely changes the memory.',
         'A long outro of unchanged repeats adds time without adding anything to remember, and it makes the least intense moment the last one.',

@@ -6,7 +6,7 @@ export const post137: BlogArticle = {
     excerpt: '"No reverb on bass" protects you from three real problems. Learn what they are, and how a filtered, short, narrow return lets the bass share the room with the band.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'High-pass the bass reverb return around 250 Hz so the room hears the harmonics and string noise while the fundamental stays dry.',
         'Keep the return short and narrow: a long low tail blurs the next note, and a wide one puts low end in the sides where mono playback loses it.',

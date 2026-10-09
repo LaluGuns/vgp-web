@@ -7,7 +7,7 @@ export const post103: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-07-19',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         'Keep the synth layers on the grid. They are the reference that makes the human parts audible as human.',
         'Swing the ride and the lead together on the off-beats, and land the lead a few milliseconds behind the beats.',

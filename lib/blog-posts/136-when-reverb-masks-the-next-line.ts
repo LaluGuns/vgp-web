@@ -13,7 +13,7 @@ export const post136: BlogArticle = {
     excerpt: 'A long tail is still sounding when the next words arrive. How to work out how much it has faded, and how ducking and delay throws keep the space without the wash.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 8,
     summary: [
         'A tail with decay T has only fallen 60 × gap / T dB when the next line starts, so a long reverb on a fast vocal is still loud under the first words.',
         'Duck the reverb return from the dry vocal so it drops whenever the singer sings and blooms in the gaps, which keeps the decay you like without the overlap.',

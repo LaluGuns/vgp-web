@@ -7,7 +7,7 @@ export const post084: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'A reference played through the same room and speakers turns "is this good?" into a specific comparison.',
         'Match loudness first, because the louder track sounds fuller and brighter whatever the mix is like.',

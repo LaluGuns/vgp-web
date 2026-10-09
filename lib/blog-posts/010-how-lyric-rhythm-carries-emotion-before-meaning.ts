@@ -32,7 +32,7 @@ export const post010: BlogArticle = {
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'Listeners hear emotion in a voice from its tempo, loudness and pitch, the same cues music uses, apart from what the words mean.',
         'Put stressed syllables on strong beats, and line up the start of the vowel, not the first consonant, with the grid.',

@@ -11,7 +11,7 @@ export const post109: BlogArticle = {
     category: 'licensing-guide',
     publishedAt: '2026-02-05',
     updatedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 5,
     summary: [
         'A beat license is permission to use the beat under set terms. The producer keeps the copyright.',
         'Non-exclusive tiers differ in files, stream and copy caps, music videos, radio and paid performances.',

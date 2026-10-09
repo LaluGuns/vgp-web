@@ -6,7 +6,7 @@ export const post131: BlogArticle = {
     excerpt: 'Panning changes where a part comes from, not which bands it fills or when it plays. Learn why the help shrinks on speakers and disappears in mono.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Judge separation on speakers and in mono as well as on headphones, because hard panning keeps two parts out of each other\'s ear only on headphones.',
         'When two parts still collide in mono, change what they play first: register, voicing or rhythm, then EQ the overlap.',

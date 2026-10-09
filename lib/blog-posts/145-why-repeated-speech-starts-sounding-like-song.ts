@@ -6,7 +6,7 @@ export const post145: BlogArticle = {
     excerpt: 'Loop a spoken phrase and it can start to sound sung, with no change to the audio. What makes a phrase turn, who hears it, and how to mine it for a hook.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 8,
     summary: [
         'Loop a short spoken line exactly, with no pitch shifts or reordering, and hum the tune you start to hear: that tune already fits the words.',
         'Phrases with steady pitch inside each syllable turn into song most readily, so choose or edit spoken samples with that in mind.',

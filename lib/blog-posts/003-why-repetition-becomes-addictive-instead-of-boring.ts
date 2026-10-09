@@ -7,7 +7,7 @@ export const post003: BlogArticle = {
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Repetition is what makes a hook learnable, and a repeat the listener saw coming tends to feel good.',
         'A pattern that never changes loses its pull, because the response to an unchanging sound fades.',

@@ -7,7 +7,7 @@ export const post012: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A chorus feels big because of the step up from the section before it, and the arrangement has to leave room for that step.',
         'Listeners remember a song by its peaks, its end and the moments that rise above what came just before, so a flat song gives them little to hold on to.',

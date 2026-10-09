@@ -10,7 +10,7 @@ export const post114: BlogArticle = {
     category: 'audio-science',
     publishedAt: '2026-02-15',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'In 32-bit float, levels above 0 dBFS survive between plugins, and rounding stays at about 24-bit precision at any level.',
         'Overs clip at the exits: fixed-point exports, the interface output and any plugin that clips or models a circuit.',

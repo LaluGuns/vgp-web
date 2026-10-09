@@ -7,7 +7,7 @@ export const post106: BlogArticle = {
     category: 'production-tips',
     publishedAt: '2026-02-01',
     updatedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 6,
     summary: [
         'Judge tempo by the pulse you nod to: a 140 BPM trap beat with the snare on beat 3 feels like 70.',
         'Hum your hook over the beat before you buy it. If the top note strains, ask for a version a semitone or two lower.',

@@ -10,7 +10,7 @@ export const post139: BlogArticle = {
     excerpt: 'PLR, PSR and LRA all get called dynamic range. Learn what each one measures, how it is calculated, and which change moves which number.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'PLR and PSR measure how far the peaks stand above the loudness, while LRA measures how far the loudness moves between sections, so they answer for different kinds of dynamics.',
         'Read PSR section by section to find where the limiter flattens the hits, and read LRA over the whole song, never on a loop.',

@@ -11,7 +11,7 @@ export const post138: BlogArticle = {
     excerpt: 'Turn the speakers down and the bass fades faster than the mids. What the equal-loudness contours say, and how to pick a home level and use quiet checks without fooling yourself.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Pick one moderate monitoring level, mark it on the volume control, and make every EQ and low-end decision there.',
         'Use a quiet level to check whether the vocal, snare and lead still read, and never to decide how much bass the mix needs.',

@@ -7,7 +7,7 @@ export const post064: BlogArticle = {
     category: 'mixing-mastering',
     publishedAt: '2026-06-09',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Mastering acts on the whole stereo file, so a master EQ moves every instrument in its band at once.',
         'A problem you hear on every playback system is a master problem; a problem with one instrument belongs in the mix.',

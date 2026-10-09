@@ -6,7 +6,7 @@ export const post134: BlogArticle = {
     excerpt: 'A correlation meter measures how alike the two channels are, weighted by energy. Learn the maths, what a reading predicts for mono and what it cannot see.',
     category: 'audio-science',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Read the needle as a mono forecast for equal-level channels: +1 loses nothing, 0 drops 3 dB, -0.5 drops 6 dB.',
         'Do not trust a healthy full-mix reading on its own, because a quiet anti-phase part barely moves an energy-weighted meter.',

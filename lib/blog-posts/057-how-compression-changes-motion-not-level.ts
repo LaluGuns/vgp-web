@@ -10,7 +10,7 @@ export const post057: BlogArticle = {
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         'Attack decides whether the first crack of a hit gets through. Release decides how fast the body comes back up.',
         'Set release so gain reduction is back at zero just before the next hit, and the track breathes with the tempo.',

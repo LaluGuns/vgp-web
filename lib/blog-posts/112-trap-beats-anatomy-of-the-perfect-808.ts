@@ -7,7 +7,7 @@ export const post112: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-02-03',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'An 808 plays notes, so set the sampler\'s root note to the sample\'s real pitch and play it in the key of the beat.',
         'Distortion adds harmonics at whole-number multiples of the note, and on a phone those harmonics carry the bass line the speaker cannot play.',

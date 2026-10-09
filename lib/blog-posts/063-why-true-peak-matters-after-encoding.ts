@@ -10,7 +10,7 @@ export const post063: BlogArticle = {
     category: 'mixing-mastering',
     publishedAt: '2026-06-09',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'A sample-peak meter reads the samples, but the speaker plays the continuous wave between them, which can crest higher.',
         'Lossy encoding changes the waveform again, so the decoded file can peak above a master that looked clean.',

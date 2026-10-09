@@ -7,7 +7,7 @@ export const post017: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Listeners decide fast: by 2015 the voice in US top-ten singles arrived after about five seconds, and many streams are skipped within the first five.',
         'An intro that plays the full hook with the full beat makes the verse a step down and leaves the chorus nothing new to reveal.',

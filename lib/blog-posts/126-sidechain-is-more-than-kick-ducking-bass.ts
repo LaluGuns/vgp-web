@@ -22,7 +22,7 @@ export const post126: BlogArticle = {
     excerpt: 'A sidechain feeds one signal to the detector and turns down another. The same routing drives kick and bass ducking, de-essing, bus compression and ghost triggers.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Ask two questions of every sidechain: which signal should decide when the processor acts, and which track should get quieter.',
         'For kick and bass, set the release so the bass is back at full level just before the next kick, which at 120 BPM means within 500 ms.',

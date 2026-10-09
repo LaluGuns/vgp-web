@@ -12,7 +12,7 @@ export const post122: BlogArticle = {
     excerpt: 'One shouted word can set how hard a vocal compressor works for the whole phrase. Trim outliers with clip gain first, then let the compressor handle the rest.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Lower single loud words with clip gain before the compressor, so its settings can be chosen for the phrase instead of the exception.',
         'A big outlier costs more than its own gain reduction: the release carries that reduction into the next words.',

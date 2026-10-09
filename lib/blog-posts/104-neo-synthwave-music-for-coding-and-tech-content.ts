@@ -10,7 +10,7 @@ export const post104: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-07-19',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         'Background sound that keeps changing pitch disrupts verbal memory more than a repeating sound, so a leaping arpeggio costs a viewer more focus than a narrow one.',
         'Keep the arpeggio in a small range with gaps in the pattern, and let the harmony move slowly underneath it.',

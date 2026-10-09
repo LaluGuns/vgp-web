@@ -7,7 +7,7 @@ export const post102: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-07-19',
     updatedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 7,
     summary: [
         'Speech intelligibility lives mostly between 1 and 4 kHz, so keys, guitar and lead lines compete with a voiceover far more than bass and kick do.',
         'Under narration, dip the music bus in that band, keyed from the voice, instead of pulling the whole cue down.',

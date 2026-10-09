@@ -7,7 +7,7 @@ export const post107: BlogArticle = {
     category: 'production-tips',
     publishedAt: '2026-01-28',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Each doubling of the distance to the mic costs about 6 dB of direct voice against the room, so record close, in the softest corner you have.',
         'Clean first, then control: high-pass, cut what sounds bad in context, de-ess, then let two compressors each do a little.',

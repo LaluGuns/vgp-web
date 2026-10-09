@@ -67,7 +67,7 @@ export const post140: BlogArticle = {
     excerpt: 'A master limiter turns the whole mix down on every kick. Its release decides what happens to everything between the hits: clean, pumping or distorted.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Every kick that hits the limiter turns down the bass, pads and hats under it, and the release decides how far they are still down when the next off-beat arrives.',
         'A release that is too fast lets the gain move within each bass cycle, which distorts the low end and makes the master louder, so always compare release settings at matched loudness.',

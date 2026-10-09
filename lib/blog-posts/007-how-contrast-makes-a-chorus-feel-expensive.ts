@@ -7,7 +7,7 @@ export const post007: BlogArticle = {
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Width comes from differences between the left and right channels, and distance from the balance of direct sound and reverb.',
         'A verse that already fills the stereo field and the reverb leaves the chorus nowhere to open into.',

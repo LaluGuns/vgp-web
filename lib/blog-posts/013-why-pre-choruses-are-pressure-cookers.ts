@@ -7,7 +7,7 @@ export const post013: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'The pre-chorus should raise tension while holding back what the chorus will deliver: low end, width and density.',
         'Anticipation is part of the reward: listeners feel the payoff more strongly after a stretch of tension.',

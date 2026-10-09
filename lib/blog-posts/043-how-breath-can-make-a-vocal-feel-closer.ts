@@ -46,7 +46,7 @@ export const post043: BlogArticle = {
     category: 'vocal-production',
     publishedAt: '2026-06-07',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A breath tells the listener a person is close and that a line is coming. Deleting it leaves gaps of dead silence between phrases.',
         'Compression shrinks the gap between words and breaths, so a natural breath can come out of the chain sounding like a gasp.',

@@ -20,7 +20,7 @@ export const post147: BlogArticle = {
     excerpt: 'Clipping at the preamp or converter is written into the file. The fader only scales playback, so the distortion gets quieter and stays.',
     category: 'vocal-production',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Set input gain on the loudest section of the song, sung for real, because anything that clips at the preamp or converter is written into the file.',
         'Fader, clip gain and normalizing multiply every sample by the same number, so they turn the distortion down by exactly as much as the vocal.',

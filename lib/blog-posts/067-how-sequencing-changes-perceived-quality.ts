@@ -7,7 +7,7 @@ export const post067: BlogArticle = {
     category: 'mixing-mastering',
     publishedAt: '2026-06-09',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Listeners judge each song partly against the one before it, so running order changes how good each track seems.',
         'Spotify normalizes an album played in order as one unit and Apple\'s Sound Check can work per album, so the level steps you set between tracks reach album listeners.',

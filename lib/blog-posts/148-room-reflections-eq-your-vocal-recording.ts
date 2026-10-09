@@ -11,7 +11,7 @@ export const post148: BlogArticle = {
     excerpt: 'A hard surface near the mic adds a late copy of the voice and carves a comb of notches into the take. How to work out where they fall and get rid of them.',
     category: 'vocal-production',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Before you EQ a hollow vocal, look for hard surfaces near the mic: each one adds a late copy of the voice that carves evenly spaced notches into the take.',
         'Bring the mic closer to the singer or move both away from the surface, so the reflection arrives weaker and the comb gets shallower.',

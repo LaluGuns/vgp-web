@@ -11,7 +11,7 @@ export const post135: BlogArticle = {
     excerpt: 'A reverb has two parts that do different jobs. How early reflections and the late tail each change size, width and clarity, and how to set them apart.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'A reverb send raises the early reflections and the tail by the same amount, so split them across two returns or two controls when you need one without the other.',
         'Use early reflections to put the sound itself in a space and make it wider while the words stay sharp, and use the tail to put the listener in the room.',

@@ -49,7 +49,7 @@ export const post125: BlogArticle = {
     excerpt: 'A compressor shapes a hit only when it crosses the threshold. A transient shaper reacts to the shape of every hit, loud or quiet. Know which one your part needs.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Use a compressor when loud hits should be treated differently from quiet ones, because its threshold makes it level dependent.',
         'Use a transient shaper when every hit, ghost notes included, needs the same change to its front edge or tail.',

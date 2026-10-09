@@ -6,7 +6,7 @@ export const post144: BlogArticle = {
     excerpt: 'Liking for a new track often climbs over everyday plays, and remembering a hook is a separate thing from liking it. What the studies found, and how to test a demo.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Judge a new idea after several plays in the background, because liking for unfamiliar music tends to keep rising over everyday listening.',
         'Weigh a cold reaction by how well the listener knows the style, since familiarity with the style was the strongest predictor of liking in a four-week study.',

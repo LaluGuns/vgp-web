@@ -7,7 +7,7 @@ export const post113: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-01-22',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Phonk takes its sound from 1990s Memphis rap tapes and the slowed, chopped and screwed style. Drift phonk is a faster, cowbell-led offshoot.',
         'The cowbell often carries the melody, so set the sample\'s root note, keep the line within about an octave and phrase it against the drums.',

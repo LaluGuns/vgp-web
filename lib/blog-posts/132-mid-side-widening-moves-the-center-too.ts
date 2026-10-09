@@ -6,7 +6,7 @@ export const post132: BlogArticle = {
     excerpt: 'A side boost raises every part that is not dead centre, by up to 4 dB at +6 dB of side. Learn the maths, what it does to panning, and why mono never hears it.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Treat a side boost as a balance move: at +6 dB it raises hard-panned and wide parts by about 4 dB against the centre.',
         'Level-match before you judge width, because the wider version is louder in stereo and identical in mono.',

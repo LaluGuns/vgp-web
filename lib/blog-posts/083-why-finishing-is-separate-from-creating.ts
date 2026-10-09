@@ -7,7 +7,7 @@ export const post083: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Creative work cycles between making rough material and judging it, and every switch between the two costs time and accuracy.',
         'In a writing session, judge only keep or replace. In a finishing session, write nothing new.',

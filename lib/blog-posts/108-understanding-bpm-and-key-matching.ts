@@ -7,7 +7,7 @@ export const post108: BlogArticle = {
     category: 'production-tips',
     publishedAt: '2026-01-20',
     updatedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 7,
     summary: [
         'One beat lasts 60,000 divided by the BPM in milliseconds, and a tempo exactly half or double keeps every beat on the same grid.',
         'Keys next to each other on the Camelot wheel share six or seven of their seven notes, which is why they sit together without clashing.',

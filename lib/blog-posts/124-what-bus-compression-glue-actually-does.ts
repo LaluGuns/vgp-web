@@ -47,7 +47,7 @@ export const post124: BlogArticle = {
     excerpt: 'A bus compressor turns every track on the bus down by the same amount at the same moment. That shared movement is what engineers hear as glue, and too much of it pumps.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'A bus compressor computes one gain from the sum of its inputs and applies it to all of them, so the loudest element moves everything else.',
         'A couple of dB of shared movement that recovers before the next hit makes parts move together; more than that, or a release too slow for the tempo, pumps.',

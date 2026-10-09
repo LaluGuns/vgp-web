@@ -7,7 +7,7 @@ export const post086: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'Every play of the rough bounce makes its details more expected, so a cleaner mix feels wrong before you have judged it.',
         'Background listening kept raising liking with every play in one study, which is why weeks of car plays make a demo hard to beat.',

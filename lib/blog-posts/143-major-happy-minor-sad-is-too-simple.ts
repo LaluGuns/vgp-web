@@ -10,7 +10,7 @@ export const post143: BlogArticle = {
     excerpt: 'Major sounds happier than minor in some contexts and not in others. The progression into a chord, its role in the key and the listener\'s history change what it says.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'Listeners raised on Western tonal music tend to hear major as more pleasant than minor, but how strongly depends on their listening history and on the role the chord plays.',
         'The same chord sounds settled as the home chord and unfinished as a dominant or after a deceptive move, so change the progression into a chord before you change its mode.',

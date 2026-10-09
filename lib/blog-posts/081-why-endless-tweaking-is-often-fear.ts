@@ -7,7 +7,7 @@ export const post081: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 7,
+    readingTime: 6,
     summary: [
         'Tiny changes judged by flicking bypass rarely settle anything, because the louder side tends to win.',
         'Ego depletion, the idea that every choice drains a willpower battery, came out near zero in two large preregistered replications.',

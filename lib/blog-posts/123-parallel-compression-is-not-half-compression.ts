@@ -31,7 +31,7 @@ export const post123: BlogArticle = {
     excerpt: 'Blending a crushed copy under the dry track raises the quiet detail and leaves the peaks almost where they were. The maths of the sum, and how to check it.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 8,
     summary: [
         'A heavily compressed copy blended under the dry track lifts everything below its threshold and barely moves the loud peaks, so leave peak control to clip gain or an ordinary compressor.',
         'Set the blend with the full mix playing, then compare it with the dry track at matched loudness, because the blend is always louder.',

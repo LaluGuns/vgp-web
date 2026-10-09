@@ -7,7 +7,7 @@ export const post004: BlogArticle = {
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Listeners rate the tonic as the best fit in a key and the second and seventh among the weakest, so a phrase that stops on those notes sounds open.',
         'A verse whose lines all end on the tonic closes the story several times before the chorus has a chance to.',

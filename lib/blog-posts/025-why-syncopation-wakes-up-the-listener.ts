@@ -13,7 +13,7 @@ export const post025: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         'A loop that never surprises fades into the background as the brain habituates to it.',
         'Syncopation accents a weak position, or leaves a strong one empty, against a pulse the listener already expects.',

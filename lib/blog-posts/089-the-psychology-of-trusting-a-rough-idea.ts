@@ -7,7 +7,7 @@ export const post089: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Early clean-up targets visible errors, and some of those errors are the feel that made the idea work.',
         'Bounce the rough and write one sentence on why it works before you edit anything.',

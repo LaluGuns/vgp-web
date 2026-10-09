@@ -6,7 +6,7 @@ export const post146: BlogArticle = {
     excerpt: 'Whether a move sounds fresh or wrong depends on what the listener has heard before. How style knowledge shapes surprise, and how to test a crossover.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 7,
     summary: [
         'Before you call a move too strange or too safe, ask which listeners you mean, because each one judges it against the styles they know.',
         'Test risky bars on at least one listener from inside the style and one from outside it, and ask them to tap along as well as react.',

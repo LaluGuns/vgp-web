@@ -7,7 +7,7 @@ export const post090: BlogArticle = {
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'Stopping mid-idea to fix a sound costs more than the fix, because attention stays on the unfinished idea and switching back takes time.',
         'Note each problem in one line and keep writing, then work through the list in a separate pass.',

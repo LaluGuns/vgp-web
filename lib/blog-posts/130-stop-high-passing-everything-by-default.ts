@@ -6,7 +6,7 @@ export const post130: BlogArticle = {
     excerpt: 'A high-pass on every track removes notes as well as rumble. Work out each part\'s lowest note, filter only what sits below it, and only when it causes a problem.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Find the lowest note each part plays and convert it to hertz before you set a high-pass, because no single cutoff fits a piano, a guitar and a voice.',
         'Filter only energy below that note that is causing a problem, such as rumble, stand thumps or sub that drives a compressor, and leave the filter off otherwise.',

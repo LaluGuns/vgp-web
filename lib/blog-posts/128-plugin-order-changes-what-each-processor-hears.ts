@@ -35,7 +35,7 @@ export const post128: BlogArticle = {
     excerpt: 'Swap two EQs and nothing changes. Swap an EQ and a compressor, or a compressor and a saturator, and the sound does. Learn which orders matter and why.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Order matters when a processor reacts to level, like a compressor, limiter, gate or saturator; two clean EQs give the same result in either order.',
         'An EQ before a compressor changes what drives the gain; an EQ after it changes only the tone of what comes out.',

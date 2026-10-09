@@ -10,6 +10,7 @@ import { categories } from '../blog-data';
 import { isDemoId } from './demos';
 import { INLINE_MATH, looksLikeMath } from './content';
 import { glossary } from './glossary';
+import { readingMinutes } from './reading-time';
 
 export function validateArticle(article: BlogArticle): string[] {
     const problems: string[] = [];
@@ -68,6 +69,8 @@ export function validateArticle(article: BlogArticle): string[] {
     for (const m of leftover.matchAll(/\$(?=[A-Za-z\\({])[^\n]{0,40}/g)) say(`unmatched $ shows as text: ${m[0]}`);
 
     if (article.summary && (article.summary.length < 2 || article.summary.length > 4)) say('summary should have 2 to 4 points');
+    const minutes = readingMinutes(article);
+    if (article.readingTime !== minutes) say(`readingTime is ${article.readingTime}, the lesson takes about ${minutes} (lib/blog/reading-time.ts)`);
     article.quiz?.forEach((q, i) => {
         if (q.options.length < 3) say(`quiz ${i + 1} needs at least 3 options`);
         if (q.answer < 0 || q.answer >= q.options.length) say(`quiz ${i + 1} answer index out of range`);

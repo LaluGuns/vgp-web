@@ -6,7 +6,7 @@ export const post142: BlogArticle = {
     excerpt: 'Fix the overall tilt of a master before you chase analyzer peaks, many of which are the song\'s own notes, and pick references from the right era.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Describe the master against level-matched references in one broad word, such as darker or heavier, and try a gentle tilt before any narrow move.',
         'Before you cut an analyzer peak, play two sections with different chords: a peak that moves with the harmony is a note, and only a peak that stays put is a candidate for a narrow cut.',

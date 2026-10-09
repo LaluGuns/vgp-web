@@ -9,7 +9,7 @@ export const post030: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         "Risers and tails that run into the drop mask the kick's attack and push the limiter into gain reduction right at the downbeat.",
         'A loud sound masks what follows for up to 100 to 200 ms, so at 128 BPM an 8th-note gap is long enough for that masking to fade.',

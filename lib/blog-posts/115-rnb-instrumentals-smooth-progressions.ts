@@ -7,7 +7,7 @@ export const post115: BlogArticle = {
     category: 'genre-guides',
     publishedAt: '2026-01-10',
     updatedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'Seventh and ninth chords share more notes with their neighbours, so the changes sound soft rather than abrupt.',
         'Voice each change so the third and seventh move a half step or stay put. In a ii-V-I that is one or two small moves per chord.',

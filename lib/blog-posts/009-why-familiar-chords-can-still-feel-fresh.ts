@@ -7,7 +7,7 @@ export const post009: BlogArticle = {
     category: 'songwriting',
     publishedAt: '2026-06-03',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A familiar progression is easy to predict, which leaves the listener\'s attention free for the melody and the words.',
         'Freshness can come from the bass line and the timing of the changes while the chords themselves stay the same.',

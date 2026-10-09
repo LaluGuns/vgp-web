@@ -99,7 +99,7 @@ export const post141: BlogArticle = {
     excerpt: 'A broadband limiter turns down moments, not frequencies. Whatever makes the peaks loses the most level, so the tonal balance shifts as you push it.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 7,
     summary: [
         'A broadband limiter lowers the level of whole moments, so the part of the spectrum whose energy sits in those moments loses level against the rest, and the tone shifts.',
         'Find out what drives the limiter by cutting the lows or the highs 2 dB before it and watching which cut lowers the gain reduction more.',

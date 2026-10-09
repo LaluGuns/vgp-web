@@ -7,7 +7,7 @@ export const post045: BlogArticle = {
     category: 'vocal-production',
     publishedAt: '2026-06-07',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A sung line is one physical gesture, so level, tone and pitch move together across it. A word-by-word comp breaks that shape at every splice.',
         'A crossfade removes the click at a join. It does not remove a jump in tone or intensity between two takes.',

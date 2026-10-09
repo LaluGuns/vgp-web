@@ -7,7 +7,7 @@ export const post119: BlogArticle = {
     category: 'mixing-mastering',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 7,
     summary: [
         'Above the threshold, a 4:1 ratio lets 1 dB out for every 4 dB in. Below it, nothing changes.',
         'Gain reduction is the overshoot times (1 - 1/R), so raising the ratio past about 8:1 adds very little.',
