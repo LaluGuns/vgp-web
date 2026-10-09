@@ -36,11 +36,11 @@ export const post102: BlogArticle = {
             mode: 'gain',
             db: 9,
             caption:
-                'Two ways to make room for the voice on the music bus, computed. The dashed line turns the whole cue down 6 dB, bass and drums included. The wide dip takes 5 dB out at 2 kHz, about 2.4 dB at 1 and 4 kHz, and less than 1 dB below 500 Hz, so the groove keeps its weight.',
+                'Two ways to make room for the voice on the music bus, computed. The dashed grey line turns the whole cue down 6 dB, bass and drums included. The wide dip takes 5 dB out at 2 kHz, about 2.4 dB at 1 and 4 kHz, and less than 1 dB below 500 Hz, so the groove keeps its weight.',
             alt: 'Gain over frequency from 20 Hz to 20 kHz with the 1 to 4 kHz band shaded. A dashed line sits flat at minus 6 dB. A solid curve is flat at 0 dB in the lows and highs and dips to minus 5 dB around 2 kHz.',
             bands: [{ from: 1000, to: 4000, label: 'Speech band' }],
             curves: [
-                { kind: 'slope', dbPerOct: 0, level: -6, label: 'Whole cue -6 dB', dashed: true },
+                { kind: 'slope', dbPerOct: 0, level: -6, label: 'Whole cue -6 dB', dashed: true, muted: true },
                 { kind: 'eq', label: 'Dip, -5 dB at 2 kHz', bands: [{ type: 'bell', freq: 2000, gain: -5, q: 0.7 }] },
             ],
         },
@@ -103,7 +103,7 @@ export const post102: BlogArticle = {
 
 You finish a City Pop cue for a travel vlog: chorused guitar, a bright electric piano, a slap bass line and a lead synth that answers it. On its own it sounds like a late drive through a city at night. The editor drops it under the narration and the first comment on the video asks what the narrator said at 0:42.
 
-The editor's fix is to ride the music fader down until the words come back. By then the cue has lost its bounce, and on a phone speaker the words still smear in places. The music was not too loud everywhere. It was too busy in the octaves that carry speech.
+The editor's fix is to ride the music fader down until the words come back. By then the cue has lost its bounce, and on a phone speaker the words still smear in places. The level was fine in most of the spectrum. The cue was too busy in the octaves that carry speech.
 
 ## Why it matters: the City Pop palette sits on top of the words
 

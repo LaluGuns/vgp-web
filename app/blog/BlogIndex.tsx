@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Search, X } from 'lucide-react';
@@ -204,18 +204,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const visibleCount = urlCount > PAGE_SIZE ? urlCount : PAGE_SIZE;
     const urlQuery = params.get('q') ?? '';
 
+    // The input keeps its own state so typing never waits on the router.
     const [query, setQuery] = useState(urlQuery);
-    // The last q this component wrote, and the last q it saw in the URL. A q that
-    // arrives from outside (a link to /blog) replaces the typed one; our own writes do not.
-    const [written, setWritten] = useState(urlQuery);
-    const [seenUrlQuery, setSeenUrlQuery] = useState(urlQuery);
-    if (urlQuery !== seenUrlQuery) {
-        setSeenUrlQuery(urlQuery);
-        if (urlQuery !== written) {
-            setWritten(urlQuery);
-            setQuery(urlQuery);
-        }
-    }
 
     // Saved lessons live in this browser only, so they load after hydration.
     const [saved, setSaved] = useState<string[]>([]);
@@ -237,16 +227,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         if (nextSaved) search.set('saved', '1');
         if (n && n > PAGE_SIZE) search.set('n', String(n));
         const qs = search.toString();
-        setWritten(q);
         window.history.replaceState(null, '', qs ? `${pathname}?${qs}` : pathname);
     };
 
-    // Typing updates the list at once and the URL a moment later.
-    const typing = useRef<ReturnType<typeof setTimeout> | null>(null);
     const onQueryChange = (value: string) => {
         setQuery(value);
-        if (typing.current) clearTimeout(typing.current);
-        typing.current = setTimeout(() => writeUrl({ q: value, n: null }), 300);
+        writeUrl({ q: value, n: null });
     };
 
     const getCategoryName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? 'Lessons';

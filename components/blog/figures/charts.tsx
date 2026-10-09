@@ -474,9 +474,9 @@ function minorTicks(ticks: number[], min: number, max: number): number[] {
 export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: number; dialect?: DialectProp }) {
     const d = dialectOf(dialect);
     const narrow = w < 480;
-    const labelCol = narrow ? 62 : 96;
-    const size = narrow ? 11 : FS;
-    const rowH = narrow ? 20 : 22;
+    const size = FS;
+    const labelCol = Math.min(narrow ? 76 : 110, Math.max(...spec.layers.map((l) => textWidth(l.label, size))) + 10);
+    const rowH = narrow ? 22 : 24;
     const densityH = spec.density ? 40 : 0;
     const headY = densityH + 16;
     const gridTop = headY + 10;
@@ -495,6 +495,8 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
     }
     const density = spec.sections.map((_, i) => spec.layers.reduce((sum, layer) => sum + (layer.levels[i] ?? 0), 0));
     const maxDensity = Math.max(1, ...density);
+    // With a layer in focus, the others are context and turn grey.
+    const anyFocus = spec.layers.some((layer) => layer.focus);
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -505,7 +507,7 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
                     </Label>
                     {cols.map((col, i) => {
                         const bh = (density[i] / maxDensity) * (densityH - 10);
-                        return <rect key={i} x={col.x + 3} y={densityH - bh} width={col.width - 6} height={bh} rx={cornerOf(d, Math.min(bh, 6), col.width - 6)} fill={C.fillStrong} />;
+                        return <rect key={i} x={col.x + 3} y={densityH - bh} width={col.width - 6} height={bh} rx={cornerOf(d, Math.min(bh, 6), col.width - 6)} fill={C.dim} />;
                     })}
                 </g>
             ) : null}
@@ -517,27 +519,34 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
             {d.name === 'business' ? <line x1={0} x2={w} y1={gridTop - 4} y2={gridTop - 4} stroke={C.faint} /> : null}
             {spec.layers.map((layer, li) => {
                 const y = gridTop + li * (rowH + 4);
+                // Each cell stands on the row's baseline; its height is the layer's level in that section.
+                const floor = y + rowH - 2;
+                const full = rowH - 4;
+                const accent = anyFocus ? layer.focus : true;
                 return (
                     <g key={layer.label}>
-                        <Label x={0} y={y + rowH * 0.7} size={size} fill={C.text}>
+                        <Label x={0} y={y + rowH * 0.68} size={size} fill={accent && anyFocus ? C.ink : C.text}>
                             {layer.label}
                         </Label>
                         {d.name === 'technical' ? <rect x={labelCol} y={y} width={avail} height={rowH} rx={cornerOf(d, rowH)} fill={C.lane} /> : null}
-                        {music || d.name === 'mind' ? <Rule d={d} x1={labelCol} x2={gridRight} y1={y + rowH / 2} y2={y + rowH / 2} major={music} /> : null}
+                        {/* Music writes the row as a line its cells stand on; mind dots it; the ledger rules under it. */}
+                        {music || d.name === 'mind' ? <Rule d={d} x1={labelCol} x2={gridRight} y1={floor + 0.5} y2={floor + 0.5} major={music} /> : null}
                         {d.name === 'business' ? <line x1={0} x2={w} y1={y + rowH + 2} y2={y + rowH + 2} stroke={C.grid} /> : null}
                         {cols.map((col, ci) => {
-                            const level = layer.levels[ci] ?? 0;
+                            const level = clamp(layer.levels[ci] ?? 0, 0, 1);
                             if (level <= 0) return null;
+                            const ch = Math.max(3, full * level);
+                            const cw = col.width - 4;
                             return (
                                 <rect
                                     key={ci}
                                     x={col.x + 2}
-                                    y={y + 2}
-                                    width={col.width - 4}
-                                    height={rowH - 4}
-                                    rx={cornerOf(d, rowH - 4, col.width - 4)}
-                                    {...accentFill(0.14 + 0.76 * clamp(level, 0, 1))}
-                                    {...draw('fade', 120 + (360 * ci) / Math.max(1, cols.length - 1))}
+                                    y={floor - ch}
+                                    width={cw}
+                                    height={ch}
+                                    rx={cornerOf(d, Math.min(ch, full), cw)}
+                                    {...(accent ? accentFill(1) : { fill: C.muted })}
+                                    {...(accent ? draw('rise', 120 + (360 * ci) / Math.max(1, cols.length - 1) + li * 30) : {})}
                                 />
                             );
                         })}
