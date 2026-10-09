@@ -1,19 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Search, X } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 import { TapLink } from '@/components/blog/article/TapLink';
+import { StartHere, type StartLesson } from '@/components/blog/paths/StartHere';
+import { useChipRow } from '@/components/blog/paths/useChipRow';
+import { useScrollMemory } from '@/components/blog/useScrollMemory';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
-    /** Lowercased extra search text built on the server: keywords, section headings, glossary terms. */
-    search: string;
+    /** Lowercased words from the section headings, built on the server (search-index.ts). */
+    headings: string;
+    /** Lowercased words from the keywords and glossary terms, built on the server. */
+    terms: string;
     /** Published in the last 30 days. */
     isNew: boolean;
 };
@@ -26,13 +31,6 @@ export interface PathSummary {
     lessons: string[];
 }
 
-/** First lesson of a path, for the "New here?" line. */
-export interface StartLesson {
-    pathName: string;
-    slug: string;
-    readingTime: number;
-}
-
 interface BlogIndexProps {
     /** In catalogue order. */
     articles: BlogListItem[];
@@ -43,10 +41,15 @@ interface BlogIndexProps {
     glossaryCount: number;
 }
 
-type Sort = 'new' | 'path';
+/** Best match exists only while there is a query; it is then the default order. */
+type Sort = 'match' | 'new' | 'path';
 
 const PAGE_SIZE = 20;
 const STORAGE_KEY = 'vgp_bookmarked_articles';
+/** Typing writes q to the URL once the reader pauses, not on every key. */
+const URL_DELAY = 150;
+
+const defaultSort = (q: string, cat: string): Sort => (q.trim() ? 'match' : cat === 'all' ? 'new' : 'path');
 
 const dateFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
@@ -64,54 +67,46 @@ function readSaved(): string[] {
     }
 }
 
-// Back from a lesson should land where the reader left the list. The App Router does not
-// restore scroll on Back, so remember the position per URL for this tab, and restore it
-// only when the list mounts because of a Back or Forward (a popstate just before).
-const SCROLL_KEY = 'vgp_lessons_scroll';
-let lastTraverse = 0;
-if (typeof window !== 'undefined') {
-    window.addEventListener('popstate', () => {
-        lastTraverse = Date.now();
-    });
+// Search ranking. A typed word of four or more letters matches anywhere in a
+// word; a shorter one ("eq", "808") only at the start of a word, so "eq" does
+// not find every lesson that says "frequency".
+interface WordMatcher {
+    word: string;
+    short: boolean;
+    start: RegExp;
 }
 
-function readScroll(): Record<string, number> {
-    try {
-        const value: unknown = JSON.parse(sessionStorage.getItem(SCROLL_KEY) || '{}');
-        return value && typeof value === 'object' ? (value as Record<string, number>) : {};
-    } catch {
-        return {};
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function wordMatchers(query: string): WordMatcher[] {
+    return [...new Set(query.toLowerCase().split(/\s+/).filter(Boolean))].map((word) => ({
+        word,
+        short: word.length <= 3,
+        start: new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeRegExp(word)}`, 'u'),
+    }));
+}
+
+/** Points per field (title, excerpt, headings, keywords and terms): [at a word start, inside a word]. */
+const FIELD_POINTS: [number, number][] = [
+    [10, 7],
+    [5, 4],
+    [3, 2],
+    [1.5, 1],
+];
+
+/** 0 when a word matches nowhere; otherwise each word scores its best field, plus a bonus for the whole phrase in the title. */
+function scoreLesson(fields: string[], words: WordMatcher[], phrase: string): number {
+    let total = 0;
+    for (const matcher of words) {
+        let best = 0;
+        fields.forEach((text, i) => {
+            if (matcher.start.test(text)) best = Math.max(best, FIELD_POINTS[i][0]);
+            else if (!matcher.short && text.includes(matcher.word)) best = Math.max(best, FIELD_POINTS[i][1]);
+        });
+        if (best === 0) return 0;
+        total += best;
     }
-}
-
-function useListScrollMemory(pathname: string) {
-    useEffect(() => {
-        const here = () => location.pathname + location.search;
-        const saved = readScroll()[here()];
-        let frame = 0;
-        if (Date.now() - lastTraverse < 1500 && typeof saved === 'number') {
-            frame = requestAnimationFrame(() => window.scrollTo({ top: saved, behavior: 'instant' }));
-        }
-        let pending = 0;
-        const remember = () => {
-            if (pending) return;
-            pending = requestAnimationFrame(() => {
-                pending = 0;
-                if (location.pathname !== pathname) return;
-                try {
-                    sessionStorage.setItem(SCROLL_KEY, JSON.stringify({ ...readScroll(), [here()]: Math.round(window.scrollY) }));
-                } catch {
-                    // Without storage, Back simply starts at the top.
-                }
-            });
-        };
-        window.addEventListener('scroll', remember, { passive: true });
-        return () => {
-            cancelAnimationFrame(frame);
-            cancelAnimationFrame(pending);
-            window.removeEventListener('scroll', remember);
-        };
-    }, [pathname]);
+    return words.length > 1 && fields[0].includes(phrase) ? total + 5 : total;
 }
 
 const chipClass = (active: boolean) =>

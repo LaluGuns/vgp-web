@@ -1,8 +1,11 @@
 /**
- * Server-side search text for the lesson library: keywords, section
- * headings and the glossary terms each lesson uses. Built once per server
- * process and sent as one short lowercase string per lesson, so the
- * browser filters without loading any article bodies.
+ * Server-side search text for the lesson library. Built once per server
+ * process and sent as two short lowercase strings per lesson, so the browser
+ * filters and ranks without loading any article bodies:
+ * - headings: words from the section headings,
+ * - terms: words from the SEO keywords and the glossary terms the lesson uses.
+ * A title match outranks the excerpt, the excerpt outranks a heading and a
+ * heading outranks a keyword (BlogIndex.tsx, `scoreLesson`).
  */
 
 import type { BlogArticle } from '@/lib/blog-data';
@@ -24,27 +27,32 @@ const tokens = (text: string) =>
         .filter((w) => w.length > 1 && !STOP.has(w));
 
 /**
- * The browser matches each typed word as a substring, so the index only needs
- * the distinct words the title and excerpt do not already contain, and no word
- * that sits inside a longer one ("limiter" inside "limiters").
+ * The browser matches a typed word of four or more letters anywhere in a
+ * word and a shorter one ("eq", "808") only at the start of a word. So a word
+ * can be left out of a field when a word that starts with it is already
+ * there or in a stronger field ("limiter" when "limiters" is in the title).
  */
-function searchText(article: BlogArticle): string {
-    const terms = termsIn(article.content, article.category).flatMap((t) => [t.term, ...t.forms]);
-    const shown = `${article.title} ${article.excerpt}`.toLowerCase();
-    const words = [...new Set(tokens([...article.seo.keywords, ...headings(article.content), ...terms].join(' ')))].filter(
-        (w) => !shown.includes(w),
-    );
-    return words.filter((w) => !words.some((other) => other !== w && other.includes(w))).join(' ');
+function fresh(words: string[], stronger: string[]): string[] {
+    const unique = [...new Set(words)].filter((w) => !stronger.some((s) => s.startsWith(w)));
+    return unique.filter((w) => !unique.some((other) => other !== w && other.startsWith(w)));
+}
+
+function searchFields(article: BlogArticle): { headings: string; terms: string } {
+    const shown = tokens(`${article.title} ${article.excerpt}`);
+    const headingWords = fresh(tokens(headings(article.content).join(' ')), shown);
+    const glossaryTerms = termsIn(article.content, article.category).flatMap((t) => [t.term, ...t.forms]);
+    const termWords = fresh(tokens([...article.seo.keywords, ...glossaryTerms].join(' ')), [...shown, ...headingWords]);
+    return { headings: headingWords.join(' '), terms: termWords.join(' ') };
 }
 
 // Keyed by the article object, so an edited lesson (a new object) is indexed again.
-const cache = new WeakMap<BlogArticle, string>();
+const cache = new WeakMap<BlogArticle, { headings: string; terms: string }>();
 
-export function lessonSearchText(article: BlogArticle): string {
-    let text = cache.get(article);
-    if (text === undefined) {
-        text = searchText(article);
-        cache.set(article, text);
+export function lessonSearchFields(article: BlogArticle): { headings: string; terms: string } {
+    let fields = cache.get(article);
+    if (fields === undefined) {
+        fields = searchFields(article);
+        cache.set(article, fields);
     }
-    return text;
+    return fields;
 }

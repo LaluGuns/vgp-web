@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { articles, getArticleBySlug, getAllSlugs, getCategoryBySlug } from '@/lib/blog-data';
 import { validateAll } from '@/lib/blog/validate';
-import { ogImage } from '@/lib/og';
+import { ogImage, socialMetadata } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import { ArticlePage } from './ArticlePage';
 
@@ -52,7 +52,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const articleUrl = `${SITE}/blog/${article.slug}`;
-    const card = shareCard(article.title, article.readingTime);
 
     return {
         title: lessonTitle(article.seo.title),
@@ -61,22 +60,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         alternates: {
             canonical: articleUrl,
         },
-        openGraph: {
+        ...socialMetadata({
             title: article.title,
             description: article.seo.description,
-            type: 'article',
             url: articleUrl,
-            publishedTime: article.publishedAt,
-            modifiedTime: article.updatedAt ?? article.publishedAt,
-            authors: ['Virzy Guns'],
-            images: [card],
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: article.title,
-            description: article.seo.description,
-            images: [card.url],
-        },
+            image: shareCard(article.title, article.readingTime),
+            article: {
+                publishedTime: article.publishedAt,
+                modifiedTime: article.updatedAt ?? article.publishedAt,
+                authors: ['Virzy Guns'],
+            },
+        }),
     };
 }
 

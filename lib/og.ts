@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import beatStarsFilterIndex from '@/data/beatstars-filter-index.json';
 import { formatBeatTitle } from '@/lib/beat-title';
 import type { BeatProduct } from '@/lib/catalog';
@@ -8,6 +9,37 @@ export function ogImage({ title, kicker, sub }: { title: string; kicker?: string
     if (kicker) params.set('kicker', kicker);
     if (sub) params.set('sub', sub);
     return { url: `/og?${params.toString()}`, width: 1200, height: 630, alt: title };
+}
+
+/** The same values the root layout (app/layout.tsx) sets for the whole site. */
+const SITE_NAME = 'Virzy Guns Production';
+const SITE_LOCALE = 'en_US';
+const TWITTER_CREATOR = '@virzyguns';
+
+/**
+ * openGraph and twitter metadata for a page. A page's own openGraph or
+ * twitter object replaces the root layout's instead of merging with it, so
+ * og:site_name, og:locale and twitter:creator are set here again.
+ */
+export function socialMetadata({
+    title,
+    description,
+    url,
+    image,
+    article,
+}: {
+    title: string;
+    description: string;
+    url: string;
+    image: ReturnType<typeof ogImage>;
+    /** Present for a lesson: og:type article with its dates and author. */
+    article?: { publishedTime: string; modifiedTime: string; authors: string[] };
+}): Pick<Metadata, 'openGraph' | 'twitter'> {
+    const shared = { title, description, url, siteName: SITE_NAME, locale: SITE_LOCALE, images: [image] };
+    return {
+        openGraph: article ? { ...shared, type: 'article', ...article } : { ...shared, type: 'website' },
+        twitter: { card: 'summary_large_image', title, description, images: [image.url], creator: TWITTER_CREATOR },
+    };
 }
 
 /** Share card for a beat: clean name, genre, BPM and key. */
