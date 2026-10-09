@@ -274,6 +274,7 @@ function playMixStep(ctx: BaseAudioContext, bus: MixBus, step: number, time: num
     if (s === 11) kick(ctx, bus.center, time, 0.5);
     if (s === 4 || s === 12) snare(ctx, bus.center, time, 0.42);
     hat(ctx, bus.center, time, s % 2 === 0 ? 0.42 : 0.18);
+    if (s === 6 || s === 14) hat(ctx, bus.center, time, 0.28, true);
     if (s === 0) {
         bass(ctx, bus.center, time, midi(MIX_BASS[bar]), stepDur * 9.5, 0.6);
         bass(ctx, bus.center, time, midi(MIX_BASS[bar] + 12), stepDur * 9.5, 0.1);
@@ -1142,7 +1143,7 @@ const LEAD_INS: Record<LeadIn, { label: string; chords: { chord: Chord; beats: n
             { chord: CH.Bb, beats: 1 },
             { chord: CH.Gm7, beats: 2 },
         ],
-        hint: 'These chords point toward F, so the same C can sound like a step on the way back to F rather than an arrival.',
+        hint: 'These chords point toward F, so the same C can sound like a step on the way back to F.',
     },
     lift: {
         label: 'Ab and Bb',

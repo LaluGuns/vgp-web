@@ -161,8 +161,8 @@ it. Sound is synthesised in the browser. Ids:
 | `clip-recover` | A take clipped at the converter, then turned down afterwards |
 | `width` | Mid/side balance with a mono check and a live correlation meter |
 | `monitor-level` | One mix at three playback levels, to hear bass and air change |
-| `reverb-duck` | Reverb ducked under the dry phrase, or a tempo delay instead |
-| `chord-context` | One chord after different progressions, tempos and registers |
+| `reverb-duck` | Reverb ducked under the dry phrase, or a delay throw on the last syllable |
+| `chord-context` | One chord after different lead-ins; one melody in major or minor, at two tempos and three registers |
 
 New demos go in `components/blog/demos/` and `lib/blog/demos.ts`.
 

@@ -119,11 +119,11 @@ export const demoCatalog = {
     },
     'reverb-duck': {
         title: 'Keep the reverb out of the next line',
-        blurb: 'A short vocal-like phrase into a long reverb. Duck the reverb under the dry phrase, or swap it for a tempo delay, and hear the next line come through.',
+        blurb: 'A short vocal-like phrase into a long reverb. Duck the reverb under the dry phrase, or send only the last syllable of each line to a tempo delay, and hear the next line come through.',
     },
     'chord-context': {
         title: 'Hear one chord in different contexts',
-        blurb: 'The same chord after different progressions, at different tempos and registers. Notice how much the surroundings change what it seems to say.',
+        blurb: 'The same chord after different progressions, and one melody in major or minor, at different tempos and registers. Notice how much the surroundings change what each seems to say.',
     },
 } satisfies Record<string, { title: string; blurb: string }>;
 

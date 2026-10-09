@@ -133,7 +133,7 @@ A delay works differently. It makes discrete copies, and you choose when they la
 
 ::figure throw
 
-In the demo, switch between the plain reverb, the ducked reverb and the tempo delay, and listen each time to the first word of the next line. Its delay repeats the whole phrase, filtered thin, so it is not a throw; listen for whether the echoes stay behind the new words or crowd them.
+In the demo, switch between the plain reverb, the ducked reverb and the delay throw, and listen each time to the first word of the next line. The throw sends only the last syllable of each line to a filtered tempo delay. Try it at a dotted eighth, then at a quarter note, where the second repeat lands on the next line's first word.
 
 ::demo reverb-duck
 
