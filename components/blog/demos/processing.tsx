@@ -77,6 +77,30 @@ function measureLatency(sampleRate: number): Promise<number> {
 
 const latencyNow = (sampleRate: number) => latencies.get(sampleRate) ?? 0.006;
 
+const makeupJobs = new Map<string, Promise<number>>();
+
+/**
+ * DynamicsCompressorNode adds its own makeup gain, set by its threshold,
+ * knee and ratio. Measure it with a quiet steady signal so it can be
+ * taken back out.
+ */
+function measureMakeup(key: string, build: (ctx: BaseAudioContext) => DynamicsCompressorNode): Promise<number> {
+    let job = makeupJobs.get(key);
+    if (!job) {
+        job = (async () => {
+            const ctx = new OfflineAudioContext(1, RATE / 2, RATE);
+            const dc = ctx.createConstantSource();
+            dc.offset.value = 0.001;
+            dc.connect(build(ctx)).connect(ctx.destination);
+            dc.start();
+            const out = (await ctx.startRendering()).getChannelData(0);
+            return out[out.length - 1] / 0.001;
+        })();
+        makeupJobs.set(key, job);
+    }
+    return job;
+}
+
 /** Renders a graph offline. Each tap is recorded to its own channel. */
 async function renderOffline(seconds: number, taps: number, build: (ctx: OfflineAudioContext, taps: GainNode[]) => void): Promise<Float32Array<ArrayBuffer>[]> {
     const ctx = new OfflineAudioContext(taps, Math.ceil(seconds * RATE), RATE);
@@ -570,7 +594,7 @@ export function ParallelDemo() {
                 hint="How much of the crushed copy sits under the dry drums. At 100% the copy is as loud as the dry loop on its own."
             />
             <p className="text-sm leading-6 text-white/60">
-                The dry drums are never processed. Every option plays at the loudness of the dry loop
+                The dry drums are never compressed. Every option plays at the loudness of the dry loop
                 {analysis && turnedDown > 0.05 ? `, so at this blend the mix is turned down ${turnedDown.toFixed(1)} dB` : ''}. Listen to the ghost notes
                 between the snares, then solo the crushed copy to hear what is doing the lifting.
             </p>
@@ -679,10 +703,10 @@ interface ShapeAnalysis {
 
 const HIT_COLUMNS = 90;
 /** Room above the dry hit's level in each panel, so a boosted attack has somewhere to go. */
-const HIT_HEADROOM = 9;
+const HIT_HEADROOM = 12;
 
 async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
-    const lat = await measureLatency(RATE);
+    const [lat, compMakeup] = await Promise.all([measureLatency(RATE), measureMakeup('punch', punchCompressor)]);
     const g = dbToGain(params.level);
     const [from, to] = secondBar(lat);
     const [dry, shaped, comped] = await renderOffline(LEAD + 2 * BAR + lat + 0.02, 3, (ctx, [dryTap, shaperTap, compTap]) => {
@@ -703,22 +727,25 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
         comp: Math.sqrt(ref / loudnessPower(comped, from, to)),
     };
     // Each panel is scaled to its own dry hit, so a ghost note and a full hit are drawn the same size.
+    // The panels show what each processor does to the hit before loudness matching: the shaper's
+    // gain as it is, the compressor's gain reduction without its built-in makeup gain.
     const hit = (step: number, title: string) => {
         const a = Math.round((LEAD + (16 + step) * STEP + lat - 0.005) * RATE);
         const length = Math.round(0.155 * RATE);
         // 11 ms is about half a cycle of the kick's 48 Hz tail.
         const window = Math.round(0.011 * RATE);
         const level = (x: Float32Array, gain: number, ref: number) => windowRms((i) => x[a + i] * gain, length, HIT_COLUMNS, ref, window);
-        const top = Math.max(...level(dry, 1, 1).map(dbToGain)) * dbToGain(HIT_HEADROOM);
+        const loudest = Math.max(...level(dry, 1, 1).map(dbToGain));
+        const top = loudest * dbToGain(HIT_HEADROOM);
         return {
-            peak: peakOf(dry, a, a + length),
-            hit: { title, before: level(dry, 1, top), shaper: level(shaped, trim.shaper, top), comp: level(comped, trim.comp, top) },
+            loudest,
+            hit: { title, before: level(dry, 1, top), shaper: level(shaped, 1, top), comp: level(comped, 1 / compMakeup, top) },
         };
     };
     const k = hit(0, 'Kick');
     const s = hit(12, 'Snare');
     const ghost = hit(15, 'Ghost note');
-    return { params, trim, hits: [k.hit, s.hit, ghost.hit], ghostDb: gainToDb(ghost.peak / s.peak) };
+    return { params, trim, hits: [k.hit, s.hit, ghost.hit], ghostDb: gainToDb(ghost.loudest / s.loudest) };
 }
 
 /**
@@ -844,7 +871,7 @@ export function TransientDemo() {
                                 className="h-20"
                                 floor={-30 - HIT_HEADROOM}
                                 traces={h ? [{ kind: 'before', db: h.before }, { kind: 'after', db: h[shown] }] : null}
-                                label={`${h?.title ?? 'Hit'}: level over the first 150 milliseconds, dry and through the ${names[shown].toLowerCase()}, scaled to the dry hit.`}
+                                label={`${h?.title ?? 'Hit'}: level over the first 150 milliseconds, dry and through the ${names[shown].toLowerCase()}, scaled to the dry hit and before loudness matching.`}
                             />
                         </div>
                     ))}
@@ -852,11 +879,11 @@ export function TransientDemo() {
                 <Legend
                     items={[
                         { kind: 'before', text: 'Dry hit' },
-                        { kind: 'after', text: `${names[shown]}, same loudness` },
+                        { kind: 'after', text: `Through the ${names[shown].toLowerCase()}` },
                     ]}
                 />
                 <p className="mt-2 text-xs leading-5 text-white/60">
-                    The level over the first 150 ms of each hit. Each panel is scaled to its own dry hit, with room above it for a boosted attack.
+                    The level over the first 150 ms of each hit, scaled to the dry hit, before the loudness matching you hear.
                     {analysis ? ` The ghost note is ${Math.round(-analysis.ghostDb)} dB quieter than the snare.` : ''}
                 </p>
             </div>
@@ -872,11 +899,12 @@ export function TransientDemo() {
                 max={0}
                 onChange={setLevel}
                 format={(v) => fmtDb(v, 0)}
-                hint="Turns the loop down before both processors and back up after them, so you hear what changes inside."
+                hint="Turns the loop down before both processors and back up after them, so only what the processors see changes."
             />
             <p className="text-sm leading-6 text-white/60">
-                The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold. Pull the level going in down to -24 dB: the loop no longer
-                reaches the threshold, so the compressor does nothing, while the shaper still changes every hit, ghost notes included.
+                All three options play at the loudness of the dry loop. The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.
+                Pull the level going in down to -24 dB. The loop no longer reaches the threshold, so the compressor does nothing, while the shaper still changes
+                every hit, ghost notes included.
             </p>
         </div>
     );
@@ -1183,23 +1211,6 @@ function limiterLoop(ctx: BaseAudioContext, dest: AudioNode, step: number, time:
     if (step === 2 || step === 10) for (const n of step === 2 ? [57, 60, 64] : [55, 59, 62]) pluck(ctx, dest, time, midi(n), STEP * 3, 0.9);
 }
 
-let makeupJob: Promise<number> | null = null;
-
-/** DynamicsCompressorNode adds its own makeup gain. Measure it so it can be taken back out. */
-function measureMakeup(): Promise<number> {
-    makeupJob ??= (async () => {
-        const ctx = new OfflineAudioContext(1, RATE / 2, RATE);
-        const dc = ctx.createConstantSource();
-        dc.offset.value = 0.001;
-        const comp = limiterCompressor(ctx, 0.1);
-        dc.connect(comp).connect(ctx.destination);
-        dc.start();
-        const out = (await ctx.startRendering()).getChannelData(0);
-        return out[out.length - 1] / 0.001;
-    })();
-    return makeupJob;
-}
-
 let loopPeakJob: Promise<number> | null = null;
 
 function measureLoopPeak(): Promise<number> {
@@ -1270,7 +1281,7 @@ interface LimitAnalysis {
 }
 
 async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
-    const [lat, makeup, peak] = await Promise.all([measureLatency(RATE), measureMakeup(), measureLoopPeak()]);
+    const [lat, makeup, peak] = await Promise.all([measureLatency(RATE), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1)), measureLoopPeak()]);
     const norm = dbToGain(LIMIT_THRESHOLD) / peak;
     const [dry, limited, pre] = await renderOffline(LEAD + 2 * BAR + lat + 0.05, 3, (ctx, [dryTap, limTap, preTap]) => {
         const src = ctx.createGain();
@@ -1757,8 +1768,8 @@ export function ClipRecoverDemo() {
                 ]}
             />
             <p className="text-sm leading-6 text-white/60">
-                Both takes play at the same loudness. The fader lowers the hot take, but the flattened tops and the buzz they add were recorded into it. Only
-                the safe take keeps its round peaks.
+                Both takes play at the same loudness. The fader lowered the hot take, but the flattened tops were recorded into it, so its loud notes still
+                buzz where the safe take stays round.
             </p>
         </div>
     );
