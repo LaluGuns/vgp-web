@@ -237,6 +237,119 @@ export function pad(ctx: BaseAudioContext, dest: AudioNode, t: number, freqs: nu
 
 export const midi = (note: number) => 440 * 2 ** ((note - 69) / 12);
 
+// ── Reverb ──────────────────────────────────────────────────────────
+
+/**
+ * The gain a ConvolverNode with `normalize` on would give this impulse
+ * (Web Audio spec, "Calculate normalization scale"), so an impulse split over
+ * several nodes plays at the level the whole one would.
+ */
+function normalizationScale(channels: Float32Array[], sampleRate: number): number {
+    let sum = 0;
+    for (const data of channels) for (let i = 0; i < data.length; i++) sum += data[i] * data[i];
+    const power = Math.max(Math.sqrt(sum / (channels.length * channels[0].length)), 0.000125);
+    return ((1 / power) * 0.00125 * 44100) / sampleRate;
+}
+
+export interface Reverb {
+    input: GainNode;
+    output: GainNode;
+    /**
+     * Loads an impulse: `make` returns its channels at the given sample rate.
+     * The previous impulse fades out once the start of the new one is in place.
+     */
+    load(make: (sampleRate: number) => Float32Array<ArrayBuffer>[]): void;
+    /** Stops any loading still to come and disconnects everything. */
+    dispose(): void;
+}
+
+/** Length of each piece of a split impulse, in seconds. */
+const REVERB_PIECE = 1;
+
+/**
+ * A convolution reverb with its impulse split into one-second pieces, each on
+ * its own ConvolverNode behind a delay equal to the piece's start. Together
+ * they make the same convolution as one node with the whole impulse. Handing
+ * a ConvolverNode its impulse is main-thread work that grows with the length
+ * (about 20 ms per second of impulse on a slow phone), so the impulse is
+ * built in one task and each piece set up in a task of its own: playback
+ * starts at once and the room fills in over the next few frames.
+ */
+export function reverb(ctx: AudioContext): Reverb {
+    const input = ctx.createGain();
+    const output = ctx.createGain();
+    const timers = new Set<number>();
+    let job = 0;
+    let current: AudioNode[] = [];
+
+    const later = (fn: () => void) => {
+        const id = window.setTimeout(() => {
+            timers.delete(id);
+            fn();
+        }, 0);
+        timers.add(id);
+    };
+    const drop = (nodes: AudioNode[], group?: GainNode) => {
+        if (group) {
+            const t = ctx.currentTime;
+            group.gain.cancelScheduledValues(t);
+            group.gain.setValueAtTime(group.gain.value, t);
+            group.gain.linearRampToValueAtTime(0, t + 0.08);
+        }
+        window.setTimeout(() => nodes.forEach((n) => n.disconnect()), group ? 150 : 0);
+    };
+
+    return {
+        input,
+        output,
+        load(make) {
+            const id = ++job;
+            later(() => {
+                if (id !== job) return;
+                const channels = make(ctx.sampleRate);
+                const length = channels[0].length;
+                const piece = Math.round(REVERB_PIECE * ctx.sampleRate);
+                const group = ctx.createGain();
+                group.gain.value = normalizationScale(channels, ctx.sampleRate);
+                group.connect(output);
+                const old = current;
+                const oldGroup = old[0] as GainNode | undefined;
+                const nodes: AudioNode[] = [group];
+                current = nodes;
+                const add = (from: number) => {
+                    if (id !== job) return;
+                    const to = Math.min(length, from + piece);
+                    const buffer = ctx.createBuffer(channels.length, to - from, ctx.sampleRate);
+                    channels.forEach((data, c) => buffer.copyToChannel(data.subarray(from, to), c));
+                    const conv = ctx.createConvolver();
+                    conv.normalize = false;
+                    conv.buffer = buffer;
+                    conv.connect(group);
+                    nodes.push(conv);
+                    if (from === 0) {
+                        input.connect(conv);
+                        if (old.length) drop(old, oldGroup);
+                    } else {
+                        const delay = ctx.createDelay(from / ctx.sampleRate + 0.01);
+                        delay.delayTime.value = from / ctx.sampleRate;
+                        input.connect(delay).connect(conv);
+                        nodes.push(delay);
+                    }
+                    if (to < length) later(() => add(to));
+                };
+                add(0);
+            });
+        },
+        dispose() {
+            job++;
+            timers.forEach((id) => window.clearTimeout(id));
+            timers.clear();
+            if (current.length) drop([...current, input], current[0] as GainNode);
+            current = [];
+        },
+    };
+}
+
 // ── Timing ──────────────────────────────────────────────────────────
 
 export interface Sequencer {

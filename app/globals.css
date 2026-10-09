@@ -785,12 +785,11 @@ body::before {
 
 /* Demo displays speak the lesson's figure dialect (docs/DESIGN.md, "Figure
    dialects"; lib/blog/dialects.ts). DemoSlot puts data-dialect on the panel.
-   Plots, meters, step lanes and bar cells follow it; the controls (play
+   Plots, meters, step lanes and step strips follow it; the controls (play
    button, sliders, choices) stay the same in every lesson. Corner ticks and
    rulings are drawn with solid-colour background images, not gradients. */
 .vgp-plot { border-radius: 3px; background-color: rgba(255, 255, 255, 0.035); }
 .vgp-lane { border-radius: 3px; background-color: rgba(255, 255, 255, 0.035); }
-.vgp-cell { border-radius: 3px; }
 .vgp-hit { border-radius: 2px; }
 .vgp-meter { overflow: hidden; border-radius: 999px; }
 .vgp-meter-fill { border-radius: 999px; }
@@ -809,7 +808,6 @@ body::before {
   background-repeat: no-repeat;
 }
 [data-dialect='technical'] :is(.vgp-lane, .vgp-hit, .vgp-meter, .vgp-meter-fill) { border-radius: 1px; }
-[data-dialect='technical'] .vgp-cell { border-radius: 2px; }
 
 /* Music: score paper. No field, the outer lines of a staff, note heads on a drum line. */
 [data-dialect='music'] .vgp-plot {
@@ -817,7 +815,6 @@ body::before {
   background-color: transparent;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -1px 0 rgba(255, 255, 255, 0.14);
 }
-[data-dialect='music'] .vgp-cell { border-radius: 7px; }
 [data-dialect='music'] .vgp-lane {
   border-radius: 0;
   background: linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)) left calc(100% - 7px) / 100% 1px no-repeat;
@@ -832,8 +829,7 @@ body::before {
 [data-dialect='music'] .vgp-hit::after { left: 0; bottom: 0; width: 9px; height: 6.5px; border-radius: 50%; transform: rotate(-20deg); }
 
 /* Mind: a field of attention. Soft corners, steps as dots, hits as rounded marks. */
-[data-dialect='mind'] .vgp-plot,
-[data-dialect='mind'] .vgp-cell { border-radius: 10px; }
+[data-dialect='mind'] .vgp-plot { border-radius: 10px; }
 [data-dialect='mind'] .vgp-lane { background-color: transparent; }
 [data-dialect='mind'] .vgp-step { position: relative; border-color: transparent; }
 [data-dialect='mind'] .vgp-step::after {
@@ -859,7 +855,7 @@ body::before {
     inset 0 -3px 0 var(--surface),
     inset 0 -4px 0 rgba(255, 255, 255, 0.3);
 }
-[data-dialect='business'] :is(.vgp-cell, .vgp-hit, .vgp-meter, .vgp-meter-fill) { border-radius: 0; }
+[data-dialect='business'] :is(.vgp-hit, .vgp-meter, .vgp-meter-fill) { border-radius: 0; }
 [data-dialect='business'] .vgp-lane {
   border-radius: 0;
   background-color: transparent;

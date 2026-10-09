@@ -35,10 +35,24 @@ function curve(points: number, fn: (x: number) => number): Float32Array<ArrayBuf
 /** Straight line from -1 to 1. Anything beyond full scale is held at full scale: a hard clip. */
 const HARD_CLIP = new Float32Array([-1, 1]);
 
-/** A one-pole smoother: the building block of an envelope follower. */
+/** A one-pole smoother: the building block of an envelope follower. Only for slow ones (see `twoPole`). */
 function onePole(ctx: BaseAudioContext, seconds: number): IIRFilterNode {
     const p = Math.exp(-1 / (seconds * ctx.sampleRate));
     return ctx.createIIRFilter([1 - p], [1, -p]);
+}
+
+/**
+ * Two one-pole smoothers in a row as a single biquad: a low-pass with both
+ * poles at 1 / `seconds`, critically damped (a Q of 0.5, which Web Audio's
+ * low-pass takes in dB). Creating an IIRFilterNode with a pole this fast
+ * costs about 100 ms of main thread on a slow phone; a biquad costs nothing.
+ */
+function twoPole(ctx: BaseAudioContext, seconds: number): BiquadFilterNode {
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = 1 / (2 * Math.PI * seconds);
+    f.Q.value = 20 * Math.log10(0.5);
+    return f;
 }
 
 const latencies = new Map<number, number>();
@@ -657,8 +671,7 @@ function transientShaper(ctx: BaseAudioContext, lookahead: number, attack: numbe
     detector.gain.value = 0.5;
     const rectify = ctx.createWaveShaper();
     rectify.curve = rectifyCurve;
-    const fastA = onePole(ctx, 0.002);
-    const fastB = onePole(ctx, 0.002);
+    const fast = twoPole(ctx, 0.002);
     const slow = onePole(ctx, 0.04);
     const logFast = ctx.createWaveShaper();
     logFast.curve = logCurve;
@@ -669,14 +682,15 @@ function transientShaper(ctx: BaseAudioContext, lookahead: number, attack: numbe
     const difference = ctx.createGain();
     const law = ctx.createWaveShaper();
     law.curve = shaperLaw(attack, sustain);
-    const smooth = onePole(ctx, 0.002);
+    // About the response of a single 2 ms pole.
+    const smooth = twoPole(ctx, 0.001);
     const vca = ctx.createGain();
     vca.gain.value = 0;
     const delay = ctx.createDelay(0.05);
     delay.delayTime.value = lookahead;
     const output = ctx.createGain();
     input.connect(detector).connect(rectify);
-    rectify.connect(fastA).connect(fastB).connect(logFast).connect(difference);
+    rectify.connect(fast).connect(logFast).connect(difference);
     rectify.connect(slow).connect(logSlow).connect(invert).connect(difference);
     difference.connect(law).connect(smooth).connect(vca.gain);
     // The audio waits for the detector, so the boost lands on the first milliseconds of each hit.

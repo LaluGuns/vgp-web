@@ -109,7 +109,7 @@ anything without one is technical.
   line. Music and business are ink on paper, so their lines stand alone.
 - **Rules are texture.** They stay well under the data; mind's dots need a
   higher opacity than a hairline to be seen at all.
-- **Demos.** Plots, meters, step lanes and bar cells follow the dialect;
+- **Demos.** Plots, meters, step lanes and step strips follow the dialect;
   controls (play, sliders, choices) are the same in every lesson.
 - **Focus.** Rhythm rows, flow steps and arrangement layers take
   `focus: true`. Once any item in a figure is focused, it is in the accent

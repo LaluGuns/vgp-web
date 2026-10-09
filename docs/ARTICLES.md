@@ -94,14 +94,14 @@ Labels must stay short: phone layouts are 320 px wide. Use `xShort` and
 | --- | --- | --- |
 | `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed}]`, `marks[{at, label}]`, `straight` |
 | `notes` | A small piano roll: a melody, a bass line, a voicing | `notes[{start, length, pitch, label, muted}]` (beats, MIDI pitch), `chords[{at, label}]`, `perBar` |
-| `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim}]`, `reference{value, label}` |
-| `rhythm` | Hits on a 16-step grid with swing and offsets | `rows[{label, hits, swing, note}]`; a hit is a step or `{step, offset, level}` (offset in steps) |
+| `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim}]`, `reference{value, label}`, `log` (powers of ten, for ranges over two decades) |
+| `rhythm` | Hits on a 16-step grid with swing and offsets | `rows[{label, hits, swing, note, focus}]`; a hit is a step or `{step, offset, level}` (offset in steps) |
 | `signal` | Waveforms over time, one plot per row | `rows[{label, traces, unipolar, lines, marks, samples}]` |
 | `spectrum` | Energy or EQ gain over log frequency | `mode: 'level' \| 'gain'`, `curves`, `bands[{from, to, label}]`, `marks[{f, label}]` |
 | `transfer` | Input level against output level | `domain: 'db' \| 'linear'`, `curves[{kind, threshold, ratio, knee, ceiling, label}]` |
 | `stereo` | Top-down mix: pan and depth | `items[{label, pan, depth, width, fade}]`, `title` |
-| `flow` | Steps with arrows, optional loop back | `steps[{label, note}]`, `loop{to, label}` |
-| `arrangement` | Which layers play in which section | `sections[{label, short, bars}]`, `layers[{label, levels}]`, `density` |
+| `flow` | Steps with arrows, optional loop back | `steps[{label, note, focus}]`, `loop{to, label}` |
+| `arrangement` | Which layers play in which section | `sections[{label, short, bars}]`, `layers[{label, levels, focus}]`, `density` |
 | `scale` | Markers along one number line | `min`, `max`, `unit`, `ticks`, `markers[{value, label, strong}]`, `ranges`, `arrows[{from, to}]` |
 
 Signal traces (`kind`):

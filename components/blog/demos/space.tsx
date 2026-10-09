@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { bass, fadeOut, kick, midi, noiseBuffer, pluck, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, kick, midi, pluck, reverb, sequence, snare, type Engine, type Reverb } from './engine';
 import { LevelTrace, Meter, PlayButton, Readout, Segmented, Slider, blockPower, useFrame, usePlayer } from './ui';
 
 const toDb = (power: number) => (power > 1e-12 ? 10 * Math.log10(power) : -120);
@@ -245,24 +245,30 @@ export function PhaseDemo() {
     );
 }
 
-function impulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
-    const length = Math.max(1, Math.floor(ctx.sampleRate * seconds));
-    const buf = ctx.createBuffer(2, length, ctx.sampleRate);
-    const noise = noiseBuffer(ctx).getChannelData(0);
-    // Exponential decay reaching -60 dB at the end: the classic RT60 shape. A running
-    // product rather than a power per sample keeps this quick on a slow phone.
-    const step = 10 ** (-3 / length);
-    for (let c = 0; c < 2; c++) {
-        const data = buf.getChannelData(c);
-        let j = c * 7919;
-        let env = 1;
-        for (let i = 0; i < length; i++) {
-            data[i] = noise[j] * env;
-            env *= step;
-            if (++j === noise.length) j = 0;
-        }
-    }
-    return buf;
+/**
+ * A room's impulse: noise falling exponentially to -60 dB at the end (the
+ * classic RT60 shape), a different noise on each side. A running product for
+ * the decay and an integer noise generator keep it quick on a slow phone.
+ */
+function roomImpulse(seconds: number) {
+    return (sampleRate: number): Float32Array<ArrayBuffer>[] => {
+        const length = Math.max(1, Math.floor(sampleRate * seconds));
+        const step = 10 ** (-3 / length);
+        return [0, 1].map((c) => {
+            const data = new Float32Array(length);
+            let seed = (1 + c * 7919) | 0;
+            let env = 1;
+            for (let i = 0; i < length; i++) {
+                // xorshift32: white noise from -1 to 1.
+                seed ^= seed << 13;
+                seed ^= seed >>> 17;
+                seed ^= seed << 5;
+                data[i] = (seed / 2147483648) * env;
+                env *= step;
+            }
+            return data;
+        });
+    };
 }
 
 /** Playback level: the melody is sparse, so it plays up to sit with the drum-loop demos. */
@@ -282,7 +288,7 @@ export function ReverbDemo() {
         pre: DelayNode;
         wet: GainNode;
         dry: GainNode;
-        conv: ConvolverNode;
+        room: Reverb;
         dryAn: AnalyserNode;
         wetAn: AnalyserNode;
         buf: Float32Array<ArrayBuffer>;
@@ -297,19 +303,20 @@ export function ReverbDemo() {
         const dry = ctx.createGain();
         const wet = ctx.createGain();
         const pre = ctx.createDelay(0.5);
-        const conv = ctx.createConvolver();
-        conv.buffer = impulse(ctx, decay);
+        const room = reverb(ctx);
+        room.load(roomImpulse(decay));
         pre.delayTime.value = preMs / 1000;
         dry.gain.value = 1 - (wetPct / 100) * 0.6;
         wet.gain.value = (wetPct / 100) * 0.9;
         source.connect(dry).connect(master);
-        source.connect(pre).connect(conv).connect(wet).connect(master);
+        source.connect(pre).connect(room.input);
+        room.output.connect(wet).connect(master);
         const dryAn = ctx.createAnalyser();
         const wetAn = ctx.createAnalyser();
         dryAn.fftSize = wetAn.fftSize = 2048;
         dry.connect(dryAn);
         wet.connect(wetAn);
-        nodes.current = { ctx, pre, wet, dry, conv, dryAn, wetAn, buf: new Float32Array(2048) };
+        nodes.current = { ctx, pre, wet, dry, room, dryAn, wetAn, buf: new Float32Array(2048) };
         const phrase = [72, 0, 76, 79, 0, 77, 76, 0, 74, 0, 72, 74, 0, 0, 0, 0];
         const seq = sequence(ctx, 84, 16, (step, time) => {
             const n = phrase[step];
@@ -318,7 +325,7 @@ export function ReverbDemo() {
         return () => {
             seq.stop();
             nodes.current = null;
-            fadeOut(ctx, master);
+            fadeOut(ctx, master, () => room.dispose());
         };
     });
 
@@ -365,7 +372,7 @@ export function ReverbDemo() {
                         window.clearTimeout(decayTimer.current);
                         decayTimer.current = window.setTimeout(() => {
                             const x = n();
-                            if (x) x.conv.buffer = impulse(x.ctx, v);
+                            if (x) x.room.load(roomImpulse(v));
                         }, 150);
                     }}
                     format={(v) => `${v.toFixed(1)} s`}

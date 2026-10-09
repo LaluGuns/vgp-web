@@ -144,8 +144,10 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
         return () => io.disconnect();
     }, [name]);
 
+    // Always ask, even when the idle fetch has already finished: it may have landed after this
+    // render read the cache, and the resolved promise re-renders with the demo at once.
     useEffect(() => {
-        if (!near || !name || loaded[name]) return;
+        if (!near || !name) return;
         let alive = true;
         load(name).then(
             () => alive && setReady((n) => n + 1),

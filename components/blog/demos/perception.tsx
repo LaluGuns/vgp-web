@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
-import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
 import {
     LevelTrace,
     Meter,
@@ -787,40 +787,43 @@ const RD_TRIM = 0.8;
 const REVERB_LEVEL = 1.3;
 const THROW_LEVEL = 1;
 
-const halls = new WeakMap<BaseAudioContext, { seconds: number; buffer: AudioBuffer }>();
+const halls = new Map<string, Float32Array<ArrayBuffer>[]>();
 
 /**
  * A generated stereo hall: decaying noise that also loses its top end as it
- * fades. Built once per audio context. A running product for the decay and
- * an integer noise generator keep it quick on a slow phone.
+ * fades, at a given sample rate. Built once per rate and kept. A running
+ * product for the decay and an integer noise generator keep it quick on a
+ * slow phone.
  */
-function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
-    const cached = halls.get(ctx);
-    if (cached && cached.seconds === seconds) return cached.buffer;
-    const sr = ctx.sampleRate;
-    const length = Math.max(1, Math.floor(sr * seconds));
-    const buf = ctx.createBuffer(2, length, sr);
-    const decay = 10 ** (-3 / length);
-    const fadeIn = sr * 0.005;
-    for (let c = 0; c < 2; c++) {
-        const data = buf.getChannelData(c);
-        let seed = (7 + c * 7919) | 0;
-        let smooth = 0;
-        let env = 1;
-        for (let i = 0; i < length; i++) {
-            // xorshift32: white noise from -1 to 1.
-            seed ^= seed << 13;
-            seed ^= seed >>> 17;
-            seed ^= seed << 5;
-            const white = seed / 2147483648;
-            smooth += (white - smooth) * (0.9 - (0.55 * i) / length);
-            // -60 dB at the end, with a 5 ms fade in.
-            data[i] = smooth * env * (i < fadeIn ? i / fadeIn : 1);
-            env *= decay;
-        }
-    }
-    halls.set(ctx, { seconds, buffer: buf });
-    return buf;
+function hallImpulse(seconds: number) {
+    return (sr: number): Float32Array<ArrayBuffer>[] => {
+        const key = `${sr}|${seconds}`;
+        const cached = halls.get(key);
+        if (cached) return cached;
+        const length = Math.max(1, Math.floor(sr * seconds));
+        const decay = 10 ** (-3 / length);
+        const fadeIn = sr * 0.005;
+        const channels = [0, 1].map((c) => {
+            const data = new Float32Array(length);
+            let seed = (7 + c * 7919) | 0;
+            let smooth = 0;
+            let env = 1;
+            for (let i = 0; i < length; i++) {
+                // xorshift32: white noise from -1 to 1.
+                seed ^= seed << 13;
+                seed ^= seed >>> 17;
+                seed ^= seed << 5;
+                const white = seed / 2147483648;
+                smooth += (white - smooth) * (0.9 - (0.55 * i) / length);
+                // -60 dB at the end, with a 5 ms fade in.
+                data[i] = smooth * env * (i < fadeIn ? i / fadeIn : 1);
+                env *= decay;
+            }
+            return data;
+        });
+        halls.set(key, channels);
+        return channels;
+    };
 }
 
 /** One-pole low-pass coefficients with time constant `tau` seconds. */
@@ -894,7 +897,7 @@ export function ReverbDuckDemo() {
         () =>
             whenIdle(() => {
                 const engine = peekEngine();
-                if (engine) hallImpulse(engine.ctx, REVERB_SECONDS);
+                if (engine) hallImpulse(REVERB_SECONDS)(engine.ctx.sampleRate);
             }),
         [],
     );
@@ -917,19 +920,24 @@ export function ReverbDuckDemo() {
         // Reverb: a short pre-delay, a generated hall, then the ducker.
         const pre = ctx.createDelay(0.2);
         pre.delayTime.value = 0.02;
-        const conv = ctx.createConvolver();
-        conv.buffer = hallImpulse(ctx, REVERB_SECONDS);
+        const hall = reverb(ctx);
+        hall.load(hallImpulse(REVERB_SECONDS));
         const ducker = gainNode(ctx, 1);
         const revOut = gainNode(ctx, 0);
-        dry.connect(pre).connect(conv).connect(ducker).connect(revOut).connect(fxSum);
+        dry.connect(pre).connect(hall.input);
+        hall.output.connect(ducker).connect(revOut).connect(fxSum);
 
         // Envelope follower on the dry phrase. A fast path catches each syllable at once;
         // a slow path holds the duck through short gaps inside a line.
         const rect = ctx.createWaveShaper();
         rect.curve = curveOf(Math.abs);
-        const fastCoef = onePole(0.01, ctx.sampleRate);
+        // The fast path is a critically damped biquad with both poles at 5 ms (about one 10 ms pole):
+        // an IIRFilterNode with a pole that fast takes tens of ms of main thread to create on a slow phone.
         const slowCoef = onePole(0.15, ctx.sampleRate);
-        const fast = ctx.createIIRFilter(fastCoef.feedforward, fastCoef.feedback);
+        const fast = ctx.createBiquadFilter();
+        fast.type = 'lowpass';
+        fast.frequency.value = 1 / (2 * Math.PI * 0.005);
+        fast.Q.value = 20 * Math.log10(0.5);
         const slow = ctx.createIIRFilter(slowCoef.feedforward, slowCoef.feedback);
         const sum = gainNode(ctx, FOLLOW_GAIN);
         const shape = ctx.createWaveShaper();
@@ -997,7 +1005,7 @@ export function ReverbDuckDemo() {
             seq.stop();
             nodes.current = null;
             setDuck(null);
-            fadeOut(ctx, master);
+            fadeOut(ctx, master, () => hall.dispose());
         };
     });
 

@@ -44,9 +44,15 @@ const PRESETS = {
  */
 const undoMakeup = (threshold: number, ratio: number) => 10 ** ((0.6 * threshold * (1 - 1 / ratio)) / 20);
 
-/** The level matching may turn the compressed path up by at most 12 dB, and down a little to take up what the knee leaves. */
+/**
+ * The level matching may turn the compressed path up by at most 16 dB (the
+ * default settings need about 13), and down a little to take up what the
+ * knee leaves. Anything louder than that is caught by the engine's -6 dBFS
+ * limiter, and the demo says when the cap leaves the compressed loop quieter.
+ */
 const MATCH_MIN = 0.7;
-const MATCH_MAX = 4;
+const MATCH_MAX = 6;
+const MATCH_MAX_DB = Math.round(20 * Math.log10(MATCH_MAX));
 
 /**
  * Drum loop through a compressor. The compressed path is level-matched
@@ -59,7 +65,7 @@ export function CompressorDemo() {
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
     const [reduction, setReduction] = useState(0);
-    /** dB the compressed path still sits under the dry one when matching needs more than its 12 dB. */
+    /** dB the compressed path still sits under the dry one when matching needs more than it may give. */
     const [short, setShort] = useState(0);
     const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
     const params = useRef({ threshold, ratio });
@@ -97,6 +103,8 @@ export function CompressorDemo() {
         const b = new Float32Array(2048);
         let smoothPre = 0;
         let smoothPost = 0;
+        // Readings in a row that wanted more than the cap: only a steady shortfall is reported.
+        let over = 0;
         const match = window.setInterval(() => {
             smoothPre = smoothPre * 0.85 + rms(pre, a) * 0.15;
             smoothPost = smoothPost * 0.85 + rms(post, b) * 0.15;
@@ -104,7 +112,8 @@ export function CompressorDemo() {
                 const wanted = smoothPre / smoothPost;
                 const target = Math.min(MATCH_MAX, Math.max(MATCH_MIN, wanted));
                 makeup.gain.setTargetAtTime(target, ctx.currentTime, 0.25);
-                const missing = wanted > MATCH_MAX ? Math.round(20 * Math.log10(wanted / MATCH_MAX)) : 0;
+                over = wanted > MATCH_MAX ? over + 1 : 0;
+                const missing = over >= 30 ? Math.round(20 * Math.log10(wanted / MATCH_MAX)) : 0;
                 setShort((s) => (s === missing ? s : missing));
             }
         }, 50);
@@ -228,7 +237,7 @@ export function CompressorDemo() {
                 </button>{' '}
                 to flatten it.{' '}
                 {short > 0
-                    ? `Matching tops out at 12 dB, so at this setting the compressed loop plays about ${short} dB quieter than the bypass.`
+                    ? `Matching tops out at ${MATCH_MAX_DB} dB, so at this setting the compressed loop plays about ${short} dB quieter than the bypass.`
                     : 'Both paths play at the same loudness.'}
             </p>
         </div>
