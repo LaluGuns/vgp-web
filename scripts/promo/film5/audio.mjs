@@ -208,7 +208,7 @@ function voiceChain(x, lufs) {
 const DETECT = 0.005;
 
 /** Picture data for one version around its downbeat: WIN.from .. WIN.to seconds from it. */
-export const WIN = { from: -2.5 * BEAT, to: 2 * BEAT };
+export const WIN = { from: -2.5 * BEAT, to: 2.5 * BEAT };
 
 /**
  * Forward masking as drawn (a model after Moore, 2012): the masker's level
@@ -289,11 +289,11 @@ export function renderAudio() {
     // ── The A/B: both versions, matched at the drop bar's loudness ──
     const { res, v } = measure();
     const match = { 1: undb(res.matchOffsetDb), 2: 1 };
-    // Demos sit 1 dB over the narration's loudness at the drop bar, so the A/B
+    // Demos sit 3 dB over the narration's loudness at the drop bar, so the A/B
     // is the loudest thing in the film; their peaks (-1 dBFS inside the song,
     // about 13 dB over its loudness) stay under the master's clipper.
     const dropLufs = res[2].dropLufs;
-    const demoGain = undb(voLufs + 1 - dropLufs);
+    const demoGain = undb(voLufs + 3 - dropLufs);
     const dL = new Float32Array(n);
     const dR = new Float32Array(n);
     for (const d of TIMELINE.demos) {
@@ -311,6 +311,20 @@ export function renderAudio() {
         }
     }
 
+    // ── Loop: the last moments play the build that leads into frame one, faded in ──
+    {
+        const len = TIMELINE.preroll;
+        const out = v[1].out;
+        const d0 = TIMELINE.demos[0];
+        const a = at(PRE - d0.pre * BEAT - len);
+        const i0 = n - at(len);
+        for (let k = 0; k < at(len) && i0 + k < n; k++) {
+            const env = (k / at(len)) ** 2;
+            dL[i0 + k] += out.L[a + k] * demoGain * match[1] * env;
+            dR[i0 + k] += out.R[a + k] * demoGain * match[1] * env;
+        }
+    }
+
     // ── Bed: the drop's bass and stabs (version 2), low-passed, carrying the
     // song on under the voice; it stops for the replay and the button ──
     const bedSrc = { L: new Float32Array(at(BAR)), R: new Float32Array(at(BAR)) };
@@ -325,9 +339,10 @@ export function renderAudio() {
     butter(bedSrc.R, 'lp', 1400, 2);
     const bL = new Float32Array(n);
     const bR = new Float32Array(n);
-    const bedFrom = TIMELINE.demos[1].at + (TIMELINE.demos[1].pre + TIMELINE.demos[1].post) * BEAT;
-    const replay = TIMELINE.demos[2].at;
-    const replayEnd = TIMELINE.demos[3].at + (TIMELINE.demos[3].pre + TIMELINE.demos[3].post) * BEAT;
+    const dm = Object.fromEntries(TIMELINE.demos.map((d) => [d.id, d]));
+    const bedFrom = dm.B.at + (dm.B.pre + dm.B.post) * BEAT;
+    const replay = dm.A2.at;
+    const replayEnd = dm.B2.at + (dm.B2.pre + dm.B2.post) * BEAT;
     const segs = [[bedFrom, replay], [replayEnd, TIMELINE.button]];
     for (const [a, b] of segs) {
         for (let t = a; t < b - 0.01; t += BAR) {

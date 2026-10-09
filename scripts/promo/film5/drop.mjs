@@ -293,6 +293,8 @@ export function measure() {
             clickPhoneDb: 10 * Math.log10(energy(band(phone(kick), 2000, 6000), T0, T0 + CLICK) / energy(band(phone(rest), 2000, 6000), T0, T0 + CLICK)),
             // What the build leaves in the gap (the last 8th before the downbeat), dB under the drop bar.
             gapDb: 10 * Math.log10(energy(kWeight(out).map(Number), T0 - GAP + 0.01, T0)) + 0.691 - dropLoudness(out),
+            // The build's last bar against the drop bar, both before the limiter: is the build a fair one?
+            buildVsDropDb: loudness(monoOf(r.bus), T0 - BAR, T0) - loudness(monoOf(r.bus), T0, T0 + BAR),
         };
     }
     // Matching: version 1 is turned to the drop-bar loudness of version 2.

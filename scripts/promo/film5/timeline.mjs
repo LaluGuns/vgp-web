@@ -26,19 +26,30 @@ const dur = (id) => {
 const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
-const HOOK = { pre: 2.5, post: 2 };
+const HOOK = { pre: 1.5, post: 2.5 };
 const REPLAY = { pre: 1.5, post: 2 };
-// After the hook, two beats to pick 1 or 2 before the voice gives the answer.
-const GUESS = 2 * BEAT;
+// After the hook, three beats (3, 2, 1) to pick 1 or 2 before the voice gives the answer.
+const GUESS = 3 * BEAT;
+// The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
+const STING = { pre: 0.75, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
 const LINE_GAP = 0.22;
 const vo = [];
 const guessAt = len(HOOK) * 2;
 let t = guessAt + GUESS + 0.1;
+const stings = [];
 for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
+    if (id === 'fog') {
+        // Version 1 then version 2, each downbeat on the grid.
+        const down1 = onGrid(t + STING.pre * BEAT);
+        stings.push({ id: 'S1', v: 1, at: down1 - STING.pre * BEAT, ...STING });
+        const down2 = down1 + (STING.pre + STING.post + 0.5) * BEAT;
+        stings.push({ id: 'S2', v: 2, at: down2 - STING.pre * BEAT, ...STING });
+        t = down2 + STING.post * BEAT + 0.2;
+    }
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -70,14 +81,18 @@ export const TIMELINE = {
     demos: [
         { id: 'A', v: 1, at: 0, ...HOOK },
         { id: 'B', v: 2, at: len(HOOK), ...HOOK },
+        ...stings,
         { id: 'A2', v: 1, at: replayAt, ...REPLAY },
         { id: 'B2', v: 2, at: replayAt + len(REPLAY), ...REPLAY },
     ],
+    // The last half second plays the build that precedes frame one, so an auto-replay continues it.
+    preroll: 0.55,
     // Single sounds tied to the picture: `cue: [line, word]` lands on that word.
     sfx: [
-        // The guess: two ticks on the beat, "1 or 2?"
+        // The guess: three ticks on the beat, "3, 2, 1"
         { at: guessAt, kind: 'tick' },
         { at: guessAt + BEAT, kind: 'tick' },
+        { at: guessAt + 2 * BEAT, kind: 'tick' },
         { cue: ['hook', 'two'], dt: -0.05, kind: 'pop', level: 0.8 },
         { cue: ['hook', 'hole'], dt: 0, kind: 'tick' },
         { cue: ['hook', 'quarter'], dt: 0, kind: 'pop', level: 0.6 },
@@ -99,8 +114,6 @@ export const TIMELINE = {
         { cue: ['cta', 'the'], dt: -0.25, kind: 'whoosh' },
         { cue: ['cta', 'play'], dt: 0.05, kind: 'tick' },
         { at: button, kind: 'button' },
-        // The last half second rises into the first frame, so a replay feels intended.
-        { at: button + 0.15, kind: 'swell', to: button + 0.75 },
     ],
     button,
     guess: { at: guessAt, dur: GUESS },

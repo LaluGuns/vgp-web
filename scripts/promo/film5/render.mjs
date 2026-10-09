@@ -57,11 +57,12 @@ const M = audio.measures;
 const Q = M.res;
 const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
 log(`Audio master: ${m.I} LUFS integrated, ${m.TP} dBTP, LRA ${m.LRA} LU (gain ${gain.toFixed(1)} dB, clip ceiling ${ceiling.toFixed(1)} dBFS)`);
-log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 1 dB over the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
+log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 3 dB over the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
 log(`A/B: one 128 BPM build into a drop, rendered twice from the same samples. Version 2 mutes every build source and the build's reverb return ${f1(Q.gapMs)} ms (one 8th) before the downbeat with ${Q.fadeMs} ms fades; version 1 runs into the downbeat.`);
 log(`Song-bus limiter (both versions): ceiling ${LIMITER.ceilingDb} dBFS, look-ahead ${LIMITER.lookMs} ms, release ${LIMITER.releaseMs} ms, drive ${Q.driveDb} dB`);
 log(`Matching: version 1 turned ${Q.matchOffsetDb >= 0 ? 'up' : 'down'} ${Math.abs(Q.matchOffsetDb).toFixed(2)} dB to version 2's drop-bar loudness (${f1(Q[2].dropLufs)} LUFS, K-weighted, downbeat plus one bar)`);
 log(`Gap check: the last 8th before the downbeat sits ${f1(Q[1].gapDb)} dB (version 1) and ${f1(Q[2].gapDb)} dB (version 2) against the drop bar's loudness`);
+log(`Build level, version 1, before the limiter: its last bar is ${f1(Q[1].buildVsDropDb)} dB against the drop bar's loudness (as loud as the drop); the riser peaks in its last 8th, which is why that 8th sits ${f1(Q[1].gapDb)} dB over the drop bar after the limiter`);
 log(`Claim 1, limiter gain reduction on the first kick (mean over its first 20 ms): version 1 ${f1(Q[1].grMean)} dB, version 2 ${f1(Q[2].grMean)} dB, ${f1(Q.claims[1].db)} dB less with the gap (target 3 dB or more)`);
 log(`Claim 2, kick click 2-6 kHz over everything else in that band, first 20 ms: version 1 ${f1(Q[1].clickDb)} dB, version 2 ${f1(Q[2].clickDb)} dB, ${f1(Q.claims[2].db)} dB better with the gap (target 10 dB or more)`);
 log(`Claim 3, through the phone check (200 Hz high-pass, 24 dB/oct): the kick heard in its first 20 ms is ${f1(Q.claims[3].kickPhone)} dB louder with the gap (${f1(Q.claims[3].kickFull)} dB full band, ${Math.round(Q.claims[3].survive1 * 100)}% survives); the click advantage is ${f1(Q.claims[3].clickPhone)} dB (${Math.round(Q.claims[3].survive2 * 100)}% survives; target 80%)`);
@@ -86,7 +87,8 @@ const browser = exe ? await chromium.launch({ executablePath: exe }) : await chr
 async function lesson() {
     const dir = path.join(OUT, 'lesson');
     const meta = path.join(dir, 'demo.json');
-    if (fs.existsSync(meta) && !args.includes('--refresh-lesson')) return JSON.parse(fs.readFileSync(meta, 'utf8'));
+    const cached = fs.existsSync(meta) ? JSON.parse(fs.readFileSync(meta, 'utf8')) : null;
+    if (cached?.page && !args.includes('--refresh-lesson')) return cached;
     fs.mkdirSync(dir, { recursive: true });
     const p = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     const url = `https://www.${TIMELINE.lesson.url.replace(/\/blog$/, '')}/blog/${TIMELINE.lesson.slug}`;
@@ -103,11 +105,27 @@ async function lesson() {
         await p.close();
         return null;
     }
-    // Bring the demo up under the site header, let it settle.
-    await p.evaluate(() => {
+    // The page from its top down to the demo, for the end card's scroll. Sections
+    // reveal once they have been on screen, so scroll down first, then back up.
+    const demoTop = await p.evaluate(() => {
         const s = document.querySelector('section[aria-label^="Listen"]');
-        scrollTo(0, s.getBoundingClientRect().top + scrollY - 76);
+        return Math.round(s.getBoundingClientRect().top + scrollY - 76);
     });
+    for (let y = 0; y <= demoTop + 844; y += 400) {
+        await p.evaluate((v) => scrollTo(0, v), y);
+        await p.waitForTimeout(150);
+    }
+    await p.evaluate(() => scrollTo(0, 0));
+    await p.waitForTimeout(800);
+    await p.screenshot({ path: path.join(dir, 'page.jpg'), type: 'jpeg', quality: 80, fullPage: true, clip: { x: 0, y: 0, width: 390, height: demoTop + 844 } });
+    if (cached && !args.includes('--refresh-lesson')) {
+        await p.close();
+        const out = { ...cached, page: { image: 'page', scrollTo: demoTop } };
+        fs.writeFileSync(meta, JSON.stringify(out, null, 1));
+        return out;
+    }
+    // Bring the demo up under the site header, let it settle.
+    await p.evaluate((v) => scrollTo(0, v), demoTop);
     await p.waitForTimeout(1200);
     const play = await p.evaluate(() => {
         const b = document.querySelector('section[aria-label^="Listen"] button').getBoundingClientRect();
@@ -120,12 +138,12 @@ async function lesson() {
         await p.screenshot({ path: path.join(dir, `play${k}.jpg`), type: 'jpeg', quality: 86 });
     }
     await p.close();
-    const out = { url, captured: new Date().toISOString().slice(0, 10), play, images: ['idle', 'play1', 'play2', 'play3'] };
+    const out = { url, captured: new Date().toISOString().slice(0, 10), play, images: ['idle', 'play1', 'play2', 'play3'], page: { image: 'page', scrollTo: demoTop } };
     fs.writeFileSync(meta, JSON.stringify(out, null, 1));
     return out;
 }
 const L = await lesson();
-const lessonData = L ? { play: L.play, images: Object.fromEntries(L.images.map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
+const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
 log(L ? `End card: the Listen demo of ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
@@ -192,6 +210,10 @@ if (opt('--pack')) {
     const all = [];
     for (let t = 0; t < TIMELINE.duration; t += 0.5) all.push({ png: await o.thumb(t, 360), caption: `${t.toFixed(1)} s` });
     for (let i = 0; i * 32 < all.length; i++) await sheet(all.slice(i * 32, i * 32 + 32), 8, 180, path.relative(OUT, path.join(dir, `sheet-${String(i + 1).padStart(2, '0')}.png`)));
+    // The loop: the first and the last frame, which should match.
+    fs.writeFileSync(path.join(dir, 'frame-first-0.000s.png'), await o.shot(0));
+    const last = (Math.round(TIMELINE.duration * TIMELINE.fps) - 1) / TIMELINE.fps;
+    fs.writeFileSync(path.join(dir, `frame-last-${last.toFixed(3)}s.png`), await o.shot(last));
     const scenes = await o.p.evaluate(() => window.sceneTimes());
     for (const s of scenes) fs.writeFileSync(path.join(dir, `scene-${s.id}-${(s.start + 0.3).toFixed(2)}s.png`), await o.shot(s.start + 0.3));
     for (const c of await o.p.evaluate(() => window.plotCrops())) {
