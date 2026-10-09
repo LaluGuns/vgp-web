@@ -23,8 +23,10 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
     const level = 'level' in meta ? meta.level : 0;
 
     return (
+        // Not a named region: a lesson has no landmarks inside its text. The h3 introduces the demo.
+        // data-demo names it for scripts and tests.
         <section
-            aria-label={`Listen: ${meta.title}`}
+            data-demo={id}
             data-dialect={d.name}
             style={{ '--accent': d.accent } as CSSProperties}
             className="vgp-demo my-12 rounded-[6px] border border-white/10 bg-[var(--surface)] px-5 py-6 sm:px-7 sm:py-7"

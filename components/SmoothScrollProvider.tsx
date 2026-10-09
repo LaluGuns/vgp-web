@@ -8,6 +8,12 @@
  * pages (/blog and /learn), which scroll natively. The module is imported
  * only when it is about to run, after hydration, so phones and the reading
  * pages never download it and its rAF loop never starts there.
+ *
+ * In-page anchor links glide (scroll-behavior: smooth on <html>) everywhere
+ * except those reading pages, where a deep link or #section must land at once.
+ * It is set inline here, per route, because a stylesheet rule on html would
+ * apply to lessons too. Next keeps it (data-scroll-behavior="smooth" in
+ * app/layout.tsx): route changes still jump, then the inline value returns.
  */
 
 import { useEffect } from 'react';
@@ -18,6 +24,20 @@ const NATIVE_SCROLL_PAGES = /^\/(?:blog|learn)(?:\/|$)/;
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+
+    useEffect(() => {
+        const html = document.documentElement;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const apply = () => {
+            html.style.scrollBehavior = NATIVE_SCROLL_PAGES.test(pathname) || reducedMotion.matches ? '' : 'smooth';
+        };
+        apply();
+        reducedMotion.addEventListener('change', apply);
+        return () => {
+            reducedMotion.removeEventListener('change', apply);
+            html.style.scrollBehavior = '';
+        };
+    }, [pathname]);
 
     useEffect(() => {
         if (NATIVE_SCROLL_PAGES.test(pathname)) return;
