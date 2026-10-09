@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { EditorialButton } from '@/components/editorial/EditorialPrimitives';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
+import { useScrollMemory } from '@/components/blog/useScrollMemory';
 
 export interface PathLesson {
     slug: string;
@@ -13,9 +14,11 @@ export interface PathLesson {
     features: string[];
 }
 
-/** A learning path: progress, a start or continue button, and the numbered lessons. */
+/** A learning path: progress, a start or continue button, and the numbered lessons (h2 under the path's h1). */
 export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
     const read = useReadArticles();
+    // Back from a lesson lands where the reader left the list.
+    useScrollMemory();
     const done = lessons.filter((l) => read.includes(l.slug)).length;
     const nextIndex = lessons.findIndex((l) => !read.includes(l.slug));
     const next = nextIndex === -1 ? lessons[0] : lessons[nextIndex];
@@ -68,9 +71,9 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
                                         {lesson.features.length ? ` · ${lesson.features.join(' · ')}` : ''}
                                         {isRead ? ' · Read' : ''}
                                     </span>
-                                    <span className="mt-2 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                    <h2 className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                                         {lesson.title}
-                                    </span>
+                                    </h2>
                                     <span className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">{lesson.excerpt}</span>
                                 </span>
                             </Link>

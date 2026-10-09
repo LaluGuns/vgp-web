@@ -576,6 +576,23 @@ body::before {
   margin: 0;
 }
 
+/* One focus ring on blog surfaces (docs/DESIGN.md: focus rings use the
+   accent): 2 px, 3 px clear of the text so it never hugs a breadcrumb.
+   Inside a lesson --accent is the lesson group's. */
+.vgp-focus:focus {
+  outline: none;
+}
+
+.vgp-focus:focus-visible,
+.article-content .vgp-inline-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.article-content .vgp-inline-link:focus-visible {
+  border-radius: 2px;
+}
+
 /* Glossary terms: a dotted underline that opens a definition. */
 .vgp-term {
   font: inherit;
@@ -596,7 +613,7 @@ body::before {
 
 .vgp-term:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: 2px;
 }
 
@@ -614,6 +631,20 @@ body::before {
   font-size: 15px;
   line-height: 1.6;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The word that opened it is in the lower half of the screen: open at the
+   top, under the site header, so the word stays in view (TermPlacement). */
+.vgp-term-pop[data-top] {
+  inset: var(--vgp-pop-top, 72px) 16px auto 16px;
+}
+
+@media (min-width: 1024px) {
+  .vgp-term-pop[data-top] {
+    inset: var(--vgp-pop-top, 88px) 24px auto auto;
+  }
 }
 
 .vgp-term-pop::backdrop {
@@ -627,13 +658,20 @@ body::before {
   margin-bottom: 6px;
 }
 
+/* The links, stacked, then Close on the right: the tab order is the reading order. */
 .vgp-term-pop .vgp-term-actions {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 0 16px;
   margin-top: 6px;
+}
+
+.vgp-term-pop .vgp-term-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
 }
 
 /* Each action is a 44 px tap target (WCAG 2.5.5); the underline stays on the words. */
@@ -660,18 +698,38 @@ body::before {
 
 .vgp-term-pop :is(a, button):focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: 2px;
 }
 
 .vgp-term-pop .vgp-term-all {
-  margin-top: -6px;
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* Lesson contents sheet on phones (ArticleChrome MobileContents). */
+/* Lesson contents sheet on phones (ArticleChrome MobileContents). The
+   button shows when the reader scrolls up (data-visible, set by script),
+   while it has keyboard focus, and while its sheet is open. */
 .vgp-contents-button {
   bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.vgp-contents-button[data-visible],
+.vgp-contents-button:focus-visible,
+.vgp-contents-button[aria-expanded='true'] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vgp-contents-button {
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (min-width: 768px) {

@@ -47,7 +47,8 @@ export interface BarsFigure extends FigureBase {
     min: number;
     max: number;
     unit?: string;
-    bars: { label: string; value: number; display?: string; dim?: boolean }[];
+    /** `open`: no upper limit. The bar runs to the end of the scale and fades out there, with no end mark. */
+    bars: { label: string; value: number; display?: string; dim?: boolean; open?: boolean }[];
     reference?: { value: number; label: string };
     /**
      * Values are powers of ten (3 is 1,000, 6 is 1,000,000). Draws a tick at
@@ -128,8 +129,13 @@ export interface SignalRow {
     traces: SignalTrace[];
     /** Envelope rows sit on a baseline instead of a centre line. */
     unipolar?: boolean;
-    /** Horizontal guide lines, e.g. a threshold. y is -1 to 1 (0 to 1 when unipolar). */
-    lines?: { y: number; label: string }[];
+    /**
+     * Horizontal guide lines, e.g. a threshold. y is -1 to 1 (0 to 1 when unipolar).
+     * The label sits beside its line where no trace comes near it, or else past the line's
+     * end, in a margin right of the plot. `short` is used on phones. Lines that share a
+     * label (a plus and minus pair) are labelled once.
+     */
+    lines?: { y: number; label: string; short?: string }[];
     /** Vertical guide lines at a time from 0 to 1. */
     marks?: { t: number; label: string }[];
     /** Sample dots on a trace. `alias` draws the slower wave the samples also fit. */

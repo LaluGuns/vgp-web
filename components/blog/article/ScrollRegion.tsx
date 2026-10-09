@@ -46,7 +46,7 @@ export function ScrollRegion({ label, className = '', children }: { label: strin
             tabIndex={state.overflow ? 0 : undefined}
             data-overflow={state.overflow ? '' : undefined}
             data-end={state.end ? '' : undefined}
-            className={`vgp-scroll overflow-x-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${className}`}
+            className={`vgp-scroll vgp-focus overflow-x-auto ${className}`}
         >
             {children}
         </div>

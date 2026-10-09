@@ -5,8 +5,10 @@ import { getArticleBySlug } from '@/lib/blog-data';
 import { dialectForCategory } from '@/lib/blog/dialects';
 import { Figure } from '@/components/blog/figures/Figure';
 import { DemoSlot } from '@/components/blog/demos/DemoSlot';
+import { CodeBlock } from './CodeBlock';
 import { ExperimentSteps } from './ExperimentSteps';
 import { LicenseTable } from './LicenseTable';
+import { TermPlacement } from './TermPlacement';
 import { ScrollRegion } from './ScrollRegion';
 
 const html = (value: string) => ({ __html: value });
@@ -75,11 +77,7 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
                 </ScrollRegion>
             );
         case 'code':
-            return (
-                <pre key={key} className="my-8 overflow-x-auto rounded-[6px] border border-white/10 bg-[var(--surface)] px-5 py-4 font-mono text-sm leading-6 text-white/85">
-                    {block.text}
-                </pre>
-            );
+            return <CodeBlock key={key} text={block.text} />;
         case 'table':
             // On phones each row becomes a small card, so nothing hides behind a sideways scroll.
             // A cell too wide even for that (a long formula) scrolls inside the region.
@@ -88,9 +86,14 @@ function renderBlock(block: Block, key: string, section: Section | null, ctx: Re
                     <table className="w-full border-collapse text-left">
                         <thead>
                             <tr className="border-b border-white/20">
-                                {block.head.map((cell, i) => (
-                                    <th key={i} className="px-4 py-3 text-sm font-semibold text-white" dangerouslySetInnerHTML={html(cell)} />
-                                ))}
+                                {/* An empty corner cell is not a column header: a <td>, so it is not announced as one. */}
+                                {block.head.map((cell, i) =>
+                                    cell.trim() ? (
+                                        <th key={i} className="px-4 py-3 text-sm font-semibold text-white" dangerouslySetInnerHTML={html(cell)} />
+                                    ) : (
+                                        <td key={i} className="px-4 py-3" />
+                                    ),
+                                )}
                             </tr>
                         </thead>
                         <tbody>
@@ -159,7 +162,7 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
                         Sources
                     </h2>
                     <details className="group">
-                        <summary className="flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 [&::-webkit-details-marker]:hidden">
+                        <summary className="vgp-focus flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white [&::-webkit-details-marker]:hidden">
                             <span className="group-open:hidden">Show {count === 1 ? 'the source' : `all ${count}`}</span>
                             <span className="hidden group-open:inline">Hide sources</span>
                             <span aria-hidden="true" className="transition-transform group-open:rotate-180">
@@ -189,11 +192,11 @@ function TermPopovers({ terms }: { terms: ParsedArticle['terms'] }) {
             const more = target
                 ? `<a class="vgp-term-more" href="/blog/${target.slug}">Read: ${escape(target.title)}</a>`
                 : '';
+            // Links first, then Close: Tab from the term walks into the popover in this order.
             return `<div id="term-${term.id}" popover class="vgp-term-pop" role="dialog" aria-label="${escape(term.term)}">
 <p class="vgp-term-name">${escape(term.term)}</p>
 <p>${escape(term.definition)}</p>
-<div class="vgp-term-actions">${more}<button type="button" popovertarget="term-${term.id}" popovertargetaction="hide">Close</button></div>
-<a class="vgp-term-all" href="/learn/glossary#${term.id}">All terms</a>
+<div class="vgp-term-actions"><div class="vgp-term-links">${more}<a class="vgp-term-all" href="/learn/glossary#${term.id}">All terms</a></div><button type="button" popovertarget="term-${term.id}" popovertargetaction="hide">Close</button></div>
 </div>`;
         })
         .join('');
@@ -216,6 +219,7 @@ export function ArticleBody({ article, parsed }: { article: BlogArticle; parsed:
                     <SectionView key={section.id} section={section} ctx={ctx} first={i === 0 && parsed.lead.length === 0} />
                 ))}
             <TermPopovers terms={parsed.terms} />
+            {parsed.terms.length > 0 ? <TermPlacement /> : null}
         </div>
     );
 }

@@ -1,19 +1,28 @@
 'use client';
 
 /**
- * The interactive edges of the article page: save, copy and share
- * actions, the reading progress bar and the outline that follows the
- * reader. The article text itself is rendered on the server.
+ * The interactive edges of the article page: save, copy and share actions,
+ * the reading progress bar, the side outline's current section and the
+ * Contents button on phones. The article text and the outline links are
+ * rendered on the server; these only follow the reader, through one shared
+ * scroll listener (reading-scroll.ts) and without re-rendering on scroll.
  */
 
-import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Bookmark, Check, Copy, Share2 } from 'lucide-react';
-import { MasterclassShareModal } from '@/components/blog/MasterclassShareModal';
+import { copyToClipboard } from './clipboard';
+import { OutlineList, type OutlineItem } from './OutlineList';
+import { currentSection, readNow, subscribeReading } from './reading-scroll';
 import { markRead } from './reading-state';
 
+// The share dialog (with html-to-image and the QR code) loads only when the reader
+// reaches for Share: on hover, focus or touch it is fetched, on click it opens.
+const loadShareDialog = () => import('@/components/blog/MasterclassShareModal');
+const ShareDialog = dynamic(() => loadShareDialog().then((m) => m.MasterclassShareModal), { ssr: false });
+
 const actionClass =
-    'inline-flex min-h-11 items-center gap-2 rounded-md px-1 text-sm font-medium text-white/70 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+    'vgp-focus inline-flex min-h-11 items-center gap-2 rounded-[4px] px-1 text-sm font-medium text-white/70 transition-colors hover:text-white';
 
 export function ArticleActions({
     slug,
@@ -21,16 +30,19 @@ export function ArticleActions({
     excerpt,
     categoryName,
     readingTime,
+    accent,
 }: {
     slug: string;
     title: string;
     excerpt: string;
     categoryName?: string;
     readingTime: number;
+    accent?: string;
 }) {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [copied, setCopied] = useState(false);
-    const [showShareModal, setShowShareModal] = useState(false);
+    const [sharing, setSharing] = useState(false);
+    const shareButton = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         let cancelled = false;
@@ -59,14 +71,25 @@ export function ArticleActions({
     };
 
     const handleCopyLink = () => {
-        navigator.clipboard
-            ?.writeText(window.location.href)
+        copyToClipboard(window.location.href)
             .then(() => {
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
             })
             .catch(() => {});
     };
+
+    const prefetchShare = () => {
+        loadShareDialog().catch(() => {});
+    };
+
+    // The dialog hands focus back to Share as it closes; this covers a browser that does not.
+    const closeShare = useCallback(() => {
+        setSharing(false);
+        requestAnimationFrame(() => {
+            if (document.activeElement === document.body) shareButton.current?.focus();
+        });
+    }, []);
 
     return (
         <>
@@ -79,202 +102,219 @@ export function ArticleActions({
                     {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
                     <span aria-live="polite">{copied ? 'Link copied' : 'Copy link'}</span>
                 </button>
-                <button type="button" onClick={() => setShowShareModal(true)} className={actionClass}>
+                <button
+                    ref={shareButton}
+                    type="button"
+                    aria-haspopup="dialog"
+                    onPointerEnter={prefetchShare}
+                    onPointerDown={prefetchShare}
+                    onFocus={prefetchShare}
+                    onClick={() => setSharing(true)}
+                    className={actionClass}
+                >
                     <Share2 size={16} aria-hidden="true" />
                     Share
                 </button>
             </div>
-            <MasterclassShareModal
-                open={showShareModal}
-                onClose={() => setShowShareModal(false)}
-                article={{ title, excerpt, slug }}
-                categoryName={categoryName}
-                readingTime={`${readingTime || 4} min read`}
-                logoSrc="/branding/logo-tg.png"
-                siteUrl="https://www.virzyguns.com"
-            />
+            {sharing ? (
+                <ShareDialog
+                    onClose={closeShare}
+                    article={{ title, excerpt, slug }}
+                    categoryName={categoryName}
+                    readingTime={`${readingTime || 4} min read`}
+                    accent={accent}
+                    logoSrc="/branding/logo-tg.png"
+                    siteUrl="https://www.virzyguns.com"
+                />
+            ) : null}
         </>
     );
 }
 
-interface OutlineItem {
-    id: string;
-    title: string;
+/** Mark the outline link for `id` as the current section, and only that one. */
+function markCurrent(root: Element | null, id: string) {
+    root?.querySelectorAll('a[href^="#"]').forEach((link) => {
+        if (link.getAttribute('href') === `#${id}`) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+    });
 }
 
 /**
- * Progress bar, active section and "read" marking. Renders the desktop outline.
- * `accent` is the lesson group's accent, so the bar matches the figures; the bar
- * is portalled to <body>, outside the article that scopes `--accent`.
+ * The reading progress bar along the top of the screen, and the "read" mark
+ * once the reader reaches the end of the text. `sectionIds` are the section
+ * anchors in page order, so an old "#section-3" link still lands on the
+ * fourth section. `accent` is the lesson group's accent, so the bar matches
+ * the figures.
  */
-export function ArticleOutline({ slug, headings, accent = 'var(--accent)' }: { slug: string; headings: OutlineItem[]; accent?: string }) {
-    const [mounted, setMounted] = useState(false);
-    const [percent, setPercent] = useState(0);
-    const [active, setActive] = useState(headings[0]?.id ?? '');
+export function ReadingProgress({ slug, accent, sectionIds }: { slug: string; accent: string; sectionIds: string[] }) {
+    const bar = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const frame = requestAnimationFrame(() => setMounted(true));
-        return () => cancelAnimationFrame(frame);
-    }, []);
+        const legacy = /^#section-(\d+)$/.exec(window.location.hash);
+        if (legacy) {
+            const target = document.getElementById(sectionIds[Number(legacy[1])] ?? '');
+            if (target) {
+                history.replaceState(history.state, '', `#${target.id}`);
+                target.scrollIntoView();
+            }
+        }
+    }, [sectionIds]);
 
     useEffect(() => {
         let marked = false;
-        let ticking = false;
-        const update = () => {
-            ticking = false;
-            const max = document.documentElement.scrollHeight - window.innerHeight;
-            const next = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
-            setPercent(next);
-            let current = headings[0]?.id ?? '';
-            for (const heading of headings) {
-                const el = document.getElementById(heading.id);
-                if (el && el.getBoundingClientRect().top <= 140) current = heading.id;
+        return subscribeReading((frame) => {
+            const progress = frame.max > 0 ? Math.min(1, Math.max(0, frame.y / frame.max)) : 0;
+            if (bar.current) bar.current.style.transform = `scaleX(${progress})`;
+            if (!marked) {
+                const end = frame.top('article-end');
+                if (end !== undefined && end < frame.y + frame.vh) {
+                    marked = true;
+                    markRead(slug);
+                }
             }
-            setActive(current);
-            // Reaching the sources or the quiz counts as having read it.
-            const end = document.getElementById('article-end');
-            if (!marked && end && end.getBoundingClientRect().top < window.innerHeight) {
-                marked = true;
-                markRead(slug);
-            }
-        };
-        const onScroll = () => {
-            if (!ticking) {
-                ticking = true;
-                requestAnimationFrame(update);
-            }
-        };
-        update();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
-        return () => {
-            window.removeEventListener('scroll', onScroll);
-            window.removeEventListener('resize', onScroll);
-        };
-    }, [headings, slug]);
+        });
+    }, [slug]);
 
     return (
-        <>
-            {mounted
-                ? createPortal(
-                      <div
-                          aria-hidden="true"
-                          className="pointer-events-none fixed left-0 top-0 z-[9999] h-0.5"
-                          style={{ width: `${percent}%`, background: accent }}
-                      />,
-                      document.body,
-                  )
-                : null}
-            <nav aria-label="In this article">
-                <p className="mb-3 text-sm font-medium text-white">In this article</p>
-                <div className="max-h-[60vh] overflow-y-auto pr-1">
-                    <OutlineList headings={headings} active={active} />
-                </div>
-            </nav>
-            <p className="mt-8 text-xs text-white/50">{Math.round(percent)}% read</p>
-        </>
+        <div
+            ref={bar}
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-0.5 origin-left"
+            style={{ background: accent, transform: 'scaleX(0)' }}
+        />
     );
 }
 
-/** Section links. `touch` gives each link a 44 px row, for phones. */
-export function OutlineList({ headings, active, touch = false }: { headings: OutlineItem[]; active?: string; touch?: boolean }) {
-    return (
-        <ol className={touch ? '' : 'space-y-1'}>
-            {headings.map((h, i) => {
-                const isActive = active === h.id;
-                return (
-                    <li key={h.id}>
-                        <a
-                            href={`#${h.id}`}
-                            aria-current={isActive ? 'location' : undefined}
-                            className={`flex gap-3 border-l pl-3 text-sm leading-snug transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
-                                touch ? 'min-h-11 items-center py-2.5' : 'py-1.5'
-                            } ${isActive ? 'border-white text-white' : 'border-white/10 text-white/60 hover:text-white'}`}
-                        >
-                            <span className="w-5 shrink-0 tabular-nums text-white/50" aria-hidden="true">
-                                {i + 1}.
-                            </span>
-                            <span>{h.title}</span>
-                        </a>
-                    </li>
-                );
-            })}
-        </ol>
-    );
+/**
+ * Wraps the side outline (server-rendered links) on wide screens and marks
+ * the section being read. Below lg the outline is not shown, and this does
+ * no work at all.
+ */
+export function OutlineTracker({ ids, children }: { ids: string[]; children: ReactNode }) {
+    const box = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const wide = window.matchMedia('(min-width: 1024px)');
+        let stop: (() => void) | null = null;
+        let active = '';
+        let shown = '';
+        const start = () => {
+            stop?.();
+            stop = null;
+            if (!wide.matches) return;
+            const percent = box.current?.querySelector<HTMLElement>('[data-percent]');
+            stop = subscribeReading((frame) => {
+                const next = currentSection(frame, ids) || ids[0] || '';
+                if (next !== active) {
+                    active = next;
+                    markCurrent(box.current, next);
+                }
+                const text = `${Math.round(frame.max > 0 ? Math.min(100, Math.max(0, (frame.y / frame.max) * 100)) : 0)}% read`;
+                if (percent && text !== shown) {
+                    shown = text;
+                    percent.textContent = text;
+                }
+            });
+        };
+        start();
+        wide.addEventListener('change', start);
+        return () => {
+            wide.removeEventListener('change', start);
+            stop?.();
+        };
+    }, [ids]);
+
+    return <div ref={box}>{children}</div>;
 }
 
 /**
  * Phones have no outline beside the text, so once the reader is past the
  * inline "In this article" list a small Contents button stays in reach,
- * above the bottom navigation. It opens the section list as a sheet.
- * While the reader scrolls down it steps aside; scrolling up (or reaching
- * it with Tab) brings it back.
+ * above the bottom navigation. It opens the section list as a popover with
+ * focus on the section being read. It shows when the reader scrolls up and
+ * steps aside again after two seconds without scrolling, so it never sits
+ * over the text for long. It sits right after the inline list in the tab
+ * order, and shows whenever it has keyboard focus.
  */
 export function MobileContents({ headings }: { headings: OutlineItem[] }) {
-    const [mounted, setMounted] = useState(false);
-    // In the body of the lesson: the button exists and can take focus.
-    const [available, setAvailable] = useState(false);
-    // Shown: the reader last scrolled up.
-    const [shown, setShown] = useState(false);
-    const [active, setActive] = useState('');
+    const button = useRef<HTMLButtonElement>(null);
     const sheet = useRef<HTMLDivElement>(null);
 
-    // Portalled to <body>: the page transition wrapper is transformed, which would pin a
-    // fixed child to the article instead of the screen.
     useEffect(() => {
-        const frame = requestAnimationFrame(() => setMounted(true));
-        return () => cancelAnimationFrame(frame);
-    }, []);
-
-    useEffect(() => {
-        let frame = 0;
+        const btn = button.current;
+        const pop = sheet.current;
+        if (!btn || !pop) return;
+        const ids = headings.map((h) => h.id);
+        const narrow = window.matchMedia('(max-width: 1023.98px)');
+        let stop: (() => void) | null = null;
+        let idle = 0;
         let lastY = window.scrollY;
-        const update = () => {
-            frame = 0;
-            const start = document.getElementById('article-outline-inline');
-            const end = document.getElementById('article-end');
-            const pastStart = start ? start.getBoundingClientRect().bottom < 0 : window.scrollY > 600;
-            const beforeEnd = end ? end.getBoundingClientRect().top > window.innerHeight * 0.6 : true;
-            setAvailable(pastStart && beforeEnd);
-            const y = window.scrollY;
-            if (Math.abs(y - lastY) > 8) {
-                setShown(y < lastY);
-                lastY = y;
-            }
-            let current = '';
-            for (const heading of headings) {
-                const el = document.getElementById(heading.id);
-                if (el && el.getBoundingClientRect().top <= 140) current = heading.id;
-            }
-            setActive(current);
+        let available = false;
+        let shown = false;
+
+        const paint = () => btn.toggleAttribute('data-visible', available && shown);
+        const hideSoon = () => {
+            window.clearTimeout(idle);
+            idle = window.setTimeout(() => {
+                if (btn.matches(':hover')) return hideSoon();
+                shown = false;
+                paint();
+            }, 2000);
         };
-        const onScroll = () => {
-            if (!frame) frame = requestAnimationFrame(update);
+        const start = () => {
+            stop?.();
+            stop = null;
+            if (!narrow.matches) return;
+            lastY = window.scrollY;
+            stop = subscribeReading((frame) => {
+                const pastList = frame.bottom('article-outline-inline');
+                const end = frame.top('article-end');
+                available = (pastList !== undefined ? pastList < frame.y : frame.y > 600) && (end === undefined || end - frame.y > frame.vh * 0.6);
+                if (Math.abs(frame.y - lastY) > 8) {
+                    shown = frame.y < lastY;
+                    lastY = frame.y;
+                    if (shown) hideSoon();
+                }
+                paint();
+            });
         };
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
+
+        const onToggle = (event: Event) => {
+            const open = (event as Event & { newState?: string }).newState === 'open';
+            btn.setAttribute('aria-expanded', String(open));
+            if (!open) return;
+            const current = currentSection(readNow(), ids) || ids[0];
+            markCurrent(pop, current);
+            pop.querySelector<HTMLElement>('a[aria-current]')?.focus();
+        };
+
+        start();
+        narrow.addEventListener('change', start);
+        pop.addEventListener('toggle', onToggle);
         return () => {
-            cancelAnimationFrame(frame);
-            window.removeEventListener('scroll', onScroll);
-            window.removeEventListener('resize', onScroll);
+            narrow.removeEventListener('change', start);
+            pop.removeEventListener('toggle', onToggle);
+            window.clearTimeout(idle);
+            stop?.();
         };
     }, [headings]);
 
-    if (headings.length < 2 || !mounted) return null;
+    if (headings.length < 2) return null;
 
-    return createPortal(
+    // React 19 renders popover attributes; the React 18 typings in this repo do not list them.
+    const popover = { popover: 'auto' } as Record<string, string>;
+    const opens = { popoverTarget: 'article-contents' } as Record<string, string>;
+    const closes = { popoverTarget: 'article-contents', popoverTargetAction: 'hide' } as Record<string, string>;
+
+    return (
         <div className="lg:hidden">
             <button
+                ref={button}
                 type="button"
-                onClick={() => sheet.current?.togglePopover()}
+                {...opens}
                 aria-haspopup="dialog"
-                tabIndex={available ? undefined : -1}
-                aria-hidden={available ? undefined : true}
-                data-visible={available && shown ? '' : undefined}
-                className={`vgp-contents-button fixed right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 bg-[var(--surface-strong)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-[opacity,transform] duration-200 focus:outline-none focus-visible:pointer-events-auto focus-visible:translate-y-0 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--accent)] ${
-                    available && shown ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
-                }`}
+                aria-expanded="false"
+                className="vgp-contents-button vgp-focus fixed right-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-[6px] border border-white/15 bg-[var(--surface-strong)] px-4 text-sm font-medium text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)]"
             >
                 <span aria-hidden="true" className="flex flex-col gap-[3px]">
                     <span className="block h-px w-3.5 bg-current" />
@@ -286,7 +326,7 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
             <div
                 ref={sheet}
                 id="article-contents"
-                {...({ popover: 'auto' } as Record<string, string>)}
+                {...popover}
                 role="dialog"
                 aria-label="In this article"
                 className="vgp-contents-pop"
@@ -298,15 +338,14 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
                     <p className="text-base font-semibold text-white">In this article</p>
                     <button
                         type="button"
-                        onClick={() => sheet.current?.hidePopover()}
-                        className="-mr-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-sm text-white/70 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                        {...closes}
+                        className="vgp-focus -mr-2 inline-flex min-h-11 min-w-11 items-center justify-center rounded-[4px] text-sm text-white/70 hover:text-white"
                     >
                         Close
                     </button>
                 </div>
-                <OutlineList headings={headings} active={active} touch />
+                <OutlineList headings={headings} touch />
             </div>
-        </div>,
-        document.body,
+        </div>
     );
 }

@@ -8,14 +8,14 @@ import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import 'katex/dist/katex.min.css';
-import { PageTransition } from '@/components/PageTransition';
 import { ArticleBody, ArticleSources } from '@/components/blog/article/ArticleBody';
-import { ArticleActions, ArticleOutline, MobileContents, OutlineList } from '@/components/blog/article/ArticleChrome';
+import { ArticleActions, MobileContents, OutlineTracker, ReadingProgress } from '@/components/blog/article/ArticleChrome';
+import { OutlineList, type OutlineItem } from '@/components/blog/article/OutlineList';
 import { Quiz } from '@/components/blog/article/Quiz';
 import { TapLink } from '@/components/blog/article/TapLink';
 import { DialectMark } from '@/components/blog/figures/DialectMark';
 import type { BlogArticle, Category } from '@/lib/blog-data';
-import { parseArticle } from '@/lib/blog/content';
+import { parseArticle, type ParsedArticle } from '@/lib/blog/content';
 import { dialectForCategory } from '@/lib/blog/dialects';
 import { glossaryFor } from '@/lib/blog/glossary';
 import { getPath, getPathPosition, learningPaths, type LearningPath } from '@/lib/blog/paths';
@@ -34,8 +34,37 @@ function formatDate(value: string) {
 
 const HEARING = /tinnitus|hearing loss|hearing damage|hearing safety|acoustic reflex|binaural|entrainment/i;
 
-const bigLink =
-    'group mt-3 block rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+// Ids already taken on a lesson page, so a section called "In short" cannot collide.
+const RESERVED_IDS = ['main', 'in-short', 'article-outline-inline', 'article-contents', 'article-end', 'check-yourself', 'path-next', 'author-heading', 'path-heading'];
+const QUIZ_ID = 'check-yourself';
+
+/**
+ * Section anchors are slugs of the heading ("#why-the-fader-comes-last"), so a
+ * shared link says where it goes and survives a section being added above it.
+ */
+function withSectionIds(parsed: ParsedArticle): ParsedArticle {
+    const used = new Set(RESERVED_IDS);
+    const sections = parsed.sections.map((section) => {
+        const base =
+            section.role === 'references'
+                ? 'sources'
+                : section.title
+                      .toLowerCase()
+                      .replace(/&/g, ' and ')
+                      .replace(/['’]/g, '')
+                      .replace(/[^a-z0-9]+/g, '-')
+                      .replace(/^-+|-+$/g, '')
+                      .slice(0, 64)
+                      .replace(/-+$/, '') || 'section';
+        let id = base;
+        for (let n = 2; used.has(id) || /^(term-|section-\d)/.test(id); n++) id = `${base}-${n}`;
+        used.add(id);
+        return { ...section, id };
+    });
+    return { ...parsed, sections };
+}
+
+const bigLink = 'vgp-focus group mt-3 block rounded-sm';
 const bigTitle =
     'block font-display text-2xl font-semibold leading-snug tracking-[-0.02em] text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-3xl';
 
@@ -74,9 +103,9 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
     const previous = position.prev ? (
         <p className="mt-6 text-sm text-white/55">
             Previous:{' '}
-            <Link href={`/blog/${position.prev.slug}`} className="vgp-link text-white/75 hover:text-white">
+            <TapLink href={`/blog/${position.prev.slug}`} className="text-white/75 hover:text-white">
                 {position.prev.title}
-            </Link>
+            </TapLink>
         </p>
     ) : null;
 
@@ -127,22 +156,30 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
 }
 
 export function ArticlePage({ article, category }: ArticlePageProps) {
-    const parsed = parseArticle(article.content, glossaryFor(article.category));
-    const headings = parsed.sections.map((s) => ({ id: s.id, title: s.title }));
+    const parsed = withSectionIds(parseArticle(article.content, glossaryFor(article.category)));
+    const sectionIds = parsed.sections.map((s) => s.id);
+    // Contents in page order: the body sections, the quiz, then the sources.
+    const body = parsed.sections.filter((s) => s.role !== 'references').map((s) => ({ id: s.id, title: s.title }));
+    const sources = parsed.sections.filter((s) => s.role === 'references').map((s) => ({ id: s.id, title: s.title }));
+    const headings: OutlineItem[] = [...body, ...(article.quiz?.length ? [{ id: QUIZ_ID, title: 'Check yourself' }] : []), ...sources];
+    const headingIds = headings.map((h) => h.id);
     const position = getPathPosition(article);
     // The next lesson gets its own block (PathNext); this list shows the ones after it.
     const upcoming = position ? position.path.articles.slice(position.index + 2, position.index + 5) : [];
     const pathName = category?.name ?? article.category;
     const hasHearingNote = HEARING.test(article.content) || HEARING.test(article.excerpt);
-    // One accent per lesson (docs/DESIGN.md, "Figure dialects"): inside the article, --accent is the
+    // One accent per lesson (docs/DESIGN.md, "Figure dialects"): inside the lesson, --accent is the
     // group's, so figures, demos, focus rings and the progress bar all speak the same colour.
     const dialect = dialectForCategory(article.category);
     const accentScope = { '--accent': dialect.accent } as CSSProperties;
 
+    // No transformed wrapper (PageTransition) around the page: the Contents button and the
+    // progress bar are position: fixed and must stay pinned to the screen.
     return (
-        <PageTransition>
-            <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
-                <article style={accentScope}>
+        <>
+            <main id="main" tabIndex={-1} style={accentScope} className="editorial-shell text-white focus:outline-none">
+                <ReadingProgress slug={article.slug} accent={dialect.accent} sectionIds={sectionIds} />
+                <article>
                     <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                         <div className="mx-auto max-w-7xl">
                             <nav aria-label="Breadcrumb" className="-my-3 flex flex-wrap items-center gap-x-2 text-sm text-white/55">
@@ -179,6 +216,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     excerpt={article.excerpt}
                                     categoryName={category?.name}
                                     readingTime={article.readingTime}
+                                    accent={dialect.accent}
                                 />
                             </div>
                         </div>
@@ -186,7 +224,21 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
 
                     <div className="px-4 pb-20 sm:px-6">
                         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12">
-                            <div className="min-w-0 lg:col-span-8">
+                            {/* First in the source, so the outline comes before the text in the tab order; the grid puts it on the right. */}
+                            <div className="hidden lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:block">
+                                <div className="sticky top-28">
+                                    <OutlineTracker ids={headingIds}>
+                                        <nav aria-label="In this article">
+                                            <p className="mb-3 text-sm font-medium text-white">In this article</p>
+                                            <div className="max-h-[60vh] overflow-y-auto pr-1">
+                                                <OutlineList headings={headings} />
+                                            </div>
+                                        </nav>
+                                        <p data-percent="" className="mt-8 min-h-4 text-xs text-white/50" />
+                                    </OutlineTracker>
+                                </div>
+                            </div>
+                            <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-1">
                                 <div className="max-w-[68ch]">
                                     {article.summary?.length ? (
                                         <section aria-labelledby="in-short" className="mb-10 border-b border-white/10 pb-8">
@@ -208,7 +260,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
 
                                     {headings.length > 0 ? (
                                         <details id="article-outline-inline" className="group mb-10 border-b border-white/10 pb-6 lg:hidden">
-                                            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-sm text-base font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 [&::-webkit-details-marker]:hidden">
+                                            <summary className="vgp-focus flex min-h-11 cursor-pointer list-none items-center justify-between rounded-sm text-base font-medium text-white [&::-webkit-details-marker]:hidden">
                                                 In this article ({headings.length})
                                                 <span className="text-sm text-white/55 group-open:hidden">Show</span>
                                                 <span className="hidden text-sm text-white/55 group-open:inline">Hide</span>
@@ -218,6 +270,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                             </div>
                                         </details>
                                     ) : null}
+                                    <MobileContents headings={headings} />
 
                                     <ArticleBody article={article} parsed={parsed} />
 
@@ -235,7 +288,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                         </div>
                                     ) : null}
 
-                                    {article.quiz?.length ? <Quiz questions={article.quiz} /> : null}
+                                    {article.quiz?.length ? <Quiz questions={article.quiz} id={QUIZ_ID} /> : null}
 
                                     <ArticleSources article={article} parsed={parsed} />
 
@@ -264,16 +317,9 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     ) : null}
                                 </div>
                             </div>
-
-                            <div className="hidden lg:col-span-3 lg:col-start-10 lg:block">
-                                <div className="sticky top-28">
-                                    <ArticleOutline slug={article.slug} headings={headings} accent={dialect.accent} />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </article>
-                <MobileContents headings={headings} />
 
                 {upcoming.length > 0 && position ? (
                     <section aria-labelledby="path-heading" className="border-t border-white/10 px-4 pb-20 pt-14 sm:px-6">
@@ -289,7 +335,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                             <ol className="divide-y divide-white/10 border-y border-white/10 lg:col-span-8">
                                 {upcoming.map((rel, i) => (
                                     <li key={rel.slug}>
-                                        <Link href={`/blog/${rel.slug}`} className="group flex gap-5 py-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                                        <Link href={`/blog/${rel.slug}`} className="vgp-focus group flex gap-5 py-6">
                                             <span className="w-6 shrink-0 pt-0.5 text-sm tabular-nums text-white/55" aria-hidden="true">
                                                 {position.index + 3 + i}
                                             </span>
@@ -307,6 +353,6 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                     </section>
                 ) : null}
             </main>
-        </PageTransition>
+        </>
     );
 }

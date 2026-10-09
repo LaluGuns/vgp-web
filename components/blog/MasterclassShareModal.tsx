@@ -54,6 +54,13 @@ function filename(slug: string, format: Format) {
     return `virzy-guns-${safe}-${format}.png`;
 }
 
+/** Cut at a word boundary with an ellipsis; the PNG export does not draw line-clamp's own. */
+function shorten(text: string, max: number) {
+    const clean = text.trim();
+    if (clean.length <= max) return clean;
+    return `${clean.slice(0, max).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '')}…`;
+}
+
 function titleSize(title: string, format: Format) {
     const n = title.trim().length;
     if (format === 'portrait') return n <= 40 ? 104 : n <= 60 ? 92 : n <= 80 ? 82 : n <= 110 ? 72 : 62;
@@ -112,8 +119,16 @@ function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc
                 boxSizing: 'border-box',
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32 * k }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14 * k, fontSize: 22 * k, color: 'rgba(255,255,255,0.75)' }}>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: portrait ? 'column' : 'row',
+                    alignItems: portrait ? 'flex-start' : 'center',
+                    justifyContent: 'space-between',
+                    gap: portrait ? 28 : 32,
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 * k, fontSize: 22 * k, color: 'rgba(255,255,255,0.75)', whiteSpace: 'nowrap' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- exported to PNG by html-to-image */}
                     <img
                         src={logoSrc}
@@ -138,18 +153,18 @@ function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc
                 {article.excerpt?.trim() ? (
                     <div
                         style={{
-                            marginTop: 24 * k,
-                            fontSize: 26 * k,
+                            marginTop: portrait ? 36 : 22,
+                            fontSize: portrait ? 36 : 24,
                             lineHeight: 1.4,
                             color: 'rgba(255,255,255,0.65)',
-                            maxWidth: portrait ? 900 : 960,
+                            maxWidth: portrait ? 900 : 1000,
                             display: '-webkit-box',
-                            WebkitLineClamp: portrait ? 4 : 2,
+                            WebkitLineClamp: portrait ? 5 : 3,
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                         }}
                     >
-                        {article.excerpt}
+                        {shorten(article.excerpt, portrait ? 260 : 190)}
                     </div>
                 ) : null}
             </div>
@@ -181,7 +196,7 @@ function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc
                     </div>
                 </div>
                 <div style={{ background: '#ffffff', borderRadius: 6, padding: portrait ? 14 : 8, lineHeight: 0, flexShrink: 0 }}>
-                    <QRCodeSVG value={url} size={portrait ? 196 : 112} level="M" bgColor="#ffffff" fgColor="#050607" />
+                    <QRCodeSVG value={url} size={portrait ? 196 : 112} level="M" bgColor="#ffffff" fgColor="#050607" title={`QR code for ${display}`} />
                 </div>
             </div>
         </div>
@@ -381,7 +396,22 @@ export function MasterclassShareModal({
             onClick={(event) => {
                 if (event.target === dialog.current) close();
             }}
-            className="vgp-share m-0 h-[100dvh] max-h-none w-full max-w-none overflow-y-auto border-0 bg-[var(--surface)] p-0 text-white backdrop:bg-black/75 lg:m-auto lg:h-auto lg:max-h-[calc(100dvh-48px)] lg:w-[min(1080px,calc(100vw-48px))] lg:overflow-hidden lg:rounded-[6px] lg:border lg:border-white/10 lg:shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
+            onKeyDown={(event) => {
+                // The page behind is inert; Tab past the last control comes back to the first
+                // instead of leaving for the browser's own controls.
+                if (event.key !== 'Tab' || !dialog.current) return;
+                const items = Array.from(dialog.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+                const first = items[0];
+                const last = items[items.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last?.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first?.focus();
+                }
+            }}
+            className="vgp-share m-0 h-[100dvh] max-h-none w-full max-w-none overflow-y-auto border-0 bg-[var(--surface)] p-0 text-white backdrop:bg-black/75 lg:m-auto lg:h-fit lg:max-h-[calc(100dvh-48px)] lg:w-[min(1080px,calc(100vw-48px))] lg:overflow-hidden lg:rounded-[6px] lg:border lg:border-white/10 lg:shadow-[0_24px_60px_rgba(0,0,0,0.5)]"
         >
             <div className="flex min-h-full flex-col lg:max-h-[calc(100dvh-48px)]">
                 <header className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 py-2 pl-[max(16px,env(safe-area-inset-left))] pr-[max(8px,env(safe-area-inset-right))] pt-[max(8px,env(safe-area-inset-top))] sm:pl-6 sm:pr-4">
@@ -398,8 +428,8 @@ export function MasterclassShareModal({
                     </button>
                 </header>
 
-                <div className="grid min-h-0 flex-1 lg:grid-cols-[minmax(0,1fr)_360px]">
-                    <section aria-label="Card preview" className="flex items-center justify-center border-b border-white/10 bg-[var(--bg)] px-4 py-6 sm:px-6 lg:border-b-0 lg:border-r lg:p-8">
+                <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
+                    <section aria-label="Card preview" className="flex min-w-0 items-center justify-center border-b border-white/10 bg-[var(--bg)] px-4 py-6 sm:px-6 lg:border-b-0 lg:border-r lg:p-8">
                         <ScaledPreview width={SIZE[format].width} height={SIZE[format].height} maxHeight={previewMax}>
                             <ShareCard
                                 cardRef={card}
@@ -448,7 +478,11 @@ export function MasterclassShareModal({
                             <ul className="mt-2 grid grid-cols-2 gap-2">
                                 {targets.map((target) => (
                                     <li key={target.label}>
-                                        <a href={target.href} target="_blank" rel="noopener noreferrer" className={`${control} w-full`}>
+                                        <a
+                                            href={target.href}
+                                            {...(target.label === 'Email' ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+                                            className={`${control} w-full`}
+                                        >
                                             <span aria-hidden="true" className="text-white/70">
                                                 {target.icon}
                                             </span>

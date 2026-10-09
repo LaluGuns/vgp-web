@@ -51,21 +51,23 @@ export function ExperimentSteps({ steps, storageKey }: { steps: string[]; storag
                     const inputId = `${id}-${i}`;
                     return (
                         <li key={i}>
+                            {/* The checkbox covers the whole step (transparent), so keyboard focus scrolls the
+                                full step into view and draws its ring around it. Links in a step stay clickable above it. */}
                             <label
                                 htmlFor={inputId}
-                                className="group flex cursor-pointer gap-4 rounded-[6px] py-2.5 pr-2 transition-colors hover:bg-white/[0.03]"
+                                className="group relative flex cursor-pointer gap-4 rounded-[6px] py-2.5 pr-2 transition-colors hover:bg-white/[0.03] [&_a]:relative [&_a]:z-10"
                             >
                                 <input
                                     id={inputId}
                                     type="checkbox"
-                                    className="peer sr-only"
+                                    className="vgp-focus absolute inset-0 m-0 h-full w-full cursor-pointer appearance-none rounded-[6px] bg-transparent"
                                     checked={checked}
                                     onChange={() => toggle(i)}
                                 />
                                 <span
                                     aria-hidden="true"
-                                    className={`mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)] ${
-                                        checked ? 'border-white bg-white text-black' : 'border-white/30 text-white/60 group-hover:border-white/60'
+                                    className={`mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums transition-colors ${
+                                        checked ? 'border-white bg-white text-black' : 'border-white/50 text-white/70 group-hover:border-white/80'
                                     }`}
                                 >
                                     {checked ? <Check size={14} strokeWidth={3} /> : i + 1}

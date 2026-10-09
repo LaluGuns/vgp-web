@@ -122,7 +122,7 @@ function FilterButton({ label, active, onClick }: { label: string; active: boole
     );
 }
 
-function ArticleRow({
+const ArticleRow = memo(function ArticleRow({
     article,
     meta,
     isBookmarked,
@@ -133,7 +133,7 @@ function ArticleRow({
     meta: string;
     isBookmarked: boolean;
     isRead: boolean;
-    onToggleBookmark: () => void;
+    onToggleBookmark: (slug: string) => void;
 }) {
     return (
         <li className="flex items-start gap-4 py-7">
@@ -146,14 +146,14 @@ function ArticleRow({
                     {meta} · {formatDate(article.publishedAt)} · {article.readingTime} min read
                     {isRead ? ' · Read' : ''}
                 </span>
-                <span className="mt-2 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                <h3 className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                     {article.title}
-                </span>
+                </h3>
                 <span className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">{article.excerpt}</span>
             </Link>
             <button
                 type="button"
-                onClick={onToggleBookmark}
+                onClick={() => onToggleBookmark(article.slug)}
                 aria-pressed={isBookmarked}
                 aria-label={isBookmarked ? `Remove ${article.title} from saved lessons` : `Save ${article.title} for later`}
                 title={isBookmarked ? 'Remove from saved' : 'Save for later'}
@@ -165,9 +165,9 @@ function ArticleRow({
             </button>
         </li>
     );
-}
+});
 
-function LearningPaths({ paths, read, startHere }: { paths: PathSummary[]; read: string[]; startHere: StartLesson[] }) {
+const LearningPaths = memo(function LearningPaths({ paths, read, startHere }: { paths: PathSummary[]; read: string[]; startHere: StartLesson[] }) {
     return (
         <section aria-labelledby="paths-heading" className="px-4 pb-14 sm:px-6">
             <div className="mx-auto max-w-7xl">
@@ -177,23 +177,9 @@ function LearningPaths({ paths, read, startHere }: { paths: PathSummary[]; read:
                     </h2>
                     <p className="text-sm text-white/55">Each path is a set of lessons meant to be read in order.</p>
                 </div>
-                {startHere.length > 0 ? (
-                    <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">
-                        New here? Start with{' '}
-                        {startHere.map((lesson, i) => (
-                            <span key={lesson.slug}>
-                                {i > 0 ? (i === startHere.length - 1 ? ' or ' : ', ') : null}
-                                <Link href={`/blog/${lesson.slug}`} className="vgp-link text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
-                                    {lesson.pathName}, lesson 1
-                                </Link>{' '}
-                                ({lesson.readingTime}&nbsp;min)
-                            </span>
-                        ))}
-                        .
-                    </p>
-                ) : null}
+                <StartHere lessons={startHere} className="mt-3 max-w-2xl" />
                 {/* Phones get a two-column list of names; the descriptions start at sm. */}
-                <ul className="mt-6 grid grid-cols-2 gap-x-4 border-t border-white/10 sm:gap-x-10 lg:grid-cols-3">
+                <ul className="mt-5 grid grid-cols-2 gap-x-4 border-t border-white/10 sm:gap-x-10 lg:grid-cols-3">
                     {paths.map((path) => {
                         const done = path.lessons.filter((slug) => read.includes(slug)).length;
                         return (
@@ -224,7 +210,7 @@ function LearningPaths({ paths, read, startHere }: { paths: PathSummary[]; read:
             </div>
         </section>
     );
-}
+});
 
 /**
  * The lesson library. What the reader filters lives in the URL (q, cat,
@@ -237,15 +223,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const read = useReadArticles();
     const params = useSearchParams();
     const pathname = usePathname();
-    useListScrollMemory(pathname);
+    useScrollMemory();
 
     const catParam = params.get('cat');
     const category = catParam && categories.some((c) => c.slug === catParam) ? catParam : 'all';
     const sortParam = params.get('sort');
-    // A path reads in lesson order; the whole library reads newest first.
-    const defaultSort: Sort = category === 'all' ? 'new' : 'path';
     const chosenSort: Sort | null = sortParam === 'new' || sortParam === 'path' ? sortParam : null;
-    const sort: Sort = chosenSort ?? defaultSort;
     const showSaved = params.get('saved') === '1';
     const urlCount = Math.floor(Number(params.get('n')) / PAGE_SIZE) * PAGE_SIZE;
     const visibleCount = urlCount > PAGE_SIZE ? urlCount : PAGE_SIZE;
@@ -267,6 +250,10 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             setQuery(urlQuery);
         }
     }
+    // The box updates on every key; the list follows when React has time (no lag while typing).
+    const listQuery = useDeferredValue(query);
+    const hasQuery = listQuery.trim() !== '';
+    const sort: Sort = chosenSort ?? defaultSort(listQuery, category);
 
     // Saved lessons live in this browser only, so they load after hydration.
     const [saved, setSaved] = useState<string[]>([]);
@@ -275,7 +262,21 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return () => cancelAnimationFrame(frame);
     }, []);
 
+    // A query waits URL_DELAY before it reaches the URL. Any other write, a click on a
+    // link and unmounting settle it first, so the URL never lags behind the list.
+    const urlTimer = useRef(0);
+    const pendingWrite = useRef<(() => void) | null>(null);
+    const flushUrl = useCallback(() => {
+        window.clearTimeout(urlTimer.current);
+        const write = pendingWrite.current;
+        pendingWrite.current = null;
+        write?.();
+    }, []);
+    useEffect(() => () => window.clearTimeout(urlTimer.current), []);
+
     const writeUrl = (next: { q?: string; cat?: string; sort?: Sort | null; saved?: boolean; n?: number | null }) => {
+        window.clearTimeout(urlTimer.current);
+        pendingWrite.current = null;
         const q = (next.q ?? query).trim();
         const cat = next.cat ?? category;
         const nextSaved = next.saved ?? showSaved;
@@ -284,7 +285,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         const search = new URLSearchParams();
         if (q) search.set('q', q);
         if (cat !== 'all') search.set('cat', cat);
-        if (nextSort && nextSort !== (cat === 'all' ? 'new' : 'path')) search.set('sort', nextSort);
+        if (nextSort && nextSort !== 'match' && nextSort !== defaultSort(q, cat)) search.set('sort', nextSort);
         if (nextSaved) search.set('saved', '1');
         if (n && n > PAGE_SIZE) search.set('n', String(n));
         const qs = search.toString();
@@ -294,20 +295,28 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
     const onQueryChange = (value: string) => {
         setQuery(value);
-        writeUrl({ q: value, n: null });
+        window.clearTimeout(urlTimer.current);
+        pendingWrite.current = () => writeUrl({ q: value, n: null });
+        urlTimer.current = window.setTimeout(flushUrl, URL_DELAY);
+    };
+
+    const onLinkClickCapture = (event: MouseEvent<HTMLElement>) => {
+        if (event.target instanceof Element && event.target.closest('a[href]')) flushUrl();
     };
 
     const getCategoryName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? 'Lessons';
 
-    const toggleBookmark = (slug: string) => {
-        const next = saved.includes(slug) ? saved.filter((item) => item !== slug) : [...saved, slug];
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch {
-            // Saving is optional when browser storage is unavailable.
-        }
-        setSaved(next);
-    };
+    const toggleBookmark = useCallback((slug: string) => {
+        setSaved((current) => {
+            const next = current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug];
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+            } catch {
+                // Saving is optional when browser storage is unavailable.
+            }
+            return next;
+        });
+    }, []);
 
     // Lesson order across the paths, and each lesson's number inside its path.
     const pathOrder = useMemo(() => {
@@ -322,34 +331,37 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return { rank, number };
     }, [paths]);
 
-    const haystacks = useMemo(
-        () => new Map(articles.map((a) => [a.slug, `${a.title} ${a.excerpt}`.toLowerCase() + ' ' + a.search])),
+    // Search fields in score order: title, excerpt, headings, keywords and glossary terms.
+    const fields = useMemo(
+        () => new Map(articles.map((a) => [a.slug, [a.title.toLowerCase(), a.excerpt.toLowerCase(), a.headings, a.terms]])),
         [articles],
     );
 
     const filteredArticles = useMemo(() => {
-        const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-        const list = articles
-            .map((article, index) => ({ article, index }))
-            .filter(({ article }) => {
-                if (category !== 'all' && article.category !== category) return false;
-                if (showSaved && !saved.includes(article.slug)) return false;
-                if (words.length === 0) return true;
-                const text = haystacks.get(article.slug) ?? '';
-                return words.every((word) => text.includes(word));
-            });
+        const words = wordMatchers(listQuery);
+        const phrase = words.map((m) => m.word).join(' ');
+        const list: { article: BlogListItem; index: number; score: number }[] = [];
+        articles.forEach((article, index) => {
+            if (category !== 'all' && article.category !== category) return;
+            if (showSaved && !saved.includes(article.slug)) return;
+            const score = words.length ? scoreLesson(fields.get(article.slug) ?? [], words, phrase) : 0;
+            if (words.length === 0 || score > 0) list.push({ article, index, score });
+        });
+        const newest = (a: (typeof list)[number], b: (typeof list)[number]) =>
+            b.article.publishedAt.localeCompare(a.article.publishedAt) || b.index - a.index;
         list.sort((a, b) => {
+            if (sort === 'match') return b.score - a.score || newest(a, b);
             if (sort === 'path') {
                 const ra = pathOrder.rank.get(a.article.slug) ?? Number.MAX_SAFE_INTEGER;
                 const rb = pathOrder.rank.get(b.article.slug) ?? Number.MAX_SAFE_INTEGER;
                 return ra - rb || a.index - b.index;
             }
-            return b.article.publishedAt.localeCompare(a.article.publishedAt) || b.index - a.index;
+            return newest(a, b);
         });
         return list.map(({ article }) => article);
-    }, [articles, category, showSaved, saved, query, haystacks, sort, pathOrder]);
+    }, [articles, category, showSaved, saved, listQuery, fields, sort, pathOrder]);
 
-    const showFeaturedArticle = Boolean(featured && !query.trim() && category === 'all' && !showSaved);
+    const showFeaturedArticle = Boolean(featured && !hasQuery && category === 'all' && !showSaved);
     const libraryArticles = showFeaturedArticle ? filteredArticles.filter((a) => a.slug !== featured?.slug) : filteredArticles;
 
     const metaFor = (article: BlogListItem) => {
@@ -363,11 +375,31 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         writeUrl({ q: '', cat: 'all', sort: null, saved: false, n: null });
     };
 
+    // The selected path chip scrolls into view on a phone (after Back, or on a shared ?cat= link).
+    const chipRow = useRef<HTMLDivElement>(null);
+    useChipRow(chipRow, showSaved ? 'saved' : category);
+
+    // "Show more lessons" moves focus to the first lesson it added.
+    const list = useRef<HTMLUListElement>(null);
+    const focusRow = useRef<number | null>(null);
+    useEffect(() => {
+        const index = focusRow.current;
+        const link = index === null ? null : list.current?.children[index]?.querySelector('a');
+        if (link) {
+            focusRow.current = null;
+            link.focus();
+        }
+    }, [visibleCount]);
+    const showMore = () => {
+        focusRow.current = visibleCount;
+        writeUrl({ n: visibleCount + PAGE_SIZE });
+    };
+
     const activePath = category !== 'all' ? paths.find((p) => p.slug === category) : undefined;
 
     return (
         <PageTransition>
-            <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
+            <main id="main" tabIndex={-1} onClickCapture={onLinkClickCapture} className="editorial-shell text-white focus:outline-none">
                 <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
                         <h1 className="font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
@@ -410,13 +442,16 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         Search lessons
                                     </label>
                                     <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/55" aria-hidden="true" />
+                                    {/* The border is white/40 on --bg, over 3:1 for an input boundary (WCAG 1.4.11). */}
                                     <input
                                         id="article-search"
                                         type="search"
                                         value={query}
                                         onChange={(e) => onQueryChange(e.target.value)}
-                                        placeholder="Search: LUFS, 808, reverb…"
-                                        className="min-h-11 w-full rounded-md border border-white/15 bg-[#0a0e12] py-2.5 pl-10 pr-11 text-white placeholder-white/55 focus:border-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                                        placeholder="Search: LUFS, 808, reverb"
+                                        className={`min-h-11 w-full rounded-md border border-white/40 bg-[#0a0e12] py-2.5 pl-10 text-white placeholder-white/55 focus:border-white/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 [&::-webkit-search-cancel-button]:appearance-none ${
+                                            query ? 'pr-11' : 'pr-3'
+                                        }`}
                                     />
                                     {query ? (
                                         <button
@@ -435,13 +470,17 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                             </div>
                             <p className="text-sm text-white/60">
                                 Stuck on a term?{' '}
-                                <Link href="/learn/glossary" className="vgp-link text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                                <TapLink href="/learn/glossary" className="text-white">
                                     The glossary explains {glossaryCount} of them
-                                </Link>
-                                .
+                                </TapLink>
                             </p>
 
-                            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filter by path">
+                            <div
+                                ref={chipRow}
+                                className="vgp-scroll -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+                                role="group"
+                                aria-label="Filter by path"
+                            >
                                 {[{ slug: 'all', name: 'All' }, ...categories].map((c) => (
                                     <FilterButton
                                         key={c.slug}
@@ -456,10 +495,11 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                             </div>
 
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                                <div className="flex items-center gap-2" role="group" aria-label="Order">
+                                <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Order">
                                     <span className="mr-1 text-sm text-white/55" aria-hidden="true">
                                         Order
                                     </span>
+                                    {hasQuery ? <FilterButton label="Best match" active={sort === 'match'} onClick={() => writeUrl({ sort: null, n: null })} /> : null}
                                     <FilterButton label="Newest" active={sort === 'new'} onClick={() => writeUrl({ sort: 'new', n: null })} />
                                     <FilterButton label="Path order" active={sort === 'path'} onClick={() => writeUrl({ sort: 'path', n: null })} />
                                 </div>
@@ -484,15 +524,15 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         <span className="text-xs text-white/50">
                                             Featured · {getCategoryName(featured.category)} · {featured.readingTime} min read
                                         </span>
-                                        <span className="mt-3 block max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-4xl">
+                                        <h3 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-4xl">
                                             {featured.title}
-                                        </span>
+                                        </h3>
                                         <span className="mt-4 block max-w-2xl text-lg leading-8 text-white/70">{featured.excerpt}</span>
                                     </Link>
                                 ) : null}
 
                                 {libraryArticles.length > 0 ? (
-                                    <ul className="divide-y divide-white/10">
+                                    <ul ref={list} className="divide-y divide-white/10">
                                         {libraryArticles.slice(0, visibleCount).map((article) => (
                                             <ArticleRow
                                                 key={article.slug}
@@ -500,7 +540,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                                 meta={metaFor(article)}
                                                 isBookmarked={saved.includes(article.slug)}
                                                 isRead={read.includes(article.slug)}
-                                                onToggleBookmark={() => toggleBookmark(article.slug)}
+                                                onToggleBookmark={toggleBookmark}
                                             />
                                         ))}
                                     </ul>
@@ -510,7 +550,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-8">
                                         <button
                                             type="button"
-                                            onClick={() => writeUrl({ n: visibleCount + PAGE_SIZE })}
+                                            onClick={showMore}
                                             className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/60 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                                         >
                                             Show more lessons
@@ -526,8 +566,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         <p className="text-lg text-white/75">
                                             {showSaved
                                                 ? 'Nothing saved in this filter yet.'
-                                                : query
-                                                  ? `No lesson matches "${query}".`
+                                                : hasQuery
+                                                  ? `No lesson matches "${listQuery.trim()}".`
                                                   : 'No lessons in this path yet.'}
                                         </p>
                                         <button
@@ -537,6 +577,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         >
                                             <span className="vgp-link">Show all lessons</span>
                                         </button>
+                                        <StartHere lessons={startHere} className="mt-6 max-w-xl" />
                                     </div>
                                 ) : null}
                             </div>

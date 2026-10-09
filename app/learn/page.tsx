@@ -4,33 +4,32 @@ import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
 import { PageHeader } from '@/components/editorial/EditorialPrimitives';
 import { TapLink } from '@/components/blog/article/TapLink';
+import { JsonLd } from '@/components/blog/article/JsonLd';
+import { StartHere } from '@/components/blog/paths/StartHere';
+import { startLessons } from '@/components/blog/paths/startLessons';
+import { SITE, breadcrumbs, pathsCollection } from '@/components/blog/paths/structured';
+import { ScrollMemory } from '@/components/blog/useScrollMemory';
 import { articles, categories } from '@/lib/blog-data';
 import { learningPaths } from '@/lib/blog/paths';
 import { glossary } from '@/lib/blog/glossary';
-import { ogImage } from '@/lib/og';
+import { ogImage, socialMetadata } from '@/lib/og';
 
+const title = 'Learn music production';
 const description = `${articles.length} free music production lessons in ${learningPaths.length} learning paths, a glossary of ${glossary.length} terms, and a book and a course on the way. By Virzy Guns.`;
-const card = ogImage({ kicker: 'Learn', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} paths · a glossary` });
+const url = `${SITE}/learn`;
 
 export const metadata: Metadata = {
-    title: 'Learn music production',
+    title,
     description,
     alternates: {
         canonical: '/learn',
     },
-    openGraph: {
-        title: 'Learn music production',
+    ...socialMetadata({
+        title,
         description,
-        type: 'website',
-        url: 'https://www.virzyguns.com/learn',
-        images: [card],
-    },
-    twitter: {
-        card: 'summary_large_image',
-        title: 'Learn music production',
-        description,
-        images: [card.url],
-    },
+        url,
+        image: ogImage({ kicker: 'Learn', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} paths · a glossary` }),
+    }),
 };
 
 const formats = [
@@ -66,6 +65,9 @@ const latestArticles = [...articles]
 export default function LearnHubPage() {
     return (
         <PageTransition>
+            <JsonLd data={pathsCollection({ name: title, description, url, paths: learningPaths })} />
+            <JsonLd data={breadcrumbs([{ name: 'Learn', url }])} />
+            <ScrollMemory />
             <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
                 <PageHeader
                     title="Learn production"
@@ -80,6 +82,7 @@ export default function LearnHubPage() {
                                 {learningPaths.length} learning paths
                             </h2>
                             <p className="mt-4 max-w-sm text-base leading-7 text-white/65">Each path is a set of lessons meant to be read in order.</p>
+                            <StartHere lessons={startLessons()} className="mt-3 max-w-sm" />
                             <p className="mt-3 max-w-sm text-sm leading-6 text-white/60">
                                 Stuck on a term?{' '}
                                 <TapLink href="/learn/glossary" className="text-white">
@@ -148,9 +151,9 @@ export default function LearnHubPage() {
                                         <span className="text-xs text-white/50">
                                             {categoryName(article.category)} · {article.readingTime} min read
                                         </span>
-                                        <span className="mt-2 block text-lg font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                        <h3 className="mt-2 text-lg font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                                             {article.title}
-                                        </span>
+                                        </h3>
                                     </Link>
                                 </li>
                             ))}

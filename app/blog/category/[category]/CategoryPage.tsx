@@ -42,12 +42,11 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                             {category.name}
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{category.description}</p>
-                        <p className="mt-4 text-sm text-white/60">
+                        <p className="mt-3 text-sm text-white/60">
                             Stuck on a term?{' '}
-                            <Link href="/learn/glossary" className="vgp-link text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                            <TapLink href="/learn/glossary" className="text-white">
                                 The glossary explains {glossaryCount} of them
-                            </Link>
-                            .
+                            </TapLink>
                         </p>
                     </div>
                 </section>
@@ -63,7 +62,7 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                         )}
 
                         <nav aria-label="Other learning paths" className="mt-16 border-t border-white/10 pt-8">
-                            <p className="text-sm font-medium text-white">Other paths</p>
+                            <h2 className="text-sm font-medium text-white">Other paths</h2>
                             <ul className="mt-4 flex flex-wrap gap-2">
                                 {allCategories
                                     .filter((cat) => cat.slug !== category.slug)

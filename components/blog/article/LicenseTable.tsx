@@ -37,13 +37,14 @@ export function LicenseTable() {
                     </div>
                 ))}
             </div>
-            <div className="hidden overflow-x-auto rounded-[6px] border border-white/10 sm:block">
-                <table className="w-full min-w-[600px] border-collapse text-left text-sm">
+            {/* In print the table fits the page width: smaller type, cells wrap. */}
+            <div className="hidden overflow-x-auto rounded-[6px] border border-white/10 sm:block print:overflow-visible">
+                <table className="w-full min-w-[600px] border-collapse text-left text-sm print:min-w-0 print:table-fixed print:text-[11px] print:leading-snug">
                     <thead>
                         <tr className="border-b border-white/20">
-                            <th className="w-36 px-4 py-3 font-semibold text-white/60">Tier</th>
+                            <th className="w-36 px-4 py-3 font-semibold text-white/60 print:w-[18%] print:px-2 print:py-2">Tier</th>
                             {tiers.map((t) => (
-                                <th key={t.id} className="whitespace-nowrap px-4 py-3 font-semibold text-white">
+                                <th key={t.id} className="whitespace-nowrap px-4 py-3 font-semibold text-white print:whitespace-normal print:break-words print:px-2 print:py-2">
                                     {t.name}
                                 </th>
                             ))}
@@ -52,11 +53,11 @@ export function LicenseTable() {
                     <tbody>
                         {rows.map((row) => (
                             <tr key={row.label} className="border-b border-white/[0.07] last:border-0">
-                                <th scope="row" className="px-4 py-3 align-top font-medium text-white/70">
+                                <th scope="row" className="px-4 py-3 align-top font-medium text-white/70 print:px-2 print:py-2">
                                     {row.label}
                                 </th>
                                 {tiers.map((t) => (
-                                    <td key={t.id} className="px-4 py-3 align-top leading-6 text-white/85">
+                                    <td key={t.id} className="px-4 py-3 align-top leading-6 text-white/85 print:break-words print:px-2 print:py-2 print:leading-snug">
                                         {row.value(t)}
                                     </td>
                                 ))}

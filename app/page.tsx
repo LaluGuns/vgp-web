@@ -75,7 +75,7 @@ export default function HomePage() {
 
     return (
         <PageTransition>
-            <main className="relative min-h-screen overflow-x-clip bg-[#050607] text-white">
+            <main id="main" tabIndex={-1} className="relative min-h-screen overflow-x-clip bg-[#050607] text-white">
                 {/* Hero: the founder and the one idea the site is about. */}
                 <section className="px-4 pt-24 sm:px-6 sm:pt-28 lg:pt-32">
                     <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
