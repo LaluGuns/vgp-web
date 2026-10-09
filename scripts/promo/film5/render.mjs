@@ -214,11 +214,11 @@ img{width:${width}px;display:block;border:1px solid #222}p{margin:6px 0 0;opacit
     await b.p.close();
     // One still per scene, and one per second, each 390 px wide (phone size).
     const stills = [];
-    const sc = TIMELINE.scenes;
+    const sc = await a.p.evaluate(() => window.sceneTimes());
     for (const [i, s] of sc.entries()) {
-        const end = i + 1 < sc.length ? sc[i + 1].at : TIMELINE.duration;
-        const t = s.at + (end - s.at) * 0.7;
-        stills.push({ png: await a.thumb(t, 600), caption: `<b>${s.id}</b> ${t.toFixed(2)} s · ${s.teaches}` });
+        const end = i + 1 < sc.length ? sc[i + 1].start : TIMELINE.duration;
+        const t = s.start + (end - s.start) * 0.7;
+        stills.push({ png: await a.thumb(t, 600), caption: `<b>${s.id}</b> ${t.toFixed(2)} s · ${TIMELINE.scenes[i].teaches}` });
     }
     await sheet(stills, 6, 300, 'contact.png');
     const secs = [];

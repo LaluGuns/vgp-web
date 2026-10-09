@@ -42,7 +42,7 @@ const sceneEnd = (id) => {
 };
 const popIn = (t, t0, d = 0.3) => clamp((t - t0) / d);
 /** Visible between a scene's start and end, with short dissolves either side. */
-const sceneAlpha = (t, id, inD = 0.25, outD = 0.25) => E.out(seg(t, SC[id], SC[id] + inD)) * (1 - seg(t, sceneEnd(id) - 0.02, sceneEnd(id) + outD));
+const sceneAlpha = (t, id) => E.out(seg(t, SC[id] + 0.02, SC[id] + 0.3)) * (1 - seg(t, sceneEnd(id) - 0.24, sceneEnd(id)));
 
 // ── Data around each version's downbeat, one value per ms ──
 const V = D.versions;
@@ -225,7 +225,7 @@ function abProgress(d, t) {
 function drawAB(t, frame1 = false, noHead = false) {
     const replay = t >= SC.replay - 0.05;
     const id = replay ? 'replay' : t < SC.notch ? 'ab' : 'notch';
-    const a = frame1 ? 1 : replay ? sceneAlpha(t, 'replay') : 1 - seg(t, SC.fog - 0.02, SC.fog + 0.25);
+    const a = frame1 ? 1 : replay ? sceneAlpha(t, 'replay') : 1 - seg(t, SC.fog - 0.24, SC.fog);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
@@ -380,6 +380,13 @@ function drawFog(t) {
         fogRow(t, 1, FG.rows[0], { reach: s1, alpha: r1, clickOn: 1, fogOn: 1 });
     }
     msAxis(g, FG.x0, FG.x1, FG.msA, FG.msB, FG.axisY, [-400, -200, 0, 200, 400]);
+    // Where row 2's riser stops.
+    const kS = popIn(t, wt('fog', 'stops') - 0.05, 0.25);
+    if (kS > 0) {
+        const r = FG.rows[1];
+        dashed(g, X(-GAP_MS), r.y - r.h / 2, X(-GAP_MS), r.y + r.h / 2, FOG, 4, [6, 8]);
+        label(g, 'riser stops', X(-GAP_MS) - 14, r.y + r.h / 2 + 52, { size: 32, weight: 700, color: FOG, align: 'right', alpha: kS, family: BODY });
+    }
     // "Up to a fifth of a second": row 2's fog after its riser stops, bracketed.
     const kB = popIn(t, wt('fog', 'fifth') - 0.05, 0.3);
     if (kB > 0) {
@@ -510,8 +517,11 @@ function drawHand(t) {
     const tRiser = wt('hand', 'riser');
     const tEnd = wt('hand', 'arrives') + 0.35;
     // Slowed down: -700 ms to +260 ms of each version, over the second half of the line.
-    const ms = keys(t, [[tRiser, HD.msA], [tEnd, HD.msB]]);
-    const slow = (tEnd - tRiser) / ((HD.msB - HD.msA) / 1000);
+    // Slowed down from -700 ms to the kick on "kick", then on to the end of
+    // the click window (+20 ms, where claim 1 is measured) and held there.
+    const tKick = wt('hand', 'kick');
+    const ms = keys(t, [[tRiser, HD.msA], [tKick, 0], [tKick + 0.35, 20]]);
+    const slow = (tKick - tRiser) / (-HD.msA / 1000);
     const live = t > tRiser;
     label(g, live ? `Limiter gain, slowed down ${Math.round(slow)}×` : 'Limiter on the master bus', 540, 400, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY });
     const appear = E.outBack(seg(t, tHand - 0.35, tHand + 0.05));
@@ -547,7 +557,7 @@ function drawHand(t) {
         badgeNum(g, f.v, f.x - 140, HD.top + 10, 34);
         // The kick arriving on the cap at the drop.
         if (live) {
-            const kAge = (ms - 0) / 1000 * slow;
+            const kAge = t - tKick;
             if (ms > -140 && ms < 0) {
                 const k = (ms + 140) / 140;
                 g.fillStyle = P.amber;
@@ -826,7 +836,7 @@ function drawEnd(t) {
     const x0 = PH.x - PH.w / 2;
     const lift = E.outBack(seg(t, SC.end - 0.05, SC.end + 0.5));
     g.save();
-    g.translate(0, (1 - lift) * 100);
+    g.translate(0, (1 - lift) * 100 + 8 * Math.sin((t - SC.end) * 1.7));
     const glow = g.createRadialGradient(PH.x, PH.top + PH.h / 2, 0, PH.x, PH.top + PH.h / 2, 640);
     glow.addColorStop(0, 'rgba(125,211,252,0.15)');
     glow.addColorStop(1, 'rgba(125,211,252,0)');
@@ -868,7 +878,8 @@ function drawEnd(t) {
     // The address, up for the whole call to action.
     const k = popIn(t, voBy.cta.at + 0.1, 0.35);
     if (k > 0) {
-        pill(g, TL.lesson.url, 540, 1196, { size: 56, bg: P.cyan, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn), alpha: clamp(k * 3), weight: 800 });
+        const pulse = t < BUTTON ? 0.035 * Math.exp(-((t % BEAT) / 0.12)) : 0;
+        pill(g, TL.lesson.url, 540, 1196, { size: 56, bg: P.cyan, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
         label(g, `Lesson: ${TL.lesson.title}`, 540, 1290, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
     }
     g.restore();
