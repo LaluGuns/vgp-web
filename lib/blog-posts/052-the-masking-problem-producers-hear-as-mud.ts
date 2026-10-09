@@ -6,7 +6,7 @@ export const post052: BlogArticle = {
     excerpt: 'Mud is rarely one bad track. It is several parts piling up in the low mids and hiding each other. Find the pile-up and thin the parts that do not need it.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 6,
     summary: [
         'Mud is usually several parts each adding a little low-mid energy, which together mask everything near them.',
@@ -128,7 +128,7 @@ Use the densest section of the song, with every part playing.
 2. On the first supporting part, a guitar or keys, insert an EQ with a bell at +8 dB and Q 4. Sweep it slowly between 150 and 600 Hz with the full mix playing.
 3. Stop where the boost makes the mix boom or cloud over the most. Turn that boost into a 3 dB cut and widen the Q to about 1.4.
 4. Repeat on the next part, a pad or a second guitar. Pick a cut point at least a few semitones away from the first one, so each part keeps its body somewhere.
-5. On every part that does not carry the bass line, add a high-pass filter at 80 Hz. Raise it until the part sounds thin in the mix, then back it off by about a third.
+5. On each part that does not carry the bass line, look for rumble or room noise below its lowest played note. Where you find some, add a high-pass just under that note, not at a fixed number; [set it from the lowest note](/blog/stop-high-passing-everything-by-default) so the part keeps its body.
 6. Bypass all these EQs at once and compare at matched loudness.
 
 With the cuts in, the vocal words and the bass notes come forward although neither fader moved. Bypass them and the cloud returns.
