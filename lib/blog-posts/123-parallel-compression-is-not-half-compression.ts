@@ -140,7 +140,7 @@ Take a copy compressed at 10:1 from a -30 dB threshold, with no makeup gain and 
 
 ::figure gain
 
-Now the "half compression" idea can be checked. A detail at the threshold and a peak at 0 dB are 30 dB apart in the dry track and 24.4 dB apart in the blend. A single 5:1 compressor with the same threshold would squeeze that gap to 6 dB. Right at the threshold, where the blend works hardest, its slope is $(1 + 1/10)/2 = 0.55$, about 1.8:1, and it drifts back toward 1:1 as the input rises. Katz (2002) describes parallel compression as upward compression: the soft passages come up toward the loud ones while the peaks stay put. On real drums, attack and release reshape this static picture, as the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) shows.
+The "half compression" idea fails this test. A detail at the threshold and a peak at 0 dB are 30 dB apart in the dry track and 24.4 dB apart in the blend. A single 5:1 compressor with the same threshold would squeeze that gap to 6 dB. Right at the threshold, where the blend works hardest, its slope is $(1 + 1/10)/2 = 0.55$, about 1.8:1, and it drifts back toward 1:1 as the input rises. Katz (2002) describes parallel compression as upward compression: the soft passages come up toward the loud ones while the peaks stay put. On real drums, attack and release reshape this static picture, as the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) shows.
 
 The sum only works this way when the paths line up. If the copy arrives late by a time $\\tau$, the bus becomes a comb filter (Zölzer, 2011). The paths cancel wherever the delay is an odd number of half periods, at
 
@@ -150,7 +150,7 @@ A 1 ms delay, which is 48 samples at 48 kHz, puts notches at 500 Hz, 1.5 kHz, 2.
 
 ::figure comb
 
-Most DAWs compensate plugin latency automatically, so a plain software chain usually lines up. The trouble comes where that compensation does not reach: outboard gear patched in without a measured round trip, a plugin that reports the wrong latency, or a low-latency recording mode that bypasses or stops compensating some plugins.
+Most DAWs compensate plugin latency automatically, so a plain software chain usually lines up. The trouble comes where that compensation does not reach: outboard gear patched in without a measured round trip, a plugin that reports the wrong latency, or a low-latency recording mode that bypasses or stops compensating some plugins. An EQ on the copy does a milder version of the same thing: a high-pass shifts the copy's phase around its corner, so the sum can thin out there, as the [lesson on filters](/blog/filters-are-shape-machines) explains.
 
 ## DAW experiment: build the blend, then check it
 
@@ -168,7 +168,7 @@ At matched loudness the blend usually keeps the snap of the hits and adds weight
 
 The first mistake is reaching for parallel compression when the problem is a peak. A snare hit that jumps out over the others needs gain reduction on that hit, from clip gain or an ordinary compressor (see [fixing outliers before the compressor](/blog/clip-gain-and-automation-before-compression)). The blend leaves that hit almost where it was and raises everything around it.
 
-The second mistake is judging the blend without matching its level. Every blend is louder than the dry track: 6 dB on quiet passages with the copy at equal level, more with makeup gain. Louder tends to win a quick A/B, as the [lesson on loudness bias](/blog/why-louder-is-not-always-bigger) shows, so an over-blended version can sound better right up to the moment you take the extra level off. A high-pass or EQ on the copy also shifts its phase near the filter frequency and can thin the sum the same way a delay does, as the [lesson on filters](/blog/filters-are-shape-machines) explains.
+The second mistake is judging the blend without matching its level. Every blend is louder than the dry track, 6 dB on quiet passages with the copy at equal level and more with makeup gain, so an over-blended version can win the A/B right up to the moment you take the extra level off. The [lesson on loudness bias](/blog/why-louder-is-not-always-bigger) covers why.
 
 ## Producer takeaway: set the crush, then the blend
 

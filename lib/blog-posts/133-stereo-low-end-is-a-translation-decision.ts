@@ -18,12 +18,11 @@ export const post133: BlogArticle = {
             mode: 'level',
             caption:
                 'The harmonics of a bass note on A1 (55 Hz). The fundamental and the second harmonic sit in the sub band, while the harmonics that give the note its character run on up through the low mids. A split around 120 Hz is a common starting point, not a rule.',
-            alt: 'A row of harmonic lines starting at 55 Hz and falling in level up to about 900 Hz. A dashed line at 120 Hz divides a shaded band labelled sub, from 20 to 120 Hz, from a band labelled harmonics, from 120 Hz to 1.5 kHz.',
+            alt: 'A row of harmonic lines starting at 55 Hz and falling in level up to about 900 Hz. A shaded band from 20 to 120 Hz is labelled sub, a second band from 120 Hz to 1.5 kHz is labelled harmonics.',
             bands: [
                 { from: 20, to: 120, label: 'Sub' },
                 { from: 120, to: 1500, label: 'Harmonics' },
             ],
-            marks: [{ f: 120, label: '120 Hz' }],
             curves: [{ kind: 'harmonics', f0: 55, count: 16, rolloff: 1, level: 0.9, label: 'Bass, A1' }],
         },
         beat: {

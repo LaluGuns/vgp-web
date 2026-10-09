@@ -6,6 +6,10 @@ const AT = [0.02, 0.27, 0.52, 0.77];
 const AMP = [1, 0.8, 1, 0.8];
 const DECAY = 14;
 const PAD = 0.25;
+// Display scales only: the bus row is drawn at 0.8 so the summed peaks fit, the pad rows 3x taller
+// so a 2 dB dip is visible. The compressor runs on the unscaled levels; the dB figures are unchanged.
+const BUS_SHOW = 0.8;
+const SHOW = 3;
 const drums = (t: number) => AT.reduce((sum, at, i) => (t < at ? sum : sum + AMP[i] * Math.exp(-DECAY * (t - at))), 0);
 
 // The same feed-forward compressor the figure renderer uses for `compress`: static curve in dB,
@@ -23,12 +27,19 @@ function padThroughBus(c: { threshold: number; ratio: number; attack: number; re
         const target = over > 0 ? over * (1 - 1 / c.ratio) : 0;
         const a = target > gr ? coef(c.attack) : coef(c.release);
         gr = a * gr + (1 - a) * target;
-        if (i % 5 === 0) points.push([t, PAD * 10 ** (-gr / 20)]);
+        if (i % 5 === 0) points.push([t, SHOW * PAD * 10 ** (-gr / 20)]);
     }
     return { kind: 'envelope', points, label: 'Pad after' };
 }
 
-const PAD_BEFORE: SignalTrace = { kind: 'envelope', points: [[0, PAD], [1, PAD]], muted: true, label: 'Pad before' };
+const PAD_BEFORE: SignalTrace = { kind: 'envelope', points: [[0, SHOW * PAD], [1, SHOW * PAD]], muted: true, label: 'Pad before' };
+
+// What the detector hears: drums plus pad.
+const BUS: SignalTrace = {
+    kind: 'envelope',
+    points: Array.from({ length: 2001 }, (_, i) => [i / 2000, BUS_SHOW * (drums(i / 2000) + PAD)] as [number, number]),
+    label: 'Bus: drums + pad',
+};
 
 export const post124: BlogArticle = {
     slug: 'what-bus-compression-glue-actually-does',
@@ -46,19 +57,19 @@ export const post124: BlogArticle = {
         shared: {
             type: 'signal',
             caption:
-                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB and never gets closer than about 3 dB to where it started.',
-            alt: 'Three level plots across two bars. The first shows four drum hits above a flat pad line and a threshold. The second shows the pad after a light bus compressor: small dips after each hit that recover fully. The third shows the pad after a heavy setting: deep dips after each hit and a level that stays below the original grey line throughout.',
+                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB, and after the first hit it never gets back within about 3 dB of where it started. The pad rows are drawn taller than the bus row so the dips are easy to see.',
+            alt: 'Three level plots across two bars. The first shows the bus level, four drum hits sitting on top of a flat pad, with two threshold lines. The second shows the pad after a light bus compressor: small dips after each hit that recover fully. The third shows the pad after a heavy setting: deep dips after each hit and a level that stays below the original grey line throughout.',
             rows: [
                 {
                     label: 'Drums and pad into the bus',
                     unipolar: true,
                     lines: [
-                        { y: 0.6, label: '2:1 threshold' },
-                        { y: 0.3, label: '6:1 threshold' },
+                        { y: BUS_SHOW * 0.6, label: '2:1 threshold' },
+                        { y: BUS_SHOW * 0.3, label: '6:1 threshold' },
                     ],
                     traces: [
-                        { kind: 'hits', at: AT, amp: AMP, decay: DECAY, outline: true, label: 'Drums' },
-                        { kind: 'envelope', points: [[0, PAD], [1, PAD]], label: 'Pad', dashed: true },
+                        BUS,
+                        { kind: 'envelope', points: [[0, BUS_SHOW * PAD], [1, BUS_SHOW * PAD]], label: 'Pad alone', dashed: true, muted: true },
                     ],
                 },
                 {
@@ -91,7 +102,7 @@ export const post124: BlogArticle = {
                 'Nothing, because the pad is below the threshold',
                 'It is turned down by the same amount as the snare',
                 'It is turned up to make room for the snare hit',
-                'It is turned down only while the pad is over the threshold',
+                'It is turned down only if the pad crosses the threshold',
             ],
             answer: 1,
             why: 'A bus compressor computes one gain from the sum and applies it to everything on the bus. The pad does not need to cross the threshold to be turned down.',
@@ -162,7 +173,7 @@ Exaggerating first makes the shared movement easy to hear. Back at a couple of d
 
 Glue cannot fix a balance problem. If the vocal is too loud against the band, a bus compressor turns the band and the vocal down together whenever the drums hit, and the vocal is still too loud. Fix the balance first, then compress the bus.
 
-The other mistake is judging bus compression with makeup gain on. The compressed version is louder, so it wins the quick A/B. Match the levels, and listen to the sustained parts, where shared movement shows first. Over a whole song, heavy bus compression can also shrink the lift from verse to chorus, the same cost the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion) describes for limiting.
+The other mistake is judging with makeup gain on, so the louder compressed version wins. Match the levels and listen to the sustained parts, where shared movement shows first. Over a whole song, heavy bus compression can also shrink the lift from verse to chorus, the same cost the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion) describes for limiting.
 
 ## Producer takeaway: glue is a timing decision
 

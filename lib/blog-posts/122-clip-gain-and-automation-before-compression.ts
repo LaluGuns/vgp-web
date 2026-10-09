@@ -94,7 +94,7 @@ export const post122: BlogArticle = {
                 'The makeup gain is set too high for the phrase',
             ],
             answer: 2,
-            why: 'The shout triggered a lot of gain reduction, and the release takes time to bring it back. A word that starts during that recovery is turned down for something it did not do.',
+            why: 'The shout triggered a lot of gain reduction, and the release takes time to bring it back. Any word that starts during that recovery is turned down along with it.',
         },
         {
             q: 'Why does riding the channel fader usually not change how hard an insert compressor works?',
@@ -102,7 +102,7 @@ export const post122: BlogArticle = {
                 'The fader comes after the inserts on most DAW channels',
                 'Fader automation is read only once per bar by the DAW',
                 'Compressors ignore any change smaller than about 3 dB',
-                'The fader changes loudness but not peak level',
+                'The fader changes loudness but leaves the peaks alone',
             ],
             answer: 0,
             why: 'In most DAWs the inserts sit before the fader, so the compressor has already reacted by the time the fader moves. Clip gain or a gain plugin before the compressor changes what it hears.',
@@ -128,7 +128,7 @@ The demo uses a drum loop, but the release behaves the same way on a vocal. Pull
 
 ## Science model: overshoot, then recovery
 
-Above the threshold, a hard-knee compressor's target gain reduction is the overshoot times $1 - 1/R$, where $R$ is the ratio. With the threshold at -22 dBFS and a 4:1 ratio, a normal word at -18 dBFS is 4 dB over and gets 3 dB of reduction. The shout at -8 dBFS is 14 dB over and gets 10.5 dB.
+Above the threshold, a hard-knee compressor's target gain reduction is the overshoot times $1 - 1/R$, where $R$ is the ratio, as worked through in the [lesson on the 4:1 ratio](/blog/compression-ratio-what-4-to-1-actually-means). With the threshold at -22 dBFS and a 4:1 ratio, a normal word at -18 dBFS is 4 dB over and gets 3 dB of reduction. The shout at -8 dBFS is 14 dB over and gets 10.5 dB.
 
 ::figure reduction
 
@@ -136,7 +136,7 @@ The release then decides how long that reduction lasts. A common digital design 
 
 $$GR(t) = GR_0 \\, e^{-t/\\tau_r}$$
 
-Solve for the time it takes to drop to 1 dB and you get $t = \\tau_r \\ln(GR_0)$, with $GR_0$ in decibels. From 3 dB that is about $1.1\\,\\tau_r$. From 10.5 dB it is about $2.35\\,\\tau_r$, more than twice as long. With a 100 ms release time constant, the shout holds the vocal at least 1 dB down for about 235 ms, against about 110 ms after a normal word. Any word that starts inside that window is turned down for something it did not do. Trim the shout by 6 dB first and it takes 6 dB of reduction, which clears in about 180 ms.
+Solve for the time it takes to drop to 1 dB and you get $t = \\tau_r \\ln(GR_0)$, with $GR_0$ in decibels. From 3 dB that is about $1.1\\,\\tau_r$. From 10.5 dB it is about $2.35\\,\\tau_r$, more than twice as long. With a 100 ms release time constant, the shout keeps the vocal more than 1 dB down for about 235 ms, against about 110 ms after a normal word. Any word that starts inside that window is turned down for something it did not do. Trim the shout by 6 dB first and it takes 6 dB of reduction, which clears in about 180 ms.
 
 Clip gain changes the input to that whole calculation. It is a fixed gain on one region of audio, applied before any insert, so the compressor never sees the shout at full level. The compressor's job shrinks back to the moment-to-moment movement of the phrase, which is what it is good at.
 
@@ -145,7 +145,7 @@ Clip gain changes the input to that whole calculation. It is a fixed gain on one
 Pick a vocal take with one or two words that jump out.
 
 1. Insert a compressor on the vocal and set it the way you normally would, threshold pulled down until the loudest word is controlled. Bounce or record four bars as version A.
-2. Bypass the compressor. Find the words that peak well above the rest of the phrase and lower each one with clip gain until its peak sits near the others. Split the region at the word's edges, in a breath or a consonant, so the gain change does not click.
+2. Bypass the compressor. Find the words that peak well above the rest of the phrase and lower each one with clip gain until its peak sits near the others. Split the region at the word's edges, in a breath or a consonant, so the gain change does not click. If your DAW has no clip gain, put a gain plugin first in the chain and automate that instead.
 3. Re-enable the compressor and raise the threshold until the meter shows a few dB of reduction on the phrase as a whole. Bounce version B.
 4. Match the loudness of A and B with a gain plugin on the playback tracks.
 5. Listen to the word right after each trimmed outlier, and to the breaths and consonants across the phrase.
@@ -155,7 +155,7 @@ Version B usually keeps more of the singer's articulation, because the compresso
 
 ## Common mistake: fixing a one-off with a global setting
 
-The reflex when a word jumps out is to lower the threshold or raise the ratio. Both settings apply to every word in the take, so you change the whole performance to manage one moment. The same goes for adding a second compressor or a limiter just for the shout: the outlier is still there, now with two detectors reacting to it.
+The reflex when a word jumps out is to lower the threshold or raise the ratio. Both settings apply to every word in the take, so you change the whole performance to manage one moment. A fast limiter in front of the compressor can catch the shout, but it reacts to level too, so it also grabs any other word that crosses its threshold and squashes the front edge of the shout where clip gain would simply lower the whole word.
 
 The other mistake is reaching for fader automation to tame a word before the compressor. On most DAW channels, as on a console, the inserts come before the fader (Izhaki, 2023), so the compressor has already reacted by the time the fader moves.
 

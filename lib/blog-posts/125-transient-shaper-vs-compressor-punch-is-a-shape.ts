@@ -31,9 +31,10 @@ function shape(level: (t: number) => number, fast: number, slow: number, release
     return out.filter((_, i) => i % 5 === 0);
 }
 
-// A snare part: two backbeats and two ghost notes.
+// A snare part: two backbeats and two ghost notes, drawn at half scale so the shaped peaks fit the plot.
 const AT = [0.03, 0.28, 0.53, 0.78];
-const AMP = [1, 0.3, 0.9, 0.25];
+const AMP = [0.5, 0.15, 0.45, 0.125];
+const THRESHOLD = 0.175;
 const SNARE = { kind: 'hits' as const, at: AT, amp: AMP, decay: 28, outline: true };
 const SHAPED = shape(hitsLevel(AT, AMP, 28), 0.004, 0.03, 0.02, 0.35);
 const shaperOut: SignalTrace = { kind: 'envelope', points: SHAPED.map((p) => [p.t, p.y] as [number, number]), label: 'After' };
@@ -64,16 +65,16 @@ export const post125: BlogArticle = {
                 {
                     label: 'Snare part',
                     unipolar: true,
-                    lines: [{ y: 0.35, label: 'Threshold' }],
+                    lines: [{ y: THRESHOLD, label: 'Threshold' }],
                     traces: [SNARE],
                 },
                 {
                     label: 'Compressor, slow attack',
                     unipolar: true,
-                    lines: [{ y: 0.35, label: 'Threshold' }],
+                    lines: [{ y: THRESHOLD, label: 'Threshold' }],
                     traces: [
                         { ...SNARE, muted: true, label: 'Before' },
-                        { ...SNARE, label: 'After', compress: { threshold: 0.35, ratio: 8, attack: 0.015, release: 0.06 } },
+                        { ...SNARE, label: 'After', compress: { threshold: THRESHOLD, ratio: 8, attack: 0.015, release: 0.06 } },
                     ],
                 },
                 {
@@ -156,17 +157,13 @@ The demo lets you hear both on one loop. Turn the shaper's attack up, then switc
 
 ## Science model: two followers and a difference
 
-A compressor's gain depends on how far the level is over a fixed threshold $T$:
-
-$$GR(t) = \\left( L(t) - T \\right) \\left( 1 - \\frac{1}{R} \\right) \\quad \\text{when } L(t) > T$$
-
-Turn the input up by 6 dB and $L(t) - T$ grows by 6 dB, so the gain reduction grows too. The outcome depends on level.
+A compressor's gain reduction is the overshoot above a fixed threshold times $1 - 1/R$, the arithmetic worked through in the [lesson on the 4:1 ratio](/blog/compression-ratio-what-4-to-1-actually-means). Turn the input up by 6 dB and the overshoot grows by 6 dB, so the gain reduction grows too, and a hit that was under the threshold may now cross it. The outcome depends on level.
 
 A common transient shaper design, which SPL describes as differential envelope technology, runs two envelope followers on the same signal: one with a fast attack, one with a slow attack (White, 1998). At the start of a hit, the fast follower $L_f$ jumps up while the slow one $L_s$ lags behind. The gap between them, in decibels, sets the attack gain:
 
 $$G_{\\text{attack}}(t) = k \\left( L_f(t) - L_s(t) \\right)$$
 
-where $k$ is the attack control, positive to sharpen onsets and negative to soften them. Turn the input up by 6 dB and both $L_f$ and $L_s$ rise by 6 dB, so their difference stays the same. That is the reason the process is independent of level and needs no threshold. The sustain control uses a second pair of followers in a similar way, acting on the tail instead of the onset.
+where $k$ is the attack control, positive to sharpen onsets and negative to soften them. Turn the input up by 6 dB and both $L_f$ and $L_s$ rise by 6 dB, so their difference stays the same. That is why the process is independent of level and needs no threshold. The sustain control uses a second pair of followers in a similar way, acting on the tail instead of the onset.
 
 ::figure followers
 
