@@ -161,6 +161,25 @@ function columns(sample: (i: number) => number, length: number, count: number, r
 }
 
 /**
+ * Level of each column as the RMS over `window` samples centred on it, in
+ * dB relative to `ref`. Over half a cycle of a sine the RMS is the same
+ * wherever the window starts, so a kick reads as one smooth shape rather
+ * than a comb of cycles.
+ */
+function windowRms(sample: (i: number) => number, length: number, count: number, ref: number, window: number): number[] {
+    const out: number[] = [];
+    for (let c = 0; c < count; c++) {
+        const centre = ((c + 0.5) * length) / count;
+        const a = Math.max(0, Math.floor(centre - window / 2));
+        const b = Math.min(length, Math.ceil(centre + window / 2));
+        let sum = 0;
+        for (let i = a; i < b; i++) sum += sample(i) ** 2;
+        out.push(gainToDb(Math.sqrt(sum / Math.max(1, b - a)) / ref));
+    }
+    return out;
+}
+
+/**
  * Runs `measure` whenever `key` changes: one render at a time, always
  * finishing on the latest inputs. Returns the last finished result.
  */
@@ -254,7 +273,7 @@ function Strip({
     floor: number;
     label: string;
     className?: string;
-    /** Positions from 0 to 1 to tick along the bottom edge. */
+    /** Positions from 0 to 1 to mark with faint vertical lines. */
     marks?: number[];
     playhead?: RefObject<HTMLDivElement>;
 }) {
@@ -262,7 +281,7 @@ function Strip({
         <div className="relative overflow-hidden rounded-[3px] bg-white/[0.035]">
             <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} preserveAspectRatio="none" className={`block w-full ${className}`} role="img" aria-label={label}>
                 {marks?.map((m) => (
-                    <line key={m} x1={m * VIEW_W} x2={m * VIEW_W} y1={VIEW_H - 6} y2={VIEW_H} stroke="rgba(255,255,255,0.45)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
+                    <line key={m} x1={m * VIEW_W} x2={m * VIEW_W} y1={0} y2={VIEW_H} stroke="rgba(255,255,255,0.18)" strokeWidth={1} strokeDasharray="2 3" vectorEffect="non-scaling-stroke" />
                 ))}
                 {traces?.map((t, i) =>
                     t.kind === 'before' ? (
@@ -659,6 +678,8 @@ interface ShapeAnalysis {
 }
 
 const HIT_COLUMNS = 90;
+/** Room above the dry hit's level in each panel, so a boosted attack has somewhere to go. */
+const HIT_HEADROOM = 9;
 
 async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
     const lat = await measureLatency(RATE);
@@ -681,24 +702,22 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
         shaper: Math.sqrt(ref / loudnessPower(shaped, from, to)),
         comp: Math.sqrt(ref / loudnessPower(comped, from, to)),
     };
-    // Each panel is scaled to its own dry peak, so a ghost note and a full hit are drawn the same size.
+    // Each panel is scaled to its own dry hit, so a ghost note and a full hit are drawn the same size.
     const hit = (step: number, title: string) => {
         const a = Math.round((LEAD + (16 + step) * STEP + lat - 0.005) * RATE);
         const length = Math.round(0.155 * RATE);
-        const peak = peakOf(dry, a, a + length);
+        // 11 ms is about half a cycle of the kick's 48 Hz tail.
+        const window = Math.round(0.011 * RATE);
+        const level = (x: Float32Array, gain: number, ref: number) => windowRms((i) => x[a + i] * gain, length, HIT_COLUMNS, ref, window);
+        const top = Math.max(...level(dry, 1, 1).map(dbToGain)) * dbToGain(HIT_HEADROOM);
         return {
-            peak,
-            hit: {
-                title,
-                before: columns((i) => dry[a + i], length, HIT_COLUMNS, peak),
-                shaper: columns((i) => shaped[a + i] * trim.shaper, length, HIT_COLUMNS, peak),
-                comp: columns((i) => comped[a + i] * trim.comp, length, HIT_COLUMNS, peak),
-            },
+            peak: peakOf(dry, a, a + length),
+            hit: { title, before: level(dry, 1, top), shaper: level(shaped, trim.shaper, top), comp: level(comped, trim.comp, top) },
         };
     };
     const k = hit(0, 'Kick');
     const s = hit(12, 'Snare');
-    const ghost = hit(15, 'Ghost snare');
+    const ghost = hit(15, 'Ghost note');
     return { params, trim, hits: [k.hit, s.hit, ghost.hit], ghostDb: gainToDb(ghost.peak / s.peak) };
 }
 
@@ -820,15 +839,12 @@ export function TransientDemo() {
                 <div className="grid grid-cols-3 gap-2">
                     {(analysis?.hits ?? [null, null, null]).map((h, i) => (
                         <div key={i}>
-                            <p className="mb-1 truncate text-xs text-white/60">
-                                {h ? h.title : ['Kick', 'Snare', 'Ghost snare'][i]}
-                                {i === 2 && analysis ? `, ${Math.round(-analysis.ghostDb)} dB down` : ''}
-                            </p>
+                            <p className="mb-1 truncate text-xs text-white/60">{h ? h.title : ['Kick', 'Snare', 'Ghost note'][i]}</p>
                             <Strip
                                 className="h-20"
-                                floor={-30}
+                                floor={-30 - HIT_HEADROOM}
                                 traces={h ? [{ kind: 'before', db: h.before }, { kind: 'after', db: h[shown] }] : null}
-                                label={`${h?.title ?? 'Hit'}: the first 150 milliseconds, dry and through the ${names[shown].toLowerCase()}, each scaled to its own dry peak.`}
+                                label={`${h?.title ?? 'Hit'}: level over the first 150 milliseconds, dry and through the ${names[shown].toLowerCase()}, scaled to the dry hit.`}
                             />
                         </div>
                     ))}
@@ -839,6 +855,10 @@ export function TransientDemo() {
                         { kind: 'after', text: `${names[shown]}, same loudness` },
                     ]}
                 />
+                <p className="mt-2 text-xs leading-5 text-white/60">
+                    The level over the first 150 ms of each hit. Each panel is scaled to its own dry hit, with room above it for a boosted attack.
+                    {analysis ? ` The ghost note is ${Math.round(-analysis.ghostDb)} dB quieter than the snare.` : ''}
+                </p>
             </div>
             <Meter label="Compressor gain reduction" value={reduction / 18} text={`${reduction.toFixed(1)} dB`} />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -855,8 +875,8 @@ export function TransientDemo() {
                 hint="Turns the loop down before both processors and back up after them, so you hear what changes inside."
             />
             <p className="text-sm leading-6 text-white/60">
-                The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold. Pull the level going in down to -18 dB: the compressor stops
-                reaching the threshold and its hits look like the dry ones, while the shaper still changes every hit, ghost notes included.
+                The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold. Pull the level going in down to -24 dB: the loop no longer
+                reaches the threshold, so the compressor does nothing, while the shaper still changes every hit, ghost notes included.
             </p>
         </div>
     );
@@ -1117,11 +1137,11 @@ export function SidechainDemo() {
                     traces={traces}
                     floor={-24}
                     marks={[0, 0.25, 0.5, 0.75]}
-                    label="Gain applied to the bass and pad across one bar, from 0 dB at the top to -24 dB at the bottom. Ticks mark the kicks."
+                    label="Gain applied to the bass and pad across one bar, from 0 dB at the top to -24 dB at the bottom. Dotted lines mark the kicks."
                     playhead={player.playing ? line : undefined}
                 />
                 <div className="mt-1 flex justify-between text-[11px] text-white/55" aria-hidden="true">
-                    <span>One bar, ticks are kicks</span>
+                    <span>One bar, dotted lines are kicks</span>
                     <span>0 to -24 dB</span>
                 </div>
                 <Legend items={legend} />
@@ -1152,8 +1172,9 @@ export function SidechainDemo() {
 
 /** Inside this demo the loop is scaled so its loudest peak sits right at the threshold. */
 const LIMIT_THRESHOLD = -12;
-/** The ceiling clip sits 1 dB above the threshold and only catches what the compressor lets through. */
-const CEILING = LIMIT_THRESHOLD + 1;
+/** dB between the threshold and the ceiling clip. At 20:1 the compressor lets about drive / 20 dB through, so 2 dB leaves the clip to catch fast overshoots only. */
+const CEILING_MARGIN = 2;
+const CEILING = LIMIT_THRESHOLD + CEILING_MARGIN;
 
 function limiterLoop(ctx: BaseAudioContext, dest: AudioNode, step: number, time: number) {
     drums(ctx, dest, step, time);
@@ -1208,7 +1229,7 @@ interface LimiterNodes {
     output: GainNode;
 }
 
-/** The limiter: a fast 20:1 compressor, then a hard clip 1 dB above its threshold. */
+/** The limiter: a fast 20:1 compressor, then a hard clip just above its threshold. */
 function limiter(ctx: BaseAudioContext, makeup: number, release: number): LimiterNodes {
     const drive = ctx.createGain();
     const comp = limiterCompressor(ctx, release);
@@ -1423,7 +1444,7 @@ export function LimiterDemo() {
                 ]}
             />
             <p className="text-sm leading-6 text-white/60">
-                This limiter is a fast compressor (20:1, 1 ms attack) with a hard clip 1 dB above its threshold to catch whatever gets past it. Both options
+                This limiter is a fast compressor (20:1, 1 ms attack) with a hard clip {CEILING_MARGIN} dB above its threshold to catch whatever gets past it. Both options
                 play at the same loudness, so listen to the kick and snare lose their edge as the drive goes up.
             </p>
         </div>
@@ -1448,7 +1469,7 @@ const CLIP_BPM = 84;
 const CLIP_STEP = 60 / CLIP_BPM / 4;
 const CLIP_LOOP = CLIP_STEP * 32;
 /** The safe take peaks at -6 dBFS. */
-const SAFE = 0.5;
+const SAFE_PEAK = 0.5;
 // step, note, length in steps, level
 const PHRASE: [number, number, number, number][] = [
     [0, 57, 3, 0.75],
@@ -1507,8 +1528,23 @@ function converter(ctx: BaseAudioContext): WaveShaperNode {
     return ws;
 }
 
+let phrasePeakJob: Promise<number> | null = null;
+
+/** Notes overlap as they release, so the phrase's true peak is measured rather than assumed. */
+function measurePhrasePeak(): Promise<number> {
+    phrasePeakJob ??= (async () => {
+        const [x] = await renderOffline(LEAD + CLIP_LOOP + 0.4, 1, (ctx, [tap]) => {
+            for (let s = 0; s < 32; s++) phraseStep(ctx, tap, s, LEAD + s * CLIP_STEP);
+        });
+        return peakOf(x, 0, x.length);
+    })();
+    return phrasePeakJob;
+}
+
 interface ClipAnalysis {
     input: number;
+    /** Gain that puts the phrase's peak at -6 dBFS: the safe recording level. */
+    safeGain: number;
     /** K-weighted powers of the hot take before the fader, and of the safe take. */
     hotPower: number;
     safePower: number;
@@ -1521,13 +1557,14 @@ interface ClipAnalysis {
 }
 
 async function analyseClip(input: number): Promise<ClipAnalysis> {
+    const safeGain = SAFE_PEAK / (await measurePhrasePeak());
     const [hot, safe, sent] = await renderOffline(LEAD + CLIP_LOOP + 0.4, 3, (ctx, [hotTap, safeTap, sentTap]) => {
         const src = ctx.createGain();
         const hotIn = ctx.createGain();
-        hotIn.gain.value = SAFE * dbToGain(input);
+        hotIn.gain.value = safeGain * dbToGain(input);
         src.connect(hotIn).connect(converter(ctx)).connect(hotTap);
         const safeIn = ctx.createGain();
-        safeIn.gain.value = SAFE;
+        safeIn.gain.value = safeGain;
         src.connect(safeIn).connect(converter(ctx)).connect(safeTap);
         // What the mic sent, scaled into range for the same converter and back, so it lines up with the others.
         const down = ctx.createGain();
@@ -1546,6 +1583,7 @@ async function analyseClip(input: number): Promise<ClipAnalysis> {
     const b = Math.min(to, loudest + half);
     return {
         input,
+        safeGain,
         hotPower: loudnessPower(hot, from, to),
         safePower: loudnessPower(safe, from, to),
         overDb: gainToDb(Math.abs(sent[loudest])),
@@ -1568,7 +1606,15 @@ export function ClipRecoverDemo() {
     const [input, setInput] = useState(12);
     const [fader, setFader] = useState(-6);
     const analysis = useAnalysis(String(input), () => analyseClip(input));
-    const nodes = useRef<{ ctx: AudioContext; hotIn: GainNode; fader: GainNode; safeMatch: GainNode; master: GainNode; sel: { hot: GainNode; safe: GainNode } } | null>(null);
+    const nodes = useRef<{
+        ctx: AudioContext;
+        hotIn: GainNode;
+        safeIn: GainNode;
+        fader: GainNode;
+        safeMatch: GainNode;
+        master: GainNode;
+        sel: { hot: GainNode; safe: GainNode };
+    } | null>(null);
     const takeRef = useRef(take);
 
     const safeMatch = (a: ClipAnalysis, faderDb: number) => dbToGain(faderDb) * Math.sqrt(a.hotPower / a.safePower);
@@ -1582,16 +1628,16 @@ export function ClipRecoverDemo() {
         const faderGain = ctx.createGain();
         faderGain.gain.value = dbToGain(fader);
         const safeIn = ctx.createGain();
-        safeIn.gain.value = SAFE;
         const match = ctx.createGain();
         const sel = { hot: ctx.createGain(), safe: ctx.createGain() };
         sel.hot.gain.value = takeRef.current === 'hot' ? 1 : 0;
         sel.safe.gain.value = takeRef.current === 'safe' ? 1 : 0;
         src.connect(hotIn).connect(converter(ctx)).connect(faderGain).connect(sel.hot).connect(master);
         src.connect(safeIn).connect(converter(ctx)).connect(match).connect(sel.safe).connect(master);
-        nodes.current = { ctx, hotIn, fader: faderGain, safeMatch: match, master, sel };
+        nodes.current = { ctx, hotIn, safeIn, fader: faderGain, safeMatch: match, master, sel };
         if (analysis) {
-            hotIn.gain.value = SAFE * dbToGain(analysis.input);
+            safeIn.gain.value = analysis.safeGain;
+            hotIn.gain.value = analysis.safeGain * dbToGain(analysis.input);
             match.gain.value = safeMatch(analysis, fader);
             master.gain.setTargetAtTime(CLIP_OUT, ctx.currentTime, 0.02);
         }
@@ -1608,7 +1654,8 @@ export function ClipRecoverDemo() {
         const n = nodes.current;
         if (!n || !analysis) return;
         const t = n.ctx.currentTime;
-        n.hotIn.gain.setTargetAtTime(SAFE * dbToGain(analysis.input), t, 0.005);
+        n.safeIn.gain.setTargetAtTime(analysis.safeGain, t, 0.005);
+        n.hotIn.gain.setTargetAtTime(analysis.safeGain * dbToGain(analysis.input), t, 0.005);
         n.fader.gain.setTargetAtTime(dbToGain(fader), t, 0.02);
         n.safeMatch.gain.setTargetAtTime(safeMatch(analysis, fader), t, 0.02);
         n.master.gain.setTargetAtTime(CLIP_OUT, t, 0.02);

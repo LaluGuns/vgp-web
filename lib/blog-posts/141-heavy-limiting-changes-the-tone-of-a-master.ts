@@ -5,25 +5,25 @@ type Pt = [number, number];
 /**
  * The broadband gain of a peak limiter with instant attack and a one-pole release on the
  * gain reduction in dB (the smoothing model in Giannoulis, Massberg and Reiss, 2012), run
- * at 48 kHz on a kick: a 55 Hz sine burst every 500 ms (120 BPM) with an 80 ms decay.
+ * at 48 kHz on the level envelope of a kick every 500 ms (120 BPM) with an 80 ms decay.
+ * The detector reads the envelope, as a look-ahead limiter would see each peak coming.
  * The ceiling sits 6 dB under the kick's peak and the release is 50 ms. One second shown,
  * after one second of pre-roll.
  */
 const KICK_LEVEL = 0.9;
+const CEILING = KICK_LEVEL * 10 ** (-6 / 20);
 const phase = (t: number) => (((t - 0.02) % 0.5) + 0.5) % 0.5;
 const kickEnv = (t: number) => KICK_LEVEL * Math.exp(-phase(t) / 0.08);
-const kickWave = (t: number) => kickEnv(t) * Math.sin(2 * Math.PI * 55 * phase(t));
 
 function limiterGain(points: number): Pt[] {
     const fs = 48000;
-    const ceiling = 0.85 * 10 ** (-6 / 20);
     const a = Math.exp(-1 / (0.05 * fs));
     const every = fs / points;
     const out: Pt[] = [];
     let gr = 0;
     for (let i = -fs; i <= fs; i++) {
         const t = (i + fs) / fs;
-        const target = Math.max(0, 20 * Math.log10(Math.max(1e-9, Math.abs(kickWave(t))) / ceiling));
+        const target = Math.max(0, 20 * Math.log10(Math.max(1e-9, kickEnv(t)) / CEILING));
         gr = target > gr ? target : a * gr + (1 - a) * target;
         if (i >= 0 && i % every === 0) out.push([i / fs, 10 ** (-gr / 20)]);
     }
@@ -56,6 +56,7 @@ export const post141: BlogArticle = {
                 {
                     label: 'Low band: kick',
                     unipolar: true,
+                    lines: [{ y: r3(CEILING), label: 'Ceiling' }],
                     traces: [
                         { kind: 'envelope', points: GAIN.map(([t]) => [t, r3(kickEnv(t))] as Pt), muted: true, label: 'In' },
                         { kind: 'envelope', points: GAIN.map(([t, g]) => [t, r3(kickEnv(t) * g)] as Pt), label: 'Out' },
@@ -74,16 +75,16 @@ export const post141: BlogArticle = {
         bands: {
             type: 'bars',
             caption:
-                'Level each band loses, averaged over a loop, with 6 dB of limiting on the biggest peaks. When the kick makes the peaks, the lows lose 3.3 dB and steady highs 0.5 dB, so the master tilts 2.8 dB brighter. When a bright snare makes the peaks, the highs lose 3.7 dB and the master tilts darker.',
-            alt: 'Four horizontal bars on a scale from 0 to 6 dB. Kick drives: lows 3.3 dB, highs 0.5 dB. Snare drives: lows 0 dB, highs 3.7 dB.',
+                'Level each band loses, averaged over a loop, in a simple simulated limiter taking 6 dB off the biggest peaks. When the kick makes the peaks, the lows lose about 3.3 dB and steady highs about 0.5 dB, so the master tilts about 2.8 dB brighter. When a bright snare makes the peaks, the highs lose about 3.5 dB, the lows almost nothing, and the master tilts darker.',
+            alt: 'Four horizontal bars on a scale from 0 to 6 dB. Kick drives: lows 3.3 dB, highs 0.5 dB. Snare drives: lows 0.1 dB, highs 3.5 dB.',
             min: 0,
             max: 6,
             unit: 'dB',
             bars: [
                 { label: 'Kick drives: lows', value: 3.3 },
                 { label: 'Kick drives: highs', value: 0.5, dim: true },
-                { label: 'Snare drives: lows', value: 0, display: '0.0 dB', dim: true },
-                { label: 'Snare drives: highs', value: 3.7 },
+                { label: 'Snare drives: lows', value: 0.1, dim: true },
+                { label: 'Snare drives: highs', value: 3.5 },
             ],
         },
     },
@@ -146,11 +147,11 @@ $$\\Delta L_b = 10 \\log_{10} \\frac{\\sum_t g(t)^2 \\, x_b(t)^2}{\\sum_t x_b(t)
 
 A band whose energy sits in the moments the limiter turns down loses the most. A band whose energy is spread evenly loses roughly the average gain reduction, which can be much smaller. Makeup gain raises every band by the same amount, so it cannot undo the difference between them.
 
-I ran that calculation on two loops through a simple peak limiter with instant attack and a 50 ms release, pushed until the biggest peaks lost 6 dB. In the first, a 55 Hz kick made the peaks over steady high-frequency noise standing in for hats and air. The lows lost 3.3 dB of average level and the highs 0.5 dB, a 2.8 dB tilt toward the top. The tilt grew with the drive: about 0.7 dB at 2 dB of reduction, 1.7 at 4 and 3.9 at 8. In the second loop a bright snare made the peaks over a softer kick and a sustained bass. The highs lost 3.7 dB and the lows almost nothing, so the master went darker. Replacing the first loop's steady highs with crash-like bursts that start on each kick shrank its tilt to about 1.1 dB, because the highs then shared the kick's moments.
+I ran that calculation on two loops through a simple peak limiter with instant attack and a 50 ms release, pushed until the biggest peaks lost 6 dB. In the first, a 55 Hz kick made the peaks over steady high-frequency noise standing in for hats and air. The lows lost about 3.3 dB of average level and the highs about 0.5 dB, a tilt of about 2.8 dB toward the top. The tilt grew with the drive: under 1 dB at 2 dB of reduction, around 1.5 to 2 dB at 4, and close to 4 dB at 8. In the second loop a bright snare made the peaks over a softer kick and a sustained bass. The highs lost about 3 to 3.5 dB and the lows almost nothing, so the master went darker. Replacing the first loop's steady highs with crash-like bursts that start on each kick shrank its tilt to about 1 dB, because the highs then shared the kick's moments.
 
 ::figure bands
 
-Real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks loses the most level. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as covered in [limiter release reaches into the groove](/blog/limiter-release-reaches-into-the-groove).
+Those figures depend on the levels I chose for each part, and real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks loses the most level. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as covered in [limiter release reaches into the groove](/blog/limiter-release-reaches-into-the-groove).
 
 Push the drive and listen to the tone rather than the level, since the demo keeps the loudness matched.
 
@@ -162,14 +163,14 @@ Push the drive and listen to the tone rather than the level, since the demo keep
 2. Drive the limiter to about 6 dB of gain reduction on the biggest hits. Use the gain plugin to match the short-term reading of the bypassed chain, then compare limited and bypassed and write down what moved: weight, brightness, vocal level.
 3. On the EQ, cut a low shelf by 2 dB below 100 Hz and watch the gain reduction. Reset it, then cut a high shelf by 2 dB above 5 kHz and watch again.
 4. Whichever cut lowers the gain reduction more points to the part of the spectrum that drives the limiter. Reset the EQ to flat.
-5. Control that part earlier. For a kick or bass, use clip gain on the loudest hits, a clipper on the drum bus, or a high-pass on sub energy nobody hears. For a snare or cymbal, tame its peaks in the mix.
+5. Control that part earlier. For a kick or bass, use clip gain on the loudest hits, a clipper on the drum bus, or a high-pass on sub energy below what the song needs. For a snare or cymbal, tame its peaks in the mix.
 6. Drive the limiter again to the same short-term loudness as step 2 and compare both limited versions with the bypassed mix at matched loudness.
 
 If those peaks were the trigger, the version where they were controlled first needs less gain reduction for the same loudness and stays closer to the tonal balance of the unlimited mix. If it does not, look elsewhere in the chain for the tone change.
 
 ## Common mistake: EQ-ing the limiter's side effect
 
-The common mistake is correcting the limiter's tone with more EQ on the master. A low boost in front of a kick-driven limiter feeds the trigger. A high cut to tame the brighter top makes the master duller during the parts where the limiter is not working. Fix what drives the limiter, and the tone mostly stops moving.
+Correcting the limiter's tone with more EQ on the master usually makes it worse. A low boost in front of a kick-driven limiter feeds the trigger. A high cut to tame the brighter top makes the master duller during the parts where the limiter is not working. Fix what drives the limiter, and the tone mostly stops moving.
 
 The second mistake is judging tone at different levels. Turned up, a master seems to have more bass, because the ear's equal-loudness contours flatten as level rises (ISO, 2023). A limited master compared louder than the original will seem fuller than it is. Match the loudness first, as in [monitoring level changes the balance you hear](/blog/monitoring-level-changes-the-balance-you-hear).
 

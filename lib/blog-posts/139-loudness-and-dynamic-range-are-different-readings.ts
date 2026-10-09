@@ -101,9 +101,9 @@ The readings measure different things over different stretches of time. Read eac
 
 ## Why it matters: two kinds of dynamics, two kinds of fix
 
-Producers use "dynamic range" for two separate properties of a master. One is how far the hits stand above the body of the sound around them, inside a bar. The other is how far the song moves between sections: verse against chorus, breakdown against drop. Limiting and clipping mostly change the first. Arrangement, automation and the balance between sections mostly change the second.
+Producers use "dynamic range" for two separate properties of a master: the micro dynamics of hits standing above the body inside a bar, and the macro dynamics of the song moving between sections, both described in [the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion). Limiting and clipping mostly change the first. Arrangement, automation and the balance between sections mostly change the second.
 
-PLR and PSR read the first kind. LRA reads the second. EBU Tech 3342, the document that defines LRA, says it "should not be confused with other measures like dynamic range or crest factor". Confuse them anyway and you fix the wrong thing: you soften a limiter to raise an LRA it hardly touched, or you see a healthy LRA and miss a chorus pressed flat against the ceiling.
+PLR and PSR read the first kind; EBU Tech 3343 calls PLR "a measure of micro-dynamics". LRA reads the second. EBU Tech 3342, the document that defines LRA, says it "should not be confused with other measures like dynamic range or crest factor". Confuse them anyway and you fix the wrong thing: you soften a limiter to raise an LRA it hardly touched, or you see a healthy LRA and miss a chorus pressed flat against the ceiling.
 
 ::figure shapes
 
@@ -111,11 +111,7 @@ PLR and PSR read the first kind. LRA reads the second. EBU Tech 3342, the docume
 
 All of these start from the ITU-R BS.1770 loudness measurement, which [stop treating LUFS like a target](/blog/why-lufs-is-not-a-magic-number) walks through. They differ in what they compare and over how long.
 
-PLR, the peak to loudness ratio, is the highest true peak in the whole file minus its integrated loudness:
-
-$$\\text{PLR} = L_{\\text{TP,max}} - L_{\\text{I}}$$
-
-It is one number for the whole song. Because most masters sit against a fixed true-peak ceiling, PLR mostly restates the integrated loudness: with a -1 dBTP ceiling, a -9 LUFS master has a PLR of 8 dB and a -12 LUFS master has 11 dB. One stray peak can also set it, however rare.
+PLR, the peak to loudness ratio, is the highest true peak in the whole file minus its integrated loudness, as worked through in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization). It is one number for the whole song. Because most masters sit against a fixed true-peak ceiling, PLR mostly restates the integrated loudness: with a -1 dBTP ceiling, a -9 LUFS master has a PLR of 8 dB and a -12 LUFS master has 11 dB. One stray peak can also set it, however rare.
 
 PSR, the peak to short-term loudness ratio, makes the same comparison against short-term loudness, the 3 second window, using the highest true peak inside that same window:
 
@@ -127,7 +123,7 @@ LRA, the loudness range, measures how much the short-term loudness varies across
 
 $$\\text{LRA} = L_{95\\%} - L_{10\\%}$$
 
-The percentiles are there on purpose. A fade-out in the quietest 10% or a single huge hit in the loudest 5% cannot set the result alone. And because LRA compares 3 second averages, a limiter that shaves every snare by the same amount barely moves it. LRA falls when processing treats loud and quiet sections differently, which is exactly what a hard final push does to a chorus.
+The percentiles are there on purpose. A fade-out in the quietest 10% or a single huge hit in the loudest 5% cannot set the result alone. And because LRA compares 3 second averages, a limiter that shaves every snare by the same amount barely moves it. LRA falls when processing treats loud and quiet sections differently, which is what a hard final push does to a chorus.
 
 A worked example ties the four together. Say the verses fill two thirds of a song at -13 LUFS short-term, the choruses fill the other third at -7 LUFS, and the chorus peaks reach -1 dBTP. Integrated loudness averages power, not decibels:
 
@@ -137,7 +133,7 @@ That is 1 dB louder than the plain average of the readings, because the loud sec
 
 ::figure readings
 
-The two kinds of dynamics have even moved apart across decades of releases. Deruty (2011) measured released music from 1969 on and found the crest factor falling sharply from around 1990 while LRA, as defined in Tech 3342, did not decrease. A later peer-reviewed study of mainstream music reached the same split: the loudness war made records louder and their transients less salient, while the macrodynamics "remain practically untouched" (Deruty and Tardieu, 2014).
+The two kinds of dynamics have even moved apart across decades of releases. Deruty (2011) measured released music from 1969 to 2010 and found the crest factor falling sharply from around 1990, with no obvious decrease in LRA, as defined in Tech 3342, over the same years. A later peer-reviewed study of tracks from 1967 to 2011 reached the same split: the loudness war reduced how far the peaks stand out, but did not reduce long-term musical dynamics (Deruty and Tardieu, 2014).
 
 The normalization demo isolates the first kind. With normalization on, both loops play at the same loudness, so what you hear is how far the hits rise above the body, the distance PLR and PSR read. A loop has no verse and no chorus, so LRA would have nothing to report here.
 
@@ -153,11 +149,11 @@ The normalization demo isolates the first kind. With normalization on, both loop
 6. Take every reading again. Integrated loudness rises, PLR falls by about the same amount, and the chorus PSR drops. If LRA falls as well, the limiter is working harder on the chorus than on the verse.
 7. Take the same readings on a released track in the same style, section by section.
 
-Each change moved the reading that matches the kind of dynamics it touched. Step 6 is the one to watch: an LRA that shrinks under a harder limiter is the lift loss described in [the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion).
+Each change moved the reading that matches the kind of dynamics it touched. Step 6 is the one to watch: an LRA that shrinks under a harder limiter means the chorus is losing its lift over the verse.
 
 ## Common mistake: grading a master by one reading
 
-The common mistake is treating one of these numbers as a score. A high PLR can come from one snare hit in an otherwise flat master. A low LRA is normal for a club track built to hold one energy level, and it says nothing about whether the kick still punches. A wide LRA in a ballad does not prove its choruses are intact. Compare readings with references in the same style, and listen before you act on any of them.
+A single reading makes a poor score. A high PLR can come from one snare hit in an otherwise flat master. A low LRA is normal for a club track built to hold one energy level, and it says nothing about whether the kick still punches. A wide LRA in a ballad does not prove its choruses are intact. Compare readings with references in the same style, and listen before you act on any of them.
 
 The second mistake is reading LRA on a loop or a single section. With nothing to compare, the number means little, and Tech 3342 warns that very short programmes with silence at the start or end can read misleadingly high.
 
@@ -165,15 +161,16 @@ The second mistake is reading LRA on a loop or a single section. With nothing to
 
 Before you change anything, decide what you are asking. How loud will it play: integrated loudness. How much room do the peaks have across the whole file: PLR. Where is the limiter flattening the hits: PSR, section by section. How far does the song move: LRA.
 
-I keep the two kinds of fix apart. Limiter and clipper settings are for the hits; arrangement and automation are for the sections. Why the distance between peaks and loudness is what survives on a streaming service is covered in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization).
+I keep the two kinds of fix apart. Limiter and clipper settings are for the hits; arrangement and automation are for the sections. With normalization on, a streaming service matches the integrated loudness away, and a gain change keeps every distance the other three readings measure, so those distances are what the listener still hears.
 
 ## References
 
 - Deruty, E. (2011). 'Dynamic range' & the loudness war. *Sound On Sound*, September 2011. https://www.soundonsound.com/sound-advice/dynamic-range-loudness-war
 - Deruty, E., & Tardieu, D. (2014). About dynamic processing in mainstream music. *Journal of the Audio Engineering Society*, 62(1/2), 42-55.
-- European Broadcasting Union. (2023). *Tech 3342: Loudness range: A measure to supplement EBU R 128 loudness normalization*. EBU. https://tech.ebu.ch/docs/tech/tech3342.pdf
+- European Broadcasting Union. (2023). *Tech 3342: Loudness range: A measure to supplement EBU R 128 loudness normalization* (Version 4). EBU. https://tech.ebu.ch/docs/tech/tech3342.pdf
+- European Broadcasting Union. (2023). *Tech 3343: Guidelines for production of programmes in accordance with EBU R 128* (Version 4). EBU. https://tech.ebu.ch/docs/tech/tech3343.pdf
 - International Telecommunication Union. (2023). *Recommendation ITU-R BS.1770-5: Algorithms to measure audio programme loudness and true-peak audio level*. ITU. https://www.itu.int/rec/R-REC-BS.1770/
-- Shepherd, I., Grimm, E., Tapper, P., Kahsnitz, M., & Kerr, I. (2017). Measuring micro-dynamics, a first step: Standardizing PSR, the peak to short-term loudness ratio. *Audio Engineering Society Convention 143*, Engineering Brief 373.
+- Shepherd, I., Grimm, E., Tapper, P., Kahsnitz, M., & Kerr, I. (2017). Measuring micro-dynamics, a first step: Standardizing PSR, the peak to short-term loudness ratio. *Audio Engineering Society Convention 143*, e-Brief 373.
 `,
     seo: {
         title: 'Loudness, PLR and LRA answer different questions | VGP Studio',

@@ -19,7 +19,7 @@ export const post142: BlogArticle = {
             range: [30, 1000],
             caption:
                 'An analyzer over a bass line. Under an A chord the tallest peaks sit at 55, 110 and 165 Hz, the bass note and its harmonics. Under a D chord they move to 73, 147 and 220 Hz. A ring that stays at 180 Hz under both chords is the kind of peak a narrow cut is for.',
-            alt: 'Energy against frequency from 30 Hz to 1 kHz. A solid series of falling peaks starts at 55 Hz. A dashed series starts at 73 Hz. A narrow bump at 180 Hz appears as a third curve.',
+            alt: 'Energy against frequency from 30 Hz to 1 kHz. A solid series of falling peaks starts at 55 Hz. A dashed series starts at 73 Hz. A narrow grey bump at 180 Hz appears as a third curve.',
             marks: [
                 { f: 55, label: 'A1' },
                 { f: 73.4, label: 'D2' },
@@ -28,30 +28,23 @@ export const post142: BlogArticle = {
             curves: [
                 { kind: 'harmonics', f0: 55, count: 12, rolloff: 1.2, label: 'Bass on A' },
                 { kind: 'harmonics', f0: 73.4, count: 9, rolloff: 1.2, label: 'Bass on D', dashed: true },
-                { kind: 'hump', center: 180, width: 0.08, level: 0.35, label: 'Ring under both' },
+                { kind: 'hump', center: 180, width: 0.08, level: 0.35, label: 'Ring under both', muted: true },
             ],
         },
-        moves: {
-            type: 'spectrum',
-            mode: 'gain',
-            db: 6,
+        notes: {
+            type: 'bars',
             caption:
-                'Two moves drawn from the filter maths. The tilt, a low shelf down 1.5 dB and a high shelf up 1.5 dB around 1 kHz, changes the balance by 3 dB from bottom to top without singling out any note. The narrow cut, -4 dB at 55 Hz with a Q of 8, is down 2 dB at about 52 and 58 Hz and only 0.2 dB at 73 Hz: it turns down the bass player\'s A and leaves the D alone.',
-            alt: 'EQ gain from 20 Hz to 20 kHz. A solid line sits 1.5 dB below zero in the lows, crosses zero at 1 kHz and sits 1.5 dB above in the highs. A dashed line is flat except for a narrow 4 dB notch at 55 Hz.',
-            marks: [
-                { f: 55, label: '55 Hz' },
-                { f: 1000, label: '1 kHz' },
-            ],
-            curves: [
-                {
-                    kind: 'eq',
-                    label: 'Tilt around 1 kHz',
-                    bands: [
-                        { type: 'lowshelf', freq: 1000, gain: -1.5, q: 0.5 },
-                        { type: 'highshelf', freq: 1000, gain: 1.5, q: 0.5 },
-                    ],
-                },
-                { kind: 'eq', label: 'Narrow cut, Q 8', dashed: true, bands: [{ type: 'bell', freq: 55, gain: -4, q: 8 }] },
+                'How much a 4 dB cut at 55 Hz with a Q of 8 takes off each note of a bass line, from the filter maths. The A loses the full 4 dB, the B just under 1 dB, and the D and E almost nothing, so the cut changes the balance between the notes.',
+            alt: 'Five horizontal bars on a scale from 0 to 4 dB. A1 at 55 Hz loses 4 dB, B1 at 62 Hz 0.9 dB, C sharp 2 at 69 Hz 0.3 dB, D2 at 73 Hz 0.2 dB, E2 at 82 Hz 0.1 dB.',
+            min: 0,
+            max: 4,
+            unit: 'dB',
+            bars: [
+                { label: 'A1, 55 Hz', value: 4, display: '4.0 dB' },
+                { label: 'B1, 62 Hz', value: 0.9, dim: true },
+                { label: 'C#2, 69 Hz', value: 0.3, dim: true },
+                { label: 'D2, 73 Hz', value: 0.2, dim: true },
+                { label: 'E2, 82 Hz', value: 0.1, dim: true },
             ],
         },
     },
@@ -106,21 +99,21 @@ An analyzer cannot tell you which is which. It shows where the energy is, and in
 
 ## Science model: tilt, bandwidth and what a peak means
 
-Released music shares a broad long-term shape. Pestana and colleagues (2013) analysed the long-term spectra of a large set of commercial pop recordings from 1950 to 2010 and found a consistent tendency toward a target curve set by industry practice. A master sounds dark or bright mostly by comparison with that shape, so the usual fix is a change of slope: a tilt that lowers one end and raises the other around a pivot.
+Released music shares a broad long-term shape. Pestana and colleagues (2013) analysed the long-term spectra of a large set of popular commercial recordings from 1950 to 2010 and found a consistent leaning toward a target curve shaped by industry practice. A master that sounds dark or bright usually differs from that shape in its slope, so the usual fix is a tilt: lower one end and raise the other around a pivot.
 
 Bandwidth decides how much of the music a move touches. For a bell, Q and bandwidth $BW$ in octaves are related by (Toy, 2021):
 
 $$\\frac{1}{Q} = 2 \\sinh\\left( \\frac{\\ln 2}{2} \\, BW \\right)$$
 
-A Q of 0.7 spans about 1.9 octaves. A Q of 8 spans about 0.18 octave, roughly a whole tone. That is narrow enough to catch a single note, which is the problem: a 4 dB cut at 55 Hz turns down every A the bass plays and leaves the D at 73 Hz almost untouched. You have rebalanced the bass line from the master.
+A Q of 0.7 spans about 1.9 octaves, the kind of small, broad move drawn in [mastering should translate the song](/blog/how-mastering-changes-translation-not-personality). A Q of 8 spans about 0.18 octave, roughly a whole tone. That is narrow enough to catch a single note, which is the problem: a 4 dB cut at 55 Hz turns down every A the bass plays and leaves the D at 73 Hz almost untouched. You have rebalanced the bass line from the master.
 
-::figure moves
+::figure notes
 
 The test for a resonance is movement. A peak that comes from notes moves when the chords change. A peak that sits at the same frequency under every chord, and that you can hear as a ring or an edge, is a candidate for a narrow cut.
 
 Level matters as much as shape. Loudness meters following ITU-R BS.1770 weight the upper frequencies up by about 4 dB before measuring, and a brighter master also tends to sound more exciting on first listen. A high-shelf boost therefore raises both the reading and the impression. Match short-term loudness after every EQ move before you judge it.
 
-Hear the difference between a broad and a narrow change on one sound. Sweep the cutoff and the whole sound gets darker or brighter together. Raise the resonance and one narrow region starts to stick out.
+The demo plays chords through one filter with the spectrum drawn live. Watch the peaks the chord notes make, then sweep the cutoff: the whole sound gets darker or brighter together. Raise the resonance and one narrow region starts to stick out.
 
 ::demo filter
 
@@ -140,9 +133,9 @@ In my sessions the tilt usually does most of the work, and the narrow cut, if on
 
 ## Common mistake: EQ-ing the picture
 
-The common mistake is mastering to the analyzer: notching every peak or pulling the curve toward a smooth line. Peaks are often notes, and a smooth curve is not a goal in itself. Notch the notes and you change the arrangement from the master, which [mastering should translate the song](/blog/how-mastering-changes-translation-not-personality) warns against.
+The common mistake is mastering to the analyzer: notching every peak or pulling the curve toward a smooth line. Peaks are often notes, and a smooth curve is not a goal in itself. Notch the notes and you change the arrangement from the master, where you cannot reach a single part.
 
-The second mistake is choosing references by genre tag alone. A record from another decade, or another corner of the same genre, can make your mix seem short of bass or air when it is simply aimed somewhere else. Match the era and substyle first, then match the level, and only then trust the comparison.
+The second mistake is choosing references by genre tag alone. A record from another decade, or another corner of the same genre, can make your mix seem short of bass or air when it is aimed somewhere else. Match the era and substyle first, then match the level, and only then trust the comparison.
 
 ## Producer takeaway: decide the slope, then look for defects
 

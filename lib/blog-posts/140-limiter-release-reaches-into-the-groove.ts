@@ -77,7 +77,7 @@ export const post140: BlogArticle = {
         recovery: {
             type: 'signal',
             caption:
-                'A simulated limiter on a kick over a steady bed at 120 BPM, 4 dB of gain reduction on each kick. With a 50 ms release the bed is untouched by the off-beat. With 250 ms it is still about 1.5 dB down there and swells back before the next kick. With 1 s it stays about 3 dB down all the time.',
+                'A simulated limiter on a kick over a steady bed at 120 BPM, 4 dB of gain reduction on each kick. With a 50 ms release the bed is untouched by the off-beat. With 250 ms it is still about 1.5 dB down there and swells back to within about half a decibel before the next kick. With 1 s it stays about 3 dB down all the time.',
             alt: 'Three level plots of two kicks over a flat bed, each with the input in grey and a ceiling line. In the first, only the kick tops are cut and the bed stays flat. In the second, the bed dips after each kick and climbs back before the next. In the third, the whole bed sits lower and barely moves.',
             rows: [grooveRow(0.05, 'Release 50 ms'), grooveRow(0.25, 'Release 250 ms'), grooveRow(1, 'Release 1 s')],
         },
@@ -151,7 +151,7 @@ Go the other way and the release becomes faster than the bass. A 50 Hz cycle las
 
 ::figure cycle
 
-Many limiters split the job between two stages: a fast one that catches short peaks and a slower release stage that follows the average level. FabFilter's documentation for its Pro-L 2 limiter describes that design and the trade-off plainly: short attack and long release settings are "safer and cleaner" but "can also cause pumping and reduce clarity", while long attack and short release can raise apparent loudness "at the expense of possible distortion". Program-dependent and auto modes make that trade-off for you, so their choice still needs checking by ear.
+Some limiters split the job between two stages: a fast one that catches short peaks and a slower release stage that follows the average level. FabFilter's documentation for its Pro-L 2 limiter describes that design and its trade-off: short attack and long release settings are "safer and cleaner" but "can also cause pumping and reduce clarity", while long attack and short release can raise apparent loudness "at the expense of possible distortion". Program-dependent and auto modes make that trade-off for you, so their choice still needs checking by ear.
 
 Listen to the space between the hits as you change the release, with the loudness held equal.
 
@@ -171,13 +171,13 @@ Between the two extremes there is often a range that does neither. In the simula
 
 ## Common mistake: choosing the release that sounds loudest
 
-The common mistake is comparing releases without matching loudness. A short release lets the limiter work like a clipper, so the master gets louder at the same ceiling, and louder wins until you level-match. The harmonics it adds sit at three and five times the bass frequency, so they stay audible on small speakers that cannot play the bass note itself.
+Comparing releases without matching loudness picks the wrong one. A short release lets the limiter work like a clipper, so the master gets louder at the same ceiling, and louder wins until you level-match. The harmonics it adds sit at three and five times the bass frequency, so they stay audible on small speakers that cannot play the bass note itself.
 
 The second mistake is reading the gain reduction meter instead of listening. A meter that bounces neatly in time can still be pumping the pad on every beat, and a meter that hardly moves can be holding the whole mix 3 dB down. Listen to what plays between the kicks. If you want the pump, a sidechain on the parts you choose, as in [sidechain is more than kick ducking bass](/blog/sidechain-is-more-than-kick-ducking-bass), gives you control the master limiter cannot.
 
 ## Producer takeaway: tune the release like a groove control
 
-Treat the master limiter's release as part of the rhythm. Start from the beat interval, listen to the hats and the sustained parts between kicks, and back off from the setting where the bass gets rough. I set it with the full chorus playing and the loudness matched, because that is the only way to hear the groove instead of the level. When no release works, the limiter is doing too much: move some of the work to a clipper on the drums or to the mix, as in [three ways to get loud](/blog/saturation-clipping-limiting-three-flavors-of-loud).
+Treat the master limiter's release as part of the rhythm. Start from the beat interval, listen to the hats and the sustained parts between kicks, and back off from the setting where the bass gets rough. I set it with the full chorus playing and the loudness matched, so that what changes between settings is the groove and not the level. When no release works, the limiter is doing too much: move some of the work to a clipper on the drums or to the mix, as in [three ways to get loud](/blog/saturation-clipping-limiting-three-flavors-of-loud).
 
 ## References
 

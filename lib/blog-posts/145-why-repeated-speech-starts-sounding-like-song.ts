@@ -16,16 +16,15 @@ export const post145: BlogArticle = {
         conditions: {
             type: 'curve',
             caption:
-                'The direction of Deutsch, Henthorn and Lapidis\'s (2011) first experiment. The first and tenth hearings were the same recording. Exact repeats in between moved listeners from speech to song, slightly transposed repeats moved them only a little, and jumbled syllables did not move them. A sketch, not their data.',
-            alt: 'Three straight lines from first hearing to tenth hearing on a speech-to-song axis. The exact repeats line climbs steeply toward song. The transposed line rises slightly. The dashed jumbled line stays flat near speech.',
+                'The direction of Deutsch, Henthorn and Lapidis\'s (2011) first experiment. The first and tenth hearings were the same recording. Exact repeats in between moved listeners firmly from speech to song. Slightly transposed repeats moved them a little and left them on the speech side, and jumbled syllables did not move them. A sketch, not their data.',
+            alt: 'Two straight lines from first hearing to tenth hearing on a speech-to-song axis. The solid exact-repeats line climbs steeply toward song. The dashed line for transposed or jumbled repeats barely rises and stays near speech.',
             x: ['First hearing', 'Tenth hearing'],
             xShort: ['First', 'Tenth'],
             yLabel: 'Sounds like song',
             straight: true,
             series: [
                 { label: 'Exact repeats', values: [0.15, 0.82] },
-                { label: 'Transposed repeats', values: [0.15, 0.3] },
-                { label: 'Jumbled syllables', values: [0.15, 0.15], dashed: true },
+                { label: 'Transposed or jumbled', values: [0.15, 0.22], dashed: true },
             ],
         },
         glide: {
@@ -129,7 +128,7 @@ It also misleads you. After an hour of looping, you hear a tune that a first-tim
 
 ## Science model: exact repeats, level syllables and the listener
 
-Diana Deutsch came across the effect while fine-tuning spoken commentary for a CD of musical illusions, with the phrase "sometimes behave so strangely" on a loop. Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, ratings moved firmly toward song. When the repeats in between were transposed slightly, or when the syllables came in a jumbled order, the shift did not happen.
+Diana Deutsch came across the effect in 1995 while preparing the spoken commentary for a CD of musical illusions: a phrase from it, "sometimes behave so strangely", started to sound sung after she had played it several times. Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, ratings moved firmly toward song. When the repeats in between were transposed slightly up or down, or when the syllables came in a jumbled order, the shift did not happen.
 
 ::figure conditions
 
@@ -139,7 +138,7 @@ Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiob
 
 ::figure glide
 
-The listener matters as well. Margulis, Simchy-Gross and Black (2015) played 24 native English speakers, most without music training, the same short passage read in seven languages, each repeated ten times. Languages that are hard for English speakers to pronounce shifted most toward song. English shifted least, and that change was not statistically reliable. Regular or irregular gaps between repeats made no difference. The ratings also show the size of the effect: on average, even the strongest shift stayed on the speech side of the scale. In a study of 20 adults, Jaisin and colleagues (2016) found a weaker effect in native speakers of tonal languages such as Thai and Mandarin, where pitch carries word meaning.
+The listener matters as well. Margulis, Simchy-Gross and Black (2015) played 24 native English speakers, most without music training, a segment of under three seconds cut from the same passage read in seven languages, each repeated ten times. Languages that are hard for English speakers to pronounce shifted most toward song. English shifted least, and that change was not statistically reliable. Regular or irregular gaps between repeats made no difference. The ratings also show the size of the effect: on average, even the strongest shift stayed on the speech side of the scale. In a study of 20 adults, Jaisin and colleagues (2016) found a weaker effect in native speakers of tonal languages such as Thai and Mandarin, where pitch carries word meaning.
 
 ::figure ratings
 
@@ -151,7 +150,7 @@ A reading that fits these results, and close to the one Margulis and colleagues 
 2. Loop it ten times with about one second of silence between repeats, with no beat underneath. Rate it from 1 (speech) to 5 (song) after the first and the tenth repeat.
 3. On the tenth repeat, hum along and record the hum on a new track.
 4. Convert the hum to MIDI with your DAW's audio-to-MIDI function, or find the notes by ear on a keyboard. Open the spoken take in a pitch editor and compare where each syllable sits and how far it glides.
-5. Duplicate the loop and transpose every second repeat up one semitone with formants preserved. Listen for whether the tune fades, as it did in Deutsch's transposed condition.
+5. Duplicate the loop and transpose each repeat between the first and the last by about one semitone, alternating up and down, with formants preserved. Listen for whether the tune fades, as it did in Deutsch's transposed condition.
 6. Try a second line that glides a lot, such as an excited question, and compare how quickly each one turns.
 7. Write a sung hook from the MIDI notes with the same words. Play the spoken loop and the sung hook once each to someone who has not heard either, and ask what they heard in each.
 

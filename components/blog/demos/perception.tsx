@@ -93,6 +93,8 @@ interface Syllable {
     /** Vowel to glide to over the note. */
     to?: Vowel;
     consonant?: 's' | 't';
+    /** The last syllable of a line: the one a delay throw catches. */
+    last?: boolean;
 }
 
 /**
@@ -213,6 +215,7 @@ interface MixBus {
 
 const MIX_BPM = 94;
 const MIX_STEPS = 32;
+const MIX_LOOP_SECONDS = (MIX_STEPS * 60) / MIX_BPM / 4;
 // Keeps the mix at the loudness of the other demos on the site.
 const MIX_TRIM = 0.5;
 
@@ -636,13 +639,19 @@ const BANDS = [
 /**
  * The same mix at three playback levels, 12 dB apart. The band meters
  * show the balance of the signal never changes; only the level does.
- * They measure the mix before the level step, averaged over a couple of
- * seconds so the numbers hold still, then add the step's exact gain.
+ * They measure the mix before the level step, averaged over one full
+ * loop so the numbers hold still, then add the step's exact gain.
  */
 export function MonitorLevelDemo() {
     const [step, setStep] = useState<LevelStep>('loud');
     const [bands, setBands] = useState<number[] | null>(null);
-    const nodes = useRef<{ ctx: AudioContext; level: GainNode; an: AnalyserNode; data: Float32Array<ArrayBuffer>; avg: number[] } | null>(null);
+    const nodes = useRef<{
+        ctx: AudioContext;
+        level: GainNode;
+        an: AnalyserNode;
+        data: Float32Array<ArrayBuffer>;
+        history: { time: number; power: number[] }[];
+    } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -657,7 +666,7 @@ export function MonitorLevelDemo() {
         an.fftSize = 4096;
         an.smoothingTimeConstant = 0;
         merger.connect(an);
-        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount), avg: [] };
+        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount), history: [] };
         const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (s, time, dur) => playMixStep(ctx, bus, s, time, dur));
         return () => {
             seq.stop();
@@ -672,15 +681,16 @@ export function MonitorLevelDemo() {
         if (!n) return;
         n.an.getFloatFrequencyData(n.data);
         const binHz = n.ctx.sampleRate / n.an.fftSize;
-        setBands(
-            BANDS.map(({ lo, hi }, b) => {
-                let sum = 0;
-                for (let i = Math.ceil(lo / binHz); i < Math.min(n.data.length, hi / binHz); i++) sum += 10 ** (n.data[i] / 10);
-                const prev = n.avg[b];
-                n.avg[b] = prev === undefined ? sum : prev + (sum - prev) * 0.03;
-                return powerDb(n.avg[b]);
-            }),
-        );
+        const power = BANDS.map(({ lo, hi }) => {
+            let sum = 0;
+            for (let i = Math.ceil(lo / binHz); i < Math.min(n.data.length, hi / binHz); i++) sum += 10 ** (n.data[i] / 10);
+            return sum;
+        });
+        // Average over exactly one loop of the mix, so the reading stays put while the music moves.
+        const now = n.ctx.currentTime;
+        n.history.push({ time: now, power });
+        while (n.history.length > 1 && n.history[0].time < now - MIX_LOOP_SECONDS) n.history.shift();
+        setBands(BANDS.map((_, b) => powerDb(n.history.reduce((sum, h) => sum + h.power[b], 0) / n.history.length)));
     });
 
     const choose = (next: LevelStep) => {
@@ -716,7 +726,7 @@ export function MonitorLevelDemo() {
                         />
                     );
                 })}
-                <p className="text-xs leading-5 text-white/50">Band levels of the mix, averaged over a few seconds, at the chosen step. Each step lowers every band by the same 12 dB.</p>
+                <p className="text-xs leading-5 text-white/50">Band levels of the mix at the chosen step, averaged over one loop. Each step lowers every band by the same 12 dB.</p>
             </div>
             <p className="text-sm leading-6 text-white/60">
                 This page cannot see your device volume, so the steps are relative to each other, and the loud step is no louder than the other demos here. Set a
@@ -729,7 +739,7 @@ export function MonitorLevelDemo() {
 
 // ── Reverb ducking ──────────────────────────────────────────────────
 
-type FxMode = 'plain' | 'ducked' | 'delay';
+type FxMode = 'plain' | 'ducked' | 'throw';
 type DelayNote = 'eighth' | 'dotted' | 'quarter';
 
 const RD_BPM = 88;
@@ -738,24 +748,25 @@ const REVERB_SECONDS = 3.4;
 const DELAY_BEATS: Record<DelayNote, number> = { eighth: 0.5, dotted: 0.75, quarter: 1 };
 const delaySeconds = (note: DelayNote) => (DELAY_BEATS[note] * 60) / RD_BPM;
 
-// Two short lines with a gap after each, so a long tail runs into the next line.
+// Two short lines with about a second of gap after each: long enough for a
+// throw to repeat in, short enough for a long reverb tail to reach the next line.
 const RD_PHRASE: Syllable[] = [
     { at: 0, len: 2, note: 64, vowel: 'a' },
     { at: 2, len: 1, note: 67, vowel: 'i', consonant: 't' },
-    { at: 3, len: 3, note: 69, vowel: 'a' },
-    { at: 7, len: 2, note: 67, vowel: 'o', consonant: 's' },
-    { at: 9, len: 3, note: 64, vowel: 'e', to: 'i' },
+    { at: 3, len: 2, note: 69, vowel: 'a' },
+    { at: 5, len: 2, note: 67, vowel: 'o', consonant: 's' },
+    { at: 8, len: 2, note: 64, vowel: 'e', to: 'i', last: true },
     { at: 16, len: 2, note: 62, vowel: 'o' },
     { at: 18, len: 1, note: 64, vowel: 'a', consonant: 't' },
-    { at: 19, len: 3, note: 67, vowel: 'e' },
-    { at: 23, len: 2, note: 64, vowel: 'a', consonant: 's' },
-    { at: 25, len: 3, note: 60, vowel: 'o', to: 'u' },
+    { at: 19, len: 2, note: 67, vowel: 'e' },
+    { at: 21, len: 2, note: 64, vowel: 'a', consonant: 's' },
+    { at: 24, len: 2, note: 60, vowel: 'o', to: 'u', last: true },
 ];
 const RD_VOICE_LEVEL = 0.8;
 // Keeps this demo at the loudness of the other demos on the site.
-const RD_TRIM = 0.72;
+const RD_TRIM = 0.85;
 const REVERB_LEVEL = 0.9;
-const DELAY_LEVEL = 0.75;
+const THROW_LEVEL = 1;
 
 /** A generated stereo hall: decaying noise that also loses its top end as it fades. */
 function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
@@ -823,8 +834,8 @@ const duckFloor = (s: FxSettings) => (s.mode === 'ducked' ? 1 - dbToGain(-s.dept
 function applyFx(n: FxNodes, s: FxSettings) {
     const t = n.ctx.currentTime;
     const a = s.amount / 100;
-    n.revOut.gain.setTargetAtTime(s.mode === 'delay' ? 0 : a * REVERB_LEVEL, t, 0.04);
-    n.delOut.gain.setTargetAtTime(s.mode === 'delay' ? a * DELAY_LEVEL : 0, t, 0.04);
+    n.revOut.gain.setTargetAtTime(s.mode === 'throw' ? 0 : a * REVERB_LEVEL, t, 0.04);
+    n.delOut.gain.setTargetAtTime(s.mode === 'throw' ? a * THROW_LEVEL : 0, t, 0.04);
     n.depthGain.gain.setTargetAtTime(-duckFloor(s), t, 0.03);
     n.dl.delayTime.setTargetAtTime(delaySeconds(s.delayNote), t, 0.03);
     n.dr.delayTime.setTargetAtTime(delaySeconds(s.delayNote), t, 0.03);
@@ -837,13 +848,13 @@ function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32A
     const s = canvas2d(c);
     if (!s) return;
     const { g, w, h } = s;
-    const floor = -66;
+    const floor = -48;
     const top = -6;
     const y = (db: number) => h - 2 - ((Math.max(floor, Math.min(top, db)) - floor) / (top - floor)) * (h - 4);
     const x = (i: number) => (i / (TRACE_POINTS - 1)) * w;
     g.strokeStyle = 'rgba(255,255,255,0.08)';
     g.lineWidth = 1;
-    for (const db of [-46, -26]) {
+    for (const db of [-34, -20]) {
         g.beginPath();
         g.moveTo(0, y(db));
         g.lineTo(w, y(db));
@@ -871,7 +882,8 @@ function drawTrace(c: HTMLCanvasElement | null, dry: Float32Array, wet: Float32A
 
 /**
  * A vocal-like phrase into a long reverb. Duck the reverb with an envelope
- * follower on the dry phrase, or swap it for a filtered tempo delay.
+ * follower on the dry phrase, or drop the reverb and throw only the last
+ * syllable of each line into a filtered tempo delay.
  */
 export function ReverbDuckDemo() {
     const [mode, setMode] = useState<FxMode>('plain');
@@ -926,7 +938,9 @@ export function ReverbDuckDemo() {
         // The ducker's gain is 1 plus this signal, which goes negative while the voice sings.
         sum.connect(shape).connect(depthGain).connect(ducker.gain);
 
-        // Tempo delay: filtered on the way in and on every repeat, bouncing left and right.
+        // Delay throw: a send that opens only for the last syllable of each line, into a
+        // tempo delay filtered on the way in and on every repeat, bouncing left and right.
+        const throwSend = gainNode(ctx, 0);
         const hp = ctx.createBiquadFilter();
         hp.type = 'highpass';
         hp.frequency.value = 500;
@@ -940,7 +954,7 @@ export function ReverbDuckDemo() {
         const loopLp = ctx.createBiquadFilter();
         loopLp.type = 'lowpass';
         loopLp.frequency.value = 2600;
-        dry.connect(hp).connect(lp).connect(dl);
+        dry.connect(throwSend).connect(hp).connect(lp).connect(dl);
         dl.connect(fb[0]).connect(dr);
         dr.connect(loopLp).connect(fb[1]).connect(dl);
         const dMerge = ctx.createChannelMerger(2);
@@ -967,8 +981,13 @@ export function ReverbDuckDemo() {
         const seq = sequence(ctx, RD_BPM, RD_STEPS, (step, time, stepDur) => {
             for (const v of RD_PHRASE) {
                 if (v.at !== step) continue;
+                const dur = v.len * stepDur * 0.88;
                 if (v.consonant) consonant(ctx, dry, time, v.consonant);
-                sing(ctx, dry, time, midi(v.note), v.len * stepDur * 0.88, v.vowel, RD_VOICE_LEVEL, v.to);
+                sing(ctx, dry, time, midi(v.note), dur, v.vowel, RD_VOICE_LEVEL, v.to);
+                if (v.last && live.current.mode === 'throw') {
+                    throwSend.gain.setTargetAtTime(1, time - 0.01, 0.003);
+                    throwSend.gain.setTargetAtTime(0, time + dur, 0.01);
+                }
             }
             if (step === 0 || step === 16) kick(ctx, beat, time, 0.35);
             if (step % 2 === 0) hat(ctx, beat, time, step % 4 === 0 ? 0.18 : 0.1);
@@ -996,7 +1015,7 @@ export function ReverbDuckDemo() {
         setDuck(-20 * Math.log10(Math.max(1e-3, 1 - duckFloor(live.current) * c)));
     });
 
-    const effectName = mode === 'delay' ? 'Delay' : 'Reverb';
+    const effectName = mode === 'throw' ? 'Throw' : 'Reverb';
     return (
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
@@ -1008,7 +1027,7 @@ export function ReverbDuckDemo() {
                     options={[
                         { value: 'plain', label: 'Plain reverb' },
                         { value: 'ducked', label: 'Ducked reverb' },
-                        { value: 'delay', label: 'Tempo delay' },
+                        { value: 'throw', label: 'Delay throw' },
                     ]}
                 />
             </Field>
@@ -1021,7 +1040,7 @@ export function ReverbDuckDemo() {
                     </span>
                     <span className="inline-flex items-center gap-1.5">
                         <span className="h-0.5 w-3 bg-[var(--accent)]" />
-                        {effectName}
+                        {mode === 'throw' ? 'Delay throw' : 'Reverb'}
                     </span>
                     <span>Last 6 seconds</span>
                 </div>
@@ -1044,9 +1063,9 @@ export function ReverbDuckDemo() {
                         hint="How far the reverb drops while the voice sings."
                     />
                 ) : null}
-                {mode === 'delay' ? <Slider label="Feedback" value={feedback} min={0} max={70} step={5} onChange={setFeedback} format={(v) => `${v}%`} /> : null}
+                {mode === 'throw' ? <Slider label="Feedback" value={feedback} min={0} max={70} step={5} onChange={setFeedback} format={(v) => `${v}%`} /> : null}
             </div>
-            {mode === 'delay' ? (
+            {mode === 'throw' ? (
                 <Field label="Delay time">
                     <Segmented
                         label="Delay time"
@@ -1058,11 +1077,13 @@ export function ReverbDuckDemo() {
                             { value: 'quarter', label: `1/4, ${Math.round(delaySeconds('quarter') * 1000)} ms` },
                         ]}
                     />
+                    <p className="mt-2 text-xs leading-5 text-white/50">With a 1/4 note, the second repeat lands on the first word of the next line.</p>
                 </Field>
             ) : null}
             <p className="text-sm leading-6 text-white/60">
-                The dry voice never changes. With plain reverb, the tail of each line runs over the start of the next. Ducked, the reverb drops while the voice sings
-                and swells in the gaps. The delay repeats in time with the beat at {RD_BPM} BPM and is filtered thin, so the echoes sit behind the words.
+                The dry voice never changes. With plain reverb, the tail of each line runs under the start of the next. Ducked, the reverb drops while the voice sings
+                and swells in the gaps. The throw sends only the last syllable of each line to a filtered delay timed to the beat at {RD_BPM} BPM, so its repeats fill
+                the gap instead of sitting under the next line.
             </p>
         </div>
     );

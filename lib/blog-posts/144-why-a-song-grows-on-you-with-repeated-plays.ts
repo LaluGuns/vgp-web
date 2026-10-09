@@ -16,7 +16,7 @@ export const post144: BlogArticle = {
         weights: {
             type: 'bars',
             caption:
-                'Standardized weights from Madison and Schiölde\'s (2017) model of mean liking across 40 excerpts. How familiar listeners said the style of an excerpt was counted for more than the 28 plays in the study, and complexity counted least. Together the three explained 57% of the variance.',
+                'Standardized weights from Madison and Schiölde\'s (2017) regression on mean liking for 40 excerpts at four rating sessions. How much listeners said, on day one, that they listen to music like each excerpt weighed more than the number of plays, and complexity weighed least. Together the three explained 57% of the variance.',
             alt: 'Three horizontal bars on a scale from 0 to 0.6. Listens to similar music reaches 0.55, number of plays 0.46 and complexity level 0.23.',
             min: 0,
             max: 0.6,
@@ -29,7 +29,7 @@ export const post144: BlogArticle = {
         split: {
             type: 'curve',
             caption:
-                'The pattern Green and colleagues (2012) reported. Recognition climbed at every step from no plays to 32. Liking rose slowly, and only 32 plays against none was a reliable difference. A sketch of the two shapes, not their data.',
+                'The pattern Green and colleagues (2012) reported after one lab session of focused listening. Recognition climbed at every step from no plays to 32. Liking rose slowly, and only 32 plays against none was a reliable difference. A sketch of the two shapes on separate rating scales, not their data.',
             alt: 'Two curves over four exposure levels: never heard, 2 plays, 8 plays and 32 plays. The recognition curve rises steeply and keeps rising. The dashed liking curve stays nearly flat and lifts a little at 32 plays.',
             x: ['Never heard', '2 plays', '8 plays', '32 plays'],
             xShort: ['None', '2', '8', '32'],
@@ -80,7 +80,7 @@ export const post144: BlogArticle = {
 
 You send a new instrumental to a friend who mostly listens to rap. The reply is "it's fine, a bit busy." Three weeks later the track has been playing in the background of your shared room most afternoons, and the same friend asks what it is called and whether it is finished. It is the same file you sent the first time.
 
-The opposite happens too. You play two hooks to a few people and ask which one they remember. Hook A wins, so you assume it is the one they like, and build the chorus on it.
+Memory misleads in a different way. You play two hooks to a few people and ask which one they remember. Hook A wins, so you assume it is the one they like, and build the chorus on it.
 
 ## Why it matters: first reactions and memory tests mislead
 
@@ -88,17 +88,17 @@ Most demo feedback rests on two habits. The first is treating one cold listen as
 
 ## Science model: exposure, style history and two kinds of memory
 
-Zajonc (1968) described the mere exposure effect: repeated exposure alone can make people like a stimulus more. The lesson on [mixing while attached to the demo](/blog/danger-of-mixing-attached-to-the-demo) covers how it traps you on your own rough mix, and the one on [hooks that wear out](/blog/why-a-hook-must-be-predictable-and-unstable) covers how liking can rise and then fall when people listen closely. This one is about a new listener meeting a new song.
+Zajonc (1968) described the mere exposure effect: repeated exposure alone can make people like a stimulus more. The lesson on [mixing while attached to the demo](/blog/danger-of-mixing-attached-to-the-demo) covers how it traps you on your own rough mix, and the one on [hooks that wear out](/blog/why-a-hook-must-be-predictable-and-unstable) covers how liking can rise and then fall when people listen closely.
 
-Madison and Schiölde (2017) ran a long test outside the lab. Fifteen adults received 40 instrumental excerpts, 38 to 75 seconds long, mostly in pop, rock and jazz styles, none of which they had heard before. Each excerpt played about once a day for four weeks, 28 times in all, and most listening happened while people did chores, ate, drove or worked. Experts had sorted the excerpts into four levels of complexity. Liking rose with plays at every level, from the simplest excerpts to the most complex, with no rise and fall. The strongest predictor of liking was familiarity with the style: how much listeners said, on the first day, that they listen to music like each excerpt.
+Madison and Schiölde (2017) ran a long test outside the lab. Fifteen adults received 40 instrumental excerpts, 38 to 75 seconds long, drawn from pop, rock, jazz and world-music records, none of which they had heard before. Each excerpt played about once a day for four weeks, 28 times in all, and most listening happened while people did chores, ate, drove or worked. Experts had sorted the excerpts into four levels of complexity. Liking rose with plays at every level, from the simplest excerpts to the most complex, with no rise and fall. The strongest predictor of liking was familiarity with the style: how much listeners said, on the first day, that they listen to music like each excerpt. That is the same [learned style knowledge](/blog/listeners-bring-genre-expectations-into-your-song) that decides what sounds surprising.
 
 ::figure weights
 
-The study has limits. Fifteen people is a small sample, they were recruited among music-professional contacts and were keen listeners, and the excerpts came from the authors' own collections. Four listeners showed a small dip late in the series, mostly for the simplest excerpts, though none of those dips was statistically reliable. The study tells you a lot about half-attentive everyday listening and little about one focused A/B in your studio.
+The study has limits. Fifteen people is a small sample. They were recruited through one author's contacts among music professionals, they were more involved with music than most people, and the excerpts came from the authors' own record collections. Four listeners showed a small dip late in the series, almost all of it in the two simplest levels, though none of those dips was statistically reliable. The study speaks to half-attentive everyday listening and says little about one focused A/B in your studio.
 
 Remembering and liking also come apart. Peretz, Gaudreau and Bonnel (1998) played listeners a set of familiar and unfamiliar melodies, then mixed them with new ones at test. Half the listeners rated how much they liked each melody. The other half said whether they had heard it before. Exposure raised liking for the unfamiliar melodies. The recognition effect lasted longer over delays than the liking effect. Changing the instrument timbre between the first hearing and the test, or changing what listeners did while they first heard the melodies, had a marked effect on recognition and little effect on liking. The authors read this as two forms of memory: an explicit one you can report, and an implicit one that shows up as preference.
 
-Green and colleagues (2012) found a similar split in a scanner study. Twenty-one non-musicians heard 30 unfamiliar 13-second melodies either never, 2, 8 or 32 times. Recognition rose at every step. Liking rose modestly, and only 32 plays against none was a reliable difference. Frontal and parietal areas that the authors tie to memory retrieval were more active for well-known melodies even while people were only judging liking, which the authors take as a sign that liking leans on memory. They used an uncorrected statistical threshold, so treat the brain result as preliminary.
+Green and colleagues (2012) found a similar split in a scanner study. Twenty-one non-musicians heard unfamiliar 13-second melodies either never, 2, 8 or 32 times, all in one session of about an hour, while they listened for an occasional out-of-tune note. Recognition rose at every step. Liking rose modestly, and only 32 plays against none was a reliable difference. Frontal and parietal areas that the authors tie to memory retrieval were more active for well-known melodies even while people were only judging liking, which the authors take as a sign that liking leans on memory. They used an uncorrected statistical threshold, so treat the brain result as preliminary.
 
 ::figure split
 
@@ -106,7 +106,7 @@ For a producer, two things follow. A listener's first reaction partly measures t
 
 ## DAW experiment: a ten-day listening log
 
-1. Bounce 45-second clips of two of your unreleased ideas and one track in a style you rarely listen to. Name them A, B and C so the titles do not steer you.
+1. Bounce 45-second clips of two ideas you started this week and one track in a style you rarely listen to. Name them A, B and C so the titles do not steer you.
 2. Put the three clips back to back in a new session with a marker or notes track. Play them once and rate each clip from 0 to 10 twice: "I like this" and "I listen to music like this." Type the numbers into the markers.
 3. Every day for the next ten days, play the session once while you do something else, such as email or cleaning. Do not stop to analyse it.
 4. On day 5 and day 10, before you press play, write whether you can hum the main idea of each clip from memory. Then play the session and rate liking again.
@@ -114,11 +114,11 @@ For a producer, two things follow. A listener's first reaction partly measures t
 6. For other ears, play a friend six short hooks in a shuffled order: three from a demo they heard last week and three new ones in the same style. On one pass ask "heard before, yes or no." On a second pass ask "like it, 0 to 10."
 7. Render one of the familiar hooks on a different instrument and slip it into the second set. Peretz's result predicts that a timbre change hurts recognition more than liking, so check whether your friend follows that pattern.
 
-One person's log proves nothing general. What it does show is how far your own first reaction moved, and whether the hook people recall is the one they rate highest.
+One person's log proves nothing general, but it shows how far your own first reaction moved, and whether the hook people recall is the one they rate highest.
 
 ## Common mistake: the cold listen as a verdict
 
-The first mistake is binning or simplifying an idea after one reaction, especially from someone who does not listen to that style. In the Madison and Schiölde data, familiarity with the style counted for more than the music's complexity. Before you strip a dense arrangement, get a reaction from someone who knows the genre, or let the track play a few more times in the background.
+The first mistake is binning or simplifying an idea after one reaction, especially from someone who does not listen to that style. In the Madison and Schiölde data, familiarity with the style counted for more than the music's complexity, and the more complex excerpts were, if anything, liked slightly more. Before you strip a dense arrangement, get a reaction from someone who knows the genre, or let the track play a few more times in the background.
 
 The second mistake is asking "which one do you remember?" and counting the answer as a vote. Recall tells you the hook got into memory. Whether the listener wants it again is a different question, and it deserves its own pass.
 
