@@ -33,10 +33,13 @@ const undb = (d) => 10 ** (d / 20);
 const msLabel = (ms) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`);
 const ZR = D.snare.rate;
 const ZN = Math.round(0.15 * ZR);
+/** Mechanism (slowed-down) views show 0-100 ms, so the crack is a fifth of the width. */
+const MN = Math.round(0.1 * ZR);
 const CRACK = Math.round(0.02 * ZR);
 const sceneAt = (t) => TL.scenes.filter((s) => s.at <= t).pop();
 const SC = Object.fromEntries(TL.scenes.map((s) => [s.id, s.at]));
 const DRY = HITS.filter((h) => !h.demo).map((h) => h.t);
+const PARTS_HIT = () => DRY.find((x) => x >= SC.parts);
 const BUTTON = TL.sfx.find((s) => s.kind === 'button').at;
 const sceneEnd = (s) => {
     const i = TL.scenes.indexOf(s);
@@ -107,10 +110,11 @@ function latestZoom(id, t) {
 
 // ── Plot primitives (linear level) ──
 /** Area from the baseline up to the curve, crack in amber and body in cyan. */
-function area(gc, box, vals, vmax, upto = ZN, { crack = CRACK, colors = [P.amber, P.cyan], alpha = 1 } = {}) {
-    const m = Math.min(vals.length, Math.floor(upto));
+function area(gc, box, vals, vmax, upto = box.n ?? ZN, { crack = CRACK, colors = [P.amber, P.cyan], alpha = 1 } = {}) {
+    const N = box.n ?? ZN;
+    const m = Math.min(vals.length, N, Math.floor(upto));
     if (m < 2) return;
-    const X = (i) => box.x0 + ((box.x1 - box.x0) * i) / (ZN - 1);
+    const X = (i) => box.x0 + ((box.x1 - box.x0) * i) / (N - 1);
     const Y = (v) => box.base - (box.base - box.top) * clamp(v / vmax);
     gc.save();
     gc.globalAlpha *= alpha;
@@ -126,8 +130,8 @@ function area(gc, box, vals, vmax, upto = ZN, { crack = CRACK, colors = [P.amber
     }
     gc.restore();
 }
-function curve(gc, box, vals, vmax, { upto = ZN, color = P.ink, width = 4, dash = null, alpha = 1, n = ZN } = {}) {
-    const m = Math.min(vals.length, Math.floor(upto));
+function curve(gc, box, vals, vmax, { upto = box.n ?? ZN, color = P.ink, width = 4, dash = null, alpha = 1, n = box.n ?? ZN } = {}) {
+    const m = Math.min(vals.length, n, Math.floor(upto));
     if (m < 2) return;
     gc.save();
     gc.globalAlpha *= alpha;
@@ -270,13 +274,11 @@ function hookScope(t, alpha, replay) {
     g.moveTo(box.x0, box.base);
     g.lineTo(box.x1, box.base);
     g.stroke();
-    // A: filled while it plays, then a dashed outline to compare against.
-    if (A) {
-        if (!B) area(g, box, A.z.heard, HEARD_MAX, A.n);
-        else curve(g, box, A.z.heard, HEARD_MAX, { color: P.ink, width: 5, dash: [14, 10], alpha: 0.85 });
-    }
+    // A fills while it plays; once B plays, B fills and A is drawn dashed on
+    // top, full width, crack included.
     if (B) area(g, box, B.z.heard, HEARD_MAX, B.n);
-    // Legend, written on the plot.
+    else if (A) area(g, box, A.z.heard, HEARD_MAX, A.n);
+    if (A && B) curve(g, box, A.z.heard, HEARD_MAX, { color: P.ink, width: 4, dash: [12, 9], alpha: 0.9 });
     const lx = box.x1 - 10;
     if (A && !B) label(g, '1 ms attack', lx, box.top - 40, { size: 38, weight: 700, color: P.ink, align: 'right' });
     if (B) {
@@ -284,25 +286,49 @@ function hookScope(t, alpha, replay) {
         label(g, '- - 1 ms attack', lx, box.top + 4, { size: 34, weight: 600, color: P.ink2, align: 'right' });
     }
     g.restore();
-    // Verdict: pills in the lane above the plot, leaders to the two cracks.
-    if (!replay && A && B) {
-        const peakA = Math.max(...A.z.heard.slice(0, CRACK));
-        const peakB = Math.max(...B.z.heard.slice(0, CRACK));
-        const cx = box.x0 + ((box.x1 - box.x0) * (CRACK * 0.5)) / (ZN - 1);
-        const yA = box.base - (box.base - box.top) * clamp(peakA / HEARD_MAX);
-        const yB = box.base - (box.base - box.top) * clamp(peakB / HEARD_MAX);
-        const bi = Math.round(ZN * 0.3);
-        const xA = box.x0 + ((box.x1 - box.x0) * bi) / (ZN - 1);
-        const yAb = box.base - (box.base - box.top) * clamp(A.z.heard[bi] / HEARD_MAX);
-        tag(g, 'flat', 660, box.top + 120, { x: xA, y: yAb }, { a: alpha * popIn(t, wt('flat', 'flat')), bg: P.ink, size: 42 });
-        tag(g, 'punchy', 470, box.top + 40, { x: cx + 6, y: yB }, { a: alpha * popIn(t, wt('punchy', 'punchy')), bg: P.amber, fg: P.dark, size: 42, weight: 800 });
-        void yA;
+    if (A && B) compareCracks(g, box, A.z.heard, B.z.heard, alpha * popIn(t, demoBy[b].at + 0.55), replay ? null : [wt('flat', 'flat'), wt('punchy', 'punchy')], t);
+    if (replay && A && !B) {
+        const ci = Math.round(CRACK * 0.45);
+        const x = box.x0 + ((box.x1 - box.x0) * ci) / (ZN - 1);
+        const y = box.base - (box.base - box.top) * clamp(A.z.heard[ci] / HEARD_MAX);
+        tag(g, 'crack squashed', box.x0 + 330, box.top + 60, { x, y }, { a: alpha * popIn(t, demoBy[a].at + 0.6), bg: P.dark, fg: P.amber, ring: P.amber, size: 40 });
     }
-    if (replay) {
-        const cx = box.x0 + ((box.x1 - box.x0) * (CRACK * 0.5)) / (ZN - 1);
-        const top = (z) => box.base - (box.base - box.top) * clamp(Math.max(...z.heard.slice(0, CRACK)) / HEARD_MAX);
-        if (A && !B) tag(g, 'crack squashed', 520, box.top + 60, { x: cx + 10, y: top(A.z) }, { a: alpha * popIn(t, demoBy[a].at + 0.55), bg: P.ink, size: 40 });
-        if (B) tag(g, 'crack gets through', 540, box.top + 40, { x: cx + 6, y: top(B.z) }, { a: alpha * popIn(t, demoBy[b].at + 0.55), bg: P.amber, fg: P.dark, size: 40, weight: 800 });
+}
+
+/**
+ * Two "what you hear" hits compared: an arrow between their crack peaks with
+ * the measured difference, and (in the hook) "flat" and "punchy" on each crack.
+ */
+function compareCracks(gc, box, lo, hi, a, words, t) {
+    if (a <= 0) return;
+    const N = box.n ?? ZN;
+    const ci = Math.round(CRACK * 0.45);
+    const x = box.x0 + ((box.x1 - box.x0) * ci) / (N - 1);
+    const Y = (v) => box.base - (box.base - box.top) * clamp(v / HEARD_MAX);
+    const pl = Math.max(...lo.slice(0, CRACK));
+    const ph = Math.max(...hi.slice(0, CRACK));
+    const y0 = Y(pl);
+    const y1 = Y(ph);
+    const ax = box.x0 + ((box.x1 - box.x0) * (CRACK + 10)) / (N - 1);
+    gc.save();
+    gc.globalAlpha *= a;
+    gc.strokeStyle = P.amber;
+    gc.lineWidth = 4;
+    gc.lineCap = 'round';
+    gc.beginPath();
+    gc.moveTo(ax, y0 - 4);
+    gc.lineTo(ax, y1 + 4);
+    for (const [yy, d] of [[y1 + 4, 1], [y0 - 4, -1]]) {
+        gc.moveTo(ax - 10, yy + 12 * d);
+        gc.lineTo(ax, yy);
+        gc.lineTo(ax + 10, yy + 12 * d);
+    }
+    gc.stroke();
+    label(gc, `+${Math.round(20 * Math.log10(ph / pl))} dB crack`, ax + 18, (y0 + y1) / 2 + 12, { size: 34, weight: 700, color: P.amber });
+    gc.restore();
+    if (words) {
+        tag(gc, 'flat', box.x0 + 300, y0 + 8, { x: x + 4, y: y0 }, { a: a * popIn(t, words[0]), bg: P.ink, size: 40 });
+        tag(gc, 'punchy', box.x0 + 330, box.top + 40, { x, y: y1 }, { a: a * popIn(t, words[1]), bg: P.dark, fg: P.amber, ring: P.amber, size: 40 });
     }
 }
 
@@ -346,7 +372,13 @@ function drawStage(t) {
     if (!replay) {
         const ta = 1 - seg(t, 2.0, 2.3);
         if (ta > 0) {
-            label(g, 'Flat or punchy?', 540, 1120, { size: 92, weight: 800, color: P.ink, align: 'center', alpha: ta });
+            // Slams in with the first hit, settles, and nudges on the second.
+            const s0 = lerp(1.25, 1, E.outBack(seg(t, 0, 0.22))) * (1 + 0.05 * bump(t, DRY[1], 0.05, 0.25));
+            g.save();
+            g.translate(540, 1095);
+            g.scale(s0, s0);
+            label(g, 'Flat or punchy?', 0, 25, { size: 96, weight: 800, color: P.ink, align: 'center', alpha: ta });
+            g.restore();
         }
     }
     const sa = (replay ? 1 : E.out(seg(t, 2.3, 2.6))) * (1 - push) * alpha;
@@ -356,16 +388,21 @@ function drawStage(t) {
 // ══ Inside the box: in, the hand on the fader, out ══
 const IN = { inX: 190, faderX: 470, outX: 760, top: 520, bottom: 1130, thr: 0.62, shelf: 452 };
 function insideState(t) {
-    const tCross = wt('pull', 'crosses');
-    const tPull = wt('pull', 'pulls') - 0.1;
-    const idle = 0.3 + 0.05 * Math.sin(t * 3.1) + 0.035 * Math.sin(t * 7.3 + 1) + 0.02 * Math.sin(t * 13.7 + 2);
-    const surge = E.out(seg(t, tCross, tCross + 0.3));
-    const pull = E.inOut(seg(t, tPull, tPull + 0.55));
-    const high = 0.93 + 0.015 * Math.sin(t * 9);
-    const inLevel = lerp(idle, high, surge);
-    // What the fader lets out: everything, until the hand pulls it down.
-    const outLevel = lerp(inLevel, IN.thr + 0.05 + 0.01 * Math.sin(t * 9), pull * surge);
-    return { inLevel, outLevel, gr: 9 * pull, pull, thrDraw: E.out(seg(t, voBy.pull.at, voBy.pull.at + 0.45)) };
+    // The soft hits placed inside the box (dry hits between the narration's "crosses" and the cut).
+    const hits = DRY.filter((h) => h > wt('pull', 'crosses') - 0.05 && h < SC.parts);
+    const idle = 0.3 + 0.04 * Math.sin(t * 3.1) + 0.03 * Math.sin(t * 7.3 + 1) + 0.015 * Math.sin(t * 13.7 + 2);
+    let inLevel = idle;
+    for (const h of hits) {
+        if (t < h) continue;
+        const k = t - h;
+        const env = Math.min(1, k / 0.06) * Math.exp(-Math.max(0, k - 0.06) / 0.42);
+        inLevel = Math.max(inLevel, idle + (0.95 - idle) * env);
+    }
+    // From the second hit the hand works: what is over the threshold comes out at a quarter.
+    const active = hits.length > 1 ? E.out(seg(t, hits[1] + 0.03, hits[1] + 0.09)) : 0;
+    const over = Math.max(0, inLevel - IN.thr);
+    const outLevel = inLevel - over * 0.75 * active;
+    return { inLevel, outLevel, gr: 40 * (inLevel - outLevel), active, thrDraw: E.out(seg(t, voBy.pull.at, voBy.pull.at + 0.45)) };
 }
 function drawInside(t) {
     const tIn = vEnd('knob') + 0.32;
@@ -407,7 +444,7 @@ function drawInside(t) {
     const tRest = wt('hand', 'resting');
     const appear = E.outBack(seg(t, tHand - 0.25, tHand + 0.1));
     const reach = E.inOut(seg(t, tHand, tRest + 0.1));
-    const grip = t < tRest ? 0 : lerp(0.35, 1, st.pull) * E.out(seg(t, tRest, tRest + 0.3)) + (t >= tRest ? 0 : 0);
+    const grip = t < tRest ? 0 : Math.max(0.6 * E.out(seg(t, tRest, tRest + 0.3)), gripOf(st.gr));
     const tEye = wt('watch', 'watches') - 0.05;
     const lid = t < tEye ? 0.85 : t < tEye + 0.15 ? 0.85 * (1 - (t - tEye) / 0.15) : blink(t, tEye + 1.6);
     const look = t > tEye ? { x: IN.inX, y: IN.bottom - st.inLevel * (IN.bottom - IN.top) } : { x: IN.faderX, y: capY };
@@ -418,7 +455,7 @@ function drawInside(t) {
         g.translate(IN.faderX, IN.shelf);
         g.scale(sc, sc);
         g.translate(-IN.faderX, -IN.shelf);
-        robotTop(g, IN.faderX, IN.shelf, capY - 38, { grip, look, lid, s: 0.72, reach });
+        robotTop(g, IN.faderX, IN.shelf, capY - 38, { grip, look, lid, s: 0.72, reach, pulse: seg(t, wt('hand', 'tiny'), wt('hand', 'tiny') + 0.6) });
         g.restore();
     }
     g.restore();
@@ -442,10 +479,10 @@ function drawParts(t) {
         const x = lerp(PT.x0, PT.x1, ms / 150);
         label(g, ms === 150 ? '150 ms' : String(ms), x, PT.base + 56, { size: 36, weight: 600, color: P.ink2, align: ms === 150 ? 'right' : ms === 0 ? 'left' : 'center', family: BODY });
     }
-    const tHit = DRY[1];
+    const tHit = PARTS_HIT();
     const upto = clamp((t - tHit) / 0.15) * ZN;
-    const cA = popIn(t, wt('crack', 'crack'));
-    const bA = popIn(t, wt('body', 'body'));
+    const cA = popIn(t, wt('crack', 'crack') - 0.1, 0.2);
+    const bA = popIn(t, wt('body', 'body') - 0.1, 0.2);
     const box = { x0: PT.x0, x1: PT.x1, top: PT.top, base: PT.base };
     area(g, box, SN.env, LONE_MAX, upto, { colors: ['rgba(248,250,252,0.22)', 'rgba(248,250,252,0.22)'] });
     if (cA > 0) area(g, box, SN.env, LONE_MAX, Math.min(upto, CRACK + 1), { colors: [P.amber, P.amber], alpha: cA });

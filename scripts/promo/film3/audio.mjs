@@ -250,6 +250,14 @@ export function renderAudio(wavPath) {
             dst += piece.length / RATE - (k + 2 < bounds.length ? 0.012 : 0);
         }
     }
+    // Cue-tied effects (and dry hits) land on their word.
+    const sfxList = TIMELINE.sfx.map((s) => {
+        if (!s.cue) return s;
+        const p = placed.find((v) => v.id === s.cue[0]);
+        const w = p?.words.filter((x) => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === s.cue[1].toLowerCase())[0];
+        if (!w) throw new Error(`sfx cue ${s.cue.join('/')} not found`);
+        return { ...s, at: w.s + (s.dt ?? 0) };
+    });
     // Rumble out, then the usual voice chain: a gentle compressor and a
     // look-ahead peak limiter, so speech peaks sit about 11 dB over its
     // loudness and the master never has to clip the voice.
@@ -262,10 +270,10 @@ export function renderAudio(wavPath) {
     const dL = new Float32Array(n);
     const dR = new Float32Array(n);
     const hits = TIMELINE.demos.flatMap(hitsOf);
-    const dryHits = TIMELINE.sfx.filter((s) => s.kind === 'hit').map((s) => ({ voice: 'snare', t: s.at, demo: null }));
+    const dryHits = sfxList.filter((s) => s.kind === 'hit').map((s) => ({ voice: 'snare', t: s.at, demo: null, level: s.level ?? 1 }));
     for (const h of [...hits, ...dryHits]) {
-        mixIn(dL, S[h.voice].L, h.t, VELOCITY[h.voice]);
-        mixIn(dR, S[h.voice].R, h.t, VELOCITY[h.voice]);
+        mixIn(dL, S[h.voice].L, h.t, VELOCITY[h.voice] * (h.level ?? 1));
+        mixIn(dR, S[h.voice].R, h.t, VELOCITY[h.voice] * (h.level ?? 1));
     }
     // Scale the detector so the snare's crack reads 1.0.
     const snareEnv = rmsEnv(mono(S.snare.L, S.snare.R), DETECT, true);
@@ -331,14 +339,6 @@ export function renderAudio(wavPath) {
     }
 
     // ── Effects ──
-    // Cue-tied effects land on their word.
-    const sfxList = TIMELINE.sfx.map((s) => {
-        if (!s.cue) return s;
-        const p = placed.find((v) => v.id === s.cue[0]);
-        const w = p?.words.filter((x) => x.w.toLowerCase().replace(/[^a-z0-9]/g, '') === s.cue[1].toLowerCase())[0];
-        if (!w) throw new Error(`sfx cue ${s.cue.join('/')} not found`);
-        return { ...s, at: w.s + (s.dt ?? 0) };
-    });
     const fx = new Float32Array(n);
     const fxL = new Float32Array(n);
     const fxR = new Float32Array(n);

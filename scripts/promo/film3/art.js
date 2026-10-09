@@ -700,11 +700,20 @@ function robotDome(g, base, { look = null, lid = 0, s = 1 } = {}) {
     if (lid > 0) {
         g.save();
         g.beginPath();
-        g.arc(ex, ey, 39 * s, 0, Math.PI * 2);
+        g.arc(ex, ey, 47 * s, 0, Math.PI * 2);
         g.clip();
         g.fillStyle = P.devHi;
-        g.fillRect(ex - 46 * s, ey - 46 * s, 92 * s, 92 * s * lid);
+        g.fillRect(ex - 48 * s, ey - 48 * s, 96 * s, 96 * s * clamp(lid * 1.15));
         g.restore();
+        if (lid > 0.8) {
+            // Closed: one curved lid line.
+            g.strokeStyle = P.dark;
+            g.lineWidth = 6 * s;
+            g.lineCap = 'round';
+            g.beginPath();
+            g.arc(ex, ey - 6 * s, 30 * s, Math.PI * 0.2, Math.PI * 0.8);
+            g.stroke();
+        }
     }
 }
 
@@ -713,14 +722,97 @@ function robotDome(g, base, { look = null, lid = 0, s = 1 } = {}) {
  * `capTop` is the top edge of the fader cap; `grip` 0..1 closes the glove on
  * it, and an open glove hovers above the cap.
  */
-function robotTop(g, x, shelfY, capTop, { grip = 1, look = null, lid = 0, s = 0.75, reach = 1 } = {}) {
-    const lift = (1 - grip) * 40 * s;
-    const wrist = { x, y: lerp(shelfY + 40 * s, capTop - 52 * s - lift, reach) };
+function robotTop(g, x, shelfY, capTop, { grip = 1, look = null, lid = 0, s = 0.75, reach = 1, pulse = 0 } = {}) {
+    // The glove's palm sits on the cap when gripping and hovers above it when open.
+    const lift = (1 - grip) * 44 * s;
+    const wrist = { x, y: lerp(shelfY + 40 * s, capTop - 44 * s * 1.4 - lift, reach) };
     const mid = { x, y: lerp(shelfY + 8 * s, wrist.y, 0.5) };
     tube(g, { x, y: shelfY + 4 * s }, mid, s * 1.25);
     tube(g, mid, wrist, s * 0.85);
-    glove(g, wrist.x, wrist.y, s, 1 - grip, Math.PI / 2);
+    gloveDown(g, wrist.x, wrist.y, s * 1.4, grip, capTop, pulse);
     robotDome(g, { x, y: shelfY }, { look, lid, s });
+}
+
+/**
+ * The white glove seen from the front, hand hanging down from the wrist.
+ * grip 0: an open hand, fingers fanned, hovering. grip 1: palm on the cap,
+ * four fingers folded over its front edge, knuckles showing.
+ */
+function gloveDown(g, x, y, s, grip, capTop, pulse = 0) {
+    g.save();
+    g.translate(x, y);
+    g.scale(s, s);
+    if (pulse > 0) {
+        g.strokeStyle = `rgba(125,211,252,${0.8 * (1 - pulse)})`;
+        g.lineWidth = 5 / s;
+        g.beginPath();
+        g.arc(0, 40, 50 + 70 * pulse, 0, Math.PI * 2);
+        g.stroke();
+    }
+    // Cuff.
+    rr(g, -24, -8, 48, 20, 8);
+    g.fillStyle = P.steel;
+    g.fill();
+    // Palm.
+    g.fillStyle = P.gloveLo;
+    g.beginPath();
+    g.ellipse(2, 34, 30, 26, 0, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = P.glove;
+    g.beginPath();
+    g.ellipse(0, 32, 29, 25, 0, 0, Math.PI * 2);
+    g.fill();
+    g.lineCap = 'round';
+    // Thumb: out to the side when open, tucked when gripping.
+    const ta = lerp(-0.2, 0.9, grip);
+    g.strokeStyle = P.glove;
+    g.lineWidth = 15;
+    g.beginPath();
+    g.moveTo(22, 26);
+    g.lineTo(22 + Math.cos(ta) * 26, 26 + Math.sin(ta) * 26);
+    g.stroke();
+    for (let i = 0; i < 4; i++) {
+        const fx = -18 + i * 12;
+        if (grip > 0.5) {
+            // Folded over the cap: short fingers ending in round knuckles.
+            const len = lerp(30, 20, (grip - 0.5) * 2);
+            g.strokeStyle = P.gloveLo;
+            g.lineWidth = 13;
+            g.beginPath();
+            g.moveTo(fx + 1, 46);
+            g.lineTo(fx + 1, 46 + len);
+            g.stroke();
+            g.strokeStyle = P.glove;
+            g.lineWidth = 11;
+            g.beginPath();
+            g.moveTo(fx, 44);
+            g.lineTo(fx, 44 + len);
+            g.stroke();
+            g.fillStyle = P.gloveLo;
+            g.beginPath();
+            g.arc(fx, 46 + len, 4, 0, Math.PI * 2);
+            g.fill();
+        } else {
+            // Open: fingers fanned out and down.
+            const a = Math.PI / 2 + (i - 1.5) * lerp(0.42, 0.2, grip * 2);
+            const len = 34 - Math.abs(i - 1.5) * 4;
+            const bx = fx * 0.6;
+            g.strokeStyle = P.gloveLo;
+            g.lineWidth = 12;
+            g.beginPath();
+            g.moveTo(bx + 1, 50);
+            g.lineTo(bx + 1 + Math.cos(a) * len, 50 + Math.sin(a) * len);
+            g.stroke();
+            g.strokeStyle = P.glove;
+            g.lineWidth = 10;
+            g.beginPath();
+            g.moveTo(bx, 48);
+            g.lineTo(bx + Math.cos(a) * len, 48 + Math.sin(a) * len);
+            g.stroke();
+        }
+    }
+    g.restore();
+    void capTop;
 }
 
 function tube(g, p, q, s) {
