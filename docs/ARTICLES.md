@@ -140,20 +140,20 @@ it. Sound is synthesised in the browser. Ids:
 | `tempo` | Same beat from 60 to 160 BPM |
 | `humanize` | Add timing drift to hats and snare |
 | `syncopation` | On the beat against syncopated accents |
-| `drop` | Silence or stripped layers before a drop |
-| `mono` | Fold a mix to mono; Haas delay against flipped polarity |
+| `drop` | Silence or stripped layers before a drop, with a bar-by-bar strip |
+| `mono` | Fold a mix to mono; Haas delay against flipped polarity, with a level meter per part |
 | `phase` | Two copies of a bass, delay and polarity |
-| `reverb` | Pre-delay, decay and level |
+| `reverb` | Pre-delay, decay and level, with a live trace of the dry notes and the reverb |
 | `filter` | Low-pass, high-pass and narrow boost with a live spectrum |
 | `eq-sweep` | Sweep a narrow boost to find a frequency by ear |
-| `envelope` | Attack and release on a synth phrase |
-| `masking` | Cut or duck a pad under a lead |
+| `envelope` | Attack and release on a synth phrase, with the note's level drawn |
+| `masking` | Cut or duck a pad under a lead, with both parts' live spectra |
 | `saturation` | Soft saturation and hard clipping, level-matched |
 | `bit-depth` | Fewer bits, with or without dither |
-| `latency` | Tap pad with added delay |
+| `latency` | Tap pad with added delay, against a metronome |
 | `normalization` | Dynamic against loud master, with streaming-style matching |
 | `loudness-bias` | Blind A/B with one side 1 dB louder |
-| `cadence` | A four-bar phrase ending on V or on I |
+| `cadence` | A four-bar phrase ending on V or on I, with its chords and melody drawn |
 | `parallel` | Blend a heavily compressed copy under dry drums, level-matched |
 | `transient` | Transient shaper attack and sustain against a compressor on one loop |
 | `sidechain` | Kick ducks a sustained bass: depth, release, full-band or lows only |
@@ -164,7 +164,13 @@ it. Sound is synthesised in the browser. Ids:
 | `reverb-duck` | Reverb ducked under the dry phrase, or a delay throw on the last syllable |
 | `chord-context` | One chord after different lead-ins; one melody in major or minor, at two tempos and three registers |
 
-New demos go in `components/blog/demos/` and `lib/blog/demos.ts`.
+New demos go in `components/blog/demos/` and `lib/blog/demos.ts`. Give each
+one a `height` there (its controls' height at 390 px and from 640 px up), so
+the page keeps that space while the demo's code loads and nothing below it
+moves. Set its playback level so its K-weighted loudness sits with the
+drum-loop demos (about -26 LUFS at the default demo volume, ungated) and no
+setting peaks above -6 dBFS; the engine's output limiter holds -6 dBFS as a
+last resort, not as the level control.
 
 ## Glossary
 

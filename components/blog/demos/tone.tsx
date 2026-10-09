@@ -7,40 +7,59 @@ import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
 const SPECTRUM_POINTS = 160;
-/** Half of a sixth of an octave, as a frequency ratio. */
-const SIXTH = 2 ** (1 / 12);
 
-/** Analyser bins averaged for each point of a 1/6-octave smoothed spectrum. Narrow bands at the bottom interpolate between bins. */
-function smoothingBands(binCount: number, binHz: number): { lo: number; hi: number; at: number }[] {
+interface Band {
+    /** First analyser bin in the band. */
+    from: number;
+    /** Weight of each bin from `from` on, summing to 1. */
+    weights: Float32Array;
+}
+
+/**
+ * Sixth-octave smoothing: each point is a weighted mean of the bins' power
+ * within a third of an octave around it, the weight falling in a triangle
+ * from the centre, so the band is a sixth of an octave wide at half weight.
+ * A harmonic sound then reads as one outline instead of a comb of partials.
+ * Below about 200 Hz the band is narrower than a bin, so the nearest two
+ * bins are interpolated.
+ */
+function smoothingBands(binCount: number, binHz: number): Band[] {
     return Array.from({ length: SPECTRUM_POINTS }, (_, k) => {
         const f = 20 * 1000 ** (k / (SPECTRUM_POINTS - 1));
-        const lo = Math.max(1, Math.ceil(f / SIXTH / binHz));
-        const hi = Math.min(binCount - 1, Math.floor((f * SIXTH) / binHz));
-        return { lo, hi, at: Math.min(binCount - 1.001, f / binHz) };
+        const lo = Math.max(1, Math.ceil(f / 2 ** (1 / 6) / binHz));
+        const hi = Math.min(binCount - 1, Math.floor((f * 2 ** (1 / 6)) / binHz));
+        if (hi - lo < 1) {
+            const at = Math.min(binCount - 1.001, Math.max(1, f / binHz));
+            const i = Math.floor(at);
+            return { from: i, weights: new Float32Array([1 - (at - i), at - i]) };
+        }
+        const weights = new Float32Array(hi - lo + 1);
+        let sum = 0;
+        for (let i = lo; i <= hi; i++) {
+            const w = Math.max(0, 1 - Math.abs(Math.log2((i * binHz) / f)) * 6);
+            weights[i - lo] = w;
+            sum += w;
+        }
+        for (let i = 0; i < weights.length; i++) weights[i] = sum > 0 ? weights[i] / sum : 1 / weights.length;
+        return { from: lo, weights };
     });
 }
 
-/** dB per point: the mean power of the bins in each band. */
-function smoothed(data: Float32Array, bands: { lo: number; hi: number; at: number }[], out: Float32Array) {
+/** dB per point from the analyser's dB per bin. `power` is scratch space, one value per bin. */
+function smoothed(data: Float32Array, bands: Band[], power: Float32Array, out: Float32Array) {
+    for (let i = 0; i < data.length; i++) power[i] = 10 ** (data[i] / 10);
     for (let k = 0; k < bands.length; k++) {
-        const { lo, hi, at } = bands[k];
-        let power: number;
-        if (hi >= lo) {
-            power = 0;
-            for (let i = lo; i <= hi; i++) power += 10 ** (data[i] / 10);
-            power /= hi - lo + 1;
-        } else {
-            const i = Math.floor(at);
-            const t = at - i;
-            power = 10 ** (data[i] / 10) * (1 - t) + 10 ** (data[i + 1] / 10) * t;
-        }
-        out[k] = power > 1e-12 ? 10 * Math.log10(power) : -120;
+        const { from, weights } = bands[k];
+        let p = 0;
+        for (let j = 0; j < weights.length; j++) p += power[from + j] * weights[j];
+        out[k] = p > 1e-12 ? 10 * Math.log10(p) : -120;
     }
 }
 
 interface Trace {
     analyser: AnalyserNode;
     data: Float32Array<ArrayBuffer>;
+    power: Float32Array;
     db: Float32Array;
 }
 
@@ -65,7 +84,7 @@ function Spectrum({
     // The lesson group's accent and rules (DemoSlot), so the live display matches the figures.
     const dialect = useDialect();
     const canvas = useRef<HTMLCanvasElement>(null);
-    const traces = useRef<{ bands: { lo: number; hi: number; at: number }[]; key: string; list: Trace[] } | null>(null);
+    const traces = useRef<{ bands: Band[]; key: string; list: Trace[] } | null>(null);
 
     useFrame(active, () => {
         const c = canvas.current;
@@ -87,13 +106,18 @@ function Spectrum({
             traces.current = {
                 key,
                 bands: smoothingBands(analyser.frequencyBinCount, analyser.context.sampleRate / analyser.fftSize),
-                list: sources.map((a) => ({ analyser: a, data: new Float32Array(a.frequencyBinCount), db: new Float32Array(SPECTRUM_POINTS) })),
+                list: sources.map((a) => ({
+                    analyser: a,
+                    data: new Float32Array(a.frequencyBinCount),
+                    power: new Float32Array(a.frequencyBinCount),
+                    db: new Float32Array(SPECTRUM_POINTS),
+                })),
             };
         }
         const { bands, list } = traces.current;
         for (const t of list) {
             t.analyser.getFloatFrequencyData(t.data);
-            smoothed(t.data, bands, t.db);
+            smoothed(t.data, bands, t.power, t.db);
         }
         const x = (k: number) => (k / (SPECTRUM_POINTS - 1)) * w;
         const y = (db: number) => h - ((Math.max(-100, Math.min(-10, db)) + 100) / 90) * h;

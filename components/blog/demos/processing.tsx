@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, fadeOut, hat, kick, midi, pad, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
@@ -204,12 +204,14 @@ function windowRms(sample: (i: number) => number, length: number, count: number,
 
 /**
  * Runs `measure` whenever `key` changes: one render at a time, always
- * finishing on the latest inputs. Returns the last finished result.
+ * finishing on the latest inputs. Returns the last finished result. The
+ * first measurement waits for an idle moment, so a demo that mounts while
+ * the reader scrolls toward it costs no frames.
  */
 function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
     const [result, setResult] = useState<R | null>(null);
     const measureRef = useRef(measure);
-    const job = useRef({ busy: false, dirty: false, alive: true });
+    const job = useRef({ busy: false, dirty: false, alive: true, first: true });
     useEffect(() => {
         measureRef.current = measure;
     });
@@ -217,7 +219,8 @@ function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
         const j = job.current;
         j.alive = true;
         j.dirty = true;
-        if (!j.busy) {
+        const run = () => {
+            if (j.busy || !j.alive) return;
             j.busy = true;
             void (async () => {
                 while (j.dirty && j.alive) {
@@ -231,9 +234,15 @@ function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
                 }
                 j.busy = false;
             })();
-        }
+        };
+        let cancel = () => {};
+        if (j.first) {
+            j.first = false;
+            cancel = whenIdle(run, 600);
+        } else run();
         return () => {
             j.alive = false;
+            cancel();
         };
     }, [key]);
     return result;
@@ -1801,27 +1810,30 @@ function Wave({
         for (let i = 0; i < data.length; i++) d += `${i ? 'L' : 'M'}${((i / (data.length - 1)) * w).toFixed(1)},${y(data[i] * gain).toFixed(1)}`;
         return d;
     };
+    // The label is HTML over the plot, so it stays the same size at any width.
     return (
-        <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block overflow-hidden" role="img" aria-label={label}>
-            <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" />
-            {[line, -line].map((l) => (
-                <line key={l} x1={0} x2={w} y1={y(l)} y2={y(l)} stroke="rgba(255,255,255,0.35)" strokeDasharray="1 3" />
-            ))}
-            <text x={4} y={Math.max(11, y(line) - 4)} fontSize={10} fill="rgba(255,255,255,0.6)">
+        <div className="relative">
+            <span className="pointer-events-none absolute left-1 text-[11px] leading-none text-white/60" style={{ top: `max(2px, calc(${(y(line) / h) * 100}% - 13px))` }} aria-hidden="true">
                 {line >= 0.999 ? '0 dBFS' : `${gainToDb(line).toFixed(0)} dBFS`}
-            </text>
-            {traces?.map((t) => (
-                <path
-                    key={t.kind}
-                    d={path(t.data, t.gain)}
-                    fill="none"
-                    stroke={t.kind === 'after' ? dialect.accent : 'rgba(255,255,255,0.55)'}
-                    strokeLinecap={dialect.cap}
-                    strokeWidth={t.kind === 'after' ? 1.75 : 1.25}
-                    strokeDasharray={t.kind === 'reference' ? '3 3' : undefined}
-                    strokeLinejoin="round"
-                />
-            ))}
-        </svg>
+            </span>
+            <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block overflow-hidden" role="img" aria-label={label}>
+                <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" />
+                {[line, -line].map((l) => (
+                    <line key={l} x1={0} x2={w} y1={y(l)} y2={y(l)} stroke="rgba(255,255,255,0.35)" strokeDasharray="1 3" />
+                ))}
+                {traces?.map((t) => (
+                    <path
+                        key={t.kind}
+                        d={path(t.data, t.gain)}
+                        fill="none"
+                        stroke={t.kind === 'after' ? dialect.accent : 'rgba(255,255,255,0.55)'}
+                        strokeLinecap={dialect.cap}
+                        strokeWidth={t.kind === 'after' ? 1.75 : 1.25}
+                        strokeDasharray={t.kind === 'reference' ? '3 3' : undefined}
+                        strokeLinejoin="round"
+                    />
+                ))}
+            </svg>
+        </div>
     );
 }

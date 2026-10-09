@@ -305,7 +305,7 @@ export function BitDepthDemo() {
             <Slider
                 label="Bit depth"
                 value={bits}
-                min={4}
+                min={5}
                 max={16}
                 onChange={(v) => apply({ bits: v })}
                 format={(v) => `${v}-bit`}

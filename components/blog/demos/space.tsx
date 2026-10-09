@@ -237,8 +237,8 @@ export function PhaseDemo() {
             />
             <Readout
                 items={[
-                    { label: 'Phase difference at 55 Hz', value: `${Math.round(shift)}°` },
-                    { label: 'Combined level at 55 Hz', value: levelDb },
+                    { label: 'Phase difference at 55\u00a0Hz', value: `${Math.round(shift)}°` },
+                    { label: 'Combined level at 55\u00a0Hz', value: levelDb },
                 ]}
             />
         </div>

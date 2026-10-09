@@ -59,6 +59,8 @@ export function CompressorDemo() {
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
     const [reduction, setReduction] = useState(0);
+    /** dB the compressed path still sits under the dry one when matching needs more than its 12 dB. */
+    const [short, setShort] = useState(0);
     const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
     const params = useRef({ threshold, ratio });
 
@@ -99,8 +101,11 @@ export function CompressorDemo() {
             smoothPre = smoothPre * 0.85 + rms(pre, a) * 0.15;
             smoothPost = smoothPost * 0.85 + rms(post, b) * 0.15;
             if (smoothPost > 1e-4) {
-                const target = Math.min(MATCH_MAX, Math.max(MATCH_MIN, smoothPre / smoothPost));
+                const wanted = smoothPre / smoothPost;
+                const target = Math.min(MATCH_MAX, Math.max(MATCH_MIN, wanted));
                 makeup.gain.setTargetAtTime(target, ctx.currentTime, 0.25);
+                const missing = wanted > MATCH_MAX ? Math.round(20 * Math.log10(wanted / MATCH_MAX)) : 0;
+                setShort((s) => (s === missing ? s : missing));
             }
         }, 50);
         return () => {
@@ -109,6 +114,7 @@ export function CompressorDemo() {
             nodes.current = null;
             fadeOut(ctx, master, () => bus.disconnect());
             setReduction(0);
+            setShort(0);
         };
     });
 
@@ -220,7 +226,10 @@ export function CompressorDemo() {
                 <button type="button" className="vgp-link text-white" onClick={() => applyPreset('flat')}>
                     fast attack
                 </button>{' '}
-                to flatten it. Both paths play at the same loudness.
+                to flatten it.{' '}
+                {short > 0
+                    ? `Matching tops out at 12 dB, so at this setting the compressed loop plays about ${short} dB quieter than the bypass.`
+                    : 'Both paths play at the same loudness.'}
             </p>
         </div>
     );
