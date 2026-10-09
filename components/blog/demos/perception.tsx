@@ -744,7 +744,7 @@ type DelayNote = 'eighth' | 'dotted' | 'quarter';
 
 const RD_BPM = 88;
 const RD_STEPS = 32;
-const REVERB_SECONDS = 3.4;
+const REVERB_SECONDS = 4.5;
 const DELAY_BEATS: Record<DelayNote, number> = { eighth: 0.5, dotted: 0.75, quarter: 1 };
 const delaySeconds = (note: DelayNote) => (DELAY_BEATS[note] * 60) / RD_BPM;
 
@@ -764,8 +764,8 @@ const RD_PHRASE: Syllable[] = [
 ];
 const RD_VOICE_LEVEL = 0.8;
 // Keeps this demo at the loudness of the other demos on the site.
-const RD_TRIM = 0.85;
-const REVERB_LEVEL = 0.9;
+const RD_TRIM = 0.8;
+const REVERB_LEVEL = 1.3;
 const THROW_LEVEL = 1;
 
 /** A generated stereo hall: decaying noise that also loses its top end as it fades. */
@@ -781,7 +781,7 @@ function hallImpulse(ctx: BaseAudioContext, seconds: number): AudioBuffer {
             seed = (seed * 16807) % 2147483647;
             const white = (seed / 2147483647) * 2 - 1;
             const x = i / length;
-            smooth += (white - smooth) * (0.9 - 0.75 * x);
+            smooth += (white - smooth) * (0.9 - 0.55 * x);
             // -60 dB at the end, with a 5 ms fade in.
             data[i] = smooth * Math.pow(10, -3 * x) * Math.min(1, i / (sr * 0.005));
         }
