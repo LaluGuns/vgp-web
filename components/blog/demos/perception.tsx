@@ -429,7 +429,7 @@ function CorrelationMeter({ value }: { value: number | null }) {
                 )}
             </div>
             <div className="mt-1 flex justify-between text-[11px] text-white/55" aria-hidden="true">
-                <span>-1 opposed</span>
+                <span>-1 out of phase</span>
                 <span>0</span>
                 <span>+1 mono</span>
             </div>
@@ -452,12 +452,16 @@ export function WidthDemo() {
     const scope = useRef<HTMLCanvasElement>(null);
     const nodes = useRef<WidthNodes | null>(null);
     const measuring = useRef(false);
-    const smooth = useRef({ ll: 0, rr: 0, lr: 0, scale: 0 });
+    const smooth = useRef({ ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 });
     const live = useRef<WidthSettings>({ sideDb, midDb, mono, matched, ms });
     useEffect(() => {
         live.current = { sideDb, midDb, mono, matched, ms };
         if (nodes.current) applyWidth(nodes.current, live.current);
     }, [sideDb, midDb, mono, matched, ms]);
+    // Folding to mono is a switch, so let the meters jump with it.
+    useEffect(() => {
+        smooth.current.at = 0;
+    }, [mono]);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -499,7 +503,7 @@ export function WidthDemo() {
         const n: WidthNodes = { ctx, mid, side, straight, cross, match, anL, anR, bufL: new Float32Array(4096), bufR: new Float32Array(4096) };
         nodes.current = n;
         applyWidth(n, live.current);
-        smooth.current = { ll: 0, rr: 0, lr: 0, scale: 0 };
+        smooth.current = { ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 };
 
         if (!live.current.ms && !measuring.current) {
             measuring.current = true;
@@ -536,20 +540,25 @@ export function WidthDemo() {
             lr += l[i] * r[i];
             peak = Math.max(peak, Math.abs(l[i] + r[i]), Math.abs(l[i] - r[i]));
         }
-        // Average the sums over about a third of a second, like a hardware meter.
+        // Average over about a fifth of a second, like a hardware meter.
         const sm = smooth.current;
         const len = l.length;
-        const k = sm.ll === 0 ? 1 : 0.15;
+        const now = performance.now();
+        const k = sm.at === 0 ? 1 : 1 - Math.exp(-(now - sm.at) / 200);
+        sm.at = now;
         sm.ll += (ll / len - sm.ll) * k;
         sm.rr += (rr / len - sm.rr) * k;
         sm.lr += (lr / len - sm.lr) * k;
+        // Mid is half the sum of the sides, side is half the difference.
+        sm.midDb += (powerDb((ll + rr + 2 * lr) / (4 * len)) - sm.midDb) * k;
+        sm.sideDb += (powerDb(Math.max(0, ll + rr - 2 * lr) / (4 * len)) - sm.sideDb) * k;
         sm.scale = Math.max(peak, sm.scale * 0.92, 1e-4);
         // Correlation: +1 when both sides match, 0 when unrelated, -1 when opposed.
         const energy = Math.sqrt(sm.ll * sm.rr);
         setMeters({
             corr: energy > 1e-9 ? Math.max(-1, Math.min(1, sm.lr / energy)) : 1,
-            mid: powerDb((sm.ll + sm.rr + 2 * sm.lr) / 4),
-            side: powerDb(Math.max(0, sm.ll + sm.rr - 2 * sm.lr) / 4),
+            mid: sm.midDb,
+            side: sm.sideDb,
         });
         drawScope(scope.current, l, r, sm.scale);
     });
@@ -581,8 +590,8 @@ export function WidthDemo() {
                 <div className="flex items-center gap-5">
                     <canvas ref={scope} aria-hidden="true" className="block h-28 w-28 shrink-0 rounded-[3px] bg-white/[0.035]" />
                     <div className="min-w-0 flex-1 space-y-4">
-                        <Meter label="Mid level" value={midMeter.value} text={midMeter.text} />
-                        <Meter label="Side level" value={sideMeter.value} text={sideMeter.text} />
+                        <Meter label="Mid signal" value={midMeter.value} text={midMeter.text} />
+                        <Meter label="Side signal" value={sideMeter.value} text={sideMeter.text} />
                     </div>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-white/50">The square plots left against right. A vertical line is mono. The wider the cloud, the wider the image.</p>
@@ -618,9 +627,9 @@ export function WidthDemo() {
                 </p>
             </Field>
             <p className="text-sm leading-6 text-white/60">
-                Kick, bass, snare and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides
-                come up, the correlation falls toward 0 and the middle parts take a smaller share of the mix, so the voice and kick seem to sit further back. Switch to
-                mono and the side signal is gone: whatever you added there disappears.
+                Drums, bass and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides come
+                up, the correlation falls toward 0 and the middle parts take a smaller share of the mix, so the voice and kick seem to sit further back. Switch to mono
+                and the side signal is gone: whatever you added there disappears, and with loudness matched the mono version gets quieter as the sides go up.
             </p>
         </div>
     );
@@ -1164,6 +1173,8 @@ const REGISTER_TRIM: Record<Register, number> = { low: 1, middle: 1, high: 1.1 }
 // Keeps this demo at the loudness of the other demos on the site.
 const CHORD_TRIM = 2.5;
 const TEMPO_BPM: Record<Tempo, number> = { slow: 60, fast: 140 };
+// More notes per second add up to a louder result; this keeps the two tempos at a similar loudness.
+const TEMPO_TRIM: Record<Tempo, number> = { slow: 1, fast: 0.75 };
 
 /** A soft keyboard note: a triangle with two quiet overtones that decays like a struck string. */
 function keys(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: number, dur: number, level = 1) {
@@ -1269,7 +1280,7 @@ export function ChordContextDemo() {
                 k = 0;
             }
             const shift = REGISTER_SHIFT[s.register];
-            const trim = REGISTER_TRIM[s.register];
+            const trim = REGISTER_TRIM[s.register] * TEMPO_TRIM[s.tempo];
             const beatDur = stepDur * 4;
             if (s.part === 'chord') {
                 const plan = chordPlan(s.leadIn);
@@ -1334,7 +1345,7 @@ export function ChordContextDemo() {
     const hint =
         part === 'chord'
             ? LEAD_INS[leadIn].hint
-            : 'The highlighted notes are the only ones that change between major and minor. Try minor, fast and high, then major, slow and low. For many listeners, tempo and register move the mood about as much as the mode does.';
+            : 'The highlighted notes are the only melody notes that change between major and minor, and the chords under them change to match. Try minor, fast and high, then major, slow and low. For many listeners, tempo and register move the mood about as much as the mode does.';
 
     return (
         <div className="space-y-6">
@@ -1366,21 +1377,23 @@ export function ChordContextDemo() {
                             options={(Object.keys(LEAD_INS) as LeadIn[]).map((id) => ({ value: id, label: LEAD_INS[id].label }))}
                         />
                     </Field>
-                    <div aria-hidden="true" className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${boxes.length}, minmax(0, 1fr))` }}>
-                        {boxes.map((chord, i) => {
-                            const target = i === boxes.length - 1;
-                            return (
-                                <div
-                                    key={`${leadIn}-${i}`}
-                                    className={`rounded-[3px] border px-3 py-2 text-sm font-semibold transition-colors ${current === i ? 'border-white/60' : 'border-white/10'} ${
-                                        target ? 'text-[var(--accent)]' : current === i ? 'text-white' : 'text-white/55'
-                                    }`}
-                                >
-                                    {chord.name}
-                                    {target ? <span className="ml-1.5 text-xs font-normal text-white/50">same every time</span> : null}
-                                </div>
-                            );
-                        })}
+                    <div>
+                        <div aria-hidden="true" className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${boxes.length}, minmax(0, 1fr))` }}>
+                            {boxes.map((chord, i) => {
+                                const target = i === boxes.length - 1;
+                                return (
+                                    <div
+                                        key={`${leadIn}-${i}`}
+                                        className={`rounded-[3px] border px-3 py-2 text-sm font-semibold transition-colors ${current === i ? 'border-white/60' : 'border-white/10'} ${
+                                            target ? 'text-[var(--accent)]' : current === i ? 'text-white' : 'text-white/55'
+                                        }`}
+                                    >
+                                        {chord.name}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <p className="mt-2 text-xs leading-5 text-white/50">The C chord is played the same way every time.</p>
                     </div>
                 </>
             ) : (
