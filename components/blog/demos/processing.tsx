@@ -688,11 +688,12 @@ interface ShapeAnalysis {
 
 /**
  * Matched for loudness, a boosted attack stands well above the dry hits.
- * Each path may peak up to 3 dB over the dry loop; past that its matching
+ * Each path may peak up to 2.5 dB over the dry loop (the default shaper
+ * setting needs about 1, the compressor about 2); past that its matching
  * stops, which keeps every setting under the demo's ceiling, and the demo
  * says how much quieter that leaves the loop.
  */
-const SHAPE_PEAK_ROOM = dbToGain(3);
+const SHAPE_PEAK_ROOM = dbToGain(2.5);
 
 const HIT_COLUMNS = 90;
 /** Room above the dry hit's level in each panel, so a boosted attack has somewhere to go. */

@@ -59,7 +59,6 @@ export const demoCatalog = {
         title: 'Make the drop land harder',
         blurb: 'Two bars of build into two bars of drop. Remove layers or leave one beat of silence before the drop and compare how hard it hits.',
         height: [341, 269, 269, 269, 217],
-        level: 0.5,
     },
     mono: {
         title: 'Fold the mix to mono',
@@ -87,7 +86,7 @@ export const demoCatalog = {
         title: 'Find a frequency by ear',
         blurb: 'A narrow boost you can sweep across the spectrum. Move it slowly, stop where it sounds worst, then check the number.',
         height: [376, 376, 376, 376, 290],
-        level: 1.0,
+        level: -0.5,
     },
     envelope: {
         title: 'Same notes, different attack',
@@ -145,7 +144,7 @@ export const demoCatalog = {
         title: 'Shape the hit without a threshold',
         blurb: 'A transient shaper turns the start of each hit up or down and the tail up or down, whatever the level. Compare it with a compressor on the same loop.',
         height: [1142, 1074, 1054, 958, 696],
-        level: -1.0,
+        level: -2,
     },
     sidechain: {
         title: 'Let the kick push the bass aside',

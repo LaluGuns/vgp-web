@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
+import { useCallback, useContext, useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
 import { claim, getEngine, release, warmEngine, type Engine } from './engine';
@@ -107,14 +108,29 @@ export function usePlayer(start: (engine: Engine) => () => void) {
  * carries no pressed state on top; the status next to it is announced.
  */
 export function PlayButton({ playing, onClick, label = 'Play' }: { playing: boolean; onClick: () => void; label?: string }) {
+    const d = useDialect();
+    const button = useRef<HTMLButtonElement>(null);
+    const [away, setAway] = useState(false);
     // The audio context is made on the press (a mouse button, a key) or as a finger lifts, a task
     // before the click, so the click itself only starts the sound.
     const warm = (e: PointerEvent<HTMLButtonElement>) => {
         if ((e.type === 'pointerdown') === (e.pointerType === 'mouse')) warmEngine();
     };
+    // While the demo plays, a small Stop stays on screen once this button has scrolled away.
+    useEffect(() => {
+        const el = button.current;
+        if (!playing || !el) return;
+        const io = new IntersectionObserver(([entry]) => setAway(!entry.isIntersecting));
+        io.observe(el);
+        return () => {
+            io.disconnect();
+            setAway(false);
+        };
+    }, [playing]);
     return (
         <div className="flex items-center gap-4">
             <button
+                ref={button}
                 type="button"
                 onClick={onClick}
                 onPointerDown={warm}
@@ -132,6 +148,21 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
             <span className="text-sm text-[var(--accent)]" aria-live="polite">
                 {playing ? 'Playing' : ''}
             </span>
+            {playing && away
+                ? createPortal(
+                      // Bottom left, clear of the contents button (bottom right) and the phone tab bar.
+                      <button
+                          type="button"
+                          onClick={onClick}
+                          style={{ '--accent': d.accent } as CSSProperties}
+                          className="vgp-focus fixed bottom-[calc(max(env(safe-area-inset-bottom),6px)+68px)] left-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 bg-[var(--surface-strong)] px-4 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] hover:border-white/70 md:bottom-6"
+                      >
+                          <Square size={14} fill="currentColor" aria-hidden="true" />
+                          Stop demo
+                      </button>,
+                      document.body,
+                  )
+                : null}
         </div>
     );
 }

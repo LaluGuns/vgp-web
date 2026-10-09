@@ -26,9 +26,10 @@ const LIMIT_MAKEUP = 10 ** ((-0.6 * CEILING_DB * (1 - 1 / LIMIT_RATIO)) / 20);
 /**
  * House level: the gain from every demo's output to the limiter. At 100 %
  * volume it puts the drum-loop demos at about -24 LUFS (K-weighted, both
- * channels, ungated) with their hits peaking around -12 dBFS, so the
- * loudest moment of any demo, at its loudest setting, stays under the
- * ceiling. The default volume (80 %) is about 4 dB lower.
+ * channels, ungated) with their hits peaking around -11 dBFS. Demos whose
+ * loudest setting would peak above -7 dBFS there play a little lower (their
+ * trims), so nothing reaches the ceiling. The default volume (80 %) is
+ * about 4 dB lower.
  */
 const HOUSE = 0.265;
 
