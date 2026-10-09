@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post038: BlogArticle = {
     slug: 'how-one-texture-can-imply-an-entire-world',
     title: 'One texture can set the whole scene',
-    excerpt: 'Four ambient layers do not build a bigger world. They add up to one louder wash. A single texture the ear can name sets the scene and leaves room for the vocal.',
+    excerpt: 'Four ambient layers add up to one louder wash. A single texture the ear can name sets the scene and leaves room for the vocal.',
     category: 'sound-design',
     publishedAt: '2026-06-06',
     updatedAt: '2026-10-08',

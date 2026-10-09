@@ -101,7 +101,7 @@ export const post119: BlogArticle = {
     ],
     content: `## Hook: the numbers on the front panel
 
-You put a compressor on a vocal, set the ratio to 4:1 because that is what everyone suggests, pull the threshold down until the meter moves and add makeup gain. It sounds better. But could you say how much it turned the loudest word down, or what would change at 8:1?
+The vocal preset you load in every session reads 4:1, the ratio every tutorial seems to suggest. You pull the threshold down until the meter moves, add makeup gain, and the vocal sounds better. But could you say how much it turned the loudest word down, or what would change at 8:1?
 
 Most compressor confusion starts here. Threshold, ratio and knee are a small piece of arithmetic, and once you can do it in your head you can predict what a setting will do before you hear it. This lesson covers that static part. How fast the compressor moves, attack and release, is the subject of the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level).
 

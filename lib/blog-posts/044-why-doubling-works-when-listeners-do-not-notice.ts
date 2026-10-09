@@ -134,7 +134,7 @@ Treat a double as part of the lead's sound, not as a second part. Filter it, fix
 - Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
 `,
     seo: {
-        title: 'Why a Vocal Double Works Best Unnoticed | VGP',
+        title: 'Why a vocal double works best unnoticed | VGP Studio',
         description: 'Vocal doubles should be felt, not heard. Learn how the brain groups a double with the lead, why loud doubles flam, and how to tuck them.',
         keywords: ['vocal doubling', 'double tracking', 'auditory grouping', 'comb filtering', 'mixing lead vocals', 'chorus vocals'],
     },

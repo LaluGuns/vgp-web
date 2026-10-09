@@ -29,10 +29,15 @@ export const post024: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In the study by Husain and colleagues, what did changing only the tempo affect?',
-            options: ['Mood, but not arousal', 'Mood and arousal equally', 'Neither mood nor arousal', 'Arousal, but not mood'],
+            q: 'The client loves the bittersweet mood of your demo but says it feels sleepy. If Husain and colleagues\' result holds, which change is most likely to wake it up and keep the mood?',
+            options: [
+                'Move it from minor to major and keep the tempo',
+                'Keep tempo and mode, and swap in a brighter pad',
+                'Lower the tempo so each line has room to land',
+                'Raise the tempo a little and keep the key and mode',
+            ],
             answer: 3,
-            why: 'Faster and slower versions of the same piece changed how energized listeners felt. Switching between major and minor changed their mood instead.',
+            why: 'Husain and colleagues found that changing the tempo moved how energized listeners felt but not their mood, while switching mode moved mood but not arousal. A slower tempo pulls the energy down, and a brighter pad leaves the timing that sets the energy where it was.',
         },
         {
             q: 'A 140 BPM beat has its snare on beat three only. Its backbeats are as far apart as in which beat?',

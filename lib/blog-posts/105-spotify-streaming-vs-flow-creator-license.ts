@@ -58,7 +58,7 @@ export const post105: BlogArticle = {
                 'Running it behind a coding tutorial on YouTube',
             ],
             answer: 2,
-            why: 'The license covers background use in published creator work. Redistribution, including releasing the recording on a DSP, stays with Virzy Guns Production.',
+            why: 'The license covers background use in published creator work. Redistribution, including releasing the recording on a DSP, stays with the rights holder.',
         },
     ],
     content: `## Hook: the track you found on a playlist
@@ -98,7 +98,7 @@ Music: Flow Creator Music by Chill Music Division / Virzy Guns Production - http
 
 ## What the license does not allow
 
-The license is narrower than ownership. Rights in the master recording, publishing and composition stay with Virzy Guns Production. You may not register the music or a derivative with Content ID or another rights-management system, resell or redistribute the files as standalone music, sample or remix them, or upload them to a streaming service under your name. A library, template marketplace, app or game needs separate written permission.
+The license is narrower than ownership. Rights in the recordings and compositions stay with their rights holder. You may not register the music or a derivative with Content ID or another rights-management system, resell or redistribute the files as standalone music, sample or remix them, or upload them to a streaming service under your name. A library, template marketplace, app or game needs separate written permission.
 
 ## Common mistake: treating royalty-free as copyright-free
 

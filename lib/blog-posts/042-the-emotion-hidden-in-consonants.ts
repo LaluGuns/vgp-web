@@ -41,7 +41,7 @@ const squeezed = (t: number): [number, number][] => [
 export const post042: BlogArticle = {
     slug: 'the-emotion-hidden-in-consonants',
     title: 'The bite of a vocal lives in its consonants',
-    excerpt: 'Consonants are the quietest, shortest parts of a vocal and the parts that tell words apart. Here is what wears them down and how to keep them.',
+    excerpt: 'Consonants are the quietest, shortest parts of a vocal and the parts that tell words apart. A slow release and an over-eager de-esser wear them down first.',
     category: 'vocal-production',
     publishedAt: '2026-06-07',
     updatedAt: '2026-10-08',
@@ -150,7 +150,7 @@ $$\\text{CVR} = L_{\\text{consonant}} - L_{\\text{vowel}}$$
 
 When people speak clearly on purpose, this ratio goes up, because they make the consonants relatively stronger (Picheny, Durlach and Braida, 1986). A singer who leans into consonants is doing the same thing, and it reads as deliberate delivery.
 
-Compression on its own usually raises the ratio, because it turns the loud vowels down more than the quiet consonants. Two things lower it. The first is a slow release: if the gain is still down from a loud vowel when a word-final consonant arrives, that consonant is turned down too. The second is the de-esser. It is built to turn down short bursts of high-frequency energy, and t, k, ch and sh sit in or near the same range as s. With the threshold too low or the band too wide, it catches all of them, and the singer starts to sound as if they have a lisp.
+Compression on its own usually raises the ratio, because it turns the loud vowels down more than the quiet consonants. A slow release lowers it: if the gain is still down from a loud vowel when a word-final consonant arrives, that consonant is turned down too. So does the de-esser. It is built to turn down short bursts of high-frequency energy, and t, k, ch and sh sit in or near the same range as s. With the threshold too low or the band too wide, it catches all of them, and the singer starts to sound as if they have a lisp.
 
 ::figure release
 
@@ -181,7 +181,7 @@ Treat consonants as the part of the vocal that every process can damage. Clip ga
 - Picheny, M. A., Durlach, N. I., & Braida, L. D. (1986). Speaking clearly for the hard of hearing. II: Acoustic characteristics of clear and conversational speech. *Journal of Speech and Hearing Research*, 29(4), 434-446.
 `,
     seo: {
-        title: 'The Bite of a Vocal Lives in Its Consonants | VGP',
+        title: 'The bite of a vocal lives in its consonants | VGP Studio',
         description: 'Consonants give a vocal its edges and are the first thing processing removes. Learn how release times and de-essers wear them down, and how to keep them.',
         keywords: ['vocal consonants', 'de-essing', 'consonant-vowel ratio', 'speech intelligibility', 'mixing vocals', 'compressor release'],
     },

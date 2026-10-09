@@ -87,7 +87,7 @@ export const post131: BlogArticle = {
 
 Two rhythm guitars, same chords, same amp, same strumming, one panned hard left and one hard right. On headphones the chorus is wide and the vocal sits in a clean gap in the middle. On the monitors that gap is narrower. On a kitchen speaker the guitars turn into one fizzy block and the top of the vocal disappears into it.
 
-The guitars are the same on all three systems. What differs is how much the panning can do on each one.
+Headphones keep each guitar in one ear. On monitors both ears hear both guitars, and a single kitchen speaker plays everything from one point, so the guitars and the top of the vocal reach the same ear in the same frequencies at the same moments.
 
 ## Why it matters: panning moves one cue out of several
 

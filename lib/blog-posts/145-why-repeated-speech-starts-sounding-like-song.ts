@@ -95,15 +95,15 @@ export const post145: BlogArticle = {
             why: 'In Deutsch and colleagues\' transposed condition, repeats shifted by two-thirds of a semitone or more moved ratings only slightly toward song, and they stayed on the speech side. Vanden Bosch der Nederlanden and colleagues also found that transposing the repeats disrupts the effect. Keep at least one exact repeat if you want the tune.',
         },
         {
-            q: 'Tierney and colleagues compared audiobook phrases that turned into song with matched phrases that did not. What set the song-like ones apart?',
+            q: 'You have two spoken lines from one narrator to loop for a hook. In the pitch editor, line A slides up or down inside most syllables, while line B holds a fairly level pitch on each syllable and steps between them. Which is more likely to start sounding sung?',
             options: [
-                'Louder stressed syllables',
-                'A faster syllable rate',
-                'Steadier pitch within each syllable',
-                'Longer pauses between the words',
+                'Line A, because its pitch already moves like a melody',
+                'Whichever has the more even gaps between stressed syllables',
+                'Line B, because level syllables give the ear notes to hold',
+                'Either, once you tune the steps between syllables to a scale',
             ],
             answer: 2,
-            why: 'The song-like phrases had less pitch movement inside each syllable, 27.6 against 40 semitones per second on average. Duration and syllable rate did not differ reliably.',
+            why: 'In Tierney and colleagues\' audiobook phrases, the ones that turned into song glided less inside each syllable, 27.6 against 40 semitones per second on average, and their stressed syllables were only slightly more regular in timing. Falk and colleagues found that level pitch on the syllables did more than fitting the steps to a scale.',
         },
         {
             q: 'You have looped a spoken sample for an hour and hear a clear melody in it. A friend hears it twice and says it is just someone talking. What is the most likely reason?',
@@ -121,7 +121,7 @@ export const post145: BlogArticle = {
 
 You pull a spoken line from an old voice memo for an intro and loop it while you build the beat. Twenty minutes later you cannot hear it as talking any more. The words seem to sit on notes, and you are humming them. Then a friend walks in, hears the loop twice and asks who is talking.
 
-Your friend heard the same file. You have heard it a hundred times, and for some phrases, repetition alone is enough to turn speech into song.
+Hearing some spoken phrases over and over is enough to make them sound sung. After a hundred loops, you no longer hear the line the way a first-time listener does.
 
 ## Why it matters: a tool and a trap
 
@@ -137,7 +137,7 @@ Diana Deutsch came across the effect in 1995 while preparing the spoken commenta
 
 In the second experiment, listeners heard the phrase once or ten times and then said it back. After one hearing they spoke it. After ten they sang it, and their pitches matched the original speech more closely than after one hearing. The sung versions were closer still to a simple tune in a key. Ten repeats left listeners with specific notes in their heads. Deutsch's listeners had musical training, but Vanden Bosch der Nederlanden, Hannon and Snyder (2015) replicated the effect in casual listeners with none, and confirmed that transposing the repeats disrupts it.
 
-Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated, then matched each with a phrase from the same speaker that stayed speech. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) compared spoken phrases that differed in specific pitch and timing properties. Level pitch targets on the syllables made the transformation happen more often and sooner than making the steps between syllables match a musical scale, and recurring contrasts between long and short syllables helped. A regular beat within and across repeats did not help.
+Not every phrase turns. Tierney, Dick, Deutsch and Sereno (2013) searched audiobooks and found 24 phrases that most listeners heard as song when repeated and 24 that stayed speech, both sets taken from the same three readers in the same proportions. The clearest acoustic difference was pitch movement inside syllables: the song-like phrases glided less. Their stressed syllables were only slightly more regular in timing, a difference that was not statistically reliable. Falk, Rathcke and Dalla Bella (2014) compared spoken phrases that differed in specific pitch and timing properties. Level pitch targets on the syllables made the transformation happen more often and sooner than making the steps between syllables match a musical scale, and recurring contrasts between long and short syllables helped. A regular beat within and across repeats did not help.
 
 ::figure glide
 

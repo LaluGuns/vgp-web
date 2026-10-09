@@ -60,15 +60,15 @@ export const post013: BlogArticle = {
             why: 'Well below the cutoff a 12 dB per octave filter cuts about 12 dB per octave. One octave below a 150 Hz cutoff it is about 12 dB down, enough to take the weight out of the kick and bass.',
         },
         {
-            q: 'What did Salimpoor and colleagues (2011) find about anticipation?',
+            q: 'Your co-writer wants to cut the pre-chorus so the chorus hits sooner, since the chorus is where the pleasure is. What does the dopamine study by Salimpoor and colleagues (2011) suggest the cut would cost?',
             options: [
-                'Dopamine rose before and during the peaks',
-                'Dopamine rose at the peaks but not before them',
-                'Listeners liked music with long build-ups less',
-                'Dopamine fell during the build-up, then spiked',
+                'Nothing, because dopamine rose only once the peak arrived',
+                'Very little, as long as the chorus keeps its level and width',
+                'Some tension, but a chorus with no warning lands harder',
+                'Part of the reward, since dopamine also rose during the wait',
             ],
-            answer: 0,
-            why: 'The caudate was more active while listeners anticipated their favourite moments and the nucleus accumbens during them. The build-up is part of the reward.',
+            answer: 3,
+            why: 'Salimpoor and colleagues found activity in the caudate rising in the moments before the peaks listeners were waiting for, and in the nucleus accumbens during them. The build-up is part of the pleasure, and Huron adds that a good outcome after tension feels better than the same outcome without it.',
         },
     ],
     content: `## Hook: the pre-chorus that steals the show

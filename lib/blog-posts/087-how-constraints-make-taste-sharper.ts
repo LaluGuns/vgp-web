@@ -59,15 +59,15 @@ export const post087: BlogArticle = {
             why: 'With no option to stack, a weak hook has to be fixed in its notes, voicing or rhythm, which is where the problem usually was.',
         },
         {
-            q: 'According to the review by Acar and colleagues, what happens as constraints keep increasing?',
+            q: 'The five-track limit sharpened your last hook, so this time you allow one track, one sound and five minutes for a whole song. What does the review by Acar and colleagues suggest you should expect?',
             options: [
-                'Creativity keeps rising without limit',
-                'Creativity stays the same whatever the limits',
-                'Creativity peaks at some level, then falls',
-                'Creativity falls from the very first limit',
+                'An even better result, since each added limit sharpens the search',
+                'The same result, since limits make no difference either way',
+                'A weaker result: past some point, limits leave too little room',
+                'A weaker result, since any limit at all lowers creative output',
             ],
             answer: 2,
-            why: 'They propose an inverted U. A few limits focus the search, and past a point they leave too little room to work.',
+            why: 'Acar, Tarakci and van Knippenberg propose an inverted U: some constraint focuses the search, and too much leaves too little room to work. Haught-Tromp\'s rhyme studies show a single limit can help, so what hurts here is the sheer number of limits.',
         },
         {
             q: 'Your hook feels weak inside the five-track limit. What is the right move?',
@@ -101,7 +101,7 @@ The benefit is not unlimited. Acar, Tarakci and van Knippenberg (2019) reviewed 
 
 ::figure peak
 
-A limit works in the studio because it narrows the search. With five tracks, you cannot answer "the hook feels weak" by adding a sixth, so the answer has to come from the notes: a wider chord voicing, a different bass rhythm, a velocity change on the hats. That is also the condition under which a big menu of sounds hurts most, when you do not yet know what you want (see [plugin choices](/blog/the-brain-cost-of-too-many-plugin-choices)).
+A limit works in the studio because it narrows the search. With five tracks, you cannot answer "the hook feels weak" by adding a sixth, so the answer has to come from the notes: a wider chord voicing, a different bass rhythm, a velocity change on the hats. That is also the condition under which a big menu of sounds hurts most, when you do not yet know what you want (see the [lesson on plugin choices](/blog/the-brain-cost-of-too-many-plugin-choices)).
 
 ## DAW experiment: the five-track hook
 

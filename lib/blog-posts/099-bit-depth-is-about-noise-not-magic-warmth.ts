@@ -27,7 +27,7 @@ const BITS = [8, 12, 16, 24];
 export const post099: BlogArticle = {
     slug: 'bit-depth-is-about-noise-not-magic-warmth',
     title: 'Bit depth sets the noise floor',
-    excerpt: 'More bits do not make audio warmer or more detailed. Each one lowers the noise floor by about 6 dB. Here is what that means for recording and export.',
+    excerpt: 'More bits do not make audio warmer or more detailed. Each one lowers the noise floor by about 6 dB. Learn what that means for recording and export.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
     updatedAt: '2026-10-08',
@@ -131,7 +131,7 @@ Rounding error only behaves like noise while the signal is large compared with o
 
 ::demo bit-depth
 
-Inside the DAW, mixing usually happens in 32-bit floating point, which stores a scale factor with every sample. That keeps levels above 0 dBFS from clipping between plugins and holds rounding error at about 24-bit precision at any level. It is a working format, and [where 32-bit float headroom ends](/blog/architecture-of-infinite-headroom-32-bit-float) covers its limits.
+Inside the DAW, mixing usually happens in 32-bit floating point, which stores a scale factor with every sample. That keeps levels above 0 dBFS from clipping between plugins and holds rounding error at about 24-bit precision at any level. It is a working format, and the [lesson on 32-bit float headroom](/blog/architecture-of-infinite-headroom-32-bit-float) covers its limits.
 
 ## DAW experiment: make quantization audible
 

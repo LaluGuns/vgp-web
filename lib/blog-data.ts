@@ -52,7 +52,7 @@ export const categories: Category[] = [
     {
         slug: 'songwriting',
         name: 'Songwriting',
-        description: 'Hooks, melody, lyric rhythm and the first seconds that decide whether a listener stays.',
+        description: 'Hooks, melody, chords, verse and chorus, lyric rhythm and the first seconds that decide whether a listener stays.',
     },
     {
         slug: 'arrangement-groove',
@@ -67,17 +67,17 @@ export const categories: Category[] = [
     {
         slug: 'vocal-production',
         name: 'Vocal Production',
-        description: 'The headphone mix, the microphone, comping, tuning, doubling and the small details that sell a vocal.',
+        description: 'The headphone mix, mic and room, input level, comping, tuning, doubling and the small details that sell a vocal.',
     },
     {
         slug: 'mixing-mastering',
         name: 'Mixing & Mastering',
-        description: 'Masking, EQ, compression, depth, mono, loudness and delivery, from first balance to final master.',
+        description: 'Masking, EQ, compression, reverb, stereo and mono, loudness and delivery, from first balance to final master.',
     },
     {
         slug: 'audio-science',
         name: 'Audio Science',
-        description: 'Sampling, bit depth, aliasing, Fourier, filters, phase and latency, explained for producers.',
+        description: 'Sampling, bit depth, aliasing, Fourier, filters, phase, latency, room modes and meters, explained for producers.',
     },
     {
         slug: 'music-psychology',
@@ -92,12 +92,12 @@ export const categories: Category[] = [
     {
         slug: 'production-tips',
         name: 'Production Tips',
-        description: 'Choosing a beat, matching tempo and key, and a home-studio mixing checklist.',
+        description: 'Choosing a beat that fits your voice, matching tempo and key, and mixing rap vocals recorded at home.',
     },
     {
         slug: 'genre-guides',
         name: 'Genre Guides',
-        description: 'How trap, phonk, R&B, city pop, cyberpunk jazz and neo synthwave are built.',
+        description: 'How trap, phonk, R&B, City Pop, Cyberpunk Jazz and Neo Synthwave are built.',
     },
     {
         slug: 'licensing-guide',

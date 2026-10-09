@@ -93,26 +93,26 @@ export const post073: BlogArticle = {
     },
     quiz: [
         {
-            q: 'What did Kawakami and colleagues (2013) find when listeners rated sad music?',
+            q: 'A test listener says your ballad sounds tragic, then says that listening to it felt tender and even pleasant. What should you take from that?',
             options: [
-                'Listeners felt even more tragic than the music itself sounded to them',
-                'Listeners felt less tragic and more romantic than the music sounded',
-                'The sad pieces produced almost no felt emotion in the listeners',
-                'Listeners felt exactly as tragic as they judged the music to sound',
+                'The song failed, so slow it down and make the reverb wetter',
+                'The listener missed the point, so make the sad cues clearer',
+                'Nothing is wrong: heard and felt emotion often differ like this',
+                'The mix is too quiet, so the sadness never reached them',
             ],
-            answer: 1,
-            why: 'Perceived and felt emotion came apart. The music sounded tragic, while listeners reported feeling more romantic and less tragic than that.',
+            answer: 2,
+            why: 'Kawakami and colleagues found that listeners heard sad pieces as tragic while feeling less tragic and more romantic themselves. That gap is common, and stacking more sad cues tends to make a song sound like a performance of sadness rather than move the listener more.',
         },
         {
-            q: 'What is the current status of the idea that prolactin explains why sad music feels good?',
+            q: 'Your singer wants the ballad as sad as it can be, because sadness releases prolactin and that is why sad songs feel good. What does the evidence say about that reasoning?',
             options: [
-                'It was confirmed with blood tests in several large studies',
-                'It was shown to hold for minor-key songs but not major ones',
-                'It is the accepted account, backed by brain imaging studies',
-                'It was a hypothesis, and its author has since rejected it',
+                'It holds: prolactin release was confirmed in listening studies',
+                'It rests on a hypothesis that its own author has since rejected',
+                'It holds in minor keys, where the prolactin effect was measured',
+                'It holds, and brain imaging is the main evidence behind it',
             ],
-            answer: 3,
-            why: 'Huron proposed it in 2011 as a possible explanation. A 2018 review rated the biological evidence as weak to non-existent, and Huron later called the theory wrong himself.',
+            answer: 1,
+            why: 'Huron proposed prolactin in 2011 as a possible explanation, a 2018 review rated the biological evidence as weak to non-existent, and Huron later called the theory wrong himself. The better-supported accounts point to beauty, empathy and sadness with nothing real at stake.',
         },
         {
             q: 'Why does a long, loud hall reverb make a singer sound further away?',
@@ -136,7 +136,7 @@ People listen to sad songs on purpose, again and again, and many say they enjoy 
 
 A listener can recognize that a song is sad without feeling sad. Kawakami and colleagues (2013) asked listeners to rate sad pieces twice: once for the emotion the music expressed and once for what they felt. The music sounded tragic, but listeners reported feeling less tragic than that, and more romantic and light-hearted. The same song held two different emotions at once.
 
-That matters for production. A sad song does not need to make the listener miserable. It needs to make sadness feel close enough to care about and beautiful enough to stay with.
+That matters for production. A sad song should make sadness feel close enough to care about and beautiful enough to stay with, and the listener can still come away feeling lighter than the music sounds.
 
 ## Science model: why sadness in music can be pleasant
 
@@ -154,7 +154,7 @@ Distance is where production comes in. The ear judges how far away a source is p
 
 ## DAW experiment: bring the singer closer
 
-This takes about ten minutes on a slow song with a lead vocal.
+Pick a slow song with a lead vocal and allow about ten minutes.
 
 1. On the lead vocal, bypass the long hall or cathedral reverb and note its send level.
 2. Create a new send to a plate reverb. Set the decay to 1.0 second and the pre-delay to 25 ms.

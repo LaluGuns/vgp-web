@@ -48,15 +48,15 @@ export const post078: BlogArticle = {
             why: 'They recognized the emotion the song expresses, which is perceived emotion. Nothing changed in them, so felt emotion was not reached.',
         },
         {
-            q: 'In Hunter, Schellenberg and Schimmack (2010), how did ratings of perceived and felt emotion compare?',
+            q: 'You and a friend score six versions of a sad chorus from 1 to 7, once for the sadness each expresses and once for the sadness you feel. If your scores follow Hunter, Schellenberg and Schimmack (2010), what pattern should you expect?',
             options: [
-                'The two were unrelated, whatever the tempo and mode',
-                'Felt ran higher, though the two were closely related',
-                'Perceived ran higher, though the two were closely related',
-                'The two were identical, so listeners felt what they heard',
+                'Felt scores sit above expressed ones, because a voice adds feeling',
+                'Felt scores move at random, with no link to the expressed ones',
+                'Felt scores rise and fall with expressed ones but sit below them',
+                'Felt and expressed scores come out the same on every version',
             ],
             answer: 2,
-            why: 'Listeners heard more happiness or sadness in the music than they felt themselves, and their feelings followed their perceptions. The gap was largest for sad-sounding music.',
+            why: 'The two ratings were closely related, but listeners heard more happiness or sadness in the music than they felt themselves. Schubert\'s review found felt ratings often the same as or lower than expressed ones, so felt scores below the expressed ones are the usual result.',
         },
         {
             q: 'Which change targets felt emotion rather than adding another sad cue?',
@@ -100,7 +100,7 @@ The practical test is to measure both kinds separately in your own track. A sect
 
 ## DAW experiment: two ratings per version
 
-This takes about twenty minutes and works best after a break from the song.
+Do this after a break from the song, and allow about twenty minutes.
 
 1. Bounce three 30-second clips of the same chorus: the full mix, the mix with all vocals muted, and the vocals with only a simple pad under them.
 2. For each clip, write down two scores from 1 to 7: how strongly the music expresses the intended emotion, and how strongly you feel it.

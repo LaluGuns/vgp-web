@@ -17,7 +17,7 @@ export const post050: BlogArticle = {
         'Build the cue from the dry voice up, keep latency low, and add reverb only if the singer asks for it.',
     ],
     seo: {
-        title: 'Headphone Balance Changes the Take | VGP Studio',
+        title: 'Headphone balance changes the take | VGP Studio',
         description: 'A headphone cue mix shapes a singer\'s pitch and timing. Learn how own-voice level, reverb, occlusion and monitoring latency affect a vocal take.',
         keywords: ['headphone mix', 'cue mix', 'monitoring latency', 'buffer size', 'recording vocals', 'intonation'],
     },
@@ -93,7 +93,7 @@ Often the headphones are the problem. While singing, what comes through the head
 
 ## Why it matters: the cue is the singer's reference
 
-The most common fault is the balance. If the backing is loud and the singer's own voice is quiet, they cannot hear themselves, so they push harder and tune less accurately. That loop is covered in [Why a great vocal starts before the microphone](/blog/why-a-great-vocal-starts-before-the-microphone).
+The most common fault is the balance. If the backing is loud and the singer's own voice is quiet, they cannot hear themselves, so they push harder and tune less accurately. That loop is covered in the [lesson on pushed vocals](/blog/why-a-great-vocal-starts-before-the-microphone).
 
 The second is reverb. A large reverb on the cue vocal sounds flattering, which is why singers ask for it. It also blurs the start and the pitch of every note into the tail of the last one, so the singer cannot hear small pitch slips or timing drift, and errors they cannot hear do not get corrected.
 

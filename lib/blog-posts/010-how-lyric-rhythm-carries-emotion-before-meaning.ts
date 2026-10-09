@@ -140,7 +140,7 @@ In a session, two things go wrong. Lines packed with consonant clusters, or with
 
 ## Science model: stress, the moment a syllable lands, and vowels
 
-**Stress meets meter.** In English, some syllables are stressed: louder, longer and often higher. Palmer and Kelly (1992) analysed songs and found that composers tend to put stressed syllables on strong metrical positions. When they tested singers, syllables were sung longer when they were stressed in the language or placed on a strong beat. When the two pull in different directions, the singer has to favour one of them, and the line tends to sound awkward.
+**Stress meets metre.** In English, some syllables are stressed: louder, longer and often higher. Palmer and Kelly (1992) analysed songs and found that composers tend to put stressed syllables on strong metrical positions. When they tested singers, syllables were sung longer when they were stressed in the language or placed on a strong beat. When the two pull in different directions, the singer has to favour one of them, and the line tends to sound awkward.
 
 ::figure stress
 

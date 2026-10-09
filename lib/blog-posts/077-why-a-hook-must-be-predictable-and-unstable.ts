@@ -40,15 +40,15 @@ export const post077: BlogArticle = {
     },
     quiz: [
         {
-            q: 'What did Jakubowski and colleagues (2017) find about the melodies people reported as earworms?',
+            q: 'People forget your hook after one play. Which rewrite brings it closer to the earworms Jakubowski and colleagues (2017) analysed?',
             options: [
-                'They had an unusual contour with very common slopes inside it',
-                'They were slower than the matched songs nobody had named',
-                'They stayed flat, hovering close to one pitch for most bars',
-                'They had a common contour with less usual slopes inside it',
+                'Keep its rise-then-fall shape and make one climb steeper than expected',
+                'Swap to an unusual zigzag shape built only from small, common steps',
+                'Flatten it to hover near one pitch so it is easy to sing back',
+                'Slow it down so each note has more time to sink in',
             ],
-            answer: 3,
-            why: 'Earworm tunes tended to follow a familiar overall shape, while how steeply the line climbed and fell between its turning points was less usual. They were also faster on average.',
+            answer: 0,
+            why: 'Earworm tunes tended to follow a common overall contour, often a rise then a fall, with less usual slopes between the turning points. They were also faster on average, so slowing the line down moves it away from that profile.',
         },
         {
             q: 'A melody ends on C in C major. Which change under that last note keeps the note and leaves the phrase open?',
@@ -62,22 +62,22 @@ export const post077: BlogArticle = {
             why: 'A minor (A, C, E) contains C, so the melody still fits. Moving from G to A minor instead of to C is a deceptive cadence: the ear expected home and got somewhere close to it.',
         },
         {
-            q: 'In Szpunar and colleagues (2004), what happened to liking when listeners heard the same music many times with full attention?',
+            q: 'After a week of looping your chorus with full attention you are sick of it, while the client, who mostly heard it under their video edit, likes it more each time. What explains the split?',
             options: [
-                'It rose at first, then fell',
-                'It kept rising with every play',
-                'It stayed level across all plays',
-                'It fell from the first repeat',
+                'Liking always keeps rising, so your verdict is just tired ears',
+                'A strong hook keeps gaining for everyone, so the chorus is weak',
+                'Focused listening rises then falls, while background play keeps rising',
+                'Background play cannot change liking, so the client has other taste',
             ],
-            answer: 0,
-            why: 'Focused listening produced an inverted U for realistic music: liking rose over the first few exposures, then dropped with many more. Background exposure kept raising liking.',
+            answer: 2,
+            why: 'Szpunar, Schellenberg and Pliner found that with full attention liking rose over the first few plays and then fell, while music heard in the background kept gaining. You and the client have been in those two conditions.',
         },
     ],
     content: `## Hook: the loop that wears out by bar sixteen
 
 You write a hook and repeat the same four-bar vocal phrase over the same chords four times in a row. You expect the repetition to make it stick. You play it for a friend, and by the third pass they have stopped listening. The hook is easy to remember, and it already sounds used up.
 
-Repetition is not the problem. Nearly every hook repeats. The problem is that nothing about the repeat changes, so after the second pass the listener has nothing left to predict.
+Nearly every hook repeats. This one wears out because nothing about the repeat changes, so after the second pass the listener has nothing left to predict.
 
 ## Why it matters: a familiar shape with something odd inside
 
@@ -101,7 +101,7 @@ In C major, the melody can end on a C over C major the first time and on the sam
 
 ## DAW experiment: same melody, new last chord
 
-This takes about ten minutes with a piano or synth and a MIDI editor.
+Use a piano or synth patch and a MIDI editor.
 
 1. Set the tempo to 100 BPM in C major. Program four bars of chords: C, F, G, C.
 2. Write a simple four-bar melody over them that ends on a long C in bar 4. Keep it mostly stepwise, with one leap of a fifth or a sixth in bar 2.

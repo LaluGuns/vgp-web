@@ -103,7 +103,7 @@ Tempo first. One beat lasts 60,000 / BPM milliseconds, but the beat you feel is 
 
 Key second. Transposing by $n$ semitones multiplies every frequency by $2^{n/12}$. Two semitones down is a factor of 0.891, enough to move a strained top note into a comfortable range for most singers. The producer can do that cleanly in the project, moving the melody and bass and leaving the drums alone. Pitch-shifting the mixed file retunes the drums too.
 
-Space third. Your words are carried mostly by the 1, 2 and 4 kHz octaves: in the octave-band Speech Intelligibility Index those three hold 71 percent of the weight (ANSI S3.5-1997). A bright lead, a vocal sample or a guitar riff in that region masks your consonants, because masking happens band by band (Fastl and Zwicker, 2007). An 808, a low pad and the kick sit mostly below it.
+Space third. Your words are carried mostly by the 1, 2 and 4 kHz octaves: in the octave-band Speech Intelligibility Index those three hold 72 percent of the weight (ANSI S3.5-1997). A bright lead, a vocal sample or a guitar riff in that region masks your consonants, because masking happens band by band (Fastl and Zwicker, 2007). An 808, a low pad and the kick sit mostly below it.
 
 ::figure space
 
@@ -139,7 +139,7 @@ The terms are explained in plain language in the [lesson on beat licensing](/blo
 
 ## References
 
-- American National Standards Institute. (1997, reaffirmed 2020). *ANSI/ASA S3.5-1997: Methods for Calculation of the Speech Intelligibility Index*. Acoustical Society of America.
+- American National Standards Institute. (1997, reaffirmed 2024). *ANSI/ASA S3.5-1997: Methods for Calculation of the Speech Intelligibility Index*. Acoustical Society of America.
 - Fastl, H., & Zwicker, E. (2007). *Psychoacoustics: Facts and Models* (3rd ed.). Springer.
 - van Noorden, L., & Moelants, D. (1999). Resonance in the perception of musical pulse. *Journal of New Music Research*, 28(1), 43-66.
 `,

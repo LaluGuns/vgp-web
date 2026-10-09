@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post052: BlogArticle = {
     slug: 'the-masking-problem-producers-hear-as-mud',
     title: 'Mud is often masking, not dirt',
-    excerpt: 'Mud is rarely one bad track. It is several parts piling up in the low mids and hiding each other. Find the pile-up and thin the parts that do not need it.',
+    excerpt: 'Mud usually comes from several parts piling up in the low mids and hiding each other. Find the pile-up and thin the parts that do not need it.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-09',
@@ -96,7 +96,7 @@ export const post052: BlogArticle = {
 
 Your lead vocal sounds muffled in the hook. You open an EQ and boost 3 kHz, or you push the fader up 3 dB. The vocal pokes through, but now it sounds harsh and sits on top of the track, and the mix still feels thick and cloudy.
 
-The vocal was rarely the problem. It may be a great recording. What you are hearing is the arrangement around it: guitars, keys and a pad that each put a little energy in the same range. That is not dirt or a bad recording. It is masking, and it builds up out of parts that each sound fine on their own.
+The vocal may be a great recording. What you are hearing is the arrangement around it: guitars, keys and a pad that each put a little energy in the same range. That build-up is masking, and it comes from parts that each sound fine on their own.
 
 ## Why it matters: mud is a sum
 

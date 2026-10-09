@@ -14,7 +14,7 @@ export const post049: BlogArticle = {
         'Give each ad-lib a slot, a position and a register, and cut the ones that sing words over the lead.',
     ],
     seo: {
-        title: 'Ad-libs Are Arrangement Moves | VGP Studio',
+        title: 'Ad-libs are arrangement moves | VGP Studio',
         description: 'Ad-libs that overlap the lead compete for attention. Learn how timing, panning and register separate vocal parts, and how to arrange ad-libs as answers.',
         keywords: ['vocal ad-libs', 'vocal arrangement', 'call and response', 'stream segregation', 'informational masking', 'vocal production'],
     },

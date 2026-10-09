@@ -9,7 +9,7 @@ const RANDOM_MS = [13, -17, 20, -5, -20, 8, 17, -12];
 export const post021: BlogArticle = {
     slug: 'why-tiny-timing-differences-create-human-feel',
     title: 'Why tiny timing differences create human feel',
-    excerpt: 'A small, consistent offset makes a part lean back or push. Random humanize and large offsets do the opposite. Here is how to size the lean in milliseconds.',
+    excerpt: 'A small, consistent offset makes a part lean back or push. Random humanize and large offsets do the opposite. Learn to size the lean in milliseconds.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
@@ -86,7 +86,7 @@ export const post021: BlogArticle = {
 
 You record a drum part, select everything and quantize it to 100 percent. The snare lands exactly on beats two and four. The hats sit exactly on the 16th-note lines. On screen it is perfect. On playback something has gone flat. The vocal floats on top of the beat instead of sitting in it, and the hats tick like a clock.
 
-Quantizing did not break the timing. It removed a relationship. Before, the hats leaned slightly behind the kick, the same way on every hit, and that lean was part of the feel. After, every part shares the same instant, so nothing pushes and nothing sits back.
+Quantizing removed a relationship between the parts. Before, the hats leaned slightly behind the kick, the same way on every hit, and that lean was part of the feel. After, every part shares the same instant, so nothing pushes and nothing sits back.
 
 ## Why it matters: feel is a lean, not a wobble
 

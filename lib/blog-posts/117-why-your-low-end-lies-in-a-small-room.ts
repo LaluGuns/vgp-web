@@ -93,7 +93,7 @@ export const post117: BlogArticle = {
 
 You spend two hours on the low end. The kick and the 808 sit together, and the sub feels warm and full. You bounce the track, walk to the car, press play, and the bass is overwhelming. Or the opposite happens: what felt like a wall of bass at the desk turns thin and hollow in the car.
 
-Your speakers and interface are probably fine. The problem is the room. Below a couple of hundred hertz, a small room boosts some bass notes and cancels others, and the pattern changes when you move.
+Your speakers and interface are probably fine, and the room is the likely cause. Below a couple of hundred hertz, a small room boosts some bass notes and cancels others, and the pattern changes when you move.
 
 ## Why it matters: bass waves are bigger than the room
 

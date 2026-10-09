@@ -39,15 +39,15 @@ export const post076: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Huron (1989) asked listeners to count the voices in polyphonic music with similar timbres. What happened?',
+            q: 'Five synth lines on the same patch play through the chorus, each with its own melody. Going by Huron\'s (1989) voice-counting study, what will most listeners hear?',
             options: [
-                'They counted every voice accurately, however many there were',
-                'They tended to overcount, hearing more voices than were there',
-                'They did well up to three voices and made errors beyond that',
-                'They noticed a voice dropping out sooner than one entering',
+                'All five lines, because each one has its own melody',
+                'More lines than you wrote, as the harmonics add parts',
+                'Fewer lines than you wrote, with some blurring together',
+                'All five, as long as the chorus is louder than the verse',
             ],
             answer: 2,
-            why: 'Accuracy dropped once a texture went beyond three voices, and listeners tended to undercount. A dense mix asks for more separate attention than listeners have.',
+            why: 'Huron\'s listeners counted voices with similar timbres well up to three, made more errors beyond that and usually undercounted. Five lines on one patch ask for more separate attention than listeners have, so give one the foreground or cut some.',
         },
         {
             q: 'Why can a mix that sounds clear in stereo get muddy in mono?',
@@ -76,7 +76,7 @@ export const post076: BlogArticle = {
 
 You mix a dense chorus: lead vocal, two electric guitars, a synth pad and a busy drum groove. You want everything to sound big, so you boost the midrange on every track. Played back, the chorus is a wall. The vocal sinks, the guitars lose their bite and the synth becomes irritating.
 
-The level of each track is not the problem. Every part is asking for attention at the same moment and in the same frequency range. A listener can only follow so much at once, so the mix has to choose what they follow.
+Every part is asking for attention at the same moment and in the same frequency range. A listener can only follow so much at once, so the mix has to choose what they follow.
 
 ## Why it matters: one stream in the foreground
 
@@ -103,8 +103,6 @@ The most reliable fix is to give the lead a range of its own. A small, broad cut
 ::demo masking
 
 ## DAW experiment: the quiet balance test
-
-This takes about ten minutes on the densest section of a mix.
 
 1. Loop the densest chorus of your song.
 2. Turn your monitors down until the music is barely louder than a quiet conversation.

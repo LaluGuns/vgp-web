@@ -20,15 +20,15 @@ export const post102: BlogArticle = {
             max: 30,
             unit: '%',
             caption:
-                'How much each octave counts toward the Speech Intelligibility Index (ANSI S3.5-1997, octave-band procedure). The 1, 2 and 4 kHz octaves carry 71 percent of the weight between them. The 250 Hz octave, where bass and kick live, carries 6 percent.',
-            alt: 'Six bars for octave bands. 250 Hz 6 percent, 500 Hz 17 percent, 1 kHz 24 percent, 2 kHz 26 percent, 4 kHz 21 percent, 8 kHz 5 percent. The 1, 2 and 4 kHz bars are drawn in the accent, the others in grey.',
+                'How much each octave counts toward the Speech Intelligibility Index (ANSI S3.5-1997, octave-band procedure). The 1, 2 and 4 kHz octaves carry 72 percent of the weight between them. The 250 Hz octave, where bass and kick live, carries 6 percent.',
+            alt: 'Six bars for octave bands. 250 Hz 6.2 percent, 500 Hz 16.7 percent, 1 kHz 23.7 percent, 2 kHz 26.5 percent, 4 kHz 21.4 percent, 8 kHz 5.5 percent. The 1, 2 and 4 kHz bars are drawn in the accent, the others in grey.',
             bars: [
-                { label: '250 Hz', value: 6, display: '6%', dim: true },
-                { label: '500 Hz', value: 17, display: '17%', dim: true },
-                { label: '1 kHz', value: 24, display: '24%' },
-                { label: '2 kHz', value: 26, display: '26%' },
-                { label: '4 kHz', value: 21, display: '21%' },
-                { label: '8 kHz', value: 5, display: '5%', dim: true },
+                { label: '250 Hz', value: 6.17, display: '6.2%', dim: true },
+                { label: '500 Hz', value: 16.71, display: '16.7%', dim: true },
+                { label: '1 kHz', value: 23.73, display: '23.7%' },
+                { label: '2 kHz', value: 26.48, display: '26.5%' },
+                { label: '4 kHz', value: 21.42, display: '21.4%' },
+                { label: '8 kHz', value: 5.49, display: '5.5%', dim: true },
             ],
         },
         duck: {
@@ -119,7 +119,7 @@ The Speech Intelligibility Index (ANSI S3.5-1997) predicts how much of a speech 
 
 Masking happens band by band: a louder sound raises the threshold for quieter sounds near its own frequency (Fastl and Zwicker, 2007). A slap bass at 100 Hz does little to the consonants of a voice. An electric piano chord at 1 to 3 kHz covers exactly the part of the voice that the index weights most.
 
-Words in the music add a second cost, separate from frequency. Salamé and Baddeley (1989) had people remember lists of digits while music played that they were told to ignore. Both kinds of music hurt recall compared with quiet, and vocal music hurt it more than instrumental music. Their task was not watching a video, but a viewer following a narrator is also holding words in memory. A sung hook under narration costs more than its level suggests.
+Words in the music add a second cost, separate from frequency. Salamé and Baddeley (1989) had people remember lists of digits while music played that they were told to ignore. In their first experiment, both kinds of music hurt recall compared with quiet, and vocal music hurt it more. A second experiment, with more practised participants, found the vocal cost again. Their task was not watching a video, but a viewer following a narrator is also holding words in memory. A sung hook under narration costs more than its level suggests.
 
 That points to two fixes. Take energy out of the speech band only while the voice is talking, and keep sung or busy lead lines for the moments without talking.
 
@@ -131,14 +131,14 @@ Hear the same move on a lead and a pad. The lead's level never changes; only the
 
 ## DAW experiment: duck the band, not the cue
 
-You need a City Pop loop, or any busy cue, and 30 seconds of speech: read a paragraph into your phone or use a podcast clip.
+You need a City Pop loop, or any busy cue, and 30 seconds of speech: read a paragraph into your phone or use a podcast clip. Step 6 also needs a dynamic EQ with an external sidechain input. Several DAWs do not ship one, and a multiband compressor keyed from the voice can stand in for it.
 
 1. Put the speech on its own track, centred, and route every music track to one music bus.
 2. Balance the two by ear on headphones until the voice sits where you would normally mix it.
 3. Listen on a phone speaker or laptop speakers and write down the words that blur.
 4. With the voice playing, mute the music parts one at a time. Note which mute makes those words clearest. Expect the keys, the guitar or the lead.
 5. Unmute everything. On the music bus, add a compressor keyed from the voice: 3:1, attack around 10 ms, release around 300 ms, threshold set for 3 to 4 dB of gain reduction while the voice talks. Listen for pumping in the bass.
-6. Bypass it and try a dynamic EQ band instead, keyed from the voice: a wide bell at 2 kHz, Q about 0.7, dipping 4 to 6 dB while the voice talks.
+6. Bypass it and try a dynamic EQ band instead, keyed from the voice: a wide bell at 2 kHz, Q about 0.7, dipping 4 to 6 dB while the voice talks. With a multiband compressor, set one band to about 1 to 4 kHz, let it take off the same 4 to 6 dB and leave the other bands uncompressed.
 7. Compare the two on the phone speaker, at the same playback level.
 8. Finally, mute the lead under the talking sections and keep it in the b-roll. Keep the version where every word is easy to follow and the groove still moves.
 
@@ -160,7 +160,7 @@ If you are choosing a finished cue rather than producing one, the [lesson on str
 
 ## References
 
-- American National Standards Institute. (1997, reaffirmed 2020). *ANSI/ASA S3.5-1997: Methods for Calculation of the Speech Intelligibility Index*. Acoustical Society of America.
+- American National Standards Institute. (1997, reaffirmed 2024). *ANSI/ASA S3.5-1997: Methods for Calculation of the Speech Intelligibility Index*. Acoustical Society of America.
 - Fastl, H., & Zwicker, E. (2007). *Psychoacoustics: Facts and Models* (3rd ed.). Springer.
 - Salamé, P., & Baddeley, A. (1989). Effects of background music on phonological short-term memory. *The Quarterly Journal of Experimental Psychology Section A*, 41(1), 107-122.
 `,

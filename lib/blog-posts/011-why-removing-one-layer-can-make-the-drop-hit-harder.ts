@@ -83,7 +83,7 @@ export const post011: BlogArticle = {
     ],
     content: `## Hook: the crowded drop that sounds small
 
-You spend an evening stacking leads for the drop: a supersaw, a square lead, a noise layer for the attack and a mid-range pluck, all playing the same melody. Each one sounds good on its own. Together the drop feels narrow and flat. It is louder on the meter but it does not hit, and the kick that thumped in the build now sounds like it is behind a curtain.
+You spend an evening stacking leads for the drop: a supersaw, a square lead, a noise layer for the attack and a midrange pluck, all playing the same melody. Each one sounds good on its own. Together the drop feels narrow and flat. It is louder on the meter but it does not hit, and the kick that thumped in the build now sounds like it is behind a curtain.
 
 More layers felt like more energy while you were stacking them. On the master bus they turn into level, masking and gain reduction.
 

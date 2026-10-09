@@ -101,7 +101,7 @@ export const post032: BlogArticle = {
 
 You have written a strong hook. The melody is catchy and the rhythm bounces, yet it sounds generic. So you open your synth folder, load a lead, stack a second one, then a third. By the fifth layer the hook is loud. It is still not memorable. It sounds like every preset at once.
 
-Stacking average sounds does not create a signature. It averages one out. What a listener recognizes is something specific: a pitch blip at the start of each note, a slightly sour detune, a burst of noise on the attack. Those details are easy to bury.
+Stacking average sounds gives you an average sound. What a listener recognizes is something specific: a pitch blip at the start of each note, a slightly sour detune, a burst of noise on the attack. Those details are easy to bury.
 
 ## Why it matters: layers that start together become one sound
 

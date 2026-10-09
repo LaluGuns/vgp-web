@@ -83,7 +83,7 @@ export const post088: BlogArticle = {
 
 You are listening to the chorus and it does not feel right. You tell yourself the vocal lacks warmth or the snare needs more vibe. So you load a vintage tape plugin and compress the channel again. When you bypass the chain, the vocal is louder but muddier, and the snare has lost its crack. You spent thirty minutes turning knobs and the track is not better, only more complicated.
 
-The problem was not the feeling. The feeling was real. The problem was chasing it with moves that were not connected to anything you could check.
+The feeling was real. What went wrong was chasing it with moves that were not connected to anything you could check.
 
 ## Why it matters: you cannot repeat an accident
 

@@ -39,10 +39,15 @@ export const post075: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Witek and colleagues (2014) varied how syncopated a drum break was. Where was the urge to move strongest?',
-            options: ['At the straight, unsyncopated beat', 'At a moderate level of syncopation', 'At the highest syncopation tested', 'Equally at every level they tested'],
+            q: 'In your remix the kick, bass and chords all avoid the beat, and friends say it does not make them want to move. Going by Witek and colleagues (2014), which edit is most likely to bring the urge back?',
+            options: [
+                'Push the hats off the beat too, so the whole kit pulls one way',
+                'Put the kick back on the downbeat and keep one or two off-beat accents',
+                'Apply a random humanize of 20 ms to every hit so it sounds played',
+                'Quantize every part onto the beat so the pattern is fully straight',
+            ],
             answer: 1,
-            why: 'Ratings of wanting to move and pleasure followed an inverted U. Too little syncopation gives the body nothing to fill in, too much and the beat is lost.',
+            why: 'Wanting to move peaked at moderate syncopation and fell toward both ends. Your remix sits at the far end, so pull part of it back to the beat and keep some accents off it: a fully straight pattern lands at the other low end, and random timing does not bring back a beat to lean against.',
         },
         {
             q: 'What does syncopation need to work?',
@@ -56,15 +61,15 @@ export const post075: BlogArticle = {
             why: 'Syncopation is an accent where the listener does not expect one, and a silence where they do. Without a felt beat there is no expectation to play against.',
         },
         {
-            q: 'What did microtiming studies such as Senn and colleagues (2016) find when they compared a quantized version with the original human timing?',
+            q: 'Your drummer\'s funk take has small timing offsets. You could keep it as played, quantize it fully, or scale the offsets up so it grooves harder. What do the microtiming studies predict?',
             options: [
-                'Original and quantized scored alike, and exaggerated timing fell',
-                'The original timing scored well above the quantized version',
-                'Exaggerated timing scored highest, ahead of the original timing',
-                'Listeners rated every version the same, exaggerated ones included',
+                'As played and quantized rate about the same, and scaled up rates lower',
+                'Scaled up rates highest, because bigger offsets add more feel',
+                'As played rates far above quantized, so the grid kills the groove',
+                'Quantized rates far above both, because the grid always grooves best',
             ],
             answer: 0,
-            why: 'Groove ratings stayed high for the original timing and for the quantized version, and fell when the deviations were scaled up. Timing offsets are not a reliable groove fix on their own.',
+            why: 'Senn and colleagues (2016) found the original timing and a fully quantized version rated about equally, with lower scores when the deviations were scaled up, and Davies and colleagues saw ratings generally fall as deviations grew. Bigger offsets are not a groove fix.',
         },
     ],
     content: `## Hook: the loop that will not move
@@ -95,7 +100,7 @@ Timing offsets are a different matter. Frühauf, Kopiez and Platz (2013) shifted
 
 ## DAW experiment: three kicks and one late snare
 
-This takes about ten minutes with any drum sampler.
+Any drum sampler works.
 
 1. Set the tempo to 100 BPM. Program one bar with the kick on beats 1 and 3, the snare on 2 and 4 and closed hats on every 8th note. Add a short bass note on each kick. Loop it.
 2. Version B: move the kick and its bass note from beat 3 to the 8th note before it, and add a second kick and bass note on the 8th note after beat 3. Leave the snare and hats alone.

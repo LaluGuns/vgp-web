@@ -118,7 +118,7 @@ The second mistake is pushing an acoustic or vocal-led song as far as a dense el
 
 ## Producer takeaway: keep the lift
 
-Before the final push, note how far the chorus rises above the verse. Push only in matched-level steps, and stop when that distance starts closing. If the song needs more density, build it earlier in the mix, where you choose what gets denser, instead of asking the last limiter to flatten everything at once. Why the heavier version tends to lose once levels are matched is covered in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization).
+Before the final push, note how far the chorus rises above the verse. Push only in matched-level steps, and stop when that distance starts closing. If the song needs more density, build it earlier in the mix, where you choose what gets denser, instead of asking the last limiter to flatten everything at once. Why the heavier version tends to lose once levels are matched is covered in the [lesson on loud masters after normalization](/blog/why-loud-masters-can-sound-smaller-after-normalization).
 
 ## References
 

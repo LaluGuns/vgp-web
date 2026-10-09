@@ -87,11 +87,11 @@ export const post054: BlogArticle = {
 
 You finish a mix and it feels like a flat sheet of paper, with everything right in front of the listener's face. To get depth you put reverb on the vocal, the guitars, the synths and the drums, and turn up the sends to push some parts back. Instead of a deep mix you get a washed-out one. The track feels smaller, and every part is buried in the same cloud of reflections.
 
-Depth does not come from the amount of reverb. It comes from contrast. You can only hear that something is far away if something else is clearly close. If every part is wet, there is no dry foreground to compare against, and the whole mix collapses onto one plane.
+Depth comes from contrast: you can only hear that something is far away if something else is clearly close. If every part is wet, there is no dry foreground to compare against, and the whole mix collapses onto one plane.
 
 ## Why it matters: depth is a comparison
 
-A listener does not measure distances in a mix. They compare. The lead that is dry, bright and loud sits in front because the parts around it are quieter, darker and wetter. Remove that difference and the brain has nothing to rank.
+A listener judges distance in a mix by comparison. The lead that is dry, bright and loud sits in front because the parts around it are quieter, darker and wetter. Remove that difference and the brain has nothing to rank.
 
 ::figure stage
 

@@ -91,7 +91,7 @@ export const post114: BlogArticle = {
 
 A channel meter in your DAW is in the red, +6 dBFS on the peak display, and the track sounds clean. Years of advice say that anything over 0 dBFS is clipped and ruined, so what is going on?
 
-The answer is the number format the DAW uses inside. Most mix engines work in 32-bit floating point, and in floating point 0 dBFS is a reference level, not a wall. That headroom is real, but it ends at specific places, and those places are where overs turn into distortion.
+The number format the DAW uses inside explains it. Most mix engines work in 32-bit floating point, and in floating point 0 dBFS is a reference level, not a wall. That headroom is real, but it ends at specific places, and those places are where overs turn into distortion.
 
 ## Why it matters: you need to know where the walls are
 
@@ -105,9 +105,9 @@ A float mix removes the top wall inside the DAW. You can be careless with levels
 
 A 32-bit float sample, as defined by the IEEE 754 standard (IEEE, 2019), is stored in binary scientific notation. One bit holds the sign, 8 bits hold an exponent and 23 bits hold the fraction, with one more leading bit implied, for 24 bits of significand. The exponent sets the scale, and the significand holds the detail at whatever scale the exponent picks.
 
-Two things follow. First, the range is enormous. The largest value is about $3.4 \\times 10^{38}$ and the smallest normal value about $1.2 \\times 10^{-38}$, a span of about 1,530 dB. With 1.0 as 0 dBFS, the format can hold signals up to about +770 dBFS. No mix comes near either end.
+The range is enormous. The largest value is about $3.4 \\times 10^{38}$ and the smallest normal value about $1.2 \\times 10^{-38}$, a span of about 1,530 dB. With 1.0 as 0 dBFS, the format can hold signals up to about +770 dBFS. No mix comes near either end.
 
-Second, the precision is relative. Each calculation rounds to the nearest value the format can hold, and that error is at most $2^{-24}$ of the value itself, about 144 dB below the signal, whether the signal sits at -60 dBFS or +20 dBFS. In 24-bit fixed point a quiet signal gets fewer levels. In float it keeps the same precision. Some DAWs go further and mix in 64-bit float.
+The precision is also relative. Each calculation rounds to the nearest value the format can hold, and that error is at most $2^{-24}$ of the value itself, about 144 dB below the signal, whether the signal sits at -60 dBFS or +20 dBFS. In 24-bit fixed point a quiet signal gets fewer levels. In float it keeps the same precision. Some DAWs go further and mix in 64-bit float.
 
 ::figure span
 

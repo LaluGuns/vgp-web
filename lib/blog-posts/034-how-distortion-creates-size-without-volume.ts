@@ -122,13 +122,13 @@ At matched loudness the saturated bass sounds denser and closer, and you can fol
 
 ## Common mistake: more drive is not more size
 
-Past a point, more drive takes size away. Hard clipping flattens the transient of every hit, so the kick loses its punch and the bass loses its attack. When two or more notes go through a nonlinear curve together, as in a distorted chord, they also produce intermodulation: new tones at the sums and differences of the notes, which are not in key and sound muddy (Reiss and McPherson, 2014). And every harmonic that lands above the Nyquist limit folds back down as aliasing, covered in [why aliasing is a ghost frequency problem](/blog/why-aliasing-is-a-ghost-frequency-problem).
+Past a point, more drive takes size away. Hard clipping flattens the transient of every hit, so the kick loses its punch and the bass loses its attack. When two or more notes go through a nonlinear curve together, as in a distorted chord, they also produce intermodulation: new tones at the sums and differences of the notes, which are not in key and sound muddy (Reiss and McPherson, 2014). And every harmonic that lands above the Nyquist limit folds back down as aliasing, covered in the [lesson on aliasing](/blog/why-aliasing-is-a-ghost-frequency-problem).
 
 The other mistake is judging without matching level. Saturation almost always adds loudness, and the louder version wins a careless comparison.
 
 ## Producer takeaway: saturate for density, decide at matched level
 
-Use saturation where a part needs to be heard more without peaking higher: bass, vocals, snare, synths. Drive in small steps, match loudness after each one, and stop when the part sits forward at the same level. On bass, try it in parallel: saturate a copy, high-pass the copy and blend it in, so the harmonics help on small speakers while the sub stays clean. [Small speakers need bass harmonics](/blog/the-physics-of-bass-on-small-speakers) walks through that setup.
+Use saturation where a part needs to be heard more without peaking higher: bass, vocals, snare, synths. Drive in small steps, match loudness after each one, and stop when the part sits forward at the same level. On bass, try it in parallel: saturate a copy, high-pass the copy and blend it in, so the harmonics help on small speakers while the sub stays clean. The [lesson on bass for small speakers](/blog/the-physics-of-bass-on-small-speakers) walks through that setup.
 
 ## References
 

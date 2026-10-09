@@ -87,7 +87,7 @@ export const post060: BlogArticle = {
 
 You have worked on a mix for four hours straight. You have tweaked the kick, adjusted the vocal compression and brightened the acoustic guitars, and in the studio it sounds great. The next morning you play it in the car and it falls apart: the bass is muddy, the vocal is buried and the upper mids are harsh.
 
-Your ears did not fail. They adapted. Hearing adjusts to whatever it listens to for a long time, so after hours on one mix in one room, that mix's balance starts to sound normal, faults included. A reference track you know well is how you get back to a fixed point.
+Your ears adapted. Hearing adjusts to whatever it listens to for a long time, so after hours on one mix in one room, that mix's balance starts to sound normal, faults included. A reference track you know well is how you get back to a fixed point.
 
 ## Why it matters: you need a fixed point
 

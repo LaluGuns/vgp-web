@@ -164,7 +164,7 @@ Do the clean-up by hand before any compression. Cut clicks and bleed in long gap
 - Reiss, J. D., & McPherson, A. (2014). *Audio Effects: Theory, Implementation and Application*. CRC Press.
 `,
     seo: {
-        title: 'Keep the Quiet Vocal Detail a Gate Would Cut | VGP',
+        title: 'Keep the quiet vocal detail a gate would cut | VGP Studio',
         description: 'Gates cut the fading ends of words and compression lifts room noise. Learn why the order matters and how to clean vocal gaps by hand before compressing.',
         keywords: ['quiet vocal detail', 'vocal editing tips', 'noise gate vocals', 'downward expander', 'clip gain vocals', 'noise floor'],
     },

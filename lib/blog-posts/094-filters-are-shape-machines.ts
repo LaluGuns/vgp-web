@@ -89,7 +89,7 @@ export const post094: BlogArticle = {
 
 A common piece of mixing advice is to clean up the low end by high-passing everything except the kick and the bass. So you put a steep 24 or 48 dB per octave high-pass at 120 Hz on the vocal, the guitars and the synths. Each track looks tidy on the analyzer. Played together, the mix sounds thinner than before, and the drums feel less solid.
 
-Two things happened. Some of those tracks had useful energy below 120 Hz, and the filters removed it. And every one of those filters changed the timing of the frequencies around its cutoff, which matters as soon as filtered and unfiltered versions of a related sound meet.
+Some of those tracks had useful energy below 120 Hz, and the filters removed it. Every one of those filters also changed the timing of the frequencies around its cutoff, which matters as soon as filtered and unfiltered versions of a related sound meet.
 
 ## Why it matters: slope and cutoff decide what survives
 

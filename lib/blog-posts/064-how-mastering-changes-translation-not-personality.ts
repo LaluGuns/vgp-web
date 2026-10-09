@@ -102,11 +102,9 @@ No master sounds identical everywhere. What you can do is make sure no single sy
 
 ## Science model: why small, broad moves travel
 
-Two facts explain how mastering engineers work.
+Perceived balance depends on playback level. The equal-loudness contours in ISO 226 show that the ear is far less sensitive to low frequencies at low levels than to the midrange, and that the contours flatten as level rises. Turn a song down and the bass seems to fall away; turn it up and the bass seems to grow. A master that is only right at one monitoring level will not translate, so balance gets checked at more than one level.
 
-The first is that perceived balance depends on playback level. The equal-loudness contours in ISO 226 show that the ear is far less sensitive to low frequencies at low levels than to the midrange, and that the contours flatten as level rises. Turn a song down and the bass seems to fall away; turn it up and the bass seems to grow. A master that is only right at one monitoring level will not translate, so balance gets checked at more than one level.
-
-The second is that a master EQ acts on everything in its band. A 1 dB cut centred on 300 Hz turns down the low-mids of the bass, guitars, keys and vocal together. That is useful for an overall build-up and useless for one instrument. Broad, gentle curves change the tone of the whole song without drawing attention to themselves. A narrow boost large enough to lift one vocal also lifts every other sound in that range.
+A master EQ also acts on everything in its band. A 1 dB cut centred on 300 Hz turns down the low-mids of the bass, guitars, keys and vocal together. That is useful for an overall build-up and useless for one instrument. Broad, gentle curves change the tone of the whole song without drawing attention to themselves. A narrow boost large enough to lift one vocal also lifts every other sound in that range.
 
 ::figure eq
 

@@ -116,7 +116,7 @@ When a singer says they cannot hear themselves, the quick answer is to put a hea
 
 ## Producer takeaway: set the cue before the chain
 
-Before you open the vocal chain, set the cue. Bring the backing down until the singer can hear their own voice clearly, keep the vocal dry or close to it, and keep the headphone level as low as feels good. Solo the mic in a pause to check for bleed. A relaxed singer gives you a take that needs less EQ, less compression and less tuning. How to build the cue itself, reverb and latency included, is covered in [Headphone balance changes the take](/blog/how-headphone-balance-changes-performance).
+Before you open the vocal chain, set the cue. Bring the backing down until the singer can hear their own voice clearly, keep the vocal dry or close to it, and keep the headphone level as low as feels good. Solo the mic in a pause to check for bleed. A relaxed singer gives you a take that needs less EQ, less compression and less tuning. How to build the cue itself, reverb and latency included, is covered in the [lesson on headphone balance](/blog/how-headphone-balance-changes-performance).
 
 ## References
 
@@ -126,7 +126,7 @@ Before you open the vocal chain, set the cue. Bring the backing down until the s
 - Tonkinson, S. (1994). The Lombard effect in choral singing. *Journal of Voice*, 8(1), 24-29.
 `,
     seo: {
-        title: 'Why a Great Vocal Starts Before the Microphone | VGP',
+        title: 'Why a great vocal starts before the microphone | VGP Studio',
         description: 'A loud headphone cue makes singers push. Learn how the Lombard effect changes tone and pitch, and why setting the cue mix beats corrective EQ.',
         keywords: ['vocal recording', 'headphone cue mix', 'Lombard effect', 'vocal tracking', 'singing pitch', 'headphone bleed'],
     },

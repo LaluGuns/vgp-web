@@ -95,7 +95,7 @@ Listeners do not need complex harmony to connect with a song. A familiar progres
 
 The opposite costs them effort. Listeners track the key across several chords at once, and in Krumhansl and Kessler's experiments shifts to distant keys took longer to register than shifts to close ones (Krumhansl and Kessler, 1982). A progression that keeps wandering asks the listener to keep reorienting, and that attention comes out of the melody's share.
 
-Too predictable has its own cost: the song can sound generic. The answer is usually not new chords. It is a new presentation of the familiar ones.
+Too predictable has its own cost: the song can sound generic. The usual answer is to present the familiar chords in a new way.
 
 ## Science model: two kinds of expectation
 

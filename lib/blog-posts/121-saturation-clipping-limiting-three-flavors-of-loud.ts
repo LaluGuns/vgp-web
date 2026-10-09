@@ -136,7 +136,7 @@ The other mistake is reaching for the wrong tool: a limiter to add warmth to a v
 
 ## Producer takeaway: small amounts, in order
 
-Spread the work. I use a clipper on my drum bus more often than a limiter there, because it shaves the tips of the transients without touching the body of the hit. Light saturation on single tracks, a couple of dB of clipping on the drum bus, and a final limiter doing 1 to 3 dB will usually sound fuller than one limiter doing 8. Set the limiter in true-peak mode for the delivery format, judge every stage at matched loudness, and check how the master sounds after normalization, because that is what your listener hears. Clipping gets its own lesson in [clipping can work, it can also cost you](/blog/why-clipping-can-be-aesthetic-but-risky).
+Spread the work. I use a clipper on my drum bus more often than a limiter there, because it shaves the tips of the transients without touching the body of the hit. Light saturation on single tracks, a couple of dB of clipping on the drum bus, and a final limiter doing 1 to 3 dB will usually sound fuller than one limiter doing 8. Set the limiter in true-peak mode for the delivery format, judge every stage at matched loudness, and check how the master sounds after normalization, because that is what your listener hears. The [lesson on clipping](/blog/why-clipping-can-be-aesthetic-but-risky) covers when it helps and what it costs.
 
 ## References
 

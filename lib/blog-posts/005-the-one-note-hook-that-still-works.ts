@@ -79,7 +79,7 @@ That is the warning. A one-note hook is exactly the rhythm-only version of a mel
 
 ## Science model: syncopation is the main surprise left
 
-Huron (2006) treats expectation in time the same way as expectation in pitch: the brain predicts when the next event will land as well as what it will be. The meter makes strong beats the most likely places for notes. A note placed between the beats, while the beat carries on underneath, is syncopation: a small surprise in time.
+Huron (2006) treats expectation in time the same way as expectation in pitch: the brain predicts when the next event will land as well as what it will be. The metre makes strong beats the most likely places for notes. A note placed between the beats, while the beat carries on underneath, is syncopation: a small surprise in time.
 
 In a one-note hook, that is the main musical surprise left, so where you put the accents decides whether the line has character. More is not always better. Witek and colleagues (2014) played listeners drum breaks with different amounts of syncopation. Breaks with a medium amount made people want to move most and gave the most pleasure, while breaks with very little or a great deal of syncopation scored lower. A rhythm needs enough on the beat to confirm the pulse, and enough off it to pull against it.
 

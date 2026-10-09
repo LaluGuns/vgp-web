@@ -92,7 +92,7 @@ export const post001: BlogArticle = {
 
 You spend weeks on the transient of a snare drum. You sit in front of studio monitors and shift compressor release times by milliseconds. Then you release the track. A listener presses play on a playlist and skips after two seconds. They never hear your snare. They never hear the vocal hook that took several writing sessions to finish.
 
-The listener did not skip because they hated the mix. They skipped because nothing gave them a reason to stay. In a large study of Spotify listening data, most skips happened at the very beginning of songs, and about a quarter of all streamed songs were skipped within the first five seconds (Montecchio, Roy and Pachet, 2020). If your intro is a slow, quiet synth drone that takes fifteen seconds to build, you are spending your best seconds on the least interesting part of the song.
+They skipped because nothing in those two seconds gave them a reason to stay. In a large study of Spotify listening data, most skips happened at the very beginning of songs, and about a quarter of all streamed songs were skipped within the first five seconds (Montecchio, Roy and Pachet, 2020). If your intro is a slow, quiet synth drone that takes fifteen seconds to build, you are spending your best seconds on the least interesting part of the song.
 
 ## Why it matters: crowding the opening
 
@@ -106,7 +106,7 @@ It also costs you later. If the intro is already dense, the verse and chorus hav
 
 ## Science model: auditory grouping and expectation
 
-Two ideas explain why one clear sound beats a wall of them. Bregman's work on auditory scene analysis (1990) shows that the brain sorts incoming sound into separate streams, one per source, before it can follow any of them. A single clear sound is grouped almost at once. Several competing elements take longer to sort, and that effort is spent before the listener has heard anything they like.
+Bregman's work on auditory scene analysis (1990) helps explain why one clear sound beats a wall of them. It shows that the brain sorts incoming sound into separate streams, one per source, before it can follow any of them. A single clear sound is grouped almost at once. Several competing elements take longer to sort, and that effort is spent before the listener has heard anything they like.
 
 Huron (2006) argues that the brain is always predicting what comes next, and that correct predictions, or clear surprises, feel rewarding. A formless intro offers no pattern to predict, so there is no small reward to keep the listener there.
 

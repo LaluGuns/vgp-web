@@ -103,7 +103,7 @@ The cost is new frequency content. A flattened peak is a sharper shape than the 
 
 ## Science model: harmonics and intermodulation
 
-A hard clipper passes everything below its ceiling untouched and holds everything above it at the ceiling, as drawn in [three ways to get loud](/blog/saturation-clipping-limiting-three-flavors-of-loud). Because it treats positive and negative peaks the same way, a clipped sine gains odd harmonics only: 3, 5, 7 times the fundamental and up. The harder you drive it, the closer the wave gets to a square, whose peak and RMS level are equal, and the stronger those harmonics become. Clipping trades peak for density.
+A hard clipper passes everything below its ceiling untouched and holds everything above it at the ceiling, as drawn in the [lesson on saturation, clipping and limiting](/blog/saturation-clipping-limiting-three-flavors-of-loud). Because it treats positive and negative peaks the same way, a clipped sine gains odd harmonics only: 3, 5, 7 times the fundamental and up. The harder you drive it, the closer the wave gets to a square, whose peak and RMS level are equal, and the stronger those harmonics become. Clipping trades peak for density.
 
 When several sounds are clipped together, the output also contains intermodulation: new frequencies at sums and differences of the inputs. With a big bass note under a quieter tone, the bass decides when the tone gets flattened, twice per bass cycle, and that shows up as sidebands either side of the tone. In a quick test, an 80 Hz note with a quieter 1 kHz tone on top, driven about 3 dB into a hard clip, produced sidebands at 840 and 1160 Hz only a few decibels below the tone. Those frequencies belong to neither note. That is why a clipped mix bus can sound rough and muddy when the clipped drum bus sounded clean.
 
@@ -124,7 +124,7 @@ On drums, 1 dB is often hard to hear and 6 dB softens the crack. On the full mix
 
 The usual mistake is driving a clipper until the track is loud enough, as if it were a fader. On a mix bus the distortion builds in the low end first, and the intermodulation roughens everything the bass sits under.
 
-The other is clipping without oversampling. A clipper's harmonics extend far above the Nyquist limit, and without oversampling they fold back down as tones unrelated to the music. Turn oversampling on, or test the plugin with a sine and an analyzer as described in [why aliasing is a ghost frequency problem](/blog/why-aliasing-is-a-ghost-frequency-problem).
+The other is clipping without oversampling. A clipper's harmonics extend far above the Nyquist limit, and without oversampling they fold back down as tones unrelated to the music. Turn oversampling on, or test the plugin with a sine and an analyzer as described in the [lesson on aliasing](/blog/why-aliasing-is-a-ghost-frequency-problem).
 
 ## Producer takeaway: shave tips, not bodies
 

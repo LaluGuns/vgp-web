@@ -82,7 +82,7 @@ export const post035: BlogArticle = {
                 'It turns the noise into extra harmonics of the note',
                 'It makes the noise start and stop with the note',
                 'It raises the noise to the level of the oscillator',
-                'It band-passes the noise to the upper mid range',
+                'It band-passes the noise to the upper midrange',
             ],
             answer: 1,
             why: 'e(t) is only the level of the noise over time. When it follows the note, the noise shares the note\'s onset and decay, which is what lets the ear hear one instrument.',

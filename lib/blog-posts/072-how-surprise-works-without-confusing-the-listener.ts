@@ -43,15 +43,15 @@ export const post072: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Cheung and colleagues (2019) found that a surprising chord tended to feel most pleasant when...',
+            q: 'The bridge drifts through four chords listeners cannot guess. According to Cheung and colleagues (2019), which chord at the end of the bridge is most likely to feel pleasant?',
             options: [
-                'the listener was confident about what came next',
-                'the listener was unsure what would come next',
-                'it was also the loudest chord in the progression',
-                'it arrived in the very first bar of the song',
+                'A chord even less expected, since surprise always adds pleasure',
+                'A chord they can predict, such as the home chord of the song',
+                'A chord in a new key, so the chorus arrives as a fresh start',
+                'Any chord, since the uncertainty already made the bridge pleasant',
             ],
-            answer: 0,
-            why: 'Pleasure was high for chords that broke a confident expectation (low uncertainty, high surprise). A surprise against a vague expectation has nothing to push against.',
+            answer: 1,
+            why: 'Pleasure tended to be high for a surprising chord after a context the listener was confident about, and for an expected chord after a context they were unsure about. After a bridge nobody could predict, another surprise has no confident expectation to push against.',
         },
         {
             q: 'A listener rates the next event as 50% likely. What is its information content?',
@@ -75,7 +75,7 @@ export const post072: BlogArticle = {
 
 You want the second verse to stand out, so you add a twist. The tempo jumps, the song moves to a new key and a distorted synth comes in, all on the same downbeat. You expect the listener to admire the move. Instead they lose the beat, and by the time they find it again they have stopped caring.
 
-The new sounds were fine. You changed too many things at once, so the listener had nothing left to hold on to. A surprise that works feels like a turn in a road you are still on. Change everything together and it feels like a different song.
+You changed too many things at once, so the listener had nothing left to hold on to. A surprise that works feels like a turn in a road you are still on. Change everything together and it feels like a different song.
 
 ## Why it matters: repetition fades, chaos confuses
 
@@ -101,7 +101,7 @@ Huron (2006) adds a useful point for producers. Listeners carry general expectat
 
 ## DAW experiment: one change against three
 
-This takes about ten minutes with any verse loop that has drums, bass and chords.
+Any verse loop with drums, bass and chords will do.
 
 1. Loop a four-bar verse groove and duplicate it, so bars 1 to 8 repeat the same pattern.
 2. Version A: in bar 8, move one secondary sound, such as a rim shot, shaker or open hat, one 16th later. Leave every other track untouched.

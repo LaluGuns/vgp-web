@@ -124,7 +124,7 @@ The other mistake is blaming normalization. It adds nothing and removes nothing 
 
 ## Producer takeaway: spend the distance carefully
 
-Compare limiter settings at matched loudness every time. Push further only while the song gains density you want, and stop when the drums start to shrink. On a normalized service, the distance between your peaks and your average is what survives. The rules behind the turn-down are in [the streaming loudness myths](/blog/the-streaming-loudness-myth-that-refuses-to-die).
+Compare limiter settings at matched loudness every time. Push further only while the song gains density you want, and stop when the drums start to shrink. On a normalized service, the distance between your peaks and your average is what survives. The rules behind the turn-down are in the [lesson on streaming loudness myths](/blog/the-streaming-loudness-myth-that-refuses-to-die).
 
 ## References
 

@@ -138,17 +138,15 @@ You can hear both versions in the demo. Play it as it is, then switch to one bea
 
 ## Science model: masking, recovery and a predictable downbeat
 
-Three things happen in the gap.
-
-The first is in the ear. A loud sound makes a following, quieter sound harder to hear for a short time after it stops. This forward masking fades over roughly 100 to 200 ms (Moore, 2012). One beat lasts:
+In the ear, a loud sound makes a following, quieter sound harder to hear for a short time after it stops. This forward masking fades over roughly 100 to 200 ms (Moore, 2012). One beat lasts:
 
 $$t_{\\text{beat}} = \\frac{60}{\\text{BPM}} \\ \\text{s}$$
 
 At 128 BPM that is 0.47 seconds, longer than forward masking lasts. Auditory nerve fibres also respond most strongly at the start of a sound and less as it continues, and silence lets them recover. By the time the downbeat arrives, the ear is no longer working on the build.
 
-The second is in the mix. A compressor's gain reduction falls back toward zero at the speed of its release time whenever the level drops below the threshold (Giannoulis, Massberg and Reiss, 2012). Silence is the longest possible stretch below the threshold.
+In the mix, a compressor's gain reduction falls back toward zero at the speed of its release time whenever the level drops below the threshold (Giannoulis, Massberg and Reiss, 2012). Silence is the longest possible stretch below the threshold.
 
-The third is in the listener's head. The pulse keeps running through the gap, so the listener knows exactly when the downbeat will land. Huron (2006) describes how tension and attention rise as an expected event approaches. A gap leaves nothing else to attend to, so all of that attention arrives with the downbeat.
+In the listener's head, the pulse keeps running through the gap, so the listener knows exactly when the downbeat will land. Huron (2006) describes how tension and attention rise as an expected event approaches. A gap leaves nothing else to attend to, so all of that attention arrives with the downbeat.
 
 ## DAW experiment: the one-beat mute test
 

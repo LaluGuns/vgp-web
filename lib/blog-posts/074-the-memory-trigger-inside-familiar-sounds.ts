@@ -49,15 +49,15 @@ export const post074: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Janata, Tomic and Rakowski (2007), what made a song most likely to bring back a personal memory?',
+            q: 'An ad brief wants music that brings back viewers\' own memories. You can write an original or license a song most of them already know. Going by Janata, Tomic and Rakowski (2007), which has the better chance?',
             options: [
-                'A slow tempo and soft dynamics',
-                'Familiarity to the listener',
-                'A worn, lo-fi production style',
-                'A sad lyric in a minor key',
+                'The original, as long as it is slow, soft and in a minor key',
+                'The known song, since memories came mostly with familiar songs',
+                'The original, if it runs through a heavy lo-fi chain',
+                'Either, since any song brings back a memory about 30% of the time',
             ],
             answer: 1,
-            why: 'About 30% of song presentations evoked an autobiographical memory, and those memories came mostly with songs the listener knew. Unfamiliar songs rarely did it.',
+            why: 'About 30% of the excerpts in the study evoked an autobiographical memory, and mostly when listeners already knew the song. Unfamiliar songs rarely did it, so a new song cannot plant a personal memory, whatever its tempo or texture.',
         },
         {
             q: 'Why can you not decide which memory a vinyl crackle will bring back?',
@@ -108,7 +108,7 @@ What counts as familiar also depends on who is listening. Krumhansl and Zupnick 
 
 ## DAW experiment: one texture, in the gaps
 
-This takes about ten minutes and needs a tape hiss or vinyl noise sample.
+You need a tape hiss or vinyl noise sample.
 
 1. Import the noise loop onto its own track and loop it for the length of the song.
 2. Pull the track fader down until the noise sits about 30 dB below the vocal on your channel meters.

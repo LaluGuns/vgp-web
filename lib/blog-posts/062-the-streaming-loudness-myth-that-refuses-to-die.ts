@@ -81,7 +81,7 @@ Both claims start from a real feature, loudness normalization, and both get it w
 
 Believe the -14 rule and you may leave a dense rap or club master under-limited, chasing a level the platform would have reached for you anyway. Believe the loud rule and you crush a ballad to win a level race that normalization cancels. Either way, a rumour sets the limiter instead of your ears.
 
-Here is what Spotify does on its Normal setting, the default. A master louder than -14 LUFS integrated is turned down until it measures -14. That is a plain volume change: it adds no distortion, no compression, and it removes none of the density you built. A master quieter than -14 is turned up, but only as far as its peaks allow, because Spotify leaves 1 dB of headroom for lossy encoding.
+On its Normal setting, the default, Spotify turns a master louder than -14 LUFS integrated down until it measures -14. That is a plain volume change: it adds no distortion, no compression, and it removes none of the density you built. A master quieter than -14 is turned up, but only as far as its peaks allow, because Spotify leaves 1 dB of headroom for lossy encoding.
 
 ::figure played
 
@@ -95,7 +95,7 @@ $$G = L_{\\text{target}} - L_{\\text{measured}}$$
 
 A -8 LUFS master on a -14 LUFS target gets $G = -14 - (-8) = -6$ dB. Every sample moves by the same 6 dB, so the distance from peaks to average, the punch, the stereo image and any distortion stay exactly as you mastered them. When $G$ would be positive, Spotify stops raising the track once its peaks are 1 dB below full scale. A -20 LUFS track that peaks at -5 dBTP can rise 4 dB, so it plays at -16 LUFS.
 
-The details that change the outcome:
+Where and how someone listens changes the result:
 
 - **Listener settings.** Premium listeners choose Quiet (-19 LUFS), Normal (-14) or Loud (-11). On Loud, Spotify sets the level regardless of true peak and runs a limiter on soft, dynamic tracks. It engages at -1 dB in sample values, with a 5 ms attack and a 100 ms decay. That is the one case where your master gets extra dynamics processing.
 - **Albums.** When someone plays an album, Spotify normalizes the whole album at once, so the gain does not change between tracks. In shuffle or a playlist, each track is adjusted on its own.
@@ -124,7 +124,7 @@ The other mistake is forgetting where normalization does not happen. The web pla
 
 ## Producer takeaway: master the song, then check the rules
 
-Choose the level by matched-level listening. Then check it against the rules: louder than -14 LUFS means it will be turned down and should peak below -2 dBTP; quieter means it will only be raised as far as its peaks allow. Neither number grades your master. They tell you what each listener will hear, and that is all you need from them. Why heavy limiting tends to lose at matched level is covered in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization).
+Choose the level by matched-level listening. Then check it against the rules: louder than -14 LUFS means it will be turned down and should peak below -2 dBTP; quieter means it will only be raised as far as its peaks allow. Neither number grades your master. They tell you what each listener will hear, and that is all you need from them. Why heavy limiting tends to lose at matched level is covered in the [lesson on loud masters after normalization](/blog/why-loud-masters-can-sound-smaller-after-normalization).
 
 ## References
 

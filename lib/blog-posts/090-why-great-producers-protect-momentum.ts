@@ -98,11 +98,9 @@ It also points your effort at the wrong thing. Many producers have folders full 
 
 ## Science model: interruptions leave residue
 
-Two lines of research explain why the stop costs more than the fix.
+Research on task switching explains part of why the stop costs more than the fix. When people switch between tasks in experiments, they respond more slowly and make more errors right after the switch, and preparing for the switch reduces the cost without removing it (Monsell, 2003). Moving from writing a melody to setting an EQ band and back again is a switch in both directions.
 
-The first is the switch cost. When people switch between tasks in experiments, they respond more slowly and make more errors right after the switch, and preparing for the switch reduces the cost without removing it (Monsell, 2003). Moving from writing a melody to setting an EQ band and back again is a switch in both directions.
-
-The second is attention residue. Leroy (2009) found that when people left a task unfinished to start another, part of their attention stayed on the first one, and they did worse on the second. In the studio, the unfinished chorus keeps pulling at you while you EQ the snare, so the snare gets half your attention. When you go back to the chorus, the idea you had has to be rebuilt from scratch, if it comes back at all.
+Research on attention residue explains the rest. Leroy (2009) found that when people left a task unfinished to start another, part of their attention stayed on the first one, and they did worse on the second. In the studio, the unfinished chorus keeps pulling at you while you EQ the snare, so the snare gets half your attention. When you go back to the chorus, the idea you had has to be rebuilt from scratch, if it comes back at all.
 
 So the cheapest interruption is the shortest one. Writing the problem down takes a few seconds, and the snare is saved for later instead of fixed now, while the chorus idea is still in your head.
 

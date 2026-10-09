@@ -10,7 +10,7 @@ export const post008: BlogArticle = {
     readingTime: 6,
     summary: [
         'On the chorus downbeat, kick, crash, bass and new layers all start together and mask the first syllable of the title.',
-        'Stopping the band for one beat clears the title, and the listener\'s sense of meter keeps counting through the gap.',
+        'Stopping the band for one beat clears the title, and the listener\'s sense of metre keeps counting through the gap.',
         'Find the shortest gap that clears the line, kill any reverb tails inside it, and let the band land on the next downbeat.',
     ],
     figures: {
@@ -30,10 +30,10 @@ export const post008: BlogArticle = {
         },
         why: {
             type: 'flow',
-            caption: 'Why one beat of space works. The meter keeps the timing, the gap removes the competition, and the band\'s return lands as a sudden change.',
-            alt: 'Four boxes with arrows: the meter predicts the downbeat, the band stops for one beat, the title lands in the clear, the band returns on the downbeat.',
+            caption: 'Why one beat of space works. The metre keeps the timing, the gap removes the competition, and the band\'s return lands as a sudden change.',
+            alt: 'Four boxes with arrows: the metre predicts the downbeat, the band stops for one beat, the title lands in the clear, the band returns on the downbeat.',
             steps: [
-                { label: 'Meter predicts the downbeat', note: 'The listener keeps counting through silence' },
+                { label: 'Metre predicts the downbeat', note: 'The listener keeps counting through silence' },
                 { label: 'Band stops for one beat', focus: true, note: 'Nothing is left to mask the vocal' },
                 { label: 'Title lands in the clear', note: 'Attention has one thing to follow' },
                 { label: 'Band returns on the downbeat', note: 'A sudden change after silence' },
@@ -88,9 +88,9 @@ The alternative is to make room in time instead of in frequency. Take the band o
 
 ::demo drop
 
-## Science model: the meter keeps time, the silence removes the competition
+## Science model: the metre keeps time, the silence removes the competition
 
-A gap that short does not break the groove, because the listener's sense of meter keeps running through it. Huron (2006) describes expectation in time as well as in pitch: once a beat is established, the brain predicts when the next strong beat will land. A beat of silence removes the sound, not the prediction, so the chorus downbeat is still expected exactly on time.
+A gap that short does not break the groove, because the listener's sense of metre keeps running through it. Huron (2006) describes expectation in time as well as in pitch: once a beat is established, the brain predicts when the next strong beat will land. A beat of silence removes the sound, not the prediction, so the chorus downbeat is still expected exactly on time.
 
 Huron's ITPRA theory adds a tension response before an expected event: attention and arousal rise as the moment approaches. In a gap, that rising attention has only one thing to land on, which is the vocal. When the band returns, it is a sudden onset after silence. Juslin and Västfjäll (2008) list sudden, loud sounds among the cues that trigger fast brain stem reflexes and raise arousal, which helps explain why an entry after a gap tends to feel harder than the same entry after continuous playing.
 

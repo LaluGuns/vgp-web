@@ -119,7 +119,7 @@ An analyzer shows only the size of each ingredient and throws the phase away. Tw
 
 ::figure phase
 
-In a DAW the analyzer uses the discrete version of this idea, computed with the fast Fourier transform (FFT) on short blocks of samples. How long those blocks are and how they are shaped decides what the display can resolve. [Reading a spectrum analyzer](/blog/fft-for-producers-how-to-read-spectrum-analyzer) covers those settings.
+In a DAW the analyzer uses the discrete version of this idea, computed with the fast Fourier transform (FFT) on short blocks of samples. How long those blocks are and how they are shaped decides what the display can resolve. The [lesson on reading a spectrum analyzer](/blog/fft-for-producers-how-to-read-spectrum-analyzer) covers those settings.
 
 ## DAW experiment: build a sawtooth, then take it apart
 

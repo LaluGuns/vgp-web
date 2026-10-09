@@ -97,7 +97,7 @@ export const post055: BlogArticle = {
 
 You have a well-recorded lead vocal with your favourite compressor and a little top-end air. In the chorus it disappears behind the guitars, synths and drums. You push the fader up. Now you can hear it, but it sits on top of the instrumental like a karaoke track instead of feeling like part of the song.
 
-A polished vocal rarely wins on level. It sounds polished because the instrumental makes room for it. The trick is to make that room only while it is needed, so the band keeps its full sound the rest of the time.
+A polished vocal sounds polished because the instrumental makes room for it. Make that room only while it is needed, so the band keeps its full sound the rest of the time.
 
 ## Why it matters: masking comes and goes
 

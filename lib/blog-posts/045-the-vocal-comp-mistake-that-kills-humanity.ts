@@ -132,7 +132,7 @@ Comp for delivery and meaning first, then fix pitch on the take you kept. Use wh
 - Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
-        title: 'Comp Vocals in Phrases, Not Syllables | VGP',
+        title: 'Comp vocals in phrases, not syllables | VGP Studio',
         description: 'Word-by-word vocal comps break the shape of a performance. Learn why takes do not splice cleanly and how to comp from whole lines of one strong take.',
         keywords: ['vocal comping', 'vocal editing tips', 'comp lanes', 'vocal tracking', 'crossfades', 'music production workflow'],
     },

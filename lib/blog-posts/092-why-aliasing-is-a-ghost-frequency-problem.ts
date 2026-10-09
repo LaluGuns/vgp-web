@@ -86,7 +86,7 @@ export const post092: BlogArticle = {
     ],
     content: `## Hook: the digital saturation trap
 
-You load a saturation plugin to warm up a vocal or add grit to a bass line. You push the input gain. Instead of the smooth density you hear on tape, the top end turns metallic. A cold glare settles over the track and it starts to sound thin. Digital audio is not bad by nature. What you are hearing is aliasing.
+You load a saturation plugin to warm up a vocal or add grit to a bass line. You push the input gain. Instead of the smooth density you hear on tape, the top end turns metallic. A cold glare settles over the track and it starts to sound thin. What you are hearing is aliasing.
 
 The plugin is generating harmonics the session cannot represent. Instead of disappearing, those frequencies fold back into the audible range as ghost tones.
 

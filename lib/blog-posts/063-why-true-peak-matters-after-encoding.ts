@@ -123,7 +123,7 @@ The second mistake is expecting a lower ceiling to rescue an over-limited master
 
 ## Producer takeaway: set the ceiling in true peak
 
-Turn on true-peak detection in your final limiter and set the ceiling to -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Then check an encoded copy as well as the WAV, because the encoded file is the one your listener hears. The rest of the delivery chain is covered in [why delivery specs save the song](/blog/why-delivery-specs-save-the-song).
+Turn on true-peak detection in your final limiter and set the ceiling to -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Then check an encoded copy as well as the WAV, because the encoded file is the one your listener hears. The rest of the delivery chain is covered in the [lesson on delivery specs](/blog/why-delivery-specs-save-the-song).
 
 ## References
 

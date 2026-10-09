@@ -141,7 +141,7 @@ export const post043: BlogArticle = {
 
 During editing, the temptation is to clean up everything. You run strip silence or put a gate on the lead vocal, and the spaces between phrases go quiet. On playback, the vocal sounds pasted into the song. Each line starts out of nothing and stops dead.
 
-Breaths are not noise by default. They are part of how a person sings, and part of how a listener hears that a person is singing.
+Breaths are part of how a person sings, and part of how a listener hears that a person is singing.
 
 ## Why it matters: breath tells the listener someone is there
 
@@ -192,7 +192,7 @@ Edit breaths before the vocal chain. Lower most of them by 6 to 10 dB with clip 
 - Whalen, D. H., Hoequist, C. E., & Sheffert, S. M. (1995). The effects of breath sounds on the perception of synthetic speech. *Journal of the Acoustical Society of America*, 97(5), 3147-3153.
 `,
     seo: {
-        title: 'How Breath Can Make a Vocal Feel Closer | VGP',
+        title: 'How breath can make a vocal feel closer | VGP Studio',
         description: 'Deleting or gating breaths makes a vocal sound edited. Learn why compression makes breaths loud and how to lower them with clip gain instead.',
         keywords: ['vocal breath editing', 'vocal editing tips', 'noise gate vocals', 'clip gain vocals', 'vocal compression', 'vocal intimacy'],
     },

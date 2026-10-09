@@ -78,7 +78,7 @@ export const post083: BlogArticle = {
 
 You are writing a new track. There is a good four-bar chord progression on a pad and a basic drum loop. Instead of writing the verse melody, you stop. You open an EQ, solo the kick and spend twenty minutes sweeping a narrow band to find the mud. Then you put a delay on the pad, tweak the feedback and go looking for a vocal sample. Two hours later you are still listening to the same four bars, the spark is gone and the project joins the folder of unfinished beats.
 
-The problem is that you were doing two jobs at once. Making new material and finishing it ask for different things from you, and doing both in the same minute keeps a song stuck in the loop.
+You were doing two jobs at once. Making new material and finishing it ask for different things from you, and doing both in the same minute keeps a song stuck in the loop.
 
 ## Why it matters: two jobs that pull against each other
 

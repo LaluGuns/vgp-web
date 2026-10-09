@@ -110,7 +110,7 @@ export const post120: BlogArticle = {
 
 You spend twenty minutes on the kick until it hits hard, and twenty more on the sub until it rumbles. Then you play them together and the low end caves in. It sounds thin and hollow, as if someone scooped out the bottom with an EQ.
 
-So you boost the lows on the kick and the lows on the sub, and now the mix is muddy and thin at once. The problem was never the tone of either part. The two signals are working against each other, and before you can fix that you need to know whether you are dealing with polarity or phase. They are related, but they are not the same thing, and they need different fixes.
+So you boost the lows on the kick and the lows on the sub, and now the mix is muddy and thin at once. Each part sounds right on its own. Together, the two signals work against each other, and before you can fix that you need to know whether you are dealing with polarity or phase. They are related, but they are not the same thing, and they need different fixes.
 
 ## Why it matters: only related signals cancel
 

@@ -143,7 +143,7 @@ Start most singers around 15 cm (6 in) from a cardioid: close enough for weight,
 - Moore, B. C. J. (2012). *An Introduction to the Psychology of Hearing* (6th ed.). Emerald.
 `,
     seo: {
-        title: 'How Proximity Effect Turns Warmth Into Mud | VGP',
+        title: 'How proximity effect turns warmth into mud | VGP Studio',
         description: 'Cardioid mics add bass as a singer gets closer. Learn the physics of proximity effect, how big the boost gets and how to set mic distance instead of EQ.',
         keywords: ['proximity effect', 'microphone distance', 'cardioid microphone', 'inverse square law', 'vocal recording tips', 'vocal low end'],
     },

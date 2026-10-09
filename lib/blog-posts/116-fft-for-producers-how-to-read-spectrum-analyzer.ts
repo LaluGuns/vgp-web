@@ -107,7 +107,7 @@ export const post116: BlogArticle = {
 
 You load a reference track, put an analyzer on it and on your mix, and start EQing your master until the two curves look the same. Forty minutes later the shapes are close, and the mix sounds worse. The curve matches. The music does not.
 
-The analyzer was not lying. It was answering a narrower question than the one you asked. To read it well, you need to know what its settings do to the picture.
+The analyzer was answering a narrower question than the one you asked. To read it well, you need to know what its settings do to the picture.
 
 ## Why it matters: the display is a set of choices
 

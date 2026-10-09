@@ -143,7 +143,7 @@ Here $GR_0$ is the reduction on the kick and $\\tau$ is the release time constan
 
 $$\\Delta t = \\frac{60}{\\text{BPM}}$$
 
-At 120 BPM a beat lasts 500 ms, so an off-beat hat lands 250 ms after the kick. With 4 dB on the kick, a 50 ms release has almost fully recovered by then. A 250 ms release still holds the hat $4 \\times e^{-1} \\approx 1.5$ dB down, and the bed rises by about 3 dB across each beat: that rise is the pumping you hear. A 1 s release holds everything about 3 dB down nearly all the time. That is clean and steady, but you need more drive to reach the same loudness.
+At 120 BPM a beat lasts 500 ms, so an off-beat hat lands 250 ms after the kick. With 4 dB on the kick, a 50 ms release has almost fully recovered by then. A 250 ms release still holds the hat $4 \\times e^{-1} \\approx 1.5$ dB down, and the bed rises by about 3.5 dB across each beat: that rise is the pumping you hear. A 1 s release holds everything about 3 dB down nearly all the time. That is clean and steady, but you need more drive to reach the same loudness.
 
 MATLAB's Audio Toolbox, for example, defines attack and release as the time the gain takes to move from 10% to 90% of its final value, which for a one-pole smoother is $\\tau \\ln 9 \\approx 2.2\\tau$. Two plugins can both read 250 ms and recover at different speeds, so set release by ear against the tempo, not by number.
 

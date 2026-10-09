@@ -84,7 +84,7 @@ export const post138: BlogArticle = {
 
 You finish a mix in a flat with thin walls, speakers turned well down so the neighbours do not knock. The kick and bass feel a little thin, so you lift them until they feel right. The next afternoon you play it at a normal level and the low end is huge, and in the car it is worse.
 
-The file is the same one you bounced last night. You set its low end at a whisper, and your hearing gives bass less weight the quieter the playback.
+You balanced the low end at a very low playback level, where your hearing gives bass less weight than it does at a normal level. The bass you added to make up for that is too much once the volume comes up.
 
 ## Why it matters: every EQ move goes through your ears at one level
 

@@ -110,8 +110,6 @@ Level is the part that survives or vanishes depending on how people listen. When
 
 ## Science model: level, time and key between songs
 
-Three things decide how one song hands over to the next.
-
 **Relative level.** In album playback the loudness differences between songs are kept, so set them on purpose. A ballad meant to feel intimate can sit a few LU below the songs around it. Mastering every track to the same integrated loudness makes it as big as the singles. Judge these steps by ear on the transitions, not from the meter alone: a sparse song and a dense one can feel different even at the same LUFS reading.
 
 **Time.** The gap a listener hears starts when the sound dies away, not when the file ends. A song that stops on a hard hit and one that ends in a long reverb tail need different spacing after them. Tempo matters too: after a fast song, a slightly longer gap lets the pulse clear before a slow one starts.

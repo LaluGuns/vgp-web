@@ -17,7 +17,7 @@ export const post115: BlogArticle = {
         guide: {
             type: 'notes',
             caption:
-                'A ii-V-I in C, voiced close together over the roots. Grey notes are held over from the chord before; notes in the accent moved. From Dm9 to G13 only C falls to B. From G13 to Cmaj9 three notes step down and B stays.',
+                'A ii-V-I in C, voiced close together over the roots. Grey: the bass, the opening chord and notes held over from the chord before. Accent: notes that moved. From Dm9 to G13 only C falls to B. From G13 to Cmaj9 three notes step down and B stays.',
             alt: 'Piano roll of three bars with the chords Dm9, G13 and Cmaj9 above it. Bass notes D2, G2 and C2. Bar 1: F4, A4, C5 and E5. Bar 2: F4, A4 and E5 held in grey and B4 in the accent. Bar 3: B4 held in grey, and E4, G4 and D5 in the accent.',
             chords: [
                 { at: 0, label: 'Dm9' },
@@ -136,9 +136,9 @@ export const post115: BlogArticle = {
     ],
     content: `## Hook: the same three chords, two different songs
 
-You loop Dm7, G7 and Cmaj7 on a piano patch, each chord in root position with the root on top of the stack. It sounds like an exercise from a theory book: every change is a block of four notes jumping to another block. Then you hear the same three chords on an R&B record and they seem to melt into each other.
+You loop Dm7, G7 and Cmaj7 on a piano patch, each chord in root position with the root at the bottom. It sounds like an exercise from a theory book: every change is a block of four notes jumping to another block. Then you hear the same progression on an R&B record and the chords seem to melt into each other.
 
-The chords are identical. What changed is which notes are in them, how each note gets to the next chord, and how the drums sit underneath.
+The chord symbols are the same on both. The record differs in its voicing (added ninths and thirteenths, each note moving to the nearest note of the next chord) and in drums that sit slightly behind the grid.
 
 ## Why it matters: the beat exists to carry a voice
 

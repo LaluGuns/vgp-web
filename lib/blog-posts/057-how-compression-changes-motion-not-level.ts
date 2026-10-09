@@ -172,7 +172,7 @@ Set your compressors with the rhythm section playing, not in solo. The attack sh
 - Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
-        title: 'How Compression Changes Motion Not Level | VGP Studio',
+        title: 'Compression changes motion before level | VGP Studio',
         description: 'Compression changes how a sound moves in time. Learn how to set attack and release times to shape transients and lock a part to the groove.',
         keywords: ['compression motion', 'dynamic range control', 'transient envelope', 'attack and release', 'mixing groove', 'audio compression'],
     },

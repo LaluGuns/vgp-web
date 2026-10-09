@@ -92,7 +92,7 @@ Nobody planned the density. Every part plays everywhere, so no section is bigger
 
 A listener hears the difference between sections more clearly than the size of any one section. If every section has the same parts playing, there is no climb, and the chorus cannot feel like the top of anything. Managing density means deciding which parts stand down in the verse so the chorus can be the highest rung.
 
-The useful count is not the number of tracks in the session. It is the number of parts a listener could pick out and follow. Four synths playing one line in unison count as one. A bass and a kick that always hit together may count as one. A pad holding long chords under everything counts as one, and often as less.
+The count that matters is the number of parts a listener could pick out and follow, which can be far smaller than the track count. Four synths playing one line in unison count as one. A bass and a kick that always hit together may count as one. A pad holding long chords under everything counts as one, and often as less.
 
 ::figure ladder
 

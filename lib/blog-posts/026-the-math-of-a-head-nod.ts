@@ -50,15 +50,15 @@ export const post026: BlogArticle = {
             why: '120 beats in 60 seconds is two per second, 2 Hz, and 60,000 / 120 = 500 ms per beat.',
         },
         {
-            q: 'In the motion-capture study by Burger and colleagues, what went with faster head movement?',
+            q: 'Nobody in the room nods to your clean 92 BPM beat. Going by the motion-capture study by Burger and colleagues, which change is most likely to get heads moving?',
             options: [
-                'More change in the kick and bass range',
-                'A faster tempo across the 30 excerpts',
-                'Longer reverb tails on the kick and snare',
-                'A wider stereo image in the high end',
+                'Push the tempo to 100 BPM and leave the parts alone',
+                'Add a long plate reverb to the kick and the snare',
+                'Give the kick and bass more movement and sharper attacks',
+                'Widen the top end so the whole mix feels larger',
             ],
-            answer: 0,
-            why: 'Head speed rose with low-frequency spectral flux, with flux in the hi-hat range and with percussiveness. Tempo made no measurable difference across their excerpts.',
+            answer: 2,
+            why: 'Head speed rose with change in the 50 to 100 Hz band, with change in the hi-hat range and with how percussive the music was, while tempo made no measurable difference across the 30 excerpts. A long reverb blurs the attacks, and a wider top end adds nothing in the kick and bass band the head followed.',
         },
         {
             q: 'Which edit is most likely to make a head nod hesitate?',
@@ -115,7 +115,7 @@ Your nod should settle on whichever pulse level gives a period you can repeat co
 
 ## Common mistake: editing every difference away
 
-The common mistake is treating every timing difference as an error. You spend hours aligning every bass note to the kick and every hat to the snare, then wonder why the track feels rigid. Quantized beats can groove, so the grid is not the problem. The problem is that consistent leans get thrown out along with the real mistakes, and the parts that carry the pulse get no more care than the decoration.
+The common mistake is treating every timing difference as an error. You spend hours aligning every bass note to the kick and every hat to the snare, then wonder why the track feels rigid. Quantized beats can groove. What hurts is that consistent leans get thrown out along with the real mistakes, and the parts that carry the pulse get no more care than the decoration.
 
 The opposite mistake is leaving inconsistency in the anchors. A kick that drifts by a few tens of milliseconds from bar to bar breaks the prediction the nod depends on. Fix the kick and snare first, then decide how far the other parts may lean.
 

@@ -5,7 +5,7 @@ const KICK = { kind: 'hits' as const, at: [0.6], decay: 9, outline: true };
 export const post030: BlogArticle = {
     slug: 'why-silence-before-the-beat-feels-physical',
     title: 'A gap before the drop makes the downbeat hit harder',
-    excerpt: 'Risers and tails that run into the drop bury the kick and push the limiter down. A short, clean gap fixes both. Here is how long it needs to be.',
+    excerpt: 'Risers and tails that run into the drop bury the kick and push the limiter down. A short, clean gap fixes both, and at 128 BPM an 8th note is long enough.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
@@ -108,7 +108,7 @@ export const post030: BlogArticle = {
 
 You build a big transition into the chorus. Crash swells rise, the hats roll and a riser screams straight into the downbeat. Then the drop lands and the kick sounds soft. You push the kick fader and the master clips, and the hit still has no punch.
 
-The kick is fine. The transition is running over it. Everything still sounding at the downbeat competes with the one hit you want to land.
+The transition is running over the kick. Everything still sounding at the downbeat competes with the one hit you want to land.
 
 ## Why it matters: the hit needs a clean start
 

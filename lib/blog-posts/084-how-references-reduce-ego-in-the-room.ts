@@ -82,11 +82,9 @@ Then there is ego. Without an anchor, "is this good?" gets answered by how much 
 
 ## Science model: short memory, loud bias
 
-Two facts about hearing decide how you should compare.
+Memory for the fine detail of a sound is short. Cowan (1984) reviewed evidence for two auditory stores: one that holds the raw sound for a fraction of a second, and one that keeps it for several seconds. After that you are left with a description, such as "the reference had more low end", rather than the sound itself. A comparison with a track you heard ten minutes ago is a comparison with a memory.
 
-The first is that memory for the fine detail of a sound is short. Cowan (1984) reviewed evidence for two auditory stores: one that holds the raw sound for a fraction of a second, and one that keeps it for several seconds. After that you are left with a description, such as "the reference had more low end", rather than the sound itself. A comparison with a track you heard ten minutes ago is a comparison with a memory.
-
-The second is that louder sounds better. The ear's sensitivity across frequencies changes with level, as the equal-loudness contours show (Fletcher and Munson, 1933; ISO 226:2023). Turn a track up and its low and high ends seem to grow more than its middle, so it sounds fuller and brighter. A finished master is usually louder than a mix in progress, so an unmatched comparison makes your mix lose for the wrong reason, and the panicked fix is to turn things up. Mastering engineers compare versions at matched loudness for this reason (Katz, 2015). The lesson on [loudness bias](/blog/why-louder-is-not-always-bigger) goes deeper.
+Louder also sounds better. The ear's sensitivity across frequencies changes with level, as the equal-loudness contours show (Fletcher and Munson, 1933; ISO 226:2023). Turn a track up and its low and high ends seem to grow more than its middle, so it sounds fuller and brighter. A finished master is usually louder than a mix in progress, so an unmatched comparison makes your mix lose for the wrong reason, and the panicked fix is to turn things up. Mastering engineers compare versions at matched loudness for this reason (Katz, 2015). The lesson on [loudness bias](/blog/why-louder-is-not-always-bigger) goes deeper.
 
 The demo below lets you hear how small the difference needs to be.
 
@@ -112,7 +110,7 @@ The other mistake is choosing a reference to feel good or bad. Pick one for the 
 
 ## Producer takeaway: let the comparison decide
 
-The reference is not there to make you feel bad about your work. It replaces a feeling with a comparison you can act on. Match its loudness, switch fast, name one gap and fix only that gap before you listen again. When the gaps you find are differences of taste rather than balance, the reference has done its job.
+The reference replaces a feeling with a comparison you can act on. Match its loudness, switch fast, name one gap and fix only that gap before you listen again. When the gaps you find are differences of taste rather than balance, the reference has done its job.
 
 ## References
 

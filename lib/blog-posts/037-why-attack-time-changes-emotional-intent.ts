@@ -89,7 +89,7 @@ export const post037: BlogArticle = {
 
 You programmed a chord progression you like, but it feels lazy. It sits at the back of the mix and does not push the song forward. So you open an EQ, boost the highs for bite and the mids for punch. The chords get brighter and louder. They still drag.
 
-The problem is not the tone. It is the envelope. How a note starts is set in its first moments, by the attack. A slow attack keeps a part relaxed and behind the beat however bright you make it. A fast attack makes it speak at once.
+The drag comes from the envelope, which EQ leaves alone. How a note starts is set in its first moments, by the attack. A slow attack keeps a part relaxed and behind the beat however bright you make it. A fast attack makes it speak at once.
 
 ## Why it matters: the onset is part of the timbre
 
@@ -135,7 +135,7 @@ The fast version speaks on the beat and sits forward. The slow version swells, l
 
 An EQ can make a slow attack brighter, but it cannot make it faster. If a part feels lazy, change its attack before you touch its tone.
 
-The opposite mistake happens on drums: a compressor at its fastest attack, often well under 1 ms. It clamps the transient of every hit, so the kick and snare lose their crack and sink back. A slower attack, tens of milliseconds as a starting point, lets the transient through before the gain reduction starts. [Compression changes motion before level](/blog/how-compression-changes-motion-not-level) shows that in detail.
+The opposite mistake happens on drums: a compressor at its fastest attack, often well under 1 ms. It clamps the transient of every hit, so the kick and snare lose their crack and sink back. A slower attack, tens of milliseconds as a starting point, lets the transient through before the gain reduction starts. The [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) shows that in detail.
 
 ## Producer takeaway: shape the envelope before the EQ
 

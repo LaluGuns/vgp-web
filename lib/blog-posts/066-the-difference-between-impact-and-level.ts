@@ -86,7 +86,7 @@ At the scale of the arrangement, a chorus hits because it is louder and denser t
 
 ## Science model: peak to average ratio
 
-The distance between the transients and the average is the crest factor from [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization), also called the peak to average ratio:
+The distance between the transients and the average is the crest factor, also called the peak to average ratio, as in the [lesson on loud masters after normalization](/blog/why-loud-masters-can-sound-smaller-after-normalization):
 
 $$\\text{PAR} = 20 \\log_{10}\\left( \\frac{V_{\\text{peak}}}{V_{\\text{RMS}}} \\right)$$
 
@@ -103,7 +103,7 @@ That is why level-based thinking misleads you. Loudness meters average over 400 
 5. Compare the true-peak readings. At the same loudness, the limited track now peaks several decibels lower.
 6. Have someone switch between the tracks without telling you which is which, and listen to the front edge of the kick and snare and to the space between hits.
 
-At matched loudness the unlimited loop usually sounds like it hits harder: its transients stand further out, while the limited one has a softer front edge and a fuller gap between hits. The same test across a verse and chorus, for the lift between sections, is in [the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion).
+At matched loudness the unlimited loop usually sounds like it hits harder: its transients stand further out, while the limited one has a softer front edge and a fuller gap between hits. The same test across a verse and chorus, for the lift between sections, is in the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion).
 
 ## Common mistake: making every part as loud as possible
 

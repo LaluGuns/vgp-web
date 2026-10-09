@@ -26,7 +26,7 @@ function sung({ scoop, vibrato, fall, drift }: { scoop: number; vibrato: number;
 export const post046: BlogArticle = {
     slug: 'how-pitch-correction-changes-perceived-confidence',
     title: 'Fast retune speed erases the movement between notes',
-    excerpt: 'A fast pitch corrector fixes the notes and flattens the scoops, slides and vibrato that carry the delivery. Here is how to tune a vocal and keep them.',
+    excerpt: 'A fast pitch corrector fixes the notes and flattens the scoops, slides and vibrato that carry the delivery. Use the slowest retune speed that keeps long notes in tune.',
     category: 'vocal-production',
     publishedAt: '2026-06-07',
     updatedAt: '2026-10-08',
@@ -131,7 +131,7 @@ export const post046: BlogArticle = {
 
 You put pitch correction at the top of the vocal chain to clean up a few notes, and you set it fast because fast sounds tight. Now the vocal is in tune everywhere. It also sounds as if the singer cares a little less.
 
-Nothing is wrong on paper. Every note is right. What changed is how the voice travels from one note to the next.
+Every note is on pitch now. The fast setting also turned the scoops, slides and vibrato into steps, and listeners hear that movement as part of the delivery.
 
 ## Why it matters: sung pitch moves
 
@@ -180,7 +180,7 @@ Use automatic correction at a slow setting as a safety net, or leave it off. Fix
 - Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
-        title: 'Fast Retune Speed Erases the Movement Between Notes | VGP',
+        title: 'Fast retune speed erases the movement between notes | VGP Studio',
         description: 'Fast pitch correction flattens the scoops, slides and vibrato that carry a vocal. Learn how cents and retune speed work and how to tune without losing them.',
         keywords: ['pitch correction', 'retune speed', 'autotune settings', 'vocal tuning tips', 'vibrato', 'melodyne vocal editing'],
     },

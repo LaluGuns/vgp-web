@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post081: BlogArticle = {
     slug: 'why-endless-tweaking-is-often-fear',
     title: 'Endless tweaking is often fear of committing',
-    excerpt: 'Moving a fader 0.2 dB back and forth for an hour is rarely care. It is a decision you are avoiding, and a blind, level-matched test ends the loop.',
+    excerpt: 'Moving a fader 0.2 dB back and forth for an hour is usually a decision you are avoiding, and a blind, level-matched test ends the loop.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
@@ -53,15 +53,15 @@ export const post081: BlogArticle = {
             why: 'Guessing alone gives either version three or more wins half the time. A change you cannot pick reliably at matched level is not doing anything you can hear.',
         },
         {
-            q: 'What did the large preregistered replications find about ego depletion, the idea that willpower drains like a battery?',
+            q: 'Six hours into a mix you are still nudging one fader, and you put it down to decision fatigue. Which reading fits the large preregistered replications?',
             options: [
-                'A strong effect that builds through the working day',
-                'A clear effect that shows up mainly in creative tasks',
-                'An effect close to zero, far below what was expected',
-                'A moderate effect, smaller than first reported but clear',
+                'Each choice drains a limited supply, so you have simply run out',
+                'The drain is real but slow, so it only matters after midnight',
+                'Depletion came out near zero, so give the change a pass-or-fail test',
+                'Depletion is strongest in creative tasks like mixing and writing',
             ],
             answer: 2,
-            why: 'Twenty-three labs found d = 0.04, and thirty-six labs found no evidence in the preregistered test. Tiredness is real, but a drained battery does not explain a six-hour fader loop.',
+            why: 'Twenty-three labs found d = 0.04, and thirty-six labs found no evidence in the preregistered test. Tiredness is real, but a drained battery does not explain six hours on one fader, and a blind, level-matched test gives the change a way to pass or fail.',
         },
         {
             q: 'Why does flicking bypass without matching level keep the loop going?',
@@ -79,13 +79,13 @@ export const post081: BlogArticle = {
 
 It is 3 a.m. and the session has been open for six hours. You nudge the lead vocal up 0.2 dB, then down 0.3 dB, then back again. You add a compressor, move the threshold a hair, bypass it, turn it back on and delete it. Nothing you do makes the song better or worse, and you keep going anyway.
 
-This is not mixing. It is a way to avoid finishing. While every setting is still moving, nobody can judge the mix, including you. Calling it perfectionism makes it sound like care. Most of the time it is a decision you are afraid to make.
+Those six hours are a way to avoid finishing. While every setting is still moving, nobody can judge the mix, including you. Calling it perfectionism makes it sound like care. Most of the time it is a decision you are afraid to make.
 
 ## Why it matters: tweaks you cannot hear still cost you
 
 Small moves on one track inside a busy mix are hard to hear reliably, and the way you check them is rarely fair. Toggle a change on and off and the version that comes out a fraction louder tends to sound fuller and clearer, so the loop keeps rewarding level instead of better choices. The lesson on [loudness bias](/blog/why-louder-is-not-always-bigger) explains why that happens.
 
-Meanwhile the decisions that matter wait. Two hours spent on a buildup in the pad are two hours not spent asking whether the pad should play in the verse at all. Hours on the same eight bars also wear down your sense of balance, which is why the morning listen so often disagrees with the night before (see [fresh ears](/blog/why-fresh-ears-are-a-real-production-tool)).
+Meanwhile the decisions that matter wait. Two hours spent on a buildup in the pad are two hours not spent asking whether the pad should play in the verse at all. Hours on the same eight bars also wear down your sense of balance, which is why the morning listen so often disagrees with the night before (see the [lesson on fresh ears](/blog/why-fresh-ears-are-a-real-production-tool)).
 
 ::figure loop
 

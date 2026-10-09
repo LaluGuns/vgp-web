@@ -81,7 +81,7 @@ export const post007: BlogArticle = {
 
 You want your chorus to sound expensive. You double-track the rhythm guitars and add several layers of backing synths.
 
-When you press play, the chorus does not sound premium. It sounds crowded. The guitars cover the vocal and the synths turn the midrange into a wall. You tried to buy size with layers and bought clutter instead. An expensive-sounding chorus comes from contrast more than size.
+When you press play, the chorus sounds crowded. The guitars cover the vocal and the synths turn the midrange into a wall. You tried to buy size with layers and bought clutter instead. An expensive-sounding chorus comes from contrast more than size.
 
 ## Why it matters: a mix has edges
 

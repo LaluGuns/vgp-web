@@ -6,7 +6,7 @@ const WAVE = { cycles: 2, amp: 0.45 };
 export const post027: BlogArticle = {
     slug: 'how-kick-placement-changes-perceived-weight',
     title: 'How kick placement changes perceived weight',
-    excerpt: 'When a kick and bass overlap, a few milliseconds of offset decide whether their low end adds or cancels. Here is the phase maths and a nudge test.',
+    excerpt: 'When a kick and bass overlap, a few milliseconds of offset decide whether their low end adds or cancels. Check polarity and timing by ear before you reach for EQ.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
@@ -94,7 +94,7 @@ export const post027: BlogArticle = {
 
 You choose a punchy kick and a deep sub bass. Soloed, each one sounds huge. Together, the low end thins out and the impact disappears. You boost 50 Hz on the kick and 60 Hz on the bass. The mix gets muddier, the master meter climbs, and the speakers still do not move the air the way they should.
 
-The frequencies were fine. The problem is how the two waves meet. When a kick and a bass overlap at similar frequencies, their relative timing decides whether they add or cancel, and a few milliseconds is enough to flip the result.
+The thin low end comes from how the two waves meet. When a kick and a bass overlap at similar frequencies, their relative timing decides whether they add or cancel, and a few milliseconds is enough to flip the result.
 
 ## Why it matters: overlapping waves add or subtract
 

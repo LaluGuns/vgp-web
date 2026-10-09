@@ -103,7 +103,7 @@ Synthwave makes this easy to get wrong, because its signature moves are about mo
 
 ## Science model: changing sounds disrupt more than steady ones
 
-Jones and Macken (1993) asked people to remember lists while tones they were told to ignore played in the background. A sequence of tones that kept changing in pitch disrupted recall. A single tone repeated over and over disrupted it much less. The finding gave its name to the changing-state idea: the disruption comes from sound that keeps changing from one moment to the next. Salamé and Baddeley (1989) found that music with vocals disrupted recall more than instrumental music, and both more than quiet.
+Jones and Macken (1993) asked people to remember lists while tones they were told to ignore played in the background. A sequence of tones that kept changing in pitch disrupted recall. A single tone repeated over and over disrupted it much less. The finding gave its name to the changing-state idea: the disruption comes from sound that keeps changing from one moment to the next. Salamé and Baddeley (1989) found that music with vocals disrupted recall more than instrumental music, and in their first experiment both disrupted it more than quiet.
 
 These were memory tests in a lab, not coding sessions, so treat them as a direction rather than a rule. The direction is clear, though. An arpeggio that lands on a new pitch every 16th, across a wide range, is a strong changing-state signal. One that cycles a few close notes is closer to a steady one.
 

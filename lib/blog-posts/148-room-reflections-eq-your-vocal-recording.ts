@@ -89,7 +89,7 @@ A microphone measures the pressure at one spot. Into that spot arrives the direc
 
 A copy that arrives within a few milliseconds does not sound like an echo. It changes the tone, because a sound plus a delayed copy of itself is a comb filter, the effect the [phase lesson](/blog/phase-explained-without-panic) builds from two equal copies. A reflection is a weaker copy, so its notches are shallower, and it moves whenever someone moves. Once the take is recorded, direct sound and reflection share one waveform, with no clean way to pull them apart.
 
-Unlike the [room modes that rule small-room bass](/blog/why-your-low-end-lies-in-a-small-room), this needs no resonance. One strong reflection off a nearby surface is enough to colour a vocal's mid range.
+Unlike the [room modes that rule small-room bass](/blog/why-your-low-end-lies-in-a-small-room), this needs no resonance. One strong reflection off a nearby surface is enough to colour a vocal's midrange.
 
 ## Science model: path, delay and depth
 

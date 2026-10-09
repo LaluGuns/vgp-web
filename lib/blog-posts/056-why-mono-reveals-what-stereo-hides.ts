@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post056: BlogArticle = {
     slug: 'why-mono-reveals-what-stereo-hides',
     title: 'Mono reveals what stereo hides',
-    excerpt: 'Width made with delay, polarity or side boosts can thin out or vanish when a phone or a club folds your mix to one channel. Here is what cancels and why.',
+    excerpt: 'Width made with delay, polarity or side boosts can thin out or vanish when a phone or a club folds your mix to one channel. Learn what cancels and why.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',

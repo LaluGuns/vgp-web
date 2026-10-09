@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post070: BlogArticle = {
     slug: 'why-delivery-specs-save-the-song',
     title: 'Why delivery specs save the song',
-    excerpt: 'Your WAV is not what the listener hears. It is encoded, decoded and turned up or down first, and a delivery spec is the list of what it has to survive.',
+    excerpt: 'Before anyone hears your WAV, it is encoded, decoded and turned up or down, and a delivery spec is the list of what it has to survive.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-09',
     updatedAt: '2026-10-08',
@@ -116,7 +116,7 @@ The other is trusting normalization to fix level problems. It changes gain and n
 
 ## Producer takeaway: deliver to the destination
 
-Set a true-peak ceiling of -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Before release, meter an encoded copy as well as the WAV. Deliver each destination the file it asks for, and keep a premaster the final limiter has not touched. How true peak works in detail is in [true peak bites after encoding](/blog/why-true-peak-matters-after-encoding).
+Set a true-peak ceiling of -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Before release, meter an encoded copy as well as the WAV. Deliver each destination the file it asks for, and keep a premaster the final limiter has not touched. How true peak works in detail is in the [lesson on true peak after encoding](/blog/why-true-peak-matters-after-encoding).
 
 ## References
 

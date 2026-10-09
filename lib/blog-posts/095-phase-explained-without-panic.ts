@@ -92,7 +92,7 @@ export const post095: BlogArticle = {
 
 You are mixing a snare recorded with two microphones, one above the top head and one below the bottom head. Together they sound thin. You boost 200 Hz by 6 dB and the snare gets louder but no thicker. You boost more and it turns hollow and harsh.
 
-The EQ is not the problem. When the stick drives the heads down, the top head moves away from the top mic while the bottom head moves toward the bottom mic, so the two mics produce waveforms of opposite polarity. Added together, they cancel much of the body of the drum. Boosting a frequency that is cancelling boosts both halves of the cancellation.
+The thin sound comes from how the two mics add up. When the stick drives the heads down, the top head moves away from the top mic while the bottom head moves toward the bottom mic, so the two mics produce waveforms of opposite polarity. Added together, they cancel much of the body of the drum. Boosting a frequency that is cancelling boosts both halves of the cancellation.
 
 ## Why it matters: two copies, one result
 

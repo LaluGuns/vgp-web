@@ -17,7 +17,7 @@ export const post108: BlogArticle = {
         halftime: {
             type: 'rhythm',
             caption:
-                'One bar at 140 BPM. With the snare on beats 2 and 4 you nod at 140. Move it to beat 3 only and it lands where beats 2 and 4 of a 70 BPM bar would fall, so the same grid feels half as fast.',
+                'One bar at 140 BPM. With the snare on beats 2 and 4 you nod at 140. Move it to beat 3 only and the bar holds two beats at 70 BPM with the snare on the second, a backbeat at half the tempo, so the same grid feels half as fast.',
             alt: 'Three lanes on a 16-step grid. The hi-hat plays every second step. One snare lane hits on beats 2 and 4. The other snare lane hits once, on beat 3.',
             rows: [
                 { label: 'Hi-hat', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: 'eighths' },
@@ -35,11 +35,11 @@ export const post108: BlogArticle = {
             unit: 'BPM',
             ticks: [120, 130, 140, 150, 160],
             markers: [
-                { value: 124.7, label: '-2 st' },
-                { value: 132.1, label: '-1 st' },
+                { value: 124.7, label: '-2 semitones' },
+                { value: 132.1, label: '-1 semitone' },
                 { value: 140, label: 'Original', strong: true },
-                { value: 148.3, label: '+1 st' },
-                { value: 157.1, label: '+2 st' },
+                { value: 148.3, label: '+1 semitone' },
+                { value: 157.1, label: '+2 semitones' },
             ],
         },
         shared: {
@@ -87,7 +87,7 @@ export const post108: BlogArticle = {
 
 You record a verse you love over one beat, then the producer sends a better one and you drop the vocal on top. Every syllable lands a little off the grid, and the hook rubs against the chords on every bar. Or you pull a sample into a session and it clashes with the keys even though both sound fine alone.
 
-Each part is fine. They disagree about one of two things: when the beats land, or which notes belong.
+The parts disagree about one of two things: when the beats land, or which notes belong.
 
 ## Why it matters: tempo and key are fixed in the take
 

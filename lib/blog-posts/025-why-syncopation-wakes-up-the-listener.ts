@@ -62,15 +62,15 @@ export const post025: BlogArticle = {
             why: 'Syncopation is a surprise against an expected beat. If nothing marks the beat, the listener cannot build that expectation, so nothing can surprise them.',
         },
         {
-            q: 'In the survey by Witek and colleagues, which drum breaks made people most want to move?',
+            q: 'You bounce three drum breaks: every hit on the beat, two kicks moved to weak positions with the snare kept on two and four, and nearly every hit off the beat. Which one will most likely make listeners want to move?',
             options: [
-                'Those with the smallest amount of syncopation',
-                'Those with a medium amount of syncopation',
-                'Those with the largest amount of syncopation',
-                'Those with the most variety in their sounds',
+                'The one with every hit on the beat, since the pulse is clearest',
+                'The one with nearly every hit off, since it surprises the most',
+                'The one with two kicks moved and the snare on two and four',
+                'All three equally, since the tempo and sounds are the same',
             ],
-            answer: 1,
-            why: 'Wanting to move and pleasure peaked at medium syncopation and fell toward both ends, an inverted U. Audio entropy, a measure of variety in the sound, predicted little.',
+            answer: 2,
+            why: 'Witek and colleagues found an inverted U: breaks with a medium amount of syncopation drew the highest ratings for wanting to move and for pleasure. With every hit on the beat nothing pulls against the pulse, and with nearly every hit off it there is no pulse left to pull against.',
         },
     ],
     content: `## Hook: the loop that put the session to sleep
@@ -110,7 +110,7 @@ With the hit on 1.3.4 the bar leans into beat four, and muting it makes the loop
 
 ## Common mistake: syncopating everything
 
-The biggest mistake is over-syncopating. To avoid boredom, some producers push every hit off the beat: the kick on 16ths, the snare on off-beats, the hats in scattered spots. The result is not more exciting. It is confusing.
+The biggest mistake is over-syncopating. To avoid boredom, some producers push every hit off the beat: the kick on 16ths, the snare on off-beats, the hats in scattered spots. The result is confusing.
 
 If nothing marks the beat, the listener cannot build an expectation, so nothing can surprise them. That is the falling side of the curve above. Syncopation loses its pull because there is no normal state to compare it with. Establish the rule before you break it.
 

@@ -10,22 +10,28 @@ type Pt = [number, number];
  * The ceiling sits 6 dB under the kick's peak and the release is 50 ms. One second shown,
  * after one second of pre-roll.
  */
+const FS = 48000;
+const RELEASE = Math.exp(-1 / (0.05 * FS));
+/** One sample of the limiter: the new gain reduction in dB for this detector level. */
+const nextGr = (gr: number, level: number, ceiling: number) => {
+    const target = Math.max(0, 20 * Math.log10(Math.max(1e-9, level) / ceiling));
+    return target > gr ? target : RELEASE * gr + (1 - RELEASE) * target;
+};
+/** A hit every `every` seconds from `at`, decaying exponentially; or a steady level. */
+const hits = (level: number, at: number, every: number, decay: number) => (t: number) => level * Math.exp(-((((t - at) % every) + every) % every) / decay);
+const steady = (level: number) => () => level;
+
 const KICK_LEVEL = 0.9;
 const CEILING = KICK_LEVEL * 10 ** (-6 / 20);
-const phase = (t: number) => (((t - 0.02) % 0.5) + 0.5) % 0.5;
-const kickEnv = (t: number) => KICK_LEVEL * Math.exp(-phase(t) / 0.08);
+const kickEnv = hits(KICK_LEVEL, 0.02, 0.5, 0.08);
 
 function limiterGain(points: number): Pt[] {
-    const fs = 48000;
-    const a = Math.exp(-1 / (0.05 * fs));
-    const every = fs / points;
+    const every = FS / points;
     const out: Pt[] = [];
     let gr = 0;
-    for (let i = -fs; i <= fs; i++) {
-        const t = (i + fs) / fs;
-        const target = Math.max(0, 20 * Math.log10(Math.max(1e-9, kickEnv(t)) / CEILING));
-        gr = target > gr ? target : a * gr + (1 - a) * target;
-        if (i >= 0 && i % every === 0) out.push([i / fs, 10 ** (-gr / 20)]);
+    for (let i = -FS; i <= FS; i++) {
+        gr = nextGr(gr, kickEnv((i + FS) / FS), CEILING);
+        if (i >= 0 && i % every === 0) out.push([i / FS, 10 ** (-gr / 20)]);
     }
     return out;
 }
@@ -33,6 +39,59 @@ function limiterGain(points: number): Pt[] {
 const GAIN = limiterGain(400);
 const r3 = (v: number) => Math.round(v * 1000) / 1000;
 const HIGHS = 0.3;
+
+/**
+ * The bars and the numbers in the text come from the same limiter. Each part of a loop is a
+ * level envelope in the low or the high band. As in Figure 1, the detector reads the loudest
+ * part at each moment and the ceiling sits `grDb` under the biggest peak. A band's loss is
+ * 10 log10 of the sum of g^2 x^2 over the sum of x^2 (the formula in the text), over one
+ * second (both loops repeat every second) after one second of pre-roll.
+ */
+type Part = { band: 0 | 1; env: (t: number) => number };
+function bandLoss(parts: Part[], peak: number, grDb: number) {
+    const ceiling = peak * 10 ** (-grDb / 20);
+    const num = [0, 0];
+    const den = [0, 0];
+    const x = new Float64Array(parts.length);
+    let gr = 0;
+    for (let i = -FS; i < FS; i++) {
+        const t = (i + FS) / FS;
+        let level = 0;
+        for (let k = 0; k < parts.length; k++) {
+            x[k] = parts[k].env(t);
+            level = Math.max(level, x[k]);
+        }
+        gr = nextGr(gr, level, ceiling);
+        if (i < 0) continue;
+        const g2 = 10 ** (-gr / 10);
+        for (let k = 0; k < parts.length; k++) {
+            num[parts[k].band] += g2 * x[k] * x[k];
+            den[parts[k].band] += x[k] * x[k];
+        }
+    }
+    const loss = (b: number) => -10 * Math.log10(num[b] / den[b]);
+    return { lows: loss(0), highs: loss(1), tilt: loss(0) - loss(1) };
+}
+
+// Loop 1 is Figure 1: the kick makes the peaks over steady highs.
+const KICK_LOOP: Part[] = [
+    { band: 0, env: kickEnv },
+    { band: 1, env: steady(HIGHS) },
+];
+// Loop 2: a bright snare on 2 and 4 makes the peaks over a softer kick on 1 and 3 and a sustained bass.
+const SNARE_LOOP: Part[] = [
+    { band: 0, env: hits(0.4, 0.02, 1, 0.08) },
+    { band: 0, env: steady(0.3) },
+    { band: 1, env: hits(KICK_LEVEL, 0.52, 1, 0.08) },
+];
+const KICK2 = bandLoss(KICK_LOOP, KICK_LEVEL, 2);
+const KICK4 = bandLoss(KICK_LOOP, KICK_LEVEL, 4);
+const KICK6 = bandLoss(KICK_LOOP, KICK_LEVEL, 6);
+const KICK8 = bandLoss(KICK_LOOP, KICK_LEVEL, 8);
+const SNARE6 = bandLoss(SNARE_LOOP, KICK_LEVEL, 6);
+/** One decimal, as the text and the bars show it. */
+const f1 = (v: number) => v.toFixed(1);
+const r1 = (v: number) => Math.round(v * 10) / 10;
 
 export const post141: BlogArticle = {
     slug: 'heavy-limiting-changes-the-tone-of-a-master',
@@ -75,30 +134,30 @@ export const post141: BlogArticle = {
         bands: {
             type: 'bars',
             caption:
-                'Level each band loses, averaged over a loop, in a simple simulated limiter taking 6 dB off the biggest peaks. When the kick makes the peaks, the lows lose about 3.3 dB and steady highs about 0.5 dB, so the master tilts about 2.8 dB brighter. When a bright snare makes the peaks, the highs lose about 3.5 dB, the lows almost nothing, and the master tilts darker.',
-            alt: 'Four horizontal bars on a scale from 0 to 6 dB. Kick drives: lows 3.3 dB, highs 0.5 dB. Snare drives: lows 0.1 dB, highs 3.5 dB.',
+                `Level each band loses, averaged over a loop, computed with the limiter from Figure 1 taking 6 dB off the biggest peaks. When the kick makes the peaks, the lows lose ${f1(KICK6.lows)} dB and the steady highs ${f1(KICK6.highs)} dB, so the master tilts ${f1(KICK6.tilt)} dB brighter. When a bright snare makes the peaks, the highs lose ${f1(SNARE6.highs)} dB, the lows ${f1(SNARE6.lows)} dB, and the master tilts ${f1(-SNARE6.tilt)} dB darker.`,
+            alt: `Four horizontal bars on a scale from 0 to 6 dB. Kick drives: lows ${f1(KICK6.lows)} dB, highs ${f1(KICK6.highs)} dB. Snare drives: lows ${f1(SNARE6.lows)} dB, highs ${f1(SNARE6.highs)} dB.`,
             min: 0,
             max: 6,
             unit: 'dB',
             bars: [
-                { label: 'Kick drives: lows', value: 3.3 },
-                { label: 'Kick drives: highs', value: 0.5, dim: true },
-                { label: 'Snare drives: lows', value: 0.1, dim: true },
-                { label: 'Snare drives: highs', value: 3.5 },
+                { label: 'Kick drives: lows', value: r1(KICK6.lows) },
+                { label: 'Kick drives: highs', value: r1(KICK6.highs), dim: true },
+                { label: 'Snare drives: lows', value: r1(SNARE6.lows), dim: true },
+                { label: 'Snare drives: highs', value: r1(SNARE6.highs) },
             ],
         },
     },
     quiz: [
         {
-            q: 'In a loop, the kick makes the peaks and the limiter takes 3.3 dB of average level off the lows and 0.5 dB off the highs. After makeup gain, how has the balance moved?',
+            q: `In a loop, the kick makes the peaks and the limiter takes ${f1(KICK6.lows)} dB of average level off the lows and ${f1(KICK6.highs)} dB off the highs. After makeup gain, how has the balance moved?`,
             options: [
                 'It has not moved, because makeup gain restores it',
-                'The highs sit about 2.8 dB higher against the lows',
-                'The lows sit about 2.8 dB higher against the highs',
-                'Both bands are 3.8 dB quieter than they were before',
+                `The highs sit about ${f1(KICK6.tilt)} dB higher against the lows`,
+                `The lows sit about ${f1(KICK6.tilt)} dB higher against the highs`,
+                `Both bands are ${f1(KICK6.lows + KICK6.highs)} dB quieter than they were before`,
             ],
             answer: 1,
-            why: 'Makeup gain raises both bands by the same amount, so it cannot undo the difference. The highs lost 2.8 dB less than the lows, so the master leans 2.8 dB toward the top.',
+            why: `Makeup gain raises both bands by the same amount, so it cannot undo the difference. The highs lost ${f1(KICK6.tilt)} dB less than the lows, so the master leans ${f1(KICK6.tilt)} dB toward the top.`,
         },
         {
             q: 'You cut 2 dB below 100 Hz before the limiter and its gain reduction drops by almost 2 dB. What does that tell you?',
@@ -147,7 +206,7 @@ $$\\Delta L_b = 10 \\log_{10} \\frac{\\sum_t g(t)^2 \\, x_b(t)^2}{\\sum_t x_b(t)
 
 A band whose energy sits in the moments the limiter turns down loses the most. A band whose energy is spread evenly loses roughly the average gain reduction, which can be much smaller. Makeup gain raises every band by the same amount, so it cannot undo the difference between them.
 
-I ran that calculation on two loops through a simple peak limiter with instant attack and a 50 ms release, pushed until the biggest peaks lost 6 dB. In the first, a 55 Hz kick made the peaks over steady high-frequency noise standing in for hats and air. The lows lost about 3.3 dB of average level and the highs about 0.5 dB, a tilt of about 2.8 dB toward the top. The tilt grew with the drive: under 1 dB at 2 dB of reduction, around 1.5 to 2 dB at 4, and close to 4 dB at 8. In the second loop a bright snare made the peaks over a softer kick and a sustained bass. The highs lost about 3 to 3.5 dB and the lows almost nothing, so the master went darker. Replacing the first loop's steady highs with crash-like bursts that start on each kick shrank its tilt to about 1 dB, because the highs then shared the kick's moments.
+I ran that calculation on two loops through the limiter in the first figure (instant attack, 50 ms release), pushed until the biggest peaks lost 6 dB. In the first, a kick on every beat at 120 BPM made the peaks over steady high-frequency noise standing in for hats and air. The lows lost ${f1(KICK6.lows)} dB of average level and the highs ${f1(KICK6.highs)} dB, a tilt of ${f1(KICK6.tilt)} dB toward the top. The tilt grew with the drive: ${f1(KICK2.tilt)} dB at 2 dB of reduction, ${f1(KICK4.tilt)} dB at 4 and ${f1(KICK8.tilt)} dB at 8. In the second loop a bright snare on beats 2 and 4 made the peaks over a softer kick on 1 and 3 and a sustained bass. The highs lost ${f1(SNARE6.highs)} dB and the lows ${f1(SNARE6.lows)} dB, so the master went ${f1(-SNARE6.tilt)} dB darker. When I replaced the first loop's steady highs with short bursts that start on each kick, the tilt shrank, because the highs then lost level in the same moments as the kick.
 
 ::figure bands
 

@@ -65,15 +65,15 @@ export const post012: BlogArticle = {
             why: 'A limiter holds both sections under the same ceiling. If they are equally full going in, they come out much the same, and the difference has to come from what the verse leaves out.',
         },
         {
-            q: 'Rozin and colleagues (2004) asked listeners how intense a piece had felt. What shaped the remembered intensity most?',
+            q: 'A label rep will hear your song once on the drive home and tell you the next day how big it felt. Which edit does most for the intensity they will remember?',
             options: [
-                'The total length of the piece',
-                'The average level of the piece',
-                'The peak, the end and the rises',
-                'How the opening ten seconds felt',
+                'Repeat the final chorus twice more so the big part lasts longer',
+                'Lift the verses to chorus level so the song stays loud throughout',
+                'Thin the bar before the final chorus so the chorus rises out of it',
+                'Fade out across the final chorus so the ending feels relaxed',
             ],
             answer: 2,
-            why: 'Remembered intensity leaned on the peak, the end and rises, while length mattered very little. A step up into a chorus is exactly that kind of rise.',
+            why: 'In Rozin and colleagues\' study, remembered intensity leaned on the peak, the end and the moments that rose above the ones just before, while length made little difference. Extra repeats only add time, louder verses take away the rise, and a fade turns down the end.',
         },
         {
             q: 'Your rating sheet reads verse 4, pre-chorus 4, chorus 4. What is the first fix to try?',
@@ -89,7 +89,7 @@ export const post012: BlogArticle = {
     ],
     content: `## Hook: the flat mix that puts listeners to sleep
 
-You finish a mix with clean transients and a solid low end. Then you listen from start to finish and the song feels like a flat line. You expect the chorus to explode, and it sounds like a slightly louder version of the verse. Nothing is wrong with any single sound. The problem is the shape of the whole song.
+You finish a mix with clean transients and a solid low end. Then you listen from start to finish and the song feels like a flat line. You expect the chorus to explode, and it sounds like a slightly louder version of the verse. Every sound works on its own, so the fault is in the shape of the whole song.
 
 You can keep adding plugins, but no compressor will fix a song that does not move.
 

@@ -44,10 +44,15 @@ export const post080: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Farbood (2012), which features had the clearest effect on tension when each changed on its own?',
-            options: ['Loudness and pitch height', 'Meter changes and syncopation', 'Lyrics and instrument timbre', 'Reverb and stereo width'],
+            q: 'You only have time to automate one thing across a four-bar build. Based on Farbood\'s single-feature results, which is most likely to raise tension on its own?',
+            options: [
+                'Raise the instrument bus level steadily into the chorus',
+                'Switch one bar of the build from 4/4 to 7/8',
+                'Widen the stereo image of the pad bar by bar',
+                'Lengthen the reverb tail on the snare build',
+            ],
             answer: 0,
-            why: 'Dynamics and pitch height had the clearest effect in isolation. Onset frequency, tempo and harmony also mattered, while the rhythmic features, such as meter changes, showed little effect.',
+            why: 'Loudness and pitch height had the clearest effect when each changed alone, while rhythmic features such as metre changes showed little effect. Width and reverb length are not among the cues the study found, so a rising level is the safest single move.',
         },
         {
             q: 'A build gets busier but also quieter and darker. What did tension research suggest happens?',
@@ -86,7 +91,7 @@ How much the lyric adds is less settled. Ali and Peynircioğlu (2006) found that
 
 ## Science model: the cues listeners hear as tension
 
-Farbood (2012) asked listeners to judge musical tension while single features changed, then while several changed together. On their own, changes in loudness and pitch height had the clearest effect. Onset frequency, meaning how many notes start per second, tempo and harmony also moved tension, while rhythmic features such as meter changes did not. When several features moved in the same direction, tension rose more than with any one of them. When features pulled in opposite directions, listeners' judgments became ambiguous.
+Farbood (2012) asked listeners to judge musical tension while single features changed, then while several changed together. On their own, changes in loudness and pitch height had the clearest effect. Onset frequency, meaning how many notes start per second, tempo and harmony also moved tension, while rhythmic features such as metre changes did not. When several features moved in the same direction, tension rose more than with any one of them. When features pulled in opposite directions, listeners' judgments became ambiguous.
 
 ::figure roll
 
@@ -98,7 +103,7 @@ For a build, that gives a clear recipe. Raise several cues together: level, pitc
 
 ## DAW experiment: the muted vocal build
 
-This takes about fifteen minutes on any song with a build into the chorus.
+You need a song with a build into the chorus and about fifteen minutes.
 
 1. Mute the lead and backing vocals. Loop the four bars before the chorus and the first bar of the chorus.
 2. Program a snare build: quarter notes in bar 1, 8th notes in bar 2, 16th notes in bars 3 and 4, with velocity rising from 60 to 120 across bar 4.

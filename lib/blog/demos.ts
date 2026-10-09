@@ -108,7 +108,7 @@ export const demoCatalog = {
         height: [588, 564, 540, 488, 348],
     },
     'loudness-bias': {
-        title: 'Blind test: louder sounds better',
+        title: 'Blind test: which one sounds better?',
         blurb: 'The same loop twice, one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
         height: [264, 212, 212, 212, 212],
     },

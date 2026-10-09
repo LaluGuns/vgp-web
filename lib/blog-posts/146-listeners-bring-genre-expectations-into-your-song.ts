@@ -18,7 +18,7 @@ export const post146: BlogArticle = {
             steps: 14,
             perBeat: 7,
             caption:
-                'Two bars of a seven-count meter grouped 2+2+3, so the last beat is longer than the others by a ratio of 3:2. An even beat laid over it lands inside the long beat and then misses the next downbeat. Hannon and Trehub (2005b) concluded that North American adults heard rhythms like the top row through an even frame like the bottom one.',
+                'Two bars of a seven-count metre grouped 2+2+3, so the last beat is longer than the others by a ratio of 3:2. An even beat laid over it lands inside the long beat and then misses the next downbeat. Hannon and Trehub (2005b) concluded that North American adults heard rhythms like the top row through an even frame like the bottom one.',
             alt: 'A grid of 14 steps split into two bars of seven. The top row has accented hits on steps 1, 3 and 5 of each bar, so the third beat in each bar is longer. The bottom row has an even hit every two steps, which lands inside the long third beat and misses the downbeat of the second bar.',
             rows: [
                 { label: '7 counts, 2+2+3', hits: [{ step: 0 }, { step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 7 }, { step: 9, level: 0.7 }, { step: 11, level: 0.7 }], focus: true },
@@ -31,13 +31,13 @@ export const post146: BlogArticle = {
             max: 2,
             ticks: [-0.5, 0, 0.5, 1, 1.5, 2],
             caption:
-                'Mean accuracy of 40 North American college students in Hannon and Trehub\'s (2005b) adult experiment, scored as how much less similar they rated meter-breaking changes than meter-keeping ones. Zero is chance. They were accurate in Western meter and slightly below zero in Balkan meter. The group that played Balkan music at home scored 0.22 in the second session, which the authors still counted as chance.',
-            alt: 'A number line from minus 0.5 to 2 with a strong marker at 0 for chance. Balkan meter sits at minus 0.27, Balkan in the second session after home listening at 0.22, and Western meter at 1.79.',
+                'Mean accuracy of 40 North American college students in Hannon and Trehub\'s (2005b) adult experiment, scored as how much less similar they rated metre-breaking changes than metre-keeping ones. Zero is chance. They were accurate in Western metre and slightly below zero in Balkan metre. The group that played Balkan music at home scored 0.22 in the second session, which the authors still counted as chance.',
+            alt: 'A number line from minus 0.5 to 2 with a strong marker at 0 for chance. Balkan metre sits at minus 0.27, Balkan in the second session after home listening at 0.22, and Western metre at 1.79.',
             markers: [
                 { value: 0, label: 'Chance', strong: true },
-                { value: -0.27, label: 'Balkan meter' },
+                { value: -0.27, label: 'Balkan metre' },
                 { value: 0.22, label: 'Balkan, session 2' },
-                { value: 1.79, label: 'Western meter' },
+                { value: 1.79, label: 'Western metre' },
             ],
         },
     },
@@ -88,7 +88,7 @@ When you decide that a move is too strange, too safe or just right, you consult 
 
 Pearce (2018) reviews the case that listeners absorb the statistical regularities of the music they hear and use them to predict what comes next. In that work, a computer model trained on one culture's music simulates the expectations of listeners from that culture, and training it on other music plausibly simulates listeners with other backgrounds. The probabilities come from each listener's own history. The lesson on [surprise](/blog/how-surprise-works-without-confusing-the-listener) shows how such predictions turn into a measure of surprise.
 
-Rhythm gives a clean test. Hannon and Trehub (2005a) played folk melodies in simple meters and in complex meters common in Balkan music, then tested listeners on altered versions that either kept or broke the original meter. North American adults told the two kinds of change apart in simple meter but not in the complex one. Adults of Bulgarian or Macedonian origin managed both, and so did 6-month-old infants. A follow-up (Hannon & Trehub, 2005b) tested 40 North American college students twice, one or two weeks apart. Those assigned to play a CD of Balkan folk music at home in between reported doing so about once a day, and in the second session they were still at chance on the complex meter. Infants about a year old, given similar home listening, learned to tell the changes apart. The authors concluded that the adults fitted the foreign rhythms into a Western even-beat frame.
+Rhythm gives a clean test. Hannon and Trehub (2005a) played folk melodies in simple metres and in complex metres common in Balkan music, then tested listeners on altered versions that either kept or broke the original metre. North American adults told the two kinds of change apart in simple metre but not in the complex one. Adults of Bulgarian or Macedonian origin managed both, and so did 6-month-old infants. A follow-up (Hannon & Trehub, 2005b) tested 40 North American college students twice, one or two weeks apart. Those assigned to play a CD of Balkan folk music at home in between reported doing so about once a day, and in the second session they were still at chance on the complex metre. Infants about a year old, given similar home listening, learned to tell the changes apart. The authors concluded that the adults fitted the foreign rhythms into a Western even-beat frame.
 
 ::figure meter
 
@@ -104,7 +104,7 @@ You can hear a learned expectation in harmony right now. For most listeners rais
 
 1. Take a four-bar loop in a style you know well and duplicate it twice.
 2. In the first copy, cut every bar to seven eighth notes grouped 2+2+3, and move the drum hits so the long count falls on the last beat.
-3. In the second copy, keep the meter and change only the last chord to V, so the phrase stops on the dominant.
+3. In the second copy, keep the metre and change only the last chord to V, so the phrase stops on the dominant.
 4. Before you play them to anyone, write down which bar you expect each listener to call odd and which to call normal.
 5. Play all three versions to someone who listens deeply in the style of the loop and to someone who does not. Ask them to tap along with the beat.
 6. Watch where the tapping breaks down in the seven-count version, then ask a separate question: does each change sound intended or like a mistake?
@@ -114,7 +114,7 @@ You can hear a learned expectation in harmony right now. For most listeners rais
 
 The first mistake is ruling on a move from your own expectations alone. If you live inside one genre, a move it uses all the time can sound bland to you and baffling to an outsider. Ask a listener who does not share your background before you decide.
 
-The second mistake is expecting an outsider audience to learn a foreign meter from one intro. One to two weeks of home listening did not lift Hannon and Trehub's adults above chance. In a crossover, keep one parent style's frame steady, such as the drum pattern, while you borrow the harmony or melody from the other. Each audience then has something it can predict.
+The second mistake is expecting an outsider audience to learn a foreign metre from one intro. One to two weeks of home listening did not lift Hannon and Trehub's adults above chance. In a crossover, keep one parent style's frame steady, such as the drum pattern, while you borrow the harmony or melody from the other. Each audience then has something it can predict.
 
 ## Producer takeaway: name the listener before you judge the move
 

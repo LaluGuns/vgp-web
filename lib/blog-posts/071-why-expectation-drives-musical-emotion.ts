@@ -77,7 +77,7 @@ export const post071: BlogArticle = {
 
 You program a build into the chorus. The riser climbs, the snare roll speeds up, and the chorus snaps in on the first beat. The edit is clean, but the moment has no weight. You add an impact sample, a sub drop and a wider stereo image, and it still feels flat.
 
-The sounds are rarely the problem. The listener knew exactly when the chorus would arrive and what it would sound like, and nothing in the last bar made them want it. Musical emotion depends heavily on what the listener expects, and on how you handle the moment before that expectation is met.
+The extra sounds rarely help, because the listener knew exactly when the chorus would arrive and what it would sound like, and nothing in the last bar made them want it. Musical emotion depends heavily on what the listener expects, and on how you handle the moment before that expectation is met.
 
 ## Why it matters: an arrival needs a wait
 
@@ -105,7 +105,7 @@ There is neural evidence that anticipation carries reward of its own. Salimpoor 
 
 ## DAW experiment: three ways into the same chorus
 
-This takes about ten minutes and works best with a song where the pre-chorus runs straight into the chorus.
+Use a song where the pre-chorus runs straight into the chorus.
 
 1. Copy the last four bars of the pre-chorus and the first four bars of the chorus to an empty part of the timeline four times, so you have versions A to D side by side.
 2. Leave version A as it is: the direct entry.

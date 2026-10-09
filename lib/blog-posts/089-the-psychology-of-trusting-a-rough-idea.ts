@@ -41,15 +41,15 @@ export const post089: BlogArticle = {
     },
     quiz: [
         {
-            q: 'What does research on brain networks suggest about creative work and editing?',
+            q: 'A co-producer refuses to edit on the day they write, saying the creative network shuts off once the editing one switches on. Going by the imaging research, what should they watch instead?',
             options: [
-                'Default and executive networks work together on creative tasks',
-                'A creative network switches off when an editing one switches on',
-                'Editing runs in the right hemisphere and writing in the left one',
-                'Generating ideas leans on executive control and not on memory',
+                'Nothing: the creative network really does go quiet during edits',
+                'The question they ask while editing, since the networks work together',
+                'Which hemisphere is active, since editing runs on the left side',
+                'How tired they are, since generating ideas uses up executive control',
             ],
-            answer: 0,
-            why: 'Beaty and colleagues describe the two networks working together during creative tasks. What changes when you edit is the question you ask, and that is the part you can control.',
+            answer: 1,
+            why: 'Beaty and colleagues describe the default and executive control networks working together during creative tasks, and Ellamil and colleagues found evaluating recruited both. The risk in clean-up is the question drifting from "does this make me move?" to "is this correct?", which is why you write down what works before you edit.',
         },
         {
             q: 'Hard quantizing a laid-back snare removes what?',
@@ -92,7 +92,7 @@ Early clean-up goes after what is easy to see: hits off the grid, notes off pitc
 
 A popular story says the brain has a creative network for writing and an analytical one for editing, and that one switches off when the other switches on. The research is less tidy. Beaty and colleagues (2016) reviewed brain imaging of creative tasks, from divergent thinking to musical improvisation and poetry, and described the default network and the executive control network working together, even though they often act in opposition. Ellamil and colleagues (2012) scanned art students while they alternated between generating ideas and evaluating them. Generating leaned on the medial temporal lobe, while evaluating recruited executive and default regions together.
 
-So the shift from writing to editing is not a switch between two brains. It is a change in the question you ask. While writing, the question is "does this make me move?". During clean-up it drifts to "is this correct?", and what makes you move is often not on the list of things a correctness check can see.
+So the shift from writing to editing is better described as a change in the question you ask. While writing, the question is "does this make me move?". During clean-up it drifts to "is this correct?", and what makes you move is often not on the list of things a correctness check can see.
 
 Timing is the clearest case. Quantize removes every difference from the grid, the ones the player meant and the ones they did not. A consistent offset, such as a snare that lands the same amount late on every backbeat, is a feel. Random drift is not. Pitch correction with a fast retune speed works the same way: it removes wrong notes and also the slides and scoops a singer uses on purpose.
 
@@ -120,7 +120,7 @@ Players often sit ahead of or behind the beat on purpose, and singers slide into
 
 When you start an edit pass, first find the element that carries the feeling. It might be the vocal tone or the swing of the hi-hats. Leave that track alone: do not tune it, quantize it or replace it until the rest of the song is built around it. Then clean up everything else and check each pass against the rough.
 
-A record does not need every track to be perfect. It needs the parts that carry the feeling to survive the mix.
+The parts that carry the feeling have to survive the mix. Every other track can stay imperfect.
 
 ## References
 

@@ -94,15 +94,15 @@ export const post143: BlogArticle = {
             why: 'After G in a C major context, Am works as vi in a deceptive cadence, so listeners who know the style expect C and hear a swerve. E to Am is V to i in A minor, which makes Am the home chord. Register and length change the colour, not the role.',
         },
         {
-            q: 'What does the Papua New Guinea study by Smit and colleagues (2022) suggest about major cadences sounding happier?',
+            q: 'A game studio wants a victory cadence that sounds happy to every player, including players who grew up with little Western-influenced music. What does the Papua New Guinea study by Smit and colleagues (2022) suggest about relying on a major cadence?',
             options: [
-                'It is a fixed acoustic property of the major triad',
-                'It shows up for melodies but never for cadences',
-                'It appears only in listeners with musical training',
-                'It goes with exposure to Western-influenced music',
+                'It works for everyone, since happiness is built into the major triad',
+                'It may not read as happy to players with little Western-like exposure',
+                'It works only for players with musical training, wherever they grew up',
+                'It carries no emotion for anyone, so the choice of mode does not matter',
             ],
-            answer: 3,
-            why: 'Major cadences were heard as happier in every community except the one with minimal exposure to Western-like music. The authors tie the effect to exposure, although they cannot exclude a universal part.',
+            answer: 1,
+            why: 'Major cadences were heard as happier in every community except the one with minimal exposure to Western-like music. The authors tie the effect to exposure, although they cannot exclude a universal part, so test the cue on the audience you are writing for.',
         },
     ],
     content: `## Hook: the sad chord that sounded like a question

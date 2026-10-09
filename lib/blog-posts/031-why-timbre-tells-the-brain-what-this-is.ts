@@ -121,7 +121,7 @@ The notes never change, yet you hear four different parts. The onset and the slo
 
 ## Common mistake: stacking the same colour
 
-A weak line tempts you to add layers that sound like it, such as three saw leads in the same octave. Similar sounds that start together fuse into one, so the stack gets louder without getting more distinct, and the small detail that made one of them interesting is masked by the other two. Stacking near-identical waves also causes phase problems of its own, covered in [why layered sounds often get smaller](/blog/why-layered-sounds-often-get-smaller).
+A weak line tempts you to add layers that sound like it, such as three saw leads in the same octave. Similar sounds that start together fuse into one, so the stack gets louder without getting more distinct, and the small detail that made one of them interesting is masked by the other two. Stacking near-identical waves also causes phase problems of its own, covered in the [lesson on layered sounds](/blog/why-layered-sounds-often-get-smaller).
 
 The other mistake is choosing a sound in solo. A pad that sounds rich on its own may be the reason the vocal disappears. Judge timbre against the parts it has to live with.
 
