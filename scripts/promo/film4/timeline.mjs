@@ -87,7 +87,7 @@ export const TIMELINE = {
         { id: 'againSat', from: 65, to: 69, blend: 0.5, drums: true },
     ],
     // The "typical note": a plucked bass string at the bass's own pitch.
-    plucks: [{ cue: ['stack', 'stack'], dt: -0.1, note: 'G#1', dur: 3.6 }],
+    plucks: [{ cue: ['stack', 'notes'], dt: -0.05, note: 'G#1', dur: 6.2 }],
 
     // Keys under everything to the button.
     bed: { from: 0, to: 75 },

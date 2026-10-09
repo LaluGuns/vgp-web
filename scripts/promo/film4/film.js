@@ -576,7 +576,7 @@ function drawLadder(t) {
     ];
     titles.forEach(([t0, text, color], i) => {
         const t1 = i + 1 < titles.length ? titles[i + 1][0] : SC.strange;
-        const k = (i === 0 ? popIn(t, wt('stack', 'stack') - 0.1, 0.3) : popIn(t, t0, 0.25)) * (1 - seg(t, t1 - 0.15, t1));
+        const k = (i === 0 ? popIn(t, D.plucks[0].t, 0.3) : popIn(t, t0, 0.25)) * (1 - seg(t, t1 - 0.15, t1));
         if (k > 0) label(g, text, 90, 330, { size: 60, weight: 800, color, alpha: k });
     });
     ladderLegend(90, 410, 1, { size: 32, row: true });

@@ -65,7 +65,7 @@ log(`  "almost just the bottom of the stack": the clean sub's strongest harmonic
 log(`Claim 2, bass through the phone at matched full-range loudness (ungated K-weighted level, same two bars): clean ${C.claim2.cleanFull.toFixed(2)} vs saturated ${C.claim2.satFull.toFixed(2)} full range; through the phone clean ${C.claim2.cleanPhone.toFixed(1)}, saturated ${C.claim2.satPhone.toFixed(1)}: saturated ${C.claim2.gainDb.toFixed(1)} dB higher. Target: at least 15 dB.`);
 log(`Claim 3, autocorrelation of the phone-filtered saturated bass (highest peak, 2.5-30 ms): ${C.claim3.map((c) => `${c.name} ${c.lagMs.toFixed(2)} ms vs 1/f0 ${c.periodMs.toFixed(2)} ms (${c.errPct.toFixed(2)} %, r ${c.r.toFixed(2)})`).join('; ')}. Target: within 2 %.`);
 log(`Claim 4, cone travel for equal level (p ∝ S·x·f², so x ∝ 1/f²): ${C.claim4.map((c) => `${c.hz} Hz ${c.x}×`).join(', ')}`);
-log(`Claim 5, every rung on screen is an FFT of the bass playing at that frame (85 ms Hann window, centred): ${audio.data.frames.f0.filter(Boolean).length} frames analysed; saturated stack, full range, dB re the clean fundamental: ${M.satStack.map((s) => `${s.name} [${s.db.slice(0, 6).join(', ')}]`).join('; ')}`);
+log(`Claim 5, every rung on screen is an FFT of the bass playing at that frame (85 ms Hann window, centred on the frame and kept inside the sounding note): ${audio.data.frames.f0.filter(Boolean).length} frames analysed; saturated stack, full range, dB re the clean fundamental: ${M.satStack.map((s) => `${s.name} [${s.db.slice(0, 6).join(', ')}]`).join('; ')}`);
 
 // ── Captions: one cue per narration line ──
 const ts = (t) => {
@@ -236,9 +236,11 @@ if (!args.includes('--stills')) {
         if (d > 20) jumps++;
     }
     log(`  flashes: ${jumps} frame-to-frame luma jumps over 20/255 (largest ${worst.toFixed(1)})`);
-    // Sync: the first kick of the film (0.25 s) and the payoff's downbeat (7.0 s).
-    for (const [from, at, what] of [[0.15, 0.25, 'first kick of the hook'], [6.9, 7.0, "payoff's downbeat"]]) {
-        const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(from), '-t', '0.3', '-i', file, '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
+    // Sync: the first kick of the hook (0.25 s) and the payoff's downbeat
+    // (7.0 s), timed on each transient's click (above 2 kHz): the phone
+    // filter delays a kick's low body by a few ms, never its click.
+    for (const [from, at, what] of [[0.2, 0.25, 'first kick of the hook'], [6.95, 7.0, "payoff's downbeat"]]) {
+        const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(from), '-t', '0.1', '-i', file, '-af', 'highpass=f=2000:poles=2,highpass=f=2000:poles=2', '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
         const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.byteLength / 4);
         const peak = x.reduce((p, v) => Math.max(p, Math.abs(v)), 0);
         const first = x.findIndex((v) => Math.abs(v) > peak * 0.3);
