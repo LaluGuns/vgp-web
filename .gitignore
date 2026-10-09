@@ -43,8 +43,9 @@ reports/
 .wrangler/
 **/.wrangler/
 
-# Editor/AI tool config
-.claude/
+# Editor/AI tool config (project skills are shared, everything else stays local)
+.claude/*
+!.claude/skills/
 .env*
 .headroom-venv/
 .headroom-cache/

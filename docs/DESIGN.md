@@ -6,6 +6,8 @@ Applies to the public site (repo root app). The founder dashboard and
 Quality references: anti-slop (miqdadbadjuber/anti-slop), design-taste
 (madebymustafa/design-taste), frontend-craft (nattergabriel/frontend-craft)
 and humanizer (blader/humanizer) for every piece of user-facing copy.
+The two copy skills are vendored in `.claude/skills/humanizer/` and
+`.claude/skills/antislop-copywriting/`; run both on any new copy.
 
 ## Direction
 
