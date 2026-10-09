@@ -10,8 +10,9 @@ type Pt = [number, number];
  * after one second of pre-roll.
  */
 const KICK_LEVEL = 0.9;
-const kickEnv = (t: number) => KICK_LEVEL * Math.exp(-(t % 0.5) / 0.08);
-const kickWave = (t: number) => kickEnv(t) * Math.sin(2 * Math.PI * 55 * (t % 0.5));
+const phase = (t: number) => (((t - 0.02) % 0.5) + 0.5) % 0.5;
+const kickEnv = (t: number) => KICK_LEVEL * Math.exp(-phase(t) / 0.08);
+const kickWave = (t: number) => kickEnv(t) * Math.sin(2 * Math.PI * 55 * phase(t));
 
 function limiterGain(points: number): Pt[] {
     const fs = 48000;
@@ -39,7 +40,7 @@ export const post141: BlogArticle = {
     excerpt: 'A broadband limiter turns down moments, not frequencies. Whatever makes the peaks loses the most level, so the tonal balance shifts as you push it.',
     category: 'mixing-mastering',
     publishedAt: '2026-10-09',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A broadband limiter lowers the level of whole moments, so the part of the spectrum whose energy sits in those moments loses level against the rest, and the tone shifts.',
         'Find out what drives the limiter by cutting the lows or the highs 2 dB before it and watching which cut lowers the gain reduction more.',
@@ -145,11 +146,11 @@ $$\\Delta L_b = 10 \\log_{10} \\frac{\\sum_t g(t)^2 \\, x_b(t)^2}{\\sum_t x_b(t)
 
 A band whose energy sits in the moments the limiter turns down loses the most. A band whose energy is spread evenly loses roughly the average gain reduction, which can be much smaller. Makeup gain raises every band by the same amount, so it cannot undo the difference between them.
 
-I ran that calculation on two loops through a simple peak limiter with instant attack and a 50 ms release, pushed until the biggest peaks lost 6 dB. In the first, a 55 Hz kick made the peaks over steady high-frequency noise standing in for hats and air. The lows lost 3.3 dB of average level and the highs 0.5 dB, a 2.8 dB tilt toward the top. The tilt grew with the drive: about 0.7 dB at 2 dB of reduction, 1.7 at 4 and 3.9 at 8. In the second loop a bright snare made the peaks over a sustained bass. The highs lost 3.7 dB and the lows almost nothing, so the master went darker. Adding crash-like bursts that start with each kick shrank the first loop's tilt to about 1.1 dB, because the highs then shared the kick's moments.
+I ran that calculation on two loops through a simple peak limiter with instant attack and a 50 ms release, pushed until the biggest peaks lost 6 dB. In the first, a 55 Hz kick made the peaks over steady high-frequency noise standing in for hats and air. The lows lost 3.3 dB of average level and the highs 0.5 dB, a 2.8 dB tilt toward the top. The tilt grew with the drive: about 0.7 dB at 2 dB of reduction, 1.7 at 4 and 3.9 at 8. In the second loop a bright snare made the peaks over a softer kick and a sustained bass. The highs lost 3.7 dB and the lows almost nothing, so the master went darker. Replacing the first loop's steady highs with crash-like bursts that start on each kick shrank its tilt to about 1.1 dB, because the highs then shared the kick's moments.
 
 ::figure bands
 
-Real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks pays for them. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as covered in [limiter release reaches into the groove](/blog/limiter-release-reaches-into-the-groove).
+Real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks loses the most level. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as covered in [limiter release reaches into the groove](/blog/limiter-release-reaches-into-the-groove).
 
 Push the drive and listen to the tone rather than the level, since the demo keeps the loudness matched.
 
@@ -164,13 +165,13 @@ Push the drive and listen to the tone rather than the level, since the demo keep
 5. Control that part earlier. For a kick or bass, use clip gain on the loudest hits, a clipper on the drum bus, or a high-pass on sub energy nobody hears. For a snare or cymbal, tame its peaks in the mix.
 6. Drive the limiter again to the same short-term loudness as step 2 and compare both limited versions with the bypassed mix at matched loudness.
 
-The version where the peaks were controlled first usually needs less gain reduction and stays closer to the tonal balance of the unlimited mix. If it does not, the limiter is not the cause and the tone change came from somewhere else in the chain.
+If those peaks were the trigger, the version where they were controlled first needs less gain reduction for the same loudness and stays closer to the tonal balance of the unlimited mix. If it does not, look elsewhere in the chain for the tone change.
 
 ## Common mistake: EQ-ing the limiter's side effect
 
 The common mistake is correcting the limiter's tone with more EQ on the master. A low boost in front of a kick-driven limiter feeds the trigger. A high cut to tame the brighter top makes the master duller during the parts where the limiter is not working. Fix what drives the limiter, and the tone mostly stops moving.
 
-The second mistake is judging tone at different levels. Turned up, a master seems to have more bass and more air, because our hearing's sensitivity to the extremes rises with level (ISO, 2023). A limited master compared louder than the original will seem fuller than it is. Match the loudness first, as in [monitoring level changes the balance you hear](/blog/monitoring-level-changes-the-balance-you-hear).
+The second mistake is judging tone at different levels. Turned up, a master seems to have more bass, because the ear's equal-loudness contours flatten as level rises (ISO, 2023). A limited master compared louder than the original will seem fuller than it is. Match the loudness first, as in [monitoring level changes the balance you hear](/blog/monitoring-level-changes-the-balance-you-hear).
 
 ## Producer takeaway: watch what the limiter is listening to
 

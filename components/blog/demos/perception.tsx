@@ -208,6 +208,9 @@ interface MixBus {
     r: GainNode;
 }
 
+// Keeps the mix at the loudness of the other demos on the site.
+const MIX_TRIM = 0.5;
+
 function mixBus(ctx: BaseAudioContext): MixBus {
     const bus: MixBus = {
         center: gainNode(ctx),
@@ -215,8 +218,8 @@ function mixBus(ctx: BaseAudioContext): MixBus {
         right: gainNode(ctx),
         leanLeft: gainNode(ctx),
         leanRight: gainNode(ctx),
-        l: gainNode(ctx),
-        r: gainNode(ctx),
+        l: gainNode(ctx, MIX_TRIM),
+        r: gainNode(ctx, MIX_TRIM),
     };
     bus.center.connect(bus.l);
     bus.center.connect(bus.r);
