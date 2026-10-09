@@ -743,6 +743,8 @@ const RD_PHRASE: Syllable[] = [
     { at: 25, len: 3, note: 60, vowel: 'o', to: 'u' },
 ];
 const RD_VOICE_LEVEL = 0.8;
+// Keeps this demo at the loudness of the other demos on the site.
+const RD_TRIM = 0.72;
 const REVERB_LEVEL = 0.9;
 const DELAY_LEVEL = 0.75;
 
@@ -879,7 +881,7 @@ export function ReverbDuckDemo() {
     }, [mode, amount, depth, delayNote, feedback]);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
-        const master = ctx.createGain();
+        const master = gainNode(ctx, RD_TRIM);
         master.connect(out);
         const dry = gainNode(ctx);
         dry.connect(master);
@@ -902,7 +904,7 @@ export function ReverbDuckDemo() {
         const rect = ctx.createWaveShaper();
         rect.curve = curveOf(Math.abs);
         const fastCoef = onePole(0.01, ctx.sampleRate);
-        const slowCoef = onePole(0.22, ctx.sampleRate);
+        const slowCoef = onePole(0.15, ctx.sampleRate);
         const fast = ctx.createIIRFilter(fastCoef.feedforward, fastCoef.feedback);
         const slow = ctx.createIIRFilter(slowCoef.feedforward, slowCoef.feedback);
         const sum = gainNode(ctx, FOLLOW_GAIN);

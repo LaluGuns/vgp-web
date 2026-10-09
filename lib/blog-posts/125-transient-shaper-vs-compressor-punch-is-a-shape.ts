@@ -31,10 +31,10 @@ function shape(level: (t: number) => number, fast: number, slow: number, release
     return out.filter((_, i) => i % 5 === 0);
 }
 
-// A snare part: two backbeats and two ghost notes, drawn at half scale so the shaped peaks fit the plot.
+// A snare part: two backbeats and two ghost notes, scaled so the shaped peaks (about 6 dB up) still fit the plot.
 const AT = [0.03, 0.28, 0.53, 0.78];
-const AMP = [0.5, 0.15, 0.45, 0.125];
-const THRESHOLD = 0.175;
+const AMP = [1, 0.3, 0.9, 0.25].map((a) => a * 0.53);
+const THRESHOLD = 0.35 * 0.53;
 const SNARE = { kind: 'hits' as const, at: AT, amp: AMP, decay: 28, outline: true };
 const SHAPED = shape(hitsLevel(AT, AMP, 28), 0.004, 0.03, 0.02, 0.35);
 const shaperOut: SignalTrace = { kind: 'envelope', points: SHAPED.map((p) => [p.t, p.y] as [number, number]), label: 'After' };
