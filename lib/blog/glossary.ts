@@ -83,6 +83,23 @@ export const glossary: GlossaryEntry[] = [
         term: 'Peak to loudness ratio',
         forms: ['peak to loudness ratio', 'peak-to-loudness ratio', 'PLR'],
         definition: 'The gap between a master\u2019s true peak and its integrated loudness. Heavy limiting makes it smaller, and normalization makes it the number that decides how punchy a track sounds next to others.',
+        article: 'loudness-and-dynamic-range-are-different-readings',
+    },
+    {
+        id: 'loudness-range',
+        term: 'Loudness range',
+        forms: ['loudness range', 'LRA'],
+        definition:
+            'LRA, in LU: the spread between the quieter and louder parts of a programme, taken from the 10th to the 95th percentile of its gated short-term loudness (EBU Tech 3342). It tracks section-to-section change, not punch.',
+        article: 'loudness-and-dynamic-range-are-different-readings',
+    },
+    {
+        id: 'psr',
+        term: 'Peak to short-term loudness ratio',
+        forms: ['peak to short-term loudness ratio', 'PSR'],
+        definition:
+            'The gap between the highest true peak in a 3-second window and the short-term loudness of that window. It follows how far the peaks stand above the music moment by moment.',
+        article: 'loudness-and-dynamic-range-are-different-readings',
     },
     {
         id: 'intermodulation',
@@ -181,6 +198,55 @@ export const glossary: GlossaryEntry[] = [
         forms: ['sidechain', 'side-chain', 'sidechaining'],
         definition:
             'Letting one signal control a processor on another, for example the kick triggering a compressor on the bass so the two take turns.',
+        article: 'sidechain-is-more-than-kick-ducking-bass',
+    },
+    {
+        id: 'parallel-compression',
+        term: 'Parallel compression',
+        forms: ['parallel compression', 'New York compression'],
+        definition:
+            'Blending a heavily compressed copy of a signal under the untouched original. The quiet detail comes up while the loud peaks keep most of their shape.',
+        article: 'parallel-compression-is-not-half-compression',
+    },
+    {
+        id: 'bus-compression',
+        term: 'Bus compression',
+        forms: ['bus compression', 'bus compressor', 'glue compression'],
+        definition:
+            'A compressor on a group or the mix bus, so every part feeding it shares one gain movement.',
+        article: 'what-bus-compression-glue-actually-does',
+    },
+    {
+        id: 'transient-shaper',
+        term: 'Transient shaper',
+        forms: ['transient shaper', 'transient shapers', 'transient designer'],
+        definition:
+            'A processor that turns the start of each sound up or down, and its sustain up or down, by comparing a fast and a slow level follower. It has no threshold, so quiet and loud hits are shaped alike.',
+        article: 'transient-shaper-vs-compressor-punch-is-a-shape',
+    },
+    {
+        id: 'clip-gain',
+        term: 'Clip gain',
+        forms: ['clip gain'],
+        definition:
+            'A gain change applied to a region of audio itself. In most DAWs it acts before the plugins on the track, so unlike the fader it changes what they hear.',
+        article: 'clip-gain-and-automation-before-compression',
+    },
+    {
+        id: 'dynamic-eq',
+        term: 'Dynamic EQ',
+        forms: ['dynamic EQ', 'dynamic EQs'],
+        definition:
+            'An EQ band that cuts or boosts only while the level in its band, or in a key signal, passes a threshold, and stays flat the rest of the time.',
+        article: 'dynamic-eq-vs-multiband-compression',
+    },
+    {
+        id: 'multiband-compression',
+        term: 'Multiband compression',
+        forms: ['multiband compression', 'multiband compressor', 'multiband compressors'],
+        definition:
+            'Splitting a signal into frequency bands with crossover filters and compressing each band on its own.',
+        article: 'dynamic-eq-vs-multiband-compression',
     },
     {
         id: 'saturation',
@@ -300,6 +366,7 @@ export const glossary: GlossaryEntry[] = [
         forms: ['comb filtering', 'comb filter', 'comb-filtering'],
         definition:
             'The hollow, notched sound you get when a signal is mixed with a slightly delayed copy of itself. The cancellations fall at evenly spaced frequencies, like the teeth of a comb.',
+        article: 'room-reflections-eq-your-vocal-recording',
     },
     {
         id: 'mono-compatibility',
@@ -308,6 +375,22 @@ export const glossary: GlossaryEntry[] = [
         definition:
             'How well a mix holds up when left and right are summed into one channel, as on many phone speakers, club systems and smart speakers.',
         article: 'why-mono-reveals-what-stereo-hides',
+    },
+    {
+        id: 'mid-side',
+        term: 'Mid/side',
+        forms: ['mid/side', 'mid-side'],
+        definition:
+            'A second way to describe a stereo signal. Mid is what left and right share, side is how they differ. Raising the side widens the image; mid alone is what a mono fold keeps.',
+        article: 'mid-side-widening-moves-the-center-too',
+    },
+    {
+        id: 'correlation-meter',
+        term: 'Correlation meter',
+        forms: ['correlation meter', 'correlation meters', 'phase correlation meter'],
+        definition:
+            'A meter that shows how alike the left and right channels are, from +1 (identical) through 0 (unrelated) to -1 (one is the other flipped). Readings near -1 warn that the mix will lose level in mono.',
+        article: 'what-a-correlation-meter-actually-tells-you',
     },
     {
         id: 'haas',
@@ -322,6 +405,14 @@ export const glossary: GlossaryEntry[] = [
         forms: ['pre-delay', 'predelay'],
         definition: 'The gap between the dry sound and the start of its reverb. More pre-delay keeps the source clear and in front.',
         article: 'why-reverb-can-push-emotion-forward-or-backward',
+    },
+    {
+        id: 'early-reflections',
+        term: 'Early reflections',
+        forms: ['early reflections', 'early reflection'],
+        definition:
+            'The first echoes from nearby surfaces, arriving in roughly the first 80 ms after the direct sound. They shape clarity and apparent width more than the sense of room size.',
+        article: 'early-reflections-place-a-sound-the-tail-sets-the-room',
     },
     {
         id: 'impulse-response',
@@ -682,6 +773,14 @@ export const glossary: GlossaryEntry[] = [
         forms: ['ear fatigue', 'listening fatigue', 'auditory fatigue'],
         definition: 'Hearing that has adapted after a long or loud session, so judgments about level and brightness drift.',
         article: 'why-fresh-ears-are-a-real-production-tool',
+    },
+    {
+        id: 'equal-loudness-contours',
+        term: 'Equal-loudness contours',
+        forms: ['equal-loudness contours', 'equal-loudness contour', 'equal loudness contours', 'Fletcher-Munson'],
+        definition:
+            'Curves showing the level each frequency needs to sound as loud as a 1 kHz tone (ISO 226). They are steepest in the bass at low levels, so quiet monitoring hides low end.',
+        article: 'monitoring-level-changes-the-balance-you-hear',
     },
     {
         id: 'auditory-scene-analysis',
