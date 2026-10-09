@@ -15,7 +15,7 @@ const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8')
 
 // Picture data resolution: one value per millisecond.
 const VIS = 1000;
-const n = Math.ceil(TIMELINE.duration * RATE);
+const n = Math.round(TIMELINE.duration * RATE);
 const at = (t) => Math.round(t * RATE);
 
 function mixIn(dst, src, t0, gain = 1, rate = 1) {

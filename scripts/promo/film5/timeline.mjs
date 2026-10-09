@@ -52,7 +52,8 @@ export const TIMELINE = {
     fps: 60,
     width: 1080,
     height: 1920,
-    duration: Math.round((button + 0.75) * 100) / 100,
+    // A whole number of frames, so picture and sound end together.
+    duration: Math.round((button + 0.75) * 60) / 60,
     bpm: BPM,
     beat: BEAT,
     bar: BAR,
