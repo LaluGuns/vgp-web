@@ -1,21 +1,36 @@
 /**
  * A small shared Web Audio engine for the article demos. Every sound is
  * synthesised in the browser, so there are no audio files to load and no
- * rights to clear. Output runs through one volume control and a limiter
- * so no demo can jump out louder than the reader set it.
+ * rights to clear.
+ *
+ * Output: demo -> house level -> safety limiter -> ceiling clip -> the
+ * reader's volume -> speakers. The volume comes last, so it scales what a
+ * demo plays and never changes its dynamics: the limiter and the clip see
+ * the same signal at 5 % as at 100 %. Every demo's own level (its playback
+ * trim, `level` in lib/blog/demos.ts) keeps its loudest moment under the
+ * ceiling, so the limiter only ever acts on a mistake.
  */
+import { onVolume, storedVolume, volumeGain } from './volume';
 
-/** Ceiling of the output limiter, in dBFS. */
-const LIMIT_DB = -6;
+/** Nothing the demos play goes above this, in dBFS, at any volume. */
+const CEILING_DB = -6;
+const CEILING = 10 ** (CEILING_DB / 20);
 const LIMIT_RATIO = 20;
 /**
  * A DynamicsCompressorNode turns its whole output up by a makeup gain set by
  * its threshold and ratio: (1 / its gain at full scale) to the power 0.6, in
  * Chromium, WebKit and Gecko alike. The engine takes that back out after the
- * limiter, and puts the same amount in front of it, so quiet material plays
- * exactly as loud as before and the ceiling is LIMIT_DB, not 3.4 dB above it.
+ * limiter, so material under the ceiling passes at exactly its own level.
  */
-const LIMIT_MAKEUP = 10 ** ((-0.6 * LIMIT_DB * (1 - 1 / LIMIT_RATIO)) / 20);
+const LIMIT_MAKEUP = 10 ** ((-0.6 * CEILING_DB * (1 - 1 / LIMIT_RATIO)) / 20);
+/**
+ * House level: the gain from every demo's output to the limiter. At 100 %
+ * volume it puts the drum-loop demos at about -24 LUFS (K-weighted, both
+ * channels, ungated) with their hits peaking around -12 dBFS, so the
+ * loudest moment of any demo, at its loudest setting, stays under the
+ * ceiling. The default volume (80 %) is about 4 dB lower.
+ */
+const HOUSE = 0.265;
 
 export interface Engine {
     ctx: AudioContext;
@@ -24,18 +39,18 @@ export interface Engine {
 }
 
 let engine: Engine | null = null;
-let volumeNode: GainNode | null = null;
 let currentStop: (() => void) | null = null;
 
-const VOLUME_KEY = 'vgp_demo_volume';
-
-export function storedVolume(): number {
-    try {
-        const v = Number(localStorage.getItem(VOLUME_KEY));
-        return Number.isFinite(v) && v > 0 && v <= 1 ? v : 0.5;
-    } catch {
-        return 0.5;
-    }
+/**
+ * A hard clip at the ceiling, and a straight line below it (the curve's
+ * points fall on the line, so in between nothing changes either). The
+ * limiter's attack lets a fast edge past for a moment; this catches it.
+ */
+function ceilingCurve(): Float32Array<ArrayBuffer> {
+    const points = 1025;
+    const c = new Float32Array(points);
+    for (let i = 0; i < points; i++) c[i] = Math.max(-CEILING, Math.min(CEILING, (i / (points - 1)) * 2 - 1));
+    return c;
 }
 
 /** The engine if a demo has already started one, without creating it. */
@@ -52,31 +67,32 @@ export function getEngine(): Engine {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new Ctor({ latencyHint: 'interactive' });
     const out = ctx.createGain();
-    out.gain.value = 0.5 * LIMIT_MAKEUP;
-    volumeNode = ctx.createGain();
-    volumeNode.gain.value = curve(storedVolume());
+    out.gain.value = HOUSE;
     const limiter = ctx.createDynamicsCompressor();
-    limiter.threshold.value = LIMIT_DB;
+    limiter.threshold.value = CEILING_DB;
     limiter.knee.value = 0;
     limiter.ratio.value = LIMIT_RATIO;
-    limiter.attack.value = 0.002;
-    limiter.release.value = 0.12;
+    limiter.attack.value = 0;
+    limiter.release.value = 0.1;
     const unMakeup = ctx.createGain();
     unMakeup.gain.value = 1 / LIMIT_MAKEUP;
-    out.connect(volumeNode).connect(limiter).connect(unMakeup).connect(ctx.destination);
+    const clip = ctx.createWaveShaper();
+    clip.curve = ceilingCurve();
+    const volume = ctx.createGain();
+    volume.gain.value = volumeGain(storedVolume());
+    onVolume((v) => volume.gain.setTargetAtTime(volumeGain(v), ctx.currentTime, 0.03));
+    out.connect(limiter).connect(unMakeup).connect(clip).connect(volume).connect(ctx.destination);
     engine = { ctx, out };
     return engine;
 }
 
-const curve = (v: number) => v * v;
-
-export function setVolume(v: number) {
-    try {
-        localStorage.setItem(VOLUME_KEY, String(v));
-    } catch {
-        // The slider still works for this visit.
-    }
-    if (engine && volumeNode) volumeNode.gain.setTargetAtTime(curve(v), engine.ctx.currentTime, 0.03);
+/**
+ * Creates (or wakes) the audio context ahead of the click that plays: on the
+ * press of a mouse button or key, or as a finger lifts. Building a context is
+ * the slowest part of the first Play, so it then runs in a task of its own.
+ */
+export function warmEngine() {
+    getEngine();
 }
 
 /** Only one demo plays at a time. Starting one stops the last. */
@@ -272,8 +288,9 @@ const REVERB_PIECE = 1;
  * they make the same convolution as one node with the whole impulse. Handing
  * a ConvolverNode its impulse is main-thread work that grows with the length
  * (about 20 ms per second of impulse on a slow phone), so the impulse is
- * built in one task and each piece set up in a task of its own: playback
- * starts at once and the room fills in over the next few frames.
+ * built in one task and each piece, the first one too, set up in a task of
+ * its own: playback starts at once and the room fills in over the next few
+ * frames.
  */
 export function reverb(ctx: AudioContext): Reverb {
     const input = ctx.createGain();
@@ -350,7 +367,7 @@ export function reverb(ctx: AudioContext): Reverb {
                     }
                     if (to < length) later(() => add(to));
                 };
-                add(0);
+                later(() => add(0));
             });
         },
         dispose() {

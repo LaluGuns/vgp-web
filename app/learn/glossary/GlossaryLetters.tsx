@@ -43,7 +43,7 @@ export function GlossaryLetters({ letters }: { letters: string[] }) {
                         key={letter}
                         href={`#letter-${letter}`}
                         aria-current={letter === current ? 'location' : undefined}
-                        className={`flex h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-sm font-medium hover:bg-white/[0.05] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                        className={`flex h-11 min-w-11 shrink-0 items-center justify-center rounded-md text-sm font-medium hover:bg-white/[0.05] hover:text-white vgp-focus ${
                             letter === current ? 'bg-white/[0.07] text-white' : 'text-white/65'
                         }`}
                     >

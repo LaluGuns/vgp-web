@@ -48,7 +48,7 @@ export const post012: BlogArticle = {
                 { label: 'Guitar', levels: [0, 0, 0.5, 0.8, 0, 0.9] },
                 { label: 'Pad', levels: [0, 0, 0.4, 0.7, 0.6, 0.8] },
                 { label: 'Vocal', levels: [0, 0.8, 0.8, 1, 0.7, 1] },
-                { label: 'Harmony', levels: [0, 0, 0, 0, 0, 0.9] },
+                { label: 'Harmony', levels: [0, 0, 0, 0, 0, 0.9], focus: true },
             ],
         },
     },

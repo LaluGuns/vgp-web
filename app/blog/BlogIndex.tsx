@@ -110,7 +110,7 @@ function scoreLesson(fields: string[], words: WordMatcher[], phrase: string): nu
 }
 
 const chipClass = (active: boolean) =>
-    `inline-flex min-h-11 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+    `inline-flex min-h-11 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors vgp-focus ${
         active ? 'border-white/70 text-white' : 'border-white/10 text-white/60 hover:border-white/25 hover:text-white'
     }`;
 
@@ -139,7 +139,7 @@ const ArticleRow = memo(function ArticleRow({
         <li className="flex items-start gap-4 py-7">
             <Link
                 href={`/blog/${article.slug}`}
-                className="group min-w-0 flex-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                className="group min-w-0 flex-1 vgp-focus"
             >
                 <span className="text-xs text-white/50">
                     {article.isNew ? <span className="font-medium text-white">New · </span> : null}
@@ -157,7 +157,7 @@ const ArticleRow = memo(function ArticleRow({
                 aria-pressed={isBookmarked}
                 aria-label={isBookmarked ? `Remove ${article.title} from saved lessons` : `Save ${article.title} for later`}
                 title={isBookmarked ? 'Remove from saved' : 'Save for later'}
-                className={`-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 ${
+                className={`-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-md transition-colors vgp-focus ${
                     isBookmarked ? 'text-white' : 'text-white/40 hover:text-white'
                 }`}
             >
@@ -186,7 +186,7 @@ const LearningPaths = memo(function LearningPaths({ paths, read, startHere }: { 
                             <li key={path.slug} className="border-b border-white/10">
                                 <Link
                                     href={`/blog/category/${path.slug}`}
-                                    className="group block py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:py-5"
+                                    className="group block py-4 vgp-focus sm:py-5"
                                 >
                                     <span className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                                         <span className="text-base font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-lg">
@@ -262,8 +262,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return () => cancelAnimationFrame(frame);
     }, []);
 
-    // A query waits URL_DELAY before it reaches the URL. Any other write, a click on a
-    // link and unmounting settle it first, so the URL never lags behind the list.
+    // A query waits URL_DELAY before it reaches the URL. Any other write and a click on a
+    // link write it at once (so Back returns to this query); unmounting drops it.
     const urlTimer = useRef(0);
     const pendingWrite = useRef<(() => void) | null>(null);
     const flushUrl = useCallback(() => {
@@ -412,13 +412,13 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                         <div className="mt-4 flex flex-wrap gap-x-6">
                             <a
                                 href="#vgp-reading-room"
-                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
                             >
                                 <span className="vgp-link">Browse all {articles.length} lessons</span>
                             </a>
                             <Link
                                 href="/learn/glossary"
-                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
                             >
                                 <span className="vgp-link">Glossary</span>
                             </Link>
@@ -458,7 +458,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                             type="button"
                                             onClick={() => onQueryChange('')}
                                             aria-label="Clear search"
-                                            className="absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md text-white/55 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                            className="absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-md text-white/55 hover:text-white vgp-focus"
                                         >
                                             <X size={16} aria-hidden="true" />
                                         </button>
@@ -506,7 +506,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                 {activePath ? (
                                     <Link
                                         href={`/blog/category/${activePath.slug}`}
-                                        className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
                                     >
                                         <span className="vgp-link">Open the {activePath.name} path</span>
                                     </Link>
@@ -519,7 +519,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                 {showFeaturedArticle && featured ? (
                                     <Link
                                         href={`/blog/${featured.slug}`}
-                                        className="group block border-b border-white/10 py-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        className="group block border-b border-white/10 py-10 vgp-focus"
                                     >
                                         <span className="text-xs text-white/50">
                                             Featured · {getCategoryName(featured.category)} · {featured.readingTime} min read
@@ -551,7 +551,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         <button
                                             type="button"
                                             onClick={showMore}
-                                            className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/60 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                            className="inline-flex min-h-12 items-center rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/60 active:scale-[0.97] vgp-focus"
                                         >
                                             Show more lessons
                                         </button>
@@ -573,7 +573,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         <button
                                             type="button"
                                             onClick={resetFilters}
-                                            className="mt-4 inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                            className="mt-4 inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
                                         >
                                             <span className="vgp-link">Show all lessons</span>
                                         </button>

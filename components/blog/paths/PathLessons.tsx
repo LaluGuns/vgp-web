@@ -56,7 +56,7 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
                     const isRead = read.includes(lesson.slug);
                     return (
                         <li key={lesson.slug}>
-                            <Link href={`/blog/${lesson.slug}`} className="group flex gap-5 py-7 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60">
+                            <Link href={`/blog/${lesson.slug}`} className="group flex gap-5 py-7 vgp-focus">
                                 <span
                                     className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums ${
                                         isRead ? 'border-white bg-white text-black' : 'border-white/25 text-white/60'

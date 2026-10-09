@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { fadeOut, hat, kick, bass, midi, rms, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, useFrame, usePlayer } from './ui';
+import { useEffect, useRef, useState } from 'react';
+import { fadeOut, hat, kick, bass, midi, sequence, snare, type Engine } from './engine';
+import { Actions, Meter, PlayButton, Segmented, Slider, useAnalysis, useFrame, usePlayer } from './ui';
 
 // A 16-step boom-bap bar with ghost notes, so dynamics have something to grab.
 const KICKS: [number, number][] = [
@@ -35,28 +35,110 @@ const PRESETS = {
     flat: { threshold: -30, ratio: 8, attack: 0, release: 60 },
 };
 
+interface CompParams {
+    threshold: number;
+    ratio: number;
+    attack: number;
+    release: number;
+}
+
 /**
  * A DynamicsCompressorNode turns its output up by its own makeup gain:
  * (1 / its gain at full scale) to the power 0.6, so a low threshold and a
- * high ratio make it louder than what went in. This undoes that (hard-knee
- * value; the level matching below takes up the fraction of a dB the knee
- * leaves), so the compressed path starts out no louder than the dry one.
+ * high ratio make it louder than what went in. This undoes that, so the
+ * matching gain below starts from the compressor's real gain reduction.
  */
 const undoMakeup = (threshold: number, ratio: number) => 10 ** ((0.6 * threshold * (1 - 1 / ratio)) / 20);
 
+/** Matching may turn the compressed path up by at most 30 dB. At thresholds down to -40 dB no setting needs more. */
+const MATCH_MAX = 10 ** (30 / 20);
 /**
- * The level matching may turn the compressed path up by at most 16 dB (the
- * default settings need about 13), and down a little to take up what the
- * knee leaves. Anything louder than that is caught by the engine's -6 dBFS
- * limiter, and the demo says when the cap leaves the compressed loop quieter.
+ * Matched for loudness, a slow attack leaves the hits' first milliseconds
+ * standing above everything else, so the compressed loop peaks higher than
+ * the bypass. Up to 7 dB higher is allowed (the default needs about 5); past
+ * that the matching stops, which keeps every setting under the demo's
+ * ceiling, and the demo says how much quieter that leaves the loop.
  */
-const MATCH_MIN = 0.7;
-const MATCH_MAX = 6;
-const MATCH_MAX_DB = Math.round(20 * Math.log10(MATCH_MAX));
+const PEAK_ROOM = 10 ** (7 / 20);
+
+const RATE = 44100;
+const BPM = 92;
+const STEP = 60 / BPM / 4;
+const BAR = STEP * 16;
+const LEAD = 0.05;
+
+function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
+    const shelf = ctx.createBiquadFilter();
+    shelf.type = 'highshelf';
+    shelf.frequency.value = 1681.97;
+    shelf.gain.value = 4;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 38.13;
+    hp.Q.value = 0.5;
+    input.connect(shelf).connect(hp);
+    return hp;
+}
+
+function compressor(ctx: BaseAudioContext, p: CompParams): DynamicsCompressorNode {
+    const comp = ctx.createDynamicsCompressor();
+    comp.knee.value = 2;
+    comp.threshold.value = p.threshold;
+    comp.ratio.value = p.ratio;
+    comp.attack.value = p.attack / 1000;
+    comp.release.value = p.release / 1000;
+    return comp;
+}
+
+interface CompAnalysis {
+    params: CompParams;
+    /** Gain after `undoMakeup` that plays the compressed loop at the bypass loudness, or as close as the peaks allow. */
+    match: number;
+    /** dB the compressed loop still sits under the bypass. */
+    short: number;
+}
+
+/**
+ * Renders two bars of the loop offline, dry and through the compressor, and
+ * measures the second bar: K-weighted loudness (ITU-R BS.1770) for the
+ * matching, and the peaks for the 7 dB allowance.
+ */
+async function analyseComp(params: CompParams): Promise<CompAnalysis> {
+    const ctx = new OfflineAudioContext(4, Math.ceil((LEAD + 2 * BAR + 0.1) * RATE), RATE);
+    const merger = ctx.createChannelMerger(4);
+    merger.connect(ctx.destination);
+    const bus = ctx.createGain();
+    const undo = ctx.createGain();
+    undo.gain.value = undoMakeup(params.threshold, params.ratio);
+    bus.connect(compressor(ctx, params)).connect(undo);
+    bus.connect(merger, 0, 0);
+    undo.connect(merger, 0, 1);
+    kWeighted(ctx, bus).connect(merger, 0, 2);
+    kWeighted(ctx, undo).connect(merger, 0, 3);
+    for (let s = 0; s < 32; s++) playDrumStep(ctx, bus, s % 16, LEAD + s * STEP, STEP);
+    const buffer = await ctx.startRendering();
+    const [dry, wet, dryK, wetK] = [0, 1, 2, 3].map((c) => buffer.getChannelData(c));
+    const from = Math.round((LEAD + BAR) * RATE);
+    const to = from + Math.round(BAR * RATE);
+    let peakDry = 0;
+    let peakWet = 0;
+    let powDry = 0;
+    let powWet = 0;
+    for (let i = from; i < to; i++) {
+        peakDry = Math.max(peakDry, Math.abs(dry[i]));
+        peakWet = Math.max(peakWet, Math.abs(wet[i]));
+        powDry += dryK[i] * dryK[i];
+        powWet += wetK[i] * wetK[i];
+    }
+    const wanted = powWet > 0 ? Math.sqrt(powDry / powWet) : 1;
+    const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * peakDry) / peakWet : MATCH_MAX);
+    return { params, match, short: 20 * Math.log10(wanted / match) };
+}
 
 /**
  * Drum loop through a compressor. The compressed path is level-matched
- * to the dry path, so switching compares shape, not loudness.
+ * to the dry path, so switching compares shape, not loudness. A setting
+ * goes live together with its matching gain, once it has been measured.
  */
 export function CompressorDemo() {
     const [mode, setMode] = useState<Mode>('on');
@@ -65,10 +147,9 @@ export function CompressorDemo() {
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
     const [reduction, setReduction] = useState(0);
-    /** dB the compressed path still sits under the dry one when matching needs more than it may give. */
-    const [short, setShort] = useState(0);
-    const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
-    const params = useRef({ threshold, ratio });
+    const analysis = useAnalysis(`${threshold}|${ratio}|${attack}|${release}`, () => analyseComp({ threshold, ratio, attack, release }));
+    const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
+    const modeRef = useRef(mode);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const bus = ctx.createGain();
@@ -76,73 +157,39 @@ export function CompressorDemo() {
         master.connect(out);
         const dry = ctx.createGain();
         const wet = ctx.createGain();
-        const comp = ctx.createDynamicsCompressor();
-        comp.knee.value = 2;
-        comp.threshold.value = threshold;
-        comp.ratio.value = ratio;
-        comp.attack.value = attack / 1000;
-        comp.release.value = release / 1000;
+        const comp = compressor(ctx, analysis?.params ?? PRESETS.punch);
         const undo = ctx.createGain();
-        undo.gain.value = undoMakeup(threshold, ratio);
-        params.current = { threshold, ratio };
         const makeup = ctx.createGain();
-        const pre = ctx.createAnalyser();
-        const post = ctx.createAnalyser();
-        pre.fftSize = post.fftSize = 2048;
-        bus.connect(pre);
         bus.connect(dry).connect(master);
-        bus.connect(comp).connect(undo);
-        undo.connect(post);
-        undo.connect(makeup).connect(wet).connect(master);
-        dry.gain.value = mode === 'off' ? 1 : 0;
-        wet.gain.value = mode === 'on' ? 1 : 0;
-        nodes.current = { comp, undo, dry, wet, ctx };
-
-        const seq = sequence(ctx, 92, 16, (step, time, dur) => playDrumStep(ctx, bus, step, time, dur));
-        const a = new Float32Array(2048);
-        const b = new Float32Array(2048);
-        let smoothPre = 0;
-        let smoothPost = 0;
-        // Readings in a row that wanted more than the cap: only a steady shortfall is reported.
-        let over = 0;
-        const match = window.setInterval(() => {
-            smoothPre = smoothPre * 0.85 + rms(pre, a) * 0.15;
-            smoothPost = smoothPost * 0.85 + rms(post, b) * 0.15;
-            if (smoothPost > 1e-4) {
-                const wanted = smoothPre / smoothPost;
-                const target = Math.min(MATCH_MAX, Math.max(MATCH_MIN, wanted));
-                makeup.gain.setTargetAtTime(target, ctx.currentTime, 0.25);
-                over = wanted > MATCH_MAX ? over + 1 : 0;
-                const missing = over >= 30 ? Math.round(20 * Math.log10(wanted / MATCH_MAX)) : 0;
-                setShort((s) => (s === missing ? s : missing));
-            }
-        }, 50);
+        bus.connect(comp).connect(undo).connect(makeup).connect(wet).connect(master);
+        dry.gain.value = modeRef.current === 'off' ? 1 : 0;
+        wet.gain.value = modeRef.current === 'on' ? 1 : 0;
+        // Silent until the setting has been measured, a moment after the page loads.
+        makeup.gain.value = 0;
+        const n = { comp, undo, makeup, dry, wet, ctx };
+        nodes.current = n;
+        if (analysis) applyComp(n, analysis, false);
+        const seq = sequence(ctx, BPM, 16, (step, time, dur) => playDrumStep(ctx, bus, step, time, dur));
         return () => {
             seq.stop();
-            window.clearInterval(match);
             nodes.current = null;
             fadeOut(ctx, master, () => bus.disconnect());
             setReduction(0);
-            setShort(0);
         };
     });
+
+    useEffect(() => {
+        const n = nodes.current;
+        if (n && analysis) applyComp(n, analysis, true);
+    }, [analysis]);
 
     useFrame(player.playing, () => {
         if (nodes.current) setReduction(-nodes.current.comp.reduction);
     });
 
-    const setParam = (name: 'threshold' | 'ratio' | 'attack' | 'release', value: number) => {
-        if (name === 'threshold' || name === 'ratio') params.current = { ...params.current, [name]: value };
-        const n = nodes.current;
-        if (!n) return;
-        const v = name === 'attack' || name === 'release' ? value / 1000 : value;
-        n.comp[name].setTargetAtTime(v, n.ctx.currentTime, 0.02);
-        // The node's own makeup gain moves with threshold and ratio; take it back out at the same rate.
-        n.undo.gain.setTargetAtTime(undoMakeup(params.current.threshold, params.current.ratio), n.ctx.currentTime, 0.02);
-    };
-
     const applyMode = (next: Mode) => {
         setMode(next);
+        modeRef.current = next;
         const n = nodes.current;
         if (!n) return;
         const t = n.ctx.currentTime;
@@ -156,12 +203,10 @@ export function CompressorDemo() {
         setRatio(p.ratio);
         setAttack(p.attack);
         setRelease(p.release);
-        setParam('threshold', p.threshold);
-        setParam('ratio', p.ratio);
-        setParam('attack', p.attack);
-        setParam('release', p.release);
         applyMode('on');
     };
+
+    const short = analysis && analysis.short >= 0.5 ? Math.round(analysis.short) : 0;
 
     return (
         <div className="space-y-6">
@@ -179,67 +224,35 @@ export function CompressorDemo() {
             </div>
             <Meter label="Gain reduction" value={reduction / 18} text={`${reduction.toFixed(1)} dB`} />
             <div className="grid gap-5 sm:grid-cols-2">
-                <Slider
-                    label="Threshold"
-                    value={threshold}
-                    min={-50}
-                    max={0}
-                    onChange={(v) => {
-                        setThreshold(v);
-                        setParam('threshold', v);
-                    }}
-                    format={(v) => `${v} dB`}
-                />
-                <Slider
-                    label="Ratio"
-                    value={ratio}
-                    min={1}
-                    max={20}
-                    step={0.5}
-                    onChange={(v) => {
-                        setRatio(v);
-                        setParam('ratio', v);
-                    }}
-                    format={(v) => `${v}:1`}
-                />
-                <Slider
-                    label="Attack"
-                    value={attack}
-                    min={0}
-                    max={100}
-                    onChange={(v) => {
-                        setAttack(v);
-                        setParam('attack', v);
-                    }}
-                    format={(v) => `${v} ms`}
-                />
-                <Slider
-                    label="Release"
-                    value={release}
-                    min={20}
-                    max={600}
-                    step={10}
-                    onChange={(v) => {
-                        setRelease(v);
-                        setParam('release', v);
-                    }}
-                    format={(v) => `${v} ms`}
-                />
+                <Slider label="Threshold" value={threshold} min={-40} max={0} onChange={setThreshold} format={(v) => `${v} dB`} />
+                <Slider label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} format={(v) => `${v}:1`} />
+                <Slider label="Attack" value={attack} min={0} max={100} onChange={setAttack} format={(v) => `${v} ms`} />
+                <Slider label="Release" value={release} min={20} max={600} step={10} onChange={setRelease} format={(v) => `${v} ms`} />
             </div>
-            <p className="text-sm leading-6 text-white/60">
-                Try{' '}
-                <button type="button" className="vgp-link text-white" onClick={() => applyPreset('punch')}>
-                    slow attack
-                </button>{' '}
-                to let the snare crack through, then{' '}
-                <button type="button" className="vgp-link text-white" onClick={() => applyPreset('flat')}>
-                    fast attack
-                </button>{' '}
-                to flatten it.{' '}
+            <Actions
+                label="Presets"
+                actions={[
+                    { label: 'Slow attack', onClick: () => applyPreset('punch') },
+                    { label: 'Fast attack', onClick: () => applyPreset('flat') },
+                ]}
+                hint="A slow attack lets the snare crack through. A fast one flattens it."
+            />
+            <p className="text-sm leading-6 text-white/60" aria-live="polite">
                 {short > 0
-                    ? `Matching tops out at ${MATCH_MAX_DB} dB, so at this setting the compressed loop plays about ${short} dB quieter than the bypass.`
+                    ? `At this setting the compressed loop plays about ${short} dB quieter than the bypass. Matching it fully would push its peaks past the demo's safe ceiling.`
                     : 'Both paths play at the same loudness.'}
             </p>
         </div>
     );
+}
+
+function applyComp(n: { comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; ctx: AudioContext }, a: CompAnalysis, smooth: boolean) {
+    const t = n.ctx.currentTime;
+    const set = (param: AudioParam, value: number) => (smooth ? param.setTargetAtTime(value, t, 0.01) : param.setValueAtTime(value, t));
+    set(n.comp.threshold, a.params.threshold);
+    set(n.comp.ratio, a.params.ratio);
+    set(n.comp.attack, a.params.attack / 1000);
+    set(n.comp.release, a.params.release / 1000);
+    set(n.undo.gain, undoMakeup(a.params.threshold, a.params.ratio));
+    set(n.makeup.gain, a.match);
 }

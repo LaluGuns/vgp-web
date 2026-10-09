@@ -21,6 +21,7 @@ import {
     type Anchor,
     type Dialect,
     type DialectProp,
+    type LegendItem,
     type Placed,
 } from './svg';
 
@@ -182,10 +183,10 @@ function SignalField({ d, x, y, w, h, mid, vy, unipolar }: { d: Dialect; x: numb
 }
 
 /** Where the labels of a row's marks go: under the plot, centred on their line, in a second row when two would touch. */
-function signalMarkLabels(row: SignalRow, w: number): Placed[] {
+function signalMarkLabels(row: SignalRow, pw: number, w: number): Placed[] {
     const pad = 6;
     return placeInRows(
-        (row.marks ?? []).map((mark) => ({ x: pad + mark.t * (w - pad * 2), width: textWidth(mark.label), prefer: ['middle', 'start', 'end'] as Anchor[] })),
+        (row.marks ?? []).map((mark) => ({ x: pad + mark.t * (pw - pad * 2), width: textWidth(mark.label), prefer: ['middle', 'start', 'end'] as Anchor[] })),
         0,
         w,
         { offset: 4 },
@@ -194,96 +195,281 @@ function signalMarkLabels(row: SignalRow, w: number): Placed[] {
 
 const MARK_ROW = 15;
 
-function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; y: number; w: number; h: number; delay: number; d: Dialect }) {
-    const pad = 6;
-    const markLabels = signalMarkLabels(row, w);
-    const mid = row.unipolar ? y + h - 4 : y + h / 2;
-    const half = row.unipolar ? h - 10 : h / 2 - 5;
-    const tx = (t: number) => x + pad + t * (w - pad * 2);
-    const vy = (v: number) => mid - clamp(v, -1.08, 1.08) * half;
-    const steps = Math.round(w * 1.5);
-    // Waveforms are dense, so their lines are a touch lighter than a curve's.
-    const traceW = d.line * 0.9;
+type Pt = [number, number];
 
-    const paths = row.traces.map((trace) => {
-        const fn = traceFn(trace);
-        if (trace.kind === 'hits' && trace.outline) {
-            const top: [number, number][] = [];
-            for (let i = 0; i <= steps; i++) top.push([tx(i / steps), vy(fn(i / steps))]);
-            if (row.unipolar) return { trace, lines: [linePath(top)], area: `${linePath(top)}L${tx(1)},${mid}L${tx(0)},${mid}Z` };
-            // Top and mirrored bottom edge as two paths, so both draw left to right together.
-            const bottom = top.map(([px, py]) => [px, mid + (mid - py)] as [number, number]);
-            return {
-                trace,
-                lines: [linePath(top), linePath(bottom)],
-                area: `${linePath(top)}L${linePath([...bottom].reverse()).slice(1)}Z`,
-            };
-        }
-        const pts: [number, number][] = [];
-        if (trace.kind === 'envelope') {
-            for (const [t, v] of trace.points) pts.push([tx(t), vy(v)]);
-        } else {
-            for (let i = 0; i <= steps; i++) pts.push([tx(i / steps), vy(fn(i / steps))]);
-        }
-        return { trace, lines: [linePath(pts)], area: undefined as string | undefined };
+/** A row's drawing in plot coordinates: x from 0 to the plot's width, y from 0 at its top. */
+interface RowShape {
+    mid: number;
+    tx: (t: number) => number;
+    vy: (v: number) => number;
+    traces: { trace: SignalTrace; lines: Pt[][]; area?: Pt[] }[];
+    sampled: { t: number; v: number }[];
+    /** The slower wave that fits the same samples. */
+    alias: Pt[] | null;
+    /** Each sample held until the next. */
+    hold: Pt[] | null;
+}
+
+function rowShape(row: SignalRow, pw: number, h: number): RowShape {
+    const pad = 6;
+    const mid = row.unipolar ? h - 4 : h / 2;
+    const half = row.unipolar ? h - 10 : h / 2 - 5;
+    const tx = (t: number) => pad + t * (pw - pad * 2);
+    const vy = (v: number) => mid - clamp(v, -1.08, 1.08) * half;
+    const steps = Math.round(pw * 1.5);
+    const sweep = (fn: (t: number) => number) => Array.from({ length: steps + 1 }, (_, i) => [tx(i / steps), vy(fn(i / steps))] as Pt);
+
+    const traces = row.traces.map((trace) => {
+        if (trace.kind === 'envelope') return { trace, lines: [trace.points.map(([t, v]) => [tx(t), vy(v)] as Pt)] };
+        const top = sweep(traceFn(trace));
+        if (trace.kind !== 'hits' || !trace.outline) return { trace, lines: [top] };
+        if (row.unipolar) return { trace, lines: [top], area: [...top, [tx(1), mid], [tx(0), mid]] as Pt[] };
+        // Top and mirrored bottom edge as two lines, so both draw left to right together.
+        const bottom = top.map(([px, py]) => [px, mid + (mid - py)] as Pt);
+        return { trace, lines: [top, bottom], area: [...top, ...[...bottom].reverse()] };
     });
 
     const samples = row.samples;
     const sampled = samples
         ? (() => {
               const fn = traceFn(row.traces[samples.trace ?? 0]);
-              return Array.from({ length: samples.count + 1 }, (_, k) => {
-                  const t = k / samples.count;
-                  return { t, v: fn(t) };
-              });
+              return Array.from({ length: samples.count + 1 }, (_, k) => ({ t: k / samples.count, v: fn(k / samples.count) }));
           })()
         : [];
 
-    // The slower wave that fits the same samples: cycles folded around the sample count.
-    const aliasPath = (() => {
+    const alias = (() => {
         if (!samples?.alias) return null;
         const source = row.traces[samples.trace ?? 0];
         if (source.kind !== 'sine') return null;
         const folded = source.cycles - samples.count * Math.round(source.cycles / samples.count);
-        const fn = traceFn({ ...source, cycles: folded, label: undefined });
-        const pts: [number, number][] = [];
-        for (let i = 0; i <= steps; i++) pts.push([tx(i / steps), vy(fn(i / steps))]);
-        return linePath(pts);
+        return sweep(traceFn({ ...source, cycles: folded, label: undefined }));
     })();
 
+    const hold = samples?.hold
+        ? sampled.flatMap(({ t, v }, k) => [[tx(t), vy(v)] as Pt, [tx(k < sampled.length - 1 ? sampled[k + 1].t : 1), vy(v)] as Pt])
+        : null;
+
+    return { mid, tx, vy, traces, sampled, alias, hold };
+}
+
+// ── Line labels: beside their line, never over a trace ──
+
+type Box = { x0: number; x1: number; y0: number; y1: number };
+type Seg = [number, number, number, number];
+
+/** A label's glyph box around its baseline, at FS. */
+const ASCENT = 9.5;
+const DESCENT = 3;
+/** Clear space round a line label: no trace comes nearer, so a label never touches the data. */
+const CLEAR = 3;
+const COLUMN = 8;
+
+/** Does the segment pass through the box? (Liang-Barsky) */
+function segmentHits([ax, ay, bx, by]: Seg, b: Box): boolean {
+    const dx = bx - ax;
+    const dy = by - ay;
+    const p = [-dx, dx, -dy, dy];
+    const q = [ax - b.x0, b.x1 - ax, ay - b.y0, b.y1 - ay];
+    let t0 = 0;
+    let t1 = 1;
+    for (let i = 0; i < 4; i++) {
+        if (p[i] === 0) {
+            if (q[i] < 0) return false;
+            continue;
+        }
+        const r = q[i] / p[i];
+        if (p[i] < 0) {
+            if (r > t1) return false;
+            t0 = Math.max(t0, r);
+        } else {
+            if (r < t0) return false;
+            t1 = Math.min(t1, r);
+        }
+    }
+    return t0 <= t1;
+}
+
+function insidePolygon([x, y]: Pt, poly: Pt[]): boolean {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const [xi, yi] = poly[i];
+        const [xj, yj] = poly[j];
+        if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+}
+
+/** Everything drawn as data in a row (traces, shaded areas, samples, marks, the baseline), indexed by column for quick box tests. */
+function dataObstacles(row: SignalRow, shape: RowShape, pw: number, h: number) {
+    const columns = new Map<number, Seg[]>();
+    const add = (s: Seg) => {
+        for (let c = Math.floor(Math.min(s[0], s[2]) / COLUMN); c <= Math.floor(Math.max(s[0], s[2]) / COLUMN); c++) {
+            const list = columns.get(c);
+            if (list) list.push(s);
+            else columns.set(c, [s]);
+        }
+    };
+    const addLine = (pts: Pt[]) => {
+        for (let i = 1; i < pts.length; i++) add([pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]]);
+    };
+    const areas: Pt[][] = [];
+    for (const { lines, area } of shape.traces) {
+        lines.forEach(addLine);
+        if (area) {
+            addLine([...area, area[0]]);
+            areas.push(area);
+        }
+    }
+    if (shape.alias) addLine(shape.alias);
+    if (shape.hold) addLine(shape.hold);
+    for (const { t, v } of shape.sampled) {
+        const [x, y] = [shape.tx(t), shape.vy(v)];
+        add([x, shape.mid, x, y]);
+        addLine([[x - 4, y - 4], [x + 4, y - 4], [x + 4, y + 4], [x - 4, y + 4], [x - 4, y - 4]]);
+    }
+    for (const mark of row.marks ?? []) add([shape.tx(mark.t), 0, shape.tx(mark.t), h]);
+    // The zero line, or the floor of a level plot: values are read from it.
+    add([0, shape.mid, pw, shape.mid]);
+    return (b: Box) => {
+        for (let c = Math.floor(b.x0 / COLUMN); c <= Math.floor(b.x1 / COLUMN); c++) {
+            if (columns.get(c)?.some((s) => segmentHits(s, b))) return true;
+        }
+        const centre: Pt = [(b.x0 + b.x1) / 2, (b.y0 + b.y1) / 2];
+        return areas.some((area) => insidePolygon(centre, area));
+    };
+}
+
+interface LineLabel {
+    text: string;
+    x: number;
+    /** Baseline, in plot coordinates. */
+    y: number;
+    anchor: Anchor;
+}
+
+const lineText = (line: { label: string; short?: string }, narrow: boolean) => (narrow && line.short) || line.label;
+
+/** One line per label: a plus and minus pair (full scale, a clip level) is labelled once, on its upper line first. */
+function labelGroups(row: SignalRow) {
+    const lines = row.lines ?? [];
+    return Array.from(new Set(lines.map((l) => l.label))).map((label) => lines.filter((l) => l.label === label).sort((a, b) => b.y - a.y));
+}
+
+/**
+ * Labels for a row's lines, each just above or below its line where no
+ * trace, shaded area, sample or mark comes within CLEAR of it: at the
+ * line's right end, else its left end, else the clear spot nearest the
+ * right. Null when any label has no such spot; the row then names its
+ * line in its legend, or labels its lines past their ends (endLabels).
+ */
+function placeLineLabels(row: SignalRow, shape: RowShape, pw: number, h: number, narrow: boolean): LineLabel[] | null {
+    const lines = row.lines ?? [];
+    const blocked = dataObstacles(row, shape, pw, h);
+    const taken: Box[] = [];
+    const out: LineLabel[] = [];
+    for (const members of labelGroups(row)) {
+        const text = lineText(members[0], narrow);
+        const tw = textWidth(text);
+        // The ends stay clear of the registration corners.
+        const spots: { x0: number; x: number; anchor: Anchor }[] = [
+            { x0: pw - 7 - tw, x: pw - 7, anchor: 'end' },
+            { x0: 7, x: 7, anchor: 'start' },
+        ];
+        for (let x0 = pw - 10 - tw; x0 > 7; x0 -= 3) spots.push({ x0, x: x0 + tw / 2, anchor: 'middle' });
+        let found: (LineLabel & { box: Box }) | null = null;
+        search: for (const line of members) {
+            const ly = shape.vy(line.y);
+            const others = lines.filter((l) => l !== line).map((l) => shape.vy(l.y));
+            for (const spot of spots) {
+                for (const base of [ly - 5, ly + 13]) {
+                    const box = { x0: spot.x0, x1: spot.x0 + tw, y0: base - ASCENT, y1: base + DESCENT };
+                    if (box.y0 < -3 || box.y1 > h + 3) continue;
+                    if (others.some((oy) => oy > box.y0 - 1 && oy < box.y1 + 1)) continue;
+                    if (taken.some((t) => t.x0 < box.x1 + 4 && box.x0 < t.x1 + 4 && t.y0 < box.y1 + 2 && box.y0 < t.y1 + 2)) continue;
+                    if (blocked({ x0: box.x0 - CLEAR, x1: box.x1 + CLEAR, y0: box.y0 - CLEAR, y1: box.y1 + CLEAR })) continue;
+                    found = { text, x: spot.x, y: base, anchor: spot.anchor, box };
+                    break search;
+                }
+            }
+        }
+        if (!found) return null;
+        taken.push(found.box);
+        out.push(found);
+    }
+    return out;
+}
+
+/** Labels past the ends of a row's lines, in the margin right of the plot, kept a line apart. */
+function endLabels(row: SignalRow, shape: RowShape, pw: number, h: number, narrow: boolean): LineLabel[] {
+    const labels = labelGroups(row)
+        .map((members) => ({ text: lineText(members[0], narrow), x: pw + 6, y: shape.vy(members[0].y) + 4, anchor: 'start' as Anchor }))
+        .sort((a, b) => a.y - b.y);
+    labels.forEach((label, i) => {
+        if (i > 0) label.y = Math.max(label.y, labels[i - 1].y + 13);
+    });
+    const over = labels.length ? labels[labels.length - 1].y - (h + 3) : 0;
+    if (over > 0) labels.forEach((label) => (label.y -= over));
+    return labels;
+}
+
+function SignalPlot({
+    row,
+    shape,
+    labels,
+    y,
+    pw,
+    w,
+    h,
+    delay,
+    d,
+}: {
+    row: SignalRow;
+    shape: RowShape;
+    labels: LineLabel[];
+    y: number;
+    pw: number;
+    w: number;
+    h: number;
+    delay: number;
+    d: Dialect;
+}) {
+    const { mid, tx, vy } = shape;
+    const markLabels = signalMarkLabels(row, pw, w);
+    // Waveforms are dense, so their lines are a touch lighter than a curve's.
+    const traceW = d.line * 0.9;
     return (
-        <g>
-            <SignalField d={d} x={x} y={y} w={w} h={h} mid={mid} vy={vy} unipolar={row.unipolar} />
-            {row.lines?.map((line) => (
-                <RefLine key={line.label} d={d} x1={x} x2={x + w} y1={vy(line.y)} y2={vy(line.y)} />
+        <g transform={`translate(0 ${y})`}>
+            <SignalField d={d} x={0} y={0} w={pw} h={h} mid={mid} vy={vy} unipolar={row.unipolar} />
+            {row.lines?.map((line, li) => (
+                <RefLine key={li} d={d} x1={0} x2={pw} y1={vy(line.y)} y2={vy(line.y)} />
             ))}
             {row.marks?.map((mark, mi) => {
                 const mx = tx(mark.t);
                 const place = markLabels[mi];
                 return (
                     <g key={mark.label}>
-                        <RefLine d={d} x1={mx} x2={mx} y1={y} y2={y + h + 4 + place.row * MARK_ROW} />
-                        <Label x={x + place.tx} y={y + h + 18 + place.row * MARK_ROW} anchor={place.anchor} fill={C.text}>
+                        <RefLine d={d} x1={mx} x2={mx} y1={0} y2={h + 4 + place.row * MARK_ROW} />
+                        <Label x={place.tx} y={h + 18 + place.row * MARK_ROW} anchor={place.anchor} fill={C.text}>
                             {mark.label}
                         </Label>
                     </g>
                 );
             })}
-            {paths.map(({ trace, lines, area }, i) => {
+            {shape.traces.map(({ trace, lines, area }, i) => {
                 // Grey traces are context and stay put. A solid accent trace draws along its length; a dashed one fades.
                 const motion = trace.muted ? {} : draw(trace.dashed ? 'fade' : 'line', delay + i * 80);
                 return (
                     <g key={i}>
                         {area && (trace.muted || d.fillUnder) ? (
                             // The area fades in once its outline has drawn, never ahead of it.
-                            <path d={area} {...(trace.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', delay + i * 80 + 760) })} />
+                            <path d={`${linePath(area)}Z`} {...(trace.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', delay + i * 80 + 760) })} />
                         ) : null}
-                        {lines.map((path, k) => (
+                        {lines.map((pts, k) => (
                             <path
                                 key={k}
-                                d={path}
+                                d={linePath(pts)}
                                 fill="none"
-                                stroke={trace.muted ? C.faint : C.accent}
+                                stroke={trace.muted ? C.dataGrey : C.accent}
                                 strokeWidth={trace.muted ? 1.4 : traceW}
                                 strokeDasharray={trace.dashed ? d.refDash : undefined}
                                 strokeLinecap={d.cap}
@@ -294,43 +480,22 @@ function SignalPlot({ row, x, y, w, h, delay, d }: { row: SignalRow; x: number; 
                     </g>
                 );
             })}
-            {aliasPath ? (
-                <path d={aliasPath} fill="none" stroke={C.accent} strokeWidth={traceW} strokeDasharray={d.refDash} strokeLinecap={d.cap} {...draw('fade', delay + 300)} />
+            {shape.alias ? (
+                <path d={linePath(shape.alias)} fill="none" stroke={C.accent} strokeWidth={traceW} strokeDasharray={d.refDash} strokeLinecap={d.cap} {...draw('fade', delay + 300)} />
             ) : null}
-            {samples?.hold ? (
-                <path
-                    d={sampled
-                        .map(({ t, v }, k) => {
-                            const next = k < sampled.length - 1 ? sampled[k + 1].t : 1;
-                            return `${k === 0 ? 'M' : 'L'}${tx(t).toFixed(1)},${vy(v).toFixed(1)}L${tx(next).toFixed(1)},${vy(v).toFixed(1)}`;
-                        })
-                        .join('')}
-                    fill="none"
-                    stroke={C.strong}
-                    strokeWidth={1.6}
-                    strokeLinejoin={d.join}
-                />
-            ) : null}
-            {sampled.map(({ t, v }, k) => (
+            {shape.hold ? <path d={linePath(shape.hold)} fill="none" stroke={C.strong} strokeWidth={1.6} strokeLinejoin={d.join} /> : null}
+            {shape.sampled.map(({ t, v }, k) => (
                 <g key={k}>
                     <line x1={tx(t)} x2={tx(t)} y1={mid} y2={vy(v)} stroke={C.faint} />
                     <Point d={d} x={tx(t)} y={vy(v)} r={3} tone="ink" />
                 </g>
             ))}
-            {/* Line labels sit on top of the traces, on a backing plate, so a waveform never hides them. */}
-            {row.lines?.map((line) => {
-                const ly = vy(line.y);
-                const above = ly - 17 > y;
-                const ty = above ? ly - 5 : ly + 14;
-                return (
-                    <g key={`label-${line.label}`}>
-                        <rect x={x + w - textWidth(line.label) - 12} y={ty - 12} width={textWidth(line.label) + 10} height={15} rx={2} fill={C.surface} opacity={0.9} />
-                        <Label x={x + w - 4} y={ty} anchor="end" fill={C.text}>
-                            {line.label}
-                        </Label>
-                    </g>
-                );
-            })}
+            {/* Line labels sit where no trace comes near them, so they never hide the data; no plate needed. */}
+            {labels.map((label) => (
+                <Label key={label.text} x={label.x} y={label.y} anchor={label.anchor} fill={C.text}>
+                    {label.text}
+                </Label>
+            ))}
         </g>
     );
 }
@@ -339,21 +504,54 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const plotH = narrow ? 92 : 112;
+    const heightOf = (row: SignalRow) => (row.unipolar ? plotH * 0.85 : plotH);
     const labelH = 22;
     const gap = 14;
+
+    // Line labels go beside their lines where the traces leave room. A row with one line label that finds
+    // no room names the line in its legend instead, a dashed sample like the line itself, when nothing else
+    // there is a grey dash. Otherwise the row labels its lines past their ends, in a margin right of the
+    // plot; every row then gives up the same margin, so the rows keep one time axis.
+    const inLegend = new Set<number>();
+    const ends = new Set<number>();
+    let margin = 0;
+    let shapes: RowShape[] = [];
+    let labels: LineLabel[][] = [];
+    for (let pass = 0; pass < 4; pass++) {
+        const pw = w - margin;
+        shapes = spec.rows.map((row) => rowShape(row, pw, heightOf(row)));
+        labels = spec.rows.map((row, i) => {
+            inLegend.delete(i);
+            if (!row.lines?.length) return [];
+            const inside = ends.has(i) ? null : placeLineLabels(row, shapes[i], pw, heightOf(row), narrow);
+            if (inside) return inside;
+            if (!ends.has(i) && labelGroups(row).length === 1 && !row.traces.some((t) => t.label && t.dashed && t.muted)) {
+                inLegend.add(i);
+                return [];
+            }
+            ends.add(i);
+            return endLabels(row, shapes[i], pw, heightOf(row), narrow);
+        });
+        const need = ends.size ? Math.max(...[...ends].flatMap((i) => spec.rows[i].lines!.map((l) => textWidth(lineText(l, narrow))))) + 10 : 0;
+        if (need <= margin) break;
+        margin = need;
+    }
+    const pw = w - margin;
+
     const rows: { row: SignalRow; top: number; plotY: number; leg: ReturnType<typeof legend> }[] = [];
     let y = 0;
     for (const row of spec.rows) {
-        const named = row.traces
+        const named: LegendItem[] = row.traces
             .filter((t) => t.label)
             .map((t) => ({ label: t.label!, dashed: t.dashed, muted: t.muted }));
+        if (inLegend.has(rows.length)) named.push({ label: row.lines![0].label, dashed: true, stroke: C.soft, width: 1.2 });
         const top = y;
         const hasLabel = Boolean(row.label);
         const leg = legend(named, 0, top + (hasLabel ? labelH + 14 : 14), w, d);
         const plotY = top + (hasLabel ? labelH : 0) + leg.height + (leg.height ? 8 : 0);
         rows.push({ row, top, plotY, leg });
-        const markRows = row.marks?.length ? Math.max(...signalMarkLabels(row, w).map((p) => p.row)) + 1 : 0;
-        y = plotY + (row.unipolar ? plotH * 0.85 : plotH) + (markRows ? 24 + (markRows - 1) * MARK_ROW : 0) + gap;
+        const markRows = row.marks?.length ? Math.max(...signalMarkLabels(row, pw, w).map((p) => p.row)) + 1 : 0;
+        y = plotY + heightOf(row) + (markRows ? 24 + (markRows - 1) * MARK_ROW : 0) + gap;
     }
     const ledger = d.name === 'business';
     const h = y - gap + (ledger ? 10 : 0);
@@ -368,7 +566,7 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
                         </Label>
                     ) : null}
                     {leg.node}
-                    <SignalPlot row={row} x={0} y={plotY} w={w} h={row.unipolar ? plotH * 0.85 : plotH} delay={120 + i * 100} d={d} />
+                    <SignalPlot row={row} shape={shapes[i]} labels={labels[i]} y={plotY} pw={pw} w={w} h={heightOf(row)} delay={120 + i * 100} d={d} />
                 </g>
             ))}
             <ClosingRule d={d} x1={0} x2={w} y={h - 4} />
@@ -511,23 +709,31 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
 
     const clipId = `spectrum-clip-${++clipCounter}`;
     const curveNode = (curve: SpectrumCurve, i: number) => {
-        const stroke = curve.muted ? C.faint : C.accent;
+        const stroke = curve.muted ? C.dataGrey : C.accent;
         const dash = curve.dashed ? d.refDash : undefined;
         if (curve.kind === 'harmonics') {
             const roll = curve.rolloff ?? 1;
             const level = curve.level ?? 0.95;
+            const lines = Array.from({ length: curve.count }, (_, n) => {
+                const k = curve.odd ? 2 * n + 1 : n + 1;
+                const f = curve.f0 * k;
+                return f > hi ? null : { n, x: fx(f), y: ly(level / k ** roll) };
+            }).filter((line) => line !== null);
+            // Accent harmonics rise from the floor in four groups, lowest first: a handful of animations, not one
+            // per harmonic, so a dense spectrum still draws in smoothly. Flat ends in every dialect, so a harmonic
+            // stops exactly at its level and never reaches below the floor.
+            const quarters = [0, 1, 2, 3].map((q) => lines.filter((line) => Math.min(3, Math.floor((4 * (line.x - left)) / (right - left))) === q));
             return (
                 <g key={i}>
-                    {Array.from({ length: curve.count }, (_, n) => {
-                        const k = curve.odd ? 2 * n + 1 : n + 1;
-                        const f = curve.f0 * k;
-                        if (f > hi) return null;
-                        const v = level / k ** roll;
-                        // Accent harmonics rise from the floor, lowest first. Flat ends in every dialect, so a
-                        // harmonic stops exactly at its level and never reaches below the floor.
-                        const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'rise', 120 + (300 * (fx(f) - left)) / (right - left));
-                        return <line key={n} x1={fx(f)} x2={fx(f)} y1={bottom} y2={ly(v)} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} {...motion} />;
-                    })}
+                    {quarters.map((group, q) =>
+                        group.length ? (
+                            <g key={q} {...(curve.muted ? {} : draw(curve.dashed ? 'fade' : 'rise', 120 + q * 90))}>
+                                {group.map((line) => (
+                                    <line key={line.n} x1={line.x} x2={line.x} y1={bottom} y2={line.y} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} />
+                                ))}
+                            </g>
+                        ) : null,
+                    )}
                 </g>
             );
         }
@@ -550,7 +756,8 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         // A comb's notches get narrower than a pixel at high frequencies, so sample it on a linear grid fine enough to reach every notch.
         const combSteps = curve.kind === 'comb' ? Math.max(N, Math.ceil(Math.min(20000, hi * (curve.delayMs / 1000) * 24))) : 0;
         const sampleAt = combSteps ? Array.from({ length: combSteps + 1 }, (_, i) => lo + ((hi - lo) * i) / combSteps) : freqs;
-        const pts = sampleAt.map((f) => [fx(f), gainMode ? gy(value(f)) : ly(value(f))] as [number, number]);
+        // A curve that leaves the plot stops just past its edge, under the clip, so nothing of it reaches the labels round the plot.
+        const pts = sampleAt.map((f) => [fx(f), clamp(gainMode ? gy(value(f)) : ly(value(f)), top - 3, bottom + 3)] as [number, number]);
         const path = linePath(pts);
         const fill = curve.kind === 'hump' && !curve.dashed && (curve.muted || d.fillUnder);
         // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed one fades.
@@ -665,7 +872,8 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
     const narrow = w < 480;
     const size = narrow ? w - 56 : 300;
     const ox = 52;
-    const oy = 12;
+    // Room above the plot for the threshold's label, so it never sits on the grid or the curve.
+    const oy = 20;
     const db = spec.domain === 'db';
     const [lo, hi] = db ? [-48, 0] : [-1, 1];
     const px = (v: number) => ox + ((v - lo) / (hi - lo)) * size;
@@ -747,7 +955,7 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
                         key={i}
                         d={linePath(pts)}
                         fill="none"
-                        stroke={linear ? C.faint : C.accent}
+                        stroke={linear ? C.dataGrey : C.accent}
                         strokeWidth={linear ? 1.4 : d.line}
                         strokeDasharray={linear || c.dashed ? d.refDash : undefined}
                         strokeLinecap={d.cap}
@@ -761,8 +969,8 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
                 .slice(0, 1)
                 .map((c) => (
                     <g key="threshold">
-                        <RefLine d={d} x1={px(c.threshold!)} x2={px(c.threshold!)} y1={oy} y2={oy + size} />
-                        <Label x={px(c.threshold!) - 5} y={oy + 14} anchor="end" fill={C.text}>
+                        <RefLine d={d} x1={px(c.threshold!)} x2={px(c.threshold!)} y1={oy - 4} y2={oy + size} />
+                        <Label x={clamp(px(c.threshold!), ox + textWidth('Threshold') / 2, ox + size - textWidth('Threshold') / 2)} y={oy - 8} anchor="middle" fill={C.text}>
                             Threshold
                         </Label>
                     </g>

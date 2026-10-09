@@ -95,7 +95,7 @@ export default function LearnHubPage() {
                                 <li key={path.category.slug} className="border-b border-white/10">
                                     <Link
                                         href={`/blog/category/${path.category.slug}`}
-                                        className="group flex min-h-11 items-baseline justify-between gap-4 py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        className="group flex min-h-11 items-baseline justify-between gap-4 py-4 vgp-focus"
                                     >
                                         <span className="text-lg font-semibold text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                                             {path.category.name}
@@ -146,7 +146,7 @@ export default function LearnHubPage() {
                                 <li key={article.slug}>
                                     <Link
                                         href={`/blog/${article.slug}`}
-                                        className="group block py-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        className="group block py-6 vgp-focus"
                                     >
                                         <span className="text-xs text-white/50">
                                             {categoryName(article.category)} · {article.readingTime} min read

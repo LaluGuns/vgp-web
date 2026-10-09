@@ -1,19 +1,18 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
-import { claim, getEngine, release, setVolume, storedVolume, type Engine } from './engine';
+import { claim, getEngine, release, warmEngine, type Engine } from './engine';
+import { DialectContext, LevelContext, whenIdle } from './shell';
+
+export { whenIdle } from './shell';
 
 /**
- * The lesson group's dialect (lib/blog/dialects.ts), provided by DemoSlot.
- * A demo's displays (plots, meters, step grids) draw in it, so a demo looks
- * like the figures around it; its controls stay the same everywhere.
- * Outside a lesson it is technical.
+ * The lesson group's dialect (DemoMount provides it). A demo's displays
+ * draw in it; outside a lesson it is technical.
  */
-export const DialectContext = createContext<Dialect>(DIALECTS.technical);
-
-export const useDialect = () => useContext(DialectContext);
+export const useDialect = (): Dialect => useContext(DialectContext) ?? DIALECTS.technical;
 
 /** A dialect's accent at an opacity, for canvas fills. */
 export function accentAlpha(d: Dialect, opacity: number): string {
@@ -26,16 +25,6 @@ export const ruleDash = (d: Dialect): number[] => (d.rule.dash ? [0.01, 4] : [])
 
 /** Rounded ends for the dialects that draw round line ends, square for the others. */
 const endClass = (d: Dialect) => (d.cap === 'round' ? 'rounded-full' : '');
-
-/** Runs `fn` when the browser is idle, or after `timeout` ms at the latest. Returns a cancel function. */
-export function whenIdle(fn: () => void, timeout = 2000): () => void {
-    if (typeof window.requestIdleCallback === 'function') {
-        const id = window.requestIdleCallback(() => fn(), { timeout });
-        return () => window.cancelIdleCallback(id);
-    }
-    const id = window.setTimeout(fn, 300);
-    return () => window.clearTimeout(id);
-}
 
 /** Runs `fn` in a new task once the next frame has been painted. */
 function afterPaint(fn: () => void) {
@@ -50,6 +39,10 @@ function afterPaint(fn: () => void) {
  * The audio context is created or resumed inside the tap, as browsers
  * require, but the graph is built in the next task, after the button has
  * repainted, so the tap itself stays short on a slow phone.
+ *
+ * `start` gets an engine whose `out` carries the demo's playback trim
+ * (`level` in lib/blog/demos.ts), so every demo sits at the house loudness.
+ * `engine()` returns the same, for sounds played outside `start` (a tap).
  */
 export function usePlayer(start: (engine: Engine) => () => void) {
     const [playing, setPlaying] = useState(false);
@@ -58,13 +51,25 @@ export function usePlayer(start: (engine: Engine) => () => void) {
     useEffect(() => {
         startRef.current = start;
     });
+    const level = useContext(LevelContext);
+    const trim = useRef<GainNode | null>(null);
+
+    const engine = useCallback((): Engine => {
+        const e = getEngine();
+        if (trim.current?.context !== e.ctx) {
+            trim.current = e.ctx.createGain();
+            trim.current.connect(e.out);
+        }
+        trim.current.gain.value = 10 ** (level / 20);
+        return { ctx: e.ctx, out: trim.current };
+    }, [level]);
 
     const stop = useCallback(() => {
         stopRef.current?.();
     }, []);
 
     const play = useCallback(() => {
-        const engine = getEngine();
+        const out = engine();
         let halt: (() => void) | null = null;
         let stopped = false;
         const stopThis = () => {
@@ -79,9 +84,9 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         stopRef.current = stopThis;
         setPlaying(true);
         afterPaint(() => {
-            if (!stopped) halt = startRef.current(engine);
+            if (!stopped) halt = startRef.current(out);
         });
-    }, []);
+    }, [engine]);
 
     useEffect(() => {
         const onHide = () => {
@@ -94,7 +99,7 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         };
     }, []);
 
-    return { playing, play, stop, toggle: () => (stopRef.current ? stop() : play()) };
+    return { playing, play, stop, engine, toggle: () => (stopRef.current ? stop() : play()) };
 }
 
 /**
@@ -102,11 +107,21 @@ export function usePlayer(start: (engine: Engine) => () => void) {
  * carries no pressed state on top; the status next to it is announced.
  */
 export function PlayButton({ playing, onClick, label = 'Play' }: { playing: boolean; onClick: () => void; label?: string }) {
+    // The audio context is made on the press (a mouse button, a key) or as a finger lifts, a task
+    // before the click, so the click itself only starts the sound.
+    const warm = (e: PointerEvent<HTMLButtonElement>) => {
+        if ((e.type === 'pointerdown') === (e.pointerType === 'mouse')) warmEngine();
+    };
     return (
         <div className="flex items-center gap-4">
             <button
                 type="button"
                 onClick={onClick}
+                onPointerDown={warm}
+                onPointerUp={warm}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') warmEngine();
+                }}
                 data-demo-play=""
                 className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
             >
@@ -271,6 +286,22 @@ export function Answers<T extends string>({
                 {options.map((option) => (
                     <button key={option.value} type="button" aria-pressed={option.value === value} onClick={() => onChange(option.value)} className={optionClass(option.value === value)}>
                         {option.label}
+                    </button>
+                ))}
+            </div>
+        </Field>
+    );
+}
+
+/** A row of buttons that each do one thing (load a preset), styled like the choices, under a visible label. */
+export function Actions({ label, actions, hint }: { label: string; actions: { label: string; onClick: () => void }[]; hint?: ReactNode }) {
+    const labelId = useId();
+    return (
+        <Field label={label} id={labelId} hint={hint}>
+            <div role="group" aria-labelledby={labelId} className="flex flex-wrap gap-2">
+                {actions.map((action) => (
+                    <button key={action.label} type="button" onClick={action.onClick} className={optionClass(false)}>
+                        {action.label}
                     </button>
                 ))}
             </div>
@@ -531,37 +562,50 @@ function drawTrace(c: HTMLCanvasElement | null, context: Float32Array, focus: Fl
     g.stroke();
 }
 
-export function VolumeRow() {
-    const [volume, setLocal] = useState(0.5);
-    const id = useId();
+/**
+ * Runs `measure` whenever `key` changes: one render at a time, always
+ * finishing on the latest inputs. Returns the last finished result. The
+ * first measurement waits for an idle moment, so a demo that mounts while
+ * the reader scrolls toward it costs no frames.
+ */
+export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
+    const [result, setResult] = useState<R | null>(null);
+    const measureRef = useRef(measure);
+    const job = useRef({ busy: false, dirty: false, alive: true, first: true });
     useEffect(() => {
-        const frame = requestAnimationFrame(() => setLocal(storedVolume()));
-        return () => cancelAnimationFrame(frame);
-    }, []);
-    return (
-        // Without JavaScript the demo cannot play, so the volume control is hidden with it.
-        <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/10 pt-5 [@media(scripting:none)]:hidden">
-            <label htmlFor={id} className="text-sm text-white/60">
-                Demo volume
-            </label>
-            <input
-                id={id}
-                type="range"
-                min={0.05}
-                max={1}
-                step={0.05}
-                value={volume}
-                aria-valuetext={`${Math.round(volume * 100)}%`}
-                onChange={(e) => {
-                    const v = Number(e.target.value);
-                    setLocal(v);
-                    setVolume(v);
-                }}
-                className="vgp-range w-32"
-            />
-            <p className="w-full text-xs leading-5 text-white/50 sm:w-auto sm:flex-1">Start with your speakers or headphones low.</p>
-        </div>
-    );
+        measureRef.current = measure;
+    });
+    useEffect(() => {
+        const j = job.current;
+        j.alive = true;
+        j.dirty = true;
+        const run = () => {
+            if (j.busy || !j.alive) return;
+            j.busy = true;
+            void (async () => {
+                while (j.dirty && j.alive) {
+                    j.dirty = false;
+                    try {
+                        const r = await measureRef.current();
+                        if (j.alive) setResult(r);
+                    } catch {
+                        // Keep the last good result.
+                    }
+                }
+                j.busy = false;
+            })();
+        };
+        let cancel = () => {};
+        if (j.first) {
+            j.first = false;
+            cancel = whenIdle(run, 600);
+        } else run();
+        return () => {
+            j.alive = false;
+            cancel();
+        };
+    }, [key]);
+    return result;
 }
 
 /** Runs `fn` every animation frame while `active`. */

@@ -31,9 +31,9 @@ export const post016: BlogArticle = {
                 { label: 'Drums', levels: [0, 0.6, 0.7, 1] },
                 { label: 'Bass', levels: [0, 0.7, 0.7, 1] },
                 { label: 'Vocal', levels: [0, 0.8, 0.8, 1] },
-                { label: 'Pad', levels: [0, 0, 0.6, 0.7] },
-                { label: 'Guitar', levels: [0, 0, 0, 0.8] },
-                { label: 'Harmony', levels: [0, 0, 0, 0.8] },
+                { label: 'Pad', levels: [0, 0, 0.6, 0.7], focus: true },
+                { label: 'Guitar', levels: [0, 0, 0, 0.8], focus: true },
+                { label: 'Harmony', levels: [0, 0, 0, 0.8], focus: true },
             ],
         },
         count: {

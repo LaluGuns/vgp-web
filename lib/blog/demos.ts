@@ -9,6 +9,12 @@
  * up (the common phones get a range each, so little space is left over). The
  * server reserves it, so the article does not move when the controls arrive.
  * Re-measure it whenever a demo's layout or copy changes.
+ *
+ * `level` is the demo's playback trim in dB (0 if absent), on top of the
+ * engine's house level (components/blog/demos/engine.ts). It sets the demo's
+ * default setting at about -24 LUFS at 100 % volume, like the drum-loop
+ * demos, or lower where the demo's loudest setting would otherwise peak
+ * above -7 dBFS. Re-measure it whenever a demo's sound changes.
  */
 
 export const demoCatalog = {
@@ -16,11 +22,13 @@ export const demoCatalog = {
         title: 'Hear compression change the shape of a hit',
         blurb: 'A drum loop through a compressor, level-matched so you compare movement, not volume. Change the attack and listen to the snare.',
         height: [666, 642, 642, 582, 383],
+        level: -3.3,
     },
     aliasing: {
         title: 'Hear a frequency fold back down',
         blurb: 'A tone sweeps up from 500 Hz to 15 kHz. At a 16 kHz sample rate everything above 8 kHz is stored as a falling ghost tone, the same fold a saturator causes when its harmonics pass the Nyquist limit.',
         height: [540, 540, 540, 540, 424],
+        level: -1.2,
     },
     swing: {
         title: 'Hear swing move the off-beats',
@@ -51,6 +59,7 @@ export const demoCatalog = {
         title: 'Make the drop land harder',
         blurb: 'Two bars of build into two bars of drop. Remove layers or leave one beat of silence before the drop and compare how hard it hits.',
         height: [341, 269, 269, 269, 217],
+        level: 0.5,
     },
     mono: {
         title: 'Fold the mix to mono',
@@ -61,6 +70,7 @@ export const demoCatalog = {
         title: 'Hear two copies of a bass cancel',
         blurb: 'The same bass note on two layers. Delay one by a few milliseconds or flip its polarity and the low end thins out, then disappears.',
         height: [370, 350, 290, 274, 274],
+        level: -8,
     },
     reverb: {
         title: 'Push a sound forward or back with reverb',
@@ -71,36 +81,43 @@ export const demoCatalog = {
         title: 'Shape a sound with a filter',
         blurb: 'Chords and soft noise through one filter, with the spectrum drawn live. Sweep the cutoff and raise the resonance.',
         height: [516, 516, 516, 464, 318],
+        level: 1.0,
     },
     'eq-sweep': {
         title: 'Find a frequency by ear',
         blurb: 'A narrow boost you can sweep across the spectrum. Move it slowly, stop where it sounds worst, then check the number.',
         height: [376, 376, 376, 376, 290],
+        level: 1.0,
     },
     envelope: {
         title: 'Same notes, different attack',
         blurb: 'One phrase with an adjustable attack and release. A fast attack speaks and pushes. A slow one swells and sits back.',
         height: [392, 392, 392, 392, 286],
+        level: 0.5,
     },
     masking: {
         title: 'Free a lead from a crowded pad',
         blurb: 'A lead and a bright pad share the same range. Cut the pad or duck it under the lead and the lead comes forward without getting louder.',
         height: [496, 496, 444, 420, 368],
+        level: 1.1,
     },
     saturation: {
         title: 'Hear saturation add size, not volume',
         blurb: 'Bass and chords through a waveshaper, level-matched so you hear the harmonics rather than a louder signal. Watch the spectrum fill in.',
         height: [510, 510, 510, 458, 378],
+        level: -3.3,
     },
     'bit-depth': {
         title: 'Lower the bit depth',
         blurb: 'A quiet, decaying note stored at fewer and fewer bits. Listen to the tail turn gritty, then turn on dither and hear the grit become hiss.',
         height: [326, 310, 290, 290, 290],
+        level: 2.6,
     },
     latency: {
         title: 'Play through added latency',
         blurb: 'Tap the pad and the click plays after the delay you set. Tap along to the metronome and notice where timing starts to feel wrong.',
         height: [318, 298, 298, 298, 278],
+        level: 5,
     },
     normalization: {
         title: 'Hear what normalization does to a loud master',
@@ -116,53 +133,63 @@ export const demoCatalog = {
         title: 'End a phrase on V or on I',
         blurb: 'The same four-bar phrase, stopping on the dominant or landing on the home chord. Listen for a question against an answer.',
         height: [405, 381, 381, 381, 297],
+        level: -1.7,
     },
     parallel: {
         title: 'Blend a crushed copy under the dry drums',
         blurb: 'The dry drum loop stays untouched while a heavily compressed copy is blended underneath. Move the blend and hear the quiet detail come up while the hits keep their shape.',
         height: [798, 750, 710, 614, 530],
+        level: 0.7,
     },
     transient: {
         title: 'Shape the hit without a threshold',
         blurb: 'A transient shaper turns the start of each hit up or down and the tail up or down, whatever the level. Compare it with a compressor on the same loop.',
         height: [1142, 1074, 1054, 958, 696],
+        level: -1.0,
     },
     sidechain: {
         title: 'Let the kick push the bass aside',
         blurb: 'A sustained bass ducks each time the kick hits. Change the depth and the release, or duck only the low end, and listen to the groove change.',
         height: [812, 760, 760, 736, 550],
+        level: -3.3,
     },
     limiter: {
         title: 'Drive a limiter and listen to the release',
         blurb: 'A loop driven into a limiter, matched in loudness to the original. Push the drive and change the release to hear the drums and the tone change.',
         height: [896, 872, 792, 748, 610],
+        level: -1.7,
     },
     'clip-recover': {
         title: 'Turn down a clipped take',
         blurb: 'A phrase recorded too hot clips at the converter. Pull the fader down afterwards and the level drops, but the flattened peaks and their distortion stay.',
         height: [1085, 1054, 1048, 1048, 585],
+        level: -1.6,
     },
     width: {
         title: 'Widen the sides and watch the meters',
         blurb: 'A stereo mix split into mid and side. Raise the side level, check it in mono and watch the correlation meter move as the image gets wider.',
         height: [1132, 1048, 1004, 936, 778],
+        level: -1.6,
     },
     'monitor-level': {
         title: 'Judge the same mix at three playback levels',
         blurb: 'One short mix played quiet, medium and loud, with the loudest step kept safe. Listen to how much bass and air you hear at each level.',
         height: [744, 696, 696, 652, 528],
+        level: -1.8,
     },
     'reverb-duck': {
         title: 'Keep the reverb out of the next line',
         blurb: 'A short vocal-like phrase into a long reverb. Duck the reverb under the dry phrase, or send only the last syllable of each line to a tempo delay, and hear the next line come through.',
         height: [790, 726, 702, 678, 578],
+        level: -1.6,
     },
     'chord-context': {
         title: 'Hear one chord in different contexts',
         blurb: 'The same chord after different progressions, and one melody in major or minor, at different tempos and registers. Notice how much the surroundings change what each seems to say.',
         height: [773, 701, 677, 677, 481],
+        level: 0.4,
     },
-} satisfies Record<string, { title: string; blurb: string; height: [number, number, number, number, number] }>;
+} satisfies Record<string, { title: string; blurb: string; height: [number, number, number, number, number]; level?: number }>;
 
 export type DemoId = keyof typeof demoCatalog;
 

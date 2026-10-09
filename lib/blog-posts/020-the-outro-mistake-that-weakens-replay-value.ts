@@ -62,7 +62,7 @@ export const post020: BlogArticle = {
                 { label: 'Drums', levels: [0.3, 1, 1, 1, 0.4] },
                 { label: 'Bass', levels: [0, 1, 1, 1, 0.4] },
                 { label: 'Chords', levels: [0.7, 0.8, 0.8, 0.8, 0.35] },
-                { label: 'Vocal', levels: [0.7, 1, 1, 1, 0.4] },
+                { label: 'Vocal', levels: [0.7, 1, 1, 1, 0.4], focus: true },
                 { label: 'Harmony', levels: [0, 0.8, 0.8, 0.8, 0.3] },
             ],
         },

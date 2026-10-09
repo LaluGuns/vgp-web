@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { clickTone, fadeOut, getEngine, midi, noiseBuffer, sequence, type Engine } from './engine';
+import { clickTone, fadeOut, midi, noiseBuffer, sequence, type Engine } from './engine';
 import { PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
 
 const SWEEP_FROM = 500;
@@ -330,12 +330,6 @@ export function LatencyDemo() {
         live.current = latency;
     }, [latency]);
 
-    const tap = () => {
-        const { ctx, out } = getEngine();
-        clickTone(ctx, out, ctx.currentTime + live.current / 1000, 900, 0.9);
-        setTaps((n) => n + 1);
-    };
-
     // The metronome is a demo like the others: starting another demo stops it.
     const metronome = usePlayer(({ ctx, out }: Engine) => {
         const bus = ctx.createGain();
@@ -348,6 +342,13 @@ export function LatencyDemo() {
             fadeOut(ctx, bus);
         };
     });
+
+    // The tap goes through the same playback trim as the metronome.
+    const tap = () => {
+        const { ctx, out } = metronome.engine();
+        clickTone(ctx, out, ctx.currentTime + live.current / 1000, 900, 0.9);
+        setTaps((n) => n + 1);
+    };
 
     return (
         <div className="space-y-6">

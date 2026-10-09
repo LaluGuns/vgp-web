@@ -70,7 +70,7 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                                         <li key={cat.slug}>
                                             <Link
                                                 href={`/blog/category/${cat.slug}`}
-                                                className="flex min-h-11 items-center rounded-md border border-white/10 px-3.5 text-sm font-medium text-white/65 transition-colors hover:border-white/25 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                                className="flex min-h-11 items-center rounded-md border border-white/10 px-3.5 text-sm font-medium text-white/65 transition-colors hover:border-white/25 hover:text-white vgp-focus"
                                             >
                                                 {cat.name}
                                             </Link>

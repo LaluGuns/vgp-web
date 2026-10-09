@@ -116,6 +116,13 @@ anything without one is technical.
   higher opacity than a hairline to be seen at all.
 - **Demos.** Plots, meters, step lanes and step strips follow the dialect;
   controls (play, sliders, choices) are the same in every lesson.
+- **Labels never sit on data.** A label goes where no mark comes near
+  it: a signal's threshold or ceiling label beside its line where the
+  traces leave room, else in the row's legend as a dashed sample, else
+  past the line's end in a margin every row shares; mark labels on curves
+  and spectra above the plot; a value steps over a dashed reference line.
+  A bar with no upper limit (`open`) fades out at the end of the scale
+  with no end mark, so it never reads as a number.
 - **Focus.** Rhythm rows, flow steps and arrangement layers take
   `focus: true`. Once any item in a figure is focused, it is in the accent
   and the rest go grey; with none focused, all of them are. Bars, markers
@@ -125,8 +132,12 @@ anything without one is technical.
   along their length (technical at a constant speed, like a scope beam),
   a shaded area fades in after its line, bars grow, points pop, mind's
   focus rings close in on their points, moved hits slide from their grid
-  step, flow steps appear in order with their arrows drawing between them,
-  and arrangement cells rise into their rows. Never on a figure already on screen;
+  step, flow steps appear in order with their arrows drawing between them
+  (an arrow takes 300 ms, so it lands as the next step shows), and
+  arrangement cells rise into their rows. Many like marks move as one
+  group (a beat of hits, a row of cells, a quarter of the harmonics), so a
+  busy figure stays smooth on a slow phone. A figure that comes to rest
+  low on the screen draws in then; none is left waiting. Never on a figure already on screen;
   off under reduced motion, with no script and in print. The end state is
   the server-rendered drawing. Turn it off by removing `data-reveal="draw"`
   in `components/blog/figures/Figure.tsx`.

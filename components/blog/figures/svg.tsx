@@ -37,7 +37,14 @@ export const C = {
     strong: 'rgba(255,255,255,0.75)',
     text: 'rgba(255,255,255,0.72)',
     soft: 'rgba(255,255,255,0.52)',
+    /** Ticks, stems and other marks that only hold the drawing together. */
     faint: 'rgba(255,255,255,0.3)',
+    /**
+     * A grey data line: a "before" trace, a muted curve, the unity line. It
+     * carries meaning, so it keeps 3:1 on the surface (3.7:1) while staying
+     * well under the accent.
+     */
+    dataGrey: 'rgba(255,255,255,0.4)',
     grid: 'rgba(255,255,255,0.1)',
     lane: 'rgba(255,255,255,0.035)',
     fill: 'rgba(255,255,255,0.08)',
@@ -410,6 +417,8 @@ export const cornerOf = (d: Dialect, h: number, w = Infinity) => Math.min(d.corn
 /**
  * A horizontal bar. Its value is its right edge, in every dialect.
  * Business adds a tick at that edge, the way a ledger marks an entry.
+ * An `open` bar has no upper limit: it fades out over its last stretch and
+ * has no end mark, so it never reads as a number.
  */
 export function Bar({
     d,
@@ -420,6 +429,7 @@ export function Bar({
     tone = 'accent',
     opacity = 1,
     delay,
+    open,
 }: {
     d: Dialect;
     x: number;
@@ -429,14 +439,28 @@ export function Bar({
     tone?: Tone | 'dim';
     opacity?: number;
     delay?: number;
+    open?: boolean;
 }) {
     const rx = cornerOf(d, h, w);
     const paint = tone === 'dim' ? { fill: C.dim } : toneFill(tone, opacity);
     const motion = delay === undefined || tone === 'dim' ? {} : draw('grow', delay);
+    const fadeId = open ? `bar-open-${++fadeCounter}` : '';
+    // The fade runs over the last 56 units, or under half of a short bar.
+    const fadeFrom = Number((1 - Math.min(0.45, 56 / Math.max(1, w))).toFixed(3));
+    const colour = tone === 'dim' ? C.dim : tone === 'accent' ? 'currentColor' : paint.fill;
     return (
         <g>
-            <rect x={x} y={y} width={w} height={h} rx={rx} {...paint} {...motion} />
-            {d.name === 'business' ? (
+            {open ? (
+                <defs>
+                    <linearGradient id={fadeId} x1="0" x2="1" y1="0" y2="0">
+                        <stop offset={0} stopColor={colour} stopOpacity={tone === 'accent' ? opacity : 1} />
+                        <stop offset={fadeFrom} stopColor={colour} stopOpacity={tone === 'accent' ? opacity : 1} />
+                        <stop offset={1} stopColor={colour} stopOpacity={0} />
+                    </linearGradient>
+                </defs>
+            ) : null}
+            <rect x={x} y={y} width={w} height={h} rx={rx} {...(open ? { fill: `url(#${fadeId})` } : paint)} {...motion} />
+            {d.name === 'business' && !open ? (
                 <rect
                     x={x + w - 2}
                     y={y - 3}
@@ -449,6 +473,8 @@ export function Bar({
         </g>
     );
 }
+
+let fadeCounter = 0;
 
 /** The track a bar runs along: a faint field (technical), a staff line (music), a dotted line (mind), nothing (business: the row rules carry it). */
 export function Track({ d, x, y, w, h }: { d: Dialect; x: number; y: number; w: number; h: number }) {
@@ -577,6 +603,8 @@ export function placeInRows(items: RowItem[], lo: number, hi: number, { offset =
                         c.from >= lo - 0.5 &&
                         c.to <= hi + 0.5 &&
                         (row > 0 || taken.every(([a, b]) => c.to + gap <= a || c.from >= b + gap)) &&
+                        // A label up a row has its line run down past the first row: never through a taken span.
+                        (row === 0 || taken.every(([a, b]) => item.x < a - 3 || item.x > b + 3)) &&
                         placed.every((p) => {
                             if (p.row === row) return c.to + gap <= p.from || c.from >= p.to + gap;
                             // An outer label's line must not run under an inner label, and the other way round.
@@ -685,6 +713,8 @@ export interface LegendItem {
     stroke?: string;
     /** Draw a filled swatch instead of a line. */
     swatch?: string;
+    /** Line width of the sample. A reference line's sample is as thin as the line. */
+    width?: number;
 }
 
 /** Legend of line samples that wraps to the available width. Samples take the dialect's line ends and dashes. */
@@ -723,8 +753,8 @@ export function legend(
                             x2={lx + (d.cap === 'round' ? 17 : 18)}
                             y1={ly - 4}
                             y2={ly - 4}
-                            stroke={item.stroke ?? (item.muted ? C.faint : C.accent)}
-                            strokeWidth={1.8}
+                            stroke={item.stroke ?? (item.muted ? C.dataGrey : C.accent)}
+                            strokeWidth={item.width ?? 1.8}
                             strokeDasharray={item.dashed ? d.refDash : undefined}
                             strokeLinecap={d.cap}
                         />

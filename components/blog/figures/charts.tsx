@@ -39,13 +39,24 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const labels = narrow && spec.xShort ? spec.xShort : spec.x;
     const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, stroke: s.dashed ? C.soft : undefined }));
     const leg = legend(named, 0, 14, w, d);
-    const top = leg.height + 30;
     // A note head or a focus ring is wider than a square, so the first and last points sit further in.
     const inset = d.marker === 'head' || d.marker === 'ring' ? 8 : 4;
     const left = inset;
     const right = w - inset;
     const n = spec.x.length;
     const xAt = (i: number) => left + (i * (right - left)) / Math.max(1, n - 1);
+    // Mark labels sit above the plot, never over the curve: on the axis title's line when they clear it,
+    // else a row higher, each beside its mark's line, which runs up to it.
+    const marks = spec.marks ?? [];
+    const titleW = textWidth(`${spec.yLabel} ↑`) + (d.italic ? 2 : 0);
+    const markLabels = placeInRows(
+        marks.map((mark) => ({ x: xAt(mark.at), width: textWidth(mark.label), prefer: ['start', 'end'] as Anchor[] })),
+        0,
+        w,
+        { offset: 7, taken: [[0, titleW]] },
+    );
+    const markRows = marks.length ? Math.max(...markLabels.map((p) => p.row)) + 1 : 1;
+    const top = leg.height + 30 + (markRows - 1) * 15;
     const xAnchor = (i: number): Anchor => (i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle');
     // Point names that would nearly touch take turns on two rows.
     const spans = labels.map((label, i) => {
@@ -58,13 +69,6 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const h = top + (narrow ? 150 : 180) + below;
     const bottom = h - below;
     const yAt = (v: number) => bottom - clamp(v, 0, 1) * (bottom - top);
-    const marks = spec.marks ?? [];
-    const markLabels = placeInRows(
-        marks.map((mark) => ({ x: xAt(mark.at), width: textWidth(mark.label), prefer: ['start', 'end'] as Anchor[] })),
-        0,
-        w,
-        { offset: 7 },
-    );
     const music = d.name === 'music';
 
     return (
@@ -88,15 +92,18 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
             {marks.map((mark, mi) => {
                 const x = xAt(mark.at);
                 const place = markLabels[mi];
+                const ly = top - 12 - place.row * 15;
+                // The mark's line runs up beside its label, so the two read as one.
+                const y1 = ly - 4;
                 return (
                     <g key={`${mi}-${mark.label}`}>
                         {music ? (
                             // A section change in a score is a double bar.
-                            <Barline x={x} y1={top} y2={bottom} kind="double" opacity={0.45} />
+                            <Barline x={x} y1={y1} y2={bottom} kind="double" opacity={0.45} />
                         ) : (
-                            <RefLine d={d} x1={x} x2={x} y1={top} y2={bottom} />
+                            <RefLine d={d} x1={x} x2={x} y1={y1} y2={bottom} />
                         )}
-                        <Label x={place.tx} y={top + 12 + place.row * 15} anchor={place.anchor} fill={C.ink}>
+                        <Label x={place.tx} y={ly} anchor={place.anchor} fill={C.ink}>
                             {mark.label}
                         </Label>
                     </g>
@@ -192,23 +199,54 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
     const base = xAt(spec.min);
     const bh = BAR_H[d.name];
     const lineTrack = d.name === 'music' || d.name === 'mind';
+    // An open bar has no upper limit: it runs to the end of the scale.
+    const endOf = (bar: BarsFigure['bars'][number]) => (bar.open ? x1 : xAt(bar.value));
+    // Where a value starts when it follows its bar. One that would sit on the dashed reference line steps over
+    // it, so the line never runs through a number.
+    const valueX = (bar: BarsFigure['bars'][number]) => {
+        const at = endOf(bar) + 8 + after;
+        const tw = textWidth(shown(bar));
+        const refX = spec.reference ? xAt(spec.reference.value) : -Infinity;
+        return Math.abs(refX - (at + tw / 2)) < tw / 2 + 5 ? Math.max(at, refX + 7) : at;
+    };
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
             {ledger ? <line x1={0} x2={w} y1={top - 4} y2={top - 4} stroke={C.faint} /> : null}
             {spec.log && !ledger
-                ? powers.map((k) => <Rule key={`g${k}`} d={d} x1={xAt(k)} x2={xAt(k)} y1={top} y2={rowsBottom + (narrow ? 2 : 4)} />)
+                ? // A power-of-ten rule stays under the bars: on a phone it runs only through each bar's slot, so it never
+                  // crosses the label above it, and it stops short of a value written across it.
+                  powers.flatMap((k) =>
+                      spec.bars.map((bar, i) => {
+                          const y = top + i * rowH;
+                          const slotY = narrow ? y + 22 : y + 9;
+                          const x = xAt(k);
+                          const textX = valueX(bar);
+                          if (!column && x > textX - 4 && x < textX + textWidth(shown(bar)) + 4) return null;
+                          const last = i === spec.bars.length - 1;
+                          return (
+                              <Rule
+                                  key={`g${k}-${i}`}
+                                  d={d}
+                                  x1={x}
+                                  x2={x}
+                                  y1={narrow ? slotY - 2 : y}
+                                  y2={narrow ? slotY + (last ? 18 : 16) : y + rowH + (last ? 4 : 0)}
+                              />
+                          );
+                      }),
+                  )
                 : null}
             {spec.bars.map((bar, i) => {
                 const y = top + i * rowH;
                 const slotY = narrow ? y + 22 : y + 9;
                 const barY = slotY + (14 - bh) / 2;
-                const end = xAt(bar.value);
+                const end = endOf(bar);
                 // Accent bars grow in a light stagger; their values fade in as each bar lands. Dim bars are context and stay put.
                 const delay = 120 + (240 * i) / Math.max(1, spec.bars.length - 1);
                 const value = bar.dim ? {} : draw('fade', delay + 380);
                 const text = shown(bar);
-                const textX = end + 8 + after;
+                const textX = valueX(bar);
                 // A staff line or dotted track runs on past the value, never through the bar or under its number.
                 const trackFrom = column ? x0 : textX + textWidth(text) + 6;
                 return (
@@ -221,8 +259,8 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                         ) : (
                             <Track d={d} x={x0} y={slotY} w={x1 - x0} h={14} />
                         )}
-                        <Bar d={d} x={base} y={barY} w={Math.max(2, end - base)} h={bh} tone={bar.dim ? 'dim' : 'accent'} delay={delay} />
-                        {ring ? <Point d={d} x={end} y={slotY + 7} r={3} tone={bar.dim ? 'muted' : 'accent'} delay={bar.dim ? undefined : delay + 420} /> : null}
+                        <Bar d={d} x={base} y={barY} w={Math.max(2, end - base)} h={bh} tone={bar.dim ? 'dim' : 'accent'} delay={delay} open={bar.open} />
+                        {ring && !bar.open ? <Point d={d} x={end} y={slotY + 7} r={3} tone={bar.dim ? 'muted' : 'accent'} delay={bar.dim ? undefined : delay + 420} /> : null}
                         {column ? (
                             <Label x={w} y={narrow ? y + 14 : slotY + 11} anchor="end" fill={bar.dim ? C.soft : C.ink} {...value}>
                                 {text}
@@ -577,24 +615,26 @@ export function Arrangement({ spec, w, dialect }: { spec: ArrangementFigure; w: 
                         {/* Music writes the row as a line its cells stand on; mind dots it; the ledger rules under it. */}
                         {music || d.name === 'mind' ? <Rule d={d} x1={labelCol} x2={gridRight} y1={floor + 0.5} y2={floor + 0.5} major={music} /> : null}
                         {d.name === 'business' ? <line x1={0} x2={w} y1={y + rowH + 2} y2={y + rowH + 2} stroke={C.grid} /> : null}
-                        {cols.map((col, ci) => {
-                            const level = clamp(layer.levels[ci] ?? 0, 0, 1);
-                            if (level <= 0) return null;
-                            const ch = Math.max(3, full * level);
-                            const cw = col.width - 4;
-                            return (
-                                <rect
-                                    key={ci}
-                                    x={col.x + 2}
-                                    y={floor - ch}
-                                    width={cw}
-                                    height={ch}
-                                    rx={cornerOf(d, Math.min(ch, full), cw)}
-                                    {...(accent ? accentFill(1) : { fill: C.muted })}
-                                    {...(accent ? draw('rise', 120 + (360 * ci) / Math.max(1, cols.length - 1) + li * 30) : {})}
-                                />
-                            );
-                        })}
+                        {/* An accent row's cells rise into it together, one animation per row, staggered down the rows. */}
+                        <g {...(accent ? draw('rise', 120 + li * 70) : {})}>
+                            {cols.map((col, ci) => {
+                                const level = clamp(layer.levels[ci] ?? 0, 0, 1);
+                                if (level <= 0) return null;
+                                const ch = Math.max(3, full * level);
+                                const cw = col.width - 4;
+                                return (
+                                    <rect
+                                        key={ci}
+                                        x={col.x + 2}
+                                        y={floor - ch}
+                                        width={cw}
+                                        height={ch}
+                                        rx={cornerOf(d, Math.min(ch, full), cw)}
+                                        {...(accent ? accentFill(1) : { fill: C.muted })}
+                                    />
+                                );
+                            })}
+                        </g>
                     </g>
                 );
             })}

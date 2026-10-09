@@ -445,17 +445,18 @@ body::before {
     animation-timing-function: var(--ease-out-quart);
   }
 
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-line { animation-name: vgp-draw-line; animation-duration: 850ms; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-grow { animation-name: vgp-draw-grow; animation-duration: 700ms; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-rise { animation-name: vgp-draw-rise; animation-duration: 700ms; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-pop { animation-name: vgp-draw-pop; animation-duration: 450ms; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-fade { animation-name: vgp-draw-fade; animation-duration: 600ms; animation-timing-function: ease-out; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-focus { animation-name: vgp-draw-focus; animation-duration: 650ms; }
-  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-slide { animation-name: vgp-draw-slide; animation-duration: 700ms; }
+  /* --draw-dur shortens a mark that has to keep pace, such as a flow's connector (figures/diagrams.tsx). */
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-line { animation-name: vgp-draw-line; animation-duration: var(--draw-dur, 850ms); }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-grow { animation-name: vgp-draw-grow; animation-duration: var(--draw-dur, 700ms); }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-rise { animation-name: vgp-draw-rise; animation-duration: var(--draw-dur, 700ms); }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-pop { animation-name: vgp-draw-pop; animation-duration: var(--draw-dur, 450ms); }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-fade { animation-name: vgp-draw-fade; animation-duration: var(--draw-dur, 600ms); animation-timing-function: ease-out; }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-focus { animation-name: vgp-draw-focus; animation-duration: var(--draw-dur, 650ms); }
+  [data-reveal='draw'][data-reveal-state='drawn'] .vgp-draw-slide { animation-name: vgp-draw-slide; animation-duration: var(--draw-dur, 700ms); }
 
   /* Technical traces sweep at a constant speed, the way a scope beam does. */
   [data-reveal='draw'][data-reveal-state='drawn'][data-dialect='technical'] .vgp-draw-line {
-    animation-duration: 760ms;
+    animation-duration: var(--draw-dur, 760ms);
     animation-timing-function: linear;
   }
 }

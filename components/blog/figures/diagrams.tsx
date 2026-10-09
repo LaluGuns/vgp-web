@@ -43,7 +43,6 @@ function Hit({
     tone,
     opacity = 1,
     ghost,
-    motion,
 }: {
     d: Dialect;
     x: number;
@@ -56,7 +55,6 @@ function Hit({
     opacity?: number;
     /** A hit's grid position before it was moved: an outline only. */
     ghost?: boolean;
-    motion?: object;
 }) {
     // Grey hits are solid, so a drum line or a step rule behind one never shows through it.
     const grey = solid(tone === 'ink' ? 0.92 : tone === 'soft' ? 0.52 : tone === 'context' ? 0.5 : 0.3);
@@ -70,7 +68,7 @@ function Hit({
         const stemX = cx + r * 1.38;
         if (ghost) return <path d={headPath(cx, cy, r)} fill={C.surface} stroke={C.faint} strokeWidth={1.2} strokeDasharray="2 2" />;
         return (
-            <g {...motion}>
+            <g>
                 {/* The stem's round end stops at the hit's level, not past it. */}
                 <line x1={stemX} x2={stemX} y1={cy - r * 0.35} y2={floor - bh + 0.75} {...stroke} strokeWidth={1.5} strokeLinecap="round" />
                 <path d={headPath(cx, cy, r)} {...paint} />
@@ -93,7 +91,7 @@ function Hit({
                 strokeWidth={d.name === 'mind' ? 1.4 : 1}
             />
         );
-    return <rect x={x} y={floor - bh} width={bw} height={bh} rx={rx} {...paint} {...motion} />;
+    return <rect x={x} y={floor - bh} width={bw} height={bh} rx={rx} {...paint} />;
 }
 
 export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; dialect?: DialectProp }) {
@@ -184,45 +182,54 @@ export function Rhythm({ spec, w, dialect }: { spec: RhythmFigure; w: number; di
                             </g>
                         )}
                         <RhythmLane d={d} x={gridX} y={laneY} w={gridW} h={laneH} steps={steps} perBeat={perBeat} />
-                        {row.hits.map((hit, hi) => {
-                            const step = typeof hit === 'number' ? hit : hit.step;
-                            const offset = typeof hit === 'number' ? 0 : (hit.offset ?? 0);
-                            const level = typeof hit === 'number' ? 1 : (hit.level ?? 1);
-                            const shift = (step % 2 === 1 ? swingShift : 0) + offset;
+                        {(() => {
+                            const hits = row.hits.map((hit) => {
+                                const step = typeof hit === 'number' ? hit : hit.step;
+                                const offset = typeof hit === 'number' ? 0 : (hit.offset ?? 0);
+                                const level = typeof hit === 'number' ? 1 : (hit.level ?? 1);
+                                const shift = (step % 2 === 1 ? swingShift : 0) + offset;
+                                // A hit's level is its height, in every dialect and in the accent too: no faded accent.
+                                const bh = (laneH - 6) * (0.35 + 0.65 * level);
+                                const gx = gridX + step * stepW + 2;
+                                const moved = Math.abs(shift) > 0.02;
+                                return { step, level, bh, gx, x: gx + shift * stepW, moved, accent: anyFocus ? lit : moved };
+                            });
                             const bw = Math.max(4, stepW * 0.5);
-                            // A hit's level is its height, in every dialect and in the accent too: no faded accent.
-                            const bh = (laneH - 6) * (0.35 + 0.65 * level);
-                            const gx = gridX + step * stepW + 2;
-                            const x = gx + shift * stepW;
-                            const moved = Math.abs(shift) > 0.02;
-                            const accent = anyFocus ? lit : moved;
+                            // Accent hits draw in by group, not one by one, so a busy figure animates a handful of
+                            // groups: moved hits slide from their grid step together, one group per distance moved;
+                            // the hits of a row in focus rise in place a beat at a time.
+                            const groups = new Map<string, { motion: object; hits: typeof hits }>();
+                            for (const hit of hits.filter((h) => h.accent)) {
+                                const key = hit.moved ? `m${(hit.gx - hit.x).toFixed(1)}` : `b${Math.floor(hit.step / perBeat)}`;
+                                if (!groups.has(key)) {
+                                    const delay = 160 + ri * 60 + (hit.moved ? 80 : (240 * Math.floor(hit.step / perBeat)) / Math.max(1, steps / perBeat));
+                                    groups.set(key, {
+                                        motion: hit.moved ? draw('slide', delay, { '--draw-from': `${(hit.gx - hit.x).toFixed(1)}px` }) : draw('rise', delay),
+                                        hits: [],
+                                    });
+                                }
+                                groups.get(key)!.hits.push(hit);
+                            }
                             // Beside a row in focus, every other row is context and stays grey; with nothing in focus, white and grey.
-                            const grey = anyFocus ? (level < 0.6 ? 'contextSoft' : 'context') : level < 0.6 ? 'soft' : 'ink';
-                            const delay = 160 + (240 * step) / steps + ri * 40;
+                            const grey = (level: number) => (anyFocus ? (level < 0.6 ? 'contextSoft' : 'context') : level < 0.6 ? 'soft' : 'ink');
                             return (
-                                <g key={hi}>
-                                    {moved ? <Hit d={d} x={gx} floor={floor} bw={bw} bh={bh} tone="soft" ghost /> : null}
-                                    {accent ? (
-                                        <Hit
-                                            d={d}
-                                            x={x}
-                                            floor={floor}
-                                            bw={bw}
-                                            bh={bh}
-                                            tone="accent"
-                                            // A moved hit slides from its grid step to where it lands; a hit in a row in focus rises in its place.
-                                            motion={
-                                                moved
-                                                    ? draw('slide', delay, { '--draw-from': `${(gx - x).toFixed(1)}px` })
-                                                    : draw(d.name === 'music' ? 'pop' : 'rise', delay)
-                                            }
-                                        />
-                                    ) : (
-                                        <Hit d={d} x={x} floor={floor} bw={bw} bh={bh} tone={grey} />
-                                    )}
+                                <g>
+                                    {hits.map((hit, hi) => (
+                                        <g key={hi}>
+                                            {hit.moved ? <Hit d={d} x={hit.gx} floor={floor} bw={bw} bh={hit.bh} tone="soft" ghost /> : null}
+                                            {hit.accent ? null : <Hit d={d} x={hit.x} floor={floor} bw={bw} bh={hit.bh} tone={grey(hit.level)} />}
+                                        </g>
+                                    ))}
+                                    {[...groups].map(([key, group]) => (
+                                        <g key={key} {...group.motion}>
+                                            {group.hits.map((hit, hi) => (
+                                                <Hit key={hi} d={d} x={hit.x} floor={floor} bw={bw} bh={hit.bh} tone="accent" />
+                                            ))}
+                                        </g>
+                                    ))}
                                 </g>
                             );
-                        })}
+                        })()}
                         {ledger ? <line x1={0} x2={w} y1={laneY + laneH + 4} y2={laneY + laneH + 4} stroke={C.grid} /> : null}
                     </g>
                 );
@@ -390,10 +397,11 @@ export function Flow({ spec, w, dialect }: { spec: FlowFigure; w: number; dialec
 function Link({ d, x1, y1, x2, y2, angle, delay }: { d: Dialect; x1: number; y1: number; x2: number; y2: number; angle: number; delay?: number }) {
     const a = (angle * Math.PI) / 180;
     const inset = arrowInset(d);
-    const motion = (kind: 'line' | 'fade', at: number) => (delay === undefined ? {} : draw(kind, delay + at));
+    // A connector draws in 300 ms, about the time the next step takes to appear, and its head lands as the line arrives.
+    const motion = (kind: 'line' | 'fade', at: number, ms: number) => (delay === undefined ? {} : draw(kind, delay + at, { '--draw-dur': `${ms}ms` }));
     return (
         <g>
-            {d.name === 'mind' ? <circle cx={x1} cy={y1} r={2} fill={C.soft} {...motion('fade', 0)} /> : null}
+            {d.name === 'mind' ? <circle cx={x1} cy={y1} r={2} fill={C.soft} {...motion('fade', 0, 200)} /> : null}
             <line
                 x1={x1}
                 y1={y1}
@@ -402,9 +410,9 @@ function Link({ d, x1, y1, x2, y2, angle, delay }: { d: Dialect; x1: number; y1:
                 stroke={C.soft}
                 strokeWidth={d.name === 'business' ? 1.25 : 1.5}
                 strokeLinecap={d.cap}
-                {...motion('line', 0)}
+                {...motion('line', 0, 300)}
             />
-            <g {...motion('fade', 260)}>
+            <g {...motion('fade', 240, 200)}>
                 <Arrowhead d={d} x={x2} y={y2} angle={angle} />
             </g>
         </g>
@@ -488,7 +496,8 @@ function FlowHorizontal({ spec, w, d }: { spec: FlowFigure; w: number; d: Dialec
                 ? (() => {
                       const from = bx(n - 1) + bw / 2;
                       const to = bx(spec.loop.to) + bw / 2;
-                      const y1 = headH + (spec.loop.label ? 22 : 8);
+                      // Above the ledger's step numbers, so the loop never runs through them.
+                      const y1 = spec.loop.label ? 22 : 8;
                       const end = top - 3 - arrowInset(d) + 1;
                       const pts: [number, number][] =
                           d.name === 'mind'
@@ -615,17 +624,33 @@ function FlowVertical({ spec, w, d }: { spec: FlowFigure; w: number; d: Dialect 
 const NOTE_NAMES = ['C', 'C♯', 'D', 'E♭', 'E', 'F', 'F♯', 'G', 'A♭', 'A', 'B♭', 'B'];
 const noteName = (midi: number) => `${NOTE_NAMES[((midi % 12) + 12) % 12]}${Math.floor(midi / 12) - 1}`;
 const isBlack = (midi: number) => [1, 3, 6, 8, 10].includes(((midi % 12) + 12) % 12);
+/** Empty semitones between two notes before the roll breaks there. */
+const BREAK_AFTER = 5;
+/** Height of a break in the roll. */
+const BREAK_H = 14;
 
 export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dialect?: DialectProp }) {
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const perBar = spec.perBar ?? 4;
     const pitches = spec.notes.map((n) => n.pitch);
-    const lo = Math.min(...pitches) - 1;
-    const hi = Math.max(...pitches) + 1;
-    const rows = hi - lo + 1;
-    // A pitch row is tall enough for its 12-unit name when the range allows; with many rows, every other name is left out.
-    const rowH = Math.max(9, Math.min(narrow ? 14 : 15, 260 / rows));
+    const used = Array.from(new Set(pitches)).sort((a, b) => b - a);
+    // The roll keeps one empty row above and below the notes, and every semitone between them, except a long
+    // empty stretch (a bass line under a voicing), which collapses into a break: two staves of one roll.
+    const spans: { hi: number; lo: number }[] = [{ hi: used[0] + 1, lo: used[0] - 1 }];
+    for (let i = 1; i < used.length; i++) {
+        const span = spans[spans.length - 1];
+        if (used[i - 1] - used[i] - 1 >= BREAK_AFTER) {
+            span.lo = used[i - 1] - 1;
+            spans.push({ hi: used[i] + 1, lo: used[i] - 1 });
+        } else span.lo = used[i] - 1;
+    }
+    const rows = spans.reduce((sum, span) => sum + span.hi - span.lo + 1, 0);
+    const noteSize = narrow ? FS : 11;
+    // A pitch row is tall enough for its 12-unit name when the range allows; with many rows, every other name is
+    // left out. A roll with named notes keeps its rows tall enough for the names, up to 400 units.
+    let rowH = clamp(260 / rows, 9, narrow ? 14 : 15);
+    if (spec.notes.some((n) => n.label) && rowH < noteSize + 1 && rows * (noteSize + 1) <= 400) rowH = noteSize + 1;
     const labelCol = narrow ? 36 : 40;
     const chordH = spec.chords?.length ? 22 : 4;
     const totalBeats = Math.ceil(Math.max(...spec.notes.map((n) => n.start + n.length)) / perBar) * perBar;
@@ -634,43 +659,61 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
     const gridW = w - labelCol - (music ? 6 : 0);
     const beatW = gridW / totalBeats;
     const top = chordH;
-    const rollBottom = top + rows * rowH;
+    const staves = spans.map((span, i) => {
+        const y = top + spans.slice(0, i).reduce((sum, s) => sum + (s.hi - s.lo + 1) * rowH + BREAK_H, 0);
+        return { ...span, y, bottom: y + (span.hi - span.lo + 1) * rowH };
+    });
+    const rollBottom = staves[staves.length - 1].bottom;
     const ledger = d.name === 'business';
     const h = rollBottom + 2 + (ledger ? 6 : 0);
-    const yOf = (pitch: number) => top + (hi - pitch) * rowH;
-    const used = Array.from(new Set(pitches)).sort((a, b) => b - a);
+    const yOf = (pitch: number) => {
+        const staff = staves.find((st) => pitch <= st.hi && pitch >= st.lo) ?? staves[0];
+        return staff.y + (staff.hi - pitch) * rowH;
+    };
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
-            {Array.from({ length: rows }, (_, r) => {
-                const pitch = hi - r;
-                // Pitch rows: piano-roll lanes, lighter in the ledger and score, which rule them instead.
-                return (
-                    <rect
-                        key={r}
-                        x={labelCol}
-                        y={yOf(pitch)}
-                        width={gridW}
-                        height={rowH}
-                        fill={isBlack(pitch) ? 'rgba(0,0,0,0.28)' : music || ledger ? 'rgba(255,255,255,0.02)' : C.lane}
-                    />
-                );
-            })}
-            {ledger
-                ? Array.from({ length: rows + 1 }, (_, r) => (
-                      <line key={`r${r}`} x1={labelCol} x2={w} y1={top + r * rowH} y2={top + r * rowH} stroke="rgba(255,255,255,0.06)" />
-                  ))
-                : null}
-            {Array.from({ length: totalBeats + 1 }, (_, b) => {
-                const x = labelCol + b * beatW;
-                if (music && b % perBar === 0)
-                    return b === totalBeats ? (
-                        <Barline key={b} x={w} y1={top} y2={rollBottom} kind="final" opacity={0.45} />
-                    ) : (
-                        <Barline key={b} x={x} y1={top} y2={rollBottom} opacity={0.3} />
-                    );
-                return <Rule key={b} d={d} x1={x} x2={x} y1={top} y2={rollBottom} major={b % perBar === 0} opacity={d.name === 'technical' ? (b % perBar === 0 ? 0.3 : 0.1) : undefined} />;
-            })}
+            {staves.map((staff, si) => (
+                <g key={si}>
+                    {Array.from({ length: staff.hi - staff.lo + 1 }, (_, r) => {
+                        const pitch = staff.hi - r;
+                        // Pitch rows: piano-roll lanes, lighter in the ledger and score, which rule them instead.
+                        return (
+                            <rect
+                                key={r}
+                                x={labelCol}
+                                y={yOf(pitch)}
+                                width={gridW}
+                                height={rowH}
+                                fill={isBlack(pitch) ? 'rgba(0,0,0,0.28)' : music || ledger ? 'rgba(255,255,255,0.02)' : C.lane}
+                            />
+                        );
+                    })}
+                    {ledger
+                        ? Array.from({ length: staff.hi - staff.lo + 2 }, (_, r) => (
+                              <line key={`r${r}`} x1={labelCol} x2={w} y1={staff.y + r * rowH} y2={staff.y + r * rowH} stroke="rgba(255,255,255,0.06)" />
+                          ))
+                        : null}
+                    {Array.from({ length: totalBeats + 1 }, (_, b) => {
+                        const x = labelCol + b * beatW;
+                        if (music && b % perBar === 0)
+                            return b === totalBeats ? (
+                                <Barline key={b} x={w} y1={staff.y} y2={staff.bottom} kind="final" opacity={0.45} />
+                            ) : (
+                                <Barline key={b} x={x} y1={staff.y} y2={staff.bottom} opacity={0.3} />
+                            );
+                        return <Rule key={b} d={d} x1={x} x2={x} y1={staff.y} y2={staff.bottom} major={b % perBar === 0} opacity={d.name === 'technical' ? (b % perBar === 0 ? 0.3 : 0.1) : undefined} />;
+                    })}
+                    {si > 0 ? (
+                        // The break: two short strokes across the gap, the way a chart marks a cut axis.
+                        <g stroke={C.soft} strokeWidth={1.2} strokeLinecap={d.cap}>
+                            {[-2.5, 2.5].map((dy) => (
+                                <line key={dy} x1={labelCol - 5} x2={labelCol + 5} y1={staff.y - BREAK_H / 2 + dy + 3} y2={staff.y - BREAK_H / 2 + dy - 3} />
+                            ))}
+                        </g>
+                    ) : null}
+                </g>
+            ))}
             {/* Skip a pitch name that would sit on top of the one above it. */}
             {used
                 .filter((pitch, i) => used.slice(0, i).every((kept) => yOf(pitch) - yOf(kept) >= 14))
@@ -688,7 +731,6 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
                 const x = labelCol + note.start * beatW + 1;
                 const width = Math.max(3, note.length * beatW - 2);
                 const y = yOf(note.pitch) + 1;
-                const noteSize = narrow ? FS : 11;
                 const fits = note.label && textWidth(note.label, noteSize) + 6 < width && rowH >= noteSize;
                 // Accent notes grow from their start in the order they play; a label fades in once its note is drawn.
                 const delay = 120 + (360 * note.start) / totalBeats;

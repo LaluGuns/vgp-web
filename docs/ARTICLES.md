@@ -94,9 +94,9 @@ Labels must stay short: phone layouts are 320 px wide. Use `xShort` and
 | --- | --- | --- |
 | `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed}]`, `marks[{at, label}]`, `straight` |
 | `notes` | A small piano roll: a melody, a bass line, a voicing | `notes[{start, length, pitch, label, muted}]` (beats, MIDI pitch), `chords[{at, label}]`, `perBar` |
-| `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim}]`, `reference{value, label}`, `log` (powers of ten, for ranges over two decades) |
+| `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim, open}]` (`open`: no upper limit, the bar fades out at the end of the scale), `reference{value, label}`, `log` (powers of ten, for ranges over two decades) |
 | `rhythm` | Hits on a 16-step grid with swing and offsets | `rows[{label, hits, swing, note, focus}]`; a hit is a step or `{step, offset, level}` (offset in steps) |
-| `signal` | Waveforms over time, one plot per row | `rows[{label, traces, unipolar, lines, marks, samples}]` |
+| `signal` | Waveforms over time, one plot per row | `rows[{label, traces, unipolar, lines[{y, label, short}], marks, samples}]` (`short`: a line's label on phones) |
 | `spectrum` | Energy or EQ gain over log frequency | `mode: 'level' \| 'gain'`, `curves`, `bands[{from, to, label}]`, `marks[{f, label}]` |
 | `transfer` | Input level against output level | `domain: 'db' \| 'linear'`, `curves[{kind, threshold, ratio, knee, ceiling, label}]` |
 | `stereo` | Top-down mix: pan and depth | `items[{label, pan, depth, width, fade}]`, `title` |

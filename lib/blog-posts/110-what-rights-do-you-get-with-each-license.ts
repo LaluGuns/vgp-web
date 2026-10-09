@@ -39,6 +39,7 @@ export const post110: BlogArticle = {
                 label: t.name,
                 value: t.unlimitedOnlineAudioStreams ? 6.3 : Math.log10(t.onlineAudioStreams ?? 1000),
                 display: t.unlimitedOnlineAudioStreams ? 'No cap' : n(t.onlineAudioStreams),
+                open: Boolean(t.unlimitedOnlineAudioStreams),
             })),
         },
     },

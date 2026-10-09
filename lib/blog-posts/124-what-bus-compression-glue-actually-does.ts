@@ -64,8 +64,8 @@ export const post124: BlogArticle = {
                     label: 'Drums and pad into the bus',
                     unipolar: true,
                     lines: [
-                        { y: BUS_SHOW * 0.6, label: '2:1 threshold' },
-                        { y: BUS_SHOW * 0.3, label: '6:1 threshold' },
+                        { y: BUS_SHOW * 0.6, label: '2:1 threshold', short: '2:1' },
+                        { y: BUS_SHOW * 0.3, label: '6:1 threshold', short: '6:1' },
                     ],
                     traces: [
                         BUS,

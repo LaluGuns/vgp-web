@@ -28,7 +28,7 @@ export const post090: BlogArticle = {
                 { label: 'Outro', bars: 4 },
             ],
             layers: [
-                { label: 'Drums', levels: [0, 0.7, 1, 0.3, 0] },
+                { label: 'Drums', levels: [0, 0.7, 1, 0.3, 0], focus: true },
                 { label: 'Bass', levels: [0, 0.7, 0.9, 0.5, 0] },
                 { label: 'Chords', levels: [0.7, 0.5, 0.8, 0.8, 0.6] },
                 { label: 'Lead', levels: [0, 0.4, 1, 0, 0] },

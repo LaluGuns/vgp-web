@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, fadeOut, hat, kick, midi, pad, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer, whenIdle } from './ui';
+import { Meter, PlayButton, Readout, Segmented, Slider, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
@@ -214,52 +214,6 @@ function windowRms(sample: (i: number) => number, length: number, count: number,
         out.push(gainToDb(Math.sqrt(sum / Math.max(1, b - a)) / ref));
     }
     return out;
-}
-
-/**
- * Runs `measure` whenever `key` changes: one render at a time, always
- * finishing on the latest inputs. Returns the last finished result. The
- * first measurement waits for an idle moment, so a demo that mounts while
- * the reader scrolls toward it costs no frames.
- */
-function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
-    const [result, setResult] = useState<R | null>(null);
-    const measureRef = useRef(measure);
-    const job = useRef({ busy: false, dirty: false, alive: true, first: true });
-    useEffect(() => {
-        measureRef.current = measure;
-    });
-    useEffect(() => {
-        const j = job.current;
-        j.alive = true;
-        j.dirty = true;
-        const run = () => {
-            if (j.busy || !j.alive) return;
-            j.busy = true;
-            void (async () => {
-                while (j.dirty && j.alive) {
-                    j.dirty = false;
-                    try {
-                        const r = await measureRef.current();
-                        if (j.alive) setResult(r);
-                    } catch {
-                        // Keep the last good result.
-                    }
-                }
-                j.busy = false;
-            })();
-        };
-        let cancel = () => {};
-        if (j.first) {
-            j.first = false;
-            cancel = whenIdle(run, 600);
-        } else run();
-        return () => {
-            j.alive = false;
-            cancel();
-        };
-    }, [key]);
-    return result;
 }
 
 /** Where step 0 of the loop last landed, so a playhead can follow the audio. */

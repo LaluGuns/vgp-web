@@ -8,7 +8,6 @@
  * scroll listener (reading-scroll.ts) and without re-rendering on scroll.
  */
 
-import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Bookmark, Check, Copy, Share2 } from 'lucide-react';
 import { copyToClipboard } from './clipboard';
@@ -16,10 +15,18 @@ import { OutlineList, type OutlineItem } from './OutlineList';
 import { currentSection, readNow, subscribeReading } from './reading-scroll';
 import { markRead } from './reading-state';
 
-// The share dialog (with html-to-image and the QR code) loads only when the reader
-// reaches for Share: on hover, focus or touch it is fetched, on click it opens.
-const loadShareDialog = () => import('@/components/blog/MasterclassShareModal');
-const ShareDialog = dynamic(() => loadShareDialog().then((m) => m.MasterclassShareModal), { ssr: false });
+// The share dialog (with the QR code; html-to-image loads on the first download) is its
+// own chunk, fetched when the reader reaches for Share (hover, focus or touch) and
+// rendered only while open. A plain import() rather than next/dynamic: dynamic() suspends
+// on first render and React holds a revealed Suspense boundary back about 300 ms, which
+// made the dialog lag the tap even when the chunk was already here.
+type ShareDialogComponent = typeof import('@/components/blog/MasterclassShareModal').MasterclassShareModal;
+let shareDialog: Promise<ShareDialogComponent> | null = null;
+const loadShareDialog = () =>
+    (shareDialog ??= import('@/components/blog/MasterclassShareModal').then((m) => m.MasterclassShareModal).catch((error) => {
+        shareDialog = null; // let the next tap try again
+        throw error;
+    }));
 
 const actionClass =
     'vgp-focus inline-flex min-h-11 items-center gap-2 rounded-[4px] px-1 text-sm font-medium text-white/70 transition-colors hover:text-white';
@@ -42,6 +49,7 @@ export function ArticleActions({
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [copied, setCopied] = useState(false);
     const [sharing, setSharing] = useState(false);
+    const [ShareDialog, setShareDialog] = useState<ShareDialogComponent | null>(null);
     const shareButton = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -80,7 +88,10 @@ export function ArticleActions({
     };
 
     const prefetchShare = () => {
-        loadShareDialog().catch(() => {});
+        if (ShareDialog) return;
+        loadShareDialog()
+            .then((component) => setShareDialog(() => component))
+            .catch(() => {});
     };
 
     // The dialog hands focus back to Share as it closes; this covers a browser that does not.
@@ -109,14 +120,17 @@ export function ArticleActions({
                     onPointerEnter={prefetchShare}
                     onPointerDown={prefetchShare}
                     onFocus={prefetchShare}
-                    onClick={() => setSharing(true)}
+                    onClick={() => {
+                        prefetchShare();
+                        setSharing(true);
+                    }}
                     className={actionClass}
                 >
                     <Share2 size={16} aria-hidden="true" />
                     Share
                 </button>
             </div>
-            {sharing ? (
+            {sharing && ShareDialog ? (
                 <ShareDialog
                     onClose={closeShare}
                     article={{ title, excerpt, slug }}
@@ -150,14 +164,17 @@ export function ReadingProgress({ slug, accent, sectionIds }: { slug: string; ac
     const bar = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const legacy = /^#section-(\d+)$/.exec(window.location.hash);
-        if (legacy) {
-            const target = document.getElementById(sectionIds[Number(legacy[1])] ?? '');
+        const follow = () => {
+            const legacy = /^#section-(\d+)$/.exec(window.location.hash);
+            const target = legacy ? document.getElementById(sectionIds[Number(legacy[1])] ?? '') : null;
             if (target) {
                 history.replaceState(history.state, '', `#${target.id}`);
                 target.scrollIntoView();
             }
-        }
+        };
+        follow();
+        window.addEventListener('hashchange', follow);
+        return () => window.removeEventListener('hashchange', follow);
     }, [sectionIds]);
 
     useEffect(() => {

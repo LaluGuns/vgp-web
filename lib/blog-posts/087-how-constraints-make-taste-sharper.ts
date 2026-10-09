@@ -42,7 +42,7 @@ export const post087: BlogArticle = {
                 { label: 'Snare', levels: [0, 0.6, 1, 0, 1] },
                 { label: 'Bass', levels: [0, 0.7, 0.9, 0.5, 1] },
                 { label: 'Chords', levels: [0.8, 0.5, 0.8, 0.8, 0.9] },
-                { label: 'Lead', levels: [0, 0, 1, 0.6, 1] },
+                { label: 'Lead', levels: [0, 0, 1, 0.6, 1], focus: true },
             ],
         },
     },

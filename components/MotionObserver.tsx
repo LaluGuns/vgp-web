@@ -12,7 +12,9 @@ import { useEffect } from 'react';
  * screen: it is marked "pending" only as it nears the bottom edge, then
  * "drawn" once it is 30% up the screen, which plays the one-time draw-in in
  * app/globals.css. A figure on screen at load, or reached from above, is
- * marked "shown" and never animates.
+ * marked "shown" and never animates. Nothing is left pending on screen at
+ * rest: when a scroll settles, after load and after a jump to a #section,
+ * a pending figure with more than 24 px showing draws in.
  */
 export function MotionObserver() {
     useEffect(() => {
@@ -33,14 +35,16 @@ export function MotionObserver() {
         const drawing = new IntersectionObserver(revealAs('drawn'), { rootMargin: '0px 0px -30% 0px' });
         // A figure stays fully drawn until it comes within 30% of a screen of the bottom edge, so a
         // full-page capture or a quick look further down never shows it half-drawn. Only then, still
-        // off screen, is it held at the start of its draw-in. One reached from above stays as it is.
+        // off screen, is it held at the start of its draw-in. One already showing (reached from
+        // above, or landed on by a jump) stays as it is.
+        const onScreen = (top: number) => top < window.innerHeight - 24;
         const approaching = new IntersectionObserver(
             (entries, observer) => {
                 for (const entry of entries) {
                     if (!entry.isIntersecting) continue;
                     observer.unobserve(entry.target);
                     if (entry.target.hasAttribute('data-reveal-state')) continue;
-                    if (entry.boundingClientRect.top < window.innerHeight * 0.92) {
+                    if (onScreen(entry.boundingClientRect.top)) {
                         entry.target.setAttribute('data-reveal-state', 'shown');
                         continue;
                     }
@@ -59,7 +63,7 @@ export function MotionObserver() {
                 if (element.getAttribute('data-reveal') === 'draw') {
                     // A pending figure is left to its observer, so it draws in instead of snapping on.
                     if (element.getAttribute('data-reveal-state') === 'pending') drawing.observe(element);
-                    else if (element.getBoundingClientRect().top < fold) element.setAttribute('data-reveal-state', 'shown');
+                    else if (onScreen(element.getBoundingClientRect().top)) element.setAttribute('data-reveal-state', 'shown');
                     else approaching.observe(element);
                     return;
                 }
@@ -72,6 +76,28 @@ export function MotionObserver() {
             });
         };
 
+        // A figure that comes to rest low on the screen, under the line where it would start drawing,
+        // draws in then instead of waiting at 40% for the next scroll.
+        const settle = () => {
+            document.querySelectorAll('[data-reveal="draw"][data-reveal-state="pending"]').forEach((element) => {
+                const { top, bottom } = element.getBoundingClientRect();
+                if (!onScreen(top) || bottom < 24) return;
+                drawing.unobserve(element);
+                element.setAttribute('data-reveal-state', 'drawn');
+            });
+        };
+        let idle = 0;
+        // scrollend where the browser has it; 150 ms without a scroll event everywhere, so a jump that fires
+        // no scrollend still settles.
+        const settleSoon = () => {
+            window.clearTimeout(idle);
+            idle = window.setTimeout(settle, 150);
+        };
+        const settleNow = () => {
+            window.clearTimeout(idle);
+            settle();
+        };
+
         let frame = 0;
         const mutations = new MutationObserver(() => {
             cancelAnimationFrame(frame);
@@ -80,9 +106,19 @@ export function MotionObserver() {
 
         scan();
         mutations.observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('scroll', settleSoon, { passive: true });
+        window.addEventListener('scrollend', settleNow);
+        window.addEventListener('hashchange', settleSoon);
+        window.addEventListener('load', settleSoon);
+        settleSoon();
 
         return () => {
             cancelAnimationFrame(frame);
+            window.clearTimeout(idle);
+            window.removeEventListener('scroll', settleSoon);
+            window.removeEventListener('scrollend', settleNow);
+            window.removeEventListener('hashchange', settleSoon);
+            window.removeEventListener('load', settleSoon);
             mutations.disconnect();
             intersection.disconnect();
             drawing.disconnect();
