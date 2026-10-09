@@ -89,8 +89,8 @@ export function getEngine(): Engine {
 
 /**
  * Creates (or wakes) the audio context ahead of the click that plays: on the
- * press of a mouse button or key, or as a finger lifts. Building a context is
- * the slowest part of the first Play, so it then runs in a task of its own.
+ * press of a mouse button or key, or as a finger lifts. Building a context
+ * takes a while on a slow phone; this way it runs in a task of its own.
  */
 export function warmEngine() {
     getEngine();

@@ -637,6 +637,7 @@ export function WidthDemo() {
                             : 'Matching starts once the mix has been measured, a moment after the page loads.'
                         : 'Raising the sides now also makes the mix louder, which can make wider seem better.'
                 }
+                liveHint
             />
             <p className="text-sm leading-6 text-white/60">
                 Drums, bass and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides come
@@ -1058,7 +1059,7 @@ export function ReverbDuckDemo() {
             <Meter
                 label="Reverb turned down by"
                 value={mode === 'ducked' && duck !== null ? duck / 24 : 0}
-                text={mode !== 'ducked' ? 'Not ducking' : duck === null ? '–' : `${duck.toFixed(1)} dB`}
+                text={!player.playing ? '–' : mode !== 'ducked' ? 'Not ducking' : duck === null ? '–' : `${duck.toFixed(1)} dB`}
             />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label={`${effectName} level`} value={amount} min={0} max={100} step={5} onChange={setAmount} format={(v) => `${v}%`} />
@@ -1070,7 +1071,6 @@ export function ReverbDuckDemo() {
                         max={24}
                         onChange={setDepth}
                         format={(v) => `${v} dB`}
-                        hint="How far the reverb drops while the voice sings."
                     />
                 ) : null}
                 {mode === 'throw' ? <Slider label="Feedback" value={feedback} min={0} max={70} step={5} onChange={setFeedback} format={(v) => `${v}%`} /> : null}

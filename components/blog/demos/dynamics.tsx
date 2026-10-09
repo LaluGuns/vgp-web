@@ -55,9 +55,10 @@ const MATCH_MAX = 10 ** (30 / 20);
 /**
  * Matched for loudness, a slow attack leaves the hits' first milliseconds
  * standing above everything else, so the compressed loop peaks higher than
- * the bypass. Up to 7 dB higher is allowed (the default needs about 5); past
- * that the matching stops, which keeps every setting under the demo's
- * ceiling, and the demo says how much quieter that leaves the loop.
+ * the bypass. Up to 7 dB higher is allowed (the default needs about that,
+ * give or take a dB, so it may sit a fraction of a dB short); past that the
+ * matching stops, which keeps every setting under the demo's ceiling, and
+ * the demo says how much quieter that leaves the loop.
  */
 const PEAK_ROOM = 10 ** (7 / 20);
 
@@ -206,7 +207,8 @@ export function CompressorDemo() {
         applyMode('on');
     };
 
-    const short = analysis && analysis.short >= 0.5 ? Math.round(analysis.short) : 0;
+    // Under 1 dB is within the matching's own accuracy, and the default setting can land there.
+    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short) : 0;
 
     return (
         <div className="space-y-6">

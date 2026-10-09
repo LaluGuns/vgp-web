@@ -689,9 +689,9 @@ interface ShapeAnalysis {
 /**
  * Matched for loudness, a boosted attack stands well above the dry hits.
  * Each path may peak up to 2.5 dB over the dry loop (the default shaper
- * setting needs about 1, the compressor about 2); past that its matching
- * stops, which keeps every setting under the demo's ceiling, and the demo
- * says how much quieter that leaves the loop.
+ * setting needs about 1, the compressor up to 3, so it may sit half a dB
+ * short); past that its matching stops, which keeps every setting under the
+ * demo's ceiling, and the demo says how much quieter that leaves the loop.
  */
 const SHAPE_PEAK_ROOM = dbToGain(2.5);
 
@@ -846,7 +846,8 @@ export function TransientDemo() {
     };
 
     const names = { shaper: 'Transient shaper', comp: 'Compressor' };
-    const lagging = (['shaper', 'comp'] as const).filter((k) => analysis && analysis.short[k] >= 0.5);
+    // Under 1 dB is within the matching's own accuracy.
+    const lagging = (['shaper', 'comp'] as const).filter((k) => analysis && analysis.short[k] >= 1);
     const quieter = lagging.map((k, i) => `the ${names[k].toLowerCase()}${i ? '' : ' plays'} about ${Math.round(analysis?.short[k] ?? 0)} dB quieter`);
     const levelNote =
         lagging.length === 0
@@ -1461,6 +1462,7 @@ export function LimiterDemo() {
                 />
             </div>
             <Readout
+                live
                 items={[
                     { label: 'Turned down to match the original', value: analysis ? fmtDb(gainToDb(analysis.match)) : '–' },
                     { label: 'Ceiling clip catches a peak', value: clippedText },
@@ -1770,6 +1772,7 @@ export function ClipRecoverDemo() {
                 <Slider label="Fader after recording" value={fader} min={-20} max={0} onChange={setFader} format={(v) => fmtDb(v, 0)} />
             </div>
             <Readout
+                live
                 items={[
                     { label: 'Went past 0 dBFS by', value: !analysis ? '–' : clipped ? `${analysis.overDb.toFixed(1)} dB` : 'Not clipped' },
                     { label: 'Hot take peak after the fader', value: analysis ? fmtDb(gainToDb(analysis.hotPeak * fg), 0, 'dBFS') : '–' },
@@ -1826,10 +1829,11 @@ function Wave({
     };
     return (
         <div>
-            <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="vgp-plot block overflow-hidden" role="img" aria-label={label}>
-                <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" />
+            {/* A fixed height at every width (strokes keep their size), so the demo's reserved height holds across a width range. */}
+            <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="vgp-plot block h-[100px] w-full overflow-hidden" role="img" aria-label={label}>
+                <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="rgba(255,255,255,0.1)" vectorEffect="non-scaling-stroke" />
                 {[line, -line].map((l) => (
-                    <line key={l} x1={0} x2={w} y1={y(l)} y2={y(l)} stroke="rgba(255,255,255,0.35)" strokeDasharray="1 3" />
+                    <line key={l} x1={0} x2={w} y1={y(l)} y2={y(l)} stroke="rgba(255,255,255,0.35)" strokeDasharray="1 3" vectorEffect="non-scaling-stroke" />
                 ))}
                 {traces?.map((t) => (
                     <path
@@ -1841,6 +1845,7 @@ function Wave({
                         strokeWidth={t.kind === 'after' ? 1.75 : 1.25}
                         strokeDasharray={t.kind === 'reference' ? '3 3' : undefined}
                         strokeLinejoin="round"
+                        vectorEffect="non-scaling-stroke"
                     />
                 ))}
             </svg>

@@ -312,6 +312,7 @@ export function BitDepthDemo() {
                 hint="The note is played quietly and turned up afterwards, the way a fade or a quiet passage exposes low bits."
             />
             <Readout
+                live
                 items={[
                     { label: 'Quantization noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
                     { label: 'Steps between silence and full scale', value: (2 ** (bits - 1)).toLocaleString('en-US') },

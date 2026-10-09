@@ -34,7 +34,8 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
             <p className="mt-2 text-base leading-7 text-white/70">{meta.blurb}</p>
             <div
                 style={size}
-                className="mt-6 min-h-[var(--demo-h0)] min-[360px]:min-h-[var(--demo-h1)] min-[375px]:min-h-[var(--demo-h2)] min-[412px]:min-h-[var(--demo-h3)] sm:min-h-[var(--demo-h4)] [@media(scripting:none)]:min-h-0"
+                // One reserved height per width range (lib/blog/demos.ts). Only min-[...] variants, so Tailwind orders them by width.
+                className="mt-6 min-h-[var(--demo-h0)] min-[360px]:min-h-[var(--demo-h1)] min-[375px]:min-h-[var(--demo-h2)] min-[390px]:min-h-[var(--demo-h3)] min-[393px]:min-h-[var(--demo-h4)] min-[412px]:min-h-[var(--demo-h5)] min-[428px]:min-h-[var(--demo-h6)] min-[640px]:min-h-[var(--demo-h7)] min-[736px]:min-h-[var(--demo-h8)] min-[1024px]:min-h-[var(--demo-h9)] min-[1104px]:min-h-[var(--demo-h10)] [@media(scripting:none)]:min-h-0"
             >
                 <DemoMount id={id} dialect={d} level={level} />
                 <noscript>

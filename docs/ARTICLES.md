@@ -165,12 +165,16 @@ it. Sound is synthesised in the browser. Ids:
 | `chord-context` | One chord after different lead-ins; one melody in major or minor, at two tempos and three registers |
 
 New demos go in `components/blog/demos/` and `lib/blog/demos.ts`. Give each
-one a `height` there (its controls' height at 390 px and from 640 px up), so
-the page keeps that space while the demo's code loads and nothing below it
-moves. Set its playback level so its K-weighted loudness sits with the
-drum-loop demos (about -26 LUFS at the default demo volume, ungated) and no
-setting peaks above -6 dBFS; the engine's output limiter holds -6 dBFS as a
-last resort, not as the level control.
+one a `height` there (its controls' height in each width range that file
+lists), so the page keeps that space while the demo's code loads and nothing
+below it moves. Set its `level` there (a playback trim in dB) so its
+K-weighted loudness sits with the drum-loop demos (about -24 LUFS at 100 %
+demo volume, both channels, ungated) and its loudest setting peaks under
+-7 dBFS; a demo whose comparison would peak higher plays lower, or says
+where its matching stops. The reader's volume is the last stage, after the
+engine's -6 dBFS limiter and clip, so it never changes what a demo does;
+the limiter and clip only catch mistakes. The default volume, 80 %, is
+4 dB under 100 %.
 
 ## Glossary
 
