@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { AudioWaveform, Home, Headphones, UserRound, Menu } from 'lucide-react';
 
 const itemClass =
-    'relative flex min-h-12 flex-col items-center justify-center gap-1 text-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60';
+    'vgp-focus relative flex min-h-12 flex-col items-center justify-center gap-1 rounded-md text-center transition-colors';
 
 export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     const pathname = usePathname();

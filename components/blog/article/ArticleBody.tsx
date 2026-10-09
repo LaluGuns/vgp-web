@@ -129,26 +129,26 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
     const blocks = section.blocks.map((block, i) =>
         renderBlock(block, `${section.id}-${i}`, section, ctx, first && i === 0 && block.kind === 'p'),
     );
-    const labelled = { 'aria-labelledby': section.id };
-
+    // Plain <section>s: a name would make each one a region landmark, and a lesson
+    // would list a dozen of them. The headings carry the structure.
     switch (section.role) {
         case 'experiment':
             return (
-                <section {...labelled} className="my-16 rounded-[6px] border border-white/10 bg-[var(--surface)] px-4 py-7 sm:px-8 sm:py-9">
+                <section className="my-16 rounded-[6px] border border-white/10 bg-[var(--surface)] px-4 py-7 sm:px-8 sm:py-9">
                     <Heading section={section} />
                     <div className="vgp-experiment">{blocks}</div>
                 </section>
             );
         case 'mistake':
             return (
-                <section {...labelled} className="my-16 border-l-2 border-white/25 pl-5 sm:pl-7">
+                <section className="my-16 border-l-2 border-white/25 pl-5 sm:pl-7">
                     <Heading section={section} />
                     {blocks}
                 </section>
             );
         case 'takeaway':
             return (
-                <section {...labelled} className="mt-16 border-t border-white/10 pt-9">
+                <section className="mt-16 border-t border-white/10 pt-9">
                     <Heading section={section} />
                     <div className="text-white/90">{blocks}</div>
                 </section>
@@ -157,12 +157,13 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
             // The heading sits outside <summary>, so it stays a heading for screen readers.
             const count = section.blocks.reduce((n, b) => n + (b.kind === 'ul' || b.kind === 'ol' ? b.items.length : b.kind === 'p' ? 1 : 0), 0);
             return (
-                <section {...labelled} className="mt-14 border-t border-white/10 pt-6">
+                <section className="mt-14 border-t border-white/10 pt-6">
                     <h2 id={section.id} className="scroll-mt-8 text-base font-semibold text-white">
                         Sources
                     </h2>
+                    {/* Opened by OpenDetails (ArticleChrome) for a #sources link and for print, where the toggle is left out. */}
                     <details className="group">
-                        <summary className="vgp-focus flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white [&::-webkit-details-marker]:hidden">
+                        <summary className="vgp-focus flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white print:hidden [&::-webkit-details-marker]:hidden">
                             <span className="group-open:hidden">Show {count === 1 ? 'the source' : `all ${count}`}</span>
                             <span className="hidden group-open:inline">Hide sources</span>
                             <span aria-hidden="true" className="transition-transform group-open:rotate-180">
@@ -176,7 +177,7 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
         }
         default:
             return (
-                <section {...labelled} className={first ? 'mt-2' : 'mt-16'}>
+                <section className={first ? 'mt-2' : 'mt-16'}>
                     <Heading section={section} />
                     {blocks}
                 </section>

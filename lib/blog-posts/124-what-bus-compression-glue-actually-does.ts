@@ -61,16 +61,13 @@ export const post124: BlogArticle = {
             alt: 'Three level plots across two bars. The first shows the bus level, four drum hits sitting on top of a flat pad, with two threshold lines. The second shows the pad after a light bus compressor: small dips after each hit that recover fully. The third shows the pad after a heavy setting: deep dips after each hit and a level that stays below the original grey line throughout.',
             rows: [
                 {
-                    label: 'Drums and pad into the bus',
+                    label: 'Into the bus, with each threshold',
                     unipolar: true,
                     lines: [
                         { y: BUS_SHOW * 0.6, label: '2:1 threshold', short: '2:1' },
                         { y: BUS_SHOW * 0.3, label: '6:1 threshold', short: '6:1' },
                     ],
-                    traces: [
-                        BUS,
-                        { kind: 'envelope', points: [[0, BUS_SHOW * PAD], [1, BUS_SHOW * PAD]], label: 'Pad alone', dashed: true, muted: true },
-                    ],
+                    traces: [BUS],
                 },
                 {
                     label: 'Pad after the bus, 2:1, light',

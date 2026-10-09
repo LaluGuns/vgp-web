@@ -1,16 +1,34 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useNewsletter } from '@/components/context/NewsletterContext';
+import { useExitTransition } from '@/components/useExitTransition';
 
+/**
+ * The newsletter dialog. AppFrame loads this module lazily (components/AppFrame.tsx),
+ * so it costs nothing on pages that never open it. It fades with CSS
+ * (.vgp-shell-backdrop / .vgp-shell-dialog in app/globals.css).
+ */
 export function SubscribePopup() {
     const { isOpen, closePopup } = useNewsletter();
+    const { mounted, closing } = useExitTransition(isOpen, 180);
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [wasOpen, setWasOpen] = useState(isOpen);
+
+    // Start every opening with an empty form. Resetting on open rather than on
+    // close keeps the last message on screen while the dialog fades out.
+    if (isOpen !== wasOpen) {
+        setWasOpen(isOpen);
+        if (isOpen) {
+            setStatus('idle');
+            setErrorMessage('');
+            setEmail('');
+        }
+    }
     const dialogRef = useRef<HTMLDivElement>(null);
     const emailInputRef = useRef<HTMLInputElement>(null);
     const previouslyFocusedRef = useRef<HTMLElement | null>(null);
@@ -79,9 +97,6 @@ export function SubscribePopup() {
         }
 
         closePopup();
-        setStatus('idle');
-        setErrorMessage('');
-        setEmail('');
     }, [closePopup]);
 
     useEffect(() => {
@@ -199,114 +214,106 @@ export function SubscribePopup() {
                 ? errorMessage
                 : '';
 
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-6">
-                    <m.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        onClick={handleClose}
-                        aria-hidden="true"
-                        className="absolute inset-0 bg-black/70"
-                    />
+    if (!mounted) return null;
 
-                    <m.div
-                        ref={dialogRef}
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="popup-title"
-                        aria-describedby="popup-description"
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="relative w-full max-w-md rounded-lg border border-white/10 bg-[#0a0e12] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.5)] sm:p-8"
-                    >
+    return (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 sm:px-6">
+            <div
+                onClick={handleClose}
+                aria-hidden="true"
+                data-closing={closing ? '' : undefined}
+                className="vgp-shell-backdrop absolute inset-0 bg-black/70"
+            />
+
+            <div
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="popup-title"
+                aria-describedby="popup-description"
+                data-closing={closing ? '' : undefined}
+                className="vgp-shell-dialog relative w-full max-w-md rounded-lg border border-white/10 bg-[#0a0e12] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.5)] sm:p-8"
+            >
+                <button
+                    type="button"
+                    onClick={handleClose}
+                    aria-label="Close"
+                    className="vgp-focus absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white"
+                >
+                    <X size={18} aria-hidden="true" />
+                </button>
+
+                <h2 id="popup-title" className="pr-10 text-2xl font-semibold leading-tight tracking-[-0.02em] text-white">
+                    {popupCopy.title}
+                </h2>
+                <p id="popup-description" className="mt-3 text-sm leading-6 text-white/70">
+                    {popupCopy.description}
+                </p>
+                <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+                    {statusMessage}
+                </p>
+
+                {status === 'success' ? (
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                        <p className="font-semibold text-white">You are on the list.</p>
+                        <p className="mt-1 text-sm text-white/65">Check your inbox for the confirmation email.</p>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                        <input
+                            type="text"
+                            name="website"
+                            tabIndex={-1}
+                            autoComplete="off"
+                            className="hidden"
+                            aria-hidden="true"
+                        />
+                        <div>
+                            <label htmlFor="newsletter-email" className="text-sm font-medium text-white">
+                                Email
+                            </label>
+                            <input
+                                ref={emailInputRef}
+                                id="newsletter-email"
+                                name="email"
+                                type="email"
+                                inputMode="email"
+                                autoComplete="email"
+                                spellCheck={false}
+                                required
+                                placeholder="you@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                aria-invalid={status === 'error' ? true : undefined}
+                                aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
+                                className="vgp-focus mt-2 w-full rounded-md border border-white/15 bg-[#050607] px-4 py-3 text-white placeholder-white/35 transition-colors focus:border-white/50"
+                            />
+                        </div>
+
+                        {status === 'error' && (
+                            <p id="newsletter-error" className="text-sm text-red-300">
+                                <span className="font-semibold">Not sent.</span> {errorMessage}
+                            </p>
+                        )}
+
                         <button
-                            type="button"
-                            onClick={handleClose}
-                            aria-label="Close"
-                            className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                            type="submit"
+                            disabled={status === 'loading'}
+                            className="vgp-focus flex min-h-12 w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 disabled:cursor-wait disabled:opacity-60"
                         >
-                            <X size={18} aria-hidden="true" />
+                            {status === 'loading' ? 'Sending…' : popupCopy.button}
                         </button>
 
-                        <h2 id="popup-title" className="pr-10 text-2xl font-semibold leading-tight tracking-[-0.02em] text-white">
-                            {popupCopy.title}
-                        </h2>
-                        <p id="popup-description" className="mt-3 text-sm leading-6 text-white/70">
-                            {popupCopy.description}
+                        <p className="text-xs leading-5 text-white/50">
+                            Every email has an unsubscribe link. See the{' '}
+                            <a href="/privacy" className="vgp-focus underline decoration-white/30 underline-offset-2 hover:text-white">
+                                privacy policy
+                            </a>
+                            .
                         </p>
-                        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-                            {statusMessage}
-                        </p>
-
-                        {status === 'success' ? (
-                            <div className="mt-6 border-t border-white/10 pt-5">
-                                <p className="font-semibold text-white">You are on the list.</p>
-                                <p className="mt-1 text-sm text-white/65">Check your inbox for the confirmation email.</p>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                                <input
-                                    type="text"
-                                    name="website"
-                                    tabIndex={-1}
-                                    autoComplete="off"
-                                    className="hidden"
-                                    aria-hidden="true"
-                                />
-                                <div>
-                                    <label htmlFor="newsletter-email" className="text-sm font-medium text-white">
-                                        Email
-                                    </label>
-                                    <input
-                                        ref={emailInputRef}
-                                        id="newsletter-email"
-                                        name="email"
-                                        type="email"
-                                        inputMode="email"
-                                        autoComplete="email"
-                                        spellCheck={false}
-                                        required
-                                        placeholder="you@example.com"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        aria-invalid={status === 'error' ? true : undefined}
-                                        aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
-                                        className="mt-2 w-full rounded-md border border-white/15 bg-[#050607] px-4 py-3 text-white placeholder-white/35 transition-colors focus:border-white/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-                                    />
-                                </div>
-
-                                {status === 'error' && (
-                                    <p id="newsletter-error" className="text-sm text-red-300">
-                                        <span className="font-semibold">Not sent.</span> {errorMessage}
-                                    </p>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={status === 'loading'}
-                                    className="flex min-h-12 w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#050607] transition-colors hover:bg-white/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0e12] disabled:cursor-wait disabled:opacity-60"
-                                >
-                                    {status === 'loading' ? 'Sending…' : popupCopy.button}
-                                </button>
-
-                                <p className="text-xs leading-5 text-white/50">
-                                    Every email has an unsubscribe link. See the{' '}
-                                    <a href="/privacy" className="underline decoration-white/30 underline-offset-2 hover:text-white">
-                                        privacy policy
-                                    </a>
-                                    .
-                                </p>
-                            </form>
-                        )}
-                    </m.div>
-                </div>
-            )}
-        </AnimatePresence>
+                    </form>
+                )}
+            </div>
+        </div>
     );
 }

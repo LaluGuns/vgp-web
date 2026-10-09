@@ -4,9 +4,9 @@ import { useEffect, useId, useRef, useState, type FocusEvent, type KeyboardEvent
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { AnimatePresence, m } from 'framer-motion';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { CADENZ_PLAY_URL, FLOW_APP_URL, mainNavGroups, type NavChild } from '@/lib/vgp-ecosystem';
+import { useExitTransition } from '@/components/useExitTransition';
 
 const beatStoreNavCopy = {
     'en-US': {
@@ -44,7 +44,12 @@ const beatStoreNavCopy = {
     },
 } as const;
 
-const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60';
+// The site's one focus style (docs/DESIGN.md "Focus"): accent outline, keyboard only.
+const focusRing = 'vgp-focus';
+
+// Menus fade in and out with CSS (.vgp-shell-* in app/globals.css); this is
+// how long a closing menu stays mounted for its exit.
+const MENU_EXIT_MS = 150;
 
 /**
  * The first focusable element on every page: "Skip to content" jumps past
@@ -67,11 +72,20 @@ function SkipLink() {
                 }
                 target.focus();
             }}
-            className="sr-only rounded-md bg-white text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:px-4 focus:py-3 focus:left-4 focus:top-3 focus:z-[60] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050607]"
+            className="vgp-focus sr-only rounded-md bg-white text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:px-4 focus:py-3 focus:left-4 focus:top-3 focus:z-[60]"
         >
             Skip to content
         </a>
     );
+}
+
+/**
+ * Renders its child while `open`, and for the exit transition after: the
+ * child gets `closing` to set data-closing (see useExitTransition).
+ */
+function MenuPresence({ open, children }: { open: boolean; children: (closing: boolean) => ReactNode }) {
+    const { mounted, closing } = useExitTransition(open, MENU_EXIT_MS);
+    return mounted ? <>{children(closing)}</> : null;
 }
 
 // Most items are live, so only the exceptions get a label.
@@ -343,7 +357,7 @@ export function Navbar() {
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">
                     <Link
                         href={useStoreNav ? beatStoreBase : '/'}
-                        className={`flex min-w-0 items-center gap-3 rounded-md ${focusRing}`}
+                        className={`flex min-h-11 min-w-0 items-center gap-3 rounded-md ${focusRing}`}
                         aria-label={useStoreNav ? beatNav.brand : 'Virzy Guns, home'}
                     >
                         <Image
@@ -430,15 +444,12 @@ export function Navbar() {
                                             />
                                         </button>
 
-                                        <AnimatePresence>
-                                            {isOpen ? (
-                                                <m.div
+                                        <MenuPresence open={isOpen}>
+                                            {(closing) => (
+                                                <div
                                                     id={panelId}
-                                                    initial={{ opacity: 0, y: 4 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: 4 }}
-                                                    transition={{ duration: 0.15, ease: 'easeOut' }}
-                                                    className="absolute left-0 top-full z-[90] w-80 pt-2"
+                                                    data-closing={closing ? '' : undefined}
+                                                    className="vgp-shell-drop absolute left-0 top-full z-[90] w-80 pt-2"
                                                 >
                                                     <ul className="rounded-lg border border-white/10 bg-[#0a0e12] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
                                                         {group.children.map((item) => {
@@ -467,9 +478,9 @@ export function Navbar() {
                                                             );
                                                         })}
                                                     </ul>
-                                                </m.div>
-                                            ) : null}
-                                        </AnimatePresence>
+                                                </div>
+                                            )}
+                                        </MenuPresence>
                                     </div>
                                 );
                             })}
@@ -509,9 +520,9 @@ export function Navbar() {
                 </div>
             </nav>
 
-            <AnimatePresence>
-                {mobileOpen ? (
-                    <m.div
+            <MenuPresence open={mobileOpen}>
+                {(closing) => (
+                    <div
                         id={mobilePanelId}
                         ref={mobilePanelRef}
                         tabIndex={-1}
@@ -519,11 +530,8 @@ export function Navbar() {
                         aria-modal="true"
                         aria-label="Site menu"
                         onKeyDown={handleMobilePanelKeyDown}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15, ease: 'easeOut' }}
-                        className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none sm:px-6 lg:hidden"
+                        data-closing={closing ? '' : undefined}
+                        className="vgp-shell-fade max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none sm:px-6 lg:hidden"
                     >
                         <div className="mx-auto grid max-w-7xl gap-8">
                             {useStoreNav ? (
@@ -609,9 +617,9 @@ export function Navbar() {
                                 </Link>
                             )}
                         </div>
-                    </m.div>
-                ) : null}
-            </AnimatePresence>
+                    </div>
+                )}
+            </MenuPresence>
         </header>
     );
 }

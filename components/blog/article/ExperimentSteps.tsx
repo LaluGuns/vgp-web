@@ -81,7 +81,7 @@ export function ExperimentSteps({ steps, storageKey }: { steps: string[]; storag
                     );
                 })}
             </ol>
-            <p className="mt-4 text-sm text-white/50" aria-live="polite">
+            <p className="mt-4 text-sm text-white/50 print:hidden" aria-live="polite">
                 {done.length === steps.length ? 'All steps done.' : `${done.length} of ${steps.length} steps done`}
             </p>
         </div>

@@ -12,14 +12,17 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Bookmark, Check, Copy, Share2 } from 'lucide-react';
 import { copyToClipboard } from './clipboard';
 import { OutlineList, type OutlineItem } from './OutlineList';
+import { closeWhenFocusLeaves } from './popover-focus';
 import { currentSection, readNow, subscribeReading } from './reading-scroll';
 import { markRead } from './reading-state';
 
 // The share dialog (with the QR code; html-to-image loads on the first download) is its
-// own chunk, fetched when the reader reaches for Share (hover, focus or touch) and
-// rendered only while open. A plain import() rather than next/dynamic: dynamic() suspends
-// on first render and React holds a revealed Suspense boundary back about 300 ms, which
-// made the dialog lag the tap even when the chunk was already here.
+// own chunk, rendered only while open. It is fetched once the page has loaded and the
+// browser is idle, so a tap on a slow phone connection finds it here; reaching for Share
+// earlier (hover, focus or touch) fetches it at once. A plain import() rather than
+// next/dynamic: dynamic() suspends on first render and React holds a revealed Suspense
+// boundary back about 300 ms, which made the dialog lag the tap even when the chunk was
+// already here.
 type ShareDialogComponent = typeof import('@/components/blog/MasterclassShareModal').MasterclassShareModal;
 let shareDialog: Promise<ShareDialogComponent> | null = null;
 const loadShareDialog = () =>
@@ -27,6 +30,26 @@ const loadShareDialog = () =>
         shareDialog = null; // let the next tap try again
         throw error;
     }));
+
+/** Runs `fn` once the page has loaded and the browser is idle. Returns a cancel function. */
+function afterLoadWhenIdle(fn: () => void): () => void {
+    let cancel = () => {};
+    const start = () => {
+        if (typeof window.requestIdleCallback === 'function') {
+            const id = window.requestIdleCallback(() => fn(), { timeout: 4000 });
+            cancel = () => window.cancelIdleCallback(id);
+        } else {
+            const id = window.setTimeout(fn, 1500);
+            cancel = () => window.clearTimeout(id);
+        }
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+    return () => {
+        window.removeEventListener('load', start);
+        cancel();
+    };
+}
 
 const actionClass =
     'vgp-focus inline-flex min-h-11 items-center gap-2 rounded-[4px] px-1 text-sm font-medium text-white/70 transition-colors hover:text-white';
@@ -94,6 +117,27 @@ export function ArticleActions({
             .catch(() => {});
     };
 
+    useEffect(
+        () =>
+            afterLoadWhenIdle(() => {
+                loadShareDialog()
+                    .then((component) => setShareDialog(() => component))
+                    .catch(() => {});
+            }),
+        [],
+    );
+
+    const openShare = () => {
+        setSharing(true);
+        if (ShareDialog) return;
+        loadShareDialog()
+            .then((component) => setShareDialog(() => component))
+            // Offline or the chunk failed: give the button back rather than leave it waiting.
+            .catch(() => setSharing(false));
+    };
+    // Share was pressed before the dialog's code arrived: say so until it opens.
+    const opening = sharing && !ShareDialog;
+
     // The dialog hands focus back to Share as it closes; this covers a browser that does not.
     const closeShare = useCallback(() => {
         setSharing(false);
@@ -104,7 +148,8 @@ export function ArticleActions({
 
     return (
         <>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            {/* Reading tools for the screen: they need JavaScript and mean nothing on paper. */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 print:hidden [@media(scripting:none)]:hidden">
                 <button type="button" onClick={toggleBookmark} aria-pressed={isBookmarked} className={actionClass}>
                     <Bookmark size={16} className={isBookmarked ? 'fill-current text-white' : ''} aria-hidden="true" />
                     {isBookmarked ? 'Saved' : 'Save'}
@@ -120,14 +165,12 @@ export function ArticleActions({
                     onPointerEnter={prefetchShare}
                     onPointerDown={prefetchShare}
                     onFocus={prefetchShare}
-                    onClick={() => {
-                        prefetchShare();
-                        setSharing(true);
-                    }}
+                    onClick={openShare}
+                    aria-busy={opening || undefined}
                     className={actionClass}
                 >
                     <Share2 size={16} aria-hidden="true" />
-                    Share
+                    {opening ? 'Opening…' : 'Share'}
                 </button>
             </div>
             {sharing && ShareDialog ? (
@@ -248,10 +291,11 @@ export function OutlineTracker({ ids, children }: { ids: string[]; children: Rea
  * Phones have no outline beside the text, so once the reader is past the
  * inline "In this article" list a small Contents button stays in reach,
  * above the bottom navigation. It opens the section list as a popover with
- * focus on the section being read. It shows when the reader scrolls up and
- * steps aside again after two seconds without scrolling, so it never sits
- * over the text for long. It sits right after the inline list in the tab
- * order, and shows whenever it has keyboard focus.
+ * focus on the section being read, and closes again when focus leaves it.
+ * It shows when the reader scrolls up and steps aside again after two
+ * seconds without scrolling, so it never sits over the text for long. It
+ * sits right after the inline list in the tab order, and shows whenever it
+ * has keyboard focus.
  */
 export function MobileContents({ headings }: { headings: OutlineItem[] }) {
     const button = useRef<HTMLButtonElement>(null);
@@ -308,9 +352,12 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
         start();
         narrow.addEventListener('change', start);
         pop.addEventListener('toggle', onToggle);
+        // Tab past the last section closes the sheet, so focus never moves on underneath it.
+        const stopFocus = closeWhenFocusLeaves(pop);
         return () => {
             narrow.removeEventListener('change', start);
             pop.removeEventListener('toggle', onToggle);
+            stopFocus();
             window.clearTimeout(idle);
             stop?.();
         };
@@ -365,4 +412,58 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
             </div>
         </div>
     );
+}
+
+/**
+ * Collapsed lists open when the reader needs what is inside them: the
+ * Sources list when the address or a link points at #sources, and every
+ * collapsed list on the page while it prints (closed again afterwards).
+ */
+export function OpenDetails() {
+    useEffect(() => {
+        const openFor = (hash: string | null) => {
+            if (!hash || hash.length < 2 || !hash.startsWith('#')) return;
+            let id = hash.slice(1);
+            try {
+                id = decodeURIComponent(id);
+            } catch {
+                // Keep the raw id.
+            }
+            const next = document.getElementById(id)?.nextElementSibling;
+            if (next instanceof HTMLDetailsElement) next.open = true;
+        };
+        const onHash = () => openFor(window.location.hash);
+        // A Contents link to the hash the address already has fires no hashchange.
+        const onClick = (event: MouseEvent) => {
+            const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
+            if (link) openFor(link.getAttribute('href'));
+        };
+        let printed: HTMLDetailsElement[] = [];
+        const beforePrint = () => {
+            // The inline contents list is left out of print, so it stays as it is on screen.
+            printed = Array.from(document.querySelectorAll<HTMLDetailsElement>('main details:not([open]):not(#article-outline-inline)'));
+            printed.forEach((details) => {
+                details.open = true;
+            });
+        };
+        const afterPrint = () => {
+            printed.forEach((details) => {
+                details.open = false;
+            });
+            printed = [];
+        };
+        onHash();
+        window.addEventListener('hashchange', onHash);
+        document.addEventListener('click', onClick);
+        window.addEventListener('beforeprint', beforePrint);
+        window.addEventListener('afterprint', afterPrint);
+        return () => {
+            window.removeEventListener('hashchange', onHash);
+            document.removeEventListener('click', onClick);
+            window.removeEventListener('beforeprint', beforePrint);
+            window.removeEventListener('afterprint', afterPrint);
+        };
+    }, []);
+
+    return null;
 }

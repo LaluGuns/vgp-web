@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import 'katex/dist/katex.min.css';
 import { ArticleBody, ArticleSources } from '@/components/blog/article/ArticleBody';
-import { ArticleActions, MobileContents, OutlineTracker, ReadingProgress } from '@/components/blog/article/ArticleChrome';
+import { ArticleActions, MobileContents, OpenDetails, OutlineTracker, ReadingProgress } from '@/components/blog/article/ArticleChrome';
 import { OutlineList, type OutlineItem } from '@/components/blog/article/OutlineList';
 import { Quiz } from '@/components/blog/article/Quiz';
 import { TapLink } from '@/components/blog/article/TapLink';
@@ -84,7 +84,7 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
     if (!position) {
         const first = path.articles[0];
         return (
-            <section aria-labelledby="path-next" className="mt-16 border-t border-white/10 pt-10">
+            <section className="mt-16 border-t border-white/10 pt-10">
                 <h2 id="path-next" className="text-sm font-medium text-white/55">
                     The {pathName} path · {total} lessons
                 </h2>
@@ -111,7 +111,7 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
 
     if (position.next) {
         return (
-            <section aria-labelledby="path-next" className="mt-16 border-t border-white/10 pt-10">
+            <section className="mt-16 border-t border-white/10 pt-10">
                 <h2 id="path-next" className="text-sm font-medium text-white/55">
                     Next lesson · {position.index + 2} of {total}
                 </h2>
@@ -128,7 +128,7 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
     const nextPath = learningPaths.length > 1 ? after(path) : undefined;
     const nextFirst = nextPath?.articles[0];
     return (
-        <section aria-labelledby="path-next" className="mt-16 border-t border-white/10 pt-10">
+        <section className="mt-16 border-t border-white/10 pt-10">
             <p className="text-sm font-medium text-white/55">
                 Lesson {total} of {total}
             </p>
@@ -179,6 +179,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
         <>
             <main id="main" tabIndex={-1} style={accentScope} className="editorial-shell text-white focus:outline-none">
                 <ReadingProgress slug={article.slug} accent={dialect.accent} sectionIds={sectionIds} />
+                <OpenDetails />
                 <article>
                     <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                         <div className="mx-auto max-w-7xl">
@@ -241,7 +242,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                             <div className="min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-1">
                                 <div className="max-w-[68ch]">
                                     {article.summary?.length ? (
-                                        <section aria-labelledby="in-short" className="mb-10 border-b border-white/10 pb-8">
+                                        <section className="mb-10 border-b border-white/10 pb-8">
                                             <h2 id="in-short" className="text-sm font-medium text-white/55">
                                                 In short
                                             </h2>
@@ -259,7 +260,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     ) : null}
 
                                     {headings.length > 0 ? (
-                                        <details id="article-outline-inline" className="group mb-10 border-b border-white/10 pb-6 lg:hidden">
+                                        <details id="article-outline-inline" className="group mb-10 border-b border-white/10 pb-6 print:hidden lg:hidden">
                                             <summary className="vgp-focus flex min-h-11 cursor-pointer list-none items-center justify-between rounded-sm text-base font-medium text-white [&::-webkit-details-marker]:hidden">
                                                 In this article ({headings.length})
                                                 <span className="text-sm text-white/55 group-open:hidden">Show</span>
@@ -294,7 +295,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
 
                                     <PathNext article={article} pathName={pathName} />
 
-                                    <section aria-labelledby="author-heading" className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-start">
+                                    <section className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-start">
                                         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[6px] bg-black">
                                             <Image src="/images/founder.jpg" alt="Portrait of Virzy Guns" fill sizes="80px" className="object-cover object-[50%_25%]" />
                                         </div>
@@ -312,9 +313,6 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                         </div>
                                     </section>
 
-                                    {article.seo.keywords.length > 0 ? (
-                                        <p className="mt-10 text-sm leading-6 text-white/50">Topics: {article.seo.keywords.join(', ')}</p>
-                                    ) : null}
                                 </div>
                             </div>
                         </div>
@@ -322,7 +320,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                 </article>
 
                 {upcoming.length > 0 && position ? (
-                    <section aria-labelledby="path-heading" className="border-t border-white/10 px-4 pb-20 pt-14 sm:px-6">
+                    <section className="border-t border-white/10 px-4 pb-20 pt-14 sm:px-6">
                         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-12">
                             <div className="lg:col-span-4">
                                 <h2 id="path-heading" className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">

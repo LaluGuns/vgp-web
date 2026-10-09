@@ -23,8 +23,10 @@ const footerGroups = [
     },
 ];
 
+// 44 px tall tap targets. The lists have no gap, so the rows sit 44 px apart
+// (37.6 px before) and the text keeps its place under each heading.
 const linkClass =
-    'text-sm text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:text-white focus-visible:underline';
+    'vgp-focus inline-flex min-h-11 items-center rounded-[4px] text-sm text-white/60 transition-colors hover:text-white focus-visible:text-white';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -57,7 +59,7 @@ export function Footer() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={social.name}
-                                        className="group -ml-2 flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                                        className="vgp-focus group -ml-2 flex h-11 w-11 items-center justify-center rounded-md text-white/60 transition-colors hover:text-white"
                                     >
                                         {social.icon}
                                     </a>
@@ -66,17 +68,17 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 lg:col-span-7">
+                    <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4 lg:col-span-7">
                         {footerGroups.map((group) => (
                             <nav key={group.title} aria-label={`${group.title} links`}>
                                 <p className="text-sm font-medium text-white">{group.title}</p>
-                                <ul className="mt-4 grid gap-3">
+                                <ul className="mt-1.5 grid">
                                     {group.links.map((link) => {
                                         const external = link.href.startsWith('http');
                                         const mailto = link.href.startsWith('mailto:');
 
                                         return (
-                                            <li key={link.name}>
+                                            <li key={link.name} className="flex">
                                                 {external ? (
                                                     <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
                                                         {link.name}
@@ -99,7 +101,7 @@ export function Footer() {
                     </div>
                 </div>
 
-                <p className="mt-14 border-t border-white/10 pt-6 text-xs text-white/50">
+                <p className="mt-12 border-t border-white/10 pt-6 text-xs text-white/50 lg:mt-14">
                     © {currentYear} Virzy Guns Production
                 </p>
             </div>

@@ -96,10 +96,18 @@
    â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â• â•  */
 
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
   /* Keep focused and linked-to elements clear of the fixed header (WCAG 2.4.11). */
   scroll-padding-top: 88px;
+}
+
+/* Smooth only for a jump the reader starts from a focused link (a Contents
+   entry, the skip link). A deep link, a shared #section or a reload lands at
+   once instead of gliding down past every figure on the way. */
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
 }
 
 /* Phones also have the fixed bottom navigation (MobileBottomNav, md:hidden)
@@ -109,6 +117,14 @@ html {
 @media (max-width: 767.98px) {
   html {
     scroll-padding-bottom: 128px;
+  }
+}
+
+/* Wider screens: a playing demo's Stop button is pinned near the bottom of
+   the screen, so focus stops clear of it too. Static, for the same reason. */
+@media (min-width: 768px) {
+  html {
+    scroll-padding-bottom: 80px;
   }
 }
 
@@ -554,6 +570,13 @@ body::before {
   figure {
     break-inside: avoid;
   }
+
+  /* Collapsed lists (Sources) print open. ArticleChrome's OpenDetails opens
+     them on beforeprint; this covers a print that skips the event. Their
+     Show and Hide toggles, like the other reading tools, are print:hidden. */
+  details::details-content {
+    content-visibility: visible;
+  }
 }
 
 /* ── Articles (docs/ARTICLES.md) ─────────────────────────────────── */
@@ -627,6 +650,11 @@ body::before {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* A term and the punctuation or "'s" next to it stay on one line (lib/blog/content.ts). */
+.vgp-term-glue {
+  white-space: nowrap;
 }
 
 .vgp-term-pop {

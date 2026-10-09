@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { closeOpenWhenFocusLeaves } from './popover-focus';
 
 /**
  * Glossary definitions open as popovers pinned to the bottom of the screen
@@ -8,6 +9,8 @@ import { useEffect } from 'react';
  * lower half of the screen, the popover would cover it, so it opens at the
  * top instead, just under the site header. If the screen is too short for
  * either, the popover gets the room on the far side of the word and scrolls.
+ * Tab past the definition's last link closes it, so focus never moves on
+ * underneath it.
  */
 export function TermPlacement() {
     useEffect(() => {
@@ -30,7 +33,11 @@ export function TermPlacement() {
             }
         };
         document.addEventListener('beforetoggle', place, true);
-        return () => document.removeEventListener('beforetoggle', place, true);
+        const stopFocus = closeOpenWhenFocusLeaves('.vgp-term-pop');
+        return () => {
+            document.removeEventListener('beforetoggle', place, true);
+            stopFocus();
+        };
     }, []);
 
     return null;

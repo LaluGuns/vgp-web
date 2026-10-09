@@ -36,9 +36,9 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
     };
 
     return (
-        <section aria-labelledby={titleId} className="mt-16 border-t border-white/10 pt-10">
+        <section className="mt-16 border-t border-white/10 pt-10">
             <p className="mb-2 text-sm font-medium text-white/50">{questions.length} questions</p>
-            <h2 id={titleId} ref={heading} tabIndex={-1} className="text-2xl font-semibold tracking-[-0.02em] text-white focus:outline-none sm:text-3xl">
+            <h2 id={titleId} ref={heading} tabIndex={-1} className="scroll-mt-8 text-2xl font-semibold tracking-[-0.02em] text-white focus:outline-none sm:text-3xl">
                 Check yourself
             </h2>
             <ol className="mt-8 space-y-10">
@@ -122,7 +122,7 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
                                         <button
                                             type="submit"
                                             disabled={choice === null}
-                                            className="vgp-focus mt-4 inline-flex min-h-11 items-center rounded-md border border-white/25 px-4 text-sm font-semibold text-white transition-colors hover:border-white/60 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/50 [@media(scripting:none)]:hidden"
+                                            className="vgp-focus mt-4 inline-flex min-h-11 items-center rounded-md border border-white/25 px-4 text-sm font-semibold text-white transition-colors hover:border-white/60 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/50 print:hidden [@media(scripting:none)]:hidden"
                                         >
                                             Check answer
                                         </button>
@@ -150,7 +150,7 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
                     <button
                         type="button"
                         onClick={reset}
-                        className="vgp-focus inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white/75 hover:text-white"
+                        className="vgp-focus inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white/75 hover:text-white print:hidden"
                     >
                         <span className="vgp-link">Try again</span>
                     </button>

@@ -100,6 +100,19 @@ interface InlineContext {
     used: GlossaryEntry[];
 }
 
+// A term button is an inline box, so a line may break between it and the
+// punctuation, quote or "'s" that follows ("stems / ."). The term and what
+// clings to it on either side go in one span that does not wrap.
+const TERM_BUTTON = '<button type="button" class="vgp-term"';
+const TERM_GLUE = /([(\[“‘]|&quot;)?(<button type="button" class="vgp-term"[^>]*>[^<]*<\/button>)((?:['’]s(?![\w’']))?(?:[.,;:!?)\]’”'…%]|&quot;)*)/g;
+
+function glueTerms(html: string): string {
+    if (!html.includes(TERM_BUTTON)) return html;
+    return html.replace(TERM_GLUE, (whole: string, before = '', button: string, after = '') =>
+        before || after ? `<span class="vgp-term-glue">${before}${button}${after}</span>` : whole,
+    );
+}
+
 function linkTerms(html: string, ctx: InlineContext): string {
     if (ctx.pending.size === 0) return html;
     // Only touch text between tags, and never inside a link.
@@ -113,11 +126,12 @@ function linkTerms(html: string, ctx: InlineContext): string {
                 return part;
             }
             if (insideLink > 0 || !part.trim()) return part;
-            return findTerms(part, ctx.pending, (entry, match) => {
+            const linked = findTerms(part, ctx.pending, (entry, match) => {
                 ctx.pending.delete(entry.id);
                 ctx.used.push(entry);
-                return `<button type="button" class="vgp-term" popovertarget="term-${entry.id}" aria-haspopup="dialog">${match}</button>`;
+                return `${TERM_BUTTON} popovertarget="term-${entry.id}" aria-haspopup="dialog">${match}</button>`;
             });
+            return glueTerms(linked);
         })
         .join('');
 }

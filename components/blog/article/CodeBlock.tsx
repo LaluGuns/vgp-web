@@ -9,9 +9,13 @@ import { copyToClipboard } from './clipboard';
  * instead of scrolling sideways, so the whole line is readable on a phone,
  * and a Copy button copies the exact text, byte for byte. Without
  * JavaScript the button is hidden and the text can be selected as usual.
+ * The button's name says what it copies (the start of the text), so a
+ * screen reader does not hear a bare "Copy" next to "Copy link".
  */
 export function CodeBlock({ text }: { text: string }) {
     const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
+    const start = text.trim().split(/\s+/).slice(0, 8).join(' ');
+    const what = start.length < text.trim().length ? `${start.replace(/[,;:.]$/, '')}…` : start;
 
     const copy = () => {
         copyToClipboard(text)
@@ -31,6 +35,7 @@ export function CodeBlock({ text }: { text: string }) {
                 >
                     {status === 'copied' ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
                     <span aria-live="polite">{status === 'copied' ? 'Copied' : status === 'failed' ? 'Copy failed' : 'Copy'}</span>
+                    <span className="sr-only"> the text “{what}”</span>
                 </button>
             </div>
         </div>

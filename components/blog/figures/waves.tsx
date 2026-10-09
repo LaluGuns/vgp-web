@@ -260,8 +260,11 @@ type Seg = [number, number, number, number];
 /** A label's glyph box around its baseline, at FS. */
 const ASCENT = 9.5;
 const DESCENT = 3;
-/** Clear space round a line label: no trace comes nearer, so a label never touches the data. */
-const CLEAR = 3;
+/**
+ * Clear space round a line label, measured to the middle of a trace: no trace comes nearer, so a label
+ * stands well apart from the data (about 6 px past a trace's edge) and never reads as touching it.
+ */
+const CLEAR = 6;
 const COLUMN = 8;
 
 /** Does the segment pass through the box? (Liang-Barsky) */
@@ -359,15 +362,17 @@ function labelGroups(row: SignalRow) {
  * Labels for a row's lines, each just above or below its line where no
  * trace, shaded area, sample or mark comes within CLEAR of it: at the
  * line's right end, else its left end, else the clear spot nearest the
- * right. Null when any label has no such spot; the row then names its
- * line in its legend, or labels its lines past their ends (endLabels).
+ * right. One entry per label group, null
+ * where the label found no spot, or where `skip` holds it (it is named in
+ * the legend). The row then names that line in its legend, or labels its
+ * lines past their ends (endLabels).
  */
-function placeLineLabels(row: SignalRow, shape: RowShape, pw: number, h: number, narrow: boolean): LineLabel[] | null {
+function placeLineLabels(row: SignalRow, shape: RowShape, pw: number, h: number, narrow: boolean, skip: Set<string>): (LineLabel | null)[] {
     const lines = row.lines ?? [];
     const blocked = dataObstacles(row, shape, pw, h);
     const taken: Box[] = [];
-    const out: LineLabel[] = [];
-    for (const members of labelGroups(row)) {
+    return labelGroups(row).map((members) => {
+        if (skip.has(members[0].label)) return null;
         const text = lineText(members[0], narrow);
         const tw = textWidth(text);
         // The ends stay clear of the registration corners.
@@ -376,8 +381,7 @@ function placeLineLabels(row: SignalRow, shape: RowShape, pw: number, h: number,
             { x0: 7, x: 7, anchor: 'start' },
         ];
         for (let x0 = pw - 10 - tw; x0 > 7; x0 -= 3) spots.push({ x0, x: x0 + tw / 2, anchor: 'middle' });
-        let found: (LineLabel & { box: Box }) | null = null;
-        search: for (const line of members) {
+        for (const line of members) {
             const ly = shape.vy(line.y);
             const others = lines.filter((l) => l !== line).map((l) => shape.vy(l.y));
             for (const spot of spots) {
@@ -387,16 +391,13 @@ function placeLineLabels(row: SignalRow, shape: RowShape, pw: number, h: number,
                     if (others.some((oy) => oy > box.y0 - 1 && oy < box.y1 + 1)) continue;
                     if (taken.some((t) => t.x0 < box.x1 + 4 && box.x0 < t.x1 + 4 && t.y0 < box.y1 + 2 && box.y0 < t.y1 + 2)) continue;
                     if (blocked({ x0: box.x0 - CLEAR, x1: box.x1 + CLEAR, y0: box.y0 - CLEAR, y1: box.y1 + CLEAR })) continue;
-                    found = { text, x: spot.x, y: base, anchor: spot.anchor, box };
-                    break search;
+                    taken.push(box);
+                    return { text, x: spot.x, y: base, anchor: spot.anchor };
                 }
             }
         }
-        if (!found) return null;
-        taken.push(found.box);
-        out.push(found);
-    }
-    return out;
+        return null;
+    });
 }
 
 /** Labels past the ends of a row's lines, in the margin right of the plot, kept a line apart. */
@@ -508,33 +509,56 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
     const labelH = 22;
     const gap = 14;
 
-    // Line labels go beside their lines where the traces leave room. A row with one line label that finds
-    // no room names the line in its legend instead, a dashed sample like the line itself, when nothing else
-    // there is a grey dash. Otherwise the row labels its lines past their ends, in a margin right of the
-    // plot; every row then gives up the same margin, so the rows keep one time axis.
-    const inLegend = new Set<number>();
+    // Line labels go beside their lines where the traces leave room. A row where one line finds no room
+    // names that line in its legend instead, a dashed sample like the line itself, when nothing else there
+    // is a grey dash; the row's other lines keep their labels beside them, so the one in the legend is the
+    // dashed line left unnamed. Otherwise the row labels its lines past their ends, in a margin right of the
+    // plot; every row then gives up the same margin, so the rows keep one time axis. A line's label is
+    // treated the same way in every row it appears in: once it goes to a legend (or the margin) in one row,
+    // it goes there in all of them, so the same line is never named inline in one row and in the legend
+    // of the next.
+    const RANK = { inline: 0, legend: 1, end: 2 } as const;
+    const mode = new Map<string, keyof typeof RANK>();
+    const inLegend = new Map<number, string>();
     const ends = new Set<number>();
     let margin = 0;
     let shapes: RowShape[] = [];
     let labels: LineLabel[][] = [];
-    for (let pass = 0; pass < 4; pass++) {
+    for (let pass = 0; pass < 8; pass++) {
         const pw = w - margin;
         shapes = spec.rows.map((row) => rowShape(row, pw, heightOf(row)));
         labels = spec.rows.map((row, i) => {
             inLegend.delete(i);
-            if (!row.lines?.length) return [];
-            const inside = ends.has(i) ? null : placeLineLabels(row, shapes[i], pw, heightOf(row), narrow);
-            if (inside) return inside;
-            if (!ends.has(i) && labelGroups(row).length === 1 && !row.traces.some((t) => t.label && t.dashed && t.muted)) {
-                inLegend.add(i);
-                return [];
+            const groups = labelGroups(row);
+            if (!groups.length) return [];
+            if (!ends.has(i) && !groups.some((g) => mode.get(g[0].label) === 'end')) {
+                const forced = new Set(groups.filter((g) => mode.get(g[0].label) === 'legend').map((g) => g[0].label));
+                const placed = placeLineLabels(row, shapes[i], pw, heightOf(row), narrow, forced);
+                const missing = groups.filter((_, k) => !placed[k]);
+                if (!missing.length) return placed as LineLabel[];
+                if (missing.length === 1 && !row.traces.some((t) => t.label && t.dashed && t.muted)) {
+                    inLegend.set(i, missing[0][0].label);
+                    return placed.filter((label) => label !== null);
+                }
             }
             ends.add(i);
             return endLabels(row, shapes[i], pw, heightOf(row), narrow);
         });
+        let changed = false;
+        spec.rows.forEach((row, i) =>
+            labelGroups(row).forEach((g) => {
+                const label = g[0].label;
+                const now = ends.has(i) ? 'end' : inLegend.get(i) === label ? 'legend' : 'inline';
+                if (RANK[now] > RANK[mode.get(label) ?? 'inline']) {
+                    mode.set(label, now);
+                    changed = true;
+                }
+            }),
+        );
         const need = ends.size ? Math.max(...[...ends].flatMap((i) => spec.rows[i].lines!.map((l) => textWidth(lineText(l, narrow))))) + 10 : 0;
-        if (need <= margin) break;
-        margin = need;
+        // Modes only ever step up and the margin only grows, so this settles in a few passes.
+        if ((!changed && need <= margin) || pass === 7) break;
+        margin = Math.max(margin, need);
     }
     const pw = w - margin;
 
@@ -544,7 +568,8 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
         const named: LegendItem[] = row.traces
             .filter((t) => t.label)
             .map((t) => ({ label: t.label!, dashed: t.dashed, muted: t.muted }));
-        if (inLegend.has(rows.length)) named.push({ label: row.lines![0].label, dashed: true, stroke: C.soft, width: 1.2 });
+        const lineInLegend = inLegend.get(rows.length);
+        if (lineInLegend) named.push({ label: lineInLegend, dashed: true, stroke: C.soft, width: 1.2 });
         const top = y;
         const hasLabel = Boolean(row.label);
         const leg = legend(named, 0, top + (hasLabel ? labelH + 14 : 14), w, d);

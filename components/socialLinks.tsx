@@ -50,13 +50,15 @@ export const socialData = [
     {
         name: 'BeatStars',
         href: 'https://www.beatstars.com/virzyguns',
+        // The logo file is red: brightness-0 invert draws it white, and
+        // opacity-60 matches the other icons' text-white/60 (7.3:1).
         icon: (
             <Image
                 src="/branding/logo_beatstars.svg"
                 alt=""
                 width={16}
                 height={16}
-                className="h-5 w-5 object-contain opacity-60 grayscale transition-opacity group-hover:opacity-100"
+                className="h-5 w-5 object-contain opacity-60 brightness-0 invert transition-opacity group-hover:opacity-100"
             />
         )
     },
