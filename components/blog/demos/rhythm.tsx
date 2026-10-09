@@ -268,12 +268,13 @@ export function DropDemo() {
         <div className="space-y-6">
             <PlayButton playing={player.playing} onClick={player.toggle} />
             <div>
-                {/* The last beat of bar 2 drops out of its line when it is left silent. */}
+                {/* One line per beat. The last beat of bar 2 drops out of its line when it is left silent. */}
                 <StepStrip
                     current={bar}
+                    beats={4}
                     steps={[
                         { key: 'b1', label: 'Build' },
-                        { key: 'b2', label: strip ? 'Build, thinned' : 'Build', part: gap ? 0.75 : 1, focus: gap || strip },
+                        { key: 'b2', label: strip ? 'Thinned' : 'Build', sounding: gap ? 3 : 4, focus: gap || strip },
                         { key: 'd1', label: 'Drop' },
                         { key: 'd2', label: 'Drop' },
                     ]}

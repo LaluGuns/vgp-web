@@ -160,8 +160,7 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
     const meta = demoCatalog[id];
     const d = resolveDialect(dialect);
     const mod = near ? loaded[name] : undefined;
-    const [narrow, phone, wide] = meta.height;
-    const size = { '--demo-h': `${narrow}px`, '--demo-h-md': `${phone}px`, '--demo-h-sm': `${wide}px` } as CSSProperties;
+    const size = Object.fromEntries(meta.height.map((h, i) => [`--demo-h${i}`, `${h}px`])) as CSSProperties;
 
     return (
         <section
@@ -176,7 +175,7 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
             <p className="mt-2 text-base leading-7 text-white/70">{meta.blurb}</p>
             <div
                 style={size}
-                className="mt-6 min-h-[var(--demo-h)] min-[400px]:min-h-[var(--demo-h-md)] sm:min-h-[var(--demo-h-sm)] [@media(scripting:none)]:min-h-0"
+                className="mt-6 min-h-[var(--demo-h0)] min-[360px]:min-h-[var(--demo-h1)] min-[375px]:min-h-[var(--demo-h2)] min-[412px]:min-h-[var(--demo-h3)] sm:min-h-[var(--demo-h4)] [@media(scripting:none)]:min-h-0"
             >
                 {failed ? (
                     <p className="text-sm leading-6 text-white/60">This demo could not load. Check your connection and reload the page.</p>

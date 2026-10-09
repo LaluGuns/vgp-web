@@ -310,10 +310,19 @@ export function Readout({ items }: { items: { label: string; value: string }[] }
  * Where the music is: a row of steps (bars, chords) read like a lead sheet,
  * not buttons. Each step is a small label over a line; the step that is
  * playing lights its line in the accent. `focus` marks the step the demo is
- * about (its label is in the accent too). `part` draws only the first share
- * of a step's line, for a step that is cut short.
+ * about (its label is in the accent too). With `beats`, each line is split
+ * into that many beats, and `sounding` says how many of them play, so a
+ * beat left silent shows as a gap.
  */
-export function StepStrip({ steps, current }: { steps: { key: string; label: string; focus?: boolean; part?: number }[]; current: number }) {
+export function StepStrip({
+    steps,
+    current,
+    beats = 1,
+}: {
+    steps: { key: string; label: string; focus?: boolean; sounding?: number }[];
+    current: number;
+    beats?: number;
+}) {
     const d = useDialect();
     return (
         <div aria-hidden="true" className="grid gap-x-1.5" style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
@@ -322,11 +331,15 @@ export function StepStrip({ steps, current }: { steps: { key: string; label: str
                 return (
                     <div key={step.key} className="min-w-0">
                         <span className={`block truncate text-xs ${step.focus ? 'font-semibold text-[var(--accent)]' : on ? 'font-medium text-white' : 'text-white/55'}`}>{step.label}</span>
-                        <span className="mt-1.5 block h-[3px] bg-white/[0.08]">
-                            <span
-                                className={`block h-full transition-colors duration-150 ${endClass(d)} ${on ? 'bg-[var(--accent)]' : 'bg-white/25'}`}
-                                style={{ width: `${Math.round((step.part ?? 1) * 100)}%` }}
-                            />
+                        <span className="mt-1.5 flex h-[3px] gap-0.5">
+                            {Array.from({ length: beats }, (_, b) => (
+                                <span
+                                    key={b}
+                                    className={`h-full flex-1 transition-colors duration-150 ${endClass(d)} ${
+                                        b >= (step.sounding ?? beats) ? 'bg-transparent' : on ? 'bg-[var(--accent)]' : 'bg-white/25'
+                                    }`}
+                                />
+                            ))}
                         </span>
                     </div>
                 );
