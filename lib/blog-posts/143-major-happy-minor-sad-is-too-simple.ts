@@ -17,17 +17,6 @@ export const post143: BlogArticle = {
         'Test a target chord by keeping its voicing fixed, changing only the route into it, and scoring how pleasant, stable and tense it feels.',
     ],
     figures: {
-        route: {
-            type: 'flow',
-            caption:
-                'The route Zhang and colleagues (2025) propose: the progression changes how stable and tense the final chord sounds, and that changes how pleasant it seems. In their data, major endings were rated above minor ones only after stable endings.',
-            alt: 'Three boxes joined by arrows: the progression into the chord, then the stability and tension of the last chord, then how pleasant it is rated.',
-            steps: [
-                { label: 'Progression into the chord', note: 'Ends stably or unstably' },
-                { label: 'Stability and tension', note: 'How settled the last chord sounds' },
-                { label: 'Pleasantness', note: 'Major above minor only after stable endings' },
-            ],
-        },
         major: {
             type: 'notes',
             caption:
@@ -113,7 +102,7 @@ export const post143: BlogArticle = {
                 'It goes with exposure to Western-influenced music',
             ],
             answer: 3,
-            why: 'Every community chose major cadences as happier except the one with minimal exposure to Western-like music, so the effect tracks listening history, although the authors could not rule out a universal part.',
+            why: 'Major cadences were heard as happier in every community except the one with minimal exposure to Western-like music. The authors tie the effect to exposure, although they cannot exclude a universal part.',
         },
     ],
     content: `## Hook: the sad chord that sounded like a question
@@ -124,7 +113,7 @@ Both times the chord had the same three notes in the same voicing. What changed 
 
 ## Why it matters: mode is a tendency, the chord has a job
 
-"Major is happy, minor is sad" is one of the first things many of us learn about harmony, and as a tendency it holds up. Parncutt (2014) calls the link between major and positive emotion, and minor and negative emotion, psychologically strong, then compares six partly overlapping explanations for it and finds arguments for and against each.
+"Major is happy, minor is sad" is one of the first things many of us learn about harmony, and as a tendency it holds up. Parncutt (2014) calls the link between major and positive emotion, and minor and negative emotion, psychologically robust, though without a single accepted explanation. He compares six partly related theories, among them dissonance, familiarity and the lower pitches of sad speech, and finds credible arguments for and against each.
 
 The trouble starts when the tendency becomes a lookup table. In a song, every chord arrives with a role: the home chord, a step on the way, or a surprise. Pick the mode for the mood and ignore the role, and the chord can say something you never meant.
 
@@ -136,9 +125,7 @@ In the demo, listen for whether each arrival sounds like an ending or like a ste
 
 Zhang and colleagues (2025) tested this directly. In a first experiment, listeners rated single major and minor chords for pleasantness, stability and tension. Major chords came out more pleasant and less tense, though no more stable. In a second experiment, the chords ended chord sequences. After progressions that ended stably, major endings were again rated more pleasant, more stable and less tense than minor ones. After progressions that ended unstably, the differences were no longer significant on any of the three scales. It is a single rating study, so read it as evidence that context can shrink the gap between major and minor, not as proof that it always does.
 
-::figure route
-
-The route matters because a chord's stability depends partly on its function in the key. Bigand, Parncutt and Lerdahl (1996) had listeners rate the tension of a middle chord in sequences that started and ended on C major. The ratings depended on the chord's harmonic function in the key, on how dissonant it sounded and on how the voices moved, and the weight of each factor changed with musical training.
+The route matters because a chord's stability depends partly on its function in the key. Bigand, Parncutt and Lerdahl (1996) had listeners rate the tension of a middle chord in sequences that started and ended on C major. The ratings reflected several influences at once: where the chord stands in the key's harmonic hierarchy, how dissonant it sounds and how the voices move into it. How much each one counted depended on the listener's musical training.
 
 A C major triad is the home chord, I, in C major. In F major the same triad is V, the dominant, which in tonal music tends to move on to F. End a phrase on it and you get a half cadence, a pause that sounds unfinished. The notes are identical. What differs is the expectation they set up, the mechanism covered in the [lesson on expectation](/blog/why-expectation-drives-musical-emotion).
 
@@ -148,7 +135,7 @@ Minor chords switch roles the same way. A minor is home in A minor. In C major i
 
 ::figure minor
 
-How strongly the major and minor code applies also depends on who is listening. Dalla Bella and colleagues (2001) changed the tempo and the mode of happy and sad excerpts. Adults and children aged 6 to 8 used both cues to judge the mood. Five-year-olds used only tempo, and 3- and 4-year-olds could not tell happy from sad above chance. Smit and colleagues (2022) asked 170 listeners in remote communities in Papua New Guinea which of a major and a minor cadence made them happier. Every community chose major except the one with minimal exposure to Western-like music. The authors conclude that the effect is strongly tied to exposure to Western-influenced music, although they could not rule out a universal part. Mode also shares the work with other cues: in the [tempo lesson](/blog/how-tempo-changes-perceived-emotion), changing tempo moved listeners' arousal while changing mode moved their mood.
+How strongly the major and minor code applies also depends on who is listening. Dalla Bella and colleagues (2001) changed the tempo and the mode of happy and sad excerpts. Adults and children aged 6 to 8 used both cues to judge the mood. Five-year-olds used only tempo, and 3- and 4-year-olds could not tell happy from sad above chance. Smit and colleagues (2022) asked 170 listeners in remote communities in Papua New Guinea which of a major and a minor cadence made them happier. For cadences there was strong evidence that major was heard as happier in every community except one, the community with minimal exposure to Western-like music. The authors conclude that the emotional pull of major and minor is strongly associated with exposure to Western-influenced music, although they cannot exclude a universal part. Mode also shares the work with other cues: in the [tempo lesson](/blog/how-tempo-changes-perceived-emotion), changing tempo moved listeners' arousal while changing mode moved their mood.
 
 ## DAW experiment: one chord, two routes
 
@@ -164,9 +151,9 @@ Compare the two home endings first, C in C major and A minor in A minor. That is
 
 ## Common mistake: changing the mode when the role is wrong
 
-The common mistake is reaching for minor when a moment should feel final and sad. Placed after G in C major, A minor is a deceptive cadence, and most listeners hear it as a swerve rather than an ending. If you want it to land, make it the home chord: put E major before it and let the section sit in A minor.
+The common mistake is reaching for minor when a moment should feel final and sad. Placed after G in C major, A minor is a deceptive cadence, and listeners who know the style tend to hear it as a swerve rather than an ending. If you want it to land, make it the home chord: put E major before it and let the section sit in A minor.
 
-The second mistake is treating a chart of chord moods as true for every listener. The major and minor code depends heavily on listening history, so the listener's background and the genre they expect change how strongly it applies. The [lesson on genre expectations](/blog/listeners-bring-genre-expectations-into-your-song) picks that up.
+The second mistake is treating a chart of chord moods as true for every listener. The major and minor code is strongly associated with listening history, so the listener's background and the genre they expect change how strongly it applies. The [lesson on genre expectations](/blog/listeners-bring-genre-expectations-into-your-song) picks that up.
 
 ## Producer takeaway: decide the job, then the colour
 
