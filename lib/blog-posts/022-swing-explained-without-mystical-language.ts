@@ -8,7 +8,7 @@ export const post022: BlogArticle = {
     excerpt: 'Swing is one timing rule: every second note lands late. Here is the maths of the ratio, why tempo changes it, and how to stop parts from flamming.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 6,
     summary: [
         'Swing delays every second subdivision by a share of the pair: 50 percent is straight and 66.7 percent is a triplet shuffle.',

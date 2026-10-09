@@ -18,7 +18,7 @@ export const post090: BlogArticle = {
             type: 'arrangement',
             caption:
                 'What a 30-minute skeleton gives you: every section exists and every sound is a placeholder. It answers questions a polished eight-bar loop cannot, such as where the energy should drop and what the bridge is for.',
-            alt: 'Arrangement grid of a rough song skeleton across intro, verse, chorus, bridge and outro. Chords play throughout, drums and bass enter in the verse, the lead comes in quietly in the verse and is strongest in the chorus, the bridge thins out and the outro leaves only chords.',
+            alt: 'Arrangement grid of a rough song skeleton across intro, verse, chorus, bridge and outro. Chords play throughout, drums and bass enter in the verse, the lead comes in low in the verse and is strongest in the chorus, the bridge thins out and the outro leaves only chords.',
             density: true,
             sections: [
                 { label: 'Intro', bars: 4 },

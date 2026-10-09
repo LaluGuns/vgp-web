@@ -108,7 +108,7 @@ A curve that treats the positive and negative halves of the wave the same way, l
 
 ## DAW experiment: the level-matched distortion test
 
-Prove to yourself that saturation adds size and not only level.
+Prove to yourself that saturation adds size as well as level.
 
 1. Load a bass synth or an 808 playing a simple riff, peaking around -10 dBFS on its channel.
 2. Insert a saturator in a tape or tube mode, set the mix to 100% and raise the drive until the character clearly changes.

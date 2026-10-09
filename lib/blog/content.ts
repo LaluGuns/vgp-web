@@ -73,10 +73,16 @@ function renderMath(tex: string, displayMode: boolean): string {
 }
 
 // $...$ is maths when it opens on a non-space character and closes before a
-// non-digit. Prices like "$15 to $30" stay text: maths that starts with a
-// digit must contain a maths sign (\\ ^ _ { } = / or ×) to count.
-const INLINE_MATH = /(?<![\\$\w])\$(?=[^\s$])([^$\n]+?)(?<=[^\s$])\$(?![\d$\w])/g;
-const looksLikeMath = (tex: string) => !/^\d/.test(tex) || /[\\^_{}=/×]/.test(tex);
+// non-digit. Prices like "$15 to $30" never match: the second "$" is followed
+// by a digit. Maths that starts with a digit must still look like maths: a
+// sign (\\ ^ _ { } = / × ± − ·), a number with a letter on it ("2M", "0.5x")
+// or terms joined by + or - ("1 + g").
+export const INLINE_MATH = /(?<![\\$\w])\$(?=[^\s$])([^$\n]+?)(?<=[^\s$])\$(?![\d$\w])/g;
+export const looksLikeMath = (tex: string) =>
+    !/^\d/.test(tex) ||
+    /[\\^_{}=/×±−·]/.test(tex) ||
+    /^\d+(?:\.\d+)?\s?[a-zA-Z]/.test(tex) ||
+    /[\w)]\s*[+-]\s*[\w(]/.test(tex);
 
 // ── Inline formatting ────────────────────────────────────────────────
 

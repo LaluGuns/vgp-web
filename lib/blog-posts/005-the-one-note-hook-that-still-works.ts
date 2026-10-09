@@ -9,7 +9,7 @@ export const post005: BlogArticle = {
     updatedAt: '2026-10-08',
     readingTime: 6,
     summary: [
-        'For most tunes, rhythm alone is a weak cue: listeners recognise familiar songs far better from their pitches than from their rhythm.',
+        'For most tunes, rhythm alone is a weak cue: listeners recognize familiar songs far better from their pitches than from their rhythm.',
         'A one-note hook is the rhythm-only version of a melody, so it works only when the rhythm, the words and the delivery are distinctive.',
         'Anchor the phrase on a downbeat, then place accents between the beats; moderate syncopation tends to make people want to move most.',
     ],

@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post032: BlogArticle = {
     slug: 'the-sound-design-reason-a-hook-feels-branded',
     title: 'Sonic signature beats another layer',
-    excerpt: 'Five stacked presets make a hook louder, not easier to recognise. Layers that start together fuse into one blend, so build the signature into one sound.',
+    excerpt: 'Five stacked presets make a hook louder, not easier to recognize. Layers that start together fuse into one blend, so build the signature into one sound.',
     category: 'sound-design',
     publishedAt: '2026-06-06',
     updatedAt: '2026-10-08',
@@ -94,14 +94,14 @@ export const post032: BlogArticle = {
                 'The lead has to sit louder than the vocal',
             ],
             answer: 0,
-            why: 'If no single layer carries an identity, the stack was only adding level. Shape the attack, pitch or filter of one sound until it is recognisable alone.',
+            why: 'If no single layer carries an identity, the stack was only adding level. Shape the attack, pitch or filter of one sound until it is recognizable alone.',
         },
     ],
     content: `## Hook: the hook that sounds like everyone else
 
 You have written a strong hook. The melody is catchy and the rhythm bounces, yet it sounds generic. So you open your synth folder, load a lead, stack a second one, then a third. By the fifth layer the hook is loud. It is still not memorable. It sounds like every preset at once.
 
-Stacking average sounds does not create a signature. It averages one out. What a listener recognises is something specific: a pitch blip at the start of each note, a slightly sour detune, a burst of noise on the attack. Those details are easy to bury.
+Stacking average sounds does not create a signature. It averages one out. What a listener recognizes is something specific: a pitch blip at the start of each note, a slightly sour detune, a burst of noise on the attack. Those details are easy to bury.
 
 ## Why it matters: layers that start together become one sound
 
@@ -130,7 +130,7 @@ Timing between layers matters too. When parts start together the ear tends to fu
 Find out whether your hook has a sound of its own or is hiding behind a pile of layers.
 
 1. Loop the hook with every lead layer playing and put a loudness meter on the lead bus. Note the short-term LUFS.
-2. Solo each lead layer in turn for one pass and pick the one you would recognise from a single note.
+2. Solo each lead layer in turn for one pass and pick the one you would recognize from a single note.
 3. Mute every other lead layer and raise the one you kept until the lead bus reads the same short-term LUFS as the full stack did.
 4. Play the hook in the full mix and compare it with the stack. Ask whether it still feels like the same song.
 5. If it feels generic on its own, give that layer character: a pitch envelope that starts 1 semitone sharp and settles in about 50 ms, or a filter envelope that opens on each attack and closes within 200 ms.
@@ -157,7 +157,7 @@ Branding starts inside the patch. Choose one lead and make it specific. Shape th
 `,
     seo: {
         title: 'Sonic signature beats another layer | VGP Studio',
-        description: 'Why stacked synth layers fuse into one blend and bury the detail a listener remembers, and how to build a recognisable hook sound from one designed patch.',
+        description: 'Why stacked synth layers fuse into one blend and bury the detail a listener remembers, and how to build a recognizable hook sound from one designed patch.',
         keywords: ['signature sound', 'sonic signature', 'synth layering', 'auditory grouping', 'sound design', 'hook sound'],
     },
 };

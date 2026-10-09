@@ -34,7 +34,7 @@ export const post147: BlogArticle = {
             alt: 'Five steps from top to bottom: microphone, preamp, A/D converter, recorded file, then inserts and fader, each with a short note on what it does.',
             steps: [
                 { label: 'Microphone', note: 'Louder or closer singing raises its output' },
-                { label: 'Preamp', note: 'Sets the level, and has its own maximum' },
+                { label: 'Preamp', note: 'Sets the level, and has its own maximum', focus: true },
                 { label: 'A/D converter', note: 'Anything above full scale is written as full scale' },
                 { label: 'Recorded file', note: 'Keeps whatever the converter wrote' },
                 { label: 'Inserts and fader', note: 'Playback only, too late for the take' },
@@ -115,7 +115,7 @@ export const post147: BlogArticle = {
 
 The verses went down clean. In the last chorus the singer opened up, the interface's clip light blinked on two words, and nobody stopped the take because it felt like the one. In the mix those two words have a fizzy edge on the vowel. You pull the vocal fader down 6 dB. The edge gets quieter along with everything else and stays exactly as rough.
 
-The fader came too late. The distortion happened before the take was written to disk, and nothing downstream of the file knows what the missing peaks were.
+The converter flattened those peaks before the take reached the disk, so every later move, the fader included, works on a wave whose tops are already gone.
 
 ## Why it matters: the file holds what the converter saw
 

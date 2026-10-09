@@ -101,7 +101,7 @@ You can put numbers on this with a textbook model: an ideal cardioid made of equ
 
 $$G(f, r) = 10 \\log_{10}\\left(1 + \\left(\\frac{c}{4\\pi f r}\\right)^2\\right)$$
 
-Here $c$ is the speed of sound, about 343 m/s. At 100 Hz this gives about 15 dB at 5 cm, 6 dB at 15 cm and 2.6 dB at 30 cm. A figure-8 has $\\tfrac{c}{2\\pi f r}$ in place of $\\tfrac{c}{4\\pi f r}$, so a figure-8 at 30 cm gets the same boost as a cardioid at 15 cm. The formula is derived from the idealised model, not measured. Real voices are not point sources and real capsules are not ideal. The measurements Inglis (2021) describes show that proximity effect depends on the source: some follow the theory closely, and others gain little bass at the closest distances. Treat the numbers as the shape and the direction, not as a spec.
+Here $c$ is the speed of sound, about 343 m/s. At 100 Hz this gives about 15 dB at 5 cm, 6 dB at 15 cm and 2.6 dB at 30 cm. A figure-8 has $\\tfrac{c}{2\\pi f r}$ in place of $\\tfrac{c}{4\\pi f r}$, so a figure-8 at 30 cm gets the same boost as a cardioid at 15 cm. The formula is derived from the idealized model, not measured. Real voices are not point sources and real capsules are not ideal. The measurements Inglis (2021) describes show that proximity effect depends on the source: some follow the theory closely, and others gain little bass at the closest distances. Treat the numbers as the shape and the direction, not as a spec.
 
 ::figure boost
 

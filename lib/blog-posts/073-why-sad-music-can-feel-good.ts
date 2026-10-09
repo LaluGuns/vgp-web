@@ -34,7 +34,7 @@ export const post073: BlogArticle = {
         path: {
             type: 'flow',
             caption:
-                'One way to read the research on enjoying sad music. The listener recognizes sadness, nothing is actually lost, and the feeling that results is often mixed rather than purely sad.',
+                'One way to read the research on enjoying sad music. The listener recognizes sadness, nothing real is lost, and the feeling that results is often mixed rather than purely sad.',
             alt: 'Five steps: the music has sad cues, the listener recognizes sadness, nothing real is at stake, beauty and empathy come in, and the listener feels something mixed.',
             steps: [
                 { label: 'Sad cues', note: 'Slow, low, soft, minor, dark timbre' },
@@ -119,7 +119,7 @@ export const post073: BlogArticle = {
             options: [
                 'The ear judges distance from the balance of reverb to direct sound',
                 'Reverb smears the voice\'s pitch, which the ear reads as distance',
-                'The hall\'s stereo spread pulls the voice wide and away from center',
+                'The hall\'s stereo spread pulls the voice wide and away from the centre',
                 'A long tail delays the voice, and the ear hears the delay as distance',
             ],
             answer: 0,

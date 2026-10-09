@@ -83,7 +83,7 @@ export const post064: BlogArticle = {
                 'Quiet playback narrows the stereo image',
             ],
             answer: 2,
-            why: 'Equal-loudness contours show the ear losing low-frequency sensitivity as level drops. A balance that only works loud sounds thin when it is played quietly.',
+            why: 'Equal-loudness contours show the ear losing low-frequency sensitivity as level drops. A balance that only works loud sounds thin when it is played at low volume.',
         },
     ],
     content: `## Hook: the master that sounded like the mix

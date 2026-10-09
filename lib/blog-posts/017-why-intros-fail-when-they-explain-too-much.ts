@@ -11,7 +11,7 @@ export const post017: BlogArticle = {
     summary: [
         'Listeners decide fast: by 2015 the voice in US top-ten singles arrived after about five seconds, and many streams are skipped within the first five.',
         'An intro that plays the full hook with the full beat makes the verse a step down and leaves the chorus nothing new to reveal.',
-        'Tease the hook instead: one part, filtered or chopped, without kick and bass, so the listener recognises it and wants the rest.',
+        'Tease the hook instead: one part, filtered or chopped, without kick and bass, so the listener recognizes it and wants the rest.',
     ],
     figures: {
         spoiler: {
@@ -26,9 +26,9 @@ export const post017: BlogArticle = {
                 { label: 'Chorus', bars: 8 },
             ],
             layers: [
-                { label: 'Hook', levels: [1, 0, 1] },
-                { label: 'Drums', levels: [0.9, 0.7, 1] },
-                { label: 'Bass', levels: [0.9, 0.7, 1] },
+                { label: 'Hook', focus: true, levels: [1, 0, 1] },
+                { label: 'Drums', focus: true, levels: [0.9, 0.7, 1] },
+                { label: 'Bass', focus: true, levels: [0.9, 0.7, 1] },
                 { label: 'Pad', levels: [0.7, 0, 0.8] },
                 { label: 'Vocal', levels: [0, 0.8, 1] },
             ],
@@ -60,7 +60,7 @@ export const post017: BlogArticle = {
             why: 'The intro is denser than the verse, so the first vocal entrance arrives as a drop in size. Starting smaller lets the verse be a step up.',
         },
         {
-            q: 'Why does a 1 kHz low-pass keep the hook recognisable?',
+            q: 'Why does a 1 kHz low-pass keep the hook recognizable?',
             options: [
                 'It boosts the hook around the cutoff frequency',
                 'It keeps the hook\'s rhythm and removes its pitch',
@@ -100,7 +100,7 @@ Opening with the hook can work. Many songs do it. The difference is how much of 
 
 ## Science model: expectation, familiarity and the tease
 
-Huron (2006) describes listening as prediction. When a listener hears part of a familiar pattern, they start to expect the rest, and that expectation builds tension that the arrival later resolves. A filtered hook in the intro starts that process: the listener recognises the contour and waits for the full version. The full hook at full size answers the question before it has been asked.
+Huron (2006) describes listening as prediction. When a listener hears part of a familiar pattern, they start to expect the rest, and that expectation builds tension that the arrival later resolves. A filtered hook in the intro starts that process: the listener recognizes the contour and waits for the full version. The full hook at full size answers the question before it has been asked.
 
 Habituation works against the spoiler too. The ear responds less to a sound it has just heard in the same form. A hook that plays for eight bars at full size in the intro has less impact when it returns unchanged in the chorus thirty seconds later. If the intro version is filtered, the chorus version is a different sound: brighter, fuller and supported by drums and bass for the first time.
 
@@ -128,7 +128,7 @@ The other mistake is an intro that runs too long without changing. Fifteen secon
 
 ## Producer takeaway: tease the identity without the full answer
 
-An intro should invite, not summarise. Show the listener the hook through a filter, a chop or a single instrument, keep the kick and bass back, and save the full answer for the chorus.
+An intro should invite, not summarize. Show the listener the hook through a filter, a chop or a single instrument, keep the kick and bass back, and save the full answer for the chorus.
 
 ## References
 

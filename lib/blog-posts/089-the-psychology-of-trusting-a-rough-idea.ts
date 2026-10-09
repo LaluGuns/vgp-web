@@ -92,7 +92,7 @@ Early clean-up goes after what is easy to see: hits off the grid, notes off pitc
 
 A popular story says the brain has a creative network for writing and an analytical one for editing, and that one switches off when the other switches on. The research is less tidy. Beaty and colleagues (2016) reviewed brain imaging of creative tasks, from divergent thinking to musical improvisation and poetry, and described the default network and the executive control network working together, even though they often act in opposition. Ellamil and colleagues (2012) scanned art students while they alternated between generating ideas and evaluating them. Generating leaned on the medial temporal lobe, while evaluating recruited executive and default regions together.
 
-So the shift from writing to editing is not a switch between two brains. It is a change in the question you ask. While writing, the question is "does this make me move?". During clean-up it quietly becomes "is this correct?", and what makes you move is often not on the list of things a correctness check can see.
+So the shift from writing to editing is not a switch between two brains. It is a change in the question you ask. While writing, the question is "does this make me move?". During clean-up it drifts to "is this correct?", and what makes you move is often not on the list of things a correctness check can see.
 
 Timing is the clearest case. Quantize removes every difference from the grid, the ones the player meant and the ones they did not. A consistent offset, such as a snare that lands the same amount late on every backbeat, is a feel. Random drift is not. Pitch correction with a fast retune speed works the same way: it removes wrong notes and also the slides and scoops a singer uses on purpose.
 

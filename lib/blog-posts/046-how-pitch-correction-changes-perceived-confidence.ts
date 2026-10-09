@@ -87,12 +87,12 @@ export const post046: BlogArticle = {
             ticks: [-100, -50, 0, 50, 100],
             caption:
                 'One semitone either side of A4. A note sung at 432 Hz is about 32 cents flat. A corrector set to the nearest note pulls anything within 50 cents of A4 to 440 Hz, and anything further to the neighbouring note.',
-            alt: 'A line from -100 to +100 cents. G#4 at 415.3 Hz sits at -100, the sung note at 432 Hz at about -32, A4 at 440 Hz at 0 and A#4 at 466.2 Hz at +100. A band from -50 to +50 is labelled as pulled to A4.',
+            alt: 'A line from -100 to +100 cents. G♯4 at 415.3 Hz sits at -100, the sung note at 432 Hz at about -32, A4 at 440 Hz at 0 and A♯4 at 466.2 Hz at +100. A band from -50 to +50 is labelled as pulled to A4.',
             markers: [
-                { value: -100, label: 'G#4' },
+                { value: -100, label: 'G♯4' },
                 { value: -31.8, label: '432 Hz' },
                 { value: 0, label: 'A4, 440 Hz', strong: true },
-                { value: 100, label: 'A#4' },
+                { value: 100, label: 'A♯4' },
             ],
             ranges: [{ from: -50, to: 50, label: 'Pulled to A4' }],
         },
@@ -121,7 +121,7 @@ export const post046: BlogArticle = {
                 'To A4, the note the singer was aiming for',
                 'To A4, since it is still within a semitone',
                 'It stays put, outside the 50-cent window',
-                'To G#4, the nearest semitone at 40 cents',
+                'To G♯4, the nearest semitone at 40 cents',
             ],
             answer: 3,
             why: 'Nearest-note correction does not know what the singer meant. Past the halfway point of 50 cents, the neighbouring semitone is closer, so the note is pulled the wrong way.',
@@ -137,7 +137,7 @@ Nothing is wrong on paper. Every note is right. What changed is how the voice tr
 
 A singer's pitch is never a flat line. They scoop up into notes, slide between them, let vibrato grow on long notes and let the pitch fall at the end of a phrase. Listeners hear that movement as part of the delivery. A scoop can sound casual, a slow rise can sound like effort, and a steady vibrato on a held note can sound settled.
 
-Fast correction replaces all of it with steps. Each note snaps to its target, the slides become jumps, and the vibrato flattens into a held tone. The movement also helps a voice stand out from what surrounds it. In a mixture of synthesised sung vowels, a vowel with vibrato was judged more prominent than the same vowel held steady (McAdams, 1989). Take the movement out and the voice blends further into the backing.
+Fast correction replaces all of it with steps. Each note snaps to its target, the slides become jumps, and the vibrato flattens into a held tone. The movement also helps a voice stand out from what surrounds it. In a mixture of synthesized sung vowels, a vowel with vibrato was judged more prominent than the same vowel held steady (McAdams, 1989). Take the movement out and the voice blends further into the backing.
 
 ::figure contour
 

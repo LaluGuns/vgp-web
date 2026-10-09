@@ -43,7 +43,7 @@ export const post074: BlogArticle = {
                 { label: 'Vocal', levels: [0, 0.8, 0, 1, 0] },
                 { label: 'Keys', levels: [0.6, 0.6, 0.6, 0.8, 0.5] },
                 { label: 'Drums', levels: [0, 0.7, 0, 0.9, 0] },
-                { label: 'Tape noise', levels: [0.7, 0.2, 0.7, 0.15, 0.7] },
+                { label: 'Tape noise', focus: true, levels: [0.7, 0.2, 0.7, 0.15, 0.7] },
             ],
         },
     },

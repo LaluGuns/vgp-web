@@ -21,7 +21,7 @@ export const post146: BlogArticle = {
                 'Two bars of a seven-count meter grouped 2+2+3, so the last beat is longer than the others by a ratio of 3:2. An even beat laid over it lands inside the long beat and then misses the next downbeat. Hannon and Trehub (2005b) concluded that North American adults heard rhythms like the top row through an even frame like the bottom one.',
             alt: 'A grid of 14 steps split into two bars of seven. The top row has accented hits on steps 1, 3 and 5 of each bar, so the third beat in each bar is longer. The bottom row has an even hit every two steps, which lands inside the long third beat and misses the downbeat of the second bar.',
             rows: [
-                { label: '7 counts, 2+2+3', hits: [{ step: 0 }, { step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 7 }, { step: 9, level: 0.7 }, { step: 11, level: 0.7 }] },
+                { label: '7 counts, 2+2+3', hits: [{ step: 0 }, { step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 7 }, { step: 9, level: 0.7 }, { step: 11, level: 0.7 }], focus: true },
                 { label: 'Even beat', hits: [{ step: 0 }, { step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 6, level: 0.7 }, { step: 8, level: 0.7 }, { step: 10, level: 0.7 }, { step: 12, level: 0.7 }] },
             ],
         },

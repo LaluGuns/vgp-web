@@ -133,7 +133,7 @@ Keep a short list for each job: one or two EQs, one or two compressors, one satu
 `,
     seo: {
         title: 'When too many plugin choices stall a mix | VGP Studio',
-        description: 'What choice-overload research actually shows, from the jam study to two meta-analyses, and how a short plugin list and a named goal speed up your mixes.',
+        description: 'What choice-overload research shows, from the jam study to two meta-analyses, and how a short plugin list and a named goal speed up your mixes.',
         keywords: ['choice overload', 'plugin choices', 'mixing workflow', 'stock plugins', 'paradox of choice', 'decision making'],
     },
 };

@@ -70,11 +70,11 @@ export const post052: BlogArticle = {
             why: 'Mud is a sum. Each part adds a little energy in the same low-mid bands, and together they mask the detail of everything near them.',
         },
         {
-            q: 'Why can a heavy pile-up around 250 Hz blur a vocal’s detail higher up?',
+            q: 'Why can a heavy pile-up around 250 Hz blur a vocal\'s detail higher up?',
             options: [
-                'The ear’s bands are wider up high, so the pile-up reaches them',
+                'The ear\'s bands are wider up high, so the pile-up reaches them',
                 'Masking spreads upward from a loud band into higher ones',
-                'Low notes ring longer, so they smear the vocal’s consonants',
+                'Low notes ring longer, so they smear the vocal\'s consonants',
                 'The pile-up phase-cancels the upper harmonics of the voice',
             ],
             answer: 1,

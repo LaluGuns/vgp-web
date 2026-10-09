@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post016: BlogArticle = {
     slug: 'the-density-ladder-producers-use-without-naming-it',
     title: 'Climb a density ladder from verse to chorus',
-    excerpt: 'Count the parts a listener can actually pick out in each section, give every section its own step, and let new parts enter on the downbeat.',
+    excerpt: 'Count the parts a listener can pick out in each section, give every section its own step, and let new parts enter on the downbeat.',
     category: 'arrangement-groove',
     publishedAt: '2026-06-04',
     updatedAt: '2026-10-08',

@@ -102,7 +102,7 @@ Green and colleagues (2012) found a similar split in a scanner study. Twenty-one
 
 ::figure split
 
-For a producer, two things follow. A listener's first reaction partly measures their history with the style. And a hook can become easy to recognise after a few plays while liking for it has barely moved.
+For a producer, two things follow. A listener's first reaction partly measures their history with the style. And a hook can become easy to recognize after a few plays while liking for it has barely moved.
 
 ## DAW experiment: a ten-day listening log
 

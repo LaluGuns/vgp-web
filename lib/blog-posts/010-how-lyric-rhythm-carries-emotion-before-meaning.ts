@@ -134,7 +134,7 @@ When you sing it over the beat, the groove disappears. The singer stumbles over 
 
 ## Why it matters: the voice carries feeling apart from the words
 
-Juslin and Laukka (2003) reviewed 104 studies of emotion in the voice and 41 studies of emotion in music performance. In both, listeners recognised the intended emotions well above chance, and the acoustic cues that signalled each emotion were similar: tempo, loudness, pitch level and movement, and timbre. Much of what a sung line feels like is carried by how it is delivered, separately from what the words say.
+Juslin and Laukka (2003) reviewed 104 studies of emotion in the voice and 41 studies of emotion in music performance. In both, listeners recognized the intended emotions well above chance, and the acoustic cues that signalled each emotion were similar: tempo, loudness, pitch level and movement, and timbre. Much of what a sung line feels like is carried by how it is delivered, separately from what the words say.
 
 In a session, two things go wrong. Lines packed with consonant clusters, or with closed vowels on the high notes, make the singer work, and the effort shows as throat tension and late timing. And lines whose stressed syllables fall in weak positions sound wrong even to a listener who could not say why. Lyric-writing teachers such as Pattison (2009) treat this fit between spoken stress and musical stress as part of prosody: every element of a song working together to support what it says.
 
@@ -166,7 +166,7 @@ The words should now sit in the beat with less effort. The vowel-aligned edit so
 
 ## Common mistake: the literal obsession
 
-The most common mistake is refusing to change a line because of what it literally says. Songwriters hold on to a line because it actually happened, even when the words are hard to sing cleanly. A true line that cannot be sung well loses to a slightly different line that can.
+The most common mistake is refusing to change a line because of what it literally says. Songwriters hold on to a line because it really happened, even when the words are hard to sing cleanly. A true line that cannot be sung well loses to a slightly different line that can.
 
 The second mistake is putting closed vowels on the highest notes of the chorus. The singer has to open "ee" or "oo" up there anyway, so the word either changes shape or comes out thin and tense. Choose the word for the vowel the note needs.
 

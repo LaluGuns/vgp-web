@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post118: BlogArticle = {
     slug: 'masking-why-vocals-drown-even-when-fader-goes-up',
     title: 'Turning up a buried vocal rarely fixes it',
-    excerpt: 'The fader raises every band of the vocal at once. Whether the words come through depends on the vocal’s lead over the competition in its own band.',
+    excerpt: 'The fader raises every band of the vocal at once. Whether the words come through depends on the vocal\'s lead over the competition in its own band.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-06',
     updatedAt: '2026-10-08',
@@ -34,7 +34,7 @@ export const post118: BlogArticle = {
             alt: 'Four steps from top to bottom: change the arrangement, cut the masker where it clashes, add a dynamic band keyed from the vocal, and raise the vocal fader last.',
             steps: [
                 { label: 'Change the arrangement', focus: true, note: 'Move, thin or mute the part under the vocal lines' },
-                { label: 'Cut the masker where it clashes', note: 'A few dB on the competing part, in the vocal’s band' },
+                { label: 'Cut the masker where it clashes', note: 'A few dB on the competing part, in the vocal\'s band' },
                 { label: 'Add a dynamic band', note: 'Keyed from the vocal, if a static cut leaves the part thin in the gaps' },
                 { label: 'Raise the vocal fader', note: 'Last, and only if the vocal is truly too quiet' },
             ],
@@ -53,7 +53,7 @@ export const post118: BlogArticle = {
                 'It adds distortion once the fader passes 0 dB',
                 'It delays the vocal slightly against the beat',
                 'It narrows the stereo image of the lead vocal',
-                'It raises every band, not just the masked one',
+                'It raises every band, including unmasked ones',
             ],
             answer: 3,
             why: 'The masking was in one region. The fader lifts the whole vocal, so it gains clarity there but also jumps out of the balance everywhere else.',
@@ -67,7 +67,7 @@ export const post118: BlogArticle = {
                 'Boost the vocal\'s presence band around 3 kHz',
             ],
             answer: 0,
-            why: 'If the guitar is not playing in the vocal’s range while the vocal sings, there is no masking to process. Every later step is a workaround for a clash the part itself could avoid.',
+            why: 'If the guitar is not playing in the vocal\'s range while the vocal sings, there is no masking to process. Every later step is a workaround for a clash the part itself could avoid.',
         },
     ],
     content: `## Hook: the fader is up and the words are gone

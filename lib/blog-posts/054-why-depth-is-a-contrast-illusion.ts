@@ -31,7 +31,7 @@ export const post054: BlogArticle = {
         arrivals: {
             type: 'signal',
             caption:
-                'What reaches you from a close and a distant source in the same room. The room’s reverberant level is about the same in both. Moving away mostly lowers the direct sound and shortens the gap before the room arrives.',
+                'What reaches you from a close and a distant source in the same room. The room\'s reverberant level is about the same in both. Moving away mostly lowers the direct sound and shortens the gap before the room arrives.',
             alt: 'Two level plots over time. In the close source, a tall direct spike is followed by a clear gap and then a lower reverb tail. In the distant source, the direct spike is much smaller and the tail starts almost at once at nearly the same height.',
             rows: [
                 {

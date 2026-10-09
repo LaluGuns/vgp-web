@@ -129,7 +129,7 @@ At +1 nothing is lost. At 0 the fold is 3 dB down, which is ordinary power addit
 
 ::figure mono
 
-The equal-level condition matters. In the [mid/side lesson](/blog/mid-side-widening-moves-the-center-too), a hard-left guitar after a +6 dB side boost has $L = 1.5x$ and $R = -0.5x$. That pair reads exactly -1, yet its mono fold is $0.5x$, the same as before the boost. For channels of unequal level, -1 means the quieter channel subtracts from the louder one. The fold only goes silent when the levels match as well.
+The equal-level condition matters. In the [mid/side lesson](/blog/mid-side-widening-moves-the-center-too), a hard-left guitar after a +6 dB side boost has $L = 1.5x$ and $R = -0.5x$. That pair reads exactly -1, yet its mono fold is $x/2$, the same as before the boost. For channels of unequal level, -1 means the quieter channel subtracts from the louder one. The fold only goes silent when the levels match as well.
 
 The meter is also an average weighted by energy. With several unrelated parts, each with equal level in both channels, the reading is each part's own $r$ weighted by its share of the power. If centred parts hold 90% of the energy and an anti-phase pad holds 10%, the meter shows $0.9 - 0.1 = 0.8$. The pad vanishes in mono, and the needle hardly mentions it. In many mixes the low end holds much of the energy, so a full-mix reading leans heavily on what the bass is doing.
 

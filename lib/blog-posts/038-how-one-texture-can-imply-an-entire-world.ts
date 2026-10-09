@@ -10,7 +10,7 @@ export const post038: BlogArticle = {
     readingTime: 6,
     summary: [
         'Unrelated ambient layers add in power, so four quiet textures come out 6 dB louder than one and fill the range the vocal uses.',
-        'The ear recognises a texture from its overall statistics, so one texture reads as a place while several blur into noise.',
+        'The ear recognizes a texture from its overall statistics, so one texture reads as a place while several blur into noise.',
         'Keep one texture that fits the song, give it some movement, and duck it under the vocal.',
     ],
     figures: {
@@ -51,7 +51,7 @@ export const post038: BlogArticle = {
             why: 'Unrelated layers add in power: 10 log10 4 is about 6 dB, so -30 becomes -24. Adding them in amplitude would give -18 dB, but unrelated noises do not line up that way.',
         },
         {
-            q: 'How does the ear recognise a texture such as rain?',
+            q: 'How does the ear recognize a texture such as rain?',
             options: [
                 'From summary statistics per frequency band',
                 'By tracking each drop as a separate event',
@@ -59,7 +59,7 @@ export const post038: BlogArticle = {
                 'From how wide the recording sits in stereo',
             ],
             answer: 0,
-            why: 'Sounds synthesised to match only those statistics are heard as rain or wind. The ear summarises a texture rather than tracking every event in it.',
+            why: 'Sounds synthesized to match only those statistics are heard as rain or wind. The ear summarizes a texture rather than tracking every event in it.',
         },
         {
             q: 'In the single-texture test, why duck the texture under the vocal with a sidechain?',
@@ -70,7 +70,7 @@ export const post038: BlogArticle = {
                 'It dips the texture while the vocal sings',
             ],
             answer: 3,
-            why: 'A few dB of ducking clears the vocal’s range only while it sings. Between phrases the texture comes back up and keeps telling the listener where they are.',
+            why: 'A few dB of ducking clears the vocal\'s range only while it sings. Between phrases the texture comes back up and keeps telling the listener where they are.',
         },
     ],
     content: `## Hook: the crowded background
@@ -95,7 +95,7 @@ They also stop reading as places. Rain, crackle and traffic each say something s
 
 ## Science model: textures are heard as statistics
 
-Rain, wind, fire and crowds are sound textures: thousands of small events that the ear does not follow one by one. McDermott and Simoncelli (2011) showed that listeners recognise textures from time-averaged statistics of the sound in each frequency band, such as how much energy each band carries, how it fluctuates and how the bands move together. Sounds synthesised to match only those statistics were heard as the real thing. A later study found that over longer excerpts, listeners keep these summary statistics and lose access to the moment-to-moment detail (McDermott, Schemitsch and Simoncelli, 2013).
+Rain, wind, fire and crowds are sound textures: thousands of small events that the ear does not follow one by one. McDermott and Simoncelli (2011) showed that listeners recognize textures from time-averaged statistics of the sound in each frequency band, such as how much energy each band carries, how it fluctuates and how the bands move together. Sounds synthesized to match only those statistics were heard as the real thing. A later study found that over longer excerpts, listeners keep these summary statistics and lose access to the moment-to-moment detail (McDermott, Schemitsch and Simoncelli, 2013).
 
 That is why one texture works so well. The ear sums it up quickly as rain or vinyl and stops spending attention on it, yet it keeps telling the listener where they are. Mix four textures and the statistics of the sum no longer match any one of them, so the listener tends to hear a louder wash with no clear identity.
 

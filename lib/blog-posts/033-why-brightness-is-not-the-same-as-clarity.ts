@@ -45,7 +45,7 @@ export const post033: BlogArticle = {
     },
     quiz: [
         {
-            q: 'A loud pad builds up around 300 Hz. How can it hide a vocal’s consonants near 3 kHz?',
+            q: 'A loud pad builds up around 300 Hz. How can it hide a vocal\'s consonants near 3 kHz?',
             options: [
                 'It cannot, since masking stays at one frequency',
                 'Loud low sounds spread their masking upward',
@@ -100,7 +100,7 @@ $$\\text{ERB}(f) = 24.7 \\left( \\frac{4.37 f}{1000} + 1 \\right) \\ \\text{Hz}$
 
 At 250 Hz that is about 52 Hz, at 1 kHz about 133 Hz and at 4 kHz about 457 Hz. Masking works within and between neighbouring filters, and a cut about an octave wide at 300 Hz spans several of them at once.
 
-Masking is also lopsided. A loud low sound masks frequencies above it far more than a high sound masks frequencies below it, and the upward reach grows as the masker gets louder (Wegel and Lane, 1924; Moore, 2012). That is the mechanism behind mud. A loud buildup at 300 Hz does not only cover other sounds at 300 Hz. It reaches up toward the range where the vocal's upper harmonics and consonants sit and blurs them too. Turning it down a few dB uncovers detail well above 300 Hz. A treble boost cannot do that, because it does not lower the masker.
+Masking is also lopsided. A loud low sound masks frequencies above it far more than a high sound masks frequencies below it, and the upward reach grows as the masker gets louder (Wegel and Lane, 1924; Moore, 2012). That is the mechanism behind mud. A loud buildup at 300 Hz covers more than other sounds at 300 Hz. It reaches up toward the range where the vocal's upper harmonics and consonants sit and blurs them too. Turning it down a few dB uncovers detail well above 300 Hz. A treble boost cannot do that, because it does not lower the masker.
 
 Brightness has its own measure. Listeners' brightness ratings follow the spectral centroid, the amplitude-weighted average frequency of a sound (Schubert and Wolfe, 2006). A shelf moves the centroid up. It does not move the masker.
 

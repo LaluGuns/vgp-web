@@ -147,7 +147,7 @@ The demo's drum loop is a small bus in itself: every drum in it shares one compr
 
 For a bus with tracks $x_1$ to $x_N$, a feed-forward compressor computes its gain from the summed signal and multiplies the whole sum by it:
 
-$$y(t) = g(t) \\sum_{i=1}^{N} x_i(t), \\qquad g(t) = f\\left( \\sum_{i=1}^{N} x_i(t) \\right)$$
+$$\\begin{aligned} y(t) &= g(t) \\sum_{i=1}^{N} x_i(t) \\\\ g(t) &= f\\left( \\sum_{i=1}^{N} x_i(t) \\right) \\end{aligned}$$
 
 Here $f$ is the threshold, ratio, attack and release machinery from the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) (Giannoulis, Massberg and Reiss, 2012). Compare that with a compressor on each track, where every $x_i$ gets its own $g_i(t)$ and the tracks move independently. On the bus, every level change the compressor makes is shared, so the tracks' envelopes become partly correlated with whatever drives the detector. On a stereo bus the left and right sides are normally linked to the same gain as well, so a hit on one side does not pull the image toward the other.
 

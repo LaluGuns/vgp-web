@@ -67,7 +67,7 @@ export const post070: BlogArticle = {
 
 You finish the master. It sounds clear and deep in the studio, and you send a 24-bit WAV to your distributor. Weeks later, on a streaming app, the top end is harsher and the loudest kicks crackle. You reload the WAV, check the meters and find no clipping anywhere.
 
-The listener never heard your WAV. On the way, it was measured, encoded to a lossy format, decoded on a phone and turned up or down by normalization. A delivery spec is the list of things your master has to survive on that journey.
+The listener never heard your WAV. On the way, it was measured, encoded to a lossy format, decoded on a phone and turned up or down by normalization. A delivery spec is the list of things your master has to survive on the way.
 
 ## Why it matters: your file is processed after you let go
 
@@ -81,7 +81,7 @@ Each of those steps can change your peaks. EBU Tech 3343 lists lossy coding amon
 
 **Measurement.** The service reads integrated loudness with ITU-R BS.1770 and sets a playback gain. On Spotify's Normal setting, a master louder than -14 LUFS is turned down. A quieter one is raised only until its peaks reach -1 dB, so a dynamic master with high peaks may not be raised at all. The Loud setting is the exception: it raises soft tracks regardless of true peak and catches them with a limiter.
 
-**Encoding.** A lossy encoder stores an approximation of your waveform that should sound the same. The decoded wave is a different wave, and it can peak higher than the original, more so on loud, dense masters. That is why Apple tells you to check the encoded file for clipping, not only the 24-bit master.
+**Encoding.** A lossy encoder stores an approximation of your waveform that should sound the same. The decoded wave is a different wave, and it can peak higher than the original, more so on loud, dense masters. That is why Apple tells you to check the encoded file for clipping, as well as the 24-bit master.
 
 **Decoding and conversion.** The device rebuilds the continuous wave from samples. That wave can crest between samples, and any stage with a fixed maximum level clips what goes past full scale.
 
@@ -116,7 +116,7 @@ The other is trusting normalization to fix level problems. It changes gain and n
 
 ## Producer takeaway: deliver to the destination
 
-Set a true-peak ceiling of -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Meter an encoded copy before release, not only the WAV. Deliver each destination the file it asks for, and keep a premaster the final limiter has not touched. How true peak works in detail is in [true peak bites after encoding](/blog/why-true-peak-matters-after-encoding).
+Set a true-peak ceiling of -1 dBTP, or -2 dBTP for masters louder than -14 LUFS going to Spotify. Before release, meter an encoded copy as well as the WAV. Deliver each destination the file it asks for, and keep a premaster the final limiter has not touched. How true peak works in detail is in [true peak bites after encoding](/blog/why-true-peak-matters-after-encoding).
 
 ## References
 

@@ -52,6 +52,12 @@ export interface Dialect {
      * paper, so their lines stand alone.
      */
     fillUnder: boolean;
+    /**
+     * Opacity of that area. Rose loses its colour into grey-mauve when it is
+     * laid thick over the dark surface, so mind keeps its area at half
+     * technical's. Paper dialects have none.
+     */
+    area: number;
 }
 
 export const DIALECTS: Record<DialectName, Dialect> = {
@@ -70,6 +76,7 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         tabular: true,
         italic: false,
         fillUnder: true,
+        area: 0.12,
     },
     /** Score paper: staff rulings, bar lines, note heads, round ends. */
     music: {
@@ -86,6 +93,7 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         tabular: false,
         italic: true,
         fillUnder: false,
+        area: 0,
     },
     /** A field of attention: dotted rules, soft nodes, points held in a focus ring. */
     mind: {
@@ -102,6 +110,7 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         tabular: false,
         italic: false,
         fillUnder: true,
+        area: 0.06,
     },
     /** A ledger: ruled rows, a closing double rule, square ends, figures in a column. */
     business: {
@@ -118,6 +127,7 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         tabular: true,
         italic: false,
         fillUnder: false,
+        area: 0,
     },
 };
 

@@ -88,7 +88,7 @@ That makes the chorus a comparison. The listener hears it against the verse that
 
 ## Science model: adaptation and recovery
 
-Recordings from single neurons show this directly. Ulanovsky, Las and Nelken (2003) played tone sequences to cats and found that neurons in the primary auditory cortex responded more strongly to a sound when it was rare than to the same sound when it was common. The response depends on context, not only on the sound itself.
+Recordings from single neurons show this directly. Ulanovsky, Las and Nelken (2003) played tone sequences to cats and found that neurons in the primary auditory cortex responded more strongly to a sound when it was rare than to the same sound when it was common. The response depends on context as much as on the sound itself.
 
 Two more ideas explain why a release after a quieter passage feels good. Juslin and Västfjäll (2008) describe a fast brainstem reflex to sounds that are sudden, loud or dissonant. A chorus that arrives suddenly and louder after a thinner verse is that kind of event. Huron (2006) argues that a good outcome feels better when it follows a less comfortable moment, which he calls contrastive valence. A short gap or a stripped bar before the chorus creates that moment.
 
@@ -118,7 +118,7 @@ The second mistake is assuming a build has to keep getting louder. Taking elemen
 
 ## Producer takeaway: plan the low points
 
-Decide where the song is smallest, not only where it is biggest. Give each verse less density, less width or a little less level than the chorus that follows, and change those amounts between the first and second verse so the song keeps moving. Check the step on a meter, then trust your ears. Keep a drop in energy only if the next section lands harder because of it.
+Decide where the song is smallest as carefully as where it is biggest. Give each verse less density, less width or a little less level than the chorus that follows, and change those amounts between the first and second verse so the song keeps moving. Check the step on a meter, then trust your ears. Keep a drop in energy only if the next section lands harder because of it.
 
 ## References
 

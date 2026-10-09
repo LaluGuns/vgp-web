@@ -22,6 +22,16 @@ export type DialectProp = Dialect | DialectName;
 
 export const dialectOf = (dialect?: DialectProp | string) => resolveDialect(dialect);
 
+/**
+ * White at an opacity, already laid over the figure surface, as an opaque
+ * colour. Grey fills use these, so a rule or a staff line behind a bar or a
+ * cell never shows through it.
+ */
+export const solid = (opacity: number) => {
+    const mix = (base: number) => Math.round(base + (255 - base) * opacity);
+    return `rgb(${mix(10)},${mix(14)},${mix(18)})`;
+};
+
 export const C = {
     ink: 'rgba(255,255,255,0.92)',
     strong: 'rgba(255,255,255,0.75)',
@@ -32,6 +42,10 @@ export const C = {
     lane: 'rgba(255,255,255,0.035)',
     fill: 'rgba(255,255,255,0.08)',
     fillStrong: 'rgba(255,255,255,0.18)',
+    /** A grey bar or cell: context, solid so nothing behind it shows through. */
+    dim: solid(0.18),
+    /** A grey cell that still reads as a part playing, next to the accent ones. */
+    muted: solid(0.34),
     /** The figure surface, for plates behind labels. */
     surface: '#0a0e12',
     /** The data in focus, in the accent set on the root <svg>. */
@@ -40,6 +54,9 @@ export const C = {
 
 /** Fill in the accent at an opacity. 0.12 is the area under a focus curve. */
 export const accentFill = (opacity = 0.12) => ({ fill: C.accent, fillOpacity: Number(opacity.toFixed(2)) });
+
+/** The faint area under a focus line in the lit dialects (technical, mind). */
+export const areaFill = (d: Dialect) => accentFill(d.area);
 
 /** Stroke in the accent at an opacity. */
 export const accentStroke = (opacity = 1) => ({ stroke: C.accent, strokeOpacity: Number(opacity.toFixed(2)) });
@@ -70,7 +87,15 @@ export function draw(kind: DrawKind, delayMs = 0, vars?: Record<`--${string}`, s
     return kind === 'line' ? { className: 'vgp-draw-line', pathLength: 1, style } : { className: `vgp-draw-${kind}`, style };
 }
 
+/**
+ * Label size in figure units. Phones draw the narrow layout 280 wide into a
+ * box about 262 px wide at a 320 px screen, so 12 renders at about 11 px
+ * there and 14 px at 390; nothing in a figure is set smaller.
+ */
 export const FS = 12;
+
+/** Width the narrow (phone) layout is drawn at. Figure.tsx draws it; figures switch layout below 480. */
+export const NARROW_W = 280;
 
 /** Rough width of a label in the system UI font. */
 export function textWidth(text: string, size = FS) {
@@ -390,7 +415,7 @@ export function Bar({
     delay?: number;
 }) {
     const rx = cornerOf(d, h, w);
-    const paint = tone === 'dim' ? { fill: C.fillStrong } : toneFill(tone, opacity);
+    const paint = tone === 'dim' ? { fill: C.dim } : toneFill(tone, opacity);
     const motion = delay === undefined || tone === 'dim' ? {} : draw('grow', delay);
     return (
         <g>
@@ -446,10 +471,117 @@ export function Arrowhead({ x, y, angle, size = 6, fill = C.soft, d }: { x: numb
 /** Where a line into an arrowhead should stop: a filled head covers its own length, an open head needs the line to reach the tip. */
 export const arrowInset = (d: Dialect, size = 6) => (d.name === 'technical' ? size - 1 : 1);
 
-/** A flow step's box. Technical: a module. Music: a hand-set card. Mind: a soft node. Business: a ruled entry. */
-export function Node({ d, x, y, w, h }: { d: Dialect; x: number; y: number; w: number; h: number }) {
+/**
+ * A flow step's box. Technical: a module. Music: a hand-set card. Mind: a
+ * soft node. Business: a ruled entry. A step in focus is outlined in the
+ * accent (and lit faintly in technical and mind); its outline draws round
+ * the box once the step is in.
+ */
+export function Node({ d, x, y, w, h, focus, delay }: { d: Dialect; x: number; y: number; w: number; h: number; focus?: boolean; delay?: number }) {
     const rx = d.node === 'pill' ? Math.min(h / 2, 22) : d.node;
-    return <rect x={x + 0.5} y={y + 0.5} width={w - 1} height={h - 1} rx={rx} fill={C.lane} stroke={d.name === 'technical' ? white(0.26) : C.faint} />;
+    if (!focus) return <rect x={x + 0.5} y={y + 0.5} width={w - 1} height={h - 1} rx={rx} fill={C.lane} stroke={d.name === 'technical' ? white(0.26) : C.faint} />;
+    const inset = 0.75;
+    return (
+        <g>
+            <rect x={x + inset} y={y + inset} width={w - inset * 2} height={h - inset * 2} rx={rx} {...(d.fillUnder ? accentFill(d.area * 0.8) : { fill: C.lane })} />
+            <path
+                d={roundRectPath(x + inset, y + inset, w - inset * 2, h - inset * 2, rx)}
+                fill="none"
+                stroke={C.accent}
+                strokeWidth={1.5}
+                strokeLinejoin={d.join}
+                {...(delay === undefined ? {} : draw('line', delay))}
+            />
+        </g>
+    );
+}
+
+/** A rounded rectangle as one path, starting at the top-left corner, so its outline can draw round it. */
+function roundRectPath(x: number, y: number, w: number, h: number, rx: number) {
+    const r = Math.max(0, Math.min(rx, w / 2, h / 2));
+    const f = (v: number) => Number(v.toFixed(2));
+    if (r === 0) return `M${f(x)},${f(y)}H${f(x + w)}V${f(y + h)}H${f(x)}Z`;
+    return (
+        `M${f(x + r)},${f(y)}H${f(x + w - r)}A${f(r)},${f(r)} 0 0 1 ${f(x + w)},${f(y + r)}V${f(y + h - r)}` +
+        `A${f(r)},${f(r)} 0 0 1 ${f(x + w - r)},${f(y + h)}H${f(x + r)}A${f(r)},${f(r)} 0 0 1 ${f(x)},${f(y + h - r)}V${f(y + r)}A${f(r)},${f(r)} 0 0 1 ${f(x + r)},${f(y)}Z`
+    );
+}
+
+// ── Label placement ──
+
+export type Anchor = 'start' | 'middle' | 'end';
+
+export interface RowItem {
+    /** Where the label belongs: a mark's line. */
+    x: number;
+    width: number;
+    /** Anchors to try, in order. start sits right of x, end left of it, middle centred on it. */
+    prefer: Anchor[];
+}
+
+export interface Placed {
+    anchor: Anchor;
+    row: number;
+    /** The label's x for its anchor. */
+    tx: number;
+    from: number;
+    to: number;
+}
+
+/**
+ * Labels for marks along one axis (lines on a spectrum, marks under a
+ * waveform), placed in rows. Each label tries its anchors in order, then the
+ * next row. A label never overlaps another, never leaves lo to hi, and a
+ * label in an outer row never sits over the line of a mark whose label is
+ * in an inner row (that line runs out to its label), so leaders never cross
+ * text. When two marks are close, the left one's label goes to its left
+ * and the right one's to its right. `taken` holds spans already used in the
+ * first row (band labels).
+ */
+export function placeInRows(items: RowItem[], lo: number, hi: number, { offset = 5, gap = 8, taken = [] as [number, number][] } = {}): Placed[] {
+    const order = items.map((_, i) => i).sort((a, b) => items[a].x - items[b].x);
+    const out: Placed[] = new Array(items.length);
+    const placed: (Placed & { x: number })[] = [];
+    const span = (item: RowItem, anchor: Anchor) => {
+        const tx = anchor === 'start' ? item.x + offset : anchor === 'end' ? item.x - offset : item.x;
+        const from = anchor === 'start' ? tx : anchor === 'end' ? tx - item.width : tx - item.width / 2;
+        return { tx, from, to: from + item.width };
+    };
+    order.forEach((index, k) => {
+        const item = items[index];
+        const next = order[k + 1] === undefined ? undefined : items[order[k + 1]];
+        // A start label would run into the next mark: try its left side first.
+        const crowded = next && next.x - item.x < item.width + offset + gap;
+        const prefer = crowded && item.prefer.includes('end') ? (['end', ...item.prefer.filter((a) => a !== 'end')] as Anchor[]) : item.prefer;
+        for (let row = 0; row < items.length + 1; row++) {
+            const fit = prefer
+                .map((anchor) => ({ anchor, ...span(item, anchor) }))
+                .find(
+                    (c) =>
+                        c.from >= lo - 0.5 &&
+                        c.to <= hi + 0.5 &&
+                        (row > 0 || taken.every(([a, b]) => c.to + gap <= a || c.from >= b + gap)) &&
+                        placed.every((p) => {
+                            if (p.row === row) return c.to + gap <= p.from || c.from >= p.to + gap;
+                            // An outer label's line must not run under an inner label, and the other way round.
+                            if (p.row < row) return item.x < p.from - 3 || item.x > p.to + 3;
+                            return p.x < c.from - 3 || p.x > c.to + 3;
+                        }),
+                );
+            if (fit) {
+                const p = { anchor: fit.anchor, row, tx: fit.tx, from: fit.from, to: fit.to };
+                out[index] = p;
+                placed.push({ ...p, x: item.x });
+                return;
+            }
+        }
+        // No room at all (more marks than the plot can label): keep the first choice in a row of its own.
+        const c = span(item, prefer[0]);
+        const p = { anchor: prefer[0], row: placed.reduce((m, q) => Math.max(m, q.row + 1), 0), ...c };
+        out[index] = p;
+        placed.push({ ...p, x: item.x });
+    });
+    return out;
 }
 
 const num = (v: number) => String(Math.round(v * 10) / 10);

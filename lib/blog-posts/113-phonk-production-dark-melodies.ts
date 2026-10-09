@@ -43,7 +43,7 @@ export const post113: BlogArticle = {
             ],
             layers: [
                 { label: 'Cowbell', levels: [0.4, 1, 0, 1] },
-                { label: 'Vocal', levels: [0.8, 0.5, 0.8, 0.6] },
+                { label: 'Vocal', focus: true, levels: [0.8, 0.5, 0.8, 0.6] },
                 { label: 'Drums', levels: [0, 1, 0, 1] },
                 { label: 'Hats', levels: [0, 0.8, 0, 0.9] },
                 { label: '808', levels: [0, 1, 0, 1] },

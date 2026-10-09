@@ -139,7 +139,7 @@ Pick the sound before you polish the notes. Give each part its own face: if the 
 `,
     seo: {
         title: 'Timbre tells the brain what arrived | VGP Studio',
-        description: 'Timbre tells two sounds apart at the same pitch, and listeners hear it in a fraction of a second. How harmonics and attack shape it, and why to choose sounds first.',
+        description: 'Timbre tells two sounds at one pitch apart, and listeners hear it in a fraction of a second. How harmonics and attack shape it, and why to pick sounds first.',
         keywords: ['timbre', 'harmonics', 'spectral envelope', 'sound design', 'attack time', 'psychoacoustics'],
     },
 };

@@ -20,8 +20,8 @@ export const post143: BlogArticle = {
         major: {
             type: 'notes',
             caption:
-                'One C major chord, same voicing and same bass, ends both progressions. After C, F and G it is the home chord, I. After F, Bb and Gm it is V in F major, a chord that wants to move on, so the phrase stops on a question.',
-            alt: 'Piano roll of two four-chord progressions, two beats per chord. The first plays C, F, G, C. The second plays F, Bb, Gm, C. The final C chord is drawn in colour and uses the same notes, C3, C4, E4 and G4, in both.',
+                'One C major chord, same voicing and same bass, ends both progressions. After C, F and G it is the home chord, I. After F, B♭ and Gm it is V in F major, a chord that wants to move on, so the phrase stops on a question.',
+            alt: 'Piano roll of two four-chord progressions, two beats per chord. The first plays C, F, G, C. The second plays F, B♭, Gm, C. The final C chord is drawn in colour and uses the same notes, C3, C4, E4 and G4, in both.',
             notes: [
                 ...chord(0, 48, [60, 64, 67]),
                 ...chord(2, 41, [60, 65, 69]),
@@ -38,7 +38,7 @@ export const post143: BlogArticle = {
                 { at: 4, label: 'G' },
                 { at: 6, label: 'C' },
                 { at: 8, label: 'F' },
-                { at: 10, label: 'Bb' },
+                { at: 10, label: 'B♭' },
                 { at: 12, label: 'Gm' },
                 { at: 14, label: 'C' },
             ],
@@ -83,15 +83,15 @@ export const post143: BlogArticle = {
             why: 'The chord\'s role in the key decides how settled it sounds. In F major, C is V, so ending on it leaves a half cadence that points back to F.',
         },
         {
-            q: 'In Zhang and colleagues\' 2025 rating study, when were major final chords clearly rated more pleasant than minor ones?',
+            q: 'Your chorus sits in C major and you end it G, then Am, hoping for a sad, final landing. It sounds like a question instead. Which change is most likely to make the Am land as a settled, dark ending?',
             options: [
-                'Only when chords were heard on their own',
-                'After progressions that ended unstably',
-                'After progressions that ended stably',
-                'Only for listeners with musical training',
+                'Put E major before it, so Am becomes the home chord',
+                'Swap the final Am for A major to give it more weight',
+                'Keep the G and voice the Am an octave lower',
+                'Keep the G and hold the Am for twice as long',
             ],
-            answer: 2,
-            why: 'After stable endings, major chords were rated more pleasant, more stable and less tense. After unstable endings, the differences were no longer significant.',
+            answer: 0,
+            why: 'After G in a C major context, Am works as vi in a deceptive cadence, so listeners who know the style expect C and hear a swerve. E to Am is V to i in A minor, which makes Am the home chord. Register and length change the colour, not the role.',
         },
         {
             q: 'What does the Papua New Guinea study by Smit and colleagues (2022) suggest about major cadences sounding happier?',
@@ -109,7 +109,7 @@ export const post143: BlogArticle = {
 
 You want the last line of the chorus to land sad, so you swap the final C major for A minor. Played after the G, it does not sound sad. It sounds as if the song swerved and is not over yet. Later you end a different song, in A minor, on the same A minor chord after an E major, and this time it sounds settled and dark.
 
-Both times the chord had the same three notes in the same voicing. What changed was the progression leading into it, and that was enough to change what the chord said.
+Both endings used the same three notes in the same voicing, so the difference has to come from the chords in front of them.
 
 ## Why it matters: mode is a tendency, the chord has a job
 
@@ -140,7 +140,7 @@ How strongly the major and minor code applies also depends on who is listening. 
 ## DAW experiment: one chord, two routes
 
 1. Load a plain piano. At 90 BPM, write C, F, G, C, two beats each, with the root in the bass. Voice the last chord as C3 in the bass with C4, E4 and G4 above.
-2. On a second clip, copy that final C exactly, same notes and same velocities, and write F, Bb and Gm in front of it.
+2. On a second clip, copy that final C exactly, same notes and same velocities, and write F, B♭ and Gm in front of it.
 3. Loop each clip twice. Score only the last chord from 1 to 7 on three scales: pleasant, stable and tense.
 4. Build the minor pair the same way: Am, Dm, E, Am, and then C, F, G, Am, with the final A minor voiced as A2 under A3, C4 and E4 in both.
 5. Score the two A minor endings on the same three scales.
@@ -153,7 +153,7 @@ Compare the two home endings first, C in C major and A minor in A minor. That is
 
 The common mistake is reaching for minor when a moment should feel final and sad. Placed after G in C major, A minor is a deceptive cadence, and listeners who know the style tend to hear it as a swerve rather than an ending. If you want it to land, make it the home chord: put E major before it and let the section sit in A minor.
 
-The second mistake is treating a chart of chord moods as true for every listener. The major and minor code is strongly associated with listening history, so the listener's background and the genre they expect change how strongly it applies. The [lesson on genre expectations](/blog/listeners-bring-genre-expectations-into-your-song) picks that up.
+The second mistake is treating a chart of chord moods as true for every listener. The major and minor code is strongly associated with listening history, so the listener's background and the genre they expect change how strongly it applies. The [lesson on genre expectations](/blog/listeners-bring-genre-expectations-into-your-song) covers that.
 
 ## Producer takeaway: decide the job, then the colour
 

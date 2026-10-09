@@ -2,121 +2,171 @@ import { BlogArticle } from '../blog-data';
 
 export const post102: BlogArticle = {
     slug: 'producing-city-pop-background-music-for-creators',
-    title: 'Producing City Pop background music for creators',
-    excerpt: 'City Pop works in video because it can suggest movement, color, and late-night optimism without asking the viewer to stop and listen. Here is how I produce it for that job.',
+    title: 'City Pop under a voiceover: leave the speech band open',
+    excerpt: 'City Pop keys, guitar and leads sit in the octaves that carry speech. How to arrange and duck a cue so the narration stays clear and the groove keeps moving.',
     category: 'genre-guides',
     publishedAt: '2026-07-19',
-    readingTime: 5,
-    featured: true,
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
+    readingTime: 6,
     summary: [
-        'City Pop helps a video because it suggests movement and color without asking the viewer to stop and listen.',
-        'Keep the first eight bars legible: rhythm section, harmony and one identity sound.',
-        'Mark new sections by removing a layer or revoicing a chord, so editors get landmarks without a big drop.',
+        'Speech intelligibility lives mostly between 1 and 4 kHz, so keys, guitar and lead lines compete with a voiceover far more than bass and kick do.',
+        'Under narration, dip the music bus in that band, keyed from the voice, instead of pulling the whole cue down.',
+        'Arrange for the edit: keep sung or lead lines for the sections without talking, and bring them back under the b-roll.',
     ],
     figures: {
+        weights: {
+            type: 'bars',
+            min: 0,
+            max: 30,
+            unit: '%',
+            caption:
+                'How much each octave counts toward the Speech Intelligibility Index (ANSI S3.5-1997, octave-band procedure). The 1, 2 and 4 kHz octaves carry 71 percent of the weight between them. The 250 Hz octave, where bass and kick live, carries 6 percent.',
+            alt: 'Six bars for octave bands. 250 Hz 6 percent, 500 Hz 17 percent, 1 kHz 24 percent, 2 kHz 26 percent, 4 kHz 21 percent, 8 kHz 5 percent. The 1, 2 and 4 kHz bars are highlighted.',
+            bars: [
+                { label: '250 Hz', value: 6, display: '6%', dim: true },
+                { label: '500 Hz', value: 17, display: '17%', dim: true },
+                { label: '1 kHz', value: 24, display: '24%' },
+                { label: '2 kHz', value: 26, display: '26%' },
+                { label: '4 kHz', value: 21, display: '21%' },
+                { label: '8 kHz', value: 5, display: '5%', dim: true },
+            ],
+        },
+        duck: {
+            type: 'spectrum',
+            mode: 'gain',
+            db: 9,
+            caption:
+                'Two ways to make room for the voice on the music bus, computed. The dashed line turns the whole cue down 6 dB, bass and drums included. The wide dip takes 5 dB out at 2 kHz, about 2.4 dB at 1 and 4 kHz, and less than 1 dB below 500 Hz, so the groove keeps its weight.',
+            alt: 'Gain over frequency from 20 Hz to 20 kHz with the 1 to 4 kHz band shaded. A dashed line sits flat at minus 6 dB. A solid curve is flat at 0 dB in the lows and highs and dips to minus 5 dB around 2 kHz.',
+            bands: [{ from: 1000, to: 4000, label: 'Speech band' }],
+            curves: [
+                { kind: 'slope', dbPerOct: 0, level: -6, label: 'Whole cue -6 dB', dashed: true },
+                { kind: 'eq', label: 'Dip, -5 dB at 2 kHz', bands: [{ type: 'bell', freq: 2000, gain: -5, q: 0.7 }] },
+            ],
+        },
         cue: {
             type: 'arrangement',
-            caption: 'A cue shaped for an edit. The opening stays legible under a voiceover, the fullest section lands under b-roll, and layers drop out when dialogue returns.',
-            alt: 'Arrangement grid of a City Pop cue: a sparse intro, a fuller section, the fullest lift, a short stripped breath, then the fuller section again.',
-            density: true,
+            caption:
+                'A cue laid out against the edit. The lead sits out wherever the narrator talks and returns under the b-roll. Drums, bass and chords carry the groove the whole way, so the gaps never sound like a mistake.',
+            alt: 'Arrangement grid with four sections: talk, b-roll, talk, b-roll. Drums, bass and chords play in every section. The lead plays only in the two b-roll sections. Fills appear only in the b-roll.',
             sections: [
-                { label: 'Intro', short: 'In', bars: 8 },
-                { label: 'Section A', short: 'A', bars: 8 },
-                { label: 'Lift', short: 'Lift', bars: 8 },
-                { label: 'Breath', short: 'Br', bars: 4 },
-                { label: 'Section A', short: 'A', bars: 8 },
+                { label: 'Talk', bars: 8 },
+                { label: 'B-roll', short: 'B-roll', bars: 4 },
+                { label: 'Talk', bars: 8 },
+                { label: 'B-roll', short: 'B-roll', bars: 4 },
             ],
             layers: [
-                { label: 'Drums', levels: [0.5, 0.7, 0.9, 0.3, 0.7] },
-                { label: 'Bass', levels: [0.6, 0.7, 0.9, 0.4, 0.7] },
-                { label: 'Chords', levels: [0.7, 0.7, 0.8, 0.6, 0.7] },
-                { label: 'Lead', levels: [0, 0.4, 0.8, 0, 0.4] },
-                { label: 'Fills', levels: [0, 0.2, 0.7, 0, 0.2] },
+                { label: 'Drums', levels: [0.6, 0.8, 0.6, 0.8] },
+                { label: 'Bass', levels: [0.7, 0.8, 0.7, 0.8] },
+                { label: 'Chords', levels: [0.5, 0.7, 0.5, 0.7] },
+                { label: 'Lead', levels: [0, 0.9, 0, 0.9], focus: true },
+                { label: 'Fills', levels: [0, 0.6, 0, 0.6] },
             ],
         },
     },
     quiz: [
         {
-            q: 'Why keep the first eight bars of a creator cue sparse?',
+            q: 'The narration blurs over a City Pop cue on a phone speaker. Which layer do you mute first to test?',
             options: [
-                'To make the full arrangement hit harder later',
-                'To leave room for narration or captions on top',
-                'To follow the City Pop habit of drumless intros',
-                'To keep the level low enough for phone speakers',
+                'The sub bass under 100 Hz',
+                'The kick drum on every beat',
+                'The electric piano comping',
+                'The vinyl crackle on the bus',
+            ],
+            answer: 2,
+            why: 'Electric piano comping sits in the 1 to 4 kHz octaves that carry most of the intelligibility weight. Sub bass and kick sit where speech counts for little.',
+        },
+        {
+            q: 'You can duck the whole music bus 6 dB under the voice, or dip it 5 dB around 2 kHz. What does the dip keep that the duck loses?',
+            options: [
+                'The level of the speech band itself',
+                'The bass and drums at their full level',
+                'The stereo width of the chorus guitar',
+                'The timing of the sidechain release',
             ],
             answer: 1,
-            why: 'A spoken intro or a headline needs room. Rhythm, harmony and one identity sound give the edit a color without competing with it.',
+            why: 'The dip barely touches anything below 500 Hz, so the groove keeps its weight. The broadband duck turns down the low end too, where it was not competing with the words.',
         },
         {
-            q: 'What is a creator-friendly way to mark a new section?',
+            q: 'Why does a sung hook cost more under narration than an instrumental lead at the same level?',
             options: [
-                'Hitting a big drop after a long riser',
-                'Switching to double time for a section',
-                'Adding a vocal hook over the chords',
-                'Pulling out one layer for four bars',
-            ],
-            answer: 3,
-            why: 'Small changes give editors landmarks to cut to without forcing the footage to follow the music.',
-        },
-        {
-            q: 'You hear a City Pop track on a streaming service. Can you use it in your published video?',
-            options: [
-                'Only with a license that covers your video',
-                'Yes, if you credit the artist in the caption',
-                'Yes, if the clip you use is under one minute',
-                'Only if you listen on a paid streaming plan',
+                'Vocal lines disturb verbal memory more',
+                'Sung hooks are always mixed louder',
+                'Vocals are recorded in mono, leads in stereo',
+                'Vocals mask the bass of the narrator',
             ],
             answer: 0,
-            why: 'Listening and using a recording in your work are different permissions. Flow Creator Music provides the license path for its eligible catalog.',
+            why: 'Salamé and Baddeley found vocal music disrupted verbal short-term memory more than instrumental music. A viewer following a narrator is doing verbal work too.',
         },
     ],
-    content: `## City Pop has a job in a creator edit
+    content: `## Hook: the cue that sounds perfect until someone talks
 
-City Pop is easy to reduce to a list of sounds: chorus guitar, glossy keys, tidy bass, a little sunset nostalgia. Those sounds matter, but they are not why the genre works so well underneath a travel cut, a desk setup, a fashion reel, or a night-drive sequence.
+You finish a City Pop cue for a travel vlog: chorused guitar, a bright electric piano, a slap bass line and a lead synth that answers it. On its own it sounds like a late drive through a city at night. The editor drops it under the narration and the first comment on the video asks what the narrator said at 0:42.
 
-For creators, the useful part is its forward motion. A good City Pop arrangement can feel bright and specific without taking the narration, captions, or image sequence away from the viewer. That is the production target I use for the City Pop material in Flow Creator Music, curated by Chill Music Division, a division of Virzy Guns Production.
+The editor's fix is to ride the music fader down until the words come back. By then the cue has lost its bounce, and on a phone speaker the words still smear in places. The music was not too loud everywhere. It was too busy in the octaves that carry speech.
 
-## Start with the edit, not a playlist reference
+## Why it matters: the City Pop palette sits on top of the words
 
-I begin by asking what the music needs to leave room for. A spoken intro needs a different opening than a montage. A vertical video often needs a recognizable color quickly, but it does not need a vocal hook competing with a headline on screen.
+City Pop, the glossy Japanese pop of the late 1970s and 1980s, is built from sounds with a lot of energy in the midrange: electric piano voicings, clean guitar with chorus, brass stabs, a lead vocal or a lead synth. Those are the same octaves a voiceover needs. The bass line and the kick, which give the genre its pull, sit mostly below them.
 
-That leads to a few repeatable decisions:
+So the parts that make a cue sound like City Pop are also the parts that blur the narration. Turning the whole cue down trades away the groove to clear a problem that lives in one region.
 
-- Keep the first eight bars legible: rhythm section, harmony, and one identity sound are usually enough.
-- Write chord movement that implies lift without forcing a giant chorus every thirty seconds.
-- Reserve the most active fills for edit points, then pull them back before dialogue returns.
-- Treat the low end as momentum, not as a second lead instrument.
+## Science model: where speech intelligibility lives
 
-The point is not to make anonymous wallpaper. The point is to make music with a stable identity that can sit inside somebody else's story.
+The Speech Intelligibility Index (ANSI S3.5-1997) predicts how much of a speech signal a listener can use by weighting each frequency band by how much it contributes to understanding. In its octave-band version, the weights pile up in the middle.
 
-## The palette: clean information, not crowded nostalgia
+::figure weights
 
-City Pop production is full of attractive details. That is exactly why it can become cluttered. I prefer a small number of sounds whose jobs are clear: a bass part that carries the pocket, drums with a controlled top end, one chord instrument, and a lead texture that can disappear when the scene gets busy.
+Masking happens band by band: a louder sound raises the threshold for quieter sounds near its own frequency (Fastl and Zwicker, 2007). A slap bass at 100 Hz does little to the consonants of a voice. An electric piano chord at 1 to 3 kHz covers exactly the part of the voice that the index weights most.
 
-Chorus and modulation are useful when they create width around the middle of the mix. They are less useful when they blur transients or turn the entire arrangement into a wash. The same goes for bright percussion: a crisp hat can keep a cut moving, but an aggressive top end gets tiring fast when someone is watching for twenty minutes.
+Words in the music add a second cost that is not about frequency. Salamé and Baddeley (1989) had people remember lists of digits while music played that they were told to ignore. Both kinds of music hurt recall compared with quiet, and vocal music hurt it more than instrumental music. Their task was not watching a video, but a viewer following a narrator is also holding words in memory. A sung hook under narration costs more than its level suggests.
 
-## Arrangement is the license to breathe
+That points to two fixes. Take energy out of the speech band only while the voice is talking, and keep sung or busy lead lines for the moments without talking.
 
-The most creator-friendly City Pop cues change without announcing every change. Instead of a dramatic drop, I will often remove a layer for four bars, shift the guitar voicing, or open the room around the snare. Those moves give editors landmarks without forcing their footage to obey the music.
+::figure duck
+
+Hear the same move on a lead and a pad. The lead's level never changes; only the pad does.
+
+::demo masking
+
+## DAW experiment: duck the band, not the cue
+
+You need a City Pop loop, or any busy cue, and 30 seconds of speech: read a paragraph into your phone or use a podcast clip.
+
+1. Put the speech on its own track, centred, and route every music track to one music bus.
+2. Balance the two by ear on headphones until the voice sits where you would normally mix it.
+3. Listen on a phone speaker or laptop speakers and write down the words that blur.
+4. With the voice playing, mute the music parts one at a time. Note which mute makes those words clearest. Expect the keys, the guitar or the lead.
+5. Unmute everything. On the music bus, add a compressor keyed from the voice: 3:1, attack around 10 ms, release around 300 ms, threshold set for 3 to 4 dB of gain reduction while the voice talks. Listen for pumping in the bass.
+6. Bypass it and try a dynamic EQ band instead, keyed from the voice: a wide bell at 2 kHz, Q about 0.7, dipping 4 to 6 dB while the voice talks.
+7. Compare the two on the phone speaker, at the same playback level.
+8. Finally, mute the lead under the talking sections and keep it in the b-roll. Keep the version where every word is easy to follow and the groove still moves.
+
+## Common mistake: fixing a band problem with the fader
+
+The usual mistake is the one from the hook: pulling the whole cue down until the words come through. The low end and the drums lose their weight first, and the music starts to sound like it is in another room, while the keys can still cover the consonants.
+
+The opposite mistake is a broadband sidechain set too fast. The whole cue jumps up and down with every syllable, and viewers hear the pumping before they hear the music. A slower release, a band-limited dip, or simply a part that sits out are all quieter than the fader.
+
+The third is leaving the topline in. A sung hook or a vocal chop under a talking head competes for attention even when it is mixed low.
 
 ::figure cue
 
-That restraint also makes looping and short-form extracts more forgiving. A creator can use the opening under voiceover, move into a fuller section for b-roll, then return to a quieter passage without the track feeling like a radio single cut in half.
+## Producer takeaway: arrange for the edit
 
-## Use it with the right license
+When you produce City Pop for someone else's video, write the cue with talking in mind. Keep drums, bass and chords steady, give the lead and the fills the sections without talking, and leave the 1 to 4 kHz region light enough that a dip of a few dB clears it. The cue still sounds like City Pop, and the narrator never has to fight it.
 
-Listening on a streaming service and using a recording in a published video are different things. Flow Creator Music is royalty-free with an active Flow Pro creator license; it is not a promise that every City Pop recording on the internet is free to reuse.
+If you are choosing a finished cue rather than producing one, the [lesson on streaming versus a creator license](/blog/spotify-streaming-vs-flow-creator-license) covers what you need before it goes under a published video.
 
-The creator catalog is designed for background use in videos, livestreams, podcasts, study-with-me sessions, and technology content under the applicable terms. If you are choosing music for a project, use the [Flow City Pop creator catalog](https://flow.virzyguns.com/en/creator-music/city-pop) for the license and download path. Chill Music Division's [Spotify artist profile](https://open.spotify.com/artist/21bxd77KSj9RR6vAqW5Hvy) is a listening and discovery destination; it is not the source of a creator license.
+## References
 
-## Producer takeaway
-
-City Pop is most useful to creators when it offers a clear world, an easy pulse, and room for the image to remain the lead. Build the arrangement around that constraint and the genre keeps its personality without becoming a distraction.
+- American National Standards Institute. (1997, reaffirmed 2020). *ANSI/ASA S3.5-1997: Methods for Calculation of the Speech Intelligibility Index*. Acoustical Society of America.
+- Fastl, H., & Zwicker, E. (2007). *Psychoacoustics: Facts and Models* (3rd ed.). Springer.
+- Salamé, P., & Baddeley, A. (1989). Effects of background music on phonological short-term memory. *The Quarterly Journal of Experimental Psychology Section A*, 41(1), 107-122.
 `,
     seo: {
-        title: 'How City Pop Background Music Is Produced for Creators | Virzy Guns Production',
-        description: 'A producer-led guide to making City Pop background music for videos, streams, and visual storytelling, plus how Flow Pro creator licensing works.',
-        keywords: ['city pop background music', 'city pop music for videos', 'city pop production', 'music for creators', 'royalty-free city pop music', 'Chill Music Division'],
+        title: 'City Pop under a voiceover | VGP Studio',
+        description: 'Keys and leads in City Pop sit in the octaves that carry speech. Arrange and duck a cue so narration stays clear and the groove keeps moving.',
+        keywords: ['city pop background music', 'music under voiceover', 'speech intelligibility', 'sidechain ducking', 'dynamic EQ', 'city pop production'],
     },
 };

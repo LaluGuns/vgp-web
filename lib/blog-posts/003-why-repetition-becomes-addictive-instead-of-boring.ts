@@ -43,7 +43,7 @@ export const post003: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Huron’s model, why can the second pass of a hook feel better than the first?',
+            q: 'In Huron\'s model, why can the second pass of a hook feel better than the first?',
             options: [
                 'A prediction error pulls the ear back to the hook',
                 'The listener predicted it, and that is rewarded',
@@ -73,7 +73,7 @@ export const post003: BlogArticle = {
                 'Producers are trained to dislike exact repeats',
             ],
             answer: 0,
-            why: 'Habituation builds with exposure. After a long session your response to the hook is much weaker than a new listener’s, so trust the pattern before rewriting it.',
+            why: 'Habituation builds with exposure. After a long session your response to the hook is much weaker than a new listener\'s, so trust the pattern before rewriting it.',
         },
     ],
     content: `## Hook: the fourth time through

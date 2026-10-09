@@ -49,6 +49,12 @@ export interface BarsFigure extends FigureBase {
     unit?: string;
     bars: { label: string; value: number; display?: string; dim?: boolean }[];
     reference?: { value: number; label: string };
+    /**
+     * Values are powers of ten (3 is 1,000, 6 is 1,000,000). Draws a tick at
+     * each power inside min to max and says "log scale", so the bar lengths
+     * are read as ratios. Put the real numbers in `display`.
+     */
+    log?: boolean;
 }
 
 export type RhythmHit = number | { step: number; offset?: number; level?: number };
@@ -65,6 +71,12 @@ export interface RhythmFigure extends FigureBase {
         /** 0.5 is straight, 0.66 is triplet swing. Moves every second step. */
         swing?: number;
         note?: string;
+        /**
+         * The row the caption asks you to look at. Its hits are drawn in the
+         * accent; once any row has focus, every other row stays grey, moved
+         * hits included. Without any focus, only moved hits are in the accent.
+         */
+        focus?: boolean;
     }[];
 }
 
@@ -195,7 +207,8 @@ export interface StereoFigure extends FigureBase {
 
 export interface FlowFigure extends FigureBase {
     type: 'flow';
-    steps: { label: string; note?: string }[];
+    /** `focus`: the step the caption asks you to look at, drawn in the accent. Every other step stays grey. */
+    steps: { label: string; note?: string; focus?: boolean }[];
     /** Draw an arrow from the last step back to `to` (index). */
     loop?: { to: number; label?: string };
 }
@@ -203,8 +216,13 @@ export interface FlowFigure extends FigureBase {
 export interface ArrangementFigure extends FigureBase {
     type: 'arrangement';
     sections: { label: string; short?: string; bars?: number }[];
-    /** levels: 0 to 1 per section. 0 means silent. */
-    layers: { label: string; levels: number[] }[];
+    /**
+     * levels: 0 to 1 per section, drawn as the height of the cell. 0 means
+     * silent. `focus`: the layer the caption asks you to look at, drawn in
+     * the accent; once any layer has focus, the others are grey. Without
+     * any focus every layer is in the accent.
+     */
+    layers: { label: string; levels: number[]; focus?: boolean }[];
     /** Draw total density per section above the grid, derived from the layers. */
     density?: boolean;
 }

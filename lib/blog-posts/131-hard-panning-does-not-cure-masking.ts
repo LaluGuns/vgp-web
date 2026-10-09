@@ -49,7 +49,7 @@ export const post131: BlogArticle = {
             rows: [
                 { label: 'Guitar L', hits: [0, 4, 8, 12] },
                 { label: 'Guitar R, same onsets', hits: [0, 4, 8, 12] },
-                { label: 'Guitar R, off-beats', hits: [2, 6, 10, 14] },
+                { label: 'Guitar R, off-beats', hits: [2, 6, 10, 14], focus: true },
             ],
         },
     },
@@ -105,7 +105,7 @@ On speakers both ears hear both speakers. The hard-left guitar reaches your righ
 
 In mono the help is gone. Every part comes from one point, and only the non-spatial cues are left to separate them. The fold also changes the balance by an amount the pan law decides. With a common -3 dB law, a centred part sits at $\\cos 45^\\circ = 0.707$ in each channel and a hard-panned part at 1 in one channel. Folded as $(L + R)/2$:
 
-$$\\text{centre: } \\frac{0.707 + 0.707}{2} = 0.707 \\; (-3 \\text{ dB}), \\qquad \\text{hard side: } \\frac{1 + 0}{2} = 0.5 \\; (-6 \\text{ dB})$$
+$$\\begin{aligned} \\text{centre: } \\frac{0.707 + 0.707}{2} &= 0.707 \\; (-3 \\text{ dB}) \\\\ \\text{hard side: } \\frac{1 + 0}{2} &= 0.5 \\; (-6 \\text{ dB}) \\end{aligned}$$
 
 ::figure panlaw
 

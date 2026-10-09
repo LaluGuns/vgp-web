@@ -121,7 +121,7 @@ The opposite mistake is leaving inconsistency in the anchors. A kick that drifts
 
 ## Producer takeaway: a steady period and a reason to move
 
-Keep the beat period steady and clear, and make the kick and bass worth moving to. Check the tempo against how your body wants to move, not only against the number in the transport. If you quantize played parts, try a strength below 100 percent, such as 85 percent, so the player's consistent lean survives while the outliers come in. If the loop makes you nod with your eyes closed, the arrangement is doing its job.
+Keep the beat period steady and clear, and make the kick and bass worth moving to. Check the tempo against how your body wants to move, as well as against the number in the transport. If you quantize played parts, try a strength below 100 percent, such as 85 percent, so the player's consistent lean survives while the outliers come in. If the loop makes you nod with your eyes closed, the arrangement is doing its job.
 
 ## References
 

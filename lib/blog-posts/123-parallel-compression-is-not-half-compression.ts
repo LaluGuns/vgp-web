@@ -166,7 +166,7 @@ At matched loudness the blend usually keeps the snap of the hits and adds weight
 
 ## Common mistake: asking the blend to control peaks
 
-The first mistake is reaching for parallel compression when the problem is a peak. A snare hit that jumps out over the others needs gain reduction on that hit, from clip gain or an ordinary compressor (see [fixing outliers before the compressor](/blog/clip-gain-and-automation-before-compression)). The blend leaves that hit almost where it was and raises everything around it.
+The first mistake is reaching for parallel compression when the problem is a peak. A snare hit that jumps out over the others needs gain reduction on that hit, from clip gain or an ordinary compressor (the [lesson on clip gain](/blog/clip-gain-and-automation-before-compression) shows how). The blend leaves that hit almost where it was and raises everything around it.
 
 The second mistake is judging the blend without matching its level. Every blend is louder than the dry track, 6 dB on quiet passages with the copy at equal level and more with makeup gain, so an over-blended version can win the A/B right up to the moment you take the extra level off. The [lesson on loudness bias](/blog/why-louder-is-not-always-bigger) covers why.
 

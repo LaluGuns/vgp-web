@@ -53,7 +53,7 @@ export const post036: BlogArticle = {
             mode: 'level',
             range: [20, 2000],
             caption:
-                'A 50 Hz sub after saturation, sketched. The first line is the sub itself, below anything a phone can play. The lines inside the shaded band are what the phone does play, and their spacing still says 50 Hz. The shaded band stands in for a small speaker’s working range, which varies by device.',
+                'A 50 Hz sub after saturation, sketched. The first line is the sub itself, below anything a phone can play. The lines inside the shaded band are what the phone does play, and their spacing still says 50 Hz. The shaded band stands in for a small speaker\'s working range, which varies by device.',
             alt: 'Harmonic lines at multiples of 50 Hz, getting shorter with frequency. A shaded band covers the range from a few hundred hertz upward, leaving the first lines outside it.',
             bands: [{ from: 300, to: 2000, label: 'Small speaker range' }],
             curves: [{ kind: 'harmonics', f0: 50, count: 40, rolloff: 1, label: 'Saturated 50 Hz sub' }],
@@ -115,7 +115,7 @@ The ear does not need the fundamental to hear the pitch. Play 200, 300, 400 and 
 
 ::figure periodic
 
-Bass enhancement for small speakers is built on this effect: it generates harmonics of the bass and plays them where the speaker works, so listeners hear bass pitch the speaker never produced (Larsen and Aarts, 2002, 2004). Saturation gets you there too. Drive a 50 Hz sub and it gains lines at multiples of 50 Hz, such as 100, 150 and 200 Hz, depending on the curve. The phone plays those, and the ear supplies the 50.
+Virtual bass processing for small speakers is built on this effect: it generates harmonics of the bass and plays them where the speaker works, so listeners hear bass pitch the speaker never produced (Larsen and Aarts, 2002, 2004). Saturation gets you there too. Drive a 50 Hz sub and it gains lines at multiples of 50 Hz, such as 100, 150 and 200 Hz, depending on the curve. The phone plays those, and the ear supplies the 50.
 
 What you get is pitch and rhythm, not weight. A phone still cannot shake the room, and the harmonic version is a different sound from a deep sub. On small speakers, a bass you can follow beats a bass you cannot hear.
 

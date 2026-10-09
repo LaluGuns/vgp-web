@@ -31,9 +31,9 @@ export const post015: BlogArticle = {
                 { label: 'Bass', levels: [0.7, 1, 0.8, 1] },
                 { label: 'Chords', levels: [0.6, 0.8, 0.7, 0.8] },
                 { label: 'Vocal', levels: [0.8, 1, 0.8, 1] },
-                { label: 'Pad', levels: [0, 0.7, 0.7, 0.7] },
-                { label: 'Guitar', levels: [0, 0.6, 0.7, 0.6] },
-                { label: 'Perc', levels: [0, 0, 0.7, 0.7] },
+                { label: 'Pad', focus: true, levels: [0, 0.7, 0.7, 0.7] },
+                { label: 'Guitar', focus: true, levels: [0, 0.6, 0.7, 0.6] },
+                { label: 'Perc', focus: true, levels: [0, 0, 0.7, 0.7] },
             ],
         },
         mutate: {
@@ -106,7 +106,7 @@ The listener does need something new in verse two. The question is where the nov
 
 The ear responds less to a pattern that repeats without change. This habituation is why an exact copy of verse one feels flat the second time, even when it sounded good the first time.
 
-Repetition itself is not the problem. Margulis (2014) argues that repetition is central to how people hear music as music, and that listeners keep finding new things to attend to in material they already know. Huron (2006) describes listening as constant prediction: a pattern the listener can predict is rewarding, and a small departure from it draws attention. A mutated verse gives both. The bass is the same bass, so the listener recognises the verse. It now plays on the offbeats, so the listener notices.
+Repetition itself is not the problem. Margulis (2014) argues that repetition is central to how people hear music as music, and that listeners keep finding new things to attend to in material they already know. Huron (2006) describes listening as constant prediction: a pattern the listener can predict is rewarding, and a small departure from it draws attention. A mutated verse gives both. The bass is the same bass, so the listener recognizes the verse. It now plays on the offbeats, so the listener notices.
 
 A new part works differently. Huron (1989) found that musicians counting the voices in a texture of similar timbres were accurate up to three and made many more errors at four, mostly by counting too few. Every new part pushes the texture toward the point where the listener stops following individual lines. A mutation changes a line the listener already follows.
 

@@ -45,7 +45,7 @@ export const post001: BlogArticle = {
             layers: [
                 { label: 'Pad', levels: [0, 0, 0.7] },
                 { label: 'Riser', levels: [0, 0, 0.3] },
-                { label: 'Pluck', levels: [0.9, 0.6, 0.7] },
+                { label: 'Pluck', focus: true, levels: [0.9, 0.6, 0.7] },
                 { label: 'Drums', levels: [0, 0.8, 1] },
                 { label: 'Vocal', levels: [0, 0.8, 1] },
             ],

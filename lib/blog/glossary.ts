@@ -872,6 +872,11 @@ function patternFor(entry: GlossaryEntry): RegExp {
     return re;
 }
 
+/** Glossary entries that occur in a text, for the lesson search index. */
+export function termsIn(text: string, category: Category): GlossaryEntry[] {
+    return glossaryFor(category).filter((entry) => patternFor(entry).test(text));
+}
+
 /**
  * Replaces the first match of each pending term in a run of plain text.
  * `wrap` is called once per term and must remove it from `pending`.

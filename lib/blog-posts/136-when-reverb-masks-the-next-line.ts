@@ -69,7 +69,7 @@ export const post136: BlogArticle = {
             alt: 'A one-bar grid of sixteen steps. The vocal row has syllables on steps 1 to 5 and a last word on step 7. The delay row has a repeat on step 10, a smaller one on step 13 and a very small one on step 16.',
             rows: [
                 { label: 'Vocal', hits: [0, 1, 2, 3, 4, 6], note: 'Line ends on step 7' },
-                { label: 'Delay throw', hits: [{ step: 9, level: 0.7 }, { step: 12, level: 0.25 }, { step: 15, level: 0.09 }], note: 'Last word only' },
+                { label: 'Delay throw', hits: [{ step: 9, level: 0.7 }, { step: 12, level: 0.25 }, { step: 15, level: 0.09 }], note: 'Last word only', focus: true },
             ],
         },
     },

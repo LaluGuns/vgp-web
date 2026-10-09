@@ -65,7 +65,7 @@ export const post040: BlogArticle = {
                 'The low fundamental of each note',
                 'Several milliseconds of its attack',
                 'The stereo width of the whole part',
-                'The high end of each note’s onset',
+                'The high end of each note\'s onset',
             ],
             answer: 3,
             why: 'A first-order filter at 3 kHz has a rise time of only about 0.12 ms, far too short to hear. What goes is the high end of the click, which the ear uses to hear a sharp start.',
@@ -75,7 +75,7 @@ export const post040: BlogArticle = {
             options: [
                 'It rises from about 500 Hz to about 1.2 kHz',
                 'It falls from about 1.2 kHz to about 500 Hz',
-                'It drops to 220 Hz, the note’s fundamental',
+                'It drops to 220 Hz, the note\'s fundamental',
                 'It stays the same, since the pitch is the same',
             ],
             answer: 1,

@@ -59,7 +59,7 @@ export const post059: BlogArticle = {
             why: 'With more than one note, the curve also makes intermodulation products at frequencies like f1 + f2 and f2 - f1. They are not harmonics of either note and pile up as clutter.',
         },
         {
-            q: 'In a 32-bit float session a channel peaks 6 dB over full scale. Where does it actually clip?',
+            q: 'In a 32-bit float session a channel peaks 6 dB over full scale. Where does it clip?',
             options: [
                 'Inside the channel, the moment it passes 0 dBFS',
                 'At the master fader, once the sum passes 0 dBFS',
@@ -135,7 +135,7 @@ Check saturated groups at a low monitoring level and listen to the top end. The 
 `,
     seo: {
         title: 'Too clean can sound unfinished | VGP Studio',
-        description: 'A spotless digital mix can sound like separate files. How saturation curves create even and odd harmonics, why intermodulation causes mud, and how to glue a group.',
+        description: 'A spotless digital mix can sound like separate files. How saturation curves add even and odd harmonics, why intermodulation causes mud, and how to glue a group.',
         keywords: ['saturation', 'harmonic distortion', 'tape saturation', 'intermodulation', 'even and odd harmonics', 'mix glue'],
     },
 };

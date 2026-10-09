@@ -8,6 +8,7 @@ import katex from 'katex';
 import type { BlogArticle } from '../blog-data';
 import { categories } from '../blog-data';
 import { isDemoId } from './demos';
+import { INLINE_MATH, looksLikeMath } from './content';
 import { glossary } from './glossary';
 
 export function validateArticle(article: BlogArticle): string[] {
@@ -45,6 +46,26 @@ export function validateArticle(article: BlogArticle): string[] {
             say(`maths does not render: ${tex.slice(0, 60)} (${(e as Error).message.slice(0, 80)})`);
         }
     }
+
+    // Inline maths must render as maths, never as raw "$...$" text (lib/blog/content.ts decides).
+    const prose = content
+        .replace(/^```[\s\S]*?^```/gm, ' ')
+        .replace(/\$\$[\s\S]+?\$\$/g, ' ')
+        .replace(/`[^`\n]+`/g, ' ');
+    const leftover = prose.replace(INLINE_MATH, (match: string, tex: string) => {
+        if (!looksLikeMath(tex)) {
+            say(`inline maths shows as text: ${match.slice(0, 60)} (write it so it reads as maths, e.g. $x/2$, or in words)`);
+            return ' ';
+        }
+        try {
+            katex.renderToString(tex, { throwOnError: true, strict: 'ignore' });
+        } catch (e) {
+            say(`inline maths does not render: ${match.slice(0, 60)} (${(e as Error).message.slice(0, 80)})`);
+        }
+        return ' ';
+    });
+    // A "$" that opens on a letter or a backslash but was not read as maths prints as a raw dollar sign.
+    for (const m of leftover.matchAll(/\$(?=[A-Za-z\\({])[^\n]{0,40}/g)) say(`unmatched $ shows as text: ${m[0]}`);
 
     if (article.summary && (article.summary.length < 2 || article.summary.length > 4)) say('summary should have 2 to 4 points');
     article.quiz?.forEach((q, i) => {

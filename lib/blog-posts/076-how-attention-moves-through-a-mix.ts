@@ -32,7 +32,7 @@ export const post076: BlogArticle = {
             db: 6,
             caption:
                 'A broad 2 dB cut at 2.5 kHz with a Q of 0.7, placed on the instrument bus rather than on the vocal. The backing loses a little presence right where the lead voice needs it, and keeps its weight and air.',
-            alt: 'An EQ curve from 20 Hz to 20 kHz. It is flat except for a wide, shallow dip of 2 dB centered at 2.5 kHz, inside a shaded band marked vocal presence from 2 to 5 kHz.',
+            alt: 'An EQ curve from 20 Hz to 20 kHz. It is flat except for a wide, shallow dip of 2 dB centred at 2.5 kHz, inside a shaded band marked vocal presence from 2 to 5 kHz.',
             curves: [{ kind: 'eq', label: 'Instrument bus', bands: [{ type: 'bell', freq: 2500, gain: -2, q: 0.7 }] }],
             bands: [{ from: 2000, to: 5000, label: 'Vocal presence' }],
         },
@@ -94,7 +94,7 @@ The ear groups sound using several cues. Parts that start together, share harmon
 
 Masking is what happens when that sorting fails. When two sounds share a frequency range at the same moment, the louder one hides parts of the quieter one. Boosting the midrange on every track makes this worse, because every part grows in the same place.
 
-Space helps too. Sources that come from different directions are easier to hear apart, so panning a guitar away from the center reduces how much it masks the vocal. That advantage depends on the two speakers. Fold the mix to mono and every part comes from one point again, and the masking returns.
+Space helps too. Sources that come from different directions are easier to hear apart, so panning a guitar away from the centre reduces how much it masks the vocal. That advantage depends on the two speakers. Fold the mix to mono and every part comes from one point again, and the masking returns.
 
 The most reliable fix is to give the lead a range of its own. A small, broad cut on the backing instruments where the voice carries its presence lets the vocal come forward without raising its fader.
 
@@ -118,7 +118,7 @@ At low level the vocal should stay clear without its fader moving. If it sinks a
 
 ## Common mistake: lighting everything at once
 
-The most common mistake is trying to make every part a highlight. Vocal, guitar, synth and drums all pushed forward produce a tiring wall where nothing leads. Decide which part owns each moment, and let the others play a supporting role.
+The most common mistake is trying to put every part in front. Vocal, guitar, synth and drums all pushed forward produce a tiring wall where nothing leads. Decide which part owns each moment, and let the others play a supporting role.
 
 The second mistake is relying on panning to separate parts. Panning does help in stereo, but many listeners hear music on a single phone speaker or a mono smart speaker. Parts that clash in frequency will clash again there.
 

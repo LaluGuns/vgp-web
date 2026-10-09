@@ -93,14 +93,14 @@ Huron (2006) describes expectation as five responses around a single event, know
 - **Imagination**: picturing an outcome before it is likely to happen.
 - **Tension**: arousal and attention rise just before the expected moment.
 - **Prediction**: a small reward when the guess turns out right, a small penalty when it does not.
-- **Reaction**: a fast, automatic response to what actually arrived.
+- **Reaction**: a fast, automatic response to what arrived.
 - **Appraisal**: a slower, conscious judgment of the outcome.
 
 The gap between what the listener expected and what arrived is called a prediction error. Huron argues that a fast negative reaction, overturned a moment later by a positive appraisal, can make an outcome feel better than a plain correct guess. He calls this contrastive valence. A half bar of silence before a chorus can work partly like this: for a moment it sounds as if the music has stopped, and then the downbeat proves it has not.
 
 ::figure itpra
 
-There is neural evidence that anticipation carries reward of its own. Salimpoor and colleagues (2011) scanned listeners with music they had chosen because it reliably gave them chills. PET imaging showed dopamine release in the striatum. fMRI with the same listeners showed one part of it, the caudate, more involved while they waited for a favorite moment, and another, the nucleus accumbens, more involved at the moment itself. This does not mean a longer build gives a bigger reward. When researchers varied how predictable short musical passages were, liking was highest at intermediate levels of predictability and uncertainty and fell off at both extremes (Gold et al., 2019).
+There is neural evidence that anticipation carries reward of its own. Salimpoor and colleagues (2011) scanned listeners with music they had chosen because it reliably gave them chills. PET imaging showed dopamine release in the striatum. fMRI with the same listeners showed one part of it, the caudate, more involved while they waited for a favourite moment, and another, the nucleus accumbens, more involved at the moment itself. This does not mean a longer build gives a bigger reward. When researchers varied how predictable short musical passages were, liking was highest at intermediate levels of predictability and uncertainty and fell off at both extremes (Gold et al., 2019).
 
 ## DAW experiment: three ways into the same chorus
 

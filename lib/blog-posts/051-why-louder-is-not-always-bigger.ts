@@ -50,7 +50,7 @@ export const post051: BlogArticle = {
             why: 'Loudness doubles for every 10 dB, so 1 dB gives 2 to the power 0.1, about 1.07. That is small enough to be heard as "better" rather than "louder".',
         },
         {
-            q: 'Why does a slightly louder version tend to sound fuller, not only louder?',
+            q: 'Why does a slightly louder version tend to sound fuller as well as louder?',
             options: [
                 'Plugins add harmonics as soon as their output gain is raised',
                 'Louder signals seem to spread wider across the stereo field',
@@ -117,7 +117,7 @@ With the extra decibel, the processed version wins almost every time. At matched
 
 The first mistake is setting processors in solo. A kick boosted on its own sounds huge, but once the bass, guitars and vocal return that low-end boost turns into mud and you pull the fader down anyway. You spent headroom on a sound that does not fit the mix.
 
-The second is monitoring too loud. At high levels the ear's response is flatter, so the bass and the extreme top sound fuller than they will at a normal listening level. Mix there and you tend to hold back the low end, and the track sounds thin when someone plays it quietly.
+The second is monitoring too loud. At high levels the ear's response is flatter, so the bass and the extreme top sound fuller than they will at a normal listening level. Mix there and you tend to hold back the low end, and the track sounds thin when someone plays it at low volume.
 
 ## Producer takeaway: make every comparison fair
 

@@ -9,7 +9,7 @@ export const post121: BlogArticle = {
     excerpt: 'All three lower your peaks so you can turn up. A saturator bends the wave, a clipper flattens it and a limiter turns it down, and each one sounds different.',
     category: 'mixing-mastering',
     publishedAt: '2026-05-30',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 7,
     summary: [
         'Saturation bends the wave gradually, hard clipping cuts it flat at a ceiling, and limiting turns the whole signal down for a short time.',
@@ -85,7 +85,7 @@ Producers use "saturate it", "clip it" and "limit it" almost as if they meant th
 
 ## Why it matters: each one bends the wave differently
 
-All three are nonlinear: the output is not just a scaled copy of the input. They differ in how and when they act.
+All three are nonlinear: they change the shape of the wave, where a fader only changes its size. They differ in how and when they act.
 
 **Saturation** runs the signal through a smooth curve. Quiet parts pass almost unchanged, and louder parts are rounded off more and more as they approach the top of the curve. There is no corner anywhere.
 
@@ -147,7 +147,7 @@ Spread the work. I use a clipper on my drum bus more often than a limiter there,
 `,
     seo: {
         title: 'Saturation vs clipping vs limiting explained | VGP Studio',
-        description: 'How saturation, hard clipping and limiting each lower your peaks, what they do to the waveform and its harmonics, and how to use them together without crushing a master.',
+        description: 'How saturation, hard clipping and limiting each lower peaks, what they do to the waveform and its harmonics, and how to stack them without crushing a master.',
         keywords: ['saturation vs clipping', 'clipping vs limiting', 'soft clipping', 'tanh saturation', 'limiter mastering', 'harmonic distortion', 'oversampling', 'loudness normalization'],
     },
 };

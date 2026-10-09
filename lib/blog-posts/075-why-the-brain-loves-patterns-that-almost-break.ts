@@ -45,7 +45,7 @@ export const post075: BlogArticle = {
             why: 'Ratings of wanting to move and pleasure followed an inverted U. Too little syncopation gives the body nothing to fill in, too much and the beat is lost.',
         },
         {
-            q: 'What does syncopation need in order to work?',
+            q: 'What does syncopation need to work?',
             options: [
                 'A tempo above 120 BPM, fast enough for the body to follow',
                 'Random timing on every hit so the pattern sounds human',

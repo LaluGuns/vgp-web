@@ -6,7 +6,7 @@ export const post100: BlogArticle = {
     excerpt: 'Under every plugin interface is an equation that turns input samples into output samples. Learn the four kinds of change a plugin can make, and test yours.',
     category: 'audio-science',
     publishedAt: '2026-06-12',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 6,
     summary: [
         'A plugin computes each output sample from current and past samples. The knobs only change the numbers in that equation.',
@@ -101,7 +101,12 @@ $$y[n] = x[n - d]$$
 
 A parametric EQ band is usually a biquad, which combines the current input and the two before it with the two previous outputs:
 
-$$y[n] = b_0 x[n] + b_1 x[n-1] + b_2 x[n-2] - a_1 y[n-1] - a_2 y[n-2]$$
+$$
+\\begin{aligned}
+y[n] = {} & b_0 x[n] + b_1 x[n-1] + b_2 x[n-2] \\\\
+& - a_1 y[n-1] - a_2 y[n-2]
+\\end{aligned}
+$$
 
 The frequency, gain and Q knobs do not change this equation. They change the five coefficients $b_0, b_1, b_2, a_1, a_2$, and those numbers decide the curve. Feeding past outputs back in is what lets five numbers draw a resonant bell or a smooth shelf.
 

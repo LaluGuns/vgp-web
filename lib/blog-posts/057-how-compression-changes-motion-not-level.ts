@@ -6,7 +6,7 @@ const HITS = { kind: 'hits' as const, at: [0.04, 0.54], amp: [1, 0.85], decay: 8
 export const post057: BlogArticle = {
     slug: 'how-compression-changes-motion-not-level',
     title: 'Compression changes motion before level',
-    excerpt: 'Compression changes how a sound moves in time, not only how loud it is. Learn to set attack and release so a track breathes with the groove.',
+    excerpt: 'Compression changes how a sound moves in time as well as how loud it is. Learn to set attack and release so a track breathes with the groove.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-08',
     updatedAt: '2026-10-08',
@@ -157,7 +157,7 @@ A common error is leaving the compressor on its default settings or relying on a
 
 ::figure release
 
-The other mistake is judging with makeup gain on. The compressed version is louder, and louder almost always sounds better at first. Bypass the compressor at matched level to hear whether the movement of the sound actually improved.
+The other mistake is judging with makeup gain on. The compressed version is louder, and louder almost always sounds better at first. Bypass the compressor at matched level to hear whether the movement of the sound improved.
 
 ## Producer takeaway: set it with the rhythm section playing
 

@@ -42,7 +42,7 @@ export const post142: BlogArticle = {
             bars: [
                 { label: 'A1, 55 Hz', value: 4, display: '4.0 dB' },
                 { label: 'B1, 62 Hz', value: 0.9, dim: true },
-                { label: 'C#2, 69 Hz', value: 0.3, dim: true },
+                { label: 'C♯2, 69 Hz', value: 0.3, dim: true },
                 { label: 'D2, 73 Hz', value: 0.2, dim: true },
                 { label: 'E2, 82 Hz', value: 0.1, dim: true },
             ],
@@ -105,7 +105,7 @@ Bandwidth decides how much of the music a move touches. For a bell, Q and bandwi
 
 $$\\frac{1}{Q} = 2 \\sinh\\left( \\frac{\\ln 2}{2} \\, BW \\right)$$
 
-A Q of 0.7 spans about 1.9 octaves, the kind of small, broad move drawn in [mastering should translate the song](/blog/how-mastering-changes-translation-not-personality). A Q of 8 spans about 0.18 octave, roughly a whole tone. That is narrow enough to catch a single note, which is the problem: a 4 dB cut at 55 Hz turns down every A the bass plays and leaves the D at 73 Hz almost untouched. You have rebalanced the bass line from the master.
+A Q of 0.7 spans about 1.9 octaves, the kind of small, broad move the [lesson on mastering and translation](/blog/how-mastering-changes-translation-not-personality) shows. A Q of 8 spans about 0.18 octave, roughly a whole tone. That is narrow enough to catch a single note, which is the problem: a 4 dB cut at 55 Hz turns down every A the bass plays and leaves the D at 73 Hz almost untouched. You have rebalanced the bass line from the master.
 
 ::figure notes
 
@@ -121,7 +121,7 @@ The reference you compare against sets the target slope, and that target has mov
 
 ## DAW experiment: broad first, narrow only if it survives
 
-1. Load your mix and two or three references from the same substyle and era. Level-match the choruses by short-term loudness, as in [reference tracks are for calibration](/blog/why-reference-tracks-are-calibration-not-imitation).
+1. Load your mix and two or three references from the same substyle and era. Level-match the choruses by short-term loudness, as the [lesson on reference tracks](/blog/why-reference-tracks-are-calibration-not-imitation) describes.
 2. Switch between your mix and each reference and describe the difference in one broad word: darker, brighter, heavier, thinner or more forward in the mids.
 3. Try a tilt to match that word: a low shelf and a high shelf at the same pivot, around 1 kHz, moving 1 dB in opposite directions. Put a gain plugin after the EQ and rematch the loudness.
 4. Compare again with the references. If the difference is mostly gone, stop there.

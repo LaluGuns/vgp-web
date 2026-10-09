@@ -91,7 +91,7 @@ Models of musical expectation treat the listener as estimating a probability for
 
 $$\\text{IC}(x) = -\\log_2 P(x)$$
 
-Here $P(x)$ is the probability the listener's model gave to the event $x$ that actually arrived, and IC is measured in bits. Suppose the snare on beat 2 is predicted with a probability of 0.9: its information content is about 0.15 bits, almost no surprise. An event predicted at 0.05 carries about 4.3 bits. The gap between what was expected and what arrived is the prediction error.
+Here $P(x)$ is the probability the listener's model gave to the event $x$ that arrived, and IC is measured in bits. Suppose the snare on beat 2 is predicted with a probability of 0.9: its information content is about 0.15 bits, almost no surprise. An event predicted at 0.05 carries about 4.3 bits. The gap between what was expected and what arrived is the prediction error.
 
 The second quantity is uncertainty: how spread out the listener's predictions were before the event. Cheung and colleagues (2019) modelled both for about 80,000 chords from US Billboard pop songs, then asked listeners to rate how pleasant chords from those progressions felt. Pleasure tended to be high in two cases: a surprising chord after a context in which the listener was confident, and an expected chord after a context in which they were unsure. A surprise needs a confident prediction to push against, and that is what the stable parts of your track provide.
 

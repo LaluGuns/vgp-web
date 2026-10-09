@@ -83,13 +83,13 @@ export const post133: BlogArticle = {
 
 You layer a sub under a synth bass, open the unison and spread the voices for a wide, warm low end. On headphones it is huge. Then the track plays on a single Bluetooth speaker and the bass swells and fades on its own, loud on one bar, nearly gone on the next, although every note was programmed at the same velocity.
 
-Nobody touched the bass. The speaker added left and right together, and the bass you built has two channels that do not agree.
+A single speaker plays left plus right. The detuned voices drift in and out of step between your two channels, so their sum rises and falls from bar to bar.
 
 ## Why it matters: low end gets summed in many places
 
 The usual advice is to keep everything under about 120 Hz in mono, and the [lesson on mono](/blog/why-mono-reveals-what-stereo-hides) explains why some width tricks fail there. That advice is about translation, so it helps to know exactly what it protects against.
 
-Plenty of playback adds the channels in the low end, even when it plays the rest in stereo. Single-speaker phones and smart speakers sum everything. A 2.1 system or a home cinema with bass management sends the lows of both channels to one sub. Many club rigs feed their subs a mono sum. Vinyl does it mechanically: in the 45/45 stereo groove that Blumlein's patent described, the sum of the channels moves the stylus sideways and the difference moves it up and down, so large out-of-phase bass makes for a deep, hard-to-track groove. Each of these hears $L + R$, or $2M$ in mid/side terms, and anything that exists only in the side signal is not there.
+Plenty of playback adds the channels in the low end, even when it plays the rest in stereo. Single-speaker phones and smart speakers sum everything. A 2.1 system or a home cinema with bass management sends the lows of both channels to one sub. Many club rigs feed their subs a mono sum. Vinyl does it mechanically: in the 45/45 stereo groove that Blumlein's patent described, the sum of the channels moves the stylus sideways and the difference moves it up and down, so large out-of-phase bass makes for a deep, hard-to-track groove. Each of these hears $L + R = 2M$, twice the mid signal, and anything that exists only in the side signal is not there.
 
 ## Science model: four kinds of stereo bass
 

@@ -16,6 +16,7 @@ import {
     Title,
     Track,
     accentFill,
+    areaFill,
     clamp,
     cornerOf,
     dialectOf,
@@ -23,7 +24,10 @@ import {
     legend,
     linePath,
     smoothPath,
+    placeInRows,
+    solid,
     textWidth,
+    type Anchor,
     type DialectProp,
 } from './svg';
 
@@ -37,12 +41,22 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const leg = legend(named, 0, 14, w, d);
     const top = leg.height + 30;
     const h = top + (narrow ? 150 : 180) + 34 + (spec.xLabel ? 18 : 0);
-    const left = 4;
-    const right = w - 4;
+    // A note head or a focus ring is wider than a square, so the first and last points sit further in.
+    const inset = d.marker === 'head' || d.marker === 'ring' ? 8 : 4;
+    const left = inset;
+    const right = w - inset;
     const bottom = h - 34 - (spec.xLabel ? 18 : 0);
     const n = spec.x.length;
     const xAt = (i: number) => left + (i * (right - left)) / Math.max(1, n - 1);
     const yAt = (v: number) => bottom - clamp(v, 0, 1) * (bottom - top);
+    const marks = spec.marks ?? [];
+    const markLabels = placeInRows(
+        marks.map((mark) => ({ x: xAt(mark.at), width: textWidth(mark.label), prefer: ['start', 'end'] as Anchor[] })),
+        0,
+        w,
+        { offset: 7 },
+    );
+    const music = d.name === 'music';
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -51,24 +65,28 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                 {spec.yLabel} ↑
             </Title>
             {/* The grid. These are shapes, not measurements, so no dialect adds a value scale. Technical and mind
-                rule each point; music draws them as bar lines, a section to a bar; the ledger rules rows instead. */}
+                rule each point; music draws them as bar lines, a section to a bar, on three faint staff rulings;
+                the ledger rules rows instead. */}
             {d.name === 'business'
                 ? [0, 1, 2, 3].map((k) => <Rule key={`r${k}`} d={d} x1={0} x2={w} y1={top + (k * (bottom - top)) / 4} y2={top + (k * (bottom - top)) / 4} />)
-                : spec.x.map((_, i) => <Rule key={i} d={d} x1={xAt(i)} x2={xAt(i)} y1={top} y2={bottom} major={d.name !== 'mind'} opacity={d.name === 'music' ? 0.14 : undefined} />)}
+                : spec.x.map((_, i) => <Rule key={i} d={d} x1={xAt(i)} x2={xAt(i)} y1={top} y2={bottom} major={d.name !== 'mind'} opacity={music ? 0.12 : undefined} />)}
+            {music
+                ? [1, 2, 3].map((k) => <Rule key={`s${k}`} d={d} x1={0} x2={w} y1={top + (k * (bottom - top)) / 4} y2={top + (k * (bottom - top)) / 4} opacity={0.075} />)
+                : null}
             <Corners d={d} x={0} y={top} w={w} h={bottom - top} />
             <Axis x1={0} x2={w} y1={bottom} y2={bottom} />
-            {spec.marks?.map((mark) => {
+            {marks.map((mark, mi) => {
                 const x = xAt(mark.at);
-                const flip = x > w - textWidth(mark.label) - 12;
+                const place = markLabels[mi];
                 return (
-                    <g key={mark.label}>
-                        {d.name === 'music' ? (
+                    <g key={`${mi}-${mark.label}`}>
+                        {music ? (
                             // A section change in a score is a double bar.
                             <Barline x={x} y1={top} y2={bottom} kind="double" opacity={0.45} />
                         ) : (
                             <RefLine d={d} x1={x} x2={x} y1={top} y2={bottom} />
                         )}
-                        <Label x={flip ? x - 7 : x + 7} y={top + 12} anchor={flip ? 'end' : 'start'} fill={C.ink}>
+                        <Label x={place.tx} y={top + 12 + place.row * 15} anchor={place.anchor} fill={C.ink}>
                             {mark.label}
                         </Label>
                     </g>
@@ -78,10 +96,12 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                 const pts = s.values.map((v, i) => [xAt(i), yAt(v)] as [number, number]);
                 const path = spec.straight ? linePath(pts) : smoothPath(pts);
                 const focus = si === 0 && !s.dashed;
+                const lineDelay = 120 + si * 120;
                 return (
                     <g key={si}>
                         {focus && d.fillUnder ? (
-                            <path d={`${path}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} {...accentFill()} {...draw('fade', 200)} />
+                            // The area follows its line: it fades in once the line has drawn, never ahead of it.
+                            <path d={`${path}L${pts[pts.length - 1][0]},${bottom}L${pts[0][0]},${bottom}Z`} {...areaFill(d)} {...draw('fade', lineDelay + 760)} />
                         ) : null}
                         {s.dashed ? (
                             <path d={path} fill="none" stroke={C.soft} strokeWidth={1.6} strokeDasharray={d.refDash} strokeLinecap={d.cap} />
@@ -93,7 +113,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                                 strokeWidth={d.line}
                                 strokeLinecap={d.cap}
                                 strokeLinejoin={d.join}
-                                {...draw('line', 120 + si * 120)}
+                                {...draw('line', lineDelay)}
                             />
                         )}
                         {focus
@@ -123,6 +143,12 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
 /** Bar thickness by dialect: a meter, a held note, a soft bar, a ledger line. The value is always the bar's right edge. */
 const BAR_H = { technical: 14, music: 10, mind: 6, business: 10 } as const;
 
+/** A power of ten, short: 3 is 1k, 6 is 1M. */
+const powerLabel = (k: number) => {
+    const v = 10 ** k;
+    return v >= 1e9 ? `${v / 1e9}B` : v >= 1e6 ? `${v / 1e6}M` : v >= 1e3 ? `${v / 1e3}k` : `${v}`;
+};
+
 export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialect?: DialectProp }) {
     const d = dialectOf(dialect);
     const narrow = w < 480;
@@ -133,22 +159,36 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
     // A ledger prints its figures in their own right-aligned column; elsewhere a value sits after its bar.
     // On a phone the column shares the label's line, so a label too long to share it sends every value back after its bar.
     const column = ledger && !(narrow && spec.bars.some((b) => textWidth(b.label) + textWidth(shown(b)) + 16 > w));
-    const valueCol = column ? (narrow ? 0 : Math.max(64, Math.max(...spec.bars.map((b) => textWidth(shown(b)))) + 20)) : 64;
-    const x0 = labelCol;
+    // Mind holds each value in a focus ring at the bar's end, so its value label steps past the ring,
+    // and a bar at the bottom of the scale starts a ring's width in, so its ring stays inside the figure.
+    const ring = d.marker === 'ring';
+    const after = ring ? 7 : 0;
+    const valueCol = column
+        ? narrow
+            ? 0
+            : Math.max(64, Math.max(...spec.bars.map((b) => textWidth(shown(b)))) + 20)
+        : Math.max(64, ...spec.bars.map((b) => textWidth(shown(b)) + 10 + after));
+    const x0 = labelCol + (ring && narrow ? 7 : 0);
     const x1 = w - valueCol;
     const xAt = (v: number) => x0 + ((clamp(v, spec.min, spec.max) - spec.min) / (spec.max - spec.min)) * (x1 - x0);
     const rowH = narrow ? 46 : 34;
     const top = spec.reference ? 26 : ledger ? 8 : 4;
-    const h = top + spec.bars.length * rowH + (narrow ? 0 : 6) + (ledger ? 8 : 0);
+    const rowsBottom = top + spec.bars.length * rowH;
+    // A log scale gets a tick at each power of ten under the rows, and says so.
+    const powers = spec.log ? Array.from({ length: Math.floor(spec.max) - Math.ceil(spec.min) + 1 }, (_, i) => Math.ceil(spec.min) + i) : [];
+    const scaleTitleBelow = spec.log && labelCol < textWidth('Log scale') + 12;
+    const scaleH = spec.log ? (narrow ? 8 : 4) + 22 + (scaleTitleBelow ? 16 : 0) : 0;
+    const h = rowsBottom + (narrow ? 0 : 6) + scaleH + (ledger ? 8 : 0);
     const base = xAt(spec.min);
     const bh = BAR_H[d.name];
-    // Mind holds each value in a focus ring at the bar's end, so its value label steps past the ring.
-    const ring = d.marker === 'ring';
-    const after = ring ? 7 : 0;
+    const lineTrack = d.name === 'music' || d.name === 'mind';
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
             {ledger ? <line x1={0} x2={w} y1={top - 4} y2={top - 4} stroke={C.faint} /> : null}
+            {spec.log && !ledger
+                ? powers.map((k) => <Rule key={`g${k}`} d={d} x1={xAt(k)} x2={xAt(k)} y1={top} y2={rowsBottom + (narrow ? 2 : 4)} />)
+                : null}
             {spec.bars.map((bar, i) => {
                 const y = top + i * rowH;
                 const slotY = narrow ? y + 22 : y + 9;
@@ -158,12 +198,19 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                 const delay = 120 + (240 * i) / Math.max(1, spec.bars.length - 1);
                 const value = bar.dim ? {} : draw('fade', delay + 380);
                 const text = shown(bar);
+                const textX = end + 8 + after;
+                // A staff line or dotted track runs on past the value, never through the bar or under its number.
+                const trackFrom = column ? x0 : textX + textWidth(text) + 6;
                 return (
                     <g key={bar.label}>
                         <Label x={0} y={narrow ? y + 14 : slotY + 11} fill={C.text}>
                             {bar.label}
                         </Label>
-                        <Track d={d} x={x0} y={slotY} w={x1 - x0} h={14} />
+                        {lineTrack ? (
+                            trackFrom < x1 - 4 ? <Track d={d} x={trackFrom} y={slotY} w={x1 - trackFrom} h={14} /> : null
+                        ) : (
+                            <Track d={d} x={x0} y={slotY} w={x1 - x0} h={14} />
+                        )}
                         <Bar d={d} x={base} y={barY} w={Math.max(2, end - base)} h={bh} tone={bar.dim ? 'dim' : 'accent'} delay={delay} />
                         {ring ? <Point d={d} x={end} y={slotY + 7} r={3} tone={bar.dim ? 'muted' : 'accent'} delay={bar.dim ? undefined : delay + 420} /> : null}
                         {column ? (
@@ -171,17 +218,33 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                                 {text}
                             </Label>
                         ) : (
-                            <g {...value}>
-                                <rect x={end + 4 + after} y={slotY - 1} width={textWidth(text) + 8} height={16} rx={2} fill={C.surface} />
-                                <Label x={end + 8 + after} y={slotY + 11} fill={bar.dim ? C.soft : C.ink}>
-                                    {text}
-                                </Label>
-                            </g>
+                            <Label x={textX} y={slotY + 11} fill={bar.dim ? C.soft : C.ink} {...value}>
+                                {text}
+                            </Label>
                         )}
                         {ledger ? <line x1={0} x2={w} y1={y + rowH - (narrow ? 2 : 1)} y2={y + rowH - (narrow ? 2 : 1)} stroke={C.grid} /> : null}
                     </g>
                 );
             })}
+            {spec.log ? (
+                <g>
+                    {powers.map((k) => {
+                        const x = xAt(k);
+                        const ty = rowsBottom + (narrow ? 8 : 4);
+                        return (
+                            <g key={k}>
+                                <line x1={x} x2={x} y1={ty} y2={ty + 5} stroke={C.soft} />
+                                <Label x={x} y={ty + 18} anchor={k === powers[0] && x - textWidth(powerLabel(k)) / 2 < 0 ? 'start' : 'middle'}>
+                                    {powerLabel(k)}
+                                </Label>
+                            </g>
+                        );
+                    })}
+                    <Title dialect={d} x={scaleTitleBelow ? w : 0} y={rowsBottom + (narrow ? 8 : 4) + 18 + (scaleTitleBelow ? 16 : 0)} anchor={scaleTitleBelow ? 'end' : 'start'} fill={C.soft}>
+                        Log scale
+                    </Title>
+                </g>
+            ) : null}
             {spec.reference ? (
                 <g>
                     {narrow ? (
@@ -197,7 +260,7 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
                             />
                         ))
                     ) : (
-                        <RefLine d={d} x1={xAt(spec.reference.value)} x2={xAt(spec.reference.value)} y1={18} y2={h - (ledger ? 10 : 0)} stroke={C.ink} />
+                        <RefLine d={d} x1={xAt(spec.reference.value)} x2={xAt(spec.reference.value)} y1={18} y2={rowsBottom + (ledger ? 4 : 6)} stroke={C.ink} />
                     )}
                     <Label
                         x={xAt(spec.reference.value)}
@@ -216,29 +279,83 @@ export function Bars({ spec, w, dialect }: { spec: BarsFigure; w: number; dialec
 
 // ── Scale: markers and ranges along one number line ──
 
+interface ScaleLabel {
+    lane: number;
+    anchor: Anchor;
+    from: number;
+    to: number;
+    tx: number;
+}
+
+/**
+ * Lanes for the labels above a number line. Every label sits over its own
+ * dot (centred on it, or starting or ending at it near an edge); a label in
+ * an upper lane hangs on a leader straight down to its dot. The search
+ * keeps labels in the lowest lanes it can, under three rules: labels in a
+ * lane never overlap, no dot sits under a label nearer the line than its
+ * own (so a leader never crosses text, and a label never looks centred
+ * over a dot that is not its own), and everything stays inside the figure.
+ */
+function placeScaleLabels(items: { x: number; width: number; strong?: boolean }[], w: number): ScaleLabel[] {
+    const gap = 8;
+    const n = items.length;
+    const options = items.map((item) =>
+        (['middle', 'start', 'end'] as Anchor[])
+            .map((anchor) => {
+                const tx = anchor === 'start' ? item.x - 2 : anchor === 'end' ? item.x + 2 : item.x;
+                const from = anchor === 'start' ? tx : anchor === 'end' ? tx - item.width : tx - item.width / 2;
+                return { anchor, tx, from, to: from + item.width };
+            })
+            .filter((o) => o.from >= 0 && o.to <= w),
+    );
+    const fits = (i: number, a: ScaleLabel, j: number, b: ScaleLabel) => {
+        if (a.lane === b.lane) return a.to + gap <= b.from || b.to + gap <= a.from;
+        const [lower, upperX] = a.lane < b.lane ? [a, items[j].x] : [b, items[i].x];
+        return upperX < lower.from - 4 || upperX > lower.to + 4;
+    };
+    let best: ScaleLabel[] | null = null;
+    let bestCost = Infinity;
+    const chosen: ScaleLabel[] = [];
+    // A handful of markers searches in microseconds; the cap only guards against a pathological spec.
+    let visits = 0;
+    const search = (i: number, cost: number, maxLane: number) => {
+        if (cost >= bestCost || ++visits > 50000) return;
+        if (i === n) {
+            best = chosen.slice();
+            bestCost = cost;
+            return;
+        }
+        for (let lane = 0; lane <= maxLane; lane++) {
+            for (const o of options[i]) {
+                const label = { lane, ...o };
+                if (!chosen.every((other, j) => fits(i, label, j, other))) continue;
+                chosen.push(label);
+                search(i + 1, cost + lane * 10 + (o.anchor === 'middle' ? 0 : 1) + (items[i].strong && lane ? 3 : 0), maxLane);
+                chosen.pop();
+            }
+        }
+    };
+    for (let maxLane = 1; maxLane <= n && !best; maxLane++) search(0, 0, Math.min(maxLane, n - 1));
+    return (
+        best ??
+        items.map((item, i) => ({ lane: i, anchor: 'middle' as Anchor, tx: clamp(item.x, item.width / 2, w - item.width / 2), from: 0, to: 0 }))
+    );
+}
+
 export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dialect?: DialectProp }) {
     const d = dialectOf(dialect);
-    const pad = 8;
+    // A focus ring or a note head at either end of the line stays inside the figure.
+    const pad = d.marker === 'ring' ? 12 : d.marker === 'head' ? 10 : 8;
     const xAt = (v: number) => pad + ((v - spec.min) / (spec.max - spec.min)) * (w - pad * 2);
-    // Labels sit in lanes above the line; a label moves up a lane only when it would overlap.
-    const lanes: number[] = [];
-    const placed = [...spec.markers]
-        .sort((a, b) => a.value - b.value)
-        .map((marker) => {
-            const x = xAt(marker.value);
-            const width = textWidth(marker.label) + 12;
-            const anchor: 'start' | 'middle' | 'end' = x - width / 2 < 0 ? 'start' : x + width / 2 > w ? 'end' : 'middle';
-            const startX = anchor === 'start' ? x - 4 : anchor === 'end' ? x - width + 4 : x - width / 2;
-            let lane = lanes.findIndex((end) => end < startX);
-            if (lane === -1) {
-                lanes.push(0);
-                lane = lanes.length - 1;
-            }
-            lanes[lane] = startX + width;
-            return { marker, x, anchor, lane };
-        });
+    const sorted = [...spec.markers].sort((a, b) => a.value - b.value);
+    const placed = placeScaleLabels(
+        sorted.map((marker) => ({ x: xAt(marker.value), width: textWidth(marker.label), strong: marker.strong })),
+        w,
+    );
+    const lanes = Math.max(0, ...placed.map((p) => p.lane)) + 1;
     const laneH = 18;
-    const axisY = 10 + lanes.length * laneH + 14;
+    const axisY = 14 + lanes * laneH + 6;
+    const laneY = (lane: number) => axisY - 16 - lane * laneH;
     const ticks = spec.ticks ?? niceTicks(spec.min, spec.max, w < 480 ? 4 : 7);
     const arrows = spec.arrows ?? [];
     const span = (a: number, b: number) => Math.abs(xAt(a) - xAt(b));
@@ -273,17 +390,20 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                     </Label>
                 </g>
             ))}
-            {placed.map(({ marker, x, anchor, lane }) => {
-                const ly = axisY - 12 - lane * laneH;
+            {sorted.map((marker, i) => {
+                const x = xAt(marker.value);
+                const { lane, anchor, tx } = placed[i];
+                const ly = laneY(lane);
                 return (
                     <g key={`${marker.label}-${marker.value}`}>
-                        {lane > 0 ? <line x1={x} x2={x} y1={ly + 4} y2={axisY - 7} stroke={C.grid} /> : null}
+                        {/* A label above its lowest lane hangs on a leader straight down to its own dot. */}
+                        {lane > 0 ? <line x1={x} x2={x} y1={ly + 4} y2={axisY - 8} stroke={C.faint} /> : null}
                         {marker.strong ? (
                             <Point d={d} x={x} y={axisY} r={4.5} delay={160 + (300 * x) / w} />
                         ) : (
                             <Point d={d} x={x} y={axisY} r={3.5} tone="muted" />
                         )}
-                        <Label x={x} y={ly} anchor={anchor} fill={marker.strong ? C.ink : C.text} weight={marker.strong ? 600 : undefined}>
+                        <Label x={tx} y={ly} anchor={anchor} fill={marker.strong ? C.ink : C.text} weight={marker.strong ? 600 : undefined}>
                             {marker.label}
                         </Label>
                     </g>
@@ -310,8 +430,8 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                 const after = b + 6 + textWidth(range.label) < w;
                 return (
                     <g key={range.label}>
-                        <rect x={a} y={y} width={Math.max(2, b - a)} height={16} rx={cornerOf(d, 16, b - a)} fill={C.fillStrong} />
-                        <Label x={inside ? a + 6 : after ? b + 6 : a - 6} y={y + 12} anchor={inside || after ? 'start' : 'end'} fill={C.text}>
+                        <rect x={a} y={y} width={Math.max(2, b - a)} height={16} rx={cornerOf(d, 16, b - a)} fill={C.dim} />
+                        <Label x={inside ? a + 6 : after ? b + 6 : a - 6} y={y + 12} anchor={inside || after ? 'start' : 'end'} fill={inside ? C.ink : C.text}>
                             {range.label}
                         </Label>
                     </g>

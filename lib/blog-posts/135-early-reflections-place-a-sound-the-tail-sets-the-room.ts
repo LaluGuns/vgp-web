@@ -152,7 +152,7 @@ The second mistake is the opposite: early reflections so loud and few that they 
 
 ## Producer takeaway: place the sound, then size the room
 
-I set the early part first and ask one question: does the vocal sound like it is in a place? Then I add tail only until the gaps between lines feel alive. If the tail starts covering the next line, shorten it or [keep it out of the next line](/blog/when-reverb-masks-the-next-line) before turning it down. Early energy and tail are two faders, and a mix usually needs much less tail than the reverb preset suggests.
+I set the early part first and ask one question: does the vocal sound like it is in a place? Then I add tail only until the gaps between lines feel alive. If the tail starts covering the next line, shorten it or duck it under the vocal before turning it down; the [lesson on reverb that masks the next line](/blog/when-reverb-masks-the-next-line) covers both. Early energy and tail are two faders, and a mix usually needs much less tail than the reverb preset suggests.
 
 ## References
 

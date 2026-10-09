@@ -71,7 +71,7 @@ export const post122: BlogArticle = {
                 'The usual order of gain stages on a DAW channel. Clip gain changes what the compressor hears. The fader, and its automation, comes after the inserts in most DAWs, so it changes only what leaves the channel.',
             alt: 'Four steps from top to bottom: clip gain on the audio region, the insert compressor, fader automation, and the output to the bus.',
             steps: [
-                { label: 'Clip gain on the region', note: 'Changes what every insert receives' },
+                { label: 'Clip gain on the region', note: 'Changes what every insert receives', focus: true },
                 { label: 'Insert compressor', note: 'Reacts to whatever level arrives' },
                 { label: 'Fader automation', note: 'Rides the finished sound' },
                 { label: 'Out to the bus' },

@@ -3,7 +3,7 @@ import { BlogArticle } from '../blog-data';
 export const post087: BlogArticle = {
     slug: 'how-constraints-make-taste-sharper',
     title: 'How constraints make taste sharper',
-    excerpt: 'Endless sounds let you hide a weak part behind layers. A five-track limit forces the fix into the notes, the voicing and the rhythm, where taste actually shows.',
+    excerpt: 'Endless sounds let you hide a weak part behind layers. A five-track limit forces the fix into the notes, the voicing and the rhythm, where taste shows.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
     updatedAt: '2026-10-08',
@@ -127,7 +127,7 @@ The opposite mistake is a limit so tight it starves the song, such as one sound 
 
 Treat limits as part of the writing. Before you start a song, pick the drum kit and the two or three sounds the song is built on, and commit to them for the session. Set a track limit and a timer, and fix weak moments by changing what the parts play.
 
-You cannot hide behind layers inside a small palette, so your choices get clearer and your sound gets more recognisable. Taste shows in what you leave out.
+You cannot hide behind layers inside a small palette, so your choices get clearer and your sound gets more recognizable. Taste shows in what you leave out.
 
 ## References
 

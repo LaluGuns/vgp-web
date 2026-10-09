@@ -66,7 +66,7 @@ export const post114: BlogArticle = {
             why: 'Float stores the over, so turning it down restores the whole wave, as long as neither plugin clips internally.',
         },
         {
-            q: 'Where does a float mix actually clip?',
+            q: 'Where does a float mix clip?',
             options: [
                 'At channel faders that are pushed past 0 dB',
                 'Between plugins once the level passes 0 dBFS',

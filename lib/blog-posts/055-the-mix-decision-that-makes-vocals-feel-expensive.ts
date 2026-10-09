@@ -17,7 +17,7 @@ export const post055: BlogArticle = {
         duck: {
             type: 'signal',
             caption:
-                'The vocal’s level drives a cut in one band of the instrument bus. The cut reaches its 3 dB limit while a phrase is sung and falls back to zero in the gap before the next one.',
+                'The vocal\'s level drives a cut in one band of the instrument bus. The cut reaches its 3 dB limit while a phrase is sung and falls back to zero in the gap before the next one.',
             alt: 'Two level plots over the same time. The top shows two sung vocal phrases separated by a gap. The bottom shows the cut in the 2 kHz band rising to the 3 dB line during each phrase and falling back to zero in the gap.',
             rows: [
                 {
@@ -76,7 +76,7 @@ export const post055: BlogArticle = {
             why: 'Masking only matters while both parts play. A dynamic band follows the vocal, so intros, breaks and gaps between lines keep the full instrumental tone.',
         },
         {
-            q: 'Threshold -30 dB, ratio 2:1, range 3 dB. The vocal’s key band reaches -20 dB. How far does the instrument band dip?',
+            q: 'Threshold -30 dB, ratio 2:1, range 3 dB. The vocal\'s key band reaches -20 dB. How far does the instrument band dip?',
             options: ['5 dB', '3 dB', '10 dB', '1.5 dB'],
             answer: 1,
             why: 'The key is 10 dB over the threshold. At 2:1 that asks for 10 × (1 - 1/2) = 5 dB of reduction, but the range caps the dip at 3 dB.',

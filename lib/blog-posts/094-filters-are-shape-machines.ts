@@ -122,7 +122,7 @@ A linear-phase filter avoids this by delaying every frequency by the same amount
 1. Put a kick or bass loop on track A and duplicate it to track B. Flip B's polarity and check that the two cancel to silence.
 2. On B, insert an EQ with a high-pass at 40 Hz, 24 dB per octave, in its normal (minimum-phase) mode.
 3. Play both with B still flipped. What you hear is everything the filter changed.
-4. Listen above the sub. The residual is not only the content below 40 Hz: around 80 Hz it is about as loud as the original, and it is still clearly there at 150 Hz, where the filter does not cut at all.
+4. Listen above the sub. The residual holds more than the content below 40 Hz: around 80 Hz it is about as loud as the original, and it is still clearly there at 150 Hz, where the filter does not cut at all.
 5. Switch the EQ to linear-phase mode, if it has one. The residual above about 80 Hz almost disappears, because now the filter only removes level.
 6. Remove the polarity flip, solo B, and switch between the two filter modes on a single hit. Listen to the start of the note.
 

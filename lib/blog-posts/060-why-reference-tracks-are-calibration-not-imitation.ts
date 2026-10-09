@@ -10,7 +10,7 @@ export const post060: BlogArticle = {
     readingTime: 6,
     summary: [
         'After hours on one mix your ears adapt to its balance, and a reference resets that baseline.',
-        'Match the reference’s loudness to your mix before comparing, or the louder master wins every time.',
+        'Match the reference\'s loudness to your mix before comparing, or the louder master wins every time.',
         'Use the reference to check balance and translation, then fix problems on the tracks instead of copying its tone.',
     ],
     figures: {
@@ -76,7 +76,7 @@ export const post060: BlogArticle = {
             options: [
                 'Add a broad high shelf on the master bus to match it',
                 'Brighten or rebalance the dull parts on their own tracks',
-                'Copy the reference’s curve onto the master with a match EQ',
+                'Copy the reference\'s curve onto the master with a match EQ',
                 'Turn the reference down until the top ends sound the same',
             ],
             answer: 1,

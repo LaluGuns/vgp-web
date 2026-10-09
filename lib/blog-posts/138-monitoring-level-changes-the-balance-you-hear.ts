@@ -2,7 +2,7 @@ import { BlogArticle } from '../blog-data';
 
 // Contour values: sound pressure level a pure tone needs to match a 1 kHz tone, minus the
 // 1 kHz level, from the ISO 226:2003 equations (the 2023 edition differs by at most 0.3 dB
-// above 10 phon). Octave points, so the x axis is evenly spaced in log frequency.
+// above 10 phon: Suzuki et al. 2024, p. 5, Sect. 3 and Fig. 4). Octave points, so the x axis is evenly spaced in log frequency.
 // Plotted as (dB + 10) / 60.
 
 export const post138: BlogArticle = {
@@ -84,7 +84,7 @@ export const post138: BlogArticle = {
 
 You finish a mix in a flat with thin walls, speakers turned well down so the neighbours do not knock. The kick and bass feel a little thin, so you lift them until they feel right. The next afternoon you play it at a normal level and the low end is huge, and in the car it is worse.
 
-Nothing in the file changed overnight. The level you listened at did, and your hearing does not weigh frequencies the same way at every level.
+The file is the same one you bounced last night. You set its low end at a whisper, and your hearing gives bass less weight the quieter the playback.
 
 ## Why it matters: every EQ move goes through your ears at one level
 
@@ -92,7 +92,7 @@ You never hear a mix's frequency balance directly. You hear it through ears whos
 
 ## Science model: equal-loudness contours
 
-An equal-loudness contour shows the sound pressure level a pure tone needs at each frequency to sound as loud as a 1 kHz tone. The level of that 1 kHz tone names the contour in phon, so the 60 phon contour passes through 60 dB at 1 kHz. ISO 226:2023 gives a family of these contours for young adults (18 to 25) with normal hearing, listening to tones from the front in a free field. Suzuki, Takeshima and Kurakata (2024) report that it differs from the 2003 edition by at most 0.6 dB, and by at most 0.3 dB above 10 phon, so the numbers below are worked out from the published 2003 equations.
+An equal-loudness contour shows the sound pressure level a pure tone needs at each frequency to sound as loud as a 1 kHz tone. The level of that 1 kHz tone names the contour in phon, so the 60 phon contour passes through 60 dB at 1 kHz. ISO 226:2023 gives a family of these contours for young adults (18 to 25) with normal hearing, listening to tones from the front in a free field. Suzuki, Takeshima and Kurakata (2024, p. 5) compared the two editions at every third-octave frequency in 10 phon steps: the differences stay within 0.6 dB, and within 0.3 dB above 10 phon. The numbers below are therefore worked out from the published 2003 equations.
 
 ::figure contours
 
@@ -102,7 +102,7 @@ On the usual chart, drawn in absolute level, the contours crowd together in the 
 
 The top end moves much less. At 8 kHz the curves sit within half a decibel of each other across those levels. Only near 12.5 kHz, the top of the standard's range, do they spread again, by about 6 dB from 40 to 80 phon, which is the air you lose when you turn down.
 
-Two limits keep this honest. The contours were measured with pure tones, and a mix is broadband sound where parts mask each other, so the numbers show the direction and rough size of the shift, not an EQ correction to apply. People also differ: the experimental equal-loudness data behind the standard typically scatter with a standard deviation of about 5 to 6 dB (Suzuki et al., 2024).
+Two limits keep this honest. The contours were measured with pure tones, and a mix is broadband sound where parts mask each other, so the numbers show the direction and rough size of the shift, not an EQ correction to apply. People also differ: the experimental equal-loudness data behind the standard typically scatter with a standard deviation of about 5 to 6 dB (Suzuki et al., 2024, p. 4).
 
 Play the same mix at three levels and listen to how much low end and air you hear at each one.
 
@@ -136,11 +136,11 @@ I make tonal decisions at one marked, moderate level, and I compare against refe
 
 - ISO 226:2023. *Acoustics: Normal equal-loudness-level contours*. International Organization for Standardization.
 - Katz, B. (2000). Integrated approach to metering, monitoring, and leveling practices, Part 1: Two-channel metering. *Journal of the Audio Engineering Society*, 48(9), 800-809.
-- Suzuki, Y., Takeshima, H., & Kurakata, K. (2024). Revision of ISO 226 "Normal Equal-Loudness-Level Contours" from 2003 to 2023 edition: The background and results. *Acoustical Science and Technology*, 45(1), 1-8.
+- Suzuki, Y., Takeshima, H., & Kurakata, K. (2024). Revision of ISO 226 "Normal Equal-Loudness-Level Contours" from 2003 to 2023 edition: The background and results. *Acoustical Science and Technology*, 45(1), 1-8. https://doi.org/10.1250/ast.e23.66
 `,
     seo: {
         title: 'Monitoring level changes the balance you hear | VGP Studio',
-        description: 'Equal-loudness contours show bass fading faster than mids as you turn down. How to pick a home monitoring level and use quiet checks without boosting the low end.',
+        description: 'Equal-loudness contours show bass fading faster than mids as you turn down. How to pick a home monitoring level and use quiet checks without adding bass.',
         keywords: ['monitoring level', 'equal-loudness contours', 'ISO 226', 'mixing at low volume', 'reference track', 'monitor calibration'],
     },
 };

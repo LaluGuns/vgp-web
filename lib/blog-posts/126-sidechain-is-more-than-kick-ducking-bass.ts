@@ -35,8 +35,8 @@ export const post126: BlogArticle = {
                 'A sidechain splits the processor into two paths. The key and its filter decide when the gain changes. The gain stage decides which sound gets quieter.',
             alt: 'Four steps from top to bottom: a key input such as a kick, vocal or silent ghost track; a detector filter; a gain computer with threshold, ratio, attack and release; and a gain stage on a different track.',
             steps: [
-                { label: 'Key input', note: 'A kick, a vocal or a silent ghost track' },
-                { label: 'Detector filter', note: 'Optional. Sets which part of the key the detector hears' },
+                { label: 'Key input', note: 'A kick, a vocal or a silent ghost track', focus: true },
+                { label: 'Detector filter', note: 'Optional. Sets which part of the key the detector hears', focus: true },
                 { label: 'Gain computer', note: 'Threshold, ratio, attack and release' },
                 { label: 'Gain stage', note: 'On the bass, a pad or a whole bus' },
             ],
@@ -159,7 +159,7 @@ The second tool filters the key. A bus compressor that hears the full mix reacts
 
 The third uses a key nobody hears. A silent copy of the kick, its output switched off but still feeding the sidechain, keeps a pad pumping through a breakdown where the real kick stops, or pumps it on a rhythm the kick never plays.
 
-The fourth swaps the compressor for a gate, so the key opens the processor instead of pushing it down. Key a gate on a noise track from the snare and the noise sounds only with the snare hits, shaped by the gate's hold and release. A vocal keying a dynamic EQ band on the instruments is the same routing again. The [lesson on vocal pockets](/blog/the-mix-decision-that-makes-vocals-feel-expensive) builds that one step by step, and [dynamic EQ against multiband compression](/blog/dynamic-eq-vs-multiband-compression) helps you pick the processor.
+The fourth swaps the compressor for a gate, so the key opens the processor instead of pushing it down. Key a gate on a noise track from the snare and the noise sounds only with the snare hits, shaped by the gate's hold and release. A vocal keying a dynamic EQ band on the instruments is the same routing again. The [lesson on vocal pockets](/blog/the-mix-decision-that-makes-vocals-feel-expensive) builds that one step by step, and the [lesson on dynamic EQ and multiband compression](/blog/dynamic-eq-vs-multiband-compression) helps you pick the processor.
 
 ## DAW experiment: four keys, one session
 

@@ -11,7 +11,7 @@ export const post053: BlogArticle = {
     summary: [
         'Boosting presence on every track removes the contrast that tells the ear where to listen.',
         'Pick one lead per section and give it the 2 to 5 kHz range, where the ear is most sensitive.',
-        'Make room with small cuts on the supporting parts at the lead’s key frequency, then check at a whisper.',
+        'Make room with small cuts on the supporting parts at the lead\'s key frequency, then check at a whisper.',
     ],
     figures: {
         complementary: {
@@ -74,7 +74,7 @@ export const post053: BlogArticle = {
             why: 'The equal-loudness contours dip lowest around 3 to 4 kHz. Small level differences there are easy to hear, so whoever owns that range draws attention.',
         },
         {
-            q: 'Why cut the supporting parts at the lead’s key frequency instead of only boosting the lead?',
+            q: 'Why cut the supporting parts at the lead\'s key frequency instead of only boosting the lead?',
             options: [
                 'Boosting the lead would push the master bus into clipping',
                 'A boost smears the timing of the consonants in the lead',
@@ -82,7 +82,7 @@ export const post053: BlogArticle = {
                 'Cuts add a phase shift that makes the lead sound brighter',
             ],
             answer: 2,
-            why: 'What the ear follows is the difference between the lead and its background in that band. A cut on the background raises that difference and keeps the lead’s own tone and the overall level unchanged.',
+            why: 'What the ear follows is the difference between the lead and its background in that band. A cut on the background raises that difference and keeps the lead\'s own tone and the overall level unchanged.',
         },
     ],
     content: `## Hook: everything is bright, nothing is clear
@@ -146,7 +146,7 @@ Use the whisper test at the end of every session. Turn the volume down until the
 `,
     seo: {
         title: 'EQ is attention design | VGP Studio',
-        description: 'Boosting presence on every track removes contrast. How complementary EQ and the ear’s 2 to 5 kHz sensitivity let you decide which part the listener follows.',
+        description: 'Boosting presence on every track removes contrast. How complementary EQ and the ear\'s 2 to 5 kHz sensitivity let you decide which part the listener follows.',
         keywords: ['EQ attention', 'complementary EQ', 'mix hierarchy', 'presence range', 'vocal clarity', 'mixing psychology'],
     },
 };

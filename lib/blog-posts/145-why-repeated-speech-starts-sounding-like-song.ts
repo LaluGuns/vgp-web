@@ -14,17 +14,20 @@ export const post145: BlogArticle = {
     ],
     figures: {
         conditions: {
-            type: 'curve',
+            type: 'bars',
             caption:
-                'The direction of Deutsch, Henthorn and Lapidis\'s (2011) first experiment. The first and tenth hearings were the same recording. Exact repeats in between moved listeners firmly from speech to song. Slightly transposed repeats moved them a little and left them on the speech side, and jumbled syllables did not move them. A sketch, not their data.',
-            alt: 'Two straight lines from first hearing to tenth hearing on a speech-to-song axis. The solid exact-repeats line climbs steeply toward song. The dashed line for transposed or jumbled repeats barely rises and stays near speech.',
-            x: ['First hearing', 'Tenth hearing'],
-            xShort: ['First', 'Tenth'],
-            yLabel: 'Sounds like song',
-            straight: true,
-            series: [
-                { label: 'Exact repeats', values: [0.15, 0.82] },
-                { label: 'Transposed or jumbled', values: [0.15, 0.22], dashed: true },
+                'Mean ratings in Deutsch, Henthorn and Lapidis\'s (2011) first experiment, read approximately from their Figure 2, on a scale from 1 (exactly like speech) to 5 (exactly like singing). The first and tenth hearings were the same recording in every condition. With exact repeats in between, the tenth hearing crossed into song. Slightly transposed repeats moved it a little toward song but left it on the speech side, and with jumbled syllables it barely moved.',
+            alt: 'Six horizontal bars on a scale from 1 to 5 with a reference line at 3. Exact repeats go from about 1.3 at the first hearing to 3.8 at the tenth. Transposed repeats go from about 1.1 to 1.9. Jumbled repeats go from about 1.5 to 1.6.',
+            min: 1,
+            max: 5,
+            reference: { value: 3, label: 'Midpoint' },
+            bars: [
+                { label: 'Exact, first', value: 1.33, display: '1.3', dim: true },
+                { label: 'Exact, tenth', value: 3.83, display: '3.8' },
+                { label: 'Transposed, first', value: 1.1, display: '1.1', dim: true },
+                { label: 'Transposed, tenth', value: 1.94, display: '1.9' },
+                { label: 'Jumbled, first', value: 1.5, display: '1.5', dim: true },
+                { label: 'Jumbled, tenth', value: 1.55, display: '1.6' },
             ],
         },
         glide: {
@@ -81,15 +84,15 @@ export const post145: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Deutsch and colleagues\' first experiment, which change to the repeats stopped the phrase from turning into song?',
+            q: 'You loop a spoken line as a hook and pitch each repeat a semitone up or down so it follows the chords. What do the studies predict for the melody you hoped people would hear in it?',
             options: [
-                'Shifting each repeat slightly up or down in pitch',
-                'Leaving a short silence between the repeats',
-                'Playing the phrase ten times instead of five',
-                'Using a phrase spoken in the listeners\' own language',
+                'It is less likely to appear than with exact repeats',
+                'It appears sooner, because the pitches now fit the key',
+                'Nothing changes, because the words and timing are the same',
+                'It appears only if the syllables are reordered as well',
             ],
             answer: 0,
-            why: 'With slightly transposed repeats the ratings stayed in the speech range. The transformation needed the same phrase at the same pitch, with the syllables in the same order.',
+            why: 'In Deutsch and colleagues\' transposed condition, repeats shifted by two-thirds of a semitone or more moved ratings only slightly toward song, and they stayed on the speech side. Vanden Bosch der Nederlanden and colleagues also found that transposing the repeats disrupts the effect. Keep at least one exact repeat if you want the tune.',
         },
         {
             q: 'Tierney and colleagues compared audiobook phrases that turned into song with matched phrases that did not. What set the song-like ones apart?',
@@ -118,7 +121,7 @@ export const post145: BlogArticle = {
 
 You pull a spoken line from an old voice memo for an intro and loop it while you build the beat. Twenty minutes later you cannot hear it as talking any more. The words seem to sit on notes, and you are humming them. Then a friend walks in, hears the loop twice and asks who is talking.
 
-Nothing in the audio changed. You heard it many more times than your friend did, and for some phrases, repetition alone is enough to turn speech into song.
+Your friend heard the same file. You have heard it a hundred times, and for some phrases, repetition alone is enough to turn speech into song.
 
 ## Why it matters: a tool and a trap
 
@@ -128,7 +131,7 @@ It also misleads you. After an hour of looping, you hear a tune that a first-tim
 
 ## Science model: exact repeats, level syllables and the listener
 
-Diana Deutsch came across the effect in 1995 while preparing the spoken commentary for a CD of musical illusions: a phrase from it, "sometimes behave so strangely", started to sound sung after she had played it several times. Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, ratings moved firmly toward song. When the repeats in between were transposed slightly up or down, or when the syllables came in a jumbled order, the shift did not happen.
+Diana Deutsch came across the effect in 1995 while preparing the spoken commentary for a CD of musical illusions: a phrase from it, "sometimes behave so strangely", started to sound sung after she had played it several times. Deutsch, Henthorn and Lapidis (2011) then tested it. In the first experiment, listeners heard the phrase ten times and rated it on a five-point scale from "exactly like speech" to "exactly like singing". When every repeat was identical, the mean rating rose from about 1.3 to about 3.8, well past the midpoint. When the repeats in between were transposed by two-thirds of a semitone or more, up or down, the rating moved only slightly toward song, to about 1.9, and stayed on the speech side. When the syllables came in a jumbled order, the last hearing still sounded like speech. Neither condition produced the illusion, and the two did not differ reliably from each other.
 
 ::figure conditions
 

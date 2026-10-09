@@ -9,14 +9,14 @@ const NOTES: [number, number][] = [
 export const post035: BlogArticle = {
     slug: 'why-noise-can-make-synths-feel-alive',
     title: 'Noise can make synths breathe',
-    excerpt: 'Acoustic instruments carry noise that moves with each note. Give a synth’s noise the same envelope and it fuses into the sound instead of sitting beside it.',
+    excerpt: 'Acoustic instruments carry noise that moves with each note. Give a synth\'s noise the same envelope and it fuses into the sound instead of sitting beside it.',
     category: 'sound-design',
     publishedAt: '2026-06-06',
     updatedAt: '2026-10-08',
     readingTime: 6,
     summary: [
         'Acoustic instruments carry noise that starts, changes and stops with each note, and a clean oscillator has none of it.',
-        'The ear joins sounds that move together, so noise on the note’s envelope fuses with it while a steady hiss track stays separate.',
+        'The ear joins sounds that move together, so noise on the note\'s envelope fuses with it while a steady hiss track stays separate.',
         'Generate noise inside the voice, filter it with the oscillator and band-pass it to where you want breath, bite or air.',
     ],
     figures: {
@@ -85,7 +85,7 @@ export const post035: BlogArticle = {
                 'It band-passes the noise to the upper mid range',
             ],
             answer: 1,
-            why: 'e(t) is only the level of the noise over time. When it follows the note, the noise shares the note’s onset and decay, which is what lets the ear hear one instrument.',
+            why: 'e(t) is only the level of the noise over time. When it follows the note, the noise shares the note\'s onset and decay, which is what lets the ear hear one instrument.',
         },
         {
             q: 'Why can noise add texture without clashing with the key of the song?',
@@ -131,7 +131,7 @@ The two parts also sit differently in the spectrum. The harmonic part is a set o
 
 Hear the difference between noise beside a synth and noise inside it.
 
-1. Open a synth with a noise oscillator, such as Vital or Serum, and start from an initialised patch.
+1. Open a synth with a noise oscillator, such as Vital or Serum, and start from an initialized patch.
 2. Set oscillator 1 to a saw, and the amp envelope to attack 5 ms, decay 400 ms, sustain at about half level, release 300 ms.
 3. Turn on the noise oscillator with white noise, route it through the same filter as the saw, and start with its level at zero.
 4. Loop a four-note chord and raise the noise level until you can just hear it with the chord.
@@ -158,7 +158,7 @@ Treat noise as part of the instrument. Generate it in the synth voice, run it th
 `,
     seo: {
         title: 'Noise can make synths breathe | VGP Studio',
-        description: 'Why a steady noise track sits beside a synth while noise on the note’s envelope fuses with it, explained with the sines-plus-noise model and a synth test.',
+        description: 'Why a steady noise track sits beside a synth while noise on the note\'s envelope fuses with it, explained with the sines-plus-noise model and a synth test.',
         keywords: ['noise oscillator', 'synth sound design', 'sines plus noise', 'amplitude envelope', 'auditory grouping', 'organic synth'],
     },
 };

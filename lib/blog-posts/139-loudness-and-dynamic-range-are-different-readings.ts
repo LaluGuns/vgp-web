@@ -101,7 +101,7 @@ The readings measure different things over different stretches of time. Read eac
 
 ## Why it matters: two kinds of dynamics, two kinds of fix
 
-Producers use "dynamic range" for two separate properties of a master: the micro dynamics of hits standing above the body inside a bar, and the macro dynamics of the song moving between sections, both described in [the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion). Limiting and clipping mostly change the first. Arrangement, automation and the balance between sections mostly change the second.
+Producers use "dynamic range" for two separate properties of a master: the micro dynamics of hits standing above the body inside a bar, and the macro dynamics of the song moving between sections, both described in the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion). Limiting and clipping mostly change the first. Arrangement, automation and the balance between sections mostly change the second.
 
 PLR and PSR read the first kind; EBU Tech 3343 calls PLR "a measure of micro-dynamics". LRA reads the second. EBU Tech 3342, the document that defines LRA, says it "should not be confused with other measures like dynamic range or crest factor". Confuse them anyway and you fix the wrong thing: you soften a limiter to raise an LRA it hardly touched, or you see a healthy LRA and miss a chorus pressed flat against the ceiling.
 
@@ -109,9 +109,9 @@ PLR and PSR read the first kind; EBU Tech 3343 calls PLR "a measure of micro-dyn
 
 ## Science model: what each reading compares
 
-All of these start from the ITU-R BS.1770 loudness measurement, which [stop treating LUFS like a target](/blog/why-lufs-is-not-a-magic-number) walks through. They differ in what they compare and over how long.
+All of these start from the ITU-R BS.1770 loudness measurement, which the [lesson on LUFS](/blog/why-lufs-is-not-a-magic-number) walks through. They differ in what they compare and over how long.
 
-PLR, the peak to loudness ratio, is the highest true peak in the whole file minus its integrated loudness, as worked through in [loud masters can shrink after matching](/blog/why-loud-masters-can-sound-smaller-after-normalization). It is one number for the whole song. Because most masters sit against a fixed true-peak ceiling, PLR mostly restates the integrated loudness: with a -1 dBTP ceiling, a -9 LUFS master has a PLR of 8 dB and a -12 LUFS master has 11 dB. One stray peak can also set it, however rare.
+PLR, the peak to loudness ratio, is the highest true peak in the whole file minus its integrated loudness, as the [lesson on loud masters after normalization](/blog/why-loud-masters-can-sound-smaller-after-normalization) works through. It is one number for the whole song. Because most masters sit against a fixed true-peak ceiling, PLR mostly restates the integrated loudness: with a -1 dBTP ceiling, a -9 LUFS master has a PLR of 8 dB and a -12 LUFS master has 11 dB. One stray peak can also set it, however rare.
 
 PSR, the peak to short-term loudness ratio, makes the same comparison against short-term loudness, the 3 second window, using the highest true peak inside that same window:
 
@@ -127,7 +127,7 @@ The percentiles are there on purpose. A fade-out in the quietest 10% or a single
 
 A worked example ties the four together. Say the verses fill two thirds of a song at -13 LUFS short-term, the choruses fill the other third at -7 LUFS, and the chorus peaks reach -1 dBTP. Integrated loudness averages power, not decibels:
 
-$$L_{\\text{I}} = 10 \\log_{10}\\left( \\frac{1}{3} \\, 10^{-7/10} + \\frac{2}{3} \\, 10^{-13/10} \\right) \\approx -10 \\text{ LUFS}$$
+$$\\begin{aligned} L_{\\text{I}} &= 10 \\log_{10}\\left( \\tfrac{1}{3} \\, 10^{-7/10} + \\tfrac{2}{3} \\, 10^{-13/10} \\right) \\\\ &\\approx -10 \\text{ LUFS} \\end{aligned}$$
 
 That is 1 dB louder than the plain average of the readings, because the loud sections weigh more. PLR is then 9 dB, the chorus PSR is 6 dB, and LRA is the 6 LU between verse and chorus.
 

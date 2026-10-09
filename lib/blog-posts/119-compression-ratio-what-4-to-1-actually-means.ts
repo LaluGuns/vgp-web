@@ -2,7 +2,7 @@ import { BlogArticle } from '../blog-data';
 
 export const post119: BlogArticle = {
     slug: 'compression-ratio-what-4-to-1-actually-means',
-    title: 'What a 4:1 compression ratio actually does',
+    title: 'What a 4:1 compression ratio does',
     excerpt: 'Threshold, ratio and knee decide how much a compressor turns down before attack and release come in. Work out 4:1 by hand and you can predict any setting.',
     category: 'mixing-mastering',
     publishedAt: '2026-06-04',
@@ -173,7 +173,7 @@ When you are unsure what a setting does, do the arithmetic. Overshoot times one 
 - Senior, M. (2011). *Mixing Secrets for the Small Studio*. Focal Press.
 `,
     seo: {
-        title: 'What a 4:1 compression ratio actually does | VGP Studio',
+        title: 'What a 4:1 compression ratio does | VGP Studio',
         description: 'Threshold, ratio, knee and makeup gain worked out by hand: the static compressor curve, why high ratios add little, and how to measure your own compressor.',
         keywords: ['compression ratio', 'compressor threshold', 'soft knee', 'gain reduction', 'makeup gain', 'compressor math'],
     },

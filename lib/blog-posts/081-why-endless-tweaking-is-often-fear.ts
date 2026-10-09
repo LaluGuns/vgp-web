@@ -83,7 +83,7 @@ This is not mixing. It is a way to avoid finishing. While every setting is still
 
 ## Why it matters: tweaks you cannot hear still cost you
 
-Small moves on one track inside a busy mix are hard to hear reliably, and the way you check them is rarely fair. Toggle a change on and off and the version that comes out a fraction louder tends to sound fuller and clearer, so the loop quietly rewards level instead of better choices. The lesson on [loudness bias](/blog/why-louder-is-not-always-bigger) explains why that happens.
+Small moves on one track inside a busy mix are hard to hear reliably, and the way you check them is rarely fair. Toggle a change on and off and the version that comes out a fraction louder tends to sound fuller and clearer, so the loop keeps rewarding level instead of better choices. The lesson on [loudness bias](/blog/why-louder-is-not-always-bigger) explains why that happens.
 
 Meanwhile the decisions that matter wait. Two hours spent on a buildup in the pad are two hours not spent asking whether the pad should play in the verse at all. Hours on the same eight bars also wear down your sense of balance, which is why the morning listen so often disagrees with the night before (see [fresh ears](/blog/why-fresh-ears-are-a-real-production-tool)).
 

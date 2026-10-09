@@ -87,7 +87,7 @@ Nothing went wrong in the upload. Both songs were turned down to the same loudne
 
 On Spotify's default setting, both masters are turned down until they measure -14 LUFS: yours by 8 dB, the other by 3 dB. The level race you won in the session is cancelled. What remains is what you paid for it: flatter transients and less distance between the hits and the space around them.
 
-Apple says the same about its Sound Check: songs mastered loud are played back at a lower volume, "which can make tracks actually sound weaker" (Apple, 2021).
+Apple says the same about its Sound Check: songs mastered loud are played back at a lower volume, and Apple warns that this can make them sound weaker (Apple, 2021).
 
 ::figure matched
 

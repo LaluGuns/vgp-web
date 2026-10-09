@@ -139,7 +139,7 @@ Decide how loud the master should be by listening at matched loudness. Push the 
 `,
     seo: {
         title: 'Stop treating LUFS like a target | VGP Studio',
-        description: 'What integrated LUFS actually measures, why the same reading can hide very different masters, and how to set loudness by ear at matched level.',
+        description: 'What integrated LUFS measures, why the same reading can hide very different masters, and how to set loudness by ear at matched level.',
         keywords: ['LUFS', 'integrated loudness', 'ITU-R BS.1770', 'K-weighting', 'mastering loudness', 'loudness normalization'],
     },
 };

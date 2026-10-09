@@ -32,7 +32,7 @@ export const post024: BlogArticle = {
             q: 'In the study by Husain and colleagues, what did changing only the tempo affect?',
             options: ['Mood, but not arousal', 'Mood and arousal equally', 'Neither mood nor arousal', 'Arousal, but not mood'],
             answer: 3,
-            why: 'Faster and slower versions of the same piece changed how energised listeners felt. Switching between major and minor changed their mood instead.',
+            why: 'Faster and slower versions of the same piece changed how energized listeners felt. Switching between major and minor changed their mood instead.',
         },
         {
             q: 'A 140 BPM beat has its snare on beat three only. Its backbeats are as far apart as in which beat?',
@@ -55,7 +55,7 @@ None of it helps, because the problem was the tempo. You started the session at 
 
 ## Why it matters: tempo sets the energy level
 
-Tempo is one of the most studied and most powerful cues listeners use to judge the emotion in music, alongside mode, loudness, articulation and timbre (Gabrielsson and Lindström, 2010). Its clearest effect is on energy. Husain, Thompson and Schellenberg (2002) played listeners the same Mozart sonata, fast or slow, in major or minor. Tempo changed how aroused and energised listeners felt but not their mood. Mode changed their mood but not their arousal.
+Tempo is one of the most studied and most powerful cues listeners use to judge the emotion in music, alongside mode, loudness, articulation and timbre (Gabrielsson and Lindström, 2010). Its clearest effect is on energy. Husain, Thompson and Schellenberg (2002) played listeners the same Mozart sonata, fast or slow, in major or minor. Tempo changed how aroused and energized listeners felt but not their mood. Mode changed their mood but not their arousal.
 
 The same cue runs through speech. Reviewing 104 studies of vocal expression and 41 of music performance, Juslin and Laukka (2003) found that the cues for emotion largely overlap between the two. A fast rate goes with high-energy states such as anger, fear and joy, a slow rate with sadness and tenderness. That is why a tempo that forces the singer to rush can make a song sound anxious whatever the lyric says, and a tempo that drags can make it sound tired.
 

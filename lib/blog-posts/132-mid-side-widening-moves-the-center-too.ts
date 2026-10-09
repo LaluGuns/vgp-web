@@ -107,7 +107,7 @@ The width control turned them down relative to everything around them, which mak
 
 Mid/side is another way of writing the same two channels. The idea goes back to Blumlein's stereo patent, and the sum-and-difference matrix is the basis of M-S microphone recording (Dooley and Streicher, 1982). This lesson uses the convention
 
-$$M = \\frac{L + R}{2}, \\qquad S = \\frac{L - R}{2}, \\qquad L = M + S, \\qquad R = M - S$$
+$$\\begin{aligned} M &= \\frac{L + R}{2}, & S &= \\frac{L - R}{2} \\\\ L &= M + S, & R &= M - S \\end{aligned}$$
 
 Some tools scale both by $1/\\sqrt{2}$ instead of 1/2. That changes the numbers on the M and S meters, but none of the conclusions below.
 
@@ -117,7 +117,7 @@ A part in dead centre has $L = R$, so it lives entirely in $M$ and $S = 0$. Anyt
 
 Multiply $S$ by a gain $g$ and decode. For the hard-left guitar with $g = 2$, a 6 dB side boost:
 
-$$L' = \\frac{x}{2} + 2 \\cdot \\frac{x}{2} = 1.5x, \\qquad R' = \\frac{x}{2} - 2 \\cdot \\frac{x}{2} = -0.5x$$
+$$\\begin{aligned} L' &= \\frac{x}{2} + 2 \\cdot \\frac{x}{2} = 1.5x \\\\ R' &= \\frac{x}{2} - 2 \\cdot \\frac{x}{2} = -0.5x \\end{aligned}$$
 
 The left channel rises 3.5 dB, and the right speaker, silent before, now plays an inverted copy of the guitar 9.5 dB below the left. That inverted leak is where the extra width comes from, and it is one reason heavy side boosts can sound phasey.
 

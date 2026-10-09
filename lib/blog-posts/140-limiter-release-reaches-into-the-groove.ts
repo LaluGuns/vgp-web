@@ -129,7 +129,7 @@ The limiter did both of those things through one control. Its release decides wh
 
 A master limiter sees one signal, the whole mix. When a kick crosses the ceiling, the limiter cannot turn down the kick alone. It turns down the bass, the pad, the vocal and the hats that are playing at that moment, then lets them back up over the release time. Each kick leaves a dip in everything else, and the release sets its shape.
 
-On a drum loop in a mix session, release decides how the next hit lands, as [compression changes motion before level](/blog/how-compression-changes-motion-not-level) shows. On a master the more audible effect is often on the parts that do not trigger the limiter at all: the sustained bass under the kick and the off-beat hats that fall inside the dip.
+On a drum loop in a mix session, release decides how the next hit lands, as the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) shows. On a master the more audible effect is often on the parts that do not trigger the limiter at all: the sustained bass under the kick and the off-beat hats that fall inside the dip.
 
 ::figure recovery
 
@@ -173,11 +173,11 @@ Between the two extremes there is often a range that does neither. In the simula
 
 Comparing releases without matching loudness picks the wrong one. A short release lets the limiter work like a clipper, so the master gets louder at the same ceiling, and louder wins until you level-match. The harmonics it adds sit at three and five times the bass frequency, so they stay audible on small speakers that cannot play the bass note itself.
 
-The second mistake is reading the gain reduction meter instead of listening. A meter that bounces neatly in time can still be pumping the pad on every beat, and a meter that hardly moves can be holding the whole mix 3 dB down. Listen to what plays between the kicks. If you want the pump, a sidechain on the parts you choose, as in [sidechain is more than kick ducking bass](/blog/sidechain-is-more-than-kick-ducking-bass), gives you control the master limiter cannot.
+The second mistake is reading the gain reduction meter instead of listening. A meter that bounces neatly in time can still be pumping the pad on every beat, and a meter that hardly moves can be holding the whole mix 3 dB down. Listen to what plays between the kicks. If you want the pump, a sidechain on the parts you choose gives you control the master limiter cannot, and the [lesson on sidechain routing](/blog/sidechain-is-more-than-kick-ducking-bass) shows how to set one up.
 
 ## Producer takeaway: tune the release like a groove control
 
-Treat the master limiter's release as part of the rhythm. Start from the beat interval, listen to the hats and the sustained parts between kicks, and back off from the setting where the bass gets rough. I set it with the full chorus playing and the loudness matched, so that what changes between settings is the groove and not the level. When no release works, the limiter is doing too much: move some of the work to a clipper on the drums or to the mix, as in [three ways to get loud](/blog/saturation-clipping-limiting-three-flavors-of-loud).
+Treat the master limiter's release as part of the rhythm. Start from the beat interval, listen to the hats and the sustained parts between kicks, and back off from the setting where the bass gets rough. I set it with the full chorus playing and the loudness matched, so that what changes between settings is the groove and not the level. When no release works, the limiter is doing too much: move some of the work to a clipper on the drums or to the mix, as the [lesson on saturation, clipping and limiting](/blog/saturation-clipping-limiting-three-flavors-of-loud) explains.
 
 ## References
 

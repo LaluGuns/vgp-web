@@ -95,7 +95,7 @@ Unlike the [room modes that rule small-room bass](/blog/why-your-low-end-lies-in
 
 Treat the hard surface as a mirror. The reflection behaves as if it came from an image of the mouth behind the surface, so its path length is the straight distance from that image to the mic. With the direct path $r_d$, the reflected path $r_r$ and the speed of sound $c$, about 343 m/s at room temperature:
 
-$$\\Delta t = \\frac{r_r - r_d}{c}, \\qquad f_{\\text{notch}} = \\frac{2k + 1}{2\\,\\Delta t}, \\quad k = 0, 1, 2, \\dots$$
+$$\\begin{aligned} \\Delta t &= \\frac{r_r - r_d}{c} \\\\ f_{\\text{notch}} &= \\frac{2k + 1}{2\\,\\Delta t}, \\quad k = 0, 1, 2, \\dots \\end{aligned}$$
 
 Take the desk in the hook. Mouth and mic are 30 cm apart, both 30 cm above the desk. The image of the mouth sits 60 cm below it, so the reflected path is $\\sqrt{0.3^2 + 0.6^2} \\approx 0.671$ m, 0.371 m longer than the direct one. That is 1.08 ms of delay, which puts notches at 462 Hz, 1.39 kHz, 2.31 kHz and every 925 Hz above.
 
@@ -103,7 +103,7 @@ How deep the notches go depends on how loud the copy is. Sound spreading from a 
 
 $$g = \\frac{r_d}{r_r}$$
 
-of the direct level, here 0.3 / 0.671 = 0.447, or 7 dB down. A signal plus a copy at relative level $g$ swings between $1 + g$ at the peaks and $1 - g$ at the notches (Zölzer, 2011): +3.2 dB and -5.1 dB in this case. A cardioid aimed at the mouth hears the desk reflection off axis, a voice beams forward at high frequencies and no desk reflects perfectly, so treat these numbers as the worst case for this layout.
+of the direct level, here 0.3 / 0.671 = 0.447, or 7 dB down. A signal plus a copy at relative level $g$ swings between $A_{\\max} = 1 + g$ at the peaks and $A_{\\min} = 1 - g$ at the notches (Zölzer, 2011): +3.2 dB and -5.1 dB in this case. A cardioid aimed at the mouth hears the desk reflection off axis, a voice beams forward at high frequencies and no desk reflects perfectly, so treat these numbers as the worst case for this layout.
 
 ::figure desk
 
@@ -113,7 +113,7 @@ Mic distance has a large effect on the depth. Moving the mic toward the mouth sh
 
 ::figure distance
 
-Absorption weakens the copy where it bounces. An absorption coefficient $\\alpha$ is the share of the sound energy a surface soaks up, so the reflected level changes by $10 \\log_{10}(1 - \\alpha)$ dB. A surface that absorbs 90% at some frequency sends back a copy 10 dB weaker there, and in the 30 cm example the dips shrink from 5.1 dB to about 1.3 dB. Thick porous material, such as a folded duvet or a proper absorber panel, works down into the mid range; a thin cloth mostly takes out the highs (Everest and Pohlmann, 2015).
+Absorption weakens the copy where it bounces. An absorption coefficient $\\alpha$ is the share of the sound energy a surface soaks up, so the reflected level changes by $10 \\log_{10}(1 - \\alpha)$ dB. A surface that absorbs 90% at some frequency sends back a copy 10 dB weaker there, and in the 30 cm example the dips shrink from 5.1 dB to about 1.3 dB. Thick porous material, such as a folded duvet or a proper absorber panel, works down into the midrange; a thin cloth mostly takes out the highs (Everest and Pohlmann, 2015).
 
 The phase demo below uses two equal copies of a bass, the deepest comb there is. A reflection is a weaker copy, but listen for the same thing: how the tone changes as the delay changes.
 

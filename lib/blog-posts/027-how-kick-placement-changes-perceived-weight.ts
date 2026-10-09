@@ -54,7 +54,7 @@ export const post027: BlogArticle = {
             max: 14,
             unit: 'ms',
             caption:
-                'The offset that puts two waves half a cycle apart, 1 / (2f). A 5 ms nudge is a 72 degree shift at 40 Hz but a full cancellation at 100 Hz, so check any nudge across the bass notes you actually use.',
+                'The offset that puts two waves half a cycle apart, 1 / (2f). A 5 ms nudge is a 72 degree shift at 40 Hz but a full cancellation at 100 Hz, so check any nudge across the bass notes the song uses.',
             alt: 'Five bars for the half-cycle delay: 12.5 ms at 40 Hz, 10 ms at 50 Hz, 8.3 ms at 60 Hz, 6.25 ms at 80 Hz and 5 ms at 100 Hz.',
             bars: [
                 { label: '40 Hz', value: 12.5 },

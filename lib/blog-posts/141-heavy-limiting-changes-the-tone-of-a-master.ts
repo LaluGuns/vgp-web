@@ -127,7 +127,7 @@ export const post141: BlogArticle = {
 
 You push the limiter for the last few decibels, match the loudness and compare. The limited version has less weight in the kick and the bass, and the hats and the vocal's sibilance seem further forward. On the next song the same move does the opposite and the top end goes dull. You never touched an EQ.
 
-The limiter changed the tone anyway. A broadband limiter applies one gain to the whole mix at each moment, and which moments it turns down depends on which part of the spectrum makes the peaks.
+So what changed the tone? A broadband limiter applies one gain to the whole mix at each moment, and which moments it turns down depends on which part of the spectrum makes the peaks.
 
 ## Why it matters: tone moves with the drive
 
@@ -151,7 +151,7 @@ I ran that calculation on two loops through a simple peak limiter with instant a
 
 ::figure bands
 
-Those figures depend on the levels I chose for each part, and real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks loses the most level. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as covered in [limiter release reaches into the groove](/blog/limiter-release-reaches-into-the-groove).
+Those figures depend on the levels I chose for each part, and real limiters use look-ahead and gentler gain curves, so your numbers will differ. The direction follows the same rule: the part of the spectrum that makes the peaks loses the most level. A fast release adds a second effect, harmonics from the gain moving within each bass cycle, which brightens the low end in a rougher way, as the [lesson on limiter release](/blog/limiter-release-reaches-into-the-groove) explains.
 
 Push the drive and listen to the tone rather than the level, since the demo keeps the loudness matched.
 
@@ -172,7 +172,7 @@ If those peaks were the trigger, the version where they were controlled first ne
 
 Correcting the limiter's tone with more EQ on the master usually makes it worse. A low boost in front of a kick-driven limiter feeds the trigger. A high cut to tame the brighter top makes the master duller during the parts where the limiter is not working. Fix what drives the limiter, and the tone mostly stops moving.
 
-The second mistake is judging tone at different levels. Turned up, a master seems to have more bass, because the ear's equal-loudness contours flatten as level rises (ISO, 2023). A limited master compared louder than the original will seem fuller than it is. Match the loudness first, as in [monitoring level changes the balance you hear](/blog/monitoring-level-changes-the-balance-you-hear).
+The second mistake is judging tone at different levels. Turned up, a master seems to have more bass, because the ear's equal-loudness contours flatten as level rises (ISO, 2023). A limited master compared louder than the original will seem fuller than it is. Match the loudness first; the [lesson on monitoring level](/blog/monitoring-level-changes-the-balance-you-hear) covers how much level shifts the balance you hear.
 
 ## Producer takeaway: watch what the limiter is listening to
 
