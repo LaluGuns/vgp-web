@@ -51,18 +51,6 @@ export const post148: BlogArticle = {
                 { label: 'Mic 50 cm away', value: 13.2, display: '13.2 dB' },
             ],
         },
-        order: {
-            type: 'flow',
-            caption:
-                'The order to work in. Each step weakens the reflection or moves it out of the way, and EQ comes last, for the tone of the voice rather than the comb.',
-            alt: 'Four steps from top to bottom: move away from the surface, set the mic distance, absorb at the reflection point, then EQ the overall tone.',
-            steps: [
-                { label: 'Move away from the surface', note: 'Away from the desk, the window, the wall' },
-                { label: 'Set the mic distance', note: 'Closer weakens the reflection, but adds bass' },
-                { label: 'Absorb at the reflection point', note: 'Something thick, where the mirror shows the mouth' },
-                { label: 'EQ the overall tone', note: 'Last, for the voice, not for the notches' },
-            ],
-        },
     },
     quiz: [
         {
@@ -111,7 +99,7 @@ $$\\Delta t = \\frac{r_r - r_d}{c}, \\qquad f_{\\text{notch}} = \\frac{2k + 1}{2
 
 Take the desk in the hook. Mouth and mic are 30 cm apart, both 30 cm above the desk. The image of the mouth sits 60 cm below it, so the reflected path is $\\sqrt{0.3^2 + 0.6^2} \\approx 0.671$ m, 0.371 m longer than the direct one. That is 1.08 ms of delay, which puts notches at 462 Hz, 1.39 kHz, 2.31 kHz and every 925 Hz above.
 
-How deep the notches go depends on how loud the copy is. Sound spreading from a small source loses amplitude in proportion to distance, so a perfectly hard surface sends the copy back at
+How deep the notches go depends on how loud the copy is. Sound spreading from a small source falls in amplitude in inverse proportion to the distance travelled, so a perfectly hard surface sends the copy back at
 
 $$g = \\frac{r_d}{r_r}$$
 
@@ -151,11 +139,9 @@ The other mistake is treating the wrong surface. Foam on the wall behind the sin
 
 ## Producer takeaway: fix the geometry first
 
-When a vocal sounds hollow and EQ keeps making it worse, look at what is near the mic before you touch another knob. Work in this order and record a test after each step.
+When a vocal sounds hollow and EQ keeps making it worse, look at what is near the mic before you touch another knob. Move the singer and mic away from the desk, window or bare wall. Then set a steady mic distance, closer if the comb is still audible and the proximity bass allows it. If you cannot move, put something thick at the reflection point the mirror shows you. Record a short test after each step, and use EQ last, for the tone of the voice rather than the notches.
 
-::figure order
-
-The first two steps cost nothing and often do the job. A singer standing clear of the desk, with the mic at a steady distance, gives you a take to shape with EQ rather than repair.
+Moving and setting the distance cost nothing and often do the job. A singer standing clear of the desk, with the mic at a steady distance, gives you a take to shape with EQ rather than repair.
 
 ## References
 

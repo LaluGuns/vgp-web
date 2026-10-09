@@ -10,8 +10,8 @@ const VOICE = {
 };
 // Full scale sits at 0.8 of the plot height.
 const FULL_SCALE = [
-    { y: 0.8, label: 'Top of the scale' },
-    { y: -0.8, label: 'Bottom of the scale' },
+    { y: 0.8, label: '0 dBFS' },
+    { y: -0.8, label: '0 dBFS' },
 ];
 
 export const post147: BlogArticle = {
@@ -44,7 +44,7 @@ export const post147: BlogArticle = {
             type: 'signal',
             caption:
                 'The same phrase three ways. Sung louder, its peaks pass full scale and the converter writes them flat. Turned down 6 dB afterwards, the flat tops sit at half height with the same shape, and the grey line shows the peaks that were never recorded.',
-            alt: 'Three waveform plots with dashed lines marking the top and bottom of the scale. The first wave stays inside the lines. The second is larger and cut flat where it meets both lines. The third is the second at half the height: its flat tops sit well inside the lines, with a grey curve above them showing the rounded peaks the wave should have had.',
+            alt: 'Three waveform plots with dashed lines marking full scale, 0 dBFS, at the top and bottom. The first wave stays inside the lines. The second is larger and cut flat where it meets both lines. The third is the second at half the height: its flat tops sit well inside the lines, with a grey curve above them showing the rounded peaks the wave should have had.',
             rows: [
                 { label: 'Sung at soundcheck level', lines: FULL_SCALE, traces: [VOICE] },
                 {
@@ -125,7 +125,7 @@ In a typical recording chain the microphone feeds a preamp, the preamp feeds the
 
 A converter with fixed-point output has a largest number it can report: full scale, or 0 dBFS. When the voltage from the preamp asks for more, every sample past that point is written as the maximum value and the top of the wave comes out flat (Pohlmann, 2011). The preamp has a ceiling of its own, its maximum output voltage, and a preamp driven past it flattens the wave before the converter ever sees it. Either way the damage is in the recording, and the DAW meter only reports it afterwards.
 
-That is also why a 32-bit float session does not rescue the take. A typical interface converter delivers fixed-point samples, so a clipped sample arrives as full scale, and float stores that full-scale value perfectly. [Float headroom](/blog/architecture-of-infinite-headroom-32-bit-float) protects you between plugins inside the DAW. It starts after the converter, which is where this problem began.
+That is also why a 32-bit float session does not rescue the take. A typical interface converter delivers fixed-point samples, so a clipped sample arrives as full scale, and float stores that full-scale value perfectly. [Float headroom](/blog/architecture-of-infinite-headroom-32-bit-float) protects you between plugins inside the DAW. It starts after the converter, which is where this problem began. Field recorders that merge two converters into one float file are the exception, and that lesson covers them too.
 
 ## Science model: a fader is one multiplication
 
@@ -147,7 +147,7 @@ In the demo, listen to the edge on the loudest notes, not the overall level. Whe
 
 ::demo clip-recover
 
-Repair tools exist. A declipper looks at the samples that did not clip and estimates what the flattened peaks would have been, using assumptions about how audio usually behaves. Záviška and colleagues (2021) compared the popular methods on real recordings. Every one of them works from the reliable samples, so the more of a phrase is clipped, the less they have to go on. A declipper can rescue a few clipped syllables. What it gives you is an estimate, so a retake is still the better fix while the singer is in the room.
+Repair tools exist. A declipper looks at the samples that did not clip and estimates what the flattened peaks would have been, using assumptions about how audio usually behaves, such as a sparse spectrum. Záviška and colleagues (2021) reviewed the popular methods and tested them on real audio. Because the estimate is built from the samples that survived, the more of a phrase is clipped, the less a declipper has to go on. A declipper can rescue a few clipped syllables. What it gives you is an estimate, so a retake is still the better fix while the singer is in the room.
 
 ## DAW experiment: clip a take on purpose
 
