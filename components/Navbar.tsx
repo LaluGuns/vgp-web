@@ -169,7 +169,15 @@ export function Navbar() {
     const ctaIsExternal = cta.href.startsWith('http');
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 8);
+        // Set state only when the value flips: a same-value setState can still
+        // re-render the navbar mid-scroll (16-23 ms on a 4x slower phone).
+        let last: boolean | null = null;
+        const handleScroll = () => {
+            const next = window.scrollY > 8;
+            if (next === last) return;
+            last = next;
+            setScrolled(next);
+        };
         handleScroll();
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);

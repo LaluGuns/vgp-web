@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, rms, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer } from './ui';
+import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
@@ -43,6 +43,19 @@ function smoothingBands(binCount: number, binHz: number): Band[] {
         for (let i = 0; i < weights.length; i++) weights[i] = sum > 0 ? weights[i] / sum : 1 / weights.length;
         return { from: lo, weights };
     });
+}
+
+const bandCache = new Map<string, Band[]>();
+
+/** The bands for an analyser's size and sample rate, worked out once per page. */
+function bandsFor(binCount: number, binHz: number): Band[] {
+    const key = `${binCount}|${binHz}`;
+    let bands = bandCache.get(key);
+    if (!bands) {
+        bands = smoothingBands(binCount, binHz);
+        bandCache.set(key, bands);
+    }
+    return bands;
 }
 
 /** dB per point from the analyser's dB per bin. `power` is scratch space, one value per bin. */
@@ -86,6 +99,21 @@ function Spectrum({
     const canvas = useRef<HTMLCanvasElement>(null);
     const traces = useRef<{ bands: Band[]; key: string; list: Trace[] } | null>(null);
 
+    // Size the canvas and make its 2D context while the page is idle, so the first frame of
+    // playback (already the busiest moment on a slow phone) only draws.
+    useEffect(
+        () =>
+            whenIdle(() => {
+                const c = canvas.current;
+                if (!c) return;
+                const dpr = window.devicePixelRatio || 1;
+                c.width = c.clientWidth * dpr;
+                c.height = c.clientHeight * dpr;
+                c.getContext('2d');
+            }),
+        [],
+    );
+
     useFrame(active, () => {
         const c = canvas.current;
         if (!c || !analyser) return;
@@ -105,7 +133,7 @@ function Spectrum({
         if (!traces.current || traces.current.key !== key || traces.current.list.some((t, i) => t.analyser !== sources[i])) {
             traces.current = {
                 key,
-                bands: smoothingBands(analyser.frequencyBinCount, analyser.context.sampleRate / analyser.fftSize),
+                bands: bandsFor(analyser.frequencyBinCount, analyser.context.sampleRate / analyser.fftSize),
                 list: sources.map((a) => ({
                     analyser: a,
                     data: new Float32Array(a.frequencyBinCount),

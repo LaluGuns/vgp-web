@@ -83,7 +83,10 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         };
         claim(stopThis);
         stopRef.current = stopThis;
-        setPlaying(true);
+        // A transition: re-rendering a large demo for its Playing state is done in slices, so the
+        // tap's own task stays short on a slow phone. A Stop pressed meanwhile still wins (it is
+        // applied after this in order), and the sound starts after the next paint either way.
+        startTransition(() => setPlaying(true));
         afterPaint(() => {
             if (stopped) return;
             try {

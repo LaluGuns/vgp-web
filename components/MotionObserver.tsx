@@ -114,8 +114,17 @@ export function MotionObserver() {
             frame = requestAnimationFrame(scan);
         });
 
+        // Every draw-in mark fires animationstart and animationend. Nothing listens for them, but each one
+        // bubbling to React's root listener costs a walk up the tree, about 1 ms on a slow phone, so a busy
+        // figure finishing could add 20 ms to one frame. They stop at the window, before the root sees them.
+        const quietDrawIn = (event: AnimationEvent) => {
+            if (event.target instanceof Element && event.target.closest('[data-reveal="draw"]')) event.stopPropagation();
+        };
+
         scan();
         mutations.observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('animationstart', quietDrawIn, true);
+        window.addEventListener('animationend', quietDrawIn, true);
         window.addEventListener('scroll', settleSoon, { passive: true });
         window.addEventListener('scrollend', settleNow);
         window.addEventListener('hashchange', settleSoon);
@@ -129,6 +138,8 @@ export function MotionObserver() {
             window.removeEventListener('scrollend', settleNow);
             window.removeEventListener('hashchange', settleSoon);
             window.removeEventListener('load', settleSoon);
+            window.removeEventListener('animationstart', quietDrawIn, true);
+            window.removeEventListener('animationend', quietDrawIn, true);
             mutations.disconnect();
             intersection.disconnect();
             drawing.disconnect();
