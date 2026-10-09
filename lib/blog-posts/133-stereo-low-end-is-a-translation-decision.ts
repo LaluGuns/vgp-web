@@ -99,11 +99,11 @@ A level difference is safe. If the right channel carries the same waveform as th
 
 A small time difference is nearly safe in the sub. The phase shift is $360^\\circ \\times f \\times \\Delta t$, so 1 ms between the channels is only 20 degrees at 55 Hz, and the sum loses about 0.1 dB. The same 1 ms is 180 degrees at 500 Hz, which is why [time offsets](/blog/phase-vs-polarity-kick-bass-will-thank-you) hurt the harmonics and the click long before the sub.
 
-A detune is not safe. Unison voices, a chorus, or a different oscillator in each channel drift in and out of step. In mono they cancel completely once every $1/\\Delta f$ seconds, where $\\Delta f$ is the frequency difference. That is the breathing in the hook.
+A detune is not safe. Unison voices, a chorus, or a different oscillator in each channel drift in and out of step. Two equal voices cancel completely in mono once every $1/\\Delta f$ seconds, where $\\Delta f$ is the frequency difference. With more voices the dips are less regular, but they are still there. That is the breathing in the hook.
 
 ::figure beat
 
-Anti-phase content is the worst case. A side boost, a polarity flip on one channel or a phase-rotating widener puts part of the bass in opposite polarity on each side, and that part cancels in any sum, as the [mid/side lesson](/blog/mid-side-widening-moves-the-center-too) works out.
+Anti-phase content is the worst case. A side boost, a polarity flip on one channel or a phase-rotating widener puts some or all of the bass in opposite polarity on each side, and that part cancels in any sum, as the [mid/side lesson](/blog/mid-side-widening-moves-the-center-too) works out.
 
 None of this means the low end carries no spatial information. For sounds that contain low frequencies, the timing difference between the two ears is the cue listeners follow for direction; with the low frequencies removed, level and pinna cues take over (Wightman and Kistler, 1992). The ear can use those timing cues below roughly 1.5 kHz (Moore, 2012), which is where the harmonics of a bass sit. In the deepest octave, a small room adds its own pattern on top: the [room modes](/blog/why-your-low-end-lies-in-a-small-room) mix the output of both speakers, so a stereo difference down there tends to show up as a level change at your chair.
 
@@ -136,7 +136,7 @@ The opposite mistake is trusting headphones. On headphones there is no summing a
 
 ## Producer takeaway: decide what each band may do
 
-Keep the sub's two channels close to identical, set the split by listening in mono rather than by a number from a forum, and let the harmonics carry the width. When a sound design move puts detune or anti-phase content into the bottom octave, treat it as a deliberate choice and check it on a summed system before it ships.
+Keep the sub's two channels close to identical, set the split by listening in mono rather than by a fixed number, and let the harmonics carry the width. When a sound design move puts detune or anti-phase content into the bottom octave, treat it as a deliberate choice and check it on a summed system before it ships.
 
 ## References
 
