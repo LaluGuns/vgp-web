@@ -101,14 +101,12 @@ html {
   scroll-padding-top: 88px;
 }
 
-/* Smooth only for a jump the reader starts from a focused link (a Contents
-   entry, the skip link). A deep link, a shared #section or a reload lands at
-   once instead of gliding down past every figure on the way. */
-@media (prefers-reduced-motion: no-preference) {
-  html:focus-within {
-    scroll-behavior: smooth;
-  }
-}
+/* No smooth scrolling on html: a deep link, a shared #section or a reload
+   lands at once instead of gliding down past every figure on the way. A
+   lesson's Contents links glide on their own (LessonAnchors in
+   components/blog/article/ArticleChrome.tsx). Not html:focus-within either:
+   its state flips whenever focus comes and goes, and each flip restyled the
+   whole document (45 ms on a 4x slower phone, on the tap itself). */
 
 /* Phones also have the fixed bottom navigation (MobileBottomNav, md:hidden)
    and, on a lesson, the Contents button just above it. One value for every
@@ -571,7 +569,7 @@ body::before {
     break-inside: avoid;
   }
 
-  /* Collapsed lists (Sources) print open. ArticleChrome's OpenDetails opens
+  /* Collapsed lists (Sources) print open. ArticleChrome's LessonAnchors opens
      them on beforeprint; this covers a print that skips the event. Their
      Show and Hide toggles, like the other reading tools, are print:hidden. */
   details::details-content {
@@ -876,6 +874,45 @@ body::before {
   box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--accent);
 }
 
+/* A playing demo's Stop button (ui.tsx PlayButton). It shows once the Play
+   button is off screen (data-away); before that it waits unseen as the next
+   Tab after the demo and shows when it has the keyboard focus. Below 1024 px
+   a 44 px round button, bottom left above the phone tab bar. From 1024 px up
+   it carries its label and sits at the foot of the outline column,
+   right-aligned with the lesson's grid (max-w-7xl in px-6), where no text
+   runs. */
+.vgp-demo-stop {
+  position: fixed;
+  z-index: 30;
+  left: 1rem;
+  bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
+  transition: opacity 150ms ease;
+}
+
+.vgp-demo-stop:not([data-away]):not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vgp-demo-stop {
+    transition: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .vgp-demo-stop {
+    bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .vgp-demo-stop {
+    left: auto;
+    right: max(1.5rem, calc((100% - 80rem) / 2));
+  }
+}
+
 /* Demo displays speak the lesson's figure dialect (docs/DESIGN.md, "Figure
    dialects"; lib/blog/dialects.ts). DemoSlot puts data-dialect on the panel.
    Plots, meters, step lanes and step strips follow it; the controls (play
@@ -1000,4 +1037,57 @@ body::before {
   .vgp-table td:empty {
     display: none;
   }
+}
+
+/* ------------------------------------------------------------------
+   Site shell: the navbar's dropdowns and phone menu and the subscribe
+   dialog fade in with @starting-style and out on [data-closing], which
+   components/useExitTransition.ts sets while a closing one stays mounted.
+   Same timing as the framer-motion version they replace: 150 ms ease-out
+   (the dropdown rises 4 px), the dialog 180 ms rising 8 px over a 150 ms
+   backdrop fade. Instant under reduced motion (rule near the top).
+   ------------------------------------------------------------------ */
+.vgp-shell-fade,
+.vgp-shell-drop,
+.vgp-shell-backdrop,
+.vgp-shell-dialog {
+  transition-property: opacity, transform;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.vgp-shell-dialog {
+  transition-duration: 180ms;
+}
+
+@starting-style {
+  .vgp-shell-fade,
+  .vgp-shell-backdrop {
+    opacity: 0;
+  }
+
+  .vgp-shell-drop {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  .vgp-shell-dialog {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.vgp-shell-fade[data-closing],
+.vgp-shell-backdrop[data-closing] {
+  opacity: 0;
+}
+
+.vgp-shell-drop[data-closing] {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.vgp-shell-dialog[data-closing] {
+  opacity: 0;
+  transform: translateY(8px);
 }

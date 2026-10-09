@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { fadeOut, hat, kick, bass, midi, sequence, snare, type Engine } from './engine';
-import { Actions, Meter, PlayButton, Segmented, Slider, useAnalysis, useFrame, usePlayer } from './ui';
+import { bass, fadeOut, hat, kick, kWeighted, midi, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
+import { LiveMeter, PlayButton, Segmented, Slider, useAnalysis, usePlayer } from './ui';
 
 // A 16-step boom-bap bar with ghost notes, so dynamics have something to grab.
 const KICKS: [number, number][] = [
@@ -34,6 +34,7 @@ const PRESETS = {
     punch: { threshold: -30, ratio: 4, attack: 30, release: 120 },
     flat: { threshold: -30, ratio: 8, attack: 0, release: 60 },
 };
+type Preset = keyof typeof PRESETS;
 
 interface CompParams {
     threshold: number;
@@ -67,19 +68,8 @@ const BPM = 92;
 const STEP = 60 / BPM / 4;
 const BAR = STEP * 16;
 const LEAD = 0.05;
-
-function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
-    const shelf = ctx.createBiquadFilter();
-    shelf.type = 'highshelf';
-    shelf.frequency.value = 1681.97;
-    shelf.gain.value = 4;
-    const hp = ctx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 38.13;
-    hp.Q.value = 0.5;
-    input.connect(shelf).connect(hp);
-    return hp;
-}
+/** Bars rendered for a measurement. The first lets the compressor settle; the rest are measured. */
+const BARS = 4;
 
 function compressor(ctx: BaseAudioContext, p: CompParams): DynamicsCompressorNode {
     const comp = ctx.createDynamicsCompressor();
@@ -100,12 +90,13 @@ interface CompAnalysis {
 }
 
 /**
- * Renders two bars of the loop offline, dry and through the compressor, and
- * measures the second bar: K-weighted loudness (ITU-R BS.1770) for the
- * matching, and the peaks for the 7 dB allowance.
+ * Renders four bars of the loop offline, dry and through the compressor, and
+ * measures the last three: K-weighted loudness (engine.ts) for the matching,
+ * and the highest peaks for the 7 dB allowance. The snare and hats are noise,
+ * different on every hit, so one bar alone can be a dB off what plays.
  */
 async function analyseComp(params: CompParams): Promise<CompAnalysis> {
-    const ctx = new OfflineAudioContext(4, Math.ceil((LEAD + 2 * BAR + 0.1) * RATE), RATE);
+    const ctx = new OfflineAudioContext(4, Math.ceil((LEAD + BARS * BAR + 0.1) * RATE), RATE);
     const merger = ctx.createChannelMerger(4);
     merger.connect(ctx.destination);
     const bus = ctx.createGain();
@@ -116,20 +107,26 @@ async function analyseComp(params: CompParams): Promise<CompAnalysis> {
     undo.connect(merger, 0, 1);
     kWeighted(ctx, bus).connect(merger, 0, 2);
     kWeighted(ctx, undo).connect(merger, 0, 3);
-    for (let s = 0; s < 32; s++) playDrumStep(ctx, bus, s % 16, LEAD + s * STEP, STEP);
+    await scheduleSteps(BARS * 16, (s) => playDrumStep(ctx, bus, s % 16, LEAD + s * STEP, STEP));
     const buffer = await ctx.startRendering();
     const [dry, wet, dryK, wetK] = [0, 1, 2, 3].map((c) => buffer.getChannelData(c));
-    const from = Math.round((LEAD + BAR) * RATE);
-    const to = from + Math.round(BAR * RATE);
     let peakDry = 0;
     let peakWet = 0;
     let powDry = 0;
     let powWet = 0;
-    for (let i = from; i < to; i++) {
-        peakDry = Math.max(peakDry, Math.abs(dry[i]));
-        peakWet = Math.max(peakWet, Math.abs(wet[i]));
-        powDry += dryK[i] * dryK[i];
-        powWet += wetK[i] * wetK[i];
+    // A bar at a time, with a yield after each, so a slow phone never spends long in here at once.
+    for (let bar = 1; bar < BARS; bar++) {
+        const from = Math.round((LEAD + bar * BAR) * RATE);
+        const to = Math.round((LEAD + (bar + 1) * BAR) * RATE);
+        for (let i = from; i < to; i++) {
+            const d = dry[i] < 0 ? -dry[i] : dry[i];
+            const w = wet[i] < 0 ? -wet[i] : wet[i];
+            if (d > peakDry) peakDry = d;
+            if (w > peakWet) peakWet = w;
+            powDry += dryK[i] * dryK[i];
+            powWet += wetK[i] * wetK[i];
+        }
+        await yieldToMain();
     }
     const wanted = powWet > 0 ? Math.sqrt(powDry / powWet) : 1;
     const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * peakDry) / peakWet : MATCH_MAX);
@@ -147,7 +144,6 @@ export function CompressorDemo() {
     const [ratio, setRatio] = useState(PRESETS.punch.ratio);
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
-    const [reduction, setReduction] = useState(0);
     const analysis = useAnalysis(`${threshold}|${ratio}|${attack}|${release}`, () => analyseComp({ threshold, ratio, attack, release }));
     const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
     const modeRef = useRef(mode);
@@ -175,7 +171,6 @@ export function CompressorDemo() {
             seq.stop();
             nodes.current = null;
             fadeOut(ctx, master, () => bus.disconnect());
-            setReduction(0);
         };
     });
 
@@ -183,10 +178,6 @@ export function CompressorDemo() {
         const n = nodes.current;
         if (n && analysis) applyComp(n, analysis, true);
     }, [analysis]);
-
-    useFrame(player.playing, () => {
-        if (nodes.current) setReduction(-nodes.current.comp.reduction);
-    });
 
     const applyMode = (next: Mode) => {
         setMode(next);
@@ -198,7 +189,7 @@ export function CompressorDemo() {
         n.wet.gain.setTargetAtTime(next === 'on' ? 1 : 0, t, 0.015);
     };
 
-    const applyPreset = (preset: keyof typeof PRESETS) => {
+    const applyPreset = (preset: Preset) => {
         const p = PRESETS[preset];
         setThreshold(p.threshold);
         setRatio(p.ratio);
@@ -209,6 +200,11 @@ export function CompressorDemo() {
 
     // Under 1 dB is within the matching's own accuracy, and the default setting can land there.
     const short = analysis && analysis.short >= 1 ? Math.round(analysis.short) : 0;
+    // The preset the sliders match, if any: the presets are a choice like the swing demo's.
+    const preset = (Object.keys(PRESETS) as Preset[]).find((k) => {
+        const p = PRESETS[k];
+        return p.threshold === threshold && p.ratio === ratio && p.attack === attack && p.release === release;
+    });
 
     return (
         <div className="space-y-6">
@@ -224,18 +220,22 @@ export function CompressorDemo() {
                     ]}
                 />
             </div>
-            <Meter label="Gain reduction" value={reduction / 18} text={`${reduction.toFixed(1)} dB`} />
+            <LiveMeter label="Gain reduction" active={player.playing} read={() => (nodes.current ? -nodes.current.comp.reduction : null)} full={18} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label="Threshold" value={threshold} min={-40} max={0} onChange={setThreshold} format={(v) => `${v} dB`} />
                 <Slider label="Ratio" value={ratio} min={1} max={20} step={0.5} onChange={setRatio} format={(v) => `${v}:1`} />
                 <Slider label="Attack" value={attack} min={0} max={100} onChange={setAttack} format={(v) => `${v} ms`} />
                 <Slider label="Release" value={release} min={20} max={600} step={10} onChange={setRelease} format={(v) => `${v} ms`} />
             </div>
-            <Actions
+            <Segmented<Preset | 'custom'>
                 label="Presets"
-                actions={[
-                    { label: 'Slow attack', onClick: () => applyPreset('punch') },
-                    { label: 'Fast attack', onClick: () => applyPreset('flat') },
+                value={preset ?? 'custom'}
+                onChange={(v) => {
+                    if (v !== 'custom') applyPreset(v);
+                }}
+                options={[
+                    { value: 'punch', label: 'Slow attack' },
+                    { value: 'flat', label: 'Fast attack' },
                 ]}
                 hint="A slow attack lets the snare crack through. A fast one flattens it."
             />

@@ -21,9 +21,10 @@ export function StartHere({ lessons, className = '' }: { lessons: StartLesson[];
                 <span key={lesson.slug}>
                     {i > 0 ? (i === lessons.length - 1 ? ' or ' : ', ') : null}
                     <TapLink href={`/blog/${lesson.slug}`} className="text-white">
-                        {lesson.pathName}, lesson 1
-                    </TapLink>{' '}
-                    ({lesson.readingTime}&nbsp;min)
+                        {lesson.pathName}, lesson&nbsp;1
+                    </TapLink>
+                    {/* A no-break space, so "(6 min)." never starts a line on its own. */}
+                    &nbsp;({lesson.readingTime}&nbsp;min)
                 </span>
             ))}
             .

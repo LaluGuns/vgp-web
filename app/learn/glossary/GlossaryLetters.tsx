@@ -3,10 +3,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { useChipRow } from '@/components/blog/paths/useChipRow';
 
+/** Room kept between the bar's lower edge and a link that takes keyboard focus. */
+const FOCUS_GAP = 12;
+
 /**
  * The sticky A-Z bar. It marks the letter being read (scroll position or a
  * #term deep link), keeps that letter in view when the bar scrolls sideways
  * on a phone, and fades its right edge while more letters sit past it.
+ *
+ * It also keeps keyboard focus out from under itself. The browser scrolls a
+ * focused link only when it sits outside the page's scroll padding (88 px,
+ * the header), so a link 88-122 px from the top stayed hidden behind the bar
+ * on Shift+Tab; scroll-margin cannot fix that because the browser only uses
+ * it once it has decided to scroll.
  */
 export function GlossaryLetters({ letters }: { letters: string[] }) {
     const row = useRef<HTMLDivElement>(null);
@@ -34,6 +43,20 @@ export function GlossaryLetters({ letters }: { letters: string[] }) {
         sections.forEach(({ section }) => observer.observe(section));
         return () => observer.disconnect();
     }, [letters]);
+
+    useEffect(() => {
+        const bar = row.current?.parentElement;
+        const onFocus = (event: FocusEvent) => {
+            const target = event.target;
+            // Keyboard focus only: a tap or click on a link never nudges the page.
+            if (!bar || !(target instanceof HTMLElement) || bar.contains(target) || !target.closest('main') || !target.matches(':focus-visible')) return;
+            const clear = bar.getBoundingClientRect().bottom + FOCUS_GAP;
+            const top = target.getBoundingClientRect().top;
+            if (top < clear) window.scrollBy({ top: top - clear, behavior: 'instant' });
+        };
+        document.addEventListener('focusin', onFocus);
+        return () => document.removeEventListener('focusin', onFocus);
+    }, []);
 
     return (
         <nav aria-label="Jump to letter" className="sticky top-16 z-10 -mx-4 border-y border-white/10 bg-[var(--bg)] sm:mx-0">

@@ -30,8 +30,11 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
             <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
                 <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
-                        <nav aria-label="Breadcrumb" className="-my-3 text-sm font-medium text-white">
-                            <TapLink href="/blog">All lessons</TapLink>
+                        {/* The parent is "Lessons" everywhere: here, on a lesson and on the glossary. */}
+                        <nav aria-label="Breadcrumb" className="-my-3 text-sm text-white/55">
+                            <TapLink href="/blog" className="hover:text-white">
+                                Lessons
+                            </TapLink>
                         </nav>
                         {/* The group's mark: the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
                         <p className="mt-6 flex items-center gap-2 text-sm text-white/55">

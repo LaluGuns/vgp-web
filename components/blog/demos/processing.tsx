@@ -1,16 +1,22 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
-import { bass, fadeOut, hat, kick, midi, pad, pluck, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Readout, Segmented, Slider, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
+import { bass, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
+import { LiveMeter, PlayButton, Readout, Segmented, Slider, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
 // Every comparison here is level-matched with numbers, not by ear: each
 // setting is rendered offline through the same graph that plays, its
-// K-weighted loudness (ITU-R BS.1770) is measured, and the playing graph
+// K-weighted loudness is measured (the weighting runs inside the render,
+// engine.ts kWeighted, like every other demo's), and the playing graph
 // takes the new setting and its matching gain at the same moment. The
 // figures are drawn from those same renders.
+//
+// The main thread only builds the graphs and reads the results, a few
+// steps at a time with a yield in between (engine.ts scheduleSteps), and
+// reads only the stretch it measures, so a slow phone keeps scrolling while
+// a demo measures.
 
 /** Sample rate of the offline renders that measure loudness and draw the figures. */
 const RATE = 44100;
@@ -114,52 +120,46 @@ function measureMakeup(key: string, build: (ctx: BaseAudioContext) => DynamicsCo
     return job;
 }
 
-/** Renders a graph offline. Each tap is recorded to its own channel. */
-async function renderOffline(seconds: number, taps: number, build: (ctx: OfflineAudioContext, taps: GainNode[]) => void): Promise<Float32Array<ArrayBuffer>[]> {
-    const ctx = new OfflineAudioContext(taps, Math.ceil(seconds * RATE), RATE);
-    const merger = ctx.createChannelMerger(taps);
+interface Render {
+    /** One channel per tap. */
+    x: Float32Array<ArrayBuffer>[];
+    /** The first `weighted` taps again, K-weighted, for loudness. */
+    k: Float32Array<ArrayBuffer>[];
+}
+
+/**
+ * Renders a graph offline. Each tap is recorded to its own channel, and the
+ * first `weighted` taps also through the K-weighting filter. `build` may
+ * yield while it creates the voices; rendering starts once it is done.
+ */
+async function renderOffline(
+    seconds: number,
+    taps: number,
+    build: (ctx: OfflineAudioContext, taps: GainNode[]) => void | Promise<void>,
+    weighted = 0,
+): Promise<Render> {
+    const channels = taps + weighted;
+    const ctx = new OfflineAudioContext(channels, Math.ceil(seconds * RATE), RATE);
+    const merger = ctx.createChannelMerger(channels);
     merger.connect(ctx.destination);
     const outs: GainNode[] = [];
     for (let i = 0; i < taps; i++) {
         const g = ctx.createGain();
         g.connect(merger, 0, i);
+        if (i < weighted) kWeighted(ctx, g).connect(merger, 0, taps + i);
         outs.push(g);
     }
-    build(ctx, outs);
+    await build(ctx, outs);
     const buffer = await ctx.startRendering();
-    return outs.map((_, i) => buffer.getChannelData(i));
+    const all = Array.from({ length: channels }, (_, i) => buffer.getChannelData(i));
+    return { x: all.slice(0, taps), k: all.slice(taps) };
 }
 
-function biquad(x: Float32Array, b0: number, b1: number, b2: number, a1: number, a2: number): Float32Array {
-    const y = new Float32Array(x.length);
-    let x1 = 0;
-    let x2 = 0;
-    let y1 = 0;
-    let y2 = 0;
-    for (let i = 0; i < x.length; i++) {
-        const v = x[i];
-        const out = b0 * v + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
-        x2 = x1;
-        x1 = v;
-        y2 = y1;
-        y1 = out;
-        y[i] = out;
-    }
-    return y;
-}
-
-/** The K-weighting filter from ITU-R BS.1770, so matching follows what the ear hears rather than raw power. */
-function kWeight(x: Float32Array): Float32Array {
-    let k = Math.tan((Math.PI * 1681.974450955533) / RATE);
-    let q = 0.7071752369554196;
-    const vh = 10 ** (3.999843853973347 / 20);
-    const vb = vh ** 0.4996667741545416;
-    let a0 = 1 + k / q + k * k;
-    const shelf = biquad(x, (vh + (vb * k) / q + k * k) / a0, (2 * (k * k - vh)) / a0, (vh - (vb * k) / q + k * k) / a0, (2 * (k * k - 1)) / a0, (1 - k / q + k * k) / a0);
-    k = Math.tan((Math.PI * 38.13547087602444) / RATE);
-    q = 0.5003270373238773;
-    a0 = 1 + k / q + k * k;
-    return biquad(shelf, 1, -2, 1, (2 * (k * k - 1)) / a0, (1 - k / q + k * k) / a0);
+/** Mean square of a stretch of signal. On a K-weighted channel, ratios of these are loudness ratios. */
+function power(x: Float32Array, from: number, to: number): number {
+    let sum = 0;
+    for (let i = from; i < to; i++) sum += x[i] * x[i];
+    return sum / Math.max(1, to - from);
 }
 
 function meanProduct(a: Float32Array, b: Float32Array, from: number, to: number): number {
@@ -168,50 +168,55 @@ function meanProduct(a: Float32Array, b: Float32Array, from: number, to: number)
     return sum / Math.max(1, to - from);
 }
 
-/** K-weighted mean square of a stretch of signal. Ratios of these are loudness ratios. */
-function loudnessPower(x: Float32Array, from: number, to: number): number {
-    const k = kWeight(x);
-    return meanProduct(k, k, from, to);
-}
-
 function peakOf(x: Float32Array, from: number, to: number): number {
     let peak = 0;
-    for (let i = from; i < to; i++) peak = Math.max(peak, Math.abs(x[i]));
+    for (let i = from; i < to; i++) {
+        const v = x[i] < 0 ? -x[i] : x[i];
+        if (v > peak) peak = v;
+    }
     return peak;
 }
 
-/** Splits a stretch of signal into `count` slices and returns each slice's peak in dB relative to `ref`. */
-function columns(sample: (i: number) => number, length: number, count: number, ref: number, lowest = false): number[] {
+/**
+ * Splits `length` samples of `x`, from `offset`, into `count` slices and
+ * returns each slice's peak (or its lowest value) times `gain`, in dB
+ * relative to `ref`.
+ */
+function columns(x: Float32Array, offset: number, length: number, count: number, ref: number, gain = 1, lowest = false): number[] {
     const out: number[] = [];
     const span = length / count;
     for (let c = 0; c < count; c++) {
-        const a = Math.floor(c * span);
-        const b = Math.max(a + 1, Math.floor((c + 1) * span));
+        const a = offset + Math.floor(c * span);
+        const b = offset + Math.max(Math.floor(c * span) + 1, Math.floor((c + 1) * span));
         let v = lowest ? Infinity : 0;
         for (let i = a; i < b; i++) {
-            const s = Math.abs(sample(i));
-            v = lowest ? Math.min(v, s) : Math.max(v, s);
+            const s = x[i] < 0 ? -x[i] : x[i];
+            if (lowest ? s < v : s > v) v = s;
         }
-        out.push(gainToDb(v / ref));
+        out.push(gainToDb((v * gain) / ref));
     }
     return out;
 }
 
 /**
  * Level of each column as the RMS over `window` samples centred on it, in
- * dB relative to `ref`. Over half a cycle of a sine the RMS is the same
- * wherever the window starts, so a kick reads as one smooth shape rather
- * than a comb of cycles.
+ * dB relative to `ref`, over `length` samples of `x` from `offset`, times
+ * `gain`. Over half a cycle of a sine the RMS is the same wherever the
+ * window starts, so a kick reads as one smooth shape rather than a comb of
+ * cycles. A running sum makes each column one subtraction.
  */
-function windowRms(sample: (i: number) => number, length: number, count: number, ref: number, window: number): number[] {
+function windowRms(x: Float32Array, offset: number, length: number, count: number, ref: number, window: number, gain = 1): number[] {
+    const sums = new Float64Array(length + 1);
+    for (let i = 0; i < length; i++) {
+        const v = x[offset + i];
+        sums[i + 1] = sums[i] + v * v;
+    }
     const out: number[] = [];
     for (let c = 0; c < count; c++) {
         const centre = ((c + 0.5) * length) / count;
         const a = Math.max(0, Math.floor(centre - window / 2));
         const b = Math.min(length, Math.ceil(centre + window / 2));
-        let sum = 0;
-        for (let i = a; i < b; i++) sum += sample(i) ** 2;
-        out.push(gainToDb(Math.sqrt(sum / Math.max(1, b - a)) / ref));
+        out.push(gainToDb((Math.sqrt((sums[b] - sums[a]) / Math.max(1, b - a)) * gain) / ref));
     }
     return out;
 }
@@ -360,9 +365,9 @@ function drums(ctx: BaseAudioContext, dest: AudioNode, step: number, time: numbe
     if (step % 2 === 0) hat(ctx, dest, time, step % 4 === 0 ? 0.55 : 0.3);
 }
 
-/** Schedules two bars offline. The figures and the loudness use the second bar, after the processors settle. */
-function twoBars(ctx: BaseAudioContext, dest: AudioNode, play: (ctx: BaseAudioContext, dest: AudioNode, step: number, time: number) => void) {
-    for (let s = 0; s < 32; s++) play(ctx, dest, s % 16, LEAD + s * STEP);
+/** Schedules two bars offline, a few steps at a time. The figures and the loudness use the second bar, after the processors settle. */
+function twoBars(ctx: BaseAudioContext, dest: AudioNode, play: (ctx: BaseAudioContext, dest: AudioNode, step: number, time: number) => void): Promise<void> {
+    return scheduleSteps(32, (s) => play(ctx, dest, s % 16, LEAD + s * STEP));
 }
 
 /** Start and end samples of the second bar in an offline render, shifted by a path delay. */
@@ -402,30 +407,47 @@ interface ParallelAnalysis {
     pxx: number;
     pxy: number;
     peak: number;
+    /** The figure's columns for the dry loop and for the crushed copy alone, which no control changes. */
+    dryColumns: number[];
+    soloColumns: number[];
 }
 
 async function analyseParallel(): Promise<ParallelAnalysis> {
     const lat = await measureLatency(RATE);
     const [from, to] = secondBar(lat);
-    const [dry, crushed] = await renderOffline(LEAD + 2 * BAR + lat + 0.02, 2, (ctx, [dryTap, crushTap]) => {
-        const src = ctx.createGain();
-        const delay = ctx.createDelay(0.05);
-        delay.delayTime.value = lat;
-        src.connect(delay).connect(dryTap);
-        src.connect(crusher(ctx)).connect(crushTap);
-        twoBars(ctx, src, drums);
-    });
-    const kx = kWeight(dry);
-    const ky = kWeight(crushed);
-    const pxx = meanProduct(kx, kx, from, to);
-    const norm = Math.sqrt(pxx / meanProduct(ky, ky, from, to));
+    const {
+        x: [dryAll, crushedAll],
+        k: [kx, ky],
+    } = await renderOffline(
+        LEAD + 2 * BAR + lat + 0.02,
+        2,
+        (ctx, [dryTap, crushTap]) => {
+            const src = ctx.createGain();
+            const delay = ctx.createDelay(0.05);
+            delay.delayTime.value = lat;
+            src.connect(delay).connect(dryTap);
+            src.connect(crusher(ctx)).connect(crushTap);
+            return twoBars(ctx, src, drums);
+        },
+        2,
+    );
+    const pxx = power(kx, from, to);
+    const norm = Math.sqrt(pxx / power(ky, from, to));
+    const pxy = meanProduct(kx, ky, from, to) * norm;
+    const peak = peakOf(dryAll, from, to);
+    const dry = dryAll.slice(from, to);
+    const crushed = crushedAll.slice(from, to);
+    for (let i = 0; i < crushed.length; i++) crushed[i] *= norm;
+    await yieldToMain();
     return {
-        dry: dry.slice(from, to),
-        crushed: crushed.slice(from, to).map((v) => v * norm),
+        dry,
+        crushed,
         norm,
         pxx,
-        pxy: meanProduct(kx, ky, from, to) * norm,
-        peak: peakOf(dry, from, to),
+        pxy,
+        peak,
+        dryColumns: columns(dry, 0, dry.length, BAR_COLUMNS, peak),
+        soloColumns: columns(crushed, 0, crushed.length, BAR_COLUMNS, peak),
     };
 }
 
@@ -439,7 +461,6 @@ const blendMatch = (a: ParallelAnalysis, blend: number) => Math.sqrt(a.pxx / (a.
 export function ParallelDemo() {
     const [mode, setMode] = useState<ParallelMode>('blend');
     const [blend, setBlend] = useState(40);
-    const [reduction, setReduction] = useState(0);
     const analysis = useAnalysis('parallel', analyseParallel);
     const nodes = useRef<{
         ctx: AudioContext;
@@ -501,7 +522,6 @@ export function ParallelDemo() {
             nodes.current = null;
             clock.current = null;
             fadeOut(ctx, master, () => src.disconnect());
-            setReduction(0);
         };
     });
 
@@ -517,20 +537,23 @@ export function ParallelDemo() {
         n.master.gain.setTargetAtTime(DRUM_LEVEL, t, 0.02);
     }, [mode, blend, analysis]);
 
-    useFrame(player.playing, () => {
-        if (nodes.current) setReduction(-nodes.current.comp.reduction);
-    });
     const line = usePlayhead(player.playing, clock);
 
     const traces = useMemo<Trace[] | null>(() => {
         if (!analysis) return null;
         const { dry, crushed, peak } = analysis;
+        if (mode === 'solo') {
+            return [
+                { kind: 'before', db: analysis.dryColumns },
+                { kind: 'after', db: analysis.soloColumns },
+            ];
+        }
         const b = blend / 100;
-        const m = blendMatch(analysis, b);
-        const after = mode === 'solo' ? (i: number) => crushed[i] : (i: number) => (dry[i] + b * crushed[i]) * m;
+        const mix = new Float32Array(dry.length);
+        for (let i = 0; i < mix.length; i++) mix[i] = dry[i] + b * crushed[i];
         return [
-            { kind: 'before', db: columns((i) => dry[i], dry.length, BAR_COLUMNS, peak) },
-            { kind: 'after', db: columns(after, dry.length, BAR_COLUMNS, peak) },
+            { kind: 'before', db: analysis.dryColumns },
+            { kind: 'after', db: columns(mix, 0, mix.length, BAR_COLUMNS, peak, blendMatch(analysis, b)) },
         ];
     }, [analysis, blend, mode]);
 
@@ -565,7 +588,7 @@ export function ParallelDemo() {
                     ]}
                 />
             </div>
-            <Meter label="Gain reduction on the crushed copy" value={reduction / 36} text={`${reduction.toFixed(1)} dB`} />
+            <LiveMeter label="Gain reduction on the crushed copy" active={player.playing} read={() => (nodes.current ? -nodes.current.comp.reduction : null)} full={36} />
             <Slider
                 label="Blend"
                 value={blend}
@@ -592,8 +615,38 @@ const SHAPE_MODES: ShapeMode[] = ['dry', 'shaper', 'comp'];
 
 /** The log converter covers 100 dB, so a ratio between two envelopes becomes a difference. */
 const LOG_RANGE = 100;
+const LOG_POINTS = 65536;
 let logCurve: Float32Array<ArrayBuffer> | null = null;
+let logCurveJob: Promise<void> | null = null;
 let rectifyCurve: Float32Array<ArrayBuffer> | null = null;
+
+const logPoint = (i: number) => Math.max(-1, gainToDb(Math.abs((i / (LOG_POINTS - 1)) * 2 - 1)) / LOG_RANGE);
+
+/**
+ * The log converter's curve takes tens of milliseconds to fill on a slow
+ * phone, so the first measurement fills it a quarter at a time, between
+ * frames. Anything that needs it sooner fills it at once (`logCurveNow`).
+ */
+function prepareLogCurve(): Promise<void> {
+    logCurveJob ??= (async () => {
+        const c = new Float32Array(LOG_POINTS);
+        for (let i = 0; i < LOG_POINTS; i++) {
+            c[i] = logPoint(i);
+            if (i % (LOG_POINTS / 4) === LOG_POINTS / 4 - 1) await yieldToMain();
+        }
+        logCurve ??= c;
+    })();
+    return logCurveJob;
+}
+
+function logCurveNow(): Float32Array<ArrayBuffer> {
+    if (!logCurve) {
+        const c = new Float32Array(LOG_POINTS);
+        for (let i = 0; i < LOG_POINTS; i++) c[i] = logPoint(i);
+        logCurve = c;
+    }
+    return logCurve;
+}
 
 /** Gain law: boost or cut by up to `attack` dB while the fast envelope leads, and by up to `sustain` dB while it trails. */
 function shaperLaw(attack: number, sustain: number): Float32Array<ArrayBuffer> {
@@ -619,7 +672,7 @@ interface ShaperNodes {
  * starting (attack). While it trails, the hit is ringing out (sustain).
  */
 function transientShaper(ctx: BaseAudioContext, lookahead: number, attack: number, sustain: number): ShaperNodes {
-    logCurve ??= curve(65536, (x) => Math.max(-1, gainToDb(Math.abs(x)) / LOG_RANGE));
+    const log = logCurveNow();
     rectifyCurve ??= curve(4097, (x) => Math.abs(x));
     const input = ctx.createGain();
     const detector = ctx.createGain();
@@ -629,9 +682,9 @@ function transientShaper(ctx: BaseAudioContext, lookahead: number, attack: numbe
     const fast = twoPole(ctx, 0.002);
     const slow = onePole(ctx, 0.04);
     const logFast = ctx.createWaveShaper();
-    logFast.curve = logCurve;
+    logFast.curve = log;
     const logSlow = ctx.createWaveShaper();
-    logSlow.curve = logCurve;
+    logSlow.curve = log;
     const invert = ctx.createGain();
     invert.gain.value = -1;
     const difference = ctx.createGain();
@@ -700,41 +753,51 @@ const HIT_COLUMNS = 90;
 const HIT_HEADROOM = 12;
 
 async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
-    const [lat, compMakeup] = await Promise.all([measureLatency(RATE), measureMakeup('punch', punchCompressor)]);
+    const [lat, compMakeup] = await Promise.all([measureLatency(RATE), measureMakeup('punch', punchCompressor), prepareLogCurve()]);
     const g = dbToGain(params.level);
     const [from, to] = secondBar(lat);
-    const [dry, shaped, comped] = await renderOffline(LEAD + 2 * BAR + lat + 0.02, 3, (ctx, [dryTap, shaperTap, compTap]) => {
-        const src = ctx.createGain();
-        src.gain.value = g;
-        const delay = ctx.createDelay(0.05);
-        delay.delayTime.value = lat;
-        src.connect(delay).connect(dryTap);
-        const shaper = transientShaper(ctx, lat, params.attack, params.sustain);
-        src.connect(shaper.input);
-        shaper.output.connect(shaperTap);
-        src.connect(punchCompressor(ctx)).connect(compTap);
-        twoBars(ctx, src, drums);
-    });
-    const ref = loudnessPower(dry, from, to);
+    const {
+        x: [dry, shaped, comped],
+        k: [dryK, shapedK, compedK],
+    } = await renderOffline(
+        LEAD + 2 * BAR + lat + 0.02,
+        3,
+        (ctx, [dryTap, shaperTap, compTap]) => {
+            const src = ctx.createGain();
+            src.gain.value = g;
+            const delay = ctx.createDelay(0.05);
+            delay.delayTime.value = lat;
+            src.connect(delay).connect(dryTap);
+            const shaper = transientShaper(ctx, lat, params.attack, params.sustain);
+            src.connect(shaper.input);
+            shaper.output.connect(shaperTap);
+            src.connect(punchCompressor(ctx)).connect(compTap);
+            return twoBars(ctx, src, drums);
+        },
+        3,
+    );
+    const ref = power(dryK, from, to);
     const room = SHAPE_PEAK_ROOM * peakOf(dry, from, to);
-    const matched = (x: Float32Array) => {
-        const wanted = Math.sqrt(ref / loudnessPower(x, from, to));
+    const matched = async (x: Float32Array, k: Float32Array) => {
+        await yieldToMain();
+        const wanted = Math.sqrt(ref / power(k, from, to));
         const gain = Math.min(wanted, room / peakOf(x, from, to));
         return { gain, short: gainToDb(wanted / gain) };
     };
-    const sm = matched(shaped);
-    const cm = matched(comped);
+    const sm = await matched(shaped, shapedK);
+    const cm = await matched(comped, compedK);
     const trim = { shaper: sm.gain, comp: cm.gain };
     const short = { shaper: sm.short, comp: cm.short };
+    await yieldToMain();
     // Each panel is scaled to its own dry hit, so a ghost note and a full hit are drawn the same size.
     // The panels show what each processor does to the hit before loudness matching: the shaper's
     // gain as it is, the compressor's gain reduction without its built-in makeup gain.
+    const length = Math.round(0.155 * RATE);
+    // 11 ms is about half a cycle of the kick's 48 Hz tail.
+    const window = Math.round(0.011 * RATE);
     const hit = (step: number, title: string) => {
         const a = Math.round((LEAD + (16 + step) * STEP + lat - 0.005) * RATE);
-        const length = Math.round(0.155 * RATE);
-        // 11 ms is about half a cycle of the kick's 48 Hz tail.
-        const window = Math.round(0.011 * RATE);
-        const level = (x: Float32Array, gain: number, ref: number) => windowRms((i) => x[a + i] * gain, length, HIT_COLUMNS, ref, window);
+        const level = (x: Float32Array, gain: number, ref: number) => windowRms(x, a, length, HIT_COLUMNS, ref, window, gain);
         const loudest = Math.max(...level(dry, 1, 1).map(dbToGain));
         const top = loudest * dbToGain(HIT_HEADROOM);
         return {
@@ -759,7 +822,6 @@ export function TransientDemo() {
     const [attack, setAttack] = useState(6);
     const [sustain, setSustain] = useState(-6);
     const [level, setLevel] = useState(0);
-    const [reduction, setReduction] = useState(0);
     const analysis = useAnalysis(`${level}|${attack}|${sustain}`, () => analyseShape({ level, attack, sustain }));
     const nodes = useRef<{
         ctx: AudioContext;
@@ -820,7 +882,6 @@ export function TransientDemo() {
             seq.stop();
             nodes.current = null;
             fadeOut(ctx, master, () => src.disconnect());
-            setReduction(0);
         };
     });
 
@@ -835,10 +896,6 @@ export function TransientDemo() {
         if (!n) return;
         for (const m of SHAPE_MODES) n.sel[m].gain.setTargetAtTime(m === mode ? 1 : 0, n.ctx.currentTime, 0.015);
     }, [mode]);
-
-    useFrame(player.playing, () => {
-        if (nodes.current) setReduction(-nodes.current.comp.reduction);
-    });
 
     const pick = (next: ShapeMode) => {
         setMode(next);
@@ -896,7 +953,7 @@ export function TransientDemo() {
                     {analysis ? ` The ghost note is ${Math.round(-analysis.ghostDb)} dB quieter than the snare.` : ''}
                 </p>
             </div>
-            <Meter label="Compressor gain reduction" value={reduction / 18} text={`${reduction.toFixed(1)} dB`} />
+            <LiveMeter label="Compressor gain reduction" active={player.playing} read={() => (nodes.current ? -nodes.current.comp.reduction : null)} full={18} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label="Shaper attack" value={attack} min={-12} max={12} onChange={setAttack} format={(v) => fmtDb(v, 0)} hint="Turns the start of every hit up or down." />
                 <Slider label="Shaper sustain" value={sustain} min={-12} max={12} onChange={setSustain} format={(v) => fmtDb(v, 0)} hint="Turns the ring after each hit up or down." />
@@ -1021,38 +1078,46 @@ interface DuckAnalysis {
 
 async function analyseDuck(params: DuckParams): Promise<DuckAnalysis> {
     const loop = SC_STEP * 32;
-    const [plain, full, lows, gain] = await renderOffline(LEAD + loop + 0.1, 4, (ctx, [plainTap, fullTap, lowsTap, gainTap]) => {
-        const music = ctx.createGain();
-        const one = ctx.createConstantSource();
-        const gainCurve = ctx.createGain();
-        one.connect(gainCurve).connect(gainTap);
-        one.start();
-        const chains = [plainTap, fullTap, lowsTap].map((tap) => {
-            const split = crossover(ctx, music);
-            const low = ctx.createGain();
-            const high = ctx.createGain();
-            split.low.connect(low).connect(tap);
-            split.high.connect(high).connect(tap);
-            return { low, high };
-        });
-        for (let s = 0; s < 32; s++) {
-            const time = LEAD + s * SC_STEP;
-            scMusic(ctx, music, s, time);
-            if (s % 4 === 0) {
-                for (const p of [chains[1].low.gain, chains[1].high.gain, chains[2].low.gain, gainCurve.gain]) duck(p, time, params.depth, params.release);
-            }
-        }
-    });
+    const {
+        x: [, , , gain],
+        k: [plain, full, lows],
+    } = await renderOffline(
+        LEAD + loop + 0.1,
+        4,
+        async (ctx, [plainTap, fullTap, lowsTap, gainTap]) => {
+            const music = ctx.createGain();
+            const one = ctx.createConstantSource();
+            const gainCurve = ctx.createGain();
+            one.connect(gainCurve).connect(gainTap);
+            one.start();
+            const chains = [plainTap, fullTap, lowsTap].map((tap) => {
+                const split = crossover(ctx, music);
+                const low = ctx.createGain();
+                const high = ctx.createGain();
+                split.low.connect(low).connect(tap);
+                split.high.connect(high).connect(tap);
+                return { low, high };
+            });
+            await scheduleSteps(32, (s) => {
+                const time = LEAD + s * SC_STEP;
+                scMusic(ctx, music, s, time);
+                if (s % 4 === 0) {
+                    for (const p of [chains[1].low.gain, chains[1].high.gain, chains[2].low.gain, gainCurve.gain]) duck(p, time, params.depth, params.release);
+                }
+            });
+        },
+        3,
+    );
     const from = Math.round(LEAD * RATE);
     const to = from + Math.round(loop * RATE);
-    const ref = loudnessPower(plain, from, to);
+    const ref = power(plain, from, to);
     // Draw the second bar, so the first kick shows the tail of the previous bar's release.
     const barFrom = from + Math.round(SC_BAR * RATE);
     const length = Math.round(SC_BAR * RATE);
     return {
         params,
-        makeup: { full: Math.sqrt(ref / loudnessPower(full, from, to)), lows: Math.sqrt(ref / loudnessPower(lows, from, to)) },
-        gain: columns((i) => gain[barFrom + i], length, BAR_COLUMNS, 1, true),
+        makeup: { full: Math.sqrt(ref / power(full, from, to)), lows: Math.sqrt(ref / power(lows, from, to)) },
+        gain: columns(gain, barFrom, length, BAR_COLUMNS, 1, 1, true),
     };
 }
 
@@ -1228,7 +1293,9 @@ let loopPeakJob: Promise<number> | null = null;
 
 function measureLoopPeak(): Promise<number> {
     loopPeakJob ??= (async () => {
-        const [x] = await renderOffline(LEAD + 2 * BAR + 0.05, 1, (ctx, [tap]) => twoBars(ctx, tap, limiterLoop));
+        const {
+            x: [x],
+        } = await renderOffline(LEAD + 2 * BAR + 0.05, 1, (ctx, [tap]) => twoBars(ctx, tap, limiterLoop));
         const [from, to] = secondBar(0);
         return peakOf(x, from, to);
     })();
@@ -1296,33 +1363,42 @@ interface LimitAnalysis {
 async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
     const [lat, makeup, peak] = await Promise.all([measureLatency(RATE), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1)), measureLoopPeak()]);
     const norm = dbToGain(LIMIT_THRESHOLD) / peak;
-    const [dry, limited, pre] = await renderOffline(LEAD + 2 * BAR + lat + 0.05, 3, (ctx, [dryTap, limTap, preTap]) => {
-        const src = ctx.createGain();
-        src.gain.value = norm;
-        const delay = ctx.createDelay(0.05);
-        delay.delayTime.value = lat;
-        src.connect(delay).connect(passThrough(ctx)).connect(dryTap);
-        const lim = limiter(ctx, makeup, params.release / 1000);
-        lim.drive.gain.value = dbToGain(params.drive);
-        src.connect(lim.drive);
-        lim.output.connect(limTap);
-        lim.toCeiling.connect(preTap);
-        twoBars(ctx, src, limiterLoop);
-    });
+    const {
+        x: [dry, limited, pre],
+        k: [dryK, limitedK],
+    } = await renderOffline(
+        LEAD + 2 * BAR + lat + 0.05,
+        3,
+        (ctx, [dryTap, limTap, preTap]) => {
+            const src = ctx.createGain();
+            src.gain.value = norm;
+            const delay = ctx.createDelay(0.05);
+            delay.delayTime.value = lat;
+            src.connect(delay).connect(passThrough(ctx)).connect(dryTap);
+            const lim = limiter(ctx, makeup, params.release / 1000);
+            lim.drive.gain.value = dbToGain(params.drive);
+            src.connect(lim.drive);
+            lim.output.connect(limTap);
+            lim.toCeiling.connect(preTap);
+            return twoBars(ctx, src, limiterLoop);
+        },
+        2,
+    );
     const [from, to] = secondBar(lat);
-    const match = Math.sqrt(loudnessPower(dry, from, to) / loudnessPower(limited, from, to));
+    const match = Math.sqrt(power(dryK, from, to) / power(limitedK, from, to));
     let over = 0;
-    for (let i = from; i < to; i++) if (Math.abs(pre[i]) > 1) over++;
+    for (let i = from; i < to; i++) if (pre[i] > 1 || pre[i] < -1) over++;
     const ref = peakOf(dry, from, to);
     const length = to - from;
+    await yieldToMain();
     return {
         params,
         makeup,
         norm,
         match,
         clipped: over / length,
-        before: columns((i) => dry[from + i], length, BAR_COLUMNS, ref),
-        after: columns((i) => limited[from + i] * match, length, BAR_COLUMNS, ref),
+        before: columns(dry, from, length, BAR_COLUMNS, ref),
+        after: columns(limited, from, length, BAR_COLUMNS, ref, match),
     };
 }
 
@@ -1336,7 +1412,6 @@ export function LimiterDemo() {
     const [mode, setMode] = useState<'original' | 'limited'>('limited');
     const [drive, setDrive] = useState(9);
     const [release, setRelease] = useState(120);
-    const [reduction, setReduction] = useState(0);
     const analysis = useAnalysis(`${drive}|${release}`, () => analyseLimit({ drive, release }));
     const nodes = useRef<{
         ctx: AudioContext;
@@ -1396,7 +1471,6 @@ export function LimiterDemo() {
             nodes.current = null;
             clock.current = null;
             fadeOut(ctx, master, () => src.disconnect());
-            setReduction(0);
         };
     });
 
@@ -1406,9 +1480,6 @@ export function LimiterDemo() {
         if (n && analysis) applyLimit(n, analysis, true);
     }, [analysis]);
 
-    useFrame(player.playing, () => {
-        if (nodes.current) setReduction(-nodes.current.lim.comp.reduction);
-    });
     const line = usePlayhead(player.playing, clock);
 
     const traces: Trace[] | null = analysis
@@ -1447,7 +1518,7 @@ export function LimiterDemo() {
                     ]}
                 />
             </div>
-            <Meter label="Gain reduction" value={reduction / 18} text={`${reduction.toFixed(1)} dB`} />
+            <LiveMeter label="Gain reduction" active={player.playing} read={() => (nodes.current ? -nodes.current.lim.comp.reduction : null)} full={18} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label="Drive" value={drive} min={0} max={18} onChange={setDrive} format={(v) => fmtDb(v, 0)} hint="How far the loudest peaks are pushed over the threshold." />
                 <Slider
@@ -1558,9 +1629,9 @@ let phrasePeakJob: Promise<number> | null = null;
 /** Notes overlap as they release, so the phrase's true peak is measured rather than assumed. */
 function measurePhrasePeak(): Promise<number> {
     phrasePeakJob ??= (async () => {
-        const [x] = await renderOffline(LEAD + CLIP_LOOP + 0.4, 1, (ctx, [tap]) => {
-            for (let s = 0; s < 32; s++) phraseStep(ctx, tap, s, LEAD + s * CLIP_STEP);
-        });
+        const {
+            x: [x],
+        } = await renderOffline(LEAD + CLIP_LOOP + 0.4, 1, (ctx, [tap]) => scheduleSteps(32, (s) => phraseStep(ctx, tap, s, LEAD + s * CLIP_STEP)));
         return peakOf(x, 0, x.length);
     })();
     return phrasePeakJob;
@@ -1583,35 +1654,50 @@ interface ClipAnalysis {
 
 async function analyseClip(input: number): Promise<ClipAnalysis> {
     const safeGain = SAFE_PEAK / (await measurePhrasePeak());
-    const [hot, safe, sent] = await renderOffline(LEAD + CLIP_LOOP + 0.4, 3, (ctx, [hotTap, safeTap, sentTap]) => {
-        const src = ctx.createGain();
-        const hotIn = ctx.createGain();
-        hotIn.gain.value = safeGain * dbToGain(input);
-        src.connect(hotIn).connect(converter(ctx)).connect(hotTap);
-        const safeIn = ctx.createGain();
-        safeIn.gain.value = safeGain;
-        src.connect(safeIn).connect(converter(ctx)).connect(safeTap);
-        // What the mic sent, scaled into range for the same converter and back, so it lines up with the others.
-        const down = ctx.createGain();
-        down.gain.value = 1 / 16;
-        const up = ctx.createGain();
-        up.gain.value = 16;
-        hotIn.connect(down).connect(converter(ctx)).connect(up).connect(sentTap);
-        for (let s = 0; s < 32; s++) phraseStep(ctx, src, s, LEAD + s * CLIP_STEP);
-    });
+    const {
+        x: [hot, safe, sent],
+        k: [hotK, safeK],
+    } = await renderOffline(
+        LEAD + CLIP_LOOP + 0.4,
+        3,
+        (ctx, [hotTap, safeTap, sentTap]) => {
+            const src = ctx.createGain();
+            const hotIn = ctx.createGain();
+            hotIn.gain.value = safeGain * dbToGain(input);
+            src.connect(hotIn).connect(converter(ctx)).connect(hotTap);
+            const safeIn = ctx.createGain();
+            safeIn.gain.value = safeGain;
+            src.connect(safeIn).connect(converter(ctx)).connect(safeTap);
+            // What the mic sent, scaled into range for the same converter and back, so it lines up with the others.
+            const down = ctx.createGain();
+            down.gain.value = 1 / 16;
+            const up = ctx.createGain();
+            up.gain.value = 16;
+            hotIn.connect(down).connect(converter(ctx)).connect(up).connect(sentTap);
+            return scheduleSteps(32, (s) => phraseStep(ctx, src, s, LEAD + s * CLIP_STEP));
+        },
+        2,
+    );
     const from = Math.round(LEAD * RATE);
     const to = hot.length;
     let loudest = from;
-    for (let i = from; i < to; i++) if (Math.abs(sent[i]) > Math.abs(sent[loudest])) loudest = i;
+    let most = 0;
+    for (let i = from; i < to; i++) {
+        const v = sent[i] < 0 ? -sent[i] : sent[i];
+        if (v > most) {
+            most = v;
+            loudest = i;
+        }
+    }
     const half = Math.round(0.006 * RATE);
     const a = Math.max(0, loudest - half);
     const b = Math.min(to, loudest + half);
     return {
         input,
         safeGain,
-        hotPower: loudnessPower(hot, from, to),
-        safePower: loudnessPower(safe, from, to),
-        overDb: gainToDb(Math.abs(sent[loudest])),
+        hotPower: power(hotK, from, to),
+        safePower: power(safeK, from, to),
+        overDb: gainToDb(most),
         hotPeak: peakOf(hot, from, to),
         safePeak: peakOf(safe, from, to),
         window: { sent: sent.slice(a, b), hot: hot.slice(a, b), safe: safe.slice(a, b) },

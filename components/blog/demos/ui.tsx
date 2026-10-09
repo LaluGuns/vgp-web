@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
+import { startTransition, useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
@@ -85,7 +85,14 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         stopRef.current = stopThis;
         setPlaying(true);
         afterPaint(() => {
-            if (!stopped) halt = startRef.current(out);
+            if (stopped) return;
+            try {
+                halt = startRef.current(out);
+            } catch (error) {
+                // Never leave the button on Stop with nothing playing.
+                console.error('The demo could not start.', error);
+                stopThis();
+            }
         });
     }, [engine]);
 
@@ -97,36 +104,101 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         return () => {
             document.removeEventListener('visibilitychange', onHide);
             stopRef.current?.();
+            // The trim goes too, once the demo's own nodes have faded out (engine.ts fadeOut).
+            const t = trim.current;
+            trim.current = null;
+            if (t) window.setTimeout(() => t.disconnect(), 200);
         };
     }, []);
 
     return { playing, play, stop, engine, toggle: () => (stopRef.current ? stop() : play()) };
 }
 
+/** True while a dialog or popover is open: Escape belongs to it then. */
+function overlayOpen(): boolean {
+    try {
+        return document.querySelector(':popover-open, dialog[open], [aria-modal="true"]') !== null;
+    } catch {
+        // A browser without popovers.
+        return document.querySelector('dialog[open], [aria-modal="true"]') !== null;
+    }
+}
+
 /**
  * Play and Stop. The label itself says what a press does, so the button
  * carries no pressed state on top; the status next to it is announced.
+ *
+ * While the demo plays, Escape stops it from anywhere on the page (unless a
+ * dialog or popover is open), and a second Stop button stays on screen
+ * once this one has scrolled away. That one sits in the page right after
+ * the demo's panel (the slot DemoSlot leaves for it), so it is the next
+ * Tab after the demo; while this button is still on screen it waits there
+ * unseen and shows when it takes the focus. Stopping from it or with
+ * Escape puts the focus back on this button.
  */
 export function PlayButton({ playing, onClick, label = 'Play' }: { playing: boolean; onClick: () => void; label?: string }) {
-    const d = useDialect();
     const button = useRef<HTMLButtonElement>(null);
     const [away, setAway] = useState(false);
+    // Where the Stop button goes: the slot after the demo's panel, null outside a lesson (it then
+    // follows this button), undefined until the button has looked.
+    const [slot, setSlot] = useState<HTMLElement | null | undefined>(undefined);
+    const toggle = useRef(onClick);
+    useEffect(() => {
+        toggle.current = onClick;
+    });
     // The audio context is made on the press (a mouse button, a key) or as a finger lifts, a task
     // before the click, so the click itself only starts the sound.
     const warm = (e: PointerEvent<HTMLButtonElement>) => {
         if ((e.type === 'pointerdown') === (e.pointerType === 'mouse')) warmEngine();
     };
-    // While the demo plays, a small Stop stays on screen once this button has scrolled away.
     useEffect(() => {
         const el = button.current;
         if (!playing || !el) return;
-        const io = new IntersectionObserver(([entry]) => setAway(!entry.isIntersecting));
+        const io = new IntersectionObserver(([entry]) => {
+            setAway(!entry.isIntersecting);
+            setSlot(el.closest('.vgp-demo')?.querySelector<HTMLElement>(':scope > [data-demo-stop]') ?? null);
+        });
         io.observe(el);
+        const onKey = (e: globalThis.KeyboardEvent) => {
+            if (e.key !== 'Escape' || e.defaultPrevented || e.isComposing || overlayOpen()) return;
+            e.preventDefault();
+            const active = document.activeElement;
+            const panel = el.closest('.vgp-demo') ?? el.parentElement;
+            toggle.current();
+            // From inside the demo (its Stop button too), the focus goes back to Play.
+            if (active && active !== el && panel?.contains(active)) el.focus();
+        };
+        document.addEventListener('keydown', onKey);
         return () => {
             io.disconnect();
+            document.removeEventListener('keydown', onKey);
             setAway(false);
         };
     }, [playing]);
+
+    const stopHere = (e: MouseEvent<HTMLButtonElement>) => {
+        onClick();
+        // A key press reaches a button as a click without a pointer (detail 0): then the page
+        // scrolls back to the demo with the focus. After a tap or a click the page stays put.
+        button.current?.focus({ preventScroll: e.detail !== 0 });
+    };
+
+    const stop =
+        playing && slot !== undefined ? (
+            // Placed by .vgp-demo-stop (app/globals.css): a round button above the phone tab bar, and
+            // from 1024 px up a labelled one at the foot of the outline column, clear of the text.
+            <button
+                type="button"
+                onClick={stopHere}
+                aria-keyshortcuts="Escape"
+                data-away={away ? '' : undefined}
+                className="vgp-demo-stop vgp-focus inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-white/30 bg-[var(--surface-strong)] text-sm font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] hover:border-white/70 lg:px-4"
+            >
+                <Square size={14} fill="currentColor" aria-hidden="true" />
+                <span className="sr-only lg:not-sr-only">Stop demo</span>
+            </button>
+        ) : null;
+
     return (
         <div className="flex items-center gap-4">
             <button
@@ -138,6 +210,7 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') warmEngine();
                 }}
+                aria-keyshortcuts={playing ? 'Escape' : undefined}
                 data-demo-play=""
                 className="vgp-focus inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97]"
             >
@@ -148,21 +221,7 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
             <span className="text-sm text-[var(--accent)]" aria-live="polite">
                 {playing ? 'Playing' : ''}
             </span>
-            {playing && away
-                ? createPortal(
-                      // Bottom left, clear of the contents button (bottom right) and the phone tab bar.
-                      <button
-                          type="button"
-                          onClick={onClick}
-                          style={{ '--accent': d.accent } as CSSProperties}
-                          className="vgp-focus fixed bottom-[calc(max(env(safe-area-inset-bottom),6px)+68px)] left-4 z-30 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 bg-[var(--surface-strong)] px-4 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] hover:border-white/70 md:bottom-6"
-                      >
-                          <Square size={14} fill="currentColor" aria-hidden="true" />
-                          Stop demo
-                      </button>,
-                      document.body,
-                  )
-                : null}
+            {stop && slot ? createPortal(stop, slot) : stop}
         </div>
     );
 }
@@ -214,7 +273,8 @@ export function Slider({
                 <label htmlFor={id} className="min-w-0 text-sm font-medium text-white/85">
                     {label}
                 </label>
-                <output htmlFor={id} className="shrink-0 whitespace-nowrap text-sm tabular-nums text-white/65">
+                {/* Not a live region: the slider's own value text is read as it moves, so this would say it twice. */}
+                <output htmlFor={id} aria-live="off" className="shrink-0 whitespace-nowrap text-sm tabular-nums text-white/65">
                     {text}
                 </output>
             </div>
@@ -334,22 +394,6 @@ export function Answers<T extends string>({
     );
 }
 
-/** A row of buttons that each do one thing (load a preset), styled like the choices, under a visible label. */
-export function Actions({ label, actions, hint }: { label: string; actions: { label: string; onClick: () => void }[]; hint?: ReactNode }) {
-    const labelId = useId();
-    return (
-        <Field label={label} id={labelId} hint={hint}>
-            <div role="group" aria-labelledby={labelId} className="flex flex-wrap gap-2">
-                {actions.map((action) => (
-                    <button key={action.label} type="button" onClick={action.onClick} className={optionClass(false)}>
-                        {action.label}
-                    </button>
-                ))}
-            </div>
-        </Field>
-    );
-}
-
 /** A level bar. `value` 0 to 1. Its ends follow the dialect (app/globals.css, `.vgp-meter`). */
 export function Meter({ label, value, text }: { label: string; value: number; text: string }) {
     return (
@@ -363,6 +407,22 @@ export function Meter({ label, value, text }: { label: string; value: number; te
             </div>
         </div>
     );
+}
+
+/**
+ * A level bar that reads its own value (in dB, from `read`) about 20 times a
+ * second while `active`, so only the meter re-renders as it moves, not the
+ * demo around it. It reads 0 dB while inactive; `full` is the dB at the end
+ * of the bar.
+ */
+export function LiveMeter({ label, active, read, full }: { label: string; active: boolean; read: () => number | null; full: number }) {
+    const [value, setValue] = useState(0);
+    useFrame(active, () => {
+        const v = read();
+        if (v !== null) setValue(v);
+    });
+    const shown = active ? value : 0;
+    return <Meter label={label} value={shown / full} text={`${shown.toFixed(1)} dB`} />;
 }
 
 /**
@@ -633,7 +693,8 @@ export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null
                     j.dirty = false;
                     try {
                         const r = await measureRef.current();
-                        if (j.alive) setResult(r);
+                        // A transition, so React can draw the new figures in slices between frames.
+                        if (j.alive) startTransition(() => setResult(r));
                     } catch {
                         // Keep the last good result.
                     }

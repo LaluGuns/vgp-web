@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { articles, getArticleBySlug, getAllSlugs, getCategoryBySlug } from '@/lib/blog-data';
 import { validateAll } from '@/lib/blog/validate';
+import { getPathPosition } from '@/lib/blog/paths';
 import { ogImage, socialMetadata } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import { ArticlePage } from './ArticlePage';
@@ -12,6 +13,8 @@ interface Props {
 
 const SITE = 'https://www.virzyguns.com';
 const BRAND = ' | Virzy Guns Production';
+/** The author's page: article:author and the Article's author.url point here. */
+const AUTHOR_URL = `${SITE}/about`;
 
 /**
  * Lesson <title>: the lesson's SEO title without the old "| VGP Studio"
@@ -52,6 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const articleUrl = `${SITE}/blog/${article.slug}`;
+    const category = getCategoryBySlug(article.category);
 
     return {
         title: lessonTitle(article.seo.title),
@@ -68,7 +72,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             article: {
                 publishedTime: article.publishedAt,
                 modifiedTime: article.updatedAt ?? article.publishedAt,
-                authors: ['Virzy Guns'],
+                authors: [AUTHOR_URL],
+                section: category?.name,
             },
         }),
     };
@@ -111,7 +116,7 @@ export default async function BlogArticlePage({ params }: Props) {
         author: {
             '@type': 'Person',
             name: 'Virzy Guns',
-            url: `${SITE}/about`,
+            url: AUTHOR_URL,
         },
         publisher: {
             '@type': 'Organization',
@@ -123,15 +128,18 @@ export default async function BlogArticlePage({ params }: Props) {
             },
         },
     };
+    // Home > Lessons > path > lesson. A lesson on no learning path (lib/blog/paths.ts, OFF_PATH)
+    // sits straight under Lessons, so the trail never names a path that does not list it.
+    const trail = [
+        { name: 'Home', item: SITE },
+        { name: 'Lessons', item: `${SITE}/blog` },
+        ...(getPathPosition(article) ? [{ name: category?.name || article.category, item: `${SITE}/blog/category/${article.category}` }] : []),
+        { name: article.title, item: articleUrl },
+    ];
     const breadcrumbJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
-        itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
-            { '@type': 'ListItem', position: 2, name: 'Lessons', item: `${SITE}/blog` },
-            { '@type': 'ListItem', position: 3, name: category?.name || article.category, item: `${SITE}/blog/category/${article.category}` },
-            { '@type': 'ListItem', position: 4, name: article.title, item: articleUrl },
-        ],
+        itemListElement: trail.map((crumb, i) => ({ '@type': 'ListItem', position: i + 1, ...crumb })),
     };
 
     return (

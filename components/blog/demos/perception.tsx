@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
-import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
 import {
     LevelTrace,
     Meter,
@@ -42,21 +42,6 @@ function gainNode(ctx: BaseAudioContext, value = 1): GainNode {
     const g = ctx.createGain();
     g.gain.value = value;
     return g;
-}
-
-
-/** K-weighting from ITU-R BS.1770: a rough model of how loud a signal sounds. */
-function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
-    const shelf = ctx.createBiquadFilter();
-    shelf.type = 'highshelf';
-    shelf.frequency.value = 1681.97;
-    shelf.gain.value = 4;
-    const hp = ctx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 38.13;
-    hp.Q.value = 0.5;
-    input.connect(shelf).connect(hp);
-    return hp;
 }
 
 // ── A vocal-like voice ──────────────────────────────────────────────

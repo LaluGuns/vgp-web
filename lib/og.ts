@@ -32,8 +32,8 @@ export function socialMetadata({
     description: string;
     url: string;
     image: ReturnType<typeof ogImage>;
-    /** Present for a lesson: og:type article with its dates and author. */
-    article?: { publishedTime: string; modifiedTime: string; authors: string[] };
+    /** Present for a lesson: og:type article with its dates, author (a profile URL) and section (the path's name). */
+    article?: { publishedTime: string; modifiedTime: string; authors: string[]; section?: string };
 }): Pick<Metadata, 'openGraph' | 'twitter'> {
     const shared = { title, description, url, siteName: SITE_NAME, locale: SITE_LOCALE, images: [image] };
     return {

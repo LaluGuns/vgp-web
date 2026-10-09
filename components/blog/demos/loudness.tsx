@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { fadeOut, midi, pluck, sequence, type Engine } from './engine';
+import { fadeOut, kWeighted, midi, pluck, sequence, type Engine } from './engine';
 import { playDrumStep } from './dynamics';
 import { Answers, PlayButton, Readout, Segmented, usePlayer, whenIdle } from './ui';
 
@@ -38,22 +38,13 @@ function masterChain(ctx: BaseAudioContext, input: AudioNode, kind: Master): Aud
     return clip;
 }
 
-/** Integrated loudness of a rendered loop, K-weighted as in ITU-R BS.1770 (ungated). */
+/** Integrated loudness of a rendered loop, K-weighted (engine.ts) and ungated. */
 async function measure(kind: Master, sampleRate: number): Promise<number> {
     const stepDur = 60 / BPM / 4;
     const seconds = stepDur * STEPS + 0.5;
     const ctx = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
     const src = ctx.createGain();
-    const out = masterChain(ctx, src, kind);
-    const shelf = ctx.createBiquadFilter();
-    shelf.type = 'highshelf';
-    shelf.frequency.value = 1681.97;
-    shelf.gain.value = 4;
-    const hp = ctx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 38.13;
-    hp.Q.value = 0.5;
-    out.connect(shelf).connect(hp).connect(ctx.destination);
+    kWeighted(ctx, masterChain(ctx, src, kind)).connect(ctx.destination);
     for (let step = 0; step < STEPS; step++) playLoopStep(ctx, src, step, 0.05 + step * stepDur, stepDur);
     const buffer = await ctx.startRendering();
     const data = buffer.getChannelData(0);
@@ -203,6 +194,7 @@ export function LevelAbDemo() {
     const [side, setSide] = useState<'a' | 'b'>('a');
     const [pick, setPick] = useState<'a' | 'b' | null>(null);
     const nodes = useRef<{ ctx: AudioContext; gain: GainNode } | null>(null);
+    const answers = useRef<HTMLDivElement>(null);
     const gainFor = (s: 'a' | 'b', l: 'a' | 'b') => (s === l ? 10 ** (1 / 20) : 1);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
@@ -230,6 +222,8 @@ export function LevelAbDemo() {
         setPick(null);
         const n = nodes.current;
         if (n) n.gain.gain.setTargetAtTime(gainFor(side, next) * 0.8, n.ctx.currentTime, 0.01);
+        // The button that started the round is about to go: the new round starts at the first answer.
+        answers.current?.querySelector('button')?.focus();
     };
 
     return (
@@ -246,21 +240,23 @@ export function LevelAbDemo() {
                     ]}
                 />
             </div>
-            <Answers
-                label="Which one sounds better?"
-                value={pick}
-                onChange={(v) => setPick(v)}
-                options={[
-                    { value: 'a', label: 'A sounds better' },
-                    { value: 'b', label: 'B sounds better' },
-                ]}
-            />
+            <div ref={answers}>
+                <Answers
+                    label="Which one sounds better?"
+                    value={pick}
+                    onChange={(v) => setPick(v)}
+                    options={[
+                        { value: 'a', label: 'A sounds better' },
+                        { value: 'b', label: 'B sounds better' },
+                    ]}
+                />
+            </div>
             <div aria-live="polite">
                 {pick ? (
                     <p className="text-base leading-7 text-white/80">
                         <span className="font-semibold text-white">{louder.toUpperCase()} was 1 dB louder.</span> Nothing else was different.{' '}
                         {pick === louder ? 'You picked the louder one, which is what loudness bias predicts.' : 'You resisted the louder one this round.'}{' '}
-                        <button type="button" onClick={newRound} className="vgp-link text-white">
+                        <button type="button" onClick={newRound} className="vgp-link vgp-focus text-white">
                             Try another round
                         </button>
                     </p>

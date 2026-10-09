@@ -13,6 +13,7 @@ import {
     areaFill,
     clamp,
     dialectOf,
+    dots,
     draw,
     legend,
     linePath,
@@ -260,10 +261,7 @@ type Seg = [number, number, number, number];
 /** A label's glyph box around its baseline, at FS. */
 const ASCENT = 9.5;
 const DESCENT = 3;
-/**
- * Clear space round a line label, measured to the middle of a trace: no trace comes nearer, so a label
- * stands well apart from the data (about 6 px past a trace's edge) and never reads as touching it.
- */
+/** Clear space round a line label, to the middle of a trace: no trace comes nearer, so a label stands apart from the data. */
 const CLEAR = 6;
 const COLUMN = 8;
 
@@ -457,27 +455,31 @@ function SignalPlot({
                 );
             })}
             {shape.traces.map(({ trace, lines, area }, i) => {
-                // Grey traces are context and stay put. A solid accent trace draws along its length; a dashed one fades.
-                const motion = trace.muted ? {} : draw(trace.dashed ? 'fade' : 'line', delay + i * 80);
+                // Grey traces are context and stay put. A solid accent trace draws along its length; a dashed or dotted one fades.
+                const motion = trace.muted ? {} : draw(trace.dashed || trace.dotted ? 'fade' : 'line', delay + i * 80);
                 return (
                     <g key={i}>
-                        {area && (trace.muted || d.fillUnder) ? (
+                        {area && !trace.dotted && (trace.muted || d.fillUnder) ? (
                             // The area fades in once its outline has drawn, never ahead of it.
                             <path d={`${linePath(area)}Z`} {...(trace.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', delay + i * 80 + 760) })} />
                         ) : null}
-                        {lines.map((pts, k) => (
-                            <path
-                                key={k}
-                                d={linePath(pts)}
-                                fill="none"
-                                stroke={trace.muted ? C.dataGrey : C.accent}
-                                strokeWidth={trace.muted ? 1.4 : traceW}
-                                strokeDasharray={trace.dashed ? d.refDash : undefined}
-                                strokeLinecap={d.cap}
-                                strokeLinejoin="round"
-                                {...motion}
-                            />
-                        ))}
+                        {lines.map((pts, k) =>
+                            trace.dotted ? (
+                                <path key={k} d={linePath(pts)} fill="none" {...dots(d, trace.muted)} {...motion} />
+                            ) : (
+                                <path
+                                    key={k}
+                                    d={linePath(pts)}
+                                    fill="none"
+                                    stroke={trace.muted ? C.dataGrey : C.accent}
+                                    strokeWidth={trace.muted ? 1.4 : traceW}
+                                    strokeDasharray={trace.dashed ? d.refDash : undefined}
+                                    strokeLinecap={d.cap}
+                                    strokeLinejoin="round"
+                                    {...motion}
+                                />
+                            ),
+                        )}
                     </g>
                 );
             })}
@@ -567,7 +569,7 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
     for (const row of spec.rows) {
         const named: LegendItem[] = row.traces
             .filter((t) => t.label)
-            .map((t) => ({ label: t.label!, dashed: t.dashed, muted: t.muted }));
+            .map((t) => ({ label: t.label!, dashed: t.dashed, dotted: t.dotted, muted: t.muted }));
         const lineInLegend = inLegend.get(rows.length);
         if (lineInLegend) named.push({ label: lineInLegend, dashed: true, stroke: C.soft, width: 1.2 });
         const top = y;
@@ -682,24 +684,30 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const [lo, hi] = spec.range ?? [20, 20000];
-    const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed, muted: c.muted }));
+    const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed, dotted: c.dotted, muted: c.muted }));
     const leg = legend(named, 0, 14, w, d);
     const gainMode = spec.mode === 'gain';
     const left = gainMode ? 40 : 4;
     const right = w - 4;
     const fx = (f: number) => left + ((Math.log10(f) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo))) * (right - left);
     // Band labels sit centred over their band; mark labels beside their line, the left one of a close pair
-    // to its left and the right one to its right, and up a row when they would still touch.
+    // to its left and the right one to its right, and up a row when they would still touch. In gain mode the
+    // dB unit sits on the same line, left of the plot: every label keeps two letters' width (24 units) clear
+    // of it, so the two never read as one phrase ("dB Rumble", "dB 264 Hz").
+    const unitRight = left - 6;
+    const unitSpan: [number, number] = [unitRight - textWidth('dB'), unitRight];
+    const firstX = gainMode ? unitRight + 24 : 0;
     const bandLabels = (spec.bands ?? []).map((band) => {
         const width = textWidth(band.label);
-        const cx = clamp((fx(band.from) + fx(band.to)) / 2, width / 2, w - width / 2);
+        const cx = clamp((fx(band.from) + fx(band.to)) / 2, firstX + width / 2, w - width / 2);
         return { cx, span: [cx - width / 2, cx + width / 2] as [number, number] };
     });
+    // placeInRows keeps 8 units from a taken span; the unit's span is widened by 16 to make that 24.
     const markLabels = placeInRows(
         (spec.marks ?? []).map((mark) => ({ x: fx(mark.f), width: textWidth(mark.label), prefer: ['start', 'end'] as Anchor[] })),
         0,
         w,
-        { taken: bandLabels.map((b) => b.span) },
+        { taken: [...bandLabels.map((b) => b.span), ...(gainMode ? [[unitSpan[0] - 16, unitSpan[1] + 16] as [number, number]] : [])] },
     );
     const labelRows = Math.max(0, ...markLabels.map((p) => p.row)) + 1;
     // Room above the plot for band or mark labels, or for the dB unit in gain mode.
@@ -752,10 +760,14 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
                 <g key={i}>
                     {quarters.map((group, q) =>
                         group.length ? (
-                            <g key={q} {...(curve.muted ? {} : draw(curve.dashed ? 'fade' : 'rise', 120 + q * 90))}>
-                                {group.map((line) => (
-                                    <line key={line.n} x1={line.x} x2={line.x} y1={bottom} y2={line.y} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} />
-                                ))}
+                            <g key={q} {...(curve.muted ? {} : draw(curve.dashed || curve.dotted ? 'fade' : 'rise', 120 + q * 90))}>
+                                {group.map((line) =>
+                                    curve.dotted ? (
+                                        <line key={line.n} x1={line.x} x2={line.x} y1={bottom} y2={line.y} {...dots(d, curve.muted)} />
+                                    ) : (
+                                        <line key={line.n} x1={line.x} x2={line.x} y1={bottom} y2={line.y} stroke={stroke} strokeWidth={2.2} strokeDasharray={dash} />
+                                    ),
+                                )}
                             </g>
                         ) : null,
                     )}
@@ -784,25 +796,29 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         // A curve that leaves the plot stops just past its edge, under the clip, so nothing of it reaches the labels round the plot.
         const pts = sampleAt.map((f) => [fx(f), clamp(gainMode ? gy(value(f)) : ly(value(f)), top - 3, bottom + 3)] as [number, number]);
         const path = linePath(pts);
-        const fill = curve.kind === 'hump' && !curve.dashed && (curve.muted || d.fillUnder);
-        // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed one fades.
-        const motion = curve.muted ? {} : draw(curve.dashed ? 'fade' : 'line', 120 + i * 100);
+        const fill = curve.kind === 'hump' && !curve.dashed && !curve.dotted && (curve.muted || d.fillUnder);
+        // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed or dotted one fades.
+        const motion = curve.muted ? {} : draw(curve.dashed || curve.dotted ? 'fade' : 'line', 120 + i * 100);
         return (
             <g key={i}>
                 {fill ? (
                     // The area fades in once its line has drawn, never ahead of it.
                     <path d={`${path}L${right},${bottom}L${left},${bottom}Z`} {...(curve.muted ? { fill: C.lane } : { ...areaFill(d), ...draw('fade', 120 + i * 100 + 760) })} />
                 ) : null}
-                <path
-                    d={path}
-                    fill="none"
-                    stroke={stroke}
-                    strokeWidth={curve.muted ? 1.4 : d.line}
-                    strokeDasharray={dash}
-                    strokeLinecap={d.cap}
-                    strokeLinejoin="round"
-                    {...motion}
-                />
+                {curve.dotted ? (
+                    <path d={path} fill="none" {...dots(d, curve.muted)} {...motion} />
+                ) : (
+                    <path
+                        d={path}
+                        fill="none"
+                        stroke={stroke}
+                        strokeWidth={curve.muted ? 1.4 : d.line}
+                        strokeDasharray={dash}
+                        strokeLinecap={d.cap}
+                        strokeLinejoin="round"
+                        {...motion}
+                    />
+                )}
             </g>
         );
     };
@@ -909,7 +925,9 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
     const ledger = d.name === 'business';
     const legendX = narrow ? 0 : ox + size + 28;
     const legendY = narrow ? oy + size + 58 : oy + 16;
-    const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed || c.kind === 'linear', muted: c.kind === 'linear' }));
+    const named = spec.curves
+        .filter((c) => c.label)
+        .map((c) => ({ label: c.label!, dashed: c.dashed || c.kind === 'linear', dotted: c.dotted && c.kind !== 'linear', muted: c.kind === 'linear' }));
     const leg = legend(named, legendX, legendY, narrow ? w : w - legendX, d, !narrow);
     const h = (narrow ? legendY + leg.height : oy + size + 40) + (ledger ? 8 : 0);
 
@@ -973,8 +991,9 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
                     pts.push([px(x), py(out(c, x))]);
                 }
                 const linear = c.kind === 'linear';
-                // The unity line is a reference and stays put; accent curves draw from quiet to loud.
-                const motion = linear ? {} : draw(c.dashed ? 'fade' : 'line', 120 + i * 100);
+                // The unity line is a reference and stays put; accent curves draw from quiet to loud, a dashed or dotted one fades.
+                const motion = linear ? {} : draw(c.dashed || c.dotted ? 'fade' : 'line', 120 + i * 100);
+                if (c.dotted && !linear) return <path key={i} d={linePath(pts)} fill="none" {...dots(d)} {...motion} />;
                 return (
                     <path
                         key={i}

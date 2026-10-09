@@ -32,13 +32,21 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
     const reset = () => {
         setPicked(questions.map(() => null));
         setChecked(questions.map(() => false));
-        requestAnimationFrame(() => heading.current?.focus());
+        // Focusable only for this move: a heading that always takes focus would also take it
+        // on a #check-yourself link, and the page would glide there instead of landing.
+        requestAnimationFrame(() => {
+            const h2 = heading.current;
+            if (!h2) return;
+            h2.tabIndex = -1;
+            h2.addEventListener('blur', () => h2.removeAttribute('tabindex'), { once: true });
+            h2.focus();
+        });
     };
 
     return (
         <section className="mt-16 border-t border-white/10 pt-10">
             <p className="mb-2 text-sm font-medium text-white/50">{questions.length} questions</p>
-            <h2 id={titleId} ref={heading} tabIndex={-1} className="scroll-mt-8 text-2xl font-semibold tracking-[-0.02em] text-white focus:outline-none sm:text-3xl">
+            <h2 id={titleId} ref={heading} className="scroll-mt-8 text-2xl font-semibold tracking-[-0.02em] text-white focus:outline-none sm:text-3xl">
                 Check yourself
             </h2>
             <ol className="mt-8 space-y-10">

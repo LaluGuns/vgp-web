@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { startTransition, useEffect, useRef, useState, type ReactNode } from 'react';
 import type { DemoId } from '@/lib/blog/demos';
 import type { Dialect } from '@/lib/blog/dialects';
 import { DialectContext, LevelContext, whenIdle } from './shell';
@@ -121,14 +121,15 @@ export function DemoMount({ id, dialect, level }: { id: DemoId; dialect: Dialect
         };
     }, [name]);
 
-    // Mount the demo when it is about two screens away.
+    // Mount the demo when it is about two screens away. Mounting is a transition, so React builds
+    // the demo in slices between frames and the scroll that brought it near stays smooth.
     useEffect(() => {
         const el = ref.current;
         if (!el) return;
         const io = new IntersectionObserver(
             (entries) => {
                 if (entries.some((e) => e.isIntersecting)) {
-                    setNear(true);
+                    startTransition(() => setNear(true));
                     io.disconnect();
                 }
             },
@@ -144,7 +145,9 @@ export function DemoMount({ id, dialect, level }: { id: DemoId; dialect: Dialect
         if (!near) return;
         let alive = true;
         load(name).then(
-            () => alive && setReady((n) => n + 1),
+            () => {
+                if (alive) startTransition(() => setReady((n) => n + 1));
+            },
             () => alive && setFailed(true),
         );
         return () => {

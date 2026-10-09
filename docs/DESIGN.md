@@ -68,7 +68,9 @@ readable text.
   dialects, below). In every dialect the data the caption asks you to look
   at (the trace, curve, melody, bar or moved hit) is in the accent and
   everything else is white or grey. "Before" and reference states are grey
-  or dashed. One accent per page, so the colour always means "look here".
+  or dashed. A second line the caption also names, to compare with the
+  first, is a line of accent dots. One accent per page, so the colour
+  always means "look here".
   Figures draw in once as they scroll into view. Tokens live in
   `lib/blog/dialects.ts`, the drawing helpers in
   `components/blog/figures/svg.tsx`.
@@ -119,11 +121,26 @@ anything without one is technical.
   higher opacity than a hairline to be seen at all.
 - **Demos.** Plots, meters, step lanes and step strips follow the dialect;
   controls (play, sliders, choices) are the same in every lesson.
+- **Four line styles.** A solid accent line is the one to look at; a line
+  of accent dots is a second one the caption also names ("also look
+  here"); a dashed line is a reference; a grey line is context or
+  "before". The dots are round in every dialect, a little heavier than a
+  line and spaced wider than technical's and the ledger's short dashes, so
+  they never read as a finer dash. A dotted line fades in, like a dashed
+  one, and has no area under it. Use dots only when the caption names
+  more lines than one accent line and one dashed line can carry (the
+  three layers in lesson 039, the three moves in 040).
 - **Labels never sit on data.** A label goes where no mark comes near
-  it: a signal's threshold or ceiling label beside its line where the
-  traces leave room, else in the row's legend as a dashed sample, else
-  past the line's end in a margin every row shares; mark labels on curves
-  and spectra above the plot; a value steps over a dashed reference line.
+  it (6 units of clear space round a line label): a signal's threshold or
+  ceiling label beside its line where the traces leave room, else in the
+  row's legend as a dashed sample, else past the line's end in a margin
+  every row shares. One line per row can go to the legend, while the
+  row's other lines keep their labels beside them; two or more go to the
+  margin. A line keeps one treatment in a figure: once it is named in a
+  legend in one row, it is named there in every row it appears in. Mark
+  labels on curves and spectra sit above the plot, never closer than two
+  letters to the dB unit, and never run up to the next mark's line (they
+  step up a row instead); a value steps over a dashed reference line.
   A bar with no upper limit (`open`) fades out at the end of the scale
   with no end mark, so it never reads as a number.
 - **Focus.** Rhythm rows, flow steps and arrangement layers take

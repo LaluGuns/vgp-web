@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import 'katex/dist/katex.min.css';
 import { ArticleBody, ArticleSources } from '@/components/blog/article/ArticleBody';
-import { ArticleActions, MobileContents, OpenDetails, OutlineTracker, ReadingProgress } from '@/components/blog/article/ArticleChrome';
+import { ArticleActions, LessonAnchors, MobileContents, OutlineTracker, ReadingProgress } from '@/components/blog/article/ArticleChrome';
 import { OutlineList, type OutlineItem } from '@/components/blog/article/OutlineList';
 import { Quiz } from '@/components/blog/article/Quiz';
 import { TapLink } from '@/components/blog/article/TapLink';
@@ -179,7 +179,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
         <>
             <main id="main" tabIndex={-1} style={accentScope} className="editorial-shell text-white focus:outline-none">
                 <ReadingProgress slug={article.slug} accent={dialect.accent} sectionIds={sectionIds} />
-                <OpenDetails />
+                <LessonAnchors />
                 <article>
                     <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                         <div className="mx-auto max-w-7xl">
@@ -296,7 +296,8 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     <PathNext article={article} pathName={pathName} />
 
                                     <section className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-8 sm:flex-row sm:items-start">
-                                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[6px] bg-black">
+                                        {/* Hidden in print: the photo loads lazily and would print as a black square if it has not loaded. */}
+                                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[6px] bg-black print:hidden">
                                             <Image src="/images/founder.jpg" alt="Portrait of Virzy Guns" fill sizes="80px" className="object-cover object-[50%_25%]" />
                                         </div>
                                         <div>
@@ -312,7 +313,6 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                             </div>
                                         </div>
                                     </section>
-
                                 </div>
                             </div>
                         </div>

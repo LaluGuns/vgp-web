@@ -23,10 +23,10 @@ export const post040: BlogArticle = {
             ],
             caption:
                 'The three moves from the experiment, computed. Warm adds 3 dB at 250 Hz and takes 1.5 dB off at 10 kHz. Dark is close to 6 dB down from about 8 kHz up. Dull is 13 dB down at 6 kHz and more than 20 dB down at 10 kHz, which removes most of the high end of every attack.',
-            alt: 'EQ gain against frequency. A solid curve bumps up 3 dB around 250 Hz and dips slightly at the top. A grey shelf curve falls to minus 6 dB above about 8 kHz. A dashed low-pass curve falls steeply above 3 kHz and leaves the plot below minus 12 dB.',
+            alt: 'EQ gain against frequency. A solid curve bumps up 3 dB around 250 Hz and dips slightly at the top. A dotted shelf curve falls to minus 6 dB above about 8 kHz. A dashed low-pass curve falls steeply above 3 kHz and leaves the plot below minus 12 dB.',
             curves: [
                 { kind: 'eq', bands: [{ type: 'bell', freq: 250, gain: 3, q: 0.8 }, { type: 'highshelf', freq: 8000, gain: -2 }], label: 'Warm' },
-                { kind: 'eq', bands: [{ type: 'highshelf', freq: 4000, gain: -6 }], label: 'Dark', muted: true },
+                { kind: 'eq', bands: [{ type: 'highshelf', freq: 4000, gain: -6 }], label: 'Dark', dotted: true },
                 { kind: 'eq', bands: [{ type: 'lowpass', freq: 3000 }], label: 'Dull', dashed: true },
             ],
         },

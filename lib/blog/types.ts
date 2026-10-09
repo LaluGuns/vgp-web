@@ -25,7 +25,11 @@ export interface CurveFigure extends FigureBase {
     yLabel: string;
     /** What the points along the bottom are, e.g. "Song section" or "Exposures". */
     xLabel?: string;
-    series: { label?: string; values: number[]; dashed?: boolean }[];
+    /**
+     * The first solid series is the one to look at, with its points. `dotted`: a second line the caption
+     * also names, in accent dots. `dashed`: a reference, in grey.
+     */
+    series: { label?: string; values: number[]; dashed?: boolean; dotted?: boolean }[];
     /** Vertical markers at an x index (fractions allowed). */
     marks?: { at: number; label: string }[];
     /** Straight segments instead of a smooth curve, for values that jump (a bass line, steps). */
@@ -91,6 +95,8 @@ export interface SineSpec {
 interface TraceBase {
     label?: string;
     dashed?: boolean;
+    /** A second trace the caption also names: accent dots instead of a solid line. */
+    dotted?: boolean;
     muted?: boolean;
     /** Flat ceiling at this level (0 to 1). */
     clip?: number;
@@ -155,7 +161,8 @@ export type EqBand = {
     q?: number;
 };
 
-export type SpectrumCurve = { label?: string; dashed?: boolean; muted?: boolean } & (
+/** `dotted`: a second curve the caption also names, in accent dots (solid is the main one, dashed a reference, muted grey context). */
+export type SpectrumCurve = { label?: string; dashed?: boolean; dotted?: boolean; muted?: boolean } & (
     | { kind: 'hump'; center: number; width: number; level?: number }
     | { kind: 'eq'; bands: EqBand[] }
     /** A signal mixed with a delayed copy of itself. mix is the copy's level relative to the original (1 = equal, -1 = flipped). */
@@ -201,6 +208,8 @@ export interface TransferFigure extends FigureBase {
         knee?: number;
         ceiling?: number;
         dashed?: boolean;
+        /** A second curve the caption also names, in accent dots. */
+        dotted?: boolean;
     }[];
 }
 

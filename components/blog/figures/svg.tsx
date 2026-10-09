@@ -68,6 +68,23 @@ export const areaFill = (d: Dialect) => accentFill(d.area);
 /** Stroke in the accent at an opacity. */
 export const accentStroke = (opacity = 1) => ({ stroke: C.accent, strokeOpacity: Number(opacity.toFixed(2)) });
 
+/**
+ * The fourth line style. Beside a solid accent line (look here), a dashed line (a reference) and a grey
+ * one (context), a line of accent dots is a second line the caption also names: also look here. The
+ * dots are round in every dialect, a touch heavier than a line and spaced well apart, so even beside
+ * the short dashes of technical and the ledger they read as dots, never as a finer dash. A dotted line
+ * fades in like a dashed one (a dash pattern cannot draw along its length) and has no area under it.
+ */
+export function dots(d: Dialect, muted?: boolean) {
+    const width = Number((d.line + 0.65).toFixed(2));
+    return {
+        stroke: muted ? C.dataGrey : C.accent,
+        strokeWidth: width,
+        strokeDasharray: `0 ${Number((width * 2.4).toFixed(1))}`,
+        strokeLinecap: 'round' as const,
+    };
+}
+
 /** White at an opacity, for rules. */
 const white = (opacity: number) => `rgba(255,255,255,${Number(opacity.toFixed(3))})`;
 
@@ -149,6 +166,7 @@ export function Svg({ w, h, label, d, children }: { w: number; h: number; label:
             role="img"
             aria-label={label}
             color={d.accent}
+            fontSize={FS}
             data-dialect={d.name}
             className="vgp-fig block h-auto overflow-visible"
             style={{ fontFamily: 'var(--font-display)', fontVariantNumeric: d.tabular ? 'tabular-nums' : undefined }}
@@ -592,11 +610,14 @@ export function placeInRows(items: RowItem[], lo: number, hi: number, { offset =
     order.forEach((index, k) => {
         const item = items[index];
         const next = order[k + 1] === undefined ? undefined : items[order[k + 1]];
-        // A start label would run into the next mark: try its left side first.
+        // A start label would run into the next mark: try its left side first. In the first row, where every
+        // mark's line reaches up to the labels, it never takes the right side then: it would end against the
+        // next mark's line and read as one phrase with the next label ("Rumble | Box"). It goes up a row instead.
         const crowded = next && next.x - item.x < item.width + offset + gap;
         const prefer = crowded && item.prefer.includes('end') ? (['end', ...item.prefer.filter((a) => a !== 'end')] as Anchor[]) : item.prefer;
         for (let row = 0; row < items.length + 1; row++) {
             const fit = prefer
+                .filter((anchor) => !(crowded && row === 0 && anchor === 'start' && prefer.includes('end')))
                 .map((anchor) => ({ anchor, ...span(item, anchor) }))
                 .find(
                     (c) =>
@@ -708,6 +729,8 @@ export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.ma
 export interface LegendItem {
     label: string;
     dashed?: boolean;
+    /** A line of accent dots (`dots`). */
+    dotted?: boolean;
     muted?: boolean;
     /** Line colour when it is neither the accent nor muted. */
     stroke?: string;
@@ -747,6 +770,9 @@ export function legend(
                 <g key={item.label}>
                     {item.swatch ? (
                         <rect x={lx} y={ly - 10} width={16} height={10} rx={cornerOf(d, 10, 16)} fill={item.swatch} />
+                    ) : item.dotted ? (
+                        // Dots from end to end of the sample, so the first and last sit where a line's ends would.
+                        <line x1={lx + 1.5} x2={lx + 17} y1={ly - 4} y2={ly - 4} {...dots(d, item.muted)} />
                     ) : (
                         <line
                             x1={lx + (d.cap === 'round' ? 1 : 0)}

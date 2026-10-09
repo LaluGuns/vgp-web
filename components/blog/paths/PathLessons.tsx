@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { EditorialButton } from '@/components/editorial/EditorialPrimitives';
@@ -17,6 +18,7 @@ export interface PathLesson {
 /** A learning path: progress, a start or continue button, and the numbered lessons (h2 under the path's h1). */
 export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
     const read = useReadArticles();
+    const listId = useId();
     // Back from a lesson lands where the reader left the list.
     useScrollMemory();
     const done = lessons.filter((l) => read.includes(l.slug)).length;
@@ -54,9 +56,16 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
             <ol className="max-w-4xl divide-y divide-white/10">
                 {lessons.map((lesson, i) => {
                     const isRead = read.includes(lesson.slug);
+                    // Named by the title alone; the meta line and the excerpt describe it.
+                    const id = `${listId}${i}`;
                     return (
                         <li key={lesson.slug}>
-                            <Link href={`/blog/${lesson.slug}`} className="group flex gap-5 py-7 vgp-focus">
+                            <Link
+                                href={`/blog/${lesson.slug}`}
+                                aria-labelledby={`${id}-title`}
+                                aria-describedby={`${id}-meta ${id}-excerpt`}
+                                className="group flex gap-5 py-7 vgp-focus"
+                            >
                                 <span
                                     className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs tabular-nums ${
                                         isRead ? 'border-white bg-white text-black' : 'border-white/25 text-white/60'
@@ -66,15 +75,20 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
                                     {isRead ? <Check size={14} strokeWidth={3} /> : i + 1}
                                 </span>
                                 <span className="min-w-0">
-                                    <span className="text-xs text-white/50">
+                                    <span id={`${id}-meta`} className="text-xs text-white/50">
                                         Lesson {i + 1} · {lesson.readingTime} min
                                         {lesson.features.length ? ` · ${lesson.features.join(' · ')}` : ''}
                                         {isRead ? ' · Read' : ''}
                                     </span>
-                                    <h2 className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                    <h2
+                                        id={`${id}-title`}
+                                        className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4"
+                                    >
                                         {lesson.title}
                                     </h2>
-                                    <span className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">{lesson.excerpt}</span>
+                                    <span id={`${id}-excerpt`} className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">
+                                        {lesson.excerpt}
+                                    </span>
                                 </span>
                             </Link>
                         </li>

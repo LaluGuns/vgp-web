@@ -161,7 +161,7 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
                     <h2 id={section.id} className="scroll-mt-8 text-base font-semibold text-white">
                         Sources
                     </h2>
-                    {/* Opened by OpenDetails (ArticleChrome) for a #sources link and for print, where the toggle is left out. */}
+                    {/* Opened by LessonAnchors (ArticleChrome) for a #sources link and for print, where the toggle is left out. */}
                     <details className="group">
                         <summary className="vgp-focus flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-sm text-sm text-white/60 hover:text-white print:hidden [&::-webkit-details-marker]:hidden">
                             <span className="group-open:hidden">Show {count === 1 ? 'the source' : `all ${count}`}</span>

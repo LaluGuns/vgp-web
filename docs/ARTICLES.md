@@ -90,9 +90,18 @@ real, so the numbers in the caption must match.
 Labels must stay short: phone layouts are 320 px wide. Use `xShort` and
 `short` where offered.
 
+Line styles, the same in every figure that draws lines (`curve` series,
+`signal` traces, `spectrum` curves, `transfer` curves): a solid accent line
+is the one the caption asks you to look at; `dotted: true` draws a second
+line the caption also names in accent dots ("also look here");
+`dashed: true` is a reference; `muted: true` is grey context or "before".
+Reach for dots only when the caption compares more lines than one solid
+and one dashed line can carry, as lessons 039 (body, edge, air) and 040
+(warm, dark, dull) do.
+
 | `type` | Shows | Key fields |
 | --- | --- | --- |
-| `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed}]`, `marks[{at, label}]`, `straight` |
+| `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed, dotted}]`, `marks[{at, label}]`, `straight` |
 | `notes` | A small piano roll: a melody, a bass line, a voicing | `notes[{start, length, pitch, label, muted}]` (beats, MIDI pitch), `chords[{at, label}]`, `perBar` |
 | `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim, open}]` (`open`: no upper limit, the bar fades out at the end of the scale), `reference{value, label}`, `log` (powers of ten, for ranges over two decades) |
 | `rhythm` | Hits on a 16-step grid with swing and offsets | `rows[{label, hits, swing, note, focus}]`; a hit is a step or `{step, offset, level}` (offset in steps) |
@@ -113,13 +122,19 @@ Signal traces (`kind`):
   the level envelope; `compress: {threshold, ratio, attack, release}`
   simulates a compressor (times are fractions of the plot width).
 - `noise`: `amp`, `seed`.
-- Any trace: `label`, `dashed`, `muted` (grey, for "before"), `gain`,
-  `clip`, `soft`, `quantize` (bits).
+- Any trace: `label`, `dashed`, `dotted` (a second trace the caption also
+  names), `muted` (grey, for "before"), `gain`, `clip`, `soft`, `quantize`
+  (bits).
+- Line labels (`lines`) sit beside their line where the traces leave room.
+  One line per row that finds no room is named in the row's legend
+  instead; a line named in a legend in one row is named there in every
+  row. Give a line a `short` label for phones.
 - Gain-mode spectra take `dbRange: [lo, hi]` for filters that only cut.
 - `samples: {count, alias: true}` on a row draws sample dots and the slower
   wave they also fit.
 
-Spectrum curves (`kind`): `hump` (`center` Hz, `width` octaves, `level`),
+Spectrum curves take `label`, `dashed`, `dotted` and `muted` like traces.
+Their kinds (`kind`): `hump` (`center` Hz, `width` octaves, `level`),
 `eq` (`bands` of `bell`, `lowshelf`, `highshelf`, `highpass`, `lowpass`,
 and first-order `highpass1`, `lowpass1`, with `freq`, `gain`, `q`),
 `comb` (`delayMs`, `mix`: a signal plus a delayed copy), `slope` (`dbPerOct`; in gain mode `dbPerOct: 0,

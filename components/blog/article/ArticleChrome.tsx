@@ -8,7 +8,7 @@
  * scroll listener (reading-scroll.ts) and without re-rendering on scroll.
  */
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { startTransition, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Bookmark, Check, Copy, Share2 } from 'lucide-react';
 import { copyToClipboard } from './clipboard';
 import { OutlineList, type OutlineItem } from './OutlineList';
@@ -128,8 +128,13 @@ export function ArticleActions({
     );
 
     const openShare = () => {
+        if (ShareDialog) {
+            // Built as a transition, so the tap is answered at once and the dialog follows
+            // a frame later instead of holding the tap until it has been laid out.
+            startTransition(() => setSharing(true));
+            return;
+        }
         setSharing(true);
-        if (ShareDialog) return;
         loadShareDialog()
             .then((component) => setShareDialog(() => component))
             // Offline or the chunk failed: give the button back rather than leave it waiting.
@@ -180,7 +185,6 @@ export function ArticleActions({
                     categoryName={categoryName}
                     readingTime={`${readingTime || 4} min read`}
                     accent={accent}
-                    logoSrc="/branding/logo-tg.png"
                     siteUrl="https://www.virzyguns.com"
                 />
             ) : null}
@@ -415,29 +419,81 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
 }
 
 /**
- * Collapsed lists open when the reader needs what is inside them: the
- * Sources list when the address or a link points at #sources, and every
- * collapsed list on the page while it prints (closed again afterwards).
+ * In-page jumps on a lesson. The page itself never scrolls smoothly, so a
+ * deep link, a shared #section or a reload lands at once; a Contents or
+ * outline link the reader clicks glides there instead (not with reduced
+ * motion), then lands with a real fragment jump, which has nowhere left to
+ * move but sets the address, :target and where Tab goes next. Collapsed
+ * lists open when the reader needs what is inside them: the Sources list
+ * when the address or a link points at #sources, and every collapsed list
+ * while the page prints (closed again afterwards).
  */
-export function OpenDetails() {
+export function LessonAnchors() {
     useEffect(() => {
-        const openFor = (hash: string | null) => {
-            if (!hash || hash.length < 2 || !hash.startsWith('#')) return;
-            let id = hash.slice(1);
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const idFrom = (hash: string | null) => {
+            if (!hash || hash.length < 2 || !hash.startsWith('#')) return '';
             try {
-                id = decodeURIComponent(id);
+                return decodeURIComponent(hash.slice(1));
             } catch {
-                // Keep the raw id.
+                return hash.slice(1);
             }
-            const next = document.getElementById(id)?.nextElementSibling;
+        };
+        const openFor = (id: string) => {
+            const next = id ? document.getElementById(id)?.nextElementSibling : null;
             if (next instanceof HTMLDetailsElement) next.open = true;
         };
-        const onHash = () => openFor(window.location.hash);
-        // A Contents link to the hash the address already has fires no hashchange.
-        const onClick = (event: MouseEvent) => {
-            const link = event.target instanceof Element ? event.target.closest('a[href^="#"]') : null;
-            if (link) openFor(link.getAttribute('href'));
+        const onHash = () => openFor(idFrom(window.location.hash));
+
+        let cancelGlide: (() => void) | null = null;
+        const glide = (id: string, target: HTMLElement) => {
+            cancelGlide?.();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // A wheel, touch or key during the glide hands the page back to the reader:
+            // then the address changes without the jump, which would pull them back.
+            let interrupted = false;
+            const stop = () => {
+                interrupted = true;
+            };
+            const kinds = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
+            kinds.forEach((kind) => window.addEventListener(kind, stop, { passive: true, capture: true }));
+            let last = Number.NaN;
+            let still = 0;
+            let frames = 0;
+            let frame = 0;
+            const finish = () => {
+                cancelAnimationFrame(frame);
+                kinds.forEach((kind) => window.removeEventListener(kind, stop, { capture: true }));
+                cancelGlide = null;
+            };
+            const tick = () => {
+                const y = window.scrollY;
+                still = y === last ? still + 1 : 0;
+                last = y;
+                if (still < 6 && ++frames < 240) {
+                    frame = requestAnimationFrame(tick);
+                    return;
+                }
+                finish();
+                if (!interrupted) window.location.hash = id;
+                else history.pushState(history.state, '', `#${encodeURIComponent(id)}`);
+            };
+            frame = requestAnimationFrame(tick);
+            cancelGlide = finish;
         };
+
+        // Capture, so this runs before the Contents sheet closes itself on the same click.
+        const onClick = (event: MouseEvent) => {
+            const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('main a[href^="#"]') : null;
+            if (!link) return;
+            const id = idFrom(link.getAttribute('href'));
+            openFor(id);
+            const target = id ? document.getElementById(id) : null;
+            if (!target || reduce.matches || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            glide(id, target);
+        };
+
         let printed: HTMLDetailsElement[] = [];
         const beforePrint = () => {
             // The inline contents list is left out of print, so it stays as it is on screen.
@@ -452,14 +508,16 @@ export function OpenDetails() {
             });
             printed = [];
         };
+
         onHash();
         window.addEventListener('hashchange', onHash);
-        document.addEventListener('click', onClick);
+        document.addEventListener('click', onClick, true);
         window.addEventListener('beforeprint', beforePrint);
         window.addEventListener('afterprint', afterPrint);
         return () => {
+            cancelGlide?.();
             window.removeEventListener('hashchange', onHash);
-            document.removeEventListener('click', onClick);
+            document.removeEventListener('click', onClick, true);
             window.removeEventListener('beforeprint', beforePrint);
             window.removeEventListener('afterprint', afterPrint);
         };

@@ -98,8 +98,18 @@ export function MotionObserver() {
             settle();
         };
 
+        // Only a batch that brings in [data-reveal] content (a route change, a lazy section) needs a scan.
+        // Everything else (a demo mounting, a popover, a list growing) is skipped without reading
+        // layout, so DOM work elsewhere on the page never pays for a forced layout here.
+        const bringsReveal = (records: MutationRecord[]) =>
+            records.some((record) =>
+                Array.from(record.addedNodes).some(
+                    (node) => node instanceof Element && (node.hasAttribute('data-reveal') || node.querySelector('[data-reveal]') !== null),
+                ),
+            );
         let frame = 0;
-        const mutations = new MutationObserver(() => {
+        const mutations = new MutationObserver((records) => {
+            if (!bringsReveal(records)) return;
             cancelAnimationFrame(frame);
             frame = requestAnimationFrame(scan);
         });

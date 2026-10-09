@@ -4,6 +4,7 @@ import { Arrangement, Bars, Curve, Scale } from './charts';
 import { Flow, Notes, Rhythm, Stereo } from './diagrams';
 import { Signal, Spectrum, Transfer } from './waves';
 import { NARROW_W } from './svg';
+import { compactFigure } from './compact';
 
 function draw(spec: FigureSpec, w: number, dialect: Dialect) {
     switch (spec.type) {
@@ -42,14 +43,15 @@ function draw(spec: FigureSpec, w: number, dialect: Dialect) {
  *
  * `data-reveal="draw"`: when the figure scrolls into view, its accent data
  * draws in once (see `draw` in ./svg). Remove the attribute to turn that off.
+ * Each drawing is trimmed by ./compact before it is sent (same pixels, fewer bytes).
  */
 export function Figure({ spec, number, dialect }: { spec: FigureSpec; number: number; dialect?: Dialect | string }) {
     const d = resolveDialect(dialect);
     return (
         <figure className="my-10">
             <div data-reveal="draw" data-dialect={d.name} className="rounded-[6px] border border-white/10 bg-[var(--surface)] px-2 py-4 sm:px-5 sm:py-5">
-                <div className="sm:hidden">{draw(spec, NARROW_W, d)}</div>
-                <div className="hidden sm:block">{draw(spec, 600, d)}</div>
+                <div className="sm:hidden">{compactFigure(draw(spec, NARROW_W, d))}</div>
+                <div className="hidden sm:block">{compactFigure(draw(spec, 600, d))}</div>
             </div>
             <figcaption className="mt-3 text-sm leading-6 text-white/60">
                 <span className="font-medium text-white/80">Figure {number}.</span> {spec.caption}

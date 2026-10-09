@@ -43,6 +43,8 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
                 </noscript>
             </div>
             <VolumeRow />
+            {/* While the demo plays, its Stop button goes here (ui.tsx PlayButton), so it is the next stop after the demo in the tab order. */}
+            <div data-demo-stop="" />
         </section>
     );
 }

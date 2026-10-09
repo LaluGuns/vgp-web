@@ -20,6 +20,7 @@ import {
     clamp,
     cornerOf,
     dialectOf,
+    dots,
     draw,
     legend,
     linePath,
@@ -37,7 +38,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const labels = narrow && spec.xShort ? spec.xShort : spec.x;
-    const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, stroke: s.dashed ? C.soft : undefined }));
+    const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, dotted: s.dotted && !s.dashed, stroke: s.dashed ? C.soft : undefined }));
     const leg = legend(named, 0, 14, w, d);
     // A note head or a focus ring is wider than a square, so the first and last points sit further in.
     const inset = d.marker === 'head' || d.marker === 'ring' ? 8 : 4;
@@ -112,7 +113,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
             {spec.series.map((s, si) => {
                 const pts = s.values.map((v, i) => [xAt(i), yAt(v)] as [number, number]);
                 const path = spec.straight ? linePath(pts) : smoothPath(pts);
-                const focus = si === 0 && !s.dashed;
+                const focus = si === 0 && !s.dashed && !s.dotted;
                 const lineDelay = 120 + si * 120;
                 return (
                     <g key={si}>
@@ -122,6 +123,9 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                         ) : null}
                         {s.dashed ? (
                             <path d={path} fill="none" stroke={C.soft} strokeWidth={1.6} strokeDasharray={d.refDash} strokeLinecap={d.cap} />
+                        ) : s.dotted ? (
+                            // A second line the caption also names: accent dots, fading in with the line beside it.
+                            <path d={path} fill="none" {...dots(d)} {...draw('fade', lineDelay)} />
                         ) : (
                             <path
                                 d={path}

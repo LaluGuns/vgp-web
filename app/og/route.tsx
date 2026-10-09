@@ -24,6 +24,34 @@ function getPortrait() {
 }
 
 /**
+ * The card's two weights, read from disk (no fetch at runtime): next/og's own
+ * Geist Regular for the kicker, sub and URL, and KaTeX's sans bold for the
+ * title. app/og/KaTeX_SansSerif-Bold.ttf is an unmodified copy of
+ * node_modules/katex/dist/fonts/KaTeX_SansSerif-Bold.ttf (SIL Open Font
+ * License 1.1, notice in the font's name table), the only bold sans in the
+ * installed packages; it lives here so the build's file tracing ships it
+ * with this route, as it does portrait.png. Its glyphs cover every lesson
+ * title (ASCII, curly quotes, dashes); a character it lacks falls back to
+ * Geist. If either file cannot be read the card renders with next/og's
+ * default font.
+ */
+type CardFont = { name: string; data: Buffer; weight: 400 | 700; style: 'normal' };
+let cardFonts: Promise<CardFont[] | undefined> | undefined;
+function getFonts() {
+    cardFonts ??= Promise.all([
+        readFile(path.join(process.cwd(), 'node_modules/next/dist/compiled/@vercel/og/Geist-Regular.ttf')),
+        readFile(path.join(process.cwd(), 'app/og/KaTeX_SansSerif-Bold.ttf')),
+    ]).then(
+        ([regular, bold]): CardFont[] => [
+            { name: 'Geist', data: regular, weight: 400, style: 'normal' },
+            { name: 'Geist', data: bold, weight: 700, style: 'normal' },
+        ],
+        () => undefined,
+    );
+    return cardFonts;
+}
+
+/**
  * The title with every letter as its own text run. The renderer lays words
  * out by the sum of their letters' widths but draws each run with the
  * font's kerning, so a word with tight pairs ("Synthwave") came out shorter
@@ -53,7 +81,7 @@ export async function GET(request: NextRequest) {
     const title = clip(params.get('title'), 90) || 'Music should leave you better than it found you.';
     const kicker = clip(params.get('kicker'), 40) || 'Virzy Guns';
     const sub = clip(params.get('sub'), 90);
-    const photo = await getPortrait();
+    const [photo, fonts] = await Promise.all([getPortrait(), getFonts()]);
     const titleSize = title.length > 60 ? 58 : title.length > 36 ? 68 : 80;
 
     return new ImageResponse(
@@ -79,6 +107,7 @@ export async function GET(request: NextRequest) {
         {
             width: 1200,
             height: 630,
+            ...(fonts ? { fonts } : {}),
             headers: { 'Cache-Control': 'public, max-age=86400, s-maxage=31536000, immutable' },
         },
     );

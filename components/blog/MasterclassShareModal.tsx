@@ -6,12 +6,13 @@
  *
  * A native <dialog> opened with showModal(): the browser keeps focus inside,
  * makes the page behind it inert, closes it on Escape and hands focus back
- * to the Share button. ArticleActions loads this file only when the reader
- * reaches for Share, so html-to-image and the QR code stay out of the lesson
- * bundle; html-to-image itself loads on the first download.
+ * to the Share button. ArticleActions loads this file on its own, once the
+ * page is idle or when the reader reaches for Share, so html-to-image and the
+ * QR code stay out of the lesson bundle; html-to-image itself loads on the
+ * first download.
  */
 
-import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type Ref } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Check, Copy, Download, Mail, Share2 } from 'lucide-react';
 import { FaFacebookF, FaLinkedinIn, FaTelegram, FaWhatsapp, FaXTwitter } from 'react-icons/fa6';
@@ -41,7 +42,6 @@ export type MasterclassShareModalProps = {
     readingTime?: string;
     /** The lesson group's accent, for the one coloured mark on the card. */
     accent?: string;
-    logoSrc?: string;
     siteUrl?: string;
 };
 
@@ -59,6 +59,74 @@ function shorten(text: string, max: number) {
     const clean = text.trim();
     if (clean.length <= max) return clean;
     return `${clean.slice(0, max).replace(/\s+\S*$/, '').replace(/[,;:.]$/, '')}…`;
+}
+
+/**
+ * The chrome logo (public/branding/vgp-logo-chrome-full.png, 1254 px square,
+ * the mark above the wordmark), through the image optimizer so the dialog
+ * does not fetch the 1.4 MB original. `crop` is the mark's box in the
+ * original's pixels; the rest of the square is cut away by the frame.
+ */
+const CHROME_LOGO = {
+    src: `/_next/image?url=${encodeURIComponent('/branding/vgp-logo-chrome-full.png')}&w=384&q=75`,
+    size: 1254,
+    crop: { x: 340, y: 340, width: 730, height: 360 },
+};
+
+// The logo's own glow is a shade lighter than the card; faded out at the edges of the
+// crop it reads as the glow, not as a box.
+const MARK_FADE = 'radial-gradient(ellipse 60% 62% at 50% 50%, #000 70%, transparent 100%)';
+
+/**
+ * The mark in its own chrome. Its dark ground is blended away (lighten) and
+ * faded at the crop's edges, so only the metal and its glow show on the
+ * card, in the preview and in the PNG.
+ */
+function ChromeMark({ height }: { height: number }) {
+    const k = height / CHROME_LOGO.crop.height;
+    return (
+        <div
+            style={{
+                position: 'relative',
+                width: Math.round(CHROME_LOGO.crop.width * k),
+                height,
+                overflow: 'hidden',
+                flexShrink: 0,
+                maskImage: MARK_FADE,
+                WebkitMaskImage: MARK_FADE,
+            }}
+        >
+            {/* eslint-disable-next-line @next/next/no-img-element -- exported to PNG by html-to-image */}
+            <img
+                src={CHROME_LOGO.src}
+                alt=""
+                draggable={false}
+                style={{
+                    position: 'absolute',
+                    left: -CHROME_LOGO.crop.x * k,
+                    top: -CHROME_LOGO.crop.y * k,
+                    width: CHROME_LOGO.size * k,
+                    height: CHROME_LOGO.size * k,
+                    maxWidth: 'none',
+                    mixBlendMode: 'lighten',
+                }}
+            />
+        </div>
+    );
+}
+
+/** The lesson address, allowed to wrap after "/blog/" and at the slug's hyphens. */
+function CardUrl({ display, style }: { display: string; style: CSSProperties }) {
+    const cut = display.indexOf('/blog/');
+    const head = cut >= 0 ? display.slice(0, cut + 6) : '';
+    const tail = cut >= 0 ? display.slice(cut + 6) : display;
+    return (
+        <div style={{ ...style, overflowWrap: 'anywhere' }}>
+            {head}
+            {head ? <wbr /> : null}
+            {tail}
+        </div>
+    );
 }
 
 function titleSize(title: string, format: Format) {
@@ -88,7 +156,6 @@ interface CardProps {
     categoryName: string;
     readingTime: string;
     accent: string;
-    logoSrc: string;
     url: string;
 }
 
@@ -97,7 +164,7 @@ interface CardProps {
  * then scaled down for the preview. Flat, like the site's link cards: one
  * accent dot, white type, a hairline, the QR code on a white tile.
  */
-function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc, url, cardRef }: CardProps & { cardRef?: Ref<HTMLDivElement> }) {
+function ShareCard({ format, article, categoryName, readingTime, accent, url, cardRef }: CardProps & { cardRef?: Ref<HTMLDivElement> }) {
     const portrait = format === 'portrait';
     const { width, height } = SIZE[format];
     const k = portrait ? 1.5 : 1; // type and spacing step for the larger card
@@ -129,15 +196,7 @@ function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc
                 }}
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14 * k, fontSize: 22 * k, color: 'rgba(255,255,255,0.75)', whiteSpace: 'nowrap' }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element -- exported to PNG by html-to-image */}
-                    <img
-                        src={logoSrc}
-                        alt=""
-                        width={40 * k}
-                        height={40 * k}
-                        draggable={false}
-                        style={{ width: 40 * k, height: 40 * k, objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
-                    />
+                    <ChromeMark height={Math.round(30 * k)} />
                     Virzy Guns Production
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 * k, fontSize: 22 * k, color: 'rgba(255,255,255,0.7)', whiteSpace: 'nowrap' }}>
@@ -181,19 +240,12 @@ function ShareCard({ format, article, categoryName, readingTime, accent, logoSrc
             >
                 <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 24 * k, fontWeight: 600 }}>Read the full lesson</div>
-                    <div
-                        style={{
-                            marginTop: 8 * k,
-                            fontSize: 18 * k,
-                            color: 'rgba(255,255,255,0.6)',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            maxWidth: portrait ? 620 : 860,
-                        }}
-                    >
-                        {display}
-                    </div>
+                    {/* The whole address, on two lines (or three) if it needs them: the card is a
+                        picture, so a cut-off address could not be read anywhere else. */}
+                    <CardUrl
+                        display={display}
+                        style={{ marginTop: 8 * k, fontSize: 18 * k, lineHeight: 1.35, color: 'rgba(255,255,255,0.6)', maxWidth: portrait ? 620 : 860 }}
+                    />
                 </div>
                 <div style={{ background: '#ffffff', borderRadius: 6, padding: portrait ? 14 : 8, lineHeight: 0, flexShrink: 0 }}>
                     <QRCodeSVG value={url} size={portrait ? 196 : 112} level="M" bgColor="#ffffff" fgColor="#050607" title={`QR code for ${display}`} />
@@ -232,13 +284,15 @@ function ScaledPreview({ width, height, maxHeight, children }: { width: number; 
 const control =
     'vgp-focus inline-flex min-h-11 items-center gap-3 rounded-[6px] border border-white/15 px-3 text-sm text-white/80 transition-colors hover:border-white/40 hover:text-white';
 
+/** Height at lg of everything in the left column but the card: header, stage padding, card size and download. */
+const DIALOG_CHROME = 61 + 48 + 150;
+
 export function MasterclassShareModal({
     onClose,
     article,
     categoryName,
     readingTime = '4 min read',
     accent = '#7dd3fc',
-    logoSrc = '/branding/logo-tg.png',
     siteUrl = 'https://www.virzyguns.com',
 }: MasterclassShareModalProps) {
     const dialog = useRef<HTMLDialogElement>(null);
@@ -251,7 +305,7 @@ export function MasterclassShareModal({
     const [imageStatus, setImageStatus] = useState('');
     const [linkStatus, setLinkStatus] = useState('');
     const [copied, setCopied] = useState(false);
-    // Rendered only in the browser (next/dynamic with ssr: false), so window is there.
+    // Rendered only in the browser: ArticleActions imports this file on demand and mounts it once Share is pressed, so window is there.
     const [viewport, setViewport] = useState(() => ({ width: window.innerWidth, height: window.innerHeight }));
     const [canShare] = useState(() => typeof navigator.share === 'function');
     const onCloseRef = useRef(onClose);
@@ -304,11 +358,13 @@ export function MasterclassShareModal({
 
     const close = () => dialog.current?.close();
 
+    // From 1024 px the card sits above its controls in the left column, so a portrait
+    // card gets the dialog's height less the header, the stage padding and those controls.
     const wide = viewport.width >= 1024;
     const previewMax =
         format === 'portrait'
             ? wide
-                ? Math.min(viewport.height - 160, 640)
+                ? Math.max(320, Math.min(viewport.height - 48 - DIALOG_CHROME, 640))
                 : Math.min(viewport.height * 0.6, 560)
             : wide
               ? 420
@@ -369,6 +425,16 @@ export function MasterclassShareModal({
         }
     };
 
+    // What is being shared. Shown once: under the card on phones, above the links from 1024 px.
+    const lessonLine = (
+        <>
+            <p className="text-base font-medium leading-snug text-white">{article.title}</p>
+            <p className="mt-1 text-sm text-white/60">
+                {category} · {readingTime}
+            </p>
+        </>
+    );
+
     const formatButton = (value: Format, label: string) => {
         const { width, height } = SIZE[value];
         const on = format === value;
@@ -428,52 +494,58 @@ export function MasterclassShareModal({
                     </button>
                 </header>
 
+                {/* Phones: card, then what to do with it, top to bottom. From 1024 px: the card with
+                    its size and download under it on the left, the links on the right, so the
+                    columns end close together whichever card is shown. */}
                 <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
-                    <section aria-label="Card preview" className="flex min-w-0 items-center justify-center border-b border-white/10 bg-[var(--bg)] px-4 py-6 sm:px-6 lg:border-b-0 lg:border-r lg:p-8">
-                        <ScaledPreview width={SIZE[format].width} height={SIZE[format].height} maxHeight={previewMax}>
-                            <ShareCard
-                                cardRef={card}
-                                format={format}
-                                article={article}
-                                categoryName={category}
-                                readingTime={readingTime}
-                                accent={accent}
-                                logoSrc={logoSrc}
-                                url={url}
-                            />
-                        </ScaledPreview>
-                    </section>
+                    <div className="flex min-w-0 flex-col lg:overflow-y-auto lg:border-r lg:border-white/10">
+                        <section aria-label="Card preview" className="flex items-center justify-center border-b border-white/10 bg-[var(--bg)] px-4 py-6 sm:px-6 lg:px-8">
+                            <ScaledPreview width={SIZE[format].width} height={SIZE[format].height} maxHeight={previewMax}>
+                                <ShareCard
+                                    cardRef={card}
+                                    format={format}
+                                    article={article}
+                                    categoryName={category}
+                                    readingTime={readingTime}
+                                    accent={accent}
+                                    url={url}
+                                />
+                            </ScaledPreview>
+                        </section>
 
-                    <div className="px-4 pb-[max(24px,env(safe-area-inset-bottom))] pt-5 sm:px-6 lg:overflow-y-auto lg:py-6">
-                        <p className="text-base font-medium leading-snug text-white">{article.title}</p>
-                        <p className="mt-1 text-sm text-white/60">
-                            {category} · {readingTime}
-                        </p>
+                        <div className="px-4 pt-5 sm:px-6 lg:px-8 lg:pb-3">
+                            <div className="mb-6 lg:hidden">{lessonLine}</div>
+                            <div className="lg:flex lg:items-end lg:gap-4">
+                                <div role="group" aria-labelledby={formatLabelId} className="lg:w-72 lg:shrink-0">
+                                    <p id={formatLabelId} className="text-sm text-white/60">
+                                        Card size
+                                    </p>
+                                    <div className="mt-2 grid grid-cols-2 gap-1 rounded-[6px] border border-white/15 p-1">
+                                        {formatButton('landscape', 'Landscape')}
+                                        {formatButton('portrait', 'Portrait')}
+                                    </div>
+                                </div>
 
-                        <div role="group" aria-labelledby={formatLabelId} className="mt-6">
-                            <p id={formatLabelId} className="text-sm text-white/60">
-                                Card size
-                            </p>
-                            <div className="mt-2 grid grid-cols-2 gap-1 rounded-[6px] border border-white/15 p-1">
-                                {formatButton('landscape', 'Landscape')}
-                                {formatButton('portrait', 'Portrait')}
+                                <button
+                                    type="button"
+                                    onClick={download}
+                                    disabled={saving}
+                                    className="vgp-focus mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-black transition-colors hover:bg-white/90 disabled:cursor-wait disabled:bg-white/70 lg:mb-1 lg:mt-0 lg:min-w-0 lg:flex-1"
+                                >
+                                    <Download size={16} aria-hidden="true" />
+                                    {saving ? 'Making the image…' : 'Download image'}
+                                </button>
                             </div>
+                            <p aria-live="polite" className="mt-2 min-h-5 break-words text-sm text-white/70">
+                                {imageStatus}
+                            </p>
                         </div>
+                    </div>
 
-                        <button
-                            type="button"
-                            onClick={download}
-                            disabled={saving}
-                            className="vgp-focus mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-black transition-colors hover:bg-white/90 disabled:cursor-wait disabled:bg-white/70"
-                        >
-                            <Download size={16} aria-hidden="true" />
-                            {saving ? 'Making the image…' : 'Download image'}
-                        </button>
-                        <p aria-live="polite" className="mt-2 min-h-5 break-words text-sm text-white/70">
-                            {imageStatus}
-                        </p>
+                    <div className="px-4 pb-[max(24px,env(safe-area-inset-bottom))] sm:px-6 lg:overflow-y-auto lg:py-6">
+                        <div className="hidden lg:block">{lessonLine}</div>
 
-                        <div className="mt-4 border-t border-white/10 pt-5">
+                        <div className="mt-4 border-t border-white/10 pt-5 lg:mt-6">
                             <h3 className="text-sm text-white/60">Post the link</h3>
                             <ul className="mt-2 grid grid-cols-2 gap-2">
                                 {targets.map((target) => (

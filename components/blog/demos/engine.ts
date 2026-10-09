@@ -254,6 +254,50 @@ export function pad(ctx: BaseAudioContext, dest: AudioNode, t: number, freqs: nu
 
 export const midi = (note: number) => 440 * 2 ** ((note - 69) / 12);
 
+// ── Measuring ───────────────────────────────────────────────────────
+
+/**
+ * K-weighting (ITU-R BS.1770) as Web Audio filters, for measuring loudness
+ * in an offline render: a +4 dB high shelf at 1.68 kHz, then a high-pass at
+ * 38 Hz. Web Audio reads a high-pass Q in dB, so this Q of 0.5 makes a
+ * slightly resonant high-pass (a Q of about 1.06, where the standard's is
+ * 0.5): it weighs the lowest octave a few dB more than a strict BS.1770
+ * meter. Every demo's loudness matching and the house level use this same
+ * filter, so the demos agree with each other. Returns the weighted signal.
+ */
+export function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
+    const shelf = ctx.createBiquadFilter();
+    shelf.type = 'highshelf';
+    shelf.frequency.value = 1681.97;
+    shelf.gain.value = 4;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 38.13;
+    hp.Q.value = 0.5;
+    input.connect(shelf).connect(hp);
+    return hp;
+}
+
+/** Ends the current task so the browser can paint and take input; the caller carries on in a new one. */
+export function yieldToMain(): Promise<void> {
+    const s = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+    if (typeof s?.yield === 'function') return s.yield();
+    return new Promise((resolve) => window.setTimeout(resolve, 0));
+}
+
+/**
+ * Calls `play` for steps 0 to `steps - 1`, eight at a time with a yield in
+ * between. Creating a step's voices is main-thread work (a drum step takes
+ * about a millisecond on a slow phone), so filling an offline render with
+ * a few bars in one go would hold up input for longer than a frame should.
+ */
+export async function scheduleSteps(steps: number, play: (step: number) => void): Promise<void> {
+    for (let s = 0; s < steps; s++) {
+        play(s);
+        if (s % 8 === 7 && s < steps - 1) await yieldToMain();
+    }
+}
+
 // ── Reverb ──────────────────────────────────────────────────────────
 
 /**

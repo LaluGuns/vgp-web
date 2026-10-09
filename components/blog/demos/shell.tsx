@@ -44,12 +44,19 @@ export function VolumeRow() {
             stop();
         };
     }, []);
+    const percent = `${Math.round(volume * 100)}%`;
     return (
         // Without JavaScript the demo cannot play, so the volume control is hidden with it.
+        // On a phone the label and the percentage share a line above a full-width slider, like the
+        // demo's own sliders; from 640 px up the label, slider and percentage sit in one row.
         <div className="mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/10 pt-5 [@media(scripting:none)]:hidden">
             <label htmlFor={id} className="text-sm text-white/60">
                 Demo volume
             </label>
+            {/* Not a live region: the slider's value text says the same as it moves. */}
+            <output htmlFor={id} aria-live="off" className="ml-auto text-sm tabular-nums text-white/60 sm:order-2 sm:ml-0 sm:w-10">
+                {percent}
+            </output>
             <input
                 id={id}
                 type="range"
@@ -57,15 +64,15 @@ export function VolumeRow() {
                 max={1}
                 step={0.05}
                 value={volume}
-                aria-valuetext={`${Math.round(volume * 100)}%`}
+                aria-valuetext={percent}
                 onChange={(e) => {
                     const v = Number(e.target.value);
                     setLocal(v);
                     setVolume(v);
                 }}
-                className="vgp-range w-32"
+                className="vgp-range w-full sm:order-1 sm:w-32"
             />
-            <p className="w-full text-xs leading-5 text-white/50 sm:w-auto sm:flex-1">Start with your speakers or headphones low.</p>
+            <p className="w-full text-xs leading-5 text-white/50 sm:order-3 sm:w-auto sm:flex-1">Start with your speakers or headphones low.</p>
         </div>
     );
 }

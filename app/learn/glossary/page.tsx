@@ -48,7 +48,7 @@ export default function GlossaryPage() {
             <JsonLd data={jsonLd} />
             <JsonLd
                 data={breadcrumbs([
-                    { name: 'Learn', url: `${SITE}/learn` },
+                    { name: 'Lessons', url: `${SITE}/blog` },
                     { name: 'Glossary', url },
                 ])}
             />
@@ -56,24 +56,15 @@ export default function GlossaryPage() {
             <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
                 <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto max-w-7xl">
-                        {/* The glossary sits under Learn, beside the lessons rather than inside them. */}
-                        <nav aria-label="Breadcrumb" className="-my-3 text-sm font-medium text-white">
-                            <ol className="flex flex-wrap items-center gap-x-2">
-                                <li>
-                                    <TapLink href="/learn">Learn</TapLink>
-                                </li>
-                                <li className="flex items-center gap-x-2 text-white/60">
-                                    <span aria-hidden="true">/</span>
-                                    <span aria-current="page">Glossary</span>
-                                </li>
-                            </ol>
+                        {/* The parent is "Lessons" everywhere: here, on a lesson and on a path page. */}
+                        <nav aria-label="Breadcrumb" className="-my-3 text-sm text-white/55">
+                            <TapLink href="/blog" className="hover:text-white">
+                                Lessons
+                            </TapLink>
                         </nav>
                         <h1 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">Glossary</h1>
                         <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
                             {terms.length} terms from the lessons, in plain words. In a lesson, tap a dotted word to see its definition without leaving the page.
-                        </p>
-                        <p className="mt-3 text-sm font-medium text-white">
-                            <TapLink href="/blog">All lessons</TapLink>
                         </p>
                     </div>
                 </section>
@@ -105,7 +96,8 @@ export default function GlossaryPage() {
                                                         {article ? (
                                                             <dd className="mt-1 text-sm text-white/55">
                                                                 Explained in{' '}
-                                                                <TapLink href={`/blog/${article.slug}`} className="text-white/80 hover:text-white">
+                                                                {/* Clear of the sticky header and letter bar (bottom edge at 122 px) when Tab or Shift+Tab lands here. */}
+                                                                <TapLink href={`/blog/${article.slug}`} className="scroll-mt-12 text-white/80 hover:text-white">
                                                                     {article.title}
                                                                 </TapLink>
                                                             </dd>

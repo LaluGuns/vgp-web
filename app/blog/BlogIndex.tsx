@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { memo, useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { memo, useCallback, useDeferredValue, useEffect, useId, useMemo, useRef, useState, type MouseEvent } from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Bookmark, Search, X } from 'lucide-react';
@@ -12,6 +12,7 @@ import { useChipRow } from '@/components/blog/paths/useChipRow';
 import { useScrollMemory } from '@/components/blog/useScrollMemory';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
+import { scoreLesson, wordMatchers } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
@@ -67,47 +68,8 @@ function readSaved(): string[] {
     }
 }
 
-// Search ranking. A typed word of four or more letters matches anywhere in a
-// word; a shorter one ("eq", "808") only at the start of a word, so "eq" does
-// not find every lesson that says "frequency".
-interface WordMatcher {
-    word: string;
-    short: boolean;
-    start: RegExp;
-}
-
-const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-function wordMatchers(query: string): WordMatcher[] {
-    return [...new Set(query.toLowerCase().split(/\s+/).filter(Boolean))].map((word) => ({
-        word,
-        short: word.length <= 3,
-        start: new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeRegExp(word)}`, 'u'),
-    }));
-}
-
-/** Points per field (title, excerpt, headings, keywords and terms): [at a word start, inside a word]. */
-const FIELD_POINTS: [number, number][] = [
-    [10, 7],
-    [5, 4],
-    [3, 2],
-    [1.5, 1],
-];
-
-/** 0 when a word matches nowhere; otherwise each word scores its best field, plus a bonus for the whole phrase in the title. */
-function scoreLesson(fields: string[], words: WordMatcher[], phrase: string): number {
-    let total = 0;
-    for (const matcher of words) {
-        let best = 0;
-        fields.forEach((text, i) => {
-            if (matcher.start.test(text)) best = Math.max(best, FIELD_POINTS[i][0]);
-            else if (!matcher.short && text.includes(matcher.word)) best = Math.max(best, FIELD_POINTS[i][1]);
-        });
-        if (best === 0) return 0;
-        total += best;
-    }
-    return words.length > 1 && fields[0].includes(phrase) ? total + 5 : total;
-}
+/** Words from the lesson bodies (search-index.ts, `searchDigest`), fetched once the reader starts a search. */
+const DIGEST_URL = '/blog/search-digest.json';
 
 const chipClass = (active: boolean) =>
     `inline-flex min-h-11 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors vgp-focus ${
@@ -133,27 +95,36 @@ const ArticleRow = memo(function ArticleRow({
     meta: string;
     isBookmarked: boolean;
     isRead: boolean;
-    onToggleBookmark: (slug: string) => void;
+    onToggleBookmark: (slug: string, row: HTMLElement | null) => void;
 }) {
+    // The link is named by the title alone; the meta line and the excerpt are its description.
+    const id = useId();
     return (
         <li className="flex items-start gap-4 py-7">
             <Link
                 href={`/blog/${article.slug}`}
+                aria-labelledby={`${id}-title`}
+                aria-describedby={`${id}-meta ${id}-excerpt`}
                 className="group min-w-0 flex-1 vgp-focus"
             >
-                <span className="text-xs text-white/50">
+                <span id={`${id}-meta`} className="text-xs text-white/50">
                     {article.isNew ? <span className="font-medium text-white">New · </span> : null}
                     {meta} · {formatDate(article.publishedAt)} · {article.readingTime} min read
                     {isRead ? ' · Read' : ''}
                 </span>
-                <h3 className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                <h3
+                    id={`${id}-title`}
+                    className="mt-2 text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4"
+                >
                     {article.title}
                 </h3>
-                <span className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">{article.excerpt}</span>
+                <span id={`${id}-excerpt`} className="mt-2 line-clamp-2 block max-w-2xl text-base leading-7 text-white/65">
+                    {article.excerpt}
+                </span>
             </Link>
             <button
                 type="button"
-                onClick={() => onToggleBookmark(article.slug)}
+                onClick={(event) => onToggleBookmark(article.slug, event.currentTarget.closest('li'))}
                 aria-pressed={isBookmarked}
                 aria-label={isBookmarked ? `Remove ${article.title} from saved lessons` : `Save ${article.title} for later`}
                 title={isBookmarked ? 'Remove from saved' : 'Save for later'}
@@ -223,7 +194,6 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const read = useReadArticles();
     const params = useSearchParams();
     const pathname = usePathname();
-    useScrollMemory();
 
     const catParam = params.get('cat');
     const category = catParam && categories.some((c) => c.slug === catParam) ? catParam : 'all';
@@ -255,12 +225,37 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     const hasQuery = listQuery.trim() !== '';
     const sort: Sort = chosenSort ?? defaultSort(listQuery, category);
 
-    // Saved lessons live in this browser only, so they load after hydration.
-    const [saved, setSaved] = useState<string[]>([]);
+    // Saved lessons live in this browser only, so they load after hydration (null until then).
+    const [savedState, setSaved] = useState<string[] | null>(null);
+    const saved = useMemo(() => savedState ?? [], [savedState]);
     useEffect(() => {
         const frame = requestAnimationFrame(() => setSaved(readSaved()));
         return () => cancelAnimationFrame(frame);
     }, []);
+    // Back from a lesson restores the scroll position once the list is complete: the Saved
+    // view has no rows until the saved lessons are read.
+    useScrollMemory(savedState !== null);
+
+    // The body digest loads once, when the reader first focuses the box, types, or opens a
+    // list that already has a query. Until it arrives, search covers titles, excerpts,
+    // headings and terms; a failed fetch is tried again on the next search.
+    const [digest, setDigest] = useState<Record<string, string> | null>(null);
+    const digestRequested = useRef(false);
+    const loadDigest = useCallback(() => {
+        if (digestRequested.current) return;
+        digestRequested.current = true;
+        fetch(DIGEST_URL)
+            .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`${response.status}`))))
+            .then((data: unknown) => {
+                if (data && typeof data === 'object') setDigest(data as Record<string, string>);
+            })
+            .catch(() => {
+                digestRequested.current = false;
+            });
+    }, []);
+    useEffect(() => {
+        if (urlQuery) loadDigest();
+    }, [urlQuery, loadDigest]);
 
     // A query waits URL_DELAY before it reaches the URL. Any other write and a click on a
     // link write it at once (so Back returns to this query); unmounting drops it.
@@ -294,6 +289,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     };
 
     const onQueryChange = (value: string) => {
+        loadDigest();
         setQuery(value);
         window.clearTimeout(urlTimer.current);
         pendingWrite.current = () => writeUrl({ q: value, n: null });
@@ -306,17 +302,35 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
     const getCategoryName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? 'Lessons';
 
-    const toggleBookmark = useCallback((slug: string) => {
-        setSaved((current) => {
-            const next = current.includes(slug) ? current.filter((item) => item !== slug) : [...current, slug];
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-            } catch {
-                // Saving is optional when browser storage is unavailable.
-            }
-            return next;
-        });
-    }, []);
+    // In the Saved view, removing a lesson removes its row: focus moves to the row that takes
+    // its place (or the one before it), or to the count once the list is empty.
+    const list = useRef<HTMLUListElement>(null);
+    const count = useRef<HTMLParagraphElement>(null);
+    const refocusRow = useRef<number | null>(null);
+    const toggleBookmark = useCallback(
+        (slug: string, row: HTMLElement | null) => {
+            if (showSaved && row?.parentElement) refocusRow.current = Array.prototype.indexOf.call(row.parentElement.children, row);
+            setSaved((current) => {
+                const items = current ?? [];
+                const next = items.includes(slug) ? items.filter((item) => item !== slug) : [...items, slug];
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+                } catch {
+                    // Saving is optional when browser storage is unavailable.
+                }
+                return next;
+            });
+        },
+        [showSaved],
+    );
+    useEffect(() => {
+        const index = refocusRow.current;
+        if (index === null) return;
+        refocusRow.current = null;
+        const rows = list.current?.children;
+        const link = (rows?.[index] ?? rows?.[index - 1])?.querySelector('a');
+        (link ?? count.current)?.focus();
+    }, [saved]);
 
     // Lesson order across the paths, and each lesson's number inside its path.
     const pathOrder = useMemo(() => {
@@ -331,10 +345,10 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return { rank, number };
     }, [paths]);
 
-    // Search fields in score order: title, excerpt, headings, keywords and glossary terms.
+    // Search fields in score order: title, excerpt, headings, keywords and glossary terms, body digest.
     const fields = useMemo(
-        () => new Map(articles.map((a) => [a.slug, [a.title.toLowerCase(), a.excerpt.toLowerCase(), a.headings, a.terms]])),
-        [articles],
+        () => new Map(articles.map((a) => [a.slug, [a.title.toLowerCase(), a.excerpt.toLowerCase(), a.headings, a.terms, digest?.[a.slug] ?? '']])),
+        [articles, digest],
     );
 
     const filteredArticles = useMemo(() => {
@@ -376,18 +390,33 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     };
 
     // The selected path chip scrolls into view on a phone (after Back, or on a shared ?cat= link).
+    // The Saved chip's label grows once the saved lessons load, so its count is part of the key.
     const chipRow = useRef<HTMLDivElement>(null);
-    useChipRow(chipRow, showSaved ? 'saved' : category);
+    useChipRow(chipRow, showSaved ? `saved:${savedState?.length ?? ''}` : category);
 
-    // "Show more lessons" moves focus to the first lesson it added.
-    const list = useRef<HTMLUListElement>(null);
+    // The Saved chip stays while its view is on, even at "Saved (0)". Leaving the view then
+    // removes the chip, so focus moves to the path chip that is now pressed.
+    const focusPressedChip = useRef(false);
+    const toggleSavedView = () => {
+        if (showSaved && saved.length === 0) focusPressedChip.current = true;
+        writeUrl({ saved: !showSaved, n: null });
+    };
+    useEffect(() => {
+        if (!focusPressedChip.current) return;
+        focusPressedChip.current = false;
+        chipRow.current?.querySelector<HTMLElement>('[aria-pressed="true"]')?.focus();
+    }, [showSaved]);
+
+    // "Show more lessons" moves focus to the first lesson it added and brings the whole row
+    // into view, clear of the bottom navigation on a phone (scroll-padding-bottom).
     const focusRow = useRef<number | null>(null);
     useEffect(() => {
         const index = focusRow.current;
         const link = index === null ? null : list.current?.children[index]?.querySelector('a');
         if (link) {
             focusRow.current = null;
-            link.focus();
+            link.focus({ preventScroll: true });
+            link.scrollIntoView({ block: 'nearest', behavior: 'instant' });
         }
     }, [visibleCount]);
     const showMore = () => {
@@ -437,7 +466,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                     <div className="mx-auto max-w-7xl">
                         <div className="grid gap-4 border-y border-white/10 py-5">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div className="relative w-full sm:max-w-md">
+                                <search className="relative block w-full sm:max-w-md">
                                     <label htmlFor="article-search" className="sr-only">
                                         Search lessons
                                     </label>
@@ -447,6 +476,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         id="article-search"
                                         type="search"
                                         value={query}
+                                        onFocus={loadDigest}
                                         onChange={(e) => onQueryChange(e.target.value)}
                                         placeholder="Search: LUFS, 808, reverb"
                                         className={`min-h-11 w-full rounded-md border border-white/40 bg-[#0a0e12] py-2.5 pl-10 text-white placeholder-white/55 vgp-focus focus:border-white/70 [&::-webkit-search-cancel-button]:appearance-none ${
@@ -463,8 +493,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                             <X size={16} aria-hidden="true" />
                                         </button>
                                     ) : null}
-                                </div>
-                                <p className="text-sm text-white/55" aria-live="polite">
+                                </search>
+                                <p ref={count} tabIndex={-1} className="w-fit rounded-sm text-sm text-white/55 vgp-focus" aria-live="polite">
                                     {filteredArticles.length} {filteredArticles.length === 1 ? 'lesson' : 'lessons'}
                                 </p>
                             </div>
@@ -489,8 +519,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         onClick={() => writeUrl({ cat: c.slug, saved: false, sort: null, n: null })}
                                     />
                                 ))}
-                                {saved.length > 0 ? (
-                                    <FilterButton label={`Saved (${saved.length})`} active={showSaved} onClick={() => writeUrl({ saved: !showSaved, n: null })} />
+                                {saved.length > 0 || showSaved ? (
+                                    <FilterButton
+                                        label={savedState === null ? 'Saved' : `Saved (${saved.length})`}
+                                        active={showSaved}
+                                        onClick={toggleSavedView}
+                                    />
                                 ) : null}
                             </div>
 
@@ -519,15 +553,22 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                 {showFeaturedArticle && featured ? (
                                     <Link
                                         href={`/blog/${featured.slug}`}
+                                        aria-labelledby="featured-lesson-title"
+                                        aria-describedby="featured-lesson-meta featured-lesson-excerpt"
                                         className="group block border-b border-white/10 py-10 vgp-focus"
                                     >
-                                        <span className="text-xs text-white/50">
+                                        <span id="featured-lesson-meta" className="text-xs text-white/50">
                                             Featured · {getCategoryName(featured.category)} · {featured.readingTime} min read
                                         </span>
-                                        <h3 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-4xl">
+                                        <h3
+                                            id="featured-lesson-title"
+                                            className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-[-0.02em] text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-4xl"
+                                        >
                                             {featured.title}
                                         </h3>
-                                        <span className="mt-4 block max-w-2xl text-lg leading-8 text-white/70">{featured.excerpt}</span>
+                                        <span id="featured-lesson-excerpt" className="mt-4 block max-w-2xl text-lg leading-8 text-white/70">
+                                            {featured.excerpt}
+                                        </span>
                                     </Link>
                                 ) : null}
 
