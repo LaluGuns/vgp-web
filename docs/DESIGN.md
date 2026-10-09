@@ -78,6 +78,11 @@ readable text.
 - **Copy.** Specific and plain. No em dashes, no "not just X, but Y", no
   forced triads, no buzzwords, no invented numbers. Only translate ja-JP and
   de-DE strings with a native check.
+- **Spelling.** British forms with -ize endings: centre, colour, labelled,
+  recognize, normalize, analyse. Three trade words keep the form producers
+  see in their tools and in Flow: "license" (noun and verb; Flow sells the
+  Creator License), "analyzer" for the tool, "meter" for the device. The
+  musical sense is "metre". "Midrange" is one word.
 
 ## Figure dialects
 
