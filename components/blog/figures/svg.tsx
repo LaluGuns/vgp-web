@@ -1,11 +1,26 @@
 /**
  * Shared drawing helpers for article figures, on the dark surface
- * (docs/DESIGN.md). The data the caption asks you to look at is drawn in
- * the site accent; text, axes, grids and "before" states stay white or
- * grey, and dashed lines mark reference states.
+ * (docs/DESIGN.md, "Article figures" and "Figure dialects"). The data the
+ * caption asks you to look at is drawn in the accent; text, axes, grids and
+ * "before" states stay white or grey, and dashed lines mark reference
+ * states. Each lesson group draws in its own dialect (lib/blog/dialects.ts):
+ * the helpers below take the dialect and draw rules, markers, bars, steps
+ * and arrows its way, so every figure type speaks every dialect.
+ *
+ * Accent marks are drawn in `currentColor`, and the root <svg> carries the
+ * dialect's accent as its `color` attribute, so a figure is complete with
+ * no stylesheet (the offline renderer) and needs no CSS on the page.
  */
 
-import type { ReactNode, SVGProps } from 'react';
+import type { CSSProperties, ReactNode, SVGProps } from 'react';
+import { resolveDialect, type Dialect, type DialectName } from '@/lib/blog/dialects';
+
+export type { Dialect, DialectName };
+
+/** What a figure component accepts: a dialect name or resolved tokens. Missing: technical. */
+export type DialectProp = Dialect | DialectName;
+
+export const dialectOf = (dialect?: DialectProp | string) => resolveDialect(dialect);
 
 export const C = {
     ink: 'rgba(255,255,255,0.92)',
@@ -17,12 +32,43 @@ export const C = {
     lane: 'rgba(255,255,255,0.035)',
     fill: 'rgba(255,255,255,0.08)',
     fillStrong: 'rgba(255,255,255,0.18)',
-    /** `--accent`: the data in focus. */
-    accent: '#7dd3fc',
-    accentFill: 'rgba(125,211,252,0.12)',
+    /** The figure surface, for plates behind labels. */
+    surface: '#0a0e12',
+    /** The data in focus, in the accent set on the root <svg>. */
+    accent: 'currentColor',
 };
 
-export const accentAlpha = (a: number) => `rgba(125,211,252,${a.toFixed(2)})`;
+/** Fill in the accent at an opacity. 0.12 is the area under a focus curve. */
+export const accentFill = (opacity = 0.12) => ({ fill: C.accent, fillOpacity: Number(opacity.toFixed(2)) });
+
+/** Stroke in the accent at an opacity. */
+export const accentStroke = (opacity = 1) => ({ stroke: C.accent, strokeOpacity: Number(opacity.toFixed(2)) });
+
+/** White at an opacity, for rules. */
+const white = (opacity: number) => `rgba(255,255,255,${Number(opacity.toFixed(3))})`;
+
+/**
+ * Draw-in on scroll (docs/DESIGN.md, Motion). The figure frame carries
+ * `data-reveal="draw"`, and app/globals.css plays these classes once when
+ * MotionObserver reveals it. With no script, under reduced motion, in
+ * print, or when the figure starts on screen, they do nothing.
+ *
+ * - `line`: a solid accent stroke draws along its length. Sets
+ *   `pathLength={1}`, so never use it on a dashed stroke.
+ * - `grow`: a bar grows from its left edge. `rise`: from its bottom edge.
+ * - `pop`: a dot fades and scales in. `fade`: fades in.
+ * - `focus`: a ring closes in on its point, the way attention settles.
+ * - `slide`: a moved hit slides from its grid step (`--draw-from`, in
+ *   user units) to where it lands.
+ *
+ * The element must not have its own `transform` attribute.
+ */
+export type DrawKind = 'line' | 'grow' | 'rise' | 'pop' | 'fade' | 'focus' | 'slide';
+
+export function draw(kind: DrawKind, delayMs = 0, vars?: Record<`--${string}`, string>) {
+    const style = { '--draw-delay': `${Math.round(delayMs)}ms`, ...vars } as CSSProperties;
+    return kind === 'line' ? { className: 'vgp-draw-line', pathLength: 1, style } : { className: `vgp-draw-${kind}`, style };
+}
 
 export const FS = 12;
 export const DASH = '5 4';
@@ -49,15 +95,17 @@ export function wrapText(text: string, maxWidth: number, size = FS): string[] {
     return lines;
 }
 
-export function Svg({ w, h, label, children }: { w: number; h: number; label: string; children: ReactNode }) {
+export function Svg({ w, h, label, d, children }: { w: number; h: number; label: string; d: Dialect; children: ReactNode }) {
     return (
         <svg
             viewBox={`0 0 ${w} ${h}`}
             width="100%"
             role="img"
             aria-label={label}
-            className="block h-auto overflow-visible"
-            style={{ fontFamily: 'var(--font-display)' }}
+            color={d.accent}
+            data-dialect={d.name}
+            className="vgp-fig block h-auto overflow-visible"
+            style={{ fontFamily: 'var(--font-display)', fontVariantNumeric: d.tabular ? 'tabular-nums' : undefined }}
         >
             {children}
         </svg>
@@ -87,6 +135,11 @@ export function Label({
             {children}
         </text>
     );
+}
+
+/** An axis title ("Energy ↑", "Input level (dB)"). Music sets it in italic, like an expression mark. */
+export function Title({ d, ...props }: { d: Dialect } & Parameters<typeof Label>[0]) {
+    return <Label fill={C.text} fontStyle={d.italicTitles ? 'italic' : undefined} {...props} />;
 }
 
 /** Multi-line label; `y` is the first baseline. */
@@ -120,10 +173,278 @@ export function Lines({
     );
 }
 
-export function Arrowhead({ x, y, angle, size = 6, fill = C.soft }: { x: number; y: number; angle: number; size?: number; fill?: string }) {
+// ── Rules: the grid texture of each dialect ──
+
+/** A grid rule. `major` for main divisions, beats and bar lines. Solid, or dotted in the mind dialect. */
+export function Rule({
+    d,
+    x1,
+    y1,
+    x2,
+    y2,
+    major,
+    opacity,
+}: {
+    d: Dialect;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    major?: boolean;
+    /** Overrides the dialect's opacity, for rules that must sit lower still. */
+    opacity?: number;
+}) {
+    return (
+        <line
+            x1={x1}
+            x2={x2}
+            y1={y1}
+            y2={y2}
+            stroke={white(opacity ?? (major ? d.rule.major : d.rule.minor))}
+            strokeWidth={d.rule.width}
+            strokeDasharray={d.rule.dash || undefined}
+            strokeLinecap={d.rule.cap}
+        />
+    );
+}
+
+/** An axis or baseline: solid in every dialect, because it is where values are read from. */
+export function Axis({ x1, y1, x2, y2, width = 1 }: { x1: number; y1: number; x2: number; y2: number; width?: number }) {
+    return <line x1={x1} x2={x2} y1={y1} y2={y2} stroke={C.faint} strokeWidth={width} />;
+}
+
+/** A dashed reference line (a threshold, a mark, a "before" state). Grey in every dialect. */
+export function RefLine({
+    d,
+    x1,
+    y1,
+    x2,
+    y2,
+    stroke = C.soft,
+    width = 1,
+}: {
+    d: Dialect;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    stroke?: string;
+    width?: number;
+}) {
+    return <line x1={x1} x2={x2} y1={y1} y2={y2} stroke={stroke} strokeWidth={width} strokeDasharray={d.refDash} strokeLinecap={d.cap} />;
+}
+
+/**
+ * Registration ticks at the corners of a plot, as on an instrument display.
+ * Technical only; other dialects frame their plots with their own rules.
+ */
+export function Corners({ d, x, y, w, h, arm = 5 }: { d: Dialect; x: number; y: number; w: number; h: number; arm?: number }) {
+    if (d.name !== 'technical') return null;
+    const p = (cx: number, cy: number, sx: number, sy: number) => `M${cx + sx * arm},${cy}H${cx}V${cy + sy * arm}`;
+    return (
+        <path
+            d={`${p(x, y, 1, 1)}${p(x + w, y, -1, 1)}${p(x, y + h, 1, -1)}${p(x + w, y + h, -1, -1)}`}
+            fill="none"
+            stroke={white(0.34)}
+            strokeWidth={1}
+            strokeLinecap="square"
+        />
+    );
+}
+
+/** The ledger's closing double rule under a figure. Business only. */
+export function ClosingRule({ d, x1, x2, y }: { d: Dialect; x1: number; x2: number; y: number }) {
+    if (d.name !== 'business') return null;
+    return (
+        <g stroke={white(d.rule.major)} strokeWidth={1}>
+            <line x1={x1} x2={x2} y1={y} y2={y} />
+            <line x1={x1} x2={x2} y1={y + 3} y2={y + 3} />
+        </g>
+    );
+}
+
+/** A bar line. `double` marks a section change, `final` closes the piece (thin then thick). Music only. */
+export function Barline({ x, y1, y2, kind = 'single', opacity = 0.5 }: { x: number; y1: number; y2: number; kind?: 'single' | 'double' | 'final'; opacity?: number }) {
+    const stroke = white(opacity);
+    if (kind === 'single') return <line x1={x} x2={x} y1={y1} y2={y2} stroke={stroke} strokeWidth={1} />;
+    if (kind === 'double')
+        return (
+            <g stroke={stroke} strokeWidth={1}>
+                <line x1={x - 1.5} x2={x - 1.5} y1={y1} y2={y2} />
+                <line x1={x + 1.5} x2={x + 1.5} y1={y1} y2={y2} />
+            </g>
+        );
+    return (
+        <g stroke={stroke}>
+            <line x1={x - 4} x2={x - 4} y1={y1} y2={y2} strokeWidth={1} />
+            <line x1={x - 1} x2={x - 1} y1={y1} y2={y2} strokeWidth={2.5} />
+        </g>
+    );
+}
+
+// ── Marks: points, bars, steps and arrows in each dialect ──
+
+export type Tone = 'accent' | 'muted' | 'ink';
+
+const toneFill = (tone: Tone, opacity = 1) =>
+    tone === 'accent' ? accentFill(opacity) : { fill: tone === 'ink' ? C.ink : C.strong, fillOpacity: opacity < 1 ? opacity : undefined };
+
+/**
+ * One value marked on a line or an axis. `r` is the size of a plain dot.
+ * Technical: a measured square. Music: a note head, hollow when not in
+ * focus. Mind: a dot held in a focus ring. Business: a tick, as on a ledger.
+ */
+export function Point({
+    d,
+    x,
+    y,
+    r = 2.6,
+    tone = 'accent',
+    opacity = 1,
+    delay,
+}: {
+    d: Dialect;
+    x: number;
+    y: number;
+    r?: number;
+    tone?: Tone;
+    opacity?: number;
+    /** Draw-in delay in ms; omit to keep the mark still. */
+    delay?: number;
+}) {
+    const motion = delay === undefined ? {} : draw('pop', delay);
+    switch (d.marker) {
+        case 'square': {
+            const s = r * 1.8;
+            return <rect x={x - s / 2} y={y - s / 2} width={s} height={s} {...toneFill(tone, opacity)} {...motion} />;
+        }
+        case 'head': {
+            const rx = r * 1.45;
+            const ry = r * 1.02;
+            // A note head leans back like an engraved one. The tilt is drawn into the path, so the
+            // element keeps no transform attribute and can still pop in.
+            const path = ellipsePath(x, y, rx, ry, -20);
+            return tone === 'accent' ? (
+                <path d={path} {...accentFill(opacity)} {...motion} />
+            ) : (
+                <path d={path} fill={C.surface} stroke={tone === 'ink' ? C.ink : C.strong} strokeOpacity={opacity < 1 ? opacity : undefined} strokeWidth={1.3} {...motion} />
+            );
+        }
+        case 'ring': {
+            if (tone !== 'accent') return <circle cx={x} cy={y} r={r} {...toneFill(tone, opacity)} {...motion} />;
+            return (
+                <g>
+                    <circle cx={x} cy={y} r={r * 2.3} fill="none" {...accentStroke(0.55 * opacity)} strokeWidth={1} {...(delay === undefined ? {} : draw('focus', delay + 60))} />
+                    <circle cx={x} cy={y} r={r} {...accentFill(opacity)} {...motion} />
+                </g>
+            );
+        }
+        case 'tick': {
+            const hh = r * 1.9;
+            return <rect x={x - 1} y={y - hh} width={2} height={hh * 2} {...toneFill(tone, opacity)} {...motion} />;
+        }
+    }
+}
+
+/** An ellipse rotated by `deg`, as a path (four arcs), so it needs no transform. */
+function ellipsePath(cx: number, cy: number, rx: number, ry: number, deg: number) {
+    const a = (deg * Math.PI) / 180;
+    const pt = (t: number) => {
+        const ex = rx * Math.cos(t);
+        const ey = ry * Math.sin(t);
+        return `${(cx + ex * Math.cos(a) - ey * Math.sin(a)).toFixed(2)},${(cy + ex * Math.sin(a) + ey * Math.cos(a)).toFixed(2)}`;
+    };
+    const arc = `A${rx},${ry} ${deg} 0 1 `;
+    return `M${pt(0)}${arc}${pt(Math.PI / 2)}${arc}${pt(Math.PI)}${arc}${pt(Math.PI * 1.5)}${arc}${pt(0)}Z`;
+}
+
+/** Corner radius of a bar, cell or note `h` high in this dialect. */
+export const cornerOf = (d: Dialect, h: number, w = Infinity) => Math.min(d.corner === 'pill' ? h / 2 : d.corner, h / 2, w / 2);
+
+/**
+ * A horizontal bar. Its value is its right edge, in every dialect.
+ * Business adds a tick at that edge, the way a ledger marks an entry.
+ */
+export function Bar({
+    d,
+    x,
+    y,
+    w,
+    h,
+    tone = 'accent',
+    opacity = 1,
+    delay,
+}: {
+    d: Dialect;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    tone?: Tone | 'dim';
+    opacity?: number;
+    delay?: number;
+}) {
+    const rx = cornerOf(d, h, w);
+    const paint = tone === 'dim' ? { fill: C.fillStrong } : toneFill(tone, opacity);
+    const motion = delay === undefined || tone === 'dim' ? {} : draw('grow', delay);
+    return (
+        <g>
+            <rect x={x} y={y} width={w} height={h} rx={rx} {...paint} {...motion} />
+            {d.name === 'business' ? (
+                <rect
+                    x={x + w - 1}
+                    y={y - 3}
+                    width={2}
+                    height={h + 6}
+                    {...(tone === 'dim' ? { fill: C.soft } : toneFill(tone, 1))}
+                    {...(delay === undefined || tone === 'dim' ? {} : draw('fade', delay + 420))}
+                />
+            ) : null}
+        </g>
+    );
+}
+
+/** The track a bar runs along: a faint field (technical), a staff line (music), a dotted line (mind), nothing (business: the row rules carry it). */
+export function Track({ d, x, y, w, h }: { d: Dialect; x: number; y: number; w: number; h: number }) {
+    switch (d.name) {
+        case 'technical':
+            return <rect x={x} y={y} width={w} height={h} rx={cornerOf(d, h)} fill={C.lane} />;
+        case 'music':
+            return <line x1={x} x2={x + w} y1={y + h / 2} y2={y + h / 2} stroke={white(d.rule.major)} strokeLinecap="round" />;
+        case 'mind':
+            return <Rule d={d} x1={x} x2={x + w} y1={y + h / 2} y2={y + h / 2} major />;
+        case 'business':
+            return null;
+    }
+}
+
+/** Arrowhead pointing along `angle` (degrees, 0 = right) with its tip at x, y. */
+export function Arrowhead({ x, y, angle, size = 6, fill = C.soft, d }: { x: number; y: number; angle: number; size?: number; fill?: string; d?: Dialect }) {
     const a = (angle * Math.PI) / 180;
-    const p = (da: number) => `${x - size * Math.cos(a + da)},${y - size * Math.sin(a + da)}`;
-    return <polygon points={`${x},${y} ${p(0.45)} ${p(-0.45)}`} fill={fill} />;
+    const p = (da: number, s = size) => `${(x - s * Math.cos(a + da)).toFixed(2)},${(y - s * Math.sin(a + da)).toFixed(2)}`;
+    if (!d || d.name === 'technical') return <polygon points={`${x},${y} ${p(0.45)} ${p(-0.45)}`} fill={fill} />;
+    // Open heads elsewhere: a drawn chevron, round in music and mind, sharp and thin in the ledger.
+    const spread = d.name === 'mind' ? 0.62 : 0.5;
+    const s = d.name === 'business' ? size * 0.95 : size * 1.05;
+    return (
+        <polyline
+            points={`${p(spread, s)} ${x},${y} ${p(-spread, s)}`}
+            fill="none"
+            stroke={fill}
+            strokeWidth={d.name === 'business' ? 1.25 : 1.5}
+            strokeLinecap={d.cap}
+            strokeLinejoin={d.join}
+        />
+    );
+}
+
+/** Where a line into an arrowhead should stop: a filled head covers its own length, an open head needs the line to reach the tip. */
+export const arrowInset = (d: Dialect, size = 6) => (d.name === 'technical' ? size - 1 : 1);
+
+/** A flow step's box. Technical: a module. Music: a hand-set card. Mind: a soft node. Business: a ruled entry. */
+export function Node({ d, x, y, w, h }: { d: Dialect; x: number; y: number; w: number; h: number }) {
+    const rx = d.node === 'pill' ? Math.min(h / 2, 22) : d.node;
+    return <rect x={x + 0.5} y={y + 0.5} width={w - 1} height={h - 1} rx={rx} fill={C.lane} stroke={d.name === 'technical' ? white(0.26) : C.faint} />;
 }
 
 const num = (v: number) => String(Math.round(v * 10) / 10);
@@ -143,9 +464,9 @@ function simplify(points: [number, number][], tolerance = 0.2): [number, number]
         let max = 0;
         let at = -1;
         for (let i = a + 1; i < b; i++) {
-            const d = Math.abs(dy * (points[i][0] - ax) - dx * (points[i][1] - ay)) / len;
-            if (d > max) {
-                max = d;
+            const dd = Math.abs(dy * (points[i][0] - ax) - dx * (points[i][1] - ay)) / len;
+            if (dd > max) {
+                max = dd;
                 at = i;
             }
         }
@@ -193,12 +514,12 @@ export function smoothPath(points: [number, number][]): string {
             t[i + 1] = k * b * m[i];
         }
     }
-    let d = `M${x[0].toFixed(1)},${y[0].toFixed(1)}`;
+    let path = `M${x[0].toFixed(1)},${y[0].toFixed(1)}`;
     for (let i = 0; i < n - 1; i++) {
         const h = dx[i] / 3;
-        d += `C${(x[i] + h).toFixed(1)},${(y[i] + t[i] * h).toFixed(1)} ${(x[i + 1] - h).toFixed(1)},${(y[i + 1] - t[i + 1] * h).toFixed(1)} ${x[i + 1].toFixed(1)},${y[i + 1].toFixed(1)}`;
+        path += `C${(x[i] + h).toFixed(1)},${(y[i] + t[i] * h).toFixed(1)} ${(x[i + 1] - h).toFixed(1)},${(y[i + 1] - t[i + 1] * h).toFixed(1)} ${x[i + 1].toFixed(1)},${y[i + 1].toFixed(1)}`;
     }
-    return d;
+    return path;
 }
 
 export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -213,12 +534,13 @@ export interface LegendItem {
     swatch?: string;
 }
 
-/** Legend of line samples that wraps to the available width. */
+/** Legend of line samples that wraps to the available width. Samples take the dialect's line ends and dashes. */
 export function legend(
     items: LegendItem[],
     x: number,
     y: number,
     maxWidth: number,
+    d: Dialect,
     column = false,
 ): { node: ReactNode; height: number } {
     if (items.length === 0) return { node: null, height: 0 };
@@ -240,16 +562,17 @@ export function legend(
             {placed.map(({ item, x: lx, y: ly }) => (
                 <g key={item.label}>
                     {item.swatch ? (
-                        <rect x={lx} y={ly - 10} width={16} height={10} rx={2} fill={item.swatch} />
+                        <rect x={lx} y={ly - 10} width={16} height={10} rx={cornerOf(d, 10, 16)} fill={item.swatch} />
                     ) : (
                         <line
-                            x1={lx}
-                            x2={lx + 18}
+                            x1={lx + (d.cap === 'round' ? 1 : 0)}
+                            x2={lx + (d.cap === 'round' ? 17 : 18)}
                             y1={ly - 4}
                             y2={ly - 4}
                             stroke={item.stroke ?? (item.muted ? C.faint : C.accent)}
                             strokeWidth={1.8}
-                            strokeDasharray={item.dashed ? DASH : undefined}
+                            strokeDasharray={item.dashed ? d.refDash : undefined}
+                            strokeLinecap={d.cap}
                         />
                     )}
                     <Label x={lx + 24} y={ly} fill={C.text}>
