@@ -172,7 +172,7 @@ function arrange(gap) {
     for (let k = 0; k < 4; k++) put(drums, s.clap, T0 + (2 * k + 1) * BEAT, undb(-5));
     for (let k = 0; k < 8; k++) put(drums, s.hat, T0 + (k + 0.5) * BEAT, undb(-11), { pan: 0.15 });
     add(tr.drums, drums);
-    put(tr.crash, s.crash, T0, undb(-14));
+    put(tr.crash, s.crash, T0, undb(-20));
     butter(tr.crash.L, 'hp', 300, 2);
     butter(tr.crash.R, 'hp', 300, 2);
     // Reese bass from the loop's own first bar, ducked by the kick.
@@ -226,7 +226,7 @@ const STEMS = ['kick', 'drums', 'riser', 'swell', 'stabs', 'bass', 'crash', 'ver
 /** Bus drive into the limiter: the same for both versions. */
 export const DRIVE_DB = -1;
 /** Riser level against its sample. */
-export const RISER_DB = 2;
+export const RISER_DB = 0;
 
 /**
  * Render one version: { bus (pre-limiter), out (after limiter), gain (limiter),
