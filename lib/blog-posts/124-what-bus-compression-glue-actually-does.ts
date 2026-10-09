@@ -52,7 +52,10 @@ export const post124: BlogArticle = {
                 {
                     label: 'Drums and pad into the bus',
                     unipolar: true,
-                    lines: [{ y: 0.6, label: 'Light threshold' }],
+                    lines: [
+                        { y: 0.6, label: '2:1 threshold' },
+                        { y: 0.3, label: '6:1 threshold' },
+                    ],
                     traces: [
                         { kind: 'hits', at: AT, amp: AMP, decay: DECAY, outline: true, label: 'Drums' },
                         { kind: 'envelope', points: [[0, PAD], [1, PAD]], label: 'Pad', dashed: true },
@@ -88,7 +91,7 @@ export const post124: BlogArticle = {
                 'Nothing, because the pad is below the threshold',
                 'It is turned down by the same amount as the snare',
                 'It is turned up to make room for the snare hit',
-                'It is turned down only if the pad is louder',
+                'It is turned down only while the pad is over the threshold',
             ],
             answer: 1,
             why: 'A bus compressor computes one gain from the sum and applies it to everything on the bus. The pad does not need to cross the threshold to be turned down.',
@@ -137,7 +140,7 @@ $$y(t) = g(t) \\sum_{i=1}^{N} x_i(t), \\qquad g(t) = f\\left( \\sum_{i=1}^{N} x_
 
 Here $f$ is the threshold, ratio, attack and release machinery from the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) (Giannoulis, Massberg and Reiss, 2012). Compare that with a compressor on each track, where every $x_i$ gets its own $g_i(t)$ and the tracks move independently. On the bus, every level change the compressor makes is shared, so the tracks' envelopes become partly correlated with whatever drives the detector. On a stereo bus the left and right sides are normally linked to the same gain as well, so a hit on one side does not pull the image toward the other.
 
-Why would shared movement sound cohesive? Bregman's work on auditory scene analysis found that sounds whose levels change together at the same time tend to be heard as belonging together, one of the grouping cues he calls common fate (Bregman, 1990). Applying that to bus compression is an interpretation rather than a measured result, but it fits what engineers describe: a little common movement makes separate parts feel like one event.
+Why would shared movement sound cohesive? In Bregman's account of auditory scene analysis, sounds whose levels change together at the same time tend to be grouped as one source, a cue he discusses under common fate (Bregman, 1990). Applying that to bus compression is an interpretation rather than a measured result, but it fits what engineers describe: a little common movement makes separate parts feel like one event.
 
 The detector also decides who steers. It reacts to the sum, so the element with the biggest peaks sets most of the gain movement, and on a drum or mix bus that is often the kick. Many bus compressors offer a high-pass filter on the detector path for this reason. It changes only what the detector hears, so the kick still passes at full weight while steering the gain less.
 
@@ -150,7 +153,7 @@ The detector also decides who steers. It reacts to the sum, so the element with 
 3. Mute the drums for a moment and listen to the pad. Unmute and listen again: the pad now dips slightly with each kick and snare.
 4. Pull the threshold down until you see 6 to 8 dB of reduction. Listen to the pad and the cymbal tails between hits.
 5. Set the release short enough that the meter is back near zero before each kick, then long enough that it never fully returns. Note which one moves with the groove.
-6. If your compressor has a detector high-pass, raise it until the kick stops dominating the meter, and listen to whether the snare and vocals now steer the movement.
+6. If your compressor has a detector high-pass, raise it until the kick stops dominating the meter, and listen to whether the snare and the bass now steer the movement.
 7. Return to a setting you like and compare it with the bypassed bus at matched loudness.
 
 Exaggerating first makes the shared movement easy to hear. Back at a couple of dB, it shows up as parts that sit together rather than as an effect you can point to.
@@ -159,17 +162,16 @@ Exaggerating first makes the shared movement easy to hear. Back at a couple of d
 
 Glue cannot fix a balance problem. If the vocal is too loud against the band, a bus compressor turns the band and the vocal down together whenever the drums hit, and the vocal is still too loud. Fix the balance first, then compress the bus.
 
-The other mistake is judging bus compression with makeup gain on. The compressed version is louder, so it wins the quick A/B. Match the levels, and listen to the sustained parts, where shared movement shows first. Over a whole song, heavy bus compression also shrinks the lift from verse to chorus, the same cost the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion) measures for limiting.
+The other mistake is judging bus compression with makeup gain on. The compressed version is louder, so it wins the quick A/B. Match the levels, and listen to the sustained parts, where shared movement shows first. Over a whole song, heavy bus compression can also shrink the lift from verse to chorus, the same cost the [lesson on the final loudness push](/blog/the-final-loudness-push-that-can-cost-emotion) describes for limiting.
 
 ## Producer takeaway: glue is a timing decision
 
-Treat a bus compressor as a decision about which events move everything else, and how fast everything comes back. Pick the release so the gain returns in time with the beat, keep the amount small, and filter the detector if the kick is steering the whole bus. On my own mix bus I rarely go past 2 dB of reduction; past that, I hear pumping before I hear glue. When parts still feel separate, the cause is usually arrangement or balance, and more bus compression will not reach it.
+Treat a bus compressor as a decision about which events move everything else, and how fast everything comes back. Pick the release so the gain returns in time with the beat, keep the amount small, and filter the detector if the kick is steering the whole bus. On a mix bus I start with a couple of dB of reduction at most; past that, pumping tends to arrive before glue does. When parts still feel separate, the cause is usually arrangement or balance, and more bus compression will not reach it.
 
 ## References
 
 - Bregman, A. S. (1990). *Auditory Scene Analysis: The Perceptual Organization of Sound*. MIT Press.
 - Giannoulis, D., Massberg, M., & Reiss, J. D. (2012). Digital dynamic range compressor design: A tutorial and analysis. *Journal of the Audio Engineering Society*, 60(6), 399-408.
-- Izhaki, R. (2023). *Mixing Audio: Concepts, Practices, and Tools* (4th ed.). Focal Press.
 `,
     seo: {
         title: 'What bus compression glue really is | VGP Studio',

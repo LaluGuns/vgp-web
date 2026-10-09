@@ -20,8 +20,8 @@ export const post139: BlogArticle = {
         shapes: {
             type: 'signal',
             caption:
-                'Two masters drawn as level envelopes with the same peak level. The first stays at one level with sharp hits: a small LRA and a large PSR. The second has a quiet verse and a chorus pressed flat under the ceiling: a larger LRA and, in the chorus, a small PSR. One integrated reading could describe both.',
-            alt: 'Two level plots of twelve hits each, with a peak line at the same height. In the first, every hit is a sharp spike that falls almost to nothing before the next. In the second, the first six hits are small spikes and the last six merge into a dense block held just under the peak line.',
+                'Two masters drawn as level envelopes with the same peak level. The first stays at one level with sharp hits: a small LRA and a large PSR. The second has a quiet verse and a dense chorus flattened at the ceiling: a larger LRA and, in the chorus, a small PSR. One integrated reading could describe both.',
+            alt: 'Two level plots of twelve hits each, with a peak line at the same height. In the first, every hit is a sharp spike that falls almost to nothing before the next. In the second, the first six hits are small spikes and the last six merge into a dense block with flat tops on the peak line.',
             rows: [
                 {
                     label: 'Even sections, sharp hits',
@@ -95,7 +95,7 @@ export const post139: BlogArticle = {
     ],
     content: `## Hook: five readings, one verdict
 
-A modern loudness meter at the end of the master chain shows a column of readings: integrated loudness, true peak, LRA, PLR and sometimes PSR. Most of us read the whole column as one verdict on "dynamic range". Someone online says an LRA of 4 LU means the master is crushed, so you back the limiter off, render again, and the LRA barely moves. The limiter was never what set it.
+A modern loudness meter at the end of the master chain shows a column of readings: integrated loudness, true peak, LRA, PLR and sometimes PSR. Most of us read the whole column as one verdict on "dynamic range". Someone online says an LRA of 4 LU means the master is crushed, so you back the limiter off, render again, and the LRA barely moves, because the limiter was never what set it.
 
 The readings measure different things over different stretches of time. Read each one as the answer to its own question and they stop contradicting each other.
 
