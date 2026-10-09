@@ -76,7 +76,7 @@ export const post129: BlogArticle = {
                 'That range is already masked by the bass and keys',
                 'Low shelves shift the phase of the guitar too far',
                 'The guitar is panned, so its lows fold to mono',
-                'Soloed tracks play back at a higher sample rate',
+                'A shelf needs a high-pass under it to be heard',
             ],
             answer: 0,
             why: 'Where the bass and keys are stronger, the guitar\'s extra energy is covered. It adds to the low-mid build-up without changing what you hear as guitar.',
@@ -95,15 +95,13 @@ export const post129: BlogArticle = {
     ],
     content: `## Hook: the guitar that sounded great alone
 
-You spend ten minutes on the acoustic guitar with solo on. A low shelf for body, a little air on top, and it sounds like an album intro. Then you unsolo. The guitar is no clearer than before, the bass has lost its edge, and the low end of the vocal is blurred. The body you added went straight into the range the bass and the piano were already filling.
-
-Solo did not show you the guitar the listener hears. It showed you a guitar nobody will ever hear on its own.
+You spend ten minutes on the acoustic guitar with solo on. A low shelf for body, a little air on top, and it sounds like an album intro. Then you unsolo. The guitar is no clearer than before, the bass has lost its edge, and the low end of the vocal is blurred. The body you added went straight into the range the bass and the piano were already filling. Solo showed you a guitar nobody will ever hear on its own.
 
 ## Why it matters: the listener hears the sum
 
 A listener never presses your solo button. They hear every part through every other part, so a part's tone in the mix depends on what plays alongside it. A guitar can be full and warm in solo and thin in the mix, or thin in solo and exactly right in the mix.
 
-That does not make solo useless. It is the right tool for anything that belongs to one track alone: a click at an edit, a breath cut off mid-word, hiss, hum, a ring that keeps sounding after the note (the [lesson on resonance](/blog/why-resonance-can-sing-or-destroy-a-mix) shows how to hunt those). It is the wrong place to decide tone and level, because those depend on everything else.
+Solo is still the right tool for anything that belongs to one track alone: a click at an edit, a breath cut off mid-word, hiss, hum, a ring that keeps sounding after the note (the [lesson on resonance](/blog/why-resonance-can-sing-or-destroy-a-mix) shows how to hunt those). It is the wrong place to decide tone and level, because those depend on everything else.
 
 ## Science model: masking decides which part of a sound you hear
 
@@ -113,7 +111,7 @@ Inside the ear, sound is analysed in narrow overlapping bands. Within a band, a 
 
 Even where a part stays audible, it sounds weaker than in solo. Moore, Glasberg and Baer (1997) modelled this partial loudness, the loudness of a sound in the presence of another, and it is lower than the same sound's loudness alone. So in solo you judge the whole spectrum at full loudness. In the mix you hear a slice of it, turned down.
 
-This explains the guitar. Its low mids sit under the bass and keys, so the shelf added energy the listener cannot pick out as guitar. That energy still counts, though: it raises the masking on the bass and on the lower part of the vocal. The guitar's identity in the mix lives higher up, in the pick attack and string detail that solo made you want to tame.
+This explains the guitar. Its low mids sit under the bass and keys, so the shelf added energy the listener cannot pick out as guitar. That energy still counts, though: it raises the masking on the bass and on the lower part of the vocal. The guitar's identity in the mix lives higher up, in the pick attack and string detail, the part a soloed guitar can make sound too sharp.
 
 It works the other way too. Some problems only exist together. Two parts that each sound clean can pile up in one range, and a bright part can sit right on top of the vocal's consonants. Neither shows up in solo.
 

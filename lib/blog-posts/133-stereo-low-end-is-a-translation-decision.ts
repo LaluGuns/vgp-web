@@ -17,7 +17,7 @@ export const post133: BlogArticle = {
             type: 'spectrum',
             mode: 'level',
             caption:
-                'The harmonics of a bass note on A1 (55 Hz). The fundamental and the first harmonic or two sit in the sub band, while the harmonics that give the note its character run up past 1 kHz. A split around 120 Hz is a common starting point, not a rule.',
+                'The harmonics of a bass note on A1 (55 Hz). The fundamental and the second harmonic sit in the sub band, while the harmonics that give the note its character run on up through the low mids. A split around 120 Hz is a common starting point, not a rule.',
             alt: 'A row of harmonic lines starting at 55 Hz and falling in level up to about 900 Hz. A shaded band from 20 to 120 Hz is labelled sub, a second band from 120 Hz to 1.5 kHz is labelled harmonics.',
             bands: [
                 { from: 20, to: 120, label: 'Sub' },
@@ -87,7 +87,7 @@ Nobody touched the bass. The speaker added left and right together, and the bass
 
 ## Why it matters: low end gets summed in many places
 
-The usual advice is to keep everything under about 120 Hz in mono, and the [lesson on mono](/blog/why-mono-reveals-what-stereo-hides) explains why some width tricks fail there. That advice is a decision about translation, not a fact about hearing, so it helps to know what it protects against.
+The usual advice is to keep everything under about 120 Hz in mono, and the [lesson on mono](/blog/why-mono-reveals-what-stereo-hides) explains why some width tricks fail there. That advice is about translation, so it helps to know exactly what it protects against.
 
 Plenty of playback adds the channels in the low end, even when it plays the rest in stereo. Single-speaker phones and smart speakers sum everything. A 2.1 system or a home cinema with bass management sends the lows of both channels to one sub. Many club rigs feed their subs a mono sum. Vinyl does it mechanically: in the 45/45 stereo groove that Blumlein's patent described, the sum of the channels moves the stylus sideways and the difference moves it up and down, so large out-of-phase bass makes for a deep, hard-to-track groove. Each of these hears $L + R$, or $2M$ in mid/side terms, and anything that exists only in the side signal is not there.
 
@@ -109,7 +109,7 @@ None of this means the low end carries no spatial information. For sounds that c
 
 ::figure split
 
-That gives a practical split. The sub carries the weight and most of the risk. The harmonics carry the character, the ear can place them, and they cost far less in mono because a timing offset that cancels at one harmonic leaves its neighbours mostly intact.
+That gives a practical split. The sub carries the weight and most of the risk. The harmonics carry the character, the ear can place them, and they cost far less in mono. With a detune measured in cents, the nth harmonic beats n times as fast as the fundamental, so the harmonics drift in and out of step at different moments instead of all vanishing together.
 
 The demo plays two copies of one bass note. Adding them is exactly what a mono fold does to a bass whose channels differ by a delay or a flip, so listen for how fast the low end thins out.
 
@@ -120,17 +120,17 @@ The demo plays two copies of one bass note. Adding them is exactly what a mono f
 Use a stereo bass patch with unison or chorus, playing a part with long notes.
 
 1. Put a mono switch and a spectrum analyzer on the master. Loop eight bars and toggle mono. Note any notes that swell or fade.
-2. Duplicate the bass track. On the first copy, low-pass at 120 Hz and set it to mono with a utility. Call it Sub.
-3. On the second copy, high-pass at 120 Hz and leave it stereo. Call it Character.
-4. Play both together and toggle mono again. The breathing in the sub should be gone, and the character track should lose only some width.
-5. Move both filters together to 80 Hz, then to 200 Hz. Pick the lowest split where the long notes stay steady in mono.
+2. On the bass, insert a utility with a bass-mono setting, or a crossover that splits it into two bands that add back to the original. Set the split to 120 Hz.
+3. Make the band below the split mono and leave the band above it stereo.
+4. Toggle mono again. The sub should now hold steady, and the band above should change far less than the full bass did.
+5. Move the split to 80 Hz, then to 200 Hz. Pick the lowest split where the long notes stay steady in mono.
 6. Check the result on headphones, on a single speaker and, if you can, on a system with a sub.
 
-The split version usually sounds about as wide as the original on headphones, because most of the width you heard was in the harmonics.
+On headphones the split version often sounds nearly as wide as the original, because most of the width you heard was in the harmonics.
 
 ## Common mistake: collapsing all of it, or none of it
 
-One mistake is a mono-maker on the whole bass, or a blanket mono below 300 Hz on the master. The sub becomes safe, but you lose the stereo character in the harmonics that the ear can actually place and that mostly survive a fold.
+One mistake is a mono-maker on the whole bass, or a blanket mono below 300 Hz on the master. The sub becomes safe, but you lose the stereo character in the harmonics, which the ear can place and which mostly survive a fold.
 
 The opposite mistake is trusting headphones. On headphones there is no summing anywhere, so a detuned sub sounds steady and wide. It only breathes when something adds the channels, and that happens on the systems you do not mix on.
 
