@@ -771,7 +771,7 @@ export function legend(
                     {item.swatch ? (
                         <rect x={lx} y={ly - 10} width={16} height={10} rx={cornerOf(d, 10, 16)} fill={item.swatch} />
                     ) : item.dotted ? (
-                        // Dots from end to end of the sample, so the first and last sit where a line's ends would.
+                        // The same dots as on the line, a short row of them.
                         <line x1={lx + 1.5} x2={lx + 17} y1={ly - 4} y2={ly - 4} {...dots(d, item.muted)} />
                     ) : (
                         <line

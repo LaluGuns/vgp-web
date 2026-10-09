@@ -365,12 +365,26 @@ function drums(ctx: BaseAudioContext, dest: AudioNode, step: number, time: numbe
     if (step % 2 === 0) hat(ctx, dest, time, step % 4 === 0 ? 0.55 : 0.3);
 }
 
-/** Schedules two bars offline, a few steps at a time. The figures and the loudness use the second bar, after the processors settle. */
-function twoBars(ctx: BaseAudioContext, dest: AudioNode, play: (ctx: BaseAudioContext, dest: AudioNode, step: number, time: number) => void): Promise<void> {
-    return scheduleSteps(32, (s) => play(ctx, dest, s % 16, LEAD + s * STEP));
+/**
+ * Bars in an offline render of the loop. The first lets the processors
+ * settle; the loudness and the peaks are measured over the rest. The snare
+ * and hats are noise, different on every hit, so a single bar can sit
+ * half a dB or more away from what plays; three average that out.
+ */
+const BARS = 4;
+
+/** Schedules the loop's bars offline, a few steps at a time. */
+function loopBars(ctx: BaseAudioContext, dest: AudioNode, play: (ctx: BaseAudioContext, dest: AudioNode, step: number, time: number) => void): Promise<void> {
+    return scheduleSteps(BARS * 16, (s) => play(ctx, dest, s % 16, LEAD + s * STEP));
 }
 
-/** Start and end samples of the second bar in an offline render, shifted by a path delay. */
+/** Start and end samples of the measured bars (all but the first) in an offline render, shifted by a path delay. */
+function measuredBars(delay: number): [number, number] {
+    const from = Math.round((LEAD + BAR + delay) * RATE);
+    return [from, from + Math.round((BARS - 1) * BAR * RATE)];
+}
+
+/** Start and end samples of the second bar, the one the figures draw. */
 function secondBar(delay: number): [number, number] {
     const from = Math.round((LEAD + BAR + delay) * RATE);
     return [from, from + Math.round(BAR * RATE)];
@@ -397,13 +411,13 @@ function crusher(ctx: BaseAudioContext): DynamicsCompressorNode {
 }
 
 interface ParallelAnalysis {
-    /** Second bar of the dry loop. */
+    /** Second bar of the dry loop, for the figure. */
     dry: Float32Array;
     /** Second bar of the crushed copy, scaled to the dry loop's loudness. */
     crushed: Float32Array;
     /** Gain that scales the crushed copy to the dry loudness. */
     norm: number;
-    /** K-weighted powers: dry x dry, and dry x scaled crushed. Scaled crushed x itself equals pxx. */
+    /** K-weighted powers over the measured bars: dry x dry, and dry x scaled crushed. Scaled crushed x itself equals pxx. */
     pxx: number;
     pxy: number;
     peak: number;
@@ -414,12 +428,13 @@ interface ParallelAnalysis {
 
 async function analyseParallel(): Promise<ParallelAnalysis> {
     const lat = await measureLatency(RATE);
-    const [from, to] = secondBar(lat);
+    const [from, to] = measuredBars(lat);
+    const [barFrom, barTo] = secondBar(lat);
     const {
         x: [dryAll, crushedAll],
         k: [kx, ky],
     } = await renderOffline(
-        LEAD + 2 * BAR + lat + 0.02,
+        LEAD + BARS * BAR + lat + 0.02,
         2,
         (ctx, [dryTap, crushTap]) => {
             const src = ctx.createGain();
@@ -427,16 +442,19 @@ async function analyseParallel(): Promise<ParallelAnalysis> {
             delay.delayTime.value = lat;
             src.connect(delay).connect(dryTap);
             src.connect(crusher(ctx)).connect(crushTap);
-            return twoBars(ctx, src, drums);
+            return loopBars(ctx, src, drums);
         },
         2,
     );
     const pxx = power(kx, from, to);
     const norm = Math.sqrt(pxx / power(ky, from, to));
+    await yieldToMain();
     const pxy = meanProduct(kx, ky, from, to) * norm;
-    const peak = peakOf(dryAll, from, to);
-    const dry = dryAll.slice(from, to);
-    const crushed = crushedAll.slice(from, to);
+    await yieldToMain();
+    // The figure draws the second bar.
+    const peak = peakOf(dryAll, barFrom, barTo);
+    const dry = dryAll.slice(barFrom, barTo);
+    const crushed = crushedAll.slice(barFrom, barTo);
     for (let i = 0; i < crushed.length; i++) crushed[i] *= norm;
     await yieldToMain();
     return {
@@ -755,12 +773,12 @@ const HIT_HEADROOM = 12;
 async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
     const [lat, compMakeup] = await Promise.all([measureLatency(RATE), measureMakeup('punch', punchCompressor), prepareLogCurve()]);
     const g = dbToGain(params.level);
-    const [from, to] = secondBar(lat);
+    const [from, to] = measuredBars(lat);
     const {
         x: [dry, shaped, comped],
         k: [dryK, shapedK, compedK],
     } = await renderOffline(
-        LEAD + 2 * BAR + lat + 0.02,
+        LEAD + BARS * BAR + lat + 0.02,
         3,
         (ctx, [dryTap, shaperTap, compTap]) => {
             const src = ctx.createGain();
@@ -772,7 +790,7 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
             src.connect(shaper.input);
             shaper.output.connect(shaperTap);
             src.connect(punchCompressor(ctx)).connect(compTap);
-            return twoBars(ctx, src, drums);
+            return loopBars(ctx, src, drums);
         },
         3,
     );
@@ -1295,8 +1313,8 @@ function measureLoopPeak(): Promise<number> {
     loopPeakJob ??= (async () => {
         const {
             x: [x],
-        } = await renderOffline(LEAD + 2 * BAR + 0.05, 1, (ctx, [tap]) => twoBars(ctx, tap, limiterLoop));
-        const [from, to] = secondBar(0);
+        } = await renderOffline(LEAD + BARS * BAR + 0.05, 1, (ctx, [tap]) => loopBars(ctx, tap, limiterLoop));
+        const [from, to] = measuredBars(0);
         return peakOf(x, from, to);
     })();
     return loopPeakJob;
@@ -1354,7 +1372,7 @@ interface LimitAnalysis {
     /** Scales the loop so its peak sits at the threshold. */
     norm: number;
     match: number;
-    /** Share of samples in the bar that went past the compressor and were clipped by the ceiling. */
+    /** Share of samples in the measured bars that went past the compressor and were clipped by the ceiling. */
     clipped: number;
     before: number[];
     after: number[];
@@ -1367,7 +1385,7 @@ async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
         x: [dry, limited, pre],
         k: [dryK, limitedK],
     } = await renderOffline(
-        LEAD + 2 * BAR + lat + 0.05,
+        LEAD + BARS * BAR + lat + 0.05,
         3,
         (ctx, [dryTap, limTap, preTap]) => {
             const src = ctx.createGain();
@@ -1380,25 +1398,28 @@ async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
             src.connect(lim.drive);
             lim.output.connect(limTap);
             lim.toCeiling.connect(preTap);
-            return twoBars(ctx, src, limiterLoop);
+            return loopBars(ctx, src, limiterLoop);
         },
         2,
     );
-    const [from, to] = secondBar(lat);
+    const [from, to] = measuredBars(lat);
     const match = Math.sqrt(power(dryK, from, to) / power(limitedK, from, to));
+    await yieldToMain();
     let over = 0;
     for (let i = from; i < to; i++) if (pre[i] > 1 || pre[i] < -1) over++;
-    const ref = peakOf(dry, from, to);
-    const length = to - from;
     await yieldToMain();
+    // The figure draws the second bar.
+    const [barFrom, barTo] = secondBar(lat);
+    const ref = peakOf(dry, barFrom, barTo);
+    const length = barTo - barFrom;
     return {
         params,
         makeup,
         norm,
         match,
-        clipped: over / length,
-        before: columns(dry, from, length, BAR_COLUMNS, ref),
-        after: columns(limited, from, length, BAR_COLUMNS, ref, match),
+        clipped: over / (to - from),
+        before: columns(dry, barFrom, length, BAR_COLUMNS, ref),
+        after: columns(limited, barFrom, length, BAR_COLUMNS, ref, match),
     };
 }
 

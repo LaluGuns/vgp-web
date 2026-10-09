@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { LazyMotion, domAnimation } from 'framer-motion';
 import { MotionObserver } from '@/components/MotionObserver';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import { AppFrame } from '@/components/AppFrame';
@@ -137,12 +136,10 @@ export default async function RootLayout({
 
                 <NewsletterProvider>
                         <SmoothScrollProvider>
-                            <LazyMotion features={domAnimation}>
-                                <AppFrame>
-                                    {children}
-                                </AppFrame>
-                                <MotionObserver />
-                            </LazyMotion>
+                            <AppFrame>
+                                {children}
+                            </AppFrame>
+                            <MotionObserver />
                         </SmoothScrollProvider>
                 </NewsletterProvider>
             </body>
