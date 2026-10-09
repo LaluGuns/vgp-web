@@ -406,7 +406,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                             Lessons
                         </h1>
                         <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
-                            {articles.length} free lessons from the studio in {paths.length} paths, from songwriting and arrangement to mixing,
+                            {articles.length} free lessons from the studio, set out in {paths.length} paths from songwriting and arrangement to mixing,
                             audio science and licensing. Most come with diagrams, an experiment to try in your DAW and a short quiz.
                         </p>
                         <div className="mt-4 flex flex-wrap gap-x-6">

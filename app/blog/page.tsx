@@ -27,7 +27,7 @@ const toListItem = (article: BlogArticle, now: number): BlogListItem => ({
 });
 
 const title = 'Music production lessons';
-const description = `${articles.length} free lessons in ${learningPaths.length} learning paths: songwriting, arrangement, sound design, vocals, mixing, audio science, psychology, genres and licensing.`;
+const description = `${articles.length} free lessons and ${learningPaths.length} learning paths: songwriting, arrangement, sound design, vocals, mixing, audio science, psychology, genres and licensing.`;
 const url = `${SITE}/blog`;
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         title,
         description,
         url,
-        image: ogImage({ kicker: 'Lessons', title: 'Free music production lessons', sub: `${articles.length} lessons in ${learningPaths.length} learning paths · Virzy Guns` }),
+        image: ogImage({ kicker: 'Lessons', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} learning paths · Virzy Guns` }),
     }),
 };
 

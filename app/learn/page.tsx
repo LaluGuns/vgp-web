@@ -15,7 +15,7 @@ import { glossary } from '@/lib/blog/glossary';
 import { ogImage, socialMetadata } from '@/lib/og';
 
 const title = 'Learn music production';
-const description = `${articles.length} free music production lessons in ${learningPaths.length} learning paths, a glossary of ${glossary.length} terms, and a book and a course on the way. By Virzy Guns.`;
+const description = `${articles.length} free music production lessons, ${learningPaths.length} learning paths, a glossary of ${glossary.length} terms, and a book and a course on the way. By Virzy Guns.`;
 const url = `${SITE}/learn`;
 
 export const metadata: Metadata = {
@@ -71,7 +71,7 @@ export default function LearnHubPage() {
             <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
                 <PageHeader
                     title="Learn production"
-                    description={`${articles.length} free lessons in ${learningPaths.length} paths: songwriting, arrangement, sound design, vocals, mixing and mastering, audio science, music psychology, producer mindset, production tips, genres and licensing. A book and a course are on the way.`}
+                    description={`${articles.length} free lessons and ${learningPaths.length} paths through them: songwriting, arrangement, sound design, vocals, mixing and mastering, audio science, music psychology, producer mindset, production tips, genres and licensing. A book and a course are on the way.`}
                     primary={{ label: 'Browse the lessons', href: '/blog' }}
                 />
 
