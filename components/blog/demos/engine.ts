@@ -286,15 +286,17 @@ export function yieldToMain(): Promise<void> {
 }
 
 /**
- * Calls `play` for steps 0 to `steps - 1`, eight at a time with a yield in
- * between. Creating a step's voices is main-thread work (a drum step takes
- * about a millisecond on a slow phone), so filling an offline render with
- * a few bars in one go would hold up input for longer than a frame should.
+ * Calls `play` for steps 0 to `steps - 1`, eight at a time, each batch in a
+ * task of its own (the first one too, so it never shares a task with
+ * building the rest of the graph). Creating a step's voices is main-thread
+ * work (a drum step takes a few milliseconds on a slow phone), so filling an
+ * offline render with a few bars in one go would hold up input for longer
+ * than a frame should.
  */
 export async function scheduleSteps(steps: number, play: (step: number) => void): Promise<void> {
     for (let s = 0; s < steps; s++) {
+        if (s % 8 === 0) await yieldToMain();
         play(s);
-        if (s % 8 === 7 && s < steps - 1) await yieldToMain();
     }
 }
 
