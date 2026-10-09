@@ -89,6 +89,42 @@ export const demoCatalog = {
         title: 'End a phrase on V or on I',
         blurb: 'The same four-bar phrase, stopping on the dominant or landing on the home chord. Listen for a question against an answer.',
     },
+    parallel: {
+        title: 'Blend a crushed copy under the dry drums',
+        blurb: 'The dry drum loop stays untouched while a heavily compressed copy is blended underneath. Move the blend and hear the quiet detail come up while the hits keep their shape.',
+    },
+    transient: {
+        title: 'Shape the hit without a threshold',
+        blurb: 'A transient shaper turns the start of each hit up or down and the tail up or down, whatever the level. Compare it with a compressor on the same loop.',
+    },
+    sidechain: {
+        title: 'Let the kick push the bass aside',
+        blurb: 'A sustained bass ducks each time the kick hits. Change the depth and the release, or duck only the low end, and listen to the groove change.',
+    },
+    limiter: {
+        title: 'Drive a limiter and listen to the release',
+        blurb: 'A loop driven into a limiter, matched in loudness to the original. Push the drive and change the release to hear the drums and the tone change.',
+    },
+    'clip-recover': {
+        title: 'Turn down a clipped take',
+        blurb: 'A phrase recorded too hot clips at the converter. Pull the fader down afterwards and the level drops, but the flattened peaks and their distortion stay.',
+    },
+    width: {
+        title: 'Widen the sides and watch the meters',
+        blurb: 'A stereo mix split into mid and side. Raise the side level, check it in mono and watch the correlation meter move as the image gets wider.',
+    },
+    'monitor-level': {
+        title: 'Judge the same mix at three playback levels',
+        blurb: 'One short mix played quiet, medium and loud, with the loudest step kept safe. Listen to how much bass and air you hear at each level.',
+    },
+    'reverb-duck': {
+        title: 'Keep the reverb out of the next line',
+        blurb: 'A short vocal-like phrase into a long reverb. Duck the reverb under the dry phrase, or swap it for a tempo delay, and hear the next line come through.',
+    },
+    'chord-context': {
+        title: 'Hear one chord in different contexts',
+        blurb: 'The same chord after different progressions, at different tempos and registers. Notice how much the surroundings change what it seems to say.',
+    },
 } satisfies Record<string, { title: string; blurb: string }>;
 
 export type DemoId = keyof typeof demoCatalog;

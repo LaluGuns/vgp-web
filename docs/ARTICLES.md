@@ -154,6 +154,15 @@ it. Sound is synthesised in the browser. Ids:
 | `normalization` | Dynamic against loud master, with streaming-style matching |
 | `loudness-bias` | Blind A/B with one side 1 dB louder |
 | `cadence` | A four-bar phrase ending on V or on I |
+| `parallel` | Blend a heavily compressed copy under dry drums, level-matched |
+| `transient` | Transient shaper attack and sustain against a compressor on one loop |
+| `sidechain` | Kick ducks a sustained bass: depth, release, full-band or lows only |
+| `limiter` | Drive a limiter, change its release, loudness-matched to the original |
+| `clip-recover` | A take clipped at the converter, then turned down afterwards |
+| `width` | Mid/side balance with a mono check and a live correlation meter |
+| `monitor-level` | One mix at three playback levels, to hear bass and air change |
+| `reverb-duck` | Reverb ducked under the dry phrase, or a tempo delay instead |
+| `chord-context` | One chord after different progressions, tempos and registers |
 
 New demos go in `components/blog/demos/` and `lib/blog/demos.ts`.
 

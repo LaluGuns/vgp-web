@@ -40,6 +40,15 @@ const DEMOS: Record<DemoId, LazyExoticComponent<ComponentType>> = {
     normalization: demo(() => import('./loudness').then((m) => ({ default: m.NormalizationDemo }))),
     'loudness-bias': demo(() => import('./loudness').then((m) => ({ default: m.LevelAbDemo }))),
     cadence: demo(() => import('./harmony').then((m) => ({ default: m.CadenceDemo }))),
+    parallel: demo(() => import('./processing').then((m) => ({ default: m.ParallelDemo }))),
+    transient: demo(() => import('./processing').then((m) => ({ default: m.TransientDemo }))),
+    sidechain: demo(() => import('./processing').then((m) => ({ default: m.SidechainDemo }))),
+    limiter: demo(() => import('./processing').then((m) => ({ default: m.LimiterDemo }))),
+    'clip-recover': demo(() => import('./processing').then((m) => ({ default: m.ClipRecoverDemo }))),
+    width: demo(() => import('./perception').then((m) => ({ default: m.WidthDemo }))),
+    'monitor-level': demo(() => import('./perception').then((m) => ({ default: m.MonitorLevelDemo }))),
+    'reverb-duck': demo(() => import('./perception').then((m) => ({ default: m.ReverbDuckDemo }))),
+    'chord-context': demo(() => import('./perception').then((m) => ({ default: m.ChordContextDemo }))),
 };
 
 /** A listening demo in a framed panel. Its code loads when it nears the screen. */
