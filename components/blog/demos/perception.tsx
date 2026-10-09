@@ -178,7 +178,7 @@ function stereoPad(ctx: BaseAudioContext, left: AudioNode, right: AudioNode, t: 
         lp.type = 'lowpass';
         lp.frequency.value = cutoff;
         const g = ctx.createGain();
-        const peak = 0.075 * level;
+        const peak = 0.11 * level;
         g.gain.setValueAtTime(0.0001, t);
         g.gain.exponentialRampToValueAtTime(peak, t + 0.3);
         g.gain.setValueAtTime(peak, t + dur - 0.25);
@@ -236,7 +236,7 @@ function mixBus(ctx: BaseAudioContext): MixBus {
         from.connect(gainNode(ctx, 0.2)).connect(far);
         const delay = ctx.createDelay(1);
         delay.delayTime.value = echo;
-        from.connect(delay).connect(gainNode(ctx, 0.4)).connect(far);
+        from.connect(delay).connect(gainNode(ctx, 0.5)).connect(far);
     };
     lean(bus.leanLeft, bus.left, bus.right);
     lean(bus.leanRight, bus.right, bus.left);
@@ -270,7 +270,7 @@ function playMixStep(ctx: BaseAudioContext, bus: MixBus, step: number, time: num
     if (s === 0 || s === 8) kick(ctx, bus.center, time, 0.8);
     if (s === 11) kick(ctx, bus.center, time, 0.5);
     if (s === 4 || s === 12) snare(ctx, bus.center, time, 0.42);
-    hat(ctx, bus.center, time, s % 2 === 0 ? 0.3 : 0.13);
+    hat(ctx, bus.center, time, s % 2 === 0 ? 0.42 : 0.18);
     if (s === 0) {
         bass(ctx, bus.center, time, midi(MIX_BASS[bar]), stepDur * 9.5, 0.6);
         bass(ctx, bus.center, time, midi(MIX_BASS[bar] + 12), stepDur * 9.5, 0.1);
@@ -282,7 +282,7 @@ function playMixStep(ctx: BaseAudioContext, bus: MixBus, step: number, time: num
     }
     if (step % 2 === 0) {
         const i = step / 2;
-        pluck(ctx, i % 2 === 0 ? bus.leanLeft : bus.leanRight, time, midi(MIX_ARP[i]), stepDur * 1.6, 0.8);
+        pluck(ctx, i % 2 === 0 ? bus.leanLeft : bus.leanRight, time, midi(MIX_ARP[i]), stepDur * 1.6, 1);
     }
     for (const v of MIX_VOICE) if (v.at === step) sing(ctx, bus.center, time, midi(v.note), v.len * stepDur * 0.9, v.vowel, MIX_VOICE_LEVEL, v.to);
 }
@@ -449,7 +449,7 @@ export function WidthDemo() {
     const scope = useRef<HTMLCanvasElement>(null);
     const nodes = useRef<WidthNodes | null>(null);
     const measuring = useRef(false);
-    const smooth = useRef({ corr: 1, scale: 0 });
+    const smooth = useRef({ ll: 0, rr: 0, lr: 0, scale: 0 });
     const live = useRef<WidthSettings>({ sideDb, midDb, mono, matched, ms });
     useEffect(() => {
         live.current = { sideDb, midDb, mono, matched, ms };
@@ -496,7 +496,7 @@ export function WidthDemo() {
         const n: WidthNodes = { ctx, mid, side, straight, cross, match, anL, anR, bufL: new Float32Array(4096), bufR: new Float32Array(4096) };
         nodes.current = n;
         applyWidth(n, live.current);
-        smooth.current = { corr: 1, scale: 0 };
+        smooth.current = { ll: 0, rr: 0, lr: 0, scale: 0 };
 
         if (!live.current.ms && !measuring.current) {
             measuring.current = true;
@@ -533,15 +533,20 @@ export function WidthDemo() {
             lr += l[i] * r[i];
             peak = Math.max(peak, Math.abs(l[i] + r[i]), Math.abs(l[i] - r[i]));
         }
+        // Average the sums over about a third of a second, like a hardware meter.
         const sm = smooth.current;
-        // Correlation: +1 when both sides match, 0 when unrelated, -1 when opposed.
-        if (ll > 1e-7 && rr > 1e-7) sm.corr = sm.corr * 0.6 + (lr / Math.sqrt(ll * rr)) * 0.4;
-        sm.scale = Math.max(peak, sm.scale * 0.92, 1e-4);
         const len = l.length;
+        const k = sm.ll === 0 ? 1 : 0.15;
+        sm.ll += (ll / len - sm.ll) * k;
+        sm.rr += (rr / len - sm.rr) * k;
+        sm.lr += (lr / len - sm.lr) * k;
+        sm.scale = Math.max(peak, sm.scale * 0.92, 1e-4);
+        // Correlation: +1 when both sides match, 0 when unrelated, -1 when opposed.
+        const energy = Math.sqrt(sm.ll * sm.rr);
         setMeters({
-            corr: Math.max(-1, Math.min(1, sm.corr)),
-            mid: powerDb((ll + rr + 2 * lr) / (4 * len)),
-            side: powerDb(Math.max(0, ll + rr - 2 * lr) / (4 * len)),
+            corr: energy > 1e-9 ? Math.max(-1, Math.min(1, sm.lr / energy)) : 1,
+            mid: powerDb((sm.ll + sm.rr + 2 * sm.lr) / 4),
+            side: powerDb(Math.max(0, sm.ll + sm.rr - 2 * sm.lr) / 4),
         });
         drawScope(scope.current, l, r, sm.scale);
     });
@@ -631,11 +636,13 @@ const BANDS = [
 /**
  * The same mix at three playback levels, 12 dB apart. The band meters
  * show the balance of the signal never changes; only the level does.
+ * They measure the mix before the level step, averaged over a couple of
+ * seconds so the numbers hold still, then add the step's exact gain.
  */
 export function MonitorLevelDemo() {
     const [step, setStep] = useState<LevelStep>('loud');
     const [bands, setBands] = useState<number[] | null>(null);
-    const nodes = useRef<{ ctx: AudioContext; level: GainNode; an: AnalyserNode; data: Float32Array<ArrayBuffer> } | null>(null);
+    const nodes = useRef<{ ctx: AudioContext; level: GainNode; an: AnalyserNode; data: Float32Array<ArrayBuffer>; avg: number[] } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -648,9 +655,9 @@ export function MonitorLevelDemo() {
         merger.connect(level).connect(master);
         const an = ctx.createAnalyser();
         an.fftSize = 4096;
-        an.smoothingTimeConstant = 0.85;
-        level.connect(an);
-        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount) };
+        an.smoothingTimeConstant = 0;
+        merger.connect(an);
+        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount), avg: [] };
         const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (s, time, dur) => playMixStep(ctx, bus, s, time, dur));
         return () => {
             seq.stop();
@@ -666,10 +673,12 @@ export function MonitorLevelDemo() {
         n.an.getFloatFrequencyData(n.data);
         const binHz = n.ctx.sampleRate / n.an.fftSize;
         setBands(
-            BANDS.map(({ lo, hi }) => {
+            BANDS.map(({ lo, hi }, b) => {
                 let sum = 0;
                 for (let i = Math.ceil(lo / binHz); i < Math.min(n.data.length, hi / binHz); i++) sum += 10 ** (n.data[i] / 10);
-                return powerDb(sum);
+                const prev = n.avg[b];
+                n.avg[b] = prev === undefined ? sum : prev + (sum - prev) * 0.03;
+                return powerDb(n.avg[b]);
             }),
         );
     });
@@ -697,7 +706,7 @@ export function MonitorLevelDemo() {
             </Field>
             <div className="space-y-4">
                 {BANDS.map((band, i) => {
-                    const db = bands?.[i];
+                    const db = bands ? bands[i] + STEP_DB[step] : undefined;
                     return (
                         <Meter
                             key={band.label}
@@ -707,7 +716,7 @@ export function MonitorLevelDemo() {
                         />
                     );
                 })}
-                <p className="text-xs leading-5 text-white/50">Measured from the signal after the level step. Each band drops by the same 12 dB per step.</p>
+                <p className="text-xs leading-5 text-white/50">Band levels of the mix, averaged over a few seconds, at the chosen step. Each step lowers every band by the same 12 dB.</p>
             </div>
             <p className="text-sm leading-6 text-white/60">
                 This page cannot see your device volume, so the steps are relative to each other, and the loud step is no louder than the other demos here. Set a

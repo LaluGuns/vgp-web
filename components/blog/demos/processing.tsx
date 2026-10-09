@@ -346,6 +346,8 @@ function secondBar(delay: number): [number, number] {
 }
 
 const BAR_COLUMNS = 240;
+/** Playback level of the drum-loop demos, set to sit just under the compressor demo. */
+const DRUM_LEVEL = 1.6;
 
 // ── Parallel compression ────────────────────────────────────────────
 
@@ -455,7 +457,7 @@ export function ParallelDemo() {
         if (analysis) {
             norm.gain.value = analysis.norm;
             match.gain.value = blendMatch(analysis, blend / 100);
-            master.gain.setTargetAtTime(1, ctx.currentTime, 0.02);
+            master.gain.setTargetAtTime(DRUM_LEVEL, ctx.currentTime, 0.02);
         }
         nodes.current = { ctx, comp, norm, amount, match, master, sel };
         const c: LoopClock = { ctx, barStart: ctx.currentTime, barDur: BAR, offset: lat };
@@ -486,7 +488,7 @@ export function ParallelDemo() {
         n.amount.gain.setTargetAtTime(blend / 100, t, 0.02);
         n.match.gain.setTargetAtTime(blendMatch(analysis, blend / 100), t, 0.02);
         n.norm.gain.setTargetAtTime(analysis.norm, t, 0.02);
-        n.master.gain.setTargetAtTime(1, t, 0.02);
+        n.master.gain.setTargetAtTime(DRUM_LEVEL, t, 0.02);
     }, [mode, blend, analysis]);
 
     useFrame(player.playing, () => {
@@ -873,7 +875,7 @@ function applyShape(
     set(n.shaperTrim.gain, a.trim.shaper);
     set(n.compTrim.gain, a.trim.comp);
     n.shaper.law.curve = shaperLaw(a.params.attack, a.params.sustain);
-    n.master.gain.setTargetAtTime(1, t, 0.02);
+    n.master.gain.setTargetAtTime(DRUM_LEVEL, t, 0.02);
 }
 
 // ── Sidechain ducking ───────────────────────────────────────────────
@@ -883,6 +885,7 @@ const SC_BPM = 120;
 const SC_STEP = 60 / SC_BPM / 4;
 const SC_BAR = SC_STEP * 16;
 const CROSSOVER = 150;
+const SC_LEVEL = 0.6;
 const SC_CHORDS = [
     { bass: 33, chord: [57, 60, 64] },
     { bass: 29, chord: [53, 57, 60] },
@@ -1027,7 +1030,7 @@ export function SidechainDemo() {
         const drumBus = ctx.createGain();
         drumBus.connect(master);
         makeup.gain.value = makeupFor(live.current.mode, analysis);
-        if (analysis) master.gain.setTargetAtTime(0.85, ctx.currentTime, 0.02);
+        if (analysis) master.gain.setTargetAtTime(SC_LEVEL, ctx.currentTime, 0.02);
         nodes.current = { ctx, low, high, makeup, master };
         const c: LoopClock = { ctx, barStart: ctx.currentTime, barDur: SC_BAR, offset: 0 };
         clock.current = c;
@@ -1055,7 +1058,7 @@ export function SidechainDemo() {
         const n = nodes.current;
         if (!n || !analysis) return;
         n.makeup.gain.setTargetAtTime(makeupFor(live.current.mode, analysis), n.ctx.currentTime, 0.02);
-        n.master.gain.setTargetAtTime(0.85, n.ctx.currentTime, 0.02);
+        n.master.gain.setTargetAtTime(SC_LEVEL, n.ctx.currentTime, 0.02);
     }, [analysis]);
 
     useEffect(() => {
@@ -1553,7 +1556,7 @@ async function analyseClip(input: number): Promise<ClipAnalysis> {
 }
 
 /** Overall playback level. With the input and the fader both at maximum this stays at the other demos' level. */
-const CLIP_OUT = 0.32;
+const CLIP_OUT = 0.26;
 
 /**
  * A phrase recorded too hot, clipped at the converter, then turned down
@@ -1563,7 +1566,7 @@ const CLIP_OUT = 0.32;
 export function ClipRecoverDemo() {
     const [take, setTake] = useState<'hot' | 'safe'>('hot');
     const [input, setInput] = useState(12);
-    const [fader, setFader] = useState(-10);
+    const [fader, setFader] = useState(-6);
     const analysis = useAnalysis(String(input), () => analyseClip(input));
     const nodes = useRef<{ ctx: AudioContext; hotIn: GainNode; fader: GainNode; safeMatch: GainNode; master: GainNode; sel: { hot: GainNode; safe: GainNode } } | null>(null);
     const takeRef = useRef(take);
@@ -1698,9 +1701,12 @@ export function ClipRecoverDemo() {
             </div>
             <Readout
                 items={[
-                    { label: 'Clipped by', value: !analysis ? '–' : clipped ? fmtDb(analysis.overDb) : 'Not clipped' },
-                    { label: 'Hot take peak after the fader', value: analysis ? fmtDb(gainToDb(analysis.hotPeak * fg), 1, 'dBFS') : '–' },
-                    { label: 'Safe take peak, same loudness', value: analysis ? fmtDb(gainToDb(analysis.safePeak * match), 1, 'dBFS') : '–' },
+                    { label: 'Went past 0 dBFS by', value: !analysis ? '–' : clipped ? `${analysis.overDb.toFixed(1)} dB` : 'Not clipped' },
+                    { label: 'Hot take peak after the fader', value: analysis ? fmtDb(gainToDb(analysis.hotPeak * fg), 0, 'dBFS') : '–' },
+                    {
+                        label: 'Peak height lost against the safe take',
+                        value: analysis ? `${Math.max(0, gainToDb((analysis.safePeak * match) / (analysis.hotPeak * fg))).toFixed(1)} dB` : '–',
+                    },
                 ]}
             />
             <p className="text-sm leading-6 text-white/60">

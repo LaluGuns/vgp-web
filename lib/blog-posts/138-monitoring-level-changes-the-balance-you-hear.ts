@@ -21,7 +21,7 @@ export const post138: BlogArticle = {
         contours: {
             type: 'curve',
             caption:
-                'How much more level a tone needs than a 1 kHz tone to sound equally loud, at a quiet and a loud listening level, from the ISO 226 equations at octave steps. Below 1 kHz the gap between the curves widens: the lower the tone, the more extra level it needs when you listen quietly. From 1 to 8 kHz the two curves almost meet.',
+                'How much more level a tone needs than a 1 kHz tone to sound equally loud, at a quiet and a loud listening level, from the ISO 226 equations at octave steps. Below 1 kHz the gap between the curves widens: the lower the tone, the more extra level it needs at the low listening level. From 1 to 8 kHz the two curves almost meet.',
             alt: 'Two curves across octave steps from 31.5 Hz to 8 kHz. Both are high at the left, fall to zero extra level at 1 kHz, dip slightly below it around 4 kHz and rise again at 8 kHz. The solid 40 phon curve sits well above the dashed 80 phon curve in the bass, and the two nearly overlap from 1 kHz up.',
             x: ['31.5 Hz', '63 Hz', '125 Hz', '250 Hz', '500 Hz', '1 kHz', '2 kHz', '4 kHz', '8 kHz'],
             xShort: ['31', '63', '125', '250', '500', '1k', '2k', '4k', '8k'],

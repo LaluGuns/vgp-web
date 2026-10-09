@@ -10,7 +10,7 @@ export const post143: BlogArticle = {
     excerpt: 'Major sounds happier than minor in some contexts and not in others. The progression into a chord, its role in the key and the listener\'s history change what it says.',
     category: 'music-psychology',
     publishedAt: '2026-10-09',
-    readingTime: 5,
+    readingTime: 6,
     summary: [
         'Listeners raised on Western tonal music tend to hear major as more pleasant than minor, but how strongly depends on their listening history and on the role the chord plays.',
         'The same chord sounds settled as the home chord and unfinished as a dominant or after a deceptive move, so change the progression into a chord before you change its mode.',
@@ -113,7 +113,7 @@ Both times the chord had the same three notes in the same voicing. What changed 
 
 ## Why it matters: mode is a tendency, the chord has a job
 
-"Major is happy, minor is sad" is one of the first things many of us learn about harmony, and as a tendency it holds up. Parncutt (2014) calls the link between major and positive emotion, and minor and negative emotion, psychologically robust, though without a single accepted explanation. He compares six partly related theories, among them dissonance, familiarity and the lower pitches of sad speech, and finds credible arguments for and against each.
+"Major is happy, minor is sad" is one of the first things many of us learn about harmony, and as a tendency it holds up. Parncutt (2014) treats the link between major and positive emotion, and minor and negative emotion, as well established in listeners, though no single explanation for it is accepted. He compares six partly related theories, among them dissonance, familiarity and the lower pitches of sad speech, and finds credible arguments for and against each.
 
 The trouble starts when the tendency becomes a lookup table. In a song, every chord arrives with a role: the home chord, a step on the way, or a surprise. Pick the mode for the mood and ignore the role, and the chord can say something you never meant.
 
@@ -135,7 +135,7 @@ Minor chords switch roles the same way. A minor is home in A minor. In C major i
 
 ::figure minor
 
-How strongly the major and minor code applies also depends on who is listening. Dalla Bella and colleagues (2001) changed the tempo and the mode of happy and sad excerpts. Adults and children aged 6 to 8 used both cues to judge the mood. Five-year-olds used only tempo, and 3- and 4-year-olds could not tell happy from sad above chance. Smit and colleagues (2022) asked 170 listeners in remote communities in Papua New Guinea which of a major and a minor cadence made them happier. For cadences there was strong evidence that major was heard as happier in every community except one, the community with minimal exposure to Western-like music. The authors conclude that the emotional pull of major and minor is strongly associated with exposure to Western-influenced music, although they cannot exclude a universal part. Mode also shares the work with other cues: in the [tempo lesson](/blog/how-tempo-changes-perceived-emotion), changing tempo moved listeners' arousal while changing mode moved their mood.
+How strongly the major and minor code applies also depends on who is listening. Dalla Bella and colleagues (2001) changed the tempo and the mode of happy and sad excerpts. Adults and children aged 6 to 8 used both cues to judge the mood. Five-year-olds used only tempo, and 3- and 4-year-olds could not tell happy from sad above chance. Smit and colleagues (2022) asked 170 listeners in remote communities in Papua New Guinea which of a major and a minor cadence made them happier. For cadences there was strong evidence that major was heard as happier in every community except one, the community with minimal exposure to Western-like music. The authors conclude that the emotional valence of major and minor is strongly associated with exposure to Western-influenced music, although they cannot exclude a universal part. Mode also shares the work with other cues: in the [tempo lesson](/blog/how-tempo-changes-perceived-emotion), changing tempo moved listeners' arousal while changing mode moved their mood.
 
 ## DAW experiment: one chord, two routes
 
