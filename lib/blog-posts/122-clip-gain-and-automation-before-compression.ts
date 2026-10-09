@@ -128,7 +128,7 @@ The demo uses a drum loop, but the release behaves the same way on a vocal. Pull
 
 ## Science model: overshoot, then recovery
 
-Above the threshold, a hard-knee compressor's target gain reduction is the overshoot times $1 - 1/R$, the arithmetic from the [lesson on compression ratio](/blog/compression-ratio-what-4-to-1-actually-means). With the threshold at -22 dBFS and a 4:1 ratio, a normal word at -18 dBFS is 4 dB over and gets 3 dB of reduction. The shout at -8 dBFS is 14 dB over and gets 10.5 dB.
+Above the threshold, a hard-knee compressor's target gain reduction is the overshoot times $1 - 1/R$, where $R$ is the ratio. With the threshold at -22 dBFS and a 4:1 ratio, a normal word at -18 dBFS is 4 dB over and gets 3 dB of reduction. The shout at -8 dBFS is 14 dB over and gets 10.5 dB.
 
 ::figure reduction
 

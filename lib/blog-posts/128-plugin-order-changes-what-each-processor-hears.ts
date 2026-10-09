@@ -45,7 +45,7 @@ export const post128: BlogArticle = {
         eqcomp: {
             type: 'bars',
             caption:
-                'One note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. A 6 dB low boost placed after the compressor leaves the gain reduction at 4.5 dB. The same boost placed before it doubles the reduction to 9 dB, and that extra 4.5 dB comes off every frequency, not only the lows.',
+                'One note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. A 6 dB low boost placed after the compressor leaves the gain reduction at 4.5 dB. The same boost placed before it doubles the reduction to 9 dB, and that extra 4.5 dB comes off every frequency, the mids and highs included.',
             alt: 'Two bars on a scale from 0 to 10 dB. With the EQ after the compressor the gain reduction is 4.5 dB. With the EQ before it the gain reduction is 9 dB.',
             min: 0,
             max: 10,
@@ -102,7 +102,7 @@ If you never think about order, you end up fixing its side effects with more plu
 
 A clean digital EQ is linear and time-invariant. Two such filters in series multiply their frequency responses, and multiplication does not care about order, so any ordering of filters in series gives the same overall response (Smith, 2007). Two EQs, a high-pass and a shelf, a delay and an EQ: swap them freely. The same is not true of an EQ that models analog saturation, because that is no longer linear.
 
-A compressor is not linear. Its gain depends on the level it receives, as in the [lesson on compression ratio](/blog/compression-ratio-what-4-to-1-actually-means), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
+A compressor is not linear. Its gain depends on the level it receives, as in the [lesson on compression and motion](/blog/how-compression-changes-motion-not-level), so whatever changes that level changes the gain. Take a bass note whose low end drives the detector, 6 dB over the threshold of a 4:1 compressor. The compressor removes $6 \\times 3/4 = 4.5$ dB. Put a 6 dB low boost in front of it and the detector is 12 dB over, so the compressor removes $12 \\times 3/4 = 9$ dB.
 
 ::figure eqcomp
 

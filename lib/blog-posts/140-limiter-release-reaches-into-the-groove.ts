@@ -135,7 +135,7 @@ On a drum loop in a mix session, release decides how the next hit lands, as [com
 
 ## Science model: the recovery curve against the beat
 
-A digital limiter measures the peak level, computes how much gain reduction is needed to keep it under the ceiling, and smooths that gain over time (Zölzer, 2011). Most limiters use a short look-ahead delay so the gain is already down when the peak arrives. Recovery is commonly modelled as a one-pole smoother on the gain reduction in decibels (Giannoulis, Massberg and Reiss, 2012). Once the kick has passed, the gain reduction left after a time $t$ is:
+A digital limiter measures the peak level, computes how much gain reduction is needed to keep it under the ceiling, and smooths that gain over time (Zölzer, 2011). Many limiters add a short look-ahead delay so the gain is already down when the peak arrives. Recovery is commonly modelled as a one-pole smoother on the gain reduction in decibels (Giannoulis, Massberg and Reiss, 2012). Once the kick has passed, the gain reduction left after a time $t$ is:
 
 $$GR(t) = GR_0 \\, e^{-t/\\tau}$$
 
@@ -167,7 +167,7 @@ Listen to the space between the hits as you change the release, with the loudnes
 6. Keep raising the release until the swell turns into a steady turn-down. Rematch the loudness with the gain plugin each time you stop.
 7. Choose the shortest release where the bass stays clean and any pumping is gone or sits on the beat the way you want it. If the limiter has an auto mode, compare it with your choice at matched loudness.
 
-On most mixes the bass distortion goes away well before the pumping starts, which leaves a window of settings that do neither. On a fast, dense track that window can be narrow, and that is when moving some of the peak control earlier in the chain pays off.
+Between the two extremes there is often a range that does neither. In the simulation above, a 100 ms release kept the bass far cleaner than 1 ms and left the bed less than half a decibel down at the off-beat. On a fast, dense track that range can shrink to nothing, and then some of the peak control has to move earlier in the chain.
 
 ## Common mistake: choosing the release that sounds loudest
 
