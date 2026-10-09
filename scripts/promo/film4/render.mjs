@@ -47,7 +47,7 @@ let m;
 let clipped;
 // Speech must never reach the clipper: count samples over its knee while the voice speaks.
 const speech = audio.data.vo.map((v) => [v.at, v.at + v.dur]);
-for (let i = 0; i < 8; i++) {
+for (let i = 0; i < 24; i++) {
     clipped = master(audio.L, audio.R, gain, ceiling, wav, speech);
     m = measure(wav);
     // AAC adds about 0.6 dB of true peak, so the WAV aims 0.7 dB under the limit.

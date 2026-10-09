@@ -91,6 +91,40 @@ scene; `film3/audio.mjs` mixes the sound and hands the picture the levels
 and gain reduction it computed, so the shapes on screen are the drums you
 hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 
+## Film 4: the missing fundamental
+
+A 76 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
+harmonics"): your phone can't play a sub, but it plays the harmonics above
+it, and your brain puts the note back. Same voice, model, kit and pipeline
+as film 3 (`eleven_v4`, Michael C. Vincent, prompt in
+`film4/narration-prompt.txt`).
+
+The bass is synthesised in `film4/bass.mjs`: a pure sine sub with an
+808-style envelope, and its parallel copy through an asymmetric soft
+clipper and a 120 Hz high-pass, as in the lesson's DAW experiment. The
+music bus goes through the lesson's phone check (200 Hz high-pass, 24
+dB/oct); the voice never does. Every harmonic rung on screen is an FFT of
+the bass at that frame, and the scope is the phone's actual output.
+
+Assets, in `scripts/promo/assets/` (ignored): the same Cymatics samples as
+film 3 (named in `film4/timeline.mjs`) and the narration as
+`assets/vo/narration.mp3`. For a new take:
+`python film4/cue_vo.py assets/vo/narration.mp3 film4/script.txt film4/vo-cues.json`,
+then adjust the `vo` placements in `film4/timeline.mjs`.
+
+```
+npm run film4                    # sound, stills, video and checks
+npm run film4 -- --stills        # contact sheets and cover only
+npm run film4 -- --frames 9.3,44.5 --tag check
+npm run film4 -- --refresh-lesson   # re-capture the lesson's Listen demo
+```
+
+Writes to `out/film4/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
+`contact.png`, `seconds.png`, `cover.png` and `VERIFY.md`, which logs the
+five measured claims (fundamental drop through the phone, saturated against
+clean through the phone, autocorrelation period, cone travel, FFT rungs),
+loudness, true peak, sync and flashes.
+
 ## Files
 
 - `DECISIONS.md`: one line per creative call.
