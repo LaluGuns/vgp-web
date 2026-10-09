@@ -35,7 +35,7 @@ export const post079: BlogArticle = {
             steps: [
                 { label: 'Constant sound', note: 'Same density, width and level' },
                 { label: 'Response fades', note: 'Adaptation, habituation' },
-                { label: 'Change or pause', note: 'A layer drops, the image narrows' },
+                { label: 'Change or pause', focus: true, note: 'A layer drops, the image narrows' },
                 { label: 'Response recovers', note: 'Until the new sound stays the same too' },
             ],
         },

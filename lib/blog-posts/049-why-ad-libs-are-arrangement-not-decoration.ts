@@ -27,7 +27,7 @@ export const post049: BlogArticle = {
             rows: [
                 { label: 'Lead', hits: [0, 1, 2, 3, 4, 5, 6, 8, 9, 10], note: 'words' },
                 { label: 'Ad-lib on top', hits: [{ step: 2, level: 0.7 }, { step: 4, level: 0.7 }, { step: 6, level: 0.7 }, { step: 9, level: 0.7 }], note: 'competes' },
-                { label: 'Ad-lib in the gap', hits: [{ step: 12, level: 0.8 }, { step: 13, level: 0.8 }, { step: 14, level: 0.8 }], note: 'answers' },
+                { label: 'Ad-lib in the gap', focus: true, hits: [{ step: 12, level: 0.8 }, { step: 13, level: 0.8 }, { step: 14, level: 0.8 }], note: 'answers' },
             ],
         },
         stage: {

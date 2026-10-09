@@ -37,7 +37,7 @@ export const post026: BlogArticle = {
                 { label: 'Hear the kick and snare', note: 'They mark the period' },
                 { label: 'Predict the next beat', note: 'From the last few intervals' },
                 { label: 'Start the nod early', note: 'A movement needs a head start' },
-                { label: 'Compare with the hit', note: 'Adjust the next nod a little' },
+                { label: 'Compare with the hit', focus: true, note: 'Adjust the next nod a little' },
             ],
             loop: { to: 1, label: 'Every beat' },
         },

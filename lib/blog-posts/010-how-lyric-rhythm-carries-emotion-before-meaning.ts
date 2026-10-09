@@ -46,7 +46,7 @@ export const post010: BlogArticle = {
             alt: 'Two rows on a 16-step grid with the same six syllables. In the matched row, the three tall bars sit on beats 1, 2 and 4. In the mismatched row, short bars sit on beats 2, 3 and 4 and the tall bars fall between the beats.',
             rows: [
                 {
-                    label: 'Matched stress',
+                    label: 'Matched stress', focus: true,
                     note: 'can\'t, get, night',
                     hits: [{ step: 0, level: 1 }, { step: 2, level: 0.35 }, { step: 4, level: 1 }, { step: 6, level: 0.35 }, { step: 10, level: 0.35 }, { step: 12, level: 1 }],
                 },

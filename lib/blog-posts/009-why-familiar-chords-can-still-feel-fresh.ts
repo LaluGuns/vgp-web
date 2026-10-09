@@ -42,7 +42,7 @@ export const post009: BlogArticle = {
             rows: [
                 { label: 'Kick', hits: [0, 8, 16, 24] },
                 { label: 'On the bar line', note: 'G on beat 5', hits: [0, 16] },
-                { label: 'Pushed', note: 'G an eighth early', hits: [0, 14] },
+                { label: 'Pushed', focus: true, note: 'G an eighth early', hits: [0, 14] },
             ],
         },
     },

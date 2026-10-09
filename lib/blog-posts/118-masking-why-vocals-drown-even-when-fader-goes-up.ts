@@ -33,7 +33,7 @@ export const post118: BlogArticle = {
                 'The order to try fixes in, from the most natural fix to the last resort. Start with the first step and stop as soon as the words are clear.',
             alt: 'Four steps from top to bottom: change the arrangement, cut the masker where it clashes, add a dynamic band keyed from the vocal, and raise the vocal fader last.',
             steps: [
-                { label: 'Change the arrangement', note: 'Move, thin or mute the part under the vocal lines' },
+                { label: 'Change the arrangement', focus: true, note: 'Move, thin or mute the part under the vocal lines' },
                 { label: 'Cut the masker where it clashes', note: 'A few dB on the competing part, in the vocal’s band' },
                 { label: 'Add a dynamic band', note: 'Keyed from the vocal, if a static cut leaves the part thin in the gaps' },
                 { label: 'Raise the vocal fader', note: 'Last, and only if the vocal is truly too quiet' },

@@ -21,8 +21,8 @@ export const post084: BlogArticle = {
             alt: 'Five steps with an arrow from the last back to the first: loop the same eight bars, match loudness, switch every few seconds, name one difference, fix that one gap, then loop again.',
             steps: [
                 { label: 'Loop the same 8 bars' },
-                { label: 'Match loudness', note: 'Turn the reference down' },
-                { label: 'Switch every few seconds', note: 'Same spot in the bar' },
+                { label: 'Match loudness', focus: true, note: 'Turn the reference down' },
+                { label: 'Switch every few seconds', focus: true, note: 'Same spot in the bar' },
                 { label: 'Name one difference', note: '"Less 200 Hz, vocal higher"' },
                 { label: 'Fix that one gap' },
             ],

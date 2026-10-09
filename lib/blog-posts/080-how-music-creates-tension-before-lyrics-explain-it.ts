@@ -26,7 +26,7 @@ export const post080: BlogArticle = {
                 { label: 'Bar 1, quarters', hits: [0, 4, 8, 12] },
                 { label: 'Bar 2, 8ths', hits: [0, 2, 4, 6, 8, 10, 12, 14] },
                 { label: 'Bar 3, 16ths', hits: Array.from({ length: 16 }, (_, i) => i) },
-                { label: 'Bar 4, rising', hits: RAMP },
+                { label: 'Bar 4, rising', focus: true, hits: RAMP },
             ],
         },
         stack: {

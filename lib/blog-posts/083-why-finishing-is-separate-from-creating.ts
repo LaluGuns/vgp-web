@@ -20,7 +20,7 @@ export const post083: BlogArticle = {
             alt: 'Four steps with an arrow from the last back to the first: write four bars, hear a flaw and stop to fix it, lose the next idea, loop the same four bars again.',
             steps: [
                 { label: 'Write four bars' },
-                { label: 'Hear a flaw, stop to fix it', note: 'Sweep an EQ on the kick' },
+                { label: 'Hear a flaw, stop to fix it', focus: true, note: 'Sweep an EQ on the kick' },
                 { label: 'Lose the next idea', note: 'The verse melody is gone' },
                 { label: 'Loop the same four bars' },
             ],
@@ -32,7 +32,7 @@ export const post083: BlogArticle = {
                 'Creative work alternates between generating rough material and exploring what it could become (Finke, Ward and Smith, 1992). It goes wrong when you judge every sound in the middle of making it.',
             alt: 'Three steps with an arrow from the last back to the first: generate rough parts, explore what they are and what they need, decide to keep, cut or change, then generate again.',
             steps: [
-                { label: 'Generate rough parts' },
+                { label: 'Generate rough parts', focus: true },
                 { label: 'Explore', note: 'What is this? What does it need?' },
                 { label: 'Decide: keep, cut or change' },
             ],

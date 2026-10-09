@@ -32,7 +32,7 @@ export const post041: BlogArticle = {
             caption:
                 'The loop a loud cue starts. The backing masks the voice, the singer pushes and asks for more, and if the whole cue goes up the backing still masks the voice, only louder.',
             alt: 'Three steps in a loop: the backing is too loud in the cue, the singer pushes harder, the singer asks for more level. An arrow labelled "whole cue goes up" leads back to the first step.',
-            steps: [{ label: 'Backing too loud in the cue' }, { label: 'Singer pushes harder' }, { label: 'Singer asks for more level' }],
+            steps: [{ label: 'Backing too loud in the cue', focus: true }, { label: 'Singer pushes harder' }, { label: 'Singer asks for more level' }],
             loop: { to: 0, label: 'Whole cue goes up' },
         },
     },

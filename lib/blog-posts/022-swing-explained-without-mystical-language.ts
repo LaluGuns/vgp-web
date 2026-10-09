@@ -23,8 +23,8 @@ export const post022: BlogArticle = {
             alt: 'Five rows on a 16-step grid. Straight hats on every step, then hats at 58 and 66.7 percent swing with every second hit shifted right by a growing amount. Kick on beats one and three and snare on two and four stay on the grid.',
             rows: [
                 { label: 'Hats 50%', note: 'straight', swing: 0.5, hits: SIXTEENTHS },
-                { label: 'Hats 58%', swing: 0.58, hits: SIXTEENTHS },
-                { label: 'Hats 66.7%', note: 'triplet', swing: 0.667, hits: SIXTEENTHS },
+                { label: 'Hats 58%', focus: true, swing: 0.58, hits: SIXTEENTHS },
+                { label: 'Hats 66.7%', focus: true, note: 'triplet', swing: 0.667, hits: SIXTEENTHS },
                 { label: 'Kick', hits: [0, 8] },
                 { label: 'Snare', hits: [4, 12] },
             ],
@@ -134,7 +134,7 @@ Choose the tempo first, then the swing. Start straight and raise the amount in s
 ## References
 
 - Friberg, A., & Sundström, A. (2002). Swing ratios and ensemble timing in jazz performance: Evidence for a common rhythmic pattern. *Music Perception*, 19(3), 333-349.
-- Scarth, G., & Linn, R. (2013, July 2). [Interview with Roger Linn on swing, groove and the timing of the MPC]. *Attack Magazine*.
+- Scarth, G., & Linn, R. (2013, July 2). Roger Linn on swing, groove & the magic of the MPC's timing. *Attack Magazine*. https://attackmagazine.com/features/interview/roger-linn-swing-groove-magic-mpc-timing/
 `,
     seo: {
         title: 'Swing explained without mystical language | VGP Studio',

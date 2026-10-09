@@ -35,7 +35,7 @@ export const post071: BlogArticle = {
             alt: 'Five boxes in a row: imagination, tension, prediction, reaction, appraisal, each with a short note on when it happens and what it does.',
             steps: [
                 { label: 'Imagination', note: 'Long before: picturing the outcome' },
-                { label: 'Tension', note: 'Just before: arousal and attention rise' },
+                { label: 'Tension', focus: true, note: 'Just before: arousal and attention rise' },
                 { label: 'Prediction', note: 'Was the guess right?' },
                 { label: 'Reaction', note: 'Fast and automatic' },
                 { label: 'Appraisal', note: 'Slower, conscious judgment' },

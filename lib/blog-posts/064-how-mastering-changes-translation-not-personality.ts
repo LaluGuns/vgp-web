@@ -23,7 +23,7 @@ export const post064: BlogArticle = {
                 { label: 'Mix' },
                 { label: 'Master', note: 'Broad EQ, gentle dynamics, final level' },
                 { label: 'Check on other systems', note: 'Phone, earbuds, car, at two levels' },
-                { label: 'Same problem everywhere? Fix it on the master' },
+                { label: 'Same problem everywhere? Fix it on the master', focus: true },
             ],
             loop: { to: 0, label: 'Back to the mix' },
         },

@@ -6,7 +6,7 @@ export const post085: BlogArticle = {
     excerpt: 'After hours on one mix, your hearing calibrates to it and harshness starts to sound normal. A break and a cold listen are how you get your reference back.',
     category: 'producer-psychology',
     publishedAt: '2026-06-11',
-    updatedAt: '2026-10-08',
+    updatedAt: '2026-10-09',
     readingTime: 6,
     summary: [
         'Over a long session your hearing calibrates to the mix, so a steady harshness stands out less and less.',
@@ -17,7 +17,7 @@ export const post085: BlogArticle = {
         drift: {
             type: 'curve',
             caption:
-                'A sketch of the idea, not a measurement. The mix does not change, but a steady colouration stands out less the longer you listen to it, and comes back after a rest.',
+                'Illustrative values. The mix stays the same, but a steady colouration stands out less the longer you listen to it, and comes back after a rest.',
             alt: 'A curve of how obvious a harsh colouration sounds. It starts high at the first listen, falls through the session, rises after a break and is highest again the next morning.',
             x: ['First listen', 'Later', 'Late in the session', 'After a break', 'Next morning'],
             xShort: ['Start', 'Later', 'Late', 'Break', 'Morning'],
@@ -76,13 +76,13 @@ export const post085: BlogArticle = {
 
 You have been mixing the same track for six hours. It is midnight and you feel in the zone. The drums slam and the synths are bright. You just added a 3 dB boost at 5 kHz to make the lead vocal cut through, and it sounds exciting. The next morning you play the bounce and wince. The top end is piercing and the low end is a muddy mess. You wonder how you made those calls.
 
-It is not a lack of talent. Your hearing adjusts to what it hears for hours, and by midnight the mix had become the reference it was judging against. Rest is part of the method, not a break from it.
+Your ears were working fine. Over six hours they adjusted to the mix, and by midnight the mix itself had become the reference they judged it against. A night away gave that reference back, which makes rest a step in the mixing method.
 
 ## Why it matters: the reference inside your head moves
 
-As your hearing adapts, problems that were obvious at the start start to sound normal. A harsh vocal stops sounding harsh, so you push it further to get the same impression of presence. A boomy low end becomes the baseline, so cutting it sounds thin. The result is a mix full of moves that were made to fix how tired ears heard it.
+As your hearing adapts, problems that were obvious in the first hour begin to sound normal. A harsh vocal stops sounding harsh, so you push it further to get the same impression of presence. A boomy low end becomes the baseline, so cutting it sounds thin. The result is a mix full of moves that were made to fix how tired ears heard it.
 
-The morning listen shows the gap. A rested ear can spot a level clash or a buildup in seconds that a tired ear will circle for an hour.
+The morning listen shows the gap. On the first play, a rested ear often catches a level clash or a buildup that a tired ear circled for an hour.
 
 ::figure drift
 
@@ -90,7 +90,7 @@ The morning listen shows the gap. A rested ear can spot a level clash or a build
 
 Two separate effects are at work.
 
-The first is calibration to the spectrum. Kiefte and Kluender (2008) played listeners a filtered lead-in sound followed by a vowel. When the lead-in had passed through the same tilt filter as the vowels, listeners stopped using that tilt to identify the vowel and relied on the remaining cue. The ear had discounted the property that stayed constant. Stilp and colleagues (2010) found the same with instruments: after a context filtered to emphasise the French horn's spectrum, listeners were more likely to hear a sound between horn and saxophone as a saxophone, and the other way round. They called it auditory colour constancy. The ear discounts properties that stay reliable, which is useful in a real room and a problem in a mix, because a steady bump at 3 kHz across a whole song is exactly that kind of property. These experiments used contexts lasting seconds, so treat the hours-long version in the studio as a likely extension rather than a measured result.
+The first is calibration to the spectrum. Kiefte and Kluender (2008) played listeners a filtered lead-in sound followed by a vowel. When the lead-in had passed through the same tilt filter as the vowels, listeners stopped using that tilt to identify the vowel and relied on the remaining cue. The ear had discounted the property that stayed constant. Stilp and colleagues (2010) found the same with instruments: after a context filtered to emphasize the French horn's spectrum, listeners were more likely to hear a sound between horn and saxophone as a saxophone, and the other way round. They called it auditory colour constancy. The ear discounts properties that stay reliable, which is useful in a real room and a problem in a mix, because a steady bump at 3 kHz across a whole song is exactly that kind of property. These experiments used contexts lasting seconds, so treat the hours-long version in the studio as a likely extension rather than a measured result.
 
 The second is level. Loud listening causes a temporary threshold shift: for a while afterwards, quiet sounds have to be louder before you hear them, and the shift recovers over hours (Moore, 2012). That is ear fatigue you can measure. Workplace guidance puts 85 dBA for eight hours as a full day's exposure, and every 3 dB louder halves the recommended time (NIOSH, 1998).
 
@@ -117,7 +117,7 @@ Work at a moderate level most of the time, turn up briefly to check the low end 
 
 ## Producer takeaway: schedule the reset
 
-Do not trust your ears after several hours on one mix. Take a short break in silence every hour or so; that interval is a habit to start from, not a tested number. Leave final decisions on brightness and low end for a session that starts with fresh ears.
+Do not trust your ears after several hours on one mix. Take a short break in silence every hour or so. Treat the hour as a habit to start from, because no study has tested that number. Leave final decisions on brightness and low end for a session that starts with fresh ears.
 
 The next time you are stuck on a vocal level late at night, do not open another compressor. Bounce, close the DAW and decide in the morning.
 

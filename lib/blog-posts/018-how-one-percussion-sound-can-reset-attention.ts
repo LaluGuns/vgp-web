@@ -27,7 +27,7 @@ export const post018: BlogArticle = {
                     note: 'beats 3 and 4',
                     hits: [8, 9, 10, 11, 12, 13, 14, 15].map((step, i) => ({ step, level: 0.55 + i * 0.06 })),
                 },
-                { label: 'One hit', hits: [{ step: 15, level: 0.5 }], note: 'dry rim' },
+                { label: 'One hit', focus: true, hits: [{ step: 15, level: 0.5 }], note: 'dry rim' },
             ],
         },
         reset: {
@@ -38,7 +38,7 @@ export const post018: BlogArticle = {
             steps: [
                 { label: 'The loop repeats', note: 'Four bars, the same pattern' },
                 { label: 'The brain predicts it', note: 'Responses to it shrink' },
-                { label: 'One sound breaks the pattern', note: 'Registered even without attention' },
+                { label: 'One sound breaks the pattern', focus: true, note: 'Registered even without attention' },
                 { label: 'Attention returns', note: 'The groove sounds present again' },
             ],
         },

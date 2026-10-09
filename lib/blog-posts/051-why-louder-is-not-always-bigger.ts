@@ -21,7 +21,7 @@ export const post051: BlogArticle = {
             alt: 'Four steps in a loop: insert a compressor, EQ or saturator, its output comes out slightly louder, the A/B sounds better, you keep it and add the next plugin, then back to the first step.',
             steps: [
                 { label: 'Insert a compressor, EQ or saturator' },
-                { label: 'Output comes out a little louder', note: 'Sometimes by less than 1 dB' },
+                { label: 'Output comes out a little louder', focus: true, note: 'Sometimes by less than 1 dB' },
                 { label: 'A/B: it sounds better', note: 'Fuller, closer, more exciting' },
                 { label: 'Keep it and add the next plugin' },
             ],

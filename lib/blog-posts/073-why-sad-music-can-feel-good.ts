@@ -39,7 +39,7 @@ export const post073: BlogArticle = {
             steps: [
                 { label: 'Sad cues', note: 'Slow, low, soft, minor, dark timbre' },
                 { label: 'Sadness recognized', note: 'This sounds sad' },
-                { label: 'Nothing at stake', note: 'No real loss or threat' },
+                { label: 'Nothing at stake', focus: true, note: 'No real loss or threat' },
                 { label: 'Beauty and empathy', note: 'Being moved, compassion' },
                 { label: 'Mixed feeling', note: 'Sad and pleasant at once' },
             ],

@@ -41,7 +41,7 @@ export const post090: BlogArticle = {
             alt: 'Four steps in a row: hear a problem while writing, write one line on the fix list, keep writing, then fix the list in the finishing pass.',
             steps: [
                 { label: 'Hear a problem while writing', note: '"Snare is harsh"' },
-                { label: 'Write one line on the fix list', note: 'A few seconds' },
+                { label: 'Write one line on the fix list', focus: true, note: 'A few seconds' },
                 { label: 'Keep writing', note: 'The chorus idea is still there' },
                 { label: 'Fix the list later', note: 'In a separate finishing pass' },
             ],

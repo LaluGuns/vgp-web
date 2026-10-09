@@ -33,8 +33,8 @@ export const post045: BlogArticle = {
             alt: 'Five steps: record full passes, pick a base take by feel, swap whole lines, cut at consonants or breaths, play it top to bottom. An arrow from the last step back to swapping lines is labelled "swap again".',
             steps: [
                 { label: 'Record full passes' },
-                { label: 'Pick a base take by feel' },
-                { label: 'Swap whole lines' },
+                { label: 'Pick a base take by feel', focus: true },
+                { label: 'Swap whole lines', focus: true },
                 { label: 'Cut at consonants or breaths' },
                 { label: 'Play it top to bottom' },
             ],

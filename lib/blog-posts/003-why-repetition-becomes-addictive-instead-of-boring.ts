@@ -36,7 +36,7 @@ export const post003: BlogArticle = {
                 { label: 'Hear the line', note: 'The first pass sets the pattern' },
                 { label: 'Correct prediction feels good' },
                 { label: 'Exact repeats', note: 'The response fades' },
-                { label: 'One detail changes: a small surprise' },
+                { label: 'One detail changes: a small surprise', focus: true },
             ],
             loop: { to: 1, label: 'Back to the original' },
         },

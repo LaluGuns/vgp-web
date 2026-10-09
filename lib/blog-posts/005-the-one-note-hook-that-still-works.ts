@@ -22,7 +22,7 @@ export const post005: BlogArticle = {
             rows: [
                 { label: 'On the beat', note: 'Steady, anonymous', hits: [0, 4, 8, 12] },
                 {
-                    label: 'Anchored',
+                    label: 'Anchored', focus: true,
                     note: 'Off-beat accents',
                     hits: [0, 3, { step: 6, level: 0.5 }, 10, { step: 11, level: 0.5 }, 14],
                 },

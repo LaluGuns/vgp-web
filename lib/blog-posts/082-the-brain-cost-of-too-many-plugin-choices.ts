@@ -35,7 +35,7 @@ export const post082: BlogArticle = {
                 'Choice overload shows up most when your preference is unclear. Naming the job first turns a menu of hundreds into a short list of one or two, and the matched check settles the choice.',
             alt: 'Four steps in a row: name the job, pick a tool from your short list, set it and compare with bypass at matched loudness, then keep or undo and move to the next job.',
             steps: [
-                { label: 'Name the job', note: 'Cut the boxiness on the vocal' },
+                { label: 'Name the job', focus: true, note: 'Cut the boxiness on the vocal' },
                 { label: 'Pick from your short list', note: 'One EQ you know well' },
                 { label: 'Set it, match level', note: 'Compare with bypass at equal loudness' },
                 { label: 'Keep or undo', note: 'Then on to the next job' },

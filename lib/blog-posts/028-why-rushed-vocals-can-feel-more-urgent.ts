@@ -35,7 +35,7 @@ export const post028: BlogArticle = {
                 { label: 'Kick', hits: [0] },
                 { label: 'Snare', hits: [4] },
                 { label: 'Vocal, on grid', hits: PHRASE },
-                { label: 'Vocal, pushed', note: '-20 ms', hits: shifted(-0.12) },
+                { label: 'Vocal, pushed', focus: true, note: '-20 ms', hits: shifted(-0.12) },
                 { label: 'Vocal, laid back', note: '+20 ms', hits: shifted(0.12) },
             ],
         },

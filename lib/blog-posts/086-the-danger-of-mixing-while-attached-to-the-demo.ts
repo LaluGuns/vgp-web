@@ -34,7 +34,7 @@ export const post086: BlogArticle = {
             alt: 'Four steps with an arrow from the last back to the first: play the rough again and again, its details become expected, the new mix changes them, the change feels like a mistake, then back to the rough.',
             steps: [
                 { label: 'Play the rough again and again' },
-                { label: 'Its details become expected', note: 'The boxy snare, the vocal level in bar 9' },
+                { label: 'Its details become expected', focus: true, note: 'The boxy snare, the vocal level in bar 9' },
                 { label: 'The new mix changes them', note: 'Cleaner, but different' },
                 { label: 'The change feels like a mistake' },
             ],

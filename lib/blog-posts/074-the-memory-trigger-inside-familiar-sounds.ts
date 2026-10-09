@@ -23,7 +23,7 @@ export const post074: BlogArticle = {
                 { label: 'Familiar cue', note: 'Tape hiss, a drum machine, a chord move' },
                 { label: 'Recognition', note: 'I have heard this kind of sound' },
                 { label: 'Association', note: 'An era, a medium, a room' },
-                { label: 'Memory, sometimes', note: 'Only with a personal link' },
+                { label: 'Memory, sometimes', focus: true, note: 'Only with a personal link' },
                 { label: 'Emotion', note: 'Often warm and sad together' },
             ],
         },

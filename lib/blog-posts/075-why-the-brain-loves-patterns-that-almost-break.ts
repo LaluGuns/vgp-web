@@ -22,7 +22,7 @@ export const post075: BlogArticle = {
             rows: [
                 { label: 'Snare', hits: [4, 12] },
                 { label: 'Kick, on the beat', hits: [0, 8] },
-                { label: 'Kick, syncopated', hits: [0, 6, 10], note: 'Skips beat 3' },
+                { label: 'Kick, syncopated', focus: true, hits: [0, 6, 10], note: 'Skips beat 3' },
                 { label: 'Kick, beat lost', hits: [3, 6, 9, 13, 15], note: 'Avoids every beat' },
             ],
         },

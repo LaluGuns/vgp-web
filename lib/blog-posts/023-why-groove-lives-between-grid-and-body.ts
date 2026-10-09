@@ -60,9 +60,9 @@ export const post023: BlogArticle = {
             rows: [
                 { label: 'Kick', hits: [0] },
                 { label: 'Snare', hits: [4] },
-                { label: 'Pad', note: '-20 ms', hits: [{ step: 0, offset: -LEAN }] },
+                { label: 'Pad', focus: true, note: '-20 ms', hits: [{ step: 0, offset: -LEAN }] },
                 {
-                    label: 'Shaker',
+                    label: 'Shaker', focus: true,
                     note: '+20 ms',
                     hits: [0, 1, 2, 3, 4, 5, 6, 7].map((step) => ({ step, offset: LEAN, level: step % 2 === 0 ? 1 : 0.45 })),
                 },

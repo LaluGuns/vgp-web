@@ -56,7 +56,7 @@ export const post001: BlogArticle = {
             alt: 'Four steps: the sound starts, the brain groups it into sources, the brain predicts what comes next, and the listener stays or skips.',
             steps: [
                 { label: 'Sound starts', note: 'Phone speaker, playlist, half attention' },
-                { label: 'Brain groups it into sources', note: 'One clear sound is quick. A wall of sound takes work.' },
+                { label: 'Brain groups it into sources', focus: true, note: 'One clear sound is quick. A wall of sound takes work.' },
                 { label: 'Brain predicts what comes next', note: 'A clear pattern gives it something to predict' },
                 { label: 'Stay or skip', note: 'No pattern, no reason to stay' },
             ],

@@ -31,7 +31,7 @@ export const post021: BlogArticle = {
                 { label: 'Kick', hits: [0] },
                 { label: 'Snare', hits: [4] },
                 { label: 'Hats, quantized', hits: EIGHT },
-                { label: 'Hats, lean', note: '+20 ms', hits: EIGHT.map((step) => ({ step, offset: at(20) })) },
+                { label: 'Hats, lean', focus: true, note: '+20 ms', hits: EIGHT.map((step) => ({ step, offset: at(20) })) },
                 { label: 'Hats, random', note: '±20 ms', hits: EIGHT.map((step) => ({ step, offset: at(RANDOM_MS[step]) })) },
             ],
         },

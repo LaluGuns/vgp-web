@@ -24,7 +24,7 @@ export const post072: BlogArticle = {
                 { label: 'Snare', hits: [4, 12] },
                 { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 12, 14] },
                 { label: 'Rim, bars 1 to 7', hits: [6] },
-                { label: 'Rim, bar 8', hits: [{ step: 6, offset: 1 }], note: 'One 16th later' },
+                { label: 'Rim, bar 8', focus: true, hits: [{ step: 6, offset: 1 }], note: 'One 16th later' },
             ],
         },
         recover: {

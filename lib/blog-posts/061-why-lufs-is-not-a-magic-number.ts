@@ -21,7 +21,7 @@ export const post061: BlogArticle = {
             alt: 'Five steps in a row: K-weighting, mean square in 400 ms blocks, an absolute gate at -70 LUFS, a relative gate 10 LU below the average, and the integrated LUFS result.',
             steps: [
                 { label: 'K-weighting', note: 'Treble up about 4 dB, deep bass reduced' },
-                { label: 'Mean square per block', note: '400 ms blocks overlapping by 75%' },
+                { label: 'Mean square per block', focus: true, note: '400 ms blocks overlapping by 75%' },
                 { label: 'Absolute gate', note: 'Blocks below -70 LUFS dropped' },
                 { label: 'Relative gate', note: 'Blocks 10 LU under the average dropped' },
                 { label: 'Integrated LUFS', note: 'One average for the whole song' },

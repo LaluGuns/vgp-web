@@ -35,7 +35,7 @@ export const post078: BlogArticle = {
             steps: [
                 { label: 'Cues in the music', note: 'Tempo, mode, voice, loudness' },
                 { label: 'Emotion recognized', note: 'Perceived: this sounds sad' },
-                { label: 'A mechanism engages', note: 'Groove, voice, memory, expectation' },
+                { label: 'A mechanism engages', focus: true, note: 'Groove, voice, memory, expectation' },
                 { label: 'Emotion felt', note: 'A change in the listener' },
             ],
         },

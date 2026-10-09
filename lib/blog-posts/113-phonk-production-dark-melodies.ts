@@ -25,7 +25,7 @@ export const post113: BlogArticle = {
                     note: 'with the pulse',
                     hits: [0, { step: 2, level: 0.5 }, 4, { step: 6, level: 0.5 }, 8, { step: 10, level: 0.5 }, 12, { step: 14, level: 0.5 }],
                 },
-                { label: '3+3+2', note: 'against the pulse', hits: [0, 3, 6, 8, 11, 14] },
+                { label: '3+3+2', focus: true, note: 'against the pulse', hits: [0, 3, 6, 8, 11, 14] },
                 { label: 'Kick', hits: [0, 8] },
             ],
         },

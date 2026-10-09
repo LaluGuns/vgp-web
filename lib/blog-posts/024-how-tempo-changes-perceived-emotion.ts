@@ -23,7 +23,7 @@ export const post024: BlogArticle = {
                 { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 12, 14] },
                 { label: 'Kick', hits: [0, 10] },
                 { label: 'Snare, 2 and 4', hits: [4, 12] },
-                { label: 'Snare, half-time', hits: [8] },
+                { label: 'Snare, half-time', focus: true, hits: [8] },
             ],
         },
     },

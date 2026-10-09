@@ -37,7 +37,7 @@ export const post088: BlogArticle = {
             alt: 'Four steps: a feeling, a measurable property, one parameter and a matched check. An arrow runs from the check back to the property step.',
             steps: [
                 { label: 'A feeling', note: '"The chorus feels muddy"' },
-                { label: 'A property: too much 200 to 500 Hz' },
+                { label: 'A property: too much 200 to 500 Hz', focus: true },
                 { label: 'One parameter', note: 'Bell at 300 Hz, Q 1, cut 3 dB' },
                 { label: 'Matched check' },
             ],

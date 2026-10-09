@@ -80,7 +80,7 @@ export const post112: BlogArticle = {
                 },
                 { label: 'Snare', hits: [16], note: 'beat 3' },
                 { label: 'Kick', hits: [0, 22] },
-                { label: '808', hits: [0, 14, 22], note: 'long notes' },
+                { label: '808', focus: true, hits: [0, 14, 22], note: 'long notes' },
             ],
         },
     },

@@ -24,9 +24,9 @@ export const post098: BlogArticle = {
             alt: 'Five steps in a row: input converter, input buffer of N samples, plugins, output buffer of N samples, output converter to the headphones.',
             steps: [
                 { label: 'Input converter', note: 'Voice or guitar becomes samples' },
-                { label: 'Input buffer', note: 'N samples' },
+                { label: 'Input buffer', focus: true, note: 'N samples' },
                 { label: 'Plugins', note: 'Look-ahead adds more' },
-                { label: 'Output buffer', note: 'N samples' },
+                { label: 'Output buffer', focus: true, note: 'N samples' },
                 { label: 'Output converter', note: 'Back to the headphones' },
             ],
         },

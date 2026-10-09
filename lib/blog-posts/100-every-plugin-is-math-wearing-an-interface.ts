@@ -22,7 +22,7 @@ export const post100: BlogArticle = {
             steps: [
                 { label: 'Knobs', note: 'Frequency, gain, Q' },
                 { label: 'Five coefficients', note: 'b0, b1, b2, a1, a2' },
-                { label: 'Multiply and add', note: 'This input, two past inputs, two past outputs' },
+                { label: 'Multiply and add', focus: true, note: 'This input, two past inputs, two past outputs' },
                 { label: 'Output sample', note: 'Also fed back into the next two calculations' },
             ],
         },

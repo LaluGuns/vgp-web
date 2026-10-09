@@ -22,9 +22,9 @@ export const post070: BlogArticle = {
             steps: [
                 { label: 'Your master', note: '24-bit WAV, true peak under the ceiling' },
                 { label: 'Distributor', note: 'Passes the file to each service' },
-                { label: 'Service', note: 'Measures loudness, encodes to AAC or Ogg Vorbis' },
+                { label: 'Service', focus: true, note: 'Measures loudness, encodes to AAC or Ogg Vorbis' },
                 { label: 'Device', note: 'Decodes, applies the normalization gain' },
-                { label: 'Converter and speaker', note: 'Overs above full scale clip here' },
+                { label: 'Converter and speaker', focus: true, note: 'Overs above full scale clip here' },
             ],
         },
     },

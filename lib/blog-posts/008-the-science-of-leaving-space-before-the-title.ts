@@ -25,7 +25,7 @@ export const post008: BlogArticle = {
                 { label: 'Snare', hits: [4, 20, 28] },
                 { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 16, 18, 20, 22, 24, 26, 28, 30] },
                 { label: 'Bass', hits: [0, 6, 8, 10, 16, 22, 24, 26] },
-                { label: 'Vocal', hits: [12, 14, 16, { step: 19, level: 0.5 }, 22] },
+                { label: 'Vocal', focus: true, hits: [12, 14, 16, { step: 19, level: 0.5 }, 22] },
             ],
         },
         why: {
@@ -34,7 +34,7 @@ export const post008: BlogArticle = {
             alt: 'Four boxes with arrows: the meter predicts the downbeat, the band stops for one beat, the title lands in the clear, the band returns on the downbeat.',
             steps: [
                 { label: 'Meter predicts the downbeat', note: 'The listener keeps counting through silence' },
-                { label: 'Band stops for one beat', note: 'Nothing is left to mask the vocal' },
+                { label: 'Band stops for one beat', focus: true, note: 'Nothing is left to mask the vocal' },
                 { label: 'Title lands in the clear', note: 'Attention has one thing to follow' },
                 { label: 'Band returns on the downbeat', note: 'A sudden change after silence' },
             ],

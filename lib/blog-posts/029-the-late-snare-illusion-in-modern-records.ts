@@ -29,8 +29,8 @@ export const post029: BlogArticle = {
                 { label: 'Hats', hits: [0, 1, 2, 3, 4, 5, 6, 7] },
                 { label: 'Kick', hits: [0] },
                 { label: 'Snare, on grid', hits: [4] },
-                { label: 'Snare, late', note: '+15 ms', hits: [{ step: 4, offset: late(15) }] },
-                { label: 'Snare, later', note: '+30 ms', hits: [{ step: 4, offset: late(30) }] },
+                { label: 'Snare, late', focus: true, note: '+15 ms', hits: [{ step: 4, offset: late(15) }] },
+                { label: 'Snare, later', focus: true, note: '+30 ms', hits: [{ step: 4, offset: late(30) }] },
             ],
         },
         share: {

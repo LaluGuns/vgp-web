@@ -21,7 +21,7 @@ export const post089: BlogArticle = {
             alt: 'Four steps: bounce the rough, name what works in one sentence, do an edit pass on a copy, then compare level-matched with the rough. An arrow runs from the comparison back to the edit pass.',
             steps: [
                 { label: 'Bounce the rough', note: '30 seconds, before any clean-up' },
-                { label: 'Name what works', note: 'One sentence' },
+                { label: 'Name what works', focus: true, note: 'One sentence' },
                 { label: 'Edit pass on a copy' },
                 { label: 'Matched A/B with the rough' },
             ],
@@ -33,7 +33,7 @@ export const post089: BlogArticle = {
                 'The same backbeat three ways. Hard quantize removes a consistent lean along with real mistakes. A consistent offset is a feel you can keep. Random drift is what quantize strength or a few hand edits should fix.',
             alt: 'Three rows of a one-bar grid with snare hits on beats 2 and 4. In the first row both hits sit slightly late by the same amount. In the second row both sit exactly on the grid. In the third row one hit is a little early and the other clearly late.',
             rows: [
-                { label: 'As played', hits: [{ step: 4, offset: 0.3 }, { step: 12, offset: 0.3 }], note: 'Same lean every time' },
+                { label: 'As played', focus: true, hits: [{ step: 4, offset: 0.3 }, { step: 12, offset: 0.3 }], note: 'Same lean every time' },
                 { label: 'Hard quantized', hits: [4, 12], note: 'Lean gone' },
                 { label: 'Random drift', hits: [{ step: 4, offset: -0.2 }, { step: 12, offset: 0.45 }], note: 'Slop, not feel' },
             ],

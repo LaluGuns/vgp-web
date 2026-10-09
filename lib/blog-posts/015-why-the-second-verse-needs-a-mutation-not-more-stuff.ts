@@ -43,10 +43,10 @@ export const post015: BlogArticle = {
             alt: 'Four rows on a 16-step grid. Verse 1 bass hits on beats 1, 2, 3 and 4. Verse 2 bass hits on the offbeat eighths. Verse 1 hats play straight eighths. Verse 2 shaker plays all sixteen steps, louder on the offbeats.',
             rows: [
                 { label: 'Bass, V1', hits: [0, 4, 8, 12], note: 'on the beats' },
-                { label: 'Bass, V2', hits: [2, 6, 10, 14], note: 'offbeats' },
+                { label: 'Bass, V2', focus: true, hits: [2, 6, 10, 14], note: 'offbeats' },
                 { label: 'Hats, V1', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: 'straight 8ths' },
                 {
-                    label: 'Shaker, V2',
+                    label: 'Shaker, V2', focus: true,
                     note: '16ths, accents',
                     hits: Array.from({ length: 16 }, (_, step) => ({ step, level: step % 4 === 2 ? 1 : 0.45 })),
                 },

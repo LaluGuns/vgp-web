@@ -28,7 +28,7 @@ export const post025: BlogArticle = {
             rows: [
                 { label: 'Strength', note: 'tall is strong', hits: STRENGTH },
                 { label: 'Kick, on the beat', hits: [0, 8] },
-                { label: 'Kick, syncopated', hits: [0, 3, 10] },
+                { label: 'Kick, syncopated', focus: true, hits: [0, 3, 10] },
                 { label: 'Snare', hits: [4, 12] },
             ],
         },

@@ -21,7 +21,7 @@ export const post081: BlogArticle = {
             steps: [
                 { label: 'Hear a doubt about the vocal' },
                 { label: 'Nudge a setting', note: 'A fraction of a dB, a hair of threshold' },
-                { label: 'Flick bypass', note: 'No level match, no blind test' },
+                { label: 'Flick bypass', focus: true, note: 'No level match, no blind test' },
                 { label: 'No clear answer, or louder wins' },
             ],
             loop: { to: 0, label: 'Again' },
