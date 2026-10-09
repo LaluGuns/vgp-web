@@ -296,7 +296,20 @@ export function reverb(ctx: AudioContext): Reverb {
             group.gain.setValueAtTime(group.gain.value, t);
             group.gain.linearRampToValueAtTime(0, t + 0.08);
         }
-        window.setTimeout(() => nodes.forEach((n) => n.disconnect()), group ? 150 : 0);
+        // Cut the feed from the input as well as each node's output, or the old
+        // convolvers keep running (and holding their impulse) until Stop.
+        window.setTimeout(
+            () =>
+                nodes.forEach((n) => {
+                    try {
+                        input.disconnect(n);
+                    } catch {
+                        // Not fed from the input directly (the group, or a piece behind its delay).
+                    }
+                    n.disconnect();
+                }),
+            group ? 150 : 0,
+        );
     };
 
     return {

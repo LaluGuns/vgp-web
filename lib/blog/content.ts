@@ -292,13 +292,3 @@ export function parseArticle(content: string, glossary: GlossaryEntry[] = []): P
 
     return { lead, sections, terms: ctx.used };
 }
-
-/** Plain-text word count of the prose, for reading time. */
-export function countWords(content: string): number {
-    return content
-        .replace(/\$\$[\s\S]*?\$\$/g, ' ')
-        .replace(/^::.*$/gm, ' ')
-        .replace(/[#*|`_\-[\]()]/g, ' ')
-        .split(/\s+/)
-        .filter(Boolean).length;
-}

@@ -165,8 +165,7 @@ export function Slider({
                     {text}
                 </output>
             </div>
-            {/* .vgp-range (app/globals.css) is a 44 px touch target pulled in by 8 px top and bottom; mt-0 keeps the
-                track 22 px under the label, where it was before the target grew. */}
+            {/* .vgp-range (app/globals.css) is a 44 px touch target pulled in by 8 px top and bottom. */}
             <input
                 id={id}
                 type="range"
@@ -176,7 +175,7 @@ export function Slider({
                 value={value}
                 aria-valuetext={text}
                 onChange={(e) => onChange(Number(e.target.value))}
-                className="vgp-range mt-0 w-full"
+                className="vgp-range w-full"
             />
             {hint ? <p className="mt-1 text-xs leading-5 text-white/50">{hint}</p> : null}
         </div>

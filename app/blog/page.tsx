@@ -9,7 +9,7 @@ import { lessonSearchText } from './search-index';
 
 const DAY = 24 * 60 * 60 * 1000;
 
-/** Paths that teach a craft. Featured lessons from these come first. */
+/** Paths tied to a product or a genre. The featured lesson comes from any other path when one is flagged. */
 const PRODUCT_PATHS: BlogArticle['category'][] = ['production-tips', 'genre-guides', 'licensing-guide'];
 
 const toListItem = (article: BlogArticle, now: number): BlogListItem => ({

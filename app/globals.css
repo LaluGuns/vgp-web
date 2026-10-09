@@ -102,14 +102,12 @@ html {
   scroll-padding-top: 88px;
 }
 
-/* Phones also have the fixed bottom navigation (MobileBottomNav, md:hidden). */
+/* Phones also have the fixed bottom navigation (MobileBottomNav, md:hidden)
+   and, on a lesson, the Contents button just above it. One value for every
+   page: switching it with html:has(...) made Chrome restyle the whole
+   document on every DOM change. */
 @media (max-width: 767.98px) {
   html {
-    scroll-padding-bottom: 72px;
-  }
-
-  /* On a lesson, the Contents button sits just above it. */
-  html:has(.vgp-contents-button[data-visible]) {
     scroll-padding-bottom: 128px;
   }
 }
@@ -723,10 +721,9 @@ body::before {
 }
 
 /* Range inputs in the listening demos. */
-/* A 44 px tall hit area (WCAG 2.5.5) that still takes 28 px of layout:
-   the negative margins keep the demos' measured heights and the track's
-   position unchanged. The slider in demos/ui.tsx carries mt-2 (8 px), which
-   the top margin absorbs. */
+/* A 44 px tall hit area (WCAG 2.5.5) that takes 28 px of layout: it
+   reaches 8 px up into the label row and 8 px down. The demos' reserved
+   heights (lib/blog/demos.ts) were measured with these margins. */
 .vgp-range {
   -webkit-appearance: none;
   appearance: none;
@@ -735,10 +732,6 @@ body::before {
   margin-bottom: -8px;
   background: transparent;
   cursor: pointer;
-}
-
-.vgp-range.mt-2 {
-  margin-top: 0;
 }
 
 .vgp-range::-webkit-slider-runnable-track {
