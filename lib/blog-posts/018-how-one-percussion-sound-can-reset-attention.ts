@@ -45,15 +45,15 @@ export const post018: BlogArticle = {
     },
     quiz: [
         {
-            q: 'What is the mismatch negativity?',
+            q: 'Your listener is following the vocal and not the drums. After three bars of the same loop, you drop one rim click on the last 16th of bar four. Will it register?',
             options: [
-                'A drop in perceived loudness when two sounds overlap',
-                'A phase cancellation between the kick and the bass',
-                'A brain response to a pattern break, even unattended',
-                'A brain response that needs the listener\'s full attention',
+                'No, because a sound nobody is attending to is not processed at all',
+                'Only if it is louder than the vocal, because attention follows level',
+                'Yes, because the brain flags a break in a pattern even unattended',
+                'Only once it has returned in the same spot at every phrase end',
             ],
             answer: 2,
-            why: 'Näätänen and colleagues (2007) review decades of work showing the auditory system flags deviant sounds automatically. That is why one unexpected hit can be noticed while the listener is focused on the vocal.',
+            why: 'A sound that breaks an established pattern produces a brain response called the mismatch negativity, even when the listener is attending to something else (Näätänen et al., 2007). Repeating the click in the same place every phrase would make it part of the pattern instead.',
         },
         {
             q: 'You add the same rim click at the end of every four-bar phrase for the whole song. What happens?',

@@ -97,7 +97,7 @@ export const post073: BlogArticle = {
             options: [
                 'The song failed, so slow it down and make the reverb wetter',
                 'The listener missed the point, so make the sad cues clearer',
-                'Nothing is wrong: heard and felt emotion often differ like this',
+                'Nothing is wrong: heard and felt emotion often differ',
                 'The mix is too quiet, so the sadness never reached them',
             ],
             answer: 2,

@@ -42,10 +42,10 @@ export const post077: BlogArticle = {
         {
             q: 'People forget your hook after one play. Which rewrite brings it closer to the earworms Jakubowski and colleagues (2017) analysed?',
             options: [
-                'Keep its rise-then-fall shape and make one climb steeper than expected',
+                'Keep its rise-then-fall shape, with one climb steeper than usual',
                 'Swap to an unusual zigzag shape built only from small, common steps',
                 'Flatten it to hover near one pitch so it is easy to sing back',
-                'Slow it down so each note has more time to sink in',
+                'Slow it to half speed so each note has time to sink in',
             ],
             answer: 0,
             why: 'Earworm tunes tended to follow a common overall contour, often a rise then a fall, with less usual slopes between the turning points. They were also faster on average, so slowing the line down moves it away from that profile.',
@@ -66,7 +66,7 @@ export const post077: BlogArticle = {
             options: [
                 'Liking always keeps rising, so your verdict is just tired ears',
                 'A strong hook keeps gaining for everyone, so the chorus is weak',
-                'Focused listening rises then falls, while background play keeps rising',
+                'Close listening rises then falls, background play keeps rising',
                 'Background play cannot change liking, so the client has other taste',
             ],
             answer: 2,

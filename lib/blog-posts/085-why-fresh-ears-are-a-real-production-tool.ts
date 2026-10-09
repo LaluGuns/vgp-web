@@ -44,15 +44,15 @@ export const post085: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In listening experiments, what does the ear do with a colouration that stays constant across what you have just heard?',
+            q: 'A 3 kHz bump that sits under the whole song stopped sounding harsh to you hours ago. A friend walks in and calls the mix piercing within seconds. What best explains the gap?',
             options: [
-                'Hears it more clearly with each repeat, so it stands out',
-                'Discounts it in the lows but keeps hearing it in the highs',
-                'Treats it as distortion and hears it as harsher over time',
-                'Discounts it, so later sounds seem to carry less of it',
+                'Your monitors lose top end as they warm up over a long session',
+                'Their untrained ears hear any brightness at all as harsh',
+                'The drums mask the bump for you once the song gets busy',
+                'Your ears discounted the bump because it stayed constant',
             ],
             answer: 3,
-            why: 'Kiefte and Kluender found that listeners discount spectral properties that stay reliable in the context. A steady bump in your mix is exactly that kind of property.',
+            why: 'Kiefte and Kluender, and Stilp and colleagues, found that listeners discount spectral properties that stay reliable in the context, and a bump under the whole song is that kind of property; your friend has not calibrated to it. Those experiments used seconds of context, so the hours-long version is a likely extension.',
         },
         {
             q: 'The NIOSH guideline allows 85 dBA for 8 hours a day. How long at 94 dBA?',

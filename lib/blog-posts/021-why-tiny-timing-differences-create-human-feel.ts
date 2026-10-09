@@ -71,15 +71,15 @@ export const post021: BlogArticle = {
             why: 'Hennig and colleagues found that human timing errors are related from hit to hit. Independent random offsets have no pattern, so the part sounds unsure of where the beat is.',
         },
         {
-            q: 'In listening tests, what happened when the timing of a real performance was exaggerated?',
+            q: 'A 20 ms lean on the hats gave your 90 BPM beat a relaxed feel, so you try 60 ms to make it groove harder. What do the listening tests on bigger offsets predict?',
             options: [
-                'Groove ratings dropped below the original',
-                'Groove ratings rose with the larger offsets',
-                'Groove ratings stayed level with the original',
-                'Listeners heard it as more human than before',
+                'The groove gets stronger, since more offset means more feel',
+                'Groove ratings drop once the lean outgrows what players use',
+                'Nothing changes, since the ear cannot hear a 60 ms offset',
+                'It grooves harder as long as the kick and snare stay quantized',
             ],
-            answer: 0,
-            why: 'Senn and colleagues found groove ratings stayed high up to the performed amount of microtiming and dropped beyond it. Fully quantized versions rated as high as the originals.',
+            answer: 1,
+            why: 'Senn and colleagues found groove ratings fell when performed offsets were exaggerated, and Davies and colleagues and Frühauf and colleagues saw ratings drop as offsets grew. At 90 BPM, 60 ms is over a third of a 16th, well past a lean a player would use.',
         },
     ],
     content: `## Hook: the beat that went flat

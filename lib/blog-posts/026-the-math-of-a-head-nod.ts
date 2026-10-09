@@ -52,7 +52,7 @@ export const post026: BlogArticle = {
         {
             q: 'Nobody in the room nods to your clean 92 BPM beat. Going by the motion-capture study by Burger and colleagues, which change is most likely to get heads moving?',
             options: [
-                'Push the tempo to 100 BPM and leave the parts alone',
+                'Push the tempo up to 100 BPM and leave the parts as they are',
                 'Add a long plate reverb to the kick and the snare',
                 'Give the kick and bass more movement and sharper attacks',
                 'Widen the top end so the whole mix feels larger',

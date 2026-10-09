@@ -46,7 +46,7 @@ export const post080: BlogArticle = {
         {
             q: 'You only have time to automate one thing across a four-bar build. Based on Farbood\'s single-feature results, which is most likely to raise tension on its own?',
             options: [
-                'Raise the instrument bus level steadily into the chorus',
+                'Raise the bus level steadily into the chorus',
                 'Switch one bar of the build from 4/4 to 7/8',
                 'Widen the stereo image of the pad bar by bar',
                 'Lengthen the reverb tail on the snare build',

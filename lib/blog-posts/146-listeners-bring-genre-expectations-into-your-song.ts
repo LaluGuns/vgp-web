@@ -43,26 +43,21 @@ export const post146: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Hannon and Trehub\'s (2005a) study, how did North American adults handle changes to Balkan folk melodies in a complex meter?',
+            q: 'You make two edits to a 2+2+3 groove in seven, one that keeps the metre and one that breaks it. Going by Hannon and Trehub (2005a), who hears the difference: a friend raised on pop and house, or one raised on Balkan brass?',
             options: [
-                'They caught changes in both kinds of meter equally well',
-                'They caught them only after a few repeats of each melody',
-                'They missed changes that broke the complex meter',
-                'They rated every change as a complete departure',
+                'Both friends, since a broken bar is obvious in any metre',
+                'The Balkan-raised friend; the pop friend hears little change',
+                'The pop friend, since an unfamiliar metre makes every change stand out',
+                'Neither friend, since nobody can track a seven-count metre by ear',
             ],
-            answer: 2,
-            why: 'The North American adults told meter-breaking from meter-keeping changes apart in simple meter but not in the complex meter. Adults of Bulgarian or Macedonian origin, and 6-month-old infants, did it in both.',
+            answer: 1,
+            why: 'North American adults told metre-keeping from metre-breaking changes apart in simple metre but not in the complex Balkan metre, while adults of Bulgarian or Macedonian origin managed both. Each listener judges the bar against the metres they learned.',
         },
         {
-            q: 'Hansen, Vuust and Pearce (2016) played Charlie Parker phrases to jazz musicians, classical musicians and non-musicians. What set the jazz musicians apart?',
-            options: [
-                'Their conscious sense of certainty matched a bebop-trained model',
-                'They were the only group whose expectedness ratings fit bebop',
-                'They judged the phrases against a general tonal model instead',
-                'They found every continuation equally likely and unsurprising',
-            ],
+            q: 'Before release you want a gut check on whether a turn in your bebop-style solo sounds like the style. Going by Hansen, Vuust and Pearce (2016), whose sense of being sure what comes next is most likely to match it?',
+            options: ['A jazz player', 'A classical pianist', 'A friend who does not play', 'All three about equally'],
             answer: 0,
-            why: 'Both musician groups rated expectedness in line with the bebop model better than non-musicians did. Only the jazz musicians\' explicit certainty ratings tracked the model\'s estimates.',
+            why: 'Both musician groups rated expectedness closer to a bebop-trained model than non-musicians did, but only the jazz musicians\' sense of certainty tracked the model. The groups were small, so treat it as a lead rather than a rule.',
         },
         {
             q: 'Your track pairs a drill rhythm with jazz harmony. Jazz listeners call the drums odd and drill listeners call the chords odd. What is the best reading?',

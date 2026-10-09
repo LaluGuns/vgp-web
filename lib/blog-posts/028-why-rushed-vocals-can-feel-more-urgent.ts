@@ -81,10 +81,15 @@ export const post028: BlogArticle = {
             why: 'Soft consonants act like a slow attack, and listeners hear the beat of slow-attack sounds later than their start. The vowel onset is close to where the word lands.',
         },
         {
-            q: 'Which cue marks high-energy emotions such as anger, fear and joy in both speech and music?',
-            options: ['A lower pitch', 'A slower rate', 'A faster rate', 'Steadier loudness'],
+            q: 'The singer rushes one line of an angry verse ahead of the beat. Going by Juslin and Laukka\'s review, what do you lose if you pull it back to the grid?',
+            options: [
+                'Nothing much, since a voice carries emotion in its pitch and tone',
+                'Some tenderness, since rushing is the cue for sad, soft states',
+                'Part of the urgency, since a fast rate goes with high-energy states',
+                'Only some groove, since rate cues work in speech but not in song',
+            ],
             answer: 2,
-            why: 'Juslin and Laukka found the same cues in both channels: a fast rate goes with high-energy emotions, a slow rate with sadness and tenderness.',
+            why: 'Juslin and Laukka found the same emotion cues in speech and music: a fast rate goes with high-energy states such as anger, fear and joy, and a slow rate with sadness and tenderness. The rush is part of how the line sounds angry.',
         },
         {
             q: 'You use an alignment tool on a stack of vocals. Which track should be the guide?',

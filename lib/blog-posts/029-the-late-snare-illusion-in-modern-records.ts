@@ -57,10 +57,15 @@ export const post029: BlogArticle = {
             why: 'A 16th lasts 60,000 / (4 × 90) = 166.7 ms, and 15 / 166.7 is 0.09.',
         },
         {
-            q: 'When drummers were asked to play laid back, what else did most of them change?',
-            options: ['They played the hats quieter', 'They slowed the tempo down', 'They hit the snare louder', 'They dropped the ghost notes'],
-            answer: 2,
-            why: 'Danielsen and colleagues found that most drummers played laid-back snare strokes louder than on-the-beat ones. Timing and sound together signal a deliberate lean.',
+            q: 'You set the snare 15 ms late for a laid-back feel, but it sounds like a programming slip, not a drummer leaning back. Going by Danielsen and colleagues\' drummer study, what do you try next?',
+            options: [
+                'Raise it 1 dB or pick a harder velocity layer',
+                'Move the hats late as well, so the beat shifts together',
+                'Lower its velocity so the late hit sounds lazier',
+                'Push it further, to 40 ms, until the lean is obvious',
+            ],
+            answer: 0,
+            why: 'Most of the drummers played their laid-back snare strokes louder than their on-the-beat ones, and the authors conclude that timing and sound together signal a deliberate lean. Moving the hats removes the reference the snare leans against, and pushing much further starts to drag the track.',
         },
         {
             q: 'You move the main snare 30 ms late but leave its clap layer on the grid. What happens?',

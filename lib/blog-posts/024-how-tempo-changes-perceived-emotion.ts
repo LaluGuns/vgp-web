@@ -34,7 +34,7 @@ export const post024: BlogArticle = {
                 'Move it from minor to major and keep the tempo',
                 'Keep tempo and mode, and swap in a brighter pad',
                 'Lower the tempo so each line has room to land',
-                'Raise the tempo a little and keep the key and mode',
+                'Raise the tempo a little, keep the key and mode',
             ],
             answer: 3,
             why: 'Husain and colleagues found that changing the tempo moved how energized listeners felt but not their mood, while switching mode moved mood but not arousal. A slower tempo pulls the energy down, and a brighter pad leaves the timing that sets the energy where it was.',

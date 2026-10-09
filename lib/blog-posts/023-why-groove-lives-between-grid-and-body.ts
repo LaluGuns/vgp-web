@@ -77,15 +77,15 @@ export const post023: BlogArticle = {
             why: 'Danielsen and colleagues found that slow and long sounds are placed later than their onset and with more spread. The perceived beat is a window, not a point.',
         },
         {
-            q: 'When people tap along to a steady click, where do their taps usually land?',
+            q: 'You clap along to the click, then line a tambourine up with your raw claps without measuring anything. Where is the tambourine most likely to end up?',
             options: [
-                'Behind the click, by tens of milliseconds',
-                'Ahead of the click, by tens of milliseconds',
-                'On the click, within a millisecond or two',
-                'Either side of the click, with no clear trend',
+                'Behind the beat, since each clap is a reaction to the click',
+                'Ahead of the beat, by tens of milliseconds on average',
+                'On the beat, within a millisecond or two of the click',
+                'Scattered either side of the beat, with no lean either way',
             ],
             answer: 1,
-            why: "This is the negative mean asynchrony described in Repp's review of tapping studies. Aligning parts to raw claps copies that anticipation into the track.",
+            why: "When people tap with a steady beat, their taps land ahead of it on average, usually by tens of milliseconds (Repp, 2005). Aligning a part to raw claps copies that anticipation into the track, which is why the corrected clap test measures it first.",
         },
         {
             q: 'In the corrected clap test, why do you first record a take against the click alone?',

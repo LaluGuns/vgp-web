@@ -42,7 +42,7 @@ export const post075: BlogArticle = {
             q: 'In your remix the kick, bass and chords all avoid the beat, and friends say it does not make them want to move. Going by Witek and colleagues (2014), which edit is most likely to bring the urge back?',
             options: [
                 'Push the hats off the beat too, so the whole kit pulls one way',
-                'Put the kick back on the downbeat and keep one or two off-beat accents',
+                'Put the kick back on the downbeat, keep one or two accents off it',
                 'Apply a random humanize of 20 ms to every hit so it sounds played',
                 'Quantize every part onto the beat so the pattern is fully straight',
             ],
@@ -63,7 +63,7 @@ export const post075: BlogArticle = {
         {
             q: 'Your drummer\'s funk take has small timing offsets. You could keep it as played, quantize it fully, or scale the offsets up so it grooves harder. What do the microtiming studies predict?',
             options: [
-                'As played and quantized rate about the same, and scaled up rates lower',
+                'As played and quantized rate alike, and scaled up rates lower',
                 'Scaled up rates highest, because bigger offsets add more feel',
                 'As played rates far above quantized, so the grid kills the groove',
                 'Quantized rates far above both, because the grid always grooves best',

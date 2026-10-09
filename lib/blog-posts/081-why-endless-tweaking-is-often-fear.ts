@@ -57,7 +57,7 @@ export const post081: BlogArticle = {
             options: [
                 'Each choice drains a limited supply, so you have simply run out',
                 'The drain is real but slow, so it only matters after midnight',
-                'Depletion came out near zero, so give the change a pass-or-fail test',
+                'Depletion came out near zero, so put the change to a blind test',
                 'Depletion is strongest in creative tasks like mixing and writing',
             ],
             answer: 2,

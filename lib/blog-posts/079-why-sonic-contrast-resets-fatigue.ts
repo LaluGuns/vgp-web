@@ -64,10 +64,15 @@ export const post079: BlogArticle = {
             why: 'Normalization turns the whole file up or down by one amount. The difference between sections survives, so contrast you build into the arrangement reaches the listener.',
         },
         {
-            q: 'Neurons in the auditory cortex respond more strongly to a sound when it is...',
-            options: ['common in its context', 'rare in its context', 'held at a steady level', 'repeated over and over'],
+            q: 'The same crash cymbal hits on every bar of the verse and again on the chorus downbeat, and the downbeat does not stand out. Going by the neuron recordings by Ulanovsky and colleagues, which change helps most?',
+            options: [
+                'Keep it on every bar, so the ear has learned it by the chorus',
+                'Drop it from the verse, so it is rare when the chorus starts',
+                'Double it with a second crash on every bar of the verse',
+                'Loop it as a steady wash under the verse and the chorus',
+            ],
             answer: 1,
-            why: 'Ulanovsky and colleagues found stronger responses to the same sound when it was rare than when it was common. A change stands out, a constant fades.',
+            why: 'Neurons in the auditory cortex of cats responded more strongly to a sound when it was rare than to the same sound when it was common. A crash saved for the chorus is rare in its context, while one on every bar has faded into the background.',
         },
     ],
     content: `## Hook: the wall from bar one

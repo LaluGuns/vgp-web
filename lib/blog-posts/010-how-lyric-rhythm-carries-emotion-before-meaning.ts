@@ -117,7 +117,7 @@ export const post010: BlogArticle = {
                 '"come" on beat 3, "back" on the "and" of 3',
             ],
             answer: 0,
-            why: 'Spoken naturally it is "come BACK", with the second syllable stronger. Putting "back" on the beat matches the stress of the words to the stress of the meter.',
+            why: 'Spoken naturally it is "come BACK", with the second syllable stronger. Putting "back" on the beat matches the stress of the words to the stress of the metre.',
         },
         {
             q: 'A male singer has to hold an A4 at the top of the chorus. Which vowel gives him the most room?',

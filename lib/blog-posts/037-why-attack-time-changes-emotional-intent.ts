@@ -62,10 +62,10 @@ export const post037: BlogArticle = {
     },
     quiz: [
         {
-            q: 'When listeners rate how different instrument sounds are, which property keeps coming out as a main dimension, alongside spectral balance?',
-            options: ['Stereo width', 'Attack time', 'Sample rate', 'Peak level'],
-            answer: 1,
-            why: 'Timbre studies repeatedly find rise time and spectral centroid as the two strongest shared dimensions. The start of a note is part of what the instrument is.',
+            q: 'Your synth string patch has the right brightness, but it still sounds like a pad instead of a plucked string. Going by the timbre study by McAdams and colleagues, which control is most likely to change what instrument it seems to be?',
+            options: ['The attack time of the envelope', 'The stereo width of the patch', 'The output level of the synth', 'The sample rate of the session'],
+            answer: 0,
+            why: 'When listeners rate how different instrument sounds are, rise time comes out as one of the main dimensions, alongside where the energy sits in the spectrum. With the spectrum already right, a faster attack is what turns a swell into a pluck.',
         },
         {
             q: 'An exponential attack has a time constant of 20 ms. Roughly how long until it reaches 95 percent of full level?',

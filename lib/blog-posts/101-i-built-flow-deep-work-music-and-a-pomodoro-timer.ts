@@ -39,26 +39,26 @@ export const post101: BlogArticle = {
             why: 'A single is built to win attention fast. Session music has to be interesting enough that silence feels empty, and calm enough that you forget it is there.',
         },
         {
-            q: 'Why did Flow stop treating a hidden tab as lost focus?',
+            q: 'Your session log shows 48 minutes for a block in which you spent part of the time in another tab. What do those 48 minutes tell you?',
             options: [
-                'Browsers block apps from detecting hidden tabs',
-                'Tracking tabs made the timer noticeably slower',
-                'A hidden tab does not mean you stopped working',
-                'Focus scores moved into the paid Flow Pro tier',
-            ],
-            answer: 2,
-            why: 'You might be reading a document or thinking in another window. What the app cannot measure, it does not report.',
-        },
-        {
-            q: 'What does Flow Pro add to the free tier?',
-            options: [
-                'The full catalogue and every visual theme',
-                'Focus scores built from your tab activity',
-                'A more precise timer than the free one',
-                'Sessions that start without an account',
+                'That the timer ran for 48 minutes, and nothing about your focus',
+                'That you focused for less, since the hidden-tab time was taken off',
+                'That you drifted, since each tab switch is logged as lost focus',
+                'That you focused for all 48, since the app checked you kept working',
             ],
             answer: 0,
-            why: 'The free tier is usable without an account. Flow Pro adds the full catalogue and the other visual themes.',
+            why: 'The stats report measured minutes only. Switching tabs does not mean you stopped working, so the app does not watch tabs or score attention, and the number is how long the timer ran.',
+        },
+        {
+            q: 'You are building a tracker for your own studio sessions and want numbers you can trust. Following the reasoning behind Flow\'s stats, what should it show?',
+            options: [
+                'A focus score from how long the DAW window stayed in front',
+                'The minutes the timer ran, with no guess about your attention',
+                'A drift alert each time you switch to another window',
+                'A productivity score from how many edits you make each hour',
+            ],
+            answer: 1,
+            why: 'Window focus and edit counts are guesses about attention: you might be reading, writing elsewhere or thinking with your eyes closed. A timer can measure how long a session ran, and what an app cannot measure, it should not report.',
         },
     ],
     content: `## The session that started it

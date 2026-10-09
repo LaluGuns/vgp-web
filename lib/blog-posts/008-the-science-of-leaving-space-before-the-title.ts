@@ -56,7 +56,7 @@ export const post008: BlogArticle = {
                 'Reverb tails carry the groove through it',
             ],
             answer: 1,
-            why: 'Meter is a prediction about when beats will land. The gap removes sound, not the expectation, so the band\'s return lands exactly where the listener was waiting for it.',
+            why: 'Metre is a prediction about when beats will land. The gap removes sound, not the expectation, so the band\'s return lands exactly where the listener was waiting for it.',
         },
         {
             q: 'You cut the band for a beat, but the title still sounds cloudy. What is the likely cause?',

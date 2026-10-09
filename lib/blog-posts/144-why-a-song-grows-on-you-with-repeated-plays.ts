@@ -46,7 +46,7 @@ export const post144: BlogArticle = {
             q: 'After one listen, a friend who listens to jazz daily gives your dense jazz-rap instrumental an 8 out of 10, and one who mostly listens to EDM gives it a 3. Going by Madison and Schiölde (2017), how should you read the 3?',
             options: [
                 'As proof the arrangement is too complex, so simplify it',
-                'Partly as their distance from the style, the strongest predictor',
+                'Partly as their distance from the style, the top predictor',
                 'As the lasting verdict, since first reactions hold over time',
                 'As noise, since liking in the study followed no factor at all',
             ],

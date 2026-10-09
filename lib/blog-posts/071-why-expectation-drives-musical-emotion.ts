@@ -45,10 +45,15 @@ export const post071: BlogArticle = {
     },
     quiz: [
         {
-            q: 'In Huron\'s ITPRA model, which response peaks just before an expected event arrives?',
-            options: ['Appraisal', 'Reaction', 'Tension', 'Prediction'],
-            answer: 2,
-            why: 'The tension response prepares the body and attention for an event that is about to happen. Prediction, reaction and appraisal all come after the event.',
+            q: 'You leave half a bar of silence before the chorus, and for a moment it sounds as if the track has stopped. Then the downbeat lands. In Huron\'s ITPRA account, why can that arrival feel better than an on-time chorus?',
+            options: [
+                'A correct prediction gets rewarded twice, before and after the gap',
+                'A fast negative reaction is overturned by a positive appraisal',
+                'Imagination fills the gap with a picture of a bigger chorus',
+                'Appraisal works alone, since a short silence draws no reaction',
+            ],
+            answer: 1,
+            why: 'Huron calls this contrastive valence: the silence briefly reads as the music stopping, and when the downbeat proves it has not, the slower positive appraisal overturns that first reaction. He argues the result can feel better than a plain correct guess.',
         },
         {
             q: 'Why does a half-bar gap before the chorus often make the same chorus feel bigger?',
