@@ -147,3 +147,4 @@ One line per call, newest last.
   - The zoom into the grille runs 0.6 s and lands where the air scene's first speaker appears.
   - The heard note: the bubble's sine flattens into a bar, which travels under the ladder and up into the note's place (it crosses no rung); the robot does not blink while surprised.
   - Each tick of the sub knob slams the phone cone into its stop: a hard shake, and the stops flash.
+- Film 4 v14, after the thirteenth review (9 accuracy, hook, clarity, pacing and polish, 8.5 craft): the hook's zoom ends with the grille on the first speaker's place, and the zoomed phone dissolves over that speaker (already there at the cut) for 0.15 s; the phone's shake on unplayed notes is 9 px.

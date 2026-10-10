@@ -342,13 +342,7 @@ function drawHook(t) {
     // Into the speaker: everything else clears while the phone grows, its
     // grille moving to where the air scene's first speaker appears.
     const zoomE = replay ? 0 : E.inOut(seg(t, SC.air - 0.6, SC.air));
-    const zoomTo = () => {
-        const gx0 = HK.ph.x + HK.ph.w / 2;
-        const gy0 = HK.ph.y + HK.ph.h - 52;
-        g.translate(lerp(gx0, AIR.cone, zoomE), lerp(gy0, 840, zoomE));
-        g.scale(1 + 2.4 * zoomE, 1 + 2.4 * zoomE);
-        g.translate(-gx0, -gy0);
-    };
+    const zoomTo = () => hookZoom(zoomE);
     if (zoomE > 0) g.globalAlpha *= 1 - clamp(zoomE * 4);
     const tNow = wt('hook-b', 'now');
     // Title: slams in on frame one.
@@ -394,7 +388,7 @@ function drawHook(t) {
     // Each bass note the phone cannot play: it shakes, and no ring leaves it.
     let tryOn = 0;
     if (!sat) for (const q of NOTES) if (t >= q.t && t - q.t < 0.3) tryOn = Math.max(tryOn, 1 - (t - q.t) / 0.3);
-    const shakeX = 6 * tryOn * Math.sin(t * 2 * Math.PI * 16);
+    const shakeX = 9 * tryOn * Math.sin(t * 2 * Math.PI * 16);
     if (zoomE <= 0) phoneBody(g, HK.ph.x + shakeX, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
     void d;
     pill(g, 'phone speaker (simulated)', 250, HK.ph.y - 48, { size: 32, bg: P.dark, fg: P.ink, ring: P.ink3, weight: 700 });
@@ -487,7 +481,7 @@ function drawHook(t) {
     if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 + 4, { size: 28, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
     if (zoomE > 0) {
         g.save();
-        g.globalAlpha = 1 - seg(t, SC.air - 0.1, SC.air);
+        g.globalAlpha = 1;
         zoomTo();
         phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
         g.restore();
@@ -519,8 +513,11 @@ function drawAir(t) {
         const amp = AIR.unit * rel;
         const x = amp * Math.sin(w * (t - appear[i]));
         g.save();
-        g.globalAlpha *= E.out(k);
-        g.translate((1 - E.out(k)) * -40, 0);
+        if (i === 0 && t < SC.air + 0.25) g.globalAlpha = E.out(popIn(t, SC.air, 0.08));
+        else {
+            g.globalAlpha *= E.out(k);
+            g.translate((1 - E.out(k)) * -40, 0);
+        }
         label(g, `${f} Hz`, 222, y + 16, { size: 48, weight: 800, color: P.ink, align: 'right' });
         coneSide(g, AIR.cone, y, 200, x, { deep: 42 });
         // Air: particles displaced by the wave. Wavelength and displacement
@@ -1626,7 +1623,25 @@ const BRIDGE = 0.5;
 const SCOPE_LAD = { x0: 760, x1: 926, y0: 935, y1: 1290 };
 /** The 2% push a view has reached at its end, about the frame's middle. */
 const PUSHED = 1.02;
+/** The hook's camera move: the phone grows until its grille sits on the air scene's first speaker. */
+const ZOOM_TO = { x: 360, y: 840 };
+function hookZoom(e) {
+    const gx0 = HK.ph.x + HK.ph.w / 2;
+    const gy0 = HK.ph.y + HK.ph.h - 52;
+    g.translate(lerp(gx0, ZOOM_TO.x, e), lerp(gy0, ZOOM_TO.y, e));
+    g.scale(1 + 2.4 * e, 1 + 2.4 * e);
+    g.translate(-gx0, -gy0);
+}
 function bridges(t) {
+    // Hook to air: the zoomed phone dissolves over the speaker already in its place.
+    const kZ = seg(t, SC.air, SC.air + 0.15);
+    if (t >= SC.air && kZ < 1) {
+        g.save();
+        g.globalAlpha = 1 - kZ;
+        hookZoom(1);
+        phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: 0, screen: phoneScreen(t, 0) });
+        g.restore();
+    }
     const kL = seg(t, SC.strange, SC.strange + BRIDGE);
     if (t >= SC.strange && kL < 1) {
         const k = E.inOut(kL);
