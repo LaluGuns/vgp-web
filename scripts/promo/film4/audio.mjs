@@ -125,7 +125,9 @@ export function bassNotes() {
             const bar = vampBar(B + 1e-3);
             for (const [s, len, name] of TIMELINE[seg.riff ?? 'riff'][bar]) {
                 const t = B + s * STEP;
-                if (t < seg.from - 1e-9 || t >= seg.to - 1e-9) continue;
+                // The film opens mid-groove: a note already sounding at 0 s is kept.
+                const opening = seg.from === 0 && t < 0 && t + len * STEP > 0.05;
+                if ((t < seg.from - 1e-9 && !opening) || t >= seg.to - 1e-9) continue;
                 const dur = Math.min(len * STEP - 0.02, seg.to - t - 0.02);
                 out.push({ t, dur, name, f0: hz(name), seg: seg.id });
             }

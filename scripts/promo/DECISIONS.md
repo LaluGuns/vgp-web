@@ -89,3 +89,10 @@ One line per call, newest last.
   - Rule: the second card draws the lesson's parallel chain (sub straight through in amber; saturate, then high-pass 120 Hz, in cyan; added). The first card starts centred and moves up for it.
   - Replay: when the saturated bass returns, the hook's ladder shows the heard note (dashed amber) with its legend.
   - Phone speaker: an amber arrow "50 Hz needs this" against a small bracket "it can move this". The air scene's first speaker starts centred; the scope's robot starts centred and steps aside for the thought bubble; the limit scene shows both speakers from the start, the club sub shaking the floor on "feel".
+- Film 4 v4, after a third scored review (9 accuracy, 8.5 hook, 7.5 clarity and craft):
+  - The recipe gets time and sound: the rule scene holds 4 s longer and draws the parallel chain in four on-screen steps (copy, saturate, high-pass 120 Hz, add), while the clean sub plays through the phone and the saturated copy comes in on step 4. No new narration.
+  - The held G#1 starts at the window beat, whose names move to the harmonics the phone plays (4x, 5x, 6x); 2x and 3x, which the filter mostly removes, leave.
+  - Hook: the payoff plays two bars alone (5-9 s) instead of three; the note sounding at 0 s is kept, so the amber bar is there from frame one; the grille lights only for the bass; the hook ladder is a third wider with five rungs.
+  - Replay captions: "Clean sub. Where's the bass?", then "+ harmonics. There it is."
+  - The phone scene clears, then its ladder grows into the next scene's ladder: one transition with movement.
+  - Axis in words "higher pitch / lower pitch"; "Sub: keep it clean" replaces "Sub: clean, mono" (mono was never explained); a travel too short for arrowheads is drawn with end ticks.
