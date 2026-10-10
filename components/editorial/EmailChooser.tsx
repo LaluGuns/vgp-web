@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { FocusEvent, ReactNode } from 'react';
 import { getGmailComposeUrl } from '@/lib/founder-contact';
 
 function parseMailto(href: string) {
@@ -14,13 +14,17 @@ function parseMailto(href: string) {
     };
 }
 
+// 44 px tall (WCAG 2.5.5), with the site's one focus ring.
 const itemClass =
-    'flex w-full items-center rounded-[4px] px-3 py-2.5 text-left text-sm text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:bg-white/[0.08] focus-visible:text-white';
+    'vgp-focus flex min-h-11 w-full items-center rounded-[4px] px-3 py-2.5 text-left text-sm text-white/80 transition-colors hover:bg-white/[0.06] hover:text-white focus-visible:text-white';
 
 /**
  * A mailto link that asks how to send: Gmail in the browser, the device's mail
  * app, or copy the address. Plain mailto does nothing for visitors with no mail
- * app set up, and Gmail alone shuts out everyone else.
+ * app set up, and Gmail alone shuts out everyone else. The menu closes on a
+ * press outside it, on Escape (and that Escape goes no further, so it does not
+ * also stop a playing lesson demo), and when focus moves on past it, so it
+ * never covers the link that Tab or Shift+Tab reaches next.
  */
 export function EmailChooser({
     href,
@@ -64,16 +68,27 @@ export function EmailChooser({
             if (!rootRef.current?.contains(event.target as Node)) close();
         };
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') close(true);
+            if (event.key !== 'Escape' || event.isComposing) return;
+            event.preventDefault();
+            event.stopPropagation();
+            close(true);
         };
 
         document.addEventListener('pointerdown', onPointerDown);
-        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keydown', onKeyDown, true);
         return () => {
             document.removeEventListener('pointerdown', onPointerDown);
-            document.removeEventListener('keydown', onKeyDown);
+            document.removeEventListener('keydown', onKeyDown, true);
         };
     }, [open, close]);
+
+    // Focus moving to something outside (Tab past the last item, Shift+Tab off the button)
+    // closes the menu. Focus going nowhere (a press on the menu's own text, another window)
+    // leaves it to the pointer handler above.
+    const closeOnFocusLeave = (event: FocusEvent<HTMLSpanElement>) => {
+        const next = event.relatedTarget as Node | null;
+        if (open && next && !event.currentTarget.contains(next)) close();
+    };
 
     const copyAddress = async () => {
         try {
@@ -85,7 +100,7 @@ export function EmailChooser({
     };
 
     return (
-        <span ref={rootRef} className={`relative inline-block ${wrapperClassName}`.trim()}>
+        <span ref={rootRef} onBlur={closeOnFocusLeave} className={`relative inline-block ${wrapperClassName}`.trim()}>
             <button
                 ref={triggerRef}
                 type="button"

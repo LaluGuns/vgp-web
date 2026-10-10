@@ -206,7 +206,7 @@ function ShareCard({ format, article, categoryName, readingTime, accent, url, ca
             </div>
 
             <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <div style={{ fontSize: size, fontWeight: 700, lineHeight: 1.04, letterSpacing: '-0.025em', maxWidth: portrait ? 920 : 1000 }}>
+                <div style={{ fontSize: size, fontWeight: 700, lineHeight: 1.04, letterSpacing: '-0.025em', maxWidth: portrait ? 920 : 1000, textWrap: 'balance' }}>
                     {article.title}
                 </div>
                 {article.excerpt?.trim() ? (

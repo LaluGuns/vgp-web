@@ -187,13 +187,18 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                 <TapLink href="/blog" className="hover:text-white">
                                     Lessons
                                 </TapLink>
-                                <span aria-hidden="true">/</span>
-                                <span className="inline-flex items-center gap-2">
-                                    <DialectMark dialect={dialect} />
-                                    <TapLink href={`/blog/category/${article.category}`} className="hover:text-white">
-                                        {pathName}
-                                    </TapLink>
-                                </span>
+                                {/* A lesson on no path (a studio note) stops at Lessons, as its JSON-LD breadcrumb does. */}
+                                {position ? (
+                                    <>
+                                        <span aria-hidden="true">/</span>
+                                        <span className="inline-flex items-center gap-2">
+                                            <DialectMark dialect={dialect} />
+                                            <TapLink href={`/blog/category/${article.category}`} className="hover:text-white">
+                                                {pathName}
+                                            </TapLink>
+                                        </span>
+                                    </>
+                                ) : null}
                             </nav>
                             <h1 className="mt-6 max-w-4xl font-display text-[clamp(2.25rem,5vw,4rem)] font-semibold leading-[1.02] tracking-[-0.035em]">
                                 {article.title}

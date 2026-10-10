@@ -103,26 +103,60 @@ function NavItemLink({
     className,
     onNavigate,
     current,
+    labelledBy,
+    describedBy,
     children,
 }: {
     item: NavChild;
     className: string;
     onNavigate: () => void;
     current?: boolean;
+    labelledBy?: string;
+    describedBy?: string;
     children: ReactNode;
 }) {
+    const naming = { 'aria-labelledby': labelledBy, 'aria-describedby': describedBy };
     if (item.external || item.href.startsWith('http')) {
         return (
-            <a href={item.href} target="_blank" rel="noopener noreferrer" onClick={onNavigate} className={className}>
+            <a href={item.href} target="_blank" rel="noopener noreferrer" onClick={onNavigate} className={className} {...naming}>
                 {children}
             </a>
         );
     }
 
     return (
-        <Link href={item.href} onClick={onNavigate} aria-current={current ? 'page' : undefined} className={className}>
+        <Link href={item.href} onClick={onNavigate} aria-current={current ? 'page' : undefined} className={className} {...naming}>
             {children}
         </Link>
+    );
+}
+
+/**
+ * One item in a desktop dropdown. Its name is the item and its status
+ * ("Lessons Free"); the line under it is the description, so a screen
+ * reader's list of links stays short.
+ */
+function DropdownItem({ item, current, onNavigate }: { item: NavChild; current: boolean; onNavigate: () => void }) {
+    const id = useId();
+    return (
+        <NavItemLink
+            item={item}
+            current={current}
+            onNavigate={onNavigate}
+            labelledBy={item.description ? `${id}-name` : undefined}
+            describedBy={item.description ? `${id}-description` : undefined}
+            className={`block rounded-md px-3 py-2.5 transition-colors hover:bg-white/[0.05] ${focusRing} ${current ? 'bg-white/[0.06]' : ''}`}
+        >
+            <span id={`${id}-name`} className="flex items-baseline justify-between gap-3">
+                <span className="text-sm font-semibold text-white">{item.name}</span>
+                <StatusText status={item.status} />
+            </span>
+            {item.description ? (
+                <span id={`${id}-description`} className="mt-0.5 block text-xs leading-5 text-white/55">
+                    {item.description}
+                </span>
+            ) : null}
+        </NavItemLink>
     );
 }
 
@@ -225,7 +259,9 @@ export function Navbar() {
         };
     }, [mobileOpen]);
 
-    // Close menus on a pointer press outside them, or on Escape.
+    // Close menus on a pointer press outside them, or on Escape. The Escape that closes a
+    // menu stops there (capture phase, before anything else on the page hears it), so one
+    // press closes the menu and nothing else: a playing lesson demo keeps playing.
     useEffect(() => {
         if (!openGroup && !mobileOpen) return;
 
@@ -238,8 +274,9 @@ export function Navbar() {
         };
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key !== 'Escape') return;
+            if (event.key !== 'Escape' || event.isComposing) return;
             event.preventDefault();
+            event.stopPropagation();
             if (openGroup) {
                 triggerRefs.current[openGroup]?.focus();
                 setOpenGroup(null);
@@ -248,11 +285,11 @@ export function Navbar() {
         };
 
         document.addEventListener('pointerdown', handlePointerDown);
-        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keydown', handleKeyDown, true);
 
         return () => {
             document.removeEventListener('pointerdown', handlePointerDown);
-            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keydown', handleKeyDown, true);
         };
     }, [openGroup, mobileOpen]);
 
@@ -460,31 +497,15 @@ export function Navbar() {
                                                     className="vgp-shell-drop absolute left-0 top-full z-[90] w-80 pt-2"
                                                 >
                                                     <ul className="rounded-lg border border-white/10 bg-[#0a0e12] p-1.5 shadow-[0_16px_40px_rgba(0,0,0,0.45)]">
-                                                        {group.children.map((item) => {
-                                                            const current = !item.external && isActive(item.href, true);
-                                                            return (
-                                                                <li key={item.href}>
-                                                                    <NavItemLink
-                                                                        item={item}
-                                                                        current={current}
-                                                                        onNavigate={() => setOpenGroup(null)}
-                                                                        className={`block rounded-md px-3 py-2.5 transition-colors hover:bg-white/[0.05] ${focusRing} ${
-                                                                            current ? 'bg-white/[0.06]' : ''
-                                                                        }`}
-                                                                    >
-                                                                        <span className="flex items-baseline justify-between gap-3">
-                                                                            <span className="text-sm font-semibold text-white">{item.name}</span>
-                                                                            <StatusText status={item.status} />
-                                                                        </span>
-                                                                        {item.description ? (
-                                                                            <span className="mt-0.5 block text-xs leading-5 text-white/55">
-                                                                                {item.description}
-                                                                            </span>
-                                                                        ) : null}
-                                                                    </NavItemLink>
-                                                                </li>
-                                                            );
-                                                        })}
+                                                        {group.children.map((item) => (
+                                                            <li key={item.href}>
+                                                                <DropdownItem
+                                                                    item={item}
+                                                                    current={!item.external && isActive(item.href, true)}
+                                                                    onNavigate={() => setOpenGroup(null)}
+                                                                />
+                                                            </li>
+                                                        ))}
                                                     </ul>
                                                 </div>
                                             )}

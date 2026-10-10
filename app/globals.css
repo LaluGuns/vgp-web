@@ -118,6 +118,14 @@ html {
   }
 }
 
+/* A short screen (a phone held sideways) hides the bottom navigation, so
+   only the Contents or Stop button is left to clear, as on wider screens. */
+@media (max-width: 767.98px) and (max-height: 499.98px) {
+  html {
+    scroll-padding-bottom: 80px;
+  }
+}
+
 /* Wider screens: a playing demo's Stop button is pinned near the bottom of
    the screen, so focus stops clear of it too. Static, for the same reason. */
 @media (min-width: 768px) {
@@ -770,7 +778,7 @@ body::before {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px), (max-height: 499.98px) {
   .vgp-contents-button {
     bottom: 24px;
   }
@@ -900,7 +908,7 @@ body::before {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px), (max-height: 499.98px) {
   .vgp-demo-stop {
     bottom: 1.5rem;
   }
@@ -1075,6 +1083,11 @@ body::before {
     opacity: 0;
     transform: translateY(8px);
   }
+}
+
+/* A closing menu or dialog is on its way out: clicks go through to the page. */
+[data-closing] {
+  pointer-events: none;
 }
 
 .vgp-shell-fade[data-closing],

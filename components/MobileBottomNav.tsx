@@ -35,9 +35,12 @@ export function MobileBottomNav({ onOpenMenu }: { onOpenMenu?: () => void }) {
     };
 
     return (
+        // Hidden on a short screen (a phone held sideways), where it and the header would take a
+        // third of the height; the header's menu button is still there. app/globals.css moves the
+        // scroll padding and the Contents and Stop buttons down to match.
         <nav
             aria-label="Quick navigation"
-            className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#050607]/95 backdrop-blur-md md:hidden"
+            className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#050607]/95 backdrop-blur-md md:hidden [@media(max-height:499.98px)]:hidden"
             style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 6px)' }}
         >
             <div className="mx-auto grid w-full max-w-md grid-cols-5 px-2">

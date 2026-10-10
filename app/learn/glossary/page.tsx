@@ -74,8 +74,9 @@ export default function GlossaryPage() {
                         <GlossaryLetters letters={letters} />
 
                         <div className="max-w-3xl">
+                            {/* Unnamed sections, so the 22 letters are headings to jump between, not 22 landmarks. */}
                             {letters.map((letter) => (
-                                <section key={letter} aria-labelledby={`letter-${letter}`} className="pt-8">
+                                <section key={letter} className="pt-8">
                                     <h2 id={`letter-${letter}`} className="scroll-mt-10 text-sm font-medium text-white/55">
                                         {letter}
                                     </h2>

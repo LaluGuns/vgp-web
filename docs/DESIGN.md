@@ -121,7 +121,8 @@ anything without one is technical.
   it. The navbar, buttons, the blog index and every non-blog page stay sky.
 - **The key.** The group's mark (its value glyph in its accent) sits beside
   the category name on a lesson and on its learning path page. Nowhere
-  else.
+  else. A lesson on no learning path (a studio note) has no path crumb, so
+  it shows no mark.
 - **Lit and paper.** Technical and mind keep a faint accent area under a
   line. Music and business are ink on paper, so their lines stand alone.
 - **Rules are texture.** They stay well under the data; mind's dots need a
