@@ -248,7 +248,7 @@ function knob(g, x, y, r, k, { ticks = true, glow = 0 } = {}) {
 }
 
 /** The robot's dome with its one eye; `base` is the middle of its flat bottom. */
-function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = [] } = {}) {
+function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = [], wow = 0 } = {}) {
     shadow(g, base.x, base.y + 10 * s, 150 * s, 22 * s, 0.8);
     g.fillStyle = P.devHi;
     g.beginPath();
@@ -295,13 +295,15 @@ function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = 
     g.fill();
     const ex = base.x - 6 * s;
     const ey = base.y - 54 * s;
+    // `wow` (0..1): surprise, the eye opens wider and the pupil shrinks.
+    const ew = 1 + 0.16 * wow;
     g.fillStyle = P.dark;
     g.beginPath();
-    g.arc(ex, ey, 46 * s, 0, Math.PI * 2);
+    g.arc(ex, ey, 46 * s * ew, 0, Math.PI * 2);
     g.fill();
     g.fillStyle = '#f1f5fb';
     g.beginPath();
-    g.arc(ex, ey, 38 * s, 0, Math.PI * 2);
+    g.arc(ex, ey, 38 * s * ew, 0, Math.PI * 2);
     g.fill();
     let ox = 0;
     let oy = 0;
@@ -316,7 +318,7 @@ function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = 
     g.fill();
     g.fillStyle = P.dark;
     g.beginPath();
-    g.arc(ex + ox * 1.15, ey + oy * 1.15, 9 * s, 0, Math.PI * 2);
+    g.arc(ex + ox * 1.15, ey + oy * 1.15, 9 * s * (1 - 0.4 * wow), 0, Math.PI * 2);
     g.fill();
     g.fillStyle = '#ffffff';
     g.beginPath();

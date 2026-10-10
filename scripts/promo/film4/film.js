@@ -189,6 +189,8 @@ function ladder(box, t, o = {}) {
     const zs = o.zoneLeft ? 32 : 36;
     g.save();
     g.globalAlpha *= o.bare ? 0 : o.labelAlpha ?? 1;
+    g.save();
+    g.globalAlpha *= o.zoneAlpha ?? 1;
     if (o.zoneLeft) {
         // Narrow ladders: the two zones are named on the left, by the 200 Hz line.
         const zx = x0 - 34;
@@ -200,6 +202,7 @@ function ladder(box, t, o = {}) {
         label(g, 'phone plays', x1 - 4, y0 + zs + 2, { size: zs, weight: 700, color: P.cyan, align: 'right', family: BODY });
         label(g, 'phone fades out', x1 - 4, y1 - 8, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
     }
+    g.restore();
     // Pitch axis in plain words, and the one frequency that matters.
     if (o.lowHigh) {
         label(g, 'higher', x0 - 34, y0 + 30, { size: 32, weight: 700, color: P.ink2, align: 'right', family: BODY });
@@ -434,7 +437,7 @@ function drawHook(t) {
     }
     // Ladder.
     const sp = spectrum(t);
-    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, labelAlpha: replay ? 1 : popIn(t, segBy.hookSat.from - 0.2, 0.3), ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, zoneAlpha: replay ? 1 : popIn(t, segBy.hookSat.from - 0.2, 0.3), spec: replay && t < segBy.againClean.from ? null : undefined, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
     // While the phone plays no bass, its window holds a question mark.
     const qw = popIn(t, replay ? segBy.againClean.from + 0.6 : wt('hook-a', 'play'), 0.3) * (1 - popIn(t, (replay ? segBy.againSat : segBy.hookSat).from - 0.2, 0.2));
     if (lad && qw > 0) label(g, '?', (HK.lad.x0 + HK.lad.x1) / 2, (HK.lad.y0 + lad.yCut) / 2 + 26, { size: 72, weight: 800, color: P.ink3, align: 'center', alpha: qw });
@@ -596,7 +599,9 @@ function drawPhone(t) {
     const gain = 10 ** (rampAt(segBy.boost.boostDb, segBy.boost.boostDb.db, t) / 20);
     const needNow = Math.min(need * gain, 196);
     const want = t > tTry ? needNow * Math.sin(w * (t - tTry)) * E.out(popIn(t, tTry, 0.3)) : 0;
-    const x = clamp(want, -stop, stop);
+    // Pinned at a stop, the cone strains (a small fast shake), more as the sub is turned up.
+    const strain = Math.abs(want) > stop ? clamp((Math.abs(want) - stop) / 40) * clamp((gain - 1) * 1.5) : 0;
+    const x = clamp(want, -stop, stop) + 2.5 * strain * Math.sin(t * 2 * Math.PI * 23);
     const cx = mag.x - 20;
     const cy = mag.y - 62;
     g.save();
@@ -696,9 +701,10 @@ function drawLadder(t) {
     const tHarm = wt('window', 'harmonics');
     const isWin = t >= SC.window;
     const arriving = t < SC.stack + 0.25;
+    const leaving = t > SC.strange - 0.25;
     const lad = ladder(BL, t, {
-        alpha: arriving && a > 0 ? 1 / a : 1,
-        labelAlpha: arriving ? a * a : 1,
+        alpha: (arriving || leaving) && a > 0 ? 1 / a : 1,
+        labelAlpha: arriving || leaving ? a * a : 1,
         windowGlow: isWin ? E.out(popIn(t, tHarm - 0.1, 0.4)) : 0,
         darkPulse: bump(t, wt('sub', 'disappears'), 0.15, 0.8) + (isWin ? bump(t, wt('window', 'cant'), 0.15, 0.9) : 0),
         rungH: 26,
@@ -750,6 +756,14 @@ function drawLadder(t) {
                 g.lineTo(BL.x0 - 8 + (len + 8) * sk, r0.y);
                 g.stroke();
                 tag(g, 'not played', BL.x0 + len * 0.3, r0.y - 52, null, { a: sk, bg: P.dark, fg: P.ink, ring: P.ink3, size: 32 });
+            }
+            // "the harmonics just fine": the ones above the cut; 2x is too low.
+            const r1 = lad.rungs[1];
+            const tl = popIn(t, tHarm + 0.1, 0.3);
+            if (r1 && tl > 0) {
+                font(g, 34, 800);
+                const x2 = BL.x0 + lad.L(r1.full) + 14 + g.measureText('2×').width + 24 + 14;
+                label(g, 'too low', x2, r1.y + 11, { size: 30, weight: 700, color: P.ink3, family: BODY, alpha: tl });
             }
             // "plays the harmonics": the window's edge lights up, and so does
             // every harmonic the phone plays (its filled part).
@@ -806,7 +820,8 @@ function scopeView(t) {
     return { q, P0, ts };
 }
 function drawScope(t) {
-    const a = viewAlpha(t, SC.strange, SC.limit);
+    // The scope arrives once the ladder has shrunk out of its way.
+    const a = viewAlpha(t, SC.strange + 0.25, SC.limit);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
@@ -913,7 +928,13 @@ function drawScope(t) {
             const ms = (v.P0 * 1000).toFixed(1);
             label(g, `repeats every ${ms} ms`, x0 - 14, base + 130, { size: 40, weight: 700, color: P.ink, alpha: ba });
             const ma = popIn(t, wt('strange', 'missing') - 0.05, 0.3);
-            if (ma > 0) pill(g, `= ${(1 / v.P0).toFixed(1)} Hz, the note`, x1 - 170, base + 116, { size: 36, bg: P.amber, fg: P.dark, alpha: ma, scale: E.outBack(ma), weight: 800 });
+            if (ma > 0) {
+                // The rate, in plain words: 51.9 times a second is the note's pitch.
+                const pt = `${(1 / v.P0).toFixed(1)}× a second = the note`;
+                font(g, 34, 800);
+                const pw = g.measureText(pt).width + 44;
+                pill(g, pt, x1 + 36 - pw / 2, base + 116, { size: 34, bg: P.amber, fg: P.dark, alpha: ma, scale: E.outBack(ma), weight: 800 });
+            }
         }
     }
     // The listener, watching the phone's sound arrive: cyan dots run from the
@@ -941,7 +962,7 @@ function drawScope(t) {
         }
         const ant = E.out(popIn(t, tPuts, 0.4));
         const look = { x: lerp(x0, x1, 0.5 + 0.3 * Math.sin(t * 0.8)), y: mid };
-        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [] });
+        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [], wow: bump(t, wt('ghost', 'never') - 0.05, 0.12, 1.3) });
         // On "Your brain": the listener is named.
         const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
         if (bn > 0) pill(g, 'your brain', Math.max(130, RB.x - 92 * RB.s), RB.y - 262 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
@@ -984,13 +1005,13 @@ function drawScope(t) {
     }
     // On "never played": the ladder, and the note flies from the bubble
     // into its dark zone, where the phone played nothing.
-    const la = popIn(t, SC.strange + 0.2, 0.3);
+    const la = t >= SC.strange + BRIDGE ? 1 : 0;
     if (la > 0) {
-        const box = { x0: 760, x1: 926, y0: 935, y1: 1290 };
+        const box = SCOPE_LAD;
         const q = scopeView(t)?.q;
         const gk = E.out(popIn(t, tNever + 0.35, 0.3));
         // The heard note takes the place of the sub's outline: this ladder is what you hear.
-        const lad = ladder(box, t, { alpha: la, ghost: gk, ghostF0: q?.f0 ?? 51.91, zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, fundAlpha: 1 - gk });
+        const lad = ladder(box, t, { alpha: la, ghost: gk, ghostF0: q?.f0 ?? 51.91, zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, fundAlpha: 1 - gk, labelAlpha: popIn(t, SC.strange + BRIDGE, 0.3), zoneAlpha: 0 });
         // "the harmonics repeat": thin cyan lines carry the played rungs into the scope.
         const tH = wt('strange', 'harmonics');
         const fl = bump(t, tH - 0.1, 0.3, 1.4);
@@ -1050,7 +1071,7 @@ function drawScope(t) {
 
 // ══ Limit: feel on a club sub, hear on a phone ══
 function drawLimit(t) {
-    const a = viewAlpha(t, SC.limit, SC.rule + 0.1);
+    const a = viewAlpha(t, SC.limit, SC.rule);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
@@ -1072,6 +1093,7 @@ function drawLimit(t) {
         g.arc(290, 760, 200 + age * 120, -0.9, 0.9);
         g.stroke();
     }
+    if (t > SC.rule - 0.25) g.globalAlpha = 1;
     clubSub(g, 290 + jx, 760, 340, Math.sin(t * 2 * Math.PI * 1.5));
     // The floor rumbles: you feel it.
     g.strokeStyle = `rgba(251,191,36,${0.7 * shake})`;
@@ -1179,7 +1201,8 @@ function drawRule(t) {
     const tKeep = wt('rule', 'keep');
     const tAdd = wt('rule', 'add');
     // Card 1 starts in the middle, then moves up to make room for card 2.
-    const k1 = popIn(t, SC.rule, 0.3);
+    // Card 1 forms around the club sub as it lands.
+    const k1 = popIn(t, SC.rule + 0.3, 0.3);
     const y1 = lerp(620, 280, E.inOut(seg(t, tAdd - 0.45, tAdd + 0.05)));
     if (k1 > 0) {
         g.save();
@@ -1194,7 +1217,7 @@ function drawRule(t) {
         g.strokeStyle = 'rgba(255,255,255,0.07)';
         g.lineWidth = 3;
         g.stroke();
-        clubSub(g, 220, y1 + 150, 180, Math.sin(t * 9));
+        if (t >= SC.rule + BRIDGE) clubSub(g, 220, y1 + 150, 180, Math.sin(t * 2 * Math.PI * 1.5));
         label(g, 'Sub: keep it clean', 360, y1 + 125, { size: 48, weight: 800, color: P.amber });
         label(g, 'for big speakers', 360, y1 + 195, { size: 42, weight: 600, color: P.ink });
         g.restore();
@@ -1263,7 +1286,7 @@ function drawRule(t) {
             if (q.t < segBy.recipe.from || q.t >= segBy.recipe.to || t < q.t || t - q.t > 0.9) continue;
             const u = (t - q.t) / 0.9;
             const fade = Math.sin(Math.PI * Math.min(1, u * 1.15));
-            const [ax, ay] = along([[215, rA], [915, rA]], u);
+            const [ax, ay] = along([[215, rA], [builtAt(q.t) >= 4 ? 915 : 790, rA]], u);
             dot(ax, ay, P.amber, fade);
             const built = builtAt(q.t);
             if (built > 0) {
@@ -1271,6 +1294,8 @@ function drawRule(t) {
                 dot(cx2, cy2, P.cyan, fade);
             }
         }
+        label(g, 'clean', 520, rA - 16, { size: 28, weight: 700, color: P.amber, align: 'center', family: BODY, alpha: d(0.25) });
+        label(g, 'harmonics', 650, rB + 56, { size: 28, weight: 700, color: P.cyan, align: 'center', family: BODY, alpha: d(at(2) + 0.3) });
         chainBox('sub', 170, rA, P.amber, d(0.1));
         chainPath([[215, rA], [790, rA]], P.amber, d(0.25));
         chainPath([[245, rA], [245, rB], [300, rB]], P.cyan, d(at(0)));
@@ -1519,6 +1544,7 @@ function draw(t, { words = true } = {}) {
     inView(t, 'scope', drawScope);
     inView(t, 'limit', drawLimit);
     inView(t, 'rule', drawRule);
+    bridges(t);
     drawEnd(t);
     if (words) subtitles(t);
     badge(t);
@@ -1533,7 +1559,7 @@ for (const sc of TL.scenes) {
     VIEWS.push({ view: sc.view, a: sc.at, b: TL.duration });
 }
 // The phone's ladder grows into the next view's: no slide across that cut.
-const NO_SLIDE = new Set(['phone>ladder']);
+const NO_SLIDE = new Set(['phone>ladder', 'ladder>scope', 'limit>rule']);
 function slide(t, view) {
     let y = 0;
     VIEWS.forEach((v, i) => {
@@ -1544,6 +1570,36 @@ function slide(t, view) {
         if (next && next.view !== 'end' && !NO_SLIDE.has(`${v.view}>${next.view}`)) y -= 70 * E.in(seg(t, v.b - 0.22, v.b));
     });
     return y;
+}
+// Match cuts: one object carries across the cut and becomes the next
+// view's version of itself (the big ladder shrinks into the scope's panel;
+// the club sub flies into the rule card's icon).
+const BRIDGE = 0.5;
+const SCOPE_LAD = { x0: 760, x1: 926, y0: 935, y1: 1290 };
+/** The 2% push a view has reached at its end, about the frame's middle. */
+const PUSHED = 1.02;
+function bridges(t) {
+    const kL = seg(t, SC.strange, SC.strange + BRIDGE);
+    if (kL > 0 && kL < 1) {
+        const k = E.inOut(kL);
+        const s = lerp(PUSHED, 1, k);
+        g.save();
+        g.translate(540, 820);
+        g.scale(s, s);
+        g.translate(-540, -820);
+        const box = {};
+        for (const key of ['x0', 'x1', 'y0', 'y1']) box[key] = lerp(BL[key], SCOPE_LAD[key], k);
+        ladder(box, t, { labelAlpha: 0, maxN: 6, fMax: Math.exp(lerp(Math.log(LAD.fMax), Math.log(420), k)), rungH: lerp(26, 16, k) });
+        g.restore();
+    }
+    const kS = seg(t, SC.rule, SC.rule + BRIDGE);
+    if (kS > 0 && kS < 1) {
+        const k = E.inOut(kS);
+        // From the limit view's pushed-in sub to the card's icon (card 1 starts centred: y 620).
+        const x = lerp(540 + (290 - 540) * PUSHED, 220, k);
+        const y = lerp(820 + (760 - 820) * PUSHED, 620 + 150, k);
+        clubSub(g, x, y, lerp(340 * PUSHED, 180, k), Math.sin(t * 2 * Math.PI * 1.5));
+    }
 }
 function inView(t, view, fn) {
     g.save();

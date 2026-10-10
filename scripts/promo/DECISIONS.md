@@ -130,3 +130,9 @@ One line per call, newest last.
   - The recipe's pulses pass under the boxes, and each keeps the path built when its note started; steps every 1.5 s; the recipe demo is 5 s; the film runs 90 s.
   - The hook's opening drops the player's progress bar and holds the 200 Hz labels for the payoff; the first rule card arrives with its scene.
   - The amber note and its legend appear together on "back"; "your brain" sits above the robot, clear of its rings; the 1x travel span is drawn at least 16 px wide (true travel 6 px).
+- Film 4 v11, after the tenth review (8.5 accuracy, hook, clarity and polish, 7.5 craft, 8 pacing):
+  - Two match cuts: the big ladder shrinks into the scope's panel; the club sub flies into the rule card's icon (the next view forms around it).
+  - The replay plays one bar clean and one bar saturated (the hook plays two of each); the film runs 86 s.
+  - The scope's pill says the rate plainly ("51.9x a second = the note"), the 2x rung is tagged "too low" during "just fine", the recipe's paths are named "clean" and "harmonics".
+  - The hook shows "200 Hz" from frame one and the zone words from the payoff; the replay's ladder stays empty until its clean bar starts.
+  - The pinned phone cone strains at its stop as the sub is turned up; the robot's eye widens on "never".
