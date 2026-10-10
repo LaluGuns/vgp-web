@@ -328,13 +328,6 @@ function phoneScreen(t, bassGlow) {
             else gc.moveTo(px, py);
         }
         gc.stroke();
-        // A progress bar, as any player shows.
-        rr(gc, x + 30, y + s + 150, w - 60, 10, 5);
-        gc.fillStyle = P.ink4;
-        gc.fill();
-        rr(gc, x + 30, y + s + 150, (w - 60) * ((t / 8) % 1), 10, 5);
-        gc.fillStyle = P.ink2;
-        gc.fill();
     };
 }
 function drawHook(t) {
@@ -441,7 +434,7 @@ function drawHook(t) {
     }
     // Ladder.
     const sp = spectrum(t);
-    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, labelAlpha: replay ? 1 : popIn(t, segBy.hookSat.from - 0.2, 0.3), ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
     // While the phone plays no bass, its window holds a question mark.
     const qw = popIn(t, replay ? segBy.againClean.from + 0.6 : wt('hook-a', 'play'), 0.3) * (1 - popIn(t, (replay ? segBy.againSat : segBy.hookSat).from - 0.2, 0.2));
     if (lad && qw > 0) label(g, '?', (HK.lad.x0 + HK.lad.x1) / 2, (HK.lad.y0 + lad.yCut) / 2 + 26, { size: 72, weight: 800, color: P.ink3, align: 'center', alpha: qw });
@@ -534,7 +527,8 @@ function drawAir(t) {
         const ka = popIn(t, arrowAt[i] - 0.05, 0.35);
         if (ka > 0) {
             // The cone's full travel, to scale, between two end bars.
-            const half = Math.max(1.5, amp * E.out(ka));
+            // At least 8 px each way, so the 1x span reads as a span (its true travel is 6 px).
+            const half = Math.max(8, amp) * E.out(ka);
             const ay = y + 122;
             const cx = AIR.cone - 6;
             g.strokeStyle = P.ink;
@@ -877,7 +871,7 @@ function drawScope(t) {
         g.lineJoin = 'round';
         g.stroke();
         // The missing note, f0, dashed amber, at the sub's phase: what the brain puts back.
-        const gh = E.out(popIn(t, wt('brain', 'puts') - 0.1, 0.8));
+        const gh = E.out(popIn(t, wt('brain', 'back') - 0.15, 0.8));
         if (gh > 0) {
             g.setLineDash([16, 12]);
             g.strokeStyle = P.amber;
@@ -950,7 +944,7 @@ function drawScope(t) {
         robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [] });
         // On "Your brain": the listener is named.
         const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
-        if (bn > 0) pill(g, 'your brain', RB.x - 92 * RB.s, RB.y - 212 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
+        if (bn > 0) pill(g, 'your brain', Math.max(130, RB.x - 92 * RB.s), RB.y - 262 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
         g.restore();
     }
     // "Puts the note back": the note forms in a thought bubble over the
@@ -1172,9 +1166,9 @@ function chainPath(pts, color, k) {
 /** The recipe's steps, seconds after "add" (the timeline's blend cue matches the last). */
 const RECIPE_STEPS = [
     [0.8, '1. Copy the sub'],
-    [2.6, '2. Saturate the copy: add harmonics'],
-    [4.4, '3. High-pass it at 120 Hz: drop the note'],
-    [6.2, '4. Blend it in under the clean sub'],
+    [2.3, '2. Saturate the copy: add harmonics'],
+    [3.8, '3. High-pass it at 120 Hz: drop the note'],
+    [5.3, '4. Blend it in under the clean sub'],
 ];
 function drawRule(t) {
     const a = viewAlpha(t, SC.rule, SC.again);
@@ -1185,7 +1179,7 @@ function drawRule(t) {
     const tKeep = wt('rule', 'keep');
     const tAdd = wt('rule', 'add');
     // Card 1 starts in the middle, then moves up to make room for card 2.
-    const k1 = popIn(t, tKeep - 0.1, 0.3);
+    const k1 = popIn(t, SC.rule, 0.3);
     const y1 = lerp(620, 280, E.inOut(seg(t, tAdd - 0.45, tAdd + 0.05)));
     if (k1 > 0) {
         g.save();
@@ -1208,7 +1202,7 @@ function drawRule(t) {
     // Card 2: the lesson's parallel chain. The clean sub goes straight
     // through (amber); a copy is saturated and high-passed at 120 Hz, which
     // removes the note from the copy (cyan), and the two are added. The
-    // steps build up as a list, one every 1.8 s, in sync with the sound.
+    // steps build up as a list, one every 1.5 s, in sync with the sound.
     const k2 = popIn(t, tAdd, 0.3);
     if (k2 > 0) {
         const y2 = 640;
@@ -1228,29 +1222,6 @@ function drawRule(t) {
         const ST = RECIPE_STEPS;
         const at = (i) => ST[i][0];
         const glow = (dt) => bump(t, tAdd + dt, 0.15, 0.9);
-        chainBox('sub', 170, rA, P.amber, d(0.1));
-        chainPath([[215, rA], [790, rA]], P.amber, d(0.25));
-        chainPath([[245, rA], [245, rB], [300, rB]], P.cyan, d(at(0)));
-        chainBox('saturate', 380, rB, P.cyan, d(at(1)));
-        if (glow(at(1)) > 0) chainBox('saturate', 380, rB, P.ink, glow(at(1)));
-        chainPath([[462, rB], [500, rB]], P.cyan, d(at(1) + 0.7));
-        chainBox('high-pass 120 Hz', 650, rB, P.cyan, d(at(2)));
-        if (glow(at(2)) > 0) chainBox('high-pass 120 Hz', 650, rB, P.ink, glow(at(2)));
-        chainPath([[800, rB], [830, rB], [830, rA + 34]], P.cyan, d(at(3) - 0.3));
-        if (d(at(3)) > 0) {
-            g.save();
-            g.globalAlpha *= d(at(3));
-            g.fillStyle = '#081022';
-            g.strokeStyle = glow(at(3)) > 0.05 ? P.cyan : P.ink;
-            g.lineWidth = 4 + 4 * glow(at(3));
-            g.beginPath();
-            g.arc(830, rA, 30, 0, Math.PI * 2);
-            g.fill();
-            g.stroke();
-            label(g, '+', 830, rA + 14, { size: 44, weight: 800, color: P.ink, align: 'center' });
-            g.restore();
-        }
-        chainPath([[860, rA], [915, rA]], P.ink, d(at(3) + 0.3));
         // The signal, live: every bass note sends a dot down the clean path,
         // and a cyan one down the copy as far as the steps have built it.
         const along = (pts, u) => {
@@ -1270,7 +1241,7 @@ function drawRule(t) {
             }
             return pts[pts.length - 1];
         };
-        const built = ST.reduce((n, [dt]) => (t >= tAdd + dt ? n + 1 : n), 0);
+        const builtAt = (tt) => ST.reduce((n, [dt]) => (tt >= tAdd + dt ? n + 1 : n), 0);
         const COPY = [
             [[245, rA], [245, rB], [300, rB]],
             [[245, rA], [245, rB], [500, rB]],
@@ -1294,11 +1265,35 @@ function drawRule(t) {
             const fade = Math.sin(Math.PI * Math.min(1, u * 1.15));
             const [ax, ay] = along([[215, rA], [915, rA]], u);
             dot(ax, ay, P.amber, fade);
+            const built = builtAt(q.t);
             if (built > 0) {
                 const [cx2, cy2] = along(COPY[built - 1], u);
                 dot(cx2, cy2, P.cyan, fade);
             }
         }
+        chainBox('sub', 170, rA, P.amber, d(0.1));
+        chainPath([[215, rA], [790, rA]], P.amber, d(0.25));
+        chainPath([[245, rA], [245, rB], [300, rB]], P.cyan, d(at(0)));
+        chainBox('saturate', 380, rB, P.cyan, d(at(1)));
+        if (glow(at(1)) > 0) chainBox('saturate', 380, rB, P.ink, glow(at(1)));
+        chainPath([[462, rB], [500, rB]], P.cyan, d(at(1) + 0.7));
+        chainBox('high-pass 120 Hz', 650, rB, P.cyan, d(at(2)));
+        if (glow(at(2)) > 0) chainBox('high-pass 120 Hz', 650, rB, P.ink, glow(at(2)));
+        chainPath([[800, rB], [830, rB], [830, rA + 34]], P.cyan, d(at(3) - 0.3));
+        if (d(at(3)) > 0) {
+            g.save();
+            g.globalAlpha *= d(at(3));
+            g.fillStyle = '#081022';
+            g.strokeStyle = glow(at(3)) > 0.05 ? P.cyan : P.ink;
+            g.lineWidth = 4 + 4 * glow(at(3));
+            g.beginPath();
+            g.arc(830, rA, 30, 0, Math.PI * 2);
+            g.fill();
+            g.stroke();
+            label(g, '+', 830, rA + 14, { size: 44, weight: 800, color: P.ink, align: 'center' });
+            g.restore();
+        }
+        chainPath([[860, rA], [915, rA]], P.ink, d(at(3) + 0.3));
         // The steps so far: the current one bright, the earlier ones dimmed.
         let si = -1;
         ST.forEach(([dt], i) => {

@@ -126,3 +126,7 @@ One line per call, newest last.
   - The air scene's motor sits further back, so the 50 Hz cone never reaches it; the phone screen no longer names the track.
   - "Heard, never played" sits on the ghost rung's row; the amber note and thought bubble wait for "back"; the 200 Hz line clears any bar near it in every ladder.
   - Recipe demo 7 s, holds trimmed after "won't save it" and "the melody": 92 s.
+- Film 4 v10, after the ninth review (8.5 accuracy, 8 hook and clarity, 7.5 craft and pacing, 8 polish):
+  - The recipe's pulses pass under the boxes, and each keeps the path built when its note started; steps every 1.5 s; the recipe demo is 5 s; the film runs 90 s.
+  - The hook's opening drops the player's progress bar and holds the 200 Hz labels for the payoff; the first rule card arrives with its scene.
+  - The amber note and its legend appear together on "back"; "your brain" sits above the robot, clear of its rings; the 1x travel span is drawn at least 16 px wide (true travel 6 px).
