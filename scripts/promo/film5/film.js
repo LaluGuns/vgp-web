@@ -40,7 +40,8 @@ const BEAT = TL.beat;
 const demoBy = Object.fromEntries(TL.demos.map((d) => [d.id, { ...d, to: d.at + (d.pre + d.post) * BEAT, down: d.at + d.pre * BEAT }]));
 const DEMOS = Object.values(demoBy);
 const BUTTON = TL.button;
-const SCENES = TL.scenes.map((s) => ({ ...s, start: s.line ? voBy[s.line].at + (s.dt ?? 0) : s.at }));
+// A scene starts at its line (or on a word of it, `word`), offset by `dt`.
+const SCENES = TL.scenes.map((s) => ({ ...s, start: s.line ? (s.word ? wto(s.line, s.word, 0) : voBy[s.line].at) + (s.dt ?? 0) : s.at }));
 const SC = Object.fromEntries(SCENES.map((s) => [s.id, s.start]));
 const sceneEnd = (id) => {
     const i = SCENES.findIndex((s) => s.id === id);
@@ -65,9 +66,9 @@ function tracker(cur, alpha = 1) {
 /** A slow push-in over a stretch of the film, about the middle of the picture. */
 function cam(t, s0, s1, amount = 0.035, slideIn = true) {
     const z = 1 + amount * E.inOut(seg(t, s0, s1));
-    // Scenes push in from the right and out to the left, so a change reads as a move, not a dissolve.
-    // A full-width push: the old scene leaves left as the new one arrives from the right, both opaque.
-    g.translate((slideIn ? (1 - E.inOut(seg(t, s0 - 0.12, s0 + 0.18))) * W : 0) - E.inOut(seg(t, s1 - 0.12, s1 + 0.18)) * W, 0);
+    // Scene changes dip through the background: the old scene fades out, then the new one fades in
+    // while drifting a little from the right, so two scenes' text never shares a frame.
+    g.translate(slideIn ? (1 - E.out(seg(t, s0, s0 + 0.35))) * 70 : 0, 0);
     g.translate(540, 820);
     g.scale(z, z);
     g.translate(-540, -820);
@@ -75,7 +76,9 @@ function cam(t, s0, s1, amount = 0.035, slideIn = true) {
 /** Visible between a scene's start and end, with short dissolves either side. */
 // Scenes overlap by 0.3 s while one pushes out and the next pushes in, so no frame is empty;
 // the replay leaves before the end card arrives, so their text never stacks.
-const sceneAlpha = (t, id) => (t < SC[id] - 0.12 ? 0 : id === 'replay' ? 1 - seg(t, sceneEnd(id) - 0.24, sceneEnd(id)) : t < sceneEnd(id) + 0.18 ? 1 : 0);
+const DIP = 0.16;
+const dip = (t, s0, s1) => (t < s0 || t >= s1 ? 0 : seg(t, s0, s0 + DIP) * (1 - seg(t, s1 - DIP, s1)));
+const sceneAlpha = (t, id) => (id === 'replay' ? (t < SC[id] ? 0 : seg(t, SC[id], SC[id] + DIP) * (1 - seg(t, sceneEnd(id) - 0.24, sceneEnd(id)))) : dip(t, SC[id], sceneEnd(id)));
 
 // ── Data around each version's downbeat, one value per ms ──
 const V = D.versions;
@@ -287,7 +290,7 @@ const abProgress = (d, t) => (t - d.down) * 1000;
 function drawAB(t, frame1 = false, noHead = false) {
     const replay = t >= SC.replay - 0.05;
     const id = replay ? 'replay' : t < SC.notch ? 'ab' : 'notch';
-    const a = frame1 ? 1 : replay ? sceneAlpha(t, 'replay') : t < SC.fog + 0.18 ? 1 : 0;
+    const a = frame1 ? 1 : replay ? sceneAlpha(t, 'replay') : t < SC.fog ? 1 - seg(t, SC.fog - DIP, SC.fog) : 0;
     if (a <= 0) return;
     g.save();
     g.globalAlpha *= a;
@@ -491,8 +494,8 @@ function drawAB(t, frame1 = false, noHead = false) {
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 470, { size: 44, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 534, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
+        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 470, { size: 46, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 536, { size: 38, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
@@ -516,10 +519,10 @@ function drawAB(t, frame1 = false, noHead = false) {
                 g.restore();
             }
             ['ears', 'limiter', 'brain'].forEach((w, i) => {
-                const kI = popIn(t, wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
+                const kI = popIn(t, i === 0 ? wto('hook', 'why', 0) + 0.15 : wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
                 const x = 540 + (i - 1) * 300;
                 // A place held for each reason until it is named, so the card is never empty.
-                const kH = kCard * (1 - kI);
+                const kH = 0;
                 if (kH > 0.01) {
                     g.save();
                     g.globalAlpha *= kH;
@@ -607,7 +610,7 @@ function drawEarSection(t, k) {
         g.save();
         // Kept below the title band.
         g.beginPath();
-        g.rect(0, 440, W, 850);
+        g.rect(0, 466, W, 824);
         g.clip();
         g.translate(XC.x, XC.y);
         const z = 1 + 2.5 * zf;
@@ -620,7 +623,7 @@ function drawEarSection(t, k) {
             vg.addColorStop(0, 'rgba(8,17,42,0)');
             vg.addColorStop(1, `rgba(8,17,42,${0.9 * zf})`);
             g.fillStyle = vg;
-            g.fillRect(0, 440, W, 850);
+            g.fillRect(0, 466, W, 824);
         }
         label(g, 'into your ear', 540, 1150, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: (1 - zf) * popIn(t, SC.fog + 0.1, 0.3), family: BODY });
     }
@@ -716,7 +719,7 @@ function drawEarSection(t, k) {
             msg = 'riser still playing: click covered';
             col = P.ink;
         } else if (e.v === 2 && e.off !== null && t >= e.off && t < e.hit) {
-            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone within 200 ms';
+            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone (100-200 ms)';
             col = FOG;
         } else if (e.v === 2 && t >= e.hit - 0.05) {
             msg = 'click lands in the clear';
@@ -731,7 +734,7 @@ function drawEarSection(t, k) {
 }
 
 function drawEar(t) {
-    const a = t >= SC.fog - 0.12 && t < SC.hand + 0.18 ? 1 : 0;
+    const a = dip(t, SC.fog, SC.hand);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
@@ -743,8 +746,11 @@ function drawEar(t) {
     const tCk = wto('fog', 'click', 0.95);
     const gloss = t < tR + 1.6 ? 'riser = the rising whoosh before a drop' : t >= tCk - 0.4 && t < SC.fresh ? "click = the kick's sharp first few ms" : t >= SC.fresh + 0.3 && t < SC.fresh + 2.3 ? 'after-fog = forward masking (Moore 2012)' : null;
     if (!fresh && t < tCk + 0.6) {
-        label(g, "riser = the build's rising whoosh", 540, 392, { size: 36, weight: 700, color: P.ink, align: 'center', family: BODY });
-        label(g, "click = the kick's sharp first few ms", 540, 438, { size: 36, weight: 700, color: P.ink, align: 'center', family: BODY });
+        label(g, "riser = the build's rising whoosh", 540, 392, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
+        label(g, "click = the kick's sharp first few ms", 540, 438, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
+    } else if (fresh && t >= SC.fresh + 0.3 && t < SC.fresh + 3.2) {
+        label(g, 'after-fog = hearing stays dull for a moment', 540, 392, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
+        label(g, 'after a loud sound (forward masking, Moore 2012)', 540, 438, { size: 34, weight: 700, color: P.ink2, align: 'center', family: BODY });
     } else if (gloss && fresh) label(g, gloss, 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(0);
     drawEarSection(t, 1);
@@ -753,7 +759,7 @@ function drawEar(t) {
 
 // ══ Hand: the limiter is a hand on a fader, on a console ══
 // Each strip, top to bottom: fader with its gain-reduction meter, the input scope, the display.
-const HD = { faders: [{ x: 350, v: 1 }, { x: 710, v: 2 }], desk: { x0: 160, y0: 600, w: 740, h: 610 }, top: 670, bottom: 950, shelf: 588, msA: -700, msB: 260, scope: { y0: 986, h: 104, w: 280 } };
+const HD = { faders: [{ x: 350, v: 1 }, { x: 710, v: 2 }], desk: { x0: 160, y0: 600, w: 740, h: 610 }, top: 670, bottom: 950, shelf: 588, msA: -400, msB: 260, scope: { y0: 986, h: 104, w: 280 } };
 const FADER_MAX = 8;
 function drawHand(t) {
     const a = sceneAlpha(t, 'hand');
@@ -1235,7 +1241,7 @@ function drawHow(t) {
     }
     g.restore();
     // At 128 BPM: the gap grows to an 8th, past the after-fog (model), full width and large.
-    const kZ = popIn(t, tFogs - 0.1, 0.35);
+    const kZ = popIn(t, tFogs + 0.15, 0.3);
     if (kZ > 0) {
         const Z = HW.zoom;
         const ZX = (ms) => lerp(Z.x0, Z.x1, ms / Z.msMax);
@@ -1270,7 +1276,8 @@ function drawHow(t) {
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        const ms = t < tQuarter ? snap(t16, GAP_MS / 2) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
+        void snap;
+        const ms = keys(t, [[tFifth, 0], [t16 + 0.25, GAP_MS / 2], [tQuarter, GAP_MS / 2], [tQuarter + 0.3, GAP_MS]]);
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
         // On "128 BPM": outlines of a 16th and an 8th at that tempo, waiting to be filled.
         const kO = popIn(t, t128 - 0.1, 0.3);

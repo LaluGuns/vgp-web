@@ -144,6 +144,6 @@ export const TIMELINE = {
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
         { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track a 16th to an 8th before the drop, the reverb return too; a loud sound fogs hearing for up to 200 ms (model) and an 8th at 128 BPM (234.4 ms) outlasts it." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
-        { id: 'end', line: 'cta', dt: -0.2, view: 'end', teaches: 'Recap of the three reasons, an open question for the comments (a 16th, an 8th or a beat), and where the lesson is.' },
+        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons, an open question for the comments (a 16th, an 8th or a beat), and where the lesson is.' },
     ],
 };

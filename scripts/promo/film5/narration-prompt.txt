@@ -1,10 +1,10 @@
-[curious] One or two? Comment your pick.
+[curious] One or two? Pick one.
 
 [excited] Number two. It has a gap: under a quarter second of silence before the kick. [curious] Why does that hit harder? Your ears, your limiter, your brain.
 
 In number one, the riser is still roaring when the kick lands, so it covers the click. [warmly] In number two, the riser stops, its after-fog fades, and your ears meet the kick fresh.
 
-[mischievously] Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down as the kick lands.
+[mischievously] Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down, right as the kick lands.
 
 [confident] And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
 
@@ -12,4 +12,4 @@ So cut everything about a quarter second before the drop, reverb tails too. The 
 
 [softly] Now listen again. Hear the click?
 
-[warmly] Clean ears, a calm limiter, a beat you saw coming. So what do you cut before your drop: a sixteenth, an eighth, or a full beat?
+[warmly] That's the click. Clean ears, a calm limiter, a beat you saw coming. So what do you cut before your drop: a sixteenth, an eighth, or a full beat?
