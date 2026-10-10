@@ -76,7 +76,9 @@ readable text.
   `components/blog/figures/svg.tsx`.
 - **Imagery.** Use the real assets in `public/` (founder portrait, CADENZ
   poster, chrome logo, book cover, app icons, game art). No stock or
-  generated filler.
+  generated filler. Share cards (`app/og/route.tsx`) show the blue DP,
+  `virzy-guns-dp.jpg`, whole on its own navy: resized, never cropped (the
+  owner's rule).
 - **Focus.** One style everywhere: `.vgp-focus` in `app/globals.css`, a 2px
   outline in the page's `--accent` with a 3px offset, shown only for
   keyboard focus. `EditorialPrimitives`, `TapLink`, the navbar, bottom nav,

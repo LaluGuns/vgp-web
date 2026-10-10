@@ -774,32 +774,87 @@ const HIT_COLUMNS = 90;
 /** Room above the dry hit's level in each panel, so a boosted attack has somewhere to go. */
 const HIT_HEADROOM = 12;
 
+/**
+ * The loop the transient demo measures, rendered once per page at full
+ * level: the source (played into every measurement, so each one hears the
+ * same hits) and the dry path as it plays, delayed to line up with the
+ * processed paths, with its loudness and peak over the measured bars. A
+ * slider step then renders only the shaper and the compressor: one buffer
+ * source instead of a few hundred voices and four channels instead of six,
+ * so a step on a slow phone stays inside a frame's budget.
+ */
+interface ShapeLoop {
+    source: AudioBuffer;
+    /** The dry path at full level (the level going in scales it). */
+    dry: Float32Array;
+    dryPower: number;
+    dryPeak: number;
+}
+
+let shapeLoopJob: Promise<ShapeLoop> | null = null;
+
+function prepareShapeLoop(lat: number): Promise<ShapeLoop> {
+    shapeLoopJob ??= (async () => {
+        const {
+            x: [dryAll, x],
+            k: [dryK],
+        } = await renderOffline(
+            LEAD + BARS * BAR + lat + 0.02,
+            2,
+            (ctx, [dryTap, srcTap]) => {
+                const src = ctx.createGain();
+                src.connect(srcTap);
+                const delay = ctx.createDelay(0.05);
+                delay.delayTime.value = lat;
+                src.connect(delay).connect(dryTap);
+                return loopBars(ctx, src, drums);
+            },
+            1,
+        );
+        const [from, to] = measuredBars(lat);
+        const source = new AudioBuffer({ numberOfChannels: 1, length: x.length, sampleRate: RATE });
+        source.copyToChannel(x, 0);
+        await yieldToMain();
+        const dryPower = power(dryK, from, to);
+        await yieldToMain();
+        // A copy, so the rest of the render can go.
+        const dry = dryAll.slice();
+        return { source, dry, dryPower, dryPeak: peakOf(dry, from, to) };
+    })().catch((error: unknown) => {
+        shapeLoopJob = null;
+        throw error;
+    });
+    return shapeLoopJob;
+}
+
 async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
     const [lat, compMakeup] = await Promise.all([measureLatency(RATE), measureMakeup('punch', punchCompressor), prepareLogCurve()]);
+    const loop = await prepareShapeLoop(lat);
     const g = dbToGain(params.level);
     const [from, to] = measuredBars(lat);
     const {
-        x: [dry, shaped, comped],
-        k: [dryK, shapedK, compedK],
+        x: [shaped, comped],
+        k: [shapedK, compedK],
     } = await renderOffline(
         LEAD + BARS * BAR + lat + 0.02,
-        3,
-        (ctx, [dryTap, shaperTap, compTap]) => {
-            const src = ctx.createGain();
-            src.gain.value = g;
-            const delay = ctx.createDelay(0.05);
-            delay.delayTime.value = lat;
-            src.connect(delay).connect(dryTap);
+        2,
+        (ctx, [shaperTap, compTap]) => {
+            const src = ctx.createBufferSource();
+            src.buffer = loop.source;
+            const level = ctx.createGain();
+            level.gain.value = g;
+            src.connect(level);
             const shaper = transientShaper(ctx, lat, params.attack, params.sustain);
-            src.connect(shaper.input);
+            level.connect(shaper.input);
             shaper.output.connect(shaperTap);
-            src.connect(punchCompressor(ctx)).connect(compTap);
-            return loopBars(ctx, src, drums);
+            level.connect(punchCompressor(ctx)).connect(compTap);
+            src.start();
         },
-        3,
+        2,
     );
-    const ref = power(dryK, from, to);
-    const room = SHAPE_PEAK_ROOM * peakOf(dry, from, to);
+    // The dry path is the cached one at full level, scaled by the level going in.
+    const ref = loop.dryPower * g * g;
+    const room = SHAPE_PEAK_ROOM * loop.dryPeak * g;
     const matched = async (x: Float32Array, k: Float32Array) => {
         await yieldToMain();
         const wanted = Math.sqrt(ref / power(k, from, to));
@@ -820,11 +875,11 @@ async function analyseShape(params: ShapeParams): Promise<ShapeAnalysis> {
     const hit = (step: number, title: string) => {
         const a = Math.round((LEAD + (16 + step) * STEP + lat - 0.005) * RATE);
         const level = (x: Float32Array, gain: number, ref: number) => windowRms(x, a, length, HIT_COLUMNS, ref, window, gain);
-        const loudest = Math.max(...level(dry, 1, 1).map(dbToGain));
+        const loudest = Math.max(...level(loop.dry, g, 1).map(dbToGain));
         const top = loudest * dbToGain(HIT_HEADROOM);
         return {
             loudest,
-            hit: { title, before: level(dry, 1, top), shaper: level(shaped, 1, top), comp: level(comped, 1 / compMakeup, top) },
+            hit: { title, before: level(loop.dry, g, top), shaper: level(shaped, 1, top), comp: level(comped, 1 / compMakeup, top) },
         };
     };
     const k = hit(0, 'Kick');
