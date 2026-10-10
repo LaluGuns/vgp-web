@@ -133,7 +133,7 @@ Decide how loud the master should be by listening at matched loudness. Push the 
 
 ## References
 
-- European Broadcasting Union. (2023). *Tech 3341: Loudness metering: 'EBU Mode' metering to supplement EBU R 128 loudness normalization*. EBU. https://tech.ebu.ch/docs/tech/tech3341.pdf
+- European Broadcasting Union. (2023). *Tech 3341: Loudness metering: 'EBU Mode' metering to supplement EBU R 128 loudness normalisation*. EBU. https://tech.ebu.ch/docs/tech/tech3341.pdf
 - International Telecommunication Union. (2023). *Recommendation ITU-R BS.1770-5: Algorithms to measure audio programme loudness and true-peak audio level*. ITU. https://www.itu.int/rec/R-REC-BS.1770/
 - Spotify for Artists. *Loudness normalization on Spotify*. https://support.spotify.com/artists/article/loudness-normalization/
 `,

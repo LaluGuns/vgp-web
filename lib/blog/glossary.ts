@@ -54,7 +54,7 @@ export const glossary: GlossaryEntry[] = [
         forms: ['dBFS', 'dBTP'],
         caseSensitive: true,
         definition:
-            'Decibels relative to full scale. 0 dBFS is the highest level a digital system can store, so every other level is a negative number. dBTP is the same scale measured as true peak.',
+            'Decibels relative to full scale, the largest value a fixed-point file or converter can hold, so levels below it are negative numbers. Inside a floating-point mix a signal can read above 0 dBFS without clipping until it leaves float. dBTP is the same scale measured as true peak, and it can read above 0.',
     },
     {
         id: 'inter-sample-peak',
@@ -82,7 +82,7 @@ export const glossary: GlossaryEntry[] = [
         id: 'plr',
         term: 'Peak to loudness ratio',
         forms: ['peak to loudness ratio', 'peak-to-loudness ratio', 'PLR'],
-        definition: 'The gap between a master\'s true peak and its integrated loudness. Heavy limiting makes it smaller, and normalization makes it the number that decides how punchy a track sounds next to others.',
+        definition: 'The gap between a master\'s true peak and its integrated loudness. Heavy limiting makes it smaller. After normalization it sets how far the loudest peak rises above the loudness, though one stray peak can make it high on a flat master.',
         article: 'loudness-and-dynamic-range-are-different-readings',
     },
     {
@@ -221,7 +221,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Transient shaper',
         forms: ['transient shaper', 'transient shapers', 'transient designer'],
         definition:
-            'A processor that turns the start of each sound up or down, and its sustain up or down, by comparing a fast and a slow level follower. It has no threshold, so quiet and loud hits are shaped alike.',
+            'A processor that turns the start of each sound up or down, and its sustain up or down, by comparing a fast and a slow level follower. Many have no threshold, so quiet and loud hits are shaped alike.',
         article: 'transient-shaper-vs-compressor-punch-is-a-shape',
     },
     {
@@ -270,7 +270,7 @@ export const glossary: GlossaryEntry[] = [
         term: 'Masking',
         forms: ['masking'],
         definition:
-            'One sound making another harder to hear because they share frequencies at the same moment. The quieter sound is still there; the ear stops separating it.',
+            'One sound making another harder to hear, usually because they share frequencies at the same moment. A loud sound also masks what follows it for a short time (forward masking). The quieter sound is still there; the ear stops separating it.',
         article: 'the-masking-problem-producers-hear-as-mud',
     },
     {
@@ -535,7 +535,7 @@ export const glossary: GlossaryEntry[] = [
         term: '32-bit float',
         forms: ['32-bit float', 'floating point', 'floating-point'],
         definition:
-            'A sample format that stores a scale factor with every value, so levels above 0 dBFS inside the DAW are kept instead of clipped. Overs still clip where the signal leaves float: a fixed-point export, the interface output, or a plugin that clips.',
+            'A sample format that stores a scale factor with every value, so levels above 0 dBFS inside the DAW are kept instead of clipped. Overs still clip at a fixed-point export, at the interface output and inside any plugin that clips.',
         article: 'architecture-of-infinite-headroom-32-bit-float',
     },
 

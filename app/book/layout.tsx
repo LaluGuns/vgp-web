@@ -3,11 +3,11 @@ import { JsonLd } from '@/components/blog/article/JsonLd';
 import { ogImage, socialMetadata } from '@/lib/og';
 
 const shareTitle = 'Music Production Guide: Trap Edition';
-const shareDescription = 'A coming-soon PDF producer manual covering trap drums, 808s, vocals, mixing, mastering, and release decisions.';
+const shareDescription = 'A coming-soon PDF manual for producers: trap drums, 808s, vocal recording and processing, mixing and mastering for streaming.';
 
 export const metadata: Metadata = {
     title: shareTitle,
-    description: 'A coming-soon PDF book by Virzy Guns covering trap drums, 808s, vocals, mixing, mastering, and release decisions for producers.',
+    description: 'A coming-soon PDF book by Virzy Guns for producers: trap drums, 808s, vocal recording and processing, mixing and mastering for streaming.',
     keywords: [
         'Music Production Guide Trap Edition',
         'trap production guide',
@@ -36,7 +36,7 @@ const bookJsonLd = {
     url: 'https://www.virzyguns.com/book',
     image: 'https://www.virzyguns.com/ebooks/trap-guide-book-cover.jpg',
     description:
-        'A practical PDF guide for producers covering trap drums, 808s, vocals, mixing, mastering, and release decisions.',
+        'A practical PDF guide for producers: trap drums, 808s, vocal recording and processing, mixing and mastering for streaming.',
     author: {
         '@type': 'Person',
         name: 'Virzy Guns',

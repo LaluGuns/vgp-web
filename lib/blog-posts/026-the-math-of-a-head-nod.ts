@@ -90,7 +90,7 @@ Tempo converts directly into a movement rate and a period:
 
 $$f = \\frac{\\text{BPM}}{60} \\ \\text{Hz} \\qquad T = \\frac{60\\,000}{\\text{BPM}} \\ \\text{ms}$$
 
-At 120 BPM a beat comes every 500 ms, twice a second. That rate is not arbitrary for a human body. Preferred walking cadence sits near 120 steps a minute, and the head bobs at the step rate. When MacDougall and Moore (2005) measured head movement over a whole day of normal activity, people's steps clustered tightly around 2 Hz.
+At 120 BPM a beat comes every 500 ms, twice a second. That rate is not arbitrary for a human body. Preferred walking pace sits near 120 steps a minute, and the head bobs at the step rate. When MacDougall and Moore (2005) measured head movement over a whole day of normal activity, people's steps clustered tightly around 2 Hz.
 
 Van Noorden and Moelants (1999) modelled pulse perception as a resonance that responds best to beats about 500 to 550 ms apart and falls off gradually on either side. Listeners tend to settle on the pulse level nearest that range. The model predicts that at a very slow tempo you will nod to the 8th notes, and at a very fast one to every second beat.
 

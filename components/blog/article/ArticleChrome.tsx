@@ -293,7 +293,7 @@ export function OutlineTracker({ ids, children }: { ids: string[]; children: Rea
 
 /**
  * Phones have no outline beside the text, so once the reader is past the
- * inline "In this article" list a small Contents button stays in reach,
+ * inline "In this lesson" list a small Contents button stays in reach,
  * above the bottom navigation. It opens the section list as a popover with
  * focus on the section being read, and closes again when focus leaves it.
  * It shows when the reader scrolls up and steps aside again after two
@@ -396,14 +396,14 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
                 id="article-contents"
                 {...popover}
                 role="dialog"
-                aria-label="In this article"
+                aria-label="In this lesson"
                 className="vgp-contents-pop"
                 onClick={(event) => {
                     if ((event.target as HTMLElement).closest('a')) sheet.current?.hidePopover();
                 }}
             >
                 <div className="mb-2 flex items-center justify-between gap-4">
-                    <p className="text-base font-semibold text-white">In this article</p>
+                    <p className="text-base font-semibold text-white">In this lesson</p>
                     <button
                         type="button"
                         {...closes}

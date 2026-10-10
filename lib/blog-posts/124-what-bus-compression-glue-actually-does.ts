@@ -57,7 +57,7 @@ export const post124: BlogArticle = {
         shared: {
             type: 'signal',
             caption:
-                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB, and after the first hit it never gets back within about 3 dB of where it started. The pad rows use three times the vertical scale of the bus rows, so the dips are easy to see.',
+                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB, and after the first hit it never gets back within about 3 dB of where it started. The pad rows use nearly four times the vertical scale of the bus rows, so the dips are easy to see.',
             alt: 'Four level plots across two bars, in two pairs. Each pair starts with the bus level, four drum hits sitting on top of a flat pad, with that setting\'s threshold line: high for the light setting, just above the pad for the heavy one. Under it is the pad after the compressor. After the light setting the pad dips a little after each hit and recovers fully. After the heavy setting it dips deeply after each hit and stays below the original grey line throughout.',
             rows: [
                 {

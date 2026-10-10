@@ -266,8 +266,8 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                             <div className="hidden lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:block">
                                 <div className="sticky top-28">
                                     <OutlineTracker ids={headingIds}>
-                                        <nav aria-label="In this article">
-                                            <p className="mb-3 text-sm font-medium text-white">In this article</p>
+                                        <nav aria-label="In this lesson">
+                                            <p className="mb-3 text-sm font-medium text-white">In this lesson</p>
                                             <div className="max-h-[60vh] overflow-y-auto pr-1">
                                                 <OutlineList headings={headings} />
                                             </div>
@@ -299,8 +299,8 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     {headings.length > 0 ? (
                                         <details id="article-outline-inline" className="group mb-10 border-b border-white/10 pb-6 print:hidden lg:hidden">
                                             <summary className="vgp-focus flex min-h-11 cursor-pointer list-none items-center justify-between rounded-sm text-base font-medium text-white [&::-webkit-details-marker]:hidden">
-                                                In this article ({headings.length})
-                                                {/* The summary already says whether it is open: "In this article (8), collapsed". */}
+                                                In this lesson ({headings.length})
+                                                {/* The summary already says whether it is open: "In this lesson (8), collapsed". */}
                                                 <span aria-hidden="true" className="text-sm text-white/55 group-open:hidden">
                                                     Show
                                                 </span>

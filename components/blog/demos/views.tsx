@@ -13,7 +13,7 @@ import { DEFAULT_VOLUME } from './volume';
 export function Placeholder() {
     return (
         <div className="flex min-h-11 items-center [@media(scripting:none)]:hidden">
-            <span className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-5 text-sm font-semibold text-white/55">Loading demo</span>
+            <span className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-5 text-sm font-semibold text-white/55">Loading demo…</span>
         </div>
     );
 }
