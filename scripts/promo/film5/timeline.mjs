@@ -27,7 +27,7 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
 const HOOK = { pre: 2.5, post: 2 };
-const REPLAY = { pre: 1.75, post: 2 };
+const REPLAY = { pre: 1.75, post: 2.5 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
@@ -52,7 +52,7 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     t += dur(id) + LINE_GAP;
     // "So in number one, the click is buried." then version 1's downbeat; "your ears hit it fresh" then version 2's.
     if (id === 'fog') sting('S1', 1, 0);
-    if (id === 'fresh') sting('S2', 2, 0);
+    if (id === 'fresh') sting('S2', 2, 0.3);
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -100,15 +100,15 @@ export const TIMELINE = {
         { cue: ['hook', 'hole', 0.35], dt: 0, kind: 'tick' },
         { cue: ['hook', 'quarter', 0.6], dt: 0, kind: 'pop', level: 0.6 },
         { cue: ['fog', 'ears', 0.1], dt: -0.15, kind: 'whoosh', level: 0.6 },
-        { cue: ['fog', 'buries', 0.8], dt: 0, kind: 'tick' },
+        { cue: ['fog', 'covers', 0.8], dt: 0, kind: 'tick' },
         { cue: ['fresh', 'stopped', 0.4], dt: 0, kind: 'tick' },
         { cue: ['fresh', 'kick', 0.85], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['hand', 'your', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['hand', 'hand', 0.17], dt: -0.1, kind: 'grab' },
         { cue: ['hand', 'down', 0.7], dt: 0, kind: 'grab', level: 0.7 },
         { cue: ['brain', 'silence', 0], dt: -0.25, kind: 'whoosh', level: 0.5 },
-        { cue: ['brain', 'there', 0.7], dt: 0, kind: 'kick' },
-        { cue: ['brain', 'pays', 0.9], dt: 0, kind: 'pop', level: 0.7 },
+        { cue: ['brain', 'lands', 0.82], dt: 0, kind: 'kick' },
+        { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['how', 'eighth', 0.6], dt: 0, kind: 'tick' },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },

@@ -1,9 +1,9 @@
 guess|One or two? Pick one.
 hook|Number two. Same drop, with a hole in it: under a quarter second of silence before the kick.
-fog|One, your ears. In number one, the riser is still roaring when the kick lands, so it buries the click.
-fresh|In number two, the riser has stopped, and your ears meet the kick fresh.
-hand|Two, your limiter: a little hand on a fader. The riser makes it pull everything down as the kick arrives.
-brain|Three, your brain. In the silence, the only thing left to predict is the next beat. Land the kick there, and it pays off.
-how|So cut everything an eighth note before the drop, reverb tails too. A loud sound fogs your ears for up to a fifth of a second, and at 128 BPM, an eighth outlasts it.
+fog|Your ears first. In number one, the riser is still roaring when the kick lands, so it covers the click.
+fresh|In number two, the riser has stopped, its after-fog fades, and your ears meet the kick fresh.
+hand|Then your limiter: a little hand on a fader. The riser makes it pull everything down as the kick arrives.
+brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
+how|So cut everything an eighth note before the drop, reverb tails too. That after-fog lasts up to a fifth of a second, and at 128 BPM, an eighth outlasts it.
 again|Now listen again.
 cta|Free lesson on the Virzy Guns blog. Which gap do you use?
