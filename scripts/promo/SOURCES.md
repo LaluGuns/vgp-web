@@ -77,8 +77,8 @@ which carries its own references, or from a calculation listed here.
 - The limiter faders draw the limiter's own gain from the render, slowed down.
 - Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master WAV
   and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
-- Narration (script v3, `film5/script.txt`): a temporary guide track from
-  Piper TTS (`en_US-ryan-high`, length scale 1.27, about 183 words a minute;
+- Narration (script v4, `film5/script.txt`): a temporary guide track from
+  Piper TTS (`en_US-ryan-high`, length scale 1.27, about 184 words a minute;
   `assets/vo/`, not in git), cued with `film5/cue_vo.py`. It holds the timings
   until the final voice is generated (ElevenLabs `eleven_v4`, voice Michael C.
   Vincent, `film5/narration-prompt.txt`). A synthetic voice needs the
