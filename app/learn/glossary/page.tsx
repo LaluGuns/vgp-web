@@ -7,6 +7,8 @@ import { ScrollMemory } from '@/components/blog/useScrollMemory';
 import { getArticleBySlug } from '@/lib/blog-data';
 import { glossary } from '@/lib/blog/glossary';
 import { ogImage, socialMetadata } from '@/lib/og';
+import { LearnHeader } from '@/components/learn/LearnHeader';
+import { LearnNav } from '@/components/learn/LearnNav';
 import { GlossaryLetters } from './GlossaryLetters';
 
 const title = 'Music production glossary';
@@ -53,21 +55,25 @@ export default function GlossaryPage() {
                 ])}
             />
             <ScrollMemory />
+            <LearnNav current="glossary" />
             <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
-                <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
-                    <div className="mx-auto max-w-7xl">
-                        {/* The parent is "Lessons" everywhere: here, on a lesson and on a path page. */}
-                        <nav aria-label="Breadcrumb" className="-my-3 text-sm text-white/55">
+                <LearnHeader
+                    label={
+                        // The parent is "Lessons" everywhere: here, on a lesson and on a path page.
+                        <nav aria-label="Breadcrumb" className="-my-3">
                             <TapLink href="/blog" className="hover:text-white">
                                 Lessons
                             </TapLink>
                         </nav>
-                        <h1 className="mt-6 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">Glossary</h1>
-                        <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
-                            {terms.length} terms from the lessons, in plain words. In a lesson, tap a dotted word to see its definition without leaving the page.
+                    }
+                    title="Glossary"
+                    description={
+                        <p>
+                            {terms.length} terms from the lessons, in plain words. In a lesson, tap a dotted word to see its definition without leaving
+                            the page.
                         </p>
-                    </div>
-                </section>
+                    }
+                />
 
                 <section className="px-4 pb-20 sm:px-6">
                     <div className="mx-auto max-w-7xl">

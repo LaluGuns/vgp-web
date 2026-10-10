@@ -63,7 +63,8 @@ export const mainNavGroups: NavGroup[] = [
         href: '/learn',
         activePrefixes: ['/learn', '/blog', '/book', '/studio/masterclass'],
         children: [
-            { name: 'Lessons', href: '/blog', description: 'Learning paths from songwriting and sound design to mixing, audio science and licensing', status: 'Free' },
+            { name: 'Lessons', href: '/blog', description: 'Every lesson, searchable, from songwriting and sound design to mixing, audio science and licensing', status: 'Free' },
+            { name: 'Paths', href: '/learn', description: 'Every learning path on one map, with where to start', status: 'Free' },
             { name: 'Glossary', href: '/learn/glossary', description: 'The terms used in the lessons, in plain words', status: 'Free' },
             { name: 'Trap Edition guide', href: '/book', description: 'An 80+ page PDF for producers', status: 'Coming Soon' },
             { name: 'Masterclasses', href: '/studio/masterclass', description: 'Video lessons on the production workflow', status: 'Coming Soon' },

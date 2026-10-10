@@ -4,6 +4,8 @@ import { TextLink } from '@/components/editorial/EditorialPrimitives';
 import { TapLink } from '@/components/blog/article/TapLink';
 import { PathLessons } from '@/components/blog/paths/PathLessons';
 import { DialectMark } from '@/components/blog/figures/DialectMark';
+import { LearnHeader } from '@/components/learn/LearnHeader';
+import { LearnNav } from '@/components/learn/LearnNav';
 import type { Category } from '@/lib/blog-data';
 import { dialectForCategory } from '@/lib/blog/dialects';
 import { lessonFeatures, type LearningPath } from '@/lib/blog/paths';
@@ -27,32 +29,36 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
 
     return (
         <PageTransition>
+            <LearnNav current="paths" onPage={false} />
             <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
-                <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
-                    <div className="mx-auto max-w-7xl">
-                        {/* The parent is "Lessons" everywhere: here, on a lesson and on the glossary. */}
-                        <nav aria-label="Breadcrumb" className="-my-3 text-sm text-white/55">
-                            <TapLink href="/blog" className="hover:text-white">
-                                Lessons
-                            </TapLink>
-                        </nav>
-                        {/* The group's mark: the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
-                        <p className="mt-6 flex items-center gap-2 text-sm text-white/55">
-                            <DialectMark dialect={dialectForCategory(category.slug)} />
-                            Learning path
-                        </p>
-                        <h1 className="mt-2 font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
-                            {category.name}
-                        </h1>
-                        <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">{category.description}</p>
-                        <p className="mt-3 text-sm text-white/60">
-                            Stuck on a term?{' '}
-                            <TapLink href="/learn/glossary" className="text-white">
-                                The glossary explains {glossaryCount} of them
-                            </TapLink>
-                        </p>
-                    </div>
-                </section>
+                {/* The crumb and the group's mark share one line above the title: "Lessons" is the parent everywhere (here,
+                    on a lesson and on the glossary), and the mark is the shape and colour its lessons' figures use
+                    (docs/DESIGN.md, "Figure dialects"). */}
+                <LearnHeader
+                    label={
+                        <>
+                            <nav aria-label="Breadcrumb" className="-my-3">
+                                <TapLink href="/blog" className="hover:text-white">
+                                    Lessons
+                                </TapLink>
+                            </nav>
+                            <span aria-hidden="true">/</span>
+                            <span className="inline-flex items-center gap-2">
+                                <DialectMark dialect={dialectForCategory(category.slug)} />
+                                Learning path
+                            </span>
+                        </>
+                    }
+                    title={category.name}
+                    description={<p>{category.description}</p>}
+                >
+                    <p className="mt-3 text-sm text-white/60">
+                        Stuck on a term?{' '}
+                        <TapLink href="/learn/glossary" className="text-white">
+                            The glossary explains {glossaryCount} of them
+                        </TapLink>
+                    </p>
+                </LearnHeader>
 
                 <section className="px-4 pb-20 sm:px-6">
                     <div className="mx-auto max-w-7xl">

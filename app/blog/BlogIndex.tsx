@@ -12,6 +12,8 @@ import { useChipRow } from '@/components/blog/paths/useChipRow';
 import { useScrollMemory } from '@/components/blog/useScrollMemory';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
+import { LearnHeader } from '@/components/learn/LearnHeader';
+import { LearnNav } from '@/components/learn/LearnNav';
 import { scoreLesson, searchText, wordMatchers } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
@@ -486,32 +488,23 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
     return (
         <PageTransition>
+            <LearnNav current="lessons" />
             <main id="main" tabIndex={-1} onClickCapture={onLinkClickCapture} className="editorial-shell text-white focus:outline-none">
-                <section data-enter="" className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
-                    <div className="mx-auto max-w-7xl">
-                        <h1 className="font-display text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
-                            Lessons
-                        </h1>
-                        <p className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8">
+                <LearnHeader
+                    title="Lessons"
+                    description={
+                        <p>
                             {articles.length} free lessons from the studio, set out in {paths.length} paths from songwriting and arrangement to mixing,
                             audio science and licensing. Most come with diagrams, an experiment to try in your DAW and a short quiz.
                         </p>
-                        <div className="mt-4 flex flex-wrap gap-x-6">
-                            <a
-                                href="#vgp-reading-room"
-                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
-                            >
-                                <span className="vgp-link">Browse all {articles.length} lessons</span>
-                            </a>
-                            <Link
-                                href="/learn/glossary"
-                                className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
-                            >
-                                <span className="vgp-link">Glossary</span>
-                            </Link>
-                        </div>
-                    </div>
-                </section>
+                    }
+                >
+                    <p className="mt-4">
+                        <a href="#vgp-reading-room" className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus">
+                            <span className="vgp-link">Browse all {articles.length} lessons</span>
+                        </a>
+                    </p>
+                </LearnHeader>
 
                 <LearningPaths paths={paths} read={read} startHere={startHere} />
 

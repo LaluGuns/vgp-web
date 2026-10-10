@@ -119,12 +119,15 @@ anything without one is technical.
   `--surface`. Mind is rose, not violet: violet on black is the stock AI
   look, and for deuteranopes it is nearly the same colour as sky.
 - **One accent per page.** Inside a lesson `--accent` is the group's, so
-  figures, demo displays, focus rings and the reading-progress bar all use
-  it. The navbar, buttons, the blog index and every non-blog page stay sky.
+  figures, demo displays, focus rings, the reading-progress bar and the
+  Learn sub-navigation's marker all use it. The navbar, buttons, the blog
+  index and every non-blog page stay sky. The one exception is the path
+  map on /learn, which shows the four groups side by side on purpose
+  (Learn area, below).
 - **The key.** The group's mark (its value glyph in its accent) sits beside
-  the category name on a lesson and on its learning path page. Nowhere
-  else. A lesson on no learning path (a studio note) has no path crumb, so
-  it shows no mark.
+  the category name on a lesson and on its learning path page, and beside
+  each group's name on the path map. Nowhere else. A lesson on no learning
+  path (a studio note) has no path crumb, so it shows no mark.
 - **Lit and paper.** Technical and mind keep a faint accent area under a
   line. Music and business are ink on paper, so their lines stand alone.
 - **Rules are texture.** They stay well under the data; mind's dots need a
@@ -188,6 +191,72 @@ anything without one is technical.
   and so are the reading tools (Save, Copy link, Share, the Contents list,
   Check answer, the author photo). Collapsed Sources print open.
 - **New figure types** implement all four dialects before they ship.
+
+## Learn area
+
+The owner's direction (2026-10-10): Learn is its own area inside this site,
+with its own face, while the header, footer and tokens stay the site's. Its
+pages are /learn, /blog, the path pages (/blog/category/*), every lesson,
+/learn/glossary and /book. Code in `components/learn/`.
+
+- **Sub-navigation.** `LearnNav`: one row under the site header on every
+  Learn page, before `<main>` (the skip link passes it): Lessons (/blog),
+  Paths (/learn, the path map), Glossary, Book. The current entry is white
+  with a 2px marker in `--accent` and `aria-current` (`page` on the
+  entry's own page, `true` inside it: a lesson under Lessons, a path page
+  under Paths). On a lesson the marker and focus rings take the group's
+  accent; elsewhere sky. It is not sticky: a lesson keeps its full screen
+  for reading, it never covers text or the fixed reading tools (progress
+  bar, Contents, a demo's Stop), the glossary's sticky letter bar keeps
+  its place, and `scroll-padding-top` stays 88px. The site header's Learn
+  menu covers the area once it has scrolled away. Four 48px entries fit
+  one row at 320px, so it never scrolls. Hidden in print.
+- **Header.** `LearnHeader`: the same opening on /learn, /blog, the path
+  pages and the glossary: an optional label line (the "Lessons" crumb, a
+  path's mark), the display title, the description, and on /learn a row
+  of counts on a hairline, like the book page's facts. Counts come from
+  the data.
+- **Landing.** /learn answers "what is this and where do I start" in its
+  first screen: the title, one sentence, the counts, and Start here (the
+  first lessons of Songwriting and Mixing & Mastering, as large links with
+  their titles). Then the path map, one demo to try (the blind loudness
+  test from Mixing & Mastering lesson 1, through `DemoSlot`, in the same
+  column width as in a lesson so its reserved height holds), the newest
+  lessons, and the glossary (three real entries) beside the book.
+- **Path map.** `PathMap`: every learning path as a line of its lessons,
+  in its group's dialect and accent, the one place the four accents
+  appear together. Groups run from the first idea to the release: Writing
+  and arranging (music), Sound and mixing (technical), Psychology (mind),
+  Business. Lessons sit on a shared axis, so lesson n is at the same place
+  on every path and a line's length is the path's size; from 1280px each
+  path is one line under a lesson ruler. Narrower, a line wraps like a
+  score's systems (22 lessons to a system from 640px; 44px cells on
+  phones, 6 at 320px). Each cell draws its stretch of the line, and each
+  group's rules (graticule, staff with bar lines and a final bar, dotted
+  field, ledger rows with a closing double rule) run the full width of
+  every system as paper, so a short path ends on open paper. A lesson is
+  its group's value glyph, hollow until read on this device, filled once
+  read (`PathMapLive` adds the fills, the "read" in each name and the
+  "3 of 44 read" counts after hydration, in boxes that already have their
+  size). Every lesson and path is a link in reading order, named "Lesson
+  3: <title>"; a "Skip past the map" link, shown on focus, lets keyboard
+  users step over it. From 1024px a fixed-height readout above the map
+  shows the path, place, minutes and title of the lesson under the
+  pointer or the focus (`aria-hidden`: the link already says it). Each
+  line draws in once with the figure motion (`data-reveal="draw"`): it
+  wipes in from lesson 1 at a constant speed, like a scope beam, the
+  group's later paths 60ms apart; never on screen at load, with reduced
+  motion, without script or in print. Server-rendered; works with
+  JavaScript off.
+- **Keep the map cheap.** 147 lessons are 147 cells on a slow phone. A
+  cell is an `li` and a plain `a` that draws its glyph and its stretch of
+  line as two background layers: no pseudo-elements, no SVG, no
+  `next/link` (one listener in `PathMapLive` sends clicks through the
+  router and prefetches on hover or focus), and no per-cell custom
+  property or inline style, which stops cells sharing styles and made a
+  restyle four times slower. Per-path values (`--o`, `--len`) sit on the
+  eleven lists, per-group ones (accent, glyphs, line weight) on the four
+  groups.
 
 ## Story and voice
 

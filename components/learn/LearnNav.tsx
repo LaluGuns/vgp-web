@@ -36,26 +36,28 @@ export function LearnNav({ current, onPage = true, accent }: { current: LearnSec
             style={style}
             className="vgp-learn-nav mt-[calc(env(safe-area-inset-top,0px)-31px)] border-b border-white/10 px-4 print:hidden sm:px-6"
         >
-            <div className="mx-auto max-w-7xl"><ul className="-ml-3 flex items-stretch sm:-ml-4">
+            <div className="mx-auto max-w-7xl">
                 {/* The first label lines up with the page text; its tap area reaches into the gutter. */}
-                {ITEMS.map((item) => {
-                    const here = item.section === current;
-                    return (
-                        <li key={item.section} className="flex">
-                            <Link
-                                href={item.href}
-                                aria-current={here ? (onPage ? 'page' : 'true') : undefined}
-                                className={`vgp-focus relative flex min-h-12 items-center px-3 text-sm font-medium transition-colors sm:px-4 ${
-                                    here ? 'text-white' : 'text-white/60 hover:text-white'
-                                }`}
-                            >
-                                {item.label}
-                                {here ? <span aria-hidden="true" className="absolute inset-x-3 bottom-[-1px] h-0.5 bg-[var(--accent)] sm:inset-x-4" /> : null}
-                            </Link>
-                        </li>
-                    );
-                })}
-            </ul></div>
+                <ul className="-ml-3 flex items-stretch sm:-ml-4">
+                    {ITEMS.map((item) => {
+                        const here = item.section === current;
+                        return (
+                            <li key={item.section} className="flex">
+                                <Link
+                                    href={item.href}
+                                    aria-current={here ? (onPage ? 'page' : 'true') : undefined}
+                                    className={`vgp-focus relative flex min-h-12 items-center px-3 text-sm font-medium transition-colors sm:px-4 ${
+                                        here ? 'text-white' : 'text-white/60 hover:text-white'
+                                    }`}
+                                >
+                                    {item.label}
+                                    {here ? <span aria-hidden="true" className="absolute inset-x-3 bottom-[-1px] h-0.5 bg-[var(--accent)] sm:inset-x-4" /> : null}
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
         </nav>
     );
 }

@@ -14,6 +14,7 @@ import { OutlineList, type OutlineItem } from '@/components/blog/article/Outline
 import { Quiz } from '@/components/blog/article/Quiz';
 import { TapLink } from '@/components/blog/article/TapLink';
 import { DialectMark } from '@/components/blog/figures/DialectMark';
+import { LearnNav } from '@/components/learn/LearnNav';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { parseArticle, type ParsedArticle } from '@/lib/blog/content';
 import { dialectForCategory } from '@/lib/blog/dialects';
@@ -174,14 +175,16 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
     const accentScope = { '--accent': dialect.accent } as CSSProperties;
 
     // No transformed wrapper (PageTransition) around the page: the Contents button and the
-    // progress bar are position: fixed and must stay pinned to the screen.
+    // progress bar are position: fixed and must stay pinned to the screen. The Learn sub-navigation
+    // comes first, outside <main>, in the lesson group's accent.
     return (
         <>
+            <LearnNav current="lessons" onPage={false} accent={dialect.accent} />
             <main id="main" tabIndex={-1} style={accentScope} className="editorial-shell text-white focus:outline-none">
                 <ReadingProgress slug={article.slug} accent={dialect.accent} sectionIds={sectionIds} />
                 <LessonAnchors />
                 <article>
-                    <header className="px-4 pb-10 pt-10 sm:px-6 sm:pt-14">
+                    <header className="px-4 pb-10 pt-8 sm:px-6 sm:pt-12">
                         <div className="mx-auto max-w-7xl">
                             <nav aria-label="Breadcrumb" className="-my-3 flex flex-wrap items-center gap-x-2 text-sm text-white/55">
                                 <TapLink href="/blog" className="hover:text-white">
