@@ -137,14 +137,14 @@ The gap also works on expectation. Huron (2006) describes listeners as constantl
 ## DAW experiment: the pre-drop gap
 
 1. Find the last bar before the drop and duplicate that section so you can compare two versions.
-2. On the copy, cut every clip that plays into the downbeat, such as risers, crashes, hats and vocal tails, one 16th before it. At 128 BPM that is 117 ms.
+2. On the copy, cut every clip that plays into the downbeat, such as risers, crashes, hats and vocal tails, one 8th before it. At 128 BPM that is 234 ms, about a quarter second. A 16th (117 ms) already helps.
 3. Add a 5 to 10 ms fade-out to each cut so it does not click.
-4. Automate the reverb and delay returns to mute for the same 16th, or their tails will fill the gap.
+4. Automate the reverb and delay returns to mute for the same 8th, or their tails will fill the gap.
 5. Play the gap and check that the master meter falls to silence or close to it.
 6. Watch the limiter's gain reduction on the downbeat in both versions.
-7. Try the gap at a 32nd note (58.6 ms) and at a full beat (468.8 ms), and compare all three at matched loudness.
+7. Try the gap at a 16th (117.2 ms) and at a full beat (468.8 ms) too, and compare all three at matched loudness.
 
-With the gap, the kick lands with a clear click and the limiter shows less gain reduction on the first hit. The 32nd sounds like a sharp breath and the full beat like a held one. Pick the length that suits the drop.
+With the gap, the kick lands with a clear click and the limiter shows less gain reduction on the first hit. The 16th sounds like a sharp breath and the full beat like a held one. Pick the length that suits the drop.
 
 ## Common mistake: letting the transition bleed
 
@@ -154,7 +154,7 @@ The related mistake is cutting the synths but forgetting the return tracks. If t
 
 ## Producer takeaway: the space makes the hit
 
-Treat the moment before the drop as part of the drop. Clear everything that would still be sounding at the downbeat, including effect returns, for at least a 32nd note, and longer if the song can take it. Then judge the result by the first kick, not by the build.
+Treat the moment before the drop as part of the drop. Clear everything that would still be sounding at the downbeat, including effect returns, for at least a 16th, ideally an 8th (about a quarter second at 128 BPM), and longer if the song can take it. Then judge the result by the first kick, not by the build.
 
 ## References
 
