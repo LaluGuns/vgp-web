@@ -174,9 +174,10 @@ function ladder(box, t, o = {}) {
         label(g, 'phone', zx, yCut - 80, { size: zs, weight: 700, color: P.cyan, align: 'right', family: BODY });
         label(g, 'plays', zx, yCut - 42, { size: zs, weight: 700, color: P.cyan, align: 'right', family: BODY });
         label(g, 'phone', zx, yCut + 66, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
-        label(g, "can't play", zx, yCut + 104, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
+        label(g, 'fades out', zx, yCut + 104, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
     } else {
         label(g, 'phone plays', x1 - 4, y0 + zs + 2, { size: zs, weight: 700, color: P.cyan, align: 'right', family: BODY });
+        label(g, 'phone plays less', x1 - 4, yCut + 40, { size: 32, weight: 600, color: P.ink3, align: 'right', family: BODY });
         label(g, "phone can't play", x1 - 4, y1 - 8, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
     }
     // Pitch axis in plain words, and the one frequency that matters.
@@ -349,7 +350,7 @@ function drawHook(t) {
         const c1 = popIn(t, segBy.againClean.from + 0.2, 0.3) * (1 - popIn(t, segBy.againSat.from - 0.25, 0.2));
         const c2 = popIn(t, segBy.againSat.from, 0.3);
         if (c1 > 0) label(g, "Clean sub. Where's the bass?", 540, 462, { size: 52, weight: 800, color: P.ink, align: 'center', alpha: c1 });
-        if (c2 > 0) label(g, '+ harmonics. There it is.', 540, 462, { size: 52, weight: 800, color: P.cyan, align: 'center', alpha: c2 });
+        if (c2 > 0) label(g, '+ saturation. There it is.', 540, 462, { size: 52, weight: 800, color: P.cyan, align: 'center', alpha: c2 });
     }
     // What the bass is, above the ladder.
     const sat = replay ? t >= segBy.againSat.from - 0.05 : t >= segBy.hookSat.from - 0.05;
@@ -367,7 +368,7 @@ function drawHook(t) {
     // The grille lights only for the bass the phone plays.
     phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
     void d;
-    pill(g, 'phone speaker (simulated)', HK.ph.x + HK.ph.w / 2, HK.ph.y - 48, { size: 32, bg: P.dark, fg: P.ink, ring: P.ink3, weight: 700 });
+    pill(g, 'phone speaker (simulated)', 250, HK.ph.y - 48, { size: 32, bg: P.dark, fg: P.ink, ring: P.ink3, weight: 700 });
     // Sound leaving the grille: white rings for drum hits, cyan for bass notes the phone plays.
     const gx = HK.ph.x + HK.ph.w / 2;
     const gy = HK.ph.y + HK.ph.h - 52;
@@ -420,7 +421,7 @@ function drawHook(t) {
     }
     // Ladder.
     const sp = spectrum(t);
-    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 5, rungH: 22, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 5, rungH: 16, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
     // Name the bottom bar: the note.
     if (lad && sp) {
         const ny = (lad.Y(sp.f0) + lad.Y(2 * sp.f0)) / 2 + 11;
@@ -480,7 +481,7 @@ function drawAir(t) {
         // Travel arrow under the cone, and its multiple.
         const ka = popIn(t, arrowAt[i] - 0.05, 0.35);
         if (ka > 0) {
-            const half = Math.max(6, amp * E.out(ka));
+            const half = Math.max(1, amp * E.out(ka));
             const ay = y + 120;
             const cx = AIR.cone + 2;
             g.strokeStyle = P.ink;
@@ -492,9 +493,7 @@ function drawAir(t) {
             for (const sgn of [-1, 1]) {
                 const ex = cx + sgn * half;
                 if (half < 16) {
-                    // Too short for arrowheads: end ticks.
-                    g.moveTo(ex, ay - 11);
-                    g.lineTo(ex, ay + 11);
+                    // Too short for arrowheads: the dash alone, to scale.
                 } else {
                     g.moveTo(ex - sgn * 11, ay - 9);
                     g.lineTo(ex, ay);
@@ -717,7 +716,7 @@ function drawLadder(t) {
             // "plays the harmonics": the window's edge lights up.
             const wk = bump(t, tHarm - 0.05, 0.2, 1.2);
             if (wk > 0) {
-                rr(g, BL.x0 - 24, BL.y0 - 24, BL.x1 - BL.x0 + 48, lad.yCut - BL.y0 + 24, 26);
+                rr(g, BL.x0 - 24, BL.y0 - 24, BL.x1 - BL.x0 + 48, lad.yCut - BL.y0 + 46, 26);
                 g.strokeStyle = `rgba(125,211,252,${0.9 * wk})`;
                 g.lineWidth = 5;
                 g.stroke();
@@ -894,6 +893,9 @@ function drawScope(t) {
         const ant = E.out(popIn(t, tPuts, 0.4));
         const look = { x: lerp(x0, x1, 0.5 + 0.3 * Math.sin(t * 0.8)), y: mid };
         robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [] });
+        // On "Your brain": the listener is named.
+        const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
+        if (bn > 0) pill(g, 'your brain', RB.x - 92 * RB.s, RB.y - 178 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
         g.restore();
     }
     // "Puts the note back": the note forms in a thought bubble over the
@@ -1141,7 +1143,7 @@ function drawRule(t) {
             [0.7, '1. Copy the sub'],
             [1.9, '2. Saturate the copy'],
             [3.1, '3. High-pass the copy at 120 Hz'],
-            [4.2, '4. Add it under the clean sub'],
+            [4.2, '4. Blend it in with the clean sub'],
         ];
         const glow = (dt) => bump(t, tAdd + dt, 0.15, 0.9);
         chainBox('sub', 170, rA, P.amber, d(0.1));
@@ -1178,6 +1180,9 @@ function drawRule(t) {
         }
         label(g, 'for small speakers', 110, y2 + 560, { size: 40, weight: 600, color: P.ink2, alpha: d(0.3) });
         g.restore();
+        // The phone, live: the clean sub leaves its window dark; step 4 lights it.
+        const la = popIn(t, vEnd('rule-2') + 0.4, 0.3);
+        if (la > 0) ladder({ x0: 640, x1: 926, y0: 1290, y1: 1500 }, t, { alpha: la * k2, zoneLeft: true, maxN: 5, rungH: 14 });
     }
     g.restore();
 }
@@ -1392,9 +1397,9 @@ function draw(t, { words = true } = {}) {
 function drawCover() {
     g.setTransform(1, 0, 0, 1, 0, 0);
     g.globalAlpha = 1;
-    ground(g, 9.3, 0);
+    ground(g, 8.0, 0);
     g.translate(0, 110);
-    drawHook(9.3);
+    drawHook(8.0);
     g.setTransform(1, 0, 0, 1, 0, 0);
 }
 

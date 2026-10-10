@@ -96,3 +96,9 @@ One line per call, newest last.
   - Replay captions: "Clean sub. Where's the bass?", then "+ harmonics. There it is."
   - The phone scene clears, then its ladder grows into the next scene's ladder: one transition with movement.
   - Axis in words "higher pitch / lower pitch"; "Sub: keep it clean" replaces "Sub: clean, mono" (mono was never explained); a travel too short for arrowheads is drawn with end ticks.
+- Film 4 v5, after a scored review of the delivered MP4 (9 accuracy, 8.5 hook, 8 clarity, craft and pacing, 7 polish):
+  - The cover drew the hook at 9.3 s, after the hook had moved to end at 9.2 s, and came out blank; it now draws the payoff at 8.0 s.
+  - "your brain" names the listener on "Your brain"; narrow ladders say the phone "fades out" under 200 Hz and the big ladder adds "phone plays less" there, matching the half-played 2x and 3x bars.
+  - The recipe shows its result: a live ladder of what the phone plays under the chain, dark with the clean sub, lit when step 4 blends the copy in ("Blend it in with the clean sub" replaces "Add it under the clean sub").
+  - The bass starts at 19 s so "Down here" has a bar to point at; the limit scene runs 2 s longer so "hear the melody" stays up; the film is 90 s.
+  - Smaller: hook rungs spaced apart, the "phone speaker (simulated)" pill inset from the edge, the 1x cone travel drawn as a dash to scale, the window highlight takes in the 4x bar, the replay caption says "+ saturation" like its badge.
