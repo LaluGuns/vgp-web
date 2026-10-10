@@ -27,7 +27,7 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
 const HOOK = { pre: 2.5, post: 2 };
-const REPLAY = { pre: 1.75, post: 2.5 };
+const REPLAY = { pre: 1.25, post: 3 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;

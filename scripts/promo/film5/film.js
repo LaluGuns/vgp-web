@@ -321,7 +321,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             g.scale(pulse, pulse);
             label(g, 'Which one hits harder?', 0, 0, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
             g.restore();
-        } else label(g, 'Which one hits harder?', 540, 445, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
+        } else label(g, 'One tiny cut. Which hits harder?', 540, 445, { size: 62, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     }
     // Notch zoom on both lanes during the hook line, so the drop lines stay aligned.
     // The zoom into the hole starts on "Same drop" and lands on "hole".
@@ -412,10 +412,10 @@ function drawAB(t, frame1 = false, noHead = false) {
     const tAns = frame1 ? 1e9 : wto('hook', 'two', 0.05) + 0.4;
     if (!replay && !noHead) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
-        if (guessing) label(g, '1: the riser runs into the drop', 540, 1288, { size: 40, weight: 700, color: FOG, align: 'center', family: BODY, alpha: popIn(t, G.at, 0.2) });
-        label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (guessing ? 0 : 1) * (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) * (id === 'notch' ? 1 - popIn(t, wto('hook', 'hole', 0.35), 0.2) : 1) });
+        if (!guessing && id === 'notch' && t >= tAns) label(g, '1: the riser runs into the drop', 540, 1288, { size: 40, weight: 700, color: FOG, align: 'center', family: BODY, alpha: popIn(t, tAns + 0.3, 0.2) * (1 - out) });
+        label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
-        if (kA > 0) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
+        if (false) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
         const kR = id === 'notch' ? popIn(t, wto('hook', 'hole', 0.35), 0.3) * (1 - out) : 0;
         void kR;
@@ -642,7 +642,7 @@ function drawEarSection(t, k) {
         let msg = null;
         let col = P.ink;
         if (e.v === 1 && t >= e.hit - 0.05) {
-            msg = 'riser still playing: click covered';
+            msg = 'riser still playing: click covered, ears worn';
             col = P.ink;
         } else if (e.v === 2 && e.off !== null && t >= e.off && t < e.hit) {
             msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone at 200 ms';
@@ -670,7 +670,7 @@ function drawEar(t) {
     else headline(t, SC.fresh + 0.05, [['Silence'], ['clears'], ['the'], ['way']], 300, { size: 88, stagger: 0 });
     const tR = wto('fog', 'riser', 0.38);
     const tCk = wto('fog', 'click', 0.95);
-    const gloss = t >= tR && t < tR + 1.4 ? 'riser = the rising whoosh before a drop' : t >= tCk - 0.6 && t < tCk + 1.2 ? "click = the kick's sharp first few ms" : t >= SC.fresh + 0.3 && t < SC.fresh + 2.1 ? 'after-fog = forward masking (Moore 2012)' : null;
+    const gloss = t < SC.fog + 1.8 ? "click = the kick's sharp first few ms" : t >= tR && t < tR + 1.4 ? 'riser = the rising whoosh before a drop' : t >= SC.fresh + 0.3 && t < SC.fresh + 2.1 ? 'after-fog = forward masking (Moore 2012)' : null;
     if (gloss) label(g, gloss, 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(0);
     drawEarSection(t, 1);
@@ -858,7 +858,7 @@ function drawBrain(t) {
     const ks = popIn(t, tPred - 0.3);
     if (ks > 0) {
         const xa = X(6.5);
-        const xb = X(7);
+        const xb = X(7) - 34;
         g.save();
         g.globalAlpha *= ks;
         g.strokeStyle = P.ink2;
@@ -1150,9 +1150,15 @@ function drawHow(t) {
         g.globalAlpha *= kZ;
         label(g, 'after-fog', Z.x0, y - 24, { size: 40, weight: 800, color: FOG, family: BODY });
         label(g, 'model', Z.x0 + 200, y - 24, { size: 32, weight: 600, color: P.ink3, family: BODY });
+        // A playhead sweeps the after-fog from 0 to 200 ms while "a fifth of a second" is spoken.
+        const sweep = 200 * E.inOut(seg(t, tFifth - 0.6, tFifth + 0.5));
         for (let m = 0; m < 200; m += 2) {
-            g.fillStyle = `rgba(${FOG_RGB},${0.75 * fogWeight(m)})`;
+            g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.75 : 0.35) * fogWeight(m)})`;
             g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 110);
+        }
+        if (sweep > 0 && sweep < 200) {
+            g.fillStyle = P.ink;
+            g.fillRect(ZX(sweep) - 2, y - 8, 4, 126);
         }
         g.strokeStyle = FOG;
         g.lineWidth = 5;
@@ -1161,7 +1167,9 @@ function drawHow(t) {
         g.lineTo(ZX(200), y + 120);
         g.stroke();
         label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY });
-        const ms = GAP_MS * E.inOut(seg(t, tQuarter - 1.2, tQuarter + 0.3));
+        const t128 = wto('how', '128', 0.78);
+        // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
+        const ms = keys(t, [[t128 - 0.1, 0], [tQuarter, 200], [tQuarter + 0.4, GAP_MS]]);
         label(g, 'gap', Z.x0, y + 200, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 224, Math.max(1, ZX(ms) - ZX(0)), 80, 16);
         g.fillStyle = P.cyan;
@@ -1278,7 +1286,7 @@ function drawEnd(t) {
     const k = popIn(t, voBy.cta.at + 0.1, 0.35);
     if (k > 0) {
         const pulse = t < BUTTON ? 0.035 * Math.exp(-((t % BEAT) / 0.12)) : 0;
-        pill(g, TL.lesson.url, 540, 1092, { size: 56, bg: P.cyan, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
+        pill(g, TL.lesson.url, 540, 1092, { size: 56, bg: P.ink, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
         // The lesson's title on two lines, clear of the right-hand rail.
         const words = `Lesson: ${TL.lesson.title}`.split(' ');
         const cut = Math.ceil(words.length / 2);
@@ -1395,7 +1403,7 @@ function subtitles(t) {
     const v = VO.filter((x) => t >= x.at - 0.12 && t <= x.at + x.dur + 0.3).pop();
     if (!v) {
         // During a demo with no narration: a speaker and "Listen", the cue to turn the sound on.
-        const d = DEMOS.find((q) => t >= q.at && t < q.to);
+        const d = DEMOS.find((q) => t >= q.at && t < q.to && !q.id.startsWith('S'));
         if (d) {
             const a = clamp((t - d.at) / 0.15) * (1 - clamp((t - d.to + 0.15) / 0.15));
             g.save();
@@ -1439,7 +1447,7 @@ function subtitles(t) {
             const key = KEYWORD[norm(w.w)];
             g.fillStyle = on > 0 && key ? key : P.ink;
             // Words not yet spoken stay readable (over 4.5:1 on the ground).
-            g.globalAlpha = fadeIn * fadeOut * lerp(0.72, 1, on);
+            g.globalAlpha = fadeIn * fadeOut * lerp(0.8, 1, on);
             g.textAlign = 'left';
             g.fillText(w.w, x, y0 + li * SUB.lh);
             x += w.width + page.space;
@@ -1547,7 +1555,7 @@ function drawCover() {
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    pill(g, 'one tiny change', 540, 1300, { size: 40, bg: P.cyan, fg: P.dark, weight: 800 });
+    pill(g, 'one tiny change', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
     label(g, '1 or 2?', 540, 1440, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     // The brand inside the 3:4 crop.
     avatar(g, 420, 1590, 36);

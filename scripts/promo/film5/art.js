@@ -665,7 +665,7 @@ function robotDome(g, base, { look = null, lid = 0, s = 1 } = {}) {
     g.moveTo(base.x + 46 * s, base.y - 98 * s);
     g.lineTo(base.x + 66 * s, base.y - 146 * s);
     g.stroke();
-    g.fillStyle = P.cyan;
+    g.fillStyle = P.ink;
     g.beginPath();
     g.arc(base.x + 68 * s, base.y - 150 * s, 10 * s, 0, Math.PI * 2);
     g.fill();
@@ -686,7 +686,7 @@ function robotDome(g, base, { look = null, lid = 0, s = 1 } = {}) {
         ox = Math.cos(la) * 14 * s;
         oy = Math.sin(la) * 14 * s;
     }
-    g.fillStyle = P.cyan2;
+    g.fillStyle = P.steelDk;
     g.beginPath();
     g.arc(ex + ox, ey + oy, 19 * s, 0, Math.PI * 2);
     g.fill();
