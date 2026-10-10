@@ -142,3 +142,13 @@ One line per call, newest last.
   - How: a 200 ms tick ends the fog; "a 16th already helps · an 8th outlasts the fog" appears halfway through the sweep and holds.
   - Captions sit on a soft dark band.
   - Declined: changing lesson 030's DAW step (outside this task's files; recommended to the founder: make step 2 "one 8th (234 ms), a 16th already helps"); a "link in bio" card in place of the address pill (the brief fixes the address pill); -14 LUFS.
+- Round 8 panel (weighted 8.20, no factual error), fixes for round 9:
+  - Script v7: the three reasons are spoken ("One, your ears", "Two, your limiter", "Three, your brain"). Version 1's click is buried by the riser that is still playing ("the riser is still roaring when the kick lands, so it buries the click"); version 2's riser has stopped and the ears meet the kick fresh. The fog (forward masking, up to a fifth of a second) moves to the how line, where it sets the gap's length: "a loud sound fogs your ears for up to a fifth of a second, and at 128 BPM, an eighth outlasts it." The brain line follows Huron as the lesson puts it: "In the silence, the only thing left to predict is the next beat."
+  - Ears: one cochlea stage for both versions instead of a stage plus measured rows. Number one: the riser's waves keep coming as the click's spark arrives, it dims, the hair cells barely move ("riser still playing: click covered"), then version 1's downbeat plays with the same picture. Number two: the waves stop, a counter runs the silence (slowed down while told), the fog thins, and the spark lands on wide-awake cells ("click lands on rested ears"), with the measured click result; then version 2's downbeat plays. The zoom into the cochlea is clipped below the title.
+  - Hook: version 2 stays covered until the answer, so the hole is heard before it is seen, then wipes in; "comment your pick before the answer" during the countdown; the claim-4 badge leaves before the 234 ms label arrives.
+  - Limiter: the console sits 40 px lower so the robot clears the subtitle.
+  - Brain: "next beat" points at the yellow beat; the landing ring stays clear of "silence".
+  - End card: no zoom that crops the lesson text; a white underline instead of amber.
+  - Cover: "the ¼-second gap" names the topic inside the 3:4 crop.
+  - Loop: the end card and frame one cross-fade (no empty frame).
+  - Declined: -14 LUFS (brief: -16); shortening the hook's guess beat below the spoken line; editing lesson 030.
