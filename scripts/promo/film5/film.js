@@ -446,7 +446,7 @@ function drawAB(t, frame1 = false, noHead = false) {
                 label(g, w, x, 1640, { size: 44, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: kI });
             });
         }
-        label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
+        label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
         if (false) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
@@ -797,7 +797,7 @@ function drawHand(t) {
         if (live && ms >= 0 && t - tKick < 0.9) {
             const kAge = t - tKick;
             const kick = f.v === 1 ? D.r1.kickDb : D.r2.kickDb;
-            const r = (60 + 110 * E.out(kAge / 0.9)) * 10 ** ((kick - D.r2.kickDb) / 20);
+            const r = (44 + 56 * E.out(kAge / 0.9)) * 10 ** ((kick - D.r2.kickDb) / 20);
             g.save();
             g.strokeStyle = `rgba(251,191,36,${0.9 * (1 - kAge / 0.9)})`;
             g.lineWidth = 7;
@@ -922,7 +922,7 @@ function drawBrain(t) {
     }
     // The ball: hops on the beats, waits on the last beat of the build, then the prediction: a dotted arc to the downbeat.
     const k = E.inOut(seg(t, tPred, tNext + 0.3));
-    const arcPt = (u) => ({ x: lerp(X(L - 1), X(L), u), y: BR.dots - 30 - 130 * 4 * u * (1 - u) });
+    const arcPt = (u) => ({ x: lerp(X(L - 1), X(L), u), y: BR.dots - 100 * 4 * u * (1 - u) });
     if (k > 0) {
         g.save();
         g.setLineDash([2, 18]);
@@ -952,8 +952,8 @@ function drawBrain(t) {
     let ball;
     if (t < tPred) {
         const fr = hop - Math.floor(hop);
-        ball = { x: X(hop), y: BR.dots - 30 - 120 * Math.sin(Math.PI * fr) };
-    } else if (t < tLand - 0.35) ball = { x: X(L - 1), y: BR.dots - 30 };
+        ball = { x: X(hop), y: BR.dots - 130 * Math.sin(Math.PI * fr) };
+    } else if (t < tLand - 0.35) ball = { x: X(L - 1), y: BR.dots };
     else ball = arcPt(E.inOut(seg(t, tLand - 0.35, tLand)));
     const land = t - tLand;
     if (land < 0) {
@@ -1231,7 +1231,7 @@ function drawHow(t) {
         const fl = t >= tQuarter ? Math.exp(-(t - tQuarter) / 0.25) : 0;
         if (fl > 0.01) {
             g.fillStyle = `rgba(${CYAN_RGB},${0.9 * fl})`;
-            g.fillRect(ZX(200) - 5, y - 10, 10, 400);
+            g.fillRect(ZX(200) - 5, y - 10, 10, 170);
         }
         label(g, `${Math.round(ms)} ms`, ZX(ms) + 20, y + 347, { size: 56, weight: 800, color: ms > 240 ? P.dark : P.cyan });
         // Axis: 0, 100, 200 ms and the 8th.
@@ -1628,8 +1628,8 @@ function drawCover() {
     const tc = demoBy.B.to + 0.02;
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    pill(g, 'one tiny gap', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
+    label(g, 'One change. Which hits harder?', 540, 500, { size: 64, weight: 800, color: P.ink, align: 'center', base: 'middle' });
+    pill(g, 'what changed?', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
     label(g, '1 or 2?', 540, 1440, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     // The brand inside the 3:4 crop.
     avatar(g, 420, 1590, 36);
