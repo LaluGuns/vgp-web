@@ -48,11 +48,24 @@ let m;
 for (let i = 0; i < 8; i++) {
     master(audio.L, audio.R, gain, ceiling, wav);
     m = measure(wav);
-    // AAC adds about 0.6 dB of true peak, so the WAV aims 0.7 dB under the limit.
+    // AAC adds true peak, so the WAV aims 0.7 dB under the limit; the encode is checked below.
     if (Math.abs(m.I + 16) <= 0.3 && m.TP <= -2.2) break;
     gain += -16 - m.I;
     if (m.TP > -2.2) ceiling -= m.TP + 2.2 + 0.1;
 }
+// AAC's overshoot varies with the material (0.6 to 1.3 dB seen), so check the encode itself:
+// encode the master as the film will be, and pull the ceiling until the AAC is at -1.8 dBTP or under.
+const aacTest = path.join(OUT, 'audio-aac-check.m4a');
+for (let i = 0; i < 8; i++) {
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', wav, '-c:a', 'aac', '-b:a', '256k', aacTest]);
+    const a = measure(aacTest);
+    if (a.TP <= -1.8 && Math.abs(m.I + 16) <= 0.3) break;
+    if (a.TP > -1.8) ceiling -= a.TP + 1.8 + 0.1;
+    gain += -16 - m.I;
+    master(audio.L, audio.R, gain, ceiling, wav);
+    m = measure(wav);
+}
+fs.rmSync(aacTest, { force: true });
 const M = audio.measures;
 const Q = M.res;
 const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
