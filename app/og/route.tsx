@@ -88,7 +88,8 @@ function getFonts() {
 function UnkernedText({ text, shrink = false }: { text: string; shrink?: boolean }) {
     return (
         <div style={{ display: 'flex', flexWrap: 'wrap', ...(shrink ? { flexShrink: 1, minWidth: 0 } : {}) }}>
-            {text.split(/\s+/).map((word, w) => (
+            {/* Split on plain spaces only: a no-break space keeps two words on one line ("Virzy\u00a0Guns"). */}
+            {text.split(/ +/).map((word, w) => (
                 <div key={w} style={{ display: 'flex' }}>
                     {[...`${word} `].map((letter, i) => (
                         <span key={i}>{letter}</span>
@@ -112,7 +113,8 @@ export async function GET(request: NextRequest) {
     const params = request.nextUrl.searchParams;
     const title = clip(params.get('title'), 90) || 'Music should leave you better than it found you.';
     const kicker = clip(params.get('kicker'), 40) || 'Virzy Guns';
-    const sub = clip(params.get('sub'), 90);
+    // The name never breaks across two lines.
+    const sub = clip(params.get('sub'), 90).replace(/Virzy Guns/g, 'Virzy\u00a0Guns');
     const [photo, fonts, sharp] = await Promise.all([getPortrait(), getFonts(), getSharp()]);
     // Sized for the 466 px text box: by length (90 characters fit in five lines at 42 px), then
     // smaller if the longest word would not fit on one line (a capital counts 1.3 letters).
