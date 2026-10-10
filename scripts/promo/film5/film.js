@@ -319,7 +319,13 @@ function drawAB(t, frame1 = false, noHead = false) {
         const kick = !frame1 && t >= d.down ? Math.exp(-(t - d.down) / 0.12) : 0;
         g.save();
         // In the replay the lanes slide back in from either side while "Now listen again" is spoken.
-        if (replay && !frame1) g.translate((v === 1 ? -1 : 1) * 700 * (1 - E.out(seg(t, SC.replay + 0.05, SC.replay + 0.6))), 0);
+        if (replay && !frame1) {
+            const kIn = E.outBack(seg(t, SC.replay + 0.05 + (v - 1) * 0.08, SC.replay + 0.5 + (v - 1) * 0.08));
+            g.globalAlpha *= clamp(kIn);
+            g.translate(540, lane.y);
+            g.scale(lerp(0.85, 1, kIn), lerp(0.85, 1, kIn));
+            g.translate(-540, -lane.y);
+        }
         g.translate(540, lane.y);
         g.scale(1 + 0.025 * kick, 1 + 0.025 * kick);
         g.translate(-540, -lane.y);
@@ -383,12 +389,12 @@ function drawAB(t, frame1 = false, noHead = false) {
     const tAns = frame1 ? 1e9 : wto('hook', 'two', 0.05) + 0.4;
     if (!replay && !noHead) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
-        label(g, 'same samples · matched loudness', 540, 1288, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
+        label(g, 'same samples · matched loudness', 540, 1288, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) * (id === 'notch' ? 1 - popIn(t, wto('hook', 'hole', 0.35), 0.2) : 1) });
         const kA = popIn(t, tAns, 0.3) * (1 - out);
-        if (kA > 0) pill(g, `measured: kick ${fmt(D.claims[4].db)} dB more prominent in 2`, 540, 1280, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
+        if (kA > 0) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 34, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
         const kR = id === 'notch' ? popIn(t, wto('hook', 'hole', 0.35), 0.3) * (1 - out) : 0;
-        if (kR > 0) label(g, "1 is the lesson's build: riser peaking into the drop", 540, 568, { size: 34, weight: 600, color: FOG, align: 'center', alpha: kR, family: BODY });
+        if (kR > 0) label(g, "1 is the lesson's build: riser peaking into the drop", 540, 1290, { size: 36, weight: 700, color: FOG, align: 'center', alpha: kR, family: BODY });
     }
     // The notch, labelled once.
     if (zIn > 0) {
@@ -542,17 +548,25 @@ function drawEarSection(t, k) {
     g.save();
     g.globalAlpha *= k;
     // The fly-in: the ear, then a zoom into its cochlea that opens onto the stage.
-    const zf = E.inOut(seg(t, tLoud - 0.15, tLoud + 0.75));
-    const stageA = seg(t, tLoud + 0.45, tLoud + 0.8);
+    const zf = E.inOut(seg(t, tLoud + 0.15, tLoud + 0.95));
+    const stageA = seg(t, tLoud + 0.6, tLoud + 0.95);
     if (stageA < 1) {
         g.save();
         g.globalAlpha *= 1 - stageA;
         g.translate(XC.x, XC.y);
-        const z = 1 + 5 * zf;
+        const z = 1 + 2.5 * zf;
         g.scale(z, z);
         g.translate(-XC.x, -XC.y);
         earSection(g, XS.x, XS.y, XS.s, { t, glow: zf });
         g.restore();
+        // A navy vignette keeps the zoom inside the film's palette.
+        if (zf > 0) {
+            const vg = g.createRadialGradient(XC.x, XC.y, 120, XC.x, XC.y, 760);
+            vg.addColorStop(0, 'rgba(8,17,42,0)');
+            vg.addColorStop(1, `rgba(8,17,42,${0.9 * zf})`);
+            g.fillStyle = vg;
+            g.fillRect(0, 0, W, H);
+        }
         label(g, 'your ear, cut through', 540, 1060, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: (1 - zf) * popIn(t, SC.fog + 0.1, 0.3), family: BODY });
     }
     if (stageA > 0) {
@@ -639,43 +653,49 @@ function drawEar(t) {
     const tSo = wto('fog', 'number', 0.82) - 0.45;
     // Cross-section until "So in number one", then the measured rows.
     const toRows = E.inOut(seg(t, tSo, tSo + 0.5));
+    // The stage leaves first, then the rows arrive, so the two never overlap.
+    const toOut = seg(t, tSo, tSo + 0.28);
+    const toIn = seg(t, tSo + 0.22, tSo + 0.5);
     if (!fresh) {
         const tThenH = wto('fog', 'then', 0.33);
         if (t < tThenH) headline(t, SC.fog + 0.1, [['A'], ['riser'], ['covers'], ['the'], ['click', P.amber]], 300, { size: 84 });
-        else headline(t, tThenH, [['then'], ['leaves'], ['a'], ['fog', FOG]], 300, { size: 84 });
+        else headline(t, tThenH, [['The'], ['fog', FOG], ['lingers']], 300, { size: 84 });
         const tR = wto('fog', 'riser', 0.05);
         const tC = wto('fog', 'click', 0.2);
         const tH = Math.max(tC + 1.4, wto('fog', 'plays', 0.28));
         const gloss = t >= tR && t < tR + 1.4 ? 'riser = the rising whoosh before a drop' : t >= tC && t < tC + 1.4 ? "click = the kick's sharp first instant" : t >= tH && t < tH + 1.6 ? "hair cells = the ear's sound sensors" : null;
-        label(g, gloss ?? (toRows < 0.5 ? '1 of 3 · your ears · slowed down (model)' : '1 of 3 · your ears · fog shading = model'), 540, 400, { size: 36, weight: 600, color: gloss ? P.ink : P.ink2, align: 'center', family: BODY });
+        label(g, gloss ?? (toRows < 0.5 ? '1 of 3 · your ears · slowed down (model)' : '1 of 3 · your ears · bars measured, fog = model'), 540, 400, { size: 36, weight: 600, color: gloss ? P.ink : P.ink2, align: 'center', family: BODY });
     } else {
-        headline(t, SC.fresh + 0.05, [['Silence'], ['lets'], ['your'], ['ears'], ['recover']], 300, { size: 84 });
+        headline(t, SC.fresh + 0.05, [['Silence'], ['lets'], ['ears'], ['recover']], 300, { size: 84 });
         label(g, '1 of 3 · your ears · nerve response (model)', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     }
-    if (toRows < 1) {
+    if (toOut < 1) {
         g.save();
-        g.translate(540, 820);
-        const z = 1 + 0.12 * toRows;
-        g.scale(z, z);
-        g.translate(-540, -820);
-        drawEarSection(t, 1 - toRows);
+        g.translate(-1080 * E.in(toOut), 0);
+        drawEarSection(t, 1 - toOut);
         g.restore();
     }
-    if (toRows <= 0) {
+    if (toIn <= 0) {
         g.restore();
         return;
     }
     g.save();
-    g.globalAlpha *= toRows;
-    g.translate(540, 820);
-    g.scale(lerp(0.94, 1, toRows), lerp(0.94, 1, toRows));
-    g.translate(-540, -820);
+    g.globalAlpha *= toIn;
+    g.translate(1080 * (1 - E.out(toIn)), 0);
     const S1 = demoBy.S1;
     const S2 = demoBy.S2;
     const tTwo0 = wto('fresh', 'two', 0.1);
     const tClr = wto('fresh', 'cleared', 0.5);
     // In fresh the rows stay drawn and a playhead walks both through the build to the drop.
-    const sweep = fresh ? keys(t, [[tTwo0, EAR.msA], [tClr + 0.4, -1]]) : null;
+    const sweep = null;
+    const tMeet = wto('fresh', 'meet', 0.8);
+    const zR = fresh ? E.inOut(seg(t, tTwo0, tTwo0 + 0.7)) * (1 - E.inOut(seg(t, tMeet - 0.35, tMeet + 0.15))) : 0;
+    if (zR > 0) {
+        const R2 = EAR.rows[1];
+        g.translate(EX(-150), R2.y);
+        g.scale(1 + 0.12 * zR, 1 + 0.12 * zR);
+        g.translate(-EX(-150), -R2.y);
+    }
     const reach = fresh ? EAR.msB : keys(t, [[tSo + 0.2, EAR.msA], [tSo + 1.1, EAR.msB]]);
     const inS = (d) => t >= d.at && t < d.to;
     const tTwo = wto('fresh', 'two', 0.1);
@@ -703,7 +723,7 @@ function drawEar(t) {
         hairCell(g, 170, row.y + 10, fresh ? 1.15 : 1.0, { tired: clamp((1 - sens) / 0.75), burst, wobble: Math.sin(t * 3 + v) * 0.5 });
         fogCloud(g, 170, row.y, 150, 150, fogNow, t, 11 + v);
         g.restore();
-        sensMeter(g, 262, row.y + 10, 160, sens, rA);
+        label(g, 'riser + tails', EAR.x0 - 8, row.y - row.h / 2 + 28, { size: 32, weight: 600, color: P.ink3, family: BODY, alpha: rA });
     });
     label(g, 'hair cell', 170, EAR.rows[1].y + EAR.rows[1].h / 2 + 52, { size: 34, weight: 600, color: P.ink2, align: 'center', family: BODY });
     msAxis(g, EAR.x0, EAR.x1, EAR.msA, EAR.msB, EAR.axisY, [-400, 0, 400]);
@@ -737,7 +757,7 @@ function drawEar(t) {
     g.restore();
     // The measured result, from "buried" to the end of the ear scene.
     const kM = popIn(t, wto('fog', 'buried', 0.95) - 0.05, 0.3);
-    if (kM > 0) pill(g, `measured: click ${fmt(D.claims[2].db)} dB clearer in 2 (2–6 kHz)`, 540, EAR.axisY + 112, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kM * toRows, scale: E.outBack(kM), weight: 800 });
+    if (kM > 0) pill(g, `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, EAR.axisY + 112, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kM * toRows, scale: E.outBack(kM), weight: 800 });
     g.restore();
 }
 
@@ -752,7 +772,7 @@ function drawHand(t) {
     g.globalAlpha = a;
     cam(t, SC.hand, SC.brain);
     headline(t, SC.hand + 0.1, [['The'], ['limiter'], ['is'], ['a'], ['hand']], 300, { size: 84 });
-    label(g, '2 of 3 · the limiter · its own gain, measured', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
+    label(g, t < SC.hand + 2.2 ? 'limiter = automatic volume control' : '2 of 3 · the limiter · its own gain, measured', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     const tHand = wto('hand', 'hand', 0.17);
     const tRiser = wto('hand', 'riser', 0.38);
     // Slowed down from -700 ms to the kick on "down", then on to the end of
@@ -810,6 +830,7 @@ function drawHand(t) {
         }
         // Gain reduction, lit on the meter.
         grMeter(g, f.x + 86, HD.top + 28, HD.bottom - 28, gr, FADER_MAX);
+        label(g, 'down', f.x + 86, HD.top + 6, { size: 32, weight: 700, color: P.ink3, align: 'center', family: BODY });
         const cy = lerp(HD.top + 40, HD.bottom - 40, clamp(gr / FADER_MAX));
         shadow(g, f.x + 8, cy + 30, 110, 26, 0.7);
         rr(g, f.x - 64, cy - 32, 128, 64, 14);
@@ -925,13 +946,13 @@ function drawBrain(t) {
         g.strokeStyle = P.ink2;
         g.lineWidth = 4;
         g.beginPath();
-        g.moveTo(xa, BR.dots + 44);
-        g.lineTo(xa, BR.dots + 58);
-        g.lineTo(xb, BR.dots + 58);
-        g.lineTo(xb, BR.dots + 44);
+        g.moveTo(xa, BR.dots + 74);
+        g.lineTo(xa, BR.dots + 88);
+        g.lineTo(xb, BR.dots + 88);
+        g.lineTo(xb, BR.dots + 74);
         g.stroke();
         g.restore();
-        label(g, 'silence', (xa + xb) / 2, BR.dots + 100, { size: 34, weight: 700, color: P.ink2, align: 'center', alpha: ks, family: BODY });
+        label(g, 'silence', (xa + xb) / 2, BR.dots + 130, { size: 34, weight: 700, color: P.ink2, align: 'center', alpha: ks, family: BODY });
     }
     // The ball: hops on the beats, waits on beat 6, then the prediction: a dotted arc to the downbeat.
     const k = E.inOut(seg(t, tPred, tNext + 0.3));
@@ -960,7 +981,7 @@ function drawBrain(t) {
         g.arc(X(7), BR.dots, 34, 0, Math.PI * 2);
         g.stroke();
         g.restore();
-        tag(g, 'next beat', X(4.6), BR.dots - 110, { x: arcPt(0.5).x - 14, y: arcPt(0.5).y + 4 }, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
+        tag(g, 'next beat', X(4.7), BR.dots - 60, { x: arcPt(0.5).x - 14, y: arcPt(0.5).y + 4 }, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
     }
     let ball;
     if (t < tPred) {
@@ -1202,7 +1223,14 @@ function drawHow(t) {
         }
         pill(g, 'fog (model)', ZX(80), y + 30, { size: 32, bg: P.dark, fg: FOG, ring: FOG, weight: 700 });
         label(g, 'gone by 200 ms', ZX(200) + 14, y + 42, { size: 32, weight: 600, color: P.ink2, family: BODY });
-        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, y - 26, { size: 34, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
+        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, y - 26, { size: 34, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, lerp(tAt, tQuarter + 0.4, 0.5), 0.3), family: BODY });
+        // The fog's end, marked, so 234 can be read against 200.
+        g.strokeStyle = FOG;
+        g.lineWidth = 4;
+        g.beginPath();
+        g.moveTo(ZX(200), y - 4);
+        g.lineTo(ZX(200), y + 64);
+        g.stroke();
         const ms = GAP_MS * E.inOut(seg(t, tAt, tQuarter + 0.4));
         rr(g, ZX(0), y + 76, Math.max(1, ZX(ms) - ZX(0)), 36, 10);
         g.fillStyle = P.cyan;
@@ -1281,42 +1309,42 @@ function drawEnd(t) {
     g.clip();
     g.fillStyle = '#050607';
     g.fillRect(x0 + 14, PH.top + 14, sw, sh);
-    if (SHOT) {
-        // The lesson's Listen demo, already in view; Play is tapped on "play".
-        const tTap = wto('cta', 'lesson', 0.3) + 0.05;
-        const playing = t > tTap + 0.12;
-        const frames = Object.keys(SHOT).filter((k) => k.startsWith('play')).sort();
-        const img = playing && frames.length ? SHOT[frames[Math.floor((t - tTap) / 0.35) % frames.length]] : SHOT.idle;
-        const s = sw / img.width;
-        // First the page scrolls from its top down to the demo, then the demo itself.
+    if (SHOT && SHOT.figure) {
+        // The lesson page: its top, a fast scroll, then its gap-length figure, easing in on the
+        // sentence that backs the film ("An 8th-note gap or longer lets it fade completely."),
+        // which is underlined as the voice names the lesson.
         const tS0 = SC.end + 0.1;
-        const tS1 = tTap - 0.1;
+        const tS1 = SC.end + 0.75;
+        const F = SHOT.figure;
+        const fs = sw / F.width;
+        // The sentence sits at 765-880 px of the figure capture (2x), the chart below it.
+        const focusY = 820 * fs;
         if (SHOT.page && t < tS1) {
             const ps = sw / SHOT.page.width;
-            const y = E.inOut(seg(t, tS0, tS1)) * LESSON.scrollTo * 2 * ps;
+            const y = E.in(seg(t, tS0, tS1)) * Math.min(LESSON.scrollTo * 2 * ps, SHOT.page.height * ps - sh);
             g.drawImage(SHOT.page, x0 + 14, PH.top + 14 - y, sw, SHOT.page.height * ps);
         } else {
-            // After the tap, the screen eases in on the demo player.
-            const z = 1 + 0.3 * E.inOut(seg(t, tTap + 0.2, tTap + 1.2));
-            const [bx, by, bw, bh] = LESSON.play;
-            const fx = x0 + 14 + (bx + bw / 2) * 2 * s;
-            const fy = PH.top + 14 + (by + bh) * 2 * s;
+            const z = 1 + 0.7 * E.inOut(seg(t, tS1, tS1 + 1.4));
+            const yOff = clamp(focusY - sh * 0.42, 0, F.height * fs - sh);
+            const fx = x0 + 14 + sw / 2;
+            const fy = PH.top + 14 + focusY - yOff;
             g.save();
             g.translate(fx, fy);
             g.scale(z, z);
             g.translate(-fx, -fy);
-            g.drawImage(img, x0 + 14, PH.top + 14, sw, img.height * s);
+            const arrive = 1 - E.out(seg(t, tS1, tS1 + 0.25));
+            g.drawImage(F, x0 + 14, PH.top + 14 - yOff + arrive * 120, sw, F.height * fs);
+            // The underline under the sentence's two lines.
+            const u = E.inOut(seg(t, wto('cta', 'lesson', 0.3) - 0.1, wto('cta', 'lesson', 0.3) + 0.6));
+            if (u > 0) {
+                g.fillStyle = P.amber;
+                const lx = x0 + 14 + 32 * fs;
+                for (const [ly, lw] of [[810, 715], [876, 620]]) {
+                    const k = clamp(u * 2 - (ly === 876 ? 1 : 0));
+                    if (k > 0) g.fillRect(lx, PH.top + 14 - yOff + ly * fs + 4, lw * fs * k, 4);
+                }
+            }
             g.restore();
-        }
-        const tap = seg(t, tTap, tTap + 0.55);
-        if (tap > 0 && tap < 1) {
-            const [bx, by, bw, bh] = LESSON.play;
-            const cx = x0 + 14 + (bx + bw / 2) * 2 * s;
-            const cy = PH.top + 14 + (by + bh / 2) * 2 * s;
-            g.fillStyle = `rgba(255,255,255,${0.55 * (1 - tap)})`;
-            g.beginPath();
-            g.arc(cx, cy, 20 + 54 * E.out(tap), 0, Math.PI * 2);
-            g.fill();
         }
     }
     g.restore();
@@ -1331,7 +1359,11 @@ function drawEnd(t) {
         const cut = Math.ceil(words.length / 2);
         label(g, words.slice(0, cut).join(' '), 540, 1166, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
         label(g, words.slice(cut).join(' '), 540, 1208, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
-        label(g, '32nd, 16th, 8th or a full beat? Comment.', 540, 1270, { size: 38, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, wto('cta', 'which', 0.7) - 0.1, 0.3) });
+        // The comment poll: the lesson's four gap lengths as chips.
+        ['32nd', '16th', '8th', 'beat'].forEach((c, i) => {
+            const kc = popIn(t, wto('cta', 'which', 0.7) - 0.1 + i * 0.06, 0.25);
+            if (kc > 0) pill(g, c, 540 + (i - 1.5) * 170, 1272, { size: 40, bg: c === '8th' ? P.cyan : P.ink, fg: P.dark, alpha: kc, scale: E.outBack(kc), weight: 800 });
+        });
     }
     g.restore();
 }
@@ -1452,6 +1484,16 @@ function subtitles(t) {
         return;
     }
     const fadeIn = clamp((t - v.at + 0.12) / 0.12);
+    // A soft dark band behind the words, so they read over any picture.
+    {
+        const bandA = fadeIn * (1 - clamp((t - (v.at + v.dur + 0.1)) / 0.2));
+        const bg = g.createLinearGradient(0, SUB.y - 110, 0, SUB.y + 110);
+        bg.addColorStop(0, 'rgba(5,9,19,0)');
+        bg.addColorStop(0.5, `rgba(5,9,19,${0.45 * bandA})`);
+        bg.addColorStop(1, 'rgba(5,9,19,0)');
+        g.fillStyle = bg;
+        g.fillRect(0, SUB.y - 110, W, 220);
+    }
     const fadeOut = 1 - clamp((t - (v.at + v.dur + 0.1)) / 0.2);
     const pages = pagesFor(v);
     let pi = 0;

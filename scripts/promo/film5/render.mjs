@@ -88,7 +88,7 @@ async function lesson() {
     const dir = path.join(OUT, 'lesson');
     const meta = path.join(dir, 'demo.json');
     const cached = fs.existsSync(meta) ? JSON.parse(fs.readFileSync(meta, 'utf8')) : null;
-    if (cached?.page && !args.includes('--refresh-lesson')) return cached;
+    if (cached?.figure && !args.includes('--refresh-lesson')) return cached;
     fs.mkdirSync(dir, { recursive: true });
     const p = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     const url = `https://www.${TIMELINE.lesson.url.replace(/\/blog$/, '')}/blog/${TIMELINE.lesson.slug}`;
@@ -118,9 +118,23 @@ async function lesson() {
     await p.evaluate(() => scrollTo(0, 0));
     await p.waitForTimeout(800);
     await p.screenshot({ path: path.join(dir, 'page.jpg'), type: 'jpeg', quality: 80, fullPage: true, clip: { x: 0, y: 0, width: 390, height: demoTop + 844 } });
+    // The lesson's gap-length figure (32nd, 16th, 8th, beat against the masking window), for the end card.
+    const fig = await p.evaluate(() => {
+        const el = [...document.querySelectorAll('figure')].find((f) => /Gap lengths at 128 BPM/.test(f.textContent));
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { top: Math.round(r.top + scrollY), height: Math.round(r.height) };
+    });
+    let figure = null;
+    if (fig) {
+        await p.evaluate((v) => scrollTo(0, v), Math.max(0, fig.top - 140));
+        await p.waitForTimeout(1200);
+        await p.screenshot({ path: path.join(dir, 'figure.jpg'), type: 'jpeg', quality: 88, fullPage: true, clip: { x: 0, y: fig.top - 300, width: 390, height: fig.height + 440 } });
+        figure = { image: 'figure', height: fig.height + 440 };
+    }
     if (cached && !args.includes('--refresh-lesson')) {
         await p.close();
-        const out = { ...cached, page: { image: 'page', scrollTo: demoTop } };
+        const out = { ...cached, page: { image: 'page', scrollTo: demoTop }, figure, images: [...new Set([...(cached.images ?? []), ...(figure ? ['figure'] : [])])] };
         fs.writeFileSync(meta, JSON.stringify(out, null, 1));
         return out;
     }
@@ -138,13 +152,13 @@ async function lesson() {
         await p.screenshot({ path: path.join(dir, `play${k}.jpg`), type: 'jpeg', quality: 86 });
     }
     await p.close();
-    const out = { url, captured: new Date().toISOString().slice(0, 10), play, images: ['idle', 'play1', 'play2', 'play3'], page: { image: 'page', scrollTo: demoTop } };
+    const out = { url, captured: new Date().toISOString().slice(0, 10), play, images: ['idle', 'play1', 'play2', 'play3', ...(figure ? ['figure'] : [])], page: { image: 'page', scrollTo: demoTop }, figure };
     fs.writeFileSync(meta, JSON.stringify(out, null, 1));
     return out;
 }
 const L = await lesson();
 const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
-log(L ? `End card: the Listen demo of ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
+log(L ? `End card: ${L.figure ? "the gap-length figure" : 'the Listen demo'} of ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
