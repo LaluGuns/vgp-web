@@ -132,7 +132,7 @@ export const TIMELINE = {
         { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: "In 2 the riser stops, the after-fog fades in the silence (counted, slowed), and the click lands in the clear on version 2's downbeat, heard alone." },
         { id: 'hand', line: 'hand', dt: -0.25, view: 'hand', teaches: "Your limiter is a hand on a console fader: in 1 it is pulled down as the kick arrives (measured gain reduction on each strip's display)." },
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
-        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track an 8th before the drop, the reverb return too; a loud sound fogs hearing for up to 200 ms (model) and an 8th at 128 BPM (234.4 ms) outlasts it." },
+        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track a 16th to an 8th before the drop, the reverb return too; a loud sound fogs hearing for up to 200 ms (model) and an 8th at 128 BPM (234.4 ms) outlasts it." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
         { id: 'end', line: 'cta', dt: -0.2, view: 'end', teaches: 'Where the lesson is, and who made it.' },
     ],

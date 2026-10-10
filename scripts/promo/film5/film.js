@@ -420,10 +420,21 @@ function drawAB(t, frame1 = false, noHead = false) {
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
         if (id === 'notch') {
-            const items = [['ears', 'ears'], ['limiter', 'limiter'], ['brain', 'brain']];
-            items.forEach(([w, cue], i) => {
-                const kI = popIn(t, wto('hook', cue, 0) - 0.05, 0.25) * (1 - out);
-                if (kI > 0) pill(g, w, 540 + (i - 1) * 250, 1560, { size: 44, bg: P.ink, fg: P.dark, alpha: kI, scale: E.outBack(kI), weight: 800 });
+            const items = ['ears', 'limiter', 'brain'];
+            items.forEach((w, i) => {
+                const kI = popIn(t, wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
+                if (kI <= 0) return;
+                const x = 540 + (i - 1) * 290;
+                const bob = Math.sin(t * 3 + i) * 4;
+                g.save();
+                g.globalAlpha *= kI;
+                g.translate(x, 1500 + bob);
+                g.scale(E.outBack(kI), E.outBack(kI));
+                if (i === 0) earPinna(g, -8, -10, 0.95);
+                else if (i === 1) robotDome(g, { x: 0, y: 62 }, { s: 0.85, look: { x: 0, y: 300 }, lid: 0 });
+                else brainChar(g, 0, -30, 0.6, { t, joy: 0.3 });
+                g.restore();
+                label(g, w, x, 1640, { size: 44, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: kI });
             });
         }
         label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
@@ -484,7 +495,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `measured, click over the rest: ${sg(D.r1.clickDb)} dB in 1` : `click over the rest: ${sg(D.r1.clickDb)} dB in 1 → ${sg(D.r2.clickDb)} dB in 2`, 540, 560, { size: 34, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        if (kC > 0) pill(g, t < dB.down ? `measured: click buried (${sg(D.r1.clickDb)} dB) in 1` : `measured: buried (${sg(D.r1.clickDb)} dB) → clear (${sg(D.r2.clickDb)} dB)`, 540, 560, { size: 34, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     g.restore();
@@ -658,7 +669,7 @@ function drawEarSection(t, k) {
             msg = 'riser still playing: click covered';
             col = P.ink;
         } else if (e.v === 2 && e.off !== null && t >= e.off && t < e.hit) {
-            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone at 200 ms';
+            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone by 200 ms';
             col = FOG;
         } else if (e.v === 2 && t >= e.hit - 0.05) {
             msg = 'click lands in the clear';
@@ -700,7 +711,7 @@ function drawHand(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.hand, SC.brain);
-    headline(t, SC.hand + 0.1, [['Riser'], ['pulls'], ['the'], ['limiter'], ['down']], 300, { size: 76, stagger: 0 });
+    headline(t, SC.hand + 0.1, [['Riser'], ['triggers'], ['the'], ['limiter']], 300, { size: 80, stagger: 0 });
     if (t < SC.hand + 2.2) label(g, 'limiter = automatic volume control', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(1);
     const tHand = SC.hand + 0.15;
@@ -836,7 +847,7 @@ function drawBrain(t) {
     g.globalAlpha = a;
     cam(t, SC.brain, SC.how);
     headline(t, SC.brain + 0.1, [['Predict'], ['the'], ['next'], ['beat']], 300, { size: 88, stagger: 0 });
-    if (t < SC.brain + 2.2) label(g, 'expectation (Huron 2006)', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
+    if (t < SC.brain + 2.2) label(g, 'expectation (Huron 2006), illustrated', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(2);
     // Eight beats: the last bar and a half of the build, then the downbeat.
     const n = 8;
@@ -987,7 +998,7 @@ function drawBrain(t) {
 
 // ══ How: the cut in a DAW, then the gap at 128 BPM ══
 // The arrangement shows two beats before the drop and one after; the cut is an 8th before it.
-const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 700, x0: 120, x1: 900, msMax: 300 } };
+const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 640, x0: 120, x1: 900, msMax: 300 } };
 const CLIPC = {
     riser: { body: 'rgba(126,131,168,0.55)', head: RISER, wave: 'rgba(200,203,226,0.75)', text: P.ink },
     drums: { body: 'rgba(248,250,252,0.16)', head: 'rgba(248,250,252,0.55)', wave: 'rgba(248,250,252,0.7)', text: P.dark },
@@ -1001,7 +1012,7 @@ function drawHow(t) {
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
     headline(t, SC.how + 0.1, [['Cut'], ['an'], ['8th'], ['early']], 300, { size: 92, stagger: 0 });
-    label(g, `just under ¼ second at ${TL.bpm} BPM`, 540, 400, { size: 40, weight: 700, color: P.ink2, align: 'center' });
+    label(g, `a 16th helps · an 8th is just under ¼ s at ${TL.bpm} BPM`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'eighth', 0.12);
     const tAt = wto('how', 'at', 0.32);
@@ -1171,12 +1182,12 @@ function drawHow(t) {
         // A playhead sweeps the after-fog from 0 to 200 ms while "a fifth of a second" is spoken.
         const sweep = 200 * E.inOut(seg(t, tFogs + 0.1, tFifth + 0.4));
         for (let m = 0; m < 200; m += 2) {
-            g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.8 : 0.06) * fogWeight(m)})`;
-            g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 110);
+            g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.8 : 0.14) * fogWeight(m)})`;
+            g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 150);
         }
         if (sweep > 0 && sweep < 200) {
             g.fillStyle = P.ink;
-            g.fillRect(ZX(sweep) - 2, y - 8, 4, 126);
+            g.fillRect(ZX(sweep) - 2, y - 8, 4, 166);
         }
         // The fog's end line lights when the sweep reaches it.
         const kEnd = sweep >= 199 ? 1 : 0.25;
@@ -1186,15 +1197,15 @@ function drawHow(t) {
         g.lineWidth = 5;
         g.beginPath();
         g.moveTo(ZX(200), y - 10);
-        g.lineTo(ZX(200), y + 120);
+        g.lineTo(ZX(200), y + 160);
         g.stroke();
         g.restore();
-        label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
+        label(g, 'gone by 200 ms', ZX(200) + 16, y + 92, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const ms = keys(t, [[Math.max(tFifth + 0.4, tQuarter - 2.2), 0], [tQuarter, 200], [tQuarter + 0.3, GAP_MS]]);
-        label(g, 'gap', Z.x0, y + 200, { size: 40, weight: 800, color: P.cyan, family: BODY });
-        rr(g, ZX(0), y + 224, Math.max(1, ZX(ms) - ZX(0)), 80, 16);
+        label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
+        rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
         g.fill();
         // A ring as the gap passes the fog's end.
@@ -1204,21 +1215,26 @@ function drawHow(t) {
             g.strokeStyle = `rgba(${CYAN_RGB},${0.9 * (1 - u)})`;
             g.lineWidth = 8 - 5 * u;
             g.beginPath();
-            g.arc(ZX(200), y + 264, 40 + 140 * E.out(u), 0, Math.PI * 2);
+            g.arc(ZX(200), y + 329, 40 + 160 * E.out(u), 0, Math.PI * 2);
             g.stroke();
         }
-        label(g, `${Math.round(ms)} ms`, Math.min(ZX(ms) + 18, Z.x1 - 150), y + 278, { size: 52, weight: 800, color: ms > 240 ? P.dark : P.cyan });
+        label(g, `${Math.round(ms)} ms`, ZX(ms) + 20, y + 347, { size: 56, weight: 800, color: ms > 240 ? P.dark : P.cyan });
         // Axis: 0, 100, 200 ms and the 8th.
         g.strokeStyle = P.ink3;
         g.lineWidth = 3;
         g.beginPath();
-        g.moveTo(ZX(0), y + 340);
-        g.lineTo(ZX(Z.msMax), y + 340);
+        g.moveTo(ZX(0), y + 430);
+        g.lineTo(ZX(Z.msMax), y + 430);
         g.stroke();
-        for (const m of [0, 100, 200]) label(g, `${m}`, ZX(m), y + 384, { size: 34, weight: 600, color: P.ink3, align: 'center', family: BODY });
-        label(g, '8th', ZX(GAP_MS), y + 384, { size: 38, weight: 800, color: ms >= GAP_MS - 1 ? P.cyan : P.ink3, align: 'center', family: BODY });
+        for (const m of [0, 100, 200, 300]) label(g, `${m}${m === 300 ? ' ms' : ''}`, ZX(m), y + 474, { size: 34, weight: 600, color: P.ink3, align: m === 300 ? 'right' : 'center', family: BODY });
+        // The note lengths at 128 BPM on their own row, ticked on the axis.
+        for (const [nm, m, on] of [['16th', GAP_MS / 2, ms >= GAP_MS / 2 - 1], ['8th', GAP_MS, ms >= GAP_MS - 1]]) {
+            g.fillStyle = on ? P.cyan : P.ink3;
+            g.fillRect(ZX(m) - 2, y + 416, 4, 28);
+            label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
+        }
         g.restore();
-        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, Z.y + 470, { size: 40, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
+        label(g, 'a 16th helps · an 8th outlasts the fog', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
     }
     g.restore();
 }

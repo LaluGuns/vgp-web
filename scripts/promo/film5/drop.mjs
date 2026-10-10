@@ -263,6 +263,13 @@ const band = (x, lo, hi) => {
 };
 /** The phone check: 200 Hz high-pass, 24 dB per octave. */
 export const phone = (x) => butter(Float32Array.from(x), 'hp', 200, 4);
+/** A stricter small-speaker model: 500 Hz high-pass (24 dB/oct), a +4 dB resonance at 1 kHz, 10 kHz low-pass. */
+export const speakerSmall = (x) => {
+    const y = butter(Float32Array.from(x), 'hp', 500, 4);
+    const r = biquad(Float32Array.from(y), 'bp', 1000, 1);
+    for (let i = 0; i < y.length; i++) y[i] += (10 ** (4 / 20) - 1) * r[i];
+    return butter(y, 'lp', 10000, 2);
+};
 
 /** Loudness of the drop bar (downbeat plus one bar), K-weighted, gated. */
 export const dropLoudness = (x) => loudness(x, PRE, PRE + BAR);
@@ -291,6 +298,7 @@ export function measure() {
             // Claim 2: click band, kick against everything else, first 20 ms.
             clickDb: 10 * Math.log10(energy(band(kick, 2000, 6000), T0, T0 + CLICK) / energy(band(rest, 2000, 6000), T0, T0 + CLICK)),
             clickPhoneDb: 10 * Math.log10(energy(band(phone(kick), 2000, 6000), T0, T0 + CLICK) / energy(band(phone(rest), 2000, 6000), T0, T0 + CLICK)),
+            clickSmallDb: 10 * Math.log10(energy(band(speakerSmall(kick), 2000, 6000), T0, T0 + CLICK) / energy(band(speakerSmall(rest), 2000, 6000), T0, T0 + CLICK)),
             // What the build leaves in the gap (the last 8th before the downbeat), dB under the drop bar.
             gapDb: 10 * Math.log10(energy(kWeight(out).map(Number), T0 - GAP + 0.01, T0)) + 0.691 - dropLoudness(out),
             // The build's last bar against the drop bar, both before the limiter: is the build a fair one?
@@ -308,6 +316,7 @@ export function measure() {
         // Claim 1, as heard: the kick's own level in the output over the click window, full band and phone band.
         res[k].kickDb = lvl(kick);
         res[k].kickPhoneDb = lvl(phone(kick));
+        res[k].kickSmallDb = lvl(speakerSmall(kick));
         // Claim 4: the first kick (K-weighted, first 50 ms) over the drop bar's loudness, at matched loudness.
         const kk = kWeight(kick);
         res[k].kickOverBar = -0.691 + 10 * Math.log10(energy(kk, T0, T0 + 0.05)) - res[k].dropLufs;
@@ -323,6 +332,9 @@ export function measure() {
             survive1: d('kickPhoneDb') / d('kickDb'),
             clickPhone: d('clickPhoneDb'),
             survive2: d('clickPhoneDb') / d('clickDb'),
+            // The stricter small-speaker model, reported alongside (not part of the pass rule set by the brief).
+            kickSmall: d('kickSmallDb'),
+            clickSmall: d('clickSmallDb'),
         },
         4: { what: 'First kick (K-weighted, 50 ms) over the drop bar loudness, at matched loudness, v2 minus v1', db: d('kickOverBar') },
     };
