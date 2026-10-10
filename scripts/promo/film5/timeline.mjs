@@ -26,18 +26,18 @@ const dur = (id) => {
 const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
-const HOOK = { pre: 1.5, post: 2.5 };
-const REPLAY = { pre: 1.5, post: 2 };
+const HOOK = { pre: 1.5, post: 2 };
+const REPLAY = { pre: 1, post: 1.5 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
-const STING = { pre: 0.75, post: 0.5 };
+const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
-const LINE_GAP = 0.25;
+const LINE_GAP = 0.12;
 const vo = [];
 const guessAt = len(HOOK) * 2;
 // "One or two? Pick one." is spoken over the countdown, which lasts at least three beats.
 vo.push({ id: 'guess', at: Math.round((guessAt + 0.05) * 1000) / 1000 });
-const GUESS = Math.max(3 * BEAT, dur('guess') + 0.2);
+const GUESS = Math.max(3 * BEAT, dur('guess') + 0.1);
 let t = guessAt + GUESS + 0.1;
 const stings = [];
 // A sting: one version's downbeat alone, its downbeat on the grid, after a line ends at t.
@@ -45,29 +45,29 @@ const stings = [];
 const sting = (id, v, hold) => {
     const down = onGrid(t + 0.1 + STING.pre * BEAT);
     stings.push({ id, v, at: down - STING.pre * BEAT, ...STING });
-    t = down + STING.post * BEAT + 0.2 + hold;
+    t = down + STING.post * BEAT + 0.1 + hold;
 };
 for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
     // "So in number one, the click is buried." then version 1's downbeat; "your ears hit it fresh" then version 2's.
-    if (id === 'fog') sting('S1', 1, 0.4);
-    if (id === 'fresh') sting('S2', 2, 0.9);
+    if (id === 'fog') sting('S1', 1, 0.1);
+    if (id === 'fresh') sting('S2', 2, 0.35);
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
 vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) / 1000 });
 const replayEnd = replayAt + 2 * len(REPLAY);
 // The CTA waits for version 2's second kick to ring out.
-vo.push({ id: 'cta', at: Math.round((replayEnd + 0.45) * 1000) / 1000 });
-const button = replayEnd + 0.45 + dur('cta') + 0.15;
+vo.push({ id: 'cta', at: Math.round((replayEnd + 0.3) * 1000) / 1000 });
+const button = replayEnd + 0.3 + dur('cta') + 0.15;
 
 export const TIMELINE = {
     fps: 60,
     width: 1080,
     height: 1920,
     // A whole number of frames, so picture and sound end together.
-    duration: Math.round((button + 0.75) * 60) / 60,
+    duration: Math.round((button + 0.6) * 60) / 60,
     bpm: BPM,
     beat: BEAT,
     bar: BAR,

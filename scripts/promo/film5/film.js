@@ -393,7 +393,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         g.lineTo(xb, yb + 16);
         g.stroke();
         g.restore();
-        tag(g, `${Math.round(GAP_MS)} ms: less than ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 36 });
+        tag(g, `${Math.round(GAP_MS)} ms: under ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 36 });
     }
     // Replay: what to listen for, on each first kick.
     if (replay && !frame1) {
@@ -553,7 +553,7 @@ function drawEar(t) {
     g.globalAlpha = a;
     cam(t, SC.fog, SC.hand);
     const fresh = t >= SC.fresh;
-    const tSo = wto('fog', 'so', 0.77) - 0.15;
+    const tSo = wto('fog', 'number', 0.82) - 0.45;
     // Cross-section until "So in number one", then the measured rows.
     const toRows = E.inOut(seg(t, tSo, tSo + 0.5));
     if (!fresh) {
@@ -591,7 +591,7 @@ function drawEar(t) {
     const tTwo = wto('fresh', 'two', 0.1);
     const r1 = fresh ? (t >= tTwo ? 0.45 : 1) : inS(S1) || t >= S1.to ? 1 : 1;
     const r2 = fresh ? 1 : inS(S1) ? 0.45 : 1;
-    const resp = fresh ? popIn(t, S2.down, 0.15) : 0;
+    const resp = fresh ? popIn(t, Math.min(S2.down, wto('fresh', 'fresh', 0.9) - 0.1), 0.25) : 0;
     EAR.rows.forEach((row, i) => {
         const v = i + 1;
         const S = v === 1 ? S1 : S2;
