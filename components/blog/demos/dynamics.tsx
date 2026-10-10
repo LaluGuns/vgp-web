@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, kWeighted, midi, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
-import { SourceChoice, loopGain, renderLoop, startFeed, stereoPeak, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
+import { MATCH_RUN_IN, SourceChoice, loopGain, matchPart, renderLoop, startFeed, stereoPeak, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import { Announce, LiveMeter, PlayButton, Segmented, Slider, useAnalysis, usePlayer } from './ui';
 
 // A 16-step boom-bap bar with ghost notes, so dynamics have something to grab.
@@ -197,13 +197,13 @@ const realDry = new WeakMap<RealLoop, Promise<{ peak: number; power: number }>>(
 /** Settings already measured on this page, by source and setting (ui.tsx useAnalysis). */
 const compResults = new Map<string, CompAnalysis>();
 
-/** The real loop's own peak and loudness as it goes in, once per loop. */
+/** The real loop's own peak and loudness as it goes in, over the bars a setting is measured on (realmix.tsx matchPart), once per loop. */
 function realDryStats(loop: RealLoop): Promise<{ peak: number; power: number }> {
     let job = realDry.get(loop);
     if (!job) {
         job = (async () => {
             const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1 }, (_, src, [tap]) => src.connect(tap));
-            const [from, to] = r.span();
+            const [from, to] = r.span(0, matchPart(loop));
             return { peak: await stereoPeak(r.x[0], from, to), power: await stereoPower(r.k[0], from, to) };
         })();
         job.catch(() => realDry.delete(loop));
@@ -212,10 +212,10 @@ function realDryStats(loop: RealLoop): Promise<{ peak: number; power: number }> 
     return job;
 }
 
-/** The same measurement on one whole pass of the real loop, as it repeats. */
+/** The same measurement on the real loop, over the two bars that stand in for the whole of it (realmix.tsx matchPart). */
 async function analyseCompReal(loop: RealLoop, params: CompParams): Promise<CompAnalysis> {
     const dry = await realDryStats(loop);
-    const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1 }, (ctx, src, [tap]) => {
+    const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1, part: matchPart(loop), runIn: MATCH_RUN_IN }, (ctx, src, [tap]) => {
         const undo = ctx.createGain();
         undo.gain.value = undoMakeup(params.threshold, params.ratio);
         src.connect(compressor(ctx, params)).connect(undo).connect(tap);
@@ -226,8 +226,9 @@ async function analyseCompReal(loop: RealLoop, params: CompParams): Promise<Comp
 
 /**
  * Drum loop through a compressor. The compressed path is level-matched
- * to the dry path, so switching compares shape, not loudness. A setting
- * goes live together with its matching gain, once it has been measured.
+ * to the dry path, so switching compares shape, not loudness. A new setting
+ * goes live at once, with the matching gain the last one had; its own
+ * matching gain follows as soon as it has been measured, a moment later.
  */
 export function CompressorDemo() {
     const [mode, setMode] = useState<Mode>('on');
@@ -254,8 +255,10 @@ export function CompressorDemo() {
         master.connect(out);
         const dry = ctx.createGain();
         const wet = ctx.createGain();
-        const comp = compressor(ctx, analysis?.params ?? PRESETS.punch);
+        const settings = { threshold, ratio, attack, release };
+        const comp = compressor(ctx, settings);
         const undo = ctx.createGain();
+        undo.gain.value = undoMakeup(threshold, ratio);
         const makeup = ctx.createGain();
         bus.connect(dry).connect(master);
         bus.connect(comp).connect(undo).connect(makeup).connect(wet).connect(master);
@@ -275,7 +278,7 @@ export function CompressorDemo() {
         );
         const n = { comp, undo, makeup, dry, wet, ctx, feed };
         nodes.current = n;
-        if (analysis) applyComp(n, analysis, false);
+        if (analysis) applyMatch(n, analysis, false);
         return () => {
             feed.stop();
             nodes.current = null;
@@ -283,11 +286,18 @@ export function CompressorDemo() {
         };
     }, !loading);
 
+    // A new setting is heard at once, with the matching gain the last one had.
+    useEffect(() => {
+        const n = nodes.current;
+        if (n) applyParams(n, { threshold, ratio, attack, release });
+    }, [threshold, ratio, attack, release]);
+
+    // Its own matching gain follows once it has been measured, and a new source with its first measurement.
     useEffect(() => {
         const n = nodes.current;
         if (!n || !analysis) return;
         n.feed.use(analysis.real);
-        applyComp(n, analysis, true);
+        applyMatch(n, analysis, true);
     }, [analysis]);
 
     const applyMode = (next: Mode) => {
@@ -364,16 +374,28 @@ export function CompressorDemo() {
     );
 }
 
-function applyComp(n: { comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; ctx: AudioContext }, a: CompAnalysis, smooth: boolean) {
+interface CompNodes {
+    comp: DynamicsCompressorNode;
+    undo: GainNode;
+    makeup: GainNode;
+    ctx: AudioContext;
+}
+
+function applyParams(n: CompNodes, p: CompParams) {
     const t = n.ctx.currentTime;
-    const set = (param: AudioParam, value: number) => (smooth ? param.setTargetAtTime(value, t, 0.01) : param.setValueAtTime(value, t));
-    set(n.comp.threshold, a.params.threshold);
-    set(n.comp.ratio, a.params.ratio);
-    set(n.comp.attack, a.params.attack / 1000);
-    set(n.comp.release, a.params.release / 1000);
-    set(n.undo.gain, undoMakeup(a.params.threshold, a.params.ratio));
+    const set = (param: AudioParam, value: number) => param.setTargetAtTime(value, t, 0.01);
+    set(n.comp.threshold, p.threshold);
+    set(n.comp.ratio, p.ratio);
+    set(n.comp.attack, p.attack / 1000);
+    set(n.comp.release, p.release / 1000);
+    set(n.undo.gain, undoMakeup(p.threshold, p.ratio));
+}
+
+function applyMatch(n: CompNodes, a: CompAnalysis, smooth: boolean) {
+    const t = n.ctx.currentTime;
     // More makeup waits for the compressor: its extra gain reduction builds over the attack time,
     // and makeup that arrived first would push the next hits past the demo's ceiling for a moment.
     if (smooth && a.match > n.makeup.gain.value) n.makeup.gain.setTargetAtTime(a.match, t, Math.max(0.01, a.params.attack / 1000));
-    else set(n.makeup.gain, a.match);
+    else if (smooth) n.makeup.gain.setTargetAtTime(a.match, t, 0.01);
+    else n.makeup.gain.setValueAtTime(a.match, t);
 }
