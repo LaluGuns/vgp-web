@@ -681,3 +681,48 @@ function crowd(g, t, jump) {
     });
     g.restore();
 }
+
+/** A clean outer ear in profile, facing left; the canal's opening is at (10, 14) in its units. */
+function earPinna(g, x, y, s) {
+    g.save();
+    g.translate(x, y);
+    g.scale(s, s);
+    shadow(g, 10, 112, 70, 12, 0.6);
+    const sk = g.createLinearGradient(-60, -100, 90, 100);
+    sk.addColorStop(0, SKIN.hi);
+    sk.addColorStop(1, SKIN.lo);
+    g.fillStyle = sk;
+    g.beginPath();
+    g.moveTo(10, -95);
+    g.bezierCurveTo(85, -105, 105, -10, 55, 35);
+    g.bezierCurveTo(35, 55, 45, 95, 5, 100);
+    g.bezierCurveTo(-35, 104, -48, 70, -35, 48);
+    g.bezierCurveTo(-70, 15, -68, -85, 10, -95);
+    g.closePath();
+    g.fill();
+    // Rim light along the helix.
+    g.strokeStyle = 'rgba(255,255,255,0.35)';
+    g.lineWidth = 5;
+    g.lineCap = 'round';
+    g.beginPath();
+    g.moveTo(-40, -50);
+    g.bezierCurveTo(-30, -85, 40, -100, 70, -60);
+    g.stroke();
+    // The inner fold and the bowl around the canal.
+    g.strokeStyle = SKIN.fold;
+    g.lineWidth = 10;
+    g.beginPath();
+    g.moveTo(-12, -58);
+    g.bezierCurveTo(28, -75, 58, -28, 30, 6);
+    g.bezierCurveTo(14, 22, 18, 42, 4, 56);
+    g.stroke();
+    g.fillStyle = 'rgba(194,119,101,0.55)';
+    g.beginPath();
+    g.ellipse(8, 12, 24, 28, 0.2, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = SKIN.deeper;
+    g.beginPath();
+    g.ellipse(10, 14, 11, 13, 0.2, 0, Math.PI * 2);
+    g.fill();
+    g.restore();
+}
