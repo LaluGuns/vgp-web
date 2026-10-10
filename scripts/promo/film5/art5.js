@@ -486,7 +486,7 @@ function grMeter(g, x, top, bottom, gr, max = 8) {
         const y = top + i * h;
         rr(g, x - 13, y + 2, 26, h - 4, 4);
         const on = (i + 0.5) / 2 <= gr;
-        g.fillStyle = on ? P.cyan : 'rgba(125,211,252,0.1)';
+        g.fillStyle = on ? P.ink : 'rgba(248,250,252,0.1)';
         g.fill();
     }
 }

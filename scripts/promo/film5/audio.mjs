@@ -71,6 +71,44 @@ function decimate(x, from, to, rate) {
 
 // Effect peak level in dB relative to the narration's loudness.
 const FX_DB = { pop: 4, tick: 0, blink: -2, whoosh: 3, slide: 0, grab: 4, spring: 3, kick: 2 };
+// Recorded one-shots replace the synthesized pop, tick, grab and whoosh
+// (assets/samples/sfx, not in git). `db` is the RMS of the hit's loudest
+// 50 ms against the narration's loudness; `rate` repitches; `len` trims with a
+// short fade-out; `skip` starts later in the file.
+const SFX_REAL = {
+    pop: { file: 'Cymatics - Secret Percussion Shot - Bubble Pop.wav', db: -10, rate: 1, len: 0.3 },
+    tick: { file: 'Cymatics - Secret Percussion Shot - Sweet Click.wav', db: -16, rate: 1.26, len: 0.12 },
+    grab: { file: 'Cymatics - Secret Percussion Shot - Sweet Click.wav', db: -12, rate: 0.75, len: 0.2 },
+    whoosh: { file: 'Cymatics - FX Essentials Downlifter 21 - G.wav', db: -10, rate: 1, len: 0.55, fadeIn: 0.12 },
+};
+const realCache = {};
+function realSfx(kind) {
+    const spec = SFX_REAL[kind];
+    if (!spec) return null;
+    const f = path.join(ASSETS, 'samples', 'sfx', spec.file);
+    if (!fs.existsSync(f)) return null;
+    realCache[spec.file] ??= readAudio(f);
+    const src = realCache[spec.file];
+    const len = Math.min(src.L.length, Math.round(spec.len * RATE));
+    const fin = Math.round((spec.fadeIn ?? 0.002) * RATE);
+    const fout = Math.round(0.04 * RATE);
+    const cut = (x) => {
+        const y = x.slice(0, len);
+        for (let k = 0; k < len; k++) y[k] *= Math.min(1, k / Math.max(1, fin), (len - k) / fout);
+        return y;
+    };
+    const L = cut(src.L);
+    const R = cut(src.R);
+    // Loudest 50 ms, RMS over both channels.
+    const w = Math.round(0.05 * RATE);
+    let best = 0;
+    for (let i = 0; i + w <= len; i += Math.round(w / 4)) {
+        let e = 0;
+        for (let k = i; k < i + w; k++) e += L[k] * L[k] + R[k] * R[k];
+        best = Math.max(best, e / (2 * w));
+    }
+    return { L, R, rmsDb: 10 * Math.log10(Math.max(best, 1e-12)), spec };
+}
 
 export function voPlacements() {
     return TIMELINE.vo.map((p) => {
@@ -251,7 +289,8 @@ function adaptModel(levelDb) {
 
 const round = (a, k = 10000) => Array.from(a, (v) => Math.round(v * k) / k);
 
-export function renderAudio() {
+/** The film's mix. `stem: 'fx'` returns the effects alone, for checking them. */
+export function renderAudio({ stem = null } = {}) {
     const S = samples();
     const L = new Float32Array(n);
     const R = new Float32Array(n);
@@ -405,6 +444,13 @@ export function renderAudio() {
             mixIn(fxR, S.kick.R, s.at, undb(voLufs - 2) / 0.9, semis(3));
             return;
         }
+        const rec = realSfx(s.kind);
+        if (rec) {
+            const gain = undb(voLufs + rec.spec.db - rec.rmsDb) * (s.level ?? 1);
+            mixIn(fxL, rec.L, s.at, gain, rec.spec.rate);
+            mixIn(fxR, rec.R, s.at, gain, rec.spec.rate);
+            return;
+        }
         const buf = sfx(s.kind, 100 + k, s.level ?? 1);
         const pk = buf.reduce((p, x) => Math.max(p, Math.abs(x)), 0) / (s.level ?? 1);
         mixIn(fx, buf, s.at, undb(voLufs + FX_DB[s.kind]) / Math.max(pk, 1e-6));
@@ -412,8 +458,9 @@ export function renderAudio() {
 
     // ── Sum ──
     for (let i = 0; i < n; i++) {
-        L[i] = vo[i] + dL[i] + bL[i] + fx[i] + fxL[i];
-        R[i] = vo[i] + dR[i] + bR[i] + fx[i] + fxR[i];
+        const keep = stem === 'fx' ? 0 : 1;
+        L[i] = keep * (vo[i] + dL[i] + bL[i]) + fx[i] + fxL[i];
+        R[i] = keep * (vo[i] + dR[i] + bR[i]) + fx[i] + fxR[i];
     }
 
     // ── What the picture draws, per version, around its downbeat ──

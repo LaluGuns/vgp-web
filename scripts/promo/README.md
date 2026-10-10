@@ -104,11 +104,15 @@ hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 A 59 second, 1080 x 1920 short for TikTok and Reels on lesson 030: the same
 128 BPM drop twice, version 1 with the build running into the downbeat and
 version 2 with everything cut one 8th note early, then why (forward masking,
-adaptation, the limiter, expectation) and how. Narrated by the founder.
+adaptation, the limiter, expectation) and how. The narration in the repo's
+cuts is a Piper TTS guide track until the ElevenLabs take exists.
 
 Assets (ignored by git) in `scripts/promo/assets/`:
 
 - `assets/samples/`: the Cymatics files named in `film5/drop.mjs` under `FILES`.
+- `assets/samples/sfx/`: the recorded one-shots named in `film5/audio.mjs`
+  under `SFX_REAL` (Cymatics Bubble Pop, Sweet Click, FX Essentials
+  Downlifter 21). Without them the synthesized effects are used.
 - `assets/vo/narration.wav`: the narration. `film5/vo-cues.json` records where
   each line sits in it; for a new take run
   `python film5/cue_vo.py assets/vo/narration.wav film5/script.txt film5/vo-cues.json`.

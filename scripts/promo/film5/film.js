@@ -47,8 +47,10 @@ const sceneEnd = (id) => {
 };
 const popIn = (t, t0, d = 0.3) => clamp((t - t0) / d);
 /** A slow push-in over a stretch of the film, about the middle of the picture. */
-function cam(t, s0, s1, amount = 0.035) {
+function cam(t, s0, s1, amount = 0.035, slideIn = true) {
     const z = 1 + amount * E.inOut(seg(t, s0, s1));
+    // Scenes push in from the right and out to the left, so a change reads as a move, not a dissolve.
+    g.translate((slideIn ? (1 - E.out(seg(t, s0, s0 + 0.4))) * 240 : 0) - E.in(seg(t, s1 - 0.3, s1)) * 240, 0);
     g.translate(540, 820);
     g.scale(z, z);
     g.translate(-540, -820);
@@ -272,7 +274,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     g.globalAlpha *= a;
     if (!frame1 && !noHead) {
         if (replay) cam(t, SC.replay, SC.end);
-        else if (t >= SC.notch) cam(t, SC.notch, SC.fog, 0.03);
+        else if (t >= SC.notch) cam(t, SC.notch, SC.fog, 0.03, false);
     }
     const [dA, dB] = replay ? [demoBy.A2, demoBy.B2] : [demoBy.A, demoBy.B];
     // The replay uses the hook's window, so it is the same picture as the opening.
@@ -284,7 +286,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     // Headline: the question; "1 or 2?" while the viewer picks; the answer on "two".
     if (noHead) {
         // Cover: the headline is drawn by drawCover.
-    } else if (replay) headline(t, SC.replay + 0.05, [['Now'], ['listen'], ['again']], 330, { size: 96 });
+    } else if (replay) headline(t, SC.replay + 0.05, [['Listen'], ['for'], ['the'], ['click', P.amber]], 330, { size: 92 });
     else {
         const s0 = frame1 ? 1 : lerp(1.18, 1, E.outBack(seg(t, 0, 0.25)));
         g.save();
@@ -331,7 +333,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         // silhouette, so the eye cannot answer before the ear; the real
         // waveform lights up under the playhead.
         const upto = frame1 ? -1e9 : t >= d.to ? 1e9 : abProgress(d, t);
-        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.3 * dim });
+        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
         else if (upto < msB) {
             silhouette(g, box, upto, a0, b0);
             if (upto < msA) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
@@ -377,7 +379,17 @@ function drawAB(t, frame1 = false, noHead = false) {
         }
     }
     // Both versions are the same samples at matched loudness; say so while the hook plays.
-    if (!replay && !noHead) label(g, 'same samples · matched loudness', 540, 1288, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: frame1 ? 1 : 1 - seg(t, SC.fog - 0.3, SC.fog - 0.05) });
+    // Both versions are the same samples at matched loudness; after the answer, the measurement behind it.
+    const tAns = frame1 ? 1e9 : wto('hook', 'two', 0.05) + 0.4;
+    if (!replay && !noHead) {
+        const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
+        label(g, 'same samples · matched loudness', 540, 1288, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
+        const kA = popIn(t, tAns, 0.3) * (1 - out);
+        if (kA > 0) pill(g, `measured: kick ${fmt(D.claims[4].db)} dB more prominent in 2`, 540, 1280, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
+        // Version 1 is the lesson's own build: the riser peaks into the downbeat.
+        const kR = id === 'notch' ? popIn(t, wto('hook', 'hole', 0.35), 0.3) * (1 - out) : 0;
+        if (kR > 0) label(g, "1 is the lesson's build: riser peaking into the drop", 540, 568, { size: 34, weight: 600, color: FOG, align: 'center', alpha: kR, family: BODY });
+    }
     // The notch, labelled once.
     if (zIn > 0) {
         const lane = AB.lanes[1];
@@ -504,69 +516,115 @@ function earRow(v, row, { reach, alpha, fogOn, live = false, head = null }) {
     g.restore();
 }
 
-/** The cross-section part of the fog line: riser in, fog builds, click covered; riser stops, fog lingers up to 200 ms. */
+/** Cochlea stage: the camera flies from the ear into the cochlea, where hair cells meet the riser, the click and the fog. */
+const STAGE = { x0: 90, x1: 930, y0: 470, y1: 1240, mem: 1110, cells: [250, 420, 590, 760], cy: 1010, s: 1.9 };
+const BUBBLES = (() => {
+    const r = rand(31);
+    return Array.from({ length: 22 }, () => ({ x: r(), y: r(), r: 4 + r() * 10, ph: r() * 6.28 }));
+})();
 function drawEarSection(t, k) {
     if (k <= 0) return;
     const tLoud = wto('fog', 'loud', 0.02);
     const tClick = wto('fog', 'click', 0.2);
-    const tDulls = wto('fog', 'dulls', 0.36);
-    const tStops = wto('fog', 'stops', 0.69);
-    // The riser: rising from "loud" until "dulls", then stopped.
-    const riser = (tt) => (tt < tLoud || tt > tDulls ? 0 : lerp(0.35, 1, seg(tt, tLoud, tDulls)));
-    // Gauge: 0 to 200 ms after the riser stops, slowed down to last until "stops".
-    const g0 = tDulls + 0.25;
-    const g1 = tStops + 0.25;
+    const tThen = wto('fog', 'then', 0.33);
+    const tStops = wto('fog', 'stops', 0.7);
+    // The riser: rising from "loud" until "then", then stopped.
+    const riser = (tt) => (tt < tLoud || tt > tThen ? 0 : lerp(0.4, 1, seg(tt, tLoud, tThen)));
+    // Clock: 0 to 200 ms after the riser stops, slowed down to last until "stops".
+    const g0 = tThen + 0.2;
+    const g1 = tStops + 0.1;
     const ms = 200 * seg(t, g0, g1);
-    const lvStop = riser(tDulls - 1e-3);
-    const fog = t < tDulls ? 0.3 + 0.7 * riser(t) * seg(t, tLoud, tLoud + 0.8) : lvStop * fogWeight(t < g0 ? 0 : ms);
-    // The click's spark: from the left at "click", into the cochlea 0.6 s later.
-    const tArr = tClick + 0.6;
+    const lvStop = riser(tThen - 1e-3);
+    const fog = t < tThen ? 0.25 + 0.75 * riser(t) * seg(t, tLoud, tLoud + 1.2) : lvStop * fogWeight(t < g0 ? 0 : ms);
+    // The click's spark reaches the hair cells 0.55 s after "click", inside the riser.
+    const tArr = tClick + 0.55;
     const covered = clamp(0.3 + 0.7 * riser(tArr));
     g.save();
     g.globalAlpha *= k;
-    // Sound arriving: the riser as arcs travelling into the canal.
-    soundArcs(g, -60, XS.x - 340 * XS.s, XS.y, t, (age) => riser(t - age), { color: '126,131,168', speed: 520, h: 64 });
-    const vib = riser(t) * Math.sin(t * 60) + (t > tArr && t < tArr + 0.3 ? 0.4 * Math.sin((t - tArr) * 90) * (1 - covered) : 0);
-    earSection(g, XS.x, XS.y, XS.s, { vib, t });
-    fogCloud(g, XC.x, XC.y, 230, 170, fog, t, 5);
-    // The spark along the canal.
-    if (t >= tClick && t < tArr + 0.25) {
-        const u = seg(t, tClick, tArr);
-        const x = lerp(20, XC.x, E.inOut(u));
-        const y = u < 0.62 ? XS.y : lerp(XS.y, XC.y, seg(u, 0.62, 1));
-        const a = u < 1 ? lerp(1, 1 - 0.75 * covered, seg(u, 0.55, 1)) : (1 - covered * 0.75) * (1 - seg(t, tArr, tArr + 0.25));
-        sparkle(g, x, y, 26, a);
-    }
-    tag(g, 'riser', 150, XS.y - 150, { x: 120, y: XS.y - 40 }, { a: popIn(t, tLoud + 0.1) * (1 - seg(t, tDulls, tDulls + 0.3)), bg: RISER, fg: P.ink, size: 36 });
-    tag(g, 'click', 130, XS.y + 150, { x: 110, y: XS.y + 30 }, { a: popIn(t, tClick, 0.2) * (1 - seg(t, tArr + 0.6, tArr + 0.9)), bg: P.amber, fg: P.dark, size: 36 });
-    // Hair cells in the cochlea, magnified.
-    const kM = popIn(t, tLoud + 0.5, 0.4);
-    magnifier(g, MAG.x, MAG.y, MAG.r, XC, () => {
-        const yb = MAG.y + 80;
-        rr(g, MAG.x - MAG.r, yb, MAG.r * 2, 90, 0);
-        g.fillStyle = '#e88a95';
-        g.fill();
-        const hit = t > tArr ? Math.exp(-(t - tArr) / 0.25) * (1 - covered) : 0;
-        for (let i = 0; i < 4; i++) {
-            const cx = MAG.x - 96 + i * 64;
-            hairCell(g, cx, yb - 38, 0.78, { tired: clamp(fog * 1.1), burst: hit, wobble: Math.sin(t * 3 + i * 1.3) * (1 - fog) });
-        }
-        if (t >= tArr - 0.15 && t < tArr + 0.3) sparkle(g, MAG.x, lerp(MAG.y - MAG.r, MAG.y - 30, seg(t, tArr - 0.15, tArr)), 22, (1 - 0.75 * covered) * (1 - seg(t, tArr, tArr + 0.3)));
-        fogCloud(g, MAG.x, MAG.y + 10, 260, 220, fog, t, 9);
-    }, { alpha: kM });
-    label(g, 'hair cells', MAG.x, MAG.y + MAG.r + 46, { size: 34, weight: 700, color: P.ink2, align: 'center', alpha: kM, family: BODY });
-    // While it plays: covered.
-    const kC = popIn(t, tArr + 0.05, 0.3) * (1 - seg(t, tDulls - 0.3, tDulls));
-    tag(g, 'click covered', 290, 1060, { x: XC.x - 40, y: XC.y + 40 }, { a: kC, bg: P.dark, fg: P.amber, ring: P.amber, size: 36 });
-    // After it stops: the fog lingers, timed on a stopwatch (slowed down).
-    const kG = popIn(t, tDulls, 0.3);
-    if (kG > 0) {
+    // The fly-in: the ear, then a zoom into its cochlea that opens onto the stage.
+    const zf = E.inOut(seg(t, tLoud - 0.15, tLoud + 0.75));
+    const stageA = seg(t, tLoud + 0.45, tLoud + 0.8);
+    if (stageA < 1) {
         g.save();
-        g.globalAlpha *= kG;
-        stopwatch(g, 300, 1120, 64, ms / 200, FOG);
+        g.globalAlpha *= 1 - stageA;
+        g.translate(XC.x, XC.y);
+        const z = 1 + 5 * zf;
+        g.scale(z, z);
+        g.translate(-XC.x, -XC.y);
+        earSection(g, XS.x, XS.y, XS.s, { t, glow: zf });
         g.restore();
-        label(g, `${Math.round(ms)} ms`, 300, 1240, { size: 44, weight: 800, color: P.cyan, align: 'center', alpha: kG });
-        label(g, ms < 200 ? 'riser stopped · fog lingers' : 'fog gone at 200 ms', 300, 1010, { size: 34, weight: 700, color: FOG, align: 'center', alpha: kG, family: BODY });
+        label(g, 'your ear, cut through', 540, 1060, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: (1 - zf) * popIn(t, SC.fog + 0.1, 0.3), family: BODY });
+    }
+    if (stageA > 0) {
+        const S = STAGE;
+        g.save();
+        g.globalAlpha *= stageA;
+        const sc = lerp(1.15, 1, E.out(stageA));
+        g.translate(540, 855);
+        g.scale(sc, sc);
+        g.translate(-540, -855);
+        // The inside of the cochlea: warm fluid, drifting bubbles, the membrane the hair cells stand on.
+        shadow(g, 510, S.y1 + 14, 420, 26, 0.7);
+        rr(g, S.x0, S.y0, S.x1 - S.x0, S.y1 - S.y0, 60);
+        const bg = g.createRadialGradient(500, 760, 60, 500, 860, 620);
+        bg.addColorStop(0, '#5a2a46');
+        bg.addColorStop(1, '#2a1226');
+        g.fillStyle = bg;
+        g.fill();
+        g.save();
+        rr(g, S.x0, S.y0, S.x1 - S.x0, S.y1 - S.y0, 60);
+        g.clip();
+        for (const b of BUBBLES) {
+            const bx = S.x0 + b.x * (S.x1 - S.x0) + Math.sin(t * 0.8 + b.ph) * 12;
+            const by = S.y0 + ((b.y * (S.y1 - S.y0) - t * 18 + 4000) % (S.y1 - S.y0));
+            g.strokeStyle = 'rgba(255,200,220,0.16)';
+            g.lineWidth = 3;
+            g.beginPath();
+            g.arc(bx, by, b.r, 0, Math.PI * 2);
+            g.stroke();
+        }
+        g.fillStyle = '#e88a95';
+        g.fillRect(S.x0, S.mem, S.x1 - S.x0, S.y1 - S.mem);
+        g.fillStyle = 'rgba(255,255,255,0.18)';
+        g.fillRect(S.x0, S.mem, S.x1 - S.x0, 8);
+        // The riser arriving as waves from the left.
+        soundArcs(g, S.x0 - 40, S.x1, 880, t, (age) => riser(t - age), { color: '167,171,201', speed: 560, h: 120, gap: 46 });
+        // Hair cells: tired in the fog, wide awake when it has gone.
+        const hit = t > tArr ? Math.exp(-(t - tArr) / 0.3) * (1 - covered) : 0;
+        const awake = t > g1 ? Math.exp(-(t - g1) / 0.4) : 0;
+        S.cells.forEach((cx, i) => {
+            hairCell(g, cx, S.cy, S.s, { tired: clamp(fog * 1.05), burst: Math.max(hit, awake * 0.6), wobble: Math.sin(t * 2.6 + i * 1.4) * (1 - fog) + riser(t) * Math.sin(t * 30 + i) * 0.6 });
+        });
+        // The click: a spark that dims to almost nothing inside the riser and its fog.
+        if (t >= tClick && t < tArr + 0.35) {
+            const u = seg(t, tClick, tArr);
+            const a = u < 1 ? lerp(1, 1 - 0.8 * covered, seg(u, 0.5, 1)) : (1 - 0.8 * covered) * (1 - seg(t, tArr, tArr + 0.35));
+            sparkle(g, lerp(S.x0 + 20, 505, E.inOut(u)), lerp(880, 840, u), 34, a);
+        }
+        // The fog itself: thick, violet-grey, over the cells.
+        fogCloud(g, 505, 940, 820, 400, fog * 0.6, t, 5);
+        fogCloud(g, 505, 1000, 700, 260, fog * 0.35, t + 3, 17);
+        g.restore();
+        label(g, 'inside the cochlea · hair cells', S.x0 + 40, S.y0 + 56, { size: 34, weight: 700, color: 'rgba(255,220,230,0.8)', family: BODY });
+        // After it stops: the clock.
+        const kG = popIn(t, tThen + 0.05, 0.3);
+        if (kG > 0) {
+            g.save();
+            g.globalAlpha *= kG;
+            rr(g, 650, S.y0 + 24, 260, 200, 30);
+            g.fillStyle = 'rgba(6,16,29,0.75)';
+            g.fill();
+            stopwatch(g, 722, S.y0 + 128, 50, ms / 200, FOG);
+            label(g, `${Math.round(ms)}`, 848, S.y0 + 130, { size: 64, weight: 800, color: P.cyan, align: 'center', base: 'middle' });
+            label(g, 'ms', 848, S.y0 + 188, { size: 34, weight: 700, color: P.ink2, align: 'center', family: BODY });
+            g.restore();
+        }
+        g.restore();
+        // What is happening, in two beats.
+        const kC = popIn(t, tArr - 0.05, 0.25) * (1 - seg(t, tThen - 0.1, tThen + 0.1));
+        if (kC > 0) pill(g, 'while it plays: click covered', 510, S.mem + 66, { size: 38, bg: P.dark, fg: P.amber, ring: P.amber, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        const kF = popIn(t, tThen + 0.1, 0.25);
+        if (kF > 0) pill(g, ms < 200 ? 'after it stops: fog lingers' : 'fog gone at 200 ms', 510, S.mem + 66, { size: 38, bg: P.dark, fg: FOG, ring: FOG, alpha: kF, scale: E.outBack(kF), weight: 800 });
     }
     g.restore();
 }
@@ -582,7 +640,9 @@ function drawEar(t) {
     // Cross-section until "So in number one", then the measured rows.
     const toRows = E.inOut(seg(t, tSo, tSo + 0.5));
     if (!fresh) {
-        headline(t, SC.fog + 0.1, [['A'], ['riser'], ['leaves'], ['a'], ['fog', FOG]], 300, { size: 84 });
+        const tThenH = wto('fog', 'then', 0.33);
+        if (t < tThenH) headline(t, SC.fog + 0.1, [['A'], ['riser'], ['covers'], ['the'], ['click', P.amber]], 300, { size: 84 });
+        else headline(t, tThenH, [['then'], ['leaves'], ['a'], ['fog', FOG]], 300, { size: 84 });
         const tR = wto('fog', 'riser', 0.05);
         const tC = wto('fog', 'click', 0.2);
         const tH = Math.max(tC + 1.4, wto('fog', 'plays', 0.28));
@@ -621,7 +681,7 @@ function drawEar(t) {
     const tTwo = wto('fresh', 'two', 0.1);
     const r1 = fresh ? (t >= tTwo ? 0.45 : 1) : inS(S1) || t >= S1.to ? 1 : 1;
     const r2 = fresh ? 1 : inS(S1) ? 0.45 : 1;
-    const resp = fresh ? popIn(t, Math.min(S2.down, wto('fresh', 'hit', 0.8) - 0.05), 0.25) : 0;
+    const resp = fresh ? popIn(t, Math.min(S2.down, wto('fresh', 'meet', 0.8) - 0.05), 0.25) : 0;
     EAR.rows.forEach((row, i) => {
         const v = i + 1;
         const S = v === 1 ? S1 : S2;
@@ -668,16 +728,16 @@ function drawEar(t) {
             const base = row.y + row.h / 2;
             if (h > 1) {
                 rr(g, EX(0) + 16, base - h, 30, h, 8);
-                g.fillStyle = P.cyan;
+                g.fillStyle = P.ink;
                 g.fill();
             }
-            label(g, v === 2 ? 'full response' : 'small response', EX(0) + 60, row.y - row.h / 2 + 30, { size: 36, weight: 800, color: P.cyan, alpha: resp });
+            label(g, v === 2 ? 'full response' : 'small response', EX(0) + 60, row.y - row.h / 2 + 30, { size: 36, weight: 800, color: P.ink, alpha: resp });
         });
     }
     g.restore();
     // The measured result, from "buried" to the end of the ear scene.
     const kM = popIn(t, wto('fog', 'buried', 0.95) - 0.05, 0.3);
-    if (kM > 0) pill(g, `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, EAR.axisY + 112, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kM * toRows, scale: E.outBack(kM), weight: 800 });
+    if (kM > 0) pill(g, `measured: click ${fmt(D.claims[2].db)} dB clearer in 2 (2–6 kHz)`, 540, EAR.axisY + 112, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kM * toRows, scale: E.outBack(kM), weight: 800 });
     g.restore();
 }
 
@@ -780,7 +840,7 @@ function drawHand(t) {
         g.fillStyle = '#070d1a';
         g.fill();
         const shown = kR > 0 ? (f.v === 1 ? D.r1.gr : D.r2.gr) : gr;
-        label(g, shown < 0.05 ? 'GR 0.0 dB' : `GR −${fmt(shown)} dB`, f.x, dk.y0 + dk.h - 34, { size: 36, weight: 800, color: kR > 0 ? P.ink : P.cyan, align: 'center' });
+        label(g, `down ${fmt(Math.max(0, shown))} dB`, f.x, dk.y0 + dk.h - 34, { size: 36, weight: 800, color: kR > 0 ? P.ink : P.ink2, align: 'center' });
         if (kR > 0) {
             g.save();
             g.globalAlpha *= kR;
@@ -964,7 +1024,7 @@ function drawBrain(t) {
         g.restore();
     }
     const kp = popIn(t, tArr - 0.05, 0.3);
-    if (kp > 0) pill(g, 'the arrival is the payoff', 540, BR.dots + 170, { size: 42, bg: P.ink, fg: P.dark, alpha: kp, scale: E.outBack(kp), weight: 800 });
+    void kp;
     g.restore();
 }
 
@@ -1125,7 +1185,7 @@ function drawHow(t) {
         g.lineTo(BX(0) + 4, yUp);
         g.lineTo(BX(bB), yUp);
         g.stroke();
-        tag(g, 'reverb muted too', BX(-1.3), y + HW.laneH + 52, { x: (xc + BX(0)) / 2, y: yDn }, { a: popIn(t, tTails - 0.1, 0.3), bg: P.ink, fg: P.dark, size: 34 });
+        tag(g, 'reverb muted too', BX(-1.3), y + HW.laneH + 52, { x: (xc + BX(0)) / 2, y: yDn }, { a: popIn(t, tTails - 0.1, 0.3) * (1 - popIn(t, tAt - 0.1, 0.3)), bg: P.ink, fg: P.dark, size: 34 });
     }
     g.restore();
     // At 128 BPM: the gap grows through the note values to the 8th, against the fog (model).
@@ -1140,8 +1200,9 @@ function drawHow(t) {
             g.fillStyle = `rgba(${FOG_RGB},${0.55 * fogWeight(ms)})`;
             g.fillRect(ZX(ms), y, ZX(2) - ZX(0) + 0.5, 60);
         }
-        label(g, 'fog (model)', ZX(60), y + 42, { size: 32, weight: 700, color: P.dark, align: 'center', family: BODY });
+        pill(g, 'fog (model)', ZX(80), y + 30, { size: 32, bg: P.dark, fg: FOG, ring: FOG, weight: 700 });
         label(g, 'gone by 200 ms', ZX(200) + 14, y + 42, { size: 32, weight: 600, color: P.ink2, family: BODY });
+        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, y - 26, { size: 34, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
         const ms = GAP_MS * E.inOut(seg(t, tAt, tQuarter + 0.4));
         rr(g, ZX(0), y + 76, Math.max(1, ZX(ms) - ZX(0)), 36, 10);
         g.fillStyle = P.cyan;
@@ -1381,8 +1442,11 @@ function subtitles(t) {
             const a = clamp((t - d.at) / 0.15) * (1 - clamp((t - d.to + 0.15) / 0.15));
             g.save();
             g.globalAlpha = a;
-            speaker(g, 420, 1394, 1.1, 0.5 + 0.5 * Math.sin(t * 18));
-            label(g, 'Listen', 470, 1412, { size: 54, weight: 700, color: P.ink });
+            // The version now playing, as a big numbered disc that pulses on its downbeat.
+            const pulse = t >= d.down ? Math.exp(-(t - d.down) / 0.15) : 0;
+            badgeNum(g, d.v, 400, 1394, 46 * (1 + 0.2 * pulse));
+            speaker(g, 486, 1394, 1.1, 0.5 + 0.5 * Math.sin(t * 18));
+            label(g, 'Listen', 530, 1412, { size: 54, weight: 700, color: P.ink });
             g.restore();
         }
         return;

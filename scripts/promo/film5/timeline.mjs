@@ -27,12 +27,12 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
 const HOOK = { pre: 2, post: 2 };
-const REPLAY = { pre: 1, post: 1.5 };
+const REPLAY = { pre: 1.5, post: 2 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
-const LINE_GAP = 0.12;
+const LINE_GAP = 0.08;
 const vo = [];
 const guessAt = len(HOOK) * 2;
 // "One or two? Pick one." is spoken over the countdown, which lasts at least three beats.
@@ -51,8 +51,8 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
     // "So in number one, the click is buried." then version 1's downbeat; "your ears hit it fresh" then version 2's.
-    if (id === 'fog') sting('S1', 1, 0.1);
-    if (id === 'fresh') sting('S2', 2, 0.35);
+    if (id === 'fog') sting('S1', 1, 0);
+    if (id === 'fresh') sting('S2', 2, 0.2);
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -67,7 +67,7 @@ export const TIMELINE = {
     width: 1080,
     height: 1920,
     // A whole number of frames, so picture and sound end together.
-    duration: Math.round((button + 0.6) * 60) / 60,
+    duration: Math.round((button + 0.45) * 60) / 60,
     bpm: BPM,
     beat: BEAT,
     bar: BAR,
