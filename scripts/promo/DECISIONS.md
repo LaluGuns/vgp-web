@@ -56,4 +56,96 @@ One line per call, newest last.
   - The release scene's title has no value, so the viewer only tracks 2.5 s and 90 ms.
   - Rule cards mark 30 ms and 90 ms with a check in neutral colours; amber stays the crack.
   - Subtitles break into balanced lines and pages ("is free on the Virzy Guns blog" never splits the name); demos show a speaker and "Listen".
-- Cleanup, 2026-10-10, at the founder's request: the 32 s film without narration (`film/`) is removed because it is not used; its compressor gain computer moved to `shared/compressor.mjs`. Shorts live under `shorts/`, named by topic instead of by number, because "film 3" counted the first film's two versions and confused everyone: `film3/` is now `shorts/attack-release/` (`npm run short:attack-release`, output in `out/shorts/attack-release/`). Film 4 and film 5 move to `shorts/bass-on-phones/` and `shorts/gap-before-drop/` when their sessions finish and their branches are merged. Lines above that name `film/` or `film3/` describe those folders as they were.
+- Film 4 topic: the missing fundamental (lesson 036, "Small speakers need bass harmonics"), chosen by the founder; the pipeline is film 3's, copied to `film4/`.
+- Bass notes from the Nightfall loop's harmony, measured (spectral peaks per bar): bar 1 A flat maj9 (G# C D# G A#), bar 2 A flat m6/9 (G# B D# F A#), bar 3 B flat 6sus2, bar 4 B flat 9#11. The bed is a two-bar vamp of bars 1-2, restarted on bar 1 at each demo, so every demo plays the same notes; the bass is G#1 (51.9 Hz) under bar 1 and F1 (43.7 Hz, the chord's sixth; the bar reads as Fm7b5) under bar 2, with G1 (49.0 Hz) walking between: three notes, all under 60 Hz, locked to the kick.
+- Saturation: a biased tanh (drive 6, bias 0.8) with the bias's DC removed, then a 10 Hz DC blocker and the lesson's 120 Hz high-pass (24 dB/oct), blended at 0.5 under the clean sub. The first try (drive 8, bias 0.35) left the even harmonics 20 dB under the odd ones; at 0.8 the 2nd, 3rd and 4th harmonics are all clearly there, as the script says.
+- The whole music bus (bass, drums, keys) plays through the phone filter, labelled "phone speaker (simulated)"; the voice and the effects do not. Viewers are on phones anyway, so the clean sub disappears for them too.
+- Ladder plots instead of a spectrum curve: one rung per harmonic on a log frequency axis, low at the bottom, outline = level in the track, fill = what the phone plays, dark zone below 200 Hz. Scale -40 to +6 dB re the clean sub's fundamental in every ladder, so the hook, phone, big and ghost ladders compare.
+- The "typical note" is a plucked string (Karplus-Strong) at G#1, plucked at 13% of its length so its harmonics fall like a real pluck's; noise excitation gave a flat, random stack.
+- Narration: one eleven_v4 generation, four takes. Word error against the script 1.5, 1.5, 2.0, 1.5% (only recogniser artefacts: "bassline", "verzi"); all four read fast, 190-198 words a minute over the take (233-237 while speaking), against the 160-180 target. Take 1 chosen: 10.7 semitones of pitch range (take 2: 9.2), "bass line" heard as two words, same speaking rate as the slowest take. The pace is slowed in the film by the gaps between lines (60 s of speech placed over 76 s) rather than by time-stretching the voice. No generation was repeated.
+- Hook: the film opens mid-groove (the vamp's second bar), clean sub through the phone under "There's a bass line in this beat. Your phone can't play it." The saturated version lands on the downbeat at 7.0 s, right after "Now you can hear it", with a crash, and plays two bars alone.
+- Mid-film the bass runs under the narration from "A clean sub" to the end of "never played", ducked 9 dB while the voice speaks; the ladders and scope draw the bass before that ducking (the track's bass), so a rung's length never jumps with the voice.
+- The scope shows what the phone plays (the phone-filtered bass) over 80 ms, triggered on whole periods of the note so it stands still; brackets sit at the period measured by autocorrelation, and the amber dashed sine is the missing fundamental at the sub's own phase.
+- Air scene: equal loudness drawn as equal squeeze of the air (particle displacement and wavelength both scale with 1/f), with the cone travel arrows at 1x, 4x and 16x; motion slowed down 100 times.
+- Mix: drums dip 8 dB under the voice and the voice limiter's ceiling sits 9.5 dB over its loudness, so speech never reaches the master clipper's knee (now at 0.9 of the ceiling).
+- Film 4, after an independent review of the stills:
+  - The ladder's FFT window is gated to the sounding note (its 85 ms window never reaches the note before or after), which removes false 2x and 3x rungs that note edges smeared into the clean sub.
+  - The big ladder shows its level scale (-40 dB to 0 dB, "level →"); every ladder runs -40 to +10 dB, and the sub knob turns up 10 dB (the outline grows, the phone's window stays dark).
+  - Rung names sit at each rung's end on a dark chip and fade with their rung; the stack is titled "A plucked bass note", so its source is named.
+  - "So why can you hear it?" arrives on the payoff's downbeat, not before; the amber curve in the scope has its own legend ("the note you hear") on the frame it appears; in the ghost ladder the heard note replaces the sub's outline.
+  - The top-right planet moved off the titles; panels end at x 950; the phone scene got a title; sound rings never cross the phone; the screen's wave saturates with the bass; the cone's surround stretches with it; dim subtitle words raised for contrast.
+  - Kept: the end card is film 3's, unchanged, and its demo is the lesson's only one ("Hear saturation add size, not volume"); the rule card keeps the lesson's own words ("clean, mono", "parallel saturation, high-pass 120 Hz").
+- Film 4 v2, after the founder asked for every aspect at 9 and for understanding over density, without a new generation:
+  - The same take, 10% slower with Rubber Band (formants kept, crisp transients): 177 words a minute over the take, word error unchanged at 1.5%. Cued one sentence per line, so every idea gets a breath; the film runs 88 s.
+  - Hook: "Now you can hear it" comes before the saturated bass, which lands on 5.0 s instead of 7.0 s; "Same notes. One change." follows over the groove.
+  - Ladder: six rungs at most, bigger bars, the axis named in words (high notes, low notes, and only the 200 Hz line in hertz), "longer bar = louder" instead of a dB scale.
+  - The robot reacts: a question mark while the bass is missing, a hop on every note it can hear, and on "puts the note back" the amber note forms in a thought bubble and flies into the ladder's dark zone as the heard note.
+  - A slow 2% push-in on every scene; in the scope a highlight steps from one repeat to the next; the phone's speaker says "trying 50 Hz"; the rule cards carry tiny ladders (the sub alone, the sub with harmonics).
+- Film 4 v3, after a second scored review (7-8 on every aspect):
+  - Hook in teaching order: "Same notes." and "One change." (cued separately from the same take) land before the switch at 5.0 s; "Now you can hear it" plays over the saturated bass, and a "harmonics" pill marks what the phone plays. The amber bar is labelled "the note" from the first note.
+  - Each narration line ends 0.3 s after its last word, so a cue's tail of silence no longer ducks the music.
+  - Through the scope and the ghost the bass holds G#1 (the vamp's root under both bars), so the period and the note on screen stay 19.3 ms and 51.9 Hz.
+  - Window beat: the note's bar is struck through and tagged "not played", and the phone's window lights its edge on "harmonics". The dark zone darkens gradually below 200 Hz, which is what a 24 dB/oct filter does; rungs shorter than 12 px are left out.
+  - Rule: the second card draws the lesson's parallel chain (sub straight through in amber; saturate, then high-pass 120 Hz, in cyan; added). The first card starts centred and moves up for it.
+  - Replay: when the saturated bass returns, the hook's ladder shows the heard note (dashed amber) with its legend.
+  - Phone speaker: an amber arrow "50 Hz needs this" against a small bracket "it can move this". The air scene's first speaker starts centred; the scope's robot starts centred and steps aside for the thought bubble; the limit scene shows both speakers from the start, the club sub shaking the floor on "feel".
+- Film 4 v4, after a third scored review (9 accuracy, 8.5 hook, 7.5 clarity and craft):
+  - The recipe gets time and sound: the rule scene holds 4 s longer and draws the parallel chain in four on-screen steps (copy, saturate, high-pass 120 Hz, add), while the clean sub plays through the phone and the saturated copy comes in on step 4. No new narration.
+  - The held G#1 starts at the window beat, whose names move to the harmonics the phone plays (4x, 5x, 6x); 2x and 3x, which the filter mostly removes, leave.
+  - Hook: the payoff plays two bars alone (5-9 s) instead of three; the note sounding at 0 s is kept, so the amber bar is there from frame one; the grille lights only for the bass; the hook ladder is a third wider with five rungs.
+  - Replay captions: "Clean sub. Where's the bass?", then "+ harmonics. There it is."
+  - The phone scene clears, then its ladder grows into the next scene's ladder: one transition with movement.
+  - Axis in words "higher pitch / lower pitch"; "Sub: keep it clean" replaces "Sub: clean, mono" (mono was never explained); a travel too short for arrowheads is drawn with end ticks.
+- Film 4 v5, after a scored review of the delivered MP4 (9 accuracy, 8.5 hook, 8 clarity, craft and pacing, 7 polish):
+  - The cover drew the hook at 9.3 s, after the hook had moved to end at 9.2 s, and came out blank; it now draws the payoff at 8.0 s.
+  - "your brain" names the listener on "Your brain"; narrow ladders say the phone "fades out" under 200 Hz and the big ladder adds "phone plays less" there, matching the half-played 2x and 3x bars.
+  - The recipe shows its result: a live ladder of what the phone plays under the chain, dark with the clean sub, lit when step 4 blends the copy in ("Blend it in with the clean sub" replaces "Add it under the clean sub").
+  - The bass starts at 19 s so "Down here" has a bar to point at; the limit scene runs 2 s longer so "hear the melody" stays up; the film is 90 s.
+  - Smaller: hook rungs spaced apart, the "phone speaker (simulated)" pill inset from the edge, the 1x cone travel drawn as a dash to scale, the window highlight takes in the 4x bar, the replay caption says "+ saturation" like its badge.
+- Film 4 v6, after a fifth scored review (9 accuracy, 8.5 hook, clarity, pacing and polish, 8 craft):
+  - The recipe holds 4 s longer, finished chain and lit ladder on screen, the saturated copy playing; the film is 94 s.
+  - The robot is tagged "you" in the hook (and "your brain" later); the "harmonics" pill lands on the payoff's downbeat; the big ladder calls its amber bar "1x the note", as the small ladders call it "the note".
+  - "Down here" pulses the phone ladder's dark zone; "it can move this" is a short solid bar with the cone's position as a dot; the zoom lens arrives with the scene.
+  - The air scene shows the squeezed air as soft bands, one per wavelength, equally bright in every row: the same loudness.
+  - Small ladders show four rungs so the top ones never fuse; the rule card's frame waits under the first card; arcs no longer touch the phone; subtitles leave in 60 ms.
+  - The plucked note sits 12 dB under the voice (its two plucks overlap) and has an 8 ms onset; speech stays clear of the clipper.
+- Film 4 v7, after a sixth scored review (9 accuracy, 8.5 hook, clarity, craft and pacing, 8 polish):
+  - The ladder strikes the amber bar with "not played" when the window lands; the phone's window border flashes once.
+  - On "the harmonics repeat", thin cyan lines carry the played rungs up into the wave, which bridges the ladder and the scope.
+  - The hook's window shows a "?" while the clean sub plays; the recipe gets its own 6 s demo after the diagram's last step, with a live ladder; the film runs 92 s.
+- Film 4 v8, after a seventh, stricter review (8 accuracy, 7.5 hook, 7 clarity and pacing, 6.5 craft and polish):
+  - Every small ladder zooms to 30-420 Hz and shows rungs up to 6x, so the harmonics the phone plays are visible whenever the narration relies on them; the 200 Hz line never runs through a bar.
+  - On "plays the harmonics" the played parts of the rungs glow; the zone under 200 Hz is "phone fades out" everywhere.
+  - The air scene draws cone travel to scale but small enough that the 50 Hz cone stays in its basket; travel spans have end bars, labels sit at their ends.
+  - Turning the sub up widens the "needs this" arrow while the cone stays at its stops ("still only this").
+  - The recipe builds as a list, one step every 1.8 s, "for small speakers" once under the title; step 3 reads "drop the note" (a 120 Hz high-pass also trims 2x); the recipe demo runs 8 s and the film 94 s.
+  - The hook's legend waits for the harmonics; views slide as they cross instead of dipping to an empty frame; dead air trimmed after "won't save it" and "the melody".
+- Film 4 v9, after the eighth review (8.5 accuracy, 8 hook, 7.5 clarity, pacing and polish, 7 craft):
+  - Cuts dip for about 0.1 s instead of 0.4 s, and views slide as they cross; the rule's first card starts centred and rises for the second instead of an empty placeholder.
+  - During the silent recipe every bass note sends a dot down the clean path, and a cyan one down the copy as far as the steps have built it.
+  - The air scene's motor sits further back, so the 50 Hz cone never reaches it; the phone screen no longer names the track.
+  - "Heard, never played" sits on the ghost rung's row; the amber note and thought bubble wait for "back"; the 200 Hz line clears any bar near it in every ladder.
+  - Recipe demo 7 s, holds trimmed after "won't save it" and "the melody": 92 s.
+- Film 4 v10, after the ninth review (8.5 accuracy, 8 hook and clarity, 7.5 craft and pacing, 8 polish):
+  - The recipe's pulses pass under the boxes, and each keeps the path built when its note started; steps every 1.5 s; the recipe demo is 5 s; the film runs 90 s.
+  - The hook's opening drops the player's progress bar and holds the 200 Hz labels for the payoff; the first rule card arrives with its scene.
+  - The amber note and its legend appear together on "back"; "your brain" sits above the robot, clear of its rings; the 1x travel span is drawn at least 16 px wide (true travel 6 px).
+- Film 4 v11, after the tenth review (8.5 accuracy, hook, clarity and polish, 7.5 craft, 8 pacing):
+  - Two match cuts: the big ladder shrinks into the scope's panel; the club sub flies into the rule card's icon (the next view forms around it).
+  - The replay plays one bar clean and one bar saturated (the hook plays two of each); the film runs 86 s.
+  - The scope's pill says the rate plainly ("51.9x a second = the note"), the 2x rung is tagged "too low" during "just fine", the recipe's paths are named "clean" and "harmonics".
+  - The hook shows "200 Hz" from frame one and the zone words from the payoff; the replay's ladder stays empty until its clean bar starts.
+  - The pinned phone cone strains at its stop as the sub is turned up; the robot's eye widens on "never".
+- Film 4 v12, after the eleventh review (9 accuracy and clarity, 8.5 hook, pacing and polish, 8 craft):
+  - Hook to air is a camera move: everything else clears and the phone grows until its grille sits where the first speaker appears.
+  - The match cuts own the cut frame, so no frame is empty between the outgoing and incoming element.
+  - The phone sends white rings on every drum hit from the first kick (it plays the drums, not the sub); no harmonics in the first 0.2 s, where the FFT window only sees the onset.
+  - The robot jumps and its eye opens wide on "never"; the pinned phone cone shakes harder as the sub goes up.
+  - Recipe steps every 1.2 s, the replay starts at 73 s; the film runs 84 s.
+- Film 4 v13, after the twelfth review (9 accuracy, clarity, pacing and polish, 8.5 hook and craft):
+  - In the hook, each bass note the phone cannot play shakes the phone with no ring leaving it, and the note's bar flares in the dark zone.
+  - The zoom into the grille runs 0.6 s and lands where the air scene's first speaker appears.
+  - The heard note: the bubble's sine flattens into a bar, which travels under the ladder and up into the note's place (it crosses no rung); the robot does not blink while surprised.
+  - Each tick of the sub knob slams the phone cone into its stop: a hard shake, and the stops flash.
+- Film 4 v14, after the thirteenth review (9 accuracy, hook, clarity, pacing and polish, 8.5 craft): the hook's zoom ends with the grille on the first speaker's place, and the zoomed phone dissolves over that speaker (already there at the cut) for 0.15 s; the phone's shake on unplayed notes is 9 px.
+- Cleanup, 2026-10-10, at the founder's request: the 32 s film without narration (`film/`) is removed because it is not used; its compressor gain computer moved to `shared/compressor.mjs`. Shorts live under `shorts/`, named by topic instead of by number, because "film 3" counted the first film's two versions and confused everyone: `film3/` is now `shorts/attack-release/` (`npm run short:attack-release`, output in `out/shorts/attack-release/`). Film 4 (finished at 1c76498, merged) is now `shorts/bass-on-phones/` (`npm run short:bass-on-phones`); film 5 moves to `shorts/gap-before-drop/` when its session finishes and its branch is merged. Lines above that name `film/`, `film3/` or `film4/` describe those folders as they were.

@@ -44,7 +44,7 @@ when their branches are merged:
 | Folder | Lesson | Status |
 |---|---|---|
 | `shorts/attack-release/` | 057, compression attack and release | done |
-| `shorts/bass-on-phones/` | 036, small speakers need bass harmonics | on branch `claude/new-session-0fjac3` as `film4/` |
+| `shorts/bass-on-phones/` | 036, small speakers need bass harmonics | done |
 | `shorts/gap-before-drop/` | 030, a gap before the drop | on branch `claude/new-session-aa3y0x` as `film5/` |
 
 ### Short: attack and release
@@ -61,10 +61,11 @@ out of git. Put them in `scripts/promo/assets/` (ignored):
 - `assets/samples/`: the Cymatics files named in `shorts/attack-release/timeline.mjs`
   under `samples` (Diamonds Snare 4 C#, Kick 15 E, Closed Hihat 5 and 11,
   Crash 1, KEYS Dusty (C), Gems Vol 10 Nightfall 120 BPM A# Min Keys).
-- `assets/vo/narration.mp3`: the narration take. `shorts/attack-release/vo-cues.json` holds
+- `assets/vo/attack-release/narration.mp3`: the narration take. Each short keeps
+  its narration in its own folder under `assets/vo/`. `shorts/attack-release/vo-cues.json` holds
   where each line sits in that file and when each word is spoken. For a new
   take, cue it against `shorts/attack-release/script.txt` (needs `faster-whisper`):
-  `python shorts/attack-release/cue_vo.py assets/vo/narration.mp3 shorts/attack-release/script.txt shorts/attack-release/vo-cues.json`,
+  `python shorts/attack-release/cue_vo.py assets/vo/attack-release/narration.mp3 shorts/attack-release/script.txt shorts/attack-release/vo-cues.json`,
   then adjust the `vo` placements in `shorts/attack-release/timeline.mjs` if line lengths
   changed.
 
@@ -81,6 +82,44 @@ Writes to `out/shorts/attack-release/`: `short_9x16.mp4`, `audio.wav`, `captions
 scene; `shorts/attack-release/audio.mjs` mixes the sound and hands the picture the levels
 and gain reduction it computed, so the shapes on screen are the drums you
 hear. `shorts/attack-release/art.js` is the drawing kit, `shorts/attack-release/film.js` the scenes.
+
+### Short: bass on phones
+
+An 84 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
+harmonics"): your phone can't play a sub, but it plays the harmonics above
+it, and your brain puts the note back. Same voice, model, kit and pipeline
+as the attack-and-release short (`eleven_v4`, Michael C. Vincent, prompt in
+`shorts/bass-on-phones/narration-prompt.txt`).
+
+The bass is synthesised in `shorts/bass-on-phones/bass.mjs`: a pure sine sub with an
+808-style envelope, and its parallel copy through an asymmetric soft
+clipper and a 120 Hz high-pass, as in the lesson's DAW experiment. The
+music bus goes through the lesson's phone check (200 Hz high-pass, 24
+dB/oct); the voice never does. Every harmonic rung on screen is an FFT of
+the bass at that frame, and the scope is the phone's actual output.
+
+Assets, in `scripts/promo/assets/` (ignored): the same Cymatics samples as
+the attack-and-release short (named in `shorts/bass-on-phones/timeline.mjs`) and the narration take as
+`assets/vo/bass-on-phones/narration.mp3`. The film plays it 10% slower: `shorts/bass-on-phones/audio.mjs`
+builds `assets/vo/bass-on-phones/narration-slow.wav` from the take with Rubber Band
+(`VO_STRETCH`) when it is missing. `shorts/bass-on-phones/script.txt` has one sentence per
+line, so each can be placed with its own pause. For a new take, delete the
+slow file, run any `npm run short:bass-on-phones -- --frames 0` to rebuild it, then
+`python shorts/bass-on-phones/cue_vo.py assets/vo/bass-on-phones/narration-slow.wav shorts/bass-on-phones/script.txt shorts/bass-on-phones/vo-cues.json`
+and adjust the `vo` placements in `shorts/bass-on-phones/timeline.mjs`.
+
+```
+npm run short:bass-on-phones                    # sound, stills, video and checks
+npm run short:bass-on-phones -- --stills        # contact sheets and cover only
+npm run short:bass-on-phones -- --frames 9.3,44.5 --tag check
+npm run short:bass-on-phones -- --refresh-lesson   # re-capture the lesson's Listen demo
+```
+
+Writes to `out/shorts/bass-on-phones/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
+`contact.png`, `seconds.png`, `cover.png` and `VERIFY.md`, which logs the
+five measured claims (fundamental drop through the phone, saturated against
+clean through the phone, autocorrelation period, cone travel, FFT rungs),
+loudness, true peak, sync and flashes.
 
 ## Files
 

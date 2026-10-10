@@ -1,5 +1,5 @@
 {
- "source": "assets/vo/narration.mp3",
+ "source": "assets/vo/attack-release/narration.mp3",
  "note": "from/to: seconds in the source file, cut where the voice starts and stops (10 ms energy frames). Word times s/e are relative to `from`, from a local faster-whisper small.en pass aligned to the script; words the recognizer missed are interpolated.",
  "missed_words": 1,
  "segments": [

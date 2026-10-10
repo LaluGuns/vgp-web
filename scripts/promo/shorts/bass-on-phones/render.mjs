@@ -1,12 +1,12 @@
-// Renders the attack-and-release short, narrated, 9:16.
+// Renders the bass-on-phones short (the missing fundamental), narrated, 9:16.
 //
-//   npm run short:attack-release                       sound, stills, video, checks
-//   npm run short:attack-release -- --stills           sound + contact sheets only
-//   npm run short:attack-release -- --frames 12.5,30   single frames for review [--tag x]
-//   npm run short:attack-release -- --refresh-lesson   re-capture the lesson page
+//   npm run short:bass-on-phones                       sound, stills, video, checks
+//   npm run short:bass-on-phones -- --stills           sound + contact sheets only
+//   npm run short:bass-on-phones -- --frames 12.5,30   single frames for review [--tag x]
+//   npm run short:bass-on-phones -- --refresh-lesson   re-capture the lesson page
 //
 // Needs assets/ (see README): the Cymatics samples and the narration.
-// Output in out/shorts/attack-release/: short_9x16.mp4, audio.wav, captions.srt,
+// Output in out/shorts/bass-on-phones/: short_9x16.mp4, audio.wav, captions.srt,
 // contact.png, seconds.png, cover.png and VERIFY.md (what was measured).
 import { execFileSync, spawn } from 'node:child_process';
 import { once } from 'node:events';
@@ -14,12 +14,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { FONTS_CSS, REPO, ROOT, T } from '../../shared/tokens.mjs';
-import { ASSETS, master, renderAudio } from './audio.mjs';
+import { ASSETS, master, renderAudio, VO_TAKE } from './audio.mjs';
 import { readAudio } from './dsp.mjs';
-import { SETTINGS, TIMELINE } from './timeline.mjs';
+import { TIMELINE } from './timeline.mjs';
 
-const OUT = path.join(ROOT, 'out/shorts/attack-release');
-const HERE = path.join(ROOT, 'shorts/attack-release');
+const OUT = path.join(ROOT, 'out/shorts/bass-on-phones');
+const HERE = path.join(ROOT, 'shorts/bass-on-phones');
 fs.mkdirSync(OUT, { recursive: true });
 const args = process.argv.slice(2);
 const opt = (k) => (args.includes(k) ? args[args.indexOf(k) + 1] : null);
@@ -29,8 +29,8 @@ const log = (line) => {
     report.push(line);
 };
 
-for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'attack-release', 'narration.mp3')])
-    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Short: attack and release"`);
+for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), VO_TAKE])
+    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Short: bass on phones"`);
 
 function measure(file) {
     const out = execFileSync('sh', ['-c', `ffmpeg -hide_banner -nostats -i "${file}" -af ebur128=peak=true:framelog=quiet -f null - 2>&1`], { encoding: 'utf8' });
@@ -44,8 +44,11 @@ const audio = renderAudio(null);
 let gain = 0;
 let ceiling = 0;
 let m;
-for (let i = 0; i < 8; i++) {
-    master(audio.L, audio.R, gain, ceiling, wav);
+let clipped;
+// Speech must never reach the clipper: count samples over its knee while the voice speaks.
+const speech = audio.data.vo.map((v) => [v.at, v.at + v.dur]);
+for (let i = 0; i < 24; i++) {
+    clipped = master(audio.L, audio.R, gain, ceiling, wav, speech);
     m = measure(wav);
     // AAC adds about 0.6 dB of true peak, so the WAV aims 0.7 dB under the limit.
     if (Math.abs(m.I + 16) <= 0.3 && m.TP <= -2.2) break;
@@ -54,20 +57,15 @@ for (let i = 0; i < 8; i++) {
 }
 const M = audio.measures;
 log(`Audio master: ${m.I} LUFS integrated, ${m.TP} dBTP, LRA ${m.LRA} LU (gain ${gain.toFixed(1)} dB, clip ceiling ${ceiling.toFixed(1)} dBFS)`);
-log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; plain drums set 4 dB under it; makeup per demo ${Object.entries(M.makeupDb).map(([k, v]) => `${k} ${v} dB`).join(', ')}`);
-log(`One snare, crack over body (RMS, 0-15 ms vs 25-70 ms): plain ${M.crackBody.plain} dB, 1 ms attack ${M.crackBody.FAST} dB, 30 ms attack ${M.crackBody.SLOW} dB`);
-{
-    // The same measure on the mastered track, snares of the hook (hats and keys included).
-    const { L: mL, R: mR } = readAudio(wav);
-    const rms = (a, b) => {
-        let q = 0;
-        for (let i = Math.round(a * 48000); i < Math.round(b * 48000); i++) q += ((mL[i] + mR[i]) / 2) ** 2;
-        return Math.sqrt(q / Math.round((b - a) * 48000));
-    };
-    const cb = (t) => 20 * Math.log10(rms(t, t + 0.015) / rms(t + 0.025, t + 0.07));
-    const avg = (ts) => (ts.reduce((p, t) => p + cb(t), 0) / ts.length).toFixed(1);
-    log(`Delivered hook, snare crack over body after mastering: 1 ms attack ${avg([3.5, 4.5])} dB, 30 ms attack ${avg([5.5, 6.5])} dB`);
-}
+log(`Speech through the master's clipper: ${clipped} samples over its knee while the voice speaks`);
+log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; bass trim ${M.bassTrimDb.toFixed(1)} dB (saturated bass through the phone 5 dB under the voice in its demos), drums through the phone 6 dB under the voice; saturated version level-matched to the clean sub by ${M.matchDb.toFixed(2)} dB`);
+const C = audio.data.claims;
+log(`Claim 1, the phone filter (200 Hz high-pass, 24 dB/oct) on each clean sub's fundamental: ${C.claim1.map((c) => `${c.name} ${c.f0} Hz down ${c.dropDb} dB (theory ${c.theoryDb})`).join('; ')}. Target: at least 40 dB.`);
+log(`  "almost just the bottom of the stack": the clean sub's strongest harmonic above f0 is ${Math.max(...C.claim1.map((c) => c.cleanTopHarmonicDb))} dB under it`);
+log(`Claim 2, bass through the phone at matched full-range loudness (ungated K-weighted level, same two bars): clean ${C.claim2.cleanFull.toFixed(2)} vs saturated ${C.claim2.satFull.toFixed(2)} full range; through the phone clean ${C.claim2.cleanPhone.toFixed(1)}, saturated ${C.claim2.satPhone.toFixed(1)}: saturated ${C.claim2.gainDb.toFixed(1)} dB higher. Target: at least 15 dB.`);
+log(`Claim 3, autocorrelation of the phone-filtered saturated bass (highest peak, 2.5-30 ms): ${C.claim3.map((c) => `${c.name} ${c.lagMs.toFixed(2)} ms vs 1/f0 ${c.periodMs.toFixed(2)} ms (${c.errPct.toFixed(2)} %, r ${c.r.toFixed(2)})`).join('; ')}. Target: within 2 %.`);
+log(`Claim 4, cone travel for equal level (p ∝ S·x·f², so x ∝ 1/f²): ${C.claim4.map((c) => `${c.hz} Hz ${c.x}×`).join(', ')}`);
+log(`Claim 5, every rung on screen is an FFT of the bass playing at that frame (85 ms Hann window, centred on the frame and kept inside the sounding note): ${audio.data.frames.f0.filter(Boolean).length} frames analysed; saturated stack, full range, dB re the clean fundamental: ${M.satStack.map((s) => `${s.name} [${s.db.slice(0, 6).join(', ')}]`).join('; ')}`);
 
 // ── Captions: one cue per narration line ──
 const ts = (t) => {
@@ -85,7 +83,7 @@ const browser = exe ? await chromium.launch({ executablePath: exe }) : await chr
 
 /**
  * The lesson's Listen demo at phone size, for the end card: idle, then three
- * moments after Play is pressed. Cached in out/shorts/attack-release/lesson/.
+ * moments after Play is pressed. Cached in out/shorts/bass-on-phones/lesson/.
  */
 async function lesson() {
     const dir = path.join(OUT, 'lesson');
@@ -135,7 +133,7 @@ log(L ? `End card: the Listen demo of ${L.url}, captured ${L.captured}` : 'End c
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
 html,body{margin:0;background:${T.bg}}canvas{display:block}</style></head><body><canvas id="film"></canvas>
-<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.SETTINGS=${JSON.stringify(SETTINGS)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
+<script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
 <script>${fs.readFileSync(path.join(HERE, 'art.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'film.js'), 'utf8')}</script></body></html>`;
 fs.writeFileSync(path.join(OUT, 'preview.html'), html);
 
@@ -170,7 +168,7 @@ if (opt('--frames')) {
     const o = await open();
     for (const t of opt('--frames').split(',')) fs.writeFileSync(path.join(dir, `${tag}-${t}.png`), await o.shot(Number(t)));
     await browser.close();
-    console.log(`wrote out/shorts/attack-release/frames/${tag}-*.png`);
+    console.log(`wrote out/shorts/bass-on-phones/frames/${tag}-*.png`);
     process.exit(0);
 }
 
@@ -187,7 +185,7 @@ img{width:${width}px;display:block;border:1px solid #222}p{margin:6px 0 0;opacit
     // Determinism: one frame in two fresh pages, byte-identical.
     const a = await open();
     const b = await open();
-    const t = 31.4;
+    const t = 44.5;
     log(`Determinism: frame at ${t} s in two fresh pages is ${(await a.shot(t)).equals(await b.shot(t)) ? 'identical' : 'DIFFERENT'}`);
     await b.p.close();
     // One still per scene, and one per second, each 390 px wide (phone size).
@@ -238,12 +236,17 @@ if (!args.includes('--stills')) {
         if (d > 20) jumps++;
     }
     log(`  flashes: ${jumps} frame-to-frame luma jumps over 20/255 (largest ${worst.toFixed(1)})`);
-    // Sync: the first kick of the hook is at 3.000 s in the timeline.
-    const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', '2.9', '-t', '0.3', '-i', file, '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
-    const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.byteLength / 4);
-    const peak = x.reduce((p, v) => Math.max(p, Math.abs(v)), 0);
-    const first = x.findIndex((v) => Math.abs(v) > peak * 0.3);
-    log(`  sync: first kick of the hook heard at ${(2.9 + first / 48000).toFixed(4)} s (timeline 3.0000 s)`);
+    // Sync: the first kick of the hook (0.25 s) and the payoff's downbeat
+    // (5.0 s), timed on each transient's click (above 2 kHz): the phone
+    // filter delays a kick's low body by a few ms, never its click.
+    for (const [from, at, what] of [[0.2, 0.25, 'first kick of the hook'], [4.95, 5.0, "payoff's downbeat"]]) {
+        const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(from), '-t', '0.1', '-i', file, '-af', 'highpass=f=2000:poles=2,highpass=f=2000:poles=2', '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
+        const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.byteLength / 4);
+        const peak = x.reduce((p, v) => Math.max(p, Math.abs(v)), 0);
+        const first = x.findIndex((v) => Math.abs(v) > peak * 0.3);
+        const heard = from + first / 48000;
+        log(`  sync: ${what} heard at ${heard.toFixed(4)} s (timeline ${at.toFixed(4)} s, ${((heard - at) * 1000).toFixed(1)} ms)`);
+    }
 }
 await browser.close();
-fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Short checks: attack and release\n\nMeasured by \`npm run short:attack-release\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);
+fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Short checks: bass on phones\n\nMeasured by \`npm run short:bass-on-phones\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);

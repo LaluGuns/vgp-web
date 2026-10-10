@@ -1,0 +1,28 @@
+hook-a1|There's a bass line in this beat.
+hook-a2|Your phone can't play it.
+hook-b1|Same notes.
+hook-b2|One change.
+hook-b3|Now you can hear it.
+air-1|A speaker makes bass by pushing air.
+air-2|Every octave lower, the cone has to move four times as far to stay as loud.
+phone-1|A phone's speaker is tiny.
+phone-2|Down here, it can barely move.
+phone-3|Turning the sub up won't save it.
+stack-1|But most notes aren't one frequency.
+stack-2|They're a stack: the note, plus harmonics at two, three, four times it.
+sub-1|A clean sub is almost just the bottom of the stack.
+sub-2|That's why it disappears.
+grow|Saturate it, and it grows the rest of the stack.
+window-1|The phone still can't play the note...
+window-2|but it plays the harmonics just fine.
+strange-1|Here's the strange part.
+strange-2|Together, the harmonics repeat at the speed of the missing note.
+brain-1|Your brain hears that rhythm...
+brain-2|and puts the note back.
+ghost|You're hearing a note your phone never played.
+limit-1|You won't feel it like a club sub.
+limit-2|But you'll hear the melody.
+rule-1|Keep the sub clean for big speakers.
+rule-2|Add harmonics for small ones.
+again|Listen again.
+cta|The full lesson, with a demo you can play, is free on the Virzy Guns blog.

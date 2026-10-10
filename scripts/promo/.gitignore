@@ -1,2 +1,5 @@
 # Licensed samples and the generated narration. Not ours to redistribute.
 assets/
+
+# Python bytecode from the cue tools.
+__pycache__/
