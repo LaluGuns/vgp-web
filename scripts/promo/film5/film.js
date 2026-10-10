@@ -413,7 +413,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     if (!replay && !noHead) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
         if (guessing) label(g, '1: the riser runs into the drop', 540, 1288, { size: 40, weight: 700, color: FOG, align: 'center', family: BODY, alpha: popIn(t, G.at, 0.2) });
-        label(g, 'same samples, same loudness', 540, 1288, { size: 40, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (guessing ? 0 : 1) * (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) * (id === 'notch' ? 1 - popIn(t, wto('hook', 'hole', 0.35), 0.2) : 1) });
+        label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (guessing ? 0 : 1) * (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) * (id === 'notch' ? 1 - popIn(t, wto('hook', 'hole', 0.35), 0.2) : 1) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
         if (kA > 0) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
@@ -470,7 +470,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         const L2 = AB.lanes[1];
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
-        if (kC > 0) pill(g, t < dB.down ? 'measured: click under the riser noise in 1' : `measured: click vs riser noise +${fmt(D.claims[2].db)} dB in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        if (kC > 0) pill(g, t < dB.down ? 'measured: click under the riser noise in 1' : `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     g.restore();
@@ -529,11 +529,11 @@ function drawEarSection(t, k) {
     g.save();
     g.globalAlpha *= k;
     // The fly-in: the ear held, then a zoom into its cochlea inside a navy vignette.
-    const zf = E.inOut(seg(t, tEars + 0.2, tEars + 1.0));
-    const stageA = seg(t, tEars + 0.65, tEars + 1.0);
-    if (stageA < 1) {
+    const zf = E.inOut(seg(t, tEars + 0.2, tEars + 0.9));
+    const iris = E.inOut(seg(t, tEars + 0.75, tEars + 1.15));
+    const stageA = iris > 0 ? 1 : 0;
+    if (iris < 1) {
         g.save();
-        g.globalAlpha *= 1 - stageA;
         // Kept below the title band.
         g.beginPath();
         g.rect(0, 440, W, H - 440);
@@ -557,7 +557,13 @@ function drawEarSection(t, k) {
         const S = STAGE;
         g.save();
         g.globalAlpha *= stageA;
-        const sc = lerp(1.15, 1, E.out(stageA)) * (1 + 0.04 * seg(t, e.at, e.at + 4));
+        const sc = 1 + 0.04 * seg(t, e.at, e.at + 4);
+        // The stage opens as a circle growing out of the ear's canal.
+        if (iris < 1) {
+            g.beginPath();
+            g.arc(XC.x, XC.y, 30 + 1300 * iris, 0, Math.PI * 2);
+            g.clip();
+        }
         g.translate(540, 855);
         g.scale(sc, sc);
         g.translate(-540, -855);
@@ -618,7 +624,7 @@ function drawEarSection(t, k) {
         g.restore();
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
-        label(g, 'hair cells + nerve (model)', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
+        label(g, 'hair cells + nerve (model, slowed)', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1 && (e.sting || t < e.hit + 0.15)) {
             const kG = popIn(t, e.off - 0.1, 0.2);
@@ -893,7 +899,7 @@ function drawBrain(t) {
         g.arc(X(7), BR.dots, 34, 0, Math.PI * 2);
         g.stroke();
         g.restore();
-        tag(g, 'next beat', X(4.2), BR.dots + 70, null, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
+        if (false) tag(g, 'next beat', X(4.2), BR.dots + 70, null, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
     }
     let ball;
     if (t < tPred) {
@@ -997,9 +1003,9 @@ function drawHow(t) {
     // Push in on the gap while it is cut, then back out for the millisecond panel.
     const zG = E.inOut(seg(t, tCut, tCut + 0.6)) * (1 - E.inOut(seg(t, tFogs - 0.5, tFogs)));
     if (zG > 0) {
-        g.translate(560, 760);
-        g.scale(1 + 0.16 * zG, 1 + 0.16 * zG);
-        g.translate(-560, -760);
+        g.translate(500, 760);
+        g.scale(1 + 0.05 * zG, 1 + 0.05 * zG);
+        g.translate(-500, -760);
     }
     const [bA, bB] = HW.beats;
     const tx0 = HW.names;
@@ -1048,8 +1054,8 @@ function drawHow(t) {
     names.forEach(([nm, key], i) => {
         const y = HW.lanes[i];
         label(g, nm, HW.x0 + 22, y + HW.laneH / 2 + 12, { size: 32, weight: 700, color: key === 'riser' ? FOG : P.ink2, family: BODY });
-        const wave = key === 'riser' ? (u) => 0.25 + 0.75 * u ** 1.5 : key === 'drums' ? (u) => (Math.abs(Math.sin(u * Math.PI * 6)) > 0.85 ? 0.95 : 0.25) : key === 'synth' ? (u) => 0.5 + 0.2 * Math.sin(u * 40) : (u) => 0.35;
-        const after = key === 'riser' ? null : key === 'drums' ? (u) => (u < 0.07 ? 1 : 0.3) : key === 'synth' ? (u) => 0.85 : (u) => 0.4;
+        const wave = key === 'riser' ? (u) => 0.25 + 0.75 * u ** 1.5 : key === 'drums' ? (u) => { const b = u * 1.5; const f = b - Math.floor(b); return f < 0.06 ? 0.95 : Math.abs(f - 0.5) < 0.05 ? 0.5 : 0.18; } : key === 'synth' ? (u) => 0.5 + 0.2 * Math.sin(u * 40) : (u) => 0.35;
+        const after = key === 'riser' ? null : key === 'drums' ? (u) => (u < 0.06 ? 1 : Math.abs(u - 0.5) < 0.05 ? 0.5 : 0.18) : key === 'synth' ? (u) => 0.85 : (u) => 0.4;
         // Before the cut.
         const pre = BX(bA) + 2;
         clip(g, pre, y, xc - pre - 3, HW.laneH, CLIPC[key], { wave });
@@ -1155,7 +1161,7 @@ function drawHow(t) {
         g.lineTo(ZX(200), y + 120);
         g.stroke();
         label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY });
-        const ms = GAP_MS * E.inOut(seg(t, tFogs, tQuarter + 0.2));
+        const ms = GAP_MS * E.inOut(seg(t, tQuarter - 1.2, tQuarter + 0.3));
         label(g, 'gap', Z.x0, y + 200, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 224, Math.max(1, ZX(ms) - ZX(0)), 80, 16);
         g.fillStyle = P.cyan;
@@ -1171,7 +1177,7 @@ function drawHow(t) {
         for (const m of [0, 100, 200]) label(g, `${m}`, ZX(m), y + 384, { size: 34, weight: 600, color: P.ink3, align: 'center', family: BODY });
         label(g, '8th', ZX(GAP_MS), y + 384, { size: 38, weight: 800, color: ms >= GAP_MS - 1 ? P.cyan : P.ink3, align: 'center', family: BODY });
         g.restore();
-        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, Z.y + 470, { size: 40, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, tQuarter - 0.3, 0.3), family: BODY });
+        label(g, 'a 16th already helps · an 8th outlasts the fog', 540, Z.y + 470, { size: 40, weight: 700, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
     }
     g.restore();
 }
