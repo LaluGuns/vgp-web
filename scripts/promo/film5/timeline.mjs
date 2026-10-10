@@ -130,8 +130,8 @@ export const TIMELINE = {
         { cue: ['how', 'quarter', 0.12], dt: 0, kind: 'tick' },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
-        { cue: ['cta', 'no', 0], dt: -0.25, kind: 'whoosh' },
-        { cue: ['cta', 'after', 0.05], dt: -0.05, kind: 'tick', level: 0.7 },
+        { cue: ['cta', 'uncovered', 0], dt: -0.4, kind: 'whoosh' },
+        { cue: ['cta', 'uncovered', 0.05], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'calmer', 0.17], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'beat', 0.29], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'which', 0.7], dt: -0.1, kind: 'pop', level: 0.8 },
@@ -150,6 +150,6 @@ export const TIMELINE = {
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
         { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then why a quarter: a loud sound fogs hearing for up to 200 ms (model); a 16th (117 ms) can end inside it, an 8th (234.4 ms) clears it." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
-        { id: 'end', line: 'cta', word: 'no', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons with the lesson address up throughout (shown, not spoken), ending on a question for the comments: which did you pick, 1 or 2, and what did you hear?' },
+        { id: 'end', line: 'cta', word: 'uncovered', dt: -0.45, view: 'end', teaches: 'Recap of the three reasons with the lesson address up throughout (shown, not spoken), ending on a question for the comments: which did you pick, 1 or 2, and what did you hear?' },
     ],
 };

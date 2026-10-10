@@ -1422,7 +1422,7 @@ function drawEnd(t) {
     if (kRe > 0) {
         label(g, 'Why the gap hits harder', 540, 440, { size: 64, weight: 800, color: P.ink, align: 'center', base: 'middle', alpha: kRe });
         // The three characters from the "why" card, full size, each lit (and bouncing) as it is named.
-        [[['no', 'after-fog'], 'after'], [['calmer', 'limiter'], 'calmer'], [['a beat you', 'saw coming'], 'beat']].forEach(([w, cue], i) => {
+        [[['uncovered', 'click'], 'uncovered'], [['calmer', 'limiter'], 'calmer'], [['a beat you', 'saw coming'], 'beat']].forEach(([w, cue], i) => {
             const t0 = wto('cta', cue, 0.2 + i * 0.12) - 0.05;
             const kI = Math.max(0.35, popIn(t, t0, 0.3)) * kRe;
             const lit = popIn(t, t0, 0.3);

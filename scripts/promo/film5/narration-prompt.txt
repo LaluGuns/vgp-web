@@ -10,10 +10,10 @@ In number one, the riser is still roaring when the kick lands, so it covers the 
 
 So cut everything about a quarter second before the drop, reverb tails too.
 
-[curious] Why a quarter second? At this tempo, a sixteenth note already helps, but can still meet the after-fog.
+[curious] Why a quarter second? At one twenty-eight B P M, a sixteenth note already helps, but can still meet the after-fog.
 
-An eighth note clears it. [confident] At any tempo, aim for about a quarter second.
+An eighth note clears it. [confident] At other tempos, keep the gap past two hundred milliseconds.
 
 [softly] Now listen again. Hear the click?
 
-[warmly] That's the click: covered in one, clear in two. No after-fog, a calmer limiter, a beat you saw coming. [curious] Which did you pick, one or two? Tell me what you heard.
+[warmly] That's the click: covered in one, clear in two. An uncovered click, a calmer limiter, a beat you saw coming. [curious] Which did you pick, one or two? Tell me what you heard.
