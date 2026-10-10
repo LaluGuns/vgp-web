@@ -59,6 +59,18 @@ const nextConfig = {
                 source: '/:path*',
                 headers: securityHeaders,
             },
+            // The demos' real-mix loops: opaque bytes the page decodes with Web
+            // Audio, never a media type a download manager would offer to save.
+            // Each file name carries a hash of its bytes (rename on re-encode), so
+            // they cache for good.
+            {
+                source: '/blog-mix/:file*',
+                headers: [
+                    { key: 'Content-Type', value: 'application/octet-stream' },
+                    { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+                    { key: 'X-Robots-Tag', value: 'noindex' },
+                ],
+            },
         ];
     },
 };

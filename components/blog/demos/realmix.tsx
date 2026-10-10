@@ -39,7 +39,7 @@ interface LoopFacts {
  */
 export const LOOPS: Record<LoopId, LoopFacts> = {
     dystopia: {
-        url: '/blog-mix/dystopia.dat',
+        url: '/blog-mix/dystopia.688cb19a26.dat',
         seconds: 12.8,
         samples: 614400,
         rawSamples: 620928,
@@ -48,7 +48,7 @@ export const LOOPS: Record<LoopId, LoopFacts> = {
         credit: 'Real mix: Dystopia by Virzy Guns (excerpt).',
     },
     'chrome-teeth': {
-        url: '/blog-mix/chrome-teeth.dat',
+        url: '/blog-mix/chrome-teeth.ab62783020.dat',
         seconds: 40 / 3,
         samples: 640000,
         rawSamples: 646272,
@@ -57,7 +57,7 @@ export const LOOPS: Record<LoopId, LoopFacts> = {
         credit: 'Real mix: Chrome Teeth, made for this blog.',
     },
     'late-train-home': {
-        url: '/blog-mix/late-train-home.dat',
+        url: '/blog-mix/late-train-home.9710c11da2.dat',
         seconds: 20,
         samples: 960000,
         rawSamples: 966528,

@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, rms, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, rms, sequence, snare, type Engine } from './engine';
 import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useAnalysis, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
 const SPECTRUM_POINTS = 160;
+/** The analyser size every spectrum here draws from. */
+const SPECTRUM_FFT = 4096;
 
 interface Band {
     /** First analyser bin in the band. */
@@ -100,10 +102,11 @@ function Spectrum({
     const canvas = useRef<HTMLCanvasElement>(null);
     const traces = useRef<{ bands: Band[]; key: string; list: Trace[] } | null>(null);
 
-    // Size the canvas and make its 2D context while the page is idle, so the first frame of
-    // playback (already the busiest moment on a slow phone) only draws.
-    useEffect(
-        () =>
+    // Size the canvas, make its 2D context and work out the smoothing bands while the page is idle, so
+    // the first frame of playback (already the busiest moment on a slow phone) only draws. The bands are
+    // made for the rates an audio context runs at, each in an idle moment of its own.
+    useEffect(() => {
+        const cancels = [
             whenIdle(() => {
                 const c = canvas.current;
                 if (!c) return;
@@ -112,8 +115,10 @@ function Spectrum({
                 c.height = c.clientHeight * dpr;
                 c.getContext('2d');
             }),
-        [],
-    );
+            ...[...new Set([peekEngine()?.ctx.sampleRate ?? 48000, 48000, 44100])].map((rate) => whenIdle(() => bandsFor(SPECTRUM_FFT / 2, rate / SPECTRUM_FFT))),
+        ];
+        return () => cancels.forEach((cancel) => cancel());
+    }, []);
 
     useFrame(active, () => {
         const c = canvas.current;
@@ -286,7 +291,7 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
         const safe = ctx.createGain();
         safe.gain.value = fed ? realTrim(type, q) : 1;
         const an = ctx.createAnalyser();
-        an.fftSize = 4096;
+        an.fftSize = SPECTRUM_FFT;
         an.smoothingTimeConstant = 0.8;
         filter.connect(safe).connect(master);
         safe.connect(an);
@@ -521,7 +526,7 @@ export function MaskingDemo() {
         // Each part's spectrum after its treatment, slow enough to read while the notes move.
         const leadAn = ctx.createAnalyser();
         const padAn = ctx.createAnalyser();
-        leadAn.fftSize = padAn.fftSize = 4096;
+        leadAn.fftSize = padAn.fftSize = SPECTRUM_FFT;
         leadAn.smoothingTimeConstant = padAn.smoothingTimeConstant = 0.88;
         lead.connect(leadAn);
         duck.connect(padAn);
@@ -692,7 +697,7 @@ export function SaturationDemo() {
         const post = ctx.createAnalyser();
         pre.fftSize = post.fftSize = 2048;
         const an = ctx.createAnalyser();
-        an.fftSize = 4096;
+        an.fftSize = SPECTRUM_FFT;
         src.connect(pre);
         src.connect(dry).connect(master);
         src.connect(shaper).connect(post);

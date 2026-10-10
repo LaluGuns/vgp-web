@@ -1,7 +1,7 @@
 'use client';
 
 import { startTransition, useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
-import { createPortal, flushSync } from 'react-dom';
+import { createPortal } from 'react-dom';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
 import { claim, getEngine, release, warmEngine, type Engine } from './engine';
@@ -469,23 +469,8 @@ export function Segmented<T extends string>({
 }) {
     const labelId = useId();
     const buttons = useRef<(HTMLButtonElement | null)[]>([]);
-    // A choice shows as made at once, even when the demo follows a moment later (a transition), so an arrow key
-    // moves the focus onto an option that already says it is checked, as a native radio does. Until the demo's
-    // value changes, the press is what shows; once it has changed, the value does again.
-    const [pressed, setPressed] = useState<{ to: T; was: T } | null>(null);
-    const [seen, setSeen] = useState(value);
-    if (seen !== value) {
-        setSeen(value);
-        setPressed(null);
-    }
-    const shown = pressed && pressed.was === value ? pressed.to : value;
-    const chosen = options.findIndex((o) => o.value === shown);
+    const chosen = options.findIndex((o) => o.value === value);
     const tabStop = chosen >= 0 ? chosen : 0;
-
-    const pick = (to: T) => {
-        if (to !== shown) flushSync(() => setPressed({ to, was: value }));
-        onChange(to);
-    };
 
     const onKey = (from: number, e: KeyboardEvent<HTMLButtonElement>) => {
         const last = options.length - 1;
@@ -496,7 +481,13 @@ export function Segmented<T extends string>({
         else if (e.key === 'End') to = last;
         else return;
         e.preventDefault();
-        if (to !== chosen) pick(options[to].value);
+        if (to !== chosen) {
+            // The option says it is checked before it takes the focus, as a native radio does, so a screen
+            // reader reads it as checked; the demo's own render, which may follow a moment later (a
+            // transition), then sets the same.
+            buttons.current.forEach((b, i) => b?.setAttribute('aria-checked', String(i === to)));
+            onChange(options[to].value);
+        }
         buttons.current[to]?.focus();
     };
 
@@ -513,7 +504,7 @@ export function Segmented<T extends string>({
                         role="radio"
                         aria-checked={i === chosen}
                         tabIndex={i === tabStop ? 0 : -1}
-                        onClick={() => pick(option.value)}
+                        onClick={() => onChange(option.value)}
                         onKeyDown={(e) => onKey(i, e)}
                         className={optionClass(i === chosen)}
                     >
