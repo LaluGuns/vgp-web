@@ -124,7 +124,7 @@ Step 6 needs a clipper plugin with a ceiling control, which not every DAW includ
 3. Remove the second gain plugin and pull the master fader down 18 dB instead. It is still clean: the master fader is part of the float engine.
 4. Turn your monitors down, set the master fader back to 0 dB and bounce the track offline with the +18 dB gain still on, once as a 24-bit WAV and once as a 32-bit float WAV.
 5. Import both files and lower each by 18 dB. The 24-bit file is flat-topped and distorted. The float file matches the original.
-6. Back on the original track, put a clipper with its ceiling at 0 dB between the two gain plugins. The distortion is back, even inside the float engine.
+6. Back on the original track, put the -18 dB gain plugin back after the +18 dB one and insert a clipper with its ceiling at 0 dB between them. The distortion is back, even inside the float engine.
 
 Overs survive between float processes and come back clean when you turn them down. They clip at a fixed-point export, at the interface output and inside any plugin that clips.
 

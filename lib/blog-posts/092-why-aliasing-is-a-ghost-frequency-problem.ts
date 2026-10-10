@@ -92,9 +92,9 @@ The plugin is generating harmonics the session cannot represent. Instead of disa
 
 ## Why it matters: harmonics with nowhere to go
 
-A digital clipper or saturator creates new harmonics. Start with a 10 kHz tone in a 44.1 kHz session and push the saturator. A harmonic at 20 kHz is fine. The harmonic at 30 kHz is not: the highest frequency a 44.1 kHz session can hold is 22.05 kHz, so 30 kHz cannot exist in your DAW.
+A digital clipper or saturator creates new harmonics. Start with a 10 kHz tone in a 48 kHz session and push the saturator. A harmonic at 20 kHz is fine. The harmonic at 30 kHz is not: the highest frequency a 48 kHz session can hold is 24 kHz, so 30 kHz cannot exist in your DAW.
 
-It does not vanish. It folds back below the limit and lands at 14.1 kHz. That folded tone has no musical relationship to the note or the key of the song. Stack several saturators across the drum bus and the mix bus and these ghost frequencies pile up, smearing cymbals and vocals.
+It does not vanish. It folds back below the limit and lands at 18 kHz. That folded tone has no musical relationship to the note or the key of the song. Stack several saturators across the drum bus and the mix bus and these ghost frequencies pile up, smearing cymbals and vocals.
 
 ::figure fold
 

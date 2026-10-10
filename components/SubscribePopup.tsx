@@ -61,7 +61,7 @@ export function SubscribePopup() {
         if (pathname.startsWith('/book') || pathname.startsWith('/books')) {
             return {
                 title: 'Get the book launch email',
-                description: 'One email when the Trap Edition guide comes out, plus new production articles.',
+                description: 'One email when the Trap Edition guide comes out, plus new production lessons.',
                 button: 'Notify me',
                 subscriberName: 'Book Waitlist',
                 tags: ['book_buyer'],

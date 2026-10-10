@@ -78,7 +78,7 @@ export default function LearnHubPage() {
                     title="Learn production"
                     description={
                         <p>
-                            {articles.length} free lessons I wrote on making records, set out in {learningPaths.length} paths from songwriting to
+                            {articles.length} free lessons I wrote on making records, and {learningPaths.length} paths through them from songwriting to
                             mastering and licensing. Read a path in order from lesson 1, or open any lesson on the map.
                         </p>
                     }

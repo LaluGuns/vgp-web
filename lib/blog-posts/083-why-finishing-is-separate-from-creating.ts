@@ -115,7 +115,7 @@ Each pass ends with a complete, better bounce. Over a few passes the fixes on yo
 
 ## Common mistake: mixing while writing
 
-The most common version of this trap is loading compressors and EQs on every channel while you are still looking for the bass line. Every processed sound feels like a commitment, and you start defending parts because of the time you spent on them.
+It usually looks like loading compressors and EQs on every channel while you are still looking for the bass line. Every processed sound feels like a commitment, and you start defending parts because of the time you spent on them.
 
 Placeholder sounds and a closed mixer are the fastest way to get the skeleton of a song down. Shape a sound during writing only when the sound itself is the idea, such as a bass patch the whole song is built around.
 

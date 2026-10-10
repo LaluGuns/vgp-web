@@ -137,7 +137,7 @@ Makeup gain is the last piece. Compression only turns things down, so the output
 
 ::figure makeup
 
-Try it on a drum loop. The demo matches levels for you, so you hear the shape change rather than the volume.
+Try it on a drum loop. The demo matches levels for you, so you hear the shape change rather than the volume. Switch Source to Real mix to hear the same ratios on a finished song.
 
 ::demo compressor
 

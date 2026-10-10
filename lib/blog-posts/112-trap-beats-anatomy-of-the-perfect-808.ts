@@ -53,7 +53,7 @@ export const post112: BlogArticle = {
             steps: 32,
             perBeat: 8,
             caption:
-                'One bar at 140 BPM on a 32nd-note grid. The snare on beat 3 gives the half-time feel. The hats run in eighths and break into quieter 32nd rolls, and the 808 shares two hits with the kick and adds one of its own.',
+                'One bar at 140 BPM on a 32nd-note grid. The snare on beat 3 gives the half-time feel. The hats run in 8ths and break into quieter 32nd rolls, and the 808 shares two hits with the kick and adds one of its own.',
             alt: 'Four lanes on a 32-step grid. Hi-hats on every eighth note with fast quiet rolls before beat 3 and at the end of the bar. One snare on beat 3. Kick on the downbeat and late in beat 3. The 808 on the downbeat, late in beat 2 and with the second kick.',
             rows: [
                 {

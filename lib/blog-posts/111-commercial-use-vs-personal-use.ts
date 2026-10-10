@@ -81,7 +81,7 @@ Personal use means the song stays with you. Nobody is paid, nothing is sold, and
 
 ## Commercial use
 
-Commercial use is anything that earns money, builds a release or promotes a business. Uploading to Spotify or Apple Music counts at any scale: the song is distributed publicly on a service that earns from it through subscriptions and ads, even before it earns you anything. Spotify pays recorded royalties on a track only once it has 1,000 streams in the previous 12 months and a minimum number of unique listeners (Spotify, 2024), so a small release can earn nothing and still be a commercial release. So do ads on a video, download and physical sales, paid shows, a sponsored post for a brand, and client work where you are paid to make a video, an ad or a podcast.
+Commercial use is anything that earns money, builds a release or promotes a business. Uploading to Spotify or Apple Music counts at any scale: the song is distributed publicly on a service that earns from it through subscriptions and ads, even before it earns you anything. Spotify pays recorded royalties on a track only once it has 1,000 streams in the previous 12 months and a minimum number of unique listeners (Spotify, 2024), so a small release can earn nothing and still be a commercial release. Ads on a video count too, and so do download and physical sales, paid shows, a sponsored post for a brand, and client work where you are paid to make a video, an ad or a podcast.
 
 Background music in your own videos and streams is commercial too once the channel is monetized or sponsored. That case usually calls for a creator license rather than a beat lease: the [lesson on streaming versus a creator license](/blog/spotify-streaming-vs-flow-creator-license) covers how that works.
 

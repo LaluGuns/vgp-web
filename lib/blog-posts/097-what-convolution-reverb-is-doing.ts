@@ -148,7 +148,7 @@ The model has limits. An impulse response captures one source position, one micr
 
 ## DAW experiment: turn any reverb into an impulse response
 
-You need an algorithmic reverb and a convolution reverb. If your DAW has no convolution reverb, a free one will do.
+You need an algorithmic reverb and a convolution reverb. If your DAW has no convolution reverb, any free one that loads impulse responses works.
 
 1. In a 48 kHz session, put a one-sample click at full scale at the start of an audio track. Draw it with the pencil at sample zoom, or use the shortest click sample you have.
 2. Send it to an aux with your algorithmic reverb at 100% wet, modulation off and a decay of about 1.5 s. Bounce three seconds of the aux, starting at the click. That file is the reverb's impulse response.

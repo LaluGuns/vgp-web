@@ -112,7 +112,7 @@ Some passes will clean the loop and keep the energy. Others flatten it, and now 
 
 ## Common mistake: snapping everything to the grid and to pitch
 
-The most common version of this trap is quantizing every MIDI note at full strength and tuning every vocal syllable to the centre of the note. It assumes precision equals quality.
+The usual form is quantizing every MIDI note at full strength and tuning every vocal syllable to the centre of the note. It assumes precision equals quality.
 
 Players often sit ahead of or behind the beat on purpose, and singers slide into notes. Those are choices. Full-strength quantize and fast pitch correction remove them along with the mistakes. The lesson on [human feel](/blog/why-tiny-timing-differences-create-human-feel) goes into timing in detail.
 

@@ -23,7 +23,7 @@ const chapters = [
         title: 'Starting Virzy Guns Production',
         paragraphs: [
             'I started Virzy Guns Production to keep songs, beats and teaching under one roof and held to one standard.',
-            'The beat store came out of that, then the studio services for artists who want something built for them, then the articles and the Trap Edition guide for producers who want to learn how the records are made.',
+            'The beat store came out of that, then the studio services for artists who want something built for them, then the lessons and the Trap Edition guide for producers who want to learn how the records are made.',
         ],
     },
     {

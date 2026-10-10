@@ -94,7 +94,7 @@ The words do the rest. With no melody to carry the line, the consonants give eac
 1. Mute your current hook and tap its rhythm on the desk or a drum pad over the beat. Notice how much of its character survives without the pitches.
 2. Create a MIDI track with a short, punchy synth sound, set the grid to 16th notes and keep your song tempo.
 3. Write a two-bar phrase on one note in the middle of the singer's range. Put the first note on the downbeat of bar 1.
-4. Place the next accents between the beats: one a 16th before beat 2, one an eighth after beat 3. Leave at least one beat in each bar with no note on it.
+4. Place the next accents between the beats: one a 16th before beat 2, one an 8th after beat 3. Leave at least one beat in each bar with no note on it.
 5. Vary only velocity and length: accents at velocity 110, other notes at 70, and one long note to end the phrase.
 6. Loop four bars over your drums. Then copy the phrase and move only its last note up one scale step.
 7. Compare the one-note line, the two-note version and your original hook at the same level.

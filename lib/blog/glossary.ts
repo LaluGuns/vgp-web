@@ -535,7 +535,7 @@ export const glossary: GlossaryEntry[] = [
         term: '32-bit float',
         forms: ['32-bit float', 'floating point', 'floating-point'],
         definition:
-            'A sample format that stores a scale factor with every value, so levels above 0 dBFS inside the DAW are kept instead of clipped. The clip happens only when you export to a fixed format.',
+            'A sample format that stores a scale factor with every value, so levels above 0 dBFS inside the DAW are kept instead of clipped. Overs still clip where the signal leaves float: a fixed-point export, the interface output, or a plugin that clips.',
         article: 'architecture-of-infinite-headroom-32-bit-float',
     },
 

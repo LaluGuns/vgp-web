@@ -35,7 +35,7 @@ export function CodeBlock({ text }: { text: string }) {
                 >
                     {status === 'copied' ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
                     <span aria-live="polite">{status === 'copied' ? 'Copied' : status === 'failed' ? 'Copy failed' : 'Copy'}</span>
-                    <span className="sr-only"> the text “{what}”</span>
+                    <span className="sr-only"> the text: {what}</span>
                 </button>
             </div>
         </div>

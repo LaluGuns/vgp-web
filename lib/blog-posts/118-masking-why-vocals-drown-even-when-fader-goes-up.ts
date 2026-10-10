@@ -74,7 +74,7 @@ export const post118: BlogArticle = {
 
 The vocal fader goes to -3 dB, then -1 dB, then the master starts to clip, and the singer still sounds as if she is behind a wall. Solo the vocal and it is clear, present and detailed. Unsolo it and it sinks back into the beat.
 
-Every push makes the vocal louder, but not clearer. The consonants stay buried while the vocal starts to sit on top of the music instead of inside it. The fader is the wrong tool here, because the problem is not level. It is masking.
+Every push makes the vocal louder, but not clearer. The consonants stay buried while the vocal starts to sit on top of the music instead of inside it. The fader is the wrong tool here, because the problem is masking.
 
 ## Why it matters: clarity is decided band by band
 

@@ -42,7 +42,7 @@ export const post010: BlogArticle = {
         stress: {
             type: 'rhythm',
             caption:
-                'The phrase "(I) can\'t forget you tonight" in one bar. Tall bars are stressed syllables. Matched, can\'t, get and night fall on beats. Mismatched, the same rhythm moved an eighth note later puts for, you and to on the beats and pushes the stresses between them.',
+                'The phrase "(I) can\'t forget you tonight" in one bar. Tall bars are stressed syllables. Matched, can\'t, get and night fall on beats. Mismatched, the same rhythm moved an 8th note later puts for, you and to on the beats and pushes the stresses between them.',
             alt: 'Two rows on a 16-step grid with the same six syllables. In the matched row, the three tall bars sit on beats 1, 2 and 4. In the mismatched row, short bars sit on beats 2, 3 and 4 and the tall bars fall between the beats.',
             rows: [
                 {
@@ -157,7 +157,7 @@ In a session, two things go wrong. Lines packed with consonant clusters, or with
 1. Loop the chorus beat at song tempo with only the drums playing.
 2. Speak the chorus lyric over it in rhythm, on one pitch, and record it on a spare track.
 3. Say each word on its own and mark its natural stress, for example "to-DAY", "BEAU-ti-ful", "come BACK".
-4. Check the recording against the grid. Each stressed syllable should land on a beat or a strong eighth note, with unstressed syllables between. Where a stress falls on a weak position, change the word or move it.
+4. Check the recording against the grid. Each stressed syllable should land on a beat or a strong 8th note, with unstressed syllables between. Where a stress falls on a weak position, change the word or move it.
 5. Find the highest note of the sung chorus and its vowel. If it is "ee" or "oo", try a word with "ah" or "eh" there, or move that word to a lower note.
 6. In your vocal edit, zoom in on a word that starts with a consonant cluster such as "str" or "sp". Line up the start of the vowel with the grid, not the start of the hiss, and compare it with the version where the consonant sits on the grid.
 7. Sing the line again with the changes, or play back the edited take.

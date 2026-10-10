@@ -494,7 +494,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                     title="Lessons"
                     description={
                         <p>
-                            {articles.length} free lessons from the studio, set out in {paths.length} paths from songwriting and arrangement to mixing,
+                            {articles.length} free lessons from the studio, and {paths.length} paths through them from songwriting and arrangement to mixing,
                             audio science and licensing. Most come with diagrams, an experiment to try in your DAW and a short quiz.
                         </p>
                     }
@@ -650,7 +650,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                             Show more lessons
                                         </button>
                                         <p className="text-sm text-white/50">
-                                            {visibleCount} of {libraryArticles.length}
+                                            {/* The featured lesson above the list counts as one shown. */}
+                                            {visibleCount + (showFeaturedArticle ? 1 : 0)} of {filteredArticles.length}
                                         </p>
                                     </div>
                                 ) : null}

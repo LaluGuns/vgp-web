@@ -47,7 +47,11 @@ export interface Category {
     description: string;
 }
 
-/** In learning order: the blog index and the filters list them this way. */
+/**
+ * In learning order, grouped as the /learn path map draws them (writing and
+ * arranging, sound and mixing, psychology, business): the blog index, the
+ * filters and each path's "next path" follow it.
+ */
 export const categories: Category[] = [
     {
         slug: 'songwriting',
@@ -58,6 +62,11 @@ export const categories: Category[] = [
         slug: 'arrangement-groove',
         name: 'Arrangement & Groove',
         description: 'Energy curves, density, silence, swing and the microtiming that makes a beat feel played.',
+    },
+    {
+        slug: 'genre-guides',
+        name: 'Genre Guides',
+        description: 'How trap, phonk, R&B, City Pop, Cyberpunk Jazz and Neo Synthwave are built.',
     },
     {
         slug: 'sound-design',
@@ -80,6 +89,11 @@ export const categories: Category[] = [
         description: 'Sampling, bit depth, aliasing, Fourier, filters, phase, latency, room modes and meters, explained for producers.',
     },
     {
+        slug: 'production-tips',
+        name: 'Production Tips',
+        description: 'Choosing a beat that fits your voice, matching tempo and key, and mixing rap vocals recorded at home.',
+    },
+    {
         slug: 'music-psychology',
         name: 'Music Psychology',
         description: 'Expectation, surprise, memory and attention: how listeners feel music before they can name it.',
@@ -88,16 +102,6 @@ export const categories: Category[] = [
         slug: 'producer-psychology',
         name: 'Producer Mindset',
         description: 'Fresh ears, references, decisions, finishing and momentum in the session.',
-    },
-    {
-        slug: 'production-tips',
-        name: 'Production Tips',
-        description: 'Choosing a beat that fits your voice, matching tempo and key, and mixing rap vocals recorded at home.',
-    },
-    {
-        slug: 'genre-guides',
-        name: 'Genre Guides',
-        description: 'How trap, phonk, R&B, City Pop, Cyberpunk Jazz and Neo Synthwave are built.',
     },
     {
         slug: 'licensing-guide',

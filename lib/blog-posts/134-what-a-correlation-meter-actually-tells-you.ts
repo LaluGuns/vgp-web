@@ -143,7 +143,7 @@ One more relation ties the needle to mid/side. For channels of equal level, $r =
 
 ## DAW experiment: calibrate your own meter
 
-You need a correlation meter. Some DAWs build one into a metering or imaging plugin; if yours does not, a free one will do.
+You need a correlation meter. Some DAWs build one into a metering or imaging plugin; if yours does not, add a free one.
 
 1. Put a correlation meter and a mono switch on the master, with the meter before the switch.
 2. Play a mono vocal centred and note the reading. Pan it 30% left and check that the reading does not change. Then pan it hard left and see what your meter shows.

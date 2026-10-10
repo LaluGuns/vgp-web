@@ -123,7 +123,7 @@ Set this up once and use it throughout the mix.
 
 1. Insert a utility plugin with a mono switch at the very end of the master chain, after the limiter and before any meters. Map the switch to a key command.
 2. Loop the chorus at a moderate monitoring level and toggle between stereo and mono every few seconds.
-3. Add a correlation meter just before the mono switch, so it still sees both channels (a free one will do if your DAW has none). It reads +1 when both channels are identical, around 0 when they are unrelated, and below 0 when they are fighting each other.
+3. Add a correlation meter just before the mono switch, so it still sees both channels (if your DAW has none, install a free one). It reads +1 when both channels are identical, around 0 when they are unrelated, and below 0 when they are fighting each other.
 4. Note every part that thins out or changes tone in mono. The parts in the centre should not change at all, and a part panned hard to one side drops by a few decibels, which is normal.
 5. For each part that drops, stay in mono and bypass its widener, chorus or stereo delay one at a time until you find the cause.
 6. Fix the cause: lower the side boost on a mid-side widener, change a Haas delay or replace it with a second take panned opposite, and make sure nothing below about 120 Hz is wider than mono.

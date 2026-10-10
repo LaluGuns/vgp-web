@@ -116,7 +116,7 @@ You will usually find the new balance cleaner, with a few items from your list t
 
 ## Common mistake: calling flaws character
 
-The most common version of this trap is relabelling technical problems as authenticity: excessive sibilance, room noise or a muddy low end that "sounds more real". Raw performances are worth keeping, and some roughness is a choice. But leaving a problem in because you are used to it rarely helps the song.
+Most often it shows up as relabelling technical problems as authenticity: excessive sibilance, room noise or a muddy low end that "sounds more real". Raw performances are worth keeping, and some roughness is a choice. But leaving a problem in because you are used to it rarely helps the song.
 
 A simple test separates the two. Imagine a clean recording of the same take. Would you add this sound to it on purpose? If yes, it is character, and you should keep it and maybe make it clearer. If no, it is a flaw you got used to.
 

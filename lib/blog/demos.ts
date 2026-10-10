@@ -136,13 +136,13 @@ export const demoCatalog = {
     },
     normalization: {
         title: 'Hear what normalization does to a loud master',
-        blurb: 'A loop, synth or a real mix, as a dynamic master and a loud, clipped one. Turn on streaming-style normalization and compare them at the same loudness.',
+        blurb: 'A synth loop or a real mix, as a dynamic master and a loud, clipped one. Turn on streaming-style normalization and compare them at the same loudness.',
         height: [752, 708, 684, 684, 632, 632, 632, 472, 448, 472, 448],
         level: 1.2,
     },
     'loudness-bias': {
         title: 'Blind test: which one sounds better?',
-        blurb: 'The same loop twice, synth or a real mix, with one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
+        blurb: 'A synth loop or a real mix, played twice with one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
         height: [428, 356, 356, 356, 356, 356, 356, 336, 336, 336, 336],
         level: -0.3,
     },

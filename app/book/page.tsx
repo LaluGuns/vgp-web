@@ -12,11 +12,11 @@ import { LearnNav } from '@/components/learn/LearnNav';
 
 const chapters = [
     { number: '01', title: 'The Trap Framework', desc: 'Song structure, the rhythm grid and how a trap beat is built.' },
-    { number: '02', title: 'The Low End', desc: '808 tuning, relationship with kick, sidechain, and translation.' },
-    { number: '03', title: 'The Recording Session', desc: 'Microphone selection, distance, and fixing issues before mixing.' },
-    { number: '04', title: 'Vocal Processing', desc: 'EQ moves, compression, saturation, de-essing, and spatial design.' },
-    { number: '05', title: 'Mixing the Full Track', desc: 'Balance, pan, depth, stereo width, and reference tracks.' },
-    { number: '06', title: 'Mastering for Streaming', desc: 'Loudness metering, peak levels, limiting, and final delivery.' },
+    { number: '02', title: 'The Low End', desc: '808 tuning, how it sits with the kick, sidechain and translation.' },
+    { number: '03', title: 'The Recording Session', desc: 'Microphone choice, distance and fixing problems before the mix.' },
+    { number: '04', title: 'Vocal Processing', desc: 'EQ moves, compression, saturation, de-essing and space.' },
+    { number: '05', title: 'Mixing the Full Track', desc: 'Balance, pan, depth, stereo width and reference tracks.' },
+    { number: '06', title: 'Mastering for Streaming', desc: 'Loudness metering, peak levels, limiting and final delivery.' },
 ];
 
 const facts = ['80+ pages', 'PDF for any device', '6 chapters'];
@@ -46,7 +46,7 @@ export default function GuidesPage() {
                                 </p>
                                 <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                                     <EditorialButton onClick={openPopup}>Email me at launch</EditorialButton>
-                                    <TextLink href="/blog">Read the free articles</TextLink>
+                                    <TextLink href="/blog">Read the free lessons</TextLink>
                                 </div>
                                 <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-2 border-t border-white/10 pt-6 text-sm text-white/70">
                                     {facts.map((fact) => (
