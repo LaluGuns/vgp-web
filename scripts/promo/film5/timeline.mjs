@@ -58,16 +58,11 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8']) 
     // "so it covers the click" then version 1's downbeat; "your ears meet the kick fresh" then version 2's.
     if (id === 'fog') sting('S1', 1, 0);
     if (id === 'fresh') sting('S2', 2, 0.35);
-    // The limiter's measured result holds after "pull the kick down".
-    if (id === 'hand') t += 0.7;
-    // The ear test: two lengths, each named while its bar fills, then heard at once, its downbeat on the grid.
-    const TEST = { g16: ['G16', '16', 1], g8: ['G8', 2, 1] }[id];
-    if (TEST) {
-        const [gid, v, pre] = TEST;
-        const down = onGrid(t + pre * BEAT - 0.1);
-        tests.push({ id: gid, v, at: down - pre * BEAT, pre, post: 1.25 });
-        t = down + 1.25 * BEAT + 0.1;
-    }
+    // The limiter's measured result holds after "right as the kick lands", long enough to read.
+    if (id === 'hand') t += 1.4;
+    // Why a quarter: shown, not played. The 16th and the 8th measure the same in the signal (VERIFY),
+    // so the film draws them on the after-fog's axis instead of asking the viewer to hear a difference.
+    if (id === 'g8') t += 0.6;
     // The three reasons stay up together before the ear scene.
     if (id === 'hook') t += 0.4;
 }
@@ -151,8 +146,8 @@ export const TIMELINE = {
         { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: "In 2 the riser stops, the after-fog fades in the silence (counted, slowed), and the click lands in the clear on version 2's downbeat, heard alone." },
         { id: 'hand', line: 'hand', dt: -0.1, view: 'hand', teaches: "Your limiter is a hand on a console fader: in 1 it is pulled down as the kick arrives (measured gain reduction on each strip's display)." },
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
-        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then an ear test of a 16th and an 8th, matched in loudness: a loud sound fogs hearing for up to 200 ms (model); a 16th (117 ms) ends inside it, an 8th (234.4 ms) outlasts it; the click itself measures the same in both." },
+        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then why a quarter: a loud sound fogs hearing for up to 200 ms (model); a 16th (117 ms) can end inside it, an 8th (234.4 ms) clears it." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
-        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons, with the lesson address up throughout, then a question for the comments: which did you pick at the start, 1 or 2?' },
+        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons with the lesson address up throughout, ending on a question for the comments: which did you pick at the start, 1 or 2?' },
     ],
 };

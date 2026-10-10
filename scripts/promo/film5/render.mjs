@@ -74,8 +74,8 @@ log(`  stricter small-speaker model (500 Hz high-pass at 24 dB/oct, +4 dB at 1 k
         const m = clickOf(len);
         return `${nm} (${(len * 1000).toFixed(1)} ms): click ${f1(m.clickDb)} dB (phone check ${f1(m.clickPhoneDb)}, small speaker ${f1(m.clickSmallDb)}), limiter ${f1(m.grMean)} dB on the first kick, gap floor ${f1(m.gapDb)} dB`;
     });
-    log(`Ear test (the film plays the 16th and the 8th; the beat is measured for reference), the same drop with three gaps, each matched to version 2's drop-bar loudness (click as in claim 2; version 1 without a gap: ${f1(Q[1].clickDb)} dB): ${rows.join('; ')}`);
-    log('  The signal measures barely differ between the three: the build is silent at the downbeat in all of them. What differs is forward masking in the listener (the after-fog), which the film shows as a labelled model, not a measurement, and says aloud ("The click is the same; your ears aren\'t.").');
+    log(`Gap lengths, measured (not played in the film): the same drop with three gaps, each matched to version 2's drop-bar loudness (click as in claim 2; version 1 without a gap: ${f1(Q[1].clickDb)} dB): ${rows.join('; ')}`);
+    log('  The signal measures barely differ between the three: the build is silent at the downbeat in all of them. What differs is forward masking in the listener (the after-fog), which is why the film draws the 16th and the 8th on the after-fog model\'s axis instead of asking the viewer to hear a difference.');
 }
 log(`Claim 4, the first kick (K-weighted, first 50 ms) over the drop bar's loudness at matched loudness: version 1 ${f1(Q[1].kickOverBar)} dB, version 2 ${f1(Q[2].kickOverBar)} dB, ${f1(Q.claims[4].db)} dB more prominent with the gap`);
 const pass = Q.claims[1].db >= 3 && Q.claims[2].db >= 10 && Q.claims[3].survive1 >= 0.8 && Q.claims[3].survive2 >= 0.8 && Q.claims[4].db > 0;

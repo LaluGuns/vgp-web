@@ -4,8 +4,8 @@ fog|In number one, the riser is still roaring when the kick lands, so it covers 
 fresh|In number two, the riser stops. Its after-fog, the dull moment after a loud sound, fades, and your ears meet the kick fresh.
 hand|Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down, right as the kick lands.
 brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
-how|So cut everything about a quarter second before the drop, reverb tails too. Why a quarter second? Compare two gaps.
-g16|A sixteenth: the after-fog may still be there.
-g8|An eighth: it's gone. The click is the same; your ears aren't.
+how|So cut everything about a quarter second before the drop, reverb tails too.
+g16|Why a quarter? A sixteenth can still sit in the after-fog.
+g8|An eighth clears it.
 again|Now listen again. Hear the click?
-cta|That's the click: about fourteen dB clearer, in this drop. Clean ears, a calmer limiter, a beat you saw coming. Which did you pick at the start, one or two? Full lesson on the Virzy Guns blog.
+cta|That's the click: about fourteen dB clearer, in this drop. Clean ears, a calmer limiter, a beat you saw coming. Full lesson on the Virzy Guns blog. Which did you pick at the start, one or two?
