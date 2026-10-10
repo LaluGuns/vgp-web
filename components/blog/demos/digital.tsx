@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { clickTone, envelopeGain, fadeOut, midi, noiseBuffer, sequence, type Engine } from './engine';
-import { PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
+import { SourceChoice, loopGain, startFeed, useSource, type Feed } from './realmix';
+import { PlayButton, Readout, Segmented, Slider, Variants, useDialect, useFrame, usePlayer } from './ui';
 
 const SWEEP_FROM = 500;
 const SWEEP_TO = 15000;
@@ -219,6 +220,8 @@ const NOTE_FADE = 1.5;
 /** The note goes into the converter at about -15 dBFS and is turned up afterwards by this much. */
 const BIT_PRE = 0.1;
 const BIT_POST = 7;
+/** The real mix's loudness before BIT_PRE: 20 dB down, it goes into the converter about as low as a quiet passage or a fade, and its 16-bit default plays at the house loudness. */
+const BIT_REAL_IN = -11.6;
 
 /**
  * A quiet, decaying piano-like note stored at fewer and fewer bits.
@@ -227,7 +230,9 @@ const BIT_POST = 7;
 export function BitDepthDemo() {
     const [bits, setBits] = useState(16);
     const [dither, setDither] = useState(false);
-    const nodes = useRef<{ ctx: AudioContext; shaper: WaveShaperNode; ditherGain: GainNode } | null>(null);
+    const source = useSource('late-train-home');
+    const fed = source.loop;
+    const nodes = useRef<{ ctx: AudioContext; shaper: WaveShaperNode; ditherGain: GainNode; feed: Feed } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -250,39 +255,52 @@ export function BitDepthDemo() {
         });
         ditherGain.connect(shaper);
         pre.connect(shaper).connect(post).connect(master).connect(out);
-        nodes.current = { ctx, shaper, ditherGain };
-        const notes = [60, 64, 67, 72];
-        let i = 0;
-        const play = () => {
-            const t = ctx.currentTime + 0.05;
-            const f = midi(notes[i++ % notes.length]);
-            for (const [h, a] of [
-                [1, 1],
-                [2, 0.4],
-                [3, 0.2],
-                [4, 0.1],
-            ] as const) {
-                const osc = ctx.createOscillator();
-                osc.frequency.value = f * h;
-                const g = envelopeGain(ctx);
-                g.gain.setValueAtTime(0.0001, t);
-                g.gain.exponentialRampToValueAtTime(a, t + 0.005);
-                g.gain.exponentialRampToValueAtTime(0.0005, t + NOTE_FADE);
-                osc.connect(g).connect(pre);
-                osc.start(t);
-                osc.stop(t + NOTE_FADE + 0.1);
-            }
-        };
-        play();
-        const timer = window.setInterval(play, NOTE_EVERY * 1000);
+        const feed = startFeed(
+            ctx,
+            pre,
+            (into) => {
+                const notes = [60, 64, 67, 72];
+                let i = 0;
+                const play = () => {
+                    const t = ctx.currentTime + 0.05;
+                    const f = midi(notes[i++ % notes.length]);
+                    for (const [h, a] of [
+                        [1, 1],
+                        [2, 0.4],
+                        [3, 0.2],
+                        [4, 0.1],
+                    ] as const) {
+                        const osc = ctx.createOscillator();
+                        osc.frequency.value = f * h;
+                        const g = envelopeGain(ctx);
+                        g.gain.setValueAtTime(0.0001, t);
+                        g.gain.exponentialRampToValueAtTime(a, t + 0.005);
+                        g.gain.exponentialRampToValueAtTime(0.0005, t + NOTE_FADE);
+                        osc.connect(g).connect(into);
+                        osc.start(t);
+                        osc.stop(t + NOTE_FADE + 0.1);
+                    }
+                };
+                play();
+                const timer = window.setInterval(play, NOTE_EVERY * 1000);
+                return () => window.clearInterval(timer);
+            },
+            fed,
+            (loop) => loopGain(loop, BIT_REAL_IN),
+        );
+        nodes.current = { ctx, shaper, ditherGain, feed };
         return () => {
-            window.clearInterval(timer);
+            feed.stop();
             nodes.current = null;
             fadeOut(ctx, master, () => {
                 for (const n of noises) n.stop();
             });
         };
-    });
+    }, source.pick === 'synth' || fed !== null);
+
+    useEffect(() => {
+        nodes.current?.feed.use(fed);
+    }, [fed]);
 
     const apply = (next: { bits?: number; dither?: boolean }) => {
         const b = next.bits ?? bits;
@@ -298,7 +316,7 @@ export function BitDepthDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Dither"
                     value={dither ? 'on' : 'off'}
@@ -309,6 +327,7 @@ export function BitDepthDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={source.pick === 'real' && !fed} />
             <Slider
                 label="Bit depth"
                 value={bits}
@@ -316,7 +335,15 @@ export function BitDepthDemo() {
                 max={16}
                 onChange={(v) => apply({ bits: v })}
                 format={(v) => `${v}-bit`}
-                hint="The note is played quietly and turned up afterwards, the way a fade or a quiet passage exposes low bits."
+                hint={
+                    <Variants
+                        show={fed ? 1 : 0}
+                        items={[
+                            'The note is played quietly and turned up afterwards, the way a fade or a quiet passage exposes low bits.',
+                            'The mix is stored 20 dB down and turned up afterwards, the way a fade or a quiet passage exposes low bits. Listen to the chord tails and the hats.',
+                        ]}
+                    />
+                }
             />
             <Readout
                 live

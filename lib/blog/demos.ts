@@ -1,7 +1,9 @@
 /**
  * The listening demos an article can place with `::demo <id>`. Titles and
  * blurbs render on the server; the controls load in the browser only when
- * the demo scrolls near. Every sound is synthesised in the browser.
+ * the demo scrolls near. Every sound is synthesised in the browser, except
+ * the real mix that eleven of them can play instead (their Source choice,
+ * components/blog/demos/realmix.tsx), which loads only when a reader picks it.
  *
  * `height` is the height in px of the demo's controls (the box under its
  * blurb) on a lesson page before anyone touches them, the tallest in each
@@ -22,14 +24,17 @@
  * the latency clicks lower. The normalization demo's dynamic master is at
  * the house loudness and its loud master about 6 LU above it, on purpose;
  * in the blind loudness test the two sides sit 0.5 LU either side of it.
- * Re-measure it whenever a demo's sound changes.
+ * A real mix plays at the same house loudness and peak rule: each demo with a
+ * Source choice sets the loudness its loop goes in at (`*_REAL_IN` in its
+ * module), and its height holds with either source picked. Re-measure it
+ * whenever a demo's sound changes.
  */
 
 export const demoCatalog = {
     compressor: {
         title: 'Hear compression change the shape of a hit',
-        blurb: 'A drum loop through a compressor, level-matched so you compare movement, not volume. Change the attack and listen to the snare.',
-        height: [756, 732, 732, 732, 732, 672, 672, 480, 480, 480, 480],
+        blurb: 'A drum loop, or a real mix, through a compressor, level-matched so you compare movement, not volume. Change the attack and listen to the snare.',
+        height: [920, 876, 876, 876, 876, 816, 816, 604, 604, 604, 604],
         level: -1.6,
     },
     aliasing: {
@@ -89,14 +94,14 @@ export const demoCatalog = {
     },
     filter: {
         title: 'Shape a sound with a filter',
-        blurb: 'Chords and soft noise through one filter, with the spectrum drawn live. Sweep the cutoff and raise the resonance.',
-        height: [516, 516, 516, 516, 516, 464, 464, 318, 318, 318, 318],
+        blurb: 'Chords and soft noise, or a real mix, through one filter, with the spectrum drawn live. Sweep the cutoff and raise the resonance.',
+        height: [680, 660, 660, 660, 660, 608, 608, 442, 442, 442, 442],
         level: -0.1,
     },
     'eq-sweep': {
         title: 'Find a frequency by ear',
-        blurb: 'A narrow boost you can sweep across the spectrum. Move it slowly, stop where it sounds worst, then check the number.',
-        height: [376, 376, 376, 376, 376, 376, 376, 290, 290, 290, 290],
+        blurb: 'A narrow boost you can sweep across a synth loop or a real mix. Move it slowly, stop where it sounds worst, then check the number.',
+        height: [540, 520, 520, 520, 520, 520, 520, 414, 414, 414, 414],
         level: -1.2,
     },
     envelope: {
@@ -113,14 +118,14 @@ export const demoCatalog = {
     },
     saturation: {
         title: 'Hear saturation add size, not volume',
-        blurb: 'Bass and chords through a waveshaper, level-matched so you hear the harmonics rather than a louder signal. Watch the spectrum fill in.',
-        height: [510, 510, 510, 458, 458, 458, 438, 378, 378, 378, 378],
+        blurb: 'Bass and chords, or a real mix, through a waveshaper, level-matched so you hear the harmonics rather than a louder signal. Watch the spectrum fill in.',
+        height: [674, 654, 654, 602, 602, 602, 602, 502, 502, 502, 502],
         level: -2.3,
     },
     'bit-depth': {
         title: 'Lower the bit depth',
-        blurb: 'A quiet, decaying note stored at fewer and fewer bits. Listen to the tail turn gritty, then turn on dither and hear the grit become hiss.',
-        height: [326, 310, 290, 290, 290, 290, 290, 290, 270, 290, 270],
+        blurb: 'A quiet, decaying note, or a real mix played quietly, stored at fewer and fewer bits. Listen to the tails turn gritty, then turn on dither and hear the grit become hiss.',
+        height: [510, 474, 474, 454, 454, 454, 454, 414, 414, 414, 414],
         level: -0.8,
     },
     latency: {
@@ -131,14 +136,14 @@ export const demoCatalog = {
     },
     normalization: {
         title: 'Hear what normalization does to a loud master',
-        blurb: 'The same loop as a dynamic master and a loud, clipped one. Turn on streaming-style normalization and compare them at the same loudness.',
-        height: [588, 564, 540, 540, 488, 488, 488, 348, 324, 348, 324],
+        blurb: 'A loop, synth or a real mix, as a dynamic master and a loud, clipped one. Turn on streaming-style normalization and compare them at the same loudness.',
+        height: [752, 708, 684, 684, 632, 632, 632, 472, 448, 472, 448],
         level: 1.2,
     },
     'loudness-bias': {
         title: 'Blind test: which one sounds better?',
-        blurb: 'The same loop twice, one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
-        height: [264, 212, 212, 212, 212, 212, 212, 212, 212, 212, 212],
+        blurb: 'The same loop twice, synth or a real mix, with one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
+        height: [428, 356, 356, 356, 356, 356, 356, 336, 336, 336, 336],
         level: -0.3,
     },
     cadence: {
@@ -149,14 +154,14 @@ export const demoCatalog = {
     },
     parallel: {
         title: 'Blend a crushed copy under the dry drums',
-        blurb: 'The dry drum loop stays untouched while a heavily compressed copy is blended underneath. Move the blend and hear the quiet detail come up while the hits keep their shape.',
-        height: [798, 750, 710, 710, 658, 614, 614, 530, 506, 506, 506],
+        blurb: 'The dry drums, or a real mix, stay untouched while a heavily compressed copy is blended underneath. Move the blend and hear the quiet detail come up while the hits keep their shape.',
+        height: [962, 898, 874, 834, 782, 758, 758, 654, 610, 630, 610],
         level: -0.5,
     },
     transient: {
         title: 'Shape the hit without a threshold',
         blurb: 'A transient shaper turns the start of each hit up or down and the tail up or down, whatever the level. Compare it with a compressor on the same loop.',
-        height: [1162, 1074, 1054, 1030, 1030, 978, 954, 696, 696, 696, 696],
+        height: [1182, 1074, 1054, 1030, 1030, 978, 954, 696, 696, 696, 696],
         level: -0.3,
     },
     sidechain: {
@@ -167,8 +172,8 @@ export const demoCatalog = {
     },
     limiter: {
         title: 'Drive a limiter and listen to the release',
-        blurb: 'A loop driven into a limiter, matched in loudness to the original. Push the drive and change the release to hear the drums and the tone change.',
-        height: [896, 872, 792, 768, 768, 748, 748, 610, 590, 610, 590],
+        blurb: 'A drum loop or a real mix driven into a limiter, matched in loudness to the original. Push the drive and change the release to hear the drums and the tone change.',
+        height: [1060, 1016, 936, 912, 912, 892, 892, 734, 714, 734, 714],
         level: -1.4,
     },
     'clip-recover': {
@@ -179,14 +184,14 @@ export const demoCatalog = {
     },
     width: {
         title: 'Widen the sides and watch the meters',
-        blurb: 'A stereo mix split into mid and side. Raise the side level, check it in mono and watch the correlation meter move as the image gets wider.',
-        height: [1132, 1048, 1004, 980, 980, 936, 936, 778, 734, 758, 734],
+        blurb: 'A short synth mix, or a real one, split into mid and side. Raise the side level, check it in mono and watch the correlation meter move as the image gets wider.',
+        height: [1312, 1192, 1148, 1124, 1124, 1080, 1080, 902, 858, 882, 858],
         level: -3.7,
     },
     'monitor-level': {
         title: 'Judge the same mix at three playback levels',
-        blurb: 'One short mix played quiet, medium and loud, with the loudest step kept safe. Listen to how much bass and air you hear at each level.',
-        height: [744, 696, 696, 672, 672, 652, 652, 528, 504, 504, 504],
+        blurb: 'One short mix, synth or real, played quiet, medium and loud, with the loudest step kept safe. Listen to how much bass and air you hear at each level.',
+        height: [908, 840, 840, 816, 816, 796, 796, 652, 628, 628, 628],
         level: -3.7,
     },
     'reverb-duck': {

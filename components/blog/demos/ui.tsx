@@ -1,7 +1,7 @@
 'use client';
 
 import { startTransition, useCallback, useContext, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, flushSync } from 'react-dom';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
 import { claim, getEngine, release, warmEngine, type Engine } from './engine';
@@ -44,9 +44,14 @@ function afterPaint(fn: () => void) {
  * `start` gets an engine whose `out` carries the demo's playback trim
  * (`level` in lib/blog/demos.ts), so every demo sits at the house loudness.
  * `engine()` returns the same, for sounds played outside `start` (a tap).
+ *
+ * While `ready` is false (a real mix still loading), Play waits: `waiting`
+ * is true, the button says so, and the sound starts once `ready` turns true.
+ * A second press cancels the wait.
  */
-export function usePlayer(start: (engine: Engine) => () => void) {
+export function usePlayer(start: (engine: Engine) => () => void, ready = true) {
     const [playing, setPlaying] = useState(false);
+    const [waiting, setWaiting] = useState(false);
     const stopRef = useRef<(() => void) | null>(null);
     const startRef = useRef(start);
     useEffect(() => {
@@ -69,7 +74,7 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         stopRef.current?.();
     }, []);
 
-    const play = useCallback(() => {
+    const begin = useCallback(() => {
         const out = engine();
         let halt: (() => void) | null = null;
         let stopped = false;
@@ -99,6 +104,37 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         });
     }, [engine]);
 
+    const readyRef = useRef(ready);
+    useEffect(() => {
+        readyRef.current = ready;
+    });
+
+    const play = useCallback(() => {
+        if (readyRef.current) {
+            begin();
+            return;
+        }
+        // The sound is not here yet. Starting another demo, or a second press, cancels the wait.
+        const cancel = () => {
+            release(cancel);
+            if (stopRef.current === cancel) stopRef.current = null;
+            setWaiting(false);
+        };
+        claim(cancel);
+        stopRef.current = cancel;
+        startTransition(() => setWaiting(true));
+    }, [begin]);
+
+    // The wait is over: start in a task of its own (begin ends the wait as it claims the output).
+    useEffect(() => {
+        if (!waiting || !ready) return;
+        const id = window.setTimeout(() => {
+            setWaiting(false);
+            begin();
+        }, 0);
+        return () => window.clearTimeout(id);
+    }, [waiting, ready, begin]);
+
     useEffect(() => {
         const onHide = () => {
             if (document.visibilityState === 'hidden') stopRef.current?.();
@@ -114,7 +150,7 @@ export function usePlayer(start: (engine: Engine) => () => void) {
         };
     }, []);
 
-    return { playing, play, stop, engine, toggle: () => (stopRef.current ? stop() : play()) };
+    return { playing, waiting, play, stop, engine, toggle: () => (stopRef.current ? stop() : play()) };
 }
 
 /** True while a dialog or popover is open: Escape belongs to it then. */
@@ -153,8 +189,11 @@ function onScreen(el: HTMLElement): boolean {
  * it covers no text while the reader reads; a scroll, the focus or a tap on
  * the tab brings it back. Stopping from it or with Escape puts the focus
  * back on this button.
+ *
+ * `waiting` (usePlayer) is a press that waits for its sound, a real mix still
+ * loading: the button says so, and pressing it again cancels.
  */
-export function PlayButton({ playing, onClick, label = 'Play' }: { playing: boolean; onClick: () => void; label?: string }) {
+export function PlayButton({ playing, onClick, label = 'Play', waiting }: { playing: boolean; onClick: () => void; label?: string; waiting?: boolean }) {
     const button = useRef<HTMLButtonElement>(null);
     const [away, setAway] = useState(false);
     const [tucked, setTucked] = useState(false);
@@ -272,30 +311,64 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
             </button>
         ) : null;
 
+    // A button that can wait (a demo with a real mix) keeps, while it waits or plays, the width of the wider of those two
+    // states, so the moment a mix that was waited for arrives (Loading the mix… turns into Stop and Playing) moves nothing.
+    const other = waiting !== undefined && (playing || waiting) ? (playing ? 'waiting' : 'playing') : null;
     return (
-        <div className="flex items-center gap-4">
-            <button
-                ref={button}
-                type="button"
-                onClick={onClick}
-                onPointerDown={warm}
-                onPointerUp={warm}
-                onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') warmEngine();
-                }}
-                aria-keyshortcuts={playing ? 'Escape' : undefined}
-                data-demo-play=""
-                className="vgp-focus inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97]"
-            >
-                {playing ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
-                {playing ? 'Stop' : label}
-            </button>
-            {/* --accent is the lesson group's inside a lesson (DemoSlot), sky elsewhere. */}
-            <span className="text-sm text-[var(--accent)]" aria-live="polite">
-                {playing ? 'Playing' : ''}
-            </span>
-            {stop && slot ? createPortal(stop, slot) : stop}
+        <div className="grid">
+            <div className="col-start-1 row-start-1 flex items-center gap-4">
+                <button
+                    ref={button}
+                    type="button"
+                    onClick={onClick}
+                    onPointerDown={warm}
+                    onPointerUp={warm}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') warmEngine();
+                    }}
+                    aria-keyshortcuts={playing ? 'Escape' : undefined}
+                    data-demo-play=""
+                    className={PLAY_CLASS}
+                >
+                    {playing ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
+                    {playing ? 'Stop' : waiting ? 'Loading the mix…' : label}
+                </button>
+                {/* --accent is the lesson group's inside a lesson (DemoSlot), sky elsewhere. */}
+                <span className="text-sm text-[var(--accent)]" aria-live="polite">
+                    {playing ? 'Playing' : ''}
+                </span>
+                {stop && slot ? createPortal(stop, slot) : stop}
+            </div>
+            {other ? (
+                <div aria-hidden="true" className="invisible col-start-1 row-start-1 flex items-center gap-4">
+                    <span className={PLAY_CLASS}>
+                        {other === 'playing' ? <Square size={14} fill="currentColor" /> : <Play size={15} fill="currentColor" />}
+                        {other === 'playing' ? 'Stop' : 'Loading the mix…'}
+                    </span>
+                    <span className="text-sm">{other === 'playing' ? 'Playing' : ''}</span>
+                </div>
+            ) : null}
         </div>
+    );
+}
+
+const PLAY_CLASS =
+    'vgp-focus inline-flex min-h-11 items-center gap-2 rounded-full border border-white/30 px-5 text-sm font-semibold text-white transition-[border-color,transform] duration-200 hover:border-white/70 active:scale-[0.97]';
+
+/**
+ * One of several texts, all laid out in the same place, so the box is as
+ * tall as the tallest at every width and a switch between them moves
+ * nothing. Only the one shown is in the accessibility tree.
+ */
+export function Variants({ show, items }: { show: number; items: ReactNode[] }) {
+    return (
+        <span className="grid">
+            {items.map((item, i) => (
+                <span key={i} className={i === show ? 'col-start-1 row-start-1' : 'invisible col-start-1 row-start-1'} aria-hidden={i === show ? undefined : true}>
+                    {item}
+                </span>
+            ))}
+        </span>
     );
 }
 
@@ -396,8 +469,23 @@ export function Segmented<T extends string>({
 }) {
     const labelId = useId();
     const buttons = useRef<(HTMLButtonElement | null)[]>([]);
-    const chosen = options.findIndex((o) => o.value === value);
+    // A choice shows as made at once, even when the demo follows a moment later (a transition), so an arrow key
+    // moves the focus onto an option that already says it is checked, as a native radio does. Until the demo's
+    // value changes, the press is what shows; once it has changed, the value does again.
+    const [pressed, setPressed] = useState<{ to: T; was: T } | null>(null);
+    const [seen, setSeen] = useState(value);
+    if (seen !== value) {
+        setSeen(value);
+        setPressed(null);
+    }
+    const shown = pressed && pressed.was === value ? pressed.to : value;
+    const chosen = options.findIndex((o) => o.value === shown);
     const tabStop = chosen >= 0 ? chosen : 0;
+
+    const pick = (to: T) => {
+        if (to !== shown) flushSync(() => setPressed({ to, was: value }));
+        onChange(to);
+    };
 
     const onKey = (from: number, e: KeyboardEvent<HTMLButtonElement>) => {
         const last = options.length - 1;
@@ -408,8 +496,8 @@ export function Segmented<T extends string>({
         else if (e.key === 'End') to = last;
         else return;
         e.preventDefault();
+        if (to !== chosen) pick(options[to].value);
         buttons.current[to]?.focus();
-        if (to !== chosen) onChange(options[to].value);
     };
 
     return (
@@ -425,7 +513,7 @@ export function Segmented<T extends string>({
                         role="radio"
                         aria-checked={i === chosen}
                         tabIndex={i === tabStop ? 0 : -1}
-                        onClick={() => onChange(option.value)}
+                        onClick={() => pick(option.value)}
                         onKeyDown={(e) => onKey(i, e)}
                         className={optionClass(i === chosen)}
                     >
@@ -467,13 +555,22 @@ export function Answers<T extends string>({
     );
 }
 
-/** A level bar. `value` 0 to 1. Its ends follow the dialect (app/globals.css, `.vgp-meter`). */
+/**
+ * A level bar. `value` 0 to 1. Its ends follow the dialect (app/globals.css, `.vgp-meter`).
+ * The reading keeps the width of the widest one a meter shows ("-00.0 dB"), so its label
+ * wraps the same with a dash before playback as with a number during it.
+ */
 export function Meter({ label, value, text }: { label: string; value: number; text: string }) {
     return (
         <div>
             <div className="flex items-baseline justify-between gap-4 text-sm">
                 <span className="min-w-0 text-white/70">{label}</span>
-                <span className="shrink-0 whitespace-nowrap tabular-nums text-white/85">{text}</span>
+                <span className="grid shrink-0 whitespace-nowrap text-right tabular-nums text-white/85">
+                    <span className="col-start-1 row-start-1">{text}</span>
+                    <span className="invisible col-start-1 row-start-1" aria-hidden="true">
+                        -00.0 dB
+                    </span>
+                </span>
             </div>
             <div className="vgp-meter mt-2 h-2 bg-white/[0.06]" aria-hidden="true">
                 <div className="vgp-meter-fill h-full bg-white/75" style={{ width: `${Math.round(Math.min(1, Math.max(0, value)) * 100)}%` }} />
@@ -746,20 +843,36 @@ function drawTrace(c: HTMLCanvasElement | null, context: Float32Array, focus: Fl
  * finishing on the latest inputs. Returns the last finished result. The
  * first measurement waits for an idle moment, so a demo that mounts while
  * the reader scrolls toward it costs no frames.
+ *
+ * With `cache`, finished results are kept by key (the last 24), and a key
+ * measured before is shown again in the same render, without measuring: a
+ * switch back to a source or a setting already heard goes live at once.
  */
-export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
-    const [result, setResult] = useState<R | null>(null);
+export function useAnalysis<R>(key: string, measure: () => Promise<R>, cache?: Map<string, R>): R | null {
+    const [result, setResult] = useState<R | null>(() => cache?.get(key) ?? null);
+    const [seen, setSeen] = useState(key);
+    if (seen !== key) {
+        setSeen(key);
+        if (cache?.has(key)) setResult(cache.get(key) as R);
+    }
     const measureRef = useRef(measure);
+    const keyRef = useRef(key);
     // `gen` counts the keys asked for: a measurement started for an older key is not shown.
     const job = useRef({ busy: false, dirty: false, alive: true, first: true, gen: 0 });
     useEffect(() => {
         measureRef.current = measure;
+        keyRef.current = key;
     });
     useEffect(() => {
         const j = job.current;
         j.alive = true;
-        j.dirty = true;
         j.gen++;
+        // Already measured: shown above, in the render that asked for it.
+        if (cache?.has(key)) {
+            j.first = false;
+            return;
+        }
+        j.dirty = true;
         const run = () => {
             if (j.busy || !j.alive) return;
             j.busy = true;
@@ -767,8 +880,13 @@ export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null
                 while (j.dirty && j.alive) {
                     j.dirty = false;
                     const gen = j.gen;
+                    const k = keyRef.current;
                     try {
                         const r = await measureRef.current();
+                        if (cache) {
+                            cache.set(k, r);
+                            if (cache.size > 24) cache.delete(cache.keys().next().value as string);
+                        }
                         // Superseded while it ran: the loop measures the newer key next and shows that.
                         // A transition, so React can draw the new figures in slices between frames.
                         if (j.alive && gen === j.gen) startTransition(() => setResult(r));
@@ -788,7 +906,7 @@ export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null
             j.alive = false;
             cancel();
         };
-    }, [key]);
+    }, [key, cache]);
     return result;
 }
 

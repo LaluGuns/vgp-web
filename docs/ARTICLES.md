@@ -146,7 +146,8 @@ level: 3` draws a flat +3 dB line), `harmonics` (`f0`, `count`, `rolloff`,
 ## Listening demos
 
 Place at most one or two per lesson, where hearing it beats reading about
-it. Sound is synthesised in the browser. Ids:
+it. Sound is synthesised in the browser; eleven demos can also play a real
+mix (Real mix, below). Ids:
 
 | Id | What the reader does |
 | --- | --- |
@@ -199,6 +200,51 @@ loop with the engine's `sequence` (it skips steps a stalled page made late
 instead of stacking them into one loud hit), and give a voice's envelope an
 `envelopeGain` (a new GainNode starts at 1, and a noise hit can then open
 with one full-scale sample).
+
+### Real mix
+
+Eleven demos have a Source choice: Synth, their own sound and the default,
+or Real mix, one of three short loops, so the reader hears the same move on
+finished music. Each demo uses one loop, and the line under the choice
+credits it.
+
+| Loop | Demos | What it is |
+| --- | --- | --- |
+| Dystopia (excerpt) | `width`, `monitor-level`, `normalization`, `loudness-bias` | Bars 99 to 106 of Virzy Guns' own mastered track, 150 BPM, 12.8 s. A finished, limited master with a mono low end and a wide top. Credit: "Real mix: Dystopia by Virzy Guns (excerpt)." |
+| Chrome Teeth | `limiter`, `parallel`, `saturation` | A hard 808 dark synthwave trap loop made for the blog from licensed Cymatics one-shots, mixed but not limited, 144 BPM, 13.3 s. Credit: "Real mix: Chrome Teeth, made for this blog." |
+| Late Train Home | `compressor`, `filter`, `eq-sweep`, `bit-depth` | A City Pop and neo-soul loop made the same way, dynamic and wide-band, 96 BPM, 20 s. Credit: "Real mix: Late Train Home, made for this blog." |
+
+The other demos stay synth only. `mono` is about one wide part against
+centred ones, metered part by part, and a finished mix has no parts to
+meter (Dystopia loses 0.14 dB in mono, which the `width` demo's mono check
+already plays). `clip-recover` is about a take clipped at the converter
+while recording. The rest are built from separate voices (drums, chords, a
+bass under a kick, a voice into a reverb), not one stereo stream.
+
+The loops are MP3s in `public/blog-mix/`, named `.dat` and served
+as `application/octet-stream`. A demo fetches its loop with `fetch()` only
+when the reader picks Real mix, never on page load, decodes it with
+`decodeAudioData` and loops it with an `AudioBufferSourceNode` on exact loop
+points. Never use `<audio>`, `<video>` or `MediaSource`, an `audio/*` or
+`video/*` content type, or a media extension in a URL: download managers
+such as IDM offer to grab any of those. Each file is encoded with the end of
+the loop before its start and its start after its end, under a gapless tag
+that points past them, so it repeats without a seam whether or not the
+decoder reads the tag (`components/blog/demos/realmix.tsx` places the loop
+either way). Keep a loop under about 350 KB. Publish the stereo mix only: no
+stems, samples or project files.
+
+A real mix plays at the house loudness with the same peak rule:
+each demo sets the loudness its loop goes in at (`*_REAL_IN` in its module)
+from the loop's measured loudness (`LOOPS` in `realmix.tsx`). The
+level-matched demos measure the real loop itself, one whole pass offline,
+so the line says "Loading the mix…" until the fetch, the decoding and that
+measurement are done, and the switch goes live with its matching. Play
+pressed meanwhile waits, and the button says "Loading the mix…" too. On the
+real mix the `filter` and `eq-sweep` demos turn down as the resonance rises
+past 11 dB or the boost widens past a Q of 2; at full resonance the mix's
+bass would otherwise peak about 3 dB over the rule. Text that differs by
+source sits in one place (`Variants` in `ui.tsx`), so a switch moves nothing.
 
 ## Glossary
 

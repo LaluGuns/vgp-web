@@ -1,7 +1,7 @@
 /**
  * A small shared Web Audio engine for the article demos. Every sound is
- * synthesised in the browser, so there are no audio files to load and no
- * rights to clear.
+ * synthesised in the browser, except three short real mixes (realmix.tsx)
+ * that a reader can pick on some demos and that load only then.
  *
  * Output: demo -> house level -> safety limiter -> ceiling clip -> the
  * reader's volume -> speakers. The volume comes last, so it scales what a

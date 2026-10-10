@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { fadeOut, kWeighted, midi, pluck, scheduleSteps, sequence, type Engine } from './engine';
 import { playDrumStep } from './dynamics';
-import { Answers, PlayButton, Readout, Segmented, usePlayer, whenIdle } from './ui';
+import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
+import { Answers, PlayButton, Readout, Segmented, useAnalysis, usePlayer, whenIdle } from './ui';
 
 const BPM = 92;
 const STEPS = 32;
@@ -15,27 +16,50 @@ function playLoopStep(ctx: BaseAudioContext, dest: AudioNode, step: number, time
 
 type Master = 'dynamic' | 'loud';
 
-/** Builds one of the two masters between `input` and the returned output node. */
-function masterChain(ctx: BaseAudioContext, input: AudioNode, kind: Master): AudioNode {
+/**
+ * The real mix (a finished master) goes in at this loudness, so with the
+ * demo's playback level it plays at the house loudness as it was released.
+ */
+const NORM_REAL_IN = -13.6;
+/** How far the real master is pushed into the clipper: it comes out about 5.8 LU louder, as the drum loop's loud master does. */
+const NORM_REAL_PUSH = 11;
+
+interface MasterChain {
+    out: AudioNode;
+    /** The drum loop's master (false) or the real mix's (true). */
+    set(real: boolean): void;
+}
+
+/**
+ * Builds one of the two masters between `input` and the returned output node.
+ * The drum loop's dynamic master is a gentle glue compressor; the real mix
+ * is already mastered, so its dynamic master is the mix as released (the
+ * compressor at 1:1). The loud master pushes either into a hard clipper.
+ */
+function masterChain(ctx: BaseAudioContext, input: AudioNode, kind: Master, real = false): MasterChain {
     if (kind === 'dynamic') {
         const glue = ctx.createDynamicsCompressor();
-        glue.threshold.value = -12;
-        glue.ratio.value = 2;
         glue.attack.value = 0.03;
         glue.release.value = 0.15;
+        const set = (r: boolean) => {
+            glue.threshold.setValueAtTime(r ? 0 : -12, ctx.currentTime);
+            glue.ratio.setValueAtTime(r ? 1 : 2, ctx.currentTime);
+        };
+        set(real);
         input.connect(glue);
-        return glue;
+        return { out: glue, set };
     }
-    // Pushed 14 dB into a hard clipper: louder, with the peaks shaved flat.
+    // Pushed into a hard clipper: louder, with the peaks shaved flat.
     const push = ctx.createGain();
-    push.gain.value = 10 ** (14 / 20);
+    const set = (r: boolean) => push.gain.setValueAtTime(10 ** ((r ? NORM_REAL_PUSH : 14) / 20), ctx.currentTime);
+    set(real);
     const clip = ctx.createWaveShaper();
     const curve = new Float32Array(2048);
     for (let i = 0; i < curve.length; i++) curve[i] = Math.max(-0.5, Math.min(0.5, (i / (curve.length - 1)) * 2 - 1));
     clip.curve = curve;
     clip.oversample = '4x';
     input.connect(push).connect(clip);
-    return clip;
+    return { out: clip, set };
 }
 
 /**
@@ -48,7 +72,7 @@ async function measure(kind: Master, sampleRate: number): Promise<number> {
     const seconds = stepDur * STEPS + 0.5;
     const ctx = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
     const src = ctx.createGain();
-    kWeighted(ctx, masterChain(ctx, src, kind)).connect(ctx.destination);
+    kWeighted(ctx, masterChain(ctx, src, kind).out).connect(ctx.destination);
     await scheduleSteps(STEPS, (step) => playLoopStep(ctx, src, step, 0.05 + step * stepDur, stepDur));
     const buffer = await ctx.startRendering();
     const data = buffer.getChannelData(0);
@@ -63,6 +87,22 @@ function measureBoth(): Promise<Record<Master, number>> {
     loudnessJob ??= Promise.all([measure('dynamic', 48000), measure('loud', 48000)]).then(([dynamic, loud]) => ({ dynamic, loud }));
     return loudnessJob;
 }
+
+/** Both masters' loudness on one whole pass of the real loop, as it repeats. */
+async function measureReal(loop: RealLoop): Promise<Measured> {
+    const one = async (kind: Master) => {
+        const r = await renderLoop(loop, { gain: loopGain(loop, NORM_REAL_IN), taps: 1, weighted: 1 }, (ctx, src, [tap]) => masterChain(ctx, src, kind, true).out.connect(tap));
+        const [from, to] = r.span();
+        return -0.691 + 10 * Math.log10(await stereoPower(r.k[0], from, to));
+    };
+    return { real: loop, dynamic: await one('dynamic'), loud: await one('loud') };
+}
+
+/** The masters' loudness, and the real loop it was measured on (null for the drum loop). */
+type Measured = Record<Master, number> & { real: RealLoop | null };
+
+/** The real loop's measurement once made (ui.tsx useAnalysis), so a switch back to it goes live at once. */
+const normResults = new Map<string, Measured | null>();
 
 /** Gain for one master: with normalization on, the louder master is turned down to match the quieter one. */
 function levelFor(kind: Master, norm: boolean, measured: Record<Master, number> | null): number {
@@ -87,8 +127,15 @@ const NORM_OUT = 0.7;
 export function NormalizationDemo() {
     const [which, setWhich] = useState<Master>('loud');
     const [normalize, setNormalize] = useState(false);
-    const [lufs, setLufs] = useState<Record<Master, number> | null>(null);
-    const nodes = useRef<{ ctx: AudioContext; gains: Record<Master, GainNode>; level: Record<Master, GainNode> } | null>(null);
+    const [synthLufs, setLufs] = useState<Record<Master, number> | null>(null);
+    const source = useSource('dystopia');
+    const real = source.loop;
+    const realLufs = useAnalysis(real ? 'real' : 'synth', () => (real ? measureReal(real) : Promise.resolve(null)), normResults);
+    // What plays, and what the readings and the normalization follow: the real mix once it has been measured.
+    const fed = realLufs?.real ?? null;
+    const lufs = useMemo<Measured | null>(() => (fed && realLufs ? realLufs : synthLufs ? { ...synthLufs, real: null } : null), [fed, realLufs, synthLufs]);
+    const loading = source.pick === 'real' && (!real || fed !== real);
+    const nodes = useRef<{ ctx: AudioContext; gains: Record<Master, GainNode>; level: Record<Master, GainNode>; chains: MasterChain[]; feed: Feed } | null>(null);
 
     // Measure while the page is idle, so pressing play does not wait for it.
     useEffect(() => {
@@ -109,24 +156,36 @@ export function NormalizationDemo() {
         const src = ctx.createGain();
         const gains = {} as Record<Master, GainNode>;
         const level = {} as Record<Master, GainNode>;
+        const chains: MasterChain[] = [];
         for (const kind of ['dynamic', 'loud'] as Master[]) {
             const select = ctx.createGain();
             select.gain.value = kind === which ? 1 : 0;
             const lvl = ctx.createGain();
             lvl.gain.value = levelFor(kind, normalize, lufs);
-            masterChain(ctx, src, kind).connect(lvl).connect(select).connect(master);
+            const chain = masterChain(ctx, src, kind, fed !== null);
+            chain.out.connect(lvl).connect(select).connect(master);
+            chains.push(chain);
             gains[kind] = select;
             level[kind] = lvl;
         }
-        nodes.current = { ctx, gains, level };
-        const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, src, step, time, dur));
-        if (!lufs) void measureBoth().then(setLufs);
+        const feed = startFeed(
+            ctx,
+            src,
+            (into) => {
+                const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, into, step, time, dur));
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, NORM_REAL_IN),
+        );
+        nodes.current = { ctx, gains, level, chains, feed };
+        if (!synthLufs) void measureBoth().then(setLufs);
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             fadeOut(ctx, master);
         };
-    });
+    }, !loading);
 
     const apply = (next: { which?: Master; normalize?: boolean }, measured = lufs) => {
         const w = next.which ?? which;
@@ -142,12 +201,15 @@ export function NormalizationDemo() {
         }
     };
 
-    // A measurement that lands while playing with normalization on goes live at once.
+    // A measurement that lands while playing with normalization on goes live at once, and a new source with its own.
     useEffect(() => {
         const n = nodes.current;
-        if (!n || !lufs) return;
+        if (!n) return;
+        n.feed.use(fed);
+        for (const c of n.chains) c.set(fed !== null);
+        if (!lufs) return;
         for (const kind of ['dynamic', 'loud'] as Master[]) n.level[kind].gain.setTargetAtTime(levelFor(kind, normalize, lufs), n.ctx.currentTime, 0.02);
-    }, [lufs, normalize]);
+    }, [lufs, normalize, fed]);
 
     const fmt = (v: number) => `${v.toFixed(1)} LUFS`;
     const diff = lufs ? lufs.loud - lufs.dynamic : 0;
@@ -155,7 +217,7 @@ export function NormalizationDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Master"
                     value={which}
@@ -166,6 +228,7 @@ export function NormalizationDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <Segmented
                 label="Normalization"
                 value={normalize ? 'on' : 'off'}
@@ -190,6 +253,9 @@ export function NormalizationDemo() {
     );
 }
 
+/** The real mix goes in at this loudness: the two sides then play 0.5 LU either side of the house loudness. */
+const AB_REAL_IN = -13.8;
+
 /**
  * A blind A/B of the same loop where one side is 1 dB louder. Pick the
  * one that sounds better, then see which was louder.
@@ -198,7 +264,9 @@ export function LevelAbDemo() {
     const [louder, setLouder] = useState<'a' | 'b'>(() => (Math.random() < 0.5 ? 'a' : 'b'));
     const [side, setSide] = useState<'a' | 'b'>('a');
     const [pick, setPick] = useState<'a' | 'b' | null>(null);
-    const nodes = useRef<{ ctx: AudioContext; gain: GainNode } | null>(null);
+    const source = useSource('dystopia');
+    const fed = source.loop;
+    const nodes = useRef<{ ctx: AudioContext; gain: GainNode; feed: Feed } | null>(null);
     const answers = useRef<HTMLDivElement>(null);
     const gainFor = (s: 'a' | 'b', l: 'a' | 'b') => (s === l ? 10 ** (1 / 20) : 1);
 
@@ -206,14 +274,27 @@ export function LevelAbDemo() {
         const gain = ctx.createGain();
         gain.gain.value = gainFor(side, louder) * 0.8;
         gain.connect(out);
-        nodes.current = { ctx, gain };
-        const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, gain, step, time, dur));
+        const feed = startFeed(
+            ctx,
+            gain,
+            (into) => {
+                const seq = sequence(ctx, BPM, STEPS, (step, time, dur) => playLoopStep(ctx, into, step, time, dur));
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, AB_REAL_IN),
+        );
+        nodes.current = { ctx, gain, feed };
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             fadeOut(ctx, gain);
         };
-    });
+    }, source.pick === 'synth' || fed !== null);
+
+    useEffect(() => {
+        nodes.current?.feed.use(fed);
+    }, [fed]);
 
     const listen = (s: 'a' | 'b') => {
         setSide(s);
@@ -234,7 +315,7 @@ export function LevelAbDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
                     value={side}
@@ -245,6 +326,7 @@ export function LevelAbDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={source.pick === 'real' && !fed} />
             <div ref={answers}>
                 <Answers
                     label="Which one sounds better?"

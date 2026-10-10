@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, kWeighted, midi, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
+import { SourceChoice, loopGain, renderLoop, startFeed, stereoPeak, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import { LiveMeter, PlayButton, Segmented, Slider, useAnalysis, usePlayer } from './ui';
 
 // A 16-step boom-bap bar with ghost notes, so dynamics have something to grab.
@@ -88,6 +89,8 @@ function compressor(ctx: BaseAudioContext, p: CompParams): DynamicsCompressorNod
 
 interface CompAnalysis {
     params: CompParams;
+    /** The real loop this was measured on, or null for the drum loop. */
+    real: RealLoop | null;
     /** Gain after `undoMakeup` that plays the compressed loop at the bypass loudness, or as close as the peaks allow. */
     match: number;
     /** dB the compressed loop still sits under the bypass. */
@@ -173,9 +176,52 @@ async function analyseComp(params: CompParams): Promise<CompAnalysis> {
     src.start();
     const buffer = await ctx.startRendering();
     const { peak: peakWet, power: powWet } = await measureBars(buffer.getChannelData(0), buffer.getChannelData(1));
-    const wanted = powWet > 0 ? Math.sqrt(loop.powDry / powWet) : 1;
-    const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * loop.peakDry) / peakWet : MATCH_MAX);
-    return { params, match, short: 20 * Math.log10(wanted / match) };
+    return matched(params, null, loop.powDry, loop.peakDry, powWet, peakWet);
+}
+
+function matched(params: CompParams, real: RealLoop | null, powDry: number, peakDry: number, powWet: number, peakWet: number): CompAnalysis {
+    const wanted = powWet > 0 ? Math.sqrt(powDry / powWet) : 1;
+    const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * peakDry) / peakWet : MATCH_MAX);
+    return { params, real, match, short: 20 * Math.log10(wanted / match) };
+}
+
+/**
+ * The real mix goes into the compressor at this loudness (ungated, K-weighted),
+ * about where the drum loop does, so the threshold acts on it the same way and
+ * the bypass plays at the house loudness.
+ */
+const REAL_IN = -13.9;
+
+const realDry = new WeakMap<RealLoop, Promise<{ peak: number; power: number }>>();
+
+/** Settings already measured on this page, by source and setting (ui.tsx useAnalysis). */
+const compResults = new Map<string, CompAnalysis>();
+
+/** The real loop's own peak and loudness as it goes in, once per loop. */
+function realDryStats(loop: RealLoop): Promise<{ peak: number; power: number }> {
+    let job = realDry.get(loop);
+    if (!job) {
+        job = (async () => {
+            const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1 }, (_, src, [tap]) => src.connect(tap));
+            const [from, to] = r.span();
+            return { peak: await stereoPeak(r.x[0], from, to), power: await stereoPower(r.k[0], from, to) };
+        })();
+        job.catch(() => realDry.delete(loop));
+        realDry.set(loop, job);
+    }
+    return job;
+}
+
+/** The same measurement on one whole pass of the real loop, as it repeats. */
+async function analyseCompReal(loop: RealLoop, params: CompParams): Promise<CompAnalysis> {
+    const dry = await realDryStats(loop);
+    const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1 }, (ctx, src, [tap]) => {
+        const undo = ctx.createGain();
+        undo.gain.value = undoMakeup(params.threshold, params.ratio);
+        src.connect(compressor(ctx, params)).connect(undo).connect(tap);
+    });
+    const [from, to] = r.span();
+    return matched(params, loop, dry.power, dry.peak, await stereoPower(r.k[0], from, to), await stereoPeak(r.x[0], from, to));
 }
 
 /**
@@ -189,8 +235,17 @@ export function CompressorDemo() {
     const [ratio, setRatio] = useState(PRESETS.punch.ratio);
     const [attack, setAttack] = useState(PRESETS.punch.attack);
     const [release, setRelease] = useState(PRESETS.punch.release);
-    const analysis = useAnalysis(`${threshold}|${ratio}|${attack}|${release}`, () => analyseComp({ threshold, ratio, attack, release }));
-    const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext } | null>(null);
+    const source = useSource('late-train-home');
+    const real = source.loop;
+    const analysis = useAnalysis(
+        `${real ? 'real' : 'synth'}|${threshold}|${ratio}|${attack}|${release}`,
+        () => (real ? analyseCompReal(real, { threshold, ratio, attack, release }) : analyseComp({ threshold, ratio, attack, release })),
+        compResults,
+    );
+    // What plays is what the matching was measured on: a switch of source goes live with its first measurement.
+    const fed = analysis?.real ?? null;
+    const loading = source.pick === 'real' && (!real || fed !== real);
+    const nodes = useRef<{ comp: DynamicsCompressorNode; undo: GainNode; makeup: GainNode; dry: GainNode; wet: GainNode; ctx: AudioContext; feed: Feed } | null>(null);
     const modeRef = useRef(mode);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
@@ -208,20 +263,31 @@ export function CompressorDemo() {
         wet.gain.value = modeRef.current === 'on' ? 1 : 0;
         // Silent until the setting has been measured, a moment after the page loads.
         makeup.gain.value = 0;
-        const n = { comp, undo, makeup, dry, wet, ctx };
+        const feed = startFeed(
+            ctx,
+            bus,
+            (into) => {
+                const seq = sequence(ctx, BPM, 16, (step, time, dur) => playDrumStep(ctx, into, step, time, dur));
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, REAL_IN),
+        );
+        const n = { comp, undo, makeup, dry, wet, ctx, feed };
         nodes.current = n;
         if (analysis) applyComp(n, analysis, false);
-        const seq = sequence(ctx, BPM, 16, (step, time, dur) => playDrumStep(ctx, bus, step, time, dur));
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             fadeOut(ctx, master, () => bus.disconnect());
         };
-    });
+    }, !loading);
 
     useEffect(() => {
         const n = nodes.current;
-        if (n && analysis) applyComp(n, analysis, true);
+        if (!n || !analysis) return;
+        n.feed.use(analysis.real);
+        applyComp(n, analysis, true);
     }, [analysis]);
 
     const applyMode = (next: Mode) => {
@@ -257,7 +323,7 @@ export function CompressorDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
                     value={mode}
@@ -268,6 +334,7 @@ export function CompressorDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <LiveMeter label="Gain reduction" active={player.playing} read={() => (nodes.current ? -nodes.current.comp.reduction : null)} full={18} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label="Threshold" value={threshold} min={-40} max={0} onChange={setThreshold} format={(v) => `${v} dB`} />

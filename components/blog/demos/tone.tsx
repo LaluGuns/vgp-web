@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, pluck, rms, sequence, snare, type Engine } from './engine';
-import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useDialect, useFrame, usePlayer, whenIdle } from './ui';
+import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
+import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useAnalysis, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
 
@@ -243,13 +244,35 @@ const FILTER_OUT = 1.58;
 const ENVELOPE_OUT = 2.24;
 const MASKING_OUT = 1.41;
 
+/**
+ * The loudness the real mix goes into the filter at, by the demo's starting
+ * filter, so its default setting plays at the house loudness: the low-pass
+ * at 900 Hz takes away most of the mix's level, the narrow boost adds a little.
+ */
+const FILTER_REAL_IN = -19.3;
+
+/**
+ * On the real mix, a high resonance or a wide boost lands on its bass and
+ * chords hard enough to take the peaks past the demo's ceiling (a resonance
+ * of 20 dB peaks about 3 dB over -7 dBFS there), so the output comes down as
+ * they rise: 0.45 dB per dB of resonance above 11, and 1.8 dB per step of Q
+ * below 2 on the boost. Worked out from every cutoff and Q on the loop. The
+ * synth never comes near the ceiling, so it plays untrimmed.
+ */
+function realTrim(type: FilterKind, q: number): number {
+    const db = type === 'peaking' ? -Math.max(0, 2 - q) * 1.8 : -Math.max(0, q - 11) * 0.45;
+    return 10 ** (db / 20);
+}
+
 /** A bright chord and noise through one filter, with the spectrum drawn live. */
 export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass', 'peaking'] }: { initial?: FilterKind; types?: FilterKind[] }) {
     const [type, setType] = useState<FilterKind>(initial);
     const [freq, setFreq] = useState(initial === 'peaking' ? 1200 : 900);
     const [q, setQ] = useState(initial === 'peaking' ? 8 : 4);
     const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
-    const nodes = useRef<{ ctx: AudioContext; filter: BiquadFilterNode } | null>(null);
+    const source = useSource('late-train-home');
+    const fed = source.loop;
+    const nodes = useRef<{ ctx: AudioContext; filter: BiquadFilterNode; safe: GainNode; feed: Feed; real: boolean } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -260,38 +283,64 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
         filter.frequency.value = freq;
         filter.Q.value = q;
         filter.gain.value = 12;
+        const safe = ctx.createGain();
+        safe.gain.value = fed ? realTrim(type, q) : 1;
         const an = ctx.createAnalyser();
         an.fftSize = 4096;
         an.smoothingTimeConstant = 0.8;
-        filter.connect(master);
-        filter.connect(an);
-        // A soft bed of noise so the filter shape shows across the whole range.
-        const noise = ctx.createBufferSource();
-        noise.buffer = noiseBuffer(ctx);
-        noise.loop = true;
-        const noiseGain = ctx.createGain();
-        noiseGain.gain.value = 0.05;
-        noise.connect(noiseGain).connect(filter);
-        noise.start();
-        const chords = [
-            [45, 57, 60, 64],
-            [41, 53, 57, 60],
-        ];
-        const seq = sequence(ctx, 100, 16, (step, time, dur) => {
-            const chord = chords[step < 8 ? 0 : 1];
-            if (step % 2 === 0) for (const n of chord) pluck(ctx, filter, time, midi(n + 12), dur * 1.8, 0.8);
-            if (step % 4 === 0) kick(ctx, filter, time, 0.5);
-            if (step % 2 === 1) hat(ctx, filter, time, 0.25);
-        });
-        nodes.current = { ctx, filter };
+        filter.connect(safe).connect(master);
+        safe.connect(an);
+        const feed = startFeed(
+            ctx,
+            filter,
+            (into) => {
+                // A soft bed of noise so the filter shape shows across the whole range.
+                const noise = ctx.createBufferSource();
+                noise.buffer = noiseBuffer(ctx);
+                noise.loop = true;
+                const noiseGain = ctx.createGain();
+                noiseGain.gain.value = 0.05;
+                noise.connect(noiseGain).connect(into);
+                noise.start();
+                const chords = [
+                    [45, 57, 60, 64],
+                    [41, 53, 57, 60],
+                ];
+                const seq = sequence(ctx, 100, 16, (step, time, dur) => {
+                    const chord = chords[step < 8 ? 0 : 1];
+                    if (step % 2 === 0) for (const n of chord) pluck(ctx, into, time, midi(n + 12), dur * 1.8, 0.8);
+                    if (step % 4 === 0) kick(ctx, into, time, 0.5);
+                    if (step % 2 === 1) hat(ctx, into, time, 0.25);
+                });
+                return () => {
+                    seq.stop();
+                    noise.stop();
+                };
+            },
+            fed,
+            (loop) => loopGain(loop, FILTER_REAL_IN),
+        );
+        nodes.current = { ctx, filter, safe, feed, real: fed !== null };
         setAnalyser(an);
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             setAnalyser(null);
-            fadeOut(ctx, master, () => noise.stop());
+            fadeOut(ctx, master);
         };
+    }, source.pick === 'synth' || fed !== null);
+
+    const live = useRef({ type, q });
+    useEffect(() => {
+        live.current = { type, q };
     });
+    useEffect(() => {
+        const n = nodes.current;
+        if (!n) return;
+        n.feed.use(fed);
+        n.real = fed !== null;
+        n.safe.gain.setTargetAtTime(fed ? realTrim(live.current.type, live.current.q) : 1, n.ctx.currentTime, 0.02);
+    }, [fed]);
 
     const set = (patch: { type?: FilterKind; freq?: number; q?: number }) => {
         if (patch.type) setType(patch.type);
@@ -302,17 +351,19 @@ export function FilterDemo({ initial = 'lowpass', types = ['lowpass', 'highpass'
         if (patch.type) n.filter.type = patch.type;
         if (patch.freq) n.filter.frequency.setTargetAtTime(patch.freq, n.ctx.currentTime, 0.02);
         if (patch.q) n.filter.Q.setTargetAtTime(patch.q, n.ctx.currentTime, 0.02);
+        if (patch.type || patch.q) n.safe.gain.setTargetAtTime(n.real ? realTrim(patch.type ?? type, patch.q ?? q) : 1, n.ctx.currentTime, 0.02);
     };
 
     const names: Record<FilterKind, string> = { lowpass: 'Low-pass', highpass: 'High-pass', peaking: 'Narrow boost' };
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 {types.length > 1 ? (
                     <Segmented label="Filter type" value={type} onChange={(v) => set({ type: v })} options={types.map((t) => ({ value: t, label: names[t] }))} />
                 ) : null}
             </div>
+            <SourceChoice source={source} loading={source.pick === 'real' && !fed} />
             <Spectrum
                 analyser={analyser}
                 active={player.playing}
@@ -561,19 +612,76 @@ function shaperCurve(kind: 'soft' | 'hard', drive: number): Float32Array<ArrayBu
     return curve;
 }
 
+/** The real mix goes into the saturation demo at this loudness, so the clean path plays at the house loudness. */
+const SAT_REAL_IN = -11.3;
+/** The demo's input gain, ahead of the shaper. */
+const SAT_IN = 0.8;
+
+interface SatMatch {
+    real: RealLoop;
+    /** Gain after the shaper that plays it at the clean loop's loudness. */
+    gain: number;
+}
+
+const satDry = new WeakMap<RealLoop, Promise<number>>();
+
+/** Matches already measured on this page, by setting (ui.tsx useAnalysis); the synth's is null (it matches as it plays). */
+const satResults = new Map<string, SatMatch | null>();
+
+/** K-weighted power of the clean real loop as it reaches the shaper, once per loop. */
+function satDryPower(loop: RealLoop): Promise<number> {
+    let job = satDry.get(loop);
+    if (!job) {
+        job = (async () => {
+            const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1 }, (_, src, [tap]) => src.connect(tap));
+            const [from, to] = r.span();
+            return stereoPower(r.k[0], from, to);
+        })();
+        job.catch(() => satDry.delete(loop));
+        satDry.set(loop, job);
+    }
+    return job;
+}
+
+/**
+ * On the real mix the matching is measured, not followed: one whole pass of
+ * the loop through the shaper, offline, against the clean loop, both
+ * K-weighted. One fixed gain per setting, so the mix does not breathe with a
+ * running level match.
+ */
+async function matchSatReal(loop: RealLoop, kind: 'off' | 'soft' | 'hard', drive: number): Promise<SatMatch> {
+    if (kind === 'off') return { real: loop, gain: 1 };
+    const dry = await satDryPower(loop);
+    const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1 }, (ctx, src, [tap]) => {
+        const shaper = ctx.createWaveShaper();
+        shaper.curve = shaperCurve(kind, drive);
+        shaper.oversample = '4x';
+        src.connect(shaper).connect(tap);
+    });
+    const [from, to] = r.span();
+    const wet = await stereoPower(r.k[0], from, to);
+    return { real: loop, gain: wet > 0 ? Math.min(4, Math.max(0.05, Math.sqrt(dry / wet))) : 1 };
+}
+
 /** Bass and chords through a waveshaper, level-matched so you hear harmonics, not volume. */
 export function SaturationDemo() {
     const [drive, setDrive] = useState(12);
     const [kind, setKind] = useState<'off' | 'soft' | 'hard'>('soft');
     const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
     const [gr, setGr] = useState(0);
-    const nodes = useRef<{ ctx: AudioContext; shaper: WaveShaperNode; dry: GainNode; wet: GainNode; matched: GainNode } | null>(null);
+    const source = useSource('chrome-teeth');
+    const real = source.loop;
+    const sat = useAnalysis(real ? `real|${kind}|${drive}` : 'synth', () => (real ? matchSatReal(real, kind, drive) : Promise.resolve(null)), satResults);
+    // The real mix goes live with its first measured match; the synth is matched as it plays.
+    const fed = sat?.real ?? null;
+    const loading = source.pick === 'real' && (!real || fed !== real);
+    const nodes = useRef<{ ctx: AudioContext; shaper: WaveShaperNode; dry: GainNode; wet: GainNode; matched: GainNode; feed: Feed; real: { current: boolean } } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
         master.connect(out);
         const src = ctx.createGain();
-        src.gain.value = 0.8;
+        src.gain.value = SAT_IN;
         const dry = ctx.createGain();
         const wet = ctx.createGain();
         const shaper = ctx.createWaveShaper();
@@ -592,14 +700,25 @@ export function SaturationDemo() {
         master.connect(an);
         dry.gain.value = kind === 'off' ? 1 : 0;
         wet.gain.value = kind === 'off' ? 0 : 1;
-        nodes.current = { ctx, shaper, dry, wet, matched };
+        const isReal = { current: fed !== null };
+        if (sat) matched.gain.value = sat.gain;
+        const feed = startFeed(
+            ctx,
+            src,
+            (into) => {
+                const seq = sequence(ctx, 92, 16, (step, time, dur) => {
+                    if (step === 0) bass(ctx, into, time, midi(33), dur * 6, 0.9);
+                    if (step === 8) bass(ctx, into, time, midi(36), dur * 6, 0.9);
+                    if (step % 4 === 2) for (const n of [57, 60, 64]) pluck(ctx, into, time, midi(n), dur * 2, 0.7);
+                    if (step === 4 || step === 12) snare(ctx, into, time, 0.6);
+                });
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, SAT_REAL_IN),
+        );
+        nodes.current = { ctx, shaper, dry, wet, matched, feed, real: isReal };
         setAnalyser(an);
-        const seq = sequence(ctx, 92, 16, (step, time, dur) => {
-            if (step === 0) bass(ctx, src, time, midi(33), dur * 6, 0.9);
-            if (step === 8) bass(ctx, src, time, midi(36), dur * 6, 0.9);
-            if (step % 4 === 2) for (const n of [57, 60, 64]) pluck(ctx, src, time, midi(n), dur * 2, 0.7);
-            if (step === 4 || step === 12) snare(ctx, src, time, 0.6);
-        });
         const a = new Float32Array(2048);
         const b = new Float32Array(2048);
         let sa = 0;
@@ -607,20 +726,31 @@ export function SaturationDemo() {
         const timer = window.setInterval(() => {
             sa = sa * 0.85 + rms(pre, a) * 0.15;
             sb = sb * 0.85 + rms(post, b) * 0.15;
-            if (sb > 1e-4) {
+            // The real mix plays with its measured match instead (below).
+            if (sb > 1e-4 && !isReal.current) {
                 const g = Math.min(4, Math.max(0.05, sa / sb));
                 matched.gain.setTargetAtTime(g, ctx.currentTime, 0.2);
                 setGr(20 * Math.log10(1 / g));
             }
         }, 60);
         return () => {
-            seq.stop();
+            feed.stop();
             window.clearInterval(timer);
             nodes.current = null;
             setAnalyser(null);
             fadeOut(ctx, master);
         };
-    });
+    }, !loading);
+
+    // A measured match goes live with its setting, and a switch of source with its first one.
+    useEffect(() => {
+        const n = nodes.current;
+        if (!n) return;
+        n.feed.use(sat?.real ?? null);
+        n.real.current = sat !== null;
+        if (sat) n.matched.gain.setTargetAtTime(sat.gain, n.ctx.currentTime, 0.01);
+    }, [sat]);
+    const shownGr = sat ? 20 * Math.log10(1 / sat.gain) : gr;
 
     const apply = (next: { drive?: number; kind?: 'off' | 'soft' | 'hard' }) => {
         const d = next.drive ?? drive;
@@ -637,7 +767,7 @@ export function SaturationDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Saturation"
                     value={kind}
@@ -649,9 +779,10 @@ export function SaturationDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <Spectrum analyser={analyser} active={player.playing} label="Live spectrum of the output, from 20 Hz to 20 kHz. Saturation adds harmonics that fill in the space above the notes." />
             <Slider label="Drive" value={drive} min={0} max={30} onChange={(v) => apply({ drive: v })} format={(v) => `${v} dB`} />
-            <Meter label="Level-matching turned the output down by" value={Math.max(0, gr) / 24} text={`${Math.max(0, gr).toFixed(1)} dB`} />
+            <Meter label="Level-matching turned the output down by" value={Math.max(0, shownGr) / 24} text={`${Math.max(0, shownGr).toFixed(1)} dB`} />
         </div>
     );
 }

@@ -3,6 +3,7 @@
 import { memo, useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, scheduleSteps, sequence, snare, type Engine } from './engine';
+import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import {
     LevelTrace,
     Meter,
@@ -11,10 +12,12 @@ import {
     Segmented,
     Slider,
     StepStrip,
+    Variants,
     accentAlpha,
     blockPower,
     canvas2d,
     ruleDash,
+    useAnalysis,
     useDialect,
     useFrame,
     usePlayer,
@@ -267,6 +270,35 @@ function playMixStep(ctx: BaseAudioContext, bus: MixBus, step: number, time: num
     for (const v of MIX_VOICE) if (v.at === step) sing(ctx, bus.center, time, midi(v.note), v.len * stepDur * 0.9, v.vowel, MIX_VOICE_LEVEL, v.to);
 }
 
+/**
+ * The real mix (Dystopia) goes into the width and monitor-level demos at this
+ * loudness, so at their defaults it plays at the house loudness.
+ */
+const MIX_REAL_IN = -11.8;
+
+/** The short mix as a stereo signal into `into`, played on its loop. Returns its stop. */
+function playMix(ctx: AudioContext, into: AudioNode): () => void {
+    const bus = mixBus(ctx);
+    const merger = ctx.createChannelMerger(2);
+    bus.l.connect(merger, 0, 0);
+    bus.r.connect(merger, 0, 1);
+    merger.connect(into);
+    const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (step, time, dur) => playMixStep(ctx, bus, step, time, dur));
+    return () => seq.stop();
+}
+
+/** A stereo input split into its left and right channels. */
+function splitStereo(ctx: BaseAudioContext): { input: GainNode; l: GainNode; r: GainNode } {
+    const input = gainNode(ctx);
+    const split = ctx.createChannelSplitter(2);
+    input.connect(split);
+    const l = gainNode(ctx);
+    const r = gainNode(ctx);
+    split.connect(l, 0);
+    split.connect(r, 1);
+    return { input, l, r };
+}
+
 function encodeMidSide(ctx: BaseAudioContext, l: AudioNode, r: AudioNode): { mid: GainNode; side: GainNode } {
     const mid = gainNode(ctx, 0.5);
     const side = gainNode(ctx, 0.5);
@@ -280,6 +312,24 @@ function encodeMidSide(ctx: BaseAudioContext, l: AudioNode, r: AudioNode): { mid
 interface MidSidePower {
     mid: number;
     side: number;
+    /** The real loop this was measured on, or null for the synth mix. */
+    real?: RealLoop | null;
+}
+
+/** The real loop's measurement once made (ui.tsx useAnalysis), so a switch back to it goes live at once. */
+const widthResults = new Map<string, MidSidePower | null>();
+
+/** The real loop's mid and side power, K-weighted, over one whole pass as it repeats. */
+async function midSideReal(loop: RealLoop): Promise<MidSidePower> {
+    const r = await renderLoop(loop, { gain: loopGain(loop, MIX_REAL_IN), taps: 2, weighted: 2 }, (ctx, src, [midTap, sideTap]) => {
+        const { input, l, r: right } = splitStereo(ctx);
+        src.connect(input);
+        const { mid, side } = encodeMidSide(ctx, l, right);
+        mid.connect(midTap);
+        side.connect(sideTap);
+    });
+    const [from, to] = r.span();
+    return { mid: await stereoPower(r.k[0], from, to), side: await stereoPower(r.k[1], from, to), real: loop };
 }
 
 let midSideJob: Promise<MidSidePower> | null = null;
@@ -556,14 +606,24 @@ export function WidthDemo() {
     const [midDb, setMidDb] = useState(0);
     const [mono, setMono] = useState(false);
     const [matched, setMatched] = useState(true);
-    const [ms, setMs] = useState<MidSidePower | null>(null);
-    const nodes = useRef<WidthNodes | null>(null);
+    const [synthMs, setMs] = useState<MidSidePower | null>(null);
+    const source = useSource('dystopia');
+    const real = source.loop;
+    const realMs = useAnalysis(real ? 'real' : 'synth', () => (real ? midSideReal(real) : Promise.resolve(null)), widthResults);
+    // What plays, and what the matching follows: the real mix once its mid and side have been measured.
+    const fed = realMs?.real ?? null;
+    const ms = fed ? realMs : synthMs;
+    const loading = source.pick === 'real' && (!real || fed !== real);
+    const nodes = useRef<(WidthNodes & { feed: Feed }) | null>(null);
     const smooth = useRef<WidthSmooth>(freshSmooth());
     const live = useRef<WidthSettings>({ sideDb, midDb, mono, matched, ms });
     useEffect(() => {
         live.current = { sideDb, midDb, mono, matched, ms };
-        if (nodes.current) applyWidth(nodes.current, live.current);
-    }, [sideDb, midDb, mono, matched, ms]);
+        const n = nodes.current;
+        if (!n) return;
+        n.feed.use(fed);
+        applyWidth(n, live.current);
+    }, [sideDb, midDb, mono, matched, ms, fed]);
     // Folding to mono is a switch, so let the meters jump with it.
     useEffect(() => {
         smooth.current.at = 0;
@@ -586,8 +646,8 @@ export function WidthDemo() {
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
         master.connect(out);
-        const bus = mixBus(ctx);
-        const enc = encodeMidSide(ctx, bus.l, bus.r);
+        const stereo = splitStereo(ctx);
+        const enc = encodeMidSide(ctx, stereo.l, stereo.r);
         const mid = gainNode(ctx, 1);
         const side = gainNode(ctx, 1);
         enc.mid.connect(mid);
@@ -620,26 +680,26 @@ export function WidthDemo() {
         anL.fftSize = anR.fftSize = 4096;
         match[0].connect(anL);
         match[1].connect(anR);
-        const n: WidthNodes = { ctx, mid, side, straight, cross, match, anL, anR, bufL: new Float32Array(4096), bufR: new Float32Array(4096) };
+        const feed = startFeed(ctx, stereo.input, (into) => playMix(ctx, into), fed, (loop) => loopGain(loop, MIX_REAL_IN));
+        const n = { ctx, mid, side, straight, cross, match, anL, anR, bufL: new Float32Array(4096), bufR: new Float32Array(4096), feed };
         nodes.current = n;
         applyWidth(n, live.current);
         smooth.current = freshSmooth();
 
-        if (!live.current.ms) midSidePower().then(setMs, () => {});
-        const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (step, time, dur) => playMixStep(ctx, bus, step, time, dur));
+        if (!synthMs) midSidePower().then(setMs, () => {});
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             fadeOut(ctx, master);
         };
-    });
+    }, !loading);
 
     const matchDb = 20 * Math.log10(matchGain(midDb, sideDb, ms));
 
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Playback"
                     value={mono ? 'mono' : 'stereo'}
@@ -650,6 +710,7 @@ export function WidthDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <WidthReadings active={player.playing} nodesRef={nodes} smoothRef={smooth} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider
@@ -681,9 +742,14 @@ export function WidthDemo() {
                 liveHint
             />
             <p className="text-sm leading-6 text-white/60">
-                Drums, bass and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides come
-                up, the correlation falls toward 0 and the middle parts take a smaller share of the mix, so the voice and kick seem to sit further back. Switch to mono
-                and the side signal is gone: whatever you added there disappears, and with loudness matched the mono version gets quieter as the sides go up.
+                {/* Both sources' wording in one place, so a switch moves nothing below. */}
+                <Variants
+                    show={fed ? 1 : 0}
+                    items={[
+                        'Drums, bass and voice sit in the middle. The pad and the arpeggio differ between left and right, so part of them lives in the sides. As the sides come up, the correlation falls toward 0 and the middle parts take a smaller share of the mix, so the voice and kick seem to sit further back. Switch to mono and the side signal is gone: whatever you added there disappears, and with loudness matched the mono version gets quieter as the sides go up.',
+                        'In Dystopia the kick and the 808 sit in the middle, while the lead, the pads and the hats are wide, so part of them lives in the sides. As the sides come up, the correlation falls toward 0 and the middle takes a smaller share of the mix, so the kick and 808 seem to sit further back. Switch to mono and the side signal is gone: whatever you added there disappears, and with loudness matched the mono version gets quieter as the sides go up.',
+                    ]}
+                />
             </p>
         </div>
     );
@@ -708,36 +774,47 @@ const BANDS = [
 export function MonitorLevelDemo() {
     const [step, setStep] = useState<LevelStep>('loud');
     const [bands, setBands] = useState<number[] | null>(null);
+    const source = useSource('dystopia');
+    const fed = source.loop;
     const nodes = useRef<{
         ctx: AudioContext;
         level: GainNode;
         an: AnalyserNode;
         data: Float32Array<ArrayBuffer>;
         history: { time: number; power: number[] }[];
+        /** One loop of what plays, the span the band levels average over. */
+        span: number;
+        feed: Feed;
     } | null>(null);
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
         master.connect(out);
         const level = gainNode(ctx, dbToGain(STEP_DB[step]));
-        const bus = mixBus(ctx);
-        const merger = ctx.createChannelMerger(2);
-        bus.l.connect(merger, 0, 0);
-        bus.r.connect(merger, 0, 1);
-        merger.connect(level).connect(master);
+        const mix = gainNode(ctx);
+        mix.connect(level).connect(master);
         const an = ctx.createAnalyser();
         an.fftSize = 4096;
         an.smoothingTimeConstant = 0;
-        merger.connect(an);
-        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount), history: [] };
-        const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (s, time, dur) => playMixStep(ctx, bus, s, time, dur));
+        mix.connect(an);
+        const feed = startFeed(ctx, mix, (into) => playMix(ctx, into), fed, (loop) => loopGain(loop, MIX_REAL_IN));
+        nodes.current = { ctx, level, an, data: new Float32Array(an.frequencyBinCount), history: [], span: fed ? fed.seconds : MIX_LOOP_SECONDS, feed };
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             setBands(null);
             fadeOut(ctx, master);
         };
-    });
+    }, source.pick === 'synth' || fed !== null);
+
+    // A new source starts a new average, over one loop of it.
+    useEffect(() => {
+        const n = nodes.current;
+        if (!n) return;
+        n.feed.use(fed);
+        n.span = fed ? fed.seconds : MIX_LOOP_SECONDS;
+        n.history.length = 0;
+    }, [fed]);
 
     useFrame(player.playing, () => {
         const n = nodes.current;
@@ -752,7 +829,7 @@ export function MonitorLevelDemo() {
         // Average over exactly one loop of the mix, so the reading stays put while the music moves.
         const now = n.ctx.currentTime;
         n.history.push({ time: now, power });
-        while (n.history.length > 1 && n.history[0].time < now - MIX_LOOP_SECONDS) n.history.shift();
+        while (n.history.length > 1 && n.history[0].time < now - n.span) n.history.shift();
         setBands(BANDS.map((_, b) => powerDb(n.history.reduce((sum, h) => sum + h.power[b], 0) / n.history.length)));
     });
 
@@ -764,7 +841,8 @@ export function MonitorLevelDemo() {
 
     return (
         <div className="space-y-6">
-            <PlayButton playing={player.playing} onClick={player.toggle} />
+            <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
+            <SourceChoice source={source} loading={source.pick === 'real' && !fed} />
             <Segmented
                 label="Playback level"
                 value={step}
@@ -790,9 +868,14 @@ export function MonitorLevelDemo() {
                 <p className="text-xs leading-5 text-white/50">Band levels of the mix at the chosen step, averaged over one loop. Each step lowers every band by the same 12 dB.</p>
             </div>
             <p className="text-sm leading-6 text-white/60">
-                This page cannot see your device volume, so the steps are relative to each other, and the loud step is no louder than the other demos here. Set a
-                comfortable level on Loud first, then step down without touching your volume. On the quiet step, listen to the bass under the kick and the hats on
-                top: many listeners hear them fade faster than the voice, even though the meters show the balance has not changed.
+                {/* Both sources' wording in one place, so a switch moves nothing below. */}
+                <Variants
+                    show={fed ? 1 : 0}
+                    items={[
+                        'This page cannot see your device volume, so the steps are relative to each other, and the loud step is no louder than the other demos here. Set a comfortable level on Loud first, then step down without touching your volume. On the quiet step, listen to the bass under the kick and the hats on top: many listeners hear them fade faster than the voice, even though the meters show the balance has not changed.',
+                        'This page cannot see your device volume, so the steps are relative to each other, and the loud step is no louder than the other demos here. Set a comfortable level on Loud first, then step down without touching your volume. On the quiet step, listen to the 808 under the kick and the hats on top: many listeners hear them fade faster than the lead, even though the meters show the balance has not changed.',
+                    ]}
+                />
             </p>
         </div>
     );

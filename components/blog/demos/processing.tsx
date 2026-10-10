@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
-import { LiveMeter, PlayButton, Readout, Segmented, Slider, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
+import { SourceChoice, loopGain, renderLoop, startFeed, stereoColumns, stereoPeak, stereoPower, stereoProduct, useSource, type Feed, type RealLoop } from './realmix';
+import { LiveMeter, PlayButton, Readout, Segmented, Slider, Variants, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
@@ -230,6 +231,14 @@ interface LoopClock {
     offset: number;
 }
 
+/** Points a playhead's clock at a real loop's first bar (the figure then spans the whole loop), or back at the drum loop's bars. */
+function followLoop(c: LoopClock, start: number | null, loop: RealLoop | null) {
+    if (start !== null && loop) {
+        c.barStart = start;
+        c.barDur = loop.seconds;
+    } else c.barDur = BAR;
+}
+
 /** Returns a ref for the playhead line. It follows the loop while `active`. */
 function usePlayhead(active: boolean, clock: { current: LoopClock | null }): RefObject<HTMLDivElement> {
     const line = useRef<HTMLDivElement>(null);
@@ -411,6 +420,8 @@ function crusher(ctx: BaseAudioContext): DynamicsCompressorNode {
 }
 
 interface ParallelAnalysis {
+    /** The real loop this was measured on (the figure then spans the whole loop, with its blend line for every 5 % of the slider), or null for the drum loop. */
+    real: { loop: RealLoop; blends: Float32Array[] } | null;
     /** Second bar of the dry loop, for the figure. */
     dry: Float32Array;
     /** Second bar of the crushed copy, scaled to the dry loop's loudness. */
@@ -458,6 +469,7 @@ async function analyseParallel(): Promise<ParallelAnalysis> {
     for (let i = 0; i < crushed.length; i++) crushed[i] *= norm;
     await yieldToMain();
     return {
+        real: null,
         dry,
         crushed,
         norm,
@@ -467,6 +479,41 @@ async function analyseParallel(): Promise<ParallelAnalysis> {
         dryColumns: columns(dry, 0, dry.length, BAR_COLUMNS, peak),
         soloColumns: columns(crushed, 0, crushed.length, BAR_COLUMNS, peak),
     };
+}
+
+/** The real mix goes in at this loudness, so with the demo's playback level the dry mix plays at the house loudness. */
+const PARALLEL_REAL_IN = -19.1;
+
+/** Measurements already made on this page, by source (and setting): a switch back to one goes live at once (ui.tsx useAnalysis). */
+const parallelResults = new Map<string, ParallelAnalysis>();
+const limitResults = new Map<string, LimitAnalysis>();
+
+/** The blend slider's positions, in %. */
+const BLEND_STEP = 5;
+const BLEND_STEPS = Array.from({ length: 100 / BLEND_STEP + 1 }, (_, i) => i * BLEND_STEP);
+
+/** Linear peaks to dB against `ref`, times `gain`. */
+const peaksDb = (peaks: Float32Array, ref: number, gain = 1) => Array.from(peaks, (v) => gainToDb((v * gain) / ref));
+
+/** The same measurement on one whole pass of the real loop, as it repeats. The figure spans the whole loop. */
+async function analyseParallelReal(loop: RealLoop): Promise<ParallelAnalysis> {
+    const lat = await measureLatency(loop.buffer.sampleRate);
+    const r = await renderLoop(loop, { gain: loopGain(loop, PARALLEL_REAL_IN), taps: 2, weighted: 2, tail: lat + 0.05 }, (ctx, src, [dryTap, crushTap]) => {
+        const delay = ctx.createDelay(0.05);
+        delay.delayTime.value = lat;
+        src.connect(delay).connect(dryTap);
+        src.connect(crusher(ctx)).connect(crushTap);
+    });
+    const [from, to] = r.span(lat);
+    const pxx = await stereoPower(r.k[0], from, to);
+    const norm = Math.sqrt(pxx / (await stereoPower(r.k[1], from, to)));
+    const pxy = (await stereoProduct(r.k[0], r.k[1], from, to)) * norm;
+    const peak = await stereoPeak(r.x[0], from, to);
+    const [dry] = await stereoColumns(r.x[0], from, to, BAR_COLUMNS);
+    const [solo] = await stereoColumns(r.x[1], from, to, BAR_COLUMNS);
+    // The blend's line for every position of the slider (5 % steps), so moving it only looks one up.
+    const blends = await stereoColumns(r.x[0], from, to, BAR_COLUMNS, r.x[1], BLEND_STEPS.map((b) => (b / 100) * norm));
+    return { real: { loop, blends }, dry: new Float32Array(0), crushed: new Float32Array(0), norm, pxx, pxy, peak, dryColumns: peaksDb(dry, peak), soloColumns: peaksDb(solo, peak, norm) };
 }
 
 /** Gain that brings dry + blend x crushed back to the loudness of the dry drums. K-weighting is linear, so no new render is needed. */
@@ -479,7 +526,12 @@ const blendMatch = (a: ParallelAnalysis, blend: number) => Math.sqrt(a.pxx / (a.
 export function ParallelDemo() {
     const [mode, setMode] = useState<ParallelMode>('blend');
     const [blend, setBlend] = useState(40);
-    const analysis = useAnalysis('parallel', analyseParallel);
+    const source = useSource('chrome-teeth');
+    const real = source.loop;
+    const analysis = useAnalysis(real ? 'real' : 'synth', () => (real ? analyseParallelReal(real) : analyseParallel()), parallelResults);
+    // What plays is what was measured: a switch of source goes live with its measurement.
+    const fed = analysis?.real?.loop ?? null;
+    const loading = source.pick === 'real' && (!real || fed !== real);
     const nodes = useRef<{
         ctx: AudioContext;
         comp: DynamicsCompressorNode;
@@ -488,6 +540,7 @@ export function ParallelDemo() {
         match: GainNode;
         master: GainNode;
         sel: Record<ParallelMode, GainNode>;
+        feed: Feed;
     } | null>(null);
     const clock = useRef<LoopClock | null>(null);
 
@@ -524,28 +577,39 @@ export function ParallelDemo() {
             match.gain.value = blendMatch(analysis, blend / 100);
             master.gain.setTargetAtTime(DRUM_LEVEL, ctx.currentTime, 0.02);
         }
-        nodes.current = { ctx, comp, norm, amount, match, master, sel };
         const c: LoopClock = { ctx, barStart: ctx.currentTime, barDur: BAR, offset: lat };
         clock.current = c;
         void measureLatency(ctx.sampleRate).then((s) => {
             delay.delayTime.value = s;
             c.offset = s;
         });
-        const seq = sequence(ctx, DRUM_BPM, 16, (step, time) => {
-            if (step === 0) c.barStart = time;
-            drums(ctx, src, step, time);
-        });
+        const feed = startFeed(
+            ctx,
+            src,
+            (into) => {
+                const seq = sequence(ctx, DRUM_BPM, 16, (step, time) => {
+                    if (step === 0) c.barStart = time;
+                    drums(ctx, into, step, time);
+                });
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, PARALLEL_REAL_IN),
+            (start, loop) => followLoop(c, start, loop),
+        );
+        nodes.current = { ctx, comp, norm, amount, match, master, sel, feed };
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             clock.current = null;
             fadeOut(ctx, master, () => src.disconnect());
         };
-    });
+    }, !loading);
 
     useEffect(() => {
         const n = nodes.current;
         if (!n || !analysis) return;
+        n.feed.use(analysis.real?.loop ?? null);
         const t = n.ctx.currentTime;
         for (const m of PARALLEL_MODES) n.sel[m].gain.setTargetAtTime(m === mode ? 1 : 0, t, 0.015);
         // The blend and its matching gain move together, so the loudness never jumps.
@@ -560,12 +624,14 @@ export function ParallelDemo() {
     // The blend's line depends only on the blend, so switching what you listen to redraws nothing.
     const blendColumns = useMemo(() => {
         if (!analysis) return null;
-        const { dry, crushed, peak } = analysis;
+        const { dry, crushed, peak, real: r } = analysis;
         const b = blend / 100;
+        if (r) return peaksDb(r.blends[Math.round(blend / BLEND_STEP)], peak, blendMatch(analysis, b));
         const mix = new Float32Array(dry.length);
         for (let i = 0; i < mix.length; i++) mix[i] = dry[i] + b * crushed[i];
         return columns(mix, 0, mix.length, BAR_COLUMNS, peak, blendMatch(analysis, b));
     }, [analysis, blend]);
+    const shownReal = analysis?.real != null;
     const traces: Trace[] | null =
         analysis && blendColumns
             ? [
@@ -579,7 +645,7 @@ export function ParallelDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
                     value={mode}
@@ -591,16 +657,21 @@ export function ParallelDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <div>
                 <Strip
                     traces={traces}
                     floor={-42}
-                    label={`Peak level across one bar of the loop, on a decibel scale: the dry drums as a grey area and ${mode === 'solo' ? 'the crushed copy' : 'the dry drums plus the crushed copy'}, at the same loudness, as a line. The blend lifts the ghost notes and hat tails while the loudest hits stay close to the dry ones.`}
+                    label={
+                        shownReal
+                            ? `Peak level across the whole loop, eight bars, on a decibel scale: the dry mix as a grey area and ${mode === 'solo' ? 'the crushed copy' : 'the dry mix plus the crushed copy'}, at the same loudness, as a line. The blend lifts the quiet parts between the hits while the loudest hits stay close to the dry ones.`
+                            : `Peak level across one bar of the loop, on a decibel scale: the dry drums as a grey area and ${mode === 'solo' ? 'the crushed copy' : 'the dry drums plus the crushed copy'}, at the same loudness, as a line. The blend lifts the ghost notes and hat tails while the loudest hits stay close to the dry ones.`
+                    }
                     playhead={player.playing ? line : undefined}
                 />
                 <Legend
                     items={[
-                        { kind: 'before', text: 'Dry drums' },
+                        { kind: 'before', text: 'Dry loop' },
                         { kind: 'after', text: mode === 'solo' ? 'Crushed copy, same loudness' : 'Dry + crushed, same loudness' },
                     ]}
                 />
@@ -611,20 +682,31 @@ export function ParallelDemo() {
                 value={blend}
                 min={0}
                 max={100}
-                step={5}
+                step={BLEND_STEP}
                 onChange={setBlend}
                 format={(v) => `${v}%`}
-                hint="How much of the crushed copy sits under the dry drums. At 100% the copy is as loud as the dry loop on its own."
+                hint="How much of the crushed copy sits under the dry loop. At 100% the copy is as loud as the dry loop on its own."
             />
             <p className="text-sm leading-6 text-white/60">
-                The dry drums are never compressed. Every option plays at the loudness of the dry loop
-                {/* In the layout from the start (unseen until measured), so the text below it never moves. */}
-                {blend > 0 ? (
-                    <span className={analysis ? undefined : 'invisible'}>
-                        , so at this blend the mix is turned down <span className="tabular-nums">{(analysis ? turnedDown : 0).toFixed(1)}</span> dB
-                    </span>
-                ) : null}
-                . Listen to the ghost notes between the snares, then solo the crushed copy to hear what is doing the lifting.
+                {/* Both sources' wording in one place, so a switch moves nothing below. */}
+                <Variants
+                    show={shownReal ? 1 : 0}
+                    items={[false, true].map((isReal) => (
+                        <span key={String(isReal)}>
+                            {isReal ? 'The dry mix is never compressed.' : 'The dry drums are never compressed.'} Every option plays at the loudness of the dry loop
+                            {/* In the layout from the start (unseen until measured), so the text below it never moves. */}
+                            {blend > 0 ? (
+                                <span className={analysis ? undefined : 'invisible'}>
+                                    , so at this blend the mix is turned down <span className="tabular-nums">{(analysis ? turnedDown : 0).toFixed(1)}</span> dB
+                                </span>
+                            ) : null}
+                            .{' '}
+                            {isReal
+                                ? 'Listen to the hat tails and the 808 between the hits, then solo the crushed copy to hear what is doing the lifting.'
+                                : 'Listen to the ghost notes between the snares, then solo the crushed copy to hear what is doing the lifting.'}
+                        </span>
+                    ))}
+                />
             </p>
         </div>
     );
@@ -1401,6 +1483,8 @@ function limiterLoop(ctx: BaseAudioContext, dest: AudioNode, step: number, time:
  * slider step on a slow phone stays inside a frame's budget.
  */
 interface LimiterLoop {
+    /** The real loop this is, or null for the drum loop (then `source` is its render). */
+    real: RealLoop | null;
     source: AudioBuffer;
     norm: number;
     /** Mean square of the K-weighted original over the measured bars, after `norm`. */
@@ -1441,7 +1525,7 @@ function prepareLimiterLoop(lat: number): Promise<LimiterLoop> {
         // The figure draws the second bar, against the original's own peak there.
         const [barFrom, barTo] = secondBar(lat);
         const barPeak = peakOf(dry, barFrom, barTo);
-        return { source, norm, dryPower, barPeak, before: columns(dry, barFrom, barTo - barFrom, BAR_COLUMNS, barPeak) };
+        return { real: null, source, norm, dryPower, barPeak, before: columns(dry, barFrom, barTo - barFrom, BAR_COLUMNS, barPeak) };
     })().catch((error: unknown) => {
         limiterLoopJob = null;
         throw error;
@@ -1497,6 +1581,8 @@ interface LimitParams {
 
 interface LimitAnalysis {
     params: LimitParams;
+    /** The real loop this was measured on (the figure then spans the whole loop), or null for the drum loop. */
+    real: RealLoop | null;
     makeup: number;
     /** Scales the loop so its peak sits at the threshold. */
     norm: number;
@@ -1542,12 +1628,77 @@ async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
     const [barFrom, barTo] = secondBar(lat);
     return {
         params,
+        real: null,
         makeup,
         norm,
         match,
         clipped: over / (to - from),
         before: loop.before,
         after: columns(limited, barFrom, barTo - barFrom, BAR_COLUMNS, loop.barPeak * norm, match),
+    };
+}
+
+/** The real mix goes in at this loudness, so the original plays at the house loudness. */
+const LIMITER_REAL_IN = -14.1;
+
+const realLimiterLoops = new WeakMap<RealLoop, Promise<LimiterLoop>>();
+
+/** The real loop's original path, measured once per loop: its loudness, its peak, the figure's grey area over the whole loop. */
+function prepareLimiterReal(loop: RealLoop, lat: number): Promise<LimiterLoop> {
+    let job = realLimiterLoops.get(loop);
+    if (!job) {
+        job = (async () => {
+            const gain = loopGain(loop, LIMITER_REAL_IN);
+            const r = await renderLoop(loop, { gain, taps: 2, weighted: 1, tail: lat + 0.05 }, (ctx, src, [dryTap, srcTap]) => {
+                src.connect(srcTap);
+                const delay = ctx.createDelay(0.05);
+                delay.delayTime.value = lat;
+                src.connect(delay).connect(passThrough(ctx)).connect(dryTap);
+            });
+            const [from, to] = r.span();
+            const norm = dbToGain(LIMIT_THRESHOLD) / (await stereoPeak(r.x[1], from, to));
+            const [kFrom, kTo] = r.span(lat);
+            const dryPower = (await stereoPower(r.k[0], kFrom, kTo)) * norm * norm;
+            const barPeak = await stereoPeak(r.x[0], kFrom, kTo);
+            const [before] = await stereoColumns(r.x[0], kFrom, kTo, BAR_COLUMNS);
+            return { real: loop, source: loop.buffer, norm, dryPower, barPeak, before: peaksDb(before, barPeak) };
+        })();
+        job.catch(() => realLimiterLoops.delete(loop));
+        realLimiterLoops.set(loop, job);
+    }
+    return job;
+}
+
+/** The same measurement on one whole pass of the real loop, as it repeats. */
+async function analyseLimitReal(real: RealLoop, params: LimitParams): Promise<LimitAnalysis> {
+    const lat = await measureLatency(real.buffer.sampleRate);
+    const [loop, makeup] = await Promise.all([prepareLimiterReal(real, lat), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1))]);
+    const { norm } = loop;
+    const r = await renderLoop(real, { gain: loopGain(real, LIMITER_REAL_IN) * norm, taps: 2, weighted: 1, tail: lat + 0.05 }, (ctx, src, [limTap, preTap]) => {
+        const lim = limiter(ctx, makeup, params.release / 1000);
+        lim.drive.gain.value = dbToGain(params.drive);
+        src.connect(lim.drive);
+        lim.output.connect(limTap);
+        lim.toCeiling.connect(preTap);
+    });
+    const [from, to] = r.span(lat);
+    const match = Math.sqrt(loop.dryPower / (await stereoPower(r.k[0], from, to)));
+    let over = 0;
+    const [pl, pr] = r.x[1];
+    for (let i = from; i < to; i++) {
+        if (pl[i] > 1 || pl[i] < -1 || pr[i] > 1 || pr[i] < -1) over++;
+        if ((i - from) % 65536 === 65535) await yieldToMain();
+    }
+    await yieldToMain();
+    return {
+        params,
+        real,
+        makeup,
+        norm,
+        match,
+        clipped: over / (to - from),
+        before: loop.before,
+        after: peaksDb((await stereoColumns(r.x[0], from, to, BAR_COLUMNS))[0], loop.barPeak * norm, match),
     };
 }
 
@@ -1561,7 +1712,12 @@ export function LimiterDemo() {
     const [mode, setMode] = useState<'original' | 'limited'>('limited');
     const [drive, setDrive] = useState(9);
     const [release, setRelease] = useState(120);
-    const analysis = useAnalysis(`${drive}|${release}`, () => analyseLimit({ drive, release }));
+    const source = useSource('chrome-teeth');
+    const real = source.loop;
+    const analysis = useAnalysis(`${real ? 'real' : 'synth'}|${drive}|${release}`, () => (real ? analyseLimitReal(real, { drive, release }) : analyseLimit({ drive, release })), limitResults);
+    // What plays is what was measured: a switch of source goes live with its first measurement.
+    const fed = analysis?.real ?? null;
+    const loading = source.pick === 'real' && (!real || fed !== real);
     const nodes = useRef<{
         ctx: AudioContext;
         norm: GainNode;
@@ -1570,6 +1726,7 @@ export function LimiterDemo() {
         restore: GainNode;
         master: GainNode;
         sel: { original: GainNode; limited: GainNode };
+        feed: Feed;
     } | null>(null);
     const modeRef = useRef(mode);
     const clock = useRef<LoopClock | null>(null);
@@ -1602,31 +1759,43 @@ export function LimiterDemo() {
         norm.connect(delay).connect(passThrough(ctx)).connect(sel.original).connect(restore);
         norm.connect(lim.drive);
         lim.output.connect(match).connect(sel.limited).connect(restore);
-        const n = { ctx, norm, lim, match, restore, master, sel };
-        nodes.current = n;
-        if (analysis) applyLimit(n, analysis, false);
         const c: LoopClock = { ctx, barStart: ctx.currentTime, barDur: BAR, offset: lat };
         clock.current = c;
         void measureLatency(ctx.sampleRate).then((s) => {
             delay.delayTime.value = s;
             c.offset = s;
         });
-        const seq = sequence(ctx, DRUM_BPM, 16, (step, time) => {
-            if (step === 0) c.barStart = time;
-            limiterLoop(ctx, src, step, time);
-        });
+        const feed = startFeed(
+            ctx,
+            src,
+            (into) => {
+                const seq = sequence(ctx, DRUM_BPM, 16, (step, time) => {
+                    if (step === 0) c.barStart = time;
+                    limiterLoop(ctx, into, step, time);
+                });
+                return () => seq.stop();
+            },
+            fed,
+            (loop) => loopGain(loop, LIMITER_REAL_IN),
+            (start, loop) => followLoop(c, start, loop),
+        );
+        const n = { ctx, norm, lim, match, restore, master, sel, feed };
+        nodes.current = n;
+        if (analysis) applyLimit(n, analysis, false);
         return () => {
-            seq.stop();
+            feed.stop();
             nodes.current = null;
             clock.current = null;
             fadeOut(ctx, master, () => src.disconnect());
         };
-    });
+    }, !loading);
 
-    // Drive and release go live together with their matching gain.
+    // Drive and release go live together with their matching gain, and a new source with its first measurement.
     useEffect(() => {
         const n = nodes.current;
-        if (n && analysis) applyLimit(n, analysis, true);
+        if (!n || !analysis) return;
+        n.feed.use(analysis.real);
+        applyLimit(n, analysis, true);
     }, [analysis]);
 
     const line = usePlayhead(player.playing, clock);
@@ -1642,7 +1811,7 @@ export function LimiterDemo() {
     return (
         <div className="space-y-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
-                <PlayButton playing={player.playing} onClick={player.toggle} />
+                <PlayButton playing={player.playing} waiting={player.waiting} onClick={player.toggle} />
                 <Segmented
                     label="Listen to"
                     value={mode}
@@ -1653,11 +1822,12 @@ export function LimiterDemo() {
                     ]}
                 />
             </div>
+            <SourceChoice source={source} loading={loading} />
             <div>
                 <Strip
                     traces={traces}
                     floor={-36}
-                    label="Peak level across one bar, original and limited at the same loudness. Limiting lowers the peaks and raises everything between them."
+                    label={`Peak level across ${analysis?.real ? 'the whole loop, eight bars' : 'one bar'}, original and limited at the same loudness. Limiting lowers the peaks and raises everything between them.`}
                     playhead={player.playing ? line : undefined}
                 />
                 <Legend
