@@ -339,6 +339,17 @@ function drawHook(t) {
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
+    // Into the speaker: everything else clears while the phone grows, its
+    // grille moving to where the air scene's first speaker appears.
+    const zoomE = replay ? 0 : E.in(seg(t, SC.air - 0.45, SC.air));
+    const zoomTo = () => {
+        const gx0 = HK.ph.x + HK.ph.w / 2;
+        const gy0 = HK.ph.y + HK.ph.h - 52;
+        g.translate(lerp(gx0, AIR.cone, zoomE), lerp(gy0, 840, zoomE));
+        g.scale(1 + 2.4 * zoomE, 1 + 2.4 * zoomE);
+        g.translate(-gx0, -gy0);
+    };
+    if (zoomE > 0) g.globalAlpha *= 1 - clamp(zoomE * 4);
     const tNow = wt('hook-b', 'now');
     // Title: slams in on frame one.
     if (!replay) {
@@ -380,7 +391,7 @@ function drawHook(t) {
     const glow = clamp((phoneDb(t) + 34) / 18);
     const d = drumFlash(t);
     // The grille lights only for the bass the phone plays.
-    phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
+    if (zoomE <= 0) phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
     void d;
     pill(g, 'phone speaker (simulated)', 250, HK.ph.y - 48, { size: 32, bg: P.dark, fg: P.ink, ring: P.ink3, weight: 700 });
     // Sound leaving the grille: white rings for drum hits, cyan for bass notes the phone plays.
@@ -405,6 +416,8 @@ function drawHook(t) {
         g.arc(gx, gy, r, -0.15, 0.95);
         g.stroke();
     };
+    // The phone plays the drums (white rings) from the first kick; the bass only once saturated (cyan).
+    for (const h of KICKS) if (t >= h.t && t - h.t < 0.5) ring((t - h.t) / 0.5, 'rgba(248,250,252,1)', h.voice === 'kick' ? 0.5 : 0.7);
     for (const q of NOTES) {
         if (t < q.t || t - q.t > 0.6) continue;
         const str = clamp((phoneDb(q.t + 0.06) + 34) / 18);
@@ -437,7 +450,7 @@ function drawHook(t) {
     }
     // Ladder.
     const sp = spectrum(t);
-    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, zoneAlpha: replay ? 1 : popIn(t, segBy.hookSat.from - 0.2, 0.3), spec: replay && t < segBy.againClean.from ? null : undefined, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, fMax: 420, rungH: 16, zoneAlpha: replay ? 1 : popIn(t, segBy.hookSat.from - 0.2, 0.3), spec: replay && t < segBy.againClean.from ? null : undefined, harmAlpha: t < 0.2 ? 0 : 1, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
     // While the phone plays no bass, its window holds a question mark.
     const qw = popIn(t, replay ? segBy.againClean.from + 0.6 : wt('hook-a', 'play'), 0.3) * (1 - popIn(t, (replay ? segBy.againSat : segBy.hookSat).from - 0.2, 0.2));
     if (lad && qw > 0) label(g, '?', (HK.lad.x0 + HK.lad.x1) / 2, (HK.lad.y0 + lad.yCut) / 2 + 26, { size: 72, weight: 800, color: P.ink3, align: 'center', alpha: qw });
@@ -466,6 +479,13 @@ function drawHook(t) {
     // Once you can hear it: these are what the phone plays.
     const hA = sat ? popIn(t, replay ? segBy.againSat.from + 0.3 : segBy.hookSat.from, 0.3) : 0;
     if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 + 4, { size: 28, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
+    if (zoomE > 0) {
+        g.save();
+        g.globalAlpha = a;
+        zoomTo();
+        phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
+        g.restore();
+    }
     g.restore();
 }
 
@@ -481,7 +501,7 @@ function drawAir(t) {
     push(t, SC.air, SC.phone);
     label(g, 'Same loudness, lower notes', 540, 330, { size: 64, weight: 800, color: P.ink, align: 'center' });
     label(g, 'how far the cone has to travel', 540, 396, { size: 40, weight: 600, color: P.ink2, align: 'center', alpha: popIn(t, wt('air', 'move') - 0.05) });
-    const appear = [voBy.air.at + 0.05, wt('air', 'every'), wt('air', 'lower')];
+    const appear = [SC.air, wt('air', 'every'), wt('air', 'lower')];
     const arrowAt = [wt('air', 'move'), wt('air', 'four'), wt('air', 'times')];
     AIR.rows.forEach((y0, i) => {
         const k = popIn(t, appear[i], 0.3);
@@ -601,7 +621,7 @@ function drawPhone(t) {
     const want = t > tTry ? needNow * Math.sin(w * (t - tTry)) * E.out(popIn(t, tTry, 0.3)) : 0;
     // Pinned at a stop, the cone strains (a small fast shake), more as the sub is turned up.
     const strain = Math.abs(want) > stop ? clamp((Math.abs(want) - stop) / 40) * clamp((gain - 1) * 1.5) : 0;
-    const x = clamp(want, -stop, stop) + 2.5 * strain * Math.sin(t * 2 * Math.PI * 23);
+    const x = clamp(want, -stop, stop) + 5 * strain * Math.sin(t * 2 * Math.PI * 11);
     const cx = mag.x - 20;
     const cy = mag.y - 62;
     g.save();
@@ -943,7 +963,8 @@ function drawScope(t) {
     const tBrain = wt('brain', 'brain');
     const tPuts = wt('brain', 'puts');
     const mv = E.inOut(seg(t, tPuts - 0.7, tPuts - 0.1));
-    const RB = { x: lerp(440, 215, mv), y: 1240, s: lerp(1.1, 0.95, mv) };
+    const hopN = bump(t, wt('ghost', 'never') - 0.05, 0.1, 0.35);
+    const RB = { x: lerp(440, 215, mv), y: 1240 - 26 * hopN, s: lerp(1.1, 0.95, mv) };
     const ax = RB.x + 68 * RB.s;
     const ay = RB.y - 150 * RB.s;
     const ra = popIn(t, SC.strange + 0.15, 0.35);
@@ -962,7 +983,7 @@ function drawScope(t) {
         }
         const ant = E.out(popIn(t, tPuts, 0.4));
         const look = { x: lerp(x0, x1, 0.5 + 0.3 * Math.sin(t * 0.8)), y: mid };
-        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [], wow: bump(t, wt('ghost', 'never') - 0.05, 0.12, 1.3) });
+        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [], wow: bump(t, wt('ghost', 'never') - 0.05, 0.12, 1.4) });
         // On "Your brain": the listener is named.
         const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
         if (bn > 0) pill(g, 'your brain', Math.max(130, RB.x - 92 * RB.s), RB.y - 262 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
@@ -1187,10 +1208,10 @@ function chainPath(pts, color, k) {
 }
 /** The recipe's steps, seconds after "add" (the timeline's blend cue matches the last). */
 const RECIPE_STEPS = [
-    [0.8, '1. Copy the sub'],
-    [2.3, '2. Saturate the copy: add harmonics'],
-    [3.8, '3. High-pass it at 120 Hz: drop the note'],
-    [5.3, '4. Blend it in under the clean sub'],
+    [0.6, '1. Copy the sub'],
+    [1.8, '2. Saturate the copy: add harmonics'],
+    [3.0, '3. High-pass it at 120 Hz: drop the note'],
+    [4.2, '4. Blend it in under the clean sub'],
 ];
 function drawRule(t) {
     const a = viewAlpha(t, SC.rule, SC.again);
@@ -1225,7 +1246,7 @@ function drawRule(t) {
     // Card 2: the lesson's parallel chain. The clean sub goes straight
     // through (amber); a copy is saturated and high-passed at 120 Hz, which
     // removes the note from the copy (cyan), and the two are added. The
-    // steps build up as a list, one every 1.5 s, in sync with the sound.
+    // steps build up as a list, one every 1.2 s, in sync with the sound.
     const k2 = popIn(t, tAdd, 0.3);
     if (k2 > 0) {
         const y2 = 640;
@@ -1559,7 +1580,7 @@ for (const sc of TL.scenes) {
     VIEWS.push({ view: sc.view, a: sc.at, b: TL.duration });
 }
 // The phone's ladder grows into the next view's: no slide across that cut.
-const NO_SLIDE = new Set(['phone>ladder', 'ladder>scope', 'limit>rule']);
+const NO_SLIDE = new Set(['hook>air', 'phone>ladder', 'ladder>scope', 'limit>rule']);
 function slide(t, view) {
     let y = 0;
     VIEWS.forEach((v, i) => {
@@ -1580,7 +1601,7 @@ const SCOPE_LAD = { x0: 760, x1: 926, y0: 935, y1: 1290 };
 const PUSHED = 1.02;
 function bridges(t) {
     const kL = seg(t, SC.strange, SC.strange + BRIDGE);
-    if (kL > 0 && kL < 1) {
+    if (t >= SC.strange && kL < 1) {
         const k = E.inOut(kL);
         const s = lerp(PUSHED, 1, k);
         g.save();
@@ -1593,7 +1614,7 @@ function bridges(t) {
         g.restore();
     }
     const kS = seg(t, SC.rule, SC.rule + BRIDGE);
-    if (kS > 0 && kS < 1) {
+    if (t >= SC.rule && kS < 1) {
         const k = E.inOut(kS);
         // From the limit view's pushed-in sub to the card's icon (card 1 starts centred: y 620).
         const x = lerp(540 + (290 - 540) * PUSHED, 220, k);

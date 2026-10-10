@@ -136,3 +136,9 @@ One line per call, newest last.
   - The scope's pill says the rate plainly ("51.9x a second = the note"), the 2x rung is tagged "too low" during "just fine", the recipe's paths are named "clean" and "harmonics".
   - The hook shows "200 Hz" from frame one and the zone words from the payoff; the replay's ladder stays empty until its clean bar starts.
   - The pinned phone cone strains at its stop as the sub is turned up; the robot's eye widens on "never".
+- Film 4 v12, after the eleventh review (9 accuracy and clarity, 8.5 hook, pacing and polish, 8 craft):
+  - Hook to air is a camera move: everything else clears and the phone grows until its grille sits where the first speaker appears.
+  - The match cuts own the cut frame, so no frame is empty between the outgoing and incoming element.
+  - The phone sends white rings on every drum hit from the first kick (it plays the drums, not the sub); no harmonics in the first 0.2 s, where the FFT window only sees the onset.
+  - The robot jumps and its eye opens wide on "never"; the pinned phone cone shakes harder as the sub goes up.
+  - Recipe steps every 1.2 s, the replay starts at 73 s; the film runs 84 s.

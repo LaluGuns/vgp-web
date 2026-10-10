@@ -296,7 +296,7 @@ function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = 
     const ex = base.x - 6 * s;
     const ey = base.y - 54 * s;
     // `wow` (0..1): surprise, the eye opens wider and the pupil shrinks.
-    const ew = 1 + 0.16 * wow;
+    const ew = 1 + 0.3 * wow;
     g.fillStyle = P.dark;
     g.beginPath();
     g.arc(ex, ey, 46 * s * ew, 0, Math.PI * 2);
@@ -318,7 +318,7 @@ function robotDome(g, base, { look = null, lid = 0, s = 1, antenna = 0, rings = 
     g.fill();
     g.fillStyle = P.dark;
     g.beginPath();
-    g.arc(ex + ox * 1.15, ey + oy * 1.15, 9 * s * (1 - 0.4 * wow), 0, Math.PI * 2);
+    g.arc(ex + ox * 1.15, ey + oy * 1.15, 9 * s * (1 - 0.5 * wow), 0, Math.PI * 2);
     g.fill();
     g.fillStyle = '#ffffff';
     g.beginPath();
