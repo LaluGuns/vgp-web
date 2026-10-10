@@ -286,10 +286,21 @@ export function CompressorDemo() {
         };
     }, !loading);
 
-    // A new setting is heard at once, with the matching gain the last one had.
+    // The measurement the matching gain now playing came from.
+    const measured = useRef(analysis);
+    useEffect(() => {
+        measured.current = analysis;
+    });
+
+    // A new setting is heard at once, with the matching gain the last one had (turned down first if the new one
+    // compresses less, so a jump to a gentle setting never plays louder than it should while it is measured).
     useEffect(() => {
         const n = nodes.current;
-        if (n) applyParams(n, { threshold, ratio, attack, release });
+        if (!n) return;
+        const p = { threshold, ratio, attack, release };
+        applyParams(n, p);
+        const a = measured.current;
+        if (a && !sameParams(a.params, p)) holdBack(n, a, p);
     }, [threshold, ratio, attack, release]);
 
     // Its own matching gain follows once it has been measured, and a new source with its first measurement.
@@ -392,6 +403,34 @@ function applyParams(n: CompNodes, p: CompParams) {
     set(n.comp.attack, p.attack / 1000);
     set(n.comp.release, p.release / 1000);
     set(n.undo.gain, undoMakeup(p.threshold, p.ratio));
+}
+
+const sameParams = (a: CompParams, b: CompParams) => a.threshold === b.threshold && a.ratio === b.ratio && a.attack === b.attack && a.release === b.release;
+
+/**
+ * How many dB less the compressor turns the loop down at `p` than at the
+ * measured setting, by the static curve (threshold and ratio) at the level
+ * that measurement implies. Positive when `p` is gentler. The matching gain
+ * of the measured setting is lowered by this until `p` has its own, so the
+ * moment between them is never louder than either; a setting that
+ * compresses more plays a little quieter for that moment instead.
+ */
+function gentlerBy(a: CompAnalysis, p: CompParams): number {
+    // The gain reduction the measurement found (before the peak allowance cut the matching short).
+    const then = 20 * Math.log10(a.match) + a.short;
+    if (then <= 0.1 || a.params.ratio <= 1) return 0;
+    const level = a.params.threshold + then / (1 - 1 / a.params.ratio);
+    const now = Math.max(0, level - p.threshold) * (1 - 1 / p.ratio);
+    return then - now;
+}
+
+function holdBack(n: CompNodes, a: CompAnalysis, p: CompParams) {
+    let gain = a.match * 10 ** (-Math.max(0, gentlerBy(a, p)) / 20);
+    // A slower attack (or a faster release) lets more of each hit through before the compressor acts, so the peaks
+    // can rise toward the dry loop's own. Until the setting is measured, the gain then stays within the peak
+    // allowance the matching itself keeps, which holds those peaks where the bypass's allowance puts them.
+    if (p.attack > a.params.attack || p.release < a.params.release) gain = Math.min(gain, PEAK_ROOM);
+    if (gain < a.match) n.makeup.gain.setTargetAtTime(gain, n.ctx.currentTime, 0.005);
 }
 
 function applyMatch(n: CompNodes, a: CompAnalysis, smooth: boolean) {
