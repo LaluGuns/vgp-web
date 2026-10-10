@@ -117,6 +117,8 @@ export const TIMELINE = {
         { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['how', 'eighth', 0.6], dt: 0, kind: 'tick' },
+        { cue: ['how', 'fifth', 0.62], dt: 0, kind: 'tick', level: 0.8 },
+        { cue: ['how', 'outlasts', 0.85], dt: 0, kind: 'tick', level: 0.9 },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
         { cue: ['cta', 'the', 0], dt: -0.25, kind: 'whoosh' },
