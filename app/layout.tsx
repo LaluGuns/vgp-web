@@ -84,6 +84,7 @@ export const metadata: Metadata = {
         description:
             'Producer turned founder. HealingWave makes music people can use to focus, move and recover.',
         images: [ogImage({ title: 'Music should leave you better than it found you.', sub: 'Producer and founder. Now building HealingWave.' }).url],
+        site: '@virzyguns',
         creator: '@virzyguns',
     },
     robots: {

@@ -33,13 +33,18 @@ function getSharp() {
  * process with sharp, so the renderer draws it at its own size; without sharp
  * the renderer scales the original.
  */
-let portrait: Promise<string> | undefined;
+let portrait: Promise<string | null> | undefined;
 function getPortrait() {
     portrait ??= Promise.all([readFile(path.join(process.cwd(), 'public/images/virzy-guns-dp.jpg')), getSharp()]).then(
         async ([source, sharp]) => {
             if (!sharp) return `data:image/jpeg;base64,${source.toString('base64')}`;
             const resized = await sharp(source).resize(PHOTO, PHOTO, { fit: 'contain', background: CARD_BG }).png().toBuffer();
             return `data:image/png;base64,${resized.toString('base64')}`;
+        },
+        // A failed read draws this card without the photo and lets the next request try again.
+        () => {
+            portrait = undefined;
+            return null;
         },
     );
     return portrait;
@@ -134,8 +139,12 @@ export async function GET(request: NextRequest) {
                     </div>
                     <div style={{ display: 'flex', fontSize: 22, color: 'rgba(255,255,255,0.52)' }}>virzyguns.com</div>
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element -- rendered by ImageResponse, not the browser */}
-                <img src={photo} alt="" width={PHOTO} height={PHOTO} style={{ width: PHOTO, height: PHOTO }} />
+                {photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- rendered by ImageResponse, not the browser
+                    <img src={photo} alt="" width={PHOTO} height={PHOTO} style={{ width: PHOTO, height: PHOTO }} />
+                ) : (
+                    <div style={{ display: 'flex', width: PHOTO, height: PHOTO }} />
+                )}
             </div>
         ),
         {
@@ -148,6 +157,11 @@ export async function GET(request: NextRequest) {
 
     if (!sharp) return card;
     const png = Buffer.from(await card.arrayBuffer());
-    const jpeg = await sharp(png).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
-    return new Response(new Uint8Array(jpeg), { headers: { ...HEADERS, 'Content-Type': 'image/jpeg' } });
+    try {
+        const jpeg = await sharp(png).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+        return new Response(new Uint8Array(jpeg), { headers: { ...HEADERS, 'Content-Type': 'image/jpeg' } });
+    } catch {
+        // The PNG is still a valid card, only larger.
+        return new Response(new Uint8Array(png), { headers: { ...HEADERS, 'Content-Type': 'image/png' } });
+    }
 }

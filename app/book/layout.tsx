@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import { JsonLd } from '@/components/blog/article/JsonLd';
+import { ogImage, socialMetadata } from '@/lib/og';
+
+const shareTitle = 'Music Production Guide: Trap Edition';
+const shareDescription = 'A coming-soon PDF producer manual covering trap drums, 808s, vocals, mixing, mastering, and release decisions.';
 
 export const metadata: Metadata = {
-    title: 'Music Production Guide: Trap Edition | PDF Book | VGP',
+    title: shareTitle,
     description: 'A coming-soon PDF book by Virzy Guns covering trap drums, 808s, vocals, mixing, mastering, and release decisions for producers.',
     keywords: [
         'Music Production Guide Trap Edition',
@@ -16,13 +20,12 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/book',
     },
-    openGraph: {
-        title: 'Music Production Guide: Trap Edition | PDF Book | VGP',
-        description: 'A coming-soon PDF producer manual covering trap drums, 808s, vocals, mixing, mastering, and release decisions.',
-        type: 'book',
+    ...socialMetadata({
+        title: shareTitle,
+        description: shareDescription,
         url: 'https://www.virzyguns.com/book',
-        images: ['/ebooks/trap-guide-book-cover.jpg'],
-    },
+        image: ogImage({ kicker: 'Book', title: shareTitle, sub: 'An 80+ page PDF for producers, coming soon' }),
+    }),
 };
 
 // The page is a client component, so its structured data is emitted here, with the CSP nonce.
