@@ -57,7 +57,7 @@ function tracker(cur, alpha = 1) {
     const sw = g.measureText(sep).width;
     let x = 540 - (ws.reduce((a, b) => a + b, 0) + 2 * sw) / 2;
     items.forEach((w, i) => {
-        label(g, w, x, 412, { size: 40, weight: i === cur ? 800 : 600, color: i === cur ? P.ink : P.ink3, family: BODY, alpha });
+        label(g, w, x, 412, { size: 40, weight: i === cur ? 800 : 600, color: i === cur ? P.ink : P.ink2, family: BODY, alpha });
         x += ws[i];
         if (i < 2) label(g, sep, x, 412, { size: 40, weight: 600, color: P.ink4, family: BODY, alpha });
         x += sw;
@@ -165,14 +165,14 @@ function headline(t, t0, parts, y, { size = 84, alpha = 1, stagger = 0.04, cente
 }
 
 /** Version badge: a numbered disc. */
-function badgeNum(gc, n, x, y, r, { ring = 0, alpha = 1, fill = P.ink } = {}) {
+function badgeNum(gc, n, x, y, r, { ring = 0, alpha = 1, fill = P.ink, color = P.dark } = {}) {
     gc.save();
     gc.globalAlpha *= alpha;
     gc.fillStyle = fill;
     gc.beginPath();
     gc.arc(x, y, r, 0, Math.PI * 2);
     gc.fill();
-    label(gc, String(n), x, y + r * 0.04, { size: r * 1.25, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+    label(gc, String(n), x, y + r * 0.04, { size: r * 1.25, weight: 800, color, align: 'center', base: 'middle' });
     if (ring > 0) {
         // A hand-drawn circle around the badge, drawn on.
         gc.strokeStyle = P.ink;
@@ -364,26 +364,17 @@ function drawAB(t, frame1 = false, noHead = false) {
         // silhouette, so the eye cannot answer before the ear; the real
         // waveform lights up under the playhead.
         let upto = frame1 ? -1e9 : t >= d.to ? 1e9 : abProgress(d, t);
-        // Version 2 stays covered until the answer, so the eye cannot answer before the ear;
-        // then it is wiped in, hole and all.
-        // Each version draws live as it is heard.
+        // Version 2 stays covered (on the cover too) until the answer, so the eye cannot answer
+        // before the ear; then it is wiped in, gap and all. Version 1 draws live as it is heard.
         const tRev = wto('hook', 'two', 0.05);
-        const hide = 0;
-        void tRev;
-        const covered = false;
-        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim * (1 - hide) });
-        else if (covered || upto < msB) {
+        const covered = v === 2 && !replay && (noHead || frame1 || t < tRev);
+        if (v === 2 && !covered && !replay) upto = Math.min(upto, lerp(msA, msB, E.inOut(seg(t, tRev, tRev + 0.45))));
+        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
+        else {
             silhouette(g, box, covered ? -1e9 : upto, a0, b0);
-            if (covered || upto < msA) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
+            if (covered) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
         }
-        if (!frame1 && !covered && (t >= d.at || replay)) wave(g, v, box, a0, b0, upto, { alpha: dim * (1 - hide) });
-        if (hide > 0) {
-            g.save();
-            g.globalAlpha *= hide;
-            silhouette(g, box, -1e9, a0, b0);
-            label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
-            g.restore();
-        }
+        if (!frame1 && !covered && (t >= d.at || replay)) wave(g, v, box, a0, b0, upto, { alpha: dim });
         dashed(g, X(0), lane.y - lane.h / 2 - 6, X(0), lane.y + lane.h / 2 + 6, P.ink3, 3, [8, 8]);
         if (playing && upto < msB) {
             g.fillStyle = P.ink;
@@ -461,7 +452,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         g.lineTo(xb, yb + 16);
         g.stroke();
         g.restore();
-        tag(g, `${Math.round(GAP_MS)} ms: under ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 40 });
+        tag(g, `${Math.round(GAP_MS)} ms ≈ ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 40 });
         // A playhead crosses the silence again and again; the kick answers at the end of it.
         const tz = wto('hook', 'gap', 0.35) + 0.3;
         if (t > tz && !replay) {
@@ -491,13 +482,20 @@ function drawAB(t, frame1 = false, noHead = false) {
         const k2 = popIn(t, dB.down, 0.2);
         const L1 = AB.lanes[0];
         const L2 = AB.lanes[1];
-        tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
+        const t14 = wto('cta', 'fourteen', 0.1) - 0.1;
+        const k14 = popIn(t, t14, 0.25);
+        tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1 * (1 - k14), bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs the rest: ${sg(D.r1.clickDb)} dB in 1` : `click vs the rest: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 490, { size: 48, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        tag(g, 'clean click', X(0) + 160, L2.y - L2.h / 2 - 46, { x: X(0), y: L2.y - L2.h / 2 - 8 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
-        const k14 = popIn(t, wto('cta', 'fourteen', 0.1) - 0.05, 0.25);
-        if (kC > 0) label(g, k14 > 0 ? '≈ 14 dB clearer, in this drop (2–6 kHz, first 20 ms)' : '2–6 kHz, first 20 ms, in this drop', 540, 552, { size: 32, weight: 700, color: k14 > 0 ? P.amber : P.ink2, align: 'center', alpha: kC, family: BODY });
+        if (kC > 0) pill(g, t < dB.down ? `click vs the rest: ${sg(D.r1.clickDb)} dB in 1` : `click vs the rest: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 474, { size: 48, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        tag(g, 'clean click', X(0) + 160, L2.y - L2.h / 2 - 50, { x: X(0) + 20, y: L2.y - L2.h / 2 - 8 }, { a: k2 * (1 - k14), bg: P.amber, fg: P.dark, size: 34 });
+        if (kC > 0) label(g, '2–6 kHz, first 20 ms, in this drop', 540, 566, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
+        // On "fourteen": the difference counts up between the lanes, with the kick as a whole beside it.
+        if (k14 > 0) {
+            const n = (D.r2.clickDb - D.r1.clickDb) * E.out(seg(t, t14, t14 + 0.8));
+            const ym = (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2;
+            pill(g, `+${fmt(n)} dB clearer click`, 540, ym + 4, { size: 54, bg: P.amber, fg: P.dark, alpha: k14, scale: E.outBack(k14) * (1 + 0.06 * Math.exp(-Math.max(0, t - t14 - 0.8) / 0.15) * (t > t14 + 0.8 ? 1 : 0)), weight: 800 });
+        }
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
     if (!replay && !noHead && !frame1) {
@@ -590,9 +588,13 @@ function stageState(t) {
     let e = eps[0];
     for (const x of eps) if (t >= x.at) e = x;
     const riserOn = t >= e.on && (e.off === null || t < e.off) ? lerp(0.55, 1, seg(t, e.on, e.hit)) : 0;
-    // Silence since the riser stopped, in real milliseconds of the version shown.
-    const silMs = e.off !== null && t >= e.off ? ((t - e.off) * 1000) / e.slow : 0;
-    const fog = riserOn > 0 ? 0.3 + 0.6 * riserOn : e.off !== null && t >= e.off ? 0.9 * fogWeight(silMs) : 0.3;
+    // Silence since the riser stopped, in real milliseconds of the version shown (slowed, eased):
+    // the after-fog fading over the first 100 ms, its faint rest to 200 ms, then on to the kick.
+    const u = e.off !== null && t >= e.off ? clamp((t - e.off) / (e.hit - e.off)) : 0;
+    const silMs = keys(u, [[0, 0], [0.45, 100], [0.8, 200], [1, GAP_MS]]);
+    // The haze means one thing only, the after-fog: it appears when the riser stops and fades with the model.
+    // While the riser plays, its sound waves crowd the sensors instead.
+    const fog = e.off !== null && t >= e.off ? 0.9 * fogWeight(silMs) : 0;
     const covered = e.off === null;
     return { e, riser: riserOn, fog, silMs: Math.min(silMs, GAP_MS), covered };
 }
@@ -671,7 +673,7 @@ function drawEarSection(t, k) {
             return lerp(0.55, 1, seg(tt, e.on, e.hit));
         };
         const live = lvAt(t) > 0 ? 1 : 1 - seg(t, e.off ?? 1e9, (e.off ?? 1e9) + 0.12);
-        soundArcs(g, S.x0 - 40, S.x1, 880, t, (age) => lvAt(t - age) * live, { color: '167,171,201', speed: 560, h: 120, gap: 46 });
+        soundArcs(g, S.x0 - 40, S.x1, 880, t, (age) => lvAt(t - age) * live, { color: '167,171,201', speed: 560, h: 150, gap: 40 });
         // The click: a spark that reaches the cells at `hit`; inside the riser it dims to almost nothing.
         const travel = e.travel;
         if (t >= e.hit - travel && t < e.hit + 0.35) {
@@ -692,7 +694,7 @@ function drawEarSection(t, k) {
         const age = t - e.hit;
         const burst = age > 0 ? Math.exp(-age / 0.3) * (st.covered ? 0.15 : 1) : 0;
         S.cells.forEach((cx, i) => {
-            hairCell(g, cx, S.cy, S.s, { tired: 0, burst, wobble: Math.sin(t * 2.6 + i * 1.4) * (1 - st.fog) + st.riser * Math.sin(t * 30 + i) * 0.6 });
+            hairCell(g, cx, S.cy, S.s, { tired: 0, burst, wobble: Math.sin(t * 2.6 + i * 1.4) * 0.25 + st.riser * Math.sin(t * 30 + i) * 0.6 });
         });
         fogCloud(g, 505, 940, 820, 400, st.fog * 0.6, t, 5);
         fogCloud(g, 505, 1000, 700, 260, st.fog * 0.35, t + 3, 17);
@@ -709,7 +711,7 @@ function drawEarSection(t, k) {
             g.fillStyle = 'rgba(6,16,29,0.75)';
             g.fill();
             label(g, `${Math.round(st.silMs)} ms`, 780, S.y0 + 178, { size: 56, weight: 800, color: P.cyan, align: 'center', base: 'middle' });
-            label(g, 'of silence', 780, S.y0 + 232, { size: 32, weight: 700, color: P.ink2, align: 'center', family: BODY });
+            label(g, 'of silence', 780, S.y0 + 232, { size: 34, weight: 700, color: P.ink2, align: 'center', family: BODY });
             g.restore();
         }
         g.restore();
@@ -827,11 +829,11 @@ function drawHand(t) {
         const outer = f.v === 1 ? -1 : 1;
         for (const d of [0, 2, 4, 6, 8]) {
             const ty = lerp(HD.top + 40, HD.bottom - 40, d / FADER_MAX);
-            label(g, d === 0 ? '0 dB' : `−${d}`, f.x + outer * 100, ty + 11, { size: 32, weight: 500, color: P.ink3, align: outer < 0 ? 'right' : 'left', family: BODY });
+            label(g, d === 0 ? '0 dB' : `−${d}`, f.x + outer * 100, ty + 11, { size: 34, weight: 500, color: P.ink3, align: outer < 0 ? 'right' : 'left', family: BODY });
         }
         // Gain reduction, lit on the meter.
         grMeter(g, f.x - outer * 86, HD.top + 28, HD.bottom - 28, gr, FADER_MAX);
-        label(g, 'down', f.x - outer * 86, HD.bottom + 4, { size: 32, weight: 700, color: P.ink3, align: 'center', family: BODY });
+        label(g, 'down', f.x - outer * 86, HD.bottom + 4, { size: 34, weight: 700, color: P.ink3, align: 'center', family: BODY });
         const cy = lerp(HD.top + 40, HD.bottom - 40, clamp(gr / FADER_MAX));
         shadow(g, f.x + 8, cy + 30, 110, 26, 0.7);
         rr(g, f.x - 64, cy - 32, 128, 64, 14);
@@ -861,8 +863,7 @@ function drawHand(t) {
         rr(g, f.x - 135, dk.y0 + dk.h - 76, 270, 58, 12);
         g.fillStyle = '#070d1a';
         g.fill();
-        const shown = kR > 0 ? (f.v === 1 ? D.r1.gr : D.r2.gr) : gr;
-        label(g, `down ${fmt(Math.max(0, shown), kR > 0 ? 1 : 0)} dB`, f.x, dk.y0 + dk.h - 34, { size: kR > 0 ? 40 : 36, weight: 800, color: kR > 0 ? P.ink : P.ink2, align: 'center' });
+        if (kR > 0) label(g, `down ${fmt(f.v === 1 ? D.r1.gr : D.r2.gr)} dB`, f.x, dk.y0 + dk.h - 34, { size: 40, weight: 800, color: P.ink, align: 'center', alpha: kR });
         if (kR > 0) {
             g.save();
             g.globalAlpha *= kR;
@@ -1067,7 +1068,7 @@ function drawBrain(t) {
 
 // ══ How: the cut in a DAW, then the gap at 128 BPM ══
 // The arrangement shows two beats before the drop and one after; the cut is an 8th before it.
-const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 640, x0: 120, x1: 880, msMax: 500 } };
+const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 640, x0: 120, x1: 880, msMax: 300 } };
 const CLIPC = {
     riser: { body: 'rgba(126,131,168,0.55)', head: RISER, wave: 'rgba(200,203,226,0.75)', text: P.ink },
     drums: { body: 'rgba(248,250,252,0.16)', head: 'rgba(248,250,252,0.55)', wave: 'rgba(248,250,252,0.7)', text: P.dark },
@@ -1086,12 +1087,9 @@ function drawHow(t) {
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'quarter', 0.12);
     const tAt = wto('how', 'at', 0.32);
-    // The ruler steps through the note lengths as they are named: a 32nd, a 16th, an 8th.
-    // The ear test: the same drop with a 16th, an 8th and a beat of silence (demos G16, G8, GB).
-    const TESTS = [['16th', demoBy.G16, GAP_MS / 2], ['8th', demoBy.G8, GAP_MS], ['beat', demoBy.GB, GAP_MS * 2]];
+    // The ear test: the same drop with a 16th and an 8th of silence (demos G16, G8).
+    const TESTS = [['16th', demoBy.G16, GAP_MS / 2], ['8th', demoBy.G8, GAP_MS]];
     const t128 = wto('how', 'gaps', 0.72);
-    const t16 = TESTS[0][1].at;
-    const tQuarter = voBy.g8.at;
     const tFogs = wto('how', 'why', 0.5);
     const tFifth = tFogs + 1.2;
     const tVerb = wto('how', 'reverb', 0.84);
@@ -1148,7 +1146,7 @@ function drawHow(t) {
         g.stroke();
         g.restore();
     }
-    label(g, 'drop', BX(0) + 12, HW.ruler + 4, { size: 32, weight: 800, color: P.amber });
+    label(g, 'drop', BX(0) + 12, HW.ruler + 4, { size: 34, weight: 800, color: P.amber });
     dashed(g, BX(0), HW.ruler + 14, BX(0), HW.lanes[3] + HW.laneH, P.amber, 4, [10, 8]);
     // Lanes and clips. The cut removes everything from an 8th before the drop to the drop.
     const names = [['Riser', 'riser'], ['Drums', 'drums'], ['Synths', 'synth'], ['Reverb', 'verb']];
@@ -1157,7 +1155,7 @@ function drawHow(t) {
     const xc = BX(-0.5);
     names.forEach(([nm, key], i) => {
         const y = HW.lanes[i];
-        label(g, nm, HW.x0 + 22, y + HW.laneH / 2 + 12, { size: 32, weight: 700, color: key === 'riser' ? FOG : P.ink2, family: BODY });
+        label(g, nm, HW.x0 + 22, y + HW.laneH / 2 + 12, { size: 34, weight: 700, color: key === 'riser' ? FOG : P.ink2, family: BODY });
         const wave = key === 'riser' ? (u) => 0.25 + 0.75 * u ** 1.5 : key === 'drums' ? (u) => { const b = u * 1.5; const f = b - Math.floor(b); return f < 0.06 ? 0.95 : Math.abs(f - 0.5) < 0.05 ? 0.5 : 0.18; } : key === 'synth' ? (u) => 0.5 + 0.2 * Math.sin(u * 40) : (u) => 0.35;
         const after = key === 'riser' ? null : key === 'drums' ? (u) => (u < 0.06 ? 1 : Math.abs(u - 0.5) < 0.05 ? 0.5 : 0.18) : key === 'synth' ? (u) => 0.85 : (u) => 0.4;
         // Before the cut.
@@ -1244,127 +1242,135 @@ function drawHow(t) {
         tag(g, 'reverb muted too', BX(-1.3), y + HW.laneH + 52, { x: (xc + BX(0)) / 2, y: yDn }, { a: popIn(t, tTails - 0.1, 0.3) * (1 - popIn(t, tAt - 0.1, 0.3)), bg: P.ink, fg: P.dark, size: 34 });
     }
     g.restore();
-    // At 128 BPM: the gap grows to an 8th, past the after-fog (model), full width and large.
+    // Why a quarter second: the after-fog (model) on a millisecond axis; then each test's gap fills
+    // on the same axis while it is named, and is heard at once, a playhead crossing it in real time.
     const kZ = popIn(t, tFogs + 0.15, 0.3);
     if (kZ > 0) {
         const Z = HW.zoom;
         const ZX = (ms) => lerp(Z.x0, Z.x1, ms / Z.msMax);
         const y = Z.y + (1 - E.out(kZ)) * 60;
+        const TY = y + 240;
+        const TH = 110;
         g.save();
         g.globalAlpha *= kZ;
         label(g, 'after-fog', Z.x0, y - 24, { size: 40, weight: 800, color: FOG, family: BODY });
-        label(g, 'model', Z.x0 + 200, y - 24, { size: 32, weight: 600, color: P.ink3, family: BODY });
-        // A playhead sweeps the after-fog from 0 to 200 ms while "a fifth of a second" is spoken.
+        label(g, 'in your hearing · model', Z.x0 + 196, y - 24, { size: 34, weight: 600, color: P.ink2, family: BODY });
+        // A playhead sweeps the after-fog from 0 to 200 ms while "Why a quarter second?" is spoken.
         const sweep = 200 * E.inOut(seg(t, tFogs + 0.1, tFifth + 0.4));
         for (let m = 0; m < 200; m += 2) {
             g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.8 : 0.14) * fogWeight(m)})`;
-            g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 150);
+            g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 120);
         }
         if (sweep > 0 && sweep < 200) {
             g.fillStyle = P.ink;
-            g.fillRect(ZX(sweep) - 2, y - 8, 4, 166);
+            g.fillRect(ZX(sweep) - 2, y - 8, 4, 136);
         }
-        // The fog's end line lights when the sweep reaches it.
         const kEnd = sweep >= 199 ? 1 : 0.25;
-        g.save();
-        g.globalAlpha *= kEnd;
-        g.strokeStyle = FOG;
-        g.lineWidth = 5;
-        g.beginPath();
-        g.moveTo(ZX(200), y - 10);
-        g.lineTo(ZX(200), y + 160);
-        g.stroke();
-        g.restore();
-        label(g, 'gone within', ZX(200) + 16, y + 62, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
-        label(g, '100–200 ms', ZX(200) + 16, y + 112, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
-        // The bar shows the gap of the test now playing; it snaps to each as it starts.
+        label(g, 'gone within', ZX(200) + 18, y + 48, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
+        label(g, '100–200 ms', ZX(200) + 18, y + 96, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
+        // Each test's gap fills while its line is spoken: a 16th, then on to an 8th, crossing the fog's end.
+        const fills = [
+            { a: voBy.g16.at, b: voBy.g16.at + 1.3, from: 0, to: TESTS[0][2] },
+            { a: voBy.g8.at, b: Math.max(voBy.g8.at + 0.9, wto('g8', 'gone', 0.35) + 0.1), from: TESTS[0][2], to: TESTS[1][2] },
+        ];
         let ms = 0;
         let now = -1;
-        TESTS.forEach(([, d, len], i) => {
-            // Shown as it is named, then heard.
-            const named = voBy[['g16', 'g8', 'gb'][i]].at - 0.05;
-            if (t >= named) {
+        fills.forEach((f, i) => {
+            if (t >= f.a) {
                 now = i;
-                ms = (i ? TESTS[i - 1][2] : 0) + (len - (i ? TESTS[i - 1][2] : 0)) * E.out(seg(t, named, named + 0.25));
+                ms = lerp(f.from, f.to, seg(t, f.a, f.b));
             }
         });
-        label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
-        // On "128 BPM": outlines of a 16th and an 8th at that tempo, waiting to be filled.
-        const kO = popIn(t, t128 - 0.1, 0.3);
-        if (kO > 0) {
+        const kT = popIn(t, t128 - 0.1, 0.3);
+        if (kT > 0) {
             g.save();
-            g.globalAlpha *= kO;
+            g.globalAlpha *= kT;
+            label(g, 'gap', Z.x0, TY - 26, { size: 40, weight: 800, color: P.cyan, family: BODY });
             g.strokeStyle = `rgba(${CYAN_RGB},0.55)`;
             g.setLineDash([10, 8]);
             g.lineWidth = 3;
-            for (const len of [GAP_MS / 2, GAP_MS, GAP_MS * 2]) {
-                rr(g, ZX(0), y + 274, ZX(len) - ZX(0), 110, 18);
+            for (const [, , len] of TESTS) {
+                rr(g, ZX(0), TY, ZX(len) - ZX(0), TH, 18);
                 g.stroke();
             }
             g.restore();
         }
-        rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
-        g.fillStyle = P.cyan;
-        g.fill();
-        // The after-fog on the gap's own track, same axis: a 16th ends inside it, an 8th clears it.
         if (now >= 0) {
+            // The after-fog inside the gap's own track: the kick at the end of a 16th still meets some.
             g.save();
-            rr(g, ZX(0), y + 274, ZX(Z.msMax) - ZX(0), 110, 18);
+            rr(g, ZX(0), TY, ZX(Z.msMax) - ZX(0), TH, 18);
             g.clip();
             for (let m = 0; m < 200; m += 2) {
-                g.fillStyle = `rgba(${FOG_RGB},${0.7 * fogWeight(m) * popIn(t, voBy.g16.at - 0.05, 0.3)})`;
-                g.fillRect(ZX(m), y + 274, ZX(2) - ZX(0) + 0.5, 110);
+                g.fillStyle = `rgba(${FOG_RGB},${0.75 * fogWeight(m) * popIn(t, voBy.g16.at - 0.05, 0.3)})`;
+                g.fillRect(ZX(m), TY, ZX(2) - ZX(0) + 0.5, TH);
             }
             g.restore();
-            g.save();
-            g.strokeStyle = FOG;
-            g.setLineDash([12, 10]);
+            rr(g, ZX(0), TY, Math.max(1, ZX(ms) - ZX(0)), TH, 18);
+            g.fillStyle = `rgba(${CYAN_RGB},0.3)`;
+            g.fill();
+            g.strokeStyle = P.cyan;
             g.lineWidth = 4;
-            g.beginPath();
-            g.moveTo(ZX(200), y - 10);
-            g.lineTo(ZX(200), y + 400);
             g.stroke();
-            g.restore();
-            // At each test's downbeat, the outcome on the bar.
-            TESTS.forEach(([, d], i) => {
-                const kO2 = popIn(t, d.down, 0.2) * (i === now ? 1 : 0);
-                if (kO2 > 0) pill(g, i === 0 ? 'fog left' : 'clear', Math.min(ZX(TESTS[i][2]) + 80, Z.x1 - 110), y + 226, { size: 34, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO2, scale: E.outBack(kO2), weight: 800 });
-            });
+            // The gap's leading edge: where the kick will land.
+            g.fillStyle = P.cyan;
+            g.fillRect(ZX(ms) - 4, TY - 10, 8, TH + 20);
         }
-        // The fog's end line flashes as the gap passes it.
-        const fl = t >= tQuarter + 0.12 ? Math.exp(-(t - tQuarter - 0.12) / 0.25) : 0;
+        // The fog's end line, through both tracks; it flashes as the 8th's edge passes it.
+        g.save();
+        g.globalAlpha *= kEnd;
+        g.strokeStyle = FOG;
+        g.setLineDash([12, 10]);
+        g.lineWidth = 4;
+        g.beginPath();
+        g.moveTo(ZX(200), y - 10);
+        g.lineTo(ZX(200), TY + TH + 14);
+        g.stroke();
+        g.restore();
+        const f8 = fills[1];
+        const tPass = lerp(f8.a, f8.b, (200 - f8.from) / (f8.to - f8.from));
+        const fl = t >= tPass ? Math.exp(-(t - tPass) / 0.25) : 0;
         if (fl > 0.01) {
             g.fillStyle = `rgba(${CYAN_RGB},${0.9 * fl})`;
-            g.fillRect(ZX(200) - 5, y - 10, 10, 170);
+            g.fillRect(ZX(200) - 6, y - 10, 12, TY + TH + 24 - y);
         }
-        // The value sits past the bar, or inside it once the bar is long, so it stays clear of the right rail.
-        const inside = ZX(ms) > Z.x1 - 190;
-        label(g, `${Math.round(ms)} ms`, inside ? ZX(ms) - 20 : ZX(ms) + 20, y + 347, { size: 56, weight: 800, color: inside ? P.dark : P.cyan, align: inside ? 'right' : 'left' });
-        // A speaker pulses by the bar while a test plays.
-        if (now >= 0 && t < TESTS[now][1].to) speaker(g, Z.x0 - 34, y + 330, 0.8, 0.5 + 0.5 * Math.sin(t * 18));
-        // Axis: 0, 100, 200 ms and the 8th.
+        // When a gap is complete, what the kick meets, above its edge.
+        fills.forEach((f, i) => {
+            const kO = popIn(t, f.b, 0.2) * (i === now ? 1 : 0);
+            if (kO > 0) pill(g, i === 0 ? 'fog left' : 'clear', clamp(ZX(f.to), Z.x0 + 100, Z.x1 - 100), y + 180, { size: 36, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO, scale: E.outBack(kO), weight: 800 });
+        });
+        if (now >= 0) {
+            const inside = ZX(ms) > Z.x1 - 190;
+            label(g, `${Math.round(ms)} ms`, inside ? ZX(ms) - 24 : ZX(ms) + 24, TY + TH / 2 + 20, { size: 56, weight: 800, color: P.ink, align: inside ? 'right' : 'left' });
+        }
+        // Heard: the playhead crosses the gap in real time, then the kick lands on its edge.
+        TESTS.forEach(([, d, len]) => {
+            const t0 = d.down - len / 1000;
+            if (t >= d.at && t < d.to) speaker(g, Z.x0 - 34, TY + TH / 2, 0.8, 0.5 + 0.5 * Math.sin(t * 18));
+            if (t >= t0 && t < d.down) {
+                g.fillStyle = P.ink;
+                g.fillRect(ZX((len * (t - t0)) / (d.down - t0)) - 3, TY - 14, 6, TH + 28);
+            }
+            impact(g, ZX(len), TY + TH / 2, d.down, t, 2);
+        });
+        // Axis: 0 and the two lengths at 128 BPM.
         g.strokeStyle = P.ink3;
         g.lineWidth = 3;
         g.beginPath();
-        g.moveTo(ZX(0), y + 430);
-        g.lineTo(ZX(Z.msMax), y + 430);
+        g.moveTo(ZX(0), TY + TH + 40);
+        g.lineTo(ZX(Z.msMax), TY + TH + 40);
         g.stroke();
-        label(g, '0', ZX(0), y + 474, { size: 34, weight: 600, color: P.ink3, align: 'center', family: BODY });
-        // The note lengths at 128 BPM on their own row, ticked on the axis.
-        for (const [nm, m, on] of [['16th', GAP_MS / 2, now === 0], ['8th', GAP_MS, now === 1], ['beat', GAP_MS * 2, now === 2]]) {
+        label(g, '0', ZX(0), TY + TH + 84, { size: 34, weight: 600, color: P.ink3, align: 'center', family: BODY });
+        TESTS.forEach(([nm, , m], i) => {
+            const on = now === i;
             g.fillStyle = on ? P.cyan : P.ink3;
-            g.fillRect(ZX(m) - 2, y + 416, 4, 28);
-            label(g, nm, ZX(m), y + 480, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
-            label(g, `${Math.round(m)} ms`, ZX(m), y + 528, { size: 32, weight: 700, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
-        }
+            g.fillRect(ZX(m) - 2, TY + TH + 26, 4, 28);
+            label(g, nm, ZX(m), TY + TH + 92, { size: 42, weight: 800, color: on ? P.cyan : P.ink2, align: 'center', family: BODY });
+            label(g, `${Math.round(m)} ms`, ZX(m), TY + TH + 138, { size: 36, weight: 700, color: on ? P.cyan : P.ink2, align: 'center', family: BODY });
+        });
         g.restore();
-        void t16;
-        // What the signal does and does not show, said plainly.
-        if (now >= 0) {
-            const kN = popIn(t, voBy.g16.at + 0.3, 0.3);
-            label(g, 'matched in loudness · the click measures the same in all three', 540, Z.y + 610, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kN, family: BODY });
-            label(g, 'what changes is the after-fog in your hearing (model)', 540, Z.y + 654, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kN, family: BODY });
-        }
+        // What the signal does and does not show, said plainly (and spoken: "The click is the same; your ears aren't").
+        const kN = popIn(t, wto('g8', 'click', 0.55) - 0.1, 0.3);
+        if (kN > 0) label(g, 'same click in both · your ears differ (model)', 540, Z.y + 620, { size: 38, weight: 700, color: P.ink, align: 'center', alpha: kN, family: BODY });
     }
     g.restore();
 }
@@ -1400,13 +1406,13 @@ function drawEnd(t) {
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
     const tPoll = wto('cta', 'which', 0.4);
-    // The lesson's address comes up with the question; the phone mock-up is left out (its text cannot be read at phone size).
-    const tLesson = tPoll;
+    // The lesson's address is up for the whole end card; the phone mock-up is left out (its text cannot be read at phone size).
+    const tLesson = SC.end + 0.15;
     const SHOW_PHONE = false;
     // 1. The recap: the three reasons once more, each lit as it is named.
     const kRe = (1 - seg(t, tPoll - 0.25, tPoll)) * E.out(seg(t, SC.end, SC.end + 0.25));
     if (kRe > 0) {
-        label(g, 'Why the gap hits harder', 540, 470, { size: 64, weight: 800, color: P.ink, align: 'center', base: 'middle', alpha: kRe });
+        label(g, 'Why the gap hits harder', 540, 440, { size: 64, weight: 800, color: P.ink, align: 'center', base: 'middle', alpha: kRe });
         // The three characters from the "why" card, full size, each lit (and bouncing) as it is named.
         [[['clean', 'ears'], 'clean'], [['calmer', 'limiter'], 'calmer'], [['a beat you', 'saw coming'], 'beat']].forEach(([w, cue], i) => {
             const t0 = wto('cta', cue, 0.2 + i * 0.12) - 0.05;
@@ -1416,16 +1422,16 @@ function drawEnd(t) {
             const hop = t >= t0 ? Math.exp(-(t - t0) / 0.18) * Math.sin(Math.min(Math.PI, (t - t0) * 14)) * 30 : 0;
             g.save();
             g.globalAlpha *= kI;
-            g.translate(x, 790 - hop);
+            g.translate(x, 690 - hop);
             g.scale(1.5 * lerp(0.9, 1, E.outBack(lit)), 1.5 * lerp(0.9, 1, E.outBack(lit)));
             if (i === 0) earPinna(g, -8, -10, 0.95);
             else if (i === 1) robotDome(g, { x: 0, y: 62 }, { s: 0.85, look: { x: 0, y: 300 }, lid: 0 });
             else brainChar(g, 0, -30, 0.6, { t, joy: lit });
             g.restore();
-            w.forEach((line, j) => label(g, line, x, 1010 + j * 56, { size: 46, weight: 800, color: lit > 0.5 ? P.ink : P.ink3, align: 'center', family: BODY, alpha: kI }));
+            w.forEach((line, j) => label(g, line, x, 900 + j * 54, { size: 46, weight: 800, color: lit > 0.5 ? P.ink : P.ink3, align: 'center', family: BODY, alpha: kI }));
         });
     }
-    // 2. A question the film does not settle, as a comment bubble with the three lengths to pick from.
+    // 2. A question for the comments that ties back to the hook: which did you pick?
     const kPo = popIn(t, tPoll - 0.1, 0.3);
     if (kPo > 0) {
         g.save();
@@ -1440,11 +1446,11 @@ function drawEnd(t) {
         g.lineTo(-280, 270);
         g.lineTo(-130, 178);
         g.fill();
-        label(g, 'What do you cut', 0, -115, { size: 60, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        label(g, 'before your drop?', 0, -45, { size: 60, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        ['16th', '8th', 'beat'].forEach((c, i) => {
-            const kc = popIn(t, wto('cta', ['sixteenth', 'eighth', 'beat'][i], 0.8 + i * 0.05, i === 2 ? 1 : 0) - 0.05, 0.25);
-            if (kc > 0) pill(g, c, (i - 1) * 230, 75, { size: 52, bg: P.dark, fg: P.ink, alpha: kc, scale: E.outBack(kc), weight: 800 });
+        label(g, 'Which did you pick', 0, -115, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        label(g, 'at the start?', 0, -42, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        [1, 2].forEach((n, i) => {
+            const kc = popIn(t, wto('cta', ['one', 'two'][i], 0.66 + i * 0.03) - 0.05, 0.25);
+            if (kc > 0) badgeNum(g, n, (i ? 1 : -1) * 120, 82, Math.max(1, 54 * E.outBack(kc)), { fill: P.dark, color: P.ink, alpha: kc });
         });
         g.restore();
     }

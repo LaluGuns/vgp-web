@@ -1,6 +1,6 @@
 [curious] One or two? Pick one.
 
-[excited] Number two. It has a gap: under a quarter second of silence before the kick. [curious] Why does that hit harder? Your ears, your limiter, your brain.
+[excited] Number two. It has a gap: about a quarter second of silence before the kick. [curious] Why does that hit harder? Your ears, your limiter, your brain.
 
 In number one, the riser is still roaring when the kick lands, so it covers the click. [warmly] In number two, the riser stops. Its after-fog, the dull moment after a loud sound, fades, and your ears meet the kick fresh.
 
@@ -8,14 +8,12 @@ In number one, the riser is still roaring when the kick lands, so it covers the 
 
 [confident] And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
 
-So cut everything about a quarter second before the drop, reverb tails too. [curious] Why a quarter second? Listen to three gaps.
+So cut everything about a quarter second before the drop, reverb tails too. [curious] Why a quarter second? Compare two gaps.
 
-A sixteenth. The after-fog may still be there.
+A sixteenth: the after-fog may still be there.
 
-An eighth. It outlasts the after-fog.
-
-A full beat. A longer breath.
+An eighth: it's gone. [knowingly] The click is the same; your ears aren't.
 
 [softly] Now listen again. Hear the click?
 
-[warmly] That's the click: in this drop, about fourteen dB clearer. Clean ears, a calmer limiter, a beat you saw coming. Which gap do you use: a sixteenth, an eighth, or a full beat? Full lesson on the Virzy Guns blog.
+[warmly] That's the click: about fourteen dB clearer, in this drop. Clean ears, a calmer limiter, a beat you saw coming. [curious] Which did you pick at the start, one or two? Full lesson on the Virzy Guns blog.

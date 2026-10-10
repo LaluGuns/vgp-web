@@ -74,8 +74,8 @@ log(`  stricter small-speaker model (500 Hz high-pass at 24 dB/oct, +4 dB at 1 k
         const m = clickOf(len);
         return `${nm} (${(len * 1000).toFixed(1)} ms): click ${f1(m.clickDb)} dB (phone check ${f1(m.clickPhoneDb)}, small speaker ${f1(m.clickSmallDb)}), limiter ${f1(m.grMean)} dB on the first kick, gap floor ${f1(m.gapDb)} dB`;
     });
-    log(`Ear test, the same drop with three gaps, each matched to version 2's drop-bar loudness (click as in claim 2; version 1 without a gap: ${f1(Q[1].clickDb)} dB): ${rows.join('; ')}`);
-    log('  The signal measures barely differ between the three: the build is silent at the downbeat in all of them. What differs is forward masking in the listener (the after-fog), which the film shows as a labelled model, not a measurement.');
+    log(`Ear test (the film plays the 16th and the 8th; the beat is measured for reference), the same drop with three gaps, each matched to version 2's drop-bar loudness (click as in claim 2; version 1 without a gap: ${f1(Q[1].clickDb)} dB): ${rows.join('; ')}`);
+    log('  The signal measures barely differ between the three: the build is silent at the downbeat in all of them. What differs is forward masking in the listener (the after-fog), which the film shows as a labelled model, not a measurement, and says aloud ("The click is the same; your ears aren\'t.").');
 }
 log(`Claim 4, the first kick (K-weighted, first 50 ms) over the drop bar's loudness at matched loudness: version 1 ${f1(Q[1].kickOverBar)} dB, version 2 ${f1(Q[2].kickOverBar)} dB, ${f1(Q.claims[4].db)} dB more prominent with the gap`);
 const pass = Q.claims[1].db >= 3 && Q.claims[2].db >= 10 && Q.claims[3].survive1 >= 0.8 && Q.claims[3].survive2 >= 0.8 && Q.claims[4].db > 0;
@@ -169,7 +169,7 @@ async function lesson() {
 }
 const L = await lesson();
 const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
-log(`End card: recap of the three reasons, an open comment question (16th / 8th / beat), the address ${TIMELINE.lesson.url} and the lesson title; the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
+log(`End card: recap of the three reasons with the address ${TIMELINE.lesson.url} and the lesson title up throughout, then a comment question tied to the hook (which did you pick at the start, 1 or 2?); the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}

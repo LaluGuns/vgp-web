@@ -29,7 +29,7 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 const HOOK = { pre: 2.5, post: 2 };
 // Version 2's replay rings out longer, so its measured line holds before the end card.
 const REPLAY = { pre: 1.25, post: 2.75 };
-const REPLAY2 = { pre: 1.25, post: 3.25 };
+const REPLAY2 = { pre: 1.25, post: 2.5 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
@@ -52,7 +52,7 @@ const sting = (id, v, hold) => {
     stings.push({ id, v, at: down - STING.pre * BEAT, ...STING });
     t = down + STING.post * BEAT + 0.1 + hold;
 };
-for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8', 'gb']) {
+for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
     // "so it covers the click" then version 1's downbeat; "your ears meet the kick fresh" then version 2's.
@@ -60,13 +60,13 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8', '
     if (id === 'fresh') sting('S2', 2, 0.35);
     // The limiter's measured result holds after "pull the kick down".
     if (id === 'hand') t += 0.7;
-    // The ear test: each length is named, then heard at once (say it, show it, play it), its downbeat on the grid.
-    const TEST = { g16: ['G16', '16', 1], g8: ['G8', 2, 1], gb: ['GB', 'beat', 1.5] }[id];
+    // The ear test: two lengths, each named while its bar fills, then heard at once, its downbeat on the grid.
+    const TEST = { g16: ['G16', '16', 1], g8: ['G8', 2, 1] }[id];
     if (TEST) {
         const [gid, v, pre] = TEST;
-        const down = onGrid(t + 0.05 + pre * BEAT);
-        tests.push({ id: gid, v, at: down - pre * BEAT, pre, post: 1.5 });
-        t = down + 1.5 * BEAT + 0.2;
+        const down = onGrid(t + pre * BEAT - 0.1);
+        tests.push({ id: gid, v, at: down - pre * BEAT, pre, post: 1.25 });
+        t = down + 1.25 * BEAT + 0.1;
     }
     // The three reasons stay up together before the ear scene.
     if (id === 'hook') t += 0.4;
@@ -75,9 +75,9 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8', '
 const replayAt = onGrid(t + dur('again') + 0.12);
 vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) / 1000 });
 const replayEnd = replayAt + len(REPLAY) + len(REPLAY2);
-// The CTA waits for version 2's second kick to ring out.
-vo.push({ id: 'cta', at: Math.round((replayEnd + 0.2) * 1000) / 1000 });
-const button = replayEnd + 0.2 + dur('cta') + 0.8;
+// The CTA starts as version 2's second kick rings out.
+vo.push({ id: 'cta', at: Math.round((replayEnd + 0.1) * 1000) / 1000 });
+const button = replayEnd + 0.1 + dur('cta') + 0.6;
 
 export const TIMELINE = {
     fps: 60,
@@ -137,7 +137,7 @@ export const TIMELINE = {
         { cue: ['cta', 'clean', 0.05], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'calmer', 0.17], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'beat', 0.29], dt: -0.05, kind: 'tick', level: 0.7 },
-        { cue: ['cta', 'so', 0.4], dt: -0.1, kind: 'pop', level: 0.8 },
+        { cue: ['cta', 'which', 0.55], dt: -0.1, kind: 'pop', level: 0.8 },
         { at: button, kind: 'button' },
     ],
     button,
@@ -146,13 +146,13 @@ export const TIMELINE = {
     // starts a scene on a spoken word; `at` is used otherwise.
     scenes: [
         { id: 'ab', at: 0, view: 'ab', teaches: 'Hook: the same drop twice, 1 then 2.' },
-        { id: 'notch', line: 'hook', dt: -0.15, view: 'ab', teaches: 'Number 2 hits harder and has a gap: less than a quarter second of silence. Why: your ears, your limiter, your brain.' },
+        { id: 'notch', line: 'hook', dt: -0.15, view: 'ab', teaches: 'Number 2 hits harder and has a gap: about a quarter second of silence. Why: your ears, your limiter, your brain.' },
         { id: 'fog', line: 'fog', dt: -0.3, view: 'ear', teaches: "Your ears, from the outer ear into the cochlea (model, slowed): in 1 the riser is still playing when the kick lands, so the click's spark is covered; it lands on version 1's downbeat, heard alone." },
         { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: "In 2 the riser stops, the after-fog fades in the silence (counted, slowed), and the click lands in the clear on version 2's downbeat, heard alone." },
         { id: 'hand', line: 'hand', dt: -0.1, view: 'hand', teaches: "Your limiter is a hand on a console fader: in 1 it is pulled down as the kick arrives (measured gain reduction on each strip's display)." },
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
-        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then an ear test of a 16th, an 8th and a full beat, each matched in loudness; a loud sound fogs hearing for up to 200 ms (model) and an 8th at 128 BPM (234.4 ms) outlasts it." },
+        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then an ear test of a 16th and an 8th, matched in loudness: a loud sound fogs hearing for up to 200 ms (model); a 16th (117 ms) ends inside it, an 8th (234.4 ms) outlasts it; the click itself measures the same in both." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
-        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons, an open question for the comments (a 16th, an 8th or a beat), and where the lesson is.' },
+        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons, with the lesson address up throughout, then a question for the comments: which did you pick at the start, 1 or 2?' },
     ],
 };
