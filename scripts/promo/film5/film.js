@@ -285,7 +285,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     const msB = demoBy.A.post * BEAT * 1000;
     const G = TL.guess;
     const tTwo = wt('hook', 'two');
-    const guessing = !frame1 && !replay && t >= G.at && t < voBy.hook.at - 0.05;
+    const guessing = !frame1 && !noHead && !replay && t >= G.at && t < voBy.hook.at - 0.05;
     // Headline: the question; "1 or 2?" while the viewer picks; the answer on "two".
     if (noHead) {
         // Cover: the headline is drawn by drawCover.
@@ -656,8 +656,9 @@ function drawHand(t) {
     cam(t, SC.hand, SC.brain);
     headline(t, SC.hand + 0.1, [['The'], ['limiter'], ['is'], ['a'], ['hand']], 300, { size: 84, stagger: 0 });
     label(g, t < SC.hand + 2.2 ? 'limiter = automatic volume control' : 'your limiter · its own gain, measured', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
-    const tHand = wto('hand', 'limiter', 0.12);
-    const tRiser = wto('hand', 'riser', 0.38);
+    const tHand = SC.hand + 0.15;
+    // The slow motion runs from the scene's start to the kick on "down", so the faders move at once.
+    const tRiser = SC.hand + 0.35;
     // Slowed down from -700 ms to the kick on "down", then on to the end of
     // the click window (+20 ms, where claim 1 is measured) and held there.
     const tKick = wto('hand', 'down', 0.7);
@@ -1515,7 +1516,7 @@ function drawCover() {
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    pill(g, 'the 234 ms gap', 540, 1300, { size: 40, bg: P.cyan, fg: P.dark, weight: 800 });
+    pill(g, 'one tiny change', 540, 1300, { size: 40, bg: P.cyan, fg: P.dark, weight: 800 });
     label(g, '1 or 2?', 540, 1440, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     // The brand inside the 3:4 crop.
     avatar(g, 420, 1590, 36);
