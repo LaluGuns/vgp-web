@@ -677,7 +677,7 @@ function drawEarSection(t, k) {
         g.restore();
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
-        label(g, "hair cells, the ear's sensors (model, slowed)", S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
+        label(g, "hair cells: ear sensors (model, slowed)", S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1) {
             const kG = popIn(t, e.off - 0.1, 0.2);
