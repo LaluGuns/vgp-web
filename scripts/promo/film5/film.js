@@ -307,8 +307,6 @@ function drawAB(t, frame1 = false, noHead = false) {
         // Cover: the headline is drawn by drawCover.
     } else if (replay) {
         headline(t, SC.replay + 0.05, [['Listen'], ['for'], ['the'], ['click', P.amber]], 330, { size: 92 });
-        const kV = popIn(t, wto('again', 'harder', 0.4) - 0.1, 0.3) * (1 - seg(t, demoBy.A2.down - 0.2, demoBy.A2.down + 0.1));
-        if (kV > 0) pill(g, 'the answer: 2 hits harder', 540, 428, { size: 40, bg: P.ink, fg: P.dark, alpha: kV, scale: E.outBack(kV), weight: 800 });
     }
     else {
         const s0 = frame1 ? 1 : lerp(1.18, 1, E.outBack(seg(t, 0, 0.25)));
@@ -318,7 +316,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         label(g, 'Same drop.', 0, 0, { size: 104, weight: 800, color: P.ink, align: 'center', base: 'middle' });
         g.restore();
         const answer = !frame1 && t >= voBy.hook.at - 0.05;
-        if (answer) headline(t, tTwo - 0.05, [['2'], ['has'], ['a'], ['gap.']], 445, { size: 72 });
+        if (answer) headline(t, tTwo - 0.05, [['2'], ['hits'], ['harder.']], 445, { size: 72 });
         else if (guessing) {
             const pulse = 1 + 0.06 * Math.exp(-(((t - G.at) % BEAT) / 0.12));
             g.save();
@@ -501,7 +499,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     if (!replay && !noHead && !frame1) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
         if (id === 'notch') {
-            const kCard = popIn(t, wto('hook', 'works', 0) - 0.1, 0.3) * (1 - out);
+            const kCard = popIn(t, wto('hook', 'why', 0) - 0.1, 0.3) * (1 - out);
             if (kCard > 0) {
                 g.save();
                 g.globalAlpha *= kCard;
@@ -514,13 +512,27 @@ function drawAB(t, frame1 = false, noHead = false) {
                 g.strokeStyle = 'rgba(255,255,255,0.18)';
                 g.lineWidth = 3;
                 g.stroke();
-                label(g, 'what the silence works on', 540, 670, { size: 46, weight: 800, color: P.ink2, align: 'center', family: BODY });
+                label(g, 'why 2 hits harder', 540, 670, { size: 46, weight: 800, color: P.ink2, align: 'center', family: BODY });
                 g.restore();
             }
             ['ears', 'limiter', 'brain'].forEach((w, i) => {
                 const kI = popIn(t, wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
-                if (kI <= 0) return;
                 const x = 540 + (i - 1) * 300;
+                // A place held for each reason until it is named, so the card is never empty.
+                const kH = kCard * (1 - kI);
+                if (kH > 0.01) {
+                    g.save();
+                    g.globalAlpha *= kH;
+                    g.strokeStyle = 'rgba(255,255,255,0.25)';
+                    g.setLineDash([10, 10]);
+                    g.lineWidth = 4;
+                    g.beginPath();
+                    g.arc(x, 900, 95, 0, Math.PI * 2);
+                    g.stroke();
+                    g.restore();
+                    label(g, `${i + 1}`, x, 904, { size: 64, weight: 800, color: 'rgba(255,255,255,0.3)', align: 'center', base: 'middle' });
+                }
+                if (kI <= 0) return;
                 const bob = Math.sin(t * 3 + i) * 5;
                 g.save();
                 g.globalAlpha *= kI;
@@ -1067,7 +1079,7 @@ function drawHow(t) {
     const tEighth = wto('how', 'quarter', 0.12);
     const tAt = wto('how', 'at', 0.32);
     // The ruler steps through the note lengths as they are named: a 32nd, a 16th, an 8th.
-    const t32 = wto('how', 'thirtysecond', 0.72);
+    const t128 = wto('how', '128', 0.72);
     const t16 = wto('how', 'sixteenth', 0.8);
     const tQuarter = wto('how', 'eighth', 0.88);
     const tFogs = wto('how', 'afterfog', 0.5);
@@ -1258,8 +1270,22 @@ function drawHow(t) {
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        const ms = t < t16 ? snap(t32, GAP_MS / 4) : t < tQuarter ? GAP_MS / 4 + snap(t16, GAP_MS / 4) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
+        const ms = t < tQuarter ? snap(t16, GAP_MS / 2) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
+        // On "128 BPM": outlines of a 16th and an 8th at that tempo, waiting to be filled.
+        const kO = popIn(t, t128 - 0.1, 0.3);
+        if (kO > 0) {
+            g.save();
+            g.globalAlpha *= kO;
+            g.strokeStyle = `rgba(${CYAN_RGB},0.55)`;
+            g.setLineDash([10, 8]);
+            g.lineWidth = 3;
+            for (const len of [GAP_MS / 2, GAP_MS]) {
+                rr(g, ZX(0), y + 274, ZX(len) - ZX(0), 110, 18);
+                g.stroke();
+            }
+            g.restore();
+        }
         rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
         g.fill();
@@ -1290,7 +1316,7 @@ function drawHow(t) {
             label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
         }
         g.restore();
-        if (t >= t32) label(g, t >= tQuarter ? 'an 8th outlasts the fog' : t >= t16 ? 'a 16th: the fog is still there' : 'a 32nd: the fog is still there', 540, Z.y + 620, { size: 44, weight: 800, color: t >= tQuarter ? P.cyan : P.ink, align: 'center', alpha: popIn(t, t32 + 0.1, 0.3), family: BODY });
+        if (t >= t16) label(g, t >= tQuarter ? 'an 8th outlasts the fog' : 'a 16th already helps', 540, Z.y + 620, { size: 44, weight: 800, color: t >= tQuarter ? P.cyan : P.ink, align: 'center', alpha: popIn(t, t16 + 0.1, 0.3), family: BODY });
     }
     g.restore();
 }
@@ -1324,8 +1350,10 @@ function drawEnd(t) {
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
-    const tPoll = wto('cta', 'did', 0.4);
-    const tLesson = wto('cta', 'full', 0.7);
+    const tPoll = wto('cta', 'so', 0.4);
+    // The lesson's address comes up with the question; the phone mock-up is left out (its text cannot be read at phone size).
+    const tLesson = tPoll;
+    const SHOW_PHONE = false;
     // 1. The recap: the three reasons once more, each lit as it is named.
     const kRe = (1 - seg(t, tPoll - 0.25, tPoll)) * E.out(seg(t, SC.end, SC.end + 0.25));
     if (kRe > 0) {
@@ -1345,40 +1373,35 @@ function drawEnd(t) {
             label(g, w, 400, y + 16, { size: 50, weight: 800, color: P.ink, family: BODY, alpha: kI, base: 'middle' });
         });
     }
-    // 2. The poll from the hook, answered in the comments.
-    const kPo = popIn(t, tPoll - 0.1, 0.3) * (1 - seg(t, tLesson - 0.25, tLesson));
+    // 2. A question the film does not settle, as a comment bubble with the three lengths to pick from.
+    const kPo = popIn(t, tPoll - 0.1, 0.3);
     if (kPo > 0) {
         g.save();
         g.globalAlpha *= kPo;
-        g.translate(540, 760);
+        g.translate(540, 700);
         g.scale(lerp(0.9, 1, E.outBack(kPo)), lerp(0.9, 1, E.outBack(kPo)));
-        // A comment bubble.
-        rr(g, -380, -230, 760, 400, 60);
+        rr(g, -410, -200, 820, 380, 60);
         g.fillStyle = P.ink;
         g.fill();
         g.beginPath();
-        g.moveTo(-200, 168);
-        g.lineTo(-260, 260);
-        g.lineTo(-110, 168);
+        g.moveTo(-220, 178);
+        g.lineTo(-280, 270);
+        g.lineTo(-130, 178);
         g.fill();
-        label(g, 'Did you pick 2?', 0, -120, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        [['1', P.ink3], ['2', P.cyan]].forEach(([c, col], i) => {
-            const x = (i - 0.5) * 260;
-            g.beginPath();
-            g.arc(x, 40, 84, 0, Math.PI * 2);
-            g.fillStyle = col;
-            g.fill();
-            label(g, c, x, 44, { size: 96, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        label(g, 'What do you cut', 0, -115, { size: 60, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        label(g, 'before your drop?', 0, -45, { size: 60, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        ['16th', '8th', 'beat'].forEach((c, i) => {
+            const kc = popIn(t, wto('cta', ['sixteenth', 'eighth', 'beat'][i], 0.8 + i * 0.05, i === 2 ? 1 : 0) - 0.05, 0.25);
+            if (kc > 0) pill(g, c, (i - 1) * 230, 75, { size: 52, bg: P.dark, fg: P.ink, alpha: kc, scale: E.outBack(kc), weight: 800 });
         });
         g.restore();
-        label(g, 'tell me in the comments', 540, 1090, { size: 46, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: kPo });
     }
     const sw = PH.w - 28;
     const sh = PH.h - 28;
     const x0 = PH.x - PH.w / 2;
     const lift = E.outBack(seg(t, tLesson - 0.25, tLesson + 0.3));
     g.save();
-    g.globalAlpha *= clamp(seg(t, tLesson - 0.25, tLesson + 0.05));
+    g.globalAlpha *= SHOW_PHONE ? clamp(seg(t, tLesson - 0.25, tLesson + 0.05)) : 0;
     g.translate(0, (1 - lift) * 100 + 8 * Math.sin((t - SC.end) * 1.7));
     const glow = g.createRadialGradient(PH.x, PH.top + PH.h / 2, 0, PH.x, PH.top + PH.h / 2, 640);
     glow.addColorStop(0, 'rgba(125,211,252,0.15)');
@@ -1441,14 +1464,12 @@ function drawEnd(t) {
     const k = popIn(t, tLesson, 0.35);
     if (k > 0) {
         const pulse = t < BUTTON ? 0.035 * Math.exp(-((t % BEAT) / 0.12)) : 0;
-        pill(g, TL.lesson.url, 540, 1092, { size: 56, bg: P.ink, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
+        pill(g, TL.lesson.url, 540, 1080, { size: 56, bg: P.ink, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
         // The lesson's title on two lines, clear of the right-hand rail.
         const words = `Lesson: ${TL.lesson.title}`.split(' ');
         const cut = Math.ceil(words.length / 2);
-        label(g, words.slice(0, cut).join(' '), 540, 1166, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
-        label(g, words.slice(cut).join(' '), 540, 1208, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
-        // The poll stays up under the lesson: one or two, in the comments.
-        label(g, 'picked 1 or 2? comment', 540, 1272, { size: 40, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: clamp(k * 3) });
+        label(g, words.slice(0, cut).join(' '), 540, 1160, { size: 36, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
+        label(g, words.slice(cut).join(' '), 540, 1206, { size: 36, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
     }
     g.restore();
 }
