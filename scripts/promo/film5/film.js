@@ -368,11 +368,19 @@ function drawAB(t, frame1 = false, noHead = false) {
         // before the ear; then it is wiped in, gap and all. Version 1 draws live as it is heard.
         const tRev = wto('hook', 'two', 0.05);
         const covered = !replay && (v === 2 ? noHead || frame1 || t < tRev : frame1 && !noHead);
-        if (v === 2 && !covered && !replay) upto = Math.min(upto, lerp(msA, msB, E.inOut(seg(t, tRev, tRev + 0.45))));
+        if (v === 2 && !covered && !replay) upto = Math.min(upto, lerp(msA, msB, E.inOut(seg(t, tRev, tRev + 0.25))));
         if (replay || (v === 1 && noHead)) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
         else {
             silhouette(g, box, covered ? -1e9 : upto, a0, b0);
-            if (covered) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
+            if (covered) {
+                const pms2 = playing ? abProgress(d, t) : -1e9;
+                const ex2 = playing ? Math.min(1, maxIn(V[v].peak, pms2 - 8, pms2) / PEAK_MAX) : 0;
+                g.save();
+                g.translate(540, lane.y + 4);
+                g.scale(1 + 0.18 * ex2, 1 + 0.18 * ex2);
+                label(g, '?', 0, 0, { size: 96, weight: 800, color: playing ? P.ink2 : P.ink3, align: 'center', base: 'middle' });
+                g.restore();
+            }
         }
         if (!frame1 && !covered && (t >= d.at || replay)) wave(g, v, box, a0, b0, upto, { alpha: dim });
         dashed(g, X(0), lane.y - lane.h / 2 - 6, X(0), lane.y + lane.h / 2 + 6, P.ink3, 3, [8, 8]);
@@ -485,7 +493,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         // After both have played: one figure, then what it is measured on and the kick as a whole.
         const t14 = dB.down + 0.45;
         const k14 = popIn(t, t14, 0.25);
-        tag(g, 'buried click', X(0) - 150, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0), y: L1.y + L1.h / 2 - 10 }, { a: k1 * (1 - k14), bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
+        tag(g, 'covered click', X(0) - 150, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0), y: L1.y + L1.h / 2 - 10 }, { a: k1 * (1 - k14), bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         tag(g, 'clean click', X(0) + 120, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0) + 10, y: L2.y - L2.h / 2 + 10 }, { a: k2 * (1 - k14), bg: P.amber, fg: P.dark, size: 34 });
         // The pulse before the replay: both drop lines glow while "Hear the click?" is spoken.
         if (t < dA.at) {
@@ -493,17 +501,17 @@ function drawAB(t, frame1 = false, noHead = false) {
             for (const L of [L1, L2]) dashed(g, X(0), L.y - L.h / 2 - 6, X(0), L.y + L.h / 2 + 6, `rgba(251,191,36,${0.35 + 0.5 * pu})`, 6, [8, 8]);
         }
         if (k14 > 0) {
-            const n = Math.round(D.r2.clickDb - D.r1.clickDb) * E.out(seg(t, t14, t14 + 0.8));
-            const ym = (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2;
-            label(g, `2–6 kHz, first 20 ms · kick overall +${fmt(D.claims[4].db)} dB`, 540, 500, { size: 36, weight: 700, color: P.ink, align: 'center', alpha: k14, family: BODY });
-            pill(g, `≈ +${Math.round(n)} dB clearer click`, 540, ym + 4, { size: 54, bg: P.amber, fg: P.dark, alpha: k14, scale: E.outBack(k14) * (1 + 0.06 * Math.exp(-Math.max(0, t - t14 - 0.8) / 0.15) * (t > t14 + 0.8 ? 1 : 0)), weight: 800 });
+            const n = Math.round(D.r2.clickDb - D.r1.clickDb);
+            pill(g, `click ≈ +${n} dB clearer`, 540, 448, { size: 54, bg: P.amber, fg: P.dark, alpha: k14, scale: E.outBack(k14), weight: 800 });
+            label(g, 'against the rest of its band (2–6 kHz, first 20 ms)', 540, 522, { size: 36, weight: 700, color: P.ink, align: 'center', alpha: k14, family: BODY });
+            label(g, `the first kick itself: ${fmt(D.claims[4].db)} dB more prominent than in 1`, 540, 566, { size: 36, weight: 700, color: P.ink, align: 'center', alpha: k14, family: BODY });
         }
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
     if (!replay && !noHead && !frame1) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
         if (id === 'notch') {
-            const kCard = popIn(t, wto('hook', 'why', 0) - 0.1, 0.3) * (1 - out);
+            const kCard = popIn(t, wto('hook', 'ears', 0) - 0.2, 0.3) * (1 - out);
             if (kCard > 0) {
                 g.save();
                 g.globalAlpha *= kCard;
@@ -592,10 +600,9 @@ function stageState(t) {
     const riserOn = t >= e.on && (e.off === null || t < e.off) ? lerp(0.55, 1, seg(t, e.on, e.hit)) : 0;
     // Silence since the riser stopped, in real milliseconds of the version shown (slowed, eased):
     // the after-fog fading over the first 100 ms, its faint rest to 200 ms, then on to the kick.
-    // The fade is timed to the words: most of it by "fades", gone (200 ms) just after, then on to the kick.
+    // One constant slow-motion factor, stated on the card.
     const u = e.off !== null && t >= e.off ? clamp((t - e.off) / (e.hit - e.off)) : 0;
-    const uF = e.v === 2 ? clamp((wto('fresh', 'fades', 0.6) + 0.2 - e.off) / (e.hit - e.off), 0.3, 0.85) : 0.6;
-    const silMs = keys(u, [[0, 0], [uF, 120], [Math.min(0.95, uF + 0.1), 200], [1, GAP_MS]]);
+    const silMs = u * GAP_MS;
     // The haze is the dulling a loud sound leaves (the model): it builds under the riser, so in 1 the kick
     // lands into noise and haze; in 2 the same haze is there at the cut and thins in the silence.
     const fog = riserOn > 0 ? 0.2 + 0.65 * riserOn : e.off !== null && t >= e.off ? 0.85 * fogWeight(silMs) : 0;
@@ -685,7 +692,7 @@ function drawEarSection(t, k) {
             // Covered: the spark is seen clearly, then swallowed by the riser before it reaches the cells.
             const dim = st.covered ? 0.88 : 0;
             const a = u < 1 ? lerp(1, 1 - dim, seg(u, 0.45, 0.9)) : (1 - dim) * (1 - seg(t, e.hit, e.hit + 0.35));
-            sparkle(g, lerp(S.x0 + 20, 505, E.inOut(u)), lerp(880, 840, u), st.covered ? lerp(64, 36, seg(u, 0.45, 1)) : 70, a);
+            sparkle(g, lerp(S.x0 + 70, 505, E.inOut(u)), lerp(880, 840, u), st.covered ? lerp(64, 36, seg(u, 0.45, 1)) : 70, a);
         }
         // The hit: a ring that spreads through the cells, faint when covered.
         if (t >= e.hit && t < e.hit + 0.7) {
@@ -699,16 +706,16 @@ function drawEarSection(t, k) {
         const age = t - e.hit;
         const burst = age > 0 ? Math.exp(-age / 0.3) * (st.covered ? 0.15 : 1) : 0;
         S.cells.forEach((cx, i) => {
-            hairCell(g, cx, S.cy, S.s, { tired: clamp(st.fog * 1.1 - i * 0.04), burst, wobble: Math.sin(t * 2.6 + i * 1.4) * 0.25 + st.riser * Math.sin(t * 30 + i) * 0.6 });
+            hairCell(g, cx, S.cy, S.s, { tired: 0, burst, wobble: Math.sin(t * 2.6 + i * 1.4) * 0.25 + st.riser * Math.sin(t * 30 + i) * 0.6 });
         });
         fogCloud(g, 505, 940, 820, 400, st.fog * 0.6, t, 5);
         fogCloud(g, 505, 1000, 700, 260, st.fog * 0.35, t + 3, 17);
         g.restore();
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
-        label(g, 'model · slowed', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
+        label(g, e.v === 2 ? `model · slowed ${Math.round(e.slow)}×` : 'model', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
         // The characters named on first sight.
-        const kHC = popIn(t, SC.fog + 1.1, 0.25) * (1 - popIn(t, SC.fog + 3.4, 0.3));
+        const kHC = popIn(t, SC.fog + 1.1, 0.25) * (1 - popIn(t, SC.fog + 2.8, 0.3));
         if (kHC > 0) pill(g, 'hair cells, inside your inner ear', 510, S.y0 + 150, { size: 38, bg: P.ink, fg: P.dark, alpha: kHC, scale: E.outBack(kHC), weight: 800 });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1) {
@@ -780,13 +787,13 @@ function drawHand(t) {
     cam(t, SC.hand, SC.brain);
     headline(t, SC.hand + 0.1, [['Riser'], ['triggers'], ['the'], ['limiter']], 300, { size: 80, stagger: 0 });
     if (t < SC.hand + 2.2) label(g, 'limiter = automatic volume control', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
-    else tracker(1);
+    else if (t < wto('hand', 'down', 0.75) + 0.15) tracker(1);
     const tHand = SC.hand + 0.15;
     // The slow motion runs from the scene's start to the kick on "down", so the faders move at once.
     const tRiser = SC.hand + 0.35;
     // Slowed down from -700 ms to the kick on "down", then on to the end of
     // the click window (+20 ms, where claim 1 is measured) and held there.
-    const tKick = wto('hand', 'lands', 0.9);
+    const tKick = wto('hand', 'down', 0.75);
     const ms = keys(t, [[tRiser, HD.msA], [tKick, 0], [tKick + 0.35, 20]]);
     const slow = (tKick - tRiser) / (-HD.msA / 1000);
     const live = t > tRiser;
@@ -907,8 +914,9 @@ function drawHand(t) {
     }
     g.restore();
     const kR = popIn(t, tKick + 0.15, 0.3);
-    if (kR > 0) pill(g, 'measured on the first kick', 540, dk.y0 + dk.h + 42, { size: 38, bg: P.ink, fg: P.dark, alpha: kR, scale: E.outBack(kR), weight: 800 });
-    else label(g, live ? `slowed ${Math.round(slow)}×` : 'the limiter on the master bus', 540, dk.y0 + dk.h + 62, { size: 38, weight: 700, color: P.ink2, align: 'center', family: BODY });
+    if (kR > 0) pill(g, 'measured on the first kick', 540, 412, { size: 40, bg: P.ink, fg: P.dark, alpha: kR, scale: E.outBack(kR), weight: 800 });
+    // The slow-motion factor above the console, clear of the caption.
+    else if (live) label(g, `slowed ${Math.round(slow)}×`, 880, 478, { size: 34, weight: 700, color: P.ink2, align: 'right', family: BODY });
     g.restore();
 }
 
@@ -1349,7 +1357,7 @@ function drawHow(t) {
         // When a gap is complete, what the kick meets, above its edge.
         fills.forEach((f, i) => {
             const kO = popIn(t, f.b, 0.2) * (i === now ? 1 : 0);
-            if (kO > 0) pill(g, i === 0 ? 'helps, may meet fog' : 'clear, room to spare', clamp(ZX(f.to), Z.x0 + 100, Z.x1 - 100), y + 180, { size: 36, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO, scale: E.outBack(kO), weight: 800 });
+            if (kO > 0) pill(g, i === 0 ? 'helps, may meet fog' : 'clear (past 200 ms)', clamp(ZX(f.to), Z.x0 + 100, Z.x1 - 100), y + 180, { size: 36, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO, scale: E.outBack(kO), weight: 800 });
         });
         if (now >= 0) {
             const inside = ZX(ms) > Z.x1 - 190;
@@ -1405,7 +1413,7 @@ function drawEnd(t) {
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
-    const tPoll = wto('cta', 'did', 0.7);
+    const tPoll = wto('cta', 'which', 0.7);
     // The lesson's address is up for the whole end card; the phone mock-up is left out (its text cannot be read at phone size).
     const tLesson = SC.end + 0.15;
     const SHOW_PHONE = false;
@@ -1414,7 +1422,7 @@ function drawEnd(t) {
     if (kRe > 0) {
         label(g, 'Why the gap hits harder', 540, 440, { size: 64, weight: 800, color: P.ink, align: 'center', base: 'middle', alpha: kRe });
         // The three characters from the "why" card, full size, each lit (and bouncing) as it is named.
-        [[['clean', 'ears'], 'clean'], [['calmer', 'limiter'], 'calmer'], [['a beat you', 'saw coming'], 'beat']].forEach(([w, cue], i) => {
+        [[['no', 'after-fog'], 'after'], [['calmer', 'limiter'], 'calmer'], [['a beat you', 'saw coming'], 'beat']].forEach(([w, cue], i) => {
             const t0 = wto('cta', cue, 0.2 + i * 0.12) - 0.05;
             const kI = Math.max(0.35, popIn(t, t0, 0.3)) * kRe;
             const lit = popIn(t, t0, 0.3);
@@ -1446,12 +1454,12 @@ function drawEnd(t) {
         g.lineTo(-280, 270);
         g.lineTo(-130, 178);
         g.fill();
-        label(g, 'Did you pick 2?', 0, -115, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        const kQ = popIn(t, wto('cta', 'which', 0.85) - 0.05, 0.25);
-        label(g, 'Which gap do you use?', 0, -42, { size: 56, weight: 800, color: P.dark, align: 'center', base: 'middle', alpha: kQ });
-        ['16th', '8th'].forEach((c, i) => {
-            const kc = popIn(t, wto('cta', 'gap', 0.9) + i * 0.12, 0.25);
-            if (kc > 0) pill(g, c, (i ? 1 : -1) * 130, 75, { size: 52, bg: P.dark, fg: P.ink, alpha: kc, scale: E.outBack(kc), weight: 800 });
+        label(g, 'Which did you pick?', 0, -115, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        const kQ = popIn(t, wto('cta', 'tell', 0.88) - 0.05, 0.25);
+        label(g, 'Tell me what you heard.', 0, -42, { size: 52, weight: 700, color: P.dark, align: 'center', base: 'middle', alpha: kQ });
+        [1, 2].forEach((n, i) => {
+            const kc = popIn(t, wto('cta', ['one', 'two'][i], 0.78 + i * 0.03) - 0.05, 0.25);
+            if (kc > 0) badgeNum(g, n, (i ? 1 : -1) * 120, 82, Math.max(1, 54 * E.outBack(kc)), { fill: P.dark, color: P.ink, alpha: kc });
         });
         g.restore();
     }

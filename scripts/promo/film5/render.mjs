@@ -78,7 +78,7 @@ log(`Gap check: the last 8th before the downbeat sits ${f1(Q[1].gapDb)} dB (vers
 log(`Build level, version 1, before the limiter: its last bar is ${f1(Q[1].buildVsDropDb)} dB against the drop bar's loudness (${Math.abs(Q[1].buildVsDropDb) < 0.5 ? 'as loud as the drop' : Q[1].buildVsDropDb < 0 ? 'a little under the drop' : 'louder than the drop'}); the riser peaks in its last 8th, which is why that 8th sits ${f1(Q[1].gapDb)} dB over the drop bar after the limiter`);
 log(`Claim 1, limiter gain reduction on the first kick (mean over its first 20 ms): version 1 ${f1(Q[1].grMean)} dB, version 2 ${f1(Q[2].grMean)} dB, ${f1(Q.claims[1].db)} dB less with the gap (target 3 dB or more)`);
 log(`Claim 2, kick click 2-6 kHz over everything else in that band, first 20 ms: version 1 ${Q[1].clickDb.toFixed(3)} dB, version 2 ${Q[2].clickDb.toFixed(3)} dB, ${f1(Q.claims[2].db)} dB better with the gap (target 10 dB or more; the difference is taken before rounding)`);
-log(`  shown on screen (replay), one decimal from the unrounded values: ${Q[1].clickDb.toFixed(1)} dB in 1, ${Q[2].clickDb.toFixed(1)} dB in 2`);
+log(`  shown on screen (replay): "click ≈ +${Math.round(Q[2].clickDb - Q[1].clickDb)} dB clearer", the difference rounded to whole dB (unrounded ${(Q[2].clickDb - Q[1].clickDb).toFixed(2)} dB), with the band and window, and claim 4 beside it ("the first kick itself: ${f1(Q.claims[4].db)} dB more prominent than in 1")`);
 log(`Claim 3, through the phone check (200 Hz high-pass, 24 dB/oct): the kick heard in its first 20 ms is ${f1(Q.claims[3].kickPhone)} dB louder with the gap (${f1(Q.claims[3].kickFull)} dB full band, ${Math.round(Q.claims[3].survive1 * 100)}% survives); the click advantage is ${f1(Q.claims[3].clickPhone)} dB (${Math.round(Q.claims[3].survive2 * 100)}% survives; target 80%)`);
 log(`  stricter small-speaker model (500 Hz high-pass at 24 dB/oct, +4 dB at 1 kHz, 10 kHz low-pass): the kick heard is ${f1(Q.claims[3].kickSmall)} dB louder with the gap (${Math.round((Q.claims[3].kickSmall / Q.claims[3].kickFull) * 100)}% of full band); the click advantage is ${f1(Q.claims[3].clickSmall)} dB (${Math.round((Q.claims[3].clickSmall / Q.claims[2].db) * 100)}%)`);
 {
@@ -182,7 +182,7 @@ async function lesson() {
 }
 const L = await lesson();
 const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
-log(`End card: recap of the three reasons with the address ${TIMELINE.lesson.url} and the lesson title up throughout (shown, not spoken), then a comment question (did you pick 2? which gap do you use, 16th or 8th?); the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
+log(`End card: recap of the three reasons with the address ${TIMELINE.lesson.url} and the lesson title up throughout (shown, not spoken), then one comment question (which did you pick, 1 or 2, and what did you hear?); the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}

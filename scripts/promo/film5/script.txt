@@ -5,7 +5,7 @@ fresh|In number two, the riser stops, and its after-fog, the dull moment after a
 hand|Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down, right as the kick lands.
 brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
 how|So cut everything about a quarter second before the drop, reverb tails too.
-g16|Why a quarter second? A sixteenth note already helps, but can still meet the after-fog.
-g8|An eighth note clears it, with room to spare.
+g16|Why a quarter second? At this tempo, a sixteenth note already helps, but can still meet the after-fog.
+g8|An eighth note clears it. At any tempo, aim for about a quarter second.
 again|Now listen again. Hear the click?
-cta|That's the click: buried in one, clear in two. Clean ears, a calmer limiter, a beat you saw coming. Did you pick two? Which gap do you use?
+cta|That's the click: covered in one, clear in two. No after-fog, a calmer limiter, a beat you saw coming. Which did you pick, one or two? Tell me what you heard.
