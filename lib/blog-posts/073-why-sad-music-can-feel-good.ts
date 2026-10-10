@@ -48,17 +48,16 @@ export const post073: BlogArticle = {
             type: 'signal',
             caption:
                 'The same sung phrase with two reverb settings. With a short plate low in the mix, the direct voice dominates and the singer sounds close. With a long, loud hall, the reverb carries nearly as much energy as the voice, which the ear reads as distance.',
-            alt: 'Two level plots of one phrase. In both, the solid voice envelope rises and falls over the first half. In the top plot a dashed reverb envelope stays low and dies soon after the phrase. In the bottom plot the dashed reverb rises almost to the voice level and fades slowly to the end.',
+            alt: 'Two level plots of one phrase. In both, the grey voice envelope rises and falls over the first half. In the top plot the reverb envelope stays low and dies soon after the phrase. In the bottom plot the reverb rises almost to the voice level and fades slowly to the end.',
             rows: [
                 {
                     label: 'Short plate, low send',
                     unipolar: true,
                     traces: [
-                        VOICE,
+                        { ...VOICE, muted: true },
                         {
                             kind: 'envelope',
                             label: 'Reverb',
-                            dashed: true,
                             points: [
                                 [0.03, 0],
                                 [0.1, 0.12],
@@ -73,11 +72,10 @@ export const post073: BlogArticle = {
                     label: 'Long hall, high send',
                     unipolar: true,
                     traces: [
-                        VOICE,
+                        { ...VOICE, muted: true },
                         {
                             kind: 'envelope',
                             label: 'Reverb',
-                            dashed: true,
                             points: [
                                 [0.03, 0],
                                 [0.18, 0.45],

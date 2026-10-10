@@ -4,6 +4,10 @@ import { startTransition, useEffect, useRef, useState, type ReactNode } from 're
 import type { DemoId } from '@/lib/blog/demos';
 import type { Dialect } from '@/lib/blog/dialects';
 import { DialectContext, LevelContext, whenIdle } from './shell';
+import { Placeholder } from './views';
+
+// The volume row travels in this module's chunk (DemoBoot loads it), so a demo slot loads one chunk.
+export { VolumeRow } from './shell';
 
 // One chunk per family of demos. A chunk is fetched once the page has loaded
 // and the browser is idle, and the demo mounts when it is about two screens
@@ -84,14 +88,6 @@ const DEMOS: Record<DemoId, Entry> = {
     'reverb-duck': entry('perception', (m) => <m.ReverbDuckDemo />),
     'chord-context': entry('perception', (m) => <m.ChordContextDemo />),
 };
-
-function Placeholder() {
-    return (
-        <div className="flex min-h-11 items-center [@media(scripting:none)]:hidden">
-            <span className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-5 text-sm font-semibold text-white/55">Loading demo</span>
-        </div>
-    );
-}
 
 /**
  * The controls of one demo, inside the box DemoSlot reserves for them. Their

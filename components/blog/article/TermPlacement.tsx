@@ -45,12 +45,13 @@ export function TermPlacement() {
                 const word = term.getBoundingClientRect();
                 return { word, above: word.top - top - GAP, below: window.innerHeight - edge - word.bottom - GAP };
             };
-            let { word, above, below } = rooms();
+            const { word } = rooms();
+            let { above, below } = rooms();
             // On a wide screen the definition sits to the right and may miss the word altogether.
             const overlaps = size.left < word.right && size.right > word.left;
             if (overlaps && Math.max(above, below) < size.height) {
                 window.scrollBy({ top: word.top - top, behavior: 'instant' });
-                ({ word, above, below } = rooms());
+                ({ above, below } = rooms());
             }
             const atTop = above > below;
             pop.toggleAttribute('data-top', atTop);

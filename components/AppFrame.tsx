@@ -84,7 +84,7 @@ export function AppFrame({ children }: { children: ReactNode }) {
     return (
         <div className="relative min-h-screen">
             <Navbar />
-            <div className={`relative pb-20 md:pb-8 print:p-0 ${isHome ? 'pt-0' : 'pt-24'}`}>
+            <div className={`relative pb-20 md:pb-8 [@media(max-height:499.98px)]:pb-8 print:p-0 ${isHome ? 'pt-0' : 'pt-24'}`}>
                 {children}
             </div>
             <Footer />

@@ -95,9 +95,11 @@ Line styles, the same in every figure that draws lines (`curve` series,
 is the one the caption asks you to look at; `dotted: true` draws a second
 line the caption also names in accent dots ("also look here");
 `dashed: true` is a reference; `muted: true` is grey context or "before".
-Reach for dots only when the caption compares more lines than one solid
-and one dashed line can carry, as lessons 039 (body, edge, air) and 040
-(warm, dark, dull) do.
+The line the caption is about is never dashed: draw it solid and make what
+it is set against `muted` (or `dashed`, for a reference). Reach for dots
+only when the caption compares more lines than one solid and one dashed
+line can carry, as lessons 039 (body, edge, air) and 040 (warm, dark,
+dull) do.
 
 | `type` | Shows | Key fields |
 | --- | --- | --- |
@@ -111,7 +113,7 @@ and one dashed line can carry, as lessons 039 (body, edge, air) and 040
 | `stereo` | Top-down mix: pan and depth | `items[{label, pan, depth, width, fade}]`, `title` |
 | `flow` | Steps with arrows, optional loop back | `steps[{label, note, focus}]`, `loop{to, label}` |
 | `arrangement` | Which layers play in which section | `sections[{label, short, bars}]`, `layers[{label, levels, focus}]`, `density` |
-| `scale` | Markers along one number line | `min`, `max`, `unit`, `ticks`, `markers[{value, label, strong}]`, `ranges`, `arrows[{from, to}]` |
+| `scale` | Markers along one number line | `min`, `max`, `unit`, `ticks`, `markers[{value, label, strong}]`, `ranges[{from, to, label, strong}]` (`strong`: the range the caption points at, in the accent; others are grey; a span too short to read as a bar is drawn as an interval, a thin bar between end ticks), `arrows[{from, to}]` |
 
 Signal traces (`kind`):
 

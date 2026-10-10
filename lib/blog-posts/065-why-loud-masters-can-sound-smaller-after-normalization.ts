@@ -47,8 +47,8 @@ export const post065: BlogArticle = {
                 { value: -4, label: 'B peaks', strong: true },
             ],
             ranges: [
-                { from: -14, to: -9, label: 'A: 5 dB' },
-                { from: -14, to: -4, label: 'B: 10 dB' },
+                { from: -14, to: -9, label: 'A: 5 dB', strong: true },
+                { from: -14, to: -4, label: 'B: 10 dB', strong: true },
             ],
         },
     },

@@ -127,21 +127,37 @@ function overlayOpen(): boolean {
     }
 }
 
+/** How long a shown Stop button below 1024 px waits for a scroll before it tucks into the screen edge. */
+const TUCK_AFTER = 3000;
+
+/** The Stop button's place in the page: the slot DemoSlot leaves after the demo's panel, or null outside a lesson. */
+const stopSlot = (el: HTMLElement) => el.closest('.vgp-demo')?.querySelector<HTMLElement>(':scope > [data-demo-stop]') ?? null;
+
+/** True when any part of `el` is inside the window, as an IntersectionObserver with no margin would say. */
+function onScreen(el: HTMLElement): boolean {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
+}
+
 /**
  * Play and Stop. The label itself says what a press does, so the button
  * carries no pressed state on top; the status next to it is announced.
  *
  * While the demo plays, Escape stops it from anywhere on the page (unless a
- * dialog or popover is open), and a second Stop button stays on screen
- * once this one has scrolled away. That one sits in the page right after
- * the demo's panel (the slot DemoSlot leaves for it), so it is the next
- * Tab after the demo; while this button is still on screen it waits there
- * unseen and shows when it takes the focus. Stopping from it or with
- * Escape puts the focus back on this button.
+ * dialog, a popover or a menu has it), and a second Stop button stays on
+ * screen once this one has scrolled away. That one sits in the page right
+ * after the demo's panel (the slot DemoSlot leaves for it), so it is the
+ * next Tab after the demo; while this button is still on screen it waits
+ * there unseen and shows when it takes the focus. Below 1024 px it tucks
+ * into the left edge of the screen after three seconds without a scroll, so
+ * it covers no text while the reader reads; a scroll, the focus or a tap on
+ * the tab brings it back. Stopping from it or with Escape puts the focus
+ * back on this button.
  */
 export function PlayButton({ playing, onClick, label = 'Play' }: { playing: boolean; onClick: () => void; label?: string }) {
     const button = useRef<HTMLButtonElement>(null);
     const [away, setAway] = useState(false);
+    const [tucked, setTucked] = useState(false);
     // Where the Stop button goes: the slot after the demo's panel, null outside a lesson (it then
     // follows this button), undefined until the button has looked.
     const [slot, setSlot] = useState<HTMLElement | null | undefined>(undefined);
@@ -149,6 +165,10 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
     useEffect(() => {
         toggle.current = onClick;
     });
+    // Brings a tucked Stop button back and starts its three seconds again (set while it is shown).
+    const wake = useRef<() => void>(() => {});
+    // Whether the Stop button was tucked when the pointer went down on it: that tap only brings it back.
+    const tuckedAtPress = useRef(false);
     // The audio context is made on the press (a mouse button, a key) or as a finger lifts, a task
     // before the click, so the click itself only starts the sound.
     const warm = (e: PointerEvent<HTMLButtonElement>) => {
@@ -157,11 +177,23 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
     useEffect(() => {
         const el = button.current;
         if (!playing || !el) return;
-        const io = new IntersectionObserver(([entry]) => {
-            setAway(!entry.isIntersecting);
-            setSlot(el.closest('.vgp-demo')?.querySelector<HTMLElement>(':scope > [data-demo-stop]') ?? null);
+        const place = stopSlot(el);
+        const io = new IntersectionObserver((entries) => {
+            // A busy page can hand over several changes at once (Play came into view and left
+            // again before this ran): the latest one says where Play is now.
+            const latest = entries.reduce((a, e) => (e.time >= a.time ? e : a));
+            setAway(!latest.isIntersecting);
+            setSlot(place);
         });
         io.observe(el);
+        // The observer's first report waits for a task of its own; this frame already knows where
+        // Play is, so the Stop button is in the page (and shown if Play is off screen) at once.
+        const frame = requestAnimationFrame(() => {
+            setSlot(place);
+            setAway(!onScreen(el));
+        });
+        // On the window, after every listener on the page: a menu, a dialog or a popover that takes
+        // the Escape cancels it (or stops it on the way), and then the demo keeps playing.
         const onKey = (e: globalThis.KeyboardEvent) => {
             if (e.key !== 'Escape' || e.defaultPrevented || e.isComposing || overlayOpen()) return;
             e.preventDefault();
@@ -171,15 +203,46 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
             // From inside the demo (its Stop button too), the focus goes back to Play.
             if (active && active !== el && panel?.contains(active)) el.focus();
         };
-        document.addEventListener('keydown', onKey);
+        window.addEventListener('keydown', onKey);
         return () => {
             io.disconnect();
-            document.removeEventListener('keydown', onKey);
+            cancelAnimationFrame(frame);
+            window.removeEventListener('keydown', onKey);
             setAway(false);
         };
     }, [playing]);
 
+    // While the Stop button is shown, three seconds without a scroll tuck it away (app/globals.css
+    // applies that below 1024 px only); every scroll brings it back for another three.
+    useEffect(() => {
+        if (!playing || !away) return;
+        let timer = 0;
+        const rest = () => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(() => setTucked(true), TUCK_AFTER);
+        };
+        const onScroll = () => {
+            setTucked(false);
+            rest();
+        };
+        wake.current = onScroll;
+        rest();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => {
+            window.clearTimeout(timer);
+            window.removeEventListener('scroll', onScroll);
+            wake.current = () => {};
+            setTucked(false);
+        };
+    }, [playing, away]);
+
     const stopHere = (e: MouseEvent<HTMLButtonElement>) => {
+        // A tap on the tucked tab brings the button back; the next tap stops.
+        if (e.detail !== 0 && tuckedAtPress.current) {
+            tuckedAtPress.current = false;
+            wake.current();
+            return;
+        }
         onClick();
         // A key press reaches a button as a click without a pointer (detail 0): then the page
         // scrolls back to the demo with the focus. After a tap or a click the page stays put.
@@ -188,13 +251,19 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
 
     const stop =
         playing && slot !== undefined ? (
-            // Placed by .vgp-demo-stop (app/globals.css): a round button above the phone tab bar, and
-            // from 1024 px up a labelled one at the foot of the outline column, clear of the text.
+            // Placed by .vgp-demo-stop (app/globals.css): a round button above the phone tab bar that
+            // tucks into the left edge while the reader reads, and from 1024 px up a labelled one at
+            // the foot of the outline column, clear of the text.
             <button
                 type="button"
                 onClick={stopHere}
+                onPointerDown={() => {
+                    tuckedAtPress.current = tucked && away && !window.matchMedia('(min-width: 1024px)').matches;
+                }}
+                onFocus={() => wake.current()}
                 aria-keyshortcuts="Escape"
                 data-away={away ? '' : undefined}
+                data-tucked={tucked ? '' : undefined}
                 className="vgp-demo-stop vgp-focus inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-white/30 bg-[var(--surface-strong)] text-sm font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] hover:border-white/70 lg:px-4"
             >
                 <Square size={14} fill="currentColor" aria-hidden="true" />
@@ -680,7 +749,8 @@ function drawTrace(c: HTMLCanvasElement | null, context: Float32Array, focus: Fl
 export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null {
     const [result, setResult] = useState<R | null>(null);
     const measureRef = useRef(measure);
-    const job = useRef({ busy: false, dirty: false, alive: true, first: true });
+    // `gen` counts the keys asked for: a measurement started for an older key is not shown.
+    const job = useRef({ busy: false, dirty: false, alive: true, first: true, gen: 0 });
     useEffect(() => {
         measureRef.current = measure;
     });
@@ -688,16 +758,19 @@ export function useAnalysis<R>(key: string, measure: () => Promise<R>): R | null
         const j = job.current;
         j.alive = true;
         j.dirty = true;
+        j.gen++;
         const run = () => {
             if (j.busy || !j.alive) return;
             j.busy = true;
             void (async () => {
                 while (j.dirty && j.alive) {
                     j.dirty = false;
+                    const gen = j.gen;
                     try {
                         const r = await measureRef.current();
+                        // Superseded while it ran: the loop measures the newer key next and shows that.
                         // A transition, so React can draw the new figures in slices between frames.
-                        if (j.alive) startTransition(() => setResult(r));
+                        if (j.alive && gen === j.gen) startTransition(() => setResult(r));
                     } catch {
                         // Keep the last good result.
                     }

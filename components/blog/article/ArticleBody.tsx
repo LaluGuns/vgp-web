@@ -26,7 +26,8 @@ function Paragraph({ value, lede }: { value: string; lede?: boolean }) {
 function Heading({ section }: { section: Section }) {
     return (
         <>
-            {section.label ? <p className="mb-2 text-sm font-medium text-white/50">{section.label}</p> : null}
+            {/* In print the label ("Try it") stays on the page of its heading. */}
+            {section.label ? <p className="mb-2 text-sm font-medium text-white/50 print:break-after-avoid">{section.label}</p> : null}
             <h2 id={section.id} className="scroll-mt-8 text-2xl font-semibold leading-snug tracking-[-0.02em] text-white sm:text-3xl">
                 {section.title}
             </h2>

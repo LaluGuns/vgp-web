@@ -57,9 +57,9 @@ export const post139: BlogArticle = {
                 { value: -1, label: 'True peak' },
             ],
             ranges: [
-                { from: -10, to: -1, label: 'PLR 9 dB' },
-                { from: -7, to: -1, label: 'Chorus PSR 6 dB' },
-                { from: -13, to: -7, label: 'LRA 6 LU' },
+                { from: -10, to: -1, label: 'PLR 9 dB', strong: true },
+                { from: -7, to: -1, label: 'Chorus PSR 6 dB', strong: true },
+                { from: -13, to: -7, label: 'LRA 6 LU', strong: true },
             ],
         },
     },

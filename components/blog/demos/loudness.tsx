@@ -251,18 +251,27 @@ export function LevelAbDemo() {
                     ]}
                 />
             </div>
-            <div aria-live="polite">
+            <div className="space-y-3">
+                {/* Only the answer is announced; the button after it is not part of the message. */}
+                <div aria-live="polite">
+                    {pick ? (
+                        <p className="text-base leading-7 text-white/80">
+                            <span className="font-semibold text-white">{louder.toUpperCase()} was 1 dB louder.</span> Nothing else was different.{' '}
+                            {pick === louder ? 'You picked the louder one, which is what loudness bias predicts.' : 'You resisted the louder one this round.'}
+                        </p>
+                    ) : (
+                        <p className="text-sm text-white/55">The answer appears after you pick.</p>
+                    )}
+                </div>
                 {pick ? (
-                    <p className="text-base leading-7 text-white/80">
-                        <span className="font-semibold text-white">{louder.toUpperCase()} was 1 dB louder.</span> Nothing else was different.{' '}
-                        {pick === louder ? 'You picked the louder one, which is what loudness bias predicts.' : 'You resisted the louder one this round.'}{' '}
-                        <button type="button" onClick={newRound} className="vgp-link vgp-focus text-white">
-                            Try another round
-                        </button>
-                    </p>
-                ) : (
-                    <p className="text-sm text-white/55">The answer appears after you pick.</p>
-                )}
+                    <button
+                        type="button"
+                        onClick={newRound}
+                        className="vgp-focus min-h-11 rounded-md border border-white/30 px-4 text-sm font-medium text-white transition-colors hover:border-white/70"
+                    >
+                        Try another round
+                    </button>
+                ) : null}
             </div>
         </div>
     );

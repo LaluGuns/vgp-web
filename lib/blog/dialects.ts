@@ -120,7 +120,7 @@ export const DIALECTS: Record<DialectName, Dialect> = {
         cap: 'butt',
         join: 'miter',
         rule: { dash: '', cap: 'butt', width: 1, minor: 0.07, major: 0.3 },
-        refDash: '3 3',
+        refDash: '6 3',
         corner: 0,
         node: 0,
         marker: 'tick',

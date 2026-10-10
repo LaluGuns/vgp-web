@@ -44,6 +44,14 @@ function draw(spec: FigureSpec, w: number, dialect: Dialect) {
  * `data-reveal="draw"`: when the figure scrolls into view, its accent data
  * draws in once (see `draw` in ./svg). Remove the attribute to turn that off.
  * Each drawing is trimmed by ./compact before it is sent (same pixels, fewer bytes).
+ *
+ * Inside this frame, animation events reach nothing below the window:
+ * MotionObserver (quietDrawIn) stops every animationstart and animationend
+ * from a `[data-reveal="draw"]` subtree at the window, in the capture phase,
+ * so a busy figure finishing its draw-in costs no walk up the tree. An
+ * onAnimationStart or onAnimationEnd prop, or an addEventListener on any
+ * element in a figure, would never fire. To react to one, listen on the
+ * window in the capture phase, or change quietDrawIn first.
  */
 export function Figure({ spec, number, dialect }: { spec: FigureSpec; number: number; dialect?: Dialect | string }) {
     const d = resolveDialect(dialect);

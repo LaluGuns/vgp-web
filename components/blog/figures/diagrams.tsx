@@ -557,7 +557,8 @@ function FlowVertical({ spec, w, d }: { spec: FlowFigure; w: number; d: Dialect 
                         <Node d={d} x={0} y={box.y} w={bw} h={box.bh} focus={box.step.focus} delay={stepDelay(i) + 160} />
                         {ledger ? (
                             <g>
-                                <Label x={14} y={box.y + 26} fill={box.step.focus ? C.accent : C.soft} weight={box.step.focus ? 600 : undefined}>
+                                {/* The number sits in the middle of its column, well clear of the column's rule and the text after it. */}
+                                <Label x={12} y={box.y + 26} anchor="middle" fill={box.step.focus ? C.accent : C.soft} weight={box.step.focus ? 600 : undefined}>
                                     {i + 1}
                                 </Label>
                                 <line x1={indent - 8} x2={indent - 8} y1={box.y + 1} y2={box.y + box.bh - 1} stroke={box.step.focus ? C.faint : C.grid} />
@@ -718,7 +719,8 @@ export function Notes({ spec, w, dialect }: { spec: NotesFigure; w: number; dial
             {used
                 .filter((pitch, i) => used.slice(0, i).every((kept) => yOf(pitch) - yOf(kept) >= 14))
                 .map((pitch) => (
-                    <Label key={pitch} x={labelCol - 6} y={yOf(pitch) + rowH / 2 + 4} anchor="end">
+                    // Ten units off the roll, so a pitch name and the name inside a note at the first beat never read as one word.
+                    <Label key={pitch} x={labelCol - 10} y={yOf(pitch) + rowH / 2 + 4} anchor="end">
                         {noteName(pitch)}
                     </Label>
                 ))}

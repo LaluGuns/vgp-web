@@ -25,7 +25,7 @@ export const post026: BlogArticle = {
             alt: 'A tempo line from 40 to 200 BPM with 120 BPM marked as 2 Hz, the walking rate. A range from 109 to 120 BPM is the resonance peak.',
             markers: [{ value: 120, label: 'Walking, 2 Hz', strong: true }],
             ranges: [
-                { from: 109, to: 120, label: 'Resonance peak' },
+                { from: 109, to: 120, label: 'Resonance peak', strong: true },
             ],
         },
         loop: {

@@ -59,7 +59,7 @@ export const post014: BlogArticle = {
             type: 'signal',
             caption:
                 'A sketch of the gap with the returns left open and with them muted. The dry parts stop in both, but a reverb tail left running fills the silence and smears into the downbeat.',
-            alt: 'Two level plots. In both, a solid line for the dry parts stops at the gap and returns at the drop. In the first, a dashed reverb line decays slowly through the gap. In the second, the dashed reverb line drops to zero with the dry parts.',
+            alt: 'Two level plots. In both, a grey line for the dry parts stops at the gap and returns at the drop. In the first, the reverb line decays slowly through the gap. In the second, the reverb line drops to zero with the dry parts.',
             rows: [
                 {
                     label: 'Returns left open',
@@ -69,8 +69,8 @@ export const post014: BlogArticle = {
                         { t: 0.8, label: 'Drop' },
                     ],
                     traces: [
-                        { kind: 'envelope', label: 'Dry parts', points: [[0, 0.7], [0.6, 0.75], [0.605, 0], [0.8, 0], [0.805, 1], [1, 0.85]] },
-                        { kind: 'envelope', label: 'Reverb return', dashed: true, points: [[0, 0.35], [0.6, 0.4], [0.65, 0.29], [0.7, 0.21], [0.75, 0.15], [0.8, 0.11], [0.805, 0.4], [1, 0.4]] },
+                        { kind: 'envelope', label: 'Dry parts', muted: true, points: [[0, 0.7], [0.6, 0.75], [0.605, 0], [0.8, 0], [0.805, 1], [1, 0.85]] },
+                        { kind: 'envelope', label: 'Reverb return', points: [[0, 0.35], [0.6, 0.4], [0.65, 0.29], [0.7, 0.21], [0.75, 0.15], [0.8, 0.11], [0.805, 0.4], [1, 0.4]] },
                     ],
                 },
                 {
@@ -81,8 +81,8 @@ export const post014: BlogArticle = {
                         { t: 0.8, label: 'Drop' },
                     ],
                     traces: [
-                        { kind: 'envelope', label: 'Dry parts', points: [[0, 0.7], [0.6, 0.75], [0.605, 0], [0.8, 0], [0.805, 1], [1, 0.85]] },
-                        { kind: 'envelope', label: 'Reverb return', dashed: true, points: [[0, 0.35], [0.6, 0.4], [0.615, 0], [0.8, 0], [0.805, 0.4], [1, 0.4]] },
+                        { kind: 'envelope', label: 'Dry parts', muted: true, points: [[0, 0.7], [0.6, 0.75], [0.605, 0], [0.8, 0], [0.805, 1], [1, 0.85]] },
+                        { kind: 'envelope', label: 'Reverb return', points: [[0, 0.35], [0.6, 0.4], [0.615, 0], [0.8, 0], [0.805, 0.4], [1, 0.4]] },
                     ],
                 },
             ],

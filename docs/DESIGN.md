@@ -132,12 +132,14 @@ anything without one is technical.
 - **Four line styles.** A solid accent line is the one to look at; a line
   of accent dots is a second one the caption also names ("also look
   here"); a dashed line is a reference; a grey line is context or
-  "before". The dots are round in every dialect, a little heavier than a
-  line and spaced wider than technical's and the ledger's short dashes, so
-  they never read as a finer dash. A dotted line fades in, like a dashed
-  one, and has no area under it. Use dots only when the caption names
-  more lines than one accent line and one dashed line can carry (the
-  three layers in lesson 039, the three moves in 040).
+  "before". So the line a caption is about is never dashed: it is solid,
+  and what it is set against is grey or dashed. The dots are round in
+  every dialect and a little heavier than a line; the space between two
+  dots is at least as long as the dialect's dash, and every dash is longer
+  than a dot is wide, so dots never read as a finer dash. A dotted line
+  fades in, like a dashed one, and has no area under it. Use dots only
+  when the caption names more lines than one accent line and one dashed
+  line can carry (the three layers in lesson 039, the three moves in 040).
 - **Labels never sit on data.** A label goes where no mark comes near
   it (6 units of clear space round a line label): a signal's threshold or
   ceiling label beside its line where the traces leave room, else in the
@@ -148,14 +150,18 @@ anything without one is technical.
   legend in one row, it is named there in every row it appears in. Mark
   labels on curves and spectra sit above the plot, never closer than two
   letters to the dB unit, and never run up to the next mark's line (they
-  step up a row instead); a value steps over a dashed reference line.
+  step up a row instead); once they need a second row, they all sit on the
+  same side of their lines where that costs no extra row. On a scale, a
+  label up a lane hangs on a leader that keeps 6 units from every label it
+  passes, and two labels in one lane with a leader between them stand 16
+  units apart. A value steps over a dashed reference line.
   A bar with no upper limit (`open`) fades out at the end of the scale
   with no end mark, so it never reads as a number.
 - **Focus.** Rhythm rows, flow steps and arrangement layers take
   `focus: true`. Once any item in a figure is focused, it is in the accent
-  and the rest go grey; with none focused, all of them are. Bars, markers
-  and traces have the same switch under their own names (`strong`,
-  `muted: false`).
+  and the rest go grey; with none focused, all of them are. Bars, markers,
+  scale ranges and traces have the same switch under their own names
+  (`strong`, `muted: false`).
 - **Motion.** A figure draws in once when it is 30% up the screen: lines
   along their length (technical at a constant speed, like a scope beam),
   a shaded area fades in after its line, bars grow, points pop, mind's

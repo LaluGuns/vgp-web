@@ -433,10 +433,17 @@ export interface Sequencer {
     setBpm(bpm: number): void;
 }
 
+/** How late a step may be and still play (a few ms late is inaudible); a later one is skipped. */
+const LATE_STEP = 0.01;
+
 /**
  * Calls `onStep` slightly ahead of time for every 16th note, with the
  * exact audio-clock time to schedule at. Look-ahead scheduling keeps
- * timing tight even when the main thread is busy.
+ * timing tight even when the main thread is busy. When the page was busy
+ * for longer than the look-ahead (a slow phone mounting a demo or
+ * collecting garbage), the steps whose time has passed are skipped, not
+ * played late: they would all start at the same moment, stacked into one
+ * hit louder than anything the loop plays (2 to 4 dB over its peaks).
  */
 export function sequence(
     ctx: AudioContext,
@@ -449,6 +456,10 @@ export function sequence(
     let step = 0;
     const tick = () => {
         const stepDur = 60 / tempo / 4;
+        while (next < ctx.currentTime - LATE_STEP) {
+            next += stepDur;
+            step = (step + 1) % steps;
+        }
         while (next < ctx.currentTime + 0.15) {
             onStep(step, next, stepDur);
             next += stepDur;

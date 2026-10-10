@@ -71,18 +71,26 @@ export const accentStroke = (opacity = 1) => ({ stroke: C.accent, strokeOpacity:
 /**
  * The fourth line style. Beside a solid accent line (look here), a dashed line (a reference) and a grey
  * one (context), a line of accent dots is a second line the caption also names: also look here. The
- * dots are round in every dialect, a touch heavier than a line and spaced well apart, so even beside
- * the short dashes of technical and the ledger they read as dots, never as a finer dash. A dotted line
- * fades in like a dashed one (a dash pattern cannot draw along its length) and has no area under it.
+ * dots are round in every dialect and a touch heavier than a line, and the space between two dots is
+ * at least as long as the dialect's dash (every dash is longer than a dot is wide), so a dotted line
+ * never reads as a finer dash. A dotted line fades in like a dashed one (a dash pattern cannot draw
+ * along its length) and has no area under it.
  */
 export function dots(d: Dialect, muted?: boolean) {
     const width = Number((d.line + 0.65).toFixed(2));
     return {
         stroke: muted ? C.dataGrey : C.accent,
         strokeWidth: width,
-        strokeDasharray: `0 ${Number((width * 2.4).toFixed(1))}`,
+        strokeDasharray: `0 ${dotPeriod(d)}`,
         strokeLinecap: 'round' as const,
     };
+}
+
+/** Centre to centre of two dots: a dash's length of space between them, and never tighter than 2.4 dot widths. */
+export function dotPeriod(d: Dialect) {
+    const width = d.line + 0.65;
+    const dash = Number(d.refDash.split(' ')[0]);
+    return Number(Math.max(width * 2.4, dash + width).toFixed(1));
 }
 
 /** White at an opacity, for rules. */
@@ -102,7 +110,9 @@ const white = (opacity: number) => `rgba(255,255,255,${Number(opacity.toFixed(3)
  * - `slide`: a moved hit slides from its grid step (`--draw-from`, in
  *   user units) to where it lands.
  *
- * The element must not have its own `transform` attribute.
+ * The element must not have its own `transform` attribute. Its animation
+ * events never arrive: MotionObserver stops them at the window (see
+ * Figure.tsx), so nothing in a figure can wait on onAnimationEnd.
  */
 export type DrawKind = 'line' | 'grow' | 'rise' | 'pop' | 'fade' | 'focus' | 'slide';
 
@@ -597,8 +607,23 @@ export interface Placed {
  * text. When two marks are close, the left one's label goes to its left
  * and the right one's to its right. `taken` holds spans already used in the
  * first row (band labels).
+ *
+ * One anchor rule: once the labels need more than one row, they all take
+ * the same side of their lines (the first anchor every item prefers that
+ * needs no more rows), so a stacked set never mixes left and right.
  */
 export function placeInRows(items: RowItem[], lo: number, hi: number, { offset = 5, gap = 8, taken = [] as [number, number][] } = {}): Placed[] {
+    const mixed = placeRows(items, lo, hi, offset, gap, taken);
+    const rows = (placed: Placed[]) => placed.reduce((m, p) => Math.max(m, p.row + 1), 0);
+    if (rows(mixed) < 2 || new Set(mixed.map((p) => p.anchor)).size < 2) return mixed;
+    for (const anchor of items[0].prefer.filter((a) => items.every((item) => item.prefer.includes(a)))) {
+        const uniform = placeRows(items, lo, hi, offset, gap, taken, anchor);
+        if (rows(uniform) <= rows(mixed) && uniform.every((p) => p.anchor === anchor)) return uniform;
+    }
+    return mixed;
+}
+
+function placeRows(items: RowItem[], lo: number, hi: number, offset: number, gap: number, taken: [number, number][], only?: Anchor): Placed[] {
     const order = items.map((_, i) => i).sort((a, b) => items[a].x - items[b].x);
     const out: Placed[] = new Array(items.length);
     const placed: (Placed & { x: number })[] = [];
@@ -613,8 +638,9 @@ export function placeInRows(items: RowItem[], lo: number, hi: number, { offset =
         // A start label would run into the next mark: try its left side first. In the first row, where every
         // mark's line reaches up to the labels, it never takes the right side then: it would end against the
         // next mark's line and read as one phrase with the next label ("Rumble | Box"). It goes up a row instead.
-        const crowded = next && next.x - item.x < item.width + offset + gap;
-        const prefer = crowded && item.prefer.includes('end') ? (['end', ...item.prefer.filter((a) => a !== 'end')] as Anchor[]) : item.prefer;
+        // With one anchor for all (`only`), the same holds for every mark's line, not just the next one's.
+        const crowded = !only && next && next.x - item.x < item.width + offset + gap;
+        const prefer = only ? [only] : crowded && item.prefer.includes('end') ? (['end', ...item.prefer.filter((a) => a !== 'end')] as Anchor[]) : item.prefer;
         for (let row = 0; row < items.length + 1; row++) {
             const fit = prefer
                 .filter((anchor) => !(crowded && row === 0 && anchor === 'start' && prefer.includes('end')))
@@ -624,6 +650,7 @@ export function placeInRows(items: RowItem[], lo: number, hi: number, { offset =
                         c.from >= lo - 0.5 &&
                         c.to <= hi + 0.5 &&
                         (row > 0 || taken.every(([a, b]) => c.to + gap <= a || c.from >= b + gap)) &&
+                        (row > 0 || !only || items.every((other, oi) => oi === index || other.x < c.from - gap || other.x > c.to + gap)) &&
                         // A label up a row has its line run down past the first row: never through a taken span.
                         (row === 0 || taken.every(([a, b]) => item.x < a - 3 || item.x > b + 3)) &&
                         placed.every((p) => {
@@ -753,8 +780,12 @@ export function legend(
     const rowH = column ? 22 : 18;
     let cx = x;
     let row = 0;
+    // A dotted sample is three dots, which in the wider-spaced dialects runs past a line sample: its label steps
+    // right to keep the same air after the sample.
+    const dotW = d.line + 0.65;
+    const labelAt = (item: LegendItem) => (item.dotted && !item.swatch ? Math.max(24, Math.ceil(dotPeriod(d) * 2 + dotW + 6)) : 24);
     const placed = items.map((item, i) => {
-        const w = 24 + textWidth(item.label) + 16;
+        const w = labelAt(item) + textWidth(item.label) + 16;
         // A few units of slack, since label widths are estimated.
         if (column ? i > 0 : cx + w - 12 > x + maxWidth && cx > x) {
             cx = x;
@@ -771,8 +802,9 @@ export function legend(
                     {item.swatch ? (
                         <rect x={lx} y={ly - 10} width={16} height={10} rx={cornerOf(d, 10, 16)} fill={item.swatch} />
                     ) : item.dotted ? (
-                        // The same dots as on the line, a short row of them.
-                        <line x1={lx + 1.5} x2={lx + 17} y1={ly - 4} y2={ly - 4} {...dots(d, item.muted)} />
+                        // The same dots as on the line, a row of three from the sample's left edge. The line runs half a unit
+                        // past the third dot, so rounding its end never drops that dot.
+                        <line x1={lx + dotW / 2} x2={lx + dotW / 2 + dotPeriod(d) * 2 + 0.5} y1={ly - 4} y2={ly - 4} {...dots(d, item.muted)} />
                     ) : (
                         <line
                             x1={lx + (d.cap === 'round' ? 1 : 0)}
@@ -785,7 +817,7 @@ export function legend(
                             strokeLinecap={d.cap}
                         />
                     )}
-                    <Label x={lx + 24} y={ly} fill={C.text}>
+                    <Label x={lx + labelAt(item)} y={ly} fill={C.text}>
                         {item.label}
                     </Label>
                 </g>

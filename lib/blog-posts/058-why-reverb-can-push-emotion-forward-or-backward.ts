@@ -28,28 +28,28 @@ export const post058: BlogArticle = {
                 { value: 9, label: 'Far singer' },
                 { value: 32, label: 'Close singer', strong: true },
             ],
-            ranges: [{ from: 0, to: 32, label: 'Gap: 32 ms' }],
+            ranges: [{ from: 0, to: 32, label: 'Gap: 32 ms', strong: true }],
         },
         tail: {
             type: 'signal',
             caption:
                 'Two vocal lines with the same reverb send. With a shorter decay the tail has faded before the next line starts. With a long one it is still loud when the next words arrive and covers their consonants.',
-            alt: 'Two level plots of two vocal phrases with a dashed reverb tail. In the first, each tail falls to nothing in the gap between phrases. In the second, the tail of the first phrase is still high when the second phrase begins.',
+            alt: 'Two level plots of two vocal phrases, drawn in grey, with their reverb tail. In the first, each tail falls to nothing in the gap between phrases. In the second, the tail of the first phrase is still high when the second phrase begins.',
             rows: [
                 {
                     label: 'Decay fades in the gap',
                     unipolar: true,
                     traces: [
-                        { kind: 'envelope', label: 'Vocal', points: [[0, 0], [0.04, 0], [0.05, 0.8], [0.4, 0.7], [0.42, 0], [0.55, 0], [0.56, 0.8], [0.9, 0.7], [0.92, 0], [1, 0]] },
-                        { kind: 'envelope', label: 'Reverb', dashed: true, points: [[0, 0], [0.06, 0], [0.2, 0.32], [0.42, 0.34], [0.47, 0.12], [0.53, 0.02], [0.57, 0], [0.7, 0.32], [0.92, 0.34], [0.97, 0.12], [1, 0.05]] },
+                        { kind: 'envelope', label: 'Vocal', muted: true, points: [[0, 0], [0.04, 0], [0.05, 0.8], [0.4, 0.7], [0.42, 0], [0.55, 0], [0.56, 0.8], [0.9, 0.7], [0.92, 0], [1, 0]] },
+                        { kind: 'envelope', label: 'Reverb', points: [[0, 0], [0.06, 0], [0.2, 0.32], [0.42, 0.34], [0.47, 0.12], [0.53, 0.02], [0.57, 0], [0.7, 0.32], [0.92, 0.34], [0.97, 0.12], [1, 0.05]] },
                     ],
                 },
                 {
                     label: 'Decay runs into the next line',
                     unipolar: true,
                     traces: [
-                        { kind: 'envelope', label: 'Vocal', points: [[0, 0], [0.04, 0], [0.05, 0.8], [0.4, 0.7], [0.42, 0], [0.55, 0], [0.56, 0.8], [0.9, 0.7], [0.92, 0], [1, 0]] },
-                        { kind: 'envelope', label: 'Reverb', dashed: true, points: [[0, 0], [0.06, 0], [0.22, 0.4], [0.42, 0.46], [0.5, 0.4], [0.56, 0.36], [0.7, 0.48], [0.92, 0.52], [1, 0.46]] },
+                        { kind: 'envelope', label: 'Vocal', muted: true, points: [[0, 0], [0.04, 0], [0.05, 0.8], [0.4, 0.7], [0.42, 0], [0.55, 0], [0.56, 0.8], [0.9, 0.7], [0.92, 0], [1, 0]] },
+                        { kind: 'envelope', label: 'Reverb', points: [[0, 0], [0.06, 0], [0.22, 0.4], [0.42, 0.46], [0.5, 0.4], [0.56, 0.36], [0.7, 0.48], [0.92, 0.52], [1, 0.46]] },
                     ],
                 },
             ],

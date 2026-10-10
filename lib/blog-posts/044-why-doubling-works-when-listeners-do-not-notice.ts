@@ -18,20 +18,20 @@ export const post044: BlogArticle = {
             type: 'signal',
             caption:
                 'A hard consonant in the lead and in the double. When the double lands close to the lead, the two fuse into one attack. When it lands clearly later, you hear a second click, a flam, and the double gives itself away.',
-            alt: 'Two plots of short decaying bursts. In the first, the lead burst and a smaller dashed double burst start almost together. In the second, the dashed double burst starts well after the lead burst has faded.',
+            alt: 'Two plots of short decaying bursts. In the first, the grey lead burst and a smaller double burst start almost together. In the second, the double burst starts well after the lead burst has faded.',
             rows: [
                 {
                     label: 'Double close to the lead',
                     traces: [
-                        { kind: 'hits', at: [0.12], decay: 26, cycles: 60, label: 'Lead' },
-                        { kind: 'hits', at: [0.135], amp: [0.6], decay: 26, cycles: 60, dashed: true, label: 'Double' },
+                        { kind: 'hits', at: [0.12], decay: 26, cycles: 60, label: 'Lead', muted: true },
+                        { kind: 'hits', at: [0.135], amp: [0.6], decay: 26, cycles: 60, label: 'Double' },
                     ],
                 },
                 {
                     label: 'Double late',
                     traces: [
-                        { kind: 'hits', at: [0.12], decay: 26, cycles: 60, label: 'Lead' },
-                        { kind: 'hits', at: [0.42], amp: [0.6], decay: 26, cycles: 60, dashed: true, label: 'Double' },
+                        { kind: 'hits', at: [0.12], decay: 26, cycles: 60, label: 'Lead', muted: true },
+                        { kind: 'hits', at: [0.42], amp: [0.6], decay: 26, cycles: 60, label: 'Double' },
                     ],
                 },
             ],
@@ -45,8 +45,8 @@ export const post044: BlogArticle = {
             items: [
                 { label: 'Lead', pan: 0, depth: 0.12 },
                 { label: 'Centre double', pan: 0, depth: 0.45, fade: 0.5 },
-                { label: 'Double L', pan: -0.75, depth: 0.6, fade: 0.5 },
-                { label: 'Double R', pan: 0.75, depth: 0.6, fade: 0.5 },
+                { label: 'Double L', pan: -0.85, depth: 0.6, fade: 0.5 },
+                { label: 'Double R', pan: 0.85, depth: 0.6, fade: 0.5 },
             ],
         },
     },

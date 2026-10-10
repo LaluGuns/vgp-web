@@ -57,22 +57,25 @@ export const post124: BlogArticle = {
         shared: {
             type: 'signal',
             caption:
-                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB, and after the first hit it never gets back within about 3 dB of where it started. The pad rows are drawn taller than the bus row so the dips are easy to see.',
-            alt: 'Three level plots across two bars. The first shows the bus level, four drum hits sitting on top of a flat pad, with two threshold lines. The second shows the pad after a light bus compressor: small dips after each hit that recover fully. The third shows the pad after a heavy setting: deep dips after each hit and a level that stays below the original grey line throughout.',
+                'A steady pad shares a bus compressor with kick and snare, drawn from a simulation. The pad never changes, but the gain the drums trigger is applied to it. At 2:1 the pad dips about 2 dB after each hit and is back before the next one. At 6:1 with a lower threshold it dips about 9 dB, and after the first hit it never gets back within about 3 dB of where it started. The pad rows are drawn taller than the bus rows so the dips are easy to see.',
+            alt: 'Four level plots across two bars, in two pairs. Each pair starts with the bus level, four drum hits sitting on top of a flat pad, with that setting\'s threshold line: high for the light setting, just above the pad for the heavy one. Under it is the pad after the compressor. After the light setting the pad dips a little after each hit and recovers fully. After the heavy setting it dips deeply after each hit and stays below the original grey line throughout.',
             rows: [
                 {
-                    label: 'Into the bus, with each threshold',
+                    label: 'Into the bus, with the 2:1 threshold',
                     unipolar: true,
-                    lines: [
-                        { y: BUS_SHOW * 0.6, label: '2:1 threshold', short: '2:1' },
-                        { y: BUS_SHOW * 0.3, label: '6:1 threshold', short: '6:1' },
-                    ],
+                    lines: [{ y: BUS_SHOW * 0.6, label: 'Threshold' }],
                     traces: [BUS],
                 },
                 {
                     label: 'Pad after the bus, 2:1, light',
                     unipolar: true,
                     traces: [PAD_BEFORE, padThroughBus({ threshold: 0.6, ratio: 2, attack: 0.01, release: 0.06 })],
+                },
+                {
+                    label: 'Into the bus, with the 6:1 threshold',
+                    unipolar: true,
+                    lines: [{ y: BUS_SHOW * 0.3, label: 'Threshold' }],
+                    traces: [BUS],
                 },
                 {
                     label: 'Pad after the bus, 6:1, heavy',

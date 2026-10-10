@@ -28,7 +28,7 @@ export const post060: BlogArticle = {
                 { value: -8, label: 'Reference as released' },
             ],
             arrows: [{ from: -8, to: -18 }],
-            ranges: [{ from: -18, to: -8, label: 'Turn down 10 dB' }],
+            ranges: [{ from: -18, to: -8, label: 'Turn down 10 dB', strong: true }],
         },
         drift: {
             type: 'curve',

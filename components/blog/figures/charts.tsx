@@ -347,9 +347,14 @@ interface ScaleLabel {
  * lane never overlap, no dot sits under a label nearer the line than its
  * own (so a leader never crosses text, and a label never looks centred
  * over a dot that is not its own), and everything stays inside the figure.
+ * A leader keeps 6 units clear of the labels it passes, and two labels in
+ * one lane with a leader running up between them stand at least 16 apart,
+ * so the leader never reads as a bar inside one phrase ("Sideband|Sideband").
  */
 function placeScaleLabels(items: { x: number; width: number; strong?: boolean }[], w: number): ScaleLabel[] {
     const gap = 8;
+    const leaderClear = 6;
+    const pairAcross = 16;
     const n = items.length;
     const options = items.map((item) =>
         (['middle', 'start', 'end'] as Anchor[])
@@ -363,7 +368,17 @@ function placeScaleLabels(items: { x: number; width: number; strong?: boolean }[
     const fits = (i: number, a: ScaleLabel, j: number, b: ScaleLabel) => {
         if (a.lane === b.lane) return a.to + gap <= b.from || b.to + gap <= a.from;
         const [lower, upperX] = a.lane < b.lane ? [a, items[j].x] : [b, items[i].x];
-        return upperX < lower.from - 4 || upperX > lower.to + 4;
+        return upperX < lower.from - leaderClear || upperX > lower.to + leaderClear;
+    };
+    // A leader that runs up between two labels of one lane needs them well apart (`chosen` holds labels 0 to i).
+    const apartAcross = (label: ScaleLabel) => {
+        const all = [...chosen, label];
+        return all.every((a, ai) =>
+            all.every((b, bi) => {
+                if (a.lane !== b.lane || a.to > b.from || b.from - a.to >= pairAcross) return true;
+                return all.every((c, ci) => ci === ai || ci === bi || c.lane <= a.lane || items[ci].x <= a.to || items[ci].x >= b.from);
+            }),
+        );
     };
     let best: ScaleLabel[] | null = null;
     let bestCost = Infinity;
@@ -380,7 +395,7 @@ function placeScaleLabels(items: { x: number; width: number; strong?: boolean }[
         for (let lane = 0; lane <= maxLane; lane++) {
             for (const o of options[i]) {
                 const label = { lane, ...o };
-                if (!chosen.every((other, j) => fits(i, label, j, other))) continue;
+                if (!chosen.every((other, j) => fits(i, label, j, other)) || !apartAcross(label)) continue;
                 chosen.push(label);
                 search(i + 1, cost + lane * 10 + (o.anchor === 'middle' ? 0 : 1) + (items[i].strong && lane ? 3 : 0), maxLane);
                 chosen.pop();
@@ -400,8 +415,9 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
     const pad = d.marker === 'ring' ? 12 : d.marker === 'head' ? 10 : 8;
     const xAt = (v: number) => pad + ((v - spec.min) / (spec.max - spec.min)) * (w - pad * 2);
     const sorted = [...spec.markers].sort((a, b) => a.value - b.value);
+    // A strong marker's label is set in semibold, a few per cent wider than the estimate.
     const placed = placeScaleLabels(
-        sorted.map((marker) => ({ x: xAt(marker.value), width: textWidth(marker.label), strong: marker.strong })),
+        sorted.map((marker) => ({ x: xAt(marker.value), width: textWidth(marker.label) * (marker.strong ? 1.04 : 1), strong: marker.strong })),
         w,
     );
     const lanes = Math.max(0, ...placed.map((p) => p.lane)) + 1;
@@ -501,19 +517,63 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                 const y = rangeTop + i * 26;
                 const a = xAt(range.from);
                 const b = xAt(range.to);
-                const tw = textWidth(range.label);
-                // Inside the range when it fits, else after it, else before it; with no room on either side it starts
-                // inside and runs on over the grey, which it reads clearly against.
-                const inside = tw + 12 < b - a;
+                const strong = Boolean(range.strong);
+                const tw = textWidth(range.label) * (strong ? 1.04 : 1);
+                // Inside the range when it fits, else after it, else before it, else centred inside when it fits there
+                // with a little less room; with no room anywhere it starts inside and runs on past the end.
+                const roomy = tw + 12 < b - a;
                 const after = b + 6 + tw < w;
                 const before = a - 6 - tw >= 0;
-                const at = inside ? { x: a + 6, anchor: 'start' as const } : after ? { x: b + 6, anchor: 'start' as const } : before ? { x: a - 6, anchor: 'end' as const } : { x: Math.min(a + 6, w - tw), anchor: 'start' as const };
+                const snug = !roomy && !after && !before && tw + 6 < b - a;
+                const inside = roomy || snug;
+                const at = roomy
+                    ? { x: a + 6, anchor: 'start' as const }
+                    : after
+                      ? { x: b + 6, anchor: 'start' as const }
+                      : before
+                        ? { x: a - 6, anchor: 'end' as const }
+                        : snug
+                          ? { x: (a + b) / 2, anchor: 'middle' as const }
+                          : { x: Math.min(a + 6, w - tw), anchor: 'start' as const };
+                const runsOn = !inside && !after && !before;
+                // A range the caption points at (`strong`) is in the accent and grows from its start; other ranges are
+                // grey context. Its label is in the surface colour where it sits on the accent, like a note's name,
+                // and white past the end: a label that runs on is drawn twice, the dark copy clipped to the bar.
+                const delay = 200 + i * 120;
+                // A span narrower than its bar is tall would read as a swatch, so it is drawn as an interval instead:
+                // a thin bar between two end ticks, in a grey that holds 3:1 when it is context.
+                const narrowSpan = b - a < 32;
+                const paint = strong ? accentFill(1) : { fill: narrowSpan ? solid(0.4) : C.dim };
+                const label = (fill: string, extra: object = {}) => (
+                    <Label x={at.x} y={y + 12} anchor={at.anchor} fill={fill} weight={strong ? 600 : undefined} {...extra} {...(strong ? draw('fade', delay + 380) : {})}>
+                        {range.label}
+                    </Label>
+                );
+                const clipId = strong && runsOn ? `range-clip-${++rangeClipCounter}` : '';
                 return (
                     <g key={range.label}>
-                        <rect x={a} y={y} width={Math.max(2, b - a)} height={16} rx={cornerOf(d, 16, b - a)} fill={C.dim} />
-                        <Label x={at.x} y={y + 12} anchor={at.anchor} fill={inside ? C.ink : C.text}>
-                            {range.label}
-                        </Label>
+                        {narrowSpan ? (
+                            <g {...paint} {...(strong ? draw('fade', delay) : {})}>
+                                <rect x={a} y={y + 6} width={Math.max(2, b - a)} height={4} />
+                                <rect x={a} y={y} width={2} height={16} />
+                                <rect x={Math.max(a, b - 2)} y={y} width={2} height={16} />
+                            </g>
+                        ) : (
+                            <rect x={a} y={y} width={Math.max(2, b - a)} height={16} rx={cornerOf(d, 16, b - a)} {...paint} {...(strong ? draw('grow', delay) : {})} />
+                        )}
+                        {clipId ? (
+                            <g>
+                                <defs>
+                                    <clipPath id={clipId}>
+                                        <rect x={a} y={y} width={b - a} height={16} />
+                                    </clipPath>
+                                </defs>
+                                {label(C.ink)}
+                                {label(C.surface, { clipPath: `url(#${clipId})` })}
+                            </g>
+                        ) : (
+                            label(strong && inside ? C.surface : inside || strong ? C.ink : C.text)
+                        )}
                     </g>
                 );
             })}
@@ -521,6 +581,8 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
         </Svg>
     );
 }
+
+let rangeClipCounter = 0;
 
 function niceTicks(min: number, max: number, count: number): number[] {
     const span = max - min;

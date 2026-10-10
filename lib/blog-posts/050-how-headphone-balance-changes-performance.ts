@@ -26,15 +26,15 @@ export const post050: BlogArticle = {
             type: 'signal',
             caption:
                 'The start of a sung note as the singer hears it, in a plot 50 ms wide. The voice reaches them through the head at once. With direct monitoring the headphone copy lands almost with it. Through a 256-sample buffer at 48 kHz it lands about 10.7 ms later, so they hear their voice twice.',
-            alt: 'Two plots of a short burst heard twice. In the first, the headphone burst starts almost on top of the burst through the head. In the second, the headphone burst starts clearly later.',
+            alt: 'Two plots of a short burst heard twice. In the first, the headphone burst starts almost on top of the grey burst through the head. In the second, the headphone burst starts clearly later.',
             rows: [
                 {
                     label: 'Direct monitoring',
-                    traces: [HEAD, { ...HEAD, at: [0.11], amp: [0.75], dashed: true, label: 'Headphones' }],
+                    traces: [{ ...HEAD, muted: true }, { ...HEAD, at: [0.11], amp: [0.75], label: 'Headphones' }],
                 },
                 {
                     label: 'Through a 256-sample buffer',
-                    traces: [HEAD, { ...HEAD, at: [0.313], amp: [0.75], dashed: true, label: 'Headphones' }],
+                    traces: [{ ...HEAD, muted: true }, { ...HEAD, at: [0.313], amp: [0.75], label: 'Headphones' }],
                 },
             ],
         },

@@ -24,25 +24,24 @@ export const post035: BlogArticle = {
             type: 'signal',
             caption:
                 'Two notes and their noise, sketched as levels over time. Above, the noise runs at one level through notes and gaps, so it is heard as a second sound. Below, it bursts on each attack, then falls and stops with the note, so it is heard as part of it.',
-            alt: 'Two level plots with two synth notes each. In the first, a dashed noise line stays flat across the whole plot. In the second, the dashed noise line jumps up at each note start, drops to a low level and ends when each note ends.',
+            alt: 'Two level plots with two synth notes each, drawn in grey. In the first, the noise line stays flat across the whole plot. In the second, the noise line jumps up at each note start, drops to a low level and ends when each note ends.',
             rows: [
                 {
                     label: 'Noise on its own track',
                     unipolar: true,
                     traces: [
-                        { kind: 'envelope', label: 'Synth note', points: NOTES },
-                        { kind: 'envelope', label: 'Noise', dashed: true, points: [[0, 0.18], [1, 0.18]] },
+                        { kind: 'envelope', label: 'Synth note', muted: true, points: NOTES },
+                        { kind: 'envelope', label: 'Noise', points: [[0, 0.18], [1, 0.18]] },
                     ],
                 },
                 {
                     label: 'Noise inside the voice',
                     unipolar: true,
                     traces: [
-                        { kind: 'envelope', label: 'Synth note', points: NOTES },
+                        { kind: 'envelope', label: 'Synth note', muted: true, points: NOTES },
                         {
                             kind: 'envelope',
                             label: 'Noise',
-                            dashed: true,
                             points: [
                                 [0, 0], [0.05, 0], [0.055, 0.4], [0.1, 0.15], [0.4, 0.15], [0.47, 0],
                                 [0.55, 0], [0.555, 0.4], [0.6, 0.15], [0.9, 0.15], [0.97, 0], [1, 0],

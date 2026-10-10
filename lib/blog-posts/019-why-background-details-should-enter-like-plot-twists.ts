@@ -28,22 +28,21 @@ export const post019: BlogArticle = {
             type: 'signal',
             caption:
                 'A sketch of one verse. On the top row the detail runs under every vocal phrase. On the bottom row its level is automated so it only rises in the gaps, answering the vocal instead of covering it.',
-            alt: 'Two level plots with three vocal phrases each. In the first, a dashed detail line stays at a constant level under all the phrases. In the second, the dashed detail line is silent during the phrases and rises only in the gaps between them.',
+            alt: 'Two level plots with three vocal phrases each, drawn in grey. In the first, the detail line stays at a constant level under all the phrases. In the second, the detail line is silent during the phrases and rises only in the gaps between them.',
             rows: [
                 {
                     label: 'Detail always on',
                     unipolar: true,
-                    traces: [VOCAL, { kind: 'envelope', label: 'Detail', dashed: true, points: [[0, 0.42], [1, 0.42]] }],
+                    traces: [{ ...VOCAL, muted: true }, { kind: 'envelope', label: 'Detail', points: [[0, 0.42], [1, 0.42]] }],
                 },
                 {
                     label: 'Detail in the gaps',
                     unipolar: true,
                     traces: [
-                        VOCAL,
+                        { ...VOCAL, muted: true },
                         {
                             kind: 'envelope',
                             label: 'Detail',
-                            dashed: true,
                             points: [
                                 [0, 0], [0.27, 0], [0.29, 0.5], [0.35, 0.5], [0.37, 0],
                                 [0.6, 0], [0.62, 0.5], [0.68, 0.5], [0.7, 0],

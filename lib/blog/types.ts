@@ -249,7 +249,8 @@ export interface ScaleFigure extends FigureBase {
     unit?: string;
     ticks?: number[];
     markers: { value: number; label: string; strong?: boolean }[];
-    ranges?: { from: number; to: number; label: string }[];
+    /** Spans below the line, grey context. `strong`: the range the caption points at, drawn in the accent. */
+    ranges?: { from: number; to: number; label: string; strong?: boolean }[];
     /** Curved arrows below the line, e.g. a frequency folding to its alias. */
     arrows?: { from: number; to: number }[];
 }

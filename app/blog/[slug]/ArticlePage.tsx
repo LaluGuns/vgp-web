@@ -210,9 +210,11 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     {position ? (
                                         <>
                                             {' '}
-                                            {/* The dot stays with the link: Chrome breaks before an inline-flex link, which left "·" ending a line on a phone. */}
-                                            <span className="whitespace-nowrap">
-                                                ·{' '}
+                                            {/* On a phone the line is too short for all three, and Chrome broke it just before
+                                                the inline-flex link, leaving "·" at the end of a line: there the link takes its
+                                                own line, with no dot. From sm up the dot stays with the link. */}
+                                            <span className="block whitespace-nowrap sm:inline">
+                                                <span className="hidden sm:inline">· </span>
                                                 <TapLink href={`/blog/category/${article.category}`} className="hover:text-white">
                                                     Lesson {position.index + 1} of {position.path.articles.length} in {pathName}
                                                 </TapLink>
@@ -328,8 +330,9 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                     </div>
                 </article>
 
+                {/* Screen only: on paper the list of later lessons was one or two pages of links. */}
                 {upcoming.length > 0 && position ? (
-                    <section className="border-t border-white/10 px-4 pb-20 pt-14 sm:px-6">
+                    <section className="border-t border-white/10 px-4 pb-20 pt-14 print:hidden sm:px-6">
                         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-12">
                             <div className="lg:col-span-4">
                                 <h2 id="path-heading" className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">

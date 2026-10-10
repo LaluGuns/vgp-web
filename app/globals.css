@@ -752,6 +752,24 @@ body::before {
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* A phone held sideways: the screen is wide but short, so the definition
+   takes more of the width and its links sit in a row, and the longest one
+   still fits between the header and the bottom with Close in view
+   (TermPlacement). */
+@media (max-width: 1023.98px) and (max-height: 499.98px) {
+  .vgp-term-pop {
+    max-width: min(40rem, calc(100% - 32px));
+    padding: 12px 20px 8px;
+  }
+
+  .vgp-term-pop .vgp-term-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 20px;
+  }
+}
+
 /* Lesson contents sheet on phones (ArticleChrome MobileContents). The
    button shows when the reader scrolls up (data-visible, set by script),
    while it has keyboard focus, and while its sheet is open. */
@@ -885,21 +903,38 @@ body::before {
 /* A playing demo's Stop button (ui.tsx PlayButton). It shows once the Play
    button is off screen (data-away); before that it waits unseen as the next
    Tab after the demo and shows when it has the keyboard focus. Below 1024 px
-   a 44 px round button, bottom left above the phone tab bar. From 1024 px up
-   it carries its label and sits at the foot of the outline column,
-   right-aligned with the lesson's grid (max-w-7xl in px-6), where no text
-   runs. */
+   a 44 px round button, bottom left above the phone tab bar, across from the
+   Contents button (bottom right). There the lesson text starts 16 to 24 px
+   from the edge, so after three seconds without a scroll (data-tucked) it
+   slides into the edge and leaves a 10 px tab in the margin, clear of the
+   text; a scroll, the focus, a hover or a tap on the tab brings it back.
+   From 1024 px up it carries its label and sits at the foot of the outline
+   column, right-aligned with the lesson's grid (max-w-7xl in px-6), where no
+   text runs. */
 .vgp-demo-stop {
   position: fixed;
   z-index: 30;
   left: 1rem;
   bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
-  transition: opacity 150ms ease;
+  transition: opacity 150ms ease, transform 200ms ease, border-color 200ms ease;
 }
 
 .vgp-demo-stop:not([data-away]):not(:focus-visible) {
   opacity: 0;
   pointer-events: none;
+}
+
+@media (max-width: 1023.98px) {
+  .vgp-demo-stop[data-away][data-tucked]:not(:focus-visible) {
+    transform: translateX(calc(-100% - 1rem + 10px));
+    border-color: var(--accent);
+  }
+}
+
+@media (max-width: 1023.98px) and (hover: hover) {
+  .vgp-demo-stop[data-away][data-tucked]:hover {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
