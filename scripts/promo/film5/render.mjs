@@ -57,7 +57,7 @@ const M = audio.measures;
 const Q = M.res;
 const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
 log(`Audio master: ${m.I} LUFS integrated, ${m.TP} dBTP, LRA ${m.LRA} LU (gain ${gain.toFixed(1)} dB, clip ceiling ${ceiling.toFixed(1)} dBFS)`);
-log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar 4 dB over the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
+log(`Mix: narration ${M.voLufs.toFixed(1)} LUFS before mastering; demos ${f1(M.demoGainDb)} dB, their drop bar ${M.demoOverVo} dB over the narration's loudness; music bed -9 dB alone, -15 under the voice, out under the demos`);
 log(`A/B: one 128 BPM build into a drop, rendered twice from the same samples. Version 2 mutes every build source and the build's reverb return ${f1(Q.gapMs)} ms (one 8th) before the downbeat with ${Q.fadeMs} ms fades; version 1 runs into the downbeat.`);
 log(`Song-bus limiter (both versions): ceiling ${LIMITER.ceilingDb} dBFS, look-ahead ${LIMITER.lookMs} ms, release ${LIMITER.releaseMs} ms, drive ${Q.driveDb} dB`);
 log(`Matching: version 1 turned ${Q.matchOffsetDb >= 0 ? 'up' : 'down'} ${Math.abs(Q.matchOffsetDb).toFixed(2)} dB to version 2's drop-bar loudness (${f1(Q[2].dropLufs)} LUFS, K-weighted, downbeat plus one bar)`);

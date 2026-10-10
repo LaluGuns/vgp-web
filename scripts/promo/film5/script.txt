@@ -4,6 +4,6 @@ fog|In number one, the riser is still roaring when the kick lands, so it covers 
 fresh|In number two, the riser stops, its after-fog fades, and your ears meet the kick fresh.
 hand|Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down, right as the kick lands.
 brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
-how|So cut everything about a quarter second before the drop, reverb tails too. The after-fog fades within two hundred milliseconds. At 128 BPM, a sixteenth already helps, and an eighth outlasts it.
+how|So cut everything about a quarter second before the drop, reverb tails too. The after-fog fades within two hundred milliseconds. Listen to three gaps: a sixteenth, then an eighth, then a full beat.
 again|Now listen again. Hear the click?
 cta|That's the click. Clean ears, a calm limiter, a beat you saw coming. So what do you cut before your drop: a sixteenth, an eighth, or a full beat?

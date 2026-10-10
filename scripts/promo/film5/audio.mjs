@@ -5,12 +5,14 @@
 // models), so what is drawn is what is heard.
 import fs from 'node:fs';
 import path from 'node:path';
-import { BEAT, BAR, GAP, PRE, measure, samples } from './drop.mjs';
+import { BEAT, BAR, GAP, NOTE, PRE, dropLoudness, measure, monoOf, render, samples } from './drop.mjs';
 import { biquad, butter, db, loudness, mulberry32, noise, RATE, readAudio, undb, writeWav } from './dsp.mjs';
 import { TIMELINE } from './timeline.mjs';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 export const ASSETS = path.join(HERE, '../assets');
+// The demos' drop bar over the narration's loudness: loud enough to be the event, not a jump for a phone at voice level.
+const DEMO_OVER_VO = 2.5;
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
 
 // Picture data resolution: one value per millisecond.
@@ -330,11 +332,17 @@ export function renderAudio({ stem = null } = {}) {
     // ── The A/B: both versions, matched at the drop bar's loudness ──
     const { res, v } = measure();
     const match = { 1: undb(res.matchOffsetDb), 2: 1 };
-    // Demos sit 4 dB over the narration's loudness at the drop bar, so the A/B
+    // The ear test: the same drop with a 16th and a full-beat gap, each matched to version 2's drop bar.
+    for (const [k, len] of [['16', NOTE.n16], ['beat', NOTE.beat]]) {
+        if (!TIMELINE.demos.some((d) => d.v === k)) continue;
+        v[k] = render(len);
+        match[k] = undb(res[2].dropLufs - dropLoudness(monoOf(v[k].out)));
+    }
+    // Demos sit 2.5 dB over the narration's loudness at the drop bar (DEMO_OVER_VO), so the A/B
     // is the loudest thing in the film; their peaks (-1 dBFS inside the song,
     // about 13 dB over its loudness) stay under the master's clipper.
     const dropLufs = res[2].dropLufs;
-    const demoGain = undb(voLufs + 4 - dropLufs);
+    const demoGain = undb(voLufs + DEMO_OVER_VO - dropLufs);
     const dL = new Float32Array(n);
     const dR = new Float32Array(n);
     for (const d of TIMELINE.demos) {
@@ -496,7 +504,7 @@ export function renderAudio({ stem = null } = {}) {
         };
     }
     const claims = res.claims;
-    const measures = { voLufs, voRawLufs: rawLufs, demoGainDb: db(demoGain), res };
+    const measures = { voLufs, voRawLufs: rawLufs, demoGainDb: db(demoGain), demoOverVo: DEMO_OVER_VO, res };
     return {
         L,
         R,

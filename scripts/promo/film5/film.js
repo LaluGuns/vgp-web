@@ -328,7 +328,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             label(g, 'Which one hits harder?', 0, 0, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
             g.restore();
         } else label(g, 'Which one hits harder?', 540, 445, { size: 62, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-        if (!guessing && !answer) pill(g, 'sound on', 900, 212, { size: 34, bg: P.ink, fg: P.dark, weight: 800 });
+        if (!guessing && !answer) pill(g, 'sound on', 540, 532, { size: 34, bg: P.ink, fg: P.dark, weight: 800 });
     }
     // Notch zoom on both lanes during the hook line, so the drop lines stay aligned.
     // The zoom into the gap starts on "It has" and lands on "gap".
@@ -404,8 +404,8 @@ function drawAB(t, frame1 = false, noHead = false) {
     });
     // The countdown while the viewer picks: 3, 2, 1 on the beat, and an invitation to comment.
     if (guessing) {
-        const kB = popIn(t, G.at + 0.2, 0.3);
-        pill(g, 'comment 1 or 2', 540, 538, { size: 40, bg: P.ink, fg: P.dark, alpha: kB, scale: E.outBack(kB), weight: 800 });
+        // One comment ask in the film, at the end; here only the countdown.
+        const kB = 0;
         const k = Math.min(2, Math.floor((t - G.at) / BEAT));
         const p = ((t - G.at) % BEAT) / BEAT;
         // Three dots that fill on the beat (no digits, which would read as version labels).
@@ -494,8 +494,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 470, { size: 46, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 536, { size: 38, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
+        if (kC > 0) pill(g, t < dB.down ? `measured click: ${sg(D.r1.clickDb)} dB in 1` : `measured click: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 490, { size: 50, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
@@ -861,7 +860,7 @@ function drawHand(t) {
         g.fillStyle = '#070d1a';
         g.fill();
         const shown = kR > 0 ? (f.v === 1 ? D.r1.gr : D.r2.gr) : gr;
-        label(g, `down ${fmt(Math.max(0, shown))} dB`, f.x, dk.y0 + dk.h - 34, { size: kR > 0 ? 40 : 36, weight: 800, color: kR > 0 ? P.ink : P.ink2, align: 'center' });
+        label(g, `down ${fmt(Math.max(0, shown), kR > 0 ? 1 : 0)} dB`, f.x, dk.y0 + dk.h - 34, { size: kR > 0 ? 40 : 36, weight: 800, color: kR > 0 ? P.ink : P.ink2, align: 'center' });
         if (kR > 0) {
             g.save();
             g.globalAlpha *= kR;
@@ -893,7 +892,7 @@ function drawHand(t) {
     g.restore();
     const kR = popIn(t, tKick + 0.15, 0.3);
     if (kR > 0) pill(g, 'measured on the first kick', 540, dk.y0 + dk.h + 42, { size: 38, bg: P.ink, fg: P.dark, alpha: kR, scale: E.outBack(kR), weight: 800 });
-    else label(g, live ? `limiter gain, slowed down ${Math.round(slow)}×` : 'the limiter on the master bus', 540, dk.y0 + dk.h + 62, { size: 36, weight: 700, color: P.ink2, align: 'center', family: BODY });
+    else label(g, live ? (ms < -GAP_MS ? `same build: both pulled down (slowed ${Math.round(slow)}×)` : 'in 2 the gap: the hand lets go') : 'the limiter on the master bus', 540, dk.y0 + dk.h + 62, { size: 36, weight: 700, color: P.ink2, align: 'center', family: BODY });
     g.restore();
 }
 
@@ -1066,7 +1065,7 @@ function drawBrain(t) {
 
 // ══ How: the cut in a DAW, then the gap at 128 BPM ══
 // The arrangement shows two beats before the drop and one after; the cut is an 8th before it.
-const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 640, x0: 120, x1: 900, msMax: 300 } };
+const HW = { x0: 80, x1: 920, names: 250, y0: 470, ruler: 530, lanes: [580, 680, 780, 880], laneH: 86, beats: [-2, 1], zoom: { y: 640, x0: 120, x1: 880, msMax: 500 } };
 const CLIPC = {
     riser: { body: 'rgba(126,131,168,0.55)', head: RISER, wave: 'rgba(200,203,226,0.75)', text: P.ink },
     drums: { body: 'rgba(248,250,252,0.16)', head: 'rgba(248,250,252,0.55)', wave: 'rgba(248,250,252,0.7)', text: P.dark },
@@ -1085,9 +1084,11 @@ function drawHow(t) {
     const tEighth = wto('how', 'quarter', 0.12);
     const tAt = wto('how', 'at', 0.32);
     // The ruler steps through the note lengths as they are named: a 32nd, a 16th, an 8th.
-    const t128 = wto('how', '128', 0.72);
-    const t16 = wto('how', 'sixteenth', 0.8);
-    const tQuarter = wto('how', 'eighth', 0.88);
+    // The ear test: the same drop with a 16th, an 8th and a beat of silence (demos G16, G8, GB).
+    const TESTS = [['16th', demoBy.G16, GAP_MS / 2], ['8th', demoBy.G8, GAP_MS], ['beat', demoBy.GB, GAP_MS * 2]];
+    const t128 = wto('how', 'gaps', 0.72);
+    const t16 = TESTS[0][1].at;
+    const tQuarter = TESTS[1][1].at;
     const tFogs = wto('how', 'afterfog', 0.5);
     const tFifth = wto('how', 'milliseconds', 0.6);
     const tVerb = wto('how', 'reverb', 0.84);
@@ -1273,11 +1274,15 @@ function drawHow(t) {
         g.restore();
         label(g, 'gone within', ZX(200) + 16, y + 62, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
         label(g, '100–200 ms', ZX(200) + 16, y + 112, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
-        const t128 = wto('how', '128', 0.78);
-        // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
-        const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        void snap;
-        const ms = keys(t, [[tFifth, 0], [t16 + 0.25, GAP_MS / 2], [tQuarter, GAP_MS / 2], [tQuarter + 0.3, GAP_MS]]);
+        // The bar shows the gap of the test now playing; it snaps to each as it starts.
+        let ms = 0;
+        let now = -1;
+        TESTS.forEach(([, d, len], i) => {
+            if (t >= d.at - 0.05) {
+                now = i;
+                ms = (i ? TESTS[i - 1][2] : 0) + (len - (i ? TESTS[i - 1][2] : 0)) * E.out(seg(t, d.at - 0.05, d.at + 0.2));
+            }
+        });
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
         // On "128 BPM": outlines of a 16th and an 8th at that tempo, waiting to be filled.
         const kO = popIn(t, t128 - 0.1, 0.3);
@@ -1287,7 +1292,7 @@ function drawHow(t) {
             g.strokeStyle = `rgba(${CYAN_RGB},0.55)`;
             g.setLineDash([10, 8]);
             g.lineWidth = 3;
-            for (const len of [GAP_MS / 2, GAP_MS]) {
+            for (const len of [GAP_MS / 2, GAP_MS, GAP_MS * 2]) {
                 rr(g, ZX(0), y + 274, ZX(len) - ZX(0), 110, 18);
                 g.stroke();
             }
@@ -1302,7 +1307,11 @@ function drawHow(t) {
             g.fillStyle = `rgba(${CYAN_RGB},${0.9 * fl})`;
             g.fillRect(ZX(200) - 5, y - 10, 10, 170);
         }
-        label(g, `${Math.round(ms)} ms`, ZX(ms) + 20, y + 347, { size: 56, weight: 800, color: ms > 240 ? P.dark : P.cyan });
+        // The value sits past the bar, or inside it once the bar is long, so it stays clear of the right rail.
+        const inside = ZX(ms) > Z.x1 - 190;
+        label(g, `${Math.round(ms)} ms`, inside ? ZX(ms) - 20 : ZX(ms) + 20, y + 347, { size: 56, weight: 800, color: inside ? P.dark : P.cyan, align: inside ? 'right' : 'left' });
+        // A speaker pulses by the bar while a test plays.
+        if (now >= 0 && t < TESTS[now][1].to) speaker(g, Z.x0 - 34, y + 330, 0.8, 0.5 + 0.5 * Math.sin(t * 18));
         // Axis: 0, 100, 200 ms and the 8th.
         g.strokeStyle = P.ink3;
         g.lineWidth = 3;
@@ -1310,20 +1319,20 @@ function drawHow(t) {
         g.moveTo(ZX(0), y + 430);
         g.lineTo(ZX(Z.msMax), y + 430);
         g.stroke();
-        for (const m of [0, 100, 200, 300]) {
+        for (const m of [0, 200, 400]) {
             g.fillStyle = P.ink3;
             g.fillRect(ZX(m) - 1.5, y + 422, 3, 16);
             label(g, `${m}`, ZX(m), y + 474, { size: 34, weight: 600, color: P.ink3, align: 'center', family: BODY });
         }
-        label(g, 'ms', ZX(300) + 34, y + 440, { size: 30, weight: 600, color: P.ink3, family: BODY });
+        label(g, 'ms', ZX(500) + 14, y + 440, { size: 30, weight: 600, color: P.ink3, family: BODY });
         // The note lengths at 128 BPM on their own row, ticked on the axis.
-        for (const [nm, m, on] of [['32nd', GAP_MS / 4, ms >= GAP_MS / 4 - 1], ['16th', GAP_MS / 2, ms >= GAP_MS / 2 - 1], ['8th', GAP_MS, ms >= GAP_MS - 1]]) {
+        for (const [nm, m, on] of [['16th', GAP_MS / 2, now === 0], ['8th', GAP_MS, now === 1], ['beat', GAP_MS * 2, now === 2]]) {
             g.fillStyle = on ? P.cyan : P.ink3;
             g.fillRect(ZX(m) - 2, y + 416, 4, 28);
             label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
         }
         g.restore();
-        if (t >= t16) label(g, t >= tQuarter ? 'an 8th outlasts the fog' : 'a 16th already helps', 540, Z.y + 620, { size: 44, weight: 800, color: t >= tQuarter ? P.cyan : P.ink, align: 'center', alpha: popIn(t, t16 + 0.1, 0.3), family: BODY });
+        if (now >= 0) label(g, ['a 16th: the fog may still be there', 'an 8th: outlasts the fog', 'a beat: a longer breath'][now], 540, Z.y + 620, { size: 44, weight: 800, color: now === 1 ? P.cyan : P.ink, align: 'center', alpha: popIn(t, t16 + 0.1, 0.3), family: BODY });
     }
     g.restore();
 }
@@ -1589,7 +1598,7 @@ function subtitles(t) {
     const v = VO.filter((x) => t >= x.at - 0.12 && t <= x.at + x.dur + 0.3).pop();
     if (!v) {
         // During a demo with no narration: a speaker and "Listen", the cue to turn the sound on.
-        const d = DEMOS.find((q) => t >= q.at && t < q.to && !q.id.startsWith('S'));
+        const d = DEMOS.find((q) => t >= q.at && t < q.to && !/^[SG]/.test(q.id));
         if (d) {
             const a = clamp((t - d.at) / 0.15) * (1 - clamp((t - d.to + 0.15) / 0.15));
             g.save();

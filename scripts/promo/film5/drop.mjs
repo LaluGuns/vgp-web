@@ -136,7 +136,8 @@ const CHORDS = { B: [-1, 3, 6], 'C#': [1, 5, 8], 'D#m': [3, 6, 10] };
 function arrange(gap) {
     const s = samples();
     const T0 = PRE;
-    const cut = T0 - GAP;
+    // `gap`: false (version 1), true (version 2, one 8th) or a length in seconds (the ear test).
+    const cut = T0 - (typeof gap === 'number' ? gap : GAP);
     const tr = {};
     for (const k of ['kick', 'drums', 'riser', 'swell', 'stabs', 'bass', 'crash', 'sendBuild', 'sendDrop']) tr[k] = track();
 
@@ -249,7 +250,7 @@ export function render(gap) {
 }
 
 // ── Measurements ──
-const monoOf = (x) => Float32Array.from(x.L, (v, i) => 0.5 * (v + x.R[i]));
+export const monoOf = (x) => Float32Array.from(x.L, (v, i) => 0.5 * (v + x.R[i]));
 const energy = (x, a, b) => {
     let s = 0;
     for (let i = at(a); i < at(b); i++) s += x[i] * x[i];
