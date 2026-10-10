@@ -1,8 +1,8 @@
 [curious] One or two? Pick one.
 
-[excited] Number two. Same drop, with a hole in it: under a quarter second of silence before the kick.
+[excited] Number two. It has a gap: under a quarter second of silence before the kick. [curious] Why? Your ears, your limiter, your brain.
 
-[curious] Your ears first. In number one, the riser is still roaring when the kick lands, so it covers the click. [warmly] In number two, the riser has stopped, its after-fog fades, and your ears meet the kick fresh.
+In number one, the riser is still roaring when the kick lands, so it covers the click. [warmly] In number two, the riser stops, its after-fog fades, and your ears meet the kick fresh.
 
 [mischievously] Then your limiter: a little hand on a fader. The riser makes it pull everything down as the kick arrives.
 

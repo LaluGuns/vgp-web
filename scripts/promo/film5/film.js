@@ -321,11 +321,11 @@ function drawAB(t, frame1 = false, noHead = false) {
             g.scale(pulse, pulse);
             label(g, 'Which one hits harder?', 0, 0, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
             g.restore();
-        } else label(g, 'One tiny cut. Which hits harder?', 540, 445, { size: 62, weight: 800, color: P.ink, align: 'center', base: 'middle' });
+        } else label(g, 'One tiny gap. Which hits harder?', 540, 445, { size: 62, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     }
     // Notch zoom on both lanes during the hook line, so the drop lines stay aligned.
-    // The zoom into the hole starts on "Same drop" and lands on "hole".
-    const zIn = id === 'notch' ? E.inOut(seg(t, wto('hook', 'same', 0.2), wto('hook', 'hole', 0.35) + 0.3)) : 0;
+    // The zoom into the gap starts on "It has" and lands on "gap".
+    const zIn = id === 'notch' ? E.inOut(seg(t, wto('hook', 'has', 0.2) - 0.3, wto('hook', 'gap', 0.35) + 0.3)) : 0;
     const a0 = lerp(msA, -GAP_MS - 260, zIn);
     const b0 = lerp(msB, 200, zIn);
     const X = (ms) => AB.x0 + ((AB.x1 - AB.x0) * (ms - a0)) / (b0 - a0);
@@ -412,12 +412,24 @@ function drawAB(t, frame1 = false, noHead = false) {
     const tAns = frame1 ? 1e9 : wto('hook', 'two', 0.05) + 0.4;
     if (!replay && !noHead) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
-        if (!guessing && id === 'notch' && t >= tAns) label(g, '1: the riser runs into the drop', 540, 1288, { size: 40, weight: 700, color: FOG, align: 'center', family: BODY, alpha: popIn(t, tAns + 0.3, 0.2) * (1 - out) });
+        if (!guessing && id === 'notch' && t >= tAns) {
+            const L1 = AB.lanes[0];
+            const kD = popIn(t, tAns + 0.3, 0.2) * (1 - out);
+            tag(g, 'in 1 the riser runs into the drop', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 34 });
+        }
+        // The three reasons, each lit as it is named; the tracker carries them through the film.
+        if (id === 'notch') {
+            const items = [['ears', 'ears'], ['limiter', 'limiter'], ['brain', 'brain']];
+            items.forEach(([w, cue], i) => {
+                const kI = popIn(t, wto('hook', cue, 0) - 0.05, 0.25) * (1 - out);
+                if (kI > 0) pill(g, w, 540 + (i - 1) * 250, 1560, { size: 44, bg: P.ink, fg: P.dark, alpha: kI, scale: E.outBack(kI), weight: 800 });
+            });
+        }
         label(g, 'same samples, drops matched in loudness', 540, 1288, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
         if (false) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
-        const kR = id === 'notch' ? popIn(t, wto('hook', 'hole', 0.35), 0.3) * (1 - out) : 0;
+        const kR = id === 'notch' ? popIn(t, wto('hook', 'gap', 0.35), 0.3) * (1 - out) : 0;
         void kR;
     }
     // The notch, labelled once.
@@ -440,7 +452,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         g.restore();
         tag(g, `${Math.round(GAP_MS)} ms: under ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 36 });
         // A playhead crosses the silence again and again; the kick answers at the end of it.
-        const tz = wto('hook', 'hole', 0.35) + 0.3;
+        const tz = wto('hook', 'gap', 0.35) + 0.3;
         if (t > tz && !replay) {
             const ph = ((t - tz) % 1.2) / 1.2;
             const ms = lerp(-GAP_MS - 60, 30, clamp(ph / 0.8));
@@ -470,7 +482,8 @@ function drawAB(t, frame1 = false, noHead = false) {
         const L2 = AB.lanes[1];
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
-        if (kC > 0) pill(g, t < dB.down ? 'measured: click under the riser noise in 1' : `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
+        if (kC > 0) pill(g, t < dB.down ? `measured, click over the rest: ${sg(D.r1.clickDb)} dB in 1` : `click over the rest: ${sg(D.r1.clickDb)} dB in 1 → ${sg(D.r2.clickDb)} dB in 2`, 540, 560, { size: 34, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     g.restore();
@@ -500,14 +513,13 @@ const BUBBLES = (() => {
 function stageEpisodes() {
     const S1 = demoBy.S1;
     const S2 = demoBy.S2;
-    const tKick1 = wto('fog', 'kick', 0.55);
-    const tStop = wto('fresh', 'stopped', 0.4);
-    const tKick2 = wto('fresh', 'fresh', 0.92) - 0.05;
+    const tCov = wto('fog', 'covers', 0.5);
+    const off2 = Math.min(wto('fresh', 'stops', 0.4), SC.fresh + 0.35);
+    // One click per version, on the downbeat the viewer hears (the sting); version 1's
+    // spark drifts in through the riser from "covers", version 2's silence is counted slowed.
     return [
-        { v: 1, at: wto('fog', 'number', 0.25) - 0.2, on: wto('fog', 'number', 0.25), off: null, hit: tKick1, slow: 1 },
-        { v: 1, at: S1.at, on: S1.at - 0.6, off: null, hit: S1.down, slow: 1, sting: true },
-        { v: 2, at: SC.fresh, on: SC.fresh - 0.4, off: Math.min(tStop, SC.fresh + 0.35), hit: tKick2, slow: (tKick2 - Math.min(tStop, SC.fresh + 0.35)) / (GAP_MS / 1000) },
-        { v: 2, at: S2.at, on: S2.at - 0.6, off: S2.down - GAP_MS / 1000, hit: S2.down, slow: 1, sting: true },
+        { v: 1, at: SC.fog - 0.3, on: wto('fog', 'number', 0.25), off: null, hit: S1.down, slow: 1, travel: Math.max(0.5, S1.down - tCov) },
+        { v: 2, at: SC.fresh, on: SC.fresh - 0.4, off: off2, hit: S2.down, slow: (S2.down - off2) / (GAP_MS / 1000), travel: 0.3 },
     ];
 }
 function stageState(t) {
@@ -523,7 +535,7 @@ function stageState(t) {
 }
 function drawEarSection(t, k) {
     if (k <= 0) return;
-    const tEars = wto('fog', 'ears', 0.1);
+    const tEars = SC.fog - 0.05;
     const st = stageState(t);
     const e = st.e;
     g.save();
@@ -598,7 +610,7 @@ function drawEarSection(t, k) {
         const live = lvAt(t) > 0 ? 1 : 1 - seg(t, e.off ?? 1e9, (e.off ?? 1e9) + 0.12);
         soundArcs(g, S.x0 - 40, S.x1, 880, t, (age) => lvAt(t - age) * live, { color: '167,171,201', speed: 560, h: 120, gap: 46 });
         // The click: a spark that reaches the cells at `hit`; inside the riser it dims to almost nothing.
-        const travel = e.sting || e.v === 2 ? 0.25 : 0.5;
+        const travel = e.travel;
         if (t >= e.hit - travel && t < e.hit + 0.35) {
             const u = seg(t, e.hit - travel, e.hit);
             const dim = st.covered ? 0.8 : 0;
@@ -626,7 +638,7 @@ function drawEarSection(t, k) {
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
         label(g, 'hair cells + nerve (model, slowed)', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
         // Number two: the silence before the kick, counted (slowed down while told).
-        if (e.v === 2 && e.off !== null && t >= e.off - 0.1 && (e.sting || t < e.hit + 0.15)) {
+        if (e.v === 2 && e.off !== null && t >= e.off - 0.1) {
             const kG = popIn(t, e.off - 0.1, 0.2);
             g.save();
             g.globalAlpha *= kG;
@@ -641,18 +653,18 @@ function drawEarSection(t, k) {
         // What happened, in one line under the cells.
         let msg = null;
         let col = P.ink;
-        if (e.v === 1 && t >= e.hit - 0.05) {
-            msg = 'riser still playing: click covered, ears worn';
+        if (e.v === 1 && t >= e.hit - e.travel) {
+            msg = 'riser still playing: click covered';
             col = P.ink;
         } else if (e.v === 2 && e.off !== null && t >= e.off && t < e.hit) {
             msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone at 200 ms';
             col = FOG;
         } else if (e.v === 2 && t >= e.hit - 0.05) {
-            msg = 'click lands on rested ears';
+            msg = 'click lands in the clear';
             col = P.ink;
         }
         if (msg) {
-            const km = popIn(t, e.v === 2 && t < e.hit ? e.off : e.hit - 0.05, 0.2);
+            const km = popIn(t, e.v === 2 && t < e.hit ? e.off : e.hit - (e.v === 1 ? e.travel : 0.05), 0.2);
             pill(g, msg, 510, S.mem + 66, { size: 38, bg: P.dark, fg: col, ring: col, alpha: km * stageA, scale: E.outBack(km), weight: 800 });
         }
     }
@@ -687,7 +699,7 @@ function drawHand(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.hand, SC.brain);
-    headline(t, SC.hand + 0.1, [['Riser'], ['makes'], ['it'], ['duck', P.ink]], 300, { size: 88, stagger: 0 });
+    headline(t, SC.hand + 0.1, [['Riser'], ['pulls'], ['the'], ['limiter'], ['down']], 300, { size: 76, stagger: 0 });
     if (t < SC.hand + 2.2) label(g, 'limiter = automatic volume control', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(1);
     const tHand = SC.hand + 0.15;
@@ -823,7 +835,8 @@ function drawBrain(t) {
     g.globalAlpha = a;
     cam(t, SC.brain, SC.how);
     headline(t, SC.brain + 0.1, [['Predict'], ['the'], ['next'], ['beat']], 300, { size: 88, stagger: 0 });
-    tracker(2);
+    if (t < SC.brain + 2.2) label(g, 'expectation (Huron 2006)', 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
+    else tracker(2);
     // Eight beats: the last bar and a half of the build, then the downbeat.
     const n = 8;
     const X = (i) => lerp(BR.x0, BR.x1, i / (n - 1));
@@ -855,7 +868,7 @@ function drawBrain(t) {
         }
     }
     // The gap, bracketed.
-    const ks = popIn(t, tPred - 0.3);
+    const ks = popIn(t, tPred - 0.3) * (1 - seg(t, tLand - 0.25, tLand));
     if (ks > 0) {
         const xa = X(6.5);
         const xb = X(7) - 34;
@@ -1151,25 +1164,30 @@ function drawHow(t) {
         label(g, 'after-fog', Z.x0, y - 24, { size: 40, weight: 800, color: FOG, family: BODY });
         label(g, 'model', Z.x0 + 200, y - 24, { size: 32, weight: 600, color: P.ink3, family: BODY });
         // A playhead sweeps the after-fog from 0 to 200 ms while "a fifth of a second" is spoken.
-        const sweep = 200 * E.inOut(seg(t, tFifth - 0.6, tFifth + 0.5));
+        const sweep = 200 * E.inOut(seg(t, tFogs + 0.1, tFifth + 0.4));
         for (let m = 0; m < 200; m += 2) {
-            g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.75 : 0.35) * fogWeight(m)})`;
+            g.fillStyle = `rgba(${FOG_RGB},${(m < sweep ? 0.8 : 0.06) * fogWeight(m)})`;
             g.fillRect(ZX(m), y, ZX(2) - ZX(0) + 0.5, 110);
         }
         if (sweep > 0 && sweep < 200) {
             g.fillStyle = P.ink;
             g.fillRect(ZX(sweep) - 2, y - 8, 4, 126);
         }
+        // The fog's end line lights when the sweep reaches it.
+        const kEnd = sweep >= 199 ? 1 : 0.25;
+        g.save();
+        g.globalAlpha *= kEnd;
         g.strokeStyle = FOG;
         g.lineWidth = 5;
         g.beginPath();
         g.moveTo(ZX(200), y - 10);
         g.lineTo(ZX(200), y + 120);
         g.stroke();
-        label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY });
+        g.restore();
+        label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
-        const ms = keys(t, [[t128 - 0.1, 0], [tQuarter, 200], [tQuarter + 0.4, GAP_MS]]);
+        const ms = keys(t, [[Math.min(t128 - 0.1, tFifth + 0.4), 0], [tQuarter, 200], [tQuarter + 0.4, GAP_MS]]);
         label(g, 'gap', Z.x0, y + 200, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 224, Math.max(1, ZX(ms) - ZX(0)), 80, 16);
         g.fillStyle = P.cyan;
@@ -1555,7 +1573,7 @@ function drawCover() {
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    pill(g, 'one tiny change', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
+    pill(g, 'one tiny gap', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
     label(g, '1 or 2?', 540, 1440, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     // The brand inside the 3:4 crop.
     avatar(g, 420, 1590, 36);
