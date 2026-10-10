@@ -101,11 +101,12 @@ hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 
 ## Film 5: a gap before the drop
 
-A 59 second, 1080 x 1920 short for TikTok and Reels on lesson 030: the same
-128 BPM drop twice, version 1 with the build running into the downbeat and
-version 2 with everything cut one 8th note early, then why (forward masking,
-adaptation, the limiter, expectation) and how. The narration in the repo's
-cuts is a Piper TTS guide track until the ElevenLabs take exists.
+A 1080 x 1920 short for TikTok and Reels on lesson 030 (about 73 s with the
+guide voice): the same 128 BPM drop twice, version 1 with the build running
+into the downbeat and version 2 with everything cut one 8th note early, then
+why (your ears, your limiter, your brain), how, a replay and an open comment
+question. The narration in the repo's cuts is a Kokoro-82M guide track
+(Apache-2.0 weights, runs on CPU) until the ElevenLabs take exists.
 
 Assets (ignored by git) in `scripts/promo/assets/`:
 
