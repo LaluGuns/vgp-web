@@ -45,7 +45,7 @@ when their branches are merged:
 |---|---|---|
 | `shorts/attack-release/` | 057, compression attack and release | done |
 | `shorts/bass-on-phones/` | 036, small speakers need bass harmonics | done |
-| `shorts/gap-before-drop/` | 030, a gap before the drop | on branch `claude/new-session-aa3y0x` as `film5/` |
+| `shorts/gap-before-drop/` | 030, a gap before the drop | round 28 cut delivered (built from 63d7407); guide voice |
 
 ### Short: attack and release
 
@@ -128,3 +128,37 @@ loudness, true peak, sync and flashes.
 - `directions/directions.html`: the four looks considered, and why A won.
 - `fonts/`: Inter and Inter Display (SIL OFL, see `LICENSE-Inter.txt`),
   subset to Latin and embedded in every render.
+
+### Short: gap before the drop
+
+A 1080 x 1920 short for TikTok and Reels on lesson 030 (about 73 s with the
+guide voice): the same 128 BPM drop twice, version 1 with the build running
+into the downbeat and version 2 with everything cut one 8th note early, then
+why (your ears, your limiter, your brain), how, a replay and an open comment
+question. The narration in the repo's cuts is a Kokoro-82M guide track
+(Apache-2.0 weights, runs on CPU) until the ElevenLabs take exists.
+
+Assets (ignored by git) in `scripts/promo/assets/`:
+
+- `assets/samples/`: the Cymatics files named in `shorts/gap-before-drop/drop.mjs` under `FILES`.
+- `assets/samples/sfx/`: the recorded one-shots named in `shorts/gap-before-drop/audio.mjs`
+  under `SFX_REAL` (Cymatics Bubble Pop, Sweet Click, FX Essentials
+  Downlifter 21). Without them the synthesized effects are used.
+- `assets/vo/gap-before-drop/narration.wav`: the narration. `shorts/gap-before-drop/vo-cues.json` records where
+  each line sits in it; for a new take run
+  `python shorts/gap-before-drop/cue_vo.py assets/vo/gap-before-drop/narration.wav shorts/gap-before-drop/script.txt shorts/gap-before-drop/vo-cues.json`.
+  `shorts/gap-before-drop/timeline.mjs` places the lines from their measured lengths.
+
+```
+npm run short:gap-before-drop                       # sound, stills, video and checks
+npm run short:gap-before-drop -- --stills           # contact sheets and cover only
+npm run short:gap-before-drop -- --frames 12.5,31 --tag check
+npm run short:gap-before-drop -- --refresh-lesson   # re-capture the lesson's Listen demo
+node shorts/gap-before-drop/judge-pack.mjs round1    # pack for a review panel (after a render)
+```
+
+`shorts/gap-before-drop/drop.mjs` builds and measures the A/B (claims 1 to 4 in `VERIFY.md`);
+`shorts/gap-before-drop/audio.mjs` mixes the film and hands the picture the levels, limiter
+gain and the two hearing models; `shorts/gap-before-drop/film.js` draws the scenes. The
+delivered cut is round 28, built from commit 63d7407; the branch carries
+rounds 29 to 31 on top of it (see DECISIONS.md).

@@ -6,7 +6,8 @@
   "scripts": {
     "carousel": "tsx --tsconfig tsconfig.json carousel/carousel.tsx",
     "short:attack-release": "node shorts/attack-release/render.mjs",
-    "short:bass-on-phones": "node shorts/bass-on-phones/render.mjs"
+    "short:bass-on-phones": "node shorts/bass-on-phones/render.mjs",
+    "short:gap-before-drop": "node shorts/gap-before-drop/render.mjs"
   },
   "devDependencies": {
     "playwright-core": "1.64.0",

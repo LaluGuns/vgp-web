@@ -68,3 +68,56 @@ which carries its own references, or from a calculation listed here.
   slowed file with `shorts/bass-on-phones/cue_vo.py`.
 - Every measured number is logged by `npm run short:bass-on-phones` in
   `out/shorts/bass-on-phones/VERIFY.md`.
+
+## Short: gap before the drop (lesson 030)
+
+- Claims on screen and in the narration come from lesson 030 ("A gap before
+  the drop makes the downbeat hit harder") and its two references, both books:
+  Moore, B. C. J. (2012). *An Introduction to the Psychology of Hearing* (6th
+  ed.). Emerald (forward masking fades within 100 to 200 ms; the auditory
+  nerve fires hardest at an onset and recovers in silence). Huron, D. (2006).
+  *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press
+  (listeners predict the next event; an accurate arrival is rewarding).
+- Gap lengths at 128 BPM: a beat is 60/128 = 468.8 ms, an 8th 234.4 ms, a
+  16th 117.2 ms, a 32nd 58.6 ms (lesson 030's figure "window").
+- The A/B (`shorts/gap-before-drop/drop.mjs`): Cymatics samples at 128 BPM in D# minor, two
+  build bars and the drop. Version 2 mutes every build source and the build's
+  reverb return 234.4 ms before the downbeat with 8 ms fades. Both versions go
+  through one look-ahead limiter (ceiling -1 dBFS, 5 ms look-ahead, 150 ms
+  release) and are matched at the K-weighted loudness of the drop bar
+  (downbeat plus one bar, BS.1770 gating). VERIFY.md logs every value.
+- Claim 1: limiter gain reduction, mean over the first kick's first 20 ms.
+- Claim 2: energy of the kick stem in 2-6 kHz (4th-order Butterworth band)
+  over the energy of everything else in that band, first 20 ms after the
+  downbeat, both after the shared limiter gain.
+- Claim 3: claims 1 and 2 again after a 200 Hz, 24 dB/oct high-pass (phone
+  check); claim 1 as the kick's level in the delivered A/B.
+- Claim 4: the kick stem's K-weighted level over its first 50 ms minus the
+  drop bar's loudness, at matched loudness.
+- Picture models, labelled "model" on screen: forward masking is the build's
+  level (0 to 1 over 40 dB below the kick's peak) carried forward with a
+  weight that falls on a log-time curve to zero at 200 ms. Adaptation: drive is
+  the mix level over 40 dB; adaptation follows it within 40 ms and recovers
+  over 150 ms; the drawn response is drive times (1 - 0.75 x adaptation).
+  Both are illustrations of the mechanisms Moore (2012) describes, not
+  measurements of hearing.
+- The limiter faders draw the limiter's own gain from the render, slowed down.
+- Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master WAV
+  and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
+- Narration (script v13, `shorts/gap-before-drop/script.txt`): a temporary guide track from
+  Kokoro-82M (`kokoro-onnx` v1.0, voice `am_michael`, speed 1.0; weights
+  Apache-2.0; `assets/vo/`, not in git), cued with `shorts/gap-before-drop/cue_vo.py`. Rounds
+  up to 22 used Piper TTS (`en_US-ryan-high`, length scale 1.27). It holds the timings
+  until the final voice is generated (ElevenLabs `eleven_v4`, voice Michael C.
+  Vincent, `shorts/gap-before-drop/narration-prompt.txt`). A synthetic voice needs the
+  platforms' AI-generated label. The founder's earlier phone takes of script
+  v2 are kept in `assets/vo/` but no longer match the script.
+- Picture, cross-section of the ear: outer ear, canal, eardrum, the three
+  small bones, cochlea and hearing nerve, drawn as an illustration (not to
+  scale). Its fog and the hair cells' tiredness follow the two models above,
+  slowed down.
+- Sound effects: pop, tick, grab and whoosh are recorded one-shots from the
+  founder's licensed packs (Cymatics Secret Percussion Shot Bubble Pop and
+  Sweet Click, Cymatics FX Essentials Downlifter 21), placed by the same
+  timeline cues as before; the kick and the button note are the A/B's own
+  samples.
