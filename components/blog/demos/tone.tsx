@@ -633,7 +633,7 @@ function satDryPower(loop: RealLoop): Promise<number> {
     let job = satDry.get(loop);
     if (!job) {
         job = (async () => {
-            const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1 }, (_, src, [tap]) => src.connect(tap));
+            const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true }, (_, src, [tap]) => src.connect(tap));
             const [from, to] = r.span();
             return stereoPower(r.k[0], from, to);
         })();
@@ -652,7 +652,7 @@ function satDryPower(loop: RealLoop): Promise<number> {
 async function matchSatReal(loop: RealLoop, kind: 'off' | 'soft' | 'hard', drive: number): Promise<SatMatch> {
     if (kind === 'off') return { real: loop, gain: 1 };
     const dry = await satDryPower(loop);
-    const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1 }, (ctx, src, [tap]) => {
+    const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true }, (ctx, src, [tap]) => {
         const shaper = ctx.createWaveShaper();
         shaper.curve = shaperCurve(kind, drive);
         shaper.oversample = '4x';

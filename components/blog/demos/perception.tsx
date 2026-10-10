@@ -321,7 +321,7 @@ const widthResults = new Map<string, MidSidePower | null>();
 
 /** The real loop's mid and side power, K-weighted, over one whole pass as it repeats. */
 async function midSideReal(loop: RealLoop): Promise<MidSidePower> {
-    const r = await renderLoop(loop, { gain: loopGain(loop, MIX_REAL_IN), taps: 2, weighted: 2 }, (ctx, src, [midTap, sideTap]) => {
+    const r = await renderLoop(loop, { gain: loopGain(loop, MIX_REAL_IN), taps: 2, weighted: 2, weightedOnly: true }, (ctx, src, [midTap, sideTap]) => {
         const { input, l, r: right } = splitStereo(ctx);
         src.connect(input);
         const { mid, side } = encodeMidSide(ctx, l, right);

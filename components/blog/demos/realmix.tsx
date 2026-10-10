@@ -345,11 +345,13 @@ export interface LoopRender {
  * processors have settled and what is measured is the loop as it repeats.
  * `build` connects `src` (the loop at `gain`) to the taps; each tap is
  * recorded in stereo, and the first `weighted` ones K-weighted too. A tap
- * fed in mono records silence on its right channel.
+ * fed in mono records silence on its right channel. `weightedOnly` keeps
+ * only the K-weighted channels (a loudness reading needs no more), so a slow
+ * phone allocates half as much.
  */
 export async function renderLoop(
     loop: RealLoop,
-    opts: { gain: number; taps: number; weighted?: number; runIn?: number; tail?: number },
+    opts: { gain: number; taps: number; weighted?: number; runIn?: number; tail?: number; weightedOnly?: boolean },
     build: (ctx: OfflineAudioContext, src: AudioNode, taps: GainNode[]) => void,
 ): Promise<LoopRender> {
     const weighted = opts.weighted ?? 0;
@@ -357,7 +359,9 @@ export async function renderLoop(
     const tail = opts.tail ?? 0.05;
     const sr = loop.buffer.sampleRate;
     const length = Math.ceil((runIn + loop.seconds + tail) * sr);
-    const channels = (opts.taps + weighted) * 2;
+    // Where each tap's two channels go, and its K-weighted copy's.
+    const raw = opts.weightedOnly ? 0 : opts.taps;
+    const channels = (raw + weighted) * 2;
     const ctx = new OfflineAudioContext(channels, length, sr);
     const merger = ctx.createChannelMerger(channels);
     merger.connect(ctx.destination);
@@ -370,8 +374,8 @@ export async function renderLoop(
     const taps: GainNode[] = [];
     for (let i = 0; i < opts.taps; i++) {
         const g = ctx.createGain();
-        record(g, i * 2);
-        if (i < weighted) record(kWeighted(ctx, g), (opts.taps + i) * 2);
+        if (i < raw) record(g, i * 2);
+        if (i < weighted) record(kWeighted(ctx, g), (raw + i) * 2);
         taps.push(g);
     }
     const src = ctx.createBufferSource();
@@ -389,8 +393,8 @@ export async function renderLoop(
     const from = Math.round(runIn * sr);
     const n = Math.round(loop.seconds * sr);
     return {
-        x: Array.from({ length: opts.taps }, (_, i) => pair(i * 2)),
-        k: Array.from({ length: weighted }, (_, i) => pair((opts.taps + i) * 2)),
+        x: Array.from({ length: raw }, (_, i) => pair(i * 2)),
+        k: Array.from({ length: weighted }, (_, i) => pair((raw + i) * 2)),
         span: (delay = 0) => {
             const a = from + Math.round(delay * sr);
             return [a, Math.min(length, a + n)];

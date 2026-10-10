@@ -91,7 +91,9 @@ function measureBoth(): Promise<Record<Master, number>> {
 /** Both masters' loudness on one whole pass of the real loop, as it repeats. */
 async function measureReal(loop: RealLoop): Promise<Measured> {
     const one = async (kind: Master) => {
-        const r = await renderLoop(loop, { gain: loopGain(loop, NORM_REAL_IN), taps: 1, weighted: 1 }, (ctx, src, [tap]) => masterChain(ctx, src, kind, true).out.connect(tap));
+        const r = await renderLoop(loop, { gain: loopGain(loop, NORM_REAL_IN), taps: 1, weighted: 1, weightedOnly: true }, (ctx, src, [tap]) =>
+            masterChain(ctx, src, kind, true).out.connect(tap),
+        );
         const [from, to] = r.span();
         return -0.691 + 10 * Math.log10(await stereoPower(r.k[0], from, to));
     };
