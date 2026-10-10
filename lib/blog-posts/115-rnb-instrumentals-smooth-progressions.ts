@@ -177,7 +177,7 @@ Progressions to try with the same method: Fmaj7, Em7, Dm7, Cmaj7 (the bass walks
 
 ## Common mistake: thick chords that jump
 
-The usual mistake is adding extensions without changing the voicing. A Dm9 in root position followed by a G13 in root position has the right notes and still jumps, because every voice leaps a fourth or fifth. The richer chord only sounds smooth when its notes move to nearby notes in the next one.
+You add the extensions and keep the voicing the same. A Dm9 in root position followed by a G13 in root position has the right notes and still jumps, because every voice leaps a fourth or fifth. The richer chord only sounds smooth when its notes move to nearby notes in the next one.
 
 The second mistake is too much lean. A humanize function on every drum, or snares 40 ms late at 90 BPM, sounds like an unsteady drummer. Keep the first kick as an anchor and move only the hits you choose, by the same amount every time.
 

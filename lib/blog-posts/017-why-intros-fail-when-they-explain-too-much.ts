@@ -122,7 +122,7 @@ The vocal entry should now feel like an arrival, and the hook should sound new a
 
 ## Common mistake: playing the full hook early
 
-The most common mistake is playing the main hook on a loud, bright synth with the full beat from bar one, out of fear that the listener will get bored. It removes the surprise the chorus depends on.
+You play the main hook on a loud, bright synth with the full beat from bar one, afraid the listener will get bored. It removes the surprise the chorus depends on.
 
 The other mistake is an intro that runs too long without changing. Fifteen seconds of the same loop is a long time for someone who can skip with one tap. If the intro needs to be long for DJs or for a live set, make a separate extended version.
 

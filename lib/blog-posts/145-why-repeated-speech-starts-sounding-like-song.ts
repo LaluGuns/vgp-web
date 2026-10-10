@@ -159,7 +159,7 @@ A reading that fits these results, and close to the one Margulis and colleagues 
 
 ## Common mistake: trusting a tune only you can hear
 
-The first mistake is building a hook on a spoken sample because it sounds melodic after an hour of looping. Your listeners hear it far fewer times before the next section starts. If the tune matters, double it with an instrument, sing it, or let the sample repeat several times before the part that depends on it.
+After an hour of looping, a spoken sample sounds melodic enough to build a hook on. Your listeners hear it far fewer times before the next section starts. If the tune matters, double it with an instrument, sing it, or let the sample repeat several times before the part that depends on it.
 
 The second mistake is chopping a spoken phrase into a new order every bar, or pitching each repeat to follow the chords, and then wondering why it stopped sounding like a melody. Those edits are close to Deutsch's jumbled and transposed conditions. Keep at least one exact, untouched repeat if you want the effect.
 

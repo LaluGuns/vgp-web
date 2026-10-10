@@ -113,7 +113,7 @@ With one detail changed, the fourth pass tends to feel like coming home rather t
 
 ## Common mistake: the nervous rewrite
 
-The most common mistake is changing too much too soon. Producers write a new melody for every bar because they fear the listener will get bored. Without a pattern there is nothing to predict, so there is no reward when the line returns, and the hook is harder to remember.
+Fear that the listener will get bored makes you change too much too soon, with a new melody for every bar. Without a pattern there is nothing to predict, so there is no reward when the line returns, and the hook is harder to remember.
 
 Part of that fear comes from your own ears. You have heard the loop far more often than any listener will, so you have habituated to it more. Before you rewrite, play it to someone fresh or come back after a break.
 

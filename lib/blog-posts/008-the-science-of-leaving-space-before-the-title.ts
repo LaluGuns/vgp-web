@@ -116,7 +116,7 @@ The title should come through clearly without any EQ change, and the band's retu
 
 ## Common mistake: the fear of empty space
 
-The most common mistake is filling every gap. Producers worry that silence sounds like a mistake, so they put a drum fill, a riser or a reversed cymbal in front of the chorus. Those sounds mask the title just as the downbeat did.
+Worried that silence sounds like a mistake, producers fill every gap in front of the chorus with a drum fill, a riser or a reversed cymbal. Those sounds mask the title just as the downbeat did.
 
 The second mistake is a gap that is not really empty. A long vocal reverb or a delay throw ringing through the gap blurs the title and softens the return. Duck the returns for that beat.
 

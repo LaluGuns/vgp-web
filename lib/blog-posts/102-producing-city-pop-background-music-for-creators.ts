@@ -144,7 +144,7 @@ You need a City Pop loop, or any busy cue, and 30 seconds of speech: read a para
 
 ## Common mistake: fixing a band problem with the fader
 
-The usual mistake is the one from the hook: pulling the whole cue down until the words come through. The low end and the drums lose their weight first, and the music starts to sound like it is in another room, while the keys can still cover the consonants.
+Pulling the whole cue down until the words come through is the mistake from the hook. The low end and the drums lose their weight first, and the music starts to sound like it is in another room, while the keys can still cover the consonants.
 
 The opposite mistake is a broadband sidechain set too fast. The whole cue jumps up and down with every syllable, and viewers hear the pumping before they hear the music. A slower release, a band-limited dip, or simply a part that sits out are all quieter than the fader.
 

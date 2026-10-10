@@ -103,7 +103,7 @@ If the one-note line sounds dull, the rhythm is too regular, not the pitch. Once
 
 ## Common mistake: the virtuosic bias
 
-The most common mistake is believing that simple writing is lazy writing. Producers feel they have to show their knowledge with complex scales or fast vocal runs. The result is a hook the average listener cannot sing back.
+Producers hear simple writing as lazy writing, so they feel they have to show their knowledge with complex scales or fast vocal runs. The result is a hook the average listener cannot sing back.
 
 The opposite mistake is syncopating everything. If no note lands on a strong beat, the listener loses the pulse, and the off-beat accents stop sounding off the beat. Keep an anchor, usually the downbeat of the phrase, and let the rest pull away from it.
 

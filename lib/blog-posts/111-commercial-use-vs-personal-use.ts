@@ -108,7 +108,7 @@ A personal post and a paid brand post can look the same on screen. If a business
 
 ## Common mistake: judging by audience size
 
-The common mistake is thinking a small release is personal. Ten streams on Spotify are still public distribution on a paid service, and a sponsored post with fifty views still promotes a business.
+A small audience makes a release feel personal. Ten streams on Spotify are still public distribution on a paid service, and a sponsored post with fifty views still promotes a business.
 
 The second is treating a credit as a license. Crediting the producer is usually required by a license, and it does not replace one.
 

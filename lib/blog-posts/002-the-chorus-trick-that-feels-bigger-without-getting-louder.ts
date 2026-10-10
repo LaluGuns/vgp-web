@@ -130,7 +130,7 @@ With level matched, the new chorus should still feel like an arrival. If it does
 
 ## Common mistake: spending everything in the verse
 
-The most common mistake is using the whole palette early: wide pads, doubled vocals and bright synths from the first bar. When the chorus arrives, the only lever left is more of the same, which ends in masking and a limiter working flat out.
+Wide pads, doubled vocals and bright synths play from the first bar, and the whole palette is spent early. When the chorus arrives, the only lever left is more of the same, which ends in masking and a limiter working flat out.
 
 The second mistake is putting a stereo widener on the master to make the chorus feel big. A mid/side widener raises the side signal, and the side signal cancels when the mix is folded to mono. The parts that sounded huge drop back on a mono speaker. Put width on chosen parts, in the arrangement.
 

@@ -117,7 +117,7 @@ You should hear every part clearly. Either the hook works with five parts, or th
 
 ## Common mistake: layering to fix a weak part
 
-The biggest mistake is believing that more tracks make a bigger sound. Three pads and a guitar loop playing the same chords do not add up to a bigger chord. Their attacks smear into each other and their ranges mask each other, so a sharp, rhythmic progression turns into a soft wall. If a melody does nothing for you on a plain piano, ten synth layers will not fix it.
+Adding tracks feels like the way to a bigger sound. Three pads and a guitar loop playing the same chords do not add up to a bigger chord. Their attacks smear into each other and their ranges mask each other, so a sharp, rhythmic progression turns into a soft wall. If a melody does nothing for you on a plain piano, ten synth layers will not fix it.
 
 ::figure five
 

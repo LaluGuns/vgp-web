@@ -93,7 +93,7 @@ In the faster bounce the syllables crowd together and the line starts to sound p
 
 ## Common mistake: swapping sounds to fix a tempo problem
 
-The biggest mistake is trying to solve a tempo problem with new instruments. You search for a punchier kick or a brighter synth because the track feels flat, without noticing that the feeling comes from the timing. A song that is too slow sounds heavy however bright the synths are. A song that is too fast sounds messy however clean the drums are.
+New instruments are the wrong fix for a tempo problem. You search for a punchier kick or a brighter synth because the track feels flat, without noticing that the feeling comes from the timing. A song that is too slow sounds heavy however bright the synths are. A song that is too fast sounds messy however clean the drums are.
 
 A related mistake is never questioning the default tempo. Many DAWs open at 120 BPM, and a song written against that click can end up there by accident. Change the tempo first and the sounds second.
 

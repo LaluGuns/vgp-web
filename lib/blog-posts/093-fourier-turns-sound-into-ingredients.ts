@@ -135,7 +135,7 @@ A single note is a stack of sines you can pick out by ear once you know where th
 
 ## Common mistake: EQing until the line looks flat
 
-The most common mistake is trying to make a mix look flat on an analyzer. Music carries more energy per hertz in the low end than in the highs, and each higher octave spreads its energy over more hertz. On an analyzer with no tilt, a balanced mix therefore slopes downward, roughly like pink noise, which has equal energy in every octave and falls 3 dB per octave on such a display. Many analyzers can add a tilt so that slope reads flat. Check which setting yours uses before you decide a mix has too much bass or too little top.
+A flat line on an analyzer looks like a balanced mix, so you EQ until you get one. Music carries more energy per hertz in the low end than in the highs, and each higher octave spreads its energy over more hertz. On an analyzer with no tilt, a balanced mix therefore slopes downward, roughly like pink noise, which has equal energy in every octave and falls 3 dB per octave on such a display. Many analyzers can add a tilt so that slope reads flat. Check which setting yours uses before you decide a mix has too much bass or too little top.
 
 The second mistake is looking for phase problems on the analyzer. Because it hides phase, a kick and bass that partly cancel simply look a little quieter. Find those with your ears, the polarity switch and a mono check.
 

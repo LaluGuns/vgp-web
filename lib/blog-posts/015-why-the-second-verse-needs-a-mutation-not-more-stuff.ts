@@ -126,7 +126,7 @@ Verse two should now sound like the same song moving forward, and the second cho
 
 ## Common mistake: stacking to fix a boring groove
 
-The most common mistake is using decoration to fix a verse that does not move. A pad or a guitar fills the space for a few bars, but it adds weight in the vocal's range and takes away the chorus's step.
+A verse that does not move tempts you to decorate it. A pad or a guitar fills the space for a few bars, but it adds weight in the vocal's range and takes away the chorus's step.
 
 The second mistake is changing every part at once. If the bass, the drums and the chords all change, nothing is familiar and the verse stops sounding like the verse. Mutate one or two parts and let the rest hold the identity of the song.
 

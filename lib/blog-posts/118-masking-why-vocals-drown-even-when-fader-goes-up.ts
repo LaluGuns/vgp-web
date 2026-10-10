@@ -111,7 +111,7 @@ The cut and the arrangement change usually bring the words forward with the voca
 
 ## Common mistake: treating level as clarity
 
-The common mistake is reaching for the fader whenever a part is unclear. Level is how loud something is. Clarity is how easy it is to separate from everything around it. A vocal at a modest level in a sparse arrangement can be easier to understand than a much louder vocal in a dense one.
+Whenever a part is unclear, you reach for the fader. Level is how loud something is. Clarity is how easy it is to separate from everything around it. A vocal at a modest level in a sparse arrangement can be easier to understand than a much louder vocal in a dense one.
 
 The second mistake is fixing the vocal instead of the masker: stacking presence boosts or compressing it harder. Both make the vocal more aggressive without moving the energy that covers it. For the mechanics of where low-mid mud comes from, see the [lesson on masking and mud](/blog/the-masking-problem-producers-hear-as-mud). A pocket that opens only while the singer sings is a [dynamic EQ keyed from the vocal](/blog/the-mix-decision-that-makes-vocals-feel-expensive).
 

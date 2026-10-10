@@ -113,7 +113,7 @@ Version B usually scores highest. Version C makes you work to find the beat. The
 
 ## Common mistake: humanizing instead of rewriting
 
-The most common mistake is reaching for random humanize to fix a stiff beat. If the pattern lands on every beat, scattering its timing does not give the listener anything to lean against. Move one or two accents off the beat first.
+When a beat feels stiff, random humanize is the button you reach for. If the pattern lands on every beat, scattering its timing does not give the listener anything to lean against. Move one or two accents off the beat first.
 
 The opposite mistake is syncopating everything. When the kick, bass and chords all avoid the beat, nothing marks the pulse, and the pattern stops feeling like a groove. Keep an anchor, such as a snare on 2 and 4 or a kick on the downbeat, and let the other parts pull against it.
 

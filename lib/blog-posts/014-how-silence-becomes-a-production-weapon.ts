@@ -162,7 +162,7 @@ The downbeat after a clean gap sounds heavier, though nothing on the master chai
 
 ## Common mistake: letting decay tails bleed
 
-The most common mistake is forgetting the effects returns. The synths are muted, but their reverb and delay keep ringing, so the silence is never silent. The gap sounds messy instead of sharp, and the tail smears into the downbeat.
+You mute the synths and forget the effects returns, so their reverb and delay keep ringing and the silence is never silent. The gap sounds messy instead of sharp, and the tail smears into the downbeat.
 
 ::figure tails
 

@@ -112,7 +112,7 @@ Because the chorus level stays the same, you hear only what the limiter is doing
 
 ## Common mistake: judging the push at its own level
 
-The usual mistake is judging each extra decibel by bypassing the limiter, so the pushed version is always louder in the comparison. Louder tends to sound fuller and more exciting at first, and that impression wins every time unless the levels are matched.
+Each time you bypass the limiter to judge an extra decibel, the pushed version is louder in the comparison. Louder tends to sound fuller and more exciting at first, and that impression wins every time unless the levels are matched.
 
 The second mistake is pushing an acoustic or vocal-led song as far as a dense electronic track. Sustained synths and distorted guitars hide limiting. A piano, a voice and the sound of a room expose it. The song decides how far the push can go.
 

@@ -119,7 +119,7 @@ Each boundary should now feel like a step up, and the chorus downbeat should lan
 
 ## Common mistake: giving every section the same weight
 
-The most common mistake is letting every part play all the time. It feels like it keeps the energy high, but a section that never changes stops sounding big and starts sounding constant. It also leaves no room to climb.
+Letting every part play all the time feels like it keeps the energy high, but a section that never changes stops sounding big and starts sounding constant. It also leaves no room to climb.
 
 The second mistake is a slow slide in density. If parts fade in gradually throughout the verse, the section boundaries lose their impact and the chorus arrives on a ramp instead of a step.
 

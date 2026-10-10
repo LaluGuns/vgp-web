@@ -122,7 +122,7 @@ In the first version the noise fills the intro, the gaps and the outro, and drop
 
 ## Common mistake: aging the whole mix
 
-The most common mistake is putting a vintage chain on the master. Cutting the lows and highs across the whole track removes punch and clarity together, and the song sounds thin on small speakers. When everything is aged, nothing stands out as the cue. One texture against a clear mix reads as a choice. A dull mix reads as a fault.
+A vintage chain on the master ages the whole mix at once. Cutting the lows and highs across the whole track removes punch and clarity together, and the song sounds thin on small speakers. When everything is aged, nothing stands out as the cue. One texture against a clear mix reads as a choice. A dull mix reads as a fault.
 
 The second mistake is assuming the cue means the same thing to everyone. A crackle that feels like a family record collection to you may mean nothing to a younger listener. Use the texture because it suits the song, not because it guarantees a memory.
 

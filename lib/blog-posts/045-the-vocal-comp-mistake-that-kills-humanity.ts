@@ -116,7 +116,7 @@ The base-take comp should hold together as one performance, with lines that buil
 
 ## Common mistake: comping for pitch first
 
-The most common mistake is choosing pieces by pitch accuracy. A great, emotional phrase gets cut up because one note is slightly flat, and the note is replaced with an in-tune one from a weaker take. Pitch on one note can be corrected afterwards. The delivery of a phrase cannot be added later.
+When pitch accuracy picks the pieces, a great, emotional phrase gets cut up because one note is slightly flat, and the note is replaced with an in-tune one from a weaker take. Pitch on one note can be corrected afterwards. The delivery of a phrase cannot be added later.
 
 The second mistake is comping with your eyes. Pitch graphs and waveforms show you which take is tidy, not which one is convincing. Choose by ear first, then look.
 

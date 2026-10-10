@@ -99,7 +99,7 @@ Choose from where the song is going. A first release to a small audience fits th
 
 ## Common mistake: releasing first, reading later
 
-The most common mistake is the one in the hook. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
+You release first and read the terms later, as in the hook. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
 
 The second is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material it evaluates, and it lists music licensed without exclusivity among its common examples of material that may not be exclusive (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
 

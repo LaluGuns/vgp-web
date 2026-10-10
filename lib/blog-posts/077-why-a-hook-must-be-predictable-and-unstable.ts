@@ -114,7 +114,7 @@ The A minor ending should make the second pass pull forward into whatever comes 
 
 ## Common mistake: copy and paste as the arrangement
 
-The most common mistake is pasting the same chorus block four times with nothing changed. Each pass is a perfect copy of the last, and an attentive listener hears it as a loop rather than a chorus. Change the harmony, the bass line or the arrangement on later passes, and keep the melody itself.
+Pasting the same chorus block four times with nothing changed feels like a finished arrangement. Each pass is a perfect copy of the last, and an attentive listener hears it as a loop rather than a chorus. Change the harmony, the bass line or the arrangement on later passes, and keep the melody itself.
 
 The opposite mistake is putting the variation in the melody. A hook should be simple enough to hum after one hearing. If you rewrite the tune on every pass, nothing gets learned. Let the chords and the production carry the change.
 

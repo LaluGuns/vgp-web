@@ -116,7 +116,7 @@ The groove should keep moving through the turn while the loop sounds less automa
 
 ## Common mistake: cluttering every transition
 
-The most common mistake is a big fill every four bars. It comes from fear of repetition, but a fill in the same place every time becomes its own predictable pattern, and the groove keeps stopping.
+Every four bars, a big fill marks the transition. It comes from fear of repetition, but a fill in the same place every time becomes its own predictable pattern, and the groove keeps stopping.
 
 The second mistake is making the percussion hit too loud. It works because it is a small surprise in the background. Turned up to lead level, it becomes a distraction instead of a signal. The same goes for repeating it: the same hit in the same place for the whole song becomes part of the loop and stops breaking it.
 

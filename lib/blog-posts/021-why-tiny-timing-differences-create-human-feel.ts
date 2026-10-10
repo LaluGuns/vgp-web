@@ -128,7 +128,7 @@ The +20 ms hats sit back and the -15 ms hats push, and both sound deliberate. Th
 
 ## Common mistake: random humanize as a shortcut
 
-The common mistake is selecting every note and running a random humanize to make it feel played. Random offsets jump independently from one hit to the next: 12 ms late, then 10 ms early, then on the grid. A real player does not do that. Their timing drifts, and when they lean, they lean the same way for a reason, such as a snare that sits a little late on every backbeat while the kick stays with the bass.
+To make a track feel played, you select every note and run a random humanize. Random offsets jump independently from one hit to the next: 12 ms late, then 10 ms early, then on the grid. A real player does not do that. Their timing drifts, and when they lean, they lean the same way for a reason, such as a snare that sits a little late on every backbeat while the kick stays with the bass.
 
 The second mistake is assuming that more offset means more feel. Past the amount a good player would use, offsets stop sounding like a lean and start sounding like a mistake, and listeners rate the groove lower.
 

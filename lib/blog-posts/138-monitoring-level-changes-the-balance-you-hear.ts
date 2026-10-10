@@ -124,7 +124,7 @@ The quiet level is good at showing what disappears from the midrange balance. It
 
 ## Common mistake: fixing the bass at whisper level
 
-The most common mistake is boosting the low end because the mix sounds thin on speakers turned well down. At that level every track sounds thin, including the references. The boost feels right until the mix is played at a normal level, where it turns into boom.
+On speakers turned well down the mix sounds thin, so you boost the low end. At that level every track sounds thin, including the references. The boost feels right until the mix is played at a normal level, where it turns into boom.
 
 The second is riding the volume knob without marks. A mix that sounds a little brighter or fuller after you turned up is not a better mix, and an A/B taken at two different monitor levels compares your hearing, not the two versions.
 

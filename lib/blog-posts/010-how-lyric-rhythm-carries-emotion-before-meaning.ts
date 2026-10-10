@@ -166,7 +166,7 @@ The words should now sit in the beat with less effort. The vowel-aligned edit so
 
 ## Common mistake: the literal obsession
 
-The most common mistake is refusing to change a line because of what it literally says. Songwriters hold on to a line because it really happened, even when the words are hard to sing cleanly. A true line that cannot be sung well loses to a slightly different line that can.
+Some lines survive every edit because of what they literally say. Songwriters hold on to a line because it really happened, even when the words are hard to sing cleanly. A true line that cannot be sung well loses to a slightly different line that can.
 
 The second mistake is putting closed vowels on the highest notes of the chorus. The singer has to open "ee" or "oo" up there anyway, so the word either changes shape or comes out thin and tense. Choose the word for the vowel the note needs.
 

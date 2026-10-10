@@ -107,7 +107,7 @@ You can hear a learned expectation in harmony right now. For most listeners rais
 
 ## Common mistake: trusting your own sense of normal
 
-The first mistake is ruling on a move from your own expectations alone. If you live inside one genre, a move it uses all the time can sound bland to you and baffling to an outsider. Ask a listener who does not share your background before you decide.
+You rule on a move from your own expectations alone. If you live inside one genre, a move it uses all the time can sound bland to you and baffling to an outsider. Ask a listener who does not share your background before you decide.
 
 The second mistake is expecting an outsider audience to learn a foreign metre from one intro. One to two weeks of home listening did not lift Hannon and Trehub's adults above chance. In a crossover, keep one parent style's frame steady, such as the drum pattern, while you borrow the harmony or melody from the other. Each audience then has something it can predict.
 

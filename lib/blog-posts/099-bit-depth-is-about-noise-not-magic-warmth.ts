@@ -147,7 +147,7 @@ The same quiet signal is grainy at 16-bit without dither, hissy with dither and 
 
 ## Common mistake: exporting to 16-bit without dither
 
-The most common mistake is reducing a 24-bit or float mix to a 16-bit file without dither, on the idea that a clean export should not add noise. Without dither the rounding error becomes low-level distortion on fades and reverb tails. With dither it becomes a hiss around -96 dBFS that nobody hears at normal listening levels. Dither once, as the last step, whenever the bit depth goes down.
+You reduce a 24-bit or float mix to a 16-bit file without dither, on the idea that a clean export should not add noise. Without dither the rounding error becomes low-level distortion on fades and reverb tails. With dither it becomes a hiss around -96 dBFS that nobody hears at normal listening levels. Dither once, as the last step, whenever the bit depth goes down.
 
 The opposite mistake is expecting more bits to change the tone. Between a 24-bit master and a properly dithered 16-bit copy of it, the only difference is noise around -96 dBFS.
 

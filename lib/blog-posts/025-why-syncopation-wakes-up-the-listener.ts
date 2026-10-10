@@ -13,7 +13,7 @@ export const post025: BlogArticle = {
     category: 'arrangement-groove',
     publishedAt: '2026-06-05',
     updatedAt: '2026-10-08',
-    readingTime: 6,
+    readingTime: 5,
     summary: [
         'A loop that never surprises fades into the background as the brain habituates to it.',
         'Syncopation accents a weak position, or leaves a strong one empty, against a pulse the listener already expects.',
@@ -110,7 +110,7 @@ With the hit on 1.3.4 the bar leans into beat four, and muting it makes the loop
 
 ## Common mistake: syncopating everything
 
-The biggest mistake is over-syncopating. To avoid boredom, some producers push every hit off the beat: the kick on 16ths, the snare on off-beats, the hats in scattered spots. The result is confusing.
+Some producers over-syncopate to avoid boredom, pushing every hit off the beat: the kick on 16ths, the snare on off-beats, the hats in scattered spots. The result is confusing.
 
 If nothing marks the beat, the listener cannot build an expectation, so nothing can surprise them. That is the falling side of the curve above. Syncopation loses its pull because there is no normal state to compare it with. Establish the rule before you break it.
 

@@ -133,7 +133,7 @@ In my sessions the tilt usually does most of the work, and the narrow cut, if on
 
 ## Common mistake: EQ-ing the picture
 
-The common mistake is mastering to the analyzer: notching every peak or pulling the curve toward a smooth line. Peaks are often notes, and a smooth curve is not a goal in itself. Notch the notes and you change the arrangement from the master, where you cannot reach a single part.
+Mastering to the analyzer means notching every peak or pulling the curve toward a smooth line. Peaks are often notes, and a smooth curve is not a goal in itself. Notch the notes and you change the arrangement from the master, where you cannot reach a single part.
 
 The second mistake is choosing references by genre tag alone. A record from another decade, or another corner of the same genre, can make your mix seem short of bass or air when it is aimed somewhere else. Match the era and substyle first, then match the level, and only then trust the comparison.
 

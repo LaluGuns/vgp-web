@@ -117,7 +117,7 @@ The chorus should feel bigger in the second version even though none of its own 
 
 ## Common mistake: maximum energy everywhere
 
-The most common mistake is keeping every section at full density. It feels exciting in the first minute and tiring by the third, because nothing changes. If you feel like skipping your own second verse, the arrangement is too static.
+When every section sits at full density, the first minute feels exciting and the third tiring, because nothing changes. If you feel like skipping your own second verse, the arrangement is too static.
 
 The second mistake is assuming a build has to keep getting louder. Taking elements away just before the chorus, or leaving a beat of space, often makes the entry hit harder than one more riser. Use the drop demo above to hear the difference.
 

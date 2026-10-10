@@ -113,7 +113,7 @@ Notice which number moves. The expressed score often stays about the same, becau
 
 ## Common mistake: adding more sadness to make it felt
 
-The most common mistake is answering a cold reaction with more sad cues: slower, darker, more reverb, a bigger performance. That raises what the song expresses and can push it further into melodrama, while the felt response stays where it was.
+Faced with a cold reaction, you add more sad cues: slower, darker, more reverb, a bigger performance. That raises what the song expresses and can push it further into melodrama, while the felt response stays where it was.
 
 The second mistake is processing the expression out of the voice. Heavy compression, strict tuning and gated breaths make a vocal even and tidy, and remove the small changes that make a voice sound like a person feeling something.
 

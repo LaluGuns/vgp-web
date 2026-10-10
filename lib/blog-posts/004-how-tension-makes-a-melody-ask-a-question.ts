@@ -130,7 +130,7 @@ The new verse should lean forward into the pre-chorus, and the tonic at the chor
 
 ## Common mistake: the harmonic safety net
 
-The most common mistake is expecting complex chords to fix a closed melody. Producers write a simple melody that keeps landing on the tonic, then add jazz extensions underneath to make it interesting. The melody is what most listeners follow, so if it still ends on the home note, the line still sounds finished.
+A closed melody sends you looking for more complex chords, and chords cannot fix it. Producers write a simple melody that keeps landing on the tonic, then add jazz extensions underneath to make it interesting. The melody is what most listeners follow, so if it still ends on the home note, the line still sounds finished.
 
 The second mistake is resolving at the end of the pre-chorus. The pre-chorus exists to build toward the chorus. A tonic on its last note releases the tension one beat before the section that was meant to release it.
 

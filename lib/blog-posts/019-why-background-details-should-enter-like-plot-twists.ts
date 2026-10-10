@@ -143,7 +143,7 @@ In the first half, the details blur into the bed and crowd the vocal. In the sec
 
 ## Common mistake: running ear candy continuously
 
-The most common mistake is running loops and textures through the entire song. It seems to add density, but the listener stops hearing them while the vocal still pays for them in masking.
+Loops and textures run through the entire song because they seem to add density. The listener stops hearing them, but the vocal still pays for them in masking.
 
 The second mistake is letting the detail compete with the vocal for attention. If a detail plays a busy melody at the same time as the vocal, it breaks the vocal's pocket. A detail answers the vocal; it does not sing over it. Filling every single gap with the same sound is the same trap in a new place: it turns into a loop of its own.
 

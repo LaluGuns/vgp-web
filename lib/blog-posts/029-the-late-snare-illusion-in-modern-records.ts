@@ -117,7 +117,7 @@ Small nudges make the backbeat sit back without sounding wrong. Listen for wheth
 
 ## Common mistake: moving the snare without its layers
 
-The most common mistake is nudging the main snare while its layers stay where they were. If a clap or a second snare sample sits on the grid while the main snare moves 30 ms late, the backbeat turns into a flam. Move every layer of the backbeat together, including the ghost notes played by the same hand.
+A nudge on the main snare leaves its layers where they were. If a clap or a second snare sample sits on the grid while the main snare moves 30 ms late, the backbeat turns into a flam. Move every layer of the backbeat together, including the ghost notes played by the same hand.
 
 The other mistake is going too far. There is no fixed limit, because it depends on the tempo and the style, but at some point a late snare stops leaning and starts dragging the whole track. Stop just before that point.
 
