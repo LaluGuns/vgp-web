@@ -41,17 +41,18 @@ const GUESS = Math.max(3 * BEAT, dur('guess') + 0.2);
 let t = guessAt + GUESS + 0.1;
 const stings = [];
 // A sting: one version's downbeat alone, its downbeat on the grid, after a line ends at t.
-const sting = (id, v) => {
+// `hold` keeps the picture on the result before the next line starts.
+const sting = (id, v, hold) => {
     const down = onGrid(t + 0.1 + STING.pre * BEAT);
     stings.push({ id, v, at: down - STING.pre * BEAT, ...STING });
-    t = down + STING.post * BEAT + 0.2;
+    t = down + STING.post * BEAT + 0.2 + hold;
 };
 for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
     // "So in number one, the click is buried." then version 1's downbeat; "your ears hit it fresh" then version 2's.
-    if (id === 'fog') sting('S1', 1);
-    if (id === 'fresh') sting('S2', 2);
+    if (id === 'fog') sting('S1', 1, 0.4);
+    if (id === 'fresh') sting('S2', 2, 0.9);
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -124,11 +125,11 @@ export const TIMELINE = {
     scenes: [
         { id: 'ab', at: 0, view: 'ab', teaches: 'Hook: the same drop twice, 1 then 2.' },
         { id: 'notch', line: 'hook', dt: -0.15, view: 'ab', teaches: 'Number 2 has a hole: less than a quarter second of silence.' },
-        { id: 'fog', line: 'fog', dt: -0.3, view: 'ear', teaches: 'A loud riser covers the click while it plays and leaves a fog (forward masking, model) for up to 200 ms; in 1 the click is buried, in 2 it is clear (measured, see VERIFY).' },
-        { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: 'Same rows: after silence the ear responds fully, inside the riser only a little (adaptation, model).' },
-        { id: 'hand', line: 'hand', dt: -0.25, view: 'hand', teaches: 'The limiter is a hand on a fader: in 1 it is already down when the kick arrives.' },
-        { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: 'Silence leaves one thing to predict: the next beat. The arrival is the payoff.' },
-        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: 'At 128 BPM cut everything an 8th early; reverb tails too.' },
+        { id: 'fog', line: 'fog', dt: -0.3, view: 'ear', teaches: 'The ear in cross-section, slowed down (model): a loud riser covers the click while it plays, and its fog lingers up to 200 ms after it stops. Then both versions as measured: in 1 the click is buried.' },
+        { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: "In 2 the fog has cleared by the drop; its hair cell (adaptation, model) responds fully to the click, 1's only a little; measured: click clearer in 2 (see VERIFY)." },
+        { id: 'hand', line: 'hand', dt: -0.25, view: 'hand', teaches: "The limiter is a hand on a console fader: in 1 it is pulled down as the kick arrives (measured gain reduction on each strip's display)." },
+        { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: 'Silence leaves the brain one thing to predict: the next beat. The kick lands where it expected; the arrival is the payoff.' },
+        { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: 'In a DAW: cut every track an 8th before the drop, the reverb return too; at 128 BPM that is 234.4 ms, past the 200 ms fog (model).' },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
         { id: 'end', line: 'cta', dt: -0.2, view: 'end', teaches: 'Where the lesson is, and who made it.' },
     ],

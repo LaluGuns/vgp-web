@@ -77,9 +77,14 @@ which carries its own references, or from a calculation listed here.
 - The limiter faders draw the limiter's own gain from the render, slowed down.
 - Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master WAV
   and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
-- Narration: the founder's own voice, recorded on a phone (first take plus
-  pickups of five lines, joined; `assets/vo/`, not in git). Pauses inside
-  lines shortened by punctuation, loudness matched between the two sessions,
-  then time-stretched 10% with ffmpeg `atempo` (pitch kept) to 181 words a
-  minute; cued with `film5/cue_vo.py`. No synthetic voice is used, so the
-  platforms' AI-generated label does not apply.
+- Narration (script v3, `film5/script.txt`): a temporary guide track from
+  Piper TTS (`en_US-ryan-high`, length scale 1.27, about 183 words a minute;
+  `assets/vo/`, not in git), cued with `film5/cue_vo.py`. It holds the timings
+  until the final voice is generated (ElevenLabs `eleven_v4`, voice Michael C.
+  Vincent, `film5/narration-prompt.txt`). A synthetic voice needs the
+  platforms' AI-generated label. The founder's earlier phone takes of script
+  v2 are kept in `assets/vo/` but no longer match the script.
+- Picture, cross-section of the ear: outer ear, canal, eardrum, the three
+  small bones, cochlea and hearing nerve, drawn as an illustration (not to
+  scale). Its fog and the hair cells' tiredness follow the two models above,
+  slowed down.

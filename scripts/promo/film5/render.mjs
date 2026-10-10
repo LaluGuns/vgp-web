@@ -150,7 +150,7 @@ const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
 html,body{margin:0;background:${T.bg}}canvas{display:block}</style></head><body><canvas id="film"></canvas>
 <script>window.TIMELINE=${JSON.stringify(TIMELINE)};window.DATA=${JSON.stringify(audio.data)};window.DP_URL=${JSON.stringify(dpUrl)};window.LESSON=${JSON.stringify(lessonData)};</script>
-<script>${fs.readFileSync(path.join(HERE, 'art.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'film.js'), 'utf8')}</script></body></html>`;
+<script>${fs.readFileSync(path.join(HERE, 'art.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'art5.js'), 'utf8')}</script><script>${fs.readFileSync(path.join(HERE, 'film.js'), 'utf8')}</script></body></html>`;
 fs.writeFileSync(path.join(OUT, 'preview.html'), html);
 
 // ── Captions: one cue per caption page, as the film shows them ──
