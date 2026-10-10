@@ -52,7 +52,7 @@ const sting = (id, v, hold) => {
     stings.push({ id, v, at: down - STING.pre * BEAT, ...STING });
     t = down + STING.post * BEAT + 0.1 + hold;
 };
-for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
+for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8', 'gb']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
     // "so it covers the click" then version 1's downbeat; "your ears meet the kick fresh" then version 2's.
@@ -60,13 +60,13 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     if (id === 'fresh') sting('S2', 2, 0.35);
     // The limiter's measured result holds after "pull the kick down".
     if (id === 'hand') t += 0.7;
-    // The ear test: the same drop with a 16th, an 8th and a full beat of silence, each downbeat on the grid.
-    if (id === 'how') {
-        for (const [gid, v, pre] of [['G16', '16', 1], ['G8', 2, 1], ['GB', 'beat', 1.5]]) {
-            const down = onGrid(t + 0.15 + pre * BEAT);
-            tests.push({ id: gid, v, at: down - pre * BEAT, pre, post: 1.5 });
-            t = down + 1.5 * BEAT + 0.15;
-        }
+    // The ear test: each length is named, then heard at once (say it, show it, play it), its downbeat on the grid.
+    const TEST = { g16: ['G16', '16', 1], g8: ['G8', 2, 1], gb: ['GB', 'beat', 1.5] }[id];
+    if (TEST) {
+        const [gid, v, pre] = TEST;
+        const down = onGrid(t + 0.05 + pre * BEAT);
+        tests.push({ id: gid, v, at: down - pre * BEAT, pre, post: 1.5 });
+        t = down + 1.5 * BEAT + 0.2;
     }
     // The three reasons stay up together before the ear scene.
     if (id === 'hook') t += 0.4;
@@ -131,13 +131,11 @@ export const TIMELINE = {
         { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['how', 'quarter', 0.12], dt: 0, kind: 'tick' },
-                { cue: ['how', 'sixteenth', 0.8], dt: 0, kind: 'tick', level: 0.8 },
-        { cue: ['how', 'eighth', 0.88], dt: 0, kind: 'pop', level: 0.8 },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
         { cue: ['cta', 'clean', 0], dt: -0.25, kind: 'whoosh' },
         { cue: ['cta', 'clean', 0.05], dt: -0.05, kind: 'tick', level: 0.7 },
-        { cue: ['cta', 'calm', 0.17], dt: -0.05, kind: 'tick', level: 0.7 },
+        { cue: ['cta', 'calmer', 0.17], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'beat', 0.29], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'so', 0.4], dt: -0.1, kind: 'pop', level: 0.8 },
         { at: button, kind: 'button' },
