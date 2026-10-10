@@ -109,3 +109,7 @@ One line per call, newest last.
   - The air scene shows the squeezed air as soft bands, one per wavelength, equally bright in every row: the same loudness.
   - Small ladders show four rungs so the top ones never fuse; the rule card's frame waits under the first card; arcs no longer touch the phone; subtitles leave in 60 ms.
   - The plucked note sits 12 dB under the voice (its two plucks overlap) and has an 8 ms onset; speech stays clear of the clipper.
+- Film 4 v7, after a sixth scored review (9 accuracy, 8.5 hook, clarity, craft and pacing, 8 polish):
+  - The ladder strikes the amber bar with "not played" when the window lands; the phone's window border flashes once.
+  - On "the harmonics repeat", thin cyan lines carry the played rungs up into the wave, which bridges the ladder and the scope.
+  - The hook's window shows a "?" while the clean sub plays; the recipe gets its own 6 s demo after the diagram's last step, with a live ladder; the film runs 92 s.

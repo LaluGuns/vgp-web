@@ -156,6 +156,14 @@ function ladder(box, t, o = {}) {
     g.fillStyle = dz;
     g.fillRect(x0 - 24, yCut, x1 - x0 + 48, y1 - yCut + 24);
     g.restore();
+    if (o.zonePulse > 0) {
+        g.save();
+        rr(g, x0 - 22, yCut + 2, x1 - x0 + 44, y1 - yCut + 20, 22);
+        g.strokeStyle = `rgba(248,250,252,${0.85 * o.zonePulse})`;
+        g.lineWidth = 4;
+        g.stroke();
+        g.restore();
+    }
     g.save();
     g.setLineDash([12, 9]);
     g.strokeStyle = P.ink2;
@@ -177,7 +185,7 @@ function ladder(box, t, o = {}) {
         label(g, 'fades out', zx, yCut + 104, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
     } else {
         label(g, 'phone plays', x1 - 4, y0 + zs + 2, { size: zs, weight: 700, color: P.cyan, align: 'right', family: BODY });
-        label(g, 'phone plays less', x1 - 4, yCut + 40, { size: 32, weight: 600, color: P.ink3, align: 'right', family: BODY });
+        label(g, 'phone plays less', x1 - 4, yCut + 70, { size: 32, weight: 600, color: P.ink3, align: 'right', family: BODY });
         label(g, "phone can't play", x1 - 4, y1 - 8, { size: zs, weight: 700, color: P.ink2, align: 'right', family: BODY });
     }
     // Pitch axis in plain words, and the one frequency that matters.
@@ -424,6 +432,26 @@ function drawHook(t) {
     // Ladder.
     const sp = spectrum(t);
     const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 5, rungH: 16, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    // While the phone plays no bass, its window holds a question mark.
+    const qw = popIn(t, replay ? segBy.againClean.from + 0.6 : wt('hook-a', 'play'), 0.3) * (1 - popIn(t, (replay ? segBy.againSat : segBy.hookSat).from - 0.2, 0.2));
+    if (lad && qw > 0) label(g, '?', (HK.lad.x0 + HK.lad.x1) / 2, (HK.lad.y0 + lad.yCut) / 2 + 26, { size: 72, weight: 800, color: P.ink3, align: 'center', alpha: qw });
+    // Each note lights the note's bar for a moment.
+    if (lad && sp && lad.rungs[0]) {
+        let on = 0;
+        for (const q of NOTES) if (t >= q.t && t - q.t < 0.35) on = Math.max(on, 1 - (t - q.t) / 0.35);
+        if (on > 0) {
+            const r0 = lad.rungs[0];
+            g.save();
+            g.globalAlpha *= 0.6 * on;
+            g.shadowColor = P.amber;
+            g.shadowBlur = 18;
+            rr(g, HK.lad.x0, r0.y - 8, lad.L(r0.full), 16, 4);
+            g.strokeStyle = P.amber;
+            g.lineWidth = 3;
+            g.stroke();
+            g.restore();
+        }
+    }
     // Name the bottom bar: the note.
     if (lad && sp) {
         const ny = (lad.Y(sp.f0) + lad.Y(2 * sp.f0)) / 2 + 11;
@@ -438,7 +466,7 @@ function drawHook(t) {
 // ══ Air: the same loudness one and two octaves lower ══
 // Rows: 200, 100 and 50 Hz at the same level. The cone's travel follows
 // x ∝ 1/f² (p ∝ S·x·f²): 1×, 4×, 16×. Motion is slowed down 100 times.
-const AIR = { rows: [580, 840, 1100], cone: 410, f: [200, 100, 50], unit: 4 };
+const AIR = { rows: [580, 840, 1100], cone: 410, f: [200, 100, 50], unit: 6 };
 function drawAir(t) {
     const a = viewAlpha(t, SC.air, SC.phone);
     if (a <= 0) return;
@@ -515,7 +543,7 @@ function drawAir(t) {
                 }
             }
             g.stroke();
-            label(g, `${rel}×`, cx + 64 + 26, ay + 15, { size: 44, weight: 800, color: P.ink, alpha: clamp(ka * 2) });
+            label(g, `${rel}×`, cx + Math.max(half, 64) + 26, ay + 15, { size: 44, weight: 800, color: P.ink, alpha: clamp(ka * 2) });
         }
         g.restore();
     });
@@ -633,7 +661,7 @@ function drawPhone(t) {
     const mk = E.inOut(seg(t, SC.stack - 0.55, SC.stack));
     if (lA > 0 && t < SC.stack) {
         const box = { x0: lerp(PHS.lad.x0, BL.x0, mk), x1: lerp(PHS.lad.x1, BL.x1, mk), y0: lerp(PHS.lad.y0, BL.y0, mk), y1: lerp(PHS.lad.y1, BL.y1, mk) };
-        ladder(box, t, { alpha: lA, zoneLeft: true, maxN: 4, labelAlpha: (1 - mk) * a, bare: false, darkPulse: bump(t, wt('phone', 'down') - 0.05, 0.2, 1.2) });
+        ladder(box, t, { alpha: lA, zoneLeft: true, maxN: 4, labelAlpha: (1 - mk) * a, bare: false, zonePulse: bump(t, wt('phone', 'down') - 0.05, 0.15, 1.0) });
     }
     g.save();
     g.restore();
@@ -677,14 +705,11 @@ function drawLadder(t) {
     // Rung names at each rung's end, on a dark chip (the 200 Hz line passes
     // behind them), fading with their rung.
     // In the window beat the names move to the harmonics the phone plays (4x-6x).
-    const winNames = popIn(t, tHarm - 0.1, 0.3);
     const names = [
         ['1× the note', wt('stack', 'note'), P.amber, 1],
-        ['2×', wt('stack', 'two'), P.cyan, 1 - winNames],
-        ['3×', wt('stack', 'three'), P.cyan, 1 - winNames],
+        ['2×', wt('stack', 'two'), P.cyan, 1],
+        ['3×', wt('stack', 'three'), P.cyan, 1],
         ['4×', wt('stack', 'four'), P.cyan, 1],
-        ['5×', tHarm - 0.1, P.cyan, winNames],
-        ['6×', tHarm - 0.1, P.cyan, winNames],
     ];
     if (lad) {
         names.forEach(([text, t0, color, vis], i) => {
@@ -694,14 +719,18 @@ function drawLadder(t) {
             if (k <= 0) return;
             font(g, 34, 800);
             const cw = g.measureText(text).width + 24;
-            const x = Math.min(BL.x0 + lad.L(r.full) + 12 + cw / 2, BL.x1 + 10 - cw / 2);
+            // Short names sit at the bar's end; the long one sits above it, flush right.
+            const end = BL.x0 + lad.L(r.full);
+            const above = i === 0;
+            const x = above ? end - cw / 2 : Math.min(end + 14 + cw / 2, BL.x1 + 10 - cw / 2);
+            const cy = above ? r.y - 44 : r.y;
             g.save();
             g.globalAlpha *= clamp(k * 3);
-            rr(g, x - cw / 2, r.y - 22, cw, 44, 12);
+            rr(g, x - cw / 2, cy - 22, cw, 44, 12);
             g.fillStyle = '#081022';
             g.fill();
             g.restore();
-            label(g, text, x, r.y + 12, { size: 34, weight: 800, color, align: 'center', alpha: k });
+            label(g, text, x, cy + 12, { size: 34, weight: 800, color, align: 'center', alpha: k });
         });
         // "can't play the note": the note's bar is struck through, "not played".
         if (isWin && lad.rungs[0]) {
@@ -714,9 +743,9 @@ function drawLadder(t) {
                 g.lineCap = 'round';
                 g.beginPath();
                 g.moveTo(BL.x0 - 8, r0.y);
-                g.lineTo(BL.x0 - 8 + (len + 16) * sk, r0.y);
+                g.lineTo(BL.x0 - 8 + (len + 8) * sk, r0.y);
                 g.stroke();
-                tag(g, 'not played', BL.x0 + len / 2, r0.y - 58, null, { a: sk, bg: P.dark, fg: P.ink, ring: P.ink3, size: 32 });
+                tag(g, 'not played', BL.x0 + len * 0.3, r0.y - 52, null, { a: sk, bg: P.dark, fg: P.ink, ring: P.ink3, size: 32 });
             }
             // "plays the harmonics": the window's edge lights up.
             const wk = bump(t, tHarm - 0.05, 0.2, 1.2);
@@ -878,7 +907,7 @@ function drawScope(t) {
     const tBrain = wt('brain', 'brain');
     const tPuts = wt('brain', 'puts');
     const mv = E.inOut(seg(t, tPuts - 0.7, tPuts - 0.1));
-    const RB = { x: lerp(540, 240, mv), y: 1240, s: lerp(1.15, 0.95, mv) };
+    const RB = { x: lerp(440, 240, mv), y: 1240, s: lerp(1.1, 0.95, mv) };
     const ax = RB.x + 68 * RB.s;
     const ay = RB.y - 150 * RB.s;
     const ra = popIn(t, SC.strange + 0.15, 0.35);
@@ -940,13 +969,37 @@ function drawScope(t) {
     }
     // On "never played": the ladder, and the note flies from the bubble
     // into its dark zone, where the phone played nothing.
-    const la = popIn(t, voBy.ghost.at - 0.05, 0.3);
+    const la = popIn(t, SC.strange + 0.2, 0.3);
     if (la > 0) {
         const box = { x0: 760, x1: 926, y0: 975, y1: 1262 };
         const q = scopeView(t)?.q;
         const gk = E.out(popIn(t, tNever + 0.35, 0.3));
         // The heard note takes the place of the sub's outline: this ladder is what you hear.
         const lad = ladder(box, t, { alpha: la, ghost: gk, ghostF0: q?.f0 ?? 51.91, zoneLeft: true, maxN: 4, rungH: 16, fundAlpha: 1 - gk });
+        // "the harmonics repeat": thin cyan lines carry the played rungs into the scope.
+        const tH = wt('strange', 'harmonics');
+        const fl = bump(t, tH - 0.1, 0.3, 1.4);
+        if (fl > 0 && lad) {
+            g.save();
+            g.strokeStyle = `rgba(125,211,252,${0.8 * fl})`;
+            g.lineWidth = 3;
+            for (const r of lad.rungs) {
+                if (r.n < 3 || r.phone < -34) continue;
+                const sx = box.x0 + lad.L(r.phone);
+                // Each line ends under the wave, with a dot where it lands.
+                const ex = 820 - (r.n - 3) * 150;
+                const ey = base - 40;
+                g.beginPath();
+                g.moveTo(sx, r.y);
+                g.bezierCurveTo(sx + 70, r.y - 60, ex + 40, ey + 260, ex, ey);
+                g.stroke();
+                g.fillStyle = g.strokeStyle;
+                g.beginPath();
+                g.arc(ex, ey, 7, 0, Math.PI * 2);
+                g.fill();
+            }
+            g.restore();
+        }
         const fly = seg(t, tNever, tNever + 0.4);
         if (fly > 0 && fly < 1 && lad) {
             const k = E.inOut(fly);
@@ -1109,7 +1162,7 @@ function drawRule(t) {
     // The second card's empty frame, waiting under the first.
     const kf = popIn(t, tKeep + 0.6, 0.4) * (1 - popIn(t, tAdd - 0.1, 0.3));
     if (kf > 0) {
-        rr(g, 70, 640, 880, 610, 40);
+        rr(g, 70, 640, 880, 500, 40);
         g.strokeStyle = `rgba(255,255,255,${0.12 * kf})`;
         g.lineWidth = 3;
         g.setLineDash([14, 10]);
@@ -1142,22 +1195,22 @@ function drawRule(t) {
         const y2 = 640;
         g.save();
         g.globalAlpha *= k2;
-        rr(g, 70, y2, 880, 610, 40);
+        rr(g, 70, y2, 880, 500, 40);
         g.fillStyle = 'rgba(22,35,63,0.94)';
         g.fill();
         g.strokeStyle = 'rgba(255,255,255,0.07)';
         g.lineWidth = 3;
         g.stroke();
         label(g, 'Harmonics: in parallel', 110, y2 + 90, { size: 48, weight: 800, color: P.cyan });
-        const rA = y2 + 210;
-        const rB = y2 + 350;
+        const rA = y2 + 190;
+        const rB = y2 + 310;
         const d = (dt) => E.out(popIn(t, tAdd + dt, 0.35));
         // The recipe, one step at a time, in sync with the sound: the clean
         // sub plays through the phone, and step 4 adds the saturated copy.
         const STEPS = [
             [0.7, '1. Copy the sub'],
             [1.9, '2. Saturate the copy'],
-            [3.1, '3. High-pass the copy at 120 Hz'],
+            [3.1, '3. High-pass it at 120 Hz: harmonics only'],
             [4.2, '4. Blend it in with the clean sub'],
         ];
         const glow = (dt) => bump(t, tAdd + dt, 0.15, 0.9);
@@ -1191,13 +1244,13 @@ function drawRule(t) {
         if (si >= 0) {
             const [dt, text] = STEPS[si];
             const sa = popIn(t, tAdd + dt - 0.05, 0.25);
-            label(g, text, 110, y2 + 470, { size: 40, weight: 700, color: si === 3 ? P.cyan : P.ink, alpha: sa });
+            label(g, text, 110, y2 + 400, { size: 40, weight: 700, color: si === 3 ? P.cyan : P.ink, alpha: sa });
         }
-        label(g, 'for small speakers', 110, y2 + 560, { size: 40, weight: 600, color: P.ink2, alpha: d(0.3) });
+        label(g, 'for small speakers', 110, y2 + 462, { size: 40, weight: 600, color: P.ink2, alpha: d(0.3) });
         g.restore();
         // The phone, live: the clean sub leaves its window dark; step 4 lights it.
         const la = popIn(t, vEnd('rule-2') + 0.4, 0.3);
-        if (la > 0) ladder({ x0: 640, x1: 926, y0: 1270, y1: 1478 }, t, { alpha: la * k2, zoneLeft: true, maxN: 4, rungH: 16 });
+        if (la > 0) ladder({ x0: 640, x1: 926, y0: 1192, y1: 1490 }, t, { alpha: la * k2, zoneLeft: true, maxN: 4, rungH: 16 });
     }
     g.restore();
 }
