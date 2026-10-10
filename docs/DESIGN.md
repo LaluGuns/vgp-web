@@ -190,18 +190,6 @@ anything without one is technical.
 - **No stylesheet needed.** A figure is complete as a bare SVG: the accent
   is the root's `color` attribute and every dialect choice is an attribute,
   so the offline renderer gets the same marks and colours as the page.
-- **Layers.** A draw-in repaints the whole SVG on every frame, grid and
-  labels with it. So on the page `components/blog/figures/layers.tsx` splits
-  a figure with much static drawing into stacked SVGs in paint order: runs
-  of marks that never animate (rules, labels, grey data) are painted once,
-  and the animated marks, with the short static runs between them, repaint
-  alone. Same pixels: every mark keeps its place in the paint order and its
-  parent groups, the layers share one grid cell (never positioned: a
-  positioned layer snaps to whole pixels and draws curves a hair off), the
-  first layer is the figure (`role="img"`, named), the rest are `aria-hidden`,
-  and the fade-in acts on the stack. A group with its own opacity, mask or
-  filter keeps its figure whole. Checks that look at a figure's text and
-  marks read every layer of its frame.
 - **Print.** Figures print inverted with the hue turned back, so the
   accent stays its own colour on white paper and text prints dark. The
   fixed bars (navbar, reading progress) and the demos are hidden in print,

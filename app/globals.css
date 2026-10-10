@@ -404,15 +404,6 @@ body::before {
   from { opacity: 0.4; }
 }
 
-/* A figure split into layers (components/blog/figures/layers.tsx): the SVGs
-   share one grid cell and paint one over another in document order, and the
-   fade-in below acts on the stack as a whole, so it composites exactly as
-   one SVG did. Nothing here is positioned: a positioned layer is snapped to
-   whole pixels and would draw its curves a hair off the first layer's. */
-.vgp-fig-stack { display: grid; grid-template-columns: minmax(0, 1fr); }
-.vgp-fig-stack > .vgp-fig-layer { grid-area: 1 / 1; align-self: start; }
-.vgp-fig-stack > .vgp-fig-layer + .vgp-fig-layer { pointer-events: none; }
-
 /* The gap is a hair longer than the line and the start a hair past it, so
    a round line end never leaves a dot where nothing is drawn yet. */
 @keyframes vgp-draw-line {
@@ -457,7 +448,7 @@ body::before {
     transition: none;
   }
 
-  [data-reveal='draw'][data-reveal-state='pending'] :is(svg:not(.vgp-fig-layer), .vgp-fig-stack) { opacity: 0.4; }
+  [data-reveal='draw'][data-reveal-state='pending'] svg { opacity: 0.4; }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-line { stroke-dasharray: 1 1.01; stroke-dashoffset: 1.001; }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-grow { transform: scaleX(0); }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-rise { transform: scaleY(0); }
@@ -466,7 +457,7 @@ body::before {
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-focus { opacity: 0; transform: scale(2.2); }
   [data-reveal='draw'][data-reveal-state='pending'] .vgp-draw-slide { transform: translateX(var(--draw-from, 0px)); }
 
-  [data-reveal='draw'][data-reveal-state='drawn'] :is(svg:not(.vgp-fig-layer), .vgp-fig-stack) {
+  [data-reveal='draw'][data-reveal-state='drawn'] svg {
     animation: vgp-draw-base 400ms ease-out backwards;
   }
 
