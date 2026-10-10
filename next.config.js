@@ -38,7 +38,8 @@ const nextConfig = {
     },
     // Reduce JS bundle size
     compiler: {
-        removeConsole: process.env.NODE_ENV === 'production',
+        // Strip logging from production builds, but keep console.error so real failures stay visible.
+        removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
     },
     allowedDevOrigins: ['127.0.0.1', 'localhost'],
     // CADENZ lives at cadenz.virzyguns.com. Only the app-store legal pages

@@ -557,23 +557,22 @@ export function ParallelDemo() {
 
     const line = usePlayhead(player.playing, clock);
 
-    const traces = useMemo<Trace[] | null>(() => {
+    // The blend's line depends only on the blend, so switching what you listen to redraws nothing.
+    const blendColumns = useMemo(() => {
         if (!analysis) return null;
         const { dry, crushed, peak } = analysis;
-        if (mode === 'solo') {
-            return [
-                { kind: 'before', db: analysis.dryColumns },
-                { kind: 'after', db: analysis.soloColumns },
-            ];
-        }
         const b = blend / 100;
         const mix = new Float32Array(dry.length);
         for (let i = 0; i < mix.length; i++) mix[i] = dry[i] + b * crushed[i];
-        return [
-            { kind: 'before', db: analysis.dryColumns },
-            { kind: 'after', db: columns(mix, 0, mix.length, BAR_COLUMNS, peak, blendMatch(analysis, b)) },
-        ];
-    }, [analysis, blend, mode]);
+        return columns(mix, 0, mix.length, BAR_COLUMNS, peak, blendMatch(analysis, b));
+    }, [analysis, blend]);
+    const traces: Trace[] | null =
+        analysis && blendColumns
+            ? [
+                  { kind: 'before', db: analysis.dryColumns },
+                  { kind: 'after', db: mode === 'solo' ? analysis.soloColumns : blendColumns },
+              ]
+            : null;
 
     const turnedDown = analysis ? -gainToDb(blendMatch(analysis, blend / 100)) : 0;
 
@@ -870,20 +869,24 @@ export function TransientDemo() {
         const comp = punchCompressor(ctx);
         const shaperTrim = ctx.createGain();
         const compTrim = ctx.createGain();
-        // Undo the input level after processing, so only what the processors see changes.
+        // Undo the input level after processing, so only what the compressor sees changes.
         const restore = ctx.createGain();
         restore.connect(master);
         src.connect(input);
         input.connect(delay);
-        input.connect(shaper.input);
         input.connect(comp);
+        // The shaper takes the loop as it is. It follows the ratio of two envelopes, so a level
+        // makes no difference to it (the figures, rendered with the level applied, show that), but
+        // a level change on its way in reads to it as a hit starting or ending, and for a moment
+        // it would boost the whole loop past the demo's ceiling.
+        src.connect(shaper.input);
         shaper.output.connect(shaperTrim);
         comp.connect(compTrim);
         const sel = {} as Record<ShapeMode, GainNode>;
         for (const m of SHAPE_MODES) {
             sel[m] = ctx.createGain();
             sel[m].gain.value = m === modeRef.current ? 1 : 0;
-            sel[m].connect(restore);
+            sel[m].connect(m === 'shaper' ? master : restore);
         }
         delay.connect(sel.dry);
         shaperTrim.connect(sel.shaper);
@@ -983,7 +986,7 @@ export function TransientDemo() {
                 max={0}
                 onChange={setLevel}
                 format={(v) => fmtDb(v, 0)}
-                hint="Turns the loop down before both processors and back up after them, so only what the processors see changes."
+                hint="Turns the loop down before the compressor and back up after it. The shaper follows the shape of each hit, so the level makes no difference to it."
             />
             <p className="text-sm leading-6 text-white/60">
                 <span aria-live="polite">{levelNote}</span> The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.

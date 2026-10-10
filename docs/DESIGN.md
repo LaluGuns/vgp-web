@@ -79,7 +79,12 @@ readable text.
   generated filler.
 - **Focus.** One style everywhere: `.vgp-focus` in `app/globals.css`, a 2px
   outline in the page's `--accent` with a 3px offset, shown only for
-  keyboard focus. `EditorialPrimitives` and `TapLink` already carry it.
+  keyboard focus. `EditorialPrimitives`, `TapLink`, the navbar, bottom nav,
+  footer, subscribe dialog and every demo control carry it.
+- **Menus and dialogs.** The navbar menus and the subscribe dialog fade
+  with CSS (`.vgp-shell-*` in `app/globals.css`, `components/useExitTransition.ts`),
+  150 to 180 ms, and appear at once under reduced motion. No framer-motion
+  on public pages.
 - **Copy.** Specific and plain. No em dashes, no "not just X, but Y", no
   forced triads, no buzzwords, no invented numbers. Only translate ja-JP and
   de-DE strings with a native check.
@@ -166,7 +171,9 @@ anything without one is technical.
   so the offline renderer gets the same marks and colours as the page.
 - **Print.** Figures print inverted with the hue turned back, so the
   accent stays its own colour on white paper and text prints dark. The
-  fixed bars (navbar, reading progress) and the demos are hidden in print.
+  fixed bars (navbar, reading progress) and the demos are hidden in print,
+  and so are the reading tools (Save, Copy link, Share, the Contents list,
+  Check answer, the author photo). Collapsed Sources print open.
 - **New figure types** implement all four dialects before they ship.
 
 ## Story and voice

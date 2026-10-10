@@ -68,8 +68,12 @@ const BPM = 92;
 const STEP = 60 / BPM / 4;
 const BAR = STEP * 16;
 const LEAD = 0.05;
-/** Bars rendered for a measurement. The first lets the compressor settle; the rest are measured. */
-const BARS = 4;
+/**
+ * Bars rendered for a measurement. The first lets the compressor settle; the rest are measured.
+ * Five measured bars put the matching within about 0.2 dB of what a long listen measures, so the
+ * note's "about N dB" rounds the way the playback does.
+ */
+const BARS = 6;
 
 function compressor(ctx: BaseAudioContext, p: CompParams): DynamicsCompressorNode {
     const comp = ctx.createDynamicsCompressor();
@@ -90,8 +94,8 @@ interface CompAnalysis {
 }
 
 /**
- * Renders four bars of the loop offline, dry and through the compressor, and
- * measures the last three: K-weighted loudness (engine.ts) for the matching,
+ * Renders six bars of the loop offline, dry and through the compressor, and
+ * measures the last five: K-weighted loudness (engine.ts) for the matching,
  * and the highest peaks for the 7 dB allowance. The snare and hats are noise,
  * different on every hit, so one bar alone can be a dB off what plays.
  */
@@ -199,7 +203,8 @@ export function CompressorDemo() {
     };
 
     // Under 1 dB is within the matching's own accuracy, and the default setting can land there.
-    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short) : 0;
+    // To the nearest half dB: the measurement itself is good to about a quarter of one.
+    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short * 2) / 2 : 0;
     // The preset the sliders match, if any: the presets are a choice like the swing demo's.
     const preset = (Object.keys(PRESETS) as Preset[]).find((k) => {
         const p = PRESETS[k];
@@ -256,5 +261,8 @@ function applyComp(n: { comp: DynamicsCompressorNode; undo: GainNode; makeup: Ga
     set(n.comp.attack, a.params.attack / 1000);
     set(n.comp.release, a.params.release / 1000);
     set(n.undo.gain, undoMakeup(a.params.threshold, a.params.ratio));
-    set(n.makeup.gain, a.match);
+    // More makeup waits for the compressor: its extra gain reduction builds over the attack time,
+    // and makeup that arrived first would push the next hits past the demo's ceiling for a moment.
+    if (smooth && a.match > n.makeup.gain.value) n.makeup.gain.setTargetAtTime(a.match, t, Math.max(0.01, a.params.attack / 1000));
+    else set(n.makeup.gain, a.match);
 }

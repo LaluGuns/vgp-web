@@ -259,11 +259,10 @@ export const midi = (note: number) => 440 * 2 ** ((note - 69) / 12);
 /**
  * K-weighting (ITU-R BS.1770) as Web Audio filters, for measuring loudness
  * in an offline render: a +4 dB high shelf at 1.68 kHz, then a high-pass at
- * 38 Hz. Web Audio reads a high-pass Q in dB, so this Q of 0.5 makes a
- * slightly resonant high-pass (a Q of about 1.06, where the standard's is
- * 0.5): it weighs the lowest octave a few dB more than a strict BS.1770
- * meter. Every demo's loudness matching and the house level use this same
- * filter, so the demos agree with each other. Returns the weighted signal.
+ * 38 Hz with the standard's Q of 0.5. Web Audio reads a high-pass Q in dB,
+ * so that Q is written as 20 log10(0.5), about -6.02 dB; a plain 0.5 would
+ * give a resonant Q of about 1.06. Every demo's loudness matching and the
+ * house level use this filter. Returns the weighted signal.
  */
 export function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
     const shelf = ctx.createBiquadFilter();
@@ -273,7 +272,7 @@ export function kWeighted(ctx: BaseAudioContext, input: AudioNode): AudioNode {
     const hp = ctx.createBiquadFilter();
     hp.type = 'highpass';
     hp.frequency.value = 38.13;
-    hp.Q.value = 0.5;
+    hp.Q.value = 20 * Math.log10(0.5);
     input.connect(shelf).connect(hp);
     return hp;
 }

@@ -147,7 +147,7 @@ export const demoCatalog = {
     transient: {
         title: 'Shape the hit without a threshold',
         blurb: 'A transient shaper turns the start of each hit up or down and the tail up or down, whatever the level. Compare it with a compressor on the same loop.',
-        height: [1142, 1074, 1054, 1030, 1030, 958, 934, 696, 696, 696, 696],
+        height: [1162, 1074, 1054, 1030, 1030, 978, 954, 696, 696, 696, 696],
         level: -2,
     },
     sidechain: {
