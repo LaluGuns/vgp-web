@@ -222,7 +222,8 @@ function Spectrum({
                 ].map(([f, text], i, all) => (
                     <span
                         key={text}
-                        className="absolute top-0"
+                        // Under 360 px "20k" would run into "10k", so it is left out there; the plot still ends at 20 kHz.
+                        className={`absolute top-0${f === 20000 ? ' max-[360px]:hidden' : ''}`}
                         style={{
                             left: `${(Math.log10(Number(f) / 20) / 3) * 100}%`,
                             transform: i === 0 ? 'none' : i === all.length - 1 ? 'translateX(-100%)' : 'translateX(-50%)',

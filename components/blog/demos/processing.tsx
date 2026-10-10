@@ -1844,7 +1844,8 @@ export function LimiterDemo() {
               { kind: 'after', db: analysis.after },
           ]
         : null;
-    const clippedText = !analysis ? '–' : analysis.clipped === 0 ? 'Never' : analysis.clipped < 0.001 ? 'Under 0.1% of the time' : `${(analysis.clipped * 100).toFixed(1)}% of the time`;
+    // Short values, so the readout fits a 320 px phone at any drive: "share of the time" is in the label.
+    const clippedText = !analysis ? '–' : analysis.clipped === 0 ? 'Never' : analysis.clipped < 0.001 ? 'Under 0.1%' : `${(analysis.clipped * 100).toFixed(1)}%`;
 
     return (
         <div className="space-y-6">
@@ -1892,7 +1893,7 @@ export function LimiterDemo() {
             <Readout
                 items={[
                     { label: 'Turned down to match the original', value: analysis ? fmtDb(gainToDb(analysis.match)) : '–' },
-                    { label: 'Ceiling clip catches a peak', value: clippedText },
+                    { label: 'Share of the time the ceiling clip catches a peak', value: clippedText },
                 ]}
             />
             <Announce
