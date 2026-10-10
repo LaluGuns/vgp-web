@@ -305,7 +305,11 @@ function drawAB(t, frame1 = false, noHead = false) {
     // Headline: the question; "1 or 2?" while the viewer picks; the answer on "two".
     if (noHead) {
         // Cover: the headline is drawn by drawCover.
-    } else if (replay) headline(t, SC.replay + 0.05, [['Listen'], ['for'], ['the'], ['click', P.amber]], 330, { size: 92 });
+    } else if (replay) {
+        headline(t, SC.replay + 0.05, [['Listen'], ['for'], ['the'], ['click', P.amber]], 330, { size: 92 });
+        const kV = popIn(t, wto('again', 'harder', 0.4) - 0.1, 0.3) * (1 - seg(t, demoBy.A2.down - 0.2, demoBy.A2.down + 0.1));
+        if (kV > 0) pill(g, 'the answer: 2 hits harder', 540, 428, { size: 40, bg: P.ink, fg: P.dark, alpha: kV, scale: E.outBack(kV), weight: 800 });
+    }
     else {
         const s0 = frame1 ? 1 : lerp(1.18, 1, E.outBack(seg(t, 0, 0.25)));
         g.save();
@@ -314,7 +318,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         label(g, 'Same drop.', 0, 0, { size: 104, weight: 800, color: P.ink, align: 'center', base: 'middle' });
         g.restore();
         const answer = !frame1 && t >= voBy.hook.at - 0.05;
-        if (answer) headline(t, tTwo - 0.05, [['2'], ['hits'], ['harder.']], 445, { size: 72 });
+        if (answer) headline(t, tTwo - 0.05, [['2'], ['has'], ['a'], ['gap.']], 445, { size: 72 });
         else if (guessing) {
             const pulse = 1 + 0.06 * Math.exp(-(((t - G.at) % BEAT) / 0.12));
             g.save();
@@ -428,7 +432,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         if (!guessing && id === 'notch' && t >= tAns) {
             const L1 = AB.lanes[0];
             const kD = popIn(t, tAns + 0.3, 0.2) * (1 - out);
-            tag(g, 'in 1 the riser peaks into the drop, as in many builds', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 34 });
+            tag(g, 'in 1 the riser peaks into the drop', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 38 });
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
         label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
@@ -456,7 +460,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         g.lineTo(xb, yb + 16);
         g.stroke();
         g.restore();
-        tag(g, `${Math.round(GAP_MS)} ms: under ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 36 });
+        tag(g, `${Math.round(GAP_MS)} ms: under ¼ second`, (xa + xb) / 2, yb - 46, null, { a: k, bg: P.cyan, fg: P.dark, size: 40 });
         // A playhead crosses the silence again and again; the kick answers at the end of it.
         const tz = wto('hook', 'gap', 0.35) + 0.3;
         if (t > tz && !replay) {
@@ -489,15 +493,15 @@ function drawAB(t, frame1 = false, noHead = false) {
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 500, { size: 44, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 566, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
+        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 470, { size: 44, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 534, { size: 36, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
     if (!replay && !noHead && !frame1) {
         const out = frame1 ? 0 : seg(t, SC.fog - 0.3, SC.fog - 0.05);
         if (id === 'notch') {
-            const kCard = popIn(t, wto('hook', 'why', 0) - 0.1, 0.3) * (1 - out);
+            const kCard = popIn(t, wto('hook', 'works', 0) - 0.1, 0.3) * (1 - out);
             if (kCard > 0) {
                 g.save();
                 g.globalAlpha *= kCard;
@@ -510,7 +514,7 @@ function drawAB(t, frame1 = false, noHead = false) {
                 g.strokeStyle = 'rgba(255,255,255,0.18)';
                 g.lineWidth = 3;
                 g.stroke();
-                label(g, 'why 2 hits harder', 540, 670, { size: 46, weight: 800, color: P.ink2, align: 'center', family: BODY });
+                label(g, 'what the silence works on', 540, 670, { size: 46, weight: 800, color: P.ink2, align: 'center', family: BODY });
                 g.restore();
             }
             ['ears', 'limiter', 'brain'].forEach((w, i) => {
@@ -1060,9 +1064,12 @@ function drawHow(t) {
     headline(t, SC.how + 0.1, [['Cut'], ['¼'], ['second'], ['early']], 300, { size: 92, stagger: 0 });
     label(g, `at ${TL.bpm} BPM: an 8th, ${Math.round(GAP_MS)} ms`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
-    const tEighth = wto('how', 'eighth', 0.12);
+    const tEighth = wto('how', 'quarter', 0.12);
     const tAt = wto('how', 'at', 0.32);
-    const tQuarter = wto('how', 'outlasts', 0.9);
+    // The ruler steps through the note lengths as they are named: a 32nd, a 16th, an 8th.
+    const t32 = wto('how', 'thirtysecond', 0.72);
+    const t16 = wto('how', 'sixteenth', 0.8);
+    const tQuarter = wto('how', 'eighth', 0.88);
     const tFogs = wto('how', 'afterfog', 0.5);
     const tFifth = wto('how', 'milliseconds', 0.6);
     const tVerb = wto('how', 'reverb', 0.84);
@@ -1251,8 +1258,7 @@ function drawHow(t) {
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        void snap;
-        const ms = keys(t, [[tFifth - 0.2, 0], [tQuarter, 200], [tQuarter + 0.35, GAP_MS]]);
+        const ms = t < t16 ? snap(t32, GAP_MS / 4) : t < tQuarter ? GAP_MS / 4 + snap(t16, GAP_MS / 4) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
@@ -1278,13 +1284,13 @@ function drawHow(t) {
         }
         label(g, 'ms', ZX(300) + 34, y + 440, { size: 30, weight: 600, color: P.ink3, family: BODY });
         // The note lengths at 128 BPM on their own row, ticked on the axis.
-        for (const [nm, m, on] of [['16th', GAP_MS / 2, ms >= GAP_MS / 2 - 1], ['8th', GAP_MS, ms >= GAP_MS - 1]]) {
+        for (const [nm, m, on] of [['32nd', GAP_MS / 4, ms >= GAP_MS / 4 - 1], ['16th', GAP_MS / 2, ms >= GAP_MS / 2 - 1], ['8th', GAP_MS, ms >= GAP_MS - 1]]) {
             g.fillStyle = on ? P.cyan : P.ink3;
             g.fillRect(ZX(m) - 2, y + 416, 4, 28);
             label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
         }
         g.restore();
-        if (t >= tQuarter) label(g, 'the shortest note that outlasts it', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
+        if (t >= t32) label(g, t >= tQuarter ? 'an 8th outlasts the fog' : t >= t16 ? 'a 16th: the fog is still there' : 'a 32nd: the fog is still there', 540, Z.y + 620, { size: 44, weight: 800, color: t >= tQuarter ? P.cyan : P.ink, align: 'center', alpha: popIn(t, t32 + 0.1, 0.3), family: BODY });
     }
     g.restore();
 }

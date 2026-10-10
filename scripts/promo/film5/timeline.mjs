@@ -29,13 +29,13 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 const HOOK = { pre: 2.5, post: 2 };
 // Version 2's replay rings out longer, so its measured line holds before the end card.
 const REPLAY = { pre: 1.25, post: 2.75 };
-const REPLAY2 = { pre: 1.25, post: 4.25 };
+const REPLAY2 = { pre: 1.25, post: 3.75 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
 // A breath between lines, so each idea lands before the next one.
-const LINE_GAP = 0.3;
+const LINE_GAP = 0.25;
 const vo = [];
 const guessAt = len(HOOK) * 2;
 // "One or two? Pick one." is spoken over the countdown, which lasts at least three beats.
@@ -59,7 +59,7 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     // The limiter's measured result holds after "pull the kick down".
     if (id === 'hand') t += 0.9;
     // The three reasons stay up together before the ear scene.
-    if (id === 'hook') t += 0.6;
+    if (id === 'hook') t += 0.4;
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -67,7 +67,7 @@ vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) /
 const replayEnd = replayAt + len(REPLAY) + len(REPLAY2);
 // The CTA waits for version 2's second kick to ring out.
 vo.push({ id: 'cta', at: Math.round((replayEnd + 0.2) * 1000) / 1000 });
-const button = replayEnd + 0.2 + dur('cta') + 0.6;
+const button = replayEnd + 0.2 + dur('cta') + 0.3;
 
 export const TIMELINE = {
     fps: 60,
@@ -103,7 +103,8 @@ export const TIMELINE = {
         { at: guessAt, kind: 'tick' },
         { at: guessAt + BEAT, kind: 'tick' },
         { at: guessAt + 2 * BEAT, kind: 'tick' },
-        { cue: ['hook', 'two', 0.05], dt: -0.05, kind: 'pop', level: 0.8 },
+        { cue: ['hook', 'two', 0.05], dt: -0.05, kind: 'pop', level: 0.6 },
+        { cue: ['again', 'harder', 0.4], dt: -0.05, kind: 'pop', level: 0.8 },
         { cue: ['hook', 'gap', 0.35], dt: 0, kind: 'tick' },
         { cue: ['hook', 'quarter', 0.6], dt: 0, kind: 'pop', level: 0.6 },
         { cue: ['hook', 'ears', 0], dt: -0.05, kind: 'tick', level: 0.7 },
@@ -119,8 +120,10 @@ export const TIMELINE = {
         { cue: ['brain', 'lands', 0.82], dt: 0, kind: 'kick' },
         { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
-        { cue: ['how', 'eighth', 0.6], dt: 0, kind: 'tick' },
-                { cue: ['how', 'outlasts', 0.9], dt: 0.2, kind: 'tick', level: 0.9 },
+        { cue: ['how', 'quarter', 0.12], dt: 0, kind: 'tick' },
+                { cue: ['how', 'thirtysecond', 0.72], dt: 0, kind: 'tick', level: 0.7 },
+        { cue: ['how', 'sixteenth', 0.8], dt: 0, kind: 'tick', level: 0.8 },
+        { cue: ['how', 'eighth', 0.88], dt: 0, kind: 'pop', level: 0.8 },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
         { cue: ['cta', 'clean', 0], dt: -0.25, kind: 'whoosh' },
@@ -137,7 +140,7 @@ export const TIMELINE = {
     // starts a scene on a spoken word; `at` is used otherwise.
     scenes: [
         { id: 'ab', at: 0, view: 'ab', teaches: 'Hook: the same drop twice, 1 then 2.' },
-        { id: 'notch', line: 'hook', dt: -0.15, view: 'ab', teaches: 'Number 2 has a gap: less than a quarter second of silence. Why: your ears, your limiter, your brain.' },
+        { id: 'notch', line: 'hook', dt: -0.15, view: 'ab', teaches: 'Number 2 has a gap: less than a quarter second of silence. It works on your ears, your limiter, your brain. The verdict waits for the replay.' },
         { id: 'fog', line: 'fog', dt: -0.3, view: 'ear', teaches: "Your ears, from the outer ear into the cochlea (model, slowed): in 1 the riser is still playing when the kick lands, so the click's spark is covered; it lands on version 1's downbeat, heard alone." },
         { id: 'fresh', line: 'fresh', dt: -0.25, view: 'ear', teaches: "In 2 the riser stops, the after-fog fades in the silence (counted, slowed), and the click lands in the clear on version 2's downbeat, heard alone." },
         { id: 'hand', line: 'hand', dt: -0.1, view: 'hand', teaches: "Your limiter is a hand on a console fader: in 1 it is pulled down as the kick arrives (measured gain reduction on each strip's display)." },
