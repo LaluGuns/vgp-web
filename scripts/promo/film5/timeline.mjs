@@ -57,9 +57,11 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how', 'g16', 'g8']) 
     t += dur(id) + LINE_GAP;
     // "so it covers the click" then version 1's downbeat; "your ears meet the kick fresh" then version 2's.
     if (id === 'fog') sting('S1', 1, 0);
-    if (id === 'fresh') sting('S2', 2, 0.35);
+    if (id === 'fresh') sting('S2', 2, 1.0);
     // The limiter's measured result holds after "right as the kick lands", long enough to read.
     if (id === 'hand') t += 1.4;
+    // The brain's kick lands; hold it before the next scene.
+    if (id === 'brain') t += 0.6;
     // Why a quarter: shown, not played. The 16th and the 8th measure the same in the signal (VERIFY),
     // so the film draws them on the after-fog's axis instead of asking the viewer to hear a difference.
     if (id === 'g8') t += 0.6;
@@ -132,7 +134,7 @@ export const TIMELINE = {
         { cue: ['cta', 'clean', 0.05], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'calmer', 0.17], dt: -0.05, kind: 'tick', level: 0.7 },
         { cue: ['cta', 'beat', 0.29], dt: -0.05, kind: 'tick', level: 0.7 },
-        { cue: ['cta', 'which', 0.55], dt: -0.1, kind: 'pop', level: 0.8 },
+        { cue: ['cta', 'did', 0.7], dt: -0.1, kind: 'pop', level: 0.8 },
         { at: button, kind: 'button' },
     ],
     button,
@@ -148,6 +150,6 @@ export const TIMELINE = {
         { id: 'brain', line: 'brain', dt: -0.3, view: 'brain', teaches: "Your brain: in the silence the only thing left to predict is the next beat; the kick lands where it was expected." },
         { id: 'how', line: 'how', dt: -0.25, view: 'how', teaches: "In a DAW: cut every track about a quarter second (an 8th at 128 BPM) before the drop, the reverb return too; then why a quarter: a loud sound fogs hearing for up to 200 ms (model); a 16th (117 ms) can end inside it, an 8th (234.4 ms) clears it." },
         { id: 'replay', line: 'again', dt: -0.15, view: 'ab', replay: true, teaches: 'Listen again, knowing what to listen for.' },
-        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons with the lesson address up throughout, ending on a question for the comments: which did you pick at the start, 1 or 2?' },
+        { id: 'end', line: 'cta', word: 'clean', dt: -0.3, view: 'end', teaches: 'Recap of the three reasons with the lesson address up throughout (shown, not spoken), ending on a question for the comments: did you pick 2, and which gap do you use (16th or 8th)?' },
     ],
 };

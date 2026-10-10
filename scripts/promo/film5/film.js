@@ -301,7 +301,7 @@ function drawAB(t, frame1 = false, noHead = false) {
     const [dA, dB] = replay ? [demoBy.A2, demoBy.B2] : [demoBy.A, demoBy.B];
     // The replay uses the hook's window, so it is the same picture as the opening.
     const msA = -demoBy.A.pre * BEAT * 1000;
-    const msB = demoBy.A.post * BEAT * 1000;
+    const msB = demoBy.A.post * BEAT * 1000 - 25;
     const G = TL.guess;
     const tTwo = wt('hook', 'two');
     const guessing = !frame1 && !noHead && !replay && t >= G.at && t < voBy.hook.at - 0.05;
@@ -367,9 +367,9 @@ function drawAB(t, frame1 = false, noHead = false) {
         // Version 2 stays covered (on the cover too) until the answer, so the eye cannot answer
         // before the ear; then it is wiped in, gap and all. Version 1 draws live as it is heard.
         const tRev = wto('hook', 'two', 0.05);
-        const covered = v === 2 && !replay && (noHead || frame1 || t < tRev);
+        const covered = !replay && (v === 2 ? noHead || frame1 || t < tRev : frame1 && !noHead);
         if (v === 2 && !covered && !replay) upto = Math.min(upto, lerp(msA, msB, E.inOut(seg(t, tRev, tRev + 0.45))));
-        if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
+        if (replay || (v === 1 && noHead)) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
         else {
             silhouette(g, box, covered ? -1e9 : upto, a0, b0);
             if (covered) label(g, '?', 540, lane.y + 4, { size: 96, weight: 800, color: P.ink3, align: 'center', base: 'middle' });
@@ -427,7 +427,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             void kD;
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
-        label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
+        label(g, 'same samples, drops matched in loudness', 540, 1290, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
         if (false) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
@@ -482,18 +482,20 @@ function drawAB(t, frame1 = false, noHead = false) {
         const k2 = popIn(t, dB.down, 0.2);
         const L1 = AB.lanes[0];
         const L2 = AB.lanes[1];
-        const t14 = wto('cta', 'fourteen', 0.1) - 0.1;
+        // After both have played: one figure, then what it is measured on and the kick as a whole.
+        const t14 = dB.down + 0.45;
         const k14 = popIn(t, t14, 0.25);
-        tag(g, 'buried click', X(0) - 160, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0), y: L1.y + L1.h / 2 - 10 }, { a: k1 * (1 - k14), bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
-        const kC = popIn(t, dA.down + 0.1, 0.25);
-        const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs the rest: ${sg(D.r1.clickDb)} dB in 1` : `click vs the rest: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 474, { size: 48, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        tag(g, 'clean click', X(0) + 170, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0) + 10, y: L2.y - L2.h / 2 + 10 }, { a: k2 * (1 - k14), bg: P.amber, fg: P.dark, size: 34 });
-        if (kC > 0) label(g, '2–6 kHz, first 20 ms, in this drop', 540, 566, { size: 36, weight: 700, color: P.ink, align: 'center', alpha: kC, family: BODY });
-        // On "fourteen": the difference counts up between the lanes, with the kick as a whole beside it.
+        tag(g, 'buried click', X(0) - 150, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0), y: L1.y + L1.h / 2 - 10 }, { a: k1 * (1 - k14), bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
+        tag(g, 'clean click', X(0) + 120, (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2, { x: X(0) + 10, y: L2.y - L2.h / 2 + 10 }, { a: k2 * (1 - k14), bg: P.amber, fg: P.dark, size: 34 });
+        // The pulse before the replay: both drop lines glow while "Hear the click?" is spoken.
+        if (t < dA.at) {
+            const pu = 0.5 + 0.5 * Math.sin((t - SC.replay) * 9);
+            for (const L of [L1, L2]) dashed(g, X(0), L.y - L.h / 2 - 6, X(0), L.y + L.h / 2 + 6, `rgba(251,191,36,${0.35 + 0.5 * pu})`, 6, [8, 8]);
+        }
         if (k14 > 0) {
             const n = Math.round(D.r2.clickDb - D.r1.clickDb) * E.out(seg(t, t14, t14 + 0.8));
             const ym = (L1.y + L1.h / 2 + L2.y - L2.h / 2) / 2;
+            label(g, `2–6 kHz, first 20 ms · kick overall +${fmt(D.claims[4].db)} dB`, 540, 500, { size: 36, weight: 700, color: P.ink, align: 'center', alpha: k14, family: BODY });
             pill(g, `≈ +${Math.round(n)} dB clearer click`, 540, ym + 4, { size: 54, bg: P.amber, fg: P.dark, alpha: k14, scale: E.outBack(k14) * (1 + 0.06 * Math.exp(-Math.max(0, t - t14 - 0.8) / 0.15) * (t > t14 + 0.8 ? 1 : 0)), weight: 800 });
         }
     }
@@ -518,7 +520,7 @@ function drawAB(t, frame1 = false, noHead = false) {
                 g.restore();
             }
             ['ears', 'limiter', 'brain'].forEach((w, i) => {
-                const kI = popIn(t, i === 0 ? wto('hook', 'why', 0) + 0.15 : wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
+                const kI = popIn(t, wto('hook', w, 0) - 0.05, 0.3) * (1 - out);
                 const x = 540 + (i - 1) * 300;
                 // A place held for each reason until it is named, so the card is never empty.
                 const kH = 0;
@@ -594,9 +596,9 @@ function stageState(t) {
     const u = e.off !== null && t >= e.off ? clamp((t - e.off) / (e.hit - e.off)) : 0;
     const uF = e.v === 2 ? clamp((wto('fresh', 'fades', 0.6) + 0.2 - e.off) / (e.hit - e.off), 0.3, 0.85) : 0.6;
     const silMs = keys(u, [[0, 0], [uF, 120], [Math.min(0.95, uF + 0.1), 200], [1, GAP_MS]]);
-    // The haze means one thing only, the after-fog: it appears when the riser stops and fades with the model.
-    // While the riser plays, its sound waves crowd the sensors instead.
-    const fog = e.off !== null && t >= e.off ? 0.9 * fogWeight(silMs) : 0;
+    // The haze is the dulling a loud sound leaves (the model): it builds under the riser, so in 1 the kick
+    // lands into noise and haze; in 2 the same haze is there at the cut and thins in the silence.
+    const fog = riserOn > 0 ? 0.2 + 0.65 * riserOn : e.off !== null && t >= e.off ? 0.85 * fogWeight(silMs) : 0;
     const covered = e.off === null;
     return { e, riser: riserOn, fog, silMs: Math.min(silMs, GAP_MS), covered };
 }
@@ -680,9 +682,10 @@ function drawEarSection(t, k) {
         const travel = e.travel;
         if (t >= e.hit - travel && t < e.hit + 0.35) {
             const u = seg(t, e.hit - travel, e.hit);
-            const dim = st.covered ? 0.85 : 0;
-            const a = (st.covered ? 0.4 * (0.6 + 0.4 * Math.sin(t * 47) ** 2) : 1) * (u < 1 ? lerp(1, 1 - dim, seg(u, 0.4, 1)) : (1 - dim) * (1 - seg(t, e.hit, e.hit + 0.35)));
-            sparkle(g, lerp(S.x0 + 20, 505, E.inOut(u)), lerp(880, 840, u), st.covered ? 40 : 70, a);
+            // Covered: the spark is seen clearly, then swallowed by the riser before it reaches the cells.
+            const dim = st.covered ? 0.88 : 0;
+            const a = u < 1 ? lerp(1, 1 - dim, seg(u, 0.45, 0.9)) : (1 - dim) * (1 - seg(t, e.hit, e.hit + 0.35));
+            sparkle(g, lerp(S.x0 + 20, 505, E.inOut(u)), lerp(880, 840, u), st.covered ? lerp(64, 36, seg(u, 0.45, 1)) : 70, a);
         }
         // The hit: a ring that spreads through the cells, faint when covered.
         if (t >= e.hit && t < e.hit + 0.7) {
@@ -704,6 +707,9 @@ function drawEarSection(t, k) {
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
         label(g, 'model · slowed', S.x0 + 104, S.y0 + 68, { size: 36, weight: 700, color: 'rgba(255,220,230,0.9)', family: BODY });
+        // The characters named on first sight.
+        const kHC = popIn(t, SC.fog + 1.1, 0.25) * (1 - popIn(t, SC.fog + 3.4, 0.3));
+        if (kHC > 0) pill(g, 'hair cells, inside your inner ear', 510, S.y0 + 150, { size: 38, bg: P.ink, fg: P.dark, alpha: kHC, scale: E.outBack(kHC), weight: 800 });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1) {
             const kG = popIn(t, e.off - 0.1, 0.2);
@@ -750,10 +756,10 @@ function drawEar(t) {
     const tR = wto('fog', 'riser', 0.38);
     const tCk = wto('fog', 'click', 0.95);
     const gloss = t < tR + 1.6 ? 'riser = the rising whoosh before a drop' : t >= tCk - 0.4 && t < SC.fresh ? "click = the kick's sharp first few ms" : t >= SC.fresh + 0.3 && t < SC.fresh + 2.3 ? 'after-fog = forward masking (Moore 2012)' : null;
-    if (!fresh && t < SC.fog + 2.8) {
+    if (!fresh && t < SC.fog + 3.6) {
         label(g, "riser = the build's rising whoosh", 540, 392, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
         label(g, "click = the kick's sharp first few ms", 540, 438, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
-    } else if (fresh && t >= SC.fresh + 0.3 && t < SC.fresh + 2.8) {
+    } else if (fresh && t >= SC.fresh + 0.3 && t < SC.fresh + 3.8) {
         label(g, 'after-fog = hearing stays dull for a moment', 540, 392, { size: 38, weight: 700, color: P.ink, align: 'center', family: BODY });
         label(g, 'after a loud sound (forward masking, Moore 2012)', 540, 438, { size: 34, weight: 700, color: P.ink2, align: 'center', family: BODY });
     } else if (gloss && fresh) label(g, gloss, 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
@@ -902,7 +908,7 @@ function drawHand(t) {
     g.restore();
     const kR = popIn(t, tKick + 0.15, 0.3);
     if (kR > 0) pill(g, 'measured on the first kick', 540, dk.y0 + dk.h + 42, { size: 38, bg: P.ink, fg: P.dark, alpha: kR, scale: E.outBack(kR), weight: 800 });
-    else label(g, live ? (ms < -GAP_MS ? `same build: both pulled down (slowed ${Math.round(slow)}×)` : 'in 2: it lets go in the gap; only the kick pulls') : 'the limiter on the master bus', 540, dk.y0 + dk.h + 62, { size: 36, weight: 700, color: P.ink2, align: 'center', family: BODY });
+    else label(g, live ? `slowed ${Math.round(slow)}×` : 'the limiter on the master bus', 540, dk.y0 + dk.h + 62, { size: 38, weight: 700, color: P.ink2, align: 'center', family: BODY });
     g.restore();
 }
 
@@ -1091,7 +1097,7 @@ function drawHow(t) {
     if (t < voBy.g16.at - 0.2) headline(t, SC.how + 0.1, [['Cut'], ['about'], ['¼'], ['second'], ['early']], 300, { size: 84, stagger: 0 });
     else headline(t, voBy.g16.at - 0.2, [['Why'], ['¼'], ['second?']], 300, { size: 92, stagger: 0 });
     label(g, `at ${TL.bpm} BPM: an 8th, ${Math.round(GAP_MS)} ms`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
-    const tCut = wto('how', 'cut', 0.03);
+    const tCut = wto('how', 'quarter', 0.3) - 0.45;
     const tEighth = wto('how', 'quarter', 0.12);
     const tAt = wto('how', 'at', 0.32);
     // Why a quarter: a 16th and an 8th of silence drawn on the after-fog's axis (shown, not played).
@@ -1343,7 +1349,7 @@ function drawHow(t) {
         // When a gap is complete, what the kick meets, above its edge.
         fills.forEach((f, i) => {
             const kO = popIn(t, f.b, 0.2) * (i === now ? 1 : 0);
-            if (kO > 0) pill(g, i === 0 ? 'can meet fog' : 'clear', clamp(ZX(f.to), Z.x0 + 100, Z.x1 - 100), y + 180, { size: 36, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO, scale: E.outBack(kO), weight: 800 });
+            if (kO > 0) pill(g, i === 0 ? 'helps, may meet fog' : 'clear, room to spare', clamp(ZX(f.to), Z.x0 + 100, Z.x1 - 100), y + 180, { size: 36, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO, scale: E.outBack(kO), weight: 800 });
         });
         if (now >= 0) {
             const inside = ZX(ms) > Z.x1 - 190;
@@ -1399,7 +1405,7 @@ function drawEnd(t) {
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
-    const tPoll = wto('cta', 'which', 0.85);
+    const tPoll = wto('cta', 'did', 0.7);
     // The lesson's address is up for the whole end card; the phone mock-up is left out (its text cannot be read at phone size).
     const tLesson = SC.end + 0.15;
     const SHOW_PHONE = false;
@@ -1440,11 +1446,12 @@ function drawEnd(t) {
         g.lineTo(-280, 270);
         g.lineTo(-130, 178);
         g.fill();
-        label(g, 'Which did you pick', 0, -115, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        label(g, 'at the start?', 0, -42, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
-        [1, 2].forEach((n, i) => {
-            const kc = popIn(t, wto('cta', ['one', 'two'][i], 0.95 + i * 0.03) - 0.05, 0.25);
-            if (kc > 0) badgeNum(g, n, (i ? 1 : -1) * 120, 82, Math.max(1, 54 * E.outBack(kc)), { fill: P.dark, color: P.ink, alpha: kc });
+        label(g, 'Did you pick 2?', 0, -115, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        const kQ = popIn(t, wto('cta', 'which', 0.85) - 0.05, 0.25);
+        label(g, 'Which gap do you use?', 0, -42, { size: 56, weight: 800, color: P.dark, align: 'center', base: 'middle', alpha: kQ });
+        ['16th', '8th'].forEach((c, i) => {
+            const kc = popIn(t, wto('cta', 'gap', 0.9) + i * 0.12, 0.25);
+            if (kc > 0) pill(g, c, (i ? 1 : -1) * 130, 75, { size: 52, bg: P.dark, fg: P.ink, alpha: kc, scale: E.outBack(kc), weight: 800 });
         });
         g.restore();
     }
@@ -1543,7 +1550,7 @@ function twoLines(words, maxW, space) {
     return best ? best.lines : null;
 }
 
-const SUB = { size: 54, maxW: 780, maxWords: 11, x: 510, y: 1388, lh: 70 };
+const SUB = { size: 54, maxW: 780, maxWords: 11, x: 510, y: 1348, lh: 70 };
 // A page never ends on these, and prefers to start on the second set.
 const WEAK = new Set(['a', 'an', 'the', 'of', 'for', 'to', 'up', 'in', 'on', 'with', 'and', 'but', 'that', 'your', 'at', 'is', 'it', 'has', 'than', 'less']);
 const LEAD = new Set(['right', 'after', 'before', 'for', 'with', 'and', 'but', 'is', 'in']);
@@ -1640,9 +1647,9 @@ function subtitles(t) {
             g.globalAlpha = a;
             // The version now playing, as a big numbered disc that pulses on its downbeat.
             const pulse = t >= d.down ? Math.exp(-(t - d.down) / 0.15) : 0;
-            badgeNum(g, d.v, 400, 1394, 46 * (1 + 0.2 * pulse));
-            speaker(g, 486, 1394, 1.1, 0.5 + 0.5 * Math.sin(t * 18));
-            label(g, 'Listen', 530, 1412, { size: 54, weight: 700, color: P.ink });
+            badgeNum(g, d.v, 400, SUB.y + 6, 46 * (1 + 0.2 * pulse));
+            speaker(g, 486, SUB.y + 6, 1.1, 0.5 + 0.5 * Math.sin(t * 18));
+            label(g, 'Listen', 530, SUB.y + 24, { size: 54, weight: 700, color: P.ink });
             g.restore();
         }
         return;

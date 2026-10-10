@@ -182,7 +182,7 @@ async function lesson() {
 }
 const L = await lesson();
 const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
-log(`End card: recap of the three reasons with the address ${TIMELINE.lesson.url} and the lesson title up throughout, then a comment question tied to the hook (which did you pick at the start, 1 or 2?); the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
+log(`End card: recap of the three reasons with the address ${TIMELINE.lesson.url} and the lesson title up throughout (shown, not spoken), then a comment question (did you pick 2? which gap do you use, 16th or 8th?); the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}
