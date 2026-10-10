@@ -341,7 +341,7 @@ function drawHook(t) {
     g.globalAlpha = a;
     // Into the speaker: everything else clears while the phone grows, its
     // grille moving to where the air scene's first speaker appears.
-    const zoomE = replay ? 0 : E.in(seg(t, SC.air - 0.45, SC.air));
+    const zoomE = replay ? 0 : E.inOut(seg(t, SC.air - 0.6, SC.air));
     const zoomTo = () => {
         const gx0 = HK.ph.x + HK.ph.w / 2;
         const gy0 = HK.ph.y + HK.ph.h - 52;
@@ -391,7 +391,11 @@ function drawHook(t) {
     const glow = clamp((phoneDb(t) + 34) / 18);
     const d = drumFlash(t);
     // The grille lights only for the bass the phone plays.
-    if (zoomE <= 0) phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
+    // Each bass note the phone cannot play: it shakes, and no ring leaves it.
+    let tryOn = 0;
+    if (!sat) for (const q of NOTES) if (t >= q.t && t - q.t < 0.3) tryOn = Math.max(tryOn, 1 - (t - q.t) / 0.3);
+    const shakeX = 6 * tryOn * Math.sin(t * 2 * Math.PI * 16);
+    if (zoomE <= 0) phoneBody(g, HK.ph.x + shakeX, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
     void d;
     pill(g, 'phone speaker (simulated)', 250, HK.ph.y - 48, { size: 32, bg: P.dark, fg: P.ink, ring: P.ink3, weight: 700 });
     // Sound leaving the grille: white rings for drum hits, cyan for bass notes the phone plays.
@@ -459,14 +463,16 @@ function drawHook(t) {
         let on = 0;
         for (const q of NOTES) if (t >= q.t && t - q.t < 0.35) on = Math.max(on, 1 - (t - q.t) / 0.35);
         if (on > 0) {
+            // The note flares in the dark zone: the track has it, the phone does not.
             const r0 = lad.rungs[0];
+            const hh = 16 * (1 + 0.9 * on);
             g.save();
-            g.globalAlpha *= 0.6 * on;
+            g.globalAlpha *= 0.95 * on;
             g.shadowColor = P.amber;
-            g.shadowBlur = 18;
-            rr(g, HK.lad.x0, r0.y - 8, lad.L(r0.full), 16, 4);
+            g.shadowBlur = 34;
+            rr(g, HK.lad.x0, r0.y - hh / 2, lad.L(r0.full) * (1 + 0.12 * on), hh, 5);
             g.strokeStyle = P.amber;
-            g.lineWidth = 3;
+            g.lineWidth = 3 + 3 * on;
             g.stroke();
             g.restore();
         }
@@ -481,7 +487,7 @@ function drawHook(t) {
     if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 + 4, { size: 28, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
     if (zoomE > 0) {
         g.save();
-        g.globalAlpha = a;
+        g.globalAlpha = 1 - seg(t, SC.air - 0.1, SC.air);
         zoomTo();
         phoneBody(g, HK.ph.x, HK.ph.y, HK.ph.w, HK.ph.h, { grille: glow, screen: phoneScreen(t, glow) });
         g.restore();
@@ -621,7 +627,13 @@ function drawPhone(t) {
     const want = t > tTry ? needNow * Math.sin(w * (t - tTry)) * E.out(popIn(t, tTry, 0.3)) : 0;
     // Pinned at a stop, the cone strains (a small fast shake), more as the sub is turned up.
     const strain = Math.abs(want) > stop ? clamp((Math.abs(want) - stop) / 40) * clamp((gain - 1) * 1.5) : 0;
-    const x = clamp(want, -stop, stop) + 5 * strain * Math.sin(t * 2 * Math.PI * 11);
+    // Each tick of the knob slams the cone into its stop: a hard shake that dies away.
+    let slam = 0;
+    for (const dt of [0.1, 0.45, 0.8]) {
+        const tk = cueAt(segBy.boost.boostDb) + dt;
+        if (t >= tk && t - tk < 0.4) slam = Math.max(slam, Math.exp(-(t - tk) / 0.1));
+    }
+    const x = clamp(want, -stop, stop) + 5 * strain * Math.sin(t * 2 * Math.PI * 11) + 8 * slam * Math.sin((t - tTry) * 2 * Math.PI * 15);
     const cx = mag.x - 20;
     const cy = mag.y - 62;
     g.save();
@@ -661,6 +673,20 @@ function drawPhone(t) {
     g.moveTo(cx - stop, by2);
     g.lineTo(cx + stop, by2);
     g.stroke();
+    // The stops flash on each slam: this is as far as it goes.
+    if (slam > 0.05) {
+        g.save();
+        g.globalAlpha *= slam;
+        g.strokeStyle = P.ink;
+        g.lineWidth = 5;
+        for (const sg of [-1, 1]) {
+            g.beginPath();
+            g.moveTo(cx + sg * (stop + 12), by2 - 22);
+            g.lineTo(cx + sg * (stop + 12), by2 + 22);
+            g.stroke();
+        }
+        g.restore();
+    }
     // Each time the cone hits a stop, the dot flashes white.
     const hit = Math.abs(want) > stop ? 1 - clamp((Math.abs(want) - stop) / 60) : 0;
     g.fillStyle = hit > 0 ? P.ink : P.amber;
@@ -983,7 +1009,8 @@ function drawScope(t) {
         }
         const ant = E.out(popIn(t, tPuts, 0.4));
         const look = { x: lerp(x0, x1, 0.5 + 0.3 * Math.sin(t * 0.8)), y: mid };
-        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [], wow: bump(t, wt('ghost', 'never') - 0.05, 0.12, 1.4) });
+        const wow = bump(t, wt('ghost', 'never') - 0.05, 0.12, 1.4);
+        robotDome(g, RB, { s: RB.s, look, lid: t < tBrain || wow > 0 ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [], wow });
         // On "Your brain": the listener is named.
         const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
         if (bn > 0) pill(g, 'your brain', Math.max(130, RB.x - 92 * RB.s), RB.y - 262 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
@@ -1017,7 +1044,7 @@ function drawScope(t) {
         for (let i = 0; i <= 60 * drawn; i++) {
             const u = i / 60;
             const px = CL.x - CL.w / 2 + 30 + u * (CL.w - 60);
-            const py = CL.y - 30 * Math.sin(u * Math.PI * 5 - t * 5);
+            const py = CL.y - 30 * (1 - E.inOut(seg(t, tNever - 0.25, tNever))) * Math.sin(u * Math.PI * 5 - t * 5);
             if (i) g.lineTo(px, py);
             else g.moveTo(px, py);
         }
@@ -1062,17 +1089,17 @@ function drawScope(t) {
             const k = E.inOut(fly);
             const tx = box.x0 + lad.L(0) / 2;
             const ty = lad.Y(q?.f0 ?? 51.91);
-            // Over the labels, then down into the ladder.
-            const cxp = 860;
-            const cyp = 860;
+            // Under the ladder, then up into the note's place: it crosses no rung.
+            const cxp = 640;
+            const cyp = 1390;
             const px = (1 - k) ** 2 * CL.x + 2 * (1 - k) * k * cxp + k * k * tx;
             const py = (1 - k) ** 2 * CL.y + 2 * (1 - k) * k * cyp + k * k * ty;
             g.strokeStyle = P.amber;
             g.lineWidth = 8;
             g.lineCap = 'round';
             g.beginPath();
-            g.moveTo(px - lerp(50, lad.L(0) / 2, k), py);
-            g.lineTo(px + lerp(50, lad.L(0) / 2, k), py);
+            g.moveTo(px - lerp(95, lad.L(0) / 2, k), py);
+            g.lineTo(px + lerp(95, lad.L(0) / 2, k), py);
             g.stroke();
         }
         if (gk > 0) {

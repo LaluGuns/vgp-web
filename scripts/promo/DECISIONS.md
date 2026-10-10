@@ -142,3 +142,8 @@ One line per call, newest last.
   - The phone sends white rings on every drum hit from the first kick (it plays the drums, not the sub); no harmonics in the first 0.2 s, where the FFT window only sees the onset.
   - The robot jumps and its eye opens wide on "never"; the pinned phone cone shakes harder as the sub goes up.
   - Recipe steps every 1.2 s, the replay starts at 73 s; the film runs 84 s.
+- Film 4 v13, after the twelfth review (9 accuracy, clarity, pacing and polish, 8.5 hook and craft):
+  - In the hook, each bass note the phone cannot play shakes the phone with no ring leaving it, and the note's bar flares in the dark zone.
+  - The zoom into the grille runs 0.6 s and lands where the air scene's first speaker appears.
+  - The heard note: the bubble's sine flattens into a bar, which travels under the ladder and up into the note's place (it crosses no rung); the robot does not blink while surprised.
+  - Each tick of the sub knob slams the phone cone into its stop: a hard shake, and the stops flash.
