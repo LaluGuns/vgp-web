@@ -116,7 +116,7 @@ Use a verse and a chorus of a finished vocal. Step 5 also needs a de-esser; if y
 
 1. Insert a plate or hall reverb on an aux return, 100% wet, and send the lead vocal to it at -12 dB.
 2. Set the pre-delay to 0 ms and listen, then set it to 50 ms. Listen to the start of each word separate from the room.
-3. Work out one beat at your tempo: 60 divided by the BPM. Start the decay at 2.5 s and shorten it in 0.2 s steps until the tail has faded before the next line begins.
+3. Start the decay at 2.5 s and shorten it in 0.2 s steps until the tail has faded before the next line begins.
 4. EQ the return: high-pass at 200 Hz and low-pass at 6 kHz.
 5. Put a de-esser on the send path, before the reverb, and set it so the s and t sounds stop splashing into the tail.
 6. Automate the send 4 dB lower in the verse than in the chorus.

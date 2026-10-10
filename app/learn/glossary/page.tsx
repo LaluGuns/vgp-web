@@ -69,8 +69,8 @@ export default function GlossaryPage() {
                     title="Glossary"
                     description={
                         <p>
-                            {terms.length} terms from the lessons, in plain words. In a lesson, tap a dotted word to see its definition without leaving
-                            the page.
+                            {terms.length} terms from the lessons, in plain words. Inside a lesson, tap a dotted word to read its definition without
+                            leaving the page.
                         </p>
                     }
                 />
