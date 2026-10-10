@@ -152,3 +152,13 @@ One line per call, newest last.
   - Cover: "the ¼-second gap" names the topic inside the 3:4 crop.
   - Loop: the end card and frame one cross-fade (no empty frame).
   - Declined: -14 LUFS (brief: -16); shortening the hook's guess beat below the spoken line; editing lesson 030.
+- Round 9 panel (weighted 7.88, down from 8.20; no factual error). Cause: "One, your ears / Two, your limiter / Three, your brain" collided with versions 1 and 2. Fixes for round 10:
+  - Script v8 names the reasons without numbers ("Your ears first", "Then your limiter", "And your brain"); numbers mean versions only, on screen too (sublabels "your ears", "your limiter", "your brain"). Version 1: the riser "covers" the click (not "buries"). Version 2: "its after-fog fades"; the how line: "That after-fog lasts up to a fifth of a second, and at 128 BPM, an eighth outlasts it." The brain line is shorter.
+  - The measured click result moves out of the model cochlea to the replay, over the waveforms, as the two measured values ("click vs the rest, 2-6 kHz: −1.3 → 12.5 dB").
+  - Status pills in white; amber stays the kick and the click.
+  - Scene changes are full-width pushes with both scenes opaque (no empty frame, no double exposure); the replay leaves before the end card arrives.
+  - How: the camera pushes in on the gap while it is cut; the millisecond bar runs from "a fifth of a second" to "outlasts it".
+  - Replay: two and a half beats after each downbeat, so "clean click" holds before the end card. A 0.3 s hold after version 2's sting, so the limiter scene starts after it.
+  - Hook: version 1's disclosure ("1 is the lesson's build: riser into the drop") sits under the lanes during the countdown, where the empty "comment your pick" line was; the claim-4 chip at 36 px.
+  - Cover pill: "the 234 ms gap".
+  - Status after round 9: one round without a rise (stop after three in a row).
