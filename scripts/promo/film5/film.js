@@ -345,8 +345,8 @@ function drawAB(t, frame1 = false, noHead = false) {
         // Version 2 stays covered until the answer, so the eye cannot answer before the ear;
         // then it is wiped in, hole and all.
         const tRev = wto('hook', 'two', 0.05);
-        const covered = v === 2 && !replay && !frame1 && t < tRev;
-        if (v === 2 && !replay && !frame1 && t >= tRev) upto = lerp(msA, msB, E.inOut(seg(t, tRev, tRev + 0.45)));
+        void tRev;
+        const covered = false;
         if (replay || v === 1) wave(g, v, box, a0, b0, 1e9, { alpha: 0.45 * dim });
         else if (covered || upto < msB) {
             silhouette(g, box, covered ? -1e9 : upto, a0, b0);
@@ -454,8 +454,8 @@ function drawAB(t, frame1 = false, noHead = false) {
         const L1 = AB.lanes[0];
         const L2 = AB.lanes[1];
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
-        const kC = popIn(t, dB.down + 0.15, 0.25);
-        if (kC > 0) pill(g, `measured: click vs the rest, 2–6 kHz: ${fmt(D.r1.clickDb)} → ${fmt(D.r2.clickDb)} dB`, 540, 560, { size: 34, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        const kC = popIn(t, dA.down + 0.1, 0.25);
+        if (kC > 0) pill(g, t < dB.down ? 'measured: click buried in 1' : `measured: click ${fmt(D.claims[2].db)} dB clearer in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     g.restore();
@@ -490,7 +490,7 @@ function stageEpisodes() {
     return [
         { v: 1, at: wto('fog', 'number', 0.25) - 0.2, on: wto('fog', 'number', 0.25), off: null, hit: tKick1, slow: 1 },
         { v: 1, at: S1.at, on: S1.at - 0.6, off: null, hit: S1.down, slow: 1, sting: true },
-        { v: 2, at: SC.fresh, on: SC.fresh - 0.4, off: tStop, hit: tKick2, slow: (tKick2 - tStop) / (GAP_MS / 1000) },
+        { v: 2, at: SC.fresh, on: SC.fresh - 0.4, off: Math.min(tStop, SC.fresh + 0.35), hit: tKick2, slow: (tKick2 - Math.min(tStop, SC.fresh + 0.35)) / (GAP_MS / 1000) },
         { v: 2, at: S2.at, on: S2.at - 0.6, off: S2.down - GAP_MS / 1000, hit: S2.down, slow: 1, sting: true },
     ];
 }
@@ -592,7 +592,7 @@ function drawEarSection(t, k) {
         g.restore();
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
-        label(g, 'inside the cochlea · hair cells', S.x0 + 104, S.y0 + 68, { size: 34, weight: 700, color: 'rgba(255,220,230,0.85)', family: BODY });
+        label(g, 'inside the cochlea · hair cells', S.x0 + 104, S.y0 + 68, { size: 34, weight: 700, color: 'rgba(255,220,230,0.85)', family: BODY, alpha: 1 - seg(t, tEars + 2.6, tEars + 3.0) });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1 && (e.sting || t < e.hit + 0.15)) {
             const kG = popIn(t, e.off - 0.1, 0.2);
@@ -634,10 +634,11 @@ function drawEar(t) {
     g.globalAlpha = a;
     cam(t, SC.fog, SC.hand);
     const fresh = t >= SC.fresh;
-    if (!fresh) headline(t, SC.fog + 0.1, [['In'], ['1,'], ['the'], ['riser'], ['covers'], ['the'], ['click', P.amber]], 300, { size: 80 });
-    else headline(t, SC.fresh + 0.05, [['In'], ['2,'], ['silence'], ['clears'], ['the'], ['way']], 300, { size: 80 });
+    if (!fresh) headline(t, SC.fog + 0.1, [['Riser'], ['covers'], ['the'], ['click', P.amber]], 300, { size: 88, stagger: 0 });
+    else headline(t, SC.fresh + 0.05, [['Silence'], ['clears'], ['the'], ['way']], 300, { size: 88, stagger: 0 });
     const tR = wto('fog', 'riser', 0.38);
-    const gloss = t >= tR && t < tR + 1.4 ? 'riser = the rising whoosh before a drop' : null;
+    const tCk = wto('fog', 'click', 0.95);
+    const gloss = t >= tR && t < tR + 1.4 ? 'riser = the rising whoosh before a drop' : t >= tCk - 0.6 && t < tCk + 1.2 ? "click = the kick's sharp first few ms" : null;
     label(g, gloss ?? 'your ears · slowed down (model)', 540, 400, { size: 36, weight: 600, color: gloss ? P.ink : P.ink2, align: 'center', family: BODY });
     drawEarSection(t, 1);
     g.restore();
@@ -653,9 +654,9 @@ function drawHand(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.hand, SC.brain);
-    headline(t, SC.hand + 0.1, [['The'], ['limiter'], ['is'], ['a'], ['hand']], 300, { size: 84 });
+    headline(t, SC.hand + 0.1, [['The'], ['limiter'], ['is'], ['a'], ['hand']], 300, { size: 84, stagger: 0 });
     label(g, t < SC.hand + 2.2 ? 'limiter = automatic volume control' : 'your limiter · its own gain, measured', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
-    const tHand = wto('hand', 'hand', 0.17);
+    const tHand = wto('hand', 'limiter', 0.12);
     const tRiser = wto('hand', 'riser', 0.38);
     // Slowed down from -700 ms to the kick on "down", then on to the end of
     // the click window (+20 ms, where claim 1 is measured) and held there.
@@ -786,7 +787,7 @@ function drawBrain(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.brain, SC.how);
-    headline(t, SC.brain + 0.1, [['Predict'], ['the'], ['next'], ['beat']], 300, { size: 88 });
+    headline(t, SC.brain + 0.1, [['Predict'], ['the'], ['next'], ['beat']], 300, { size: 88, stagger: 0 });
     label(g, 'your brain · expectation (Huron 2006)', 540, 400, { size: 36, weight: 600, color: P.ink2, align: 'center', family: BODY });
     // Eight beats: the last bar and a half of the build, then the downbeat.
     const n = 8;
@@ -828,13 +829,13 @@ function drawBrain(t) {
         g.strokeStyle = P.ink2;
         g.lineWidth = 4;
         g.beginPath();
-        g.moveTo(xa, BR.dots + 74);
-        g.lineTo(xa, BR.dots + 88);
-        g.lineTo(xb, BR.dots + 88);
-        g.lineTo(xb, BR.dots + 74);
+        g.moveTo(xa, BR.dots + 104);
+        g.lineTo(xa, BR.dots + 118);
+        g.lineTo(xb, BR.dots + 118);
+        g.lineTo(xb, BR.dots + 104);
         g.stroke();
         g.restore();
-        label(g, 'silence', (xa + xb) / 2, BR.dots + 130, { size: 34, weight: 700, color: P.ink2, align: 'center', alpha: ks, family: BODY });
+        label(g, 'silence', (xa + xb) / 2, BR.dots + 160, { size: 34, weight: 700, color: P.ink2, align: 'center', alpha: ks, family: BODY });
     }
     // The ball: hops on the beats, waits on beat 6, then the prediction: a dotted arc to the downbeat.
     const k = E.inOut(seg(t, tPred, tNext + 0.3));
@@ -863,7 +864,7 @@ function drawBrain(t) {
         g.arc(X(7), BR.dots, 34, 0, Math.PI * 2);
         g.stroke();
         g.restore();
-        tag(g, 'next beat', X(4.7), BR.dots - 60, { x: X(7) - 30, y: BR.dots - 12 }, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
+        tag(g, 'next beat', X(4.7), BR.dots - 60, { x: X(7) - 44, y: BR.dots - 20 }, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
     }
     let ball;
     if (t < tPred) {
@@ -900,7 +901,7 @@ function drawBrain(t) {
     }
     // The listener's brain: watches the ball, leans in during the silence, delighted when the kick lands.
     const B = BR.brain;
-    const kB = popIn(t, SC.brain + 0.1, 0.4);
+    const kB = 1;
     const waiting = t >= tPred && t < tLand ? 1 : 0;
     const joy = land >= 0 ? clamp(land / 0.2) : 0;
     const blink = Math.max(0, 1 - Math.abs(((t - SC.brain) % 3.1) - 1.5) / 0.08);
@@ -946,8 +947,8 @@ function drawHow(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
-    headline(t, SC.how + 0.1, [['Cut'], ['an'], ['8th'], ['early']], 300, { size: 92 });
-    label(g, `At ${TL.bpm} BPM`, 540, 400, { size: 40, weight: 700, color: P.ink2, align: 'center' });
+    headline(t, SC.how + 0.1, [['Cut'], ['¼'], ['second'], ['early']], 300, { size: 92, stagger: 0 });
+    label(g, `= an 8th at ${TL.bpm} BPM`, 540, 400, { size: 40, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'eighth', 0.12);
     const tAt = wto('how', 'at', 0.32);
@@ -1122,7 +1123,8 @@ function drawHow(t) {
         g.moveTo(ZX(200), y - 4);
         g.lineTo(ZX(200), y + 64);
         g.stroke();
-        const ms = GAP_MS * E.inOut(seg(t, tFifth - 0.2, tQuarter + 0.2));
+        const ms = GAP_MS * E.inOut(seg(t, tFogs, tQuarter + 0.2));
+        void tFifth;
         rr(g, ZX(0), y + 76, Math.max(1, ZX(ms) - ZX(0)), 36, 10);
         g.fillStyle = P.cyan;
         g.fill();
@@ -1252,7 +1254,7 @@ function drawEnd(t) {
         label(g, words.slice(cut).join(' '), 540, 1208, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
         // The comment poll: the lesson's four gap lengths as chips.
         ['32nd', '16th', '8th', 'beat'].forEach((c, i) => {
-            const kc = popIn(t, wto('cta', 'which', 0.7) - 0.1 + i * 0.06, 0.25);
+            const kc = popIn(t, SC.end + 0.5 + i * 0.12, 0.25);
             if (kc > 0) pill(g, c, 540 + (i - 1.5) * 170, 1272, { size: 40, bg: c === '8th' ? P.cyan : P.ink, fg: P.dark, alpha: kc, scale: E.outBack(kc), weight: 800 });
         });
     }
@@ -1269,7 +1271,8 @@ function twoLines(words, maxW, space) {
     for (let i = 1; i < words.length; i++) {
         const l1 = words.slice(0, i);
         const l2 = words.slice(i);
-        const m = Math.max(width(l1), width(l2));
+        // Balance the two lines, but never end the first on a weak word (a, the, so ...).
+        const m = Math.max(width(l1), width(l2)) + (WEAK.has(norm(l1[l1.length - 1].w)) || norm(l1[l1.length - 1].w) === 'so' ? 400 : 0);
         if (width(l1) <= maxW && width(l2) <= maxW && (!best || m < best.m)) best = { m, lines: [l1, l2] };
     }
     return best ? best.lines : null;
@@ -1462,6 +1465,9 @@ function draw(t, { words = true } = {}) {
     }
     ground(g, t, 0.3 * kick);
     // The crowd jumps on every demo kick, as high as that version's first kick is loud as heard.
+    // The crowd only where the music is heard as a song: the hook, the replay and the end.
+    g.save();
+    g.globalAlpha = clamp(1 - seg(t, SC.fog - 0.3, SC.fog) + seg(t, SC.replay - 0.3, SC.replay));
     crowd(g, t, (delay) => {
         let lift = 0;
         for (const d of DEMOS) {
@@ -1473,9 +1479,10 @@ function draw(t, { words = true } = {}) {
         }
         return lift;
     });
+    g.restore();
     // The last half second hands off to frame one: the end card goes, then frame one comes.
-    const out = seg(t, TL.duration - 0.6, TL.duration - 0.25);
-    const loop = seg(t, TL.duration - 0.45, TL.duration - 0.05);
+    const out = seg(t, TL.duration - 0.62, TL.duration - 0.34);
+    const loop = seg(t, TL.duration - 0.36, TL.duration - 0.04);
     g.save();
     g.globalAlpha = 1;
     // A small camera shake on each demo kick.
@@ -1504,7 +1511,7 @@ function drawCover() {
     ground(g, 0, 0.2);
     // Both versions drawn in full, the hook's last frame, under a large question
     // that sits inside the profile grid's 3:4 crop (y 240 to 1680).
-    const tc = demoBy.B.to - 0.02;
+    const tc = demoBy.B.to + 0.02;
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
