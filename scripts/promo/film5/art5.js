@@ -458,8 +458,8 @@ function consoleDesk(g, x0, y0, w, h) {
     for (const cx of [x0 - 28, x0 + w]) {
         rr(g, cx, y0 - 10, 28, h + 20, 12);
         const wd = g.createLinearGradient(cx, 0, cx + 28, 0);
-        wd.addColorStop(0, P.wood);
-        wd.addColorStop(1, P.woodLo);
+        wd.addColorStop(0, '#6e5a49');
+        wd.addColorStop(1, '#45372d');
         g.fillStyle = wd;
         g.fill();
     }

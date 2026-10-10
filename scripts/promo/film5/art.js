@@ -965,7 +965,7 @@ function speaker(g, x, y, s, level) {
     g.lineCap = 'round';
     g.lineWidth = 5;
     for (let i = 0; i < 3; i++) {
-        g.strokeStyle = `rgba(125,211,252,${clamp(level * 3 - i) * 0.9 + 0.12})`;
+        g.strokeStyle = `rgba(248,250,252,${clamp(level * 3 - i) * 0.9 + 0.12})`;
         g.beginPath();
         g.arc(6, 0, 14 + i * 11, -0.8, 0.8);
         g.stroke();

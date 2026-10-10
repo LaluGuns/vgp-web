@@ -26,7 +26,7 @@ const dur = (id) => {
 const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
-const HOOK = { pre: 1.5, post: 2 };
+const HOOK = { pre: 2, post: 2 };
 const REPLAY = { pre: 1, post: 1.5 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
@@ -108,14 +108,14 @@ export const TIMELINE = {
         { cue: ['hand', 'hand', 0.17], dt: -0.1, kind: 'grab' },
         { cue: ['hand', 'down', 0.7], dt: 0, kind: 'grab', level: 0.7 },
         { cue: ['brain', 'silence', 0], dt: -0.25, kind: 'whoosh', level: 0.5 },
-        { cue: ['brain', 'there', 0.68], dt: 0, kind: 'kick' },
-        { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
+        { cue: ['brain', 'there', 0.7], dt: 0, kind: 'kick' },
+        { cue: ['brain', 'pays', 0.9], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['how', 'eighth', 0.6], dt: 0, kind: 'tick' },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
         { cue: ['cta', 'the', 0], dt: -0.25, kind: 'whoosh' },
-        { cue: ['cta', 'play', 0.45], dt: 0.05, kind: 'tick' },
+        { cue: ['cta', 'lesson', 0.3], dt: 0.05, kind: 'tick' },
         { at: button, kind: 'button' },
     ],
     button,
