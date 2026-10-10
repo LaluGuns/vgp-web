@@ -22,7 +22,7 @@ export const post135: BlogArticle = {
             type: 'signal',
             caption:
                 'Two reverbs that both move a vocal back, drawn as a sketch of the first 400 ms. The first puts most of its energy in strong early reflections before the 80 ms line. The second has weak early reflections and a long tail that is still sounding when the plot ends.',
-            alt: 'Two level plots over time. Each starts with a tall spike for the dry sound. In the first, a cluster of medium spikes follows within the first 80 ms and a short grey tail dies away quickly. In the second, the early spikes are small and a grey tail decays slowly across the whole plot, well past the 80 ms line.',
+            alt: 'Two level plots over time. Each starts with a tall spike for the dry sound. In the first, a cluster of medium spikes follows within the first 80 ms and a short dotted tail dies away quickly. In the second, the early spikes are small and a dotted tail decays slowly across the whole plot, well past the 80 ms line.',
             rows: [
                 {
                     label: 'Strong early reflections, short tail',
@@ -30,7 +30,7 @@ export const post135: BlogArticle = {
                     marks: BOUNDARY,
                     traces: [
                         { kind: 'hits', label: 'Dry and early', outline: true, decay: 150, at: [0.025, 0.07, 0.1, 0.13, 0.16, 0.19, 0.21], amp: [1, 0.55, 0.45, 0.5, 0.35, 0.3, 0.25] },
-                        { kind: 'hits', label: 'Tail', muted: true, outline: true, decay: 5.5, at: [0.12], amp: [0.2] },
+                        { kind: 'hits', label: 'Tail', dotted: true, outline: true, decay: 5.5, at: [0.12], amp: [0.2] },
                     ],
                 },
                 {
@@ -39,7 +39,7 @@ export const post135: BlogArticle = {
                     marks: BOUNDARY,
                     traces: [
                         { kind: 'hits', label: 'Dry and early', outline: true, decay: 150, at: [0.025, 0.07, 0.1, 0.13, 0.16, 0.19, 0.21], amp: [1, 0.15, 0.12, 0.14, 0.1, 0.08, 0.07] },
-                        { kind: 'hits', label: 'Tail', muted: true, outline: true, decay: 1.1, at: [0.12], amp: [0.35] },
+                        { kind: 'hits', label: 'Tail', dotted: true, outline: true, decay: 1.1, at: [0.12], amp: [0.35] },
                     ],
                 },
             ],

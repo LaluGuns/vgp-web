@@ -7,7 +7,7 @@ export const post111: BlogArticle = {
     category: 'licensing-guide',
     publishedAt: '2026-01-15',
     updatedAt: '2026-10-09',
-    readingTime: 4,
+    readingTime: 5,
     summary: [
         'Personal use means practice and private listening. Anything that earns money or promotes a release or a business is commercial use.',
         'Putting a song on Spotify or Apple Music is commercial use even at ten streams, because it is public distribution on a paid service.',

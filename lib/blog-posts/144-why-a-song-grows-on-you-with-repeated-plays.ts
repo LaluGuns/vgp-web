@@ -23,7 +23,7 @@ export const post144: BlogArticle = {
             bars: [
                 { label: 'Similar music', value: 0.551, display: '0.55' },
                 { label: 'Number of plays', value: 0.464, display: '0.46' },
-                { label: 'Complexity', value: 0.226, display: '0.23', dim: true },
+                { label: 'Complexity', value: 0.226, display: '0.23' },
             ],
         },
         split: {

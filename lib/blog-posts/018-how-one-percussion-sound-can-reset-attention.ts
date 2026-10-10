@@ -21,7 +21,7 @@ export const post018: BlogArticle = {
             alt: 'Four rows on a 16-step grid. Kick and snare hits sit on steps 1, 5, 9, 11 and 13. Hats play eighth notes. A fill row has eight rising sixteenths over beats three and four. A one-hit row has a single hit on the last step.',
             rows: [
                 { label: 'Kick, snare', hits: [0, 4, 8, 10, 12] },
-                { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: '8ths' },
+                { label: 'Hats', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: 'eighths' },
                 {
                     label: 'Fill',
                     note: 'beats 3 and 4',
@@ -45,7 +45,7 @@ export const post018: BlogArticle = {
     },
     quiz: [
         {
-            q: 'Your listener is following the vocal and not the drums. After three bars of the same loop, you drop one rim click on the last 16th of bar four. Will it register?',
+            q: 'Your listener is following the vocal and not the drums. After three bars of the same loop, you drop one rim click on the last sixteenth of bar four. Will it register?',
             options: [
                 'No, because a sound nobody is attending to is not processed at all',
                 'Only if it is louder than the vocal, because attention follows level',

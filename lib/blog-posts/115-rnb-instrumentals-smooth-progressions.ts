@@ -74,7 +74,6 @@ export const post115: BlogArticle = {
                 {
                     label: 'Snare',
                     note: 'late',
-                    focus: true,
                     hits: [
                         { step: 4, offset: 0.12 },
                         { step: 12, offset: 0.12 },
@@ -154,7 +153,7 @@ Extended chords share more notes with their neighbours. Dm9 and G13, voiced as i
 
 The ear hears it that way because of how it groups notes. Huron (2001) showed that most traditional voice-leading rules follow from a few perceptual principles, one of them pitch proximity: a note followed by a nearby pitch is heard as the same line continuing. When every note of a chord moves a step or stays, the listener hears four lines gliding. When the whole block jumps, the lines break and the change is heard as an event.
 
-The drums follow the same logic in time. A snare a few milliseconds late reads as relaxed, as long as the offset is small and consistent. At 90 BPM a 16th lasts 60,000 / 90 / 4 = 166.7 ms, so a snare 20 ms late is about a tenth of a 16th off the grid.
+The drums follow the same logic in time. A snare a few milliseconds late reads as relaxed, as long as the offset is small and consistent. At 90 BPM a sixteenth lasts 60,000 / 90 / 4 = 166.7 ms, so a snare 20 ms late is about a tenth of a sixteenth off the grid.
 
 ::figure groove
 

@@ -92,7 +92,9 @@ readable text.
   recognize, normalize, analyse. Three trade words keep the form producers
   see in their tools and in Flow: "license" (noun and verb; Flow sells the
   Creator License), "analyzer" for the tool, "meter" for the device. The
-  musical sense is "metre". "Midrange" is one word.
+  musical sense is "metre". "Midrange" is one word. One form each for
+  "artefact", "judgment", "toward" and "off-beat". Within a lesson, write
+  note values one way: "16th" and "8th", or "sixteenth" and "eighth".
 
 ## Figure dialects
 

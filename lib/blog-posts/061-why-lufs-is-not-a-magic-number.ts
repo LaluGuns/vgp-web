@@ -125,7 +125,7 @@ At the same integrated reading, the limited copy usually sounds flatter: the dru
 
 The usual mistake is carrying one target across every genre and arrangement. A dense electronic track with sustained synths can take more limiting before it falls apart than a sparse acoustic song, where the space between notes is part of the sound. A number from a tutorial knows nothing about your song.
 
-The opposite mistake is deciding that, because services normalize, -14 LUFS is now the rule. Spotify does suggest -14 LUFS integrated in its mastering tips, but nothing breaks when a master is louder. It is turned down, and it should keep its true peak below -2 dBTP, as covered in the [lesson on streaming loudness myths](/blog/the-streaming-loudness-myth-that-refuses-to-die).
+The opposite mistake is deciding that, because services normalize, -14 LUFS is now the rule. Spotify does suggest -14 LUFS integrated in its mastering tips, but nothing breaks when a master is louder. It is turned down, and it should keep its true peak below -2 dBTP; the [lesson on streaming loudness myths](/blog/the-streaming-loudness-myth-that-refuses-to-die) explains why.
 
 ## Producer takeaway: decide by ear, check with the meter
 

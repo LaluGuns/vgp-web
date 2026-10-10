@@ -82,7 +82,7 @@ export const glossary: GlossaryEntry[] = [
         id: 'plr',
         term: 'Peak to loudness ratio',
         forms: ['peak to loudness ratio', 'peak-to-loudness ratio', 'PLR'],
-        definition: 'The gap between a master\u2019s true peak and its integrated loudness. Heavy limiting makes it smaller, and normalization makes it the number that decides how punchy a track sounds next to others.',
+        definition: 'The gap between a master\'s true peak and its integrated loudness. Heavy limiting makes it smaller, and normalization makes it the number that decides how punchy a track sounds next to others.',
         article: 'loudness-and-dynamic-range-are-different-readings',
     },
     {
@@ -609,7 +609,7 @@ export const glossary: GlossaryEntry[] = [
         id: 'scale-degree',
         term: 'Scale degree',
         forms: ['scale degrees', 'scale degree'],
-        definition: 'A note\u2019s position in the key, counted from the tonic: in C major, C is 1, D is 2 and G is 5.',
+        definition: 'A note\'s position in the key, counted from the tonic: in C major, C is 1, D is 2 and G is 5.',
     },
     {
         id: 'cadence',

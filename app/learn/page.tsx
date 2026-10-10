@@ -44,7 +44,7 @@ const formats: { title: string; status: string; description: string; href: strin
         title: 'Music Production Guide: Trap Edition',
         status: 'PDF, coming soon',
         description:
-            'More than 80 pages on 808 tuning, vocal processing, mix balance and loudness for streaming. Written for producers who want a method they can repeat.',
+            'More than 80 pages on trap drums, 808 tuning, vocals, mix balance and mastering for streaming.',
         href: '/book',
         cta: 'See the chapters',
         cover: { src: '/ebooks/trap-guide-book-cover.jpg', alt: 'Cover of Music Production Guide: Trap Edition by Virzy Guns' },

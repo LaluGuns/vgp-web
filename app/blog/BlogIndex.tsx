@@ -638,7 +638,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     <p className="mt-5 text-xs text-white/50">PDF, coming soon</p>
                                     <p className="mt-1 text-lg font-semibold leading-snug text-white">Music Production Guide: Trap Edition</p>
                                     <p className="mt-2 text-sm leading-6 text-white/65">
-                                        The long version of these notes: 80+ pages on 808s, drums, mix balance and mastering.
+                                        More than 80 pages on trap drums, 808 tuning, vocals, mix balance and mastering for streaming.
                                     </p>
                                     <p className="mt-1">
                                         <TapLink href="/book" className="text-sm font-medium text-white">

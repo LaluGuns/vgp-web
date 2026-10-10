@@ -99,7 +99,7 @@ The TR-808 cowbell is built from two of the machine's pulse-wave oscillators at 
 
 A sampler that transposes by changing playback speed changes length too. Up $n$ semitones, the sample plays $2^{n/12}$ times faster: an octave up, a 300 ms hit lasts 150 ms; an octave down, 600 ms. That is why the top of a wide riff clicks and the bottom drags. Keep the line within about an octave of the root.
 
-Rhythm matters as much as the notes. Straight 8ths land with the pulse. Grouping 16ths as 3+3+2 puts notes between the beats, so the line pushes against the kick.
+Rhythm matters as much as the notes. Straight eighths land with the pulse. Grouping sixteenths as 3+3+2 puts notes between the beats, so the line pushes against the kick.
 
 ::figure cowbell
 
@@ -116,7 +116,7 @@ Streaming services turn loud tracks down to a similar playback level, so past a 
 Step 6 needs a clipper with oversampling; if your DAW's clipper has no such switch, use a third-party one.
 
 1. Load a cowbell sample into a sampler, set the root note to the sample's real pitch, and write a four-bar minor riff that stays within one octave.
-2. Program it twice: straight 8ths, then 16ths grouped 3+3+2. Keep the version that pulls against the kick the way you want.
+2. Program it twice: straight eighths, then sixteenths grouped 3+3+2. Keep the version that pulls against the kick the way you want.
 3. Add a distorted 808: duplicate it, high-pass the copy around 100 Hz after the distortion, and keep the clean sub in mono.
 4. Duck the 808 and the cowbell from the kick with a sidechain compressor for the pumping bounce. Leave the vocal sample out of the sidechain.
 5. Process a vocal: pitch it down two to four semitones, high-pass around 300 Hz and low-pass around 3 to 4 kHz, then add a little hiss and slow pitch wobble for tape wear.

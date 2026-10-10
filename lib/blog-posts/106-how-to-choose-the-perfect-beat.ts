@@ -69,7 +69,7 @@ export const post106: BlogArticle = {
                 'Turn the beat down so you can hear yourself',
             ],
             answer: 0,
-            why: 'In the project the producer can move the melody and bass and leave the drums alone. A pitch shifter on a mixed file retunes the drums too and can add artifacts.',
+            why: 'In the project the producer can move the melody and bass and leave the drums alone. A pitch shifter on a mixed file retunes the drums too and can add artefacts.',
         },
         {
             q: 'Why is a bright lead synth playing through the verse a warning sign?',
@@ -125,7 +125,7 @@ Hear how one beat changes character across tempos, and notice where your own poc
 
 The intro of a beat is written to sell the beat. It usually shows off the melody that will later sit on top of your verse. Judge the verse section, with your voice on it.
 
-The second mistake is planning to fix the key afterwards with a pitch shifter on the mixed file. Ask for a transposed version from the project instead; the drums keep their tuning and the bass moves without artifacts. The [lesson on tempo and key matching](/blog/understanding-bpm-and-key-matching) has the maths.
+The second mistake is planning to fix the key afterwards with a pitch shifter on the mixed file. Ask for a transposed version from the project instead; the drums keep their tuning and the bass moves without artefacts. The [lesson on tempo and key matching](/blog/understanding-bpm-and-key-matching) has the maths.
 
 The third is ignoring the license until release day. If an engineer will mix your vocal inside the beat, you need a tier with stems.
 

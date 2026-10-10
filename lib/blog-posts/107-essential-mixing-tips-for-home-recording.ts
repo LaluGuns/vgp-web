@@ -21,12 +21,12 @@ export const post107: BlogArticle = {
             unit: 'dB',
             caption:
                 'Direct sound from the voice at the mic, relative to 10 cm, from the inverse square law: 20 log10 of the distance ratio. Each doubling costs 6 dB. The room\'s reflections arrive at roughly the same level wherever you stand in a small room, so the voice loses 6 dB against the room with every doubling.',
-            alt: 'Four bars for mic distance. 10 cm at 0 dB, 20 cm at minus 6 dB, 40 cm at minus 12 dB and 80 cm at minus 18.1 dB. The 10 cm bar is in the accent.',
+            alt: 'Four bars for mic distance. 10 cm at 0 dB, 20 cm at minus 6 dB, 40 cm at minus 12 dB and 80 cm at minus 18.1 dB. The 10 cm reference bar is grey and the three farther distances are in the accent.',
             bars: [
-                { label: '10 cm', value: 0, display: '0 dB' },
-                { label: '20 cm', value: -6, display: '-6.0 dB', dim: true },
-                { label: '40 cm', value: -12, display: '-12.0 dB', dim: true },
-                { label: '80 cm', value: -18.1, display: '-18.1 dB', dim: true },
+                { label: '10 cm', value: 0, display: '0 dB', dim: true },
+                { label: '20 cm', value: -6, display: '-6.0 dB' },
+                { label: '40 cm', value: -12, display: '-12.0 dB' },
+                { label: '80 cm', value: -18.1, display: '-18.1 dB' },
             ],
         },
         eq: {
@@ -124,7 +124,7 @@ Then the chain. A compressor reacts to whatever level it sees, including rumble 
 
 A common way to compress a rap vocal is two compressors each doing a little: a fast one catching only the loudest words by 2 to 4 dB, then a slower one levelling the performance by another 2 to 3 dB. Neither has to work hard enough to be heard. The [lesson on compression and motion](/blog/how-compression-changes-motion-not-level) explains how attack and release shape each word.
 
-Time the delays to the beat. A quarter note lasts 60,000 / BPM milliseconds; halve it for an 8th, halve again for a 16th, and multiply the 8th by 1.5 for a dotted 8th.
+Time the delays to the beat. A quarter note lasts 60,000 / BPM milliseconds; halve it for an eighth, halve again for a sixteenth, and multiply the eighth by 1.5 for a dotted eighth.
 
 ::figure delays
 

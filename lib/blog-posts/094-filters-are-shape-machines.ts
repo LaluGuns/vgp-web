@@ -26,8 +26,8 @@ export const post094: BlogArticle = {
                 'Three Butterworth high-pass filters at 100 Hz. All are 3 dB down at the cutoff. One octave lower, at 50 Hz, they are 12, 24 and 48 dB down.',
             alt: 'Gain against frequency for three high-pass filters with the same 100 Hz cutoff. Above the cutoff all three are flat at 0 dB. Below it the 12 dB per octave curve falls gently, the 24 dB curve twice as fast and the 48 dB curve almost straight down.',
             curves: [
-                { kind: 'eq', label: '12 dB/oct', muted: true, bands: highpass([0.7071]) },
-                { kind: 'eq', label: '24 dB/oct', dashed: true, bands: highpass([0.5412, 1.3066]) },
+                { kind: 'eq', label: '12 dB/oct', dashed: true, bands: highpass([0.7071]) },
+                { kind: 'eq', label: '24 dB/oct', dotted: true, bands: highpass([0.5412, 1.3066]) },
                 { kind: 'eq', label: '48 dB/oct', bands: highpass([0.5098, 0.6013, 0.9, 2.5629]) },
             ],
             marks: [{ f: 100, label: 'Cutoff' }],

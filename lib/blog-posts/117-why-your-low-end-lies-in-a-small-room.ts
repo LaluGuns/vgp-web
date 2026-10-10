@@ -41,7 +41,7 @@ export const post117: BlogArticle = {
                     label: 'First length mode, 43 Hz',
                     traces: [
                         { kind: 'sine', cycles: 0.5, phase: 90, amp: 0.85 },
-                        { kind: 'sine', cycles: 0.5, phase: 270, amp: 0.85, muted: true },
+                        { kind: 'sine', cycles: 0.5, phase: 270, amp: 0.85, dotted: true },
                     ],
                     marks: [{ t: 0.5, label: 'Null at 2 m' }],
                 },
@@ -49,7 +49,7 @@ export const post117: BlogArticle = {
                     label: 'Second length mode, 86 Hz',
                     traces: [
                         { kind: 'sine', cycles: 1, phase: 90, amp: 0.85 },
-                        { kind: 'sine', cycles: 1, phase: 270, amp: 0.85, muted: true },
+                        { kind: 'sine', cycles: 1, phase: 270, amp: 0.85, dotted: true },
                     ],
                     marks: [
                         { t: 0.25, label: 'Null at 1 m' },

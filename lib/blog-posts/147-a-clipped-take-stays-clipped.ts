@@ -76,8 +76,8 @@ export const post147: BlogArticle = {
             bars: [
                 { label: 'Note, as recorded', value: 0, display: '0 dB' },
                 { label: '3rd harmonic, as recorded', value: -17.8, display: '-17.8 dB' },
-                { label: 'Note, fader -6 dB', value: -6, display: '-6 dB', dim: true },
-                { label: '3rd harmonic, fader -6 dB', value: -23.8, display: '-23.8 dB', dim: true },
+                { label: 'Note, fader -6 dB', value: -6, display: '-6 dB' },
+                { label: '3rd harmonic, fader -6 dB', value: -23.8, display: '-23.8 dB' },
             ],
         },
     },

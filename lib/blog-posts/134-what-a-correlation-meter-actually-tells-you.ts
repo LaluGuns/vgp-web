@@ -63,12 +63,12 @@ export const post134: BlogArticle = {
             type: 'scale',
             caption:
                 'A mix where centred parts hold 90% of the energy and a pad in opposite polarity holds 10%. The meter averages them by energy and reads +0.8, which looks healthy, while the pad disappears completely in mono.',
-            alt: 'A line from -1 to +1. A marker at -1 is labelled pad, 10%, a marker at +1 is labelled centre parts, 90%, and a larger marker at +0.8 is labelled meter.',
+            alt: 'A line from -1 to +1. Larger markers at -1 and +0.8 are labelled pad, 10%, and meter. A smaller marker at +1 is labelled centre parts, 90%.',
             min: -1,
             max: 1,
             ticks: [-1, -0.5, 0, 0.5, 1],
             markers: [
-                { value: -1, label: 'Pad, 10%' },
+                { value: -1, label: 'Pad, 10%', strong: true },
                 { value: 0.8, label: 'Meter +0.8', strong: true },
                 { value: 1, label: 'Centre parts, 90%' },
             ],

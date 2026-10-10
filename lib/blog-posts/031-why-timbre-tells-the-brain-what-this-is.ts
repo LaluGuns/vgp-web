@@ -103,7 +103,7 @@ Each term is one harmonic: a line at $n f_0$ with amplitude $A_n$. The fundament
 
 ::demo filter
 
-The spectrum is only half of timbre. When listeners rate how different pairs of instrument sounds are, the same few properties keep explaining their judgements: how fast the sound rises at the start, where the centre of its spectrum sits, and how much the spectrum changes over time (Grey, 1977; McAdams and colleagues, 1995). The start matters for recognition too. Instruments become harder to identify once the starts of their notes are cut off (Saldanha and Corso, 1964). A sound's identity lives in how it starts as much as in how it sustains.
+The spectrum is only half of timbre. When listeners rate how different pairs of instrument sounds are, the same few properties keep explaining their judgments: how fast the sound rises at the start, where the centre of its spectrum sits, and how much the spectrum changes over time (Grey, 1977; McAdams and colleagues, 1995). The start matters for recognition too. Instruments become harder to identify once the starts of their notes are cut off (Saldanha and Corso, 1964). A sound's identity lives in how it starts as much as in how it sustains.
 
 ## DAW experiment: the four-sound test
 

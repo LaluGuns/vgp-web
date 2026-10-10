@@ -33,12 +33,12 @@ export const post038: BlogArticle = {
             mode: 'level',
             caption:
                 'Four quiet textures, sketched. Each covers a broad band, and together they cover the whole range the vocal uses, so the vocal competes with them wherever it has energy.',
-            alt: 'Four overlapping grey humps spread from the low hundreds of hertz to above 5 kHz, with a dashed vocal hump centred near 2 kHz sitting inside them.',
+            alt: 'Four overlapping humps spread from the low hundreds of hertz to above 5 kHz, with a dashed vocal hump centred near 2 kHz sitting inside them.',
             curves: [
-                { kind: 'hump', center: 250, width: 1.3, level: 0.45, label: 'Four textures', muted: true },
-                { kind: 'hump', center: 600, width: 1, level: 0.5, muted: true },
-                { kind: 'hump', center: 2500, width: 1.4, level: 0.4, muted: true },
-                { kind: 'hump', center: 6000, width: 1.2, level: 0.5, muted: true },
+                { kind: 'hump', center: 250, width: 1.3, level: 0.45, label: 'Four textures' },
+                { kind: 'hump', center: 600, width: 1, level: 0.5 },
+                { kind: 'hump', center: 2500, width: 1.4, level: 0.4 },
+                { kind: 'hump', center: 6000, width: 1.2, level: 0.5 },
                 { kind: 'hump', center: 2000, width: 1, level: 0.7, label: 'Vocal', dashed: true },
             ],
         },

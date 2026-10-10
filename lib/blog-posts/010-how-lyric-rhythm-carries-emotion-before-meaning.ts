@@ -89,8 +89,8 @@ export const post010: BlogArticle = {
             max: 800,
             unit: 'Hz',
             bars: [
-                { label: '"ee" as in heed', value: 270, display: '270', dim: true },
-                { label: '"oo" as in who\'d', value: 300, display: '300', dim: true },
+                { label: '"ee" as in heed', value: 270, display: '270' },
+                { label: '"oo" as in who\'d', value: 300, display: '300' },
                 { label: '"ah" as in hod', value: 730, display: '730' },
             ],
             reference: { value: 440, label: 'A4 sung, 440 Hz' },

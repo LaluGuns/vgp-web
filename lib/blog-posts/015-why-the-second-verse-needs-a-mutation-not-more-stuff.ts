@@ -11,7 +11,7 @@ export const post015: BlogArticle = {
     summary: [
         'Stacking new parts into verse two raises it to chorus density, so the second chorus has no step left to take.',
         'A familiar part that changes how it plays gives the listener something new to notice without adding a stream to follow.',
-        'Change one or two parts, such as moving the bass to the offbeats or swapping the hats for a shaker, and leave the rest alone.',
+        'Change one or two parts, such as moving the bass to the off-beats or swapping the hats for a shaker, and leave the rest alone.',
     ],
     figures: {
         stacked: {
@@ -39,15 +39,15 @@ export const post015: BlogArticle = {
         mutate: {
             type: 'rhythm',
             caption:
-                'One bar of each verse. In verse two the bass keeps its notes but moves to the offbeat eighths, and a shaker in sixteenths with offbeat accents replaces the straight hats. Same parts, same density, a different groove.',
-            alt: 'Four rows on a 16-step grid. Verse 1 bass hits on beats 1, 2, 3 and 4. Verse 2 bass hits on the offbeat eighths. Verse 1 hats play straight eighths. Verse 2 shaker plays all sixteen steps, louder on the offbeats.',
+                'One bar of each verse. In verse two the bass keeps its notes but moves to the off-beat eighths, and a shaker in sixteenths with off-beat accents replaces the straight hats. Same parts, same density, a different groove.',
+            alt: 'Four rows on a 16-step grid. Verse 1 bass hits on beats 1, 2, 3 and 4. Verse 2 bass hits on the off-beat eighths. Verse 1 hats play straight eighths. Verse 2 shaker plays all sixteen steps, louder on the off-beats.',
             rows: [
                 { label: 'Bass, V1', hits: [0, 4, 8, 12], note: 'on the beats' },
-                { label: 'Bass, V2', focus: true, hits: [2, 6, 10, 14], note: 'offbeats' },
-                { label: 'Hats, V1', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: 'straight 8ths' },
+                { label: 'Bass, V2', focus: true, hits: [2, 6, 10, 14], note: 'off-beats' },
+                { label: 'Hats, V1', hits: [0, 2, 4, 6, 8, 10, 12, 14], note: 'straight eighths' },
                 {
                     label: 'Shaker, V2', focus: true,
-                    note: '16ths, accents',
+                    note: 'sixteenths, accents',
                     hits: Array.from({ length: 16 }, (_, step) => ({ step, level: step % 4 === 2 ? 1 : 0.45 })),
                 },
             ],
@@ -71,7 +71,7 @@ export const post015: BlogArticle = {
                 'Adding a synth that doubles the chords',
                 'Bringing in an extra percussion loop',
                 'Doubling the bass an octave up on a synth',
-                'Moving the bass notes onto the offbeats',
+                'Moving the bass notes onto the off-beats',
             ],
             answer: 3,
             why: 'A mutation changes how an existing part behaves. The listener hears the same bass doing something new, and no new stream joins the mix.',
@@ -106,7 +106,7 @@ The listener does need something new in verse two. The question is where the nov
 
 The ear responds less to a pattern that repeats without change. This habituation is why an exact copy of verse one feels flat the second time, even when it sounded good the first time.
 
-Repetition can still hold attention. Margulis (2014) argues that repetition is central to how people hear music as music, and that listeners keep finding new things to attend to in material they already know. Huron (2006) describes listening as constant prediction: a pattern the listener can predict is rewarding, and a small departure from it draws attention. A mutated verse gives both. The bass is the same bass, so the listener recognizes the verse. It now plays on the offbeats, so the listener notices.
+Repetition can still hold attention. Margulis (2014) argues that repetition is central to how people hear music as music, and that listeners keep finding new things to attend to in material they already know. Huron (2006) describes listening as constant prediction: a pattern the listener can predict is rewarding, and a small departure from it draws attention. A mutated verse gives both. The bass is the same bass, so the listener recognizes the verse. It now plays on the off-beats, so the listener notices.
 
 A new part works differently. Huron (1989) found that musicians counting the voices in a texture of similar timbres were accurate up to three and made many more errors at four, mostly by counting too few. Every new part pushes the texture toward the point where the listener stops following individual lines. A mutation changes a line the listener already follows.
 
@@ -116,8 +116,8 @@ A new part works differently. Huron (1989) found that musicians counting the voi
 
 1. Save a copy of the session, then mute every track that plays only in verse two.
 2. Loop the first eight bars of verse two.
-3. Move the bass notes that land on the beats to the offbeat eighth just after them. Keep the same pitches.
-4. Replace the closed hi-hat eighths with a shaker playing sixteenths, accented on the offbeats.
+3. Move the bass notes that land on the beats to the off-beat eighth just after them. Keep the same pitches.
+4. Replace the closed hi-hat eighths with a shaker playing sixteenths, accented on the off-beats.
 5. Shorten the chord notes to sixteenth-note stabs, or halve the release of the chord synth's amp envelope.
 6. Keep at most two of the three changes. Undo the one that pulls the verse furthest from the song.
 7. Play verse one, chorus one and verse two in order.

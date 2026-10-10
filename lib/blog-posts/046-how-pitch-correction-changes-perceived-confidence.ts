@@ -90,7 +90,7 @@ export const post046: BlogArticle = {
             alt: 'A line from -100 to +100 cents. G♯4 at 415.3 Hz sits at -100, the sung note at 432 Hz at about -32, A4 at 440 Hz at 0 and A♯4 at 466.2 Hz at +100. A band from -50 to +50 is labelled as pulled to A4.',
             markers: [
                 { value: -100, label: 'G♯4' },
-                { value: -31.8, label: '432 Hz' },
+                { value: -31.8, label: '432 Hz', strong: true },
                 { value: 0, label: 'A4, 440 Hz', strong: true },
                 { value: 100, label: 'A♯4' },
             ],

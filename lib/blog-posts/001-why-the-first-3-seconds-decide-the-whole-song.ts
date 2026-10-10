@@ -147,7 +147,7 @@ Your intro is a promise. It tells the listener what the song is. If you start wi
 `,
     seo: {
         title: 'Skip risk starts in the intro',
-        description: 'Learn why the first seconds of your song decide whether a listener stays or skips, and how to open with one clear sonic promise.',
+        description: 'About a quarter of streamed songs are skipped in the first five seconds. Why a crowded intro loses listeners, and how to open on one clear sound.',
         keywords: ['opening hook', 'arrangement density', 'songwriting tips', 'streaming skips', 'auditory scene analysis'],
     },
 };

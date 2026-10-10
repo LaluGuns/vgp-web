@@ -43,8 +43,8 @@ export const post065: BlogArticle = {
             ticks: [-16, -12, -8, -4, 0],
             markers: [
                 { value: -14, label: 'Both play at -14 LUFS', strong: true },
-                { value: -9, label: 'A peaks' },
-                { value: -4, label: 'B peaks' },
+                { value: -9, label: 'A peaks', strong: true },
+                { value: -4, label: 'B peaks', strong: true },
             ],
             ranges: [
                 { from: -14, to: -9, label: 'A: 5 dB' },

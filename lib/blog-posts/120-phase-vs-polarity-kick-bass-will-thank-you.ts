@@ -103,7 +103,7 @@ export const post120: BlogArticle = {
                 'Delay the amp track by another 9 ms',
             ],
             answer: 1,
-            why: 'The amp and speaker shift the phase of the lows without moving the attack, so no nudge lines up every frequency, and a phase-rotation tool shifts phase without delay. A boost gives both tracks more to cancel, panning still cancels in mono, and 9 ms puts 55 Hz half a cycle apart.',
+            why: 'The amp and speaker shift the phase of the lows without moving the attack, so no nudge lines up every frequency; a phase-rotation tool shifts phase without any delay. A boost gives both tracks more to cancel, panning still cancels in mono, and 9 ms puts 55 Hz half a cycle apart.',
         },
     ],
     content: `## Hook: the amp track that makes the bass smaller

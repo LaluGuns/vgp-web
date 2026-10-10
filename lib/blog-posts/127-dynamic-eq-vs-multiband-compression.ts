@@ -45,8 +45,8 @@ export const post127: BlogArticle = {
             bars: [
                 { label: 'Dynamic EQ, 3 kHz ring', value: 0, display: '0 dB' },
                 { label: 'Dynamic EQ, 4 kHz peak', value: -8.1, display: '-8.1 dB' },
-                { label: 'Multiband, 3 kHz ring', value: -2.1, display: '-2.1 dB', dim: true },
-                { label: 'Multiband, 4 kHz peak', value: -2.1, display: '-2.1 dB', dim: true },
+                { label: 'Multiband, 3 kHz ring', value: -2.1, display: '-2.1 dB' },
+                { label: 'Multiband, 4 kHz peak', value: -2.1, display: '-2.1 dB' },
             ],
         },
     },

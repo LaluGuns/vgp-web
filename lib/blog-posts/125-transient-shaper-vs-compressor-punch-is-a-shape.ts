@@ -190,7 +190,7 @@ A sustain boost has a different risk. Because it ignores level, it lifts every t
 
 ## Producer takeaway: decide whether level should matter
 
-Before reaching for either tool, ask whether loud and quiet hits should be treated differently. If they should, the compressor's threshold is a feature: it shapes the backbeats and leaves the ghost notes soft. If they should not, the shaper gives every hit the same change without a threshold to chase as the performance gets louder or softer. On drum loops and samples with a fixed level I go to the shaper first; on a live drummer with a wide dynamic range I usually want the compressor's judgement on level. Either way, compare at matched loudness and watch the peak meter.
+Before reaching for either tool, ask whether loud and quiet hits should be treated differently. If they should, the compressor's threshold is a feature: it shapes the backbeats and leaves the ghost notes soft. If they should not, the shaper gives every hit the same change without a threshold to chase as the performance gets louder or softer. On drum loops and samples with a fixed level I go to the shaper first; on a live drummer with a wide dynamic range I usually want the compressor's judgment on level. Either way, compare at matched loudness and watch the peak meter.
 
 ## References
 

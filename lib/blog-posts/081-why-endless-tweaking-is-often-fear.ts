@@ -16,7 +16,7 @@ export const post081: BlogArticle = {
     figures: {
         loop: {
             type: 'flow',
-            caption: 'The tweak loop. Flicking bypass is the step that should test the change at matched level, and because it never does, nothing in the loop can end it.',
+            caption: 'The tweak loop. Flicking bypass is its only test, and without a level match it settles nothing, so the loop has no way out.',
             alt: 'Four steps with an arrow from the last back to the first: hear a doubt, nudge a setting, flick bypass without matching level, get no clear answer, then doubt again.',
             steps: [
                 { label: 'Hear a doubt about the vocal' },

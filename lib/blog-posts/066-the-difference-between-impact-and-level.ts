@@ -68,7 +68,7 @@ export const post066: BlogArticle = {
     ],
     content: `## Hook: the drop that did not land
 
-You want the chorus to hit. You push the mix into the limiter, raise the master fader, and the meters climb. When the chorus arrives it is loud, and it does not land. The verse was already almost as loud, the kick has turned into a thud, and the moment you built towards barely registers.
+You want the chorus to hit. You push the mix into the limiter, raise the master fader, and the meters climb. When the chorus arrives it is loud, and it does not land. The verse was already almost as loud, the kick has turned into a thud, and the moment you built toward barely registers.
 
 Level and impact are different things. Level is how much energy a meter averages. Impact is change: how far a hit jumps out of the sound around it, and how far a section rises above the one before.
 
@@ -90,7 +90,7 @@ The distance between the transients and the average is the crest factor, also ca
 
 $$\\text{PAR} = 20 \\log_{10}\\left( \\frac{V_{\\text{peak}}}{V_{\\text{RMS}}} \\right)$$
 
-A pure sine has a PAR of about 3 dB. A square wave, the shape heavy clipping pushes towards, has 0 dB, because its peak and its RMS level are the same. Drum recordings sit well above the sine. Limit the peaks by a few decibels, add the same amount of makeup gain, and the peaks land where they were while the body, which holds most of the energy, rises almost the full amount. The PAR falls by close to the gain reduction.
+A pure sine has a PAR of about 3 dB. A square wave, the shape heavy clipping pushes toward, has 0 dB, because its peak and its RMS level are the same. Drum recordings sit well above the sine. Limit the peaks by a few decibels, add the same amount of makeup gain, and the peaks land where they were while the body, which holds most of the energy, rises almost the full amount. The PAR falls by close to the gain reduction.
 
 That is why level-based thinking misleads you. Loudness meters average over 400 ms or longer and barely register a short transient, so they reward a change that removes the part of the sound that carries impact. The comparison is biased too: in a quick A/B, the louder version tends to sound better, even when it is the flatter one.
 

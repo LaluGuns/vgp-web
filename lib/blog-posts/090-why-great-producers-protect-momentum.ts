@@ -17,7 +17,7 @@ export const post090: BlogArticle = {
         skeleton: {
             type: 'arrangement',
             caption:
-                'What a 30-minute skeleton gives you: every section exists and every sound is a placeholder. It answers questions a polished eight-bar loop cannot, such as where the energy should drop (here the drums thin out for the bridge) and what the bridge is for.',
+                'A 30-minute skeleton: every section exists and every sound is a placeholder. It already shows where the energy drops, here the drums thinning out for the bridge, which a polished eight-bar loop cannot tell you.',
             alt: 'Arrangement grid of a rough song skeleton across intro, verse, chorus, bridge and outro. Chords play throughout, drums and bass enter in the verse, the lead comes in low in the verse and is strongest in the chorus, the bridge thins out and the outro leaves only chords.',
             density: true,
             sections: [
@@ -37,7 +37,7 @@ export const post090: BlogArticle = {
         note: {
             type: 'flow',
             caption:
-                'Handling a problem without leaving the idea. The interruption lasts as long as it takes to write one line, and the fix happens later, when fixing is the only job.',
+                'Handling a problem without leaving the idea: the interruption lasts one written line, and the fix waits until fixing is the only job.',
             alt: 'Four steps in a row: hear a problem while writing, write one line on the fix list, keep writing, then fix the list in the finishing pass.',
             steps: [
                 { label: 'Hear a problem while writing', note: '"Snare is harsh"' },
