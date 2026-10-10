@@ -483,10 +483,23 @@ export function sequence(
             step = (step + 1) % steps;
         }
     };
-    tick();
-    const timer = window.setInterval(tick, 25);
+    // The first steps are made in a task of their own, a moment after the one that built the demo's
+    // graph, with 80 ms to spare: making a step's voices is main-thread work, and the two together
+    // ran long on a slow phone. If the page was too busy even for that, the loop starts a little late
+    // rather than without its first step.
+    let first = window.setTimeout(() => {
+        first = 0;
+        next = Math.max(next, ctx.currentTime + 0.005);
+        tick();
+    }, 0);
+    const timer = window.setInterval(() => {
+        if (!first) tick();
+    }, 25);
     return {
-        stop: () => window.clearInterval(timer),
+        stop: () => {
+            window.clearTimeout(first);
+            window.clearInterval(timer);
+        },
         setBpm: (b) => {
             tempo = b;
         },
