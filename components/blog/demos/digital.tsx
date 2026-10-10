@@ -25,6 +25,13 @@ function stored(f: number, rate: number, filter: Filter): { freq: number; gain: 
 }
 
 /**
+ * 32768 as "32,768". By hand: the first toLocaleString on a page sets up the
+ * browser's number formatting, which cost a slow phone a long task as the
+ * demo mounted.
+ */
+const groupThousands = (n: number) => String(n).replace(/\B(?=(\d{3})+$)/g, ',');
+
+/**
  * A rising sine sweep, played back as a 16 kHz converter would store it.
  * Above 8 kHz the stored tone turns around and falls: that falling tone
  * is the alias.
@@ -102,7 +109,7 @@ export function AliasingDemo() {
         c.retune();
     };
 
-    const hz = (f: number) => `${Math.round(f).toLocaleString('en-US')} Hz`;
+    const hz = (f: number) => `${groupThousands(Math.round(f))} Hz`;
     const rateNum = Number(rate);
 
     return (
@@ -315,7 +322,7 @@ export function BitDepthDemo() {
                 live
                 items={[
                     { label: 'Quantization noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
-                    { label: 'Steps between silence and full scale', value: (2 ** (bits - 1)).toLocaleString('en-US') },
+                    { label: 'Steps between silence and full scale', value: groupThousands(2 ** (bits - 1)) },
                 ]}
             />
         </div>

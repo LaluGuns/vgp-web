@@ -56,13 +56,14 @@ const MATCH_MAX = 10 ** (30 / 20);
 /**
  * Matched for loudness, a slow attack leaves the hits' first milliseconds
  * standing above everything else, so the compressed loop peaks higher than
- * the bypass. Up to 6 dB higher is allowed (the default needs about that, so
- * it may sit a fraction of a dB short); past that the matching stops, which
- * keeps every setting under the demo's ceiling, and the demo says how much
- * quieter that leaves the loop. This room sets the loudest peak of any demo
- * at the house level (lib/blog/demos.ts), so it is no larger than it needs to be.
+ * the bypass. Up to 6.3 dB higher is allowed (the default needs about 6.2,
+ * so it may sit a fraction of a dB short); past that the matching stops,
+ * which keeps every setting under the demo's ceiling, and the demo says how
+ * much quieter that leaves the loop. This room sets the loudest peak of any
+ * demo at the house level (engine.ts HOUSE), so it is no larger than the
+ * default needs.
  */
-const PEAK_ROOM = 10 ** (6 / 20);
+const PEAK_ROOM = 10 ** (6.3 / 20);
 
 const RATE = 44100;
 const BPM = 92;
@@ -71,8 +72,7 @@ const BAR = STEP * 16;
 const LEAD = 0.05;
 /**
  * Bars rendered for a measurement. The first lets the compressor settle; the rest are measured.
- * Five measured bars put the matching within about 0.2 dB of what a long listen measures, so the
- * note's "about N dB" rounds the way the playback does.
+ * Five measured bars put the matching within about 0.2 dB of what a long listen measures.
  */
 const BARS = 6;
 
@@ -94,47 +94,87 @@ interface CompAnalysis {
     short: number;
 }
 
-/**
- * Renders six bars of the loop offline, dry and through the compressor, and
- * measures the last five: K-weighted loudness (engine.ts) for the matching,
- * and the highest peaks for the 7 dB allowance. The snare and hats are noise,
- * different on every hit, so one bar alone can be a dB off what plays.
- */
-async function analyseComp(params: CompParams): Promise<CompAnalysis> {
-    const ctx = new OfflineAudioContext(4, Math.ceil((LEAD + BARS * BAR + 0.1) * RATE), RATE);
-    const merger = ctx.createChannelMerger(4);
-    merger.connect(ctx.destination);
-    const bus = ctx.createGain();
-    const undo = ctx.createGain();
-    undo.gain.value = undoMakeup(params.threshold, params.ratio);
-    bus.connect(compressor(ctx, params)).connect(undo);
-    bus.connect(merger, 0, 0);
-    undo.connect(merger, 0, 1);
-    kWeighted(ctx, bus).connect(merger, 0, 2);
-    kWeighted(ctx, undo).connect(merger, 0, 3);
-    await scheduleSteps(BARS * 16, (s) => playDrumStep(ctx, bus, s % 16, LEAD + s * STEP, STEP));
-    const buffer = await ctx.startRendering();
-    const [dry, wet, dryK, wetK] = [0, 1, 2, 3].map((c) => buffer.getChannelData(c));
-    let peakDry = 0;
-    let peakWet = 0;
-    let powDry = 0;
-    let powWet = 0;
-    // A bar at a time, with a yield after each, so a slow phone never spends long in here at once.
+/** Peak of `x` and summed power of `k` over the measured bars, a bar at a time with a yield after each, so a slow phone never spends long in here at once. */
+async function measureBars(x: Float32Array, k: Float32Array): Promise<{ peak: number; power: number }> {
+    let peak = 0;
+    let power = 0;
     for (let bar = 1; bar < BARS; bar++) {
         const from = Math.round((LEAD + bar * BAR) * RATE);
         const to = Math.round((LEAD + (bar + 1) * BAR) * RATE);
         for (let i = from; i < to; i++) {
-            const d = dry[i] < 0 ? -dry[i] : dry[i];
-            const w = wet[i] < 0 ? -wet[i] : wet[i];
-            if (d > peakDry) peakDry = d;
-            if (w > peakWet) peakWet = w;
-            powDry += dryK[i] * dryK[i];
-            powWet += wetK[i] * wetK[i];
+            const v = x[i] < 0 ? -x[i] : x[i];
+            if (v > peak) peak = v;
+            power += k[i] * k[i];
         }
         await yieldToMain();
     }
-    const wanted = powWet > 0 ? Math.sqrt(powDry / powWet) : 1;
-    const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * peakDry) / peakWet : MATCH_MAX);
+    return { peak, power };
+}
+
+interface CompLoop {
+    /** The dry loop as it plays, for every measurement to play through the compressor. */
+    source: AudioBuffer;
+    peakDry: number;
+    powDry: number;
+}
+
+let compLoopJob: Promise<CompLoop> | null = null;
+
+/**
+ * Six bars of the dry loop, rendered once per page with its K-weighted copy,
+ * and its peak and loudness over the last five. Every setting is then
+ * measured by playing this one render through the compressor: a buffer
+ * source instead of a few hundred voices and two channels instead of four,
+ * so a slider step on a slow phone stays inside a frame's budget, and every
+ * setting is compared on the same hits.
+ */
+function prepareCompLoop(): Promise<CompLoop> {
+    compLoopJob ??= (async () => {
+        const length = Math.ceil((LEAD + BARS * BAR + 0.1) * RATE);
+        const ctx = new OfflineAudioContext(2, length, RATE);
+        const merger = ctx.createChannelMerger(2);
+        merger.connect(ctx.destination);
+        const bus = ctx.createGain();
+        bus.connect(merger, 0, 0);
+        kWeighted(ctx, bus).connect(merger, 0, 1);
+        await scheduleSteps(BARS * 16, (s) => playDrumStep(ctx, bus, s % 16, LEAD + s * STEP, STEP));
+        const buffer = await ctx.startRendering();
+        const dry = buffer.getChannelData(0);
+        const { peak, power } = await measureBars(dry, buffer.getChannelData(1));
+        const source = new AudioBuffer({ numberOfChannels: 1, length, sampleRate: RATE });
+        source.copyToChannel(dry, 0);
+        return { source, peakDry: peak, powDry: power };
+    })().catch((error: unknown) => {
+        compLoopJob = null;
+        throw error;
+    });
+    return compLoopJob;
+}
+
+/**
+ * Plays the measured loop (six bars) through the compressor offline and
+ * measures the last five against the dry loop: K-weighted loudness (engine.ts)
+ * for the matching, and the highest peaks for the peak allowance. The snare
+ * and hats are noise, different on every hit, so one bar alone can be a dB
+ * off what plays.
+ */
+async function analyseComp(params: CompParams): Promise<CompAnalysis> {
+    const loop = await prepareCompLoop();
+    const ctx = new OfflineAudioContext(2, loop.source.length, RATE);
+    const merger = ctx.createChannelMerger(2);
+    merger.connect(ctx.destination);
+    const src = ctx.createBufferSource();
+    src.buffer = loop.source;
+    const undo = ctx.createGain();
+    undo.gain.value = undoMakeup(params.threshold, params.ratio);
+    src.connect(compressor(ctx, params)).connect(undo);
+    undo.connect(merger, 0, 0);
+    kWeighted(ctx, undo).connect(merger, 0, 1);
+    src.start();
+    const buffer = await ctx.startRendering();
+    const { peak: peakWet, power: powWet } = await measureBars(buffer.getChannelData(0), buffer.getChannelData(1));
+    const wanted = powWet > 0 ? Math.sqrt(loop.powDry / powWet) : 1;
+    const match = Math.min(wanted, MATCH_MAX, peakWet > 0 ? (PEAK_ROOM * loop.peakDry) / peakWet : MATCH_MAX);
     return { params, match, short: 20 * Math.log10(wanted / match) };
 }
 

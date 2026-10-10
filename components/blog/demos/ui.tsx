@@ -167,7 +167,7 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
     });
     // Brings a tucked Stop button back and starts its three seconds again (set while it is shown).
     const wake = useRef<() => void>(() => {});
-    // Whether the Stop button was tucked when the pointer went down on it: that tap only brings it back.
+    // Whether the Stop button was tucked when a finger or pen went down on it: that tap only brings it back.
     const tuckedAtPress = useRef(false);
     // The audio context is made on the press (a mouse button, a key) or as a finger lifts, a task
     // before the click, so the click itself only starts the sound.
@@ -257,8 +257,9 @@ export function PlayButton({ playing, onClick, label = 'Play' }: { playing: bool
             <button
                 type="button"
                 onClick={stopHere}
-                onPointerDown={() => {
-                    tuckedAtPress.current = tucked && away && !window.matchMedia('(min-width: 1024px)').matches;
+                onPointerDown={(e) => {
+                    // A mouse has already brought it back by hovering (app/globals.css), so its click stops.
+                    tuckedAtPress.current = e.pointerType !== 'mouse' && tucked && away && !window.matchMedia('(min-width: 1024px)').matches;
                 }}
                 onFocus={() => wake.current()}
                 aria-keyshortcuts="Escape"

@@ -30,9 +30,10 @@ const LIMIT_MAKEUP = 10 ** ((-0.6 * CEILING_DB * (1 - 1 / LIMIT_RATIO)) / 20);
  * Q, as in kWeighted below), both channels, ungated, measured over whole
  * loops. The drum loops' hits peak around -13 dBFS there. It is the highest
  * level at which every demo's loudest setting still peaks under -7 dBFS:
- * the compressor demo's slow attack, matched for loudness, sets it (its
- * peaks reach about -7.4 dBFS), with the transient demo's compressor close
- * behind. The volume starts at 100 % (volume.ts).
+ * the loudness-matched compressors set it (the transient demo's, and the
+ * compressor demo at its strongest settings, peak about -7.3 dBFS over a
+ * long listen; everything else stays under -8). The volume starts at 100 %
+ * (volume.ts).
  */
 const HOUSE = 0.212;
 

@@ -184,21 +184,21 @@ it. Sound is synthesised in the browser. Ids:
 New demos go in `components/blog/demos/` and `lib/blog/demos.ts`. Give each
 one a `height` there (its controls' height in each width range that file
 lists), so the page keeps that space while the demo's code loads and nothing
-below it moves. Set its `level` there (a playback trim in dB) so its
-default setting sits at the house loudness, -29 LUFS at 100 % demo volume
-(BS.1770 K-weighting with the standard high-pass, both channels, ungated,
-over whole loops), and check that its loudest setting peaks under -7 dBFS
-there; a comparison that would peak higher stops matching at that point
-and says how much quieter it plays (the compressor and transient demos
-do). -29 is the highest level at which every demo fits under that peak:
-the loudness-matched slow-attack compressor sets it, peaking about
--7.4 dBFS. The reader's volume is the last stage, after the engine's
--6 dBFS limiter and clip, so it never changes what a demo does; the
-limiter and clip only catch mistakes. The volume starts at 100 %. Schedule
-a loop with the engine's `sequence` (it skips steps a stalled page made
-late instead of stacking them into one loud hit), and give a voice's
-envelope an `envelopeGain` (a new GainNode starts at 1, and a noise hit
-can then open with one full-scale sample).
+below it moves. Set its `level` there (a playback trim in dB) so its default
+setting sits at the house loudness, -29 LUFS at 100 % demo volume (BS.1770
+K-weighting with the standard high-pass, both channels, ungated, over whole
+loops), and check that its loudest setting peaks under -7 dBFS there; a
+comparison that would peak higher stops matching at that point and says how
+much quieter it plays (the compressor and transient demos do). -29 is the
+highest level at which every demo fits under that peak: the loudness-matched
+compressors set it (the transient demo's, and the compressor demo at its
+strongest settings, peak about -7.3 dBFS). The reader's volume is the last
+stage, after the engine's -6 dBFS limiter and clip, so it never changes what
+a demo does; the limiter and clip only catch mistakes. The volume starts at
+100 %. Schedule a loop with the engine's `sequence` (it skips steps a
+stalled page made late instead of stacking them into one loud hit), and give
+a voice's envelope an `envelopeGain` (a new GainNode starts at 1, and a
+noise hit can then open with one full-scale sample).
 
 ## Glossary
 

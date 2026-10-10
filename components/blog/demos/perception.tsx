@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
-import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
+import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, scheduleSteps, sequence, snare, type Engine } from './engine';
 import {
     LevelTrace,
     Meter,
@@ -304,7 +304,8 @@ async function measureMidSide(sampleRate: number): Promise<MidSidePower> {
     kWeighted(ctx, mid).connect(merger, 0, 0);
     kWeighted(ctx, side).connect(merger, 0, 1);
     merger.connect(ctx.destination);
-    for (let step = 0; step < MIX_STEPS; step++) playMixStep(ctx, bus, step, 0.05 + step * stepDur, stepDur);
+    // A few steps at a time (engine.ts scheduleSteps), so this idle-time measurement never holds up a frame.
+    await scheduleSteps(MIX_STEPS, (step) => playMixStep(ctx, bus, step, 0.05 + step * stepDur, stepDur));
     const buffer = await ctx.startRendering();
     return { mid: meanSquare(buffer.getChannelData(0)), side: meanSquare(buffer.getChannelData(1)) };
 }
@@ -360,6 +361,8 @@ function applyWidth(n: WidthNodes, s: WidthSettings) {
     for (const g of n.match) g.gain.setTargetAtTime(match, t, 0.05);
 }
 
+const SCOPE_FONT = '11px system-ui, sans-serif';
+
 function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array, scale: number, dialect: Dialect) {
     const s = canvas2d(c);
     if (!s) return;
@@ -385,7 +388,7 @@ function drawScope(c: HTMLCanvasElement | null, l: Float32Array, r: Float32Array
     g.stroke();
     g.setLineDash([]);
     g.fillStyle = 'rgba(255,255,255,0.55)';
-    g.font = '11px system-ui, sans-serif';
+    g.font = SCOPE_FONT;
     g.fillText('L', 5, 13);
     g.fillText('R', w - 12, 13);
     g.fillText('M', cx + 4, 12);
@@ -429,22 +432,133 @@ function CorrelationMeter({ value }: { value: number | null }) {
     );
 }
 
+/** The width meters' running averages, kept between frames (WidthDemo resets them on Play and on a switch to mono). */
+interface WidthSmooth {
+    ll: number;
+    rr: number;
+    lr: number;
+    midDb: number;
+    sideDb: number;
+    scale: number;
+    at: number;
+}
+
+const freshSmooth = (): WidthSmooth => ({ ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 });
+
+/**
+ * The correlation meter, the scope and the mid and side meters. They move
+ * about 20 times a second while the demo plays, so they are a component of
+ * their own: only they re-render as they move, not the whole demo (on a slow
+ * phone that was a long task every few frames), and a change to the demo's
+ * settings does not re-render them.
+ */
+const WidthReadings = memo(function WidthReadings({
+    active,
+    nodesRef,
+    smoothRef,
+}: {
+    active: boolean;
+    nodesRef: MutableRefObject<WidthNodes | null>;
+    smoothRef: MutableRefObject<WidthSmooth>;
+}) {
+    const dialect = useDialect();
+    const scope = useRef<HTMLCanvasElement>(null);
+    const [meters, setMeters] = useState<{ corr: number; mid: number; side: number } | null>(null);
+    useFrame(active, () => {
+        const n = nodesRef.current;
+        if (!n) return;
+        n.anL.getFloatTimeDomainData(n.bufL);
+        n.anR.getFloatTimeDomainData(n.bufR);
+        const l = n.bufL;
+        const r = n.bufR;
+        let ll = 0;
+        let rr = 0;
+        let lr = 0;
+        let peak = 0;
+        for (let i = 0; i < l.length; i++) {
+            ll += l[i] * l[i];
+            rr += r[i] * r[i];
+            lr += l[i] * r[i];
+            peak = Math.max(peak, Math.abs(l[i] + r[i]), Math.abs(l[i] - r[i]));
+        }
+        // Average over about a fifth of a second, like a hardware meter.
+        const sm = smoothRef.current;
+        const len = l.length;
+        const now = performance.now();
+        const k = sm.at === 0 ? 1 : 1 - Math.exp(-(now - sm.at) / 200);
+        sm.at = now;
+        sm.ll += (ll / len - sm.ll) * k;
+        sm.rr += (rr / len - sm.rr) * k;
+        sm.lr += (lr / len - sm.lr) * k;
+        // Mid is half the sum of the sides, side is half the difference.
+        sm.midDb += (powerDb((ll + rr + 2 * lr) / (4 * len)) - sm.midDb) * k;
+        sm.sideDb += (powerDb(Math.max(0, ll + rr - 2 * lr) / (4 * len)) - sm.sideDb) * k;
+        sm.scale = Math.max(peak, sm.scale * 0.92, 1e-4);
+        // Correlation: +1 when both sides match, 0 when unrelated, -1 when opposed.
+        const energy = Math.sqrt(sm.ll * sm.rr);
+        setMeters({
+            corr: energy > 1e-9 ? Math.max(-1, Math.min(1, sm.lr / energy)) : 1,
+            mid: sm.midDb,
+            side: sm.sideDb,
+        });
+        drawScope(scope.current, l, r, sm.scale, dialect);
+    });
+    // The canvas's drawing context, its pixels and its font are set up while the page is idle (it stays
+    // blank), so the first frame after Play does not pay for them: on a slow phone that frame ran long.
+    useEffect(
+        () =>
+            whenIdle(() => {
+                const c = canvas2d(scope.current);
+                if (!c) return;
+                c.g.font = SCOPE_FONT;
+                c.g.measureText('LRM');
+            }),
+        [],
+    );
+    // When playback stops, the scope keeps only its axes.
+    const was = useRef(false);
+    useEffect(() => {
+        if (was.current && !active) drawScope(scope.current, new Float32Array(0), new Float32Array(0), 0, dialect);
+        was.current = active;
+    }, [active, dialect]);
+
+    const shown = active ? meters : null;
+    const levelMeter = (db: number | undefined) => ({
+        value: db === undefined ? 0 : (db + 60) / 54,
+        text: db === undefined ? '–' : db < -70 ? 'Silent' : `${db.toFixed(1)} dB`,
+    });
+    const midMeter = levelMeter(shown?.mid);
+    const sideMeter = levelMeter(shown?.side);
+    return (
+        <>
+            <CorrelationMeter value={shown ? shown.corr : null} />
+            <div>
+                <div className="flex items-center gap-5">
+                    <canvas ref={scope} aria-hidden="true" className="vgp-plot block h-28 w-28 shrink-0" />
+                    <div className="min-w-0 flex-1 space-y-4">
+                        <Meter label="Mid signal" value={midMeter.value} text={midMeter.text} />
+                        <Meter label="Side signal" value={sideMeter.value} text={sideMeter.text} />
+                    </div>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-white/50">The square plots left against right. A vertical line is mono. The wider the cloud, the wider the image.</p>
+            </div>
+        </>
+    );
+});
+
 /**
  * A short mix split into mid and side. Raise the side level, fold to mono
  * and watch the correlation meter. The output is loudness-matched by
  * default, so wider cannot win just by being louder.
  */
 export function WidthDemo() {
-    const dialect = useDialect();
     const [sideDb, setSideDb] = useState(0);
     const [midDb, setMidDb] = useState(0);
     const [mono, setMono] = useState(false);
     const [matched, setMatched] = useState(true);
     const [ms, setMs] = useState<MidSidePower | null>(null);
-    const [meters, setMeters] = useState<{ corr: number; mid: number; side: number } | null>(null);
-    const scope = useRef<HTMLCanvasElement>(null);
     const nodes = useRef<WidthNodes | null>(null);
-    const smooth = useRef({ ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 });
+    const smooth = useRef<WidthSmooth>(freshSmooth());
     const live = useRef<WidthSettings>({ sideDb, midDb, mono, matched, ms });
     useEffect(() => {
         live.current = { sideDb, midDb, mono, matched, ms };
@@ -509,65 +623,17 @@ export function WidthDemo() {
         const n: WidthNodes = { ctx, mid, side, straight, cross, match, anL, anR, bufL: new Float32Array(4096), bufR: new Float32Array(4096) };
         nodes.current = n;
         applyWidth(n, live.current);
-        smooth.current = { ll: 0, rr: 0, lr: 0, midDb: -120, sideDb: -120, scale: 0, at: 0 };
+        smooth.current = freshSmooth();
 
         if (!live.current.ms) midSidePower().then(setMs, () => {});
         const seq = sequence(ctx, MIX_BPM, MIX_STEPS, (step, time, dur) => playMixStep(ctx, bus, step, time, dur));
         return () => {
             seq.stop();
             nodes.current = null;
-            setMeters(null);
-            drawScope(scope.current, n.bufL, n.bufR, 0, dialect);
             fadeOut(ctx, master);
         };
     });
 
-    useFrame(player.playing, () => {
-        const n = nodes.current;
-        if (!n) return;
-        n.anL.getFloatTimeDomainData(n.bufL);
-        n.anR.getFloatTimeDomainData(n.bufR);
-        const l = n.bufL;
-        const r = n.bufR;
-        let ll = 0;
-        let rr = 0;
-        let lr = 0;
-        let peak = 0;
-        for (let i = 0; i < l.length; i++) {
-            ll += l[i] * l[i];
-            rr += r[i] * r[i];
-            lr += l[i] * r[i];
-            peak = Math.max(peak, Math.abs(l[i] + r[i]), Math.abs(l[i] - r[i]));
-        }
-        // Average over about a fifth of a second, like a hardware meter.
-        const sm = smooth.current;
-        const len = l.length;
-        const now = performance.now();
-        const k = sm.at === 0 ? 1 : 1 - Math.exp(-(now - sm.at) / 200);
-        sm.at = now;
-        sm.ll += (ll / len - sm.ll) * k;
-        sm.rr += (rr / len - sm.rr) * k;
-        sm.lr += (lr / len - sm.lr) * k;
-        // Mid is half the sum of the sides, side is half the difference.
-        sm.midDb += (powerDb((ll + rr + 2 * lr) / (4 * len)) - sm.midDb) * k;
-        sm.sideDb += (powerDb(Math.max(0, ll + rr - 2 * lr) / (4 * len)) - sm.sideDb) * k;
-        sm.scale = Math.max(peak, sm.scale * 0.92, 1e-4);
-        // Correlation: +1 when both sides match, 0 when unrelated, -1 when opposed.
-        const energy = Math.sqrt(sm.ll * sm.rr);
-        setMeters({
-            corr: energy > 1e-9 ? Math.max(-1, Math.min(1, sm.lr / energy)) : 1,
-            mid: sm.midDb,
-            side: sm.sideDb,
-        });
-        drawScope(scope.current, l, r, sm.scale, dialect);
-    });
-
-    const levelMeter = (db: number | undefined) => ({
-        value: db === undefined ? 0 : (db + 60) / 54,
-        text: db === undefined ? '–' : db < -70 ? 'Silent' : `${db.toFixed(1)} dB`,
-    });
-    const midMeter = levelMeter(meters?.mid);
-    const sideMeter = levelMeter(meters?.side);
     const matchDb = 20 * Math.log10(matchGain(midDb, sideDb, ms));
 
     return (
@@ -584,17 +650,7 @@ export function WidthDemo() {
                     ]}
                 />
             </div>
-            <CorrelationMeter value={meters ? meters.corr : null} />
-            <div>
-                <div className="flex items-center gap-5">
-                    <canvas ref={scope} aria-hidden="true" className="vgp-plot block h-28 w-28 shrink-0" />
-                    <div className="min-w-0 flex-1 space-y-4">
-                        <Meter label="Mid signal" value={midMeter.value} text={midMeter.text} />
-                        <Meter label="Side signal" value={sideMeter.value} text={sideMeter.text} />
-                    </div>
-                </div>
-                <p className="mt-2 text-xs leading-5 text-white/50">The square plots left against right. A vertical line is mono. The wider the cloud, the wider the image.</p>
-            </div>
+            <WidthReadings active={player.playing} nodesRef={nodes} smoothRef={smooth} />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider
                     label="Side level"

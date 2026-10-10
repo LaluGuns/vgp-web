@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { fadeOut, kWeighted, midi, pluck, sequence, type Engine } from './engine';
+import { fadeOut, kWeighted, midi, pluck, scheduleSteps, sequence, type Engine } from './engine';
 import { playDrumStep } from './dynamics';
 import { Answers, PlayButton, Readout, Segmented, usePlayer, whenIdle } from './ui';
 
@@ -38,14 +38,18 @@ function masterChain(ctx: BaseAudioContext, input: AudioNode, kind: Master): Aud
     return clip;
 }
 
-/** Integrated loudness of a rendered loop, K-weighted (engine.ts) and ungated. */
+/**
+ * Integrated loudness of a rendered loop, K-weighted (engine.ts) and ungated.
+ * The loop's voices are made a few steps at a time (engine.ts scheduleSteps),
+ * so measuring both masters while the page is idle never holds up a frame.
+ */
 async function measure(kind: Master, sampleRate: number): Promise<number> {
     const stepDur = 60 / BPM / 4;
     const seconds = stepDur * STEPS + 0.5;
     const ctx = new OfflineAudioContext(1, Math.ceil(seconds * sampleRate), sampleRate);
     const src = ctx.createGain();
     kWeighted(ctx, masterChain(ctx, src, kind)).connect(ctx.destination);
-    for (let step = 0; step < STEPS; step++) playLoopStep(ctx, src, step, 0.05 + step * stepDur, stepDur);
+    await scheduleSteps(STEPS, (step) => playLoopStep(ctx, src, step, 0.05 + step * stepDur, stepDur));
     const buffer = await ctx.startRendering();
     const data = buffer.getChannelData(0);
     let sum = 0;
