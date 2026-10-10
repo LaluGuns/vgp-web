@@ -422,11 +422,14 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
  * In-page jumps on a lesson. The page itself never scrolls smoothly, so a
  * deep link, a shared #section or a reload lands at once; a Contents or
  * outline link the reader clicks glides there instead (not with reduced
- * motion), then lands with a real fragment jump, which has nowhere left to
- * move but sets the address, :target and where Tab goes next. Collapsed
- * lists open when the reader needs what is inside them: the Sources list
- * when the address or a link points at #sources, and every collapsed list
- * while the page prints (closed again afterwards).
+ * motion). The jump takes its history entry before the page moves, so the
+ * entry the reader leaves keeps the place they left from and Back returns
+ * there, as it does after a plain link jump. Once the glide ends, a real
+ * fragment jump (replacing that entry, so still one entry per jump) has
+ * nowhere left to move but sets :target and where Tab goes next.
+ * Collapsed lists open when the reader needs what is inside them: the
+ * Sources list when the address or a link points at #sources, and every
+ * collapsed list while the page prints (closed again afterwards).
  */
 export function LessonAnchors() {
     useEffect(() => {
@@ -448,9 +451,13 @@ export function LessonAnchors() {
         let cancelGlide: (() => void) | null = null;
         const glide = (id: string, target: HTMLElement) => {
             cancelGlide?.();
+            // A link to the section already in the address replaces its entry, as the browser does.
+            const hash = `#${encodeURIComponent(id)}`;
+            if (window.location.hash === hash) history.replaceState(history.state, '', hash);
+            else history.pushState(history.state, '', hash);
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             // A wheel, touch or key during the glide hands the page back to the reader:
-            // then the address changes without the jump, which would pull them back.
+            // then the address keeps the section without the jump, which would pull them back.
             let interrupted = false;
             const stop = () => {
                 interrupted = true;
@@ -475,8 +482,7 @@ export function LessonAnchors() {
                     return;
                 }
                 finish();
-                if (!interrupted) window.location.hash = id;
-                else history.pushState(history.state, '', `#${encodeURIComponent(id)}`);
+                if (!interrupted) window.location.replace(hash);
             };
             frame = requestAnimationFrame(tick);
             cancelGlide = finish;

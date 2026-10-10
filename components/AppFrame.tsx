@@ -19,7 +19,7 @@ const loadPopup = () =>
     (popupModule ??= import('@/components/SubscribePopup').then((mod) => mod.SubscribePopup));
 
 function LazySubscribePopup({ prefetch }: { prefetch: boolean }) {
-    const { isOpen } = useNewsletter();
+    const { isOpen, closePopup } = useNewsletter();
     const [Popup, setPopup] = useState<ComponentType | null>(null);
 
     useEffect(() => {
@@ -31,8 +31,10 @@ function LazySubscribePopup({ prefetch }: { prefetch: boolean }) {
                     if (!cancelled) setPopup(() => component);
                 })
                 .catch(() => {
-                    // A failed chunk load leaves the button inert; the next open retries.
+                    // A failed chunk load: forget it and drop the open state, so the
+                    // next press opens again and retries the load.
                     popupModule = null;
+                    if (!cancelled && isOpen) closePopup();
                 });
         };
         if (isOpen) {
@@ -53,7 +55,7 @@ function LazySubscribePopup({ prefetch }: { prefetch: boolean }) {
             cancelled = true;
             window.clearTimeout(timer);
         };
-    }, [Popup, isOpen, prefetch]);
+    }, [Popup, isOpen, prefetch, closePopup]);
 
     return Popup ? <Popup /> : null;
 }

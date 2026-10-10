@@ -12,7 +12,7 @@ import { useChipRow } from '@/components/blog/paths/useChipRow';
 import { useScrollMemory } from '@/components/blog/useScrollMemory';
 import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
-import { scoreLesson, wordMatchers } from './search-match';
+import { scoreLesson, searchText, wordMatchers } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
@@ -240,6 +240,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // list that already has a query. Until it arrives, search covers titles, excerpts,
     // headings and terms; a failed fetch is tried again on the next search.
     const [digest, setDigest] = useState<Record<string, string> | null>(null);
+    const [digestFailed, setDigestFailed] = useState(false);
     const digestRequested = useRef(false);
     const loadDigest = useCallback(() => {
         if (digestRequested.current) return;
@@ -248,9 +249,11 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`${response.status}`))))
             .then((data: unknown) => {
                 if (data && typeof data === 'object') setDigest(data as Record<string, string>);
+                else setDigestFailed(true);
             })
             .catch(() => {
                 digestRequested.current = false;
+                setDigestFailed(true);
             });
     }, []);
     useEffect(() => {
@@ -347,19 +350,27 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
     // Search fields in score order: title, excerpt, headings, keywords and glossary terms, body digest.
     const fields = useMemo(
-        () => new Map(articles.map((a) => [a.slug, [a.title.toLowerCase(), a.excerpt.toLowerCase(), a.headings, a.terms, digest?.[a.slug] ?? '']])),
+        () =>
+            new Map(
+                articles.map((a) => [a.slug, [a.title, a.excerpt, a.headings, a.terms, digest?.[a.slug] ?? ''].map(searchText)]),
+            ),
         [articles, digest],
     );
 
-    const filteredArticles = useMemo(() => {
+    // The lessons in view, and how many more the query finds outside it (in the other paths,
+    // or among the lessons not saved), for the empty state. The Saved view lists every saved
+    // lesson: no path chip is pressed there, so a path in the address waits until it is left.
+    const [filteredArticles, matchesElsewhere] = useMemo(() => {
         const words = wordMatchers(listQuery);
         const phrase = words.map((m) => m.word).join(' ');
         const list: { article: BlogListItem; index: number; score: number }[] = [];
+        let elsewhere = 0;
         articles.forEach((article, index) => {
-            if (category !== 'all' && article.category !== category) return;
-            if (showSaved && !saved.includes(article.slug)) return;
             const score = words.length ? scoreLesson(fields.get(article.slug) ?? [], words, phrase) : 0;
-            if (words.length === 0 || score > 0) list.push({ article, index, score });
+            if (words.length > 0 && score === 0) return;
+            const inView = showSaved ? saved.includes(article.slug) : category === 'all' || article.category === category;
+            if (inView) list.push({ article, index, score });
+            else elsewhere += 1;
         });
         const newest = (a: (typeof list)[number], b: (typeof list)[number]) =>
             b.article.publishedAt.localeCompare(a.article.publishedAt) || b.index - a.index;
@@ -372,7 +383,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             }
             return newest(a, b);
         });
-        return list.map(({ article }) => article);
+        return [list.map(({ article }) => article), elsewhere] as const;
     }, [articles, category, showSaved, saved, listQuery, fields, sort, pathOrder]);
 
     const showFeaturedArticle = Boolean(featured && !hasQuery && category === 'all' && !showSaved);
@@ -384,10 +395,57 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return sort === 'path' && n ? `${name} · Lesson ${n}` : name;
     };
 
+    // The empty state's button takes its own place away, so focus moves on to the first
+    // lesson it brought back (the featured one included), or to the count.
+    const results = useRef<HTMLDivElement>(null);
+    const focusFirstRow = useRef(false);
+    useEffect(() => {
+        // Both buttons lead to every path outside the Saved view; wait for the address and for
+        // the list, which follows the box deferred, to get there.
+        if (!focusFirstRow.current || category !== 'all' || showSaved || listQuery !== query) return;
+        focusFirstRow.current = false;
+        (results.current?.querySelector('a') ?? count.current)?.focus();
+    }, [filteredArticles, category, showSaved, listQuery, query]);
+
     const resetFilters = () => {
+        focusFirstRow.current = true;
         setQuery('');
         writeUrl({ q: '', cat: 'all', sort: null, saved: false, n: null });
     };
+    // Keeps the query and looks for it in every lesson.
+    const searchEverywhere = () => {
+        focusFirstRow.current = true;
+        writeUrl({ cat: 'all', sort: null, saved: false, n: null });
+    };
+
+    // Lesson bodies are searched once the digest arrives (about a second on a slow phone
+    // connection): until then a query that only a body would find says so, not "No lesson".
+    const searchingBodies = hasQuery && digest === null && !digestFailed;
+    const emptyState = (() => {
+        const typed = listQuery.trim();
+        const all = { label: 'Show all lessons', onClick: resetFilters };
+        if (showSaved) {
+            if (saved.length === 0 || !hasQuery) {
+                return { message: 'No saved lessons yet. Use Save at the top of a lesson to keep it here.', action: all };
+            }
+            return matchesElsewhere > 0
+                ? {
+                      message: `None of your saved lessons matches "${typed}". ${matchesElsewhere} other ${matchesElsewhere === 1 ? 'lesson does' : 'lessons do'}.`,
+                      action: { label: 'Search all lessons', onClick: searchEverywhere },
+                  }
+                : { message: `No lesson matches "${typed}".`, action: all };
+        }
+        if (!hasQuery) return { message: 'No lessons in this path yet.', action: all };
+        if (category !== 'all' && matchesElsewhere > 0) {
+            return {
+                message: `No lesson in ${getCategoryName(category)} matches "${typed}". ${matchesElsewhere} ${
+                    matchesElsewhere === 1 ? 'lesson in another path does' : 'lessons in other paths do'
+                }.`,
+                action: { label: 'Search all paths', onClick: searchEverywhere },
+            };
+        }
+        return { message: `No lesson matches "${typed}".`, action: all };
+    })();
 
     // The selected path chip scrolls into view on a phone (after Back, or on a shared ?cat= link).
     // The Saved chip's label grows once the saved lessons load, so its count is part of the key.
@@ -424,7 +482,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         writeUrl({ n: visibleCount + PAGE_SIZE });
     };
 
-    const activePath = category !== 'all' ? paths.find((p) => p.slug === category) : undefined;
+    const activePath = category !== 'all' && !showSaved ? paths.find((p) => p.slug === category) : undefined;
 
     return (
         <PageTransition>
@@ -495,7 +553,9 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     ) : null}
                                 </search>
                                 <p ref={count} tabIndex={-1} className="w-fit rounded-sm text-sm text-white/55 vgp-focus" aria-live="polite">
-                                    {filteredArticles.length} {filteredArticles.length === 1 ? 'lesson' : 'lessons'}
+                                    {searchingBodies && filteredArticles.length === 0
+                                        ? 'Searching lesson text…'
+                                        : `${filteredArticles.length} ${filteredArticles.length === 1 ? 'lesson' : 'lessons'}`}
                                 </p>
                             </div>
                             <p className="text-sm text-white/60">
@@ -549,7 +609,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                         </div>
 
                         <div className="grid gap-10 pt-4 lg:grid-cols-12">
-                            <div className="lg:col-span-8">
+                            <div ref={results} className="lg:col-span-8">
                                 {showFeaturedArticle && featured ? (
                                     <Link
                                         href={`/blog/${featured.slug}`}
@@ -602,21 +662,16 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     </div>
                                 ) : null}
 
-                                {libraryArticles.length === 0 ? (
+                                {/* Nothing yet while the saved lessons or the lesson text are still on their way. */}
+                                {libraryArticles.length === 0 && !searchingBodies && !(showSaved && savedState === null) ? (
                                     <div className="py-16">
-                                        <p className="text-lg text-white/75">
-                                            {showSaved
-                                                ? 'Nothing saved in this filter yet.'
-                                                : hasQuery
-                                                  ? `No lesson matches "${listQuery.trim()}".`
-                                                  : 'No lessons in this path yet.'}
-                                        </p>
+                                        <p className="max-w-xl text-lg text-white/75">{emptyState.message}</p>
                                         <button
                                             type="button"
-                                            onClick={resetFilters}
+                                            onClick={emptyState.action.onClick}
                                             className="mt-4 inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-white vgp-focus"
                                         >
-                                            <span className="vgp-link">Show all lessons</span>
+                                            <span className="vgp-link">{emptyState.action.label}</span>
                                         </button>
                                         <StartHere lessons={startHere} className="mt-6 max-w-xl" />
                                     </div>

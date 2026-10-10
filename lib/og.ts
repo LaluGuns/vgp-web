@@ -19,7 +19,8 @@ const TWITTER_CREATOR = '@virzyguns';
 /**
  * openGraph and twitter metadata for a page. A page's own openGraph or
  * twitter object replaces the root layout's instead of merging with it, so
- * og:site_name, og:locale and twitter:creator are set here again.
+ * og:site_name, og:locale and twitter:creator are set here again
+ * (plus twitter:site, the same account).
  */
 export function socialMetadata({
     title,
@@ -38,7 +39,7 @@ export function socialMetadata({
     const shared = { title, description, url, siteName: SITE_NAME, locale: SITE_LOCALE, images: [image] };
     return {
         openGraph: article ? { ...shared, type: 'article', ...article } : { ...shared, type: 'website' },
-        twitter: { card: 'summary_large_image', title, description, images: [image.url], creator: TWITTER_CREATOR },
+        twitter: { card: 'summary_large_image', title, description, images: [image.url], site: TWITTER_CREATOR, creator: TWITTER_CREATOR },
     };
 }
 

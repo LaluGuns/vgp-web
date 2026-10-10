@@ -5,7 +5,7 @@
  * - headings: words from the section headings,
  * - terms: words from the SEO keywords and the glossary terms the lesson uses.
  * A title match outranks the excerpt, the excerpt outranks a heading and a
- * heading outranks a keyword (BlogIndex.tsx, `scoreLesson`).
+ * heading outranks a keyword (search-match.ts, `scoreLesson`).
  *
  * The lesson bodies reach search through a separate digest
  * (/blog/search-digest.json, `searchDigest`): the words a lesson's body uses
@@ -32,16 +32,14 @@ const tokens = (text: string) =>
         .filter((w) => w.length > 1 && !STOP.has(w));
 
 /**
- * True when `word` can be left out because `other` already finds it. The
- * browser matches a typed word of four or more letters anywhere in a word and
- * a shorter one ("eq", "808") at the start of a word; a short plural it
- * searches as a whole word ("pads" finds "pad" and "pads", not "padding").
- * So "limiter" can go when "limiters" is there, but "pad" stays beside "padding".
+ * True when `word` can be left out because `other` already finds it as a
+ * whole word. The browser ranks a whole word (or its plural) above the start
+ * of a longer one (search-match.ts), so "limiter" can go when "limiters" is
+ * there, but "comp" stays beside "compression" and "pad" beside "padding".
  */
-const covers = (other: string, word: string) =>
-    other.startsWith(word) && (word.length >= 4 || other === word || other === `${word}s` || other === `${word}es`);
+const covers = (other: string, word: string) => other === word || other === `${word}s` || other === `${word}es`;
 
-/** The words not already found through a stronger field or a longer word in the same one. */
+/** The words not already found through a stronger field or their plural in the same one. */
 function fresh(words: string[], stronger: string[]): string[] {
     const unique = [...new Set(words)].filter((w) => !stronger.some((s) => covers(s, w)));
     return unique.filter((w) => !unique.some((other) => other !== w && covers(other, w)));

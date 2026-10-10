@@ -1,9 +1,16 @@
 /**
  * How a typed query matches a lesson in the library search (BlogIndex.tsx).
  *
- * A typed word of four or more letters matches anywhere in a word; a shorter
- * one ("eq", "808") only at the start of a word, so "eq" does not find every
- * lesson that says "frequency". On top of the word as typed:
+ * A typed word matches at the start of a word ("comp" finds "compression").
+ * One of five or more letters also matches inside a word ("chain" finds
+ * "sidechain"), scored far below a word start; a shorter one never does, so
+ * "eq" does not find every lesson that says "frequency" and "ears" does not
+ * find "hears". A whole word scores above the start of a longer one, so
+ * "ear" lists "Fresh ears" before "Early reflections". Hyphens do not count:
+ * "lofi" finds "lo-fi", "deesser" finds "de-esser" and "midside" finds
+ * "mid/side" (`searchText` adds the joined form of each hyphenated or
+ * slashed word to the text searched, and a typed word loses its hyphens).
+ * On top of the word as typed:
  * - a plural also searches its singular ("hooks" finds "hook", "808s" finds
  *   "808", "melodies" finds "melody"), from the start of a word only, and a
  *   singular of three letters or fewer only as a whole word, so "pads" never
@@ -16,12 +23,34 @@
  */
 
 export interface WordMatcher {
-    /** The word as typed (lowercase). */
+    /** The word as typed (lowercase, without hyphens). */
     word: string;
+    /** Every accepted form as a whole word (or with a plural ending). */
+    whole: RegExp;
     /** Every accepted form at the start of a word. */
     start: RegExp;
-    /** Forms that may also match inside a word (typed words of four or more letters and their spellings). */
+    /** Forms that may also match inside a word (typed words of five or more letters and their spellings). */
     inside: string[];
+}
+
+/** A hyphen between two letters or digits ("lo-fi", "la-2a"). */
+const INNER_HYPHEN = /(?<=[\p{L}\p{N}])-(?=[\p{L}\p{N}])/gu;
+/** A hyphen or slash between two letters or digits ("lo-fi", "mid/side"). */
+const INNER_JOIN = /(?<=[\p{L}\p{N}])[-/](?=[\p{L}\p{N}])/gu;
+/** Words joined by hyphens or a slash ("de-esser", "mid/side"). */
+const COMPOUND = /[\p{L}\p{N}]+(?:[-/][\p{L}\p{N}]+)+/gu;
+
+/**
+ * Lowercase text as the search reads it: the text itself, then the joined
+ * form of each hyphenated (or slashed) word ("lo-fi" adds "lofi", "mid/side"
+ * adds "midside"), so a reader who types either form finds it and "fi"
+ * still finds "lo-fi".
+ */
+export function searchText(text: string): string {
+    const lower = text.toLowerCase();
+    const compounds = lower.match(COMPOUND);
+    if (!compounds) return lower;
+    return `${lower} ${[...new Set(compounds)].map((word) => word.replace(/[-/]/g, '')).join(' ')}`;
 }
 
 const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -118,31 +147,41 @@ function matcher(word: string): WordMatcher {
     alternatives.push(...[...wholeWords].map(whole));
     return {
         word,
+        whole: new RegExp(`${WORD_START}(?:${alternatives.join('|')})(?:e?s)?(?![\\p{L}\\p{N}])`, 'u'),
         start: new RegExp(`${WORD_START}(?:${alternatives.join('|')})`, 'u'),
-        inside: typed.filter((form) => form.length >= 4),
+        inside: typed.filter((form) => form.length >= 5),
     };
 }
 
-/** One matcher per distinct word; a trailing "'s" and stray punctuation around a word are ignored. */
+/**
+ * One matcher per distinct word; a trailing "'s", stray punctuation around a
+ * word and its hyphens are ignored ("de-esser" searches "deesser", which
+ * `searchText` adds for every "de-esser" in a lesson).
+ */
 export function wordMatchers(query: string): WordMatcher[] {
     const words = query
         .toLowerCase()
         .split(/\s+/)
         .map((raw) => {
-            const word = raw.replace(/^["'“‘(]+|[.,;:!?"'”’)]+$/g, '').replace(/['’]s$/, '');
+            const word = raw.replace(/^["'“‘(]+|[.,;:!?"'”’)-]+$/g, '').replace(/['’]s$/, '').replace(INNER_HYPHEN, '');
             return word || raw;
         })
         .filter(Boolean);
     return [...new Set(words)].map(matcher);
 }
 
-/** Points per field (title, excerpt, headings, keywords and terms, body digest): [at a word start, inside a word]. */
-const FIELD_POINTS: [number, number][] = [
-    [10, 7],
-    [5, 4],
-    [3, 2],
-    [1.5, 1],
-    [1, 0.5],
+/**
+ * Points per field (title, excerpt, headings, keywords and terms, body
+ * digest): [as a whole word, at the start of a longer word, inside a word].
+ * Inside a word is worth less than a word start in any later field but the
+ * digest, so "hears" in a title never outranks "ears" in an excerpt.
+ */
+const FIELD_POINTS: [number, number, number][] = [
+    [10, 7, 2],
+    [5, 3.5, 1],
+    [3, 2, 0.6],
+    [1.5, 1, 0.3],
+    [1, 0.7, 0.2],
 ];
 
 /** 0 when a word matches nowhere; otherwise each word scores its best field, plus a bonus for the whole phrase in the title. */
@@ -151,12 +190,18 @@ export function scoreLesson(fields: string[], words: WordMatcher[], phrase: stri
     for (const m of words) {
         let best = 0;
         fields.forEach((text, i) => {
-            if (!text || FIELD_POINTS[i][0] <= best) return;
-            if (m.start.test(text)) best = FIELD_POINTS[i][0];
-            else if (FIELD_POINTS[i][1] > best && m.inside.some((form) => text.includes(form))) best = FIELD_POINTS[i][1];
+            const [whole, start, inside] = FIELD_POINTS[i];
+            if (!text || whole <= best) return;
+            if (m.whole.test(text)) best = whole;
+            else if (start > best && m.start.test(text)) best = start;
+            else if (inside > best && m.inside.some((form) => text.includes(form))) best = inside;
         });
         if (best === 0) return 0;
         total += best;
     }
-    return words.length > 1 && fields[0].includes(phrase) ? total + 5 : total;
+    if (words.length < 2) return total;
+    // "lo-fi beats" in a title is the phrase "lofi beats" as typed with a hyphen, or "lo fi beats" typed with a space.
+    const title = fields[0];
+    const inTitle = title.includes(phrase) || title.replace(INNER_JOIN, '').includes(phrase) || title.replace(INNER_JOIN, ' ').includes(phrase);
+    return inTitle ? total + 5 : total;
 }

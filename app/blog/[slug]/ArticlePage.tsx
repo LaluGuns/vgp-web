@@ -204,10 +204,14 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                     <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time> · {article.readingTime} min read
                                     {position ? (
                                         <>
-                                            {' · '}
-                                            <TapLink href={`/blog/category/${article.category}`} className="hover:text-white">
-                                                Lesson {position.index + 1} of {position.path.articles.length} in {pathName}
-                                            </TapLink>
+                                            {' '}
+                                            {/* The dot stays with the link: Chrome breaks before an inline-flex link, which left "·" ending a line on a phone. */}
+                                            <span className="whitespace-nowrap">
+                                                ·{' '}
+                                                <TapLink href={`/blog/category/${article.category}`} className="hover:text-white">
+                                                    Lesson {position.index + 1} of {position.path.articles.length} in {pathName}
+                                                </TapLink>
+                                            </span>
                                         </>
                                     ) : null}
                                 </p>

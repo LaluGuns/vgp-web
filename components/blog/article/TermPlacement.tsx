@@ -3,34 +3,59 @@
 import { useEffect } from 'react';
 import { closeOpenWhenFocusLeaves } from './popover-focus';
 
+/** Space kept between the definition and the word that opened it, and under the site header. */
+const GAP = 8;
+
 /**
  * Glossary definitions open as popovers pinned to the bottom of the screen
- * (bottom right on wide screens). When the word that opened one sits in the
- * lower half of the screen, the popover would cover it, so it opens at the
- * top instead, just under the site header. If the screen is too short for
- * either, the popover gets the room on the far side of the word and scrolls.
- * Tab past the definition's last link closes it, so focus never moves on
- * underneath it.
+ * (bottom right on wide screens), or at the top, just under the site
+ * header: whichever side of the word that opened it has more room, so the
+ * word stays in view, and never taller than that room. When the definition
+ * is too tall for either side (a phone held sideways), the page first
+ * brings the word up under the header and the definition opens below it;
+ * only if it still does not fit does it scroll inside. Tab past the
+ * definition's last link closes it, so focus never moves on underneath it.
  */
 export function TermPlacement() {
     useEffect(() => {
+        const wide = window.matchMedia('(min-width: 1024px)');
         const place = (event: Event) => {
             const pop = event.target as HTMLElement;
             if (!pop.classList?.contains('vgp-term-pop')) return;
             const state = (event as Event & { newState?: string }).newState;
-            if (event.type === 'beforetoggle' && state === 'open') {
-                const term = document.querySelector<HTMLElement>(`[popovertarget="${pop.id}"]:not([popovertargetaction])`);
-                if (!term) return;
-                const box = term.getBoundingClientRect();
-                const header = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0;
-                const top = Math.max(16, Math.round(header + 8));
-                const below = box.top + box.height / 2 > window.innerHeight / 2;
-                pop.toggleAttribute('data-top', below);
-                pop.style.setProperty('--vgp-pop-top', `${top}px`);
-                // The room between the popover's edge and the word, less a small gap.
-                const room = below ? box.top - top - 8 : window.innerHeight - 16 - box.bottom - 8;
-                pop.style.maxHeight = `${Math.max(160, Math.floor(room))}px`;
+            if (event.type !== 'beforetoggle' || state !== 'open') return;
+            const term = document.querySelector<HTMLElement>(`[popovertarget="${pop.id}"]:not([popovertargetaction])`);
+            if (!term) return;
+            const header = document.querySelector('header')?.getBoundingClientRect().bottom ?? 0;
+            const top = Math.max(16, Math.round(header + GAP));
+            // The popover's inset from the bottom of the screen (app/globals.css, .vgp-term-pop).
+            const edge = wide.matches ? 24 : 16;
+            pop.style.setProperty('--vgp-pop-top', `${top}px`);
+
+            // Its full height and its left and right edges, measured unseen before it opens.
+            pop.removeAttribute('data-top');
+            pop.style.maxHeight = '';
+            pop.style.visibility = 'hidden';
+            pop.style.display = 'block';
+            const size = pop.getBoundingClientRect();
+            pop.style.removeProperty('display');
+            pop.style.removeProperty('visibility');
+
+            const rooms = () => {
+                const word = term.getBoundingClientRect();
+                return { word, above: word.top - top - GAP, below: window.innerHeight - edge - word.bottom - GAP };
+            };
+            let { word, above, below } = rooms();
+            // On a wide screen the definition sits to the right and may miss the word altogether.
+            const overlaps = size.left < word.right && size.right > word.left;
+            if (overlaps && Math.max(above, below) < size.height) {
+                window.scrollBy({ top: word.top - top, behavior: 'instant' });
+                ({ word, above, below } = rooms());
             }
+            const atTop = above > below;
+            pop.toggleAttribute('data-top', atTop);
+            const room = overlaps ? Math.max(above, below) : window.innerHeight - top - edge;
+            pop.style.maxHeight = `${Math.floor(room)}px`;
         };
         document.addEventListener('beforetoggle', place, true);
         const stopFocus = closeOpenWhenFocusLeaves('.vgp-term-pop');

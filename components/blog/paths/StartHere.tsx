@@ -20,14 +20,16 @@ export function StartHere({ lessons, className = '' }: { lessons: StartLesson[];
             {lessons.map((lesson, i) => (
                 <span key={lesson.slug}>
                     {i > 0 ? (i === lessons.length - 1 ? ' or ' : ', ') : null}
-                    <TapLink href={`/blog/${lesson.slug}`} className="text-white">
-                        {lesson.pathName}, lesson&nbsp;1
-                    </TapLink>
-                    {/* A no-break space, so "(6 min)." never starts a line on its own. */}
-                    &nbsp;({lesson.readingTime}&nbsp;min)
+                    {/* One unbroken piece: Chrome breaks after an inline-flex link even at a no-break
+                        space, which left "(6 min)." to start a line on its own. */}
+                    <span className="whitespace-nowrap">
+                        <TapLink href={`/blog/${lesson.slug}`} className="text-white">
+                            {lesson.pathName}, lesson 1
+                        </TapLink>{' '}
+                        ({lesson.readingTime} min){i === lessons.length - 1 ? '.' : null}
+                    </span>
                 </span>
             ))}
-            .
         </p>
     );
 }
