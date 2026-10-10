@@ -160,7 +160,7 @@ async function lesson() {
 }
 const L = await lesson();
 const lessonData = L ? { play: L.play, scrollTo: L.page?.scrollTo ?? 0, images: Object.fromEntries([...L.images, ...(L.page ? ['page'] : [])].map((k) => [k, `data:image/jpeg;base64,${fs.readFileSync(path.join(OUT, 'lesson', `${k}.jpg`)).toString('base64')}`])) } : null;
-log(L ? `End card: ${L.figure ? "the gap-length figure" : 'the Listen demo'} of ${L.url}, captured ${L.captured}` : 'End card: lesson page could not be captured; phone shows a blank page');
+log(`End card: recap of the three reasons, an open comment question (16th / 8th / beat), the address ${TIMELINE.lesson.url} and the lesson title; the phone mock-up of the lesson page is not shown${L ? ` (page captured ${L.captured} for reference)` : ''}`);
 
 const dpUrl = `data:image/jpeg;base64,${fs.readFileSync(path.join(REPO, 'public/images/virzy-guns-dp.jpg')).toString('base64')}`;
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS_CSS}

@@ -1345,7 +1345,8 @@ function drawEnd(t) {
     if (t < SC.end) return;
     const a = E.out(seg(t, SC.end, SC.end + 0.25));
     g.save();
-    g.globalAlpha = a;
+    // Multiplied, so the loop's fade-out (set by the caller) applies.
+    g.globalAlpha *= a;
     const btn = bump(t, BUTTON, 0.08, 0.6);
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
