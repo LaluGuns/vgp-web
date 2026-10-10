@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
-import { bass, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
+import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
 import { LiveMeter, PlayButton, Readout, Segmented, Slider, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
@@ -618,8 +618,13 @@ export function ParallelDemo() {
             />
             <p className="text-sm leading-6 text-white/60">
                 The dry drums are never compressed. Every option plays at the loudness of the dry loop
-                {analysis && turnedDown > 0.05 ? `, so at this blend the mix is turned down ${turnedDown.toFixed(1)} dB` : ''}. Listen to the ghost notes
-                between the snares, then solo the crushed copy to hear what is doing the lifting.
+                {/* In the layout from the start (unseen until measured), so the text below it never moves. */}
+                {blend > 0 ? (
+                    <span className={analysis ? undefined : 'invisible'}>
+                        , so at this blend the mix is turned down <span className="tabular-nums">{(analysis ? turnedDown : 0).toFixed(1)}</span> dB
+                    </span>
+                ) : null}
+                . Listen to the ghost notes between the snares, then solo the crushed copy to hear what is doing the lifting.
             </p>
         </div>
     );
@@ -971,7 +976,11 @@ export function TransientDemo() {
                 />
                 <p className="mt-2 text-xs leading-5 text-white/60">
                     The level over the first 150 ms of each hit, scaled to the dry hit, before the loudness matching you hear.
-                    {analysis ? ` The ghost note is ${Math.round(-analysis.ghostDb)} dB quieter than the snare.` : ''}
+                    {/* In the layout from the start (unseen until measured), so the lines below never move. */}
+                    <span className={analysis ? undefined : 'invisible'}>
+                        {' '}
+                        The ghost note is <span className="tabular-nums">{analysis ? Math.round(-analysis.ghostDb) : 10}</span> dB quieter than the snare.
+                    </span>
                 </p>
             </div>
             <LiveMeter label="Compressor gain reduction" active={player.playing} read={() => (nodes.current ? -nodes.current.comp.reduction : null)} full={18} />
@@ -1054,7 +1063,7 @@ function heldBass(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: numbe
     lp.frequency.value = 520;
     const sawLevel = ctx.createGain();
     sawLevel.gain.value = 0.32;
-    const env = ctx.createGain();
+    const env = envelopeGain(ctx);
     env.gain.setValueAtTime(0.0001, t);
     env.gain.exponentialRampToValueAtTime(0.42, t + 0.02);
     env.gain.setValueAtTime(0.42, t + dur - 0.06);
@@ -1326,17 +1335,63 @@ function limiterLoop(ctx: BaseAudioContext, dest: AudioNode, step: number, time:
     if (step === 2 || step === 10) for (const n of step === 2 ? [57, 60, 64] : [55, 59, 62]) pluck(ctx, dest, time, midi(n), STEP * 3, 0.9);
 }
 
-let loopPeakJob: Promise<number> | null = null;
+/**
+ * The loop the limiter demo measures, rendered once per page: the source at
+ * its own level (played into every measurement, so each one hears the same
+ * hits) and the original path as it plays (the delay and the oversampled
+ * pass-through), with that path's K-weighted copy, the figure's grey area
+ * and the gain that puts the loop's loudest peak at the threshold. A drive
+ * or release change then renders only the limited path: one buffer source
+ * instead of a few hundred voices, and three channels instead of five, so a
+ * slider step on a slow phone stays inside a frame's budget.
+ */
+interface LimiterLoop {
+    source: AudioBuffer;
+    norm: number;
+    /** Mean square of the K-weighted original over the measured bars, after `norm`. */
+    dryPower: number;
+    /** The original's peak in the second bar, before `norm`: the top of the figure. */
+    barPeak: number;
+    before: number[];
+}
 
-function measureLoopPeak(): Promise<number> {
-    loopPeakJob ??= (async () => {
+let limiterLoopJob: Promise<LimiterLoop> | null = null;
+
+function prepareLimiterLoop(lat: number): Promise<LimiterLoop> {
+    limiterLoopJob ??= (async () => {
         const {
-            x: [x],
-        } = await renderOffline(LEAD + BARS * BAR + 0.05, 1, (ctx, [tap]) => loopBars(ctx, tap, limiterLoop));
+            x: [dry, x],
+            k: [dryK],
+        } = await renderOffline(
+            LEAD + BARS * BAR + lat + 0.05,
+            2,
+            (ctx, [dryTap, srcTap]) => {
+                const src = ctx.createGain();
+                src.connect(srcTap);
+                const delay = ctx.createDelay(0.05);
+                delay.delayTime.value = lat;
+                src.connect(delay).connect(passThrough(ctx)).connect(dryTap);
+                return loopBars(ctx, src, limiterLoop);
+            },
+            1,
+        );
         const [from, to] = measuredBars(0);
-        return peakOf(x, from, to);
-    })();
-    return loopPeakJob;
+        const norm = dbToGain(LIMIT_THRESHOLD) / peakOf(x, from, to);
+        await yieldToMain();
+        const source = new AudioBuffer({ numberOfChannels: 1, length: x.length, sampleRate: RATE });
+        source.copyToChannel(x, 0);
+        const [kFrom, kTo] = measuredBars(lat);
+        const dryPower = power(dryK, kFrom, kTo) * norm * norm;
+        await yieldToMain();
+        // The figure draws the second bar, against the original's own peak there.
+        const [barFrom, barTo] = secondBar(lat);
+        const barPeak = peakOf(dry, barFrom, barTo);
+        return { source, norm, dryPower, barPeak, before: columns(dry, barFrom, barTo - barFrom, BAR_COLUMNS, barPeak) };
+    })().catch((error: unknown) => {
+        limiterLoopJob = null;
+        throw error;
+    });
+    return limiterLoopJob;
 }
 
 function limiterCompressor(ctx: BaseAudioContext, release: number): DynamicsCompressorNode {
@@ -1398,47 +1453,46 @@ interface LimitAnalysis {
 }
 
 async function analyseLimit(params: LimitParams): Promise<LimitAnalysis> {
-    const [lat, makeup, peak] = await Promise.all([measureLatency(RATE), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1)), measureLoopPeak()]);
-    const norm = dbToGain(LIMIT_THRESHOLD) / peak;
+    const [lat, makeup] = await Promise.all([measureLatency(RATE), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1))]);
+    const loop = await prepareLimiterLoop(lat);
+    const { norm } = loop;
     const {
-        x: [dry, limited, pre],
-        k: [dryK, limitedK],
+        x: [limited, pre],
+        k: [limitedK],
     } = await renderOffline(
         LEAD + BARS * BAR + lat + 0.05,
-        3,
-        (ctx, [dryTap, limTap, preTap]) => {
-            const src = ctx.createGain();
-            src.gain.value = norm;
-            const delay = ctx.createDelay(0.05);
-            delay.delayTime.value = lat;
-            src.connect(delay).connect(passThrough(ctx)).connect(dryTap);
+        2,
+        (ctx, [limTap, preTap]) => {
+            const src = ctx.createBufferSource();
+            src.buffer = loop.source;
+            const gain = ctx.createGain();
+            gain.gain.value = norm;
             const lim = limiter(ctx, makeup, params.release / 1000);
             lim.drive.gain.value = dbToGain(params.drive);
-            src.connect(lim.drive);
+            src.connect(gain).connect(lim.drive);
             lim.output.connect(limTap);
             lim.toCeiling.connect(preTap);
-            return loopBars(ctx, src, limiterLoop);
+            src.start();
         },
-        2,
+        1,
     );
     const [from, to] = measuredBars(lat);
-    const match = Math.sqrt(power(dryK, from, to) / power(limitedK, from, to));
+    const match = Math.sqrt(loop.dryPower / power(limitedK, from, to));
     await yieldToMain();
     let over = 0;
     for (let i = from; i < to; i++) if (pre[i] > 1 || pre[i] < -1) over++;
     await yieldToMain();
-    // The figure draws the second bar.
+    // The figure draws the second bar, against the original's peak there (the limited path is the
+    // original times `norm` going in, so its level is scaled back by the same amount).
     const [barFrom, barTo] = secondBar(lat);
-    const ref = peakOf(dry, barFrom, barTo);
-    const length = barTo - barFrom;
     return {
         params,
         makeup,
         norm,
         match,
         clipped: over / (to - from),
-        before: columns(dry, barFrom, length, BAR_COLUMNS, ref),
-        after: columns(limited, barFrom, length, BAR_COLUMNS, ref, match),
+        before: loop.before,
+        after: columns(limited, barFrom, barTo - barFrom, BAR_COLUMNS, loop.barPeak * norm, match),
     };
 }
 
@@ -1636,11 +1690,11 @@ function sing(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: number, d
     osc.frequency.value = freq;
     const lfo = ctx.createOscillator();
     lfo.frequency.value = 5.2;
-    const vibrato = ctx.createGain();
+    const vibrato = envelopeGain(ctx);
     vibrato.gain.setValueAtTime(0, t);
     vibrato.gain.linearRampToValueAtTime(freq * 0.006, t + 0.3);
     lfo.connect(vibrato).connect(osc.frequency);
-    const env = ctx.createGain();
+    const env = envelopeGain(ctx);
     env.gain.setValueAtTime(0.0001, t);
     env.gain.exponentialRampToValueAtTime(level, t + 0.04);
     env.gain.setTargetAtTime(level * 0.8, t + 0.06, 0.2);

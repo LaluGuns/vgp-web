@@ -69,8 +69,9 @@ function levelFor(kind: Master, norm: boolean, measured: Record<Master, number> 
 
 /**
  * Playback level. The clipped master peaks low for how loud it is (that is
- * the point), and at this level it is already the loudest demo on the site,
- * about 4 LU above the drum-loop demos, so it is not raised to match peaks.
+ * the point), and at this level (with the demo's trim) it is already the
+ * loudest demo on the site, about 6 LU above the house loudness where the
+ * dynamic master sits, so it is not raised to match peaks.
  */
 const NORM_OUT = 0.7;
 

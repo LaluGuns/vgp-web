@@ -56,12 +56,13 @@ const MATCH_MAX = 10 ** (30 / 20);
 /**
  * Matched for loudness, a slow attack leaves the hits' first milliseconds
  * standing above everything else, so the compressed loop peaks higher than
- * the bypass. Up to 7 dB higher is allowed (the default needs about that,
- * give or take a dB, so it may sit a fraction of a dB short); past that the
- * matching stops, which keeps every setting under the demo's ceiling, and
- * the demo says how much quieter that leaves the loop.
+ * the bypass. Up to 6 dB higher is allowed (the default needs about that, so
+ * it may sit a fraction of a dB short); past that the matching stops, which
+ * keeps every setting under the demo's ceiling, and the demo says how much
+ * quieter that leaves the loop. This room sets the loudest peak of any demo
+ * at the house level (lib/blog/demos.ts), so it is no larger than it needs to be.
  */
-const PEAK_ROOM = 10 ** (7 / 20);
+const PEAK_ROOM = 10 ** (6 / 20);
 
 const RATE = 44100;
 const BPM = 92;
@@ -203,8 +204,10 @@ export function CompressorDemo() {
     };
 
     // Under 1 dB is within the matching's own accuracy, and the default setting can land there.
-    // To the nearest half dB: the measurement itself is good to about a quarter of one.
-    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short * 2) / 2 : 0;
+    // To a tenth of a dB: the measured bars are the loop that plays, so playback lands within about
+    // a quarter of a dB of this (the snare's noise moves the hits' peaks, and with them the matching,
+    // a little from one measurement to the next). A half-dB step put 2.3 dB on either side of 2.25.
+    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short * 10) / 10 : 0;
     // The preset the sliders match, if any: the presets are a choice like the swing demo's.
     const preset = (Object.keys(PRESETS) as Preset[]).find((k) => {
         const p = PRESETS[k];
@@ -246,7 +249,7 @@ export function CompressorDemo() {
             />
             <p className="text-sm leading-6 text-white/60" aria-live="polite">
                 {short > 0
-                    ? `At this setting the compressed loop plays about ${short} dB quieter than the bypass. Matching it fully would push its peaks past the demo's safe ceiling.`
+                    ? `At this setting the compressed loop plays about ${short.toFixed(1)} dB quieter than the bypass. Matching it fully would push its peaks past the demo's safe ceiling.`
                     : 'Both paths play at the same loudness.'}
             </p>
         </div>

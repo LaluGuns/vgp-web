@@ -5,14 +5,20 @@
  *
  * The volume is the last stage of the output (engine.ts), after the safety
  * limiter, so it scales what a demo plays and never changes its dynamics.
- * 100 % is the level the demos are made for; the slider only turns down.
+ * 100 % is the level the demos are made for, and where the slider starts;
+ * it only turns down.
  */
 
 /** A new key: under the old one (`vgp_demo_volume`) 100 % meant 12 dB more than it does now. */
 const KEY = 'vgp_demo_volume_v2';
 
-/** Where the slider starts: about 4 dB under 100 %. */
-export const DEFAULT_VOLUME = 0.8;
+/**
+ * Where the slider starts. The demos sit at -29 LUFS at 100 % (engine.ts
+ * HOUSE): 5 dB under the -24 they were meant to have before their loudness
+ * was measured with the standard K-weighting, so the slider starts at the
+ * top, and a first play is about as loud as it was at the old 80 %.
+ */
+export const DEFAULT_VOLUME = 1;
 
 const listeners = new Set<(volume: number) => void>();
 

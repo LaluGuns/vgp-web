@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { clickTone, fadeOut, midi, noiseBuffer, sequence, type Engine } from './engine';
+import { clickTone, envelopeGain, fadeOut, midi, noiseBuffer, sequence, type Engine } from './engine';
 import { PlayButton, Readout, Segmented, Slider, useDialect, useFrame, usePlayer } from './ui';
 
 const SWEEP_FROM = 500;
@@ -39,8 +39,8 @@ export function AliasingDemo() {
         const osc = ctx.createOscillator();
         const level = ctx.createGain();
         const master = ctx.createGain();
-        // A pure tone is louder than its peak suggests: this puts it at about the loudness of the drum-loop
-        // demos (K-weighted), with its peaks near -29 dBFS at the default volume.
+        // A pure tone is louder than its peak suggests: with the demo's trim this puts it at the house
+        // loudness (K-weighted, like the drum-loop demos), with its peaks near -33 dBFS at 100 %.
         master.gain.value = 0.19;
         osc.connect(level).connect(master).connect(out);
 
@@ -257,7 +257,7 @@ export function BitDepthDemo() {
             ] as const) {
                 const osc = ctx.createOscillator();
                 osc.frequency.value = f * h;
-                const g = ctx.createGain();
+                const g = envelopeGain(ctx);
                 g.gain.setValueAtTime(0.0001, t);
                 g.gain.exponentialRampToValueAtTime(a, t + 0.005);
                 g.gain.exponentialRampToValueAtTime(0.0005, t + NOTE_FADE);

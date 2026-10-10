@@ -25,13 +25,16 @@ const LIMIT_RATIO = 20;
 const LIMIT_MAKEUP = 10 ** ((-0.6 * CEILING_DB * (1 - 1 / LIMIT_RATIO)) / 20);
 /**
  * House level: the gain from every demo's output to the limiter. At 100 %
- * volume it puts the drum-loop demos at about -24 LUFS (K-weighted, both
- * channels, ungated) with their hits peaking around -11 dBFS. Demos whose
- * loudest setting would peak above -7 dBFS there play a little lower (their
- * trims), so nothing reaches the ceiling. The default volume (80 %) is
- * about 4 dB lower.
+ * volume it puts the drum-loop demos (and, with their trims, every demo's
+ * default setting) at -29 LUFS: BS.1770 K-weighting (the standard high-pass
+ * Q, as in kWeighted below), both channels, ungated, measured over whole
+ * loops. The drum loops' hits peak around -13 dBFS there. It is the highest
+ * level at which every demo's loudest setting still peaks under -7 dBFS:
+ * the compressor demo's slow attack, matched for loudness, sets it (its
+ * peaks reach about -7.4 dBFS), with the transient demo's compressor close
+ * behind. The volume starts at 100 % (volume.ts).
  */
-const HOUSE = 0.265;
+const HOUSE = 0.212;
 
 export interface Engine {
     ctx: AudioContext;
@@ -125,8 +128,21 @@ export function noiseBuffer(ctx: BaseAudioContext): AudioBuffer {
     return buf;
 }
 
-function envGain(ctx: BaseAudioContext, dest: AudioNode, t: number, peak: number, attack: number, decay: number): GainNode {
+/**
+ * A GainNode for an envelope whose first event is at a scheduled time. It
+ * starts at 0 rather than at a new GainNode's 1: a source started on a sample
+ * frame (or within rounding of one) plays that frame before the gain's first
+ * event takes hold, and a noise hit then opens with one full-scale sample, up
+ * to 4 dB over the hit's own peak and different on every hit.
+ */
+export function envelopeGain(ctx: BaseAudioContext): GainNode {
     const g = ctx.createGain();
+    g.gain.value = 0;
+    return g;
+}
+
+function envGain(ctx: BaseAudioContext, dest: AudioNode, t: number, peak: number, attack: number, decay: number): GainNode {
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + attack);
     g.gain.exponentialRampToValueAtTime(0.0001, t + attack + decay);
@@ -191,7 +207,7 @@ export function clickTone(ctx: BaseAudioContext, dest: AudioNode, t: number, fre
 export function bass(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: number, dur: number, level = 1) {
     const osc = ctx.createOscillator();
     osc.frequency.value = freq;
-    const g = ctx.createGain();
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(0.7 * level, t + 0.008);
     g.gain.setTargetAtTime(0.45 * level, t + 0.05, 0.2);
@@ -219,7 +235,7 @@ export function pluck(
     lp.Q.value = 1;
     lp.frequency.setValueAtTime(Math.min(9000, freq * 12), t);
     lp.frequency.exponentialRampToValueAtTime(Math.max(200, freq * 2), t + dur);
-    const g = ctx.createGain();
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(0.25 * level, t + Math.max(0.002, attack));
     g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(attack + 0.05, dur));
@@ -233,7 +249,7 @@ export function pad(ctx: BaseAudioContext, dest: AudioNode, t: number, freqs: nu
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
     lp.frequency.value = cutoff;
-    const g = ctx.createGain();
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(0.09 * level, t + 0.25);
     g.gain.setValueAtTime(0.09 * level, t + Math.max(0.3, dur - 0.3));

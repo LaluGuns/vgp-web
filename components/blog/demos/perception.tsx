@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Dialect } from '@/lib/blog/dialects';
-import { bass, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
+import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, sequence, snare, type Engine } from './engine';
 import {
     LevelTrace,
     Meter,
@@ -86,12 +86,12 @@ function sing(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: number, d
     src.detune.linearRampToValueAtTime(0, t + 0.07);
     const vib = ctx.createOscillator();
     vib.frequency.value = 5.2;
-    const vibDepth = ctx.createGain();
+    const vibDepth = envelopeGain(ctx);
     vibDepth.gain.setValueAtTime(0, t);
     vibDepth.gain.linearRampToValueAtTime(dur > 0.4 ? 22 : 8, t + Math.min(dur, 0.5));
     vib.connect(vibDepth).connect(src.detune);
 
-    const env = ctx.createGain();
+    const env = envelopeGain(ctx);
     const peak = Math.max(0.0002, level);
     const attack = 0.04;
     const fall = Math.min(0.09, dur * 0.4);
@@ -132,7 +132,7 @@ function consonant(ctx: BaseAudioContext, dest: AudioNode, t: number, kind: 's' 
     const f = ctx.createBiquadFilter();
     f.type = sibilant ? 'highpass' : 'bandpass';
     f.frequency.value = sibilant ? 5500 : 3200;
-    const g = ctx.createGain();
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, start);
     g.gain.exponentialRampToValueAtTime((sibilant ? 0.07 : 0.16) * level, start + (sibilant ? 0.03 : 0.002));
     g.gain.exponentialRampToValueAtTime(0.0001, start + len);
@@ -155,7 +155,7 @@ function stereoPad(ctx: BaseAudioContext, left: AudioNode, right: AudioNode, t: 
         const lp = ctx.createBiquadFilter();
         lp.type = 'lowpass';
         lp.frequency.value = cutoff;
-        const g = ctx.createGain();
+        const g = envelopeGain(ctx);
         const peak = 0.11 * level;
         g.gain.setValueAtTime(0.0001, t);
         g.gain.exponentialRampToValueAtTime(peak, t + 0.3);
@@ -1162,7 +1162,7 @@ const TEMPO_TRIM: Record<Tempo, number> = { slow: 1, fast: 0.75 };
 /** A soft keyboard note: a triangle with two quiet overtones that decays like a struck string. */
 function keys(ctx: BaseAudioContext, dest: AudioNode, t: number, freq: number, dur: number, level = 1) {
     const peak = 0.16 * level;
-    const g = ctx.createGain();
+    const g = envelopeGain(ctx);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(peak, t + 0.006);
     // Lower notes ring longer.
