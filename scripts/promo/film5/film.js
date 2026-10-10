@@ -18,6 +18,7 @@ const g = cv.getContext('2d');
 // The riser and its fog.
 const FOG = '#a7abc9';
 const FOG_RGB = '200,203,226';
+const CYAN_RGB = '125,211,252';
 const RISER = '#7e83a8';
 
 const VO = D.vo;
@@ -827,7 +828,7 @@ function drawHand(t) {
 }
 
 // ══ Brain: one thing to predict ══
-const BR = { x0: 150, x1: 880, dots: 1120, wave: 870, brain: { x: 400, y: 650, s: 0.95 } };
+const BR = { x0: 150, x1: 880, dots: 1120, wave: 880, brain: { x: 370, y: 640, s: 1.15 } };
 function drawBrain(t) {
     const a = sceneAlpha(t, 'brain');
     if (a <= 0) return;
@@ -846,15 +847,19 @@ function drawBrain(t) {
     const tArr = wto('brain', 'payoff', 0.95);
     // A ball hops along the build's beats 0 to 6; the build stops at 6.5 for the gap.
     const hop = keys(t, [[SC.brain + 0.3, 0], [tPred - 0.1, 6]]);
-    const fillTo = Math.min(6.5, hop + 0.5);
+    // The whole build is there from the start; the bars under the ball light on each hop.
+    const pulse = t < tPred ? Math.exp(-((hop % 1) / 0.25)) : 0;
     for (let i = 0; i < 6.5 * 24; i++) {
         const p = i / 24;
-        if (p > fillTo) break;
-        const h = 16 + 130 * (p / 6.5) ** 2;
+        const h = 24 + 190 * (p / 6.5) ** 2;
+        const near = clamp(1 - Math.abs(p - hop) / 0.6);
         g.fillStyle = RISER;
-        g.fillRect(X(p) - 3, BR.wave - h / 2, 5, h);
+        g.save();
+        g.globalAlpha *= lerp(0.55, 1, Math.max(near, p <= hop ? 0.6 : 0));
+        g.fillRect(X(p) - 3, BR.wave - (h * (1 + 0.12 * near * pulse)) / 2, 5, h * (1 + 0.12 * near * pulse));
+        g.restore();
     }
-    label(g, 'build', X(1.2), BR.wave + 62, { size: 34, weight: 700, color: FOG, align: 'center', alpha: popIn(t, SC.brain + 0.4), family: BODY });
+    label(g, 'build', X(1.2), BR.wave + 74, { size: 34, weight: 700, color: FOG, align: 'center', alpha: popIn(t, SC.brain + 0.4), family: BODY });
     for (let i = 0; i < n; i++) {
         g.beginPath();
         g.arc(X(i), BR.dots, i === n - 1 ? 22 : 11, 0, Math.PI * 2);
@@ -1187,11 +1192,21 @@ function drawHow(t) {
         label(g, 'gone at 200 ms', ZX(200) + 16, y + 72, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
-        const ms = keys(t, [[Math.min(t128 - 0.1, tFifth + 0.4), 0], [tQuarter, 200], [tQuarter + 0.4, GAP_MS]]);
+        const ms = keys(t, [[Math.max(tFifth + 0.4, tQuarter - 2.2), 0], [tQuarter, 200], [tQuarter + 0.3, GAP_MS]]);
         label(g, 'gap', Z.x0, y + 200, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 224, Math.max(1, ZX(ms) - ZX(0)), 80, 16);
         g.fillStyle = P.cyan;
         g.fill();
+        // A ring as the gap passes the fog's end.
+        const tPass = tQuarter;
+        if (t >= tPass && t < tPass + 0.6) {
+            const u = (t - tPass) / 0.6;
+            g.strokeStyle = `rgba(${CYAN_RGB},${0.9 * (1 - u)})`;
+            g.lineWidth = 8 - 5 * u;
+            g.beginPath();
+            g.arc(ZX(200), y + 264, 40 + 140 * E.out(u), 0, Math.PI * 2);
+            g.stroke();
+        }
         label(g, `${Math.round(ms)} ms`, Math.min(ZX(ms) + 18, Z.x1 - 150), y + 278, { size: 52, weight: 800, color: ms > 240 ? P.dark : P.cyan });
         // Axis: 0, 100, 200 ms and the 8th.
         g.strokeStyle = P.ink3;
