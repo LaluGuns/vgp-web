@@ -304,7 +304,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             g.save();
             g.translate(540, 445);
             g.scale(pulse, pulse);
-            label(g, '1 or 2? Pick one.', 0, 0, { size: 72, weight: 800, color: P.ink, align: 'center', base: 'middle' });
+            label(g, 'Which one hits harder?', 0, 0, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
             g.restore();
         } else label(g, 'Which one hits harder?', 540, 445, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     }
@@ -486,7 +486,7 @@ function stageEpisodes() {
     const S2 = demoBy.S2;
     const tKick1 = wto('fog', 'kick', 0.55);
     const tStop = wto('fresh', 'stopped', 0.4);
-    const tKick2 = wto('fresh', 'kick', 0.85);
+    const tKick2 = wto('fresh', 'fresh', 0.92) - 0.05;
     return [
         { v: 1, at: wto('fog', 'number', 0.25) - 0.2, on: wto('fog', 'number', 0.25), off: null, hit: tKick1, slow: 1 },
         { v: 1, at: S1.at, on: S1.at - 0.6, off: null, hit: S1.down, slow: 1, sting: true },
@@ -592,7 +592,7 @@ function drawEarSection(t, k) {
         g.restore();
         // Which version, top left.
         badgeNum(g, e.v, S.x0 + 56, S.y0 + 56, 32);
-        label(g, 'inside the cochlea · hair cells', S.x0 + 104, S.y0 + 68, { size: 34, weight: 700, color: 'rgba(255,220,230,0.85)', family: BODY, alpha: 1 - seg(t, tEars + 2.6, tEars + 3.0) });
+        label(g, 'inside the cochlea · hair cells + nerve', S.x0 + 104, S.y0 + 68, { size: 34, weight: 700, color: 'rgba(255,220,230,0.85)', family: BODY, alpha: 1 - seg(t, tEars + 2.6, tEars + 3.0) });
         // Number two: the silence before the kick, counted (slowed down while told).
         if (e.v === 2 && e.off !== null && t >= e.off - 0.1 && (e.sting || t < e.hit + 0.15)) {
             const kG = popIn(t, e.off - 0.1, 0.2);
@@ -781,7 +781,7 @@ function drawHand(t) {
 }
 
 // ══ Brain: one thing to predict ══
-const BR = { x0: 150, x1: 880, dots: 1120, wave: 870, brain: { x: 320, y: 650, s: 0.95 } };
+const BR = { x0: 150, x1: 880, dots: 1120, wave: 870, brain: { x: 400, y: 650, s: 0.95 } };
 function drawBrain(t) {
     const a = sceneAlpha(t, 'brain');
     if (a <= 0) return;
@@ -865,7 +865,7 @@ function drawBrain(t) {
         g.arc(X(7), BR.dots, 34, 0, Math.PI * 2);
         g.stroke();
         g.restore();
-        tag(g, 'next beat', X(4.7), BR.dots - 60, { x: X(7) - 44, y: BR.dots - 20 }, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
+        tag(g, 'next beat', X(5.4), BR.dots + 70, null, { a: popIn(t, tNext), bg: P.ink, fg: P.dark, size: 36 });
     }
     let ball;
     if (t < tPred) {
@@ -912,7 +912,7 @@ function drawBrain(t) {
     brainChar(g, B.x, B.y + bob, B.s * lerp(0.85, 1, E.outBack(kB)), { look: land >= 0 ? { x: X(7), y: BR.dots } : ball, joy, lean: waiting * 0.8 * E.inOut(seg(t, tPred, tPred + 0.4)), blink: waiting ? 0 : blink, t });
     g.restore();
     // A thought bubble: what it predicts.
-    const kT = popIn(t, tNext - 0.1, 0.3) * (1 - seg(t, tLand + 0.2, tLand + 0.5));
+    const kT = popIn(t, tPred - 0.1, 0.3) * (1 - seg(t, tLand + 0.2, tLand + 0.5));
     if (kT > 0) {
         g.save();
         g.globalAlpha *= kT;
@@ -948,8 +948,8 @@ function drawHow(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
-    headline(t, SC.how + 0.1, [['Cut'], ['¼'], ['second'], ['early']], 300, { size: 92, stagger: 0 });
-    label(g, `= an 8th at ${TL.bpm} BPM`, 540, 400, { size: 40, weight: 700, color: P.ink2, align: 'center' });
+    headline(t, SC.how + 0.1, [['Cut'], ['an'], ['8th'], ['early']], 300, { size: 92, stagger: 0 });
+    label(g, `just under ¼ second at ${TL.bpm} BPM`, 540, 400, { size: 40, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'eighth', 0.12);
     const tAt = wto('how', 'at', 0.32);
@@ -1135,7 +1135,7 @@ function drawHow(t) {
         g.moveTo(ZX(0), y + 128);
         g.lineTo(ZX(Z.msMax), y + 128);
         g.stroke();
-        for (const [m, nm] of [[58.6, '32nd'], [117.2, '16th'], [234.4, '8th'], [468.8, 'beat']]) {
+        for (const [m, nm] of [[234.4, '8th']]) {
             const lit = ms >= m - 0.5;
             g.strokeStyle = lit ? P.ink : P.ink3;
             g.beginPath();
@@ -1256,7 +1256,7 @@ function drawEnd(t) {
         // The comment poll: the lesson's four gap lengths as chips.
         ['32nd', '16th', '8th', 'beat'].forEach((c, i) => {
             const kc = popIn(t, SC.end + 0.5 + i * 0.12, 0.25);
-            if (kc > 0) pill(g, c, 540 + (i - 1.5) * 170, 1272, { size: 40, bg: c === '8th' ? P.cyan : P.ink, fg: P.dark, alpha: kc, scale: E.outBack(kc), weight: 800 });
+            if (kc > 0) pill(g, c, 540 + (i - 1.5) * 190, 1272, { size: 44, bg: c === '8th' ? P.cyan : P.ink, fg: P.dark, alpha: kc, scale: E.outBack(kc), weight: 800 });
         });
     }
     g.restore();
