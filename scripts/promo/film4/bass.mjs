@@ -60,8 +60,10 @@ export function pluck(f0, dur) {
     for (let i = off; i < n + off; i++) line[i] = 0.998 * 0.5 * (at(i, L) + at(i, L + 1));
     for (let i = 0; i < n; i++) {
         const t = i / RATE;
+        // An 8 ms onset, as a thumb's pluck, and an 80 ms release.
+        const onset = t < 0.008 ? 0.5 - 0.5 * Math.cos((Math.PI * t) / 0.008) : 1;
         const fade = t > dur - 0.08 ? Math.max(0, (dur - t) / 0.08) : 1;
-        out[i] = line[i] * fade;
+        out[i] = line[i] * onset * fade;
     }
     return butter4(out, 'lp', 900);
 }

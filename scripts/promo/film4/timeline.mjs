@@ -19,7 +19,7 @@ export const TIMELINE = {
     fps: 60,
     width: 1080,
     height: 1920,
-    duration: 90,
+    duration: 94,
     bpm: 120,
     bar: 2,
     gridOrigin: 1,
@@ -58,7 +58,7 @@ export const TIMELINE = {
     ],
     // The vamp restarts on bar 1 at these times (each a bar line), so every
     // demo starts on the same notes. Before the first, bar 1 falls on 1 s.
-    vampSync: [5, 19, 33, 69, 75, 79],
+    vampSync: [5, 19, 33, 69, 79, 83],
 
     // Narration, one sentence per entry: `id` is a line in vo-cues.json,
     // `at` where it starts. Lines sharing a stem (air-1, air-2) form one beat;
@@ -90,8 +90,8 @@ export const TIMELINE = {
         { id: 'limit-2', at: 61.5 },
         { id: 'rule-1', at: 65.2 },
         { id: 'rule-2', at: 67.7 },
-        { id: 'again', at: 74.2 },
-        { id: 'cta', at: 83.3 },
+        { id: 'again', at: 78.2 },
+        { id: 'cta', at: 87.3 },
     ],
 
     // Bass demos. `blend`: level of the saturated copy under the clean sub
@@ -108,9 +108,9 @@ export const TIMELINE = {
         { id: 'pedal', from: 41, to: 59, blend: 0.5, duck: true, riff: 'pedal' },
         // The recipe: the clean sub through the phone, then the saturated
         // copy added on the diagram's last step.
-        { id: 'recipe', from: 69, to: 73, blend: { cue: ['rule', 'add'], dt: 4.2, to: 0.4, v: 0.5 } },
-        { id: 'againClean', from: 75, to: 79, blend: 0, drums: true },
-        { id: 'againSat', from: 79, to: 83, blend: 0.5, drums: true },
+        { id: 'recipe', from: 69, to: 77, blend: { cue: ['rule', 'add'], dt: 4.2, to: 0.4, v: 0.5 } },
+        { id: 'againClean', from: 79, to: 83, blend: 0, drums: true },
+        { id: 'againSat', from: 83, to: 87, blend: 0.5, drums: true },
     ],
     // The "typical note": a plucked bass string at the bass's own pitch,
     // plucked as the idea is introduced and again on "stack".
@@ -120,7 +120,7 @@ export const TIMELINE = {
     ],
 
     // Keys under everything to the button.
-    bed: { from: 0, to: 89 },
+    bed: { from: 0, to: 93 },
 
     sfx: [
         { cue: ['hook-b', 'now'], dt: -0.05, kind: 'pop', level: 0.6 },
@@ -147,12 +147,12 @@ export const TIMELINE = {
         { at: 59, kind: 'whoosh', level: 0.5 },
         { cue: ['rule', 'keep'], dt: -0.1, kind: 'pop', level: 0.7 },
         { cue: ['rule', 'add'], dt: -0.1, kind: 'pop', level: 0.7 },
-        { at: 74, kind: 'pop' },
-        { at: 79, kind: 'tick' },
-        { at: 83.1, kind: 'whoosh' },
-        { at: 83.45, kind: 'pop', level: 0.7 },
+        { at: 78, kind: 'pop' },
+        { at: 83, kind: 'tick' },
+        { at: 87.1, kind: 'whoosh' },
+        { at: 87.45, kind: 'pop', level: 0.7 },
         { cue: ['cta', 'play'], dt: 0.05, kind: 'tick' },
-        { at: 88.8, kind: 'button' },
+        { at: 92.8, kind: 'button' },
     ],
 
     // Scenes in order; each runs until the next one starts.
@@ -169,7 +169,7 @@ export const TIMELINE = {
         { id: 'ghost', at: 55.5, view: 'scope', teaches: 'The brain puts the note back.' },
         { id: 'limit', at: 59.2, view: 'limit', teaches: 'Feel it on a club sub, hear it on a phone.' },
         { id: 'rule', at: 65, view: 'rule', teaches: 'Sub clean for big speakers, harmonics for small ones.' },
-        { id: 'again', at: 74, view: 'hook', teaches: 'The hook again, knowing what to listen for.' },
-        { id: 'end', at: 83.1, view: 'end', teaches: 'Where the lesson is, and who made it.' },
+        { id: 'again', at: 78, view: 'hook', teaches: 'The hook again, knowing what to listen for.' },
+        { id: 'end', at: 87.1, view: 'end', teaches: 'Where the lesson is, and who made it.' },
     ],
 };

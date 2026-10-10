@@ -76,7 +76,7 @@ which carries its own references, or from a calculation listed here.
   before the voice ducking.
 - The pluck: Karplus-Strong at G#1, plucked on "notes" and ringing 6.2 s, a triangle excitation (plucked at 13%),
   0.2% loss per period, low-passed at 900 Hz; drawn with its fundamental 3
-  dB under the sub's, mixed 8 dB lower under the voice.
+  dB under the sub's, mixed 10 dB lower under the voice.
 - Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master
   WAV and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
 - Narration: ElevenLabs `eleven_v4`, Michael C. Vincent, take 1 of 4, played

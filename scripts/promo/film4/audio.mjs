@@ -364,7 +364,7 @@ export function renderAudio(wavPath) {
     const drumTrim = voLufs - 6 - loudness(drumsPhone, ref0, ref0 + CYCLE);
     const keysLufs = loudness(mono(bL, bR), ref0, ref0 + CYCLE);
     const bedTrim = voLufs - keysLufs;
-    const plTrim = voLufs - 10 - loudness(phone(pl), plucks[0].t, plucks[0].t + 2);
+    const plTrim = voLufs - 12 - loudness(phone(pl), plucks[0].t, plucks[0].t + 2);
     // The pluck as the track carries it (for the picture): its fundamental
     // 3 dB under the clean sub's, so the two stacks share one scale. In the
     // mix it sits under the voice, like the ducked bass.

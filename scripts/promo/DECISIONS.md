@@ -102,3 +102,10 @@ One line per call, newest last.
   - The recipe shows its result: a live ladder of what the phone plays under the chain, dark with the clean sub, lit when step 4 blends the copy in ("Blend it in with the clean sub" replaces "Add it under the clean sub").
   - The bass starts at 19 s so "Down here" has a bar to point at; the limit scene runs 2 s longer so "hear the melody" stays up; the film is 90 s.
   - Smaller: hook rungs spaced apart, the "phone speaker (simulated)" pill inset from the edge, the 1x cone travel drawn as a dash to scale, the window highlight takes in the 4x bar, the replay caption says "+ saturation" like its badge.
+- Film 4 v6, after a fifth scored review (9 accuracy, 8.5 hook, clarity, pacing and polish, 8 craft):
+  - The recipe holds 4 s longer, finished chain and lit ladder on screen, the saturated copy playing; the film is 94 s.
+  - The robot is tagged "you" in the hook (and "your brain" later); the "harmonics" pill lands on the payoff's downbeat; the big ladder calls its amber bar "1x the note", as the small ladders call it "the note".
+  - "Down here" pulses the phone ladder's dark zone; "it can move this" is a short solid bar with the cone's position as a dot; the zoom lens arrives with the scene.
+  - The air scene shows the squeezed air as soft bands, one per wavelength, equally bright in every row: the same loudness.
+  - Small ladders show four rungs so the top ones never fuse; the rule card's frame waits under the first card; arcs no longer touch the phone; subtitles leave in 60 ms.
+  - The plucked note sits 12 dB under the voice (its two plucks overlap) and has an 8 ms onset; speech stays clear of the clipper.
