@@ -433,7 +433,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         if (!guessing && id === 'notch' && t >= tAns) {
             const L1 = AB.lanes[0];
             const kD = popIn(t, tAns + 0.3, 0.2) * (1 - out) * (1 - popIn(t, wto('hook', 'why', 0) - 0.3, 0.25));
-            tag(g, 'in 1 the riser peaks into the drop', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 38 });
+            void kD;
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
         label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
@@ -495,7 +495,9 @@ function drawAB(t, frame1 = false, noHead = false) {
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
         if (kC > 0) pill(g, t < dB.down ? `click vs the rest: ${sg(D.r1.clickDb)} dB in 1` : `click vs the rest: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 490, { size: 48, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
+        tag(g, 'clean click', X(0) + 160, L2.y - L2.h / 2 - 46, { x: X(0), y: L2.y - L2.h / 2 - 8 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
+        const k14 = popIn(t, wto('cta', 'fourteen', 0.1) - 0.05, 0.25);
+        if (kC > 0) label(g, k14 > 0 ? '≈ 14 dB clearer, in this drop (2–6 kHz, first 20 ms)' : '2–6 kHz, first 20 ms, in this drop', 540, 552, { size: 32, weight: 700, color: k14 > 0 ? P.amber : P.ink2, align: 'center', alpha: kC, family: BODY });
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
     if (!replay && !noHead && !frame1) {
@@ -1078,7 +1080,7 @@ function drawHow(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
-    if (t < wto('how', 'why', 0.5) - 0.2) headline(t, SC.how + 0.1, [['Cut'], ['¼'], ['second'], ['early']], 300, { size: 92, stagger: 0 });
+    if (t < wto('how', 'why', 0.5) - 0.2) headline(t, SC.how + 0.1, [['Cut'], ['about'], ['¼'], ['second'], ['early']], 300, { size: 84, stagger: 0 });
     else headline(t, wto('how', 'why', 0.5) - 0.2, [['Why'], ['¼'], ['second?']], 300, { size: 92, stagger: 0 });
     label(g, `at ${TL.bpm} BPM: an 8th, ${Math.round(GAP_MS)} ms`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
@@ -1304,6 +1306,31 @@ function drawHow(t) {
         rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
         g.fill();
+        // The after-fog on the gap's own track, same axis: a 16th ends inside it, an 8th clears it.
+        if (now >= 0) {
+            g.save();
+            rr(g, ZX(0), y + 274, ZX(Z.msMax) - ZX(0), 110, 18);
+            g.clip();
+            for (let m = 0; m < 200; m += 2) {
+                g.fillStyle = `rgba(${FOG_RGB},${0.7 * fogWeight(m) * popIn(t, voBy.g16.at - 0.05, 0.3)})`;
+                g.fillRect(ZX(m), y + 274, ZX(2) - ZX(0) + 0.5, 110);
+            }
+            g.restore();
+            g.save();
+            g.strokeStyle = FOG;
+            g.setLineDash([12, 10]);
+            g.lineWidth = 4;
+            g.beginPath();
+            g.moveTo(ZX(200), y - 10);
+            g.lineTo(ZX(200), y + 400);
+            g.stroke();
+            g.restore();
+            // At each test's downbeat, the outcome on the bar.
+            TESTS.forEach(([, d], i) => {
+                const kO2 = popIn(t, d.down, 0.2) * (i === now ? 1 : 0);
+                if (kO2 > 0) pill(g, i === 0 ? 'fog left' : 'clear', Math.min(ZX(TESTS[i][2]) + 80, Z.x1 - 110), y + 226, { size: 34, bg: i === 0 ? FOG : P.cyan, fg: P.dark, alpha: kO2, scale: E.outBack(kO2), weight: 800 });
+            });
+        }
         // The fog's end line flashes as the gap passes it.
         const fl = t >= tQuarter + 0.12 ? Math.exp(-(t - tQuarter - 0.12) / 0.25) : 0;
         if (fl > 0.01) {
@@ -1332,6 +1359,12 @@ function drawHow(t) {
         }
         g.restore();
         void t16;
+        // What the signal does and does not show, said plainly.
+        if (now >= 0) {
+            const kN = popIn(t, voBy.g16.at + 0.3, 0.3);
+            label(g, 'matched in loudness · the click measures the same in all three', 540, Z.y + 610, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kN, family: BODY });
+            label(g, 'what changes is the after-fog in your hearing (model)', 540, Z.y + 654, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kN, family: BODY });
+        }
     }
     g.restore();
 }
@@ -1366,7 +1399,7 @@ function drawEnd(t) {
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
-    const tPoll = wto('cta', 'so', 0.4);
+    const tPoll = wto('cta', 'which', 0.4);
     // The lesson's address comes up with the question; the phone mock-up is left out (its text cannot be read at phone size).
     const tLesson = tPoll;
     const SHOW_PHONE = false;
@@ -1487,8 +1520,8 @@ function drawEnd(t) {
         // The lesson's title on two lines, clear of the right-hand rail.
         const words = `Lesson: ${TL.lesson.title}`.split(' ');
         const cut = Math.ceil(words.length / 2);
-        label(g, words.slice(0, cut).join(' '), 540, 1160, { size: 36, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
-        label(g, words.slice(cut).join(' '), 540, 1206, { size: 36, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
+        label(g, words.slice(0, cut).join(' '), 540, 1164, { size: 40, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
+        label(g, words.slice(cut).join(' '), 540, 1214, { size: 40, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
     }
     g.restore();
 }

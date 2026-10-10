@@ -68,6 +68,15 @@ log(`Claim 2, kick click 2-6 kHz over everything else in that band, first 20 ms:
 log(`  shown on screen (replay), one decimal from the unrounded values: ${Q[1].clickDb.toFixed(1)} dB in 1, ${Q[2].clickDb.toFixed(1)} dB in 2`);
 log(`Claim 3, through the phone check (200 Hz high-pass, 24 dB/oct): the kick heard in its first 20 ms is ${f1(Q.claims[3].kickPhone)} dB louder with the gap (${f1(Q.claims[3].kickFull)} dB full band, ${Math.round(Q.claims[3].survive1 * 100)}% survives); the click advantage is ${f1(Q.claims[3].clickPhone)} dB (${Math.round(Q.claims[3].survive2 * 100)}% survives; target 80%)`);
 log(`  stricter small-speaker model (500 Hz high-pass at 24 dB/oct, +4 dB at 1 kHz, 10 kHz low-pass): the kick heard is ${f1(Q.claims[3].kickSmall)} dB louder with the gap (${Math.round((Q.claims[3].kickSmall / Q.claims[3].kickFull) * 100)}% of full band); the click advantage is ${f1(Q.claims[3].clickSmall)} dB (${Math.round((Q.claims[3].clickSmall / Q.claims[2].db) * 100)}%)`);
+{
+    const { clickOf, NOTE } = await import('./drop.mjs');
+    const rows = [['a 16th', NOTE.n16], ['an 8th', NOTE.n8], ['a beat', NOTE.beat]].map(([nm, len]) => {
+        const m = clickOf(len);
+        return `${nm} (${(len * 1000).toFixed(1)} ms): click ${f1(m.clickDb)} dB (phone check ${f1(m.clickPhoneDb)}, small speaker ${f1(m.clickSmallDb)}), limiter ${f1(m.grMean)} dB on the first kick, gap floor ${f1(m.gapDb)} dB`;
+    });
+    log(`Ear test, the same drop with three gaps, each matched to version 2's drop-bar loudness (click as in claim 2; version 1 without a gap: ${f1(Q[1].clickDb)} dB): ${rows.join('; ')}`);
+    log('  The signal measures barely differ between the three: the build is silent at the downbeat in all of them. What differs is forward masking in the listener (the after-fog), which the film shows as a labelled model, not a measurement.');
+}
 log(`Claim 4, the first kick (K-weighted, first 50 ms) over the drop bar's loudness at matched loudness: version 1 ${f1(Q[1].kickOverBar)} dB, version 2 ${f1(Q[2].kickOverBar)} dB, ${f1(Q.claims[4].db)} dB more prominent with the gap`);
 const pass = Q.claims[1].db >= 3 && Q.claims[2].db >= 10 && Q.claims[3].survive1 >= 0.8 && Q.claims[3].survive2 >= 0.8 && Q.claims[4].db > 0;
 log(`Claims 1-4: ${pass ? 'all pass' : 'NOT ALL PASS'}`);

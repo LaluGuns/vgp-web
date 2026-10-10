@@ -1,7 +1,7 @@
 guess|One or two? Pick one.
 hook|Number two. It has a gap: under a quarter second of silence before the kick. Why does that hit harder? Your ears, your limiter, your brain.
 fog|In number one, the riser is still roaring when the kick lands, so it covers the click.
-fresh|In number two, the riser stops, its after-fog fades, and your ears meet the kick fresh.
+fresh|In number two, the riser stops. Its after-fog, the dull moment after a loud sound, fades, and your ears meet the kick fresh.
 hand|Then your limiter, a little hand on a fader. The riser makes it pull the whole mix down, right as the kick lands.
 brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
 how|So cut everything about a quarter second before the drop, reverb tails too. Why a quarter second? Listen to three gaps.
@@ -9,4 +9,4 @@ g16|A sixteenth. The after-fog may still be there.
 g8|An eighth. It outlasts the after-fog.
 gb|A full beat. A longer breath.
 again|Now listen again. Hear the click?
-cta|That's the click, about fourteen dB clearer. Clean ears, a calmer limiter, a beat you saw coming. So what do you cut before your drop: a sixteenth, an eighth, or a full beat?
+cta|That's the click: in this drop, about fourteen dB clearer. Clean ears, a calmer limiter, a beat you saw coming. Which gap do you use: a sixteenth, an eighth, or a full beat? Full lesson on the Virzy Guns blog.

@@ -279,6 +279,18 @@ export const dropLoudness = (x) => loudness(x, PRE, PRE + BAR);
  * Everything section 3 of the brief asks for, for both versions.
  * CLICK is the first 20 ms after the downbeat.
  */
+/** The ear test's numbers for one gap length: claim 2's click measure, through the phone and small-speaker models too, and claim 1's gain reduction. */
+export function clickOf(gap) {
+    const r = render(gap);
+    const T0 = PRE;
+    const CLICK = 0.02;
+    const kick = monoOf(r.kick);
+    const rest = monoOf(r.rest);
+    const ratio = (f) => 10 * Math.log10(energy(band(f(kick), 2000, 6000), T0, T0 + CLICK) / energy(band(f(rest), 2000, 6000), T0, T0 + CLICK));
+    const grDb = Array.from(r.gain.subarray(at(T0), at(T0 + CLICK)), (g) => -db(g));
+    return { clickDb: ratio((x) => x), clickPhoneDb: ratio(phone), clickSmallDb: ratio(speakerSmall), grMean: grDb.reduce((a, b) => a + b, 0) / grDb.length, gapDb: 10 * Math.log10(energy(kWeight(monoOf(r.out)).map(Number), T0 - (typeof gap === 'number' ? gap : GAP) + 0.01, T0)) + 0.691 - dropLoudness(monoOf(r.out)) };
+}
+
 export function measure() {
     const v = { 1: render(false), 2: render(true) };
     const T0 = PRE;

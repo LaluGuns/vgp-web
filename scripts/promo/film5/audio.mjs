@@ -12,7 +12,7 @@ import { TIMELINE } from './timeline.mjs';
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 export const ASSETS = path.join(HERE, '../assets');
 // The demos' drop bar over the narration's loudness: loud enough to be the event, not a jump for a phone at voice level.
-const DEMO_OVER_VO = 2.5;
+const DEMO_OVER_VO = 3.5;
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
 
 // Picture data resolution: one value per millisecond.
@@ -338,7 +338,7 @@ export function renderAudio({ stem = null } = {}) {
         v[k] = render(len);
         match[k] = undb(res[2].dropLufs - dropLoudness(monoOf(v[k].out)));
     }
-    // Demos sit 2.5 dB over the narration's loudness at the drop bar (DEMO_OVER_VO), so the A/B
+    // Demos sit 3.5 dB over the narration's loudness at the drop bar (DEMO_OVER_VO), so the A/B
     // is the loudest thing in the film; their peaks (-1 dBFS inside the song,
     // about 13 dB over its loudness) stay under the master's clipper.
     const dropLufs = res[2].dropLufs;
