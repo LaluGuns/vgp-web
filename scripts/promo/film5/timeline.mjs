@@ -29,12 +29,13 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 const HOOK = { pre: 2.5, post: 2 };
 // Version 2's replay rings out longer, so its measured line holds before the end card.
 const REPLAY = { pre: 1.25, post: 2.75 };
-const REPLAY2 = { pre: 1.25, post: 3.25 };
+const REPLAY2 = { pre: 1.25, post: 4.25 };
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.5, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
-const LINE_GAP = 0.0;
+// A breath between lines, so each idea lands before the next one.
+const LINE_GAP = 0.3;
 const vo = [];
 const guessAt = len(HOOK) * 2;
 // "One or two? Pick one." is spoken over the countdown, which lasts at least three beats.
@@ -54,9 +55,11 @@ for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     t += dur(id) + LINE_GAP;
     // "so it covers the click" then version 1's downbeat; "your ears meet the kick fresh" then version 2's.
     if (id === 'fog') sting('S1', 1, 0);
-    if (id === 'fresh') sting('S2', 2, 0.15);
+    if (id === 'fresh') sting('S2', 2, 0.35);
     // The limiter's measured result holds after "pull the kick down".
-    if (id === 'hand') t += 0.75;
+    if (id === 'hand') t += 0.9;
+    // The three reasons stay up together before the ear scene.
+    if (id === 'hook') t += 0.6;
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -64,7 +67,7 @@ vo.push({ id: 'again', at: Math.round((replayAt - 0.12 - dur('again')) * 1000) /
 const replayEnd = replayAt + len(REPLAY) + len(REPLAY2);
 // The CTA waits for version 2's second kick to ring out.
 vo.push({ id: 'cta', at: Math.round((replayEnd + 0.2) * 1000) / 1000 });
-const button = replayEnd + 0.2 + dur('cta') + 0.15;
+const button = replayEnd + 0.2 + dur('cta') + 0.6;
 
 export const TIMELINE = {
     fps: 60,
@@ -111,14 +114,14 @@ export const TIMELINE = {
         { cue: ['fresh', 'stops', 0.4], dt: 0, kind: 'tick' },
         { cue: ['hand', 'your', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['hand', 'hand', 0.17], dt: -0.1, kind: 'grab' },
-        { cue: ['hand', 'down', 0.7], dt: 0, kind: 'grab', level: 0.7 },
+        { cue: ['hand', 'lands', 0.9], dt: 0, kind: 'grab', level: 0.7 },
         { cue: ['brain', 'silence', 0], dt: -0.25, kind: 'whoosh', level: 0.5 },
         { cue: ['brain', 'lands', 0.82], dt: 0, kind: 'kick' },
         { cue: ['brain', 'payoff', 0.95], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['how', 'at', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['how', 'eighth', 0.6], dt: 0, kind: 'tick' },
-        { cue: ['how', 'fifth', 0.62], dt: 0, kind: 'tick', level: 0.8 },
-        { cue: ['how', 'outlasts', 0.85], dt: 0, kind: 'tick', level: 0.9 },
+        { cue: ['how', 'afterfog', 0.5], dt: 0.3, kind: 'tick', level: 0.8 },
+        { cue: ['how', 'only', 0.9], dt: 0.25, kind: 'tick', level: 0.9 },
         { cue: ['how', 'tails', 0.85], dt: 0, kind: 'tick' },
         { cue: ['again', 'listen', 0], dt: -0.1, kind: 'pop' },
         { cue: ['cta', 'the', 0], dt: -0.25, kind: 'whoosh' },

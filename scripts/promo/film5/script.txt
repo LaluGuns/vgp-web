@@ -1,9 +1,9 @@
-guess|One or two? Pick one.
+guess|One or two? Pick one before I tell you.
 hook|Number two. It has a gap: under a quarter second of silence before the kick. Why? Your ears, your limiter, your brain.
 fog|In number one, the riser is still roaring when the kick lands, so it covers the click.
 fresh|In number two, the riser stops, its after-fog fades, and your ears meet the kick fresh.
-hand|Then your limiter, a little hand on a fader: the riser makes it pull the kick down.
+hand|Then your limiter, a little hand on a fader: the riser makes it pull the whole mix down as the kick lands.
 brain|And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
-how|So cut everything a sixteenth to an eighth note before the drop, reverb tails too. That after-fog lasts up to a fifth of a second, and at 128 BPM, an eighth outlasts it.
+how|So cut everything an eighth note before the drop, reverb tails too. A sixteenth already helps, but the after-fog can last a fifth of a second, and at 128 BPM, only an eighth outlasts it.
 again|Now listen again.
 cta|Free lesson on the Virzy Guns blog. Which gap do you use?

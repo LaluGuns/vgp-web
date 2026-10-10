@@ -428,7 +428,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             tag(g, 'in 1 the riser runs into the drop', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 34 });
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
-        label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, tAns - 0.2, tAns)) });
+        label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
         const kA = popIn(t, tAns, 0.3) * (1 - out) * (1 - popIn(t, wto('hook', 'quarter', 0.6) - 0.3, 0.2));
         if (false) pill(g, `measured: kick stands out ${fmt(D.claims[4].db)} dB more in 2`, 540, 560, { size: 36, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kA, scale: E.outBack(kA), weight: 800 });
         // Version 1 is the lesson's own build: the riser peaks into the downbeat.
@@ -486,8 +486,8 @@ function drawAB(t, frame1 = false, noHead = false) {
         tag(g, 'buried click', X(0) - 150, L1.y + L1.h / 2 + 62, { x: X(0), y: L1.y + L1.h / 2 + 22 }, { a: k1, bg: P.dark, fg: P.amber, ring: P.amber, size: 34 });
         const kC = popIn(t, dA.down + 0.1, 0.25);
         const sg = (x) => (x > 0 ? '+' : '') + fmt(x);
-        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 505, { size: 38, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
-        if (kC > 0) label(g, '2–6 kHz, first 20 ms', 540, 558, { size: 30, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
+        if (kC > 0) pill(g, t < dB.down ? `click vs everything else: ${sg(D.r1.clickDb)} dB in 1` : `click vs everything else: ${sg(D.r1.clickDb)} → ${sg(D.r2.clickDb)} dB`, 540, 500, { size: 44, bg: P.dark, fg: P.ink, ring: P.ink, alpha: kC, scale: E.outBack(kC), weight: 800 });
+        if (kC > 0) label(g, '2–6 kHz, first 20 ms, measured', 540, 566, { size: 32, weight: 700, color: P.ink2, align: 'center', alpha: kC, family: BODY });
         tag(g, 'clean click', X(0) - 150, L2.y + L2.h / 2 + 62, { x: X(0), y: L2.y + L2.h / 2 + 22 }, { a: k2, bg: P.amber, fg: P.dark, size: 34 });
     }
     // The three reasons, on a card over the lanes from "Why?"; each drawn as it is named.
@@ -748,7 +748,7 @@ function drawHand(t) {
     const tRiser = SC.hand + 0.35;
     // Slowed down from -700 ms to the kick on "down", then on to the end of
     // the click window (+20 ms, where claim 1 is measured) and held there.
-    const tKick = wto('hand', 'down', 0.7);
+    const tKick = wto('hand', 'lands', 0.9);
     const ms = keys(t, [[tRiser, HD.msA], [tKick, 0], [tKick + 0.35, 20]]);
     const slow = (tKick - tRiser) / (-HD.msA / 1000);
     const live = t > tRiser;
@@ -830,7 +830,7 @@ function drawHand(t) {
         }
         // The measured reading on the strip's display, after the kick.
         const kR = popIn(t, tKick + 0.15, 0.3);
-        rr(g, f.x - 110, dk.y0 + dk.h - 76, 220, 58, 12);
+        rr(g, f.x - 135, dk.y0 + dk.h - 76, 270, 58, 12);
         g.fillStyle = '#070d1a';
         g.fill();
         const shown = kR > 0 ? (f.v === 1 ? D.r1.gr : D.r2.gr) : gr;
@@ -840,7 +840,7 @@ function drawHand(t) {
             g.globalAlpha *= kR;
             g.strokeStyle = P.ink;
             g.lineWidth = 4;
-            rr(g, f.x - 110, dk.y0 + dk.h - 76, 220, 58, 12);
+            rr(g, f.x - 135, dk.y0 + dk.h - 76, 270, 58, 12);
             g.stroke();
             g.restore();
         }
@@ -1052,12 +1052,13 @@ function drawHow(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
-    headline(t, SC.how + 0.1, [['Cut'], ['a'], ['16th'], ['to'], ['an'], ['8th'], ['early']], 300, { size: 80, stagger: 0 });
-    label(g, `an 8th (${Math.round(GAP_MS)} ms at ${TL.bpm} BPM) clears the fog fully`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
+    headline(t, SC.how + 0.1, [['Cut'], ['an'], ['8th'], ['early']], 300, { size: 92, stagger: 0 });
+    label(g, `a 16th helps · an 8th (${Math.round(GAP_MS)} ms) outlasts the fog`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'eighth', 0.12);
     const tAt = wto('how', 'at', 0.32);
-    const tQuarter = wto('how', 'outlasts', 0.85);
+    // The second "eighth": "only an eighth outlasts it".
+    const tQuarter = wto('how', 'eighth', 0.85, 1);
     const tFogs = wto('how', 'afterfog', 0.5);
     const tFifth = wto('how', 'fifth', 0.62);
     const tVerb = wto('how', 'reverb', 0.84);
@@ -1241,11 +1242,12 @@ function drawHow(t) {
         g.lineTo(ZX(200), y + 160);
         g.stroke();
         g.restore();
-        label(g, 'gone by 200 ms', ZX(200) + 16, y + 92, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
+        label(g, 'gone within', ZX(200) + 16, y + 62, { size: 36, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
+        label(g, '100–200 ms', ZX(200) + 16, y + 112, { size: 40, weight: 700, color: P.ink2, family: BODY, alpha: kEnd });
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        const ms = t < tQuarter ? snap(tFifth, GAP_MS / 2) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
+        const ms = t < tQuarter ? snap(tFogs + 0.3, GAP_MS / 2) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
@@ -1277,7 +1279,7 @@ function drawHow(t) {
             label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
         }
         g.restore();
-        label(g, t < tQuarter ? 'a 16th: the fog is still there' : 'an 8th outlasts the fog', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tFifth + 0.2, 0.3), family: BODY });
+        label(g, t < tQuarter ? 'a 16th shortens the fog' : 'an 8th outlasts it', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tFogs + 0.5, 0.3), family: BODY });
     }
     g.restore();
 }
