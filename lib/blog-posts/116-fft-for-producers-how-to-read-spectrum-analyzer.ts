@@ -6,10 +6,10 @@ const SIZES = [1024, 2048, 4096, 8192, 16384];
 
 // Two snare hits 200 ms apart on a 400 ms plot, and the block an FFT of N points covers.
 const SPAN_MS = 400;
-const SNARES: SignalTrace = { kind: 'hits', at: [0.08, 0.58], amp: [0.85, 0.85], decay: 12, cycles: 45 };
+const SNARES: SignalTrace = { kind: 'hits', at: [0.08, 0.58], amp: [0.85, 0.85], decay: 12, cycles: 45, muted: true };
 const block = (n: number): SignalTrace => {
     const end = 0.06 + (n / FS) * 1000 / SPAN_MS;
-    return { kind: 'envelope', dashed: true, label: 'Block', points: [[0.06, 0], [0.0601, 0.95], [end, 0.95], [end + 0.0001, 0]] };
+    return { kind: 'envelope', label: 'Block', points: [[0.06, 0], [0.0601, 0.95], [end, 0.95], [end + 0.0001, 0]] };
 };
 
 // A block holding 2.5 cycles, starting at a peak, with and without a Hann window.
@@ -50,7 +50,7 @@ export const post116: BlogArticle = {
             type: 'signal',
             caption:
                 'Two snare hits 200 ms apart, drawn over 400 ms, with the block each FFT size analyses. The 1024-point block catches the start of one hit. The 16384-point block spans both hits and the gap between them, and reports them as one blended spectrum.',
-            alt: 'Two plots of the same two drum hits. In the first, a dashed box covers only the very start of the first hit. In the second, a dashed box stretches from before the first hit to past the second.',
+            alt: 'Two plots of the same two drum hits, drawn in grey. In the first, a box covers only the very start of the first hit. In the second, a box stretches from before the first hit to past the second.',
             rows: [
                 { label: '1024 points: a 21 ms block', traces: [SNARES, block(1024)] },
                 { label: '16384 points: a 341 ms block', traces: [SNARES, block(16384)] },

@@ -38,10 +38,10 @@ export const post103: BlogArticle = {
             mode: 'level',
             caption:
                 'Where a voiceover and a jazz lead overlap. The voice carries most of its energy below 1 kHz, but much of what makes words easy to follow sits between 1 and 4 kHz. A sax-like lead or bright keys centred there cover that band, so they are the parts to drop under talking.',
-            alt: 'Frequency plot with a broad voiceover hump peaking around 500 Hz and reaching into the highs, a lead hump centred near 1.5 kHz drawn dashed, a low pad hump in grey, and a shaded band from 1 to 4 kHz.',
+            alt: 'Frequency plot with a broad voiceover hump peaking around 500 Hz and reaching into the highs, a lead hump centred near 1.5 kHz drawn dotted, a low pad hump in grey, and a shaded band from 1 to 4 kHz.',
             curves: [
                 { kind: 'hump', center: 500, width: 1.5, level: 0.85, label: 'Voiceover' },
-                { kind: 'hump', center: 1500, width: 0.9, level: 0.7, label: 'Lead or keys', dashed: true },
+                { kind: 'hump', center: 1500, width: 0.9, level: 0.7, label: 'Lead or keys', dotted: true },
                 { kind: 'hump', center: 180, width: 1.2, level: 0.5, label: 'Pad', muted: true },
             ],
             bands: [{ from: 1000, to: 4000, label: 'Speech clarity' }],

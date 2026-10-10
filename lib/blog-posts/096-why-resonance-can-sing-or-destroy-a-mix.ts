@@ -38,7 +38,7 @@ export const post096: BlogArticle = {
             alt: 'Gain against frequency for three low-pass filters at 1 kHz. All are flat below 1 kHz and fall above it. The Q 0.7 curve bends smoothly, the Q 4 curve has a peak of 12 dB at the cutoff and the Q 10 curve a sharp 20 dB peak.',
             curves: [
                 { kind: 'eq', label: 'Q 0.7', muted: true, bands: [{ type: 'lowpass', freq: 1000, q: 0.707 }] },
-                { kind: 'eq', label: 'Q 4', dashed: true, bands: [{ type: 'lowpass', freq: 1000, q: 4 }] },
+                { kind: 'eq', label: 'Q 4', dotted: true, bands: [{ type: 'lowpass', freq: 1000, q: 4 }] },
                 { kind: 'eq', label: 'Q 10', bands: [{ type: 'lowpass', freq: 1000, q: 10 }] },
             ],
             marks: [{ f: 1000, label: 'Cutoff' }],

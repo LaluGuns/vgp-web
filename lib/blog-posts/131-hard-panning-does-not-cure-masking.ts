@@ -18,12 +18,12 @@ export const post131: BlogArticle = {
             mode: 'level',
             caption:
                 'Two rhythm guitars from the same amp and the vocal they sit under. Panning decides which speaker each hump comes out of. It does not move a single hump along this axis, so the overlap in the shaded band is still there.',
-            alt: 'Energy over frequency for a left guitar, a right guitar and a vocal. The two guitar humps lie almost on top of each other and both overlap the dashed vocal hump in a shaded band from about 2 to 5 kHz.',
+            alt: 'Energy over frequency for a left guitar, a right guitar and a vocal. The two guitar humps lie almost on top of each other and both overlap the dotted vocal hump in a shaded band from about 2 to 5 kHz.',
             bands: [{ from: 2000, to: 5000, label: 'Shared band' }],
             curves: [
                 { kind: 'hump', center: 1800, width: 2.2, level: 0.65, label: 'Guitar L' },
                 { kind: 'hump', center: 2000, width: 2.2, level: 0.6, label: 'Guitar R' },
-                { kind: 'hump', center: 2800, width: 1.6, level: 0.55, label: 'Vocal', dashed: true },
+                { kind: 'hump', center: 2800, width: 1.6, level: 0.55, label: 'Vocal', dotted: true },
             ],
         },
         panlaw: {

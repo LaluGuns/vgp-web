@@ -19,14 +19,14 @@ export const post127: BlogArticle = {
             dbRange: [-9, 3],
             caption:
                 'Both are set to cut 6 dB. The dynamic bell (Q 4) reaches 6 dB at 3 kHz and is back within 1 dB by 2 and 4 kHz. The multiband band, 2 to 6 kHz between fourth-order Linkwitz-Riley crossovers, reaches only about 4.5 dB at its centre because the crossover slopes overlap, and still takes about 1 dB out at 1.5 and 8 kHz. That curve is drawn with two shelves that follow the crossover maths within about half a decibel.',
-            alt: 'Gain over frequency. A solid curve dips sharply to -6 dB at 3 kHz and returns to 0 dB within about half an octave either side. A dashed curve sags gradually from about 1 kHz, bottoms out near -4.5 dB around 3.5 kHz and recovers by about 12 kHz.',
+            alt: 'Gain over frequency. A solid curve dips sharply to -6 dB at 3 kHz and returns to 0 dB within about half an octave either side. A dotted curve sags gradually from about 1 kHz, bottoms out near -4.5 dB around 3.5 kHz and recovers by about 12 kHz.',
             marks: [{ f: 3000, label: 'Ring' }],
             curves: [
                 { kind: 'eq', label: 'Dynamic bell, -6 dB', bands: [{ type: 'bell', freq: 3000, gain: -6, q: 4 }] },
                 {
                     kind: 'eq',
                     label: 'Multiband 2-6 kHz, -6 dB',
-                    dashed: true,
+                    dotted: true,
                     bands: [
                         { type: 'highshelf', freq: 2000, gain: -6 },
                         { type: 'highshelf', freq: 6000, gain: 6 },

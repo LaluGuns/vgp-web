@@ -35,11 +35,11 @@ export const post119: BlogArticle = {
             domain: 'db',
             caption:
                 'The same 4:1 ratio with a hard knee and a 12 dB soft knee, threshold -20 dB. The soft knee starts turning down 6 dB below the threshold and reaches the full 4:1 slope 6 dB above it. Away from the threshold the two curves are identical.',
-            alt: 'Input level against output level from -48 to 0 dB. Below -26 dB all lines follow one to one. The hard-knee line bends sharply at -20 dB; the dashed soft-knee line curves gradually between -26 and -14 dB. Above -14 dB both rise at a quarter of the slope.',
+            alt: 'Input level against output level from -48 to 0 dB. Below -26 dB all lines follow one to one. The dashed hard-knee line bends sharply at -20 dB; the solid soft-knee line curves gradually between -26 and -14 dB. Above -14 dB both rise at a quarter of the slope.',
             curves: [
                 { kind: 'linear', label: 'No compression' },
-                { kind: 'compressor', threshold: -20, ratio: 4, label: '4:1, hard knee' },
-                { kind: 'compressor', threshold: -20, ratio: 4, knee: 12, label: '4:1, 12 dB soft knee', dashed: true },
+                { kind: 'compressor', threshold: -20, ratio: 4, label: '4:1, hard knee', dashed: true },
+                { kind: 'compressor', threshold: -20, ratio: 4, knee: 12, label: '4:1, 12 dB soft knee' },
             ],
         },
         makeup: {

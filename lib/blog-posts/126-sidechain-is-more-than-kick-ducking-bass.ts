@@ -82,14 +82,14 @@ export const post126: BlogArticle = {
             dbRange: [-36, 6],
             caption:
                 'Two detector filters, drawn from the real filter maths. A 12 dB per octave high-pass at 100 Hz hears a 50 Hz kick fundamental about 12 dB quieter. One at 5 kHz, a simple stand-in for a de-esser detector, hears 1 kHz about 29 dB quieter, so vowels barely reach it and sibilance does.',
-            alt: 'Gain over frequency for two high-pass filters. The first falls away below 100 Hz and is flat above about 200 Hz. The second, dashed, falls away below 5 kHz and is far down through the midrange.',
+            alt: 'Gain over frequency for two high-pass filters. The first falls away below 100 Hz and is flat above about 200 Hz. The second, dotted, falls away below 5 kHz and is far down through the midrange.',
             marks: [
                 { f: 50, label: 'Kick' },
                 { f: 1000, label: 'Vowels' },
             ],
             curves: [
                 { kind: 'eq', label: 'Bus compressor key, HPF 100 Hz', bands: [{ type: 'highpass', freq: 100 }] },
-                { kind: 'eq', label: 'De-esser key, HPF 5 kHz', dashed: true, bands: [{ type: 'highpass', freq: 5000 }] },
+                { kind: 'eq', label: 'De-esser key, HPF 5 kHz', dotted: true, bands: [{ type: 'highpass', freq: 5000 }] },
             ],
         },
     },

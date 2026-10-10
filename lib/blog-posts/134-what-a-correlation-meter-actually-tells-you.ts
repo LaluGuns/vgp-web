@@ -17,27 +17,27 @@ export const post134: BlogArticle = {
             type: 'signal',
             caption:
                 'For two equal sines, the correlation is the cosine of the phase difference between them. In step it is +1, a quarter cycle apart it is 0, half a cycle apart it is -1.',
-            alt: 'Three plots, each with a solid left wave and a dashed right wave. In the first they lie on top of each other. In the second the right wave is shifted by a quarter cycle. In the third the right wave peaks where the left dips.',
+            alt: 'Three plots, each with a solid left wave and a dotted right wave. In the first they lie on top of each other. In the second the right wave is shifted by a quarter cycle. In the third the right wave peaks where the left dips.',
             rows: [
                 {
                     label: 'r = +1, in step',
                     traces: [
                         { kind: 'sine', cycles: 2, amp: 0.8, label: 'Left' },
-                        { kind: 'sine', cycles: 2, amp: 0.8, label: 'Right', dashed: true },
+                        { kind: 'sine', cycles: 2, amp: 0.8, label: 'Right', dotted: true },
                     ],
                 },
                 {
                     label: 'r = 0, 90° apart',
                     traces: [
                         { kind: 'sine', cycles: 2, amp: 0.8, label: 'Left' },
-                        { kind: 'sine', cycles: 2, amp: 0.8, phase: 90, label: 'Right', dashed: true },
+                        { kind: 'sine', cycles: 2, amp: 0.8, phase: 90, label: 'Right', dotted: true },
                     ],
                 },
                 {
                     label: 'r = -1, 180° apart',
                     traces: [
                         { kind: 'sine', cycles: 2, amp: 0.8, label: 'Left' },
-                        { kind: 'sine', cycles: 2, amp: 0.8, phase: 180, label: 'Right', dashed: true },
+                        { kind: 'sine', cycles: 2, amp: 0.8, phase: 180, label: 'Right', dotted: true },
                     ],
                 },
             ],

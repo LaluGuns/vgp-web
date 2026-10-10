@@ -35,7 +35,7 @@ export const post100: BlogArticle = {
                 'One equation, two sets of coefficients: a 3 dB bell at 5 kHz with Q 0.7 and with Q 2. An octave below, at 2.5 kHz, the wide band still adds about 1.4 dB and the narrow one about 0.3 dB.',
             alt: 'Gain against frequency for two bell boosts of 3 dB at 5 kHz. The Q 0.7 curve is a broad hill spanning several octaves. The Q 2 curve is a narrow peak.',
             curves: [
-                { kind: 'eq', label: 'Q 0.7', dashed: true, bands: [{ type: 'bell', freq: 5000, gain: 3, q: 0.7 }] },
+                { kind: 'eq', label: 'Q 0.7', dotted: true, bands: [{ type: 'bell', freq: 5000, gain: 3, q: 0.7 }] },
                 { kind: 'eq', label: 'Q 2', bands: [{ type: 'bell', freq: 5000, gain: 3, q: 2 }] },
             ],
             marks: [{ f: 2500, label: '2.5 kHz' }],

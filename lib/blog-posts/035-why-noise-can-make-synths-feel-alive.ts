@@ -56,9 +56,9 @@ export const post035: BlogArticle = {
             mode: 'level',
             caption:
                 'One note split the way a sines-plus-noise model sees it. The oscillator is a set of lines at multiples of 110 Hz. The noise is a smooth band with no pitch, here band-passed to the upper mids, where it reads as breath or bite.',
-            alt: 'Harmonic lines starting at 110 Hz and getting shorter with frequency, over a low, wide dashed hump centred around 3.5 kHz.',
+            alt: 'Harmonic lines starting at 110 Hz and getting shorter with frequency, over a low, wide filled hump centred around 3.5 kHz.',
             curves: [
-                { kind: 'hump', center: 3500, width: 1, level: 0.25, label: 'Band-passed noise', dashed: true },
+                { kind: 'hump', center: 3500, width: 1, level: 0.25, label: 'Band-passed noise' },
                 { kind: 'harmonics', f0: 110, count: 60, rolloff: 1, label: 'Oscillator harmonics' },
             ],
         },

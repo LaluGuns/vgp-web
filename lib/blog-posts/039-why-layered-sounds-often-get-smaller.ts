@@ -70,11 +70,16 @@ export const post039: BlogArticle = {
             mode: 'level',
             caption:
                 'A stack layered by role, sketched. Each layer owns its own band, so together they add body, bite and air instead of interfering in one range.',
-            alt: 'Three humps across the spectrum: a solid one labelled body around 200 Hz, a dashed one labelled edge around 2.5 kHz and a dotted one labelled air around 9 kHz.',
+            alt: 'Three filled humps side by side across the spectrum, each under its own shaded, labelled band: body around 200 Hz, edge around 2.5 kHz and air around 9 kHz.',
+            bands: [
+                { from: 100, to: 400, label: 'Body' },
+                { from: 1400, to: 4400, label: 'Edge' },
+                { from: 6000, to: 13500, label: 'Air' },
+            ],
             curves: [
-                { kind: 'hump', center: 200, width: 1, level: 0.8, label: 'Body' },
-                { kind: 'hump', center: 2500, width: 0.8, level: 0.6, label: 'Edge', dashed: true },
-                { kind: 'hump', center: 9000, width: 0.6, level: 0.45, label: 'Air', dotted: true },
+                { kind: 'hump', center: 200, width: 1, level: 0.8 },
+                { kind: 'hump', center: 2500, width: 0.8, level: 0.6 },
+                { kind: 'hump', center: 9000, width: 0.6, level: 0.45 },
             ],
         },
     },

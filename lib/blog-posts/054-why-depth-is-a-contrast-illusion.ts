@@ -39,7 +39,7 @@ export const post054: BlogArticle = {
                     unipolar: true,
                     traces: [
                         { kind: 'envelope', label: 'Direct sound', points: [[0, 0], [0.04, 0], [0.045, 0.95], [0.08, 0.05], [0.12, 0]] },
-                        { kind: 'envelope', label: 'Room', dashed: true, points: [[0, 0], [0.17, 0], [0.18, 0.32], [0.35, 0.2], [0.6, 0.09], [0.85, 0.03], [1, 0.01]] },
+                        { kind: 'envelope', label: 'Room', dotted: true, points: [[0, 0], [0.17, 0], [0.18, 0.32], [0.35, 0.2], [0.6, 0.09], [0.85, 0.03], [1, 0.01]] },
                     ],
                 },
                 {
@@ -47,7 +47,7 @@ export const post054: BlogArticle = {
                     unipolar: true,
                     traces: [
                         { kind: 'envelope', label: 'Direct sound', points: [[0, 0], [0.04, 0], [0.045, 0.36], [0.08, 0.02], [0.12, 0]] },
-                        { kind: 'envelope', label: 'Room', dashed: true, points: [[0, 0], [0.06, 0], [0.07, 0.3], [0.25, 0.2], [0.5, 0.09], [0.75, 0.03], [1, 0.01]] },
+                        { kind: 'envelope', label: 'Room', dotted: true, points: [[0, 0], [0.06, 0], [0.07, 0.3], [0.25, 0.2], [0.5, 0.09], [0.75, 0.03], [1, 0.01]] },
                     ],
                 },
             ],

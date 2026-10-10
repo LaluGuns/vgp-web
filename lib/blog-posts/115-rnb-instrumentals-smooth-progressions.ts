@@ -87,10 +87,10 @@ export const post115: BlogArticle = {
             mode: 'gain',
             caption:
                 'The same low-pass filter on the chords in two sections, computed. At 1.5 kHz in the verse it darkens the keys and clears the upper midrange for the voice. Opened to 8 kHz in the chorus, it lets their brightness back in.',
-            alt: 'Two filter curves from 20 Hz to 20 kHz. Both are flat in the low end. The verse curve falls away above 1.5 kHz. The dashed chorus curve stays flat until about 8 kHz.',
+            alt: 'Two filter curves from 20 Hz to 20 kHz. Both are flat in the low end. The verse curve falls away above 1.5 kHz. The dotted chorus curve stays flat until about 8 kHz.',
             curves: [
                 { kind: 'eq', label: 'Verse', bands: [{ type: 'lowpass', freq: 1500, q: 0.71 }] },
-                { kind: 'eq', label: 'Chorus', dashed: true, bands: [{ type: 'lowpass', freq: 8000, q: 0.71 }] },
+                { kind: 'eq', label: 'Chorus', dotted: true, bands: [{ type: 'lowpass', freq: 8000, q: 0.71 }] },
             ],
             marks: [
                 { f: 1500, label: '1.5k' },

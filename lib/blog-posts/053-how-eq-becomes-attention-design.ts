@@ -19,12 +19,12 @@ export const post053: BlogArticle = {
             mode: 'gain',
             caption:
                 'Complementary EQ, drawn from the real filter maths. The lead gets a gentle 2 dB lift at 3 kHz and the pad gives up 3 dB at the same place. The lead now sits 5 dB further above the pad in that band, with only 2 dB of boost.',
-            alt: 'Two EQ curves from 20 Hz to 20 kHz. The lead curve rises 2 dB in a broad bump centred on 3 kHz. The dashed pad curve dips 3 dB at the same frequency. A shaded band marks 2 to 5 kHz.',
+            alt: 'Two EQ curves from 20 Hz to 20 kHz. The lead curve rises 2 dB in a broad bump centred on 3 kHz. The dotted pad curve dips 3 dB at the same frequency. A shaded band marks 2 to 5 kHz.',
             bands: [{ from: 2000, to: 5000, label: 'Most sensitive range' }],
             db: 6,
             curves: [
                 { kind: 'eq', label: 'Lead', bands: [{ type: 'bell', freq: 3000, gain: 2, q: 1 }] },
-                { kind: 'eq', label: 'Pad', dashed: true, bands: [{ type: 'bell', freq: 3000, gain: -3, q: 1 }] },
+                { kind: 'eq', label: 'Pad', dotted: true, bands: [{ type: 'bell', freq: 3000, gain: -3, q: 1 }] },
             ],
         },
         window: {

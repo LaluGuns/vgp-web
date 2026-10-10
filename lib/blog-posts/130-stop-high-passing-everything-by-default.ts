@@ -39,14 +39,13 @@ export const post130: BlogArticle = {
             dbRange: [-24, 3],
             caption:
                 'Three high-passes, drawn from the real filter maths, against a guitar\'s low E at 82.4 Hz. At 100 Hz and 12 dB per octave the note loses 5 dB; at 24 dB per octave it loses 7.6 dB. A 12 dB per octave filter at 41 Hz, an octave below the note, costs it 0.26 dB.',
-            alt: 'Gain over frequency from 20 Hz to 2 kHz with a mark at 82 Hz. Two curves cut off around 100 Hz, the dashed one more steeply. A dotted third curve cuts off around 41 Hz and is close to 0 dB at the mark.',
+            alt: 'Gain over frequency from 20 Hz to 2 kHz with a mark at 82 Hz. Two curves cut off around 100 Hz: a grey one and a solid one that falls more steeply. A dotted third curve cuts off around 41 Hz and is close to 0 dB at the mark.',
             marks: [{ f: 82.4, label: 'Low E' }],
             curves: [
-                { kind: 'eq', label: '100 Hz, 12 dB/oct', bands: [{ type: 'highpass', freq: 100 }] },
+                { kind: 'eq', label: '100 Hz, 12 dB/oct', muted: true, bands: [{ type: 'highpass', freq: 100 }] },
                 {
                     kind: 'eq',
                     label: '100 Hz, 24 dB/oct',
-                    dashed: true,
                     bands: [
                         { type: 'highpass', freq: 100, q: 0.5412 },
                         { type: 'highpass', freq: 100, q: 1.3066 },

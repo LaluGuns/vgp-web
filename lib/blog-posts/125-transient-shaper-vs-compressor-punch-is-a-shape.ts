@@ -88,7 +88,7 @@ export const post125: BlogArticle = {
             type: 'signal',
             caption:
                 'Inside a transient shaper, drawn from the same model. A fast follower jumps with the hit while a slow one lags behind. The gap between them, in dB, is largest at the onset and shrinks as the slow one catches up, and the shaper turns that gap into gain. Scale the hit up or down and both followers scale with it, so the gap stays the same.',
-            alt: 'Two plots of one drum hit. In the first, the hit envelope rises instantly; a solid line follows it closely and a dashed line rises more slowly and gradually closes in on it. The second plot shows the difference between the two lines: a peak at the start of the hit that falls away to nothing.',
+            alt: 'Two plots of one drum hit. In the first, the hit envelope rises instantly; a solid line follows it closely and a dotted line rises more slowly and gradually closes in on it. The second plot shows the difference between the two lines: a peak at the start of the hit that falls away to nothing.',
             rows: [
                 {
                     label: 'Fast and slow followers',
@@ -96,7 +96,7 @@ export const post125: BlogArticle = {
                     traces: [
                         { kind: 'hits', at: [0.08], amp: [0.9], decay: 9, outline: true, muted: true, label: 'Hit' },
                         { kind: 'envelope', points: ONE.map((p) => [p.t, p.f] as [number, number]), label: 'Fast' },
-                        { kind: 'envelope', points: ONE.map((p) => [p.t, p.s] as [number, number]), label: 'Slow', dashed: true },
+                        { kind: 'envelope', points: ONE.map((p) => [p.t, p.s] as [number, number]), label: 'Slow', dotted: true },
                     ],
                 },
                 {

@@ -18,13 +18,13 @@ export const post086: BlogArticle = {
             type: 'curve',
             caption:
                 'The shape of the findings for real music in Szpunar, Schellenberg and Pliner (2004). Heard in the background, liking kept rising with plays. Heard with full attention, it rose and then fell. Shapes only, not measured values.',
-            alt: 'Two curves of liking over first play, a few plays, more plays and many plays. The background listening curve keeps rising. The dashed focused listening curve rises, then falls.',
+            alt: 'Two curves of liking over first play, a few plays, more plays and many plays. The background listening curve keeps rising. The dotted focused listening curve rises, then falls.',
             x: ['First play', 'A few plays', 'More plays', 'Many plays'],
             xShort: ['First', 'A few', 'More', 'Many'],
             yLabel: 'Liking',
             series: [
                 { label: 'Background listening', values: [0.3, 0.5, 0.66, 0.8] },
-                { label: 'Focused listening', values: [0.3, 0.58, 0.52, 0.36], dashed: true },
+                { label: 'Focused listening', values: [0.3, 0.58, 0.52, 0.36], dotted: true },
             ],
         },
         expect: {

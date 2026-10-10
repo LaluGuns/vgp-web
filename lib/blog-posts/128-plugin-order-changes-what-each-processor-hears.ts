@@ -12,7 +12,7 @@ const EQ_COMP = { threshold: 0.25, ratio: 4, release: 0.05 };
 
 // The same feed-forward model the figure renderer uses for `compress` (static curve in dB, instant
 // attack, one-pole release), returning the gain it applies to the whole signal.
-function gainTrace(boost: number, label: string, dashed = false): SignalTrace {
+function gainTrace(boost: number, label: string, dotted = false): SignalTrace {
     const n = 2000;
     const toDb = (v: number) => 20 * Math.log10(Math.max(1e-5, v));
     const release = Math.exp(-1 / (EQ_COMP.release * n));
@@ -26,7 +26,7 @@ function gainTrace(boost: number, label: string, dashed = false): SignalTrace {
         gr = target > gr ? target : release * gr + (1 - release) * target;
         if (i % 4 === 0) points.push([t, 10 ** (-gr / 20)]);
     }
-    return { kind: 'envelope', points, label, dashed };
+    return { kind: 'envelope', points, label, dotted };
 }
 
 export const post128: BlogArticle = {
@@ -71,7 +71,7 @@ export const post128: BlogArticle = {
             type: 'signal',
             caption:
                 'Four bass notes into a 4:1 compressor, drawn from a simulation. The bottom row is the gain the compressor applies to everything, mids and highs included. With the 6 dB low boost after the compressor, each note is 6 dB over and the gain dips about 4.5 dB. With the boost in front, the detector hears 12 dB over and the gain dips about 9 dB on every note.',
-            alt: 'Two plots across four bass notes. The first shows the low-end level of each note as a solid outline, with a dashed outline twice as tall for the boosted version, and a threshold line below both peaks. The second shows two gain lines starting at full level: the solid line dips a little at each note and recovers, the dashed line dips about twice as far.',
+            alt: 'Two plots across four bass notes. The first shows the low-end level of each note as a solid outline, with a dotted outline twice as tall for the boosted version, and a threshold line below both peaks. The second shows two gain lines starting at full level: the solid line dips a little at each note and recovers, the dotted line dips about twice as far.',
             rows: [
                 {
                     label: 'Low end into the detector',
@@ -79,7 +79,7 @@ export const post128: BlogArticle = {
                     lines: [{ y: EQ_COMP.threshold, label: 'Threshold' }],
                     traces: [
                         { kind: 'hits', at: LOW.at, amp: LOW.at.map(() => LOW.amp), decay: LOW.decay, outline: true, label: 'No boost' },
-                        { kind: 'hits', at: LOW.at, amp: LOW.at.map(() => 2 * LOW.amp), decay: LOW.decay, outline: true, dashed: true, label: '6 dB boost' },
+                        { kind: 'hits', at: LOW.at, amp: LOW.at.map(() => 2 * LOW.amp), decay: LOW.decay, outline: true, dotted: true, label: '6 dB boost' },
                     ],
                 },
                 {

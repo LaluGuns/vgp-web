@@ -35,11 +35,11 @@ export const post033: BlogArticle = {
             mode: 'level',
             caption:
                 'Where the energy sits in a muddy chorus, sketched. The low-mid buildup is far from the vocal detail on the frequency axis, but loud low sounds mask upward, so lowering the buildup uncovers the vocal. A treble boost leaves this picture as it is.',
-            alt: 'A large filled hump centred near 350 Hz, labelled pads and guitars, and a smaller dashed hump near 3 kHz, labelled vocal detail. The band from 200 to 500 Hz is shaded and labelled mud.',
+            alt: 'A large filled hump centred near 350 Hz, labelled pads and guitars, and a smaller dotted hump near 3 kHz, labelled vocal detail. The band from 200 to 500 Hz is shaded and labelled mud.',
             bands: [{ from: 200, to: 500, label: 'Mud' }],
             curves: [
                 { kind: 'hump', center: 350, width: 0.9, level: 0.85, label: 'Pads and guitars' },
-                { kind: 'hump', center: 3000, width: 0.7, level: 0.45, label: 'Vocal detail', dashed: true },
+                { kind: 'hump', center: 3000, width: 0.7, level: 0.45, label: 'Vocal detail', dotted: true },
             ],
         },
     },

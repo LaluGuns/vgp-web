@@ -137,9 +137,11 @@ anything without one is technical.
   every dialect and a little heavier than a line; the space between two
   dots is at least as long as the dialect's dash, and every dash is longer
   than a dot is wide, so dots never read as a finer dash. A dotted line
-  fades in, like a dashed one, and has no area under it. Use dots only
-  when the caption names more lines than one accent line and one dashed
-  line can carry (the three layers in lesson 039, the three moves in 040).
+  fades in, like a dashed one, and has no area under it. Dots mark a
+  second line the caption names that is not a reference (both EQ moves in
+  052, the right channel in 132). When three lines are all subjects, keep
+  the third solid where its shape sets it apart (040), or draw the layers
+  as labelled `bands` (039).
 - **Labels never sit on data.** A label goes where no mark comes near
   it (6 units of clear space round a line label): a signal's threshold or
   ceiling label beside its line where the traces leave room, else in the

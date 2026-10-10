@@ -59,8 +59,8 @@ export const post042: BlogArticle = {
                 'Where a voice puts its energy, drawn as shapes. Vowels carry most of it, low in the spectrum. The s and sh sounds are much quieter overall but sit high, in the band a de-esser listens to, and a wide de-esser band reaches down into sh as well.',
             alt: 'Energy against frequency. A large hump for vowels sits between about 150 Hz and 2 kHz. A small hump for sh sits around 3 to 4 kHz and a small hump for s around 6 to 8 kHz, inside a shaded sibilance band from 5 to 10 kHz.',
             curves: [
-                { kind: 'hump', center: 500, width: 1.1, level: 0.9, label: 'Vowels' },
-                { kind: 'hump', center: 3500, width: 0.4, level: 0.3, label: 'sh', dashed: true },
+                { kind: 'hump', center: 500, width: 1.1, level: 0.9, label: 'Vowels', muted: true },
+                { kind: 'hump', center: 3500, width: 0.4, level: 0.3, label: 'sh', dotted: true },
                 { kind: 'hump', center: 7000, width: 0.4, level: 0.36, label: 's' },
             ],
             bands: [{ from: 5000, to: 10000, label: 'Sibilance' }],

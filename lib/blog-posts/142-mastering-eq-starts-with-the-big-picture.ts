@@ -19,15 +19,15 @@ export const post142: BlogArticle = {
             range: [30, 1000],
             caption:
                 'An analyzer over a bass line. Under an A chord the tallest peaks sit at 55, 110 and 165 Hz, the bass note and its harmonics. Under a D chord they move to 73, 147 and 220 Hz. A ring that stays at 180 Hz under both chords is the kind of peak a narrow cut is for.',
-            alt: 'Energy against frequency from 30 Hz to 1 kHz. A dotted series of falling peaks starts at 55 Hz and a dashed series starts at 73 Hz. A narrow solid bump at 180 Hz stands between them as a third curve.',
+            alt: 'Energy against frequency from 30 Hz to 1 kHz. A grey series of falling peaks starts at 55 Hz and a dotted series starts at 73 Hz. A narrow solid bump at 180 Hz stands between them as a third curve.',
             marks: [
                 { f: 55, label: 'A1' },
                 { f: 73.4, label: 'D2' },
                 { f: 180, label: 'Ring' },
             ],
             curves: [
-                { kind: 'harmonics', f0: 55, count: 12, rolloff: 1.2, label: 'Bass on A', dotted: true },
-                { kind: 'harmonics', f0: 73.4, count: 9, rolloff: 1.2, label: 'Bass on D', dashed: true },
+                { kind: 'harmonics', f0: 55, count: 12, rolloff: 1.2, label: 'Bass on A', muted: true },
+                { kind: 'harmonics', f0: 73.4, count: 9, rolloff: 1.2, label: 'Bass on D', dotted: true },
                 { kind: 'hump', center: 180, width: 0.08, level: 0.35, label: 'Ring under both' },
             ],
         },

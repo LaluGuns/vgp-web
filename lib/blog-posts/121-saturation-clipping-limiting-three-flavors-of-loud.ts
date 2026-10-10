@@ -22,11 +22,11 @@ export const post121: BlogArticle = {
             domain: 'linear',
             caption:
                 'Input against output for two ways of holding a signal under a ceiling of 0.5. The hard clipper is perfectly straight until the ceiling, then flat. The soft clipper, a tanh curve, starts bending well below the ceiling and only approaches it.',
-            alt: 'A transfer plot from -1 to 1 on both axes. A faint diagonal shows no processing. A solid line follows the diagonal and turns flat at plus and minus 0.5. A dashed curve bends away from the diagonal gradually and levels off toward 0.5.',
+            alt: 'A transfer plot from -1 to 1 on both axes. A faint diagonal shows no processing. A solid line follows the diagonal and turns flat at plus and minus 0.5. A dotted curve bends away from the diagonal gradually and levels off toward 0.5.',
             curves: [
                 { kind: 'linear', label: 'No processing' },
                 { kind: 'hardclip', ceiling: 0.5, label: 'Hard clip' },
-                { kind: 'softclip', ceiling: 0.5, label: 'Soft clip (tanh)', dashed: true },
+                { kind: 'softclip', ceiling: 0.5, label: 'Soft clip (tanh)', dotted: true },
             ],
         },
         time: {

@@ -28,13 +28,13 @@ export const post077: BlogArticle = {
             type: 'curve',
             caption:
                 'The shape Szpunar, Schellenberg and Pliner (2004) reported for their most realistic music. Heard in the background, liking kept rising with exposure. Heard with full attention, it rose and then fell. A sketch of the shape, not their data.',
-            alt: 'Two curves across four levels of exposure. The solid focused-listening curve rises, peaks after a few plays and falls. The dashed background-listening curve keeps rising.',
+            alt: 'Two curves across four levels of exposure. The solid focused-listening curve rises, peaks after a few plays and falls. The dotted background-listening curve keeps rising.',
             x: ['First play', 'A few plays', 'Many plays', 'Very many'],
             xShort: ['First', 'A few', 'Many', 'Lots'],
             yLabel: 'Liking',
             series: [
                 { label: 'Focused listening', values: [0.35, 0.78, 0.6, 0.4] },
-                { label: 'In the background', values: [0.3, 0.48, 0.62, 0.74], dashed: true },
+                { label: 'In the background', values: [0.3, 0.48, 0.62, 0.74], dotted: true },
             ],
         },
     },

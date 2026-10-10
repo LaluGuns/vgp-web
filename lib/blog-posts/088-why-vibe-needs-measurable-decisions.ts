@@ -20,10 +20,10 @@ export const post088: BlogArticle = {
             db: 6,
             caption:
                 'Two words as two EQ moves: a broad 3 dB cut at 300 Hz, Q 1, for mud, and a narrower 3 dB cut at 3.5 kHz, Q 2, for harshness. Starting points to test, not rules.',
-            alt: 'EQ gain curves over frequency. A broad dip centred at 300 Hz and a narrower dashed dip at 3.5 kHz. Shaded bands mark the mud region from 200 to 500 Hz and the harsh region from 2 to 5 kHz.',
+            alt: 'EQ gain curves over frequency. A broad dip centred at 300 Hz and a narrower dotted dip at 3.5 kHz. Shaded bands mark the mud region from 200 to 500 Hz and the harsh region from 2 to 5 kHz.',
             curves: [
                 { label: 'Less muddy', kind: 'eq', bands: [{ type: 'bell', freq: 300, gain: -3, q: 1 }] },
-                { label: 'Less harsh', kind: 'eq', dashed: true, bands: [{ type: 'bell', freq: 3500, gain: -3, q: 2 }] },
+                { label: 'Less harsh', kind: 'eq', dotted: true, bands: [{ type: 'bell', freq: 3500, gain: -3, q: 2 }] },
             ],
             bands: [
                 { from: 200, to: 500, label: 'Mud' },

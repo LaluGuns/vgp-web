@@ -23,14 +23,14 @@ export const post132: BlogArticle = {
                     label: 'Before',
                     traces: [
                         { kind: 'sine', cycles: 3, amp: 0.6, label: 'Left' },
-                        { kind: 'sine', cycles: 3, amp: 0, label: 'Right', dashed: true },
+                        { kind: 'sine', cycles: 3, amp: 0, label: 'Right', dotted: true },
                     ],
                 },
                 {
                     label: 'After side +6 dB',
                     traces: [
                         { kind: 'sine', cycles: 3, amp: 0.9, label: 'Left' },
-                        { kind: 'sine', cycles: 3, amp: 0.3, phase: 180, label: 'Right', dashed: true },
+                        { kind: 'sine', cycles: 3, amp: 0.3, phase: 180, label: 'Right', dotted: true },
                     ],
                 },
             ],

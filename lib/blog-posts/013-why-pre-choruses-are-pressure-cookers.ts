@@ -18,13 +18,13 @@ export const post013: BlogArticle = {
             type: 'curve',
             caption:
                 'A sketch of the move. Tension climbs through the four bars of the pre-chorus while the low end and width are pulled back, and the chorus downbeat returns them all at once.',
-            alt: 'Two lines from verse through four pre-chorus bars to chorus. The solid tension line rises bar by bar and eases off in the chorus. The dashed line for low end and width falls through the pre-chorus and jumps to the top at the chorus.',
+            alt: 'Two lines from verse through four pre-chorus bars to chorus. The solid tension line rises bar by bar and eases off in the chorus. The dotted line for low end and width falls through the pre-chorus and jumps to the top at the chorus.',
             x: ['Verse', 'Pre bar 1', 'Pre bar 2', 'Pre bar 3', 'Pre bar 4', 'Chorus'],
             xShort: ['V', 'P1', 'P2', 'P3', 'P4', 'C'],
             yLabel: 'Amount',
             series: [
                 { label: 'Tension', values: [0.3, 0.45, 0.6, 0.75, 0.92, 0.55] },
-                { label: 'Low end and width', dashed: true, values: [0.62, 0.55, 0.45, 0.32, 0.15, 1] },
+                { label: 'Low end and width', dotted: true, values: [0.62, 0.55, 0.45, 0.32, 0.15, 1] },
             ],
         },
         filter: {

@@ -25,10 +25,10 @@ export const post148: BlogArticle = {
             db: 6,
             caption:
                 'Mic 30 cm from the singer, mouth and mic 30 cm above a perfectly hard desk, computed from the geometry. The reflection arrives 1.08 ms late and 7 dB down, so the take gets notches at 462 Hz, 1.39 kHz, 2.31 kHz and up, dipping 5.1 dB. Raise both by 15 cm and every notch moves, the first to 264 Hz, and the dips shrink to 3.3 dB.',
-            alt: 'Gain against frequency from 100 Hz to 5 kHz. A solid curve ripples between about +3 dB and -5 dB with its first dip at 462 Hz and further dips about 925 Hz apart. A dashed curve ripples less, between about +2 dB and -3 dB, with its first dip at 264 Hz and dips closer together.',
+            alt: 'Gain against frequency from 100 Hz to 5 kHz. A solid curve ripples between about +3 dB and -5 dB with its first dip at 462 Hz and further dips about 925 Hz apart. A dotted curve ripples less, between about +2 dB and -3 dB, with its first dip at 264 Hz and dips closer together.',
             curves: [
                 { kind: 'comb', delayMs: 1.081, mix: 0.447, label: 'Desk 30 cm below' },
-                { kind: 'comb', delayMs: 1.891, mix: 0.316, label: 'Desk 45 cm below', dashed: true },
+                { kind: 'comb', delayMs: 1.891, mix: 0.316, label: 'Desk 45 cm below', dotted: true },
             ],
             marks: [
                 { f: 264, label: '264 Hz' },

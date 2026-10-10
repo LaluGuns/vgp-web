@@ -30,14 +30,14 @@ export const post144: BlogArticle = {
             type: 'curve',
             caption:
                 'The pattern Green and colleagues (2012) reported after one lab session of focused listening. Recognition climbed at every step from no plays to 32. Liking rose slowly, and only 32 plays against none was a reliable difference. A sketch of the two shapes on separate rating scales, not their data.',
-            alt: 'Two curves over four exposure levels: never heard, 2 plays, 8 plays and 32 plays. The recognition curve rises steeply and keeps rising. The dashed liking curve stays nearly flat and lifts a little at 32 plays.',
+            alt: 'Two curves over four exposure levels: never heard, 2 plays, 8 plays and 32 plays. The recognition curve rises steeply and keeps rising. The dotted liking curve stays nearly flat and lifts a little at 32 plays.',
             x: ['Never heard', '2 plays', '8 plays', '32 plays'],
             xShort: ['None', '2', '8', '32'],
             xLabel: 'Plays before the test',
             yLabel: 'Rise with exposure',
             series: [
                 { label: 'Recognition', values: [0.05, 0.5, 0.78, 0.92] },
-                { label: 'Liking', values: [0.05, 0.1, 0.16, 0.3], dashed: true },
+                { label: 'Liking', values: [0.05, 0.1, 0.16, 0.3], dotted: true },
             ],
         },
     },

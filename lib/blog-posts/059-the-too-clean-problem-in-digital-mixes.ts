@@ -19,11 +19,11 @@ export const post059: BlogArticle = {
             domain: 'linear',
             caption:
                 'Three ways to pass a signal. Near zero all three lines are straight, so quiet material goes through almost untouched. Only the peaks bend: the soft curve rounds them gradually, the hard clip flattens them at once.',
-            alt: 'Input against output from -1 to 1. A dashed straight diagonal line for clean, a curve that bends smoothly toward a ceiling for soft saturation, and a line that runs straight then goes flat at the ceiling for hard clipping.',
+            alt: 'Input against output from -1 to 1. A dashed straight diagonal line for clean, a curve that bends smoothly toward a ceiling for soft saturation, and a dotted line that runs straight then goes flat at the ceiling for hard clipping.',
             curves: [
                 { kind: 'linear', label: 'Clean' },
                 { kind: 'softclip', ceiling: 0.6, label: 'Soft saturation' },
-                { kind: 'hardclip', ceiling: 0.6, label: 'Hard clip', dashed: true },
+                { kind: 'hardclip', ceiling: 0.6, label: 'Hard clip', dotted: true },
             ],
         },
         harmonics: {

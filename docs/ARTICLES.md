@@ -96,10 +96,10 @@ is the one the caption asks you to look at; `dotted: true` draws a second
 line the caption also names in accent dots ("also look here");
 `dashed: true` is a reference; `muted: true` is grey context or "before".
 The line the caption is about is never dashed: draw it solid and make what
-it is set against `muted` (or `dashed`, for a reference). Reach for dots
-only when the caption compares more lines than one solid and one dashed
-line can carry, as lessons 039 (body, edge, air) and 040 (warm, dark,
-dull) do.
+it is set against `muted` (or `dashed`, for a reference). Use dots for a
+second line the caption names that is not a reference. When three lines
+are all subjects, keep the third solid where its shape sets it apart (as
+040 does), or draw the layers as labelled `bands` (as 039 does).
 
 | `type` | Shows | Key fields |
 | --- | --- | --- |

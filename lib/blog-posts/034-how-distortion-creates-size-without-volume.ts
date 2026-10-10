@@ -30,11 +30,11 @@ export const post034: BlogArticle = {
             domain: 'linear',
             caption:
                 'Input against output. The soft curve bends gradually, so quiet signals pass almost clean and harmonics grow as you push. The hard curve is clean up to the ceiling and then flat, and that sudden corner makes many more high harmonics.',
-            alt: 'Input against output from minus 1 to 1. A dashed diagonal shows the clean line. A smooth S-shaped curve bends away from it toward a ceiling. A dashed hard-clip line follows the diagonal, then turns flat at the ceiling.',
+            alt: 'Input against output from minus 1 to 1. A dashed diagonal shows the clean line. A smooth S-shaped curve bends away from it toward a ceiling. A dotted hard-clip line follows the diagonal, then turns flat at the ceiling.',
             curves: [
                 { kind: 'linear', label: 'Clean' },
                 { kind: 'softclip', ceiling: 0.6, label: 'Soft clip' },
-                { kind: 'hardclip', ceiling: 0.6, label: 'Hard clip', dashed: true },
+                { kind: 'hardclip', ceiling: 0.6, label: 'Hard clip', dotted: true },
             ],
         },
     },

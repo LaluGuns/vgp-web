@@ -34,7 +34,7 @@ export const post052: BlogArticle = {
             mode: 'gain',
             caption:
                 'Two cleanup EQs drawn from the real filter maths. The guitar keeps its body at 300 Hz but loses 3 dB there, the pad gives up 4 dB a little higher at 450 Hz, and both lose the rumble they never needed. The vocal is not touched.',
-            alt: 'EQ curves from 20 Hz to 20 kHz. The guitar curve rolls off below 100 Hz and dips 3 dB at 300 Hz. The dashed pad curve rolls off below 150 Hz and dips 4 dB at 450 Hz. Both are flat above 1 kHz, where a marker shows the vocal centre.',
+            alt: 'EQ curves from 20 Hz to 20 kHz. The guitar curve rolls off below 100 Hz and dips 3 dB at 300 Hz. The dotted pad curve rolls off below 150 Hz and dips 4 dB at 450 Hz. Both are flat above 1 kHz, where a marker shows the vocal centre.',
             marks: [{ f: 1200, label: 'Vocal centre' }],
             curves: [
                 {
@@ -48,7 +48,7 @@ export const post052: BlogArticle = {
                 {
                     kind: 'eq',
                     label: 'Pad',
-                    dashed: true,
+                    dotted: true,
                     bands: [
                         { type: 'highpass', freq: 150, q: 0.707 },
                         { type: 'bell', freq: 450, gain: -4, q: 1.4 },
