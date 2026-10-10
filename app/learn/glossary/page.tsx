@@ -50,7 +50,7 @@ export default function GlossaryPage() {
             <JsonLd data={jsonLd} />
             <JsonLd
                 data={breadcrumbs([
-                    { name: 'Lessons', url: `${SITE}/blog` },
+                    { name: 'Learn', url: `${SITE}/learn` },
                     { name: 'Glossary', url },
                 ])}
             />
@@ -59,10 +59,10 @@ export default function GlossaryPage() {
             <main id="main" tabIndex={-1} className="editorial-shell min-h-screen text-white focus:outline-none">
                 <LearnHeader
                     label={
-                        // The parent is "Lessons" everywhere: here, on a lesson and on a path page.
+                        // The trail is the sub-navigation's: the glossary is one of Learn's parts, as in the JSON-LD above.
                         <nav aria-label="Breadcrumb" className="-my-3">
-                            <TapLink href="/blog" className="hover:text-white">
-                                Lessons
+                            <TapLink href="/learn" className="hover:text-white">
+                                Learn
                             </TapLink>
                         </nav>
                     }

@@ -1,9 +1,13 @@
-'use client';
-
 /**
- * PageTransition — Lightweight CSS-only page entrance
- * Uses CSS transitions instead of Framer Motion spring physics
- * for dramatically faster page loads.
+ * PageTransition: the wrapper around a page's content. It animates
+ * nothing; it only keeps the page's own layers (z-index) and absolutely
+ * placed parts together, under the site header and the phone tab bar.
+ *
+ * No transform on it: a transform, even translate-y-0, makes the wrapper
+ * the containing block for position: fixed, so a fixed part inside the page
+ * (a playing demo's Stop button on /learn) scrolled away with the page
+ * instead of staying on the screen. `relative z-0` stacks and contains the
+ * rest exactly as the transform did.
  */
 
 import type { ReactNode } from 'react';
@@ -13,11 +17,5 @@ interface PageTransitionProps {
 }
 
 export function PageTransition({ children }: PageTransitionProps) {
-    return (
-        <div
-            className="translate-y-0 opacity-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
-        >
-            {children}
-        </div>
-    );
+    return <div className="relative z-0">{children}</div>;
 }

@@ -14,7 +14,7 @@ import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
 import { LearnHeader } from '@/components/learn/LearnHeader';
 import { LearnNav } from '@/components/learn/LearnNav';
-import { scoreLesson, searchText, wordMatchers } from './search-match';
+import { correctWord, scoreLesson, searchText, searchVocabulary, wordMatchers, type WordMatcher } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
@@ -51,6 +51,8 @@ const PAGE_SIZE = 20;
 const STORAGE_KEY = 'vgp_bookmarked_articles';
 /** Typing writes q to the URL once the reader pauses, not on every key. */
 const URL_DELAY = 150;
+/** A screen reader hears the result once the reader pauses, not after every key. */
+const ANNOUNCE_DELAY = 400;
 
 const defaultSort = (q: string, cat: string): Sort => (q.trim() ? 'match' : cat === 'all' ? 'new' : 'path');
 
@@ -68,6 +70,17 @@ function readSaved(): string[] {
     } catch {
         return [];
     }
+}
+
+/** The words a typo can be corrected to, built the first time a query finds nothing (one per set of search fields). */
+const vocabularies = new WeakMap<Map<string, string[]>, Map<string, number>>();
+function vocabularyFor(fields: Map<string, string[]>) {
+    let words = vocabularies.get(fields);
+    if (!words) {
+        words = searchVocabulary(fields.values());
+        vocabularies.set(fields, words);
+    }
+    return words;
 }
 
 /** Words from the lesson bodies (search-index.ts, `searchDigest`), fetched once the reader starts a search. */
@@ -359,21 +372,45 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         [articles, digest],
     );
 
+    const bodiesSearched = digest !== null || digestFailed;
+
     // The lessons in view, and how many more the query finds outside it (in the other paths,
     // or among the lessons not saved), for the empty state. The Saved view lists every saved
     // lesson: no path chip is pressed there, so a path in the address waits until it is left.
-    const [filteredArticles, matchesElsewhere] = useMemo(() => {
+    // A query that finds no lesson anywhere, once the lesson text is searched too, is tried
+    // again with each word that finds nothing corrected by one letter ("compresion" ->
+    // "compression"); `corrected` is then the query the list shows.
+    const [filteredArticles, matchesElsewhere, corrected] = useMemo(() => {
+        const search = (words: WordMatcher[]) => {
+            const phrase = words.map((m) => m.word).join(' ');
+            const found: { article: BlogListItem; index: number; score: number }[] = [];
+            let outside = 0;
+            articles.forEach((article, index) => {
+                const score = words.length ? scoreLesson(fields.get(article.slug) ?? [], words, phrase) : 0;
+                if (words.length > 0 && score === 0) return;
+                const inView = showSaved ? saved.includes(article.slug) : category === 'all' || article.category === category;
+                if (inView) found.push({ article, index, score });
+                else outside += 1;
+            });
+            return { found, outside };
+        };
         const words = wordMatchers(listQuery);
-        const phrase = words.map((m) => m.word).join(' ');
-        const list: { article: BlogListItem; index: number; score: number }[] = [];
-        let elsewhere = 0;
-        articles.forEach((article, index) => {
-            const score = words.length ? scoreLesson(fields.get(article.slug) ?? [], words, phrase) : 0;
-            if (words.length > 0 && score === 0) return;
-            const inView = showSaved ? saved.includes(article.slug) : category === 'all' || article.category === category;
-            if (inView) list.push({ article, index, score });
-            else elsewhere += 1;
-        });
+        let { found: list, outside: elsewhere } = search(words);
+        let fixed: string | null = null;
+        if (words.length > 0 && list.length === 0 && elsewhere === 0 && bodiesSearched) {
+            const lessonFields = [...fields.values()];
+            const vocabulary = vocabularyFor(fields);
+            const findsSomething = (m: WordMatcher) => lessonFields.some((f) => scoreLesson(f, [m], m.word) > 0);
+            const typed = words.map((m) => m.word);
+            const fixedWords = words.map((m) => (findsSomething(m) ? m.word : (correctWord(m.word, vocabulary) ?? m.word)));
+            if (fixedWords.some((word, i) => word !== typed[i])) {
+                const again = search(wordMatchers(fixedWords.join(' ')));
+                if (again.found.length > 0 || again.outside > 0) {
+                    ({ found: list, outside: elsewhere } = again);
+                    fixed = fixedWords.join(' ');
+                }
+            }
+        }
         const newest = (a: (typeof list)[number], b: (typeof list)[number]) =>
             b.article.publishedAt.localeCompare(a.article.publishedAt) || b.index - a.index;
         list.sort((a, b) => {
@@ -385,8 +422,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             }
             return newest(a, b);
         });
-        return [list.map(({ article }) => article), elsewhere] as const;
-    }, [articles, category, showSaved, saved, listQuery, fields, sort, pathOrder]);
+        return [list.map(({ article }) => article), elsewhere, fixed] as const;
+    }, [articles, category, showSaved, saved, listQuery, fields, sort, pathOrder, bodiesSearched]);
 
     const showFeaturedArticle = Boolean(featured && !hasQuery && category === 'all' && !showSaved);
     const libraryArticles = showFeaturedArticle ? filteredArticles.filter((a) => a.slug !== featured?.slug) : filteredArticles;
@@ -424,7 +461,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // connection): until then a query that only a body would find says so, not "No lesson".
     const searchingBodies = hasQuery && digest === null && !digestFailed;
     const emptyState = (() => {
-        const typed = listQuery.trim();
+        const typed = corrected ?? listQuery.trim();
         const all = { label: 'Show all lessons', onClick: resetFilters };
         if (showSaved) {
             if (saved.length === 0 || !hasQuery) {
@@ -448,6 +485,32 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         }
         return { message: `No lesson matches "${typed}".`, action: all };
     })();
+
+    // What a screen reader hears after a search or a filter: the count (with the corrected query),
+    // or the empty state's sentence, once the reader pauses, not after every key. Nothing while
+    // the saved lessons or the lesson text are still on their way, and nothing for the list the
+    // page opened with.
+    const showsEmpty = libraryArticles.length === 0 && !searchingBodies && !(showSaved && savedState === null);
+    const countText = `${filteredArticles.length} ${filteredArticles.length === 1 ? 'lesson' : 'lessons'}`;
+    const liveMessage =
+        (searchingBodies && filteredArticles.length === 0) || (showSaved && savedState === null)
+            ? null
+            : showsEmpty
+              ? emptyState.message
+              : corrected
+                ? `Showing results for "${corrected}". ${countText}.`
+                : countText;
+    const [announcement, setAnnouncement] = useState('');
+    const firstMessage = useRef<string | null>(null);
+    useEffect(() => {
+        if (liveMessage === null) return;
+        if (firstMessage.current === null) {
+            firstMessage.current = liveMessage;
+            return;
+        }
+        const timer = window.setTimeout(() => setAnnouncement(liveMessage), ANNOUNCE_DELAY);
+        return () => window.clearTimeout(timer);
+    }, [liveMessage]);
 
     // The selected path chip scrolls into view on a phone (after Back, or on a shared ?cat= link).
     // The Saved chip's label grows once the saved lessons load, so its count is part of the key.
@@ -545,10 +608,11 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                         </button>
                                     ) : null}
                                 </search>
-                                <p ref={count} tabIndex={-1} className="w-fit rounded-sm text-sm text-white/55 vgp-focus" aria-live="polite">
-                                    {searchingBodies && filteredArticles.length === 0
-                                        ? 'Searching lesson text…'
-                                        : `${filteredArticles.length} ${filteredArticles.length === 1 ? 'lesson' : 'lessons'}`}
+                                <p ref={count} tabIndex={-1} className="w-fit rounded-sm text-sm text-white/55 vgp-focus">
+                                    {searchingBodies && filteredArticles.length === 0 ? 'Searching lesson text…' : countText}
+                                </p>
+                                <p className="sr-only" aria-live="polite" aria-atomic="true">
+                                    {announcement}
                                 </p>
                             </div>
                             <p className="text-sm text-white/60">
@@ -625,6 +689,13 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     </Link>
                                 ) : null}
 
+                                {corrected && libraryArticles.length > 0 ? (
+                                    <p className="border-b border-white/10 py-5 text-base leading-7 text-white/75">
+                                        Showing results for <span className="font-medium text-white">&quot;{corrected}&quot;</span>. No lesson
+                                        matches &quot;{listQuery.trim()}&quot;.
+                                    </p>
+                                ) : null}
+
                                 {libraryArticles.length > 0 ? (
                                     <ul ref={list} className="divide-y divide-white/10">
                                         {libraryArticles.slice(0, visibleCount).map((article) => (
@@ -657,7 +728,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                 ) : null}
 
                                 {/* Nothing yet while the saved lessons or the lesson text are still on their way. */}
-                                {libraryArticles.length === 0 && !searchingBodies && !(showSaved && savedState === null) ? (
+                                {showsEmpty ? (
                                     <div className="py-16">
                                         <p className="max-w-xl text-lg text-white/75">{emptyState.message}</p>
                                         <button

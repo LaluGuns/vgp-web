@@ -63,7 +63,8 @@ export default async function BlogCategoryPage({ params }: Props) {
             <JsonLd data={lessonsCollection({ name: `${category.name}: a learning path`, description: category.description, url, path })} />
             <JsonLd
                 data={breadcrumbs([
-                    { name: 'Lessons', url: `${SITE}/blog` },
+                    { name: 'Learn', url: `${SITE}/learn` },
+                    { name: 'Paths', url: `${SITE}/learn#paths` },
                     { name: category.name, url },
                 ])}
             />

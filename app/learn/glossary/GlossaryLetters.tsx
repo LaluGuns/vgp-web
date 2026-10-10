@@ -29,6 +29,8 @@ export function GlossaryLetters({ letters }: { letters: string[] }) {
         });
         const inBand = new Set<Element>();
         // A letter is current while its section crosses a band just under the header and this bar.
+        // Above the first section (back at the top of the page) no letter is; past the last, its letter stays.
+        const BAND_TOP = 140;
         const observer = new IntersectionObserver(
             (entries) => {
                 for (const entry of entries) {
@@ -37,8 +39,9 @@ export function GlossaryLetters({ letters }: { letters: string[] }) {
                 }
                 const first = sections.find(({ section }) => inBand.has(section));
                 if (first) setCurrent(first.letter);
+                else if (sections.length > 0 && sections[0].section.getBoundingClientRect().top > BAND_TOP) setCurrent('');
             },
-            { rootMargin: '-140px 0px -55% 0px' },
+            { rootMargin: `-${BAND_TOP}px 0px -55% 0px` },
         );
         sections.forEach(({ section }) => observer.observe(section));
         return () => observer.disconnect();

@@ -4,7 +4,7 @@ import { startTransition, useCallback, useContext, useEffect, useId, useRef, use
 import { createPortal } from 'react-dom';
 import { Play, Square } from 'lucide-react';
 import { DIALECTS, type Dialect } from '@/lib/blog/dialects';
-import { claim, getEngine, release, warmEngine, type Engine } from './engine';
+import { claim, getEngine, outputTaken, release, warmEngine, type Engine } from './engine';
 import { DialectContext, LevelContext, whenIdle } from './shell';
 
 export { whenIdle } from './shell';
@@ -191,7 +191,10 @@ function onScreen(el: HTMLElement): boolean {
  * back on this button.
  *
  * `waiting` (usePlayer) is a press that waits for its sound, a real mix still
- * loading: the button says so, and pressing it again cancels.
+ * loading: the button says "Loading…", and pressing it again cancels.
+ *
+ * Its status, beside it, says "Playing" and is a live region; after a stop it
+ * says "Stopped" to screen readers only.
  */
 export function PlayButton({ playing, onClick, label = 'Play', waiting }: { playing: boolean; onClick: () => void; label?: string; waiting?: boolean }) {
     const button = useRef<HTMLButtonElement>(null);
@@ -311,9 +314,20 @@ export function PlayButton({ playing, onClick, label = 'Play', waiting }: { play
             </button>
         ) : null;
 
-    // A button that can wait (a demo with a real mix) keeps, while it waits or plays, the width of the wider of those two
-    // states, so the moment a mix that was waited for arrives (Loading the mix… turns into Stop and Playing) moves nothing.
-    const other = waiting !== undefined && (playing || waiting) ? (playing ? 'waiting' : 'playing') : null;
+    // What the status says to a screen reader: "Playing", then "Stopped" once, when a press, the Stop button or Escape
+    // stops it. A demo stopped because another one started says nothing, so the reader hears only the new one's "Playing".
+    const [stopped, setStopped] = useState(false);
+    const [was, setWas] = useState(playing);
+    if (was !== playing) {
+        setWas(playing);
+        setStopped(!playing && !outputTaken());
+    }
+
+    // Every state's look in one place: the one shown, and an invisible copy of each other state (Play, Stop with
+    // "Playing", and for a demo with a real mix "Loading…"). The row keeps the width of the widest from the first
+    // render, so pressing Play, stopping, or a mix that was waited for arriving moves nothing beside or below it.
+    const shown: PlayState = playing ? 'stop' : waiting ? 'wait' : 'play';
+    const sizers = (waiting === undefined ? (['play', 'stop'] as const) : (['play', 'stop', 'wait'] as const)).filter((s) => s !== shown);
     return (
         <div className="grid">
             <div className="col-start-1 row-start-1 flex items-center gap-4">
@@ -330,25 +344,40 @@ export function PlayButton({ playing, onClick, label = 'Play', waiting }: { play
                     data-demo-play=""
                     className={PLAY_CLASS}
                 >
-                    {playing ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
-                    {playing ? 'Stop' : waiting ? 'Loading the mix…' : label}
+                    <PlayFace state={shown} label={label} />
                 </button>
                 {/* --accent is the lesson group's inside a lesson (DemoSlot), sky elsewhere. */}
-                <span className="text-sm text-[var(--accent)]" aria-live="polite">
-                    {playing ? 'Playing' : ''}
+                <span className="text-sm text-[var(--accent)]" aria-live="polite" aria-atomic="true">
+                    {playing ? 'Playing' : stopped ? <span className="sr-only">Stopped</span> : null}
                 </span>
                 {stop && slot ? createPortal(stop, slot) : stop}
             </div>
-            {other ? (
-                <div aria-hidden="true" className="invisible col-start-1 row-start-1 flex items-center gap-4">
+            {sizers.map((s) => (
+                <div key={s} aria-hidden="true" className="invisible col-start-1 row-start-1 flex items-center gap-4">
                     <span className={PLAY_CLASS}>
-                        {other === 'playing' ? <Square size={14} fill="currentColor" /> : <Play size={15} fill="currentColor" />}
-                        {other === 'playing' ? 'Stop' : 'Loading the mix…'}
+                        <PlayFace state={s} label={label} />
                     </span>
-                    <span className="text-sm">{other === 'playing' ? 'Playing' : ''}</span>
+                    <span className="text-sm">{s === 'stop' ? 'Playing' : ''}</span>
                 </div>
-            ) : null}
+            ))}
         </div>
+    );
+}
+
+type PlayState = 'play' | 'stop' | 'wait';
+
+/**
+ * What the Play button shows in each state. "Loading…" (a press waiting for a
+ * real mix; the Source line under it says "Loading the mix…") is kept no wider
+ * than Stop with its "Playing", so a demo with a real mix reserves no more room
+ * than any other. Keep a new label within that too.
+ */
+function PlayFace({ state, label }: { state: PlayState; label: string }) {
+    return (
+        <>
+            {state === 'stop' ? <Square size={14} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
+            {state === 'stop' ? 'Stop' : state === 'wait' ? 'Loading…' : label}
+        </>
     );
 }
 
@@ -372,22 +401,74 @@ export function Variants({ show, items }: { show: number; items: ReactNode[] }) 
     );
 }
 
+/** How long a change has to hold still before Announce says it. */
+const ANNOUNCE_AFTER = 500;
+/** How long Announce keeps its words once it has said them. */
+const ANNOUNCE_KEEP = 4000;
+
+/**
+ * Tells screen readers about a change that matters, once. `on` names the
+ * part of the state worth hearing about (the mix started clipping, the
+ * matching was turned off), not every number: a slider's own value text
+ * already says each step. `text` is said once nothing has changed for half a
+ * second, and only if `on` then differs from what was last said, so a slider
+ * moved step by step stays quiet until it rests, and moving it back says
+ * nothing. null means not known yet; the first value `on` takes is where it
+ * starts, not news. The words clear a few seconds later, so a reader moving
+ * through the page does not find a stale copy next to what they repeat.
+ */
+export function Announce({ text, on }: { text: string; on: string | null }) {
+    const [said, setSaid] = useState('');
+    const last = useRef(on);
+    const textRef = useRef(text);
+    useEffect(() => {
+        textRef.current = text;
+    });
+    useEffect(() => {
+        if (on === null) return;
+        if (last.current === null) {
+            last.current = on;
+            return;
+        }
+        if (on === last.current) return;
+        let frame = 0;
+        const id = window.setTimeout(() => {
+            last.current = on;
+            // Emptied first, so words that match the last ones are still a change, and are said.
+            setSaid('');
+            frame = requestAnimationFrame(() => setSaid(textRef.current));
+        }, ANNOUNCE_AFTER);
+        return () => {
+            window.clearTimeout(id);
+            cancelAnimationFrame(frame);
+        };
+    }, [on, text]);
+    useEffect(() => {
+        if (!said) return;
+        const id = window.setTimeout(() => setSaid(''), ANNOUNCE_KEEP);
+        return () => window.clearTimeout(id);
+    }, [said]);
+    return (
+        <span className="sr-only" aria-live="polite" aria-atomic="true">
+            {said}
+        </span>
+    );
+}
+
 /**
  * A visible label above a group of controls, with an optional note under them.
- * `liveHint` announces the note when it changes (a note that follows the choice).
+ * `announce` says a change that matters to screen readers (Announce); the note
+ * itself is not a live region.
  */
-export function Field({ label, id, hint, liveHint = false, children }: { label: string; id?: string; hint?: ReactNode; liveHint?: boolean; children: ReactNode }) {
+export function Field({ label, id, hint, announce, children }: { label: string; id?: string; hint?: ReactNode; announce?: { text: string; on: string | null }; children: ReactNode }) {
     return (
         <div>
             <p id={id} className="mb-2 text-sm font-medium text-white/85">
                 {label}
             </p>
             {children}
-            {hint ? (
-                <p className="mt-2 text-xs leading-5 text-white/50" aria-live={liveHint ? 'polite' : undefined}>
-                    {hint}
-                </p>
-            ) : null}
+            {hint ? <p className="mt-2 text-xs leading-5 text-white/50">{hint}</p> : null}
+            {announce ? <Announce text={announce.text} on={announce.on} /> : null}
         </div>
     );
 }
@@ -458,14 +539,20 @@ export function Segmented<T extends string>({
     onChange,
     hint,
     liveHint,
+    onPress,
 }: {
     label: string;
     value: T;
     options: { value: T; label: string }[];
     onChange: (value: T) => void;
     hint?: ReactNode;
-    /** The hint describes the current choice: announce it when it changes. */
+    /** The hint (a string) describes the current choice: say it once a change of choice has held still (Announce). */
     liveHint?: boolean;
+    /**
+     * Heard as an option is pressed, before it is chosen: as a mouse button goes down or a finger lifts (a task
+     * ahead of the click), or with the key that chooses it. For work that needs the reader's gesture.
+     */
+    onPress?: (value: T) => void;
 }) {
     const labelId = useId();
     const buttons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -479,8 +566,12 @@ export function Segmented<T extends string>({
         else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') to = from === 0 ? last : from - 1;
         else if (e.key === 'Home') to = 0;
         else if (e.key === 'End') to = last;
-        else return;
+        else {
+            if (e.key === 'Enter' || e.key === ' ') onPress?.(options[from].value);
+            return;
+        }
         e.preventDefault();
+        onPress?.(options[to].value);
         if (to !== chosen) {
             // The option says it is checked before it takes the focus, as a native radio does, so a screen
             // reader reads it as checked; the demo's own render, which may follow a moment later (a
@@ -492,7 +583,7 @@ export function Segmented<T extends string>({
     };
 
     return (
-        <Field label={label} id={labelId} hint={hint} liveHint={liveHint}>
+        <Field label={label} id={labelId} hint={hint} announce={liveHint && typeof hint === 'string' ? { text: hint, on: value } : undefined}>
             <div role="radiogroup" aria-labelledby={labelId} className="flex flex-wrap gap-2">
                 {options.map((option, i) => (
                     <button
@@ -505,6 +596,8 @@ export function Segmented<T extends string>({
                         aria-checked={i === chosen}
                         tabIndex={i === tabStop ? 0 : -1}
                         onClick={() => onChange(option.value)}
+                        onPointerDown={onPress ? (e) => e.pointerType === 'mouse' && onPress(option.value) : undefined}
+                        onPointerUp={onPress ? (e) => e.pointerType !== 'mouse' && onPress(option.value) : undefined}
                         onKeyDown={(e) => onKey(i, e)}
                         className={optionClass(i === chosen)}
                     >
@@ -548,10 +641,11 @@ export function Answers<T extends string>({
 
 /**
  * A level bar. `value` 0 to 1. Its ends follow the dialect (app/globals.css, `.vgp-meter`).
- * The reading keeps the width of the widest one a meter shows ("-00.0 dB"), so its label
- * wraps the same with a dash before playback as with a number during it.
+ * The reading keeps the width of the widest one a meter shows (`widest`, "-00.0 dB" unless
+ * it says something wider), so its label wraps the same with a dash before playback as
+ * with a number during it.
  */
-export function Meter({ label, value, text }: { label: string; value: number; text: string }) {
+export function Meter({ label, value, text, widest = '-00.0 dB' }: { label: string; value: number; text: string; widest?: string }) {
     return (
         <div>
             <div className="flex items-baseline justify-between gap-4 text-sm">
@@ -559,7 +653,7 @@ export function Meter({ label, value, text }: { label: string; value: number; te
                 <span className="grid shrink-0 whitespace-nowrap text-right tabular-nums text-white/85">
                     <span className="col-start-1 row-start-1">{text}</span>
                     <span className="invisible col-start-1 row-start-1" aria-hidden="true">
-                        -00.0 dB
+                        {widest}
                     </span>
                 </span>
             </div>
@@ -588,15 +682,15 @@ export function LiveMeter({ label, active, read, full }: { label: string; active
 
 /**
  * Numbers under their labels. Labels may wrap; the values always sit on one
- * line, level with each other. `live` announces new values to screen readers:
- * only for values that follow the reader's settings, never a running meter.
+ * line, level with each other. Not a live region: values that follow a slider
+ * change on every step, which the slider itself already says. A change that
+ * matters goes to Announce instead.
  */
-export function Readout({ items, live = false }: { items: { label: string; value: string }[]; live?: boolean }) {
+export function Readout({ items }: { items: { label: string; value: string }[] }) {
     return (
-        <dl className="grid grid-cols-2 items-end gap-x-6 gap-y-3 sm:grid-cols-3" aria-live={live ? 'polite' : undefined}>
+        <dl className="grid grid-cols-2 items-end gap-x-6 gap-y-3 sm:grid-cols-3">
             {items.map((item) => (
-                // Atomic, so a new value is read with its label.
-                <div key={item.label} className="min-w-0" aria-atomic={live || undefined}>
+                <div key={item.label} className="min-w-0">
                     <dt className="text-xs leading-4 text-white/50">{item.label}</dt>
                     <dd className="mt-1 whitespace-nowrap text-lg font-semibold leading-6 tabular-nums text-white">{item.value}</dd>
                 </div>

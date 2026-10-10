@@ -697,6 +697,16 @@ body::before {
   background: transparent;
 }
 
+/* The definition takes the focus as it opens (TermPlacement); the ring shows for the keyboard only. */
+.vgp-term-pop:focus {
+  outline: none;
+}
+
+.vgp-term-pop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 .vgp-term-pop .vgp-term-name {
   color: #fff;
   font-weight: 600;
@@ -1184,6 +1194,12 @@ body::before {
   .vgp-map-track { --p: 36px; }
 }
 
+/* A finger needs the phone's 44 px cells (WCAG 2.5.5): below 1024 px a coarse pointer (a phone held
+   sideways, a tablet) keeps them, and the line wraps into as many systems as that takes. */
+@media (min-width: 640px) and (max-width: 1023.98px) and (pointer: coarse) {
+  .vgp-map-track { --p: 44px; grid-template-columns: repeat(auto-fill, var(--p)); width: auto; }
+}
+
 @media (min-width: 1280px) {
   .vgp-map-track,
   .vgp-map-ruler { --p: 24px; grid-template-columns: repeat(var(--n, 44), var(--p)); }
@@ -1222,6 +1238,49 @@ body::before {
 
 .vgp-map-cell > a:hover {
   background-color: rgba(255, 255, 255, 0.06);
+}
+
+/* A mark chosen by a first tap (PathMapLive): a second tap, or the readout's link, opens it. */
+.vgp-map-cell > a[data-chosen] {
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* The map's readout (PathMapLive): the lesson under the pointer, the keyboard focus or a first tap.
+   It stays under the site header while the map scrolls beneath it (a hairline under it then), in a
+   box of fixed height, so nothing moves when its text or its link changes. The hints describe what
+   the script does, so without it they stay unseen and the box just keeps its place. */
+.vgp-map-readout {
+  position: sticky;
+  top: calc(64px + env(safe-area-inset-top, 0px));
+  z-index: 10;
+  height: 68px;
+  padding: 8px 0 7px;
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+}
+
+.vgp-map-readout[data-stuck] {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.vgp-map-readout [data-open][hidden],
+.vgp-map-readout [data-hint='touch'] {
+  display: none;
+}
+
+@media (hover: none) {
+  .vgp-map-readout [data-hint='pointer'] {
+    display: none;
+  }
+
+  .vgp-map-readout [data-hint='touch'] {
+    display: inline;
+  }
+}
+
+.vgp-map-readout:not([data-live]) [data-hint] {
+  visibility: hidden;
 }
 
 /* Each path draws in once, left to right, the way a figure's line does (MotionObserver; reduced

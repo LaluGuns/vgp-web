@@ -186,18 +186,21 @@ function SectionView({ section, ctx, first }: { section: Section; ctx: RenderCon
     }
 }
 
-function TermPopovers({ terms }: { terms: ParsedArticle['terms'] }) {
+function TermPopovers({ terms, slug }: { terms: ParsedArticle['terms']; slug: string }) {
     if (terms.length === 0) return null;
     const markup = terms
         .map((term) => {
-            const target = term.article ? getArticleBySlug(term.article) : undefined;
+            // No "Read:" link to the lesson already open: it would only jump to its top.
+            const target = term.article && term.article !== slug ? getArticleBySlug(term.article) : undefined;
             const more = target
                 ? `<a class="vgp-term-more" href="/blog/${target.slug}">Read: ${escape(target.title)}</a>`
                 : '';
-            // Links first, then Close: Tab from the term walks into the popover in this order.
-            return `<div id="term-${term.id}" popover class="vgp-term-pop" role="dialog" aria-label="${escape(term.term)}">
-<p class="vgp-term-name">${escape(term.term)}</p>
-<p>${escape(term.definition)}</p>
+            // Named by the term, described by the definition: TermPlacement moves the focus onto the
+            // popover as it opens, so a screen reader says "Mid/side, dialog" and then the definition.
+            // Links first, then Close: Tab from there walks the popover in this order.
+            return `<div id="term-${term.id}" popover class="vgp-term-pop" role="dialog" tabindex="-1" aria-labelledby="term-${term.id}-name" aria-describedby="term-${term.id}-def">
+<p class="vgp-term-name" id="term-${term.id}-name">${escape(term.term)}</p>
+<p id="term-${term.id}-def">${escape(term.definition)}</p>
 <div class="vgp-term-actions"><div class="vgp-term-links">${more}<a class="vgp-term-all" href="/learn/glossary#${term.id}">All terms</a></div><button type="button" popovertarget="term-${term.id}" popovertargetaction="hide">Close</button></div>
 </div>`;
         })
@@ -220,7 +223,7 @@ export function ArticleBody({ article, parsed }: { article: BlogArticle; parsed:
                 .map((section, i) => (
                     <SectionView key={section.id} section={section} ctx={ctx} first={i === 0 && parsed.lead.length === 0} />
                 ))}
-            <TermPopovers terms={parsed.terms} />
+            <TermPopovers terms={parsed.terms} slug={article.slug} />
             {parsed.terms.length > 0 ? <TermPlacement /> : null}
         </div>
     );

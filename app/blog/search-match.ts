@@ -184,6 +184,55 @@ const FIELD_POINTS: [number, number, number][] = [
     [1, 0.7, 0.2],
 ];
 
+/** A word as the typo fallback knows it: four or more letters or digits, at least one of them a letter. */
+const VOCAB_WORD = /(?=[\p{N}]*\p{L})[\p{L}\p{N}]{4,}/gu;
+
+/**
+ * The words a typo can be corrected to (`correctWord`): every word of four
+ * or more characters in the text searched, with how many lessons use it.
+ * Pass each lesson's fields as `searchText` returns them.
+ */
+export function searchVocabulary(lessons: Iterable<string[]>): Map<string, number> {
+    const counts = new Map<string, number>();
+    for (const fields of lessons) {
+        for (const word of new Set(fields.join(' ').match(VOCAB_WORD) ?? [])) counts.set(word, (counts.get(word) ?? 0) + 1);
+    }
+    return counts;
+}
+
+/** True when b is a with one letter added, dropped or changed, or two neighbours swapped. */
+function oneEditApart(a: string, b: string): boolean {
+    if (a === b || Math.abs(a.length - b.length) > 1) return false;
+    let i = 0;
+    while (i < a.length && i < b.length && a[i] === b[i]) i++;
+    if (a.length === b.length) {
+        if (a.slice(i + 1) === b.slice(i + 1)) return true;
+        return a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2);
+    }
+    return a.length > b.length ? a.slice(i + 1) === b.slice(i) : a.slice(i) === b.slice(i + 1);
+}
+
+/**
+ * The search's typo fallback (BlogIndex uses it only when a query finds no
+ * lesson at all): the word one edit away from `word` that the most lessons
+ * use ("compresion" -> "compression"), or null. A word under four letters
+ * is left alone, since one edit turns it into too many others, and so is
+ * one that starts with a different letter, where typos are rare.
+ */
+export function correctWord(word: string, vocabulary: Map<string, number>): string | null {
+    if (word.length < 4 || !/\p{L}/u.test(word)) return null;
+    let best: string | null = null;
+    let uses = 0;
+    for (const [candidate, count] of vocabulary) {
+        if (candidate[0] !== word[0] || count < uses || !oneEditApart(word, candidate)) continue;
+        if (count > uses || (best !== null && candidate < best)) {
+            best = candidate;
+            uses = count;
+        }
+    }
+    return best;
+}
+
 /** 0 when a word matches nowhere; otherwise each word scores its best field, plus a bonus for the whole phrase in the title. */
 export function scoreLesson(fields: string[], words: WordMatcher[], phrase: string): number {
     let total = 0;

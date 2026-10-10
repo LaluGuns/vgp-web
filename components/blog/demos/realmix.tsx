@@ -1,8 +1,8 @@
 'use client';
 
 import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
-import { getEngine, kWeighted, yieldToMain } from './engine';
-import { Segmented, Variants } from './ui';
+import { kWeighted, peekEngine, warmEngine, yieldToMain } from './engine';
+import { Announce, Segmented, Variants } from './ui';
 
 /*
  * The real mixes a demo can play instead of its synth: three short loops,
@@ -13,7 +13,7 @@ import { Segmented, Variants } from './ui';
  * grab them. Only these stereo mixes are published; no stems or samples.
  */
 
-export type LoopId = 'dystopia' | 'chrome-teeth' | 'late-train-home';
+type LoopId = 'dystopia' | 'chrome-teeth' | 'late-train-home';
 
 interface LoopFacts {
     url: string;
@@ -37,7 +37,7 @@ interface LoopFacts {
  * one that ignores it returns the loop with real music on both sides, so either
  * way the loop below repeats without a seam.
  */
-export const LOOPS: Record<LoopId, LoopFacts> = {
+const LOOPS: Record<LoopId, LoopFacts> = {
     dystopia: {
         url: '/blog-mix/dystopia.688cb19a26.dat',
         seconds: 12.8,
@@ -92,46 +92,78 @@ function place(id: LoopId, buffer: AudioBuffer): RealLoop {
     return { id, buffer, start, end: Math.min(have, start + f.seconds), seconds: f.seconds };
 }
 
-const jobs = new Map<LoopId, Promise<RealLoop>>();
+/** A fetch and decode in progress (or done), shared by every demo on the page that wants the same loop. */
+interface LoopJob {
+    loop: Promise<RealLoop>;
+    abort: AbortController;
+    /** The demos that picked Real mix and are waiting for it. */
+    wanted: Set<object>;
+}
+
+const jobs = new Map<LoopId, LoopJob>();
 const loaded = new Map<LoopId, RealLoop>();
 
 /** The decoded loop if it is already here (it is kept for the rest of the visit). */
-export const loadedLoop = (id: LoopId): RealLoop | null => loaded.get(id) ?? null;
+const loadedLoop = (id: LoopId): RealLoop | null => loaded.get(id) ?? null;
 
 /**
- * Fetches and decodes a loop, once per page. Decoding uses the demos' audio
- * context, so the buffer is at the rate it plays at; the context is made a
- * task after the fetch lands, apart from the click that asked for the mix.
+ * Decodes in the demos' audio context, so the buffer is at the rate it plays
+ * at. That context is made by the press that picked Real mix (SourceChoice),
+ * never outside one; should it still be missing, an offline context decodes
+ * at the files' own 48 kHz instead.
  */
-export function loadLoop(id: LoopId): Promise<RealLoop> {
+function decode(bytes: ArrayBuffer): Promise<AudioBuffer> {
+    const ctx: BaseAudioContext = peekEngine()?.ctx ?? new OfflineAudioContext(2, 1, 48000);
+    // The callback form: older Safari has no promise from decodeAudioData.
+    return new Promise<AudioBuffer>((resolve, reject) => {
+        ctx.decodeAudioData(bytes, resolve, (error) => reject(error ?? new Error('The mix could not be decoded.')));
+    });
+}
+
+/**
+ * Fetches and decodes a loop for `who` (a demo), once per page. Once no demo
+ * on the page still wants it (each picked Synth again or left the page), a
+ * fetch still in flight is dropped (unwantLoop).
+ */
+function loadLoop(id: LoopId, who: object): Promise<RealLoop> {
     let job = jobs.get(id);
     if (!job) {
-        job = (async () => {
-            const res = await fetch(LOOPS[id].url);
+        const abort = new AbortController();
+        const loop = (async () => {
+            const res = await fetch(LOOPS[id].url, { signal: abort.signal });
             if (!res.ok) throw new Error(`The mix answered ${res.status}.`);
             const bytes = await res.arrayBuffer();
             await yieldToMain();
-            const { ctx } = getEngine();
-            // The callback form: older Safari has no promise from decodeAudioData.
-            const buffer = await new Promise<AudioBuffer>((resolve, reject) => {
-                ctx.decodeAudioData(bytes, resolve, (error) => reject(error ?? new Error('The mix could not be decoded.')));
-            });
-            const loop = place(id, buffer);
-            loaded.set(id, loop);
-            return loop;
-        })().catch((error: unknown) => {
-            // A dropped connection: picking Real mix again tries again.
-            jobs.delete(id);
-            throw error;
+            abort.signal.throwIfAborted();
+            const placed = place(id, await decode(bytes));
+            loaded.set(id, placed);
+            return placed;
+        })();
+        const made: LoopJob = { loop, abort, wanted: new Set() };
+        // A dropped connection or an abort: picking Real mix again tries again.
+        loop.catch(() => {
+            if (jobs.get(id) === made) jobs.delete(id);
         });
-        jobs.set(id, job);
+        jobs.set(id, made);
+        job = made;
     }
-    return job;
+    job.wanted.add(who);
+    return job.loop;
 }
 
-export type Source = 'synth' | 'real';
+/** `who` no longer waits for the loop. When nobody does, its fetch stops. */
+function unwantLoop(id: LoopId, who: object) {
+    const job = jobs.get(id);
+    if (!job || loaded.has(id)) return;
+    job.wanted.delete(who);
+    if (job.wanted.size > 0) return;
+    jobs.delete(id);
+    job.abort.abort();
+}
 
-export interface SourceState {
+type Source = 'synth' | 'real';
+
+interface SourceState {
     id: LoopId;
     /** What the reader picked. */
     pick: Source;
@@ -142,19 +174,25 @@ export interface SourceState {
     choose: (next: Source) => void;
 }
 
-/** The Source choice of one demo: Synth, or a real loop that loads when the reader first picks it. */
+/**
+ * The Source choice of one demo: Synth, or a real loop that loads when the
+ * reader first picks it. Picking Synth again before it has arrived, or leaving
+ * the page, gives up on it (unwantLoop).
+ */
 export function useSource(id: LoopId): SourceState {
     const [pick, setPick] = useState<Source>('synth');
     const [loop, setLoop] = useState<RealLoop | null>(null);
     const [failed, setFailed] = useState(false);
-    const live = useRef({ alive: true, pick: 'synth' as Source });
+    // `ask` counts the picks of Real mix: an answer to an earlier one that was given up on is not this one's.
+    const live = useRef({ alive: true, pick: 'synth' as Source, ask: 0 });
     useEffect(() => {
         const l = live.current;
         l.alive = true;
         return () => {
             l.alive = false;
+            unwantLoop(id, l);
         };
-    }, []);
+    }, [id]);
     // Transitions: a demo is large, and re-rendering it inside the tap ran long on a slow phone. React renders it
     // in slices instead; the fetch starts in the tap itself.
     const choose = useCallback(
@@ -167,13 +205,15 @@ export function useSource(id: LoopId): SourceState {
                 setFailed(false);
                 if (ready) setLoop(ready);
             });
+            if (next !== 'real') unwantLoop(id, l);
             if (next !== 'real' || ready) return;
-            loadLoop(id).then(
+            const ask = ++l.ask;
+            loadLoop(id, l).then(
                 (got) => {
                     if (l.alive) startTransition(() => setLoop(got));
                 },
                 () => {
-                    if (!l.alive || l.pick !== 'real') return;
+                    if (!l.alive || l.pick !== 'real' || l.ask !== ask) return;
                     l.pick = 'synth';
                     startTransition(() => {
                         setPick('synth');
@@ -191,10 +231,10 @@ export function useSource(id: LoopId): SourceState {
  * The Source choice and its line: the loop's credit, "Loading the mix…" until
  * it can play (fetched, decoded and, for a level-matched demo, measured), or
  * why it went back to Synth. Every line takes the same place, so a change
- * moves nothing. The line is a live region: picking a loop that is already
- * here changes nothing in it (the radio says what was picked), so a switch is
- * announced once; a first pick reads "Loading the mix…" and then the credit
- * once it plays.
+ * moves nothing. A change of line is said once it has held for half a second
+ * (ui.tsx Announce): picking a loop that is already here changes nothing in it
+ * (the radio says what was picked); a first pick that takes a while says
+ * "Loading the mix…" and then the credit once it plays.
  */
 export function SourceChoice({ source, loading }: { source: SourceState; loading: boolean }) {
     const show = source.failed ? 2 : loading ? 1 : 0;
@@ -206,6 +246,11 @@ export function SourceChoice({ source, loading }: { source: SourceState; loading
                 label="Source"
                 value={source.pick}
                 onChange={source.choose}
+                // The press that picks Real mix makes the audio context the mix is decoded in, as Play does: a task
+                // ahead of the click (as a mouse button goes down or a finger lifts), or with the key.
+                onPress={(v) => {
+                    if (v === 'real') warmEngine();
+                }}
                 options={[
                     { value: 'synth', label: 'Synth' },
                     { value: 'real', label: 'Real mix' },
@@ -215,12 +260,12 @@ export function SourceChoice({ source, loading }: { source: SourceState; loading
                         <span aria-hidden="true">
                             <Variants show={show} items={lines} />
                         </span>
-                        {/* What is read out: a change of text, which every screen reader announces. */}
+                        {/* What a screen reader reads here: the line that is shown. */}
                         <span className="sr-only">{lines[show]}</span>
                     </>
                 }
-                liveHint
             />
+            <Announce on={String(show)} text={lines[show]} />
         </div>
     );
 }
@@ -329,36 +374,60 @@ const dbToGain = (db: number) => 10 ** (db / 20);
 /** The gain that plays a loop at `lufs` (ungated, K-weighted) in a demo. */
 export const loopGain = (loop: RealLoop, lufs: number) => dbToGain(lufs - LOOPS[loop.id].lufs);
 
-export interface LoopRender {
+/** A stretch of a loop: `from` seconds into it, `seconds` long. */
+interface LoopPart {
+    from: number;
+    seconds: number;
+}
+
+/**
+ * What a per-setting analysis measures: bars 3 and 4 of the loop's eight,
+ * after half a second of bar 2 as run-in (MATCH_RUN_IN). Over a grid of
+ * settings of each demo that measures one (the compressor on Late Train Home,
+ * the limiter and the saturation on Chrome Teeth, gentle to extreme), the
+ * matching measured over these two bars lands within about a tenth of a dB of
+ * the matching measured over the whole loop, for a quarter of the render.
+ * The demo's one-off measurement of the loop going in covers the same bars
+ * (and the whole loop where it needs it, such as the limiter's peak), so the
+ * two sides of a match are measured on the same music.
+ */
+export const matchPart = (loop: RealLoop): LoopPart => ({ from: loop.seconds / 4, seconds: loop.seconds / 4 });
+export const MATCH_RUN_IN = 0.5;
+
+interface LoopRender {
     /** Each tap's left and right channels. */
     x: [Float32Array, Float32Array][];
     /** The first `weighted` taps again, K-weighted (engine.ts kWeighted). */
     k: [Float32Array, Float32Array][];
-    /** The whole loop in these arrays, after the run-in and a tap's `delay`: [from, to) in samples. */
-    span: (delay?: number) => [number, number];
+    /**
+     * Where the rendered stretch (or `part`, a stretch of it given in the loop's own time) sits in these arrays,
+     * after the run-in and a tap's `delay`: [from, to) in samples.
+     */
+    span: (delay?: number, part?: LoopPart) => [number, number];
     sampleRate: number;
 }
 
 /**
- * Renders one whole pass of a loop through a demo's graph, offline, at the
- * loop's own sample rate: `runIn` seconds of the loop's end first, so the
- * processors have settled and what is measured is the loop as it repeats.
- * `build` connects `src` (the loop at `gain`) to the taps; each tap is
- * recorded in stereo, and the first `weighted` ones K-weighted too. A tap
- * fed in mono records silence on its right channel. `weightedOnly` keeps
- * only the K-weighted channels (a loudness reading needs no more), so a slow
- * phone allocates half as much.
+ * Renders a loop through a demo's graph, offline, at the loop's own sample
+ * rate: one whole pass, or only `part` of it. `runIn` seconds of the music
+ * before it go first, so the processors have settled and what is measured is
+ * the loop as it repeats. `build` connects `src` (the loop at `gain`) to the
+ * taps; each tap is recorded in stereo, and the first `weighted` ones
+ * K-weighted too. A tap fed in mono records silence on its right channel.
+ * `weightedOnly` keeps only the K-weighted channels (a loudness reading needs
+ * no more), so a slow phone allocates half as much.
  */
 export async function renderLoop(
     loop: RealLoop,
-    opts: { gain: number; taps: number; weighted?: number; runIn?: number; tail?: number; weightedOnly?: boolean },
+    opts: { gain: number; taps: number; weighted?: number; runIn?: number; tail?: number; weightedOnly?: boolean; part?: LoopPart },
     build: (ctx: OfflineAudioContext, src: AudioNode, taps: GainNode[]) => void,
 ): Promise<LoopRender> {
     const weighted = opts.weighted ?? 0;
     const runIn = opts.runIn ?? 1.5;
     const tail = opts.tail ?? 0.05;
+    const part = opts.part ?? { from: 0, seconds: loop.seconds };
     const sr = loop.buffer.sampleRate;
-    const length = Math.ceil((runIn + loop.seconds + tail) * sr);
+    const length = Math.ceil((runIn + part.seconds + tail) * sr);
     // Where each tap's two channels go, and its K-weighted copy's.
     const raw = opts.weightedOnly ? 0 : opts.taps;
     const channels = (raw + weighted) * 2;
@@ -387,17 +456,18 @@ export async function renderLoop(
     level.gain.value = opts.gain;
     src.connect(level);
     build(ctx, level, taps);
-    src.start(0, loop.end - runIn);
+    // The run-in starts `runIn` before the stretch, wrapping round the loop's end.
+    const at = (((part.from - runIn) % loop.seconds) + loop.seconds) % loop.seconds;
+    src.start(0, loop.start + at);
     const out = await ctx.startRendering();
     const pair = (c: number): [Float32Array, Float32Array] => [out.getChannelData(c), out.getChannelData(c + 1)];
     const from = Math.round(runIn * sr);
-    const n = Math.round(loop.seconds * sr);
     return {
         x: Array.from({ length: raw }, (_, i) => pair(i * 2)),
         k: Array.from({ length: weighted }, (_, i) => pair((raw + i) * 2)),
-        span: (delay = 0) => {
-            const a = from + Math.round(delay * sr);
-            return [a, Math.min(length, a + n)];
+        span: (delay = 0, sub = { from: part.from, seconds: part.seconds }) => {
+            const a = from + Math.round((sub.from - part.from + delay) * sr);
+            return [a, Math.min(length, a + Math.round(sub.seconds * sr))];
         },
         sampleRate: sr,
     };

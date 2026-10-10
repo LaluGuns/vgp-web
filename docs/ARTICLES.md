@@ -185,7 +185,12 @@ mix (Real mix, below). Ids:
 New demos go in `components/blog/demos/` and `lib/blog/demos.ts`. Give each
 one a `height` there (its controls' height in each width range that file
 lists), so the page keeps that space while the demo's code loads and nothing
-below it moves. Set its `level` there (a playback trim in dB) so its default
+below it moves. Playing must not move anything either: the Play button keeps
+the width of its widest state (Stop with "Playing" beside it) from the first
+render, so keep a new button label within that, and give any text that
+changes while a demo plays the width of its longest wording (a meter's
+`widest`). Check every state (idle, playing, stopped, and on a real mix
+waiting and playing) at both ends of every width range. Set its `level` there (a playback trim in dB) so its default
 setting sits at the house loudness, -29 LUFS at 100 % demo volume (BS.1770
 K-weighting with the standard high-pass, both channels, ungated, over whole
 loops), and check that its loudest setting peaks under -7 dBFS there; a
@@ -240,7 +245,7 @@ from the loop's measured loudness (`LOOPS` in `realmix.tsx`). The
 level-matched demos measure the real loop itself, one whole pass offline,
 so the line says "Loading the mix…" until the fetch, the decoding and that
 measurement are done, and the switch goes live with its matching. Play
-pressed meanwhile waits, and the button says "Loading the mix…" too. On the
+pressed meanwhile waits, and the button says "Loading…". On the
 real mix the `filter` and `eq-sweep` demos turn down as the resonance rises
 past 11 dB or the boost widens past a Q of 2; at full resonance the mix's
 bass would otherwise peak about 3 dB over the rule. Text that differs by

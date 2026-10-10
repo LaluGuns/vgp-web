@@ -89,11 +89,20 @@ function MenuPresence({ open, children }: { open: boolean; children: (closing: b
 }
 
 // Most items are live, so only the exceptions get a label.
-function StatusText({ status }: { status: NavChild['status'] }) {
-    if (!status || status === 'Available') return null;
+const statusLabel = (status: NavChild['status']) => (!status || status === 'Available' ? null : status === 'Coming Soon' ? 'Coming soon' : status);
+
+/**
+ * The label beside an item ("Free", "Coming soon"). It is not part of the
+ * link's name, which is the item alone; the link lists it in its
+ * description (`id`), with a stop after it that only a screen reader hears.
+ */
+function StatusText({ status, id }: { status: NavChild['status']; id?: string }) {
+    const label = statusLabel(status);
+    if (!label) return null;
     return (
-        <span className="shrink-0 text-xs font-medium text-white/50">
-            {status === 'Coming Soon' ? 'Coming soon' : status}
+        <span id={id} className="shrink-0 text-xs font-medium text-white/50">
+            {label}
+            <span className="sr-only">.</span>
         </span>
     );
 }
@@ -132,8 +141,18 @@ function NavItemLink({
 }
 
 /**
- * One item in a desktop dropdown. Its name is the item and its status
- * ("Lessons Free"); the line under it is the description, so a screen
+ * The ids that name an item's link by the item alone and describe it by
+ * its status and its description, so a screen reader's list of links says
+ * "Lessons", not "Lessons Free Every lesson…".
+ */
+function itemNaming(id: string, item: NavChild) {
+    const described = [statusLabel(item.status) ? `${id}-status` : '', item.description ? `${id}-description` : ''].filter(Boolean).join(' ');
+    return described ? { labelledBy: `${id}-name`, describedBy: described } : {};
+}
+
+/**
+ * One item in a desktop dropdown. Its name is the item; its status
+ * ("Free") and the line under it are the description, so a screen
  * reader's list of links stays short.
  */
 function DropdownItem({ item, current, onNavigate }: { item: NavChild; current: boolean; onNavigate: () => void }) {
@@ -143,19 +162,41 @@ function DropdownItem({ item, current, onNavigate }: { item: NavChild; current: 
             item={item}
             current={current}
             onNavigate={onNavigate}
-            labelledBy={item.description ? `${id}-name` : undefined}
-            describedBy={item.description ? `${id}-description` : undefined}
+            {...itemNaming(id, item)}
             className={`block rounded-md px-3 py-2.5 transition-colors hover:bg-white/[0.05] ${focusRing} ${current ? 'bg-white/[0.06]' : ''}`}
         >
-            <span id={`${id}-name`} className="flex items-baseline justify-between gap-3">
-                <span className="text-sm font-semibold text-white">{item.name}</span>
-                <StatusText status={item.status} />
+            <span className="flex items-baseline justify-between gap-3">
+                <span id={`${id}-name`} className="text-sm font-semibold text-white">
+                    {item.name}
+                </span>
+                <StatusText status={item.status} id={`${id}-status`} />
             </span>
             {item.description ? (
                 <span id={`${id}-description`} className="mt-0.5 block text-xs leading-5 text-white/55">
                     {item.description}
                 </span>
             ) : null}
+        </NavItemLink>
+    );
+}
+
+/** One item in the phone menu: named by the item, described by its status. */
+function MobileItem({ item, current, onNavigate, className }: { item: NavChild; current: boolean; onNavigate: () => void; className: string }) {
+    const id = useId();
+    const status = statusLabel(item.status);
+    return (
+        <NavItemLink
+            item={item}
+            current={current}
+            onNavigate={onNavigate}
+            labelledBy={status ? `${id}-name` : undefined}
+            describedBy={status ? `${id}-status` : undefined}
+            className={className}
+        >
+            <span id={`${id}-name`} className="truncate">
+                {item.name}
+            </span>
+            <StatusText status={item.status} id={`${id}-status`} />
         </NavItemLink>
     );
 }
@@ -609,15 +650,7 @@ export function Navbar() {
                                                 const current = !item.external && isActive(item.href, true);
                                                 return (
                                                     <li key={item.href}>
-                                                        <NavItemLink
-                                                            item={item}
-                                                            current={current}
-                                                            onNavigate={closeAll}
-                                                            className={mobileRowClass(current)}
-                                                        >
-                                                            <span className="truncate">{item.name}</span>
-                                                            <StatusText status={item.status} />
-                                                        </NavItemLink>
+                                                        <MobileItem item={item} current={current} onNavigate={closeAll} className={mobileRowClass(current)} />
                                                     </li>
                                                 );
                                             })}

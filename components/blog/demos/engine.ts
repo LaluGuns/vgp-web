@@ -110,6 +110,9 @@ export function release(stop: () => void) {
     if (currentStop === stop) currentStop = null;
 }
 
+/** True while a demo has the output: one plays, or waits for its sound. */
+export const outputTaken = (): boolean => currentStop !== null;
+
 // ── Building blocks ─────────────────────────────────────────────────
 
 const noiseBuffers = new WeakMap<BaseAudioContext, AudioBuffer>();

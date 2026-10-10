@@ -131,16 +131,33 @@ export default function LearnHubPage() {
                                 </p>
                             </div>
                         </div>
-                        {/* A readout of the lesson under the pointer or the keyboard focus (PathMapLive). Its box has a fixed
-                            height, so a long title never moves the map. A visual aid only: each link already has the title as its name. */}
-                        <p id="map-readout" aria-hidden="true" className="mt-6 hidden h-14 overflow-hidden print:hidden lg:block">
-                            <span data-line="" className="block truncate text-sm text-white/55">
-                                Point at a mark, or move to one with the Tab key, to see its lesson.
-                            </span>
-                            <span data-title="" className="mt-1 block truncate text-lg font-semibold text-white/80" />
-                        </p>
+                        {/* A readout of the lesson under the pointer, the keyboard focus or a first tap (PathMapLive), held
+                            under the site header while the map scrolls under it. Its box has a fixed height, so a long title or
+                            the "Open lesson" link never moves the map. A visual aid only: each lesson's link already has its
+                            title as its name, so the readout is hidden from screen readers and its link from the Tab key.
+                            The hints say what the script does, so they wait for it (app/globals.css, "Learn area"). */}
+                        <div id="map-readout" aria-hidden="true" className="vgp-map-readout mt-4 print:hidden">
+                            <p data-line="" className="truncate text-sm leading-5 text-white/55">
+                                <span data-hint="pointer">Point at a mark, or move to one with the Tab key, to see its lesson.</span>
+                                <span data-hint="touch">Tap a mark to see its lesson, then tap it again to open it.</span>
+                            </p>
+                            <div className="mt-1 flex items-center gap-4">
+                                <p data-title="" className="min-w-0 flex-1 truncate text-lg font-semibold leading-7 text-white/80" />
+                                {/* Gets its href (the chosen lesson's) when a tap chooses a mark. */}
+                                <a
+                                    data-open=""
+                                    tabIndex={-1}
+                                    hidden
+                                    className="-my-2 inline-flex min-h-11 shrink-0 items-center rounded-sm text-sm font-medium text-white"
+                                >
+                                    <span className="vgp-link">Open lesson</span>
+                                </a>
+                            </div>
+                        </div>
+                        {/* Says which lesson a first tap chose, for a screen reader on a touch screen (PathMapLive). */}
+                        <p id="map-announce" aria-live="polite" className="sr-only" />
                         {/* A link per lesson and per path: a keyboard user can step over all of them at once. Shown while it has focus. */}
-                        <div id="path-map" className="relative mt-6 lg:mt-2">
+                        <div id="path-map" className="relative mt-1">
                             <a
                                 href="#try"
                                 className="vgp-focus sr-only rounded-md bg-white text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-10 focus:px-4 focus:py-3"
@@ -149,7 +166,7 @@ export default function LearnHubPage() {
                             </a>
                             <PathMap families={families} />
                         </div>
-                        <PathMapLive mapId="path-map" readoutId="map-readout" />
+                        <PathMapLive mapId="path-map" readoutId="map-readout" announceId="map-announce" />
                     </div>
                 </section>
 
@@ -226,7 +243,7 @@ export default function LearnHubPage() {
                                 {terms.map((term) => (
                                     <div key={term.id} className="py-4">
                                         <dt className="text-base font-semibold text-white">
-                                            <Link href={`/learn/glossary#${term.id}`} className="vgp-focus inline-flex min-h-11 items-center rounded-sm">
+                                            <Link href={`/learn/glossary#${term.id}`} className="vgp-focus inline-flex min-h-11 min-w-11 items-center rounded-sm">
                                                 <span className="vgp-link">{term.term}</span>
                                             </Link>
                                         </dt>

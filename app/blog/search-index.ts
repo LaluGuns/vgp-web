@@ -68,6 +68,12 @@ export function lessonSearchFields(article: BlogArticle): { headings: string; te
 /** A body word goes into the digest only while at most this many lessons use it; commoner words find too much to help. */
 const DIGEST_MAX_LESSONS = 5;
 
+/**
+ * Numbers that are the names of instruments (drum machines, a bass synth): a reader searching "808"
+ * means the sound, so these stay in the digest however many lessons use them.
+ */
+const NAMED_NUMBERS = new Set(['808', '909', '303']);
+
 /** Body prose only: no headings (indexed already), sources, figures, demos, maths, code or link targets. */
 function bodyWords(content: string): Set<string> {
     const prose = content
@@ -82,8 +88,8 @@ function bodyWords(content: string): Set<string> {
     for (const raw of prose.toLowerCase().split(/[^\p{L}\p{N}'’-]+/u)) {
         const word = raw.replace(/^['’-]+|['’-]+$/g, '').replace(/['’]s$/, '');
         if (word.length < 3 || STOP.has(word)) continue;
-        // Bare numbers (years, pages, frequencies) find nothing useful; "sm7b" or "la-2a" stay.
-        if (/^[\d.,-]+$/.test(word)) continue;
+        // Bare numbers (years, pages, frequencies) find nothing useful; "sm7b", "la-2a" and an 808 stay.
+        if (/^[\d.,-]+$/.test(word) && !NAMED_NUMBERS.has(word)) continue;
         words.add(word);
     }
     return words;
@@ -93,8 +99,9 @@ let digestCache: { source: readonly BlogArticle[]; digest: Record<string, string
 
 /**
  * slug -> space-separated words from the lesson's body that at most
- * DIGEST_MAX_LESSONS lessons use and its title, excerpt, headings and terms
- * do not already cover. Searched last, so a body match never outranks a title.
+ * DIGEST_MAX_LESSONS lessons use (and any NAMED_NUMBERS) and its title,
+ * excerpt, headings and terms do not already cover. Searched last, so a body
+ * match never outranks a title.
  */
 export function searchDigest(articles: readonly BlogArticle[]): Record<string, string> {
     if (digestCache?.source === articles) return digestCache.digest;
@@ -105,7 +112,7 @@ export function searchDigest(articles: readonly BlogArticle[]): Record<string, s
     articles.forEach((article, i) => {
         const fields = lessonSearchFields(article);
         const indexed = [...tokens(`${article.title} ${article.excerpt}`), ...`${fields.headings} ${fields.terms}`.split(' ')];
-        const rare = [...bodies[i]].filter((word) => (lessonsUsing.get(word) ?? 0) <= DIGEST_MAX_LESSONS);
+        const rare = [...bodies[i]].filter((word) => (lessonsUsing.get(word) ?? 0) <= DIGEST_MAX_LESSONS || NAMED_NUMBERS.has(word));
         const words = fresh(rare, indexed);
         if (words.length) digest[article.slug] = words.join(' ');
     });

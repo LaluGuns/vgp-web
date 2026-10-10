@@ -31,15 +31,19 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
         <PageTransition>
             <LearnNav current="paths" onPage={false} />
             <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
-                {/* The crumb and the group's mark share one line above the title: "Lessons" is the parent everywhere (here,
-                    on a lesson and on the glossary), and the mark is the shape and colour its lessons' figures use
-                    (docs/DESIGN.md, "Figure dialects"). */}
+                {/* The crumbs and the group's mark share one line above the title. The trail is the sub-navigation's:
+                    Learn, then Paths (the path map on /learn, marked current above), as in the JSON-LD (page.tsx). The
+                    mark is the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
                 <LearnHeader
                     label={
                         <>
-                            <nav aria-label="Breadcrumb" className="-my-3">
-                                <TapLink href="/blog" className="hover:text-white">
-                                    Lessons
+                            <nav aria-label="Breadcrumb" className="-my-3 flex items-center gap-2">
+                                <TapLink href="/learn" className="hover:text-white">
+                                    Learn
+                                </TapLink>
+                                <span aria-hidden="true">/</span>
+                                <TapLink href="/learn#paths" className="hover:text-white">
+                                    Paths
                                 </TapLink>
                             </nav>
                             <span aria-hidden="true">/</span>

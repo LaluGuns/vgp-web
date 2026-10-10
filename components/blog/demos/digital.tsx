@@ -346,7 +346,6 @@ export function BitDepthDemo() {
                 }
             />
             <Readout
-                live
                 items={[
                     { label: 'Quantization noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
                     { label: 'Steps between silence and full scale', value: groupThousands(2 ** (bits - 1)) },

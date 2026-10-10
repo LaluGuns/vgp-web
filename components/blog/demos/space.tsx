@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { bass, fadeOut, kick, midi, pluck, reverb, sequence, snare, type Engine, type Reverb } from './engine';
-import { LevelTrace, Meter, PlayButton, Readout, Segmented, Slider, blockPower, useFrame, usePlayer } from './ui';
+import { Announce, LevelTrace, Meter, PlayButton, Readout, Segmented, Slider, blockPower, useFrame, usePlayer } from './ui';
 
 const toDb = (power: number) => (power > 1e-12 ? 10 * Math.log10(power) : -120);
 
@@ -210,6 +210,8 @@ export function PhaseDemo() {
     const shift = ((((delayMs / 1000) * freq * 360) % 360) + (flipped ? 180 : 0)) % 360;
     const level = Math.abs(Math.cos(((shift / 360) * 2 * Math.PI) / 2));
     const levelDb = level < 0.01 ? 'silent' : `${(20 * Math.log10(level)).toFixed(1)} dB`;
+    // What a screen reader hears once the slider rests: whether the layers add up, thin out or cancel, not every degree.
+    const blend = level >= 0.7 ? 'full' : level >= 0.1 ? 'thin' : 'gone';
 
     return (
         <div className="space-y-6">
@@ -236,11 +238,20 @@ export function PhaseDemo() {
                 hint="At 55 Hz one cycle lasts about 18 ms, so about 9 ms of delay puts the layers half a cycle apart."
             />
             <Readout
-                live
                 items={[
                     { label: 'Phase difference at 55\u00a0Hz', value: `${Math.round(shift)}°` },
                     { label: 'Combined level at 55\u00a0Hz', value: levelDb },
                 ]}
+            />
+            <Announce
+                on={blend}
+                text={
+                    blend === 'full'
+                        ? 'The two layers add up at 55 Hz.'
+                        : blend === 'thin'
+                          ? `The two layers partly cancel at 55 Hz, so the low end drops to ${levelDb}.`
+                          : 'The two layers cancel at 55 Hz, so the low end disappears.'
+                }
             />
         </div>
     );

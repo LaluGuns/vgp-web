@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, kWeighted, midi, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
 import { SourceChoice, loopGain, renderLoop, startFeed, stereoPeak, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
-import { LiveMeter, PlayButton, Segmented, Slider, useAnalysis, usePlayer } from './ui';
+import { Announce, LiveMeter, PlayButton, Segmented, Slider, useAnalysis, usePlayer } from './ui';
 
 // A 16-step boom-bap bar with ghost notes, so dynamics have something to grab.
 const KICKS: [number, number][] = [
@@ -315,6 +315,10 @@ export function CompressorDemo() {
     // half-dB step put 2.3 dB on either side of 2.25.
     const short = analysis && analysis.short >= 0.5 ? Math.round(analysis.short * 10) / 10 : 0;
     // The preset the sliders match, if any: the presets are a choice like the swing demo's.
+    const levelNote =
+        short > 0
+            ? `At this setting the compressed loop plays about ${short.toFixed(1)} dB quieter than the bypass. Matching it fully would push its peaks past the demo's safe ceiling.`
+            : 'Both paths play at the same loudness.';
     const preset = (Object.keys(PRESETS) as Preset[]).find((k) => {
         const p = PRESETS[k];
         return p.threshold === threshold && p.ratio === ratio && p.attack === attack && p.release === release;
@@ -354,11 +358,8 @@ export function CompressorDemo() {
                 ]}
                 hint="A slow attack lets the snare crack through. A fast one flattens it."
             />
-            <p className="text-sm leading-6 text-white/60" aria-live="polite">
-                {short > 0
-                    ? `At this setting the compressed loop plays about ${short.toFixed(1)} dB quieter than the bypass. Matching it fully would push its peaks past the demo's safe ceiling.`
-                    : 'Both paths play at the same loudness.'}
-            </p>
+            <p className="text-sm leading-6 text-white/60">{levelNote}</p>
+            <Announce on={analysis ? (short > 0 ? 'short' : 'matched') : null} text={levelNote} />
         </div>
     );
 }

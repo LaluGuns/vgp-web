@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { PageTransition } from '@/components/PageTransition';
 import { ButtonArrow, TextLink, buttonMotionClass } from '@/components/editorial/EditorialPrimitives';
+import { TapLink } from '@/components/blog/article/TapLink';
 import { CreditsStrip } from '@/components/editorial/CreditsStrip';
 import { CadenzTempo } from '@/components/home/CadenzTempo';
 import { JourneyTimeline, type JourneyChapter } from '@/components/home/JourneyTimeline';
@@ -99,7 +100,11 @@ export default function HomeClient({ lessonCount }: { lessonCount: number }) {
                                     <ButtonArrow />
                                 </Link>
                                 <TextLink href="/about">Read my story</TextLink>
-                                <TextLink href="/blog">{lessonCount} free production lessons</TextLink>
+                                {/* The Learn landing is built for a first visit: what is here and where to start. A 44 px
+                                    tall target; the negative margin keeps the text where a plain text link puts it. */}
+                                <TapLink href="/learn" className="-my-[10.5px] text-sm font-medium text-white">
+                                    {lessonCount} free production lessons
+                                </TapLink>
                             </div>
                         </div>
 

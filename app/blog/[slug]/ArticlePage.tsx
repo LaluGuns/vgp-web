@@ -36,7 +36,7 @@ function formatDate(value: string) {
 const HEARING = /tinnitus|hearing loss|hearing damage|hearing safety|acoustic reflex|binaural|entrainment/i;
 
 // Ids already taken on a lesson page, so a section called "In short" cannot collide.
-const RESERVED_IDS = ['main', 'in-short', 'article-outline-inline', 'article-contents', 'article-end', 'check-yourself', 'path-next', 'author-heading', 'path-heading'];
+const RESERVED_IDS = ['main', 'in-short', 'article-outline-inline', 'article-contents', 'article-end', 'check-yourself', 'path-next', 'path-next-label', 'path-next-title', 'path-next-excerpt', 'author-heading', 'path-heading'];
 const QUIZ_ID = 'check-yourself';
 
 /**
@@ -89,10 +89,16 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
                 <h2 id="path-next" className="text-sm font-medium text-white/55">
                     The {pathName} path · {total} lessons
                 </h2>
-                <Link href={`/blog/${first.slug}`} className={bigLink}>
-                    <span className="block text-sm text-white/55">Lesson 1</span>
-                    <span className={`mt-1 ${bigTitle}`}>{first.title}</span>
-                    <span className="mt-2 block text-base leading-7 text-white/65">{first.excerpt}</span>
+                <Link href={`/blog/${first.slug}`} aria-labelledby="path-next-title" aria-describedby="path-next-label path-next-excerpt" className={bigLink}>
+                    <span id="path-next-label" className="block text-sm text-white/55">
+                        Lesson 1
+                    </span>
+                    <span id="path-next-title" className={`mt-1 ${bigTitle}`}>
+                        {first.title}
+                    </span>
+                    <span id="path-next-excerpt" className="mt-2 block text-base leading-7 text-white/65">
+                        {first.excerpt}
+                    </span>
                 </Link>
                 <p className="mt-4 text-sm text-white/60">
                     <TapLink href={pathHref}>See all {total} lessons</TapLink>
@@ -116,9 +122,14 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
                 <h2 id="path-next" className="text-sm font-medium text-white/55">
                     Next lesson · {position.index + 2} of {total}
                 </h2>
-                <Link href={`/blog/${position.next.slug}`} className={bigLink}>
-                    <span className={bigTitle}>{position.next.title}</span>
-                    <span className="mt-2 block text-base leading-7 text-white/65">{position.next.excerpt}</span>
+                {/* Named by the title alone; the excerpt is its description. */}
+                <Link href={`/blog/${position.next.slug}`} aria-labelledby="path-next-title" aria-describedby="path-next-excerpt" className={bigLink}>
+                    <span id="path-next-title" className={bigTitle}>
+                        {position.next.title}
+                    </span>
+                    <span id="path-next-excerpt" className="mt-2 block text-base leading-7 text-white/65">
+                        {position.next.excerpt}
+                    </span>
                 </Link>
                 {previous}
             </section>
@@ -141,14 +152,26 @@ function PathNext({ article, pathName }: { article: BlogArticle; pathName: strin
                 {nextPath && nextFirst ? ` The next path is ${nextPath.category.name}, ${nextPath.articles.length} lessons.` : null}
             </p>
             {nextPath && nextFirst ? (
-                <Link href={`/blog/${nextFirst.slug}`} className={`${bigLink} mt-6`}>
-                    <span className="block text-sm text-white/55">{nextPath.category.name}, lesson 1</span>
-                    <span className={`mt-1 ${bigTitle}`}>{nextFirst.title}</span>
-                    <span className="mt-2 block text-base leading-7 text-white/65">{nextFirst.excerpt}</span>
+                <Link
+                    href={`/blog/${nextFirst.slug}`}
+                    aria-labelledby="path-next-title"
+                    aria-describedby="path-next-label path-next-excerpt"
+                    className={`${bigLink} mt-6`}
+                >
+                    <span id="path-next-label" className="block text-sm text-white/55">
+                        {nextPath.category.name}, lesson 1
+                    </span>
+                    <span id="path-next-title" className={`mt-1 ${bigTitle}`}>
+                        {nextFirst.title}
+                    </span>
+                    <span id="path-next-excerpt" className="mt-2 block text-base leading-7 text-white/65">
+                        {nextFirst.excerpt}
+                    </span>
                 </Link>
             ) : null}
             <p className="mt-6 flex flex-wrap gap-x-6 text-sm text-white/60">
                 <TapLink href={pathHref}>Back to the {pathName} path</TapLink>
+                <TapLink href="/learn">All paths</TapLink>
                 <TapLink href="/blog">All lessons</TapLink>
             </p>
             {previous}
@@ -277,8 +300,13 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                                         <details id="article-outline-inline" className="group mb-10 border-b border-white/10 pb-6 print:hidden lg:hidden">
                                             <summary className="vgp-focus flex min-h-11 cursor-pointer list-none items-center justify-between rounded-sm text-base font-medium text-white [&::-webkit-details-marker]:hidden">
                                                 In this article ({headings.length})
-                                                <span className="text-sm text-white/55 group-open:hidden">Show</span>
-                                                <span className="hidden text-sm text-white/55 group-open:inline">Hide</span>
+                                                {/* The summary already says whether it is open: "In this article (8), collapsed". */}
+                                                <span aria-hidden="true" className="text-sm text-white/55 group-open:hidden">
+                                                    Show
+                                                </span>
+                                                <span aria-hidden="true" className="hidden text-sm text-white/55 group-open:inline">
+                                                    Hide
+                                                </span>
                                             </summary>
                                             <div className="mt-3">
                                                 <OutlineList headings={headings} touch />
@@ -348,15 +376,26 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                             <ol className="divide-y divide-white/10 border-y border-white/10 lg:col-span-8">
                                 {upcoming.map((rel, i) => (
                                     <li key={rel.slug}>
-                                        <Link href={`/blog/${rel.slug}`} className="vgp-focus group flex gap-5 py-6">
+                                        {/* Named by the title alone; the excerpt is its description. */}
+                                        <Link
+                                            href={`/blog/${rel.slug}`}
+                                            aria-labelledby={`later-${rel.slug}-title`}
+                                            aria-describedby={`later-${rel.slug}-excerpt`}
+                                            className="vgp-focus group flex gap-5 py-6"
+                                        >
                                             <span className="w-6 shrink-0 pt-0.5 text-sm tabular-nums text-white/55" aria-hidden="true">
                                                 {position.index + 3 + i}
                                             </span>
                                             <span className="min-w-0">
-                                                <span className="block text-lg font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                                                <span
+                                                    id={`later-${rel.slug}-title`}
+                                                    className="block text-lg font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4"
+                                                >
                                                     {rel.title}
                                                 </span>
-                                                <span className="mt-1 line-clamp-2 block text-base leading-7 text-white/65">{rel.excerpt}</span>
+                                                <span id={`later-${rel.slug}-excerpt`} className="mt-1 line-clamp-2 block text-base leading-7 text-white/65">
+                                                    {rel.excerpt}
+                                                </span>
                                             </span>
                                         </Link>
                                     </li>

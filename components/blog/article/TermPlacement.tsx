@@ -15,10 +15,22 @@ const GAP = 8;
  * brings the word up under the header and the definition opens below it;
  * only if it still does not fit does it scroll inside. Tab past the
  * definition's last link closes it, so focus never moves on underneath it.
+ *
+ * Once it is open, the focus moves onto the definition (a dialog named by
+ * the term and described by its definition), so a screen reader reads it
+ * where it opened instead of saying nothing; the browser hands the focus
+ * back to the word on Escape or Close. The move never scrolls the page: the
+ * definition is already placed on screen.
  */
 export function TermPlacement() {
     useEffect(() => {
         const wide = window.matchMedia('(min-width: 1024px)');
+        const enter = (event: Event) => {
+            const pop = event.target as HTMLElement;
+            if (!pop.classList?.contains('vgp-term-pop') || (event as Event & { newState?: string }).newState !== 'open') return;
+            if (!pop.matches(':popover-open') || pop.contains(document.activeElement)) return;
+            pop.focus({ preventScroll: true });
+        };
         const place = (event: Event) => {
             const pop = event.target as HTMLElement;
             if (!pop.classList?.contains('vgp-term-pop')) return;
@@ -59,9 +71,11 @@ export function TermPlacement() {
             pop.style.maxHeight = `${Math.floor(room)}px`;
         };
         document.addEventListener('beforetoggle', place, true);
+        document.addEventListener('toggle', enter, true);
         const stopFocus = closeOpenWhenFocusLeaves('.vgp-term-pop');
         return () => {
             document.removeEventListener('beforetoggle', place, true);
+            document.removeEventListener('toggle', enter, true);
             stopFocus();
         };
     }, []);

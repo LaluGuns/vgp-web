@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
 import { SourceChoice, loopGain, renderLoop, startFeed, stereoColumns, stereoPeak, stereoPower, stereoProduct, useSource, type Feed, type RealLoop } from './realmix';
-import { LiveMeter, PlayButton, Readout, Segmented, Slider, Variants, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
+import { Announce, LiveMeter, PlayButton, Readout, Segmented, Slider, Variants, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
 //
@@ -1135,10 +1135,11 @@ export function TransientDemo() {
                 hint="Turns the loop down before the compressor and back up after it. The shaper follows the shape of each hit, so the level makes no difference to it."
             />
             <p className="text-sm leading-6 text-white/60">
-                <span aria-live="polite">{levelNote}</span> The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.
+                {levelNote} The compressor uses 4:1 with a 30 ms attack, 120 ms release and a -20 dB threshold.
                 Pull the level going in down to -24 dB. The loop no longer reaches the threshold, so the compressor does nothing, while the shaper still changes
                 every hit, ghost notes included.
             </p>
+            <Announce on={analysis ? lagging.join(' ') || 'matched' : null} text={levelNote} />
         </div>
     );
 }
@@ -1403,6 +1404,10 @@ export function SidechainDemo() {
                 ]
               : [{ kind: 'after', text: 'Bass and pad gain' }];
     const makeupDb = gainToDb(makeupFor(mode, analysis));
+    const duckNote =
+        mode === 'off'
+            ? 'The kick and the bass hit at the same moment and share the low end. Turn ducking on and listen to the kick get its own space.'
+            : `The bass and pad are turned up ${Math.max(0, makeupDb).toFixed(1)} dB to make up for the dips, so they keep the same overall loudness. A short release tucks the bass under the kick. A long one makes it pump.`;
 
     return (
         <div className="space-y-6">
@@ -1448,11 +1453,8 @@ export function SidechainDemo() {
                     hint="How long the bass takes to come back. The kicks are 500 ms apart."
                 />
             </div>
-            <p className="text-sm leading-6 text-white/60" aria-live="polite">
-                {mode === 'off'
-                    ? 'The kick and the bass hit at the same moment and share the low end. Turn ducking on and listen to the kick get its own space.'
-                    : `The bass and pad are turned up ${Math.max(0, makeupDb).toFixed(1)} dB to make up for the dips, so they keep the same overall loudness. A short release tucks the bass under the kick. A long one makes it pump.`}
-            </p>
+            <p className="text-sm leading-6 text-white/60">{duckNote}</p>
+            <Announce on={mode === 'off' ? 'off' : 'on'} text={duckNote} />
         </div>
     );
 }
@@ -1852,11 +1854,14 @@ export function LimiterDemo() {
                 />
             </div>
             <Readout
-                live
                 items={[
                     { label: 'Turned down to match the original', value: analysis ? fmtDb(gainToDb(analysis.match)) : '–' },
                     { label: 'Ceiling clip catches a peak', value: clippedText },
                 ]}
+            />
+            <Announce
+                on={analysis ? (analysis.clipped === 0 ? 'never' : 'clips') : null}
+                text={analysis?.clipped ? `The ceiling clip now catches a peak ${clippedText.toLowerCase()}.` : 'The ceiling clip no longer catches any peak.'}
             />
             <p className="text-sm leading-6 text-white/60">
                 This limiter is a fast compressor (20:1, 1 ms attack) with a hard clip {CEILING_MARGIN} dB above its threshold to catch whatever gets past it. Both options
@@ -2184,7 +2189,6 @@ export function ClipRecoverDemo() {
                 <Slider label="Fader after recording" value={fader} min={-20} max={0} onChange={setFader} format={(v) => fmtDb(v, 0)} />
             </div>
             <Readout
-                live
                 items={[
                     { label: 'Went past 0 dBFS by', value: !analysis ? '–' : clipped ? `${analysis.overDb.toFixed(1)} dB` : 'Not clipped' },
                     { label: 'Hot take peak after the fader', value: analysis ? fmtDb(gainToDb(analysis.hotPeak * fg), 0, 'dBFS') : '–' },
@@ -2193,6 +2197,10 @@ export function ClipRecoverDemo() {
                         value: analysis ? `${Math.max(0, gainToDb((analysis.safePeak * match) / (analysis.hotPeak * fg))).toFixed(1)} dB` : '–',
                     },
                 ]}
+            />
+            <Announce
+                on={analysis ? (clipped ? 'clipped' : 'clean') : null}
+                text={clipped && analysis ? `The take now clips: it went past 0 dBFS by ${analysis.overDb.toFixed(1)} dB.` : 'The take no longer clips.'}
             />
             <p className="text-sm leading-6 text-white/60">
                 Both takes play at the same loudness. The fader lowered the hot take, but the flattened tops were recorded into it, so its loud notes still

@@ -5,6 +5,7 @@ import type { Dialect } from '@/lib/blog/dialects';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, noiseBuffer, peekEngine, pluck, reverb, scheduleSteps, sequence, snare, type Engine } from './engine';
 import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import {
+    Announce,
     LevelTrace,
     Meter,
     NoteRoll,
@@ -1184,6 +1185,7 @@ export function ReverbDuckDemo() {
                 label="Reverb turned down by"
                 value={mode === 'ducked' && duck !== null ? duck / 24 : 0}
                 text={!player.playing ? '–' : mode !== 'ducked' ? 'Not ducking' : duck === null ? '–' : `${duck.toFixed(1)} dB`}
+                widest="Not ducking"
             />
             <div className="grid gap-5 sm:grid-cols-2">
                 <Slider label={`${effectName} level`} value={amount} min={0} max={100} step={5} onChange={setAmount} format={(v) => `${v}%`} />
@@ -1525,9 +1527,8 @@ export function ChordContextDemo() {
                     ]}
                 />
             </div>
-            <p className="text-sm leading-6 text-white/60" aria-live="polite">
-                {hint}
-            </p>
+            <p className="text-sm leading-6 text-white/60">{hint}</p>
+            <Announce on={hint} text={hint} />
         </div>
     );
 }

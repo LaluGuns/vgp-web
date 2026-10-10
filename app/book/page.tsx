@@ -6,7 +6,8 @@
 
 import Image from 'next/image';
 import { PageTransition } from '@/components/PageTransition';
-import { EditorialButton, TextLink } from '@/components/editorial/EditorialPrimitives';
+import { EditorialButton } from '@/components/editorial/EditorialPrimitives';
+import { TapLink } from '@/components/blog/article/TapLink';
 import { useNewsletter } from '@/components/context/NewsletterContext';
 import { LearnNav } from '@/components/learn/LearnNav';
 
@@ -46,7 +47,10 @@ export default function GuidesPage() {
                                 </p>
                                 <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                                     <EditorialButton onClick={openPopup}>Email me at launch</EditorialButton>
-                                    <TextLink href="/blog">Read the free lessons</TextLink>
+                                    {/* A 44 px tall target; the negative margin keeps the text where a plain text link puts it. */}
+                                    <TapLink href="/blog" className="-my-[10.5px] text-sm font-medium text-white">
+                                        Read the free lessons
+                                    </TapLink>
                                 </div>
                                 <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-2 border-t border-white/10 pt-6 text-sm text-white/70">
                                     {facts.map((fact) => (
