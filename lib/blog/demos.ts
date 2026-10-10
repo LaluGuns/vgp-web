@@ -6,8 +6,9 @@
  * components/blog/demos/realmix.tsx), which loads only when a reader picks it.
  *
  * `height` is the height in px of the demo's controls (the box under its
- * blurb) on a lesson page before anyone touches them, the tallest in each
- * range of window widths: under 360 px, 360 to 374, 375 to 389, 390 to 392,
+ * blurb) on a lesson page in every state (idle, playing, stopped, waiting for
+ * a real mix: the Play button keeps its widest width throughout), the tallest
+ * in each range of window widths: under 360 px, 360 to 374, 375 to 389, 390 to 392,
  * 393 to 411, 412 to 427, 428 to 639, 640 to 735, 736 to 1023, 1024 to 1103
  * (the lesson's outline column narrows the text there) and 1104 up. The
  * common phones start a range each, so little space is left over. The server
