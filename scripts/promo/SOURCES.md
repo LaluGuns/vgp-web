@@ -79,5 +79,8 @@ which carries its own references, or from a calculation listed here.
   dB under the sub's, mixed 8 dB lower under the voice.
 - Delivery: -16 LUFS integrated, true peak at most -2.2 dBTP on the master
   WAV and -1.5 dBTP after AAC, measured with ffmpeg `ebur128`.
+- Narration: ElevenLabs `eleven_v4`, Michael C. Vincent, take 1 of 4, played
+  10% slower (Rubber Band, formants preserved); cued per sentence on the
+  slowed file with `film4/cue_vo.py`.
 - Every measured number is logged by `npm run film4` in
   `out/film4/VERIFY.md`.

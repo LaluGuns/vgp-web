@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
 import { FONTS_CSS, REPO, ROOT, T } from '../shared/tokens.mjs';
-import { ASSETS, master, renderAudio } from './audio.mjs';
+import { ASSETS, master, renderAudio, VO_TAKE } from './audio.mjs';
 import { readAudio } from './dsp.mjs';
 import { TIMELINE } from './timeline.mjs';
 
@@ -29,7 +29,7 @@ const log = (line) => {
     report.push(line);
 };
 
-for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.mp3')])
+for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), VO_TAKE])
     if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Film 4"`);
 
 function measure(file) {
@@ -237,9 +237,9 @@ if (!args.includes('--stills')) {
     }
     log(`  flashes: ${jumps} frame-to-frame luma jumps over 20/255 (largest ${worst.toFixed(1)})`);
     // Sync: the first kick of the hook (0.25 s) and the payoff's downbeat
-    // (7.0 s), timed on each transient's click (above 2 kHz): the phone
+    // (5.0 s), timed on each transient's click (above 2 kHz): the phone
     // filter delays a kick's low body by a few ms, never its click.
-    for (const [from, at, what] of [[0.2, 0.25, 'first kick of the hook'], [6.95, 7.0, "payoff's downbeat"]]) {
+    for (const [from, at, what] of [[0.2, 0.25, 'first kick of the hook'], [4.95, 5.0, "payoff's downbeat"]]) {
         const pcm = execFileSync('ffmpeg', ['-v', 'error', '-ss', String(from), '-t', '0.1', '-i', file, '-af', 'highpass=f=2000:poles=2,highpass=f=2000:poles=2', '-ac', '1', '-ar', '48000', '-f', 'f32le', '-'], { maxBuffer: 1 << 26 });
         const x = new Float32Array(pcm.buffer, pcm.byteOffset, pcm.byteLength / 4);
         const peak = x.reduce((p, v) => Math.max(p, Math.abs(v)), 0);

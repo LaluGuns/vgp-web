@@ -75,3 +75,9 @@ One line per call, newest last.
   - "So why can you hear it?" arrives on the payoff's downbeat, not before; the amber curve in the scope has its own legend ("the note you hear") on the frame it appears; in the ghost ladder the heard note replaces the sub's outline.
   - The top-right planet moved off the titles; panels end at x 950; the phone scene got a title; sound rings never cross the phone; the screen's wave saturates with the bass; the cone's surround stretches with it; dim subtitle words raised for contrast.
   - Kept: the end card is film 3's, unchanged, and its demo is the lesson's only one ("Hear saturation add size, not volume"); the rule card keeps the lesson's own words ("clean, mono", "parallel saturation, high-pass 120 Hz").
+- Film 4 v2, after the founder asked for every aspect at 9 and for understanding over density, without a new generation:
+  - The same take, 10% slower with Rubber Band (formants kept, crisp transients): 177 words a minute over the take, word error unchanged at 1.5%. Cued one sentence per line, so every idea gets a breath; the film runs 88 s.
+  - Hook: "Now you can hear it" comes before the saturated bass, which lands on 5.0 s instead of 7.0 s; "Same notes. One change." follows over the groove.
+  - Ladder: six rungs at most, bigger bars, the axis named in words (high notes, low notes, and only the 200 Hz line in hertz), "longer bar = louder" instead of a dB scale.
+  - The robot reacts: a question mark while the bass is missing, a hop on every note it can hear, and on "puts the note back" the amber note forms in a thought bubble and flies into the ladder's dark zone as the heard note.
+  - A slow 2% push-in on every scene; in the scope a highlight steps from one repeat to the next; the phone's speaker says "trying 50 Hz"; the rule cards carry tiny ladders (the sub alone, the sub with harmonics).

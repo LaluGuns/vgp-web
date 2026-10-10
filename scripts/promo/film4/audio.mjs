@@ -5,6 +5,7 @@
 // Returns the stereo mix plus the data the picture draws from (harmonic
 // levels by FFT, the phone's waveform, measured periods), so what is drawn
 // is what is heard.
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { autocorrPeak, butter4HpDb, harmonics, hz, phone, pluck, saturateCopy, subNote } from './bass.mjs';
@@ -14,6 +15,20 @@ import { TIMELINE } from './timeline.mjs';
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 export const ASSETS = path.join(HERE, '../assets');
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
+
+/**
+ * The narration as the film uses it: the ElevenLabs take, 10% slower, by
+ * Rubber Band (formants and pitch kept, crisp transients), so the lesson
+ * reads at a teaching pace without a new generation. Built from
+ * assets/vo/narration.mp3 when missing; vo-cues.json is cued on this file.
+ */
+export const VO_TAKE = path.join(ASSETS, 'vo', 'narration.mp3');
+export const VO_FILE = path.join(ASSETS, 'vo', 'narration-slow.wav');
+export const VO_STRETCH = 'rubberband=tempo=0.9:transients=crisp:formant=preserved:pitchq=quality:window=standard:channels=together';
+export function narrationFile() {
+    if (!fs.existsSync(VO_FILE)) execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', VO_TAKE, '-af', VO_STRETCH, '-ar', '48000', '-ac', '1', '-c:a', 'pcm_s24le', VO_FILE]);
+    return VO_FILE;
+}
 
 const n = Math.ceil(TIMELINE.duration * RATE);
 const at = (t) => Math.round(t * RATE);
@@ -71,11 +86,13 @@ export function voPlacements() {
 }
 const PLACED = voPlacements();
 const normW = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
-/** Film time of a cue: `cue: [line, word]` plus `dt`, or a plain `at`. */
+/** The beat a sentence belongs to: 'air-2' and 'hook-b1' are beats 'air' and 'hook-b'. */
+export const beatOf = (id) => id.replace(/-?\d+$/, '');
+/** Film time of a cue: `cue: [beat, word]` plus `dt`, or a plain `at`. */
 export function cueTime(s) {
     if (!s.cue) return s.at;
-    const p = PLACED.find((v) => v.id === s.cue[0]);
-    const w = p?.words.find((x) => normW(x.w) === normW(s.cue[1]));
+    const words = PLACED.filter((v) => v.id === s.cue[0] || beatOf(v.id) === s.cue[0]).flatMap((v) => v.words);
+    const w = words.find((x) => normW(x.w) === normW(s.cue[1]));
     if (!w) throw new Error(`cue ${s.cue.join('/')} not found`);
     return w.s + (s.dt ?? 0);
 }
@@ -236,7 +253,7 @@ export function renderAudio(wavPath) {
     for (const [k, f] of Object.entries(TIMELINE.samples)) S[k] = readAudio(path.join(ASSETS, 'samples', f));
 
     // ── Narration ──
-    const voSrc = readAudio(path.join(ASSETS, 'vo', 'narration.mp3'));
+    const voSrc = readAudio(narrationFile());
     const vo = new Float32Array(n);
     const fade = at(0.008);
     for (const p of PLACED) {

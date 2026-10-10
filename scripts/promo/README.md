@@ -93,7 +93,7 @@ hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 
 ## Film 4: the missing fundamental
 
-A 76 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
+An 88 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
 harmonics"): your phone can't play a sub, but it plays the harmonics above
 it, and your brain puts the note back. Same voice, model, kit and pipeline
 as film 3 (`eleven_v4`, Michael C. Vincent, prompt in
@@ -107,10 +107,14 @@ dB/oct); the voice never does. Every harmonic rung on screen is an FFT of
 the bass at that frame, and the scope is the phone's actual output.
 
 Assets, in `scripts/promo/assets/` (ignored): the same Cymatics samples as
-film 3 (named in `film4/timeline.mjs`) and the narration as
-`assets/vo/narration.mp3`. For a new take:
-`python film4/cue_vo.py assets/vo/narration.mp3 film4/script.txt film4/vo-cues.json`,
-then adjust the `vo` placements in `film4/timeline.mjs`.
+film 3 (named in `film4/timeline.mjs`) and the narration take as
+`assets/vo/narration.mp3`. The film plays it 10% slower: `film4/audio.mjs`
+builds `assets/vo/narration-slow.wav` from the take with Rubber Band
+(`VO_STRETCH`) when it is missing. `film4/script.txt` has one sentence per
+line, so each can be placed with its own pause. For a new take, delete the
+slow file, run any `npm run film4 -- --frames 0` to rebuild it, then
+`python film4/cue_vo.py assets/vo/narration-slow.wav film4/script.txt film4/vo-cues.json`
+and adjust the `vo` placements in `film4/timeline.mjs`.
 
 ```
 npm run film4                    # sound, stills, video and checks
