@@ -239,7 +239,8 @@ pages are /learn, /blog, the path pages (/blog/category/*), every lesson,
   on every path and a line's length is the path's size; from 1280px each
   path is one line under a lesson ruler. Narrower, a line wraps like a
   score's systems (22 lessons to a system from 640px with a mouse; 44px
-  cells on phones, 6 at 320px, and on any touch screen under 1024px). Each
+  cells on phones, 6 at 320px, and for any coarse pointer at any width,
+  which leaves out the lesson ruler from 1280px). Each
   cell draws its stretch of the line, and each group's rules (graticule,
   staff with bar lines and a final bar, dotted field, ledger rows with a
   closing double rule) run the full width of every system as paper, so a
@@ -254,14 +255,18 @@ pages are /learn, /blog, the path pages (/blog/category/*), every lesson,
   link already says it); it stays under the site header while the map
   scrolls beneath it, and a mark the Tab key reaches stops below it. A
   finger has no hover, so on a touch screen the first tap on a mark
-  chooses it and the readout shows it with an "Open lesson" link; a second
-  tap (or the link) opens it. Under 1024px on a touch screen the readout
-  is a card over the tab bar, shown only for a chosen mark, so it costs
-  the map no height. Each line draws in once with the figure motion
+  chooses it, scrolls it clear of the card if the card would cover it,
+  and the readout shows it; the whole readout is then one link to that
+  lesson, and a second tap on the mark opens it too. Under 1024px on a
+  touch screen the readout is a fixed-height card over the tab bar (the
+  title on two lines, three under 360px), shown only for a chosen mark, so
+  it costs the map no height; the gesture hint ends the map's intro, in a
+  space it has from the first paint. Each line draws in once with the figure motion
   (`data-reveal="draw"`): it wipes in from lesson 1 at a constant speed,
-  like a scope beam, the group's later paths 60ms apart (two transforms
-  and no paint: the box around the line slides in while the line inside
-  slides back by as much); never on screen at load, with reduced motion,
+  like a scope beam, the group's later paths 60ms apart (one clip that
+  opens from lesson 1; the marks keep their place from the first frame,
+  so a tap during the draw-in lands, and nothing repaints per frame);
+  never on screen at load, with reduced motion,
   without script or in print. Server-rendered; works with JavaScript off.
 - **Keep the map cheap.** 147 lessons are 147 cells on a slow phone. A
   cell is an `li` and a plain `a` that draws its glyph and its stretch of

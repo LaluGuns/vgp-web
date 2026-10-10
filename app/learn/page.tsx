@@ -265,8 +265,9 @@ export default function LearnHubPage() {
                 <section aria-label="Glossary and book" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6 lg:pt-16">
                     <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-12 lg:gap-12">
                         <div className="lg:col-span-6">
-                            <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">Glossary</h2>
-                            <p className="mt-3 max-w-lg text-base leading-7 text-white/65">
+                            {/* On paper the heading and its intro stay with the terms. */}
+                            <h2 className="font-display text-3xl font-semibold tracking-[-0.03em] print:break-after-avoid sm:text-4xl">Glossary</h2>
+                            <p className="mt-3 max-w-lg text-base leading-7 text-white/65 print:break-inside-avoid print:break-after-avoid">
                                 {glossary.length} terms from the lessons, in plain words. Inside a lesson, tap a dotted word to read its definition
                                 without leaving the page.
                             </p>
