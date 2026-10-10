@@ -93,7 +93,7 @@ hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
 
 ## Film 4: the missing fundamental
 
-A 92 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
+A 94 second, 1080 x 1920 short on lesson 036 ("Small speakers need bass
 harmonics"): your phone can't play a sub, but it plays the harmonics above
 it, and your brain puts the note back. Same voice, model, kit and pipeline
 as film 3 (`eleven_v4`, Michael C. Vincent, prompt in

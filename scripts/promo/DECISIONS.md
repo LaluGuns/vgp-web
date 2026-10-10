@@ -113,3 +113,10 @@ One line per call, newest last.
   - The ladder strikes the amber bar with "not played" when the window lands; the phone's window border flashes once.
   - On "the harmonics repeat", thin cyan lines carry the played rungs up into the wave, which bridges the ladder and the scope.
   - The hook's window shows a "?" while the clean sub plays; the recipe gets its own 6 s demo after the diagram's last step, with a live ladder; the film runs 92 s.
+- Film 4 v8, after a seventh, stricter review (8 accuracy, 7.5 hook, 7 clarity and pacing, 6.5 craft and polish):
+  - Every small ladder zooms to 30-420 Hz and shows rungs up to 6x, so the harmonics the phone plays are visible whenever the narration relies on them; the 200 Hz line never runs through a bar.
+  - On "plays the harmonics" the played parts of the rungs glow; the zone under 200 Hz is "phone fades out" everywhere.
+  - The air scene draws cone travel to scale but small enough that the 50 Hz cone stays in its basket; travel spans have end bars, labels sit at their ends.
+  - Turning the sub up widens the "needs this" arrow while the cone stays at its stops ("still only this").
+  - The recipe builds as a list, one step every 1.8 s, "for small speakers" once under the title; step 3 reads "drop the note" (a 120 Hz high-pass also trims 2x); the recipe demo runs 8 s and the film 94 s.
+  - The hook's legend waits for the harmonics; views slide as they cross instead of dipping to an empty frame; dead air trimmed after "won't save it" and "the melody".
