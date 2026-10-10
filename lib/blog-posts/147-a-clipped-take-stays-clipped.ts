@@ -74,9 +74,9 @@ export const post147: BlogArticle = {
                 'A sine driven 3 dB past full scale and clipped, with its harmonic levels computed and shown relative to the clipped note. Before and after a 6 dB fader cut, the third harmonic sits 17.8 dB under the note, so the amount of distortion has not changed.',
             alt: 'Four bars. The note as recorded is at 0 dB and its third harmonic at -17.8 dB. After the fader, the note is at -6 dB and the third harmonic at -23.8 dB. The gap between note and harmonic is the same in both cases.',
             bars: [
-                { label: 'Note, as recorded', value: 0, display: '0 dB' },
+                { label: 'Note, as recorded', value: 0, display: '0 dB', dim: true },
                 { label: '3rd harmonic, as recorded', value: -17.8, display: '-17.8 dB' },
-                { label: 'Note, fader -6 dB', value: -6, display: '-6 dB' },
+                { label: 'Note, fader -6 dB', value: -6, display: '-6 dB', dim: true },
                 { label: '3rd harmonic, fader -6 dB', value: -23.8, display: '-23.8 dB' },
             ],
         },

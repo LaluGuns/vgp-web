@@ -34,7 +34,7 @@ export const demoCatalog = {
     compressor: {
         title: 'Hear compression change the shape of a hit',
         blurb: 'A drum loop, or a real mix, through a compressor, level-matched so you compare movement, not volume. Change the attack and listen to the snare.',
-        height: [920, 876, 876, 876, 876, 816, 816, 604, 604, 604, 604],
+        height: [920, 876, 876, 876, 876, 876, 876, 604, 604, 604, 604],
         level: -1.6,
     },
     aliasing: {
@@ -77,13 +77,13 @@ export const demoCatalog = {
     mono: {
         title: 'Fold the mix to mono',
         blurb: 'Kick, bass and snare in the middle, and a pluck made wide with a stereo trick. Switch to mono and hear which one survives.',
-        height: [616, 532, 532, 532, 532, 508, 508, 412, 388, 412, 388],
+        height: [616, 592, 592, 592, 592, 508, 508, 412, 388, 412, 388],
         level: -1.4,
     },
     phase: {
         title: 'Hear two copies of a bass cancel',
         blurb: 'The same bass note on two layers. Delay one by a few milliseconds or flip its polarity and the low end thins out, then disappears.',
-        height: [370, 350, 290, 290, 274, 274, 274, 274, 254, 254, 254],
+        height: [370, 350, 350, 350, 334, 334, 274, 274, 254, 254, 254],
         level: -6,
     },
     reverb: {
@@ -125,7 +125,7 @@ export const demoCatalog = {
     'bit-depth': {
         title: 'Lower the bit depth',
         blurb: 'A quiet, decaying note, or a real mix played quietly, stored at fewer and fewer bits. Listen to the tails turn gritty, then turn on dither and hear the grit become hiss.',
-        height: [510, 474, 474, 454, 454, 454, 454, 414, 414, 414, 414],
+        height: [570, 474, 474, 454, 454, 454, 454, 414, 414, 414, 414],
         level: -0.8,
     },
     latency: {
@@ -143,7 +143,7 @@ export const demoCatalog = {
     'loudness-bias': {
         title: 'Blind test: which one sounds better?',
         blurb: 'A synth loop or a real mix, played twice with one side 1 dB louder. Pick the one you prefer, then find out which was louder.',
-        height: [428, 356, 356, 356, 356, 356, 356, 336, 336, 336, 336],
+        height: [488, 356, 356, 356, 356, 356, 356, 336, 336, 336, 336],
         level: -0.3,
     },
     cadence: {
@@ -173,19 +173,19 @@ export const demoCatalog = {
     limiter: {
         title: 'Drive a limiter and listen to the release',
         blurb: 'A drum loop or a real mix driven into a limiter, matched in loudness to the original. Push the drive and change the release to hear the drums and the tone change.',
-        height: [1060, 1016, 936, 912, 912, 892, 892, 734, 714, 734, 714],
+        height: [1060, 1016, 996, 972, 972, 952, 892, 734, 714, 734, 714],
         level: -1.4,
     },
     'clip-recover': {
         title: 'Turn down a clipped take',
         blurb: 'A phrase recorded too hot clips at the converter. Pull the fader down afterwards and the level drops, but the flattened peaks and their distortion stay.',
-        height: [1160, 1082, 1039, 1019, 1019, 1019, 1003, 618, 556, 574, 556],
+        height: [1160, 1082, 1039, 1019, 1019, 1019, 1003, 678, 556, 574, 556],
         level: -3.8,
     },
     width: {
         title: 'Widen the sides and watch the meters',
         blurb: 'A short synth mix, or a real one, split into mid and side. Raise the side level, check it in mono and watch the correlation meter move as the image gets wider.',
-        height: [1312, 1192, 1148, 1124, 1124, 1080, 1080, 902, 858, 882, 858],
+        height: [1312, 1252, 1208, 1184, 1184, 1080, 1080, 902, 858, 882, 858],
         level: -3.7,
     },
     'monitor-level': {
@@ -197,7 +197,7 @@ export const demoCatalog = {
     'reverb-duck': {
         title: 'Keep the reverb out of the next line',
         blurb: 'A short vocal-like phrase into a long reverb. Duck the reverb under the dry phrase, or send only the last syllable of each line to a tempo delay, and hear the next line come through.',
-        height: [698, 678, 654, 634, 634, 634, 634, 558, 534, 558, 534],
+        height: [718, 678, 654, 634, 634, 634, 634, 558, 534, 558, 534],
         level: -3.6,
     },
     'chord-context': {

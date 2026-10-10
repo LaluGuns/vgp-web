@@ -134,7 +134,8 @@ function loadLoop(id: LoopId, who: object): Promise<RealLoop> {
             if (!res.ok) throw new Error(`The mix answered ${res.status}.`);
             const bytes = await res.arrayBuffer();
             await yieldToMain();
-            abort.signal.throwIfAborted();
+            // Given up on while it downloaded: nobody needs it decoded.
+            if (abort.signal.aborted) throw new DOMException('The mix was not wanted any more.', 'AbortError');
             const placed = place(id, await decode(bytes));
             loaded.set(id, placed);
             return placed;
@@ -246,10 +247,11 @@ export function SourceChoice({ source, loading }: { source: SourceState; loading
                 label="Source"
                 value={source.pick}
                 onChange={source.choose}
-                // The press that picks Real mix makes the audio context the mix is decoded in, as Play does: a task
-                // ahead of the click (as a mouse button goes down or a finger lifts), or with the key.
+                // The press that picks Real mix makes the audio context the mix is decoded in: as a mouse button goes
+                // down, a finger lifts or the key goes down, in a task of its own right after it (still inside the
+                // press for every browser: a timer set during it carries it), so the press itself stays short.
                 onPress={(v) => {
-                    if (v === 'real') warmEngine();
+                    if (v === 'real') window.setTimeout(warmEngine, 0);
                 }}
                 options={[
                     { value: 'synth', label: 'Synth' },
@@ -473,8 +475,8 @@ export async function renderLoop(
     };
 }
 
-/** Samples handled between yields in the measurements below: a few milliseconds on a slow phone. */
-const CHUNK = 65536;
+/** Samples handled between yields in the measurements below: a millisecond or two on a slow phone. */
+export const CHUNK = 16384;
 
 /** Summed mean square of both channels over [from, to): on K-weighted channels, a loudness. */
 export async function stereoPower(x: [Float32Array, Float32Array], from: number, to: number): Promise<number> {

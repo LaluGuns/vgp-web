@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
-import { SourceChoice, loopGain, renderLoop, startFeed, stereoColumns, stereoPeak, stereoPower, stereoProduct, useSource, type Feed, type RealLoop } from './realmix';
+import { CHUNK, MATCH_RUN_IN, SourceChoice, loopGain, matchPart, renderLoop, startFeed, stereoColumns, stereoPeak, stereoPower, stereoProduct, useSource, type Feed, type RealLoop } from './realmix';
 import { Announce, LiveMeter, PlayButton, Readout, Segmented, Slider, Variants, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
@@ -229,14 +229,23 @@ interface LoopClock {
     barDur: number;
     /** Extra delay between the source and what is heard, in seconds. */
     offset: number;
+    /** The stretch of the loop the figure draws, when it draws only part of it: the playhead shows while that plays. */
+    part?: { from: number; seconds: number } | null;
 }
 
-/** Points a playhead's clock at a real loop's first bar (the figure then spans the whole loop), or back at the drum loop's bars. */
-function followLoop(c: LoopClock, start: number | null, loop: RealLoop | null) {
+/**
+ * Points a playhead's clock at a real loop's first bar (the figure then spans the whole loop, or `part` of it), or
+ * back at the drum loop's bars.
+ */
+function followLoop(c: LoopClock, start: number | null, loop: RealLoop | null, part?: (loop: RealLoop) => { from: number; seconds: number }) {
     if (start !== null && loop) {
         c.barStart = start;
         c.barDur = loop.seconds;
-    } else c.barDur = BAR;
+        c.part = part ? part(loop) : null;
+    } else {
+        c.barDur = BAR;
+        c.part = null;
+    }
 }
 
 /** Returns a ref for the playhead line. It follows the loop while `active`. */
@@ -247,7 +256,11 @@ function usePlayhead(active: boolean, clock: { current: LoopClock | null }): Ref
         const el = line.current;
         if (!c || !el) return;
         const heard = c.ctx.currentTime - (c.ctx.outputLatency || 0) - c.offset - c.barStart;
-        const phase = (((heard % c.barDur) + c.barDur) % c.barDur) / c.barDur;
+        const at = ((heard % c.barDur) + c.barDur) % c.barDur;
+        const part = c.part;
+        // A figure of part of the loop shows the playhead only while that part plays.
+        const phase = part ? (at - part.from) / part.seconds : at / c.barDur;
+        el.style.visibility = phase >= 0 && phase < 1 ? '' : 'hidden';
         el.style.left = `${(phase * 100).toFixed(2)}%`;
     });
     return line;
@@ -1075,6 +1088,11 @@ export function TransientDemo() {
             : lagging.length === 1
               ? `At this setting ${quieter[0]} than the dry loop, as matching it fully would push its peaks past the demo's safe ceiling. The ${names[lagging[0] === 'shaper' ? 'comp' : 'shaper'].toLowerCase()} plays at the dry loop's loudness.`
               : `At this setting ${quieter.join(' and ')} than the dry loop, as matching them fully would push their peaks past the demo's safe ceiling.`;
+    // The same, said once the setting rests (Announce), without the numbers that go on moving.
+    const levelSaid =
+        lagging.length === 0
+            ? levelNote
+            : `At this setting the ${lagging.map((k) => names[k].toLowerCase()).join(' and the ')} ${lagging.length > 1 ? 'play' : 'plays'} quieter than the dry loop, as matching fully would push the peaks past the demo's safe ceiling.`;
 
     return (
         <div className="space-y-6">
@@ -1139,7 +1157,7 @@ export function TransientDemo() {
                 Pull the level going in down to -24 dB. The loop no longer reaches the threshold, so the compressor does nothing, while the shaper still changes
                 every hit, ghost notes included.
             </p>
-            <Announce on={analysis ? lagging.join(' ') || 'matched' : null} text={levelNote} />
+            <Announce on={analysis ? lagging.join(' ') || 'matched' : null} text={levelSaid} />
         </div>
     );
 }
@@ -1454,7 +1472,10 @@ export function SidechainDemo() {
                 />
             </div>
             <p className="text-sm leading-6 text-white/60">{duckNote}</p>
-            <Announce on={mode === 'off' ? 'off' : 'on'} text={duckNote} />
+            <Announce
+                on={mode === 'off' ? 'off' : 'on'}
+                text={mode === 'off' ? duckNote : 'The bass and pad are turned up to make up for the dips, so they keep the same overall loudness.'}
+            />
         </div>
     );
 }
@@ -1645,7 +1666,10 @@ const LIMITER_REAL_IN = -14.1;
 
 const realLimiterLoops = new WeakMap<RealLoop, Promise<LimiterLoop>>();
 
-/** The real loop's original path, measured once per loop: its loudness, its peak, the figure's grey area over the whole loop. */
+/**
+ * The real loop's original path, measured once per loop: its peak over the whole loop (which sets how hard it goes
+ * in), and its loudness and the figure's grey area over the two bars a setting is measured on (realmix.tsx matchPart).
+ */
 function prepareLimiterReal(loop: RealLoop, lat: number): Promise<LimiterLoop> {
     let job = realLimiterLoops.get(loop);
     if (!job) {
@@ -1659,7 +1683,7 @@ function prepareLimiterReal(loop: RealLoop, lat: number): Promise<LimiterLoop> {
             });
             const [from, to] = r.span();
             const norm = dbToGain(LIMIT_THRESHOLD) / (await stereoPeak(r.x[1], from, to));
-            const [kFrom, kTo] = r.span(lat);
+            const [kFrom, kTo] = r.span(lat, matchPart(loop));
             const dryPower = (await stereoPower(r.k[0], kFrom, kTo)) * norm * norm;
             const barPeak = await stereoPeak(r.x[0], kFrom, kTo);
             const [before] = await stereoColumns(r.x[0], kFrom, kTo, BAR_COLUMNS);
@@ -1671,12 +1695,13 @@ function prepareLimiterReal(loop: RealLoop, lat: number): Promise<LimiterLoop> {
     return job;
 }
 
-/** The same measurement on one whole pass of the real loop, as it repeats. */
+/** The same measurement on the real loop, over the two bars that stand in for the whole of it (realmix.tsx matchPart). */
 async function analyseLimitReal(real: RealLoop, params: LimitParams): Promise<LimitAnalysis> {
     const lat = await measureLatency(real.buffer.sampleRate);
     const [loop, makeup] = await Promise.all([prepareLimiterReal(real, lat), measureMakeup('limiter', (ctx) => limiterCompressor(ctx, 0.1))]);
     const { norm } = loop;
-    const r = await renderLoop(real, { gain: loopGain(real, LIMITER_REAL_IN) * norm, taps: 2, weighted: 1, tail: lat + 0.05 }, (ctx, src, [limTap, preTap]) => {
+    const opts = { gain: loopGain(real, LIMITER_REAL_IN) * norm, taps: 2, weighted: 1, tail: lat + 0.05, part: matchPart(real), runIn: MATCH_RUN_IN };
+    const r = await renderLoop(real, opts, (ctx, src, [limTap, preTap]) => {
         const lim = limiter(ctx, makeup, params.release / 1000);
         lim.drive.gain.value = dbToGain(params.drive);
         src.connect(lim.drive);
@@ -1689,7 +1714,7 @@ async function analyseLimitReal(real: RealLoop, params: LimitParams): Promise<Li
     const [pl, pr] = r.x[1];
     for (let i = from; i < to; i++) {
         if (pl[i] > 1 || pl[i] < -1 || pr[i] > 1 || pr[i] < -1) over++;
-        if ((i - from) % 65536 === 65535) await yieldToMain();
+        if ((i - from) % CHUNK === CHUNK - 1) await yieldToMain();
     }
     await yieldToMain();
     return {
@@ -1750,6 +1775,7 @@ export function LimiterDemo() {
         const delay = ctx.createDelay(0.05);
         delay.delayTime.value = lat;
         const lim = limiter(ctx, analysis?.makeup ?? 1, release / 1000);
+        lim.drive.gain.value = dbToGain(drive);
         const match = ctx.createGain();
         // Scales back up by 1 / norm, so the original plays at its own level.
         const restore = ctx.createGain();
@@ -1779,7 +1805,8 @@ export function LimiterDemo() {
             },
             fed,
             (loop) => loopGain(loop, LIMITER_REAL_IN),
-            (start, loop) => followLoop(c, start, loop),
+            // On the real mix the figure draws the two bars a setting is measured on.
+            (start, loop) => followLoop(c, start, loop, matchPart),
         );
         const n = { ctx, norm, lim, match, restore, master, sel, feed };
         nodes.current = n;
@@ -1792,7 +1819,16 @@ export function LimiterDemo() {
         };
     }, !loading);
 
-    // Drive and release go live together with their matching gain, and a new source with its first measurement.
+    // New drive and release are heard at once, with the matching gain the last setting had.
+    useEffect(() => {
+        const n = nodes.current;
+        if (!n) return;
+        const t = n.ctx.currentTime;
+        n.lim.drive.gain.setTargetAtTime(dbToGain(drive), t, 0.005);
+        n.lim.comp.release.setValueAtTime(release / 1000, t);
+    }, [drive, release]);
+
+    // Their own matching gain follows once it has been measured, and a new source with its first measurement.
     useEffect(() => {
         const n = nodes.current;
         if (!n || !analysis) return;
@@ -1829,7 +1865,7 @@ export function LimiterDemo() {
                 <Strip
                     traces={traces}
                     floor={-36}
-                    label={`Peak level across ${analysis?.real ? 'the whole loop, eight bars' : 'one bar'}, original and limited at the same loudness. Limiting lowers the peaks and raises everything between them.`}
+                    label={`Peak level across ${analysis?.real ? 'two bars of the loop' : 'one bar'}, original and limited at the same loudness. Limiting lowers the peaks and raises everything between them.`}
                     playhead={player.playing ? line : undefined}
                 />
                 <Legend
@@ -1861,7 +1897,7 @@ export function LimiterDemo() {
             />
             <Announce
                 on={analysis ? (analysis.clipped === 0 ? 'never' : 'clips') : null}
-                text={analysis?.clipped ? `The ceiling clip now catches a peak ${clippedText.toLowerCase()}.` : 'The ceiling clip no longer catches any peak.'}
+                text={analysis?.clipped ? 'The ceiling clip now catches some peaks.' : 'The ceiling clip no longer catches any peak.'}
             />
             <p className="text-sm leading-6 text-white/60">
                 This limiter is a fast compressor (20:1, 1 ms attack) with a hard clip {CEILING_MARGIN} dB above its threshold to catch whatever gets past it. Both options
@@ -1871,15 +1907,16 @@ export function LimiterDemo() {
     );
 }
 
+/** A measurement's gains: the source's level going in and coming back, and the setting's matching. Drive and release are set as they change (LimiterDemo). */
 function applyLimit(n: { ctx: AudioContext; norm: GainNode; lim: LimiterNodes; match: GainNode; restore: GainNode; master: GainNode }, a: LimitAnalysis, smooth: boolean) {
     const t = n.ctx.currentTime;
     const set = (param: AudioParam, value: number) => (smooth ? param.setTargetAtTime(value, t, 0.005) : param.setValueAtTime(value, t));
     set(n.norm.gain, a.norm);
     set(n.restore.gain, 1 / a.norm);
-    set(n.lim.drive.gain, dbToGain(a.params.drive));
-    set(n.match.gain, a.match);
+    // A smaller matching gain at once; a larger one over 20 ms.
+    if (smooth && a.match > n.match.gain.value) n.match.gain.setTargetAtTime(a.match, t, 0.02);
+    else set(n.match.gain, a.match);
     n.lim.toCeiling.gain.setValueAtTime(1 / (a.makeup * dbToGain(CEILING)), t);
-    n.lim.comp.release.setValueAtTime(a.params.release / 1000, t);
     n.master.gain.setTargetAtTime(1, t, 0.02);
 }
 
@@ -2200,7 +2237,7 @@ export function ClipRecoverDemo() {
             />
             <Announce
                 on={analysis ? (clipped ? 'clipped' : 'clean') : null}
-                text={clipped && analysis ? `The take now clips: it went past 0 dBFS by ${analysis.overDb.toFixed(1)} dB.` : 'The take no longer clips.'}
+                text={clipped ? 'The take now clips: its loudest notes went past 0 dBFS.' : 'The take no longer clips.'}
             />
             <p className="text-sm leading-6 text-white/60">
                 Both takes play at the same loudness. The fader lowered the hot take, but the flattened tops were recorded into it, so its loud notes still

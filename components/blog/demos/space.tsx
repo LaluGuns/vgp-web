@@ -249,7 +249,7 @@ export function PhaseDemo() {
                     blend === 'full'
                         ? 'The two layers add up at 55 Hz.'
                         : blend === 'thin'
-                          ? `The two layers partly cancel at 55 Hz, so the low end drops to ${levelDb}.`
+                          ? 'The two layers partly cancel at 55 Hz, so the low end thins out.'
                           : 'The two layers cancel at 55 Hz, so the low end disappears.'
                 }
             />

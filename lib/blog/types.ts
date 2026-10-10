@@ -27,9 +27,10 @@ export interface CurveFigure extends FigureBase {
     xLabel?: string;
     /**
      * The first solid series is the one to look at, with its points. `dotted`: a second line the caption
-     * also names, in accent dots. `dashed`: a reference, in grey.
+     * also names, in accent dots. `dashed`: a reference, in grey. `muted`: grey context or "before", a
+     * solid grey line that stays put.
      */
-    series: { label?: string; values: number[]; dashed?: boolean; dotted?: boolean }[];
+    series: { label?: string; values: number[]; dashed?: boolean; dotted?: boolean; muted?: boolean }[];
     /** Vertical markers at an x index (fractions allowed). */
     marks?: { at: number; label: string }[];
     /** Straight segments instead of a smooth curve, for values that jump (a bass line, steps). */
@@ -144,8 +145,13 @@ export interface SignalRow {
     lines?: { y: number; label: string; short?: string }[];
     /** Vertical guide lines at a time from 0 to 1. */
     marks?: { t: number; label: string }[];
-    /** Sample dots on a trace. `alias` draws the slower wave the samples also fit. */
-    samples?: { count: number; trace?: number; hold?: boolean; alias?: boolean };
+    /**
+     * Sample dots on a trace: `count` dots, one per sample period, so the plot is `count` periods wide and
+     * the dot at its right edge (the first of the next window) is not drawn. `alias` draws the slower
+     * wave the samples also fit, as a solid accent line (it is what plays back) named `aliasLabel`
+     * in the row's legend ("Alias" without one).
+     */
+    samples?: { count: number; trace?: number; hold?: boolean; alias?: boolean; aliasLabel?: string };
 }
 
 export interface SignalFigure extends FigureBase {
@@ -210,6 +216,8 @@ export interface TransferFigure extends FigureBase {
         dashed?: boolean;
         /** A second curve the caption also names, in accent dots. */
         dotted?: boolean;
+        /** Grey context or "before": a solid grey curve that stays put. The unity line (`linear`) is always grey. */
+        muted?: boolean;
     }[];
 }
 

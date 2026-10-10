@@ -234,7 +234,9 @@ function rowShape(row: SignalRow, pw: number, h: number): RowShape {
     const sampled = samples
         ? (() => {
               const fn = traceFn(row.traces[samples.trace ?? 0]);
-              return Array.from({ length: samples.count + 1 }, (_, k) => ({ t: k / samples.count, v: fn(k / samples.count) }));
+              // `count` dots, one per sample period: the plot is count periods wide, so the dot a period past the
+              // last one (the first dot of the next window) is not drawn.
+              return Array.from({ length: samples.count }, (_, k) => ({ t: k / samples.count, v: fn(k / samples.count) }));
           })()
         : [];
 
@@ -484,7 +486,8 @@ function SignalPlot({
                 );
             })}
             {shape.alias ? (
-                <path d={linePath(shape.alias)} fill="none" stroke={C.accent} strokeWidth={traceW} strokeDasharray={d.refDash} strokeLinecap={d.cap} {...draw('fade', delay + 300)} />
+                // The slower wave the dots also fit is what a converter plays back: a solid accent line, named in the legend.
+                <path d={linePath(shape.alias)} fill="none" stroke={C.accent} strokeWidth={traceW} strokeLinecap={d.cap} strokeLinejoin="round" {...draw('line', delay + 300)} />
             ) : null}
             {shape.hold ? <path d={linePath(shape.hold)} fill="none" stroke={C.strong} strokeWidth={1.6} strokeLinejoin={d.join} /> : null}
             {shape.sampled.map(({ t, v }, k) => (
@@ -570,6 +573,7 @@ export function Signal({ spec, w, dialect }: { spec: SignalFigure; w: number; di
         const named: LegendItem[] = row.traces
             .filter((t) => t.label)
             .map((t) => ({ label: t.label!, dashed: t.dashed, dotted: t.dotted, muted: t.muted }));
+        if (shapes[rows.length].alias) named.push({ label: row.samples?.aliasLabel ?? 'Alias' });
         const lineInLegend = inLegend.get(rows.length);
         if (lineInLegend) named.push({ label: lineInLegend, dashed: true, stroke: C.soft, width: 1.2 });
         const top = y;
@@ -798,7 +802,13 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         const path = linePath(pts);
         const fill = curve.kind === 'hump' && !curve.dashed && !curve.dotted && (curve.muted || d.fillUnder);
         // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed or dotted one fades.
-        const motion = curve.muted ? {} : draw(curve.dashed || curve.dotted ? 'fade' : 'line', 120 + i * 100);
+        const lineDelay = 120 + i * 100;
+        const motion = curve.muted ? {} : draw(curve.dashed || curve.dotted ? 'fade' : 'line', lineDelay);
+        // A solid accent curve that runs along the whole 0 dB axis (a filter that cancels another's boost) would read
+        // as the axis itself, a bright rule with nothing to tell it from the grid. It carries measured points, one on
+        // each labelled frequency, as a focus curve does elsewhere: a value in the dialect's own mark.
+        const flatOnZero =
+            gainMode && !curve.muted && !curve.dashed && !curve.dotted && pts.every(([, y]) => Math.abs(y - gy(0)) < 1);
         return (
             <g key={i}>
                 {fill ? (
@@ -819,6 +829,11 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
                         {...motion}
                     />
                 )}
+                {flatOnZero
+                    ? ticks
+                          .filter((f) => f > lo && f < hi)
+                          .map((f) => <Point key={f} d={d} x={fx(f)} y={gy(value(f))} r={3} delay={lineDelay + (700 * (fx(f) - left)) / (right - left)} />)
+                    : null}
             </g>
         );
     };
@@ -927,7 +942,7 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
     const legendY = narrow ? oy + size + 58 : oy + 16;
     const named = spec.curves
         .filter((c) => c.label)
-        .map((c) => ({ label: c.label!, dashed: c.dashed || c.kind === 'linear', dotted: c.dotted && c.kind !== 'linear', muted: c.kind === 'linear' }));
+        .map((c) => ({ label: c.label!, dashed: c.dashed || c.kind === 'linear', dotted: c.dotted && c.kind !== 'linear', muted: c.kind === 'linear' || c.muted }));
     const leg = legend(named, legendX, legendY, narrow ? w : w - legendX, d, !narrow);
     const h = (narrow ? legendY + leg.height : oy + size + 40) + (ledger ? 8 : 0);
 
@@ -991,16 +1006,18 @@ export function Transfer({ spec, w, dialect }: { spec: TransferFigure; w: number
                     pts.push([px(x), py(out(c, x))]);
                 }
                 const linear = c.kind === 'linear';
-                // The unity line is a reference and stays put; accent curves draw from quiet to loud, a dashed or dotted one fades.
-                const motion = linear ? {} : draw(c.dashed || c.dotted ? 'fade' : 'line', 120 + i * 100);
-                if (c.dotted && !linear) return <path key={i} d={linePath(pts)} fill="none" {...dots(d)} {...motion} />;
+                // The unity line is a reference (dashed grey) and a muted curve is grey context (solid): both stay put.
+                // Accent curves draw from quiet to loud, a dashed or dotted one fades.
+                const grey = linear || c.muted;
+                const motion = grey ? {} : draw(c.dashed || c.dotted ? 'fade' : 'line', 120 + i * 100);
+                if (c.dotted && !linear) return <path key={i} d={linePath(pts)} fill="none" {...dots(d, c.muted)} {...motion} />;
                 return (
                     <path
                         key={i}
                         d={linePath(pts)}
                         fill="none"
-                        stroke={linear ? C.dataGrey : C.accent}
-                        strokeWidth={linear ? 1.4 : d.line}
+                        stroke={grey ? C.dataGrey : C.accent}
+                        strokeWidth={grey ? 1.4 : d.line}
                         strokeDasharray={linear || c.dashed ? d.refDash : undefined}
                         strokeLinecap={d.cap}
                         strokeLinejoin={d.join}

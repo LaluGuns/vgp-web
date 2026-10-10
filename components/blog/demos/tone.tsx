@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, rms, sequence, snare, type Engine } from './engine';
-import { SourceChoice, loopGain, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
+import { MATCH_RUN_IN, SourceChoice, loopGain, matchPart, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useAnalysis, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
 // ── A live spectrum, drawn from an AnalyserNode on a log frequency axis ──
@@ -633,13 +633,13 @@ const satDry = new WeakMap<RealLoop, Promise<number>>();
 /** Matches already measured on this page, by setting (ui.tsx useAnalysis); the synth's is null (it matches as it plays). */
 const satResults = new Map<string, SatMatch | null>();
 
-/** K-weighted power of the clean real loop as it reaches the shaper, once per loop. */
+/** K-weighted power of the clean real loop as it reaches the shaper, over the two bars a setting is measured on (realmix.tsx matchPart), once per loop. */
 function satDryPower(loop: RealLoop): Promise<number> {
     let job = satDry.get(loop);
     if (!job) {
         job = (async () => {
             const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true }, (_, src, [tap]) => src.connect(tap));
-            const [from, to] = r.span();
+            const [from, to] = r.span(0, matchPart(loop));
             return stereoPower(r.k[0], from, to);
         })();
         job.catch(() => satDry.delete(loop));
@@ -649,15 +649,17 @@ function satDryPower(loop: RealLoop): Promise<number> {
 }
 
 /**
- * On the real mix the matching is measured, not followed: one whole pass of
- * the loop through the shaper, offline, against the clean loop, both
- * K-weighted. One fixed gain per setting, so the mix does not breathe with a
- * running level match.
+ * On the real mix the matching is measured, not followed: two bars of the
+ * loop that stand in for the whole of it (realmix.tsx matchPart) through the
+ * shaper, offline, against the same bars clean, both K-weighted. One fixed
+ * gain per setting, so the mix does not breathe with a running level match.
+ * A new setting is heard at once, with the last setting's gain, until its
+ * own lands.
  */
 async function matchSatReal(loop: RealLoop, kind: 'off' | 'soft' | 'hard', drive: number): Promise<SatMatch> {
     if (kind === 'off') return { real: loop, gain: 1 };
     const dry = await satDryPower(loop);
-    const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true }, (ctx, src, [tap]) => {
+    const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true, part: matchPart(loop), runIn: MATCH_RUN_IN }, (ctx, src, [tap]) => {
         const shaper = ctx.createWaveShaper();
         shaper.curve = shaperCurve(kind, drive);
         shaper.oversample = '4x';

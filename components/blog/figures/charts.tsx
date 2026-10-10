@@ -38,7 +38,9 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const labels = narrow && spec.xShort ? spec.xShort : spec.x;
-    const named = spec.series.filter((s) => s.label).map((s) => ({ label: s.label!, dashed: s.dashed, dotted: s.dotted && !s.dashed, stroke: s.dashed ? C.soft : undefined }));
+    const named = spec.series
+        .filter((s) => s.label)
+        .map((s) => ({ label: s.label!, dashed: s.dashed, dotted: s.dotted && !s.dashed, muted: s.muted && !s.dashed, stroke: s.dashed ? C.soft : undefined }));
     const leg = legend(named, 0, 14, w, d);
     // A note head or a focus ring is wider than a square, so the first and last points sit further in.
     const inset = d.marker === 'head' || d.marker === 'ring' ? 8 : 4;
@@ -113,7 +115,7 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
             {spec.series.map((s, si) => {
                 const pts = s.values.map((v, i) => [xAt(i), yAt(v)] as [number, number]);
                 const path = spec.straight ? linePath(pts) : smoothPath(pts);
-                const focus = si === 0 && !s.dashed && !s.dotted;
+                const focus = si === 0 && !s.dashed && !s.dotted && !s.muted;
                 const lineDelay = 120 + si * 120;
                 return (
                     <g key={si}>
@@ -125,7 +127,10 @@ export function Curve({ spec, w, dialect }: { spec: CurveFigure; w: number; dial
                             <path d={path} fill="none" stroke={C.soft} strokeWidth={1.6} strokeDasharray={d.refDash} strokeLinecap={d.cap} />
                         ) : s.dotted ? (
                             // A second line the caption also names: accent dots, fading in with the line beside it.
-                            <path d={path} fill="none" {...dots(d)} {...draw('fade', lineDelay)} />
+                            <path d={path} fill="none" {...dots(d, s.muted)} {...(s.muted ? {} : draw('fade', lineDelay))} />
+                        ) : s.muted ? (
+                            // Grey context or "before": a solid grey line that stays put, as on every other line figure.
+                            <path d={path} fill="none" stroke={C.dataGrey} strokeWidth={1.4} strokeLinecap={d.cap} strokeLinejoin={d.join} />
                         ) : (
                             <path
                                 d={path}
@@ -456,6 +461,7 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
     })();
     // An instrument scale is graduated: unlabelled minor ticks between the numbered ones, when the step divides evenly.
     const minor = d.name === 'technical' && !spec.ticks ? minorTicks(ticks, spec.min, spec.max) : [];
+    const rangeLabels = placeRangeLabels((spec.ranges ?? []).map((range) => ({ a: xAt(range.from), b: xAt(range.to), tw: textWidth(range.label) * (range.strong ? 1.04 : 1) })), w);
 
     return (
         <Svg w={w} h={h} label={spec.alt} d={d}>
@@ -518,24 +524,7 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
                 const a = xAt(range.from);
                 const b = xAt(range.to);
                 const strong = Boolean(range.strong);
-                const tw = textWidth(range.label) * (strong ? 1.04 : 1);
-                // Inside the range when it fits, else after it, else before it, else centred inside when it fits there
-                // with a little less room; with no room anywhere it starts inside and runs on past the end.
-                const roomy = tw + 12 < b - a;
-                const after = b + 6 + tw < w;
-                const before = a - 6 - tw >= 0;
-                const snug = !roomy && !after && !before && tw + 6 < b - a;
-                const inside = roomy || snug;
-                const at = roomy
-                    ? { x: a + 6, anchor: 'start' as const }
-                    : after
-                      ? { x: b + 6, anchor: 'start' as const }
-                      : before
-                        ? { x: a - 6, anchor: 'end' as const }
-                        : snug
-                          ? { x: (a + b) / 2, anchor: 'middle' as const }
-                          : { x: Math.min(a + 6, w - tw), anchor: 'start' as const };
-                const runsOn = !inside && !after && !before;
+                const { at, inside, runsOn } = rangeLabels[i];
                 // A range the caption points at (`strong`) is in the accent and grows from its start; other ranges are
                 // grey context. Its label is in the surface colour where it sits on the accent, like a note's name,
                 // and white past the end: a label that runs on is drawn twice, the dark copy clipped to the bar.
@@ -583,6 +572,47 @@ export function Scale({ spec, w, dialect }: { spec: ScaleFigure; w: number; dial
 }
 
 let rangeClipCounter = 0;
+
+interface RangeLabel {
+    at: { x: number; anchor: Anchor };
+    /** The label sits on its bar (over the accent, a strong one is set in the surface colour). */
+    inside: boolean;
+    /** No room anywhere: it starts on its bar and runs on past the end. */
+    runsOn: boolean;
+}
+
+/**
+ * Where the labels of a figure's ranges go, one rule for the whole figure: every label inside its bar
+ * when each one fits there, else every label beside its bar (after it, else before it; all on one side
+ * when they all fit on it), so a figure never has one label outside and the others inside. A figure
+ * with no such rule (a bar with no room beside it either) places each label where it fits: inside, else
+ * after, else before, else centred inside with less room, else starting inside and running on.
+ */
+function placeRangeLabels(ranges: { a: number; b: number; tw: number }[], w: number): RangeLabel[] {
+    const room = ranges.map(({ a, b, tw }) => ({
+        roomy: tw + 12 < b - a,
+        after: b + 6 + tw < w,
+        before: a - 6 - tw >= 0,
+        snug: tw + 6 < b - a,
+    }));
+    const inside = (a: number) => ({ x: a + 6, anchor: 'start' as const });
+    const afterAt = (b: number) => ({ x: b + 6, anchor: 'start' as const });
+    const beforeAt = (a: number) => ({ x: a - 6, anchor: 'end' as const });
+    const allInside = room.every((r) => r.roomy);
+    const allAfter = room.every((r) => r.after);
+    const allBefore = room.every((r) => r.before);
+    const allOutside = room.every((r) => r.after || r.before);
+    return ranges.map(({ a, b, tw }, i) => {
+        const r = room[i];
+        if (allInside) return { at: inside(a), inside: true, runsOn: false };
+        if (allOutside) return { at: allAfter ? afterAt(b) : allBefore ? beforeAt(a) : r.after ? afterAt(b) : beforeAt(a), inside: false, runsOn: false };
+        if (r.roomy) return { at: inside(a), inside: true, runsOn: false };
+        if (r.after) return { at: afterAt(b), inside: false, runsOn: false };
+        if (r.before) return { at: beforeAt(a), inside: false, runsOn: false };
+        if (r.snug) return { at: { x: (a + b) / 2, anchor: 'middle' as const }, inside: true, runsOn: false };
+        return { at: { x: Math.min(a + 6, w - tw), anchor: 'start' as const }, inside: false, runsOn: true };
+    });
+}
 
 function niceTicks(min: number, max: number, count: number): number[] {
     const span = max - min;

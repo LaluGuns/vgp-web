@@ -740,7 +740,7 @@ export function WidthDemo() {
                             : 'Matching starts once the mix has been measured, a moment after the page loads.'
                         : 'Raising the sides now also makes the mix louder, which can make wider seem better.'
                 }
-                liveHint
+                liveHint={matched ? 'Matching turns the output up or down so the stereo mix stays at the same loudness.' : true}
             />
             <p className="text-sm leading-6 text-white/60">
                 {/* Both sources' wording in one place, so a switch moves nothing below. */}

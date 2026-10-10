@@ -347,8 +347,11 @@ export function PlayButton({ playing, onClick, label = 'Play', waiting }: { play
                     <PlayFace state={shown} label={label} />
                 </button>
                 {/* --accent is the lesson group's inside a lesson (DemoSlot), sky elsewhere. */}
-                <span className="text-sm text-[var(--accent)]" aria-live="polite" aria-atomic="true">
-                    {playing ? 'Playing' : stopped ? <span className="sr-only">Stopped</span> : null}
+                <span className="text-sm text-[var(--accent)]" aria-hidden="true">
+                    {playing ? 'Playing' : ''}
+                </span>
+                <span className="sr-only" aria-live="polite" aria-atomic="true">
+                    {playing ? 'Playing' : stopped ? 'Stopped' : ''}
                 </span>
                 {stop && slot ? createPortal(stop, slot) : stop}
             </div>
@@ -403,8 +406,6 @@ export function Variants({ show, items }: { show: number; items: ReactNode[] }) 
 
 /** How long a change has to hold still before Announce says it. */
 const ANNOUNCE_AFTER = 500;
-/** How long Announce keeps its words once it has said them. */
-const ANNOUNCE_KEEP = 4000;
 
 /**
  * Tells screen readers about a change that matters, once. `on` names the
@@ -414,11 +415,12 @@ const ANNOUNCE_KEEP = 4000;
  * second, and only if `on` then differs from what was last said, so a slider
  * moved step by step stays quiet until it rests, and moving it back says
  * nothing. null means not known yet; the first value `on` takes is where it
- * starts, not news. The words clear a few seconds later, so a reader moving
- * through the page does not find a stale copy next to what they repeat.
+ * starts, not news. The words stay until the next change, so keep numbers
+ * that go on moving out of them: the readout beside them has those.
  */
 export function Announce({ text, on }: { text: string; on: string | null }) {
-    const [said, setSaid] = useState('');
+    // `n` counts what has been said: the same words again end in a no-break space, so they are still a change.
+    const [said, setSaid] = useState({ text: '', n: 0 });
     const last = useRef(on);
     const textRef = useRef(text);
     useEffect(() => {
@@ -431,26 +433,15 @@ export function Announce({ text, on }: { text: string; on: string | null }) {
             return;
         }
         if (on === last.current) return;
-        let frame = 0;
         const id = window.setTimeout(() => {
             last.current = on;
-            // Emptied first, so words that match the last ones are still a change, and are said.
-            setSaid('');
-            frame = requestAnimationFrame(() => setSaid(textRef.current));
+            setSaid((s) => ({ text: textRef.current, n: s.n + 1 }));
         }, ANNOUNCE_AFTER);
-        return () => {
-            window.clearTimeout(id);
-            cancelAnimationFrame(frame);
-        };
-    }, [on, text]);
-    useEffect(() => {
-        if (!said) return;
-        const id = window.setTimeout(() => setSaid(''), ANNOUNCE_KEEP);
         return () => window.clearTimeout(id);
-    }, [said]);
+    }, [on, text]);
     return (
         <span className="sr-only" aria-live="polite" aria-atomic="true">
-            {said}
+            {said.text ? said.text + (said.n % 2 ? '' : '\u00a0') : ''}
         </span>
     );
 }
@@ -546,8 +537,11 @@ export function Segmented<T extends string>({
     options: { value: T; label: string }[];
     onChange: (value: T) => void;
     hint?: ReactNode;
-    /** The hint (a string) describes the current choice: say it once a change of choice has held still (Announce). */
-    liveHint?: boolean;
+    /**
+     * The hint describes the current choice: say it once a change of choice has held still (Announce). A string is
+     * said instead of the hint (one without the numbers that go on changing).
+     */
+    liveHint?: boolean | string;
     /**
      * Heard as an option is pressed, before it is chosen: as a mouse button goes down or a finger lifts (a task
      * ahead of the click), or with the key that chooses it. For work that needs the reader's gesture.
@@ -583,7 +577,7 @@ export function Segmented<T extends string>({
     };
 
     return (
-        <Field label={label} id={labelId} hint={hint} announce={liveHint && typeof hint === 'string' ? { text: hint, on: value } : undefined}>
+        <Field label={label} id={labelId} hint={hint} announce={typeof liveHint === 'string' ? { text: liveHint, on: value } : liveHint && typeof hint === 'string' ? { text: hint, on: value } : undefined}>
             <div role="radiogroup" aria-labelledby={labelId} className="flex flex-wrap gap-2">
                 {options.map((option, i) => (
                     <button

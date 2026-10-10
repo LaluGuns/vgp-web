@@ -369,7 +369,10 @@ export function CompressorDemo() {
                 hint="A slow attack lets the snare crack through. A fast one flattens it."
             />
             <p className="text-sm leading-6 text-white/60">{levelNote}</p>
-            <Announce on={analysis ? (short > 0 ? 'short' : 'matched') : null} text={levelNote} />
+            <Announce
+                on={analysis ? (short > 0 ? 'short' : 'matched') : null}
+                text={short > 0 ? "At this setting the compressed loop plays quieter than the bypass, as matching it fully would push its peaks past the demo's safe ceiling." : levelNote}
+            />
         </div>
     );
 }

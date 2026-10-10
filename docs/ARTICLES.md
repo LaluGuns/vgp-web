@@ -94,22 +94,25 @@ Line styles, the same in every figure that draws lines (`curve` series,
 `signal` traces, `spectrum` curves, `transfer` curves): a solid accent line
 is the one the caption asks you to look at; `dotted: true` draws a second
 line the caption also names in accent dots ("also look here");
-`dashed: true` is a reference; `muted: true` is grey context or "before".
-The line the caption is about is never dashed: draw it solid and make what
-it is set against `muted` (or `dashed`, for a reference). Use dots for a
-second line the caption names that is not a reference. When three lines
-are all subjects, keep the third solid where its shape sets it apart (as
-040 does), or draw the layers as labelled `bands` (as 039 does).
+`dashed: true` is a reference; `muted: true` is grey context or "before"
+(a solid grey line that stays put). The line the caption is about is never
+dashed: draw it solid and make what it is set against `muted` (or `dashed`,
+for a reference). Use dots for a second line the caption names that is not
+a reference. When three lines are all subjects, keep the third solid where
+its shape sets it apart (as 040 does), or draw the layers as labelled
+`bands` (as 039 does). A solid accent spectrum curve that lies along the
+0 dB axis (a filter that cancels a boost) carries a marker on each labelled
+frequency, so it never reads as the axis.
 
 | `type` | Shows | Key fields |
 | --- | --- | --- |
-| `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed, dotted}]`, `marks[{at, label}]`, `straight` |
+| `curve` | A shape over named points: energy, tension, attention | `x`, `xShort`, `xLabel`, `yLabel`, `series[{label, values, dashed, dotted, muted}]`, `marks[{at, label}]`, `straight` |
 | `notes` | A small piano roll: a melody, a bass line, a voicing | `notes[{start, length, pitch, label, muted}]` (beats, MIDI pitch), `chords[{at, label}]`, `perBar` |
 | `bars` | Horizontal bars on one scale: LUFS, levels | `min`, `max`, `unit`, `bars[{label, value, display, dim, open}]` (`open`: no upper limit, the bar fades out at the end of the scale), `reference{value, label}`, `log` (powers of ten, for ranges over two decades) |
 | `rhythm` | Hits on a 16-step grid with swing and offsets | `rows[{label, hits, swing, note, focus}]`; a hit is a step or `{step, offset, level}` (offset in steps) |
 | `signal` | Waveforms over time, one plot per row | `rows[{label, traces, unipolar, lines[{y, label, short}], marks, samples}]` (`short`: a line's label on phones) |
 | `spectrum` | Energy or EQ gain over log frequency | `mode: 'level' \| 'gain'`, `curves`, `bands[{from, to, label}]`, `marks[{f, label}]` |
-| `transfer` | Input level against output level | `domain: 'db' \| 'linear'`, `curves[{kind, threshold, ratio, knee, ceiling, label}]` |
+| `transfer` | Input level against output level | `domain: 'db' \| 'linear'`, `curves[{kind, threshold, ratio, knee, ceiling, label, dashed, dotted, muted}]` |
 | `stereo` | Top-down mix: pan and depth | `items[{label, pan, depth, width, fade}]`, `title` |
 | `flow` | Steps with arrows, optional loop back | `steps[{label, note, focus}]`, `loop{to, label}` |
 | `arrangement` | Which layers play in which section | `sections[{label, short, bars}]`, `layers[{label, levels, focus}]`, `density` |
@@ -132,8 +135,10 @@ Signal traces (`kind`):
   instead; a line named in a legend in one row is named there in every
   row. Give a line a `short` label for phones.
 - Gain-mode spectra take `dbRange: [lo, hi]` for filters that only cut.
-- `samples: {count, alias: true}` on a row draws sample dots and the slower
-  wave they also fit.
+- `samples: {count, alias: true, aliasLabel}` on a row draws `count` sample dots, one per sample
+  period (ten samples are ten dots: the plot is `count` periods wide), and with `alias` the
+  slower wave they also fit, as a solid accent line named `aliasLabel` in the row's legend (it is
+  what the converter plays back), so the fast wave itself is a `muted` trace.
 
 Spectrum curves take `label`, `dashed`, `dotted` and `muted` like traces.
 Their kinds (`kind`): `hump` (`center` Hz, `width` octaves, `level`),
@@ -242,10 +247,17 @@ stems, samples or project files.
 A real mix plays at the house loudness with the same peak rule:
 each demo sets the loudness its loop goes in at (`*_REAL_IN` in its module)
 from the loop's measured loudness (`LOOPS` in `realmix.tsx`). The
-level-matched demos measure the real loop itself, one whole pass offline,
-so the line says "Loading the mix…" until the fetch, the decoding and that
-measurement are done, and the switch goes live with its matching. Play
-pressed meanwhile waits, and the button says "Loading…". On the
+level-matched demos measure the real loop itself, offline, so the line says
+"Loading the mix…" until the fetch, the decoding and that measurement are
+done, and the switch goes live with its matching. Play pressed meanwhile
+waits, and the button says "Loading…". A demo that measures each setting
+(compressor, limiter, saturation) measures it over bars 3 and 4 of the loop
+after half a second of run-in (`matchPart`), which lands within about 0.1 dB
+of a whole pass at a quarter of the cost, and a new setting is heard at once
+with the last setting's matching gain until its own arrives. The fetch stops
+if every demo that wanted the loop goes back to Synth or leaves the page,
+and the audio context it is decoded in is made by the press that picked Real
+mix, never without one. On the
 real mix the `filter` and `eq-sweep` demos turn down as the resonance rises
 past 11 dB or the boost widens past a Q of 2; at full resonance the mix's
 bass would otherwise peak about 3 dB over the rule. Text that differs by

@@ -44,12 +44,12 @@ export const post092: BlogArticle = {
             type: 'signal',
             caption:
                 'A wave with nine cycles, measured only ten times. The dots fit the fast wave, and they fit a slow one-cycle wave just as well. The converter keeps only the dots, so the slow wave is what plays back.',
-            alt: 'A fast sine wave with ten sample dots. A dashed slow wave passes through every dot.',
+            alt: 'A fast grey sine wave with ten sample dots. A slow accent wave passes through every dot.',
             rows: [
                 {
                     label: 'Nine cycles, ten samples',
                     traces: [{ kind: 'sine', cycles: 9, amp: 0.85, muted: true, label: 'Real signal' }],
-                    samples: { count: 10, alias: true },
+                    samples: { count: 10, alias: true, aliasLabel: 'What plays back' },
                 },
             ],
         },
