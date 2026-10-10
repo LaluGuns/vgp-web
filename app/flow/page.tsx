@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import { OG_SITE, ogImage, TWITTER_HANDLES } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import FlowClient from './FlowClient';
+
+const FLOW_CARD = ogImage({ kicker: 'Flow', title: 'Deep work music and a pomodoro timer.', sub: 'Focus music produced in-house by Virzy Guns.' });
 
 export const metadata: Metadata = {
     title: 'Flow by Virzy Guns — Deep Work Music & Pomodoro Timer',
@@ -26,15 +29,17 @@ export const metadata: Metadata = {
         description:
             'A pomodoro timer wrapped in focus music produced in-house by Virzy Guns. Free without an account, measured-only stats, four visual themes, eleven languages.',
         url: 'https://www.virzyguns.com/flow',
+        ...OG_SITE,
         type: 'website',
-        images: ['/branding/vgp-logo-chrome-full.png'],
+        images: [FLOW_CARD],
     },
     twitter: {
         card: 'summary_large_image',
+        ...TWITTER_HANDLES,
         title: 'Flow by Virzy Guns — Deep Work Music & Pomodoro Timer',
         description:
             'Deep work music and a pomodoro timer in one place. Music produced in-house, stats that only count what they measure.',
-        images: ['/branding/vgp-logo-chrome-full.png'],
+        images: [FLOW_CARD.url],
     },
 };
 

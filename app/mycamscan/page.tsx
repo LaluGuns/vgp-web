@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { TWITTER_HANDLES } from '@/lib/og';
 import Image from 'next/image';
 import { EditorialButton, TextLink } from '@/components/editorial/EditorialPrimitives';
 
@@ -39,6 +40,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary',
+        ...TWITTER_HANDLES,
         title: 'MyCamScan | Document scanner and OCR',
         description: 'Scan documents, OCR and searchable PDF, private on-device.',
         images: ['/images/mycamscan-app-icon.png'],

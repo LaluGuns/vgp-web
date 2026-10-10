@@ -15,6 +15,10 @@ export function ogImage({ title, kicker, sub }: { title: string; kicker?: string
 const SITE_NAME = 'Virzy Guns Production';
 const SITE_LOCALE = 'en_US';
 const TWITTER_CREATOR = '@virzyguns';
+/** og:site_name and og:locale, for a page that sets its own openGraph object (it replaces the layout's). */
+export const OG_SITE = { siteName: SITE_NAME, locale: SITE_LOCALE };
+/** twitter:site and twitter:creator, for a page that sets its own twitter object (it replaces the layout's, so these go too). */
+export const TWITTER_HANDLES = { site: TWITTER_CREATOR, creator: TWITTER_CREATOR };
 
 /**
  * openGraph and twitter metadata for a page. A page's own openGraph or
@@ -39,7 +43,7 @@ export function socialMetadata({
     const shared = { title, description, url, siteName: SITE_NAME, locale: SITE_LOCALE, images: [image] };
     return {
         openGraph: article ? { ...shared, type: 'article', ...article } : { ...shared, type: 'website' },
-        twitter: { card: 'summary_large_image', title, description, images: [image.url], site: TWITTER_CREATOR, creator: TWITTER_CREATOR },
+        twitter: { card: 'summary_large_image', title, description, images: [image.url], ...TWITTER_HANDLES },
     };
 }
 

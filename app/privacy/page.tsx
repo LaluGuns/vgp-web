@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { OG_SITE, ogImage } from '@/lib/og';
 import { PolicyPage } from '@/components/policies/PolicyPage';
 
 export const metadata: Metadata = {
@@ -10,6 +11,8 @@ export const metadata: Metadata = {
         title: 'Privacy Policy | Virzy Guns Production',
         description: 'Privacy information for the public Virzy Guns Production website and services.',
         url: 'https://www.virzyguns.com/privacy',
+        ...OG_SITE,
+        images: [ogImage({ kicker: 'Privacy', title: 'Privacy Policy' })],
     },
     robots: {
         index: true,

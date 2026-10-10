@@ -62,9 +62,9 @@ export default async function BlogCategoryPage({ params }: Props) {
         <>
             <JsonLd data={lessonsCollection({ name: `${category.name}: a learning path`, description: category.description, url, path })} />
             <JsonLd
+                // The visible crumb also shows "Paths" (/learn#paths); here it is left out, since a fragment is the same URL as Learn.
                 data={breadcrumbs([
                     { name: 'Learn', url: `${SITE}/learn` },
-                    { name: 'Paths', url: `${SITE}/learn#paths` },
                     { name: category.name, url },
                 ])}
             />

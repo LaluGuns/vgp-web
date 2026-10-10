@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { TWITTER_HANDLES } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import Link from 'next/link';
 import GameArcade from './GameArcade';
@@ -79,6 +80,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    ...TWITTER_HANDLES,
     title: 'VGP Games | 100% Play. 100% VGP.',
     description: 'A growing browser game playground from Virzy Guns Production.',
     images: [socialImage],

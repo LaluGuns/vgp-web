@@ -17,7 +17,7 @@ import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClie
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
-import { beatShareCard } from '@/lib/og';
+import { beatShareCard, TWITTER_HANDLES } from '@/lib/og';
 import {
     getEditorialBeatWorld,
     getOfficialBeatStarsGenres,
@@ -98,6 +98,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             },
             twitter: {
                 card: 'summary_large_image',
+                ...TWITTER_HANDLES,
                 title: beat.localizedTitle?.['ja-JP'] || beat.title,
                 description,
                 images: [beatShareCard(beat, editorialWorld).url],

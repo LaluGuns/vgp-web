@@ -14,6 +14,8 @@ const PHOTO = CARD_H;
 /** The navy behind the portrait, so the square's edges disappear into the card. */
 const CARD_BG = '#01051e';
 const HEADERS = { 'Cache-Control': 'public, max-age=86400, s-maxage=31536000, immutable' };
+// A card without the photo, or the larger PNG fallback, is only kept briefly, so the next request can make the full card.
+const SHORT_HEADERS = { 'Cache-Control': 'public, max-age=300, s-maxage=300' };
 
 type Sharp = (typeof import('sharp'))['default'];
 let sharpModule: Promise<Sharp | null> | undefined;
@@ -35,18 +37,17 @@ function getSharp() {
  */
 let portrait: Promise<string | null> | undefined;
 function getPortrait() {
-    portrait ??= Promise.all([readFile(path.join(process.cwd(), 'public/images/virzy-guns-dp.jpg')), getSharp()]).then(
-        async ([source, sharp]) => {
+    portrait ??= Promise.all([readFile(path.join(process.cwd(), 'public/images/virzy-guns-dp.jpg')), getSharp()])
+        .then(async ([source, sharp]) => {
             if (!sharp) return `data:image/jpeg;base64,${source.toString('base64')}`;
             const resized = await sharp(source).resize(PHOTO, PHOTO, { fit: 'contain', background: CARD_BG }).png().toBuffer();
             return `data:image/png;base64,${resized.toString('base64')}`;
-        },
-        // A failed read draws this card without the photo and lets the next request try again.
-        () => {
+        })
+        // A failed read or resize draws this card without the photo and lets the next request try again.
+        .catch(() => {
             portrait = undefined;
             return null;
-        },
-    );
+        });
     return portrait;
 }
 
@@ -153,7 +154,7 @@ export async function GET(request: NextRequest) {
             width: CARD_W,
             height: CARD_H,
             ...(fonts ? { fonts } : {}),
-            headers: HEADERS,
+            headers: photo ? HEADERS : SHORT_HEADERS,
         },
     );
 
@@ -161,9 +162,9 @@ export async function GET(request: NextRequest) {
     const png = Buffer.from(await card.arrayBuffer());
     try {
         const jpeg = await sharp(png).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
-        return new Response(new Uint8Array(jpeg), { headers: { ...HEADERS, 'Content-Type': 'image/jpeg' } });
+        return new Response(new Uint8Array(jpeg), { headers: { ...(photo ? HEADERS : SHORT_HEADERS), 'Content-Type': 'image/jpeg' } });
     } catch {
         // The PNG is still a valid card, only larger.
-        return new Response(new Uint8Array(png), { headers: { ...HEADERS, 'Content-Type': 'image/png' } });
+        return new Response(new Uint8Array(png), { headers: { ...SHORT_HEADERS, 'Content-Type': 'image/png' } });
     }
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { TWITTER_HANDLES } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import BeatsClient from '../../../studio/beats/BeatsClient';
 
@@ -42,6 +43,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
+        ...TWITTER_HANDLES,
         title: 'Cyberpunk Trap, Phonk & Synthwave Beats kaufen | Virzy Guns',
         description: 'Offizielle Instrumentals anhören, Lizenzen vergleichen und direkt bei BeatStars kaufen.',
         images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { TWITTER_HANDLES } from '@/lib/og';
 import { JsonLd } from '@/components/blog/article/JsonLd';
 import BeatsClient from '../../../studio/beats/BeatsClient';
 
@@ -42,6 +43,7 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
+        ...TWITTER_HANDLES,
         title: 'サイバーパンクトラップ・フォンク・シンセウェーブ ビート販売 | Virzy Guns',
         description: 'Virzy Guns 公式インストゥルメンタルのプレビューとライセンス。',
         images: [`${SITE_URL}/branding/vgp-logo-chrome-full.png`],
