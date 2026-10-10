@@ -1841,14 +1841,21 @@ async function analyseClip(input: number): Promise<ClipAnalysis> {
     const half = Math.round(0.006 * RATE);
     const a = Math.max(0, loudest - half);
     const b = Math.min(to, loudest + half);
+    // A pass or two over the render at a time, with a yield in between, so a slow phone never spends long in here at once.
+    await yieldToMain();
+    const hotPower = power(hotK, from, to);
+    const safePower = power(safeK, from, to);
+    await yieldToMain();
+    const hotPeak = peakOf(hot, from, to);
+    const safePeak = peakOf(safe, from, to);
     return {
         input,
         safeGain,
-        hotPower: power(hotK, from, to),
-        safePower: power(safeK, from, to),
+        hotPower,
+        safePower,
         overDb: gainToDb(most),
-        hotPeak: peakOf(hot, from, to),
-        safePeak: peakOf(safe, from, to),
+        hotPeak,
+        safePeak,
         window: { sent: sent.slice(a, b), hot: hot.slice(a, b), safe: safe.slice(a, b) },
     };
 }

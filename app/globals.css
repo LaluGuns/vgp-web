@@ -1139,3 +1139,163 @@ body::before {
   opacity: 0;
   transform: translateY(8px);
 }
+
+/* ------------------------------------------------------------------
+   Learn area (docs/DESIGN.md, "Learn area"): the sub-navigation on every
+   Learn page and the path map on /learn (components/learn/).
+   ------------------------------------------------------------------ */
+
+/* The sub-navigation's links touch the fixed header, so their focus ring is drawn inside them. */
+.vgp-learn-nav .vgp-focus:focus-visible {
+  outline-offset: -4px;
+}
+
+/* A path: its name over its line below 1024 px, beside it from there. */
+@media (min-width: 1024px) {
+  .vgp-map-path {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    column-gap: 8px;
+    align-items: start;
+  }
+}
+
+/* One 44 px tall cell per lesson. The line wraps like a score's systems:
+   44 px cells on phones, 22 to a system from 640 px, one line from 1280 px. */
+.vgp-map-track {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 44px);
+}
+
+@media (min-width: 640px) {
+  .vgp-map-track { grid-template-columns: repeat(22, 26px); }
+}
+
+@media (min-width: 768px) {
+  .vgp-map-track { grid-template-columns: repeat(22, 32px); }
+}
+
+@media (min-width: 1024px) {
+  .vgp-map-track { grid-template-columns: repeat(22, 36px); }
+}
+
+@media (min-width: 1280px) {
+  .vgp-map-track { grid-template-columns: repeat(44, 24px); }
+}
+
+.vgp-map-cell {
+  position: relative;
+  height: 44px;
+}
+
+.vgp-map-cell > a {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  color: var(--accent);
+}
+
+.vgp-map-cell > a:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* The path's line, in its accent: each cell draws its stretch of it. */
+.vgp-map-rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1.5px;
+  margin-top: -0.75px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+.vgp-map-track[data-dialect='music'] .vgp-map-rule { height: 2px; margin-top: -1px; }
+.vgp-map-track[data-dialect='mind'] .vgp-map-rule { height: 1.75px; margin-top: -0.875px; }
+.vgp-map-cell[data-end='first'] .vgp-map-rule { left: 50%; }
+.vgp-map-cell[data-end='last'] .vgp-map-rule { right: 50%; }
+.vgp-map-cell[data-end='only'] .vgp-map-rule { display: none; }
+
+.vgp-map-mark {
+  position: relative;
+  overflow: visible;
+}
+
+/* Hollow until read on this device (PathMapLive sets data-read); the fill hides the line behind it. */
+.vgp-map-fill {
+  fill: var(--bg);
+  stroke: currentColor;
+}
+
+.vgp-map-cell > a[data-read] .vgp-map-fill {
+  fill: currentColor;
+}
+
+/* Each group's rules, as texture under its lines (lib/blog/dialects.ts). */
+/* Technical: a graticule line every fifth lesson. */
+.vgp-map-track[data-dialect='technical'] .vgp-map-cell[data-major]::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  right: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Music: a staff under the note heads, a bar line every four lessons, a final bar to close. */
+.vgp-map-track[data-dialect='music'] .vgp-map-cell {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09)) 0 14px / 100% 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09)) 0 18px / 100% 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09)) 0 26px / 100% 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09)) 0 30px / 100% 1px no-repeat;
+}
+
+.vgp-map-track[data-dialect='music'] .vgp-map-cell[data-bar]::before,
+.vgp-map-track[data-dialect='music'] .vgp-map-cell:is([data-end='last'], [data-end='only'])::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  height: 17px;
+  right: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.vgp-map-track[data-dialect='music'] .vgp-map-cell:is([data-end='last'], [data-end='only'])::before {
+  right: 1px;
+  width: 4px;
+  background: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.45);
+  border-right: 2px solid rgba(255, 255, 255, 0.45);
+}
+
+/* Mind: dotted rules above and below, a field the rings sit in. */
+.vgp-map-track[data-dialect='mind'] .vgp-map-cell {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='2'%3E%3Ccircle cx='1' cy='1' r='0.8' fill='white' fill-opacity='0.24'/%3E%3C/svg%3E") 0 8px / 6px 2px repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='2'%3E%3Ccircle cx='1' cy='1' r='0.8' fill='white' fill-opacity='0.24'/%3E%3C/svg%3E") 0 34px / 6px 2px repeat-x;
+}
+
+/* Business: ruled rows of a ledger, closed with a double rule. */
+.vgp-map-track[data-dialect='business'] .vgp-map-cell {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)) 0 4px / 100% 1px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)) 0 39px / 100% 1px no-repeat;
+}
+
+.vgp-map-track[data-dialect='business'] .vgp-map-cell:is([data-end='last'], [data-end='only'])::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  right: 1px;
+  width: 3px;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+}
