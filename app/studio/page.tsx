@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ogImage, socialMetadata } from '@/lib/og';
 import { PageHeader, TextLink } from '@/components/editorial/EditorialPrimitives';
 import { founderEmail } from '@/lib/founder-contact';
 import { CreditsStrip } from '@/components/editorial/CreditsStrip';
@@ -20,6 +21,12 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/studio',
     },
+    ...socialMetadata({
+        title: 'VGP Studio | Beats and Production by Virzy Guns',
+        description: 'Beats, custom production, mixing and mastering by Virzy Guns.',
+        url: 'https://www.virzyguns.com/studio',
+        image: ogImage({ kicker: 'Studio', title: 'Beats and production by Virzy Guns.', sub: 'Beat leases, exclusive rights, custom production, mixing and mastering.' }),
+    }),
 };
 
 const mailto = (subject: string) => `mailto:${founderEmail}?subject=${encodeURIComponent(subject)}`;

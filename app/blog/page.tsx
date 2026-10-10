@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         title,
         description,
         url,
-        image: ogImage({ kicker: 'Lessons', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} learning paths · Virzy Guns` }),
+        image: ogImage({ kicker: 'Lessons', title: 'Free music production lessons', sub: `${articles.length} lessons · ${learningPaths.length} paths · Virzy Guns` }),
     }),
 };
 
