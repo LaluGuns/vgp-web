@@ -396,12 +396,14 @@ function drawAB(t, frame1 = false, noHead = false) {
         speakerBox(g, 92, lane.y + 26, 0.72, { exc: exc * (0.6 + 0.4 * Math.sin(t * 90) ** 2), kick: kick * (v === 2 ? 1 : 0.6), alpha: dim });
         badgeNum(g, v, 92, lane.y - 98, 32, { ring, alpha: dim });
     });
-    // The countdown while the viewer picks: 3, 2, 1 on the beat.
+    // The countdown while the viewer picks: 3, 2, 1 on the beat, and an invitation to comment.
     if (guessing) {
+        const kB = popIn(t, G.at + 0.2, 0.3);
+        pill(g, 'comment 1 or 2', 540, 538, { size: 40, bg: P.ink, fg: P.dark, alpha: kB, scale: E.outBack(kB), weight: 800 });
         const k = Math.min(2, Math.floor((t - G.at) / BEAT));
         const p = ((t - G.at) % BEAT) / BEAT;
         // Three dots that fill on the beat (no digits, which would read as version labels).
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3 && kB <= 0; i++) {
             const x = 540 + (i - 1) * 70;
             const on = i <= k;
             const sc = i === k ? 1 + 0.35 * Math.exp(-p / 0.15) : 1;
@@ -1313,11 +1315,61 @@ function drawEnd(t) {
     avatar(g, 132, 212, 62 * (1 + 0.08 * btn));
     label(g, 'Virzy Guns', 222, 204, { size: 54, weight: 800, color: P.ink });
     label(g, TL.lesson.tagline, 222, 256, { size: 36, weight: 600, color: P.ink2 });
+    const tPoll = wto('cta', 'did', 0.4);
+    const tLesson = wto('cta', 'full', 0.7);
+    // 1. The recap: the three reasons once more, each lit as it is named.
+    const kRe = (1 - seg(t, tPoll - 0.25, tPoll)) * E.out(seg(t, SC.end, SC.end + 0.25));
+    if (kRe > 0) {
+        label(g, 'why the gap hits harder', 540, 470, { size: 46, weight: 800, color: P.ink2, align: 'center', family: BODY, alpha: kRe });
+        [['clean ears', 'clean'], ['calm limiter', 'calm'], ['a beat you saw coming', 'beat']].forEach(([w, cue], i) => {
+            const kI = popIn(t, wto('cta', cue, 0.05 + i * 0.12) - 0.05, 0.3) * kRe;
+            if (kI <= 0) return;
+            const y = 640 + i * 230;
+            g.save();
+            g.globalAlpha *= kI;
+            g.translate(270, y);
+            g.scale(1.1 * E.outBack(kI), 1.1 * E.outBack(kI));
+            if (i === 0) earPinna(g, -8, -10, 0.85);
+            else if (i === 1) robotDome(g, { x: 0, y: 55 }, { s: 0.75, look: { x: 0, y: 300 }, lid: 0 });
+            else brainChar(g, 0, -25, 0.52, { t, joy: 0.6 });
+            g.restore();
+            label(g, w, 400, y + 16, { size: 50, weight: 800, color: P.ink, family: BODY, alpha: kI, base: 'middle' });
+        });
+    }
+    // 2. The poll from the hook, answered in the comments.
+    const kPo = popIn(t, tPoll - 0.1, 0.3) * (1 - seg(t, tLesson - 0.25, tLesson));
+    if (kPo > 0) {
+        g.save();
+        g.globalAlpha *= kPo;
+        g.translate(540, 760);
+        g.scale(lerp(0.9, 1, E.outBack(kPo)), lerp(0.9, 1, E.outBack(kPo)));
+        // A comment bubble.
+        rr(g, -380, -230, 760, 400, 60);
+        g.fillStyle = P.ink;
+        g.fill();
+        g.beginPath();
+        g.moveTo(-200, 168);
+        g.lineTo(-260, 260);
+        g.lineTo(-110, 168);
+        g.fill();
+        label(g, 'Did you pick 2?', 0, -120, { size: 64, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        [['1', P.ink3], ['2', P.cyan]].forEach(([c, col], i) => {
+            const x = (i - 0.5) * 260;
+            g.beginPath();
+            g.arc(x, 40, 84, 0, Math.PI * 2);
+            g.fillStyle = col;
+            g.fill();
+            label(g, c, x, 44, { size: 96, weight: 800, color: P.dark, align: 'center', base: 'middle' });
+        });
+        g.restore();
+        label(g, 'tell me in the comments', 540, 1090, { size: 46, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: kPo });
+    }
     const sw = PH.w - 28;
     const sh = PH.h - 28;
     const x0 = PH.x - PH.w / 2;
-    const lift = E.outBack(seg(t, SC.end - 0.05, SC.end + 0.5));
+    const lift = E.outBack(seg(t, tLesson - 0.25, tLesson + 0.3));
     g.save();
+    g.globalAlpha *= clamp(seg(t, tLesson - 0.25, tLesson + 0.05));
     g.translate(0, (1 - lift) * 100 + 8 * Math.sin((t - SC.end) * 1.7));
     const glow = g.createRadialGradient(PH.x, PH.top + PH.h / 2, 0, PH.x, PH.top + PH.h / 2, 640);
     glow.addColorStop(0, 'rgba(125,211,252,0.15)');
@@ -1340,8 +1392,8 @@ function drawEnd(t) {
         // The lesson page: its top, a fast scroll, then its gap-length figure, easing in on the
         // sentence that backs the film ("An 8th-note gap or longer lets it fade completely."),
         // which is underlined as the voice names the lesson.
-        const tS0 = SC.end + 0.1;
-        const tS1 = SC.end + 0.75;
+        const tS0 = tLesson;
+        const tS1 = tLesson + 0.65;
         const F = SHOT.figure;
         const fs = sw / F.width;
         // The sentence sits at 765-880 px of the figure capture (2x), the chart below it.
@@ -1377,7 +1429,7 @@ function drawEnd(t) {
     g.restore();
     g.restore();
     // The address, up for the whole call to action.
-    const k = popIn(t, voBy.cta.at + 0.1, 0.35);
+    const k = popIn(t, tLesson, 0.35);
     if (k > 0) {
         const pulse = t < BUTTON ? 0.035 * Math.exp(-((t % BEAT) / 0.12)) : 0;
         pill(g, TL.lesson.url, 540, 1092, { size: 56, bg: P.ink, fg: P.dark, scale: lerp(0.85, 1, E.outBack(k)) * (1 + 0.04 * btn + pulse), alpha: clamp(k * 3), weight: 800 });
@@ -1386,11 +1438,8 @@ function drawEnd(t) {
         const cut = Math.ceil(words.length / 2);
         label(g, words.slice(0, cut).join(' '), 540, 1166, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
         label(g, words.slice(cut).join(' '), 540, 1208, { size: 34, weight: 600, color: P.ink2, align: 'center', alpha: clamp(k * 3) });
-        // The comment poll: the gap lengths the film names, as chips.
-        ['16th', '8th', 'beat'].forEach((c, i) => {
-            const kc = popIn(t, SC.end + 0.3 + i * 0.12, 0.25);
-            if (kc > 0) pill(g, c, 540 + (i - 1) * 220, 1272, { size: 44, bg: c === '8th' ? P.cyan : P.ink, fg: P.dark, alpha: kc, scale: E.outBack(kc), weight: 800 });
-        });
+        // The poll stays up under the lesson: one or two, in the comments.
+        label(g, 'picked 1 or 2? comment', 540, 1272, { size: 40, weight: 800, color: P.ink, align: 'center', family: BODY, alpha: clamp(k * 3) });
     }
     g.restore();
 }
