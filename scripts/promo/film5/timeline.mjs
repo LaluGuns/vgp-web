@@ -28,28 +28,30 @@ const onGrid = (t) => Math.ceil(t / BEAT - 1e-9) * BEAT;
 // Demos: `v` is the version, `pre` and `post` the beats played either side of the downbeat.
 const HOOK = { pre: 1.5, post: 2.5 };
 const REPLAY = { pre: 1.5, post: 2 };
-// After the hook, three beats (3, 2, 1) to pick 1 or 2 before the voice gives the answer.
-const GUESS = 3 * BEAT;
 // The sting after the fog line: each version's downbeat alone, so the ear hears what the rows show.
 const STING = { pre: 0.75, post: 0.5 };
 const len = (d) => (d.pre + d.post) * BEAT;
 
-const LINE_GAP = 0.22;
+const LINE_GAP = 0.25;
 const vo = [];
 const guessAt = len(HOOK) * 2;
+// "One or two? Pick one." is spoken over the countdown, which lasts at least three beats.
+vo.push({ id: 'guess', at: Math.round((guessAt + 0.05) * 1000) / 1000 });
+const GUESS = Math.max(3 * BEAT, dur('guess') + 0.2);
 let t = guessAt + GUESS + 0.1;
 const stings = [];
+// A sting: one version's downbeat alone, its downbeat on the grid, after a line ends at t.
+const sting = (id, v) => {
+    const down = onGrid(t + 0.1 + STING.pre * BEAT);
+    stings.push({ id, v, at: down - STING.pre * BEAT, ...STING });
+    t = down + STING.post * BEAT + 0.2;
+};
 for (const id of ['hook', 'fog', 'fresh', 'hand', 'brain', 'how']) {
     vo.push({ id, at: Math.round(t * 1000) / 1000 });
     t += dur(id) + LINE_GAP;
-    if (id === 'fog') {
-        // Version 1 then version 2, each downbeat on the grid.
-        const down1 = onGrid(t + STING.pre * BEAT);
-        stings.push({ id: 'S1', v: 1, at: down1 - STING.pre * BEAT, ...STING });
-        const down2 = down1 + (STING.pre + STING.post + 0.5) * BEAT;
-        stings.push({ id: 'S2', v: 2, at: down2 - STING.pre * BEAT, ...STING });
-        t = down2 + STING.post * BEAT + 0.2;
-    }
+    // "So in number one, the click is buried." then version 1's downbeat; "your ears hit it fresh" then version 2's.
+    if (id === 'fog') sting('S1', 1);
+    if (id === 'fresh') sting('S2', 2);
 }
 // "Listen again" ends just before the replay, which starts on the grid.
 const replayAt = onGrid(t + dur('again') + 0.12);
@@ -100,7 +102,7 @@ export const TIMELINE = {
         { cue: ['fog', 'stops', 0.45], dt: 0.1, kind: 'tick' },
         { cue: ['fog', 'click', 0.7], dt: 0, kind: 'pop', level: 0.6 },
 
-        { cue: ['fresh', 'full', 0.75], dt: 0, kind: 'pop', level: 0.7 },
+        { cue: ['fresh', 'fresh', 0.9], dt: 0, kind: 'pop', level: 0.7 },
         { cue: ['hand', 'your', 0], dt: -0.2, kind: 'whoosh', level: 0.5 },
         { cue: ['hand', 'hand', 0.17], dt: -0.1, kind: 'grab' },
         { cue: ['hand', 'down', 0.7], dt: 0, kind: 'grab', level: 0.7 },
