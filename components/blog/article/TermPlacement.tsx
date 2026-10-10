@@ -25,10 +25,20 @@ const GAP = 8;
 export function TermPlacement() {
     useEffect(() => {
         const wide = window.matchMedia('(min-width: 1024px)');
+        // A tap or click on a word: its definition takes the focus without a ring (the browser would draw
+        // one if the word still had it from the keyboard).
+        let pressed: { term: Element; at: number } | null = null;
+        const press = (event: PointerEvent) => {
+            const term = event.target instanceof Element ? event.target.closest('.vgp-term') : null;
+            pressed = term ? { term, at: event.timeStamp } : null;
+        };
         const enter = (event: Event) => {
             const pop = event.target as HTMLElement;
             if (!pop.classList?.contains('vgp-term-pop') || (event as Event & { newState?: string }).newState !== 'open') return;
             if (!pop.matches(':popover-open') || pop.contains(document.activeElement)) return;
+            const opener = document.querySelector(`[popovertarget="${pop.id}"]:not([popovertargetaction])`);
+            pop.toggleAttribute('data-pointer', pressed !== null && pressed.term === opener && event.timeStamp - pressed.at < 1500);
+            pressed = null;
             pop.focus({ preventScroll: true });
         };
         const place = (event: Event) => {
@@ -72,10 +82,12 @@ export function TermPlacement() {
         };
         document.addEventListener('beforetoggle', place, true);
         document.addEventListener('toggle', enter, true);
+        document.addEventListener('pointerdown', press, true);
         const stopFocus = closeOpenWhenFocusLeaves('.vgp-term-pop');
         return () => {
             document.removeEventListener('beforetoggle', place, true);
             document.removeEventListener('toggle', enter, true);
+            document.removeEventListener('pointerdown', press, true);
             stopFocus();
         };
     }, []);

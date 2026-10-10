@@ -82,60 +82,83 @@ export default function LearnHubPage() {
                             mastering and licensing. Read a path in order from lesson 1, or open any lesson on the map.
                         </p>
                     }
-                    facts={[`${articles.length} lessons`, `${learningPaths.length} paths`, `about ${hours} hours of reading`, `${glossary.length} glossary terms`]}
+                    // On a phone the sentence above already gives the first two.
+                    facts={[
+                        { text: `${articles.length} lessons`, fromSm: true },
+                        { text: `${learningPaths.length} paths`, fromSm: true },
+                        `about ${hours} hours of reading`,
+                        `${glossary.length} glossary terms`,
+                    ]}
                     aside={
                         start.length > 0 ? (
                             <div>
-                                <h2 className="text-base font-semibold text-white">Start here</h2>
-                                <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
-                                    {start.map((lesson) => {
-                                        const article = getArticleBySlug(lesson.slug);
-                                        return (
-                                            <li key={lesson.slug}>
-                                                {/* Named by the title; the path and reading time describe it. */}
-                                                <Link
-                                                    href={`/blog/${lesson.slug}`}
-                                                    aria-labelledby={`start-${lesson.slug}-title`}
-                                                    aria-describedby={`start-${lesson.slug}-meta`}
-                                                    className="vgp-focus group block py-5"
-                                                >
-                                                    <span id={`start-${lesson.slug}-meta`} className="block text-sm text-white/55">
-                                                        {lesson.pathName}, lesson 1 · {lesson.readingTime} min
-                                                    </span>
-                                                    <span
-                                                        id={`start-${lesson.slug}-title`}
-                                                        className="mt-1 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4"
+                                {/* A phone has no room for the large links above the map: one sentence, each link on a line of its own. */}
+                                <p className="text-base leading-7 text-white/70 sm:hidden">
+                                    Start with{' '}
+                                    {start.map((lesson, i) => (
+                                        <span key={lesson.slug}>
+                                            {i > 0 ? ' or ' : null}
+                                            <span className="whitespace-nowrap">
+                                                <TapLink href={`/blog/${lesson.slug}`} className="text-white">
+                                                    {lesson.pathName}, lesson 1
+                                                </TapLink>{' '}
+                                                ({lesson.readingTime} min){i === start.length - 1 ? '.' : null}
+                                            </span>
+                                        </span>
+                                    ))}
+                                </p>
+                                <div className="hidden sm:block">
+                                    <h2 className="text-base font-semibold text-white">Start here</h2>
+                                    <ul className="mt-3 divide-y divide-white/10 border-y border-white/10">
+                                        {start.map((lesson) => {
+                                            const article = getArticleBySlug(lesson.slug);
+                                            return (
+                                                <li key={lesson.slug}>
+                                                    {/* Named by the title; the path and reading time describe it. */}
+                                                    <Link
+                                                        href={`/blog/${lesson.slug}`}
+                                                        aria-labelledby={`start-${lesson.slug}-title`}
+                                                        aria-describedby={`start-${lesson.slug}-meta`}
+                                                        className="vgp-focus group block py-5"
                                                     >
-                                                        {article?.title}
-                                                    </span>
-                                                </Link>
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
+                                                        <span id={`start-${lesson.slug}-meta`} className="block text-sm text-white/55">
+                                                            {lesson.pathName}, lesson 1 · {lesson.readingTime} min
+                                                        </span>
+                                                        <span
+                                                            id={`start-${lesson.slug}-title`}
+                                                            className="mt-1 block text-xl font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4"
+                                                        >
+                                                            {article?.title}
+                                                        </span>
+                                                    </Link>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
                             </div>
                         ) : null
                     }
                 />
 
-                <section id="paths" aria-labelledby="map-heading" className="px-4 pb-16 pt-6 sm:px-6 lg:pb-20">
+                <section id="paths" aria-labelledby="map-heading" className="px-4 pb-16 sm:px-6 lg:pb-20 lg:pt-2">
                     <div className="mx-auto max-w-7xl">
-                        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-                            <div>
-                                <h2 id="map-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
-                                    Paths
-                                </h2>
-                                <p className="mt-3 max-w-2xl text-base leading-7 text-white/65">
-                                    Each line is a path, read from left to right, and each mark on it is a lesson. A filled mark is one you have read
-                                    on this device.
-                                </p>
-                            </div>
+                        {/* From 1024 px the line under the heading sits beside it, so the map's first group starts in the first screen. */}
+                        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-12">
+                            <h2 id="map-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+                                Paths
+                            </h2>
+                            <p className="max-w-2xl text-base leading-7 text-white/65 lg:-mb-1">
+                                Each line is a path, read from left to right, and each mark on it is a lesson. A filled mark is one you have read on
+                                this device.
+                            </p>
                         </div>
                         {/* A readout of the lesson under the pointer, the keyboard focus or a first tap (PathMapLive), held
-                            under the site header while the map scrolls under it. Its box has a fixed height, so a long title or
-                            the "Open lesson" link never moves the map. A visual aid only: each lesson's link already has its
-                            title as its name, so the readout is hidden from screen readers and its link from the Tab key.
-                            The hints say what the script does, so they wait for it (app/globals.css, "Learn area"). */}
+                            under the site header while the map scrolls under it; on a touch screen under 1024 px, a card above
+                            the tab bar once a tap chooses a mark. Its box has a fixed height, so a long title or the "Open
+                            lesson" link never moves the map. A visual aid only: each lesson's link already has its title as its
+                            name, so the readout is hidden from screen readers and its link from the Tab key. The hints say
+                            what the script does, so they wait for it (app/globals.css, "Learn area"). */}
                         <div id="map-readout" aria-hidden="true" className="vgp-map-readout mt-4 print:hidden">
                             <p data-line="" className="truncate text-sm leading-5 text-white/55">
                                 <span data-hint="pointer">Point at a mark, or move to one with the Tab key, to see its lesson.</span>
@@ -157,7 +180,7 @@ export default function LearnHubPage() {
                         {/* Says which lesson a first tap chose, for a screen reader on a touch screen (PathMapLive). */}
                         <p id="map-announce" aria-live="polite" className="sr-only" />
                         {/* A link per lesson and per path: a keyboard user can step over all of them at once. Shown while it has focus. */}
-                        <div id="path-map" className="relative mt-1">
+                        <div id="path-map" className="vgp-map-box relative mt-1">
                             <a
                                 href="#try"
                                 className="vgp-focus sr-only rounded-md bg-white text-sm font-semibold text-[#050607] focus:not-sr-only focus:absolute focus:left-0 focus:top-0 focus:z-10 focus:px-4 focus:py-3"
@@ -172,7 +195,8 @@ export default function LearnHubPage() {
 
                 {tryLesson && tryPath ? (
                     <section id="try" aria-labelledby="try-heading" className="border-t border-white/10 px-4 pt-14 print:hidden sm:px-6 lg:pt-16">
-                        {/* The demo sits in the same column as in a lesson, so the height it reserves (lib/blog/demos.ts) fits here too. */}
+                        {/* The demo sits in the same column width as in a lesson, so the height it reserves (lib/blog/demos.ts) fits here
+                            too, and against the right edge of the page grid, as the map above and the list below end there. */}
                         <div className="mx-auto grid max-w-7xl gap-x-12 lg:grid-cols-12">
                             <div className="lg:col-span-4">
                                 <h2 id="try-heading" className="font-display text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
@@ -187,7 +211,7 @@ export default function LearnHubPage() {
                                 </p>
                             </div>
                             <div className="min-w-0 lg:col-span-8">
-                                <div className="max-w-[68ch] [&>.vgp-demo]:mt-8 lg:[&>.vgp-demo]:mt-0">
+                                <div className="max-w-[68ch] lg:ml-auto [&>.vgp-demo]:mt-8 lg:[&>.vgp-demo]:mt-0">
                                     <DemoSlot id={TRY_DEMO} dialect="technical" />
                                 </div>
                             </div>
@@ -241,7 +265,7 @@ export default function LearnHubPage() {
                             </p>
                             <dl className="mt-6 divide-y divide-white/10 border-y border-white/10">
                                 {terms.map((term) => (
-                                    <div key={term.id} className="py-4">
+                                    <div key={term.id} className="py-4 print:break-inside-avoid">
                                         <dt className="text-base font-semibold text-white">
                                             <Link href={`/learn/glossary#${term.id}`} className="vgp-focus inline-flex min-h-11 min-w-11 items-center rounded-sm">
                                                 <span className="vgp-link">{term.term}</span>

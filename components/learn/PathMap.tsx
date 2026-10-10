@@ -12,13 +12,15 @@ import type { MapFamily, MapPath } from './map-data';
  * (PathMapLive) without changing any size.
  *
  * Each path's line is a grid of 44 px tall cells (one per lesson) that wraps
- * like a score's systems: 44 px wide on phones, narrower from 640 px up,
- * and one line per path from 1280 px. A cell is just its link, and the link
+ * like a score's systems: 44 px wide on phones and touch screens under
+ * 1024 px, narrower from 640 px up with a mouse, and one line per path
+ * from 1280 px. A cell is just its link, and the link
  * draws itself with two background layers: its stretch of the line and the
  * lesson's value glyph (app/globals.css, "Learn area"). So a lesson costs
- * two elements and no pseudo-elements, which keeps the first render and a
- * restyle cheap on a slow phone, and the drawing wraps with the grid. The
- * links are plain anchors, not
+ * two elements and no pseudo-elements of its own (only the few cells that
+ * carry a rule mark, a graticule or bar line, draw it with ::before), which
+ * keeps the first render and a restyle cheap on a slow phone, and the
+ * drawing wraps with the grid. The links are plain anchors, not
  * next/link: PathMapLive sends their clicks through the app router with one
  * listener instead of a hydrated Link component per lesson.
  */
@@ -77,36 +79,32 @@ function Track({ path, family, order }: { path: MapPath; family: MapFamily; orde
                 </span>
             </a>
             {/* The lane carries the group's rules (the paper); the list on it draws in once, left to right, in
-                --len steps (one per lesson), after --o others of its group (app/globals.css, "Learn area"). Only these
-                eleven lists carry their own values: one per cell made every cell restyle on its own. */}
+                --len steps (one per lesson), after --o others of its group, wiped in by the box around it
+                (app/globals.css, "Learn area"). Only these eleven boxes carry their own values: one per cell
+                made every cell restyle on its own. */}
             <div className="vgp-map-lane" data-dialect={d.name}>
-                <ol
-                    aria-labelledby={nameId}
-                    data-reveal="draw"
-                    data-dialect={d.name}
-                    data-name={path.name}
-                    className="vgp-map-track"
-                    style={{ '--o': order, '--len': total } as CSSProperties}
-                >
-                    {path.lessons.map((lesson, i) => (
-                        <li
-                            key={lesson.slug}
-                            className="vgp-map-cell"
-                            data-end={total === 1 ? 'only' : i === 0 ? 'first' : i === total - 1 ? 'last' : undefined}
-                            data-bar={d.name === 'music' && i % 4 === 3 && i < total - 1 ? '' : undefined}
-                            data-major={i % 5 === 4 ? '' : undefined}
-                        >
-                            <a
-                                href={`/blog/${lesson.slug}`}
-                                aria-label={`Lesson ${i + 1}: ${lesson.title}`}
-                                data-slug={lesson.slug}
-                                data-n={i + 1}
-                                data-min={lesson.minutes}
-                                className="vgp-focus"
-                            />
-                        </li>
-                    ))}
-                </ol>
+                <div className="vgp-map-wipe" data-reveal="draw" style={{ '--o': order, '--len': total } as CSSProperties}>
+                    <ol aria-labelledby={nameId} data-dialect={d.name} data-name={path.name} className="vgp-map-track">
+                        {path.lessons.map((lesson, i) => (
+                            <li
+                                key={lesson.slug}
+                                className="vgp-map-cell"
+                                data-end={total === 1 ? 'only' : i === 0 ? 'first' : i === total - 1 ? 'last' : undefined}
+                                data-bar={d.name === 'music' && i % 4 === 3 && i < total - 1 ? '' : undefined}
+                                data-major={i % 5 === 4 ? '' : undefined}
+                            >
+                                <a
+                                    href={`/blog/${lesson.slug}`}
+                                    aria-label={`Lesson ${i + 1}: ${lesson.title}`}
+                                    data-slug={lesson.slug}
+                                    data-n={i + 1}
+                                    data-min={lesson.minutes}
+                                    className="vgp-focus"
+                                />
+                            </li>
+                        ))}
+                    </ol>
+                </div>
             </div>
         </li>
     );

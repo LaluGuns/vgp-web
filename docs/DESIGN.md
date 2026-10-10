@@ -146,7 +146,10 @@ anything without one is technical.
   second line the caption names that is not a reference (both EQ moves in
   052, the right channel in 132). When three lines are all subjects, keep
   the third solid where its shape sets it apart (040), or draw the layers
-  as labelled `bands` (039).
+  as labelled `bands` (039). A solid line that lies along the 0 dB rule of a
+  gain plot (047: a shelf that cancels a boost) would read as the axis, so
+  it carries the dialect's value mark on each labelled frequency. Grey
+  context (`muted`) is a solid grey line in every figure that draws lines.
 - **Labels never sit on data.** A label goes where no mark comes near
   it (6 units of clear space round a line label): a signal's threshold or
   ceiling label beside its line where the traces leave room, else in the
@@ -161,7 +164,9 @@ anything without one is technical.
   same side of their lines where that costs no extra row. On a scale, a
   label up a lane hangs on a leader that keeps 6 units from every label it
   passes, and two labels in one lane with a leader between them stand 16
-  units apart. A value steps over a dashed reference line.
+  units apart. A value steps over a dashed reference line. A scale's range
+  labels follow one rule per figure: every label inside its bar when each
+  one fits there, else every label beside its bar, never some of each.
   A bar with no upper limit (`open`) fades out at the end of the scale
   with no end mark, so it never reads as a number.
 - **Focus.** Rhythm rows, flow steps and arrangement layers take
@@ -185,6 +190,18 @@ anything without one is technical.
 - **No stylesheet needed.** A figure is complete as a bare SVG: the accent
   is the root's `color` attribute and every dialect choice is an attribute,
   so the offline renderer gets the same marks and colours as the page.
+- **Layers.** A draw-in repaints the whole SVG on every frame, grid and
+  labels with it. So on the page `components/blog/figures/layers.tsx` splits
+  a figure with much static drawing into stacked SVGs in paint order: runs
+  of marks that never animate (rules, labels, grey data) are painted once,
+  and the animated marks, with the short static runs between them, repaint
+  alone. Same pixels: every mark keeps its place in the paint order and its
+  parent groups, the layers share one grid cell (never positioned: a
+  positioned layer snaps to whole pixels and draws curves a hair off), the
+  first layer is the figure (`role="img"`, named), the rest are `aria-hidden`,
+  and the fade-in acts on the stack. A group with its own opacity, mask or
+  filter keeps its figure whole. Checks that look at a figure's text and
+  marks read every layer of its frame.
 - **Print.** Figures print inverted with the hue turned back, so the
   accent stays its own colour on white paper and text prints dark. The
   fixed bars (navbar, reading progress) and the demos are hidden in print,
@@ -219,44 +236,55 @@ pages are /learn, /blog, the path pages (/blog/category/*), every lesson,
 - **Landing.** /learn answers "what is this and where do I start" in its
   first screen: the title, one sentence, the counts, and Start here (the
   first lessons of Songwriting and Mixing & Mastering, as large links with
-  their titles). Then the path map, one demo to try (the blind loudness
-  test from Mixing & Mastering lesson 1, through `DemoSlot`, in the same
-  column width as in a lesson so its reserved height holds), the newest
+  their titles; under 640px the one-line "New here? Start with ..." form
+  that /blog uses), and the path map's first group starts in that screen
+  too (at 390x844 and 1280x800). Then the rest of the path map, one demo
+  to try (the blind loudness test from Mixing & Mastering lesson 1,
+  through `DemoSlot`, in the same column width as in a lesson so its
+  reserved height holds, against the page grid's right edge), the newest
   lessons, and the glossary (three real entries) beside the book.
 - **Path map.** `PathMap`: every learning path as a line of its lessons,
-  in its group's dialect and accent, the one place the four accents
-  appear together. Groups run from the first idea to the release: Writing
-  and arranging (music), Sound and mixing (technical), Psychology (mind),
+  in its group's dialect and accent, the one place the four accents appear
+  together. Groups run from the first idea to the release: Writing and
+  arranging (music), Sound and mixing (technical), Psychology (mind),
   Business. Lessons sit on a shared axis, so lesson n is at the same place
   on every path and a line's length is the path's size; from 1280px each
   path is one line under a lesson ruler. Narrower, a line wraps like a
-  score's systems (22 lessons to a system from 640px; 44px cells on
-  phones, 6 at 320px). Each cell draws its stretch of the line, and each
-  group's rules (graticule, staff with bar lines and a final bar, dotted
-  field, ledger rows with a closing double rule) run the full width of
-  every system as paper, so a short path ends on open paper. A lesson is
-  its group's value glyph, hollow until read on this device, filled once
-  read (`PathMapLive` adds the fills, the "read" in each name and the
-  "3 of 44 read" counts after hydration, in boxes that already have their
-  size). Every lesson and path is a link in reading order, named "Lesson
-  3: <title>"; a "Skip past the map" link, shown on focus, lets keyboard
-  users step over it. From 1024px a fixed-height readout above the map
-  shows the path, place, minutes and title of the lesson under the
-  pointer or the focus (`aria-hidden`: the link already says it). Each
-  line draws in once with the figure motion (`data-reveal="draw"`): it
-  wipes in from lesson 1 at a constant speed, like a scope beam, the
-  group's later paths 60ms apart; never on screen at load, with reduced
-  motion, without script or in print. Server-rendered; works with
-  JavaScript off.
+  score's systems (22 lessons to a system from 640px with a mouse; 44px
+  cells on phones, 6 at 320px, and on any touch screen under 1024px). Each
+  cell draws its stretch of the line, and each group's rules (graticule,
+  staff with bar lines and a final bar, dotted field, ledger rows with a
+  closing double rule) run the full width of every system as paper, so a
+  short path ends on open paper. A lesson is its group's value glyph,
+  hollow until read on this device, filled once read (`PathMapLive` adds
+  the fills, the "read" in each name and the "3 of 44 read" counts after
+  hydration, in boxes that already have their size). Every lesson and path
+  is a link in reading order, named "Lesson 3: <title>"; a "Skip past the
+  map" link, shown on focus, lets keyboard users step over it. A
+  fixed-height readout above the map shows the path, place, minutes and
+  title of the lesson under the pointer or the focus (`aria-hidden`: the
+  link already says it); it stays under the site header while the map
+  scrolls beneath it, and a mark the Tab key reaches stops below it. A
+  finger has no hover, so on a touch screen the first tap on a mark
+  chooses it and the readout shows it with an "Open lesson" link; a second
+  tap (or the link) opens it. Under 1024px on a touch screen the readout
+  is a card over the tab bar, shown only for a chosen mark, so it costs
+  the map no height. Each line draws in once with the figure motion
+  (`data-reveal="draw"`): it wipes in from lesson 1 at a constant speed,
+  like a scope beam, the group's later paths 60ms apart (two transforms
+  and no paint: the box around the line slides in while the line inside
+  slides back by as much); never on screen at load, with reduced motion,
+  without script or in print. Server-rendered; works with JavaScript off.
 - **Keep the map cheap.** 147 lessons are 147 cells on a slow phone. A
   cell is an `li` and a plain `a` that draws its glyph and its stretch of
-  line as two background layers: no pseudo-elements, no SVG, no
-  `next/link` (one listener in `PathMapLive` sends clicks through the
-  router and prefetches on hover or focus), and no per-cell custom
-  property or inline style, which stops cells sharing styles and made a
-  restyle four times slower. Per-path values (`--o`, `--len`) sit on the
-  eleven lists, per-group ones (accent, glyphs, line weight) on the four
-  groups.
+  line as two background layers: no pseudo-elements on the link (only the
+  few cells that carry a rule mark, a graticule line, a bar line or the
+  final bar, draw it as an `li::before`), no SVG, no `next/link` (one
+  listener in `PathMapLive` sends clicks through the router and prefetches
+  on hover or focus), and no per-cell custom property or inline style,
+  which stops cells sharing styles and made a restyle four times slower.
+  Per-path values (`--o`, `--len`) sit on the eleven boxes round the
+  lists, per-group ones (accent, glyphs, line weight) on the four groups.
 
 ## Story and voice
 

@@ -55,7 +55,7 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
                     const done = checked[qi];
                     const right = done && choice === question.answer;
                     return (
-                        <li key={qi}>
+                        <li key={qi} className="print:break-inside-avoid">
                             <form onSubmit={check(qi)}>
                                 <fieldset disabled={done}>
                                     <legend className="text-lg font-medium leading-7 text-white">

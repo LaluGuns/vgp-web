@@ -22,7 +22,9 @@ const FOCUS_GAP = 8;
  * and a screen reader's activation open the lesson at once, as before.
  *
  * The readout stays under the site header while the map scrolls beneath
- * it, so a mark the Tab key reaches is brought out from under it.
+ * it (on a touch screen under 1024 px it is a card over the tab bar that
+ * shows the chosen mark), so a mark the Tab key reaches is brought out
+ * from under it.
  *
  * The map's links are plain anchors (one per lesson and path), so this also
  * gives them what next/link would: a plain click goes through the app router
@@ -91,12 +93,12 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
             title.textContent = titleOf(next);
             readout?.setAttribute('data-active', '');
         };
-        const choose = (link: HTMLAnchorElement) => {
+        const choose = (link: HTMLAnchorElement | null) => {
             chosen?.removeAttribute('data-chosen');
             chosen = link;
-            link.setAttribute('data-chosen', '');
+            link?.setAttribute('data-chosen', '');
             show(link);
-            if (announce) {
+            if (announce && link) {
                 const track = link.closest('ol');
                 announce.textContent = `${track?.dataset.name ?? ''}, lesson ${link.dataset.n}: ${titleOf(link)}. Tap it again to open it.`;
             }
@@ -122,6 +124,11 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
         const onDown = (event: PointerEvent) => {
             press = { link: lessonAt(event.target), type: event.pointerType, at: event.timeStamp };
         };
+        // A tap anywhere else lets go of the chosen mark (and on a phone, puts the card away).
+        const onDownElsewhere = (event: PointerEvent) => {
+            const target = event.target instanceof Node ? event.target : null;
+            if (chosen && target && !map.contains(target) && !readout?.contains(target)) choose(null);
+        };
         const onOver = (event: PointerEvent) => {
             if (event.pointerType !== 'mouse') return;
             show(lessonAt(event.target));
@@ -130,11 +137,18 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
         const onLeave = () => {
             if (!map.contains(document.activeElement)) show(null);
         };
-        // A mark the Tab key reaches under the readout (it stays under the header) is brought out below it.
+        // A mark the Tab key reaches under the readout is brought out from under it: below it while it is
+        // held under the header, above it while it is the card over the tab bar (a touch screen).
         const clearOfReadout = (target: HTMLElement) => {
             if (!readout || !target.matches(':focus-visible')) return;
-            const clear = readout.getBoundingClientRect().bottom + FOCUS_GAP;
-            const top = target.getBoundingClientRect().top;
+            const box = readout.getBoundingClientRect();
+            const { top, bottom } = target.getBoundingClientRect();
+            if (getComputedStyle(readout).position === 'fixed') {
+                const clear = box.top - FOCUS_GAP;
+                if (bottom > clear) window.scrollBy({ top: bottom - clear, behavior: 'instant' });
+                return;
+            }
+            const clear = box.bottom + FOCUS_GAP;
             if (top < clear) window.scrollBy({ top: top - clear, behavior: 'instant' });
         };
         const onFocus = (event: FocusEvent) => {
@@ -173,7 +187,10 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
 
         // The hairline under the readout shows only while it is held under the header.
         let stuck = false;
-        const holdAt = readout ? parseFloat(getComputedStyle(readout).top) || 0 : 0;
+        let holdAt = 0;
+        const measure = () => {
+            holdAt = readout ? parseFloat(getComputedStyle(readout).top) || 0 : 0;
+        };
         const onScroll = () => {
             if (!readout) return;
             const next = readout.getBoundingClientRect().top <= holdAt + 0.5 && map.getBoundingClientRect().top < holdAt + readout.offsetHeight;
@@ -181,11 +198,21 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
             stuck = next;
             readout.toggleAttribute('data-stuck', next);
         };
+        const onResize = () => {
+            measure();
+            onScroll();
+        };
+        // The card over the tab bar is put away while the map is off screen: no part of it between the
+        // header and the card itself.
+        const onScreen = new IntersectionObserver(([entry]) => readout?.toggleAttribute('data-out', !entry.isIntersecting), {
+            rootMargin: '-72px 0px -150px 0px',
+        });
+        onScreen.observe(map);
 
         readout?.setAttribute('data-live', '');
         const frame = requestAnimationFrame(() => {
             paint();
-            onScroll();
+            onResize();
         });
         const unsubscribe = subscribeRead(paint);
         map.addEventListener('pointerdown', onDown);
@@ -196,6 +223,8 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
         map.addEventListener('click', onClick);
         open?.addEventListener('click', onOpen);
         window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        document.addEventListener('pointerdown', onDownElsewhere, true);
         return () => {
             cancelAnimationFrame(frame);
             unsubscribe();
@@ -207,6 +236,9 @@ export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; r
             map.removeEventListener('click', onClick);
             open?.removeEventListener('click', onOpen);
             window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onResize);
+            document.removeEventListener('pointerdown', onDownElsewhere, true);
+            onScreen.disconnect();
         };
     }, [mapId, readoutId, announceId, router]);
 

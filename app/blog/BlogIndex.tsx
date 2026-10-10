@@ -500,6 +500,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
               : corrected
                 ? `Showing results for "${corrected}". ${countText}.`
                 : countText;
+    // Every key starts the wait again (`query`), also while the count stays the same.
     const [announcement, setAnnouncement] = useState('');
     const firstMessage = useRef<string | null>(null);
     useEffect(() => {
@@ -510,7 +511,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         }
         const timer = window.setTimeout(() => setAnnouncement(liveMessage), ANNOUNCE_DELAY);
         return () => window.clearTimeout(timer);
-    }, [liveMessage]);
+    }, [liveMessage, query]);
 
     // The selected path chip scrolls into view on a phone (after Back, or on a shared ?cat= link).
     // The Saved chip's label grows once the saved lessons load, so its count is part of the key.

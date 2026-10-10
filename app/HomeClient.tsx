@@ -99,9 +99,11 @@ export default function HomeClient({ lessonCount }: { lessonCount: number }) {
                                     See HealingWave
                                     <ButtonArrow />
                                 </Link>
-                                <TextLink href="/about">Read my story</TextLink>
-                                {/* The Learn landing is built for a first visit: what is here and where to start. A 44 px
-                                    tall target; the negative margin keeps the text where a plain text link puts it. */}
+                                {/* 44 px tall targets; the negative margin keeps the text where a plain text link puts it.
+                                    The Learn landing is built for a first visit: what is here and where to start. */}
+                                <TapLink href="/about" className="-my-[10.5px] text-sm font-medium text-white">
+                                    Read my story
+                                </TapLink>
                                 <TapLink href="/learn" className="-my-[10.5px] text-sm font-medium text-white">
                                     {lessonCount} free production lessons
                                 </TapLink>
