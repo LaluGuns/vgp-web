@@ -120,3 +120,9 @@ One line per call, newest last.
   - Turning the sub up widens the "needs this" arrow while the cone stays at its stops ("still only this").
   - The recipe builds as a list, one step every 1.8 s, "for small speakers" once under the title; step 3 reads "drop the note" (a 120 Hz high-pass also trims 2x); the recipe demo runs 8 s and the film 94 s.
   - The hook's legend waits for the harmonics; views slide as they cross instead of dipping to an empty frame; dead air trimmed after "won't save it" and "the melody".
+- Film 4 v9, after the eighth review (8.5 accuracy, 8 hook, 7.5 clarity, pacing and polish, 7 craft):
+  - Cuts dip for about 0.1 s instead of 0.4 s, and views slide as they cross; the rule's first card starts centred and rises for the second instead of an empty placeholder.
+  - During the silent recipe every bass note sends a dot down the clean path, and a cyan one down the copy as far as the steps have built it.
+  - The air scene's motor sits further back, so the 50 Hz cone never reaches it; the phone screen no longer names the track.
+  - "Heard, never played" sits on the ghost rung's row; the amber note and thought bubble wait for "back"; the 200 Hz line clears any bar near it in every ladder.
+  - Recipe demo 7 s, holds trimmed after "won't save it" and "the melody": 92 s.

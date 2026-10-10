@@ -19,7 +19,7 @@ export const TIMELINE = {
     fps: 60,
     width: 1080,
     height: 1920,
-    duration: 94,
+    duration: 92,
     bpm: 120,
     bar: 2,
     gridOrigin: 1,
@@ -58,7 +58,7 @@ export const TIMELINE = {
     ],
     // The vamp restarts on bar 1 at these times (each a bar line), so every
     // demo starts on the same notes. Before the first, bar 1 falls on 1 s.
-    vampSync: [5, 19, 33, 69, 79, 83],
+    vampSync: [5, 19, 33, 69, 77, 81],
 
     // Narration, one sentence per entry: `id` is a line in vo-cues.json,
     // `at` where it starts. Lines sharing a stem (air-1, air-2) form one beat;
@@ -74,8 +74,8 @@ export const TIMELINE = {
         { id: 'phone-1', at: 17.5 },
         { id: 'phone-2', at: 19.45 },
         { id: 'phone-3', at: 21.9 },
-        { id: 'stack-1', at: 24.9 },
-        { id: 'stack-2', at: 27.3 },
+        { id: 'stack-1', at: 24.6 },
+        { id: 'stack-2', at: 27.0 },
         { id: 'sub-1', at: 33.4 },
         { id: 'sub-2', at: 36.6 },
         { id: 'grow', at: 38.6 },
@@ -88,10 +88,10 @@ export const TIMELINE = {
         { id: 'ghost', at: 55.7 },
         { id: 'limit-1', at: 59.4 },
         { id: 'limit-2', at: 61.5 },
-        { id: 'rule-1', at: 64.6 },
-        { id: 'rule-2', at: 67.1 },
-        { id: 'again', at: 78.2 },
-        { id: 'cta', at: 87.3 },
+        { id: 'rule-1', at: 64.1 },
+        { id: 'rule-2', at: 66.6 },
+        { id: 'again', at: 76.2 },
+        { id: 'cta', at: 85.3 },
     ],
 
     // Bass demos. `blend`: level of the saturated copy under the clean sub
@@ -101,16 +101,16 @@ export const TIMELINE = {
     bass: [
         { id: 'hookClean', from: 0, to: 5, blend: 0, drums: true },
         { id: 'hookSat', from: 5, to: 9, blend: 0.5, drums: true },
-        { id: 'boost', from: 19, to: 24.4, blend: 0, boostDb: { cue: ['phone', 'turning'], dt: 0, to: 1.0, db: 10 }, duck: true },
+        { id: 'boost', from: 19, to: 24.1, blend: 0, boostDb: { cue: ['phone', 'turning'], dt: 0, to: 1.0, db: 10 }, duck: true },
         { id: 'grow', from: 33, to: 41, blend: { cue: ['grow', 'saturate'], dt: -0.05, to: 2.1, v: 0.5 }, duck: true },
         // From the window beat to the ghost the bass holds G#1, the vamp's
         // root under both bars, so one note's harmonics and period stay put.
         { id: 'pedal', from: 41, to: 59, blend: 0.5, duck: true, riff: 'pedal' },
         // The recipe: the clean sub through the phone, then the saturated
         // copy added on the diagram's last step (film.js RECIPE_STEPS).
-        { id: 'recipe', from: 69, to: 77, blend: { cue: ['rule', 'add'], dt: 6.2, to: 0.4, v: 0.5 } },
-        { id: 'againClean', from: 79, to: 83, blend: 0, drums: true },
-        { id: 'againSat', from: 83, to: 87, blend: 0.5, drums: true },
+        { id: 'recipe', from: 69, to: 76, blend: { cue: ['rule', 'add'], dt: 6.2, to: 0.4, v: 0.5 } },
+        { id: 'againClean', from: 77, to: 81, blend: 0, drums: true },
+        { id: 'againSat', from: 81, to: 85, blend: 0.5, drums: true },
     ],
     // The "typical note": a plucked bass string at the bass's own pitch,
     // plucked as the idea is introduced and again on "stack".
@@ -120,7 +120,7 @@ export const TIMELINE = {
     ],
 
     // Keys under everything to the button.
-    bed: { from: 0, to: 93 },
+    bed: { from: 0, to: 91 },
 
     sfx: [
         { cue: ['hook-b', 'now'], dt: -0.05, kind: 'pop', level: 0.6 },
@@ -135,7 +135,7 @@ export const TIMELINE = {
         { cue: ['phone', 'turning'], dt: 0.1, kind: 'tick' },
         { cue: ['phone', 'turning'], dt: 0.45, kind: 'tick' },
         { cue: ['phone', 'turning'], dt: 0.8, kind: 'tick' },
-        { at: 24.5, kind: 'whoosh', level: 0.5 },
+        { at: 24.2, kind: 'whoosh', level: 0.5 },
         { cue: ['stack', 'two'], dt: -0.05, kind: 'pop', level: 0.5 },
         { cue: ['stack', 'three'], dt: -0.05, kind: 'pop', level: 0.5 },
         { cue: ['stack', 'four'], dt: -0.05, kind: 'pop', level: 0.5 },
@@ -147,12 +147,12 @@ export const TIMELINE = {
         { at: 59, kind: 'whoosh', level: 0.5 },
         { cue: ['rule', 'keep'], dt: -0.1, kind: 'pop', level: 0.7 },
         { cue: ['rule', 'add'], dt: -0.1, kind: 'pop', level: 0.7 },
-        { at: 78, kind: 'pop' },
-        { at: 83, kind: 'tick' },
-        { at: 87.1, kind: 'whoosh' },
-        { at: 87.45, kind: 'pop', level: 0.7 },
+        { at: 76, kind: 'pop' },
+        { at: 81, kind: 'tick' },
+        { at: 85.1, kind: 'whoosh' },
+        { at: 85.45, kind: 'pop', level: 0.7 },
         { cue: ['cta', 'play'], dt: 0.05, kind: 'tick' },
-        { at: 92.8, kind: 'button' },
+        { at: 90.8, kind: 'button' },
     ],
 
     // Scenes in order; each runs until the next one starts.
@@ -161,15 +161,15 @@ export const TIMELINE = {
         { id: 'payoff', at: 4.8, view: 'hook', teaches: 'Same notes, saturated: now the phone plays it.' },
         { id: 'air', at: 9.2, view: 'air', teaches: 'Each octave down, four times the cone movement.' },
         { id: 'phone', at: 17.3, view: 'phone', teaches: 'A phone cone cannot move that far; turning the sub up changes nothing.' },
-        { id: 'stack', at: 24.7, view: 'ladder', teaches: 'A note is a stack: f, 2f, 3f, 4f.' },
+        { id: 'stack', at: 24.4, view: 'ladder', teaches: 'A note is a stack: f, 2f, 3f, 4f.' },
         { id: 'sub', at: 33.2, view: 'ladder', teaches: 'A clean sub is only the bottom line, below the phone.' },
         { id: 'grow', at: 38.4, view: 'ladder', teaches: 'Saturation grows the stack.' },
         { id: 'window', at: 41.7, view: 'ladder', teaches: 'The phone plays the harmonics, not the note.' },
         { id: 'strange', at: 46.3, view: 'scope', teaches: 'The harmonics repeat at the period of the missing note.' },
         { id: 'ghost', at: 55.5, view: 'scope', teaches: 'The brain puts the note back.' },
         { id: 'limit', at: 59.2, view: 'limit', teaches: 'Feel it on a club sub, hear it on a phone.' },
-        { id: 'rule', at: 64.4, view: 'rule', teaches: 'Sub clean for big speakers, harmonics for small ones.' },
-        { id: 'again', at: 78, view: 'hook', teaches: 'The hook again, knowing what to listen for.' },
-        { id: 'end', at: 87.1, view: 'end', teaches: 'Where the lesson is, and who made it.' },
+        { id: 'rule', at: 63.9, view: 'rule', teaches: 'Sub clean for big speakers, harmonics for small ones.' },
+        { id: 'again', at: 76, view: 'hook', teaches: 'The hook again, knowing what to listen for.' },
+        { id: 'end', at: 85.1, view: 'end', teaches: 'Where the lesson is, and who made it.' },
     ],
 };

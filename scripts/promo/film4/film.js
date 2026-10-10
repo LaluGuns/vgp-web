@@ -88,10 +88,10 @@ function push(t, a, b, amt = 0.02) {
     g.translate(-540, -820);
 }
 
-/** One view's opacity: in over 0.2 s from `a`, out over the 0.2 s before `b`. */
+/** One view's opacity: out over the 0.22 s before a cut, the next in over 0.22 s from it; the dip between is about 0.1 s and text never doubles. */
 function viewAlpha(t, a, b) {
     if (t < a || t > b) return 0;
-    return (a <= 0 ? 1 : E.out(seg(t, a, a + 0.2))) * (1 - seg(t, b - 0.2, b));
+    return (a <= 0 ? 1 : E.out(seg(t, a, a + 0.22))) * (1 - E.in(seg(t, b - 0.22, b)));
 }
 
 // ── Data at time t ──
@@ -174,7 +174,7 @@ function ladder(box, t, o = {}) {
         for (let k = 0; k < Math.min(s.full.length, o.maxN ?? 99); k++) {
             const f = (k + 1) * s.f0;
             if (f > fMax || L(s.full[k]) < 12) continue;
-            if (Math.abs(Y(f) - yCut) < h / 2 + 4) dash0 = Math.max(dash0, x0 + L(s.full[k]) + 14);
+            if (Math.abs(Y(f) - yCut) < h + 6) dash0 = Math.max(dash0, x0 + L(s.full[k]) + 14);
         }
     }
     g.save();
@@ -328,7 +328,6 @@ function phoneScreen(t, bassGlow) {
             else gc.moveTo(px, py);
         }
         gc.stroke();
-        if (w >= 240) label(gc, 'Nightfall beat', x + 30, y + s + 82, { size: 32, weight: 700, color: P.ink, family: BODY });
         // A progress bar, as any player shows.
         rr(gc, x + 30, y + s + 150, w - 60, 10, 5);
         gc.fillStyle = P.ink4;
@@ -470,14 +469,14 @@ function drawHook(t) {
     }
     // Once you can hear it: these are what the phone plays.
     const hA = sat ? popIn(t, replay ? segBy.againSat.from + 0.3 : segBy.hookSat.from, 0.3) : 0;
-    if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 - 8, { size: 32, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
+    if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 + 4, { size: 28, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
     g.restore();
 }
 
 // ══ Air: the same loudness one and two octaves lower ══
 // Rows: 200, 100 and 50 Hz at the same level. The cone's travel follows
 // x ∝ 1/f² (p ∝ S·x·f²): 1×, 4×, 16×. Motion is slowed down 100 times.
-const AIR = { rows: [580, 840, 1100], cone: 410, f: [200, 100, 50], unit: 3.2 };
+const AIR = { rows: [580, 840, 1100], cone: 440, f: [200, 100, 50], unit: 3.2 };
 function drawAir(t) {
     const a = viewAlpha(t, SC.air, SC.phone);
     if (a <= 0) return;
@@ -501,7 +500,7 @@ function drawAir(t) {
         g.globalAlpha *= E.out(k);
         g.translate((1 - E.out(k)) * -40, 0);
         label(g, `${f} Hz`, 222, y + 16, { size: 48, weight: 800, color: P.ink, align: 'right' });
-        coneSide(g, AIR.cone, y, 200, x);
+        coneSide(g, AIR.cone, y, 200, x, { deep: 42 });
         // Air: particles displaced by the wave. Wavelength and displacement
         // both scale with 1/f, so every row squeezes the air equally.
         const lam = 170 * (200 / f);
@@ -826,7 +825,7 @@ function drawScope(t) {
     label(g, 'What the phone plays', x0 - 14, top - 76, { size: 44, weight: 800, color: P.ink });
     label(g, '80 ms window', x1 + 14, top - 76, { size: 32, weight: 600, color: P.ink2, align: 'right', family: BODY });
     // Legend for the amber curve, on the frame it appears.
-    const gl = E.out(popIn(t, wt('brain', 'puts') - 0.1, 0.8));
+    const gl = E.out(popIn(t, wt('brain', 'back') - 0.15, 0.8));
     if (gl > 0) {
         g.save();
         g.globalAlpha *= gl;
@@ -951,21 +950,21 @@ function drawScope(t) {
         robotDome(g, RB, { s: RB.s, look, lid: t < tBrain ? 0 : blink(t, tBrain + 1.2), antenna: ant, rings: t > tPuts ? satRings(t, tPuts - 0.4) : [] });
         // On "Your brain": the listener is named.
         const bn = popIn(t, tBrain - 0.05, 0.3) * (1 - popIn(t, voBy.ghost.at, 0.3));
-        if (bn > 0) pill(g, 'your brain', RB.x - 92 * RB.s, RB.y - 178 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
+        if (bn > 0) pill(g, 'your brain', RB.x - 92 * RB.s, RB.y - 212 * RB.s, { size: 32, bg: P.ink, fg: P.dark, alpha: bn, scale: E.outBack(bn), weight: 700 });
         g.restore();
     }
     // "Puts the note back": the note forms in a thought bubble over the
     // robot, in amber (its wave slowed down to be seen).
     const tNever = wt('ghost', 'never');
     const CL = { x: 470, y: 1010, w: 250, h: 120 };
-    const ca = popIn(t, tPuts - 0.15, 0.3) * (1 - popIn(t, tNever + 0.15, 0.3));
+    const ca = popIn(t, wt('brain', 'back') - 0.15, 0.3) * (1 - popIn(t, tNever + 0.15, 0.3));
     if (ca > 0) {
         g.save();
         g.globalAlpha *= ca;
         g.fillStyle = '#16233f';
         g.strokeStyle = P.ink4;
         g.lineWidth = 3;
-        for (const [dx, dy, r] of [[-70, 120, 10], [-48, 92, 15]]) {
+        for (const [dx, dy, r] of [[-45, 118, 10], [-24, 90, 15]]) {
             g.beginPath();
             g.arc(CL.x + dx - 40, CL.y + dy, r, 0, Math.PI * 2);
             g.fill();
@@ -1009,7 +1008,7 @@ function drawScope(t) {
                 if (r.n < 3 || r.phone < -34) continue;
                 const sx = box.x0 + lad.L(r.phone);
                 // Each line ends under the wave, with a dot where it lands.
-                const ex = 820 - (r.n - 3) * 150;
+                const ex = 910 - (r.n - 3) * 70;
                 const ey = base - 40;
                 g.beginPath();
                 g.moveTo(sx, r.y);
@@ -1044,12 +1043,12 @@ function drawScope(t) {
             g.save();
             g.globalAlpha *= gk;
             g.setLineDash([10, 7]);
-            rr(g, 560, 906, 40, 20, 5);
+            rr(g, 362, 1196, 40, 20, 5);
             g.strokeStyle = P.amber;
             g.lineWidth = 4;
             g.stroke();
             g.restore();
-            label(g, 'heard, never played', 614, 927, { size: 32, weight: 700, color: P.amber, family: BODY, alpha: gk });
+            label(g, 'heard, never played', 416, 1217, { size: 32, weight: 700, color: P.amber, family: BODY, alpha: gk });
         }
     }
     g.restore();
@@ -1187,17 +1186,7 @@ function drawRule(t) {
     const tAdd = wt('rule', 'add');
     // Card 1 starts in the middle, then moves up to make room for card 2.
     const k1 = popIn(t, tKeep - 0.1, 0.3);
-    const y1 = 280;
-    // The second card's empty frame, waiting under the first.
-    const kf = popIn(t, tKeep + 0.6, 0.4) * (1 - popIn(t, tAdd - 0.1, 0.3));
-    if (kf > 0) {
-        rr(g, 70, 640, 880, 600, 40);
-        g.strokeStyle = `rgba(255,255,255,${0.12 * kf})`;
-        g.lineWidth = 3;
-        g.setLineDash([14, 10]);
-        g.stroke();
-        g.setLineDash([]);
-    }
+    const y1 = lerp(620, 280, E.inOut(seg(t, tAdd - 0.45, tAdd + 0.05)));
     if (k1 > 0) {
         g.save();
         g.globalAlpha *= k1;
@@ -1220,7 +1209,7 @@ function drawRule(t) {
     // through (amber); a copy is saturated and high-passed at 120 Hz, which
     // removes the note from the copy (cyan), and the two are added. The
     // steps build up as a list, one every 1.8 s, in sync with the sound.
-    const k2 = popIn(t, tAdd - 0.1, 0.3);
+    const k2 = popIn(t, tAdd, 0.3);
     if (k2 > 0) {
         const y2 = 640;
         g.save();
@@ -1262,6 +1251,54 @@ function drawRule(t) {
             g.restore();
         }
         chainPath([[860, rA], [915, rA]], P.ink, d(at(3) + 0.3));
+        // The signal, live: every bass note sends a dot down the clean path,
+        // and a cyan one down the copy as far as the steps have built it.
+        const along = (pts, u) => {
+            let total = 0;
+            const seglen = [];
+            for (let i = 1; i < pts.length; i++) {
+                seglen.push(Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+                total += seglen[i - 1];
+            }
+            let r = u * total;
+            for (let i = 1; i < pts.length; i++) {
+                if (r <= seglen[i - 1]) {
+                    const k = r / seglen[i - 1];
+                    return [lerp(pts[i - 1][0], pts[i][0], k), lerp(pts[i - 1][1], pts[i][1], k)];
+                }
+                r -= seglen[i - 1];
+            }
+            return pts[pts.length - 1];
+        };
+        const built = ST.reduce((n, [dt]) => (t >= tAdd + dt ? n + 1 : n), 0);
+        const COPY = [
+            [[245, rA], [245, rB], [300, rB]],
+            [[245, rA], [245, rB], [500, rB]],
+            [[245, rA], [245, rB], [830, rB], [830, rA + 34]],
+            [[245, rA], [245, rB], [830, rB], [830, rA + 30], [915, rA]],
+        ];
+        const dot = (x, y, color, k) => {
+            g.save();
+            g.globalAlpha *= k;
+            g.shadowColor = color;
+            g.shadowBlur = 16;
+            g.fillStyle = color;
+            g.beginPath();
+            g.arc(x, y, 9, 0, Math.PI * 2);
+            g.fill();
+            g.restore();
+        };
+        for (const q of NOTES) {
+            if (q.t < segBy.recipe.from || q.t >= segBy.recipe.to || t < q.t || t - q.t > 0.9) continue;
+            const u = (t - q.t) / 0.9;
+            const fade = Math.sin(Math.PI * Math.min(1, u * 1.15));
+            const [ax, ay] = along([[215, rA], [915, rA]], u);
+            dot(ax, ay, P.amber, fade);
+            if (built > 0) {
+                const [cx2, cy2] = along(COPY[built - 1], u);
+                dot(cx2, cy2, P.cyan, fade);
+            }
+        }
         // The steps so far: the current one bright, the earlier ones dimmed.
         let si = -1;
         ST.forEach(([dt], i) => {
@@ -1505,11 +1542,11 @@ const NO_SLIDE = new Set(['phone>ladder']);
 function slide(t, view) {
     let y = 0;
     VIEWS.forEach((v, i) => {
-        if (v.view !== view || t < v.a - 0.05 || t > v.b + 0.05) return;
+        if (v.view !== view || t < v.a - 0.1 || t > v.b + 0.05) return;
         const prev = VIEWS[i - 1];
         const next = VIEWS[i + 1];
         if (prev && !NO_SLIDE.has(`${prev.view}>${v.view}`)) y += 70 * (1 - E.out(seg(t, v.a, v.a + 0.4)));
-        if (next && next.view !== 'end' && !NO_SLIDE.has(`${v.view}>${next.view}`)) y -= 70 * E.in(seg(t, v.b - 0.25, v.b));
+        if (next && next.view !== 'end' && !NO_SLIDE.has(`${v.view}>${next.view}`)) y -= 70 * E.in(seg(t, v.b - 0.22, v.b));
     });
     return y;
 }

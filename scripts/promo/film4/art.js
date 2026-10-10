@@ -423,24 +423,25 @@ function phoneBody(g, x, y, w, h, { grille = 0, screen = null } = {}) {
  * cone's mouth when at rest. `x` is the cone's displacement in px (positive
  * pushes out to the right), `size` the cone's height.
  */
-function coneSide(g, cx, cy, size, x, { body = P.devHi, cone = P.steel, stops = null } = {}) {
+function coneSide(g, cx, cy, size, x, { body = P.devHi, cone = P.steel, stops = null, deep = 0 } = {}) {
     const h = size;
     const d = size * 0.42;
     g.save();
-    // Basket and magnet stay put.
+    // Basket and magnet stay put; `deep` sets the motor further back, for long travel.
+    const m = d + deep;
     g.fillStyle = P.dev;
-    rr(g, cx - d - h * 0.34, cy - h * 0.2, h * 0.3, h * 0.4, 10);
+    rr(g, cx - m - h * 0.34, cy - h * 0.2, h * 0.3, h * 0.4, 10);
     g.fill();
     g.fillStyle = P.steelDk;
-    rr(g, cx - d - h * 0.08, cy - h * 0.13, h * 0.12, h * 0.26, 6);
+    rr(g, cx - m - h * 0.08, cy - h * 0.13, h * 0.12, h * 0.26, 6);
     g.fill();
     g.strokeStyle = body;
     g.lineWidth = Math.max(4, h * 0.03);
     g.lineCap = 'round';
     g.beginPath();
-    g.moveTo(cx - d + 4, cy - h * 0.12);
+    g.moveTo(cx - m + 4, cy - h * 0.12);
     g.lineTo(cx + 6, cy - h * 0.52);
-    g.moveTo(cx - d + 4, cy + h * 0.12);
+    g.moveTo(cx - m + 4, cy + h * 0.12);
     g.lineTo(cx + 6, cy + h * 0.52);
     g.stroke();
     // Frame lips the surround hangs from.
