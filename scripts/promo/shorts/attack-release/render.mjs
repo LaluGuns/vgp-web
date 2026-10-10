@@ -1,25 +1,25 @@
-// Renders film 3, the narrated 9:16 short.
+// Renders the attack-and-release short, narrated, 9:16.
 //
-//   npm run film3                       sound, stills, video, checks
-//   npm run film3 -- --stills           sound + contact sheets only
-//   npm run film3 -- --frames 12.5,30   single frames for review [--tag x]
-//   npm run film3 -- --refresh-lesson   re-capture the lesson page
+//   npm run short:attack-release                       sound, stills, video, checks
+//   npm run short:attack-release -- --stills           sound + contact sheets only
+//   npm run short:attack-release -- --frames 12.5,30   single frames for review [--tag x]
+//   npm run short:attack-release -- --refresh-lesson   re-capture the lesson page
 //
 // Needs assets/ (see README): the Cymatics samples and the narration.
-// Output in out/film3/: short_9x16.mp4, audio.wav, captions.srt,
+// Output in out/shorts/attack-release/: short_9x16.mp4, audio.wav, captions.srt,
 // contact.png, seconds.png, cover.png and VERIFY.md (what was measured).
 import { execFileSync, spawn } from 'node:child_process';
 import { once } from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright-core';
-import { FONTS_CSS, REPO, ROOT, T } from '../shared/tokens.mjs';
+import { FONTS_CSS, REPO, ROOT, T } from '../../shared/tokens.mjs';
 import { ASSETS, master, renderAudio } from './audio.mjs';
 import { readAudio } from './dsp.mjs';
 import { SETTINGS, TIMELINE } from './timeline.mjs';
 
-const OUT = path.join(ROOT, 'out/film3');
-const HERE = path.join(ROOT, 'film3');
+const OUT = path.join(ROOT, 'out/shorts/attack-release');
+const HERE = path.join(ROOT, 'shorts/attack-release');
 fs.mkdirSync(OUT, { recursive: true });
 const args = process.argv.slice(2);
 const opt = (k) => (args.includes(k) ? args[args.indexOf(k) + 1] : null);
@@ -30,7 +30,7 @@ const log = (line) => {
 };
 
 for (const f of [...Object.values(TIMELINE.samples).map((s) => path.join(ASSETS, 'samples', s)), path.join(ASSETS, 'vo', 'narration.mp3')])
-    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Film 3"`);
+    if (!fs.existsSync(f)) throw new Error(`missing ${path.relative(ROOT, f)}; see README.md, "Short: attack and release"`);
 
 function measure(file) {
     const out = execFileSync('sh', ['-c', `ffmpeg -hide_banner -nostats -i "${file}" -af ebur128=peak=true:framelog=quiet -f null - 2>&1`], { encoding: 'utf8' });
@@ -85,7 +85,7 @@ const browser = exe ? await chromium.launch({ executablePath: exe }) : await chr
 
 /**
  * The lesson's Listen demo at phone size, for the end card: idle, then three
- * moments after Play is pressed. Cached in out/film3/lesson/.
+ * moments after Play is pressed. Cached in out/shorts/attack-release/lesson/.
  */
 async function lesson() {
     const dir = path.join(OUT, 'lesson');
@@ -170,7 +170,7 @@ if (opt('--frames')) {
     const o = await open();
     for (const t of opt('--frames').split(',')) fs.writeFileSync(path.join(dir, `${tag}-${t}.png`), await o.shot(Number(t)));
     await browser.close();
-    console.log(`wrote out/film3/frames/${tag}-*.png`);
+    console.log(`wrote out/shorts/attack-release/frames/${tag}-*.png`);
     process.exit(0);
 }
 
@@ -246,4 +246,4 @@ if (!args.includes('--stills')) {
     log(`  sync: first kick of the hook heard at ${(2.9 + first / 48000).toFixed(4)} s (timeline 3.0000 s)`);
 }
 await browser.close();
-fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Film 3 checks\n\nMeasured by \`npm run film3\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);
+fs.writeFileSync(path.join(OUT, 'VERIFY.md'), `# Short checks: attack and release\n\nMeasured by \`npm run short:attack-release\` on ${new Date().toISOString().slice(0, 10)}.\n\n${report.map((l) => `- ${l}`).join('\n')}\n`);

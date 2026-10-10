@@ -1,4 +1,4 @@
-# Promo: carousels and explainer films
+# Promo: carousels and shorts
 
 Social material for the blog lessons, drawn from the lessons themselves:
 same figures, same numbers, same look as the page a viewer lands on.
@@ -7,7 +7,7 @@ tsconfig, and `out/` is ignored by git).
 
 ## Setup
 
-Needs Node 20+, Google Chrome (or set `CHROME_PATH`), and for the film
+Needs Node 20+, Google Chrome (or set `CHROME_PATH`), and for the shorts
 `ffmpeg` and `ffprobe` on the PATH.
 
 ```
@@ -34,62 +34,53 @@ Slides: cover (hook and the clearest figure), one slide per remaining
 figure, the DAW experiment, a quiz question, its answer, and the call to
 action with what the lesson contains and its sources.
 
-## Film
+## Shorts
 
-A 32 second explainer on attack and release (lesson 057) at 120 BPM, with
-sound and captions. It opens on the hook (the same snare at 1 ms and 30 ms
-attack), explains crack, body, threshold, attack and release one bar each,
-proves it on the live loop, turns to release, and ends on the founder's
-picture with the tagline and the lesson. One file, `film/timeline.mjs`, holds every beat, line, setting and
-camera move; sound (`film/audio.mjs`) and picture (`film/film.js`) both read
-it and share one model (`film/model.mjs`), so the waveform on screen is the
-level of the drums you hear.
+Narrated 9:16 shorts for TikTok and Reels, one folder per lesson under
+`shorts/`, named by topic. They share the brand tokens and the compressor
+(`shared/compressor.mjs`). Shorts made in other sessions join this folder
+when their branches are merged:
 
-```
-npm run film                 # all cuts and checks
-npm run film -- --stills     # contact sheets only
-npm run film -- --frames 9x16@25.4,16x9@18.6 --tag check
-```
+| Folder | Lesson | Status |
+|---|---|---|
+| `shorts/attack-release/` | 057, compression attack and release | done |
+| `shorts/bass-on-phones/` | 036, small speakers need bass harmonics | on branch `claude/new-session-0fjac3` as `film4/` |
+| `shorts/gap-before-drop/` | 030, a gap before the drop | on branch `claude/new-session-aa3y0x` as `film5/` |
 
-Writes to `out/film/`: `master_16x9.mp4`, `cut_9x16.mp4`, `cut_1x1.mp4`,
-`master_16x9_reduced_motion.mp4`, `captions.srt`, `audio.wav`,
-`contact.png`, `beats-<format>.png` and `VERIFY.md`, which records what the
-run measured.
+### Short: attack and release
 
-## Film 3: the narrated short
-
-A 76 second, 1080 x 1920 short for TikTok and Reels on the same lesson, in
+A 76 second, 1080 x 1920 short on lesson 057 (attack and release), in
 an illustrated explainer style: a snare, a compressor, and inside it a small
 robot whose hand rides the fader. Narrated in American English (ElevenLabs
-`eleven_v4`, voice Michael C. Vincent, prompt in `film3/narration-prompt.txt`),
+`eleven_v4`, voice Michael C. Vincent, prompt in `shorts/attack-release/narration-prompt.txt`),
 with real drum samples through the compressor the picture shows.
 
 The samples and the narration are licensed or generated material and stay
 out of git. Put them in `scripts/promo/assets/` (ignored):
 
-- `assets/samples/`: the Cymatics files named in `film3/timeline.mjs`
+- `assets/samples/`: the Cymatics files named in `shorts/attack-release/timeline.mjs`
   under `samples` (Diamonds Snare 4 C#, Kick 15 E, Closed Hihat 5 and 11,
   Crash 1, KEYS Dusty (C), Gems Vol 10 Nightfall 120 BPM A# Min Keys).
-- `assets/vo/narration.mp3`: the narration take. `film3/vo-cues.json` holds
+- `assets/vo/narration.mp3`: the narration take. `shorts/attack-release/vo-cues.json` holds
   where each line sits in that file and when each word is spoken. For a new
-  take, cue it against `film3/script.txt` (needs `faster-whisper`):
-  `python film3/cue_vo.py assets/vo/narration.mp3 film3/script.txt film3/vo-cues.json`,
-  then adjust the `vo` placements in `film3/timeline.mjs` if line lengths
+  take, cue it against `shorts/attack-release/script.txt` (needs `faster-whisper`):
+  `python shorts/attack-release/cue_vo.py assets/vo/narration.mp3 shorts/attack-release/script.txt shorts/attack-release/vo-cues.json`,
+  then adjust the `vo` placements in `shorts/attack-release/timeline.mjs` if line lengths
   changed.
 
 ```
-npm run film3                    # sound, stills, video and checks
-npm run film3 -- --stills        # contact sheets only
-npm run film3 -- --frames 12.5,31 --tag check
-npm run film3 -- --refresh-lesson   # re-capture the lesson's Listen demo for the end card
+npm run short:attack-release                    # sound, stills, video and checks
+npm run short:attack-release -- --stills        # contact sheets only
+npm run short:attack-release -- --frames 12.5,31 --tag check
+npm run short:attack-release -- --refresh-lesson   # re-capture the lesson's Listen demo for the end card
 ```
 
-Writes to `out/film3/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
+Writes to `out/shorts/attack-release/`: `short_9x16.mp4`, `audio.wav`, `captions.srt`,
 `contact.png` (one still per scene), `seconds.png` (one per second),
-`cover.png` (for the profile grid) and `VERIFY.md`. `film3/timeline.mjs` places every line, demo, effect and
-scene; `film3/audio.mjs` mixes the sound and hands the picture the levels
+`cover.png` (for the profile grid) and `VERIFY.md`. `shorts/attack-release/timeline.mjs` places every line, demo, effect and
+scene; `shorts/attack-release/audio.mjs` mixes the sound and hands the picture the levels
 and gain reduction it computed, so the shapes on screen are the drums you
-hear. `film3/art.js` is the drawing kit, `film3/film.js` the scenes.
+hear. `shorts/attack-release/art.js` is the drawing kit, `shorts/attack-release/film.js` the scenes.
 
 ## Files
 

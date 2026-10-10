@@ -1,15 +1,15 @@
-// Film 3 soundtrack: the narration, Cymatics drums through the compressor
+// Attack-and-release short, soundtrack: the narration, Cymatics drums through the compressor
 // the picture shows, the Nightfall keys loop as a bed, and small effects.
 // Returns the stereo mix plus the data the picture draws from (levels, gain
 // reduction, hit times), so what is drawn is what is heard.
 import fs from 'node:fs';
 import path from 'node:path';
-import { compress } from '../film/model.mjs';
+import { compress } from '../../shared/compressor.mjs';
 import { biquad, db, loudness, mulberry32, noise, RATE, readAudio, undb, writeWav } from './dsp.mjs';
 import { SETTINGS, TIMELINE } from './timeline.mjs';
 
 const HERE = path.dirname(new URL(import.meta.url).pathname);
-export const ASSETS = path.join(HERE, '../assets');
+export const ASSETS = path.join(HERE, '../../assets');
 const CUES = JSON.parse(fs.readFileSync(path.join(HERE, 'vo-cues.json'), 'utf8'));
 
 // Detector: RMS over 3 ms of the mono sum, centred so it has no lag (the
