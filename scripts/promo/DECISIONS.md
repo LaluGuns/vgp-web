@@ -162,3 +162,11 @@ One line per call, newest last.
   - Hook: version 1's disclosure ("1 is the lesson's build: riser into the drop") sits under the lanes during the countdown, where the empty "comment your pick" line was; the claim-4 chip at 36 px.
   - Cover pill: "the 234 ms gap".
   - Status after round 9: one round without a rise (stop after three in a row).
+- Round 10 panel (weighted 7.94, up from 7.88; best so far 8.20 in round 8; no factual error). Fixes for round 11:
+  - Hook: version 2 is drawn live again as it plays (round 9's cover-until-answer left muted viewers nothing to see; round 8 with the live waveform scored the hook higher).
+  - Titles are the beat's idea in two to four words, shown at once ("Riser covers the click", "Silence clears the way", "Cut ¼ second early" with "= an 8th at 128 BPM"); the caption carries the speech.
+  - "click = the kick's sharp first few ms" is glossed on "click"; the stage's panel label leaves after it is established.
+  - Static openings: version 2's silence counter starts at the scene cut; the robot reaches for the faders on "limiter"; the ms bar starts on "after-fog"; the brain opens at full strength.
+  - Replay: one measured line held from version 1's kick ("click buried in 1") to version 2's ("click 13.9 dB clearer in 2").
+  - Captions never end a line on a weak word; the end card's chips appear as it opens; the end card is fully out before frame one returns; the cover shows version 2 with its hole and no playhead; the crowd appears only in the hook, the replay and the end.
+  - Declined again: -14 LUFS or +1.5 dB of extra gain (the brief fixes -16 LUFS and -1.5 dBTP after AAC); a "link in bio" card (the brief fixes the address pill); editing lesson 030; a quieter version 1 riser (claim 1 would sit at the 3 dB threshold).
