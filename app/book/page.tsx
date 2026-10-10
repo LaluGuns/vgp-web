@@ -20,34 +20,12 @@ const chapters = [
 
 const facts = ['80+ pages', 'PDF for any device', '6 chapters'];
 
-const bookJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Book',
-    name: 'Music Production Guide: Trap Edition',
-    url: 'https://www.virzyguns.com/book',
-    image: 'https://www.virzyguns.com/ebooks/trap-guide-book-cover.jpg',
-    description:
-        'A practical PDF guide for producers covering trap drums, 808s, vocals, mixing, mastering, and release decisions.',
-    author: {
-        '@type': 'Person',
-        name: 'Virzy Guns',
-        url: 'https://www.virzyguns.com/about',
-    },
-    bookFormat: 'EBook',
-    inLanguage: 'en',
-};
-
 export default function GuidesPage() {
     const { openPopup } = useNewsletter();
 
     return (
         <PageTransition>
             <article className="editorial-shell min-h-screen text-white">
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(bookJsonLd) }}
-                />
-
                 <section data-enter="" className="px-4 pb-16 pt-10 sm:px-6 sm:pt-14">
                     <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
                         <div className="lg:col-span-7">

@@ -191,7 +191,7 @@ anything without one is technical.
 
 The site is Virzy Guns' founder site: producer, founder of Virzy Guns
 Production (2020), now building HealingWave. Menu: Story, HealingWave,
-Studio, Writing, with Get CADENZ as the button. Games and MyCamScan are
+Studio, Learn, with Get CADENZ as the button. Games and MyCamScan are
 footer-only.
 
 - Write in the first person ("I"), as Virzy Guns.

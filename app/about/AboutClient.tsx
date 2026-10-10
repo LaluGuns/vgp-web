@@ -46,7 +46,7 @@ const facts = [
 const work = [
     { title: 'HealingWave', body: 'Music made to help people focus, move and recover.', href: HEALINGWAVE_PATH },
     { title: 'Studio', body: 'The beat store, custom production, mixing and mastering.', href: '/studio' },
-    { title: 'Writing', body: 'Free articles and guides on how records are made.', href: '/learn' },
+    { title: 'Learn', body: 'Free lessons on how records are made.', href: '/learn' },
 ];
 
 export default function AboutClient() {

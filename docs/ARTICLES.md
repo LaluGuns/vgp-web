@@ -191,14 +191,14 @@ loops), and check that its loudest setting peaks under -7 dBFS there; a
 comparison that would peak higher stops matching at that point and says how
 much quieter it plays (the compressor and transient demos do). -29 is the
 highest level at which every demo fits under that peak: the loudness-matched
-compressors set it (the transient demo's, and the compressor demo at its
-strongest settings, peak about -7.3 dBFS). The reader's volume is the last
-stage, after the engine's -6 dBFS limiter and clip, so it never changes what
-a demo does; the limiter and clip only catch mistakes. The volume starts at
-100 %. Schedule a loop with the engine's `sequence` (it skips steps a
-stalled page made late instead of stacking them into one loud hit), and give
-a voice's envelope an `envelopeGain` (a new GainNode starts at 1, and a
-noise hit can then open with one full-scale sample).
+compressors set it (the compressor and transient demos peak -7.4 to -7.7
+dBFS at their loudest). The reader's volume is the last stage, after the
+engine's -6 dBFS limiter and clip, so it never changes what a demo does; the
+limiter and clip only catch mistakes. The volume starts at 100 %. Schedule a
+loop with the engine's `sequence` (it skips steps a stalled page made late
+instead of stacking them into one loud hit), and give a voice's envelope an
+`envelopeGain` (a new GainNode starts at 1, and a noise hit can then open
+with one full-scale sample).
 
 ## Glossary
 

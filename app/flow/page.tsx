@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import FlowClient from './FlowClient';
 
 export const metadata: Metadata = {
@@ -78,10 +79,7 @@ const flowJsonLd = {
 export default function FlowPage() {
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(flowJsonLd) }}
-            />
+            <JsonLd data={flowJsonLd} />
             <FlowClient />
         </>
     );

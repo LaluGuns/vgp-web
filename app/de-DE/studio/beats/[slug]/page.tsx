@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import { notFound } from 'next/navigation';
 import {
     getBeatBySlug,
@@ -133,10 +134,7 @@ export default async function GermanSlugPage({ params }: PageProps) {
         const schema = generateLicensingSchema('de-DE');
         return (
             <>
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-                />
+                <JsonLd data={schema} />
                 <LicensingClient locale="de-DE" />
             </>
         );
@@ -147,10 +145,7 @@ export default async function GermanSlugPage({ params }: PageProps) {
         const schema = generateBeatProductSchema(beat, 'de-DE');
         return (
             <>
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-                />
+                <JsonLd data={schema} />
                 <BeatDetailClient beat={beat} locale="de-DE" />
             </>
         );
@@ -162,10 +157,7 @@ export default async function GermanSlugPage({ params }: PageProps) {
         const schema = generateCategorySchema(category, matchingBeats, 'de-DE');
         return (
             <>
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-                />
+                <JsonLd data={schema} />
                 <CategoryClient category={category} beats={matchingBeats} locale="de-DE" />
             </>
         );

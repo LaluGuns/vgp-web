@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import { ogImage } from '@/lib/og';
 import BeatsClient from './BeatsClient';
 
@@ -81,10 +82,7 @@ const hubSchema = {
 export default function BeatsPage() {
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(hubSchema) }}
-            />
+            <JsonLd data={hubSchema} />
             <BeatsClient />
         </>
     );

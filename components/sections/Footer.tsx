@@ -10,7 +10,7 @@ const navGroupLinks = (key: NavGroup['key']) =>
 const footerGroups = [
     { title: 'HealingWave', links: navGroupLinks('healingwave') },
     { title: 'Studio', links: navGroupLinks('studio') },
-    { title: 'Writing', links: navGroupLinks('writing') },
+    { title: 'Learn', links: navGroupLinks('learn') },
     {
         title: 'Virzy Guns',
         links: [

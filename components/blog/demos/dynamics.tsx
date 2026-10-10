@@ -243,11 +243,11 @@ export function CompressorDemo() {
         applyMode('on');
     };
 
-    // Under 1 dB is within the matching's own accuracy, and the default setting can land there.
-    // To a tenth of a dB: the measured bars are the loop that plays, so playback lands within about
-    // a quarter of a dB of this (the snare's noise moves the hits' peaks, and with them the matching,
-    // a little from one measurement to the next). A half-dB step put 2.3 dB on either side of 2.25.
-    const short = analysis && analysis.short >= 1 ? Math.round(analysis.short * 10) / 10 : 0;
+    // Under half a dB is within the matching's own accuracy, and the default setting can land there.
+    // To a tenth of a dB: playback lands within about a quarter of a dB of this (the snare's noise moves
+    // the hits' peaks, and with them the matching, a little from one measurement to the next). A
+    // half-dB step put 2.3 dB on either side of 2.25.
+    const short = analysis && analysis.short >= 0.5 ? Math.round(analysis.short * 10) / 10 : 0;
     // The preset the sliders match, if any: the presets are a choice like the swing demo's.
     const preset = (Object.keys(PRESETS) as Preset[]).find((k) => {
         const p = PRESETS[k];

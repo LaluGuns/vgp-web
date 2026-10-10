@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import Link from 'next/link';
 import GameArcade from './GameArcade';
 import styles from './games.module.css';
@@ -118,8 +119,8 @@ const breadcrumbSchema = {
 export default function GamesPage() {
   return (
     <main className={styles.page}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <JsonLd data={collectionSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <GameArcade games={games} />
       <section className={styles.infoSection} aria-labelledby="game-guides-title">
         <div className={styles.infoInner}>

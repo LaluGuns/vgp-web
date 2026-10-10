@@ -7,7 +7,7 @@ export interface NavChild {
 }
 
 export interface NavGroup {
-    key: 'story' | 'healingwave' | 'studio' | 'writing';
+    key: 'story' | 'healingwave' | 'studio' | 'learn';
     name: string;
     href: string;
     /** A group with no children renders as a plain link. */
@@ -58,8 +58,8 @@ export const mainNavGroups: NavGroup[] = [
         ],
     },
     {
-        key: 'writing',
-        name: 'Writing',
+        key: 'learn',
+        name: 'Learn',
         href: '/learn',
         activePrefixes: ['/learn', '/blog', '/book', '/studio/masterclass'],
         children: [

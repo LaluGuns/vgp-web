@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { JsonLd } from '@/components/blog/article/JsonLd';
 import BeatsClient from '../../../studio/beats/BeatsClient';
 
 const SITE_URL = 'https://www.virzyguns.com';
@@ -81,10 +82,7 @@ const hubSchema = {
 export default function GermanBeatsIndexPage() {
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(hubSchema) }}
-            />
+            <JsonLd data={hubSchema} />
             <BeatsClient locale="de-DE" />
         </>
     );
