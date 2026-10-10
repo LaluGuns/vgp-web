@@ -119,7 +119,7 @@ Saturation and clipping share one digital problem. New harmonics can land above 
 
 ## DAW experiment: one loop, three tools
 
-Step 3 needs a hard clipper with oversampling. If your DAW has none, free ones exist.
+Step 3 needs a hard clipper with oversampling. If your DAW has none, a free one is easy to find.
 
 1. Loop eight bars of a drum bus or a full mix. At the end of the chain, put a gain plugin, then a true-peak meter and a short-term loudness meter. Note the true peak and the loudness.
 2. Insert a saturator before the gain plugin, oversampling on. Raise its drive and lower its output until the loop reads 3 LU louder at the same true peak as before.

@@ -8,6 +8,7 @@ const streams = (t: (typeof tiers)[number]) => formatLicenseCount(t.onlineAudioS
 const firstWithShows = tiers.find((t) => t.paidPerformances);
 const unlimitedTier = tiers.find((t) => t.unlimitedOnlineAudioStreams);
 const twoVideos = tiers.find((t) => (t.musicVideos ?? 0) >= 2);
+const firstWithRadio = tiers.find((t) => (t.radioStations ?? 0) > 0);
 const videos = (t: (typeof tiers)[number] | undefined) => (t ? formatLicenseCount(t.musicVideos, 'music video', 'music videos') : 'a set number of music videos');
 const noContentId = tiers.every((t) => t.contentIdAllowed === false);
 // A test scenario that passes the smallest tier's stream cap.
@@ -105,13 +106,13 @@ A paid performance is any show where you earn money: ticket sales, a fee or a bo
 
 ## Radio
 
-Radio play is counted per station. Radio also earns performance royalties, collected through performing rights organizations such as ASCAP or BMI. How those royalties are split between you and the producer is set by the written license and your registrations.
+Radio play is counted per station. ${smallest?.radioStations === 0 ? `${smallest.name} covers no stations, so the community station in the hook needs ${firstWithRadio ? `a tier such as ${firstWithRadio.name}` : 'a written upgrade'} before it plays the song.` : 'Check the table for how many stations your tier covers before the community station in the hook plays the song.'} Radio also earns performance royalties, collected through performing rights organizations such as ASCAP or BMI. How those royalties are split between you and the producer is set by the written license and your registrations.
 
 ## Common mistake: reading the tier name as a summary
 
 The common mistake is treating a tier's name as a description of everything it allows. ${unlimitedTier ? `${unlimitedTier.name} has no stream cap, and still covers ${videos(unlimitedTier)} and ${formatLicenseCount(unlimitedTier.radioStations, 'radio station', 'radio stations')}.` : 'A tier with no stream cap can still have a fixed number of music videos and radio stations.'}
 
-The second is assuming monetization and Content ID come with the video count. They are separate questions. YouTube's Content ID requires exclusive rights to the material and lists music licensed without exclusivity as material that does not qualify (YouTube Help, n.d.).${noContentId ? ' None of the current non-exclusive tiers allow Content ID registration, because it would claim the beat on every other artist who licensed it.' : ''}
+The second is assuming monetization and Content ID come with the video count. They are separate questions. YouTube's Content ID requires exclusive rights to the material it evaluates, and YouTube lists music licensed without exclusivity among its common examples of material that may not be exclusive (YouTube Help, n.d.).${noContentId ? ' None of the current non-exclusive tiers allow Content ID registration, because it would claim the beat on every other artist who licensed it.' : ''}
 
 ## Producer takeaway: map your plan to the rows
 

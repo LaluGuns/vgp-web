@@ -155,7 +155,7 @@ Retune speed sets roughly how quickly the plugin pulls the detected pitch to its
 
 ## DAW experiment: sweep the retune speed
 
-You need an automatic pitch corrector with a retune speed control. Several DAWs include one, and free ones exist.
+You need an automatic pitch corrector with a retune speed control. Several DAWs include one.
 
 1. Insert an automatic pitch corrector on the lead vocal and set it to the key and scale of the song. Use chromatic only if the melody uses notes outside the scale.
 2. Set retune speed to its fastest setting, 0 ms on plugins that use milliseconds, and loop a phrase with a held note and a slide.

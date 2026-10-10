@@ -48,7 +48,7 @@ export const post135: BlogArticle = {
             type: 'bars',
             caption:
                 'Share of a reverb\'s own energy that arrives more than 80 ms after the dry sound, for a simple exponential decay worked out as 10^(-0.48/T). Past a decay of about 1.6 s, more than half of the reverb is late energy. Adding 40 ms of pre-delay to the 2 s reverb raises its late share from 58% to 76%.',
-            alt: 'Horizontal bars on a scale from 0 to 100 percent with a dashed line at 50 percent. A 0.5 s decay reaches 11 percent, 1 s reaches 33 percent, 2 s reaches 58 percent and 4 s reaches 76 percent. A dimmed bar for 2 s with 40 ms pre-delay also reaches 76 percent.',
+            alt: 'Horizontal bars on a scale from 0 to 100 percent with a dashed line at 50 percent. A 0.5 s decay reaches 11 percent, 1 s reaches 33 percent, 2 s reaches 58 percent and 4 s reaches 76 percent. A last bar, for 2 s with 40 ms pre-delay, also reaches 76 percent.',
             min: 0,
             max: 100,
             unit: '%',
@@ -57,7 +57,7 @@ export const post135: BlogArticle = {
                 { label: 'Decay 1 s', value: 33, display: '33%' },
                 { label: 'Decay 2 s', value: 58, display: '58%' },
                 { label: 'Decay 4 s', value: 76, display: '76%' },
-                { label: '2 s + 40 ms pre-delay', value: 76, display: '76%', dim: true },
+                { label: '2 s + 40 ms pre-delay', value: 76, display: '76%' },
             ],
             reference: { value: 50, label: 'Half' },
         },

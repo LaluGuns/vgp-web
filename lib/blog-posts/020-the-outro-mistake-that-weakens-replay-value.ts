@@ -138,7 +138,7 @@ So a fade suits a song whose groove is the point and should feel like it goes on
 
 The cold ending should stop at full energy. The short fade should keep the groove going for a moment after the sound stops. The long fade will spend its last stretch on a loop you have already heard several times.
 
-## Common mistake: the endless repetition trap
+## Common mistake: an outro with nothing new
 
 The most common mistake is letting the outro run because ending feels risky. Each extra repeat makes the song longer and the last impression weaker, and nothing in it is new.
 

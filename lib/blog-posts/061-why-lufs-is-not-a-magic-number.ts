@@ -112,7 +112,7 @@ That design explains what the number misses:
 
 ## DAW experiment: same number, different master
 
-1. Put a BS.1770 loudness meter last on your master bus. Most DAWs include one, and free meters exist.
+1. Put a BS.1770 loudness meter last on your master bus. Most DAWs include one; otherwise use a free meter.
 2. Bounce your mix with no master limiter, import it, and play it from the first bar to the last. Note the integrated LUFS and the short-term reading in the biggest chorus.
 3. Duplicate the track. On the copy, insert a limiter with a -1 dBTP ceiling and raise its input until the integrated reading is 4 LU higher than the original.
 4. Add a gain plugin after the limiter on the copy and set it to -4 dB, so both tracks read the same integrated LUFS.

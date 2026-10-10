@@ -16,7 +16,7 @@ export const post120: BlogArticle = {
     readingTime: 7,
     summary: [
         'Polarity inverts every frequency at once with no time shift. A delay shifts each frequency by a different angle.',
-        'Only related signals cancel reliably: two mics on one source, or layers that start together, like a kick and its sub.',
+        'Only related signals cancel reliably: two feeds of one source, like a bass DI and its amp mic, or layers that start together, like a kick and its sub.',
         'Fix the relationship before the tone: polarity first, then timing or phase rotation, and EQ last.',
     ],
     figures: {
@@ -95,15 +95,15 @@ export const post120: BlogArticle = {
             why: 'Cancellation needs 180 degrees, half a cycle. Half a cycle lasts 1 ms at 500 Hz, because a full cycle at 500 Hz lasts 2 ms.',
         },
         {
-            q: 'A kick and a 55 Hz sub layer sound thin together. Nudging the sub by 1 ms changes little. Why?',
+            q: 'Your DI and amp tracks sound hollow together in mono. A polarity flip and a 0.3 ms nudge both help, but the lowest notes are still thin. What do you try next?',
             options: [
-                'A sub has no transient to line up with',
-                'The kick masks the sub, whatever the timing',
-                'The sub is out of tune with the kick\'s note',
-                '1 ms is a small slice of a 55 Hz cycle',
+                'Boost 60 Hz on both tracks until the bottom returns',
+                'Put a phase-rotation tool on the amp track',
+                'Pan the DI and the amp track hard apart',
+                'Delay the amp track by another 9 ms',
             ],
-            answer: 3,
-            why: 'The phase shift is 360° × 55 × 0.001, about 20 degrees. Half a cycle at 55 Hz takes about 9 ms, so the low end only cancels with a much larger offset or a polarity flip.',
+            answer: 1,
+            why: 'The amp and speaker shift the phase of the lows without moving the attack, so no nudge lines up every frequency, and a phase-rotation tool shifts phase without delay. A boost gives both tracks more to cancel, panning still cancels in mono, and 9 ms puts 55 Hz half a cycle apart.',
         },
     ],
     content: `## Hook: the amp track that makes the bass smaller
@@ -114,7 +114,7 @@ The two signals work against each other, and before you can fix that you need to
 
 ## Why it matters: only related signals cancel
 
-Cancellation only happens reliably between related signals: two microphones on one source, such as a bass DI and its amp mic or a kick's inside and outside mics, or layers that start together on every hit, such as a kick sample and the sine sub under it. Their relationship is the same every time, so a bad one thins out every single note.
+Cancellation only happens reliably between related signals: two feeds of one source, such as a bass DI and its amp mic or a kick's inside and outside mics, or layers that start together on every hit, such as a kick sample and the sine sub under it. Their relationship is the same every time, so a bad one thins out every single note.
 
 A kick and an unrelated bass line are different. The bass changes notes, so how its waves line up with the kick's changes from hit to hit, and no single polarity setting is right for all of them. That is still worth checking when an 808 or a sub plays the same note as the kick and starts with it, but for a moving bass line the answer is usually arrangement and EQ, not the polarity button.
 
@@ -146,30 +146,30 @@ Hear both effects on two copies of a bass note. At 55 Hz, about 9 ms of delay pu
 
 ::demo phase
 
-## DAW experiment: line up a kick and its sub
+## DAW experiment: line up a DI and its amp track
 
-Use a kick sample and a sine sub, or an 808, that hits on the same beats and plays the kick's low note.
+Use a bass recorded through a DI and an amp mic at the same time, like the one in the hook. The amp track arrives late, since sound takes about 1 ms to cross 34 cm of air from the speaker to the mic. The amp and speaker also filter it, which shifts the phase of the lows. Step 5 needs a phase-rotation or all-pass plugin; not every DAW includes one.
 
-1. Put the kick and the sub on two tracks, both starting exactly on the beat, and fold the mix to mono.
-2. Zoom in on the first 20 ms of one hit and check whether the sub's first half-cycle moves in the same direction as the kick's low thump.
-3. Flip the sub's polarity and listen to the first 100 ms of each hit. Keep whichever setting sounds fuller and punchier.
-4. If neither is clearly better, nudge the sub later in 0.5 ms steps, up to about 5 ms, and stop where the low end is fullest.
-5. Add a high-pass at 30 Hz on the kick only, then try the polarity flip again. The filter's phase shift can change which setting wins.
-6. Bounce the best version and the worst one and compare them on a small speaker as well as on your monitors.
+1. Put the DI and amp tracks side by side with no EQ or compression on either, set them to about the same level and fold the mix to mono. Loop a few bars where the bass plays its lowest notes.
+2. Zoom in on the start of one low note on both tracks. Check whether the amp track's first half-cycle moves the same way as the DI's, and how far behind the DI it starts.
+3. Flip the amp track's polarity and listen to the low notes. Keep whichever setting sounds fuller.
+4. Nudge the amp track earlier in 0.1 ms steps, with the track delay or a sample offset (at 48 kHz, 0.1 ms is about 5 samples). Past the first millisecond, step by 0.5 ms. Stop where the low notes are fullest, then try the polarity flip once more at that position.
+5. If the lows are still thinner than the DI on its own, put the phase-rotation or all-pass plugin on the amp track and sweep its angle or frequency until the bottom comes back. It shifts the phase of the lows without moving the attack.
+6. Bounce the best version and the worst one and compare them in mono, on a small speaker as well as on your monitors.
 
-The right combination sounds like one big hit with weight under the click. The wrong one sounds like a click with the bottom missing.
+The right setting sounds like one bass, bigger than either track alone, with the amp's growl on top. The wrong one sounds like the DI with the bottom scooped out.
 
 ## Common mistake: EQ as a phase fix
 
 The biggest mistake is treating cancellation as a tone problem. The symptom looks like a lack of low end, so you boost 60 Hz on the kick and 80 Hz on the bass. The result is louder and still hollow, with less headroom.
 
-The second is trusting your eyes. Lining up the transients on screen does not guarantee the low frequencies line up, because filters and amps shift their phase without moving the transient. Let your ears in mono decide, and if polarity and timing do not settle it, try a phase rotation tool, which shifts phase without delaying the signal.
+The second is trusting your eyes. Lining up the transients on screen does not guarantee the low frequencies line up, because filters and amps shift their phase without moving the transient. Let your ears in mono decide, and if polarity and timing do not settle it, try a phase-rotation tool, which shifts phase without delaying the signal.
 
 ## Producer takeaway: fix the relationship before the tone
 
 When two parts each sound full alone but thin together, work in order: check polarity, which is free and instant, then timing, then phase rotation. Reach for EQ only after the relationship is right.
 
-The same rules apply wherever related signals meet: snare top and bottom mics, a guitar amp with two mics, a bass DI and its amp. For multi-mic drums, see the [lesson on phase as timing](/blog/phase-explained-without-panic).
+The same order works wherever related signals meet: a kick and the sub under it, snare top and bottom mics, a guitar amp with two mics. For multi-mic drums, see the [lesson on phase as timing](/blog/phase-explained-without-panic).
 
 ## References
 
@@ -179,7 +179,7 @@ The same rules apply wherever related signals meet: snare top and bottom mics, a
 `,
     seo: {
         title: 'Phase and polarity are not the same fix | VGP Studio',
-        description: 'Polarity inverts every frequency at once; a delay shifts each by a different angle. How to tell them apart and line up a kick and sub before you reach for EQ.',
+        description: 'Polarity inverts every frequency at once; a delay shifts each by a different angle. How to tell them apart and line up a bass DI and amp mic before using EQ.',
         keywords: ['phase vs polarity', 'phase cancellation', 'kick and sub', 'comb filtering', 'polarity flip', 'low end mixing'],
     },
 };

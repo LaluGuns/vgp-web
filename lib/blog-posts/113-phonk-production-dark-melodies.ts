@@ -113,6 +113,8 @@ Streaming services turn loud tracks down to a similar playback level, so past a 
 
 ## DAW experiment: build a phonk drop with grit you chose
 
+Step 6 needs a clipper with oversampling; if your DAW's clipper has no such switch, use a third-party one.
+
 1. Load a cowbell sample into a sampler, set the root note to the sample's real pitch, and write a four-bar minor riff that stays within one octave.
 2. Program it twice: straight 8ths, then 16ths grouped 3+3+2. Keep the version that pulls against the kick the way you want.
 3. Add a distorted 808: duplicate it, high-pass the copy around 100 Hz after the distortion, and keep the clean sub in mono.

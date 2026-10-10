@@ -70,7 +70,7 @@ export const post059: BlogArticle = {
             why: 'Floating point holds levels far above full scale inside the mixer. The overload happens where the signal has to fit a fixed range again, at the output or in a 16- or 24-bit file.',
         },
     ],
-    content: `## Hook: the trap of digital perfection
+    content: `## Hook: a session edited to the millisecond
 
 You have edited the session down to the millisecond. Every breath pop is gone, every silence is gated and every part sits in its own frequency pocket. The low end is controlled and the top is clean. Yet the full mix feels sterile, more like a set of separate files playing at the same time than a song moving together.
 

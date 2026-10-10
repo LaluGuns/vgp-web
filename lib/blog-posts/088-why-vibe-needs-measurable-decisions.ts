@@ -79,7 +79,7 @@ export const post088: BlogArticle = {
             why: 'The word was right, but the property sat somewhere else. Mud is often a sum of several parts in the same range, not one track.',
         },
     ],
-    content: `## Hook: the vague adjustment trap
+    content: `## Hook: thirty minutes chasing vibe
 
 You are listening to the chorus and it does not feel right. You tell yourself the vocal lacks warmth or the snare needs more vibe. So you load a vintage tape plugin and compress the channel again. When you bypass the chain, the vocal is louder but muddier, and the snare has lost its crack. You spent thirty minutes turning knobs and the track is not better, only more complicated.
 

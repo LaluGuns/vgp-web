@@ -111,7 +111,7 @@ When several sounds are clipped together, the output also contains intermodulati
 
 ## DAW experiment: find your clipping point
 
-You need a clipper with oversampling. Not every DAW ships one, and free clippers with oversampling exist.
+You need a clipper with oversampling. Some stock clippers have no oversampling switch, so check yours before you start.
 
 1. Loop four bars of a drum bus with clear transients. Put a true-peak meter and a loudness meter after it.
 2. Insert a clipper with oversampling on, followed by a gain plugin. Set the clipper's ceiling at the loop's current peak level.

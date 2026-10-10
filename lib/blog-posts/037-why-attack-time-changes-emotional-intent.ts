@@ -85,7 +85,7 @@ export const post037: BlogArticle = {
             why: 'A slow attack becomes audible later than the note starts. Moving the part earlier lets it reach full level near the beat while it still swells in.',
         },
     ],
-    content: `## Hook: the chords with no attitude
+    content: `## Hook: bright chords that still drag
 
 You programmed a chord progression you like, but it feels lazy. It sits at the back of the mix and does not push the song forward. So you open an EQ, boost the highs for bite and the mids for punch. The chords get brighter and louder. They still drag.
 
@@ -119,7 +119,7 @@ A fast rise also puts more high-frequency energy into the onset. A sudden step c
 
 ## DAW experiment: the attack duplication test
 
-Hear one part change its job when only the attack changes.
+Hear one part change its job when only the attack changes. If you use an audio part instead of a synth, step 2 needs a transient shaper, which some DAWs call an envelope shaper.
 
 1. Load a synth pluck or chord part that plays on the beat with your drums.
 2. Duplicate the track. On the copy, raise the amp envelope attack from about 1 ms to 80 ms. For an audio part, use a transient shaper on the copy and turn the attack down by about 6 dB instead.

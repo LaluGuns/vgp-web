@@ -83,7 +83,7 @@ export const post054: BlogArticle = {
             why: 'Depth is a difference between parts. The same treatment on everything puts the whole band in one place, just further away.',
         },
     ],
-    content: `## Hook: the flat mix trap
+    content: `## Hook: reverb on every part
 
 You finish a mix and it feels like a flat sheet of paper, with everything right in front of the listener's face. To get depth you put reverb on the vocal, the guitars, the synths and the drums, and turn up the sends to push some parts back. Instead of a deep mix you get a washed-out one. The track feels smaller, and every part is buried in the same cloud of reflections.
 

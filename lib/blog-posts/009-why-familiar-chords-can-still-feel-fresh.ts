@@ -81,7 +81,7 @@ export const post009: BlogArticle = {
             why: 'Seconds and thirds sound clear high up and muddy low down. Keep extensions in the upper part of the voicing and the bass on roots, fifths or inversions.',
         },
     ],
-    content: `## Hook: the harmony trap
+    content: `## Hook: two hours replacing four good chords
 
 You sit down to write a song and play a simple four-chord progression: I, V, vi, IV. It sounds stable and immediately familiar.
 

@@ -18,12 +18,12 @@ export const post076: BlogArticle = {
             type: 'curve',
             caption:
                 'A sketch of a clean handoff. The guitar answers in the gaps between vocal lines, so one part owns the foreground at any moment and the ear always knows where to look.',
-            alt: 'Two curves across six moments of a phrase. The solid vocal curve is high on each line and low in each gap. The dashed guitar curve does the opposite and is highest in the final fill.',
+            alt: 'Two curves across six moments of a phrase. The solid guitar curve is low on each line, high in each gap and highest in the final fill. The dashed vocal curve does the opposite.',
             x: ['Line 1', 'Gap', 'Line 2', 'Gap', 'Line 3', 'Fill'],
             yLabel: 'Foreground',
             series: [
-                { label: 'Vocal', values: [0.9, 0.2, 0.9, 0.2, 0.9, 0.15] },
-                { label: 'Guitar', values: [0.2, 0.75, 0.2, 0.75, 0.2, 0.9], dashed: true },
+                { label: 'Guitar', values: [0.2, 0.75, 0.2, 0.75, 0.2, 0.9] },
+                { label: 'Vocal', values: [0.9, 0.2, 0.9, 0.2, 0.9, 0.15], dashed: true },
             ],
         },
         cut: {

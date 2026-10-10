@@ -117,6 +117,8 @@ The limits are at the edges of the float world. A 16-bit or 24-bit export clips 
 
 ## DAW experiment: find the walls
 
+Step 6 needs a clipper plugin with a ceiling control, which not every DAW includes.
+
 1. In a 48 kHz session, put a drum loop on a track that peaks around -6 dBFS.
 2. Insert a gain plugin set to +18 dB, then a second gain plugin set to -18 dB. The signal between them peaks around +12 dBFS, but the output sounds clean.
 3. Remove the second gain plugin and pull the master fader down 18 dB instead. It is still clean: the master fader is part of the float engine.

@@ -84,7 +84,7 @@ export const post092: BlogArticle = {
             why: 'At the higher internal rate the new harmonics have room to exist. The filter removes them before the signal returns to the session rate, so they never fold.',
         },
     ],
-    content: `## Hook: the digital saturation trap
+    content: `## Hook: saturation that turns the top end metallic
 
 You load a saturation plugin to warm up a vocal or add grit to a bass line. You push the input gain. Instead of the smooth density you hear on tape, the top end turns metallic. A cold glare settles over the track and it starts to sound thin. What you are hearing is aliasing.
 

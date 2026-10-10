@@ -81,7 +81,7 @@ export const post087: BlogArticle = {
             why: 'The limit exists to push the fix into the writing. A wider voicing or a new bass rhythm changes the hook. A layer only hides it.',
         },
     ],
-    content: `## Hook: the infinite options trap
+    content: `## Hook: an hour of browsing kicks
 
 You open your DAW to start a new track. There are dozens of virtual synths and gigabytes of drum samples on an external drive. You spend the first hour clicking through kicks and loading huge pads you will delete later. By the time you have a basic drum pattern, your focus is gone and you have not written a single musical phrase.
 

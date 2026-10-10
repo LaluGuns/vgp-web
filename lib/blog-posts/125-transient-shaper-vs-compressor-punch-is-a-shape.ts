@@ -139,7 +139,7 @@ export const post125: BlogArticle = {
     ],
     content: `## Hook: the ghost notes under the threshold
 
-You want the snare to crack. A compressor with a slow attack does it on the backbeats: the front edge gets through, the body comes down, and with makeup gain the hit sounds sharper. Then you listen to the ghost notes between the backbeats. They sound exactly as before, soft and a little vague, because they never reached the threshold.
+You want the snare to crack. A compressor with a slow attack does it on the backbeats: the front edge gets through, the body comes down, and with makeup gain the hit sounds sharper. Then you listen to the ghost notes between the backbeats. The makeup gain has turned them up, but they keep exactly the shape they had, soft and a little vague, because they never reached the threshold.
 
 Swap the compressor for a transient shaper and turn up its attack, and the ghost notes get the same extra edge as the backbeats. Both tools change punch. They decide when to act in different ways, and that decides which one a part needs.
 
@@ -171,7 +171,7 @@ Fenton and Lee's perceptual model of punch suggests why the front edge carries s
 
 ## DAW experiment: one snare, two tools
 
-You need a transient shaper. Several DAWs include one, sometimes called an envelope shaper, and free ones exist.
+You need a transient shaper. Several DAWs include one, sometimes under the name envelope shaper.
 
 1. Pick a snare track with clear backbeats and some ghost notes, or a drum loop with loud and quiet hits. Loop two bars.
 2. Insert a compressor: ratio 4:1 or higher, attack around 20 to 30 ms, release short. Pull the threshold down until the backbeats show 4 to 6 dB of reduction, then add makeup gain until the loudness matches the bypassed track.

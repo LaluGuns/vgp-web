@@ -10,7 +10,7 @@ export const post111: BlogArticle = {
     readingTime: 4,
     summary: [
         'Personal use means practice and private listening. Anything that earns money or promotes a release or a business is commercial use.',
-        'Putting a song on Spotify or Apple Music is commercial use even at ten streams, because those services pay royalties.',
+        'Putting a song on Spotify or Apple Music is commercial use even at ten streams, because it is public distribution on a paid service.',
         'When a use is unclear, ask before you release and keep the answer in writing.',
     ],
     figures: {
@@ -32,11 +32,11 @@ export const post111: BlogArticle = {
             options: [
                 'Personal, as long as it only gets a few streams',
                 'Personal, because you credited the producer',
-                'Commercial, because the service pays royalties',
+                'Commercial: public distribution on a paid service',
                 'Neither, because streaming uploads are exempt',
             ],
             answer: 2,
-            why: 'Distribution on a royalty-paying service is commercial activity at any scale, so it needs a license.',
+            why: 'Releasing a song publicly on a service that earns from it is commercial at any scale, even before the track earns you anything, so it needs a license.',
         },
         {
             q: 'A clothing brand pays you to post a short video that uses a beat. Is that commercial use?',
@@ -81,7 +81,7 @@ Personal use means the song stays with you. Nobody is paid, nothing is sold, and
 
 ## Commercial use
 
-Commercial use is anything that earns money, builds a release or promotes a business. Uploading to Spotify or Apple Music counts at any scale, because those services pay royalties. So do ads on a video, download and physical sales, paid shows, a sponsored post for a brand, and client work where you are paid to make a video, an ad or a podcast.
+Commercial use is anything that earns money, builds a release or promotes a business. Uploading to Spotify or Apple Music counts at any scale: the song is distributed publicly on a service that earns from it through subscriptions and ads, even before it earns you anything. Spotify pays recorded royalties on a track only once it has 1,000 streams in the previous 12 months and a minimum number of unique listeners (Spotify, 2024), so a small release can earn nothing and still be a commercial release. So do ads on a video, download and physical sales, paid shows, a sponsored post for a brand, and client work where you are paid to make a video, an ad or a podcast.
 
 Background music in your own videos and streams is commercial too once the channel is monetized or sponsored. That case usually calls for a creator license rather than a beat lease: the [lesson on streaming versus a creator license](/blog/spotify-streaming-vs-flow-creator-license) covers how that works.
 
@@ -108,7 +108,7 @@ A personal post and a paid brand post can look the same on screen. If a business
 
 ## Common mistake: judging by audience size
 
-The common mistake is thinking a small release is personal. Ten streams on Spotify still pay royalties, and a sponsored post with fifty views still promotes a business.
+The common mistake is thinking a small release is personal. Ten streams on Spotify are still public distribution on a paid service, and a sponsored post with fifty views still promotes a business.
 
 The second is treating a credit as a license. Crediting the producer is usually required by a license, and it does not replace one.
 
@@ -118,6 +118,7 @@ If money is involved, or you hope it will be, license the beat before release. W
 
 ## References
 
+- Spotify. (2024). *Track monetization eligibility*. Spotify for Artists. https://support.spotify.com/artists/article/track-monetization-eligibility/
 - US Copyright Office. (2021). *Circular 56A: Copyright Registration of Musical Compositions and Sound Recordings*. https://www.copyright.gov/circs/circ56a.pdf
 `,
     seo: {

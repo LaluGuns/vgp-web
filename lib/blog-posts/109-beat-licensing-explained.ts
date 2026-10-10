@@ -69,7 +69,7 @@ export const post109: BlogArticle = {
 
 You lease a beat on the smallest tier, record a song on it the same night and put it out everywhere. For two months it does a few hundred plays a week. Then a short clip of the hook takes off, the streams climb past the number in your license, and a sync agency asks whether you can clear the song for an ad.
 
-You go back to the license file you never opened. It says what you can do, how far the song can travel, and who owns what. The answer for the agency is in that file too.
+You go back to the license file you never opened. It says what you can do, how far the song can travel, and who owns what. It is also the first place to look before you answer the agency.
 
 ## Why it matters: a lease is permission with limits
 
@@ -95,13 +95,13 @@ These are the non-exclusive tiers for Virzy Guns beats right now (${tierNames}).
 
 ::licenses
 
-Choose from where the song is going. A first release to a small audience fits the smallest tier. WAV files, radio and paid performances are listed per tier in the table. If you or an engineer will mix from separate parts, choose a tier with stems. If you expect the song to travel, compare the caps with your plan before release.
+Choose from where the song is going. A first release to a small audience fits the smallest tier. WAV files, radio and paid performances are listed per tier in the table. If you or an engineer will mix from separate parts, choose a tier with stems. If you expect the song to travel, compare the caps with your plan before release. Sync, the use of a song in an ad, a film or a TV spot, is not one of the rights the table lists, so the agency in the hook needs an answer from the producer, in writing, before you agree to anything.
 
 ## Common mistake: releasing first, reading later
 
 The most common mistake is the one in the hook. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
 
-The second is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material in a reference file and lists music licensed without exclusivity as material that does not qualify (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
+The second is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material it evaluates, and it lists music licensed without exclusivity among its common examples of material that may not be exclusive (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
 
 The third is assuming that exclusive means you own the beat outright. Ownership depends on the contract, so read it before you sign.
 

@@ -141,7 +141,7 @@ In the demo, listen for two things: whether the centre feels smaller as the side
 
 ## DAW experiment: measure your width move
 
-You need a mid/side utility with a side gain control. Several DAWs include one, and free ones exist.
+You need a mid/side utility with a side gain control. Several DAWs have one built in.
 
 1. Put a mid/side utility on the mix bus with a side gain control, followed by a loudness meter and a mono switch.
 2. Loop the chorus and note the short-term loudness and how present the vocal feels.

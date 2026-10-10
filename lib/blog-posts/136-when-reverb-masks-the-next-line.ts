@@ -51,15 +51,15 @@ export const post136: BlogArticle = {
             type: 'bars',
             caption:
                 'How far the tail of line 1 has fallen when line 2 starts 0.4 s later, worked out as 60 × 0.4 / T. A 3 s reverb has fallen only 8 dB. Ducking the return by 8 dB while the singer sings doubles that margin to 16 dB at the start of the new line.',
-            alt: 'Horizontal bars on a scale from 0 to 30 dB. A 1 s decay has fallen 24 dB, 2 s has fallen 12 dB and 3 s has fallen 8 dB. A dimmed bar for the 3 s decay with 8 dB of ducking reaches 16 dB.',
+            alt: 'Horizontal bars on a scale from 0 to 30 dB. Grey bars show a 1 s decay fallen 24 dB and a 2 s decay fallen 12 dB. Two highlighted bars show a 3 s decay fallen 8 dB and the same decay with 8 dB of ducking at 16 dB.',
             min: 0,
             max: 30,
             unit: 'dB',
             bars: [
-                { label: 'Decay 1 s', value: 24, display: '24 dB' },
-                { label: 'Decay 2 s', value: 12, display: '12 dB' },
+                { label: 'Decay 1 s', value: 24, display: '24 dB', dim: true },
+                { label: 'Decay 2 s', value: 12, display: '12 dB', dim: true },
                 { label: 'Decay 3 s', value: 8, display: '8 dB' },
-                { label: '3 s, ducked 8 dB', value: 16, display: '16 dB', dim: true },
+                { label: '3 s, ducked 8 dB', value: 16, display: '16 dB' },
             ],
         },
         throw: {

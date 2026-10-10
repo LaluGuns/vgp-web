@@ -115,7 +115,7 @@ The contrast is what the listener notices. Hearing tends to respond to change mo
 
 In stereo, the chorus should open out with the faders untouched. In mono, the width change disappears, so the chorus should still lift from its parts and register, and nothing important should vanish.
 
-## Common mistake: the wide verse trap
+## Common mistake: a verse as wide as the chorus
 
 The most common mistake is double-tracking and wide-panning everything in the verse to make it sound full. That leaves the chorus no room to grow, so the biggest moment of the song sounds the same size as the rest.
 

@@ -156,7 +156,7 @@ Compression on its own usually raises the ratio, because it turns the loud vowel
 
 ## DAW experiment: hear what the de-esser takes
 
-You need a de-esser. Not every DAW ships one, and free ones exist.
+You need a de-esser. Not every DAW ships one; a free plugin is fine for this test.
 
 1. Loop a fast, wordy section of the lead vocal with the full mix playing.
 2. Switch your de-esser to its listen or delta mode, if it has one, so you hear only what it removes.

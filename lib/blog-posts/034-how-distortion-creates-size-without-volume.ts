@@ -68,7 +68,7 @@ export const post034: BlogArticle = {
             why: 'Louder almost always sounds better at first. Only at matched loudness can you hear whether the harmonics improved the part or just made it louder.',
         },
     ],
-    content: `## Hook: the fader trap
+    content: `## Hook: a bass that is either invisible or too loud
 
 Your bass is too quiet. On a laptop you cannot follow the bass line at all, so you push the fader. Now it is loud enough, but its peaks hit the master ceiling and the limiter starts squeezing the whole mix. You pull it back and the bass disappears again. There seems to be no setting between invisible and too loud.
 

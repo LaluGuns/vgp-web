@@ -112,7 +112,7 @@ Move the pre-delay, decay and level and listen to the notes step forward or sink
 
 ## DAW experiment: keep the singer close
 
-Use a verse and a chorus of a finished vocal.
+Use a verse and a chorus of a finished vocal. Step 5 also needs a de-esser; if your DAW has none, install one before you start.
 
 1. Insert a plate or hall reverb on an aux return, 100% wet, and send the lead vocal to it at -12 dB.
 2. Set the pre-delay to 0 ms and listen, then set it to 50 ms. Listen to the start of each word separate from the room.

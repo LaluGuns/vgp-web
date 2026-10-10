@@ -134,6 +134,8 @@ A short reverb with a few tens of milliseconds of pre-delay keeps the start of e
 
 ## DAW experiment: hear the room, then build the chain
 
+Step 5 needs a de-esser. Not every DAW has one, so check your plugin list before you record.
+
 1. Record the same two lines twice: once with your mouth about 10 cm from the mic, once at about 40 cm. Match their levels and compare. The far take carries 12 dB more room against the voice.
 2. Move to the softest corner you have, hang a duvet behind you, and record the close take again. Compare it with the first close take.
 3. On the best take, add a high-pass filter. Raise it until the voice thins, then back it off a little.

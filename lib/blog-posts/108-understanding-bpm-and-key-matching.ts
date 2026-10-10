@@ -123,7 +123,7 @@ Hear the grid side of this: the same beat from 60 to 160 BPM. Notice which tempo
 
 ## DAW experiment: match a sample, then set pitch correction
 
-Steps 5 to 7 need a pitch corrector with key and scale settings. Several DAWs include one, and free ones exist.
+Steps 5 to 7 need a pitch corrector with key and scale settings, which several DAWs include.
 
 1. Find the sample's tempo. Count the beats in the loop and time it: $\\text{BPM} = 60 \\times \\text{beats} / \\text{seconds}$. A four-bar loop has 16 beats, so if it lasts 6.86 seconds it is at about 140 BPM.
 2. Find its key with your DAW's detection or an online tool, then confirm by playing the root under it. Detection can report the relative major instead of the minor, because the notes are the same.
