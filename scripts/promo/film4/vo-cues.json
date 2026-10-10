@@ -81,9 +81,9 @@
   },
   {
    "id": "hook-b1",
-   "text": "Same notes. One change.",
+   "text": "Same notes.",
    "from": 3.53,
-   "to": 5.92,
+   "to": 4.41,
    "words": [
     {
      "w": "Same",
@@ -94,21 +94,29 @@
      "w": "notes.",
      "s": 0.29,
      "e": 0.67
-    },
-    {
-     "w": "One",
-     "s": 1.11,
-     "e": 1.43
-    },
-    {
-     "w": "change.",
-     "s": 1.43,
-     "e": 1.89
     }
    ]
   },
   {
    "id": "hook-b2",
+   "text": "One change.",
+   "from": 4.7,
+   "to": 5.92,
+   "words": [
+    {
+     "w": "One",
+     "s": 0.0,
+     "e": 0.26
+    },
+    {
+     "w": "change.",
+     "s": 0.26,
+     "e": 0.72
+    }
+   ]
+  },
+  {
+   "id": "hook-b3",
    "text": "Now you can hear it.",
    "from": 6.21,
    "to": 7.11,

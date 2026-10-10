@@ -148,7 +148,12 @@ function ladder(box, t, o = {}) {
     g.clip();
     g.fillStyle = `rgba(125,211,252,${0.05 + 0.1 * (o.windowGlow ?? 0)})`;
     g.fillRect(x0 - 24, y0 - 24, x1 - x0 + 48, yCut - y0 + 24);
-    g.fillStyle = `rgba(0,0,0,${0.5 + 0.2 * (o.darkPulse ?? 0)})`;
+    // The phone fades out below 200 Hz rather than stopping: the zone darkens downward.
+    const dz = g.createLinearGradient(0, yCut, 0, y1);
+    dz.addColorStop(0, `rgba(0,0,0,${0.22 + 0.2 * (o.darkPulse ?? 0)})`);
+    dz.addColorStop(0.45, `rgba(0,0,0,${0.5 + 0.2 * (o.darkPulse ?? 0)})`);
+    dz.addColorStop(1, `rgba(0,0,0,${0.62 + 0.2 * (o.darkPulse ?? 0)})`);
+    g.fillStyle = dz;
     g.fillRect(x0 - 24, yCut, x1 - x0 + 48, y1 - yCut + 24);
     g.restore();
     g.save();
@@ -201,12 +206,17 @@ function ladder(box, t, o = {}) {
             g.globalAlpha *= ra;
             const lf = L(s.full[k]);
             const lp = L(s.phone[k]);
+            // Rungs shorter than 12 px read as specks, not levels: left out.
+            if (lf < 12) {
+                g.restore();
+                continue;
+            }
             if (lp > 1) {
                 rr(g, x0, y - h / 2, lp, h, 4);
                 g.fillStyle = col;
                 g.fill();
             }
-            if (lf > 1) {
+            {
                 rr(g, x0, y - h / 2, lf, h, 4);
                 g.strokeStyle = col;
                 g.lineWidth = 3;
@@ -301,15 +311,13 @@ function phoneScreen(t, bassGlow) {
         }
         gc.stroke();
         if (w >= 280) label(gc, 'Nightfall beat', x + 30, y + s + 82, { size: 34, weight: 700, color: P.ink, family: BODY });
-        // Level bars: the drums (white) and the bass the phone plays (cyan).
-        const d = drumFlash(t);
-        const bars = [0.25 + d, 0.2 + 0.8 * d, 0.15 + bassGlow, 0.2 + bassGlow * 0.8, 0.18 + 0.6 * d];
-        bars.forEach((v, i) => {
-            const bh = 18 + 70 * clamp(v);
-            rr(gc, x + 30 + i * 42, y + s + 200 - bh, 26, bh, 6);
-            gc.fillStyle = i === 2 || i === 3 ? P.cyan : P.ink3;
-            gc.fill();
-        });
+        // A progress bar, as any player shows.
+        rr(gc, x + 30, y + s + 150, w - 60, 10, 5);
+        gc.fillStyle = P.ink4;
+        gc.fill();
+        rr(gc, x + 30, y + s + 150, (w - 60) * ((t / 8) % 1), 10, 5);
+        gc.fillStyle = P.ink2;
+        gc.fill();
     };
 }
 function drawHook(t) {
@@ -347,7 +355,8 @@ function drawHook(t) {
     const pw = g.measureText(ptxt).width + 35;
     label(g, 'Bass:', 530, 651, { size: 36, weight: 800, color: P.ink, alpha: pa });
     pill(g, ptxt, 640 + pw / 2, 640, { size: 32, bg: sat ? P.cyan : P.ink, fg: P.dark, alpha: pa, weight: 700, scale: sat ? lerp(1.12, 1, E.out(popIn(t, (replay ? segBy.againSat : segBy.hookSat).from - 0.05, 0.25))) : 1 });
-    ladderLegend(530, 740, pa, { size: 32, gap: 46 });
+    const gReplay = replay ? E.out(popIn(t, segBy.againSat.from + 0.6, 0.4)) : 0;
+    ladderLegend(530, replay ? 712 : 740, pa, { size: 32, gap: 44, ghost: gReplay });
     // Phone and its speaker.
     const glow = clamp((phoneDb(t) + 34) / 18);
     const d = drumFlash(t);
@@ -405,7 +414,16 @@ function drawHook(t) {
         g.restore();
     }
     // Ladder.
-    ladder(HK.lad, t, { zoneLeft: true, maxN: 6, rungH: 18 });
+    const sp = spectrum(t);
+    const lad = ladder(HK.lad, t, { zoneLeft: true, maxN: 6, rungH: 18, ghost: gReplay, ghostF0: sp?.f0, fundAlpha: 1 - gReplay });
+    // Name the bottom bar: the note.
+    if (lad && sp) {
+        const ny = (lad.Y(sp.f0) + lad.Y(2 * sp.f0)) / 2 + 11;
+        label(g, 'the note', HK.lad.x0, ny, { size: 32, weight: 700, color: P.amber, family: BODY, alpha: popIn(t, replay ? SC.again + 0.4 : 0.35, 0.3) });
+    }
+    // Once you can hear it: these are what the phone plays.
+    const hA = sat ? popIn(t, replay ? segBy.againSat.from + 0.3 : wt('hook-b', 'hear'), 0.3) : 0;
+    if (hA > 0) pill(g, 'harmonics', (HK.lad.x0 + HK.lad.x1) / 2, HK.lad.y0 + 34, { size: 32, bg: P.cyan, fg: P.dark, alpha: hA, scale: E.outBack(hA), weight: 700 });
     g.restore();
 }
 
@@ -423,8 +441,9 @@ function drawAir(t) {
     label(g, 'how far the cone has to travel', 540, 396, { size: 40, weight: 600, color: P.ink2, align: 'center', alpha: popIn(t, wt('air', 'move') - 0.05) });
     const appear = [voBy.air.at + 0.05, wt('air', 'every'), wt('air', 'lower')];
     const arrowAt = [wt('air', 'move'), wt('air', 'four'), wt('air', 'times')];
-    AIR.rows.forEach((y, i) => {
+    AIR.rows.forEach((y0, i) => {
         const k = popIn(t, appear[i], 0.3);
+        const y = i === 0 ? lerp(840, y0, E.inOut(seg(t, appear[1] - 0.4, appear[1] + 0.1))) : y0;
         if (k <= 0) return;
         const f = AIR.f[i];
         const rel = (200 / f) ** 2;
@@ -530,58 +549,53 @@ function drawPhone(t) {
     g.arc(mag.x, mag.y, mag.r - 6, 0, Math.PI * 2);
     g.clip();
     coneSide(g, cx, cy, 190, x);
-    label(g, 'trying 50 Hz', mag.x, mag.y - 168, { size: 32, weight: 700, color: P.amber, align: 'center', family: BODY, alpha: popIn(t, tTry - 0.05, 0.3) });
-    // A travel gauge under the cone: the dashed span is how far 50 Hz needs
-    // it to move, the solid span how far it can, the dot where it is.
-    const ly = mag.y + 125;
+    // Under the cone: an amber arrow for how far 50 Hz needs it to travel,
+    // a small white bracket for how far it can, and the cone's position.
+    const ly = mag.y + 118;
     const ga = popIn(t, wt('phone', 'barely') - 0.1, 0.3);
-    if (ga > 0) {
-        g.save();
-        g.globalAlpha *= ga;
-        g.setLineDash([12, 9]);
-        g.strokeStyle = P.ink2;
-        g.lineWidth = 4;
-        g.beginPath();
-        g.moveTo(cx - need, ly);
-        g.lineTo(cx + need, ly);
-        g.stroke();
-        g.restore();
-    }
+    g.save();
+    g.globalAlpha *= ga;
+    g.strokeStyle = P.amber;
+    g.lineWidth = 6;
     g.lineCap = 'round';
-    g.strokeStyle = P.ink;
-    g.lineWidth = 10;
     g.beginPath();
-    g.moveTo(cx - stop, ly);
-    g.lineTo(cx + stop, ly);
-    g.stroke();
-    g.lineWidth = 5;
-    for (const sx of [-1, 1]) {
-        g.beginPath();
-        g.moveTo(cx + sx * (stop + 6), ly - 20);
-        g.lineTo(cx + sx * (stop + 6), ly + 20);
-        g.stroke();
+    g.moveTo(cx - need, ly);
+    g.lineTo(cx + need, ly);
+    for (const sg of [-1, 1]) {
+        g.moveTo(cx + sg * need - sg * 16, ly - 12);
+        g.lineTo(cx + sg * need, ly);
+        g.lineTo(cx + sg * need - sg * 16, ly + 12);
     }
-    g.fillStyle = P.amber;
+    g.stroke();
+    label(g, '50 Hz needs this', cx, ly - 24, { size: 32, weight: 700, color: P.amber, align: 'center', family: BODY });
+    g.restore();
+    const by2 = ly + 52;
+    g.strokeStyle = P.ink;
+    g.lineWidth = 5;
     g.beginPath();
-    g.arc(cx + x, ly, 9, 0, Math.PI * 2);
+    g.moveTo(cx - stop - 6, by2 - 14);
+    g.lineTo(cx - stop - 6, by2);
+    g.lineTo(cx + stop + 6, by2);
+    g.lineTo(cx + stop + 6, by2 - 14);
+    g.stroke();
+    g.fillStyle = P.ink;
+    g.beginPath();
+    g.arc(cx + x, by2 - 7, 7, 0, Math.PI * 2);
     g.fill();
-    // The stop it is pressed against glows.
     const hit = Math.abs(want) > stop ? clamp((Math.abs(want) - stop) / 30) : 0;
     if (hit > 0) {
         const hx = cx + Math.sign(want) * (stop + 6);
-        const gl = g.createRadialGradient(hx, ly, 0, hx, ly, 34);
+        const gl = g.createRadialGradient(hx, by2 - 7, 0, hx, by2 - 7, 30);
         gl.addColorStop(0, `rgba(248,250,252,${0.6 * hit})`);
         gl.addColorStop(1, 'rgba(248,250,252,0)');
         g.fillStyle = gl;
         g.beginPath();
-        g.arc(hx, ly, 34, 0, Math.PI * 2);
+        g.arc(hx, by2 - 7, 30, 0, Math.PI * 2);
         g.fill();
     }
+    label(g, 'it can move this', cx, by2 + 42, { size: 32, weight: 700, color: P.ink, align: 'center', family: BODY, alpha: ga });
     g.restore();
     g.restore();
-    const la = popIn(t, wt('phone', 'barely') - 0.1, 0.3) * ma;
-    label(g, '━  how far it can move', mag.x, mag.y + mag.r + 56, { size: 32, weight: 700, color: P.ink, align: 'center', family: BODY, alpha: la });
-    label(g, '- - -  how far 50 Hz needs', mag.x, mag.y + mag.r + 98, { size: 32, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: la });
     // The sub knob, turned up 6 dB on "Turning", with the bass playing.
     const bs = segBy.boost;
     const boost = rampAt(bs.boostDb, bs.boostDb.db, t);
@@ -593,8 +607,10 @@ function drawPhone(t) {
         label(g, 'sub', PHS.knob.x, PHS.knob.y + 130, { size: 40, weight: 800, color: P.amber, align: 'center' });
         label(g, boost > 0.05 ? `+${boost.toFixed(1)} dB` : '0 dB', PHS.knob.x + 100, PHS.knob.y + 14, { size: 44, weight: 800, color: P.ink });
         g.restore();
-        ladder(PHS.lad, t, { alpha: ka, zoneLeft: true, maxN: 6 });
     }
+    // The phone's ladder, from "Down here": the sub's bar in the dark, nothing lit.
+    const lA = popIn(t, wt('phone', 'down') - 0.1, 0.3);
+    if (lA > 0) ladder(PHS.lad, t, { alpha: lA, zoneLeft: true, maxN: 6 });
     g.restore();
 }
 
@@ -646,13 +662,37 @@ function drawLadder(t) {
             if (k <= 0) return;
             const x = BL.x0 + lad.L(r.full) + 46;
             g.save();
-            g.globalAlpha *= k;
+            g.globalAlpha *= clamp(k * 3);
             rr(g, x - 34, r.y - 22, 68, 44, 12);
             g.fillStyle = '#081022';
             g.fill();
-            label(g, text, x, r.y + 12, { size: 34, weight: 800, color, align: 'center' });
             g.restore();
+            label(g, text, x, r.y + 12, { size: 34, weight: 800, color, align: 'center', alpha: k });
         });
+        // "can't play the note": the note's bar is struck through, "not played".
+        if (isWin && lad.rungs[0]) {
+            const r0 = lad.rungs[0];
+            const sk = E.out(popIn(t, tNote - 0.05, 0.4));
+            if (sk > 0) {
+                const len = lad.L(r0.full);
+                g.strokeStyle = P.ink;
+                g.lineWidth = 6;
+                g.lineCap = 'round';
+                g.beginPath();
+                g.moveTo(BL.x0 - 8, r0.y);
+                g.lineTo(BL.x0 - 8 + (len + 16) * sk, r0.y);
+                g.stroke();
+                tag(g, 'not played', BL.x0 + len / 2, r0.y - 58, null, { a: sk, bg: P.dark, fg: P.ink, ring: P.ink3, size: 32 });
+            }
+            // "plays the harmonics": the window's edge lights up.
+            const wk = bump(t, tHarm - 0.05, 0.2, 1.2);
+            if (wk > 0) {
+                rr(g, BL.x0 - 24, BL.y0 - 24, BL.x1 - BL.x0 + 48, lad.yCut - BL.y0 + 24, 26);
+                g.strokeStyle = `rgba(125,211,252,${0.9 * wk})`;
+                g.lineWidth = 5;
+                g.stroke();
+            }
+        }
         // "Disappears": the clean sub's one line, under the window.
         // The saturation knob, turned by the same blend the sound uses.
         const gs = segBy.grow;
@@ -699,7 +739,7 @@ function drawScope(t) {
     g.fillStyle = '#081022';
     g.fill();
     label(g, 'What the phone plays', x0 - 14, top - 76, { size: 44, weight: 800, color: P.ink });
-    label(g, '80 ms', x1 + 14, top - 76, { size: 32, weight: 600, color: P.ink2, align: 'right', family: BODY });
+    label(g, '80 ms window', x1 + 14, top - 76, { size: 32, weight: 600, color: P.ink2, align: 'right', family: BODY });
     // Legend for the amber curve, on the frame it appears.
     const gl = E.out(popIn(t, wt('brain', 'puts') - 0.1, 0.8));
     if (gl > 0) {
@@ -708,9 +748,11 @@ function drawScope(t) {
         g.setLineDash([12, 8]);
         g.strokeStyle = P.amber;
         g.lineWidth = 5;
+        font(g, 32, 700, BODY);
+        const lx = x1 + 14 - g.measureText('the note you hear').width - 20;
         g.beginPath();
-        g.moveTo(x1 - 400, top - 30);
-        g.lineTo(x1 - 350, top - 30);
+        g.moveTo(lx - 54, top - 30);
+        g.lineTo(lx - 4, top - 30);
         g.stroke();
         g.restore();
         label(g, 'the note you hear', x1 + 14, top - 19, { size: 32, weight: 700, color: P.amber, align: 'right', family: BODY, alpha: gl });
@@ -801,7 +843,8 @@ function drawScope(t) {
     // answers in amber, once per note the phone plays.
     const tBrain = wt('brain', 'brain');
     const tPuts = wt('brain', 'puts');
-    const RB = { x: 240, y: 1240, s: 0.95 };
+    const mv = E.inOut(seg(t, tPuts - 0.7, tPuts - 0.1));
+    const RB = { x: lerp(540, 240, mv), y: 1240, s: lerp(1.15, 0.95, mv) };
     const ax = RB.x + 68 * RB.s;
     const ay = RB.y - 150 * RB.s;
     const ra = popIn(t, SC.strange + 0.15, 0.35);
@@ -872,8 +915,11 @@ function drawScope(t) {
             const k = E.inOut(fly);
             const tx = box.x0 + lad.L(0) / 2;
             const ty = lad.Y(q?.f0 ?? 51.91);
-            const px = lerp(CL.x, tx, k);
-            const py = lerp(CL.y, ty, k) - 80 * Math.sin(Math.PI * k);
+            // Over the labels, then down into the ladder.
+            const cxp = 860;
+            const cyp = 860;
+            const px = (1 - k) ** 2 * CL.x + 2 * (1 - k) * k * cxp + k * k * tx;
+            const py = (1 - k) ** 2 * CL.y + 2 * (1 - k) * k * cyp + k * k * ty;
             g.strokeStyle = P.amber;
             g.lineWidth = 8;
             g.lineCap = 'round';
@@ -904,90 +950,184 @@ function drawLimit(t) {
     g.save();
     g.globalAlpha = a;
     push(t, SC.limit, SC.rule);
-    // Club sub: big cone, air moving.
-    const la = popIn(t, voBy.limit.at - 0.05, 0.3);
-    const breathe = Math.sin(t * 2 * Math.PI * 1.5);
+    // Both speakers from the start; each lights up on its own words.
+    const tFeel = wt('limit', 'feel');
+    const tBut = wt('limit', 'but');
+    const subOn = 0.35 + 0.65 * popIn(t, voBy.limit.at - 0.05, 0.3);
+    const phOn = 0.35 + 0.65 * popIn(t, tBut - 0.05, 0.3);
+    const shake = popIn(t, tFeel - 0.05, 0.2) * (1 - popIn(t, tBut, 0.4));
+    const jx = 3 * shake * Math.sin(t * 2 * Math.PI * 11);
     g.save();
-    g.globalAlpha *= la;
+    g.globalAlpha *= subOn;
     for (let k = 0; k < 3; k++) {
-        const age = ((t * 0.9 + k / 3) % 1);
+        const age = (t * 0.9 + k / 3) % 1;
         g.strokeStyle = `rgba(251,191,36,${0.5 * (1 - age)})`;
         g.lineWidth = 8;
         g.beginPath();
         g.arc(290, 760, 200 + age * 160, -0.9, 0.9);
         g.stroke();
     }
-    clubSub(g, 290, 760, 340, breathe);
+    clubSub(g, 290 + jx, 760, 340, Math.sin(t * 2 * Math.PI * 1.5));
+    // The floor rumbles: you feel it.
+    g.strokeStyle = `rgba(251,191,36,${0.7 * shake})`;
+    g.lineWidth = 5;
+    g.lineCap = 'round';
+    for (const dy of [0, 22]) {
+        g.beginPath();
+        for (let i = 0; i <= 40; i++) {
+            const px = 130 + i * 8;
+            const py = 1010 + dy + 6 * Math.sin(i * 1.3 + t * 40) * shake;
+            if (i) g.lineTo(px, py);
+            else g.moveTo(px, py);
+        }
+        g.stroke();
+    }
     label(g, 'Club sub', 290, 470, { size: 52, weight: 800, color: P.ink, align: 'center' });
     g.restore();
-    const fa = popIn(t, wt('limit', 'feel') - 0.05, 0.3);
-    tag(g, 'feel it', 290, 1080, null, { a: fa, bg: P.amber, fg: P.dark, size: 44, weight: 800 });
-    // Phone: the harmonics, heard.
-    const pa = popIn(t, wt('limit', 'but') - 0.05, 0.3);
-    if (pa > 0) {
-        g.save();
-        g.globalAlpha *= pa;
-        phoneBody(g, 660, 540, 230, 430, { grille: 0.5 + 0.5 * Math.abs(Math.sin(t * 6)), screen: phoneScreen(t, 0.6) });
+    g.save();
+    g.globalAlpha *= phOn;
+    phoneBody(g, 640, 540, 230, 430, { grille: phOn > 0.9 ? 0.5 + 0.5 * Math.abs(Math.sin(t * 6)) : 0, screen: phoneScreen(t, phOn > 0.9 ? 0.6 : 0) });
+    if (phOn > 0.9) {
         for (let k = 0; k < 3; k++) {
             const age = (t * 1.6 + k / 3) % 1;
             g.strokeStyle = `rgba(125,211,252,${0.6 * (1 - age)})`;
             g.lineWidth = 5;
             g.beginPath();
-            g.arc(775, 920, 40 + age * 120, 0.2, Math.PI - 0.2);
+            g.arc(755, 920, 40 + age * 120, 0.2, Math.PI - 0.2);
             g.stroke();
         }
-        label(g, 'Phone', 775, 470, { size: 52, weight: 800, color: P.ink, align: 'center' });
-        g.restore();
     }
-    const ha = popIn(t, wt('limit', 'hear') - 0.05, 0.3);
-    tag(g, 'hear the melody', 755, 1170, null, { a: ha, bg: P.cyan, fg: P.dark, size: 44, weight: 800 });
+    label(g, 'Phone', 755, 470, { size: 52, weight: 800, color: P.ink, align: 'center' });
+    g.restore();
+    tag(g, 'feel it', 290, 1125, null, { a: popIn(t, tFeel - 0.05, 0.3), bg: P.amber, fg: P.dark, size: 40, weight: 800 });
+    tag(g, 'hear the melody', 755, 1125, null, { a: popIn(t, wt('limit', 'hear') - 0.05, 0.3), bg: P.cyan, fg: P.dark, size: 40, weight: 800 });
     g.restore();
 }
 
-// ══ The rule ══
+// ══ The rule: two cards, the second with the parallel chain drawn out ══
+/** A labelled box in the chain diagram, centred at (x, y). */
+function chainBox(text, x, y, color, a) {
+    if (a <= 0) return;
+    g.save();
+    g.globalAlpha *= a;
+    font(g, 32, 700, BODY);
+    const w = g.measureText(text).width + 36;
+    rr(g, x - w / 2, y - 30, w, 60, 14);
+    g.fillStyle = '#081022';
+    g.fill();
+    g.strokeStyle = color;
+    g.lineWidth = 4;
+    g.stroke();
+    label(g, text, x, y + 11, { size: 32, weight: 700, color: P.ink, align: 'center', family: BODY });
+    g.restore();
+}
+/** A path through points, drawn up to fraction k of its length, with an arrowhead. */
+function chainPath(pts, color, k) {
+    if (k <= 0) return;
+    let total = 0;
+    for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+    let left = total * k;
+    g.save();
+    g.strokeStyle = color;
+    g.lineWidth = 5;
+    g.lineCap = 'round';
+    g.lineJoin = 'round';
+    g.beginPath();
+    g.moveTo(pts[0][0], pts[0][1]);
+    let end = pts[0];
+    let dir = [1, 0];
+    for (let i = 1; i < pts.length && left > 0; i++) {
+        const [x0, y0] = pts[i - 1];
+        const [x1, y1] = pts[i];
+        const l = Math.hypot(x1 - x0, y1 - y0);
+        const f = Math.min(1, left / l);
+        end = [x0 + (x1 - x0) * f, y0 + (y1 - y0) * f];
+        dir = [(x1 - x0) / l, (y1 - y0) / l];
+        g.lineTo(end[0], end[1]);
+        left -= l;
+    }
+    g.stroke();
+    if (k >= 1) {
+        const [ex, ey] = end;
+        const [dx, dy] = dir;
+        g.beginPath();
+        g.moveTo(ex - dx * 16 - dy * 10, ey - dy * 16 + dx * 10);
+        g.lineTo(ex, ey);
+        g.lineTo(ex - dx * 16 + dy * 10, ey - dy * 16 - dx * 10);
+        g.stroke();
+    }
+    g.restore();
+}
 function drawRule(t) {
     const a = viewAlpha(t, SC.rule, SC.again);
     if (a <= 0) return;
     g.save();
     g.globalAlpha = a;
     push(t, SC.rule, SC.again);
-    const cards = [
-        { y: 330, at: wt('rule', 'keep'), head: 'Sub: clean, mono', headColor: P.amber, lines: ['for big speakers'], icon: 'sub' },
-        { y: 800, at: wt('rule', 'add'), head: 'Harmonics:', headColor: P.cyan, lines: ['parallel saturation,', 'high-pass 120 Hz,', 'for small speakers'], icon: 'phone' },
-    ];
-    for (const c of cards) {
-        const k = popIn(t, c.at - 0.1, 0.3);
-        if (k <= 0) continue;
+    const tKeep = wt('rule', 'keep');
+    const tAdd = wt('rule', 'add');
+    // Card 1 starts in the middle, then moves up to make room for card 2.
+    const k1 = popIn(t, tKeep - 0.1, 0.3);
+    const y1 = lerp(560, 280, E.inOut(seg(t, tAdd - 0.5, tAdd)));
+    if (k1 > 0) {
         g.save();
-        g.globalAlpha *= k;
-        const sc = lerp(0.92, 1, E.outBack(k));
-        g.translate(540, c.y + 200);
+        g.globalAlpha *= k1;
+        const sc = lerp(0.92, 1, E.outBack(k1));
+        g.translate(540, y1 + 150);
         g.scale(sc, sc);
-        g.translate(-540, -(c.y + 200));
-        rr(g, 70, c.y, 880, 400, 40);
+        g.translate(-540, -(y1 + 150));
+        rr(g, 70, y1, 880, 300, 40);
         g.fillStyle = 'rgba(22,35,63,0.94)';
         g.fill();
         g.strokeStyle = 'rgba(255,255,255,0.07)';
         g.lineWidth = 3;
         g.stroke();
-        if (c.icon === 'sub') clubSub(g, 230, c.y + 200, 200, Math.sin(t * 9));
-        else phoneBody(g, 160, c.y + 60, 150, 280, { grille: 0.6, screen: null });
-        label(g, c.head, 370, c.y + 120, { size: 48, weight: 800, color: c.headColor });
-        c.lines.forEach((ln, i) => label(g, ln, 370, c.y + 190 + i * 58, { size: 42, weight: 600, color: i === c.lines.length - 1 ? P.ink : P.ink2 }));
-        // A tiny ladder, as the film drew them: the sub alone, or the sub with its harmonics.
-        const gx = 856;
-        const gy = c.y + 330;
-        rr(g, gx - 10, c.y + 70, 100, 290, 16);
-        g.fillStyle = '#081022';
+        clubSub(g, 220, y1 + 150, 180, Math.sin(t * 9));
+        label(g, 'Sub: clean, mono', 360, y1 + 125, { size: 48, weight: 800, color: P.amber });
+        label(g, 'for big speakers', 360, y1 + 195, { size: 42, weight: 600, color: P.ink });
+        g.restore();
+    }
+    // Card 2: the lesson's parallel chain. The clean sub goes straight
+    // through (amber); a copy is saturated and high-passed at 120 Hz, leaving
+    // only harmonics (cyan), and the two are added.
+    const k2 = popIn(t, tAdd - 0.1, 0.3);
+    if (k2 > 0) {
+        const y2 = 640;
+        g.save();
+        g.globalAlpha *= k2;
+        rr(g, 70, y2, 880, 610, 40);
+        g.fillStyle = 'rgba(22,35,63,0.94)';
         g.fill();
-        const bars = c.icon === 'sub' ? [[0, 70, P.amber]] : [[0, 70, P.amber], [1, 34, P.cyan], [2, 54, P.cyan], [3, 44, P.cyan], [4, 36, P.cyan]];
-        for (const [i, len, col] of bars) {
-            const by = gy - 22 - i * 46;
-            const grow = E.out(popIn(t, c.at + 0.1 + i * 0.08, 0.3));
-            rr(g, gx + 4, by - 8, Math.max(2, len * grow), 16, 4);
-            g.fillStyle = col;
+        g.strokeStyle = 'rgba(255,255,255,0.07)';
+        g.lineWidth = 3;
+        g.stroke();
+        label(g, 'Harmonics: in parallel', 110, y2 + 90, { size: 48, weight: 800, color: P.cyan });
+        const rA = y2 + 210;
+        const rB = y2 + 350;
+        const d = (dt) => E.out(popIn(t, tAdd + dt, 0.35));
+        chainBox('sub', 170, rA, P.amber, d(0.1));
+        chainPath([[215, rA], [790, rA]], P.amber, d(0.2));
+        chainPath([[245, rA], [245, rB], [300, rB]], P.cyan, d(0.45));
+        chainBox('saturate', 380, rB, P.cyan, d(0.55));
+        chainPath([[462, rB], [500, rB]], P.cyan, d(0.75));
+        chainBox('high-pass 120 Hz', 650, rB, P.cyan, d(0.8));
+        chainPath([[800, rB], [830, rB], [830, rA + 34]], P.cyan, d(1.0));
+        if (d(1.1) > 0) {
+            g.save();
+            g.globalAlpha *= d(1.1);
+            g.fillStyle = '#081022';
+            g.strokeStyle = P.ink;
+            g.lineWidth = 4;
+            g.beginPath();
+            g.arc(830, rA, 30, 0, Math.PI * 2);
             g.fill();
+            g.stroke();
+            label(g, '+', 830, rA + 14, { size: 44, weight: 800, color: P.ink, align: 'center' });
+            g.restore();
         }
+        chainPath([[860, rA], [915, rA]], P.ink, d(1.2));
+        label(g, 'only harmonics pass', 650, rB + 76, { size: 32, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: d(0.9) });
+        label(g, 'for small speakers', 110, y2 + 560, { size: 42, weight: 600, color: P.ink, alpha: d(0.3) });
         g.restore();
     }
     g.restore();
@@ -1132,13 +1272,13 @@ function subtitles(t) {
             g.save();
             g.globalAlpha = a;
             speaker(g, 420, 1394, 1.1, 0.5 + 0.5 * Math.sin(t * 18));
-            label(g, 'Listen', 470, 1412, { size: 54, weight: 700, color: P.cyan });
+            label(g, 'Listen', 488, 1412, { size: 54, weight: 700, color: P.cyan });
             g.restore();
         }
         return;
     }
     const fadeIn = clamp((t - v.at + 0.12) / 0.12);
-    const fadeOut = 1 - clamp((t - (v.at + v.dur + 0.1)) / 0.2);
+    const fadeOut = 1 - clamp((t - (v.at + v.dur + 0.15)) / 0.1);
     const size = 54;
     font(g, size, 600);
     const space = g.measureText(' ').width;

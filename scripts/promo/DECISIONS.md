@@ -81,3 +81,11 @@ One line per call, newest last.
   - Ladder: six rungs at most, bigger bars, the axis named in words (high notes, low notes, and only the 200 Hz line in hertz), "longer bar = louder" instead of a dB scale.
   - The robot reacts: a question mark while the bass is missing, a hop on every note it can hear, and on "puts the note back" the amber note forms in a thought bubble and flies into the ladder's dark zone as the heard note.
   - A slow 2% push-in on every scene; in the scope a highlight steps from one repeat to the next; the phone's speaker says "trying 50 Hz"; the rule cards carry tiny ladders (the sub alone, the sub with harmonics).
+- Film 4 v3, after a second scored review (7-8 on every aspect):
+  - Hook in teaching order: "Same notes." and "One change." (cued separately from the same take) land before the switch at 5.0 s; "Now you can hear it" plays over the saturated bass, and a "harmonics" pill marks what the phone plays. The amber bar is labelled "the note" from the first note.
+  - Each narration line ends 0.3 s after its last word, so a cue's tail of silence no longer ducks the music.
+  - Through the scope and the ghost the bass holds G#1 (the vamp's root under both bars), so the period and the note on screen stay 19.3 ms and 51.9 Hz.
+  - Window beat: the note's bar is struck through and tagged "not played", and the phone's window lights its edge on "harmonics". The dark zone darkens gradually below 200 Hz, which is what a 24 dB/oct filter does; rungs shorter than 12 px are left out.
+  - Rule: the second card draws the lesson's parallel chain (sub straight through in amber; saturate, then high-pass 120 Hz, in cyan; added). The first card starts centred and moves up for it.
+  - Replay: when the saturated bass returns, the hook's ladder shows the heard note (dashed amber) with its legend.
+  - Phone speaker: an amber arrow "50 Hz needs this" against a small bracket "it can move this". The air scene's first speaker starts centred; the scope's robot starts centred and steps aside for the thought bubble; the limit scene shows both speakers from the start, the club sub shaking the floor on "feel".

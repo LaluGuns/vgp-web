@@ -81,7 +81,10 @@ export function voPlacements() {
         const c = CUES.segments.find((s) => s.id === p.id);
         if (!c) throw new Error(`no cue ${p.id}`);
         const words = c.words.map((w) => ({ w: w.w, s: p.at + w.s, e: p.at + w.e }));
-        return { id: p.id, at: p.at, dur: c.to - c.from, from: c.from, to: c.to, text: c.show ?? c.text, breaks: c.breaks ?? [], words };
+        // A line ends 0.3 s after its last word: a cue's tail of silence
+        // would otherwise count as speech (and duck the music under it).
+        const dur = Math.min(c.to - c.from, c.words[c.words.length - 1].e + 0.3);
+        return { id: p.id, at: p.at, dur, from: c.from, to: c.from + dur, text: c.show ?? c.text, breaks: c.breaks ?? [], words };
     });
 }
 const PLACED = voPlacements();
@@ -120,7 +123,7 @@ export function bassNotes() {
         const first = TIMELINE.gridOrigin + Math.floor((seg.from - TIMELINE.gridOrigin) / TIMELINE.bar) * TIMELINE.bar;
         for (let B = first; B < seg.to - 1e-9; B += TIMELINE.bar) {
             const bar = vampBar(B + 1e-3);
-            for (const [s, len, name] of TIMELINE.riff[bar]) {
+            for (const [s, len, name] of TIMELINE[seg.riff ?? 'riff'][bar]) {
                 const t = B + s * STEP;
                 if (t < seg.from - 1e-9 || t >= seg.to - 1e-9) continue;
                 const dur = Math.min(len * STEP - 0.02, seg.to - t - 0.02);

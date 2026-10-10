@@ -1,7 +1,8 @@
 hook-a1|There's a bass line in this beat.
 hook-a2|Your phone can't play it.
-hook-b1|Same notes. One change.
-hook-b2|Now you can hear it.
+hook-b1|Same notes.
+hook-b2|One change.
+hook-b3|Now you can hear it.
 air-1|A speaker makes bass by pushing air.
 air-2|Every octave lower, the cone has to move four times as far to stay as loud.
 phone-1|A phone's speaker is tiny.
