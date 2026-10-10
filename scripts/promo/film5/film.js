@@ -323,6 +323,7 @@ function drawAB(t, frame1 = false, noHead = false) {
             label(g, 'Which one hits harder?', 0, 0, { size: 66, weight: 800, color: P.ink, align: 'center', base: 'middle' });
             g.restore();
         } else label(g, 'Which one hits harder?', 540, 445, { size: 62, weight: 800, color: P.ink, align: 'center', base: 'middle' });
+        if (!guessing && !answer) pill(g, 'sound on', 900, 212, { size: 34, bg: P.ink, fg: P.dark, weight: 800 });
     }
     // Notch zoom on both lanes during the hook line, so the drop lines stay aligned.
     // The zoom into the gap starts on "It has" and lands on "gap".
@@ -427,7 +428,7 @@ function drawAB(t, frame1 = false, noHead = false) {
         if (!guessing && id === 'notch' && t >= tAns) {
             const L1 = AB.lanes[0];
             const kD = popIn(t, tAns + 0.3, 0.2) * (1 - out);
-            tag(g, 'in 1 the riser runs into the drop', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 34 });
+            tag(g, 'in 1 the riser peaks into the drop, as in many builds', 540, L1.y - L1.h / 2 - 62, null, { a: kD, bg: P.dark, fg: FOG, ring: FOG, size: 34 });
         }
         // The three reasons, each lit as it is named; the tracker carries them through the film.
         label(g, 'same samples, drops matched in loudness', 540, 1308, { size: 38, weight: 600, color: P.ink2, align: 'center', family: BODY, alpha: (1 - out) * (1 - seg(t, TL.guess.at - 0.25, TL.guess.at)) });
@@ -503,8 +504,8 @@ function drawAB(t, frame1 = false, noHead = false) {
                 g.translate(540, 900);
                 g.scale(lerp(0.92, 1, E.outBack(kCard)), lerp(0.92, 1, E.outBack(kCard)));
                 g.translate(-540, -900);
-                rr(g, 70, 580, 940, 660, 40);
-                g.fillStyle = 'rgba(9,18,40,0.97)';
+                rr(g, 30, 575, 1020, 680, 40);
+                g.fillStyle = '#0a1430';
                 g.fill();
                 g.strokeStyle = 'rgba(255,255,255,0.18)';
                 g.lineWidth = 3;
@@ -556,12 +557,11 @@ const BUBBLES = (() => {
 function stageEpisodes() {
     const S1 = demoBy.S1;
     const S2 = demoBy.S2;
-    const tCov = wto('fog', 'covers', 0.5);
-    const off2 = Math.min(wto('fresh', 'stops', 0.4), SC.fresh + 0.35);
+        const off2 = Math.min(wto('fresh', 'stops', 0.4), SC.fresh + 0.35);
     // One click per version, on the downbeat the viewer hears (the sting); version 1's
     // spark drifts in through the riser from "covers", version 2's silence is counted slowed.
     return [
-        { v: 1, at: SC.fog - 0.3, on: wto('fog', 'number', 0.25), off: null, hit: S1.down, slow: 1, travel: Math.max(0.5, S1.down - tCov) },
+        { v: 1, at: SC.fog - 0.3, on: wto('fog', 'number', 0.25), off: null, hit: S1.down, slow: 1, travel: Math.max(0.5, S1.down - wto('fog', 'roaring', 0.3)) },
         { v: 2, at: SC.fresh, on: SC.fresh - 0.4, off: off2, hit: S2.down, slow: (S2.down - off2) / (GAP_MS / 1000), travel: 0.3 },
     ];
 }
@@ -700,7 +700,7 @@ function drawEarSection(t, k) {
             msg = 'riser still playing: click covered';
             col = P.ink;
         } else if (e.v === 2 && e.off !== null && t >= e.off && t < e.hit) {
-            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone by 200 ms';
+            msg = st.silMs < 200 ? 'riser stopped: the after-fog fades' : 'after-fog gone within 200 ms';
             col = FOG;
         } else if (e.v === 2 && t >= e.hit - 0.05) {
             msg = 'click lands in the clear';
@@ -726,7 +726,10 @@ function drawEar(t) {
     const tR = wto('fog', 'riser', 0.38);
     const tCk = wto('fog', 'click', 0.95);
     const gloss = t < tR + 1.6 ? 'riser = the rising whoosh before a drop' : t >= tCk - 0.4 && t < SC.fresh ? "click = the kick's sharp first few ms" : t >= SC.fresh + 0.3 && t < SC.fresh + 2.3 ? 'after-fog = forward masking (Moore 2012)' : null;
-    if (gloss) label(g, gloss, 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
+    if (!fresh && t < tCk + 0.6) {
+        label(g, "riser = the build's rising whoosh", 540, 392, { size: 36, weight: 700, color: P.ink, align: 'center', family: BODY });
+        label(g, "click = the kick's sharp first few ms", 540, 438, { size: 36, weight: 700, color: P.ink, align: 'center', family: BODY });
+    } else if (gloss && fresh) label(g, gloss, 540, 412, { size: 40, weight: 700, color: P.ink, align: 'center', family: BODY });
     else tracker(0);
     drawEarSection(t, 1);
     g.restore();
@@ -1054,15 +1057,14 @@ function drawHow(t) {
     g.save();
     g.globalAlpha = a;
     cam(t, SC.how, SC.replay);
-    headline(t, SC.how + 0.1, [['Cut'], ['an'], ['8th'], ['early']], 300, { size: 92, stagger: 0 });
-    label(g, `a 16th helps · an 8th (${Math.round(GAP_MS)} ms) outlasts the fog`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
+    headline(t, SC.how + 0.1, [['Cut'], ['¼'], ['second'], ['early']], 300, { size: 92, stagger: 0 });
+    label(g, `at ${TL.bpm} BPM: an 8th, ${Math.round(GAP_MS)} ms`, 540, 400, { size: 38, weight: 700, color: P.ink2, align: 'center' });
     const tCut = wto('how', 'cut', 0.03);
     const tEighth = wto('how', 'eighth', 0.12);
     const tAt = wto('how', 'at', 0.32);
-    // The second "eighth": "only an eighth outlasts it".
-    const tQuarter = wto('how', 'eighth', 0.85, 1);
+    const tQuarter = wto('how', 'outlasts', 0.9);
     const tFogs = wto('how', 'afterfog', 0.5);
-    const tFifth = wto('how', 'fifth', 0.62);
+    const tFifth = wto('how', 'milliseconds', 0.6);
     const tVerb = wto('how', 'reverb', 0.84);
     const tTails = wto('how', 'tails', 0.9);
     // Window: the DAW eases in, then shifts up a little when the zoom panel opens.
@@ -1249,7 +1251,8 @@ function drawHow(t) {
         const t128 = wto('how', '128', 0.78);
         // The gap starts on "128" and crosses the fog's 200 ms line on "outlasts".
         const snap = (t0, to) => to * E.out(seg(t, t0, t0 + 0.25));
-        const ms = t < tQuarter ? snap(tFogs + 0.3, GAP_MS / 2) : GAP_MS / 2 + snap(tQuarter, GAP_MS / 2);
+        void snap;
+        const ms = keys(t, [[tFifth - 0.2, 0], [tQuarter, 200], [tQuarter + 0.35, GAP_MS]]);
         label(g, 'gap', Z.x0, y + 250, { size: 40, weight: 800, color: P.cyan, family: BODY });
         rr(g, ZX(0), y + 274, Math.max(1, ZX(ms) - ZX(0)), 110, 18);
         g.fillStyle = P.cyan;
@@ -1281,7 +1284,7 @@ function drawHow(t) {
             label(g, nm, ZX(m), y + 530, { size: 42, weight: 800, color: on ? P.cyan : P.ink3, align: 'center', family: BODY });
         }
         g.restore();
-        label(g, t < tQuarter ? 'a 16th shortens the fog' : 'an 8th outlasts it', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tFogs + 0.5, 0.3), family: BODY });
+        if (t >= tQuarter) label(g, 'the shortest note that outlasts it', 540, Z.y + 620, { size: 44, weight: 800, color: P.ink, align: 'center', alpha: popIn(t, tQuarter + 0.2, 0.3), family: BODY });
     }
     g.restore();
 }
@@ -1703,7 +1706,6 @@ function drawCover() {
     drawAB(tc, false, true);
     label(g, 'Same drop.', 540, 370, { size: 132, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     label(g, 'Which one hits harder?', 540, 500, { size: 78, weight: 800, color: P.ink, align: 'center', base: 'middle' });
-    pill(g, 'what changed?', 540, 1300, { size: 40, bg: P.ink, fg: P.dark, weight: 800 });
     label(g, '1 or 2?', 540, 1440, { size: 120, weight: 800, color: P.ink, align: 'center', base: 'middle' });
     // The brand inside the 3:4 crop.
     avatar(g, 420, 1590, 36);

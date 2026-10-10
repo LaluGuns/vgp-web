@@ -8,7 +8,7 @@ In number one, the riser is still roaring when the kick lands, so it covers the 
 
 [confident] And your brain: the silence leaves one thing to predict, the next beat, so the kick lands as a payoff.
 
-So cut everything an eighth note before the drop, reverb tails too. A sixteenth already helps, but the after-fog can last a fifth of a second, and at 128 BPM, only an eighth outlasts it.
+So cut everything about a quarter second before the drop, reverb tails too. The after-fog can last two hundred milliseconds, and at 128 BPM, an eighth note is the shortest gap that outlasts it.
 
 [softly] Now listen again. Hear the click?
 
