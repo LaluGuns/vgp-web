@@ -172,19 +172,24 @@ const LearningPaths = memo(function LearningPaths({ paths, read, startHere }: { 
                             <li key={path.slug} className="border-b border-white/10">
                                 <Link
                                     href={`/blog/category/${path.slug}`}
-                                    className="group block py-4 vgp-focus sm:py-5"
+                                    className="group relative block py-4 vgp-focus sm:py-5"
                                 >
                                     <span className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                                         <span className="text-base font-semibold leading-snug text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4 sm:text-lg">
                                             {path.name}
                                         </span>
-                                        <span className="shrink-0 text-xs tabular-nums text-white/50">
-                                            {done > 0 ? `${done} of ${path.lessons.length} read` : `${path.lessons.length} lessons`}
+                                        {/* The widest label sits invisibly under the real one, so the count never changes width when the
+                                            reading progress loads after the first paint. */}
+                                        <span className="grid shrink-0 text-xs tabular-nums text-white/50 [&>*]:col-start-1 [&>*]:row-start-1 sm:justify-items-end">
+                                            <span className="invisible">{`${path.lessons.length} of ${path.lessons.length} read`}</span>
+                                            <span>{done > 0 ? `${done} of ${path.lessons.length} read` : `${path.lessons.length} lessons`}</span>
                                         </span>
                                     </span>
                                     <span className="mt-1.5 line-clamp-2 hidden text-sm leading-6 text-white/60 sm:block">{path.description}</span>
+                                    {/* Drawn in the row's bottom padding, so the list keeps its height when the reading progress loads
+                                        after the first paint. */}
                                     {done > 0 ? (
-                                        <span className="mt-3 block h-0.5 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden="true">
+                                        <span className="absolute inset-x-0 bottom-1.5 block h-0.5 overflow-hidden rounded-full bg-white/[0.08] sm:bottom-2" aria-hidden="true">
                                             <span className="block h-full bg-white/70" style={{ width: `${(done / path.lessons.length) * 100}%` }} />
                                         </span>
                                     ) : null}
