@@ -601,7 +601,9 @@ export function Navbar() {
                         aria-label="Site menu"
                         onKeyDown={handleMobilePanelKeyDown}
                         data-closing={closing ? '' : undefined}
-                        className="vgp-shell-fade max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none sm:px-6 lg:hidden"
+                        // The bottom tab bar (MobileBottomNav: under 768 px, not on a short screen) covers the end of this
+                        // list, so an item the Tab key reaches stops clear above it.
+                        className="vgp-shell-fade max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain bg-[#050607] px-4 pb-10 pt-2 outline-none [scroll-padding-bottom:calc(max(env(safe-area-inset-bottom),6px)_+_49px)] sm:px-6 md:[scroll-padding-bottom:0] lg:hidden [@media(max-height:499.98px)]:[scroll-padding-bottom:0]"
                     >
                         <div className="mx-auto grid max-w-7xl gap-8">
                             {useStoreNav ? (

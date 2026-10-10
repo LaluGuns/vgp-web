@@ -21,8 +21,9 @@ export function LicenseTable() {
     ];
     return (
         <figure className="my-10">
-            {/* Phones: one block per tier, so no column hides behind a sideways scroll. */}
-            <div className="space-y-4 sm:hidden">
+            {/* Phones, held either way up (the table needs about 660 px): one block per tier, so no column hides
+                behind a sideways scroll. */}
+            <div className="space-y-4 md:hidden print:hidden">
                 {tiers.map((t) => (
                     <div key={t.id} className="rounded-[6px] border border-white/10 px-4 py-4">
                         <p className="text-base font-semibold text-white">{t.name}</p>
@@ -37,14 +38,15 @@ export function LicenseTable() {
                     </div>
                 ))}
             </div>
-            {/* In print the table fits the page width: smaller type, cells wrap. */}
-            <div className="hidden overflow-x-auto rounded-[6px] border border-white/10 sm:block print:overflow-visible">
+            {/* From 768 px, and in print, where it fits the page width: smaller type, cells wrap. The cells' 12 px
+                sides keep it inside the text column beside the lesson outline at 1024 px too. */}
+            <div className="hidden overflow-x-auto rounded-[6px] border border-white/10 md:block print:block print:overflow-visible">
                 <table className="w-full min-w-[600px] border-collapse text-left text-sm print:min-w-0 print:table-fixed print:text-[11px] print:leading-snug">
                     <thead>
                         <tr className="border-b border-white/20">
-                            <th className="w-36 px-4 py-3 font-semibold text-white/60 print:w-[18%] print:px-2 print:py-2">Tier</th>
+                            <th className="w-36 px-3 py-3 font-semibold text-white/60 print:w-[18%] print:px-2 print:py-2">Tier</th>
                             {tiers.map((t) => (
-                                <th key={t.id} className="whitespace-nowrap px-4 py-3 font-semibold text-white print:whitespace-normal print:break-words print:px-2 print:py-2">
+                                <th key={t.id} className="whitespace-nowrap px-3 py-3 font-semibold text-white print:whitespace-normal print:break-words print:px-2 print:py-2">
                                     {t.name}
                                 </th>
                             ))}
@@ -53,11 +55,11 @@ export function LicenseTable() {
                     <tbody>
                         {rows.map((row) => (
                             <tr key={row.label} className="border-b border-white/[0.07] last:border-0">
-                                <th scope="row" className="px-4 py-3 align-top font-medium text-white/70 print:px-2 print:py-2">
+                                <th scope="row" className="px-3 py-3 align-top font-medium text-white/70 print:px-2 print:py-2">
                                     {row.label}
                                 </th>
                                 {tiers.map((t) => (
-                                    <td key={t.id} className="px-4 py-3 align-top leading-6 text-white/85 print:break-words print:px-2 print:py-2 print:leading-snug">
+                                    <td key={t.id} className="px-3 py-3 align-top leading-6 text-white/85 print:break-words print:px-2 print:py-2 print:leading-snug">
                                         {row.value(t)}
                                     </td>
                                 ))}

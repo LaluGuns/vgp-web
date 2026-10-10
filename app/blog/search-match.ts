@@ -19,7 +19,9 @@
  *   ("melody" finds "melodies");
  * - British and American spellings find each other (colour/color,
  *   centre/center, licence/license, -ise/-ize, -yse/-yze, -isation/-ization),
- *   so the house spelling never hides a lesson from a reader who types the other.
+ *   so the house spelling never hides a lesson from a reader who types the other;
+ * - a few words find what the lessons call by another name ("equaliser"
+ *   finds "EQ", `SYNONYMS`).
  */
 
 export interface WordMatcher {
@@ -128,6 +130,14 @@ function singulars(word: string): string[] {
     return out;
 }
 
+/** What the lessons call some things a reader may type out in full: "equaliser" (or "equalizers") also finds "EQ". */
+const SYNONYMS: Record<string, string[]> = {
+    equalizer: ['eq'],
+    equaliser: ['eq'],
+    equalization: ['eq'],
+    equalisation: ['eq'],
+};
+
 const WORD_START = '(?:^|[^\\p{L}\\p{N}])';
 /** A whole word, or that word plus a plural ending. */
 const whole = (form: string) => `${escapeRegExp(form)}(?:e?s)?(?![\\p{L}\\p{N}])`;
@@ -143,6 +153,9 @@ function matcher(word: string): WordMatcher {
         }
     }
     if (word.length > 3 && /[^aeiou]y$/.test(word)) fromStart.add(`${word.slice(0, -1)}ies`);
+    for (const form of [...typed, ...fromStart]) {
+        for (const other of SYNONYMS[form] ?? []) (other.length >= 4 ? fromStart : wholeWords).add(other);
+    }
     const alternatives = [...new Set([...typed, ...fromStart])].map(escapeRegExp);
     alternatives.push(...[...wholeWords].map(whole));
     return {
@@ -189,13 +202,36 @@ const VOCAB_WORD = /(?=[\p{N}]*\p{L})[\p{L}\p{N}]{4,}/gu;
 
 /**
  * The words a typo can be corrected to (`correctWord`): every word of four
- * or more characters in the text searched, with how many lessons use it.
+ * or more characters in the text searched (a hyphenated one as written),
+ * with how many lessons use it,
+ * and each word in SYNONYMS with how many lessons use what it stands for
+ * ("eqalizer" becomes "equalizer", which finds every lesson about EQ).
  * Pass each lesson's fields as `searchText` returns them.
  */
 export function searchVocabulary(lessons: Iterable<string[]>): Map<string, number> {
     const counts = new Map<string, number>();
+    const names = [...new Set(Object.values(SYNONYMS).flat())].map((name) => ({ name, pattern: new RegExp(`${WORD_START}${whole(name)}`, 'u') }));
+    const named = new Map<string, number>();
     for (const fields of lessons) {
-        for (const word of new Set(fields.join(' ').match(VOCAB_WORD) ?? [])) counts.set(word, (counts.get(word) ?? 0) + 1);
+        const text = fields.join(' ');
+        const tokens = new Map<string, number>();
+        for (const word of text.match(VOCAB_WORD) ?? []) tokens.set(word, (tokens.get(word) ?? 0) + 1);
+        // The joined form `searchText` adds once for "de-esser" counts as "de-esser", the way the lesson writes it,
+        // and as itself only where the lesson also writes it that way.
+        for (const compound of new Set(text.match(COMPOUND) ?? [])) {
+            const joined = compound.replace(/[-/]/g, '');
+            const left = (tokens.get(joined) ?? 0) - 1;
+            if (left < 0) continue;
+            tokens.set(compound, 1);
+            if (left > 0) tokens.set(joined, left);
+            else tokens.delete(joined);
+        }
+        for (const word of tokens.keys()) counts.set(word, (counts.get(word) ?? 0) + 1);
+        for (const { name, pattern } of names) if (pattern.test(text)) named.set(name, (named.get(name) ?? 0) + 1);
+    }
+    for (const [word, others] of Object.entries(SYNONYMS)) {
+        const n = Math.max(counts.get(word) ?? 0, ...others.map((other) => named.get(other) ?? 0));
+        if (n > 0) counts.set(word, n);
     }
     return counts;
 }
@@ -212,25 +248,116 @@ function oneEditApart(a: string, b: string): boolean {
     return a.length > b.length ? a.slice(i + 1) === b.slice(i) : a.slice(i) === b.slice(i + 1);
 }
 
+/** True when b is a with one letter doubled ("paning", "panning") or a doubled letter made single ("threshhold"). */
+function doubledApart(a: string, b: string): boolean {
+    if (Math.abs(a.length - b.length) !== 1) return false;
+    const [short, long] = a.length < b.length ? [a, b] : [b, a];
+    let i = 0;
+    while (i < short.length && short[i] === long[i]) i++;
+    return long.slice(i + 1) === short.slice(i) && (long[i] === long[i - 1] || long[i] === long[i + 1]);
+}
+
+/** Between two words as many lessons use, the one written without a hyphen ("sidechain", not "side-chain"), then the alphabet. */
+const spelledBefore = (a: string, b: string) => {
+    const [ja, jb] = [/[-/]/.test(a), /[-/]/.test(b)];
+    return ja !== jb ? jb : a < b;
+};
+
 /**
  * The search's typo fallback (BlogIndex uses it only when a query finds no
  * lesson at all): the word one edit away from `word` that the most lessons
- * use ("compresion" -> "compression"), or null. A word under four letters
- * is left alone, since one edit turns it into too many others, and so is
- * one that starts with a different letter, where typos are rare.
+ * use ("compresion" -> "compression", "deeser" -> "de-esser"), or null. A letter typed once where
+ * the word has it twice, or twice where it has it once, is the commonest
+ * slip, so that edit wins over any other ("deeser" is "de-esser", not
+ * "denser"). A word under four letters is left alone, since one edit turns
+ * it into too many others, and so is one that starts with a different
+ * letter, where typos are rare.
  */
 export function correctWord(word: string, vocabulary: Map<string, number>): string | null {
     if (word.length < 4 || !/\p{L}/u.test(word)) return null;
     let best: string | null = null;
+    let bestDoubled = false;
     let uses = 0;
     for (const [candidate, count] of vocabulary) {
-        if (candidate[0] !== word[0] || count < uses || !oneEditApart(word, candidate)) continue;
-        if (count > uses || (best !== null && candidate < best)) {
-            best = candidate;
-            uses = count;
-        }
+        // "de-esser" is compared as typed without its hyphen, and given back as the lesson writes it.
+        const joined = candidate.replace(/[-/]/g, '');
+        if (joined[0] !== word[0] || !oneEditApart(word, joined)) continue;
+        const doubled = doubledApart(word, joined);
+        if (best !== null && (doubled !== bestDoubled ? !doubled : count < uses || (count === uses && !spelledBefore(candidate, best)))) continue;
+        best = candidate;
+        bestDoubled = doubled;
+        uses = count;
     }
     return best;
+}
+
+/** The key of the digest (/blog/search-digest.json) that is not a lesson; a slug never starts with "#". */
+const DIGEST_COMMON = '#common';
+
+/**
+ * Lesson positions (ascending) as capital letters, each the step from the one before:
+ * "Z" for every 25 and one of "A"-"Y" for the rest, so 0, 3, 40 is "ADZO".
+ */
+function encodePositions(positions: number[]): string {
+    let out = '';
+    let last = 0;
+    for (const position of positions) {
+        const step = position - last;
+        out += 'Z'.repeat(Math.floor(step / 25)) + String.fromCharCode(65 + (step % 25));
+        last = position;
+    }
+    return out;
+}
+
+function decodePositions(code: string): number[] {
+    const out: number[] = [];
+    let at = 0;
+    for (const letter of code) {
+        if (letter === 'Z') {
+            at += 25;
+        } else {
+            at += letter.charCodeAt(0) - 65;
+            out.push(at);
+        }
+    }
+    return out;
+}
+
+/**
+ * The digest as search-index.ts (`searchDigest`) writes it: one key per
+ * lesson in catalogue order, with the words few lessons use, and under
+ * "#common" each commoner word once, followed by the positions of the
+ * lessons that carry it ("pianoAFZC", `encodePositions`).
+ */
+export function writeDigest(words: Record<string, string>, common: Map<string, number[]>): Record<string, string> {
+    return {
+        ...words,
+        [DIGEST_COMMON]: [...common].map(([word, positions]) => word + encodePositions([...positions].sort((a, b) => a - b))).join(' '),
+    };
+}
+
+/** slug -> the lowercase words from the lesson's text that the digest (`writeDigest`) carries. Anything else is left out. */
+export function readDigest(data: Record<string, unknown>): Record<string, string> {
+    const words: Record<string, string> = {};
+    for (const [key, value] of Object.entries(data)) if (!key.startsWith('#') && typeof value === 'string') words[key] = value;
+    const slugs = Object.keys(words);
+    const common = data[DIGEST_COMMON];
+    if (typeof common === 'string') {
+        for (const entry of common.split(' ')) {
+            const m = entry.match(/^([^A-Z]+)([A-Z]+)$/);
+            if (!m) continue;
+            for (const position of decodePositions(m[2])) {
+                const slug = slugs[position];
+                if (slug !== undefined) words[slug] = words[slug] ? `${words[slug]} ${m[1]}` : m[1];
+            }
+        }
+    }
+    return words;
+}
+
+/** True when `text` (as `searchText` returns it) has a match for the word anywhere, as `scoreLesson` would count it. */
+export function findsWord(text: string, m: WordMatcher): boolean {
+    return m.start.test(text) || m.inside.some((form) => text.includes(form));
 }
 
 /** 0 when a word matches nowhere; otherwise each word scores its best field, plus a bonus for the whole phrase in the title. */

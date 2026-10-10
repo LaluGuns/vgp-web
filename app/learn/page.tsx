@@ -151,31 +151,38 @@ export default function LearnHubPage() {
                             <p className="max-w-2xl text-base leading-7 text-white/65 lg:-mb-1">
                                 Each line is a path, read from left to right, and each mark on it is a lesson. A filled mark is one you have read on
                                 this device.
+                                {/* On a touch screen under 1024 px the readout is a card that shows only after a tap, so the gesture is
+                                    said here, before the first one: in the box from the first paint (app/globals.css, "Learn area"), shown
+                                    once the script that does it runs (PathMapLive), so the map below never moves. A screen reader opens a
+                                    lesson with one activation, so it is not told. */}
+                                <span id="map-tap-hint" aria-hidden="true" className="vgp-map-tap-hint">
+                                    {' '}
+                                    Tap a mark to see its lesson, then tap it again to open it.
+                                </span>
                             </p>
                         </div>
                         {/* A readout of the lesson under the pointer, the keyboard focus or a first tap (PathMapLive), held
                             under the site header while the map scrolls under it; on a touch screen under 1024 px, a card above
-                            the tab bar once a tap chooses a mark. Its box has a fixed height, so a long title or the "Open
-                            lesson" link never moves the map. A visual aid only: each lesson's link already has its title as its
-                            name, so the readout is hidden from screen readers and its link from the Tab key. The hints say
-                            what the script does, so they wait for it (app/globals.css, "Learn area"). */}
+                            the tab bar once a tap chooses a mark, where the title may take two lines. Its box has a fixed
+                            height, so a long title or the "Open lesson" label never moves the map. A visual aid only: each
+                            lesson's link already has its title as its name, so the readout is hidden from screen readers and its
+                            link from the Tab key. The hints say what the script does, so they wait for it (app/globals.css,
+                            "Learn area"). */}
                         <div id="map-readout" aria-hidden="true" className="vgp-map-readout mt-4 print:hidden">
-                            <p data-line="" className="truncate text-sm leading-5 text-white/55">
-                                <span data-hint="pointer">Point at a mark, or move to one with the Tab key, to see its lesson.</span>
-                                <span data-hint="touch">Tap a mark to see its lesson, then tap it again to open it.</span>
-                            </p>
-                            <div className="mt-1 flex items-center gap-4">
-                                <p data-title="" className="min-w-0 flex-1 truncate text-lg font-semibold leading-7 text-white/80" />
-                                {/* Gets its href (the chosen lesson's) when a tap chooses a mark. */}
-                                <a
-                                    data-open=""
-                                    tabIndex={-1}
-                                    hidden
-                                    className="-my-2 inline-flex min-h-11 shrink-0 items-center rounded-sm text-sm font-medium text-white"
-                                >
-                                    <span className="vgp-link">Open lesson</span>
-                                </a>
-                            </div>
+                            {/* The whole box is one link once a tap chooses a mark (PathMapLive gives it that lesson's href, so a
+                                second tap anywhere on the card opens it); without an href it is not a link. */}
+                            <a data-open="" tabIndex={-1} className="vgp-map-readout-link block">
+                                <span className="flex items-center gap-4">
+                                    <span data-line="" className="min-w-0 flex-1 truncate text-sm leading-5 text-white/55">
+                                        <span data-hint="pointer">Point at a mark, or move to one with the Tab key, to see its lesson.</span>
+                                        <span data-hint="touch">Tap a mark to see its lesson, then tap it again to open it.</span>
+                                    </span>
+                                    <span data-open-label="" hidden className="shrink-0 text-sm font-medium leading-5 text-white">
+                                        <span className="vgp-link">Open lesson</span>
+                                    </span>
+                                </span>
+                                <span data-title="" className="mt-1 block truncate text-lg font-semibold leading-7 text-white/80" />
+                            </a>
                         </div>
                         {/* Says which lesson a first tap chose, for a screen reader on a touch screen (PathMapLive). */}
                         <p id="map-announce" aria-live="polite" className="sr-only" />
@@ -189,7 +196,7 @@ export default function LearnHubPage() {
                             </a>
                             <PathMap families={families} />
                         </div>
-                        <PathMapLive mapId="path-map" readoutId="map-readout" announceId="map-announce" />
+                        <PathMapLive mapId="path-map" readoutId="map-readout" announceId="map-announce" hintId="map-tap-hint" />
                     </div>
                 </section>
 

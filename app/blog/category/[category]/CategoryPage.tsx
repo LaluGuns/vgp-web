@@ -46,11 +46,8 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                                     Paths
                                 </TapLink>
                             </nav>
-                            <span aria-hidden="true">/</span>
-                            <span className="inline-flex items-center gap-2">
-                                <DialectMark dialect={dialectForCategory(category.slug)} />
-                                Learning path
-                            </span>
+                            {/* The crumbs already say this is a path, so the mark stands alone, as on the path map. */}
+                            <DialectMark dialect={dialectForCategory(category.slug)} className="ml-1" />
                         </>
                     }
                     title={category.name}

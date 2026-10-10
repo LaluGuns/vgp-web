@@ -1206,9 +1206,10 @@ body::before {
   .vgp-map-track { --p: 36px; }
 }
 
-/* A finger needs the phone's 44 px cells (WCAG 2.5.5): below 1024 px a coarse pointer (a phone held
-   sideways, a tablet) keeps them, and the line wraps into as many systems as that takes. */
-@media (min-width: 640px) and (max-width: 1023.98px) and (pointer: coarse) {
+/* A finger needs the phone's 44 px cells (WCAG 2.5.5): a coarse pointer (a phone held sideways, a
+   tablet, an iPad held sideways at 1024 px and wider) keeps them at any width, and the line wraps
+   into as many systems as that takes. The mouse layout does not change. */
+@media (min-width: 640px) and (pointer: coarse) {
   .vgp-map-track { --p: 44px; grid-template-columns: repeat(auto-fill, var(--p)); width: auto; }
 }
 
@@ -1216,6 +1217,12 @@ body::before {
   .vgp-map-track,
   .vgp-map-ruler { --p: 24px; grid-template-columns: repeat(var(--n, 44), var(--p)); }
   .vgp-map-track { width: calc(min(var(--len, 44), var(--n, 44)) * var(--p)); }
+}
+
+/* From 1280 px too; the lesson ruler, which numbers 24 px cells on one line, then has nothing to number. */
+@media (min-width: 1280px) and (pointer: coarse) {
+  .vgp-map-track { --p: 44px; grid-template-columns: repeat(auto-fill, var(--p)); width: auto; }
+  .vgp-map > .vgp-map-axis { display: none; }
 }
 
 .vgp-map-cell {
@@ -1260,7 +1267,8 @@ body::before {
 
 /* The map's readout (PathMapLive): the lesson under the pointer, the keyboard focus or a first tap.
    It stays under the site header while the map scrolls beneath it (a hairline under it then), in a
-   box of fixed height, so nothing moves when its text or its link changes. The hints describe what
+   box of fixed height, so nothing moves when its text or its link changes. Its content is one link
+   (an href only while a tap has chosen a mark), so the whole box opens that lesson. The hints describe what
    the script does, so without it they stay unseen and the box just keeps its place. A lesson the
    Tab key reaches stops below it: scroll-margin when the browser scrolls (it adds the page's 88 px
    scroll padding), PathMapLive when it does not. */
@@ -1282,8 +1290,9 @@ body::before {
   scroll-margin-top: 53px;
 }
 
-.vgp-map-readout [data-open][hidden],
-.vgp-map-readout [data-hint='touch'] {
+.vgp-map-readout [data-open-label][hidden],
+.vgp-map-readout [data-hint='touch'],
+.vgp-map-tap-hint {
   display: none;
 }
 
@@ -1303,10 +1312,22 @@ body::before {
 
 /* A touch screen under 1024 px has no pointer to follow, and a phone has no height to spare above the
    map, so there the readout is a card above the tab bar (where the Contents and Stop buttons sit) that
-   shows the lesson a first tap chose, with its link, and the map starts right under its heading. It
-   leaves while the map is off screen (data-out) and after a tap elsewhere (PathMapLive), and steps up
-   over a playing demo's Stop button. */
+   shows the lesson a first tap chose, and the map starts right under its heading. The whole card is
+   the link that opens it (44 px and more), and the title may take two lines, three under 360 px, in
+   a height kept for them, so no title is cut and the card never changes size. A mark chosen under
+   the card moves up clear of it (PathMapLive). It leaves while the map is off screen (data-out) and
+   after a tap elsewhere, and steps up over a playing demo's Stop button. Before the first tap the
+   gesture is said under the map's heading (.vgp-map-tap-hint), in a box it has from the first paint
+   and shown once the script runs. */
 @media (hover: none) and (max-width: 1023.98px) {
+  .vgp-map-tap-hint {
+    display: inline;
+  }
+
+  .vgp-map-tap-hint:not([data-live]) {
+    visibility: hidden;
+  }
+
   .vgp-map-readout {
     position: fixed;
     top: auto;
@@ -1315,8 +1336,9 @@ body::before {
     bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
     z-index: 30;
     max-width: 28rem;
+    height: 85px;
     margin: 0 auto;
-    padding: 8px 16px 7px;
+    padding: 0;
     border: 1px solid var(--line-strong);
     border-radius: 6px;
     background: var(--surface-strong);
@@ -1332,6 +1354,29 @@ body::before {
     visibility: visible;
     transform: none;
     transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .vgp-map-readout-link {
+    height: 100%;
+    padding: 8px 16px 7px;
+    border-radius: 5px;
+  }
+
+  /* The link takes taps on the card's border too, and in the strip between the card and the tab bar,
+     where a mark that was chosen there was before it moved up: a second tap in the same place opens it. */
+  .vgp-map-readout-link::after {
+    content: '';
+    position: absolute;
+    inset: -1px -1px -14px;
+  }
+
+  .vgp-map-readout [data-title] {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 16px;
+    line-height: 22px;
+    white-space: normal;
   }
 
   body:has(.vgp-demo-stop[data-away]) .vgp-map-readout {
@@ -1358,6 +1403,17 @@ body::before {
   }
 }
 
+/* Under 360 px the longest titles need a third line. */
+@media (hover: none) and (max-width: 359.98px) {
+  .vgp-map-readout {
+    height: 107px;
+  }
+
+  .vgp-map-readout [data-title] {
+    -webkit-line-clamp: 3;
+  }
+}
+
 @media (hover: none) and (max-width: 1023.98px) and (prefers-reduced-motion: reduce) {
   .vgp-map-readout,
   .vgp-map-readout[data-active]:not([data-out]) {
@@ -1369,10 +1425,11 @@ body::before {
 /* Each path draws in once, left to right, the way a figure's line does (MotionObserver; reduced
    motion, no script and print show it drawn): a wipe across the list in --len steps of 18 ms, at a
    constant speed like a scope beam, the group's later paths 60 ms apart. One animation per path,
-   not per cell, so the cells keep sharing their styles. The wipe moves two layers and paints
-   nothing: the box around the list (it clips, 8 px clear of the list so focus rings show) slides
-   in from the left while the list inside slides back by as much, so the lessons stand still and
-   the box's right edge uncovers them; the paper (the lane's rules) is outside and stays put. */
+   not per cell, so the cells keep sharing their styles. The wipe moves no box: a clip on the box
+   around the list (8 px clear of it, so focus rings show) opens from the left, so every mark sits
+   in its place from the first frame and a mark already uncovered takes a tap. (Two transforms, the
+   box sliding in while the list slid back, ran out of step and threw the marks up to 366 px aside
+   for 0.4 s.) The paper (the lane's rules) is outside and stays put. */
 .vgp-map-wipe {
   margin: -8px;
   padding: 8px;
@@ -1385,39 +1442,25 @@ body::before {
   }
 }
 
-@media (min-width: 640px) and (max-width: 1023.98px) and (pointer: coarse) {
+@media (min-width: 640px) and (pointer: coarse) {
   .vgp-map-wipe {
     width: auto;
   }
 }
 
-@keyframes vgp-map-wipe-box {
-  from { transform: translateX(-100%); }
-  to { transform: none; }
-}
-
-@keyframes vgp-map-wipe-list {
-  from { transform: translateX(calc(100% + 16px)); }
-  to { transform: none; }
+@keyframes vgp-map-wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0); }
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
   .vgp-map-wipe[data-reveal='draw'][data-reveal-state='pending'] {
-    transform: translateX(-100%);
+    clip-path: inset(0 100% 0 0);
   }
 
-  .vgp-map-wipe[data-reveal='draw'][data-reveal-state='pending'] > .vgp-map-track {
-    transform: translateX(calc(100% + 16px));
-  }
-
-  .vgp-map-wipe[data-reveal='draw'][data-reveal-state='drawn'],
-  .vgp-map-wipe[data-reveal='draw'][data-reveal-state='drawn'] > .vgp-map-track {
-    animation: vgp-map-wipe-box calc(max(var(--len, 10), 12) * 18ms) linear backwards;
+  .vgp-map-wipe[data-reveal='draw'][data-reveal-state='drawn'] {
+    animation: vgp-map-wipe calc(max(var(--len, 10), 12) * 18ms) linear backwards;
     animation-delay: calc(var(--o, 0) * 60ms);
-  }
-
-  .vgp-map-wipe[data-reveal='draw'][data-reveal-state='drawn'] > .vgp-map-track {
-    animation-name: vgp-map-wipe-list;
   }
 }
 

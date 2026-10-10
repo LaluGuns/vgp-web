@@ -344,10 +344,13 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
             });
         };
 
+        // The state changes before the sheet does: on closing, focus returns to the button, which a
+        // screen reader then announces, so it must already say "collapsed" ('toggle' comes too late).
+        const onBeforeToggle = (event: Event) => {
+            btn.setAttribute('aria-expanded', String((event as Event & { newState?: string }).newState === 'open'));
+        };
         const onToggle = (event: Event) => {
-            const open = (event as Event & { newState?: string }).newState === 'open';
-            btn.setAttribute('aria-expanded', String(open));
-            if (!open) return;
+            if ((event as Event & { newState?: string }).newState !== 'open') return;
             const current = currentSection(readNow(), ids) || ids[0];
             markCurrent(pop, current);
             pop.querySelector<HTMLElement>('a[aria-current]')?.focus();
@@ -355,11 +358,13 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
 
         start();
         narrow.addEventListener('change', start);
+        pop.addEventListener('beforetoggle', onBeforeToggle);
         pop.addEventListener('toggle', onToggle);
         // Tab past the last section closes the sheet, so focus never moves on underneath it.
         const stopFocus = closeWhenFocusLeaves(pop);
         return () => {
             narrow.removeEventListener('change', start);
+            pop.removeEventListener('beforetoggle', onBeforeToggle);
             pop.removeEventListener('toggle', onToggle);
             stopFocus();
             window.clearTimeout(idle);

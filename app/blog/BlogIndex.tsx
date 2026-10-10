@@ -14,7 +14,7 @@ import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
 import { LearnHeader } from '@/components/learn/LearnHeader';
 import { LearnNav } from '@/components/learn/LearnNav';
-import { correctWord, scoreLesson, searchText, searchVocabulary, wordMatchers, type WordMatcher } from './search-match';
+import { correctWord, readDigest, scoreLesson, searchText, searchVocabulary, wordMatchers, type WordMatcher } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
@@ -252,9 +252,6 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         const frame = requestAnimationFrame(() => setSaved(readSaved()));
         return () => cancelAnimationFrame(frame);
     }, []);
-    // Back from a lesson restores the scroll position once the list is complete: the Saved
-    // view has no rows until the saved lessons are read.
-    useScrollMemory(savedState !== null);
 
     // The body digest loads once, when the reader first focuses the box, types, or opens a
     // list that already has a query. Until it arrives, search covers titles, excerpts,
@@ -268,7 +265,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         fetch(DIGEST_URL)
             .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`${response.status}`))))
             .then((data: unknown) => {
-                if (data && typeof data === 'object') setDigest(data as Record<string, string>);
+                if (data && typeof data === 'object') setDigest(readDigest(data as Record<string, unknown>));
                 else setDigestFailed(true);
             })
             .catch(() => {
@@ -279,6 +276,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     useEffect(() => {
         if (urlQuery) loadDigest();
     }, [urlQuery, loadDigest]);
+
+    // Back from a lesson restores the scroll position once the list is final: the Saved view
+    // has no rows until the saved lessons are read, and a search (a corrected typo above all)
+    // can change its rows when the lesson text arrives. Restored any earlier, the position
+    // landed on a short list, and the rows that came in above it pushed it down to the footer.
+    useScrollMemory(savedState !== null && !(hasQuery && digest === null && !digestFailed));
 
     // A query waits URL_DELAY before it reaches the URL. Any other write and a click on a
     // link write it at once (so Back returns to this query); unmounting drops it.
@@ -465,26 +468,33 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // Lesson bodies are searched once the digest arrives (about a second on a slow phone
     // connection): until then a query that only a body would find says so, not "No lesson".
     const searchingBodies = hasQuery && digest === null && !digestFailed;
+    // A corrected typo says so first, the way the list does when it shows the corrected results.
     const emptyState = (() => {
-        const typed = corrected ?? listQuery.trim();
+        const typed = listQuery.trim();
+        const fixed = corrected ? `No lesson matches "${typed}". Showing results for "${corrected}": ` : '';
         const all = { label: 'Show all lessons', onClick: resetFilters };
         if (showSaved) {
             if (saved.length === 0 || !hasQuery) {
                 return { message: 'No saved lessons yet. Use Save at the top of a lesson to keep it here.', action: all };
             }
+            const others = `${matchesElsewhere} other ${matchesElsewhere === 1 ? 'lesson' : 'lessons'}`;
             return matchesElsewhere > 0
                 ? {
-                      message: `None of your saved lessons matches "${typed}". ${matchesElsewhere} other ${matchesElsewhere === 1 ? 'lesson does' : 'lessons do'}.`,
+                      message: fixed
+                          ? `${fixed}none of your saved lessons, ${others}.`
+                          : `None of your saved lessons matches "${typed}". ${others} ${matchesElsewhere === 1 ? 'does' : 'do'}.`,
                       action: { label: 'Search all lessons', onClick: searchEverywhere },
                   }
                 : { message: `No lesson matches "${typed}".`, action: all };
         }
         if (!hasQuery) return { message: 'No lessons in this path yet.', action: all };
         if (category !== 'all' && matchesElsewhere > 0) {
+            const path = getCategoryName(category);
+            const others = `${matchesElsewhere} ${matchesElsewhere === 1 ? 'lesson in another path' : 'lessons in other paths'}`;
             return {
-                message: `No lesson in ${getCategoryName(category)} matches "${typed}". ${matchesElsewhere} ${
-                    matchesElsewhere === 1 ? 'lesson in another path does' : 'lessons in other paths do'
-                }.`,
+                message: fixed
+                    ? `${fixed}none in ${path}, ${others}.`
+                    : `No lesson in ${path} matches "${typed}". ${others} ${matchesElsewhere === 1 ? 'does' : 'do'}.`,
                 action: { label: 'Search all paths', onClick: searchEverywhere },
             };
         }

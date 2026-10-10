@@ -12,9 +12,9 @@ import type { MapFamily, MapPath } from './map-data';
  * (PathMapLive) without changing any size.
  *
  * Each path's line is a grid of 44 px tall cells (one per lesson) that wraps
- * like a score's systems: 44 px wide on phones and touch screens under
- * 1024 px, narrower from 640 px up with a mouse, and one line per path
- * from 1280 px. A cell is just its link, and the link
+ * like a score's systems: 44 px wide on phones and any touch screen,
+ * narrower from 640 px up with a mouse, and one line per path from 1280 px
+ * with a mouse. A cell is just its link, and the link
  * draws itself with two background layers: its stretch of the line and the
  * lesson's value glyph (app/globals.css, "Learn area"). So a lesson costs
  * two elements and no pseudo-elements of its own (only the few cells that
@@ -116,7 +116,7 @@ export function PathMap({ families }: { families: MapFamily[] }) {
     const axis = Math.min(longest, XL_AXIS);
     return (
         <div className="vgp-map grid gap-8" style={{ '--n': axis } as CSSProperties}>
-            <div aria-hidden="true" className="-mb-4 hidden xl:grid xl:grid-cols-[160px_1fr] xl:gap-x-2">
+            <div aria-hidden="true" className="vgp-map-axis -mb-4 hidden xl:grid xl:grid-cols-[160px_1fr] xl:gap-x-2">
                 <span className="self-end text-xs leading-4 text-white/50">Lesson</span>
                 <div className="vgp-map-ruler">
                     {Array.from({ length: axis }, (_, i) => (
