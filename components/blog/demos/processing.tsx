@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { bass, envelopeGain, fadeOut, hat, kick, kWeighted, midi, pad, pluck, scheduleSteps, sequence, snare, yieldToMain, type Engine } from './engine';
 import { CHUNK, MATCH_RUN_IN, SourceChoice, loopGain, matchPart, renderLoop, startFeed, stereoColumns, stereoPeak, stereoPower, stereoProduct, useSource, type Feed, type RealLoop } from './realmix';
+import { aheadAlong, along, postGain, type Axis, type Posted } from './matching';
 import { Announce, LiveMeter, PlayButton, Readout, Segmented, Slider, Variants, useAnalysis, useDialect, useFrame, usePlayer } from './ui';
 
 // ── Shared helpers ──────────────────────────────────────────────────
@@ -1739,22 +1740,29 @@ export function LimiterDemo() {
     const [mode, setMode] = useState<'original' | 'limited'>('limited');
     const [drive, setDrive] = useState(9);
     const [release, setRelease] = useState(120);
+    const [playing, setPlaying] = useState(false);
     const source = useSource('chrome-teeth');
     const real = source.loop;
-    const analysis = useAnalysis(`${real ? 'real' : 'synth'}|${drive}|${release}`, () => (real ? analyseLimitReal(real, { drive, release }) : analyseLimit({ drive, release })), limitResults);
+    const settings = { drive, release };
+    // The setting now heard, for estimates made between renders (a measurement landing), and the shown measurement.
+    const live = useRef(settings);
+    const measured = useRef<LimitAnalysis | null>(null);
+    const nodes = useRef<LimitNodes | null>(null);
+    const follow = () => {
+        const n = nodes.current;
+        if (!n) return;
+        const g = limitTarget(live.current, n.src, measured.current);
+        if (g !== null) postLimit(n, g, live.current);
+    };
+    const analysis = useAnalysis(limitKey(real, settings), () => (real ? analyseLimitReal(real, settings) : analyseLimit(settings)), limitResults, {
+        keep: 64,
+        onResult: () => follow(),
+        // While it plays, the drives and releases around this one are measured ahead (matching.ts).
+        ahead: playing ? () => (!real || measured.current?.real === real ? limitAhead(live.current, real) : []) : undefined,
+    });
     // What plays is what was measured: a switch of source goes live with its first measurement.
     const fed = analysis?.real ?? null;
     const loading = source.pick === 'real' && (!real || fed !== real);
-    const nodes = useRef<{
-        ctx: AudioContext;
-        norm: GainNode;
-        lim: LimiterNodes;
-        match: GainNode;
-        restore: GainNode;
-        master: GainNode;
-        sel: { original: GainNode; limited: GainNode };
-        feed: Feed;
-    } | null>(null);
     const modeRef = useRef(mode);
     const clock = useRef<LoopClock | null>(null);
     useEffect(() => {
@@ -1808,44 +1816,53 @@ export function LimiterDemo() {
             // On the real mix the figure draws the two bars a setting is measured on.
             (start, loop) => followLoop(c, start, loop, matchPart),
         );
-        const n = { ctx, norm, lim, match, restore, master, sel, feed };
+        // Its matching gain from the start (Play pressed mid-measurement plays the estimate).
+        const start = limitTarget(settings, fed, analysis) ?? 1;
+        match.gain.value = start;
+        const n: LimitNodes = { ctx, norm, lim, match, restore, master, sel, feed, src: fed, changedAt: ctx.currentTime, release, releaseGrew: false, posted: { ctx, param: match.gain, target: start } };
         nodes.current = n;
-        if (analysis) {
-            applyLimit(n, analysis, false);
-            // Pressed while a new drive is still being measured: held back as a new drive is (below), from the start.
-            match.gain.setValueAtTime(heldLimit(analysis, drive), ctx.currentTime);
-        }
+        if (analysis) applyLimit(n, analysis, false);
+        live.current = settings;
+        setPlaying(true);
         return () => {
             feed.stop();
             nodes.current = null;
             clock.current = null;
+            setPlaying(false);
             fadeOut(ctx, master, () => src.disconnect());
         };
     }, !loading);
 
-    // The measurement the matching gain now playing came from.
-    const measured = useRef(analysis);
     useEffect(() => {
         measured.current = analysis;
     });
 
-    // New drive and release are heard at once, with the matching gain the last setting had, turned down by
-    // any rise in drive until the new one is measured.
+    // New drive and release are heard at once, with their matching gain (their own, or the estimate until measured).
     useEffect(() => {
+        const p = { drive, release };
+        live.current = p;
         const n = nodes.current;
         if (!n) return;
         const t = n.ctx.currentTime;
         n.lim.drive.gain.setTargetAtTime(dbToGain(drive), t, 0.005);
         n.lim.comp.release.setValueAtTime(release / 1000, t);
-        if (measured.current) holdLimit(n, measured.current, drive);
+        n.changedAt = t;
+        n.releaseGrew = release > n.release;
+        n.release = release;
+        follow();
     }, [drive, release]);
 
-    // Their own matching gain follows once it has been measured, and a new source with its first measurement.
+    // A measurement shown for the setting heard, or the first one for a new source, which then goes live.
     useEffect(() => {
         const n = nodes.current;
         if (!n || !analysis) return;
-        n.feed.use(analysis.real);
+        if (n.src !== analysis.real) {
+            n.feed.use(analysis.real);
+            n.src = analysis.real;
+            n.changedAt = n.ctx.currentTime;
+        }
         applyLimit(n, analysis, true);
+        follow();
     }, [analysis]);
 
     const line = usePlayhead(player.playing, clock);
@@ -1920,34 +1937,94 @@ export function LimiterDemo() {
     );
 }
 
-/** A measurement's gains: the source's level going in and coming back, and the setting's matching. Drive and release are set as they change (LimiterDemo). */
-function applyLimit(n: { ctx: AudioContext; norm: GainNode; lim: LimiterNodes; match: GainNode; restore: GainNode; master: GainNode }, a: LimitAnalysis, smooth: boolean) {
+interface LimitNodes {
+    ctx: AudioContext;
+    norm: GainNode;
+    lim: LimiterNodes;
+    match: GainNode;
+    restore: GainNode;
+    master: GainNode;
+    sel: { original: GainNode; limited: GainNode };
+    feed: Feed;
+    /** The loop playing (null: the drum loop). */
+    src: RealLoop | null;
+    /** When the setting or the source last changed, and whether that lengthened the release. */
+    changedAt: number;
+    release: number;
+    releaseGrew: boolean;
+    posted: Posted;
+}
+
+/** A measurement's gains for its source: its level going in and coming back. Drive, release and the matching gain are set as they change (LimiterDemo). */
+function applyLimit(n: LimitNodes, a: LimitAnalysis, smooth: boolean) {
     const t = n.ctx.currentTime;
     const set = (param: AudioParam, value: number) => (smooth ? param.setTargetAtTime(value, t, 0.005) : param.setValueAtTime(value, t));
     set(n.norm.gain, a.norm);
     set(n.restore.gain, 1 / a.norm);
-    // A smaller matching gain at once; a larger one over 20 ms.
-    if (smooth && a.match > n.match.gain.value) n.match.gain.setTargetAtTime(a.match, t, 0.02);
-    else set(n.match.gain, a.match);
     n.lim.toCeiling.gain.setValueAtTime(1 / (a.makeup * dbToGain(CEILING)), t);
     n.master.gain.setTargetAtTime(1, t, 0.02);
 }
 
-/**
- * More drive raises the limiter's output by at most as many dB (by less once
- * it limits), so until a higher drive has been measured the last matching
- * gain is lowered by the whole rise: the moment between the two measurements
- * may play a little quieter, never louder. Less drive, or the measured drive
- * again (its measurement is the one already showing, so nothing else would
- * restore it), plays the measured gain itself. Always set: lower at once,
- * higher over 20 ms, as applyLimit does.
- */
-function holdLimit(n: { ctx: AudioContext; match: GainNode }, a: LimitAnalysis, drive: number) {
-    const gain = heldLimit(a, drive);
-    n.match.gain.setTargetAtTime(gain, n.ctx.currentTime, gain < n.match.gain.value ? 0.005 : 0.02);
+/** Drive on the dB scale it is set in; release on a log scale, where its effect on the level changes about evenly. */
+const LIMIT_AXES: Record<keyof LimitParams, Axis> = {
+    drive: { min: 0, max: 18, step: 1 },
+    release: { min: 10, max: 600, step: 10, scale: Math.log },
+};
+
+const limitKey = (real: RealLoop | null, p: LimitParams) => `${real ? 'real' : 'synth'}|${p.drive}|${p.release}`;
+
+/** The drives and releases to measure ahead around `p`, nearest first: drive with three points inside its range. */
+function limitAhead(p: LimitParams, real: RealLoop | null): [string, () => Promise<LimitAnalysis>][] {
+    const out: [string, () => Promise<LimitAnalysis>][] = [];
+    const drives = aheadAlong(LIMIT_AXES.drive, p.drive, 3);
+    const releases = aheadAlong(LIMIT_AXES.release, p.release);
+    for (let tier = 0; tier < 3; tier++) {
+        for (const q of [...drives[tier].map((drive) => ({ drive, release: p.release })), ...releases[tier].map((release) => ({ drive: p.drive, release }))]) {
+            out.push([limitKey(real, q), () => (real ? analyseLimitReal(real, q) : analyseLimit(q))]);
+        }
+    }
+    return out;
 }
 
-const heldLimit = (a: LimitAnalysis, drive: number) => a.match * dbToGain(Math.min(0, a.params.drive - drive));
+/**
+ * The safe estimate for `p` from one measurement `a`: more drive turns the output up by at most as many dB (by
+ * less once it limits); a faster release by about a dB for each halving (the whole range plays 4 to 5 dB apart).
+ * Less drive or a slower release keeps `a`'s gain, which is never louder.
+ */
+function heldLimit(a: LimitAnalysis, p: LimitParams): number {
+    return a.match * dbToGain(Math.min(0, a.params.drive - p.drive) - Math.max(0, Math.log2(a.params.release / p.release)));
+}
+
+/** The matching gain for `p`: its own measurement, else from the measured drives or releases around it (matching.ts along), else heldLimit from the shown one. */
+function limitTarget(p: LimitParams, src: RealLoop | null, shown: LimitAnalysis | null): number | null {
+    const known = [...limitResults.values()].filter((r) => r.real === src);
+    const exact = known.find((r) => r.params.drive === p.drive && r.params.release === p.release);
+    if (exact) return exact.match;
+    let best: { gain: number; reach: number } | null = null;
+    for (const name of ['drive', 'release'] as const) {
+        const other = name === 'drive' ? 'release' : 'drive';
+        const line = known.filter((r) => r.params[other] === p[other]);
+        const est = along(
+            line.map((r) => ({ v: r.params[name], gain: r.match, from: r })),
+            p[name],
+            LIMIT_AXES[name],
+            (r) => heldLimit(r, p),
+        );
+        if (est && (!best || est.reach < best.reach)) best = est;
+    }
+    if (best) return best.gain;
+    return shown && shown.real === src ? heldLimit(shown, p) : null;
+}
+
+/**
+ * Posts the limiter's matching gain. Lower at once. Higher over 20 ms: less drive leaves the limiter recovering
+ * over its release, which only plays quieter meanwhile; but a longer release piles up reduction over about the
+ * release time, so after one the gain rises no faster than that.
+ */
+function postLimit(n: LimitNodes, gain: number, p: LimitParams) {
+    const slow = n.releaseGrew && n.ctx.currentTime - n.changedAt < p.release / 1000;
+    postGain(n.posted, gain, slow ? Math.max(0.02, p.release / 2000) : 0.02, slow ? n.changedAt : undefined);
+}
 
 // ── Clipping at the converter ───────────────────────────────────────
 

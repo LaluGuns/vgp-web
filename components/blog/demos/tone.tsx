@@ -822,6 +822,35 @@ function realGuess(sat: SatMatch, kind: SatKind, drive: number): number {
     return clampGain(sat.kind === 'off' ? now : (sat.gain * now) / realGain(sat.real, sat.kind, sat.drive));
 }
 
+interface SatNodes {
+    ctx: AudioContext;
+    shaper: WaveShaperNode;
+    dry: GainNode;
+    wet: GainNode;
+    matched: GainNode;
+    feed: Feed;
+    /** Whether the real mix plays, and which loop. */
+    real: { current: boolean };
+    loop: { current: RealLoop | null };
+    /** Works out the matching gain for a curve and returns the step that posts it (null when there is none yet). */
+    retune: (kind: 'soft' | 'hard', drive: number) => (() => void) | null;
+}
+
+/**
+ * The real mix's matching gain for a setting: its own measurement (shown or not), else realGuess from the nearest
+ * measured drive of the same curve, else from `shown`.
+ */
+function realTarget(loop: RealLoop, kind: 'soft' | 'hard', drive: number, shown: SatMatch | null): number | null {
+    let near: SatMatch | null = null;
+    for (const r of satResults.values()) {
+        if (!r || r.real !== loop || r.kind !== kind) continue;
+        if (r.drive === drive) return r.gain;
+        if (!near || Math.abs(r.drive - drive) < Math.abs(near.drive - drive)) near = r;
+    }
+    const from = near ?? (shown && shown.real === loop ? shown : null);
+    return from ? realGuess(from, kind, drive) : null;
+}
+
 /** Bass and chords through a waveshaper, level-matched so you hear harmonics, not volume. */
 export function SaturationDemo() {
     const [drive, setDrive] = useState(12);
@@ -830,22 +859,27 @@ export function SaturationDemo() {
     const [gr, setGr] = useState(0);
     const source = useSource('chrome-teeth');
     const real = source.loop;
-    const sat = useAnalysis(real ? `real|${kind}|${drive}` : 'synth', () => (real ? matchSatReal(real, kind, drive) : Promise.resolve(null)), satResults);
+    // The setting now heard, for a bar that is rendered after Play and for estimates made between renders.
+    const live = useRef({ kind, drive });
+    const nodes = useRef<SatNodes | null>(null);
+    // The real mix's gain for the setting heard, from its own measurement or the nearest one (realTarget): posted
+    // whenever a setting changes or any measurement lands, shown or superseded.
+    const follow = () => {
+        const n = nodes.current;
+        const now = live.current;
+        if (n && n.real.current && now.kind !== 'off') n.retune(now.kind, now.drive)?.();
+    };
+    const sat = useAnalysis(real ? `real|${kind}|${drive}` : 'synth', () => (real ? matchSatReal(real, kind, drive) : Promise.resolve(null)), satResults, {
+        onResult: () => follow(),
+    });
     // The real mix goes live with its first measured match; the synth is matched as it plays.
     const fed = sat?.real ?? null;
     const loading = source.pick === 'real' && (!real || fed !== real);
-    const nodes = useRef<{
-        ctx: AudioContext;
-        shaper: WaveShaperNode;
-        dry: GainNode;
-        wet: GainNode;
-        matched: GainNode;
-        feed: Feed;
-        real: { current: boolean };
-        retune: (kind: 'soft' | 'hard', drive: number, sat: SatMatch | null) => (() => void) | null;
-    } | null>(null);
-    // The setting now heard, for a bar that is rendered after Play.
-    const live = useRef({ kind, drive });
+    // The shown measurement, for an estimate when no other measurement is on the setting's curve.
+    const shown = useRef(sat);
+    useEffect(() => {
+        shown.current = sat;
+    });
 
     // The synth's bar is rendered while the page is idle, so Play and the first slider step already have it.
     useEffect(
@@ -883,6 +917,7 @@ export function SaturationDemo() {
         dry.gain.value = kind === 'off' ? 1 : 0;
         wet.gain.value = kind === 'off' ? 0 : 1;
         const isReal = { current: fed !== null };
+        const loop = { current: fed };
         // The synth's running level readings, before and after the shaper.
         let sa = 0;
         let sb = 0;
@@ -898,7 +933,10 @@ export function SaturationDemo() {
             if (g < matched.gain.value) {
                 matched.gain.cancelScheduledValues(t);
                 matched.gain.setValueAtTime(g, t);
-            } else matched.gain.setTargetAtTime(g, t + 0.01, 0.003);
+            } else {
+                matched.gain.cancelScheduledValues(t);
+                matched.gain.setTargetAtTime(g, t + 0.01, 0.003);
+            }
             if (!follow) return;
             if (sa > 0) sb = sa / g;
             hold = fresh = t + 0.05;
@@ -906,17 +944,16 @@ export function SaturationDemo() {
         };
         // Works the estimate out now (a few ms, more on a slow phone) and returns the step that applies it, so the
         // caller can hand the new curve and its gain to the audio thread together.
-        const retune = (k: 'soft' | 'hard', d: number, measured: SatMatch | null) => {
+        const retune = (k: 'soft' | 'hard', d: number) => {
             if (isReal.current) {
-                if (!measured) return null;
-                const g = realGuess(measured, k, d);
-                return () => seed(g, false);
+                const g = loop.current ? realTarget(loop.current, k, d, shown.current) : null;
+                return g === null ? null : () => seed(g, false);
             }
             if (!satBar) return null;
             const g = synthGain(satBar, k, d);
             return () => seed(g, true);
         };
-        if (sat) matched.gain.value = realGuess(sat, kind, drive);
+        if (fed) matched.gain.value = realTarget(fed, curveKind, drive, sat) ?? 1;
         else if (satBar) {
             const g = synthGain(satBar, curveKind, drive);
             matched.gain.value = g;
@@ -927,7 +964,7 @@ export function SaturationDemo() {
             void prepareSatBar()
                 .then(() => {
                     const now = live.current;
-                    if (nodes.current?.matched === matched && now.kind !== 'off') retune(now.kind, now.drive, null)?.();
+                    if (nodes.current?.matched === matched && now.kind !== 'off') retune(now.kind, now.drive)?.();
                 })
                 .catch(() => {});
         const feed = startFeed(
@@ -940,7 +977,7 @@ export function SaturationDemo() {
             fed,
             (loop) => loopGain(loop, SAT_REAL_IN),
         );
-        nodes.current = { ctx, shaper, dry, wet, matched, feed, real: isReal, retune };
+        nodes.current = { ctx, shaper, dry, wet, matched, feed, real: isReal, loop, retune };
         setAnalyser(an);
         const a = new Float32Array(SAT_BLOCK);
         const b = new Float32Array(SAT_BLOCK);
@@ -966,19 +1003,15 @@ export function SaturationDemo() {
     }, !loading);
 
     // A measured match goes live with its setting, and a switch of source with its first one. Clean has no
-    // match of its own: the shaped path is silent there and keeps the gain it has.
+    // match of its own: the shaped path is silent there and keeps the gain it has. seed cancels any estimate still
+    // on its way, so the measurement is what stays.
     useEffect(() => {
         const n = nodes.current;
         if (!n) return;
         n.feed.use(sat?.real ?? null);
         n.real.current = sat !== null;
-        if (sat && sat.kind !== 'off') {
-            const t = n.ctx.currentTime;
-            // Its own gain replaces any estimate still on its way: a rising one starts a moment ahead (seed),
-            // and would otherwise land after this and stay, since a measurement already shown is not shown again.
-            n.matched.gain.cancelScheduledValues(t);
-            n.matched.gain.setTargetAtTime(sat.gain, t, 0.01);
-        }
+        n.loop.current = sat?.real ?? null;
+        follow();
     }, [sat]);
     const shownGr = sat && sat.kind !== 'off' ? 20 * Math.log10(1 / sat.gain) : gr;
 
@@ -995,7 +1028,7 @@ export function SaturationDemo() {
             // The new curve's matching gain with it, so a jump or a drag never plays louder (or quieter) while the
             // follower or the measurement catches up. Both are worked out first, then go to the audio thread together.
             const curve = shaperCurve(curveKind, d);
-            const match = n.retune(curveKind, d, sat);
+            const match = n.retune(curveKind, d);
             n.shaper.curve = curve;
             match?.();
         }

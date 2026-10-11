@@ -24,8 +24,8 @@ export const post129: BlogArticle = {
                 { from: 500, to: 6000, label: 'Heard as guitar' },
             ],
             curves: [
-                { kind: 'hump', center: 90, width: 0.9, level: 0.85, muted: true, label: 'Bass' },
-                { kind: 'hump', center: 350, width: 1.1, level: 0.75, muted: true, label: 'Keys' },
+                { kind: 'hump', center: 90, width: 0.9, level: 0.85, muted: true, label: 'Bass and keys' },
+                { kind: 'hump', center: 350, width: 1.1, level: 0.75, muted: true },
                 { kind: 'hump', center: 600, width: 1.6, level: 0.7, label: 'Guitar' },
             ],
         },

@@ -920,17 +920,29 @@ function drawTrace(c: HTMLCanvasElement | null, context: Float32Array, focus: Fl
     g.stroke();
 }
 
+export interface AnalysisOptions<R> {
+    /** Hears every measurement that finishes, shown or superseded, so a demo can use a neighbour's while it waits. */
+    onResult?: (key: string, result: R) => void;
+    /**
+     * Settings worth having measured before the reader gets there (keys with their measurements, nearest first). They
+     * are measured one at a time in idle moments while nothing else is asked for; a new key always goes first.
+     */
+    ahead?: () => [string, () => Promise<R>][];
+    /** How many results the cache keeps (24). */
+    keep?: number;
+}
+
 /**
  * Runs `measure` whenever `key` changes: one render at a time, always
  * finishing on the latest inputs. Returns the last finished result. The
  * first measurement waits for an idle moment, so a demo that mounts while
  * the reader scrolls toward it costs no frames.
  *
- * With `cache`, finished results are kept by key (the last 24), and a key
+ * With `cache`, finished results are kept by key (the last `keep`), and a key
  * measured before is shown again in the same render, without measuring: a
  * switch back to a source or a setting already heard goes live at once.
  */
-export function useAnalysis<R>(key: string, measure: () => Promise<R>, cache?: Map<string, R>): R | null {
+export function useAnalysis<R>(key: string, measure: () => Promise<R>, cache?: Map<string, R>, options?: AnalysisOptions<R>): R | null {
     const [result, setResult] = useState<R | null>(() => cache?.get(key) ?? null);
     const [seen, setSeen] = useState(key);
     if (seen !== key) {
@@ -939,56 +951,86 @@ export function useAnalysis<R>(key: string, measure: () => Promise<R>, cache?: M
     }
     const measureRef = useRef(measure);
     const keyRef = useRef(key);
+    const optionsRef = useRef(options);
     // `gen` counts the keys asked for: a measurement started for an older key is not shown.
     const job = useRef({ busy: false, dirty: false, alive: true, first: true, gen: 0 });
     useEffect(() => {
         measureRef.current = measure;
         keyRef.current = key;
+        optionsRef.current = options;
     });
+    // One loop at a time: the key asked for first, then any settings to measure ahead.
+    const run = useRef(() => {});
+    run.current = () => {
+        const j = job.current;
+        if (j.busy || !j.alive) return;
+        j.busy = true;
+        void (async () => {
+            for (;;) {
+                if (!j.alive) break;
+                let k: string;
+                let m: () => Promise<R>;
+                let shown = false;
+                const gen = j.gen;
+                if (j.dirty) {
+                    j.dirty = false;
+                    k = keyRef.current;
+                    m = measureRef.current;
+                    shown = true;
+                } else {
+                    const next = cache ? optionsRef.current?.ahead?.().find(([ahead]) => !cache.has(ahead)) : undefined;
+                    if (!next) break;
+                    await new Promise<void>((resolve) => whenIdle(resolve, 1000));
+                    if (!j.alive) break;
+                    // A setting the reader asked for in the meantime goes first.
+                    if (j.dirty || cache?.has(next[0])) continue;
+                    [k, m] = next;
+                }
+                try {
+                    const r = await m();
+                    if (cache) {
+                        cache.set(k, r);
+                        if (cache.size > (optionsRef.current?.keep ?? 24)) cache.delete(cache.keys().next().value as string);
+                    }
+                    optionsRef.current?.onResult?.(k, r);
+                    // Superseded while it ran: the loop measures the newer key next and shows that.
+                    // A transition, so React can draw the new figures in slices between frames.
+                    if (shown && j.alive && gen === j.gen) startTransition(() => setResult(r));
+                } catch {
+                    // Keep the last good result.
+                }
+            }
+            j.busy = false;
+        })();
+    };
     useEffect(() => {
         const j = job.current;
         j.alive = true;
         j.gen++;
-        // Already measured: shown above, in the render that asked for it.
+        // Already measured: shown above, in the render that asked for it. Anything to measure ahead starts now.
         if (cache?.has(key)) {
             j.first = false;
-            return;
+            run.current();
+            return () => {
+                j.alive = false;
+            };
         }
         j.dirty = true;
-        const run = () => {
-            if (j.busy || !j.alive) return;
-            j.busy = true;
-            void (async () => {
-                while (j.dirty && j.alive) {
-                    j.dirty = false;
-                    const gen = j.gen;
-                    const k = keyRef.current;
-                    try {
-                        const r = await measureRef.current();
-                        if (cache) {
-                            cache.set(k, r);
-                            if (cache.size > 24) cache.delete(cache.keys().next().value as string);
-                        }
-                        // Superseded while it ran: the loop measures the newer key next and shows that.
-                        // A transition, so React can draw the new figures in slices between frames.
-                        if (j.alive && gen === j.gen) startTransition(() => setResult(r));
-                    } catch {
-                        // Keep the last good result.
-                    }
-                }
-                j.busy = false;
-            })();
-        };
         let cancel = () => {};
         if (j.first) {
             j.first = false;
-            cancel = whenIdle(run, 600);
-        } else run();
+            cancel = whenIdle(() => run.current(), 600);
+        } else run.current();
         return () => {
             j.alive = false;
             cancel();
         };
     }, [key, cache]);
+    // Measuring ahead can start later than the key (a demo asks for it while it plays).
+    const aheadOn = Boolean(options?.ahead);
+    useEffect(() => {
+        if (aheadOn && !job.current.first) run.current();
+    }, [aheadOn]);
     return result;
 }
 

@@ -767,9 +767,10 @@ export interface LegendItem {
     swatch?: string;
     /**
      * A sample in the shape of the mark, where a line would not tell two kinds apart (spectrum curves): `ticks`,
-     * three falling lines, for harmonics; `hump` for a hump, and `area` for one the plot fills under.
+     * three falling lines, for harmonics (`tick`, one, for a single one); `hump` for a hump, and `area` for one the
+     * plot fills under.
      */
-    sample?: 'ticks' | 'hump' | 'area';
+    sample?: 'ticks' | 'tick' | 'hump' | 'area';
     /** Line width of the sample. A reference line's sample is as thin as the line. */
     width?: number;
 }
@@ -781,11 +782,11 @@ const humpPath = (x: number, y: number) => `M${x},${y + 0.5}C${x + 5},${y + 0.5}
 function shapedSample(item: LegendItem, x: number, y: number, d: Dialect): ReactNode {
     const stroke = item.muted ? C.dataGrey : C.accent;
     const style = item.dotted ? dots(d, item.muted) : { stroke, strokeDasharray: item.dashed ? d.refDash : undefined };
-    if (item.sample === 'ticks') {
-        // Falling like a harmonic series, with flat ends, as the plot draws them.
+    if (item.sample === 'ticks' || item.sample === 'tick') {
+        // Falling like a harmonic series, with flat ends, as the plot draws them; a single harmonic is one tick.
         return (
             <g>
-                {[10, 6, 4].map((height, i) => (
+                {(item.sample === 'tick' ? [10] : [10, 6, 4]).map((height, i) => (
                     <line key={i} x1={x + 2 + i * 6} x2={x + 2 + i * 6} y1={y + 0.5} y2={y + 0.5 - height} strokeWidth={item.dotted ? undefined : 2} {...style} />
                 ))}
             </g>

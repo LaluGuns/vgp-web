@@ -691,7 +691,8 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     // A hump is filled under in the lit dialects (and in grey when muted) unless dashed or dotted.
     const filled = (c: SpectrumCurve) => c.kind === 'hump' && !c.dashed && !c.dotted && (c.muted || d.fillUnder);
     // Harmonics and humps get samples in their own shape, so a key of spikes and a band never shows two like lines.
-    // A dashed hump keeps the straight dashed sample: the dialect's dash breaks a hump that small into pieces.
+    // A dashed hump keeps the straight dashed sample: the dialect's dash breaks a hump that small into pieces. A single
+    // harmonic (a clean note) is one tick, as it is drawn.
     const named = spec.curves
         .filter((c) => c.label)
         .map((c) => ({
@@ -699,7 +700,7 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
             dashed: c.dashed,
             dotted: c.dotted,
             muted: c.muted,
-            sample: c.kind === 'harmonics' ? ('ticks' as const) : c.kind === 'hump' && !c.dashed ? (filled(c) ? ('area' as const) : ('hump' as const)) : undefined,
+            sample: c.kind === 'harmonics' ? (c.count === 1 ? ('tick' as const) : ('ticks' as const)) : c.kind === 'hump' && !c.dashed ? (filled(c) ? ('area' as const) : ('hump' as const)) : undefined,
         }));
     const leg = legend(named, 0, 14, w, d);
     const gainMode = spec.mode === 'gain';

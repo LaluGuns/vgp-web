@@ -23,9 +23,9 @@ export const post052: BlogArticle = {
             bands: [{ from: 200, to: 500, label: 'Low mids' }],
             curves: [
                 { kind: 'hump', center: 100, width: 0.7, level: 0.6, label: 'Bass', muted: true },
-                { kind: 'hump', center: 260, width: 0.8, level: 0.55, label: 'Guitar' },
-                { kind: 'hump', center: 340, width: 0.9, level: 0.5, label: 'Keys' },
-                { kind: 'hump', center: 420, width: 1, level: 0.5, label: 'Pad' },
+                { kind: 'hump', center: 260, width: 0.8, level: 0.55, label: 'Guitar, keys and pad' },
+                { kind: 'hump', center: 340, width: 0.9, level: 0.5 },
+                { kind: 'hump', center: 420, width: 1, level: 0.5 },
                 { kind: 'hump', center: 1200, width: 1.3, level: 0.65, label: 'Vocal', dashed: true, muted: true },
             ],
         },

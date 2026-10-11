@@ -21,8 +21,8 @@ export const post131: BlogArticle = {
             alt: 'Energy over frequency for a left guitar, a right guitar and a vocal. The two guitar humps lie almost on top of each other and both overlap the dotted vocal hump in a shaded band from about 2 to 5 kHz.',
             bands: [{ from: 2000, to: 5000, label: 'Shared band' }],
             curves: [
-                { kind: 'hump', center: 1800, width: 2.2, level: 0.65, label: 'Guitar L' },
-                { kind: 'hump', center: 2000, width: 2.2, level: 0.6, label: 'Guitar R' },
+                { kind: 'hump', center: 1800, width: 2.2, level: 0.65, label: 'Guitars L and R' },
+                { kind: 'hump', center: 2000, width: 2.2, level: 0.6 },
                 { kind: 'hump', center: 2800, width: 1.6, level: 0.55, label: 'Vocal', dotted: true },
             ],
         },
