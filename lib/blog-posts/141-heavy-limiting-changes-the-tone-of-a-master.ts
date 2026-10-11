@@ -227,7 +227,7 @@ Push the drive and listen to the tone rather than the level, since the demo keep
 
 If those peaks were the trigger, the version where they were controlled first needs less gain reduction for the same loudness and stays closer to the tonal balance of the unlimited mix. If it does not, look elsewhere in the chain for the tone change.
 
-## Common mistake: EQ-ing the limiter's side effect
+## Common mistake: EQing the limiter's side effect
 
 Correcting the limiter's tone with more EQ on the master usually makes it worse. A low boost in front of a kick-driven limiter feeds the trigger. A high cut to tame the brighter top makes the master duller during the parts where the limiter is not working. Fix what drives the limiter, and the tone mostly stops moving.
 

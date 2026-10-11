@@ -110,7 +110,7 @@ A personal post and a paid brand post can look the same on screen. If a business
 
 A small audience makes a release feel personal. Ten streams on Spotify are still public distribution on a paid service, and a sponsored post with fifty views still promotes a business.
 
-The second is treating a credit as a license. Crediting the producer is usually required by a license, and it does not replace one.
+The second mistake is treating a credit as a license. Crediting the producer is usually required by a license, and it does not replace one.
 
 ## Producer takeaway: license before the checkbox
 

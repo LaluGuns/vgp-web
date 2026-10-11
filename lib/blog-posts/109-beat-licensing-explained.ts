@@ -99,9 +99,9 @@ Choose from where the song is going. A first release to a small audience fits th
 
 ## Common mistake: releasing first, reading later
 
-You release first and read the terms later, as in the hook. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
+You put the song out the night you lease the beat and open the license only when the streams take off. A song that takes off on a small tier can pass its caps in weeks, and an upgrade is easier to arrange before that than after.
 
-The second is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material it evaluates, and it lists music licensed without exclusivity among its common examples of material that may not be exclusive (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
+The second mistake is assuming a lease lets you claim the song in YouTube's Content ID. YouTube requires exclusive rights to the material it evaluates, and it lists music licensed without exclusivity among its common examples of material that may not be exclusive (YouTube Help, n.d.). Every other artist on the same beat would be claimed too.
 
 The third is assuming that exclusive means you own the beat outright. Ownership depends on the contract, so read it before you sign.
 

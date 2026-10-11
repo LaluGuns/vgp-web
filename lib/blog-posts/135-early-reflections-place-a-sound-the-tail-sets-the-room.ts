@@ -146,7 +146,7 @@ Return A alone usually gets the vocal out of the speakers with every word intact
 
 ## Common mistake: asking the tail to do the early part's job
 
-A long hall set low under the vocal is how you try to make it sit in a space. At a low send you hear almost none of the early part, only the tail poking out in the gaps, so you push the send up and the wash comes with it. If the vocal needs a place, give it early energy first.
+You set a long hall low under the vocal to make it sit in a space. At a low send you hear almost none of the early part, only the tail poking out in the gaps, so you push the send up and the wash comes with it. If the vocal needs a place, give it early energy first.
 
 The second mistake is the opposite: early reflections so loud and few that they act like single echoes. One strong reflection a few milliseconds after the dry sound combs the tone, the same effect a reflective wall has on a microphone, as the [lesson on room reflections in vocal recordings](/blog/room-reflections-eq-your-vocal-recording) explains. Keep the early level below the point where the vocal starts to sound hollow or phasey.
 

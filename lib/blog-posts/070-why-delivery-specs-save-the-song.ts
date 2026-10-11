@@ -112,7 +112,7 @@ On loud material the encoded copy often reads higher than the WAV. The differenc
 
 One loud master goes everywhere: to streaming, to the vinyl cutter and into your archive. Limiting cannot be undone, so keep an unlimited premaster for remasters, vinyl and formats you have not thought of yet.
 
-The other is trusting normalization to fix level problems. It changes gain and nothing else. It will not limit a loud master, it will not clean up overs that are already in the file, and on the Normal setting it will not raise a quiet master past the point where its peaks would clip.
+The other mistake is trusting normalization to fix level problems. It changes gain and nothing else. It will not limit a loud master, it will not clean up overs that are already in the file, and on the Normal setting it will not raise a quiet master past the point where its peaks would clip.
 
 ## Producer takeaway: deliver to the destination
 

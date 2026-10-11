@@ -54,7 +54,7 @@ export const glossary: GlossaryEntry[] = [
         forms: ['dBFS', 'dBTP'],
         caseSensitive: true,
         definition:
-            'Decibels relative to full scale, the largest value a fixed-point file or converter can hold, so levels below it are negative numbers. Inside a floating-point mix a signal can read above 0 dBFS without clipping until it leaves float. dBTP is the same scale measured as true peak, and it can read above 0.',
+            'Decibels relative to full scale, the largest value a fixed-point file or converter can hold, so levels below it are negative numbers. Inside a floating-point mix a signal can read above 0 dBFS and stay intact; it clips where it leaves float or passes through a plugin that clips. dBTP is the same scale measured as true peak, and it can read above 0.',
     },
     {
         id: 'inter-sample-peak',
@@ -82,7 +82,7 @@ export const glossary: GlossaryEntry[] = [
         id: 'plr',
         term: 'Peak to loudness ratio',
         forms: ['peak to loudness ratio', 'peak-to-loudness ratio', 'PLR'],
-        definition: 'The gap between a master\'s true peak and its integrated loudness. Heavy limiting makes it smaller. After normalization it sets how far the loudest peak rises above the loudness, though one stray peak can make it high on a flat master.',
+        definition: 'The gap between a master\'s true peak and its integrated loudness. Heavy limiting makes it smaller. Normalization moves peak and loudness together, so PLR stays the same: at the shared playback level it is how far the peaks rise above it, though one stray peak can make it high on a flat master.',
         article: 'loudness-and-dynamic-range-are-different-readings',
     },
     {

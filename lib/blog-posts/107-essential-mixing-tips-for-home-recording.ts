@@ -148,7 +148,7 @@ Step 5 needs a de-esser. Not every DAW has one, so check your plugin list before
 
 You record far from the mic in a bare room and expect EQ and reverb to fix it later. Boosting presence on a roomy take brings the reflections up with the voice. Adding reverb to a take that already has a room on it stacks two spaces, and the vocal moves further back.
 
-The second is a single compressor working hard. On a rap vocal it tends to pump and flatten the delivery, and with no de-esser in front it pulls whole words down on every S.
+The second mistake is a single compressor working hard. On a rap vocal it tends to pump and flatten the delivery, and with no de-esser in front it pulls whole words down on every S.
 
 The third is an unfiltered reverb return. High-pass it around 200 to 300 Hz and low-pass it around 6 to 8 kHz, so the space adds depth without mud or extra sibilance.
 

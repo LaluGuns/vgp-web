@@ -126,7 +126,7 @@ The quiet level is good at showing what disappears from the midrange balance. It
 
 On speakers turned well down the mix sounds thin, so you boost the low end. At that level every track sounds thin, including the references. The boost feels right until the mix is played at a normal level, where it turns into boom.
 
-The second is riding the volume knob without marks. A mix that sounds a little brighter or fuller after you turned up is not a better mix, and an A/B taken at two different monitor levels compares your hearing, not the two versions.
+The second mistake is riding the volume knob without marks. A mix that sounds a little brighter or fuller after you turned up is not a better mix, and an A/B taken at two different monitor levels compares your hearing, not the two versions.
 
 ## Producer takeaway: one home level, quick trips away from it
 

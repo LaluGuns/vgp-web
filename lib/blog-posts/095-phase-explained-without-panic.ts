@@ -74,7 +74,7 @@ export const post095: BlogArticle = {
             q: 'Why does a polarity flip fix a snare top and bottom pair, but not two mics at different distances?',
             options: [
                 'A delay shifts each frequency by a different angle',
-                'A flip equals a half-cycle delay at every frequency',
+                'A flip delays the copy by half a cycle of its lowest note',
                 'Distant mics pick up too little low end to cancel',
                 'The farther mic is quieter, so a flip cannot match it',
             ],

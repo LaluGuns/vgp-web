@@ -163,7 +163,7 @@ The right setting sounds like one bass, bigger than either track alone, with the
 
 Cancellation looks like a lack of low end, so you boost 60 Hz on the DI and the amp track as if it were a tone problem. The result is louder and still hollow, with less headroom.
 
-The second is trusting your eyes. Lining up the transients on screen does not guarantee the low frequencies line up, because filters and amps shift their phase without moving the transient. Let your ears in mono decide, and if polarity and timing do not settle it, try a phase-rotation tool, which shifts phase without delaying the signal.
+The second mistake is trusting your eyes. Lining up the transients on screen does not guarantee the low frequencies line up, because filters and amps shift their phase without moving the transient. Let your ears in mono decide, and if polarity and timing do not settle it, try a phase-rotation tool, which shifts phase without delaying the signal.
 
 ## Producer takeaway: fix the relationship before the tone
 

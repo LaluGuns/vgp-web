@@ -131,7 +131,7 @@ The reference you compare against sets the target slope, and that target has mov
 
 In my sessions the tilt usually does most of the work, and the narrow cut, if one survives at all, is small.
 
-## Common mistake: EQ-ing the picture
+## Common mistake: EQing the picture
 
 Mastering to the analyzer means notching every peak or pulling the curve toward a smooth line. Peaks are often notes, and a smooth curve is not a goal in itself. Notch the notes and you change the arrangement from the master, where you cannot reach a single part.
 
