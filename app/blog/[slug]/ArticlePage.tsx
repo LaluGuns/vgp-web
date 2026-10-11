@@ -260,7 +260,7 @@ export function ArticlePage({ article, category }: ArticlePageProps) {
                         </div>
                     </header>
 
-                    <div className="px-4 pb-20 sm:px-6">
+                    <div className="px-4 pb-20 print:pb-0 sm:px-6">
                         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12">
                             {/* First in the source, so the outline comes before the text in the tab order; the grid puts it on the right. */}
                             <div className="hidden lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:block">

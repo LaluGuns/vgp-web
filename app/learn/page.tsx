@@ -152,9 +152,9 @@ export default function LearnHubPage() {
                                 Each line is a path, read from left to right, and each mark on it is a lesson. A filled mark is one you have read on
                                 this device.
                                 {/* On a touch screen under 1024 px the readout is a card that shows only after a tap, so the gesture is
-                                    said here, before the first one: in the box from the first paint (app/globals.css, "Learn area"), shown
-                                    once the script that does it runs (PathMapLive), so the map below never moves. A screen reader opens a
-                                    lesson with one activation, so it is not told. */}
+                                    said here, before the first one, from the first paint (app/globals.css, "Learn area"), so nothing
+                                    appears or moves once the script that does it (PathMapLive) runs; without script it is left out. A
+                                    screen reader opens a lesson with one activation, so it is not told. */}
                                 <span id="map-tap-hint" aria-hidden="true" className="vgp-map-tap-hint">
                                     {' '}
                                     Tap a mark to see its lesson, then tap it again to open it.
@@ -197,7 +197,7 @@ export default function LearnHubPage() {
                             </a>
                             <PathMap families={families} />
                         </div>
-                        <PathMapLive mapId="path-map" readoutId="map-readout" announceId="map-announce" hintId="map-tap-hint" />
+                        <PathMapLive mapId="path-map" readoutId="map-readout" announceId="map-announce" />
                     </div>
                 </section>
 
@@ -263,7 +263,7 @@ export default function LearnHubPage() {
                     </div>
                 </section>
 
-                <section aria-label="Glossary and book" className="border-t border-white/10 px-4 pb-24 pt-14 sm:px-6 lg:pt-16">
+                <section aria-label="Glossary and book" className="border-t border-white/10 px-4 pb-24 pt-14 print:pb-0 sm:px-6 lg:pt-16">
                     <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-12 lg:gap-12">
                         <div className="lg:col-span-6">
                             {/* On paper the heading and its intro stay with the terms. */}

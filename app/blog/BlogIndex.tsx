@@ -598,7 +598,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
 
                 <LearningPaths paths={paths} read={read} startHere={startHere} />
 
-                <section id="vgp-reading-room" aria-labelledby="library-heading" className="px-4 pb-20 sm:px-6">
+                <section id="vgp-reading-room" aria-labelledby="library-heading" className="px-4 pb-20 print:pb-0 sm:px-6">
                     <div className="mx-auto max-w-7xl pb-4">
                         <h2 id="library-heading" className="font-display text-2xl font-semibold tracking-[-0.02em] sm:text-3xl">
                             All lessons

@@ -125,8 +125,8 @@ anything without one is technical.
   map on /learn, which shows the four groups side by side on purpose
   (Learn area, below).
 - **The key.** The group's mark (its value glyph in its accent) sits beside
-  the category name on a lesson and on its learning path page, and beside
-  each group's name on the path map. Nowhere else. A lesson on no learning
+  the category name on a lesson, and beside the group's name on a learning
+  path page and on the path map. Nowhere else. A lesson on no learning
   path (a studio note) has no path crumb, so it shows no mark.
 - **Lit and paper.** Technical and mind keep a faint accent area under a
   line. Music and business are ink on paper, so their lines stand alone.
@@ -260,14 +260,17 @@ pages are /learn, /blog, the path pages (/blog/category/*), every lesson,
   lesson, and a second tap on the mark opens it too. Under 1024px on a
   touch screen the readout is a fixed-height card over the tab bar (the
   title on two lines, three under 360px), shown only for a chosen mark, so
-  it costs the map no height; the gesture hint ends the map's intro, in a
-  space it has from the first paint. Each line draws in once with the figure motion
-  (`data-reveal="draw"`): it wipes in from lesson 1 at a constant speed,
-  like a scope beam, the group's later paths 60ms apart (one clip that
-  opens from lesson 1; the marks keep their place from the first frame,
-  so a tap during the draw-in lands, and nothing repaints per frame);
-  never on screen at load, with reduced motion,
-  without script or in print. Server-rendered; works with JavaScript off.
+  it costs the map no height; the gesture hint ends the map's intro from
+  the first paint (left out without script). Each line draws in once with the figure motion
+  (`data-reveal="draw"`): it wipes in from the left at a constant speed,
+  like a scope beam, the group's later paths 60ms apart. It is one clip on
+  the box round the path's list: a path on one line opens from lesson 1,
+  a path that wraps opens its systems together, and the marks keep their
+  place from the first frame, so a tap during the draw-in lands. The clip
+  is not composited, so the box repaints on every frame while it opens
+  (paint only, no layout; no dropped frames measured). No draw-in for a
+  map on screen at load, with reduced motion, without script or in
+  print. Server-rendered; works with JavaScript off.
 - **Keep the map cheap.** 147 lessons are 147 cells on a slow phone. A
   cell is an `li` and a plain `a` that draws its glyph and its stretch of
   line as two background layers: no pseudo-elements on the link (only the

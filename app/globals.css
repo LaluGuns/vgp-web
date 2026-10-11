@@ -1317,15 +1317,11 @@ body::before {
    a height kept for them, so no title is cut and the card never changes size. A mark chosen under
    the card moves up clear of it (PathMapLive). It leaves while the map is off screen (data-out) and
    after a tap elsewhere, and steps up over a playing demo's Stop button. Before the first tap the
-   gesture is said under the map's heading (.vgp-map-tap-hint), in a box it has from the first paint
-   and shown once the script runs. */
+   gesture is said under the map's heading (.vgp-map-tap-hint), from the first paint, so it never
+   pops in when the script arrives (a tap in that first second opens the lesson at once). */
 @media (hover: none) and (max-width: 1023.98px) {
   .vgp-map-tap-hint {
     display: inline;
-  }
-
-  .vgp-map-tap-hint:not([data-live]) {
-    visibility: hidden;
   }
 }
 
@@ -1337,15 +1333,19 @@ body::before {
 }
 
 @media (hover: none) and (max-width: 1023.98px) {
+  /* The card is 14 px taller than its text needs (shared out as padding) and reaches down to just
+     above the tab bar: that strip is where a mark chosen there was before it moved up, so a second tap
+     in the same place lands on the card and opens it, and the card's own background shows there, not
+     the page. Over a playing demo's Stop button it has no strip, so it never covers the button. */
   .vgp-map-readout {
     position: fixed;
     top: auto;
     left: 16px;
     right: 16px;
-    bottom: calc(max(env(safe-area-inset-bottom), 6px) + 68px);
+    bottom: calc(max(env(safe-area-inset-bottom), 6px) + 54px);
     z-index: 30;
     max-width: 28rem;
-    height: 85px;
+    height: 99px;
     margin: 0 auto;
     padding: 0;
     border: 1px solid var(--line-strong);
@@ -1367,16 +1367,15 @@ body::before {
 
   .vgp-map-readout-link {
     height: 100%;
-    padding: 8px 16px 7px;
+    padding: 15px 16px 14px;
     border-radius: 5px;
   }
 
-  /* The link takes taps on the card's border too, and in the strip between the card and the tab bar,
-     where a mark that was chosen there was before it moved up: a second tap in the same place opens it. */
+  /* The link takes taps on the card's border too. */
   .vgp-map-readout-link::after {
     content: '';
     position: absolute;
-    inset: -1px -1px -14px;
+    inset: -1px;
   }
 
   .vgp-map-readout [data-title] {
@@ -1390,6 +1389,11 @@ body::before {
 
   body:has(.vgp-demo-stop[data-away]) .vgp-map-readout {
     bottom: calc(max(env(safe-area-inset-bottom), 6px) + 124px);
+    height: 85px;
+  }
+
+  body:has(.vgp-demo-stop[data-away]) .vgp-map-readout-link {
+    padding: 8px 16px 7px;
   }
 
   .vgp-map-box {
@@ -1404,7 +1408,7 @@ body::before {
 
 @media (hover: none) and (max-width: 1023.98px) and (min-width: 768px), (hover: none) and (max-width: 1023.98px) and (max-height: 499.98px) {
   .vgp-map-readout {
-    bottom: 1.5rem;
+    bottom: calc(1.5rem - 14px);
   }
 
   body:has(.vgp-demo-stop[data-away]) .vgp-map-readout {
@@ -1415,6 +1419,10 @@ body::before {
 /* Under 360 px the longest titles need a third line. */
 @media (hover: none) and (max-width: 359.98px) {
   .vgp-map-readout {
+    height: 121px;
+  }
+
+  body:has(.vgp-demo-stop[data-away]) .vgp-map-readout {
     height: 107px;
   }
 
@@ -1438,7 +1446,11 @@ body::before {
    around the list (8 px clear of it, so focus rings show) opens from the left, so every mark sits
    in its place from the first frame and a mark already uncovered takes a tap. (Two transforms, the
    box sliding in while the list slid back, ran out of step and threw the marks up to 366 px aside
-   for 0.4 s.) The paper (the lane's rules) is outside and stays put. */
+   for 0.4 s.) The paper (the lane's rules) is outside and stays put. One clip per path, so a path that
+   wraps opens its systems together, each from its left end. A clip-path animation is not composited:
+   the box repaints every frame while it opens (round 7, at 4x CPU slowdown: about 0.3 s of paint over
+   a scroll down the map, no dropped frames). A cover moved by a transform would composite, but its
+   paper would slide over the lane's. */
 .vgp-map-wipe {
   margin: -8px;
   padding: 8px;

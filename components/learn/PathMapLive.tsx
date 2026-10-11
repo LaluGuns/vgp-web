@@ -33,14 +33,13 @@ const FOCUS_GAP = 8;
  * focus reaches it. A click with a modifier key, or with no script, is an
  * ordinary link.
  */
-export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: string; readoutId: string; announceId?: string; hintId?: string }) {
+export function PathMapLive({ mapId, readoutId, announceId }: { mapId: string; readoutId: string; announceId?: string }) {
     const router = useRouter();
 
     useEffect(() => {
         const map = document.getElementById(mapId);
         const readout = document.getElementById(readoutId);
         const announce = announceId ? document.getElementById(announceId) : null;
-        const tapHint = hintId ? document.getElementById(hintId) : null;
         if (!map) return;
         const links = Array.from(map.querySelectorAll<HTMLAnchorElement>('a[data-slug]'));
         const counts = Array.from(map.querySelectorAll<HTMLElement>('[data-map-count]'));
@@ -235,7 +234,6 @@ export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: s
         onScreen.observe(map);
 
         readout?.setAttribute('data-live', '');
-        tapHint?.setAttribute('data-live', '');
         const frame = requestAnimationFrame(() => {
             paint();
             onResize();
@@ -266,7 +264,7 @@ export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: s
             document.removeEventListener('pointerdown', onDownElsewhere, true);
             onScreen.disconnect();
         };
-    }, [mapId, readoutId, announceId, hintId, router]);
+    }, [mapId, readoutId, announceId, router]);
 
     return null;
 }

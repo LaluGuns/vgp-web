@@ -34,6 +34,12 @@ const FAMILIES: { dialect: DialectName; name: string }[] = [
     { dialect: 'business', name: 'Business' },
 ];
 
+/** The map's name for a path's group ("Sound and mixing" for Mixing & Mastering), shown with its mark on the path page. */
+export function familyName(category: string): string | undefined {
+    const dialect = dialectForCategory(category).name;
+    return FAMILIES.find((family) => family.dialect === dialect)?.name;
+}
+
 export function mapFamilies(): MapFamily[] {
     return FAMILIES.map(({ dialect, name }) => ({
         dialect: DIALECTS[dialect],

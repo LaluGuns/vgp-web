@@ -6,6 +6,7 @@ import { PathLessons } from '@/components/blog/paths/PathLessons';
 import { DialectMark } from '@/components/blog/figures/DialectMark';
 import { LearnHeader } from '@/components/learn/LearnHeader';
 import { LearnNav } from '@/components/learn/LearnNav';
+import { familyName } from '@/components/learn/map-data';
 import type { Category } from '@/lib/blog-data';
 import { dialectForCategory } from '@/lib/blog/dialects';
 import { lessonFeatures, type LearningPath } from '@/lib/blog/paths';
@@ -19,6 +20,7 @@ interface CategoryPageProps {
 
 /** A category read as a learning path, in lesson order. */
 export function CategoryPage({ category, path, allCategories, glossaryCount }: CategoryPageProps) {
+    const group = familyName(category.slug);
     const lessons = path.articles.map((a) => ({
         slug: a.slug,
         title: a.title,
@@ -31,12 +33,13 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
         <PageTransition>
             <LearnNav current="paths" onPage={false} />
             <main id="main" tabIndex={-1} className="editorial-shell text-white focus:outline-none">
-                {/* The crumbs and the group's mark share one line above the title. The trail is the sub-navigation's:
+                {/* The crumbs and the path's group share one line above the title. The trail is the sub-navigation's:
                     Learn, then Paths (the path map on /learn, marked current above), as in the JSON-LD (page.tsx). The
-                    mark is the shape and colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
+                    group is named with its mark as on the path map ("Sound and mixing"); the mark is the shape and
+                    colour its lessons' figures use (docs/DESIGN.md, "Figure dialects"). */}
                 <LearnHeader
                     label={
-                        <>
+                        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                             <nav aria-label="Breadcrumb" className="-my-3 flex items-center gap-2">
                                 <TapLink href="/learn" className="hover:text-white">
                                     Learn
@@ -46,9 +49,15 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                                     Paths
                                 </TapLink>
                             </nav>
-                            {/* The crumbs already say this is a path, so the mark stands alone, as on the path map. */}
-                            <DialectMark dialect={dialectForCategory(category.slug)} className="ml-1" />
-                        </>
+                            {group ? (
+                                <p className="flex items-center gap-2 text-white/60">
+                                    <DialectMark dialect={dialectForCategory(category.slug)} />
+                                    {group}
+                                </p>
+                            ) : (
+                                <DialectMark dialect={dialectForCategory(category.slug)} className="ml-1" />
+                            )}
+                        </div>
                     }
                     title={category.name}
                     description={<p>{category.description}</p>}
@@ -61,7 +70,7 @@ export function CategoryPage({ category, path, allCategories, glossaryCount }: C
                     </p>
                 </LearnHeader>
 
-                <section className="px-4 pb-20 sm:px-6">
+                <section className="px-4 pb-20 print:pb-0 sm:px-6">
                     <div className="mx-auto max-w-7xl">
                         {lessons.length > 0 ? (
                             <PathLessons lessons={lessons} />

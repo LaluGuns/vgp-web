@@ -75,7 +75,7 @@ export default function GlossaryPage() {
                     }
                 />
 
-                <section className="px-4 pb-20 sm:px-6">
+                <section className="px-4 pb-20 print:pb-0 sm:px-6">
                     <div className="mx-auto max-w-7xl">
                         <GlossaryLetters letters={letters} />
 
