@@ -227,7 +227,7 @@ const STEMS = ['kick', 'drums', 'riser', 'swell', 'stabs', 'bass', 'crash', 'ver
 /** Bus drive into the limiter: the same for both versions. */
 export const DRIVE_DB = -1;
 /** Riser level against its sample. */
-export const RISER_DB = 0;
+export const RISER_DB = -1;
 
 /**
  * Render one version: { bus (pre-limiter), out (after limiter), gain (limiter),
