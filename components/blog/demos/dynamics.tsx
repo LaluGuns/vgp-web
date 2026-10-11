@@ -202,8 +202,9 @@ function realDryStats(loop: RealLoop): Promise<{ peak: number; power: number }> 
     let job = realDry.get(loop);
     if (!job) {
         job = (async () => {
-            const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1 }, (_, src, [tap]) => src.connect(tap));
-            const [from, to] = r.span(0, matchPart(loop));
+            // Those two bars and their run-in only, as a setting is measured: a quarter of the whole loop's render.
+            const r = await renderLoop(loop, { gain: loopGain(loop, REAL_IN), taps: 1, weighted: 1, part: matchPart(loop), runIn: MATCH_RUN_IN }, (_, src, [tap]) => src.connect(tap));
+            const [from, to] = r.span();
             return { peak: await stereoPeak(r.x[0], from, to), power: await stereoPower(r.k[0], from, to) };
         })();
         job.catch(() => realDry.delete(loop));
@@ -278,7 +279,11 @@ export function CompressorDemo() {
         );
         const n = { comp, undo, makeup, dry, wet, ctx, feed };
         nodes.current = n;
-        if (analysis) applyMatch(n, analysis, false);
+        if (analysis) {
+            applyMatch(n, analysis, false);
+            // Pressed while a new setting is still being measured: held back as a new setting is (below).
+            if (!sameParams(analysis.params, settings)) holdBack(n, analysis, settings);
+        }
         return () => {
             feed.stop();
             nodes.current = null;

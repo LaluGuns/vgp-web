@@ -688,7 +688,19 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
     const d = dialectOf(dialect);
     const narrow = w < 480;
     const [lo, hi] = spec.range ?? [20, 20000];
-    const named = spec.curves.filter((c) => c.label).map((c) => ({ label: c.label!, dashed: c.dashed, dotted: c.dotted, muted: c.muted }));
+    // A hump is filled under in the lit dialects (and in grey when muted) unless dashed or dotted.
+    const filled = (c: SpectrumCurve) => c.kind === 'hump' && !c.dashed && !c.dotted && (c.muted || d.fillUnder);
+    // Harmonics and humps get samples in their own shape, so a key of spikes and a band never shows two like lines.
+    // A dashed hump keeps the straight dashed sample: the dialect's dash breaks a hump that small into pieces.
+    const named = spec.curves
+        .filter((c) => c.label)
+        .map((c) => ({
+            label: c.label!,
+            dashed: c.dashed,
+            dotted: c.dotted,
+            muted: c.muted,
+            sample: c.kind === 'harmonics' ? ('ticks' as const) : c.kind === 'hump' && !c.dashed ? (filled(c) ? ('area' as const) : ('hump' as const)) : undefined,
+        }));
     const leg = legend(named, 0, 14, w, d);
     const gainMode = spec.mode === 'gain';
     const left = gainMode ? 40 : 4;
@@ -800,7 +812,7 @@ export function Spectrum({ spec, w, dialect }: { spec: SpectrumFigure; w: number
         // A curve that leaves the plot stops just past its edge, under the clip, so nothing of it reaches the labels round the plot.
         const pts = sampleAt.map((f) => [fx(f), clamp(gainMode ? gy(value(f)) : ly(value(f)), top - 3, bottom + 3)] as [number, number]);
         const path = linePath(pts);
-        const fill = curve.kind === 'hump' && !curve.dashed && !curve.dotted && (curve.muted || d.fillUnder);
+        const fill = filled(curve);
         // Grey curves are context and stay put. A solid accent curve draws left to right; a dashed or dotted one fades.
         const lineDelay = 120 + i * 100;
         const motion = curve.muted ? {} : draw(curve.dashed || curve.dotted ? 'fade' : 'line', lineDelay);

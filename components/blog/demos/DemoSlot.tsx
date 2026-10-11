@@ -42,7 +42,7 @@ export function DemoSlot({ id, dialect }: { id: string; dialect?: string }) {
             <div
                 style={size}
                 // One reserved height per width range (lib/blog/demos.ts). Only min-[...] variants, so Tailwind orders them by width.
-                className="mt-6 min-h-[var(--demo-h0)] min-[360px]:min-h-[var(--demo-h1)] min-[375px]:min-h-[var(--demo-h2)] min-[390px]:min-h-[var(--demo-h3)] min-[393px]:min-h-[var(--demo-h4)] min-[412px]:min-h-[var(--demo-h5)] min-[428px]:min-h-[var(--demo-h6)] min-[640px]:min-h-[var(--demo-h7)] min-[736px]:min-h-[var(--demo-h8)] min-[1024px]:min-h-[var(--demo-h9)] min-[1104px]:min-h-[var(--demo-h10)] [@media(scripting:none)]:min-h-0"
+                className="mt-6 min-h-[var(--demo-h0)] min-[344px]:min-h-[var(--demo-h1)] min-[360px]:min-h-[var(--demo-h2)] min-[375px]:min-h-[var(--demo-h3)] min-[390px]:min-h-[var(--demo-h4)] min-[393px]:min-h-[var(--demo-h5)] min-[412px]:min-h-[var(--demo-h6)] min-[428px]:min-h-[var(--demo-h7)] min-[480px]:min-h-[var(--demo-h8)] min-[540px]:min-h-[var(--demo-h9)] min-[600px]:min-h-[var(--demo-h10)] min-[640px]:min-h-[var(--demo-h11)] min-[736px]:min-h-[var(--demo-h12)] min-[1024px]:min-h-[var(--demo-h13)] min-[1104px]:min-h-[var(--demo-h14)] [@media(scripting:none)]:min-h-0"
             >
                 <DemoBoot id={id} dialect={d} level={level}>
                     {/* DemoMount's first render, until its chunk is here. */}

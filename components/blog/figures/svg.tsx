@@ -181,7 +181,9 @@ export function Svg({ w, h, label, d, children }: { w: number; h: number; label:
             className="vgp-fig block h-auto overflow-visible"
             style={{ fontFamily: 'var(--font-display)', fontVariantNumeric: d.tabular ? 'tabular-nums' : undefined }}
         >
-            {children}
+            {/* The image's name is the whole description (alt). Chrome keeps the drawing's text under the img role, so a
+                screen reader read its labels again after it; this group takes them out of the accessibility tree. */}
+            <g aria-hidden="true">{children}</g>
         </svg>
     );
 }
@@ -763,8 +765,39 @@ export interface LegendItem {
     stroke?: string;
     /** Draw a filled swatch instead of a line. */
     swatch?: string;
+    /**
+     * A sample in the shape of the mark, where a line would not tell two kinds apart (spectrum curves): `ticks`,
+     * three falling lines, for harmonics; `hump` for a hump, and `area` for one the plot fills under.
+     */
+    sample?: 'ticks' | 'hump' | 'area';
     /** Line width of the sample. A reference line's sample is as thin as the line. */
     width?: number;
+}
+
+/** A hump 18 units wide and 10 high, standing on the label's baseline. */
+const humpPath = (x: number, y: number) => `M${x},${y + 0.5}C${x + 5},${y + 0.5} ${x + 6},${y - 9.5} ${x + 9},${y - 9.5}C${x + 12},${y - 9.5} ${x + 13},${y + 0.5} ${x + 18},${y + 0.5}`;
+
+/** A sample in the shape of its mark (LegendItem `sample`), in the item's line style. */
+function shapedSample(item: LegendItem, x: number, y: number, d: Dialect): ReactNode {
+    const stroke = item.muted ? C.dataGrey : C.accent;
+    const style = item.dotted ? dots(d, item.muted) : { stroke, strokeDasharray: item.dashed ? d.refDash : undefined };
+    if (item.sample === 'ticks') {
+        // Falling like a harmonic series, with flat ends, as the plot draws them.
+        return (
+            <g>
+                {[10, 6, 4].map((height, i) => (
+                    <line key={i} x1={x + 2 + i * 6} x2={x + 2 + i * 6} y1={y + 0.5} y2={y + 0.5 - height} strokeWidth={item.dotted ? undefined : 2} {...style} />
+                ))}
+            </g>
+        );
+    }
+    const path = humpPath(x, y);
+    return (
+        <g>
+            {item.sample === 'area' ? <path d={`${path}Z`} {...(item.muted ? { fill: C.lane } : areaFill(d))} /> : null}
+            <path d={path} fill="none" strokeWidth={item.dotted ? undefined : 1.8} strokeLinecap={item.dotted ? undefined : d.cap} strokeLinejoin="round" {...style} />
+        </g>
+    );
 }
 
 /** Legend of line samples that wraps to the available width. Samples take the dialect's line ends and dashes. */
@@ -783,7 +816,7 @@ export function legend(
     // A dotted sample is three dots, which in the wider-spaced dialects runs past a line sample: its label steps
     // right to keep the same air after the sample.
     const dotW = d.line + 0.65;
-    const labelAt = (item: LegendItem) => (item.dotted && !item.swatch ? Math.max(24, Math.ceil(dotPeriod(d) * 2 + dotW + 6)) : 24);
+    const labelAt = (item: LegendItem) => (item.dotted && !item.swatch && !item.sample ? Math.max(24, Math.ceil(dotPeriod(d) * 2 + dotW + 6)) : 24);
     const placed = items.map((item, i) => {
         const w = labelAt(item) + textWidth(item.label) + 16;
         // A few units of slack, since label widths are estimated.
@@ -801,6 +834,8 @@ export function legend(
                 <g key={item.label}>
                     {item.swatch ? (
                         <rect x={lx} y={ly - 10} width={16} height={10} rx={cornerOf(d, 10, 16)} fill={item.swatch} />
+                    ) : item.sample ? (
+                        shapedSample(item, lx, ly, d)
                     ) : item.dotted ? (
                         // The same dots as on the line, a row of three from the sample's left edge. The line runs half a unit
                         // past the third dot, so rounding its end never drops that dot.

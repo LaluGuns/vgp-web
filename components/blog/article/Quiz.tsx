@@ -45,7 +45,8 @@ export function Quiz({ questions, id: headingId }: { questions: QuizQuestion[]; 
 
     return (
         <section className="mt-16 border-t border-white/10 pt-10">
-            <p className="mb-2 text-sm font-medium text-white/50">{questions.length} questions</p>
+            {/* In print the count stays with the heading it introduces, never alone at the foot of a page. */}
+            <p className="mb-2 text-sm font-medium text-white/50 print:break-after-avoid">{questions.length} questions</p>
             <h2 id={titleId} ref={heading} className="scroll-mt-8 text-2xl font-semibold tracking-[-0.02em] text-white focus:outline-none sm:text-3xl">
                 Check yourself
             </h2>

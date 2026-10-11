@@ -1810,7 +1810,11 @@ export function LimiterDemo() {
         );
         const n = { ctx, norm, lim, match, restore, master, sel, feed };
         nodes.current = n;
-        if (analysis) applyLimit(n, analysis, false);
+        if (analysis) {
+            applyLimit(n, analysis, false);
+            // Pressed while a new drive is still being measured: held back as a new drive is (below).
+            holdLimit(n, analysis, drive);
+        }
         return () => {
             feed.stop();
             nodes.current = null;
@@ -1819,13 +1823,21 @@ export function LimiterDemo() {
         };
     }, !loading);
 
-    // New drive and release are heard at once, with the matching gain the last setting had.
+    // The measurement the matching gain now playing came from.
+    const measured = useRef(analysis);
+    useEffect(() => {
+        measured.current = analysis;
+    });
+
+    // New drive and release are heard at once, with the matching gain the last setting had, turned down by
+    // any rise in drive until the new one is measured.
     useEffect(() => {
         const n = nodes.current;
         if (!n) return;
         const t = n.ctx.currentTime;
         n.lim.drive.gain.setTargetAtTime(dbToGain(drive), t, 0.005);
         n.lim.comp.release.setValueAtTime(release / 1000, t);
+        if (measured.current) holdLimit(n, measured.current, drive);
     }, [drive, release]);
 
     // Their own matching gain follows once it has been measured, and a new source with its first measurement.
@@ -1919,6 +1931,16 @@ function applyLimit(n: { ctx: AudioContext; norm: GainNode; lim: LimiterNodes; m
     else set(n.match.gain, a.match);
     n.lim.toCeiling.gain.setValueAtTime(1 / (a.makeup * dbToGain(CEILING)), t);
     n.master.gain.setTargetAtTime(1, t, 0.02);
+}
+
+/**
+ * More drive raises the limiter's output by at most as many dB (by less once
+ * it limits), so until a higher drive has been measured the last matching
+ * gain is lowered by the whole rise: the moment between the two measurements
+ * may play a little quieter, never louder. Less drive keeps the last gain.
+ */
+function holdLimit(n: { ctx: AudioContext; match: GainNode }, a: LimitAnalysis, drive: number) {
+    if (drive > a.params.drive) n.match.gain.setTargetAtTime(a.match * dbToGain(a.params.drive - drive), n.ctx.currentTime, 0.005);
 }
 
 // ── Clipping at the converter ───────────────────────────────────────

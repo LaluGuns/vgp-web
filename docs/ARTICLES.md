@@ -253,8 +253,13 @@ done, and the switch goes live with its matching. Play pressed meanwhile
 waits, and the button says "Loading…". A demo that measures each setting
 (compressor, limiter, saturation) measures it over bars 3 and 4 of the loop
 after half a second of run-in (`matchPart`), which lands within about 0.1 dB
-of a whole pass at a quarter of the cost, and a new setting is heard at once
-with the last setting's matching gain until its own arrives. The fetch stops
+of a whole pass at a quarter of the cost (the one-off dry measurements use
+the same bars), and a new setting is heard at once: saturation plays an
+estimate of the new setting's matching gain straight away, and the
+compressor and limiter hold the last gain back by the rise in drive until
+the new setting is measured, also when Play is pressed meanwhile. A demo
+readout never widens the page: under 360px it is one column, and a value
+that would not fit is cut with an ellipsis. The fetch stops
 if every demo that wanted the loop goes back to Synth or leaves the page,
 and the audio context it is decoded in is made by the press that picked Real
 mix, never without one. On the

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, rms, sequence, snare, type Engine } from './engine';
+import { bass, fadeOut, hat, kick, midi, noiseBuffer, peekEngine, pluck, rms, scheduleSteps, sequence, snare, type Engine } from './engine';
 import { MATCH_RUN_IN, SourceChoice, loopGain, matchPart, renderLoop, startFeed, stereoPower, useSource, type Feed, type RealLoop } from './realmix';
 import { Meter, PlayButton, Segmented, Slider, accentAlpha, ruleDash, useAnalysis, useDialect, useFrame, usePlayer, whenIdle } from './ui';
 
@@ -606,15 +606,19 @@ export function MaskingDemo() {
     );
 }
 
+type SatKind = 'off' | 'soft' | 'hard';
+
+/** What the shaper does to one sample at a gain of `k` (a WaveShaperNode holds its input to ±1 first). */
+function shape(kind: 'soft' | 'hard', k: number, x: number): number {
+    const v = (x > 1 ? 1 : x < -1 ? -1 : x) * k;
+    return kind === 'soft' ? Math.tanh(v) : v > 1 ? 1 : v < -1 ? -1 : v;
+}
+
 function shaperCurve(kind: 'soft' | 'hard', drive: number): Float32Array<ArrayBuffer> {
     const n = 2048;
     const curve = new Float32Array(n);
     const k = 10 ** (drive / 20);
-    for (let i = 0; i < n; i++) {
-        const x = (i / (n - 1)) * 2 - 1;
-        const v = x * k;
-        curve[i] = kind === 'soft' ? Math.tanh(v) : Math.max(-1, Math.min(1, v));
-    }
+    for (let i = 0; i < n; i++) curve[i] = shape(kind, k, (i / (n - 1)) * 2 - 1);
     return curve;
 }
 
@@ -622,9 +626,102 @@ function shaperCurve(kind: 'soft' | 'hard', drive: number): Float32Array<ArrayBu
 const SAT_REAL_IN = -11.3;
 /** The demo's input gain, ahead of the shaper. */
 const SAT_IN = 0.8;
+const SAT_BPM = 92;
+/** The samples each of the synth's level readings covers (its analysers' fftSize). */
+const SAT_BLOCK = 2048;
+const clampGain = (g: number) => Math.min(4, Math.max(0.05, g));
+
+/** One step of the synth loop: bass, chords and a snare. The demo plays it live, and once offline for the estimate below. */
+function satStep(ctx: BaseAudioContext, into: AudioNode, step: number, time: number, dur: number) {
+    if (step === 0) bass(ctx, into, time, midi(33), dur * 6, 0.9);
+    if (step === 8) bass(ctx, into, time, midi(36), dur * 6, 0.9);
+    if (step % 4 === 2) for (const n of [57, 60, 64]) pluck(ctx, into, time, midi(n), dur * 2, 0.7);
+    if (step === 4 || step === 12) snare(ctx, into, time, 0.6);
+}
+
+let satBarJob: Promise<Float32Array> | null = null;
+/** The bar below once it is rendered, for the moments that cannot wait for a promise (a slider step). */
+let satBar: Float32Array | null = null;
+
+/**
+ * One bar of the synth loop as it reaches the shaper, rendered offline once
+ * per page while it is idle: the second of two bars, so the first one's tails
+ * ring into it as they do while the loop repeats. The synth is mono.
+ */
+function prepareSatBar(): Promise<Float32Array> {
+    satBarJob ??= (async () => {
+        const rate = 48000;
+        const step = 60 / SAT_BPM / 4;
+        const bar = Math.round(16 * step * rate);
+        const ctx = new OfflineAudioContext(1, bar * 2, rate);
+        const into = ctx.createGain();
+        into.gain.value = SAT_IN;
+        into.connect(ctx.destination);
+        await scheduleSteps(32, (s) => satStep(ctx, into, s % 16, s * step, step));
+        const out = await ctx.startRendering();
+        satBar = out.getChannelData(0).slice(bar);
+        return satBar;
+    })().catch((error: unknown) => {
+        satBarJob = null;
+        throw error;
+    });
+    return satBarJob;
+}
+
+/** Every this many samples of the bar are read: the curve has no memory, so they give the same levels at a quarter of the work. */
+const SAT_STRIDE = 4;
+
+/**
+ * The mean RMS of SAT_BLOCK-sample blocks taken round the bar (as a loop, one
+ * starting every 256 samples), clean or through a curve: what the synth's
+ * running level readings average to while it plays.
+ */
+function blockRms(bar: Float32Array, kind?: 'soft' | 'hard', drive = 0): number {
+    const n = Math.floor(bar.length / SAT_STRIDE);
+    const block = SAT_BLOCK / SAT_STRIDE;
+    const k = 10 ** (drive / 20);
+    // Running sums of the squares, so a block costs two lookups.
+    const sums = new Float64Array(n + 1);
+    for (let i = 0; i < n; i++) {
+        const x = bar[i * SAT_STRIDE];
+        const v = kind ? shape(kind, k, x) : x;
+        sums[i + 1] = sums[i] + v * v;
+    }
+    let sum = 0;
+    let count = 0;
+    for (let a = 0; a < n; a += 256 / SAT_STRIDE) {
+        const b = a + block;
+        const power = b <= n ? sums[b] - sums[a] : sums[n] - sums[a] + sums[b - n];
+        sum += Math.sqrt(Math.max(0, power) / block);
+        count++;
+    }
+    return sum / count;
+}
+
+const synthGains = new Map<string, number>();
+
+/** The matching gain the synth's level follower settles on at a setting, worked out from the bar once per setting (about a millisecond). */
+function synthGain(bar: Float32Array, kind: 'soft' | 'hard', drive: number): number {
+    let clean = synthGains.get('clean');
+    if (clean === undefined) {
+        clean = blockRms(bar);
+        synthGains.set('clean', clean);
+    }
+    const key = `${kind}|${drive}`;
+    let g = synthGains.get(key);
+    if (g === undefined) {
+        const wet = blockRms(bar, kind, drive);
+        g = wet > 1e-6 ? clampGain(clean / wet) : 1;
+        synthGains.set(key, g);
+    }
+    return g;
+}
 
 interface SatMatch {
     real: RealLoop;
+    /** The setting it was measured at. */
+    kind: SatKind;
+    drive: number;
     /** Gain after the shaper that plays it at the clean loop's loudness. */
     gain: number;
 }
@@ -639,8 +736,11 @@ function satDryPower(loop: RealLoop): Promise<number> {
     let job = satDry.get(loop);
     if (!job) {
         job = (async () => {
-            const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true }, (_, src, [tap]) => src.connect(tap));
-            const [from, to] = r.span(0, matchPart(loop));
+            // Those two bars and their run-in only, as a setting is measured: a quarter of the whole loop's render.
+            const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true, part: matchPart(loop), runIn: MATCH_RUN_IN }, (_, src, [tap]) =>
+                src.connect(tap),
+            );
+            const [from, to] = r.span();
             return stereoPower(r.k[0], from, to);
         })();
         job.catch(() => satDry.delete(loop));
@@ -654,11 +754,11 @@ function satDryPower(loop: RealLoop): Promise<number> {
  * loop that stand in for the whole of it (realmix.tsx matchPart) through the
  * shaper, offline, against the same bars clean, both K-weighted. One fixed
  * gain per setting, so the mix does not breathe with a running level match.
- * A new setting is heard at once, with the last setting's gain, until its
- * own lands.
+ * A new setting is heard at once with an estimate of its gain (realGuess)
+ * until its own lands.
  */
-async function matchSatReal(loop: RealLoop, kind: 'off' | 'soft' | 'hard', drive: number): Promise<SatMatch> {
-    if (kind === 'off') return { real: loop, gain: 1 };
+async function matchSatReal(loop: RealLoop, kind: SatKind, drive: number): Promise<SatMatch> {
+    if (kind === 'off') return { real: loop, kind, drive, gain: 1 };
     const dry = await satDryPower(loop);
     const r = await renderLoop(loop, { gain: loopGain(loop, SAT_REAL_IN) * SAT_IN, taps: 1, weighted: 1, weightedOnly: true, part: matchPart(loop), runIn: MATCH_RUN_IN }, (ctx, src, [tap]) => {
         const shaper = ctx.createWaveShaper();
@@ -668,13 +768,64 @@ async function matchSatReal(loop: RealLoop, kind: 'off' | 'soft' | 'hard', drive
     });
     const [from, to] = r.span();
     const wet = await stereoPower(r.k[0], from, to);
-    return { real: loop, gain: wet > 0 ? Math.min(4, Math.max(0.05, Math.sqrt(dry / wet))) : 1 };
+    return { real: loop, kind, drive, gain: wet > 0 ? clampGain(Math.sqrt(dry / wet)) : 1 };
+}
+
+const realGains = new WeakMap<RealLoop, Map<string, number>>();
+
+/**
+ * How far a curve turns the real loop's measured bars up, as the gain that
+ * undoes it: unweighted power, clean against shaped, over every eighth sample
+ * (the curve has no memory, so 40,000 of them give the same power), about a
+ * millisecond per setting.
+ */
+function realGain(loop: RealLoop, kind: 'soft' | 'hard', drive: number): number {
+    let byKey = realGains.get(loop);
+    if (!byKey) {
+        byKey = new Map();
+        realGains.set(loop, byKey);
+    }
+    const key = `${kind}|${drive}`;
+    let g = byKey.get(key);
+    if (g === undefined) {
+        const { buffer } = loop;
+        const part = matchPart(loop);
+        const from = Math.floor((loop.start + part.from) * buffer.sampleRate);
+        const to = Math.min(buffer.length, from + Math.round(part.seconds * buffer.sampleRate));
+        const k = 10 ** (drive / 20);
+        const level = loopGain(loop, SAT_REAL_IN) * SAT_IN;
+        let clean = 0;
+        let wet = 0;
+        for (let c = 0; c < Math.min(2, buffer.numberOfChannels); c++) {
+            const x = buffer.getChannelData(c);
+            for (let i = from; i < to; i += 8) {
+                const v = x[i] * level;
+                const y = shape(kind, k, v);
+                clean += v * v;
+                wet += y * y;
+            }
+        }
+        g = wet > 0 ? Math.sqrt(clean / wet) : 1;
+        byKey.set(key, g);
+    }
+    return g;
+}
+
+/**
+ * The gain a setting plays the real mix with until its own is measured: the
+ * last measured setting's, moved by as much as the two curves' estimates
+ * differ (realGain), which takes the K-weighting's share out of the estimate.
+ */
+function realGuess(sat: SatMatch, kind: SatKind, drive: number): number {
+    if (kind === 'off' || (sat.kind === kind && sat.drive === drive)) return sat.gain;
+    const now = realGain(sat.real, kind, drive);
+    return clampGain(sat.kind === 'off' ? now : (sat.gain * now) / realGain(sat.real, sat.kind, sat.drive));
 }
 
 /** Bass and chords through a waveshaper, level-matched so you hear harmonics, not volume. */
 export function SaturationDemo() {
     const [drive, setDrive] = useState(12);
-    const [kind, setKind] = useState<'off' | 'soft' | 'hard'>('soft');
+    const [kind, setKind] = useState<SatKind>('soft');
     const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
     const [gr, setGr] = useState(0);
     const source = useSource('chrome-teeth');
@@ -683,7 +834,29 @@ export function SaturationDemo() {
     // The real mix goes live with its first measured match; the synth is matched as it plays.
     const fed = sat?.real ?? null;
     const loading = source.pick === 'real' && (!real || fed !== real);
-    const nodes = useRef<{ ctx: AudioContext; shaper: WaveShaperNode; dry: GainNode; wet: GainNode; matched: GainNode; feed: Feed; real: { current: boolean } } | null>(null);
+    const nodes = useRef<{
+        ctx: AudioContext;
+        shaper: WaveShaperNode;
+        dry: GainNode;
+        wet: GainNode;
+        matched: GainNode;
+        feed: Feed;
+        real: { current: boolean };
+        retune: (kind: 'soft' | 'hard', drive: number, sat: SatMatch | null) => (() => void) | null;
+    } | null>(null);
+    // The setting now heard, for a bar that is rendered after Play.
+    const live = useRef({ kind, drive });
+
+    // The synth's bar is rendered while the page is idle, so Play and the first slider step already have it.
+    useEffect(
+        () =>
+            whenIdle(() => {
+                void prepareSatBar()
+                    .then((bar) => synthGain(bar, 'soft', 12))
+                    .catch(() => {});
+            }),
+        [],
+    );
 
     const player = usePlayer(({ ctx, out }: Engine) => {
         const master = ctx.createGain();
@@ -692,13 +865,14 @@ export function SaturationDemo() {
         src.gain.value = SAT_IN;
         const dry = ctx.createGain();
         const wet = ctx.createGain();
+        const curveKind = kind === 'hard' ? 'hard' : 'soft';
         const shaper = ctx.createWaveShaper();
-        shaper.curve = shaperCurve(kind === 'hard' ? 'hard' : 'soft', drive);
+        shaper.curve = shaperCurve(curveKind, drive);
         shaper.oversample = '4x';
         const matched = ctx.createGain();
         const pre = ctx.createAnalyser();
         const post = ctx.createAnalyser();
-        pre.fftSize = post.fftSize = 2048;
+        pre.fftSize = post.fftSize = SAT_BLOCK;
         const an = ctx.createAnalyser();
         an.fftSize = SPECTRUM_FFT;
         src.connect(pre);
@@ -709,35 +883,76 @@ export function SaturationDemo() {
         dry.gain.value = kind === 'off' ? 1 : 0;
         wet.gain.value = kind === 'off' ? 0 : 1;
         const isReal = { current: fed !== null };
-        if (sat) matched.gain.value = sat.gain;
+        // The synth's running level readings, before and after the shaper.
+        let sa = 0;
+        let sb = 0;
+        // The follower leaves the gain alone until `hold` (its readings are still too few, or the last
+        // curve's), and its after-shaper reading until `fresh` (its block still holds the last curve).
+        let hold = 0;
+        let fresh = 0;
+        // A new curve's matching gain at once, from the estimate: a lower gain lands with the curve, a higher one
+        // rises over 10 ms just after it, so the switch never plays louder than either setting for a moment.
+        // On the synth the follower goes on from it: its after-shaper reading becomes the one the estimate implies.
+        const seed = (g: number, follow: boolean) => {
+            const t = ctx.currentTime;
+            if (g < matched.gain.value) {
+                matched.gain.cancelScheduledValues(t);
+                matched.gain.setValueAtTime(g, t);
+            } else matched.gain.setTargetAtTime(g, t + 0.01, 0.003);
+            if (!follow) return;
+            if (sa > 0) sb = sa / g;
+            hold = fresh = t + 0.05;
+            setGr(20 * Math.log10(1 / g));
+        };
+        // Works the estimate out now (a few ms, more on a slow phone) and returns the step that applies it, so the
+        // caller can hand the new curve and its gain to the audio thread together.
+        const retune = (k: 'soft' | 'hard', d: number, measured: SatMatch | null) => {
+            if (isReal.current) {
+                if (!measured) return null;
+                const g = realGuess(measured, k, d);
+                return () => seed(g, false);
+            }
+            if (!satBar) return null;
+            const g = synthGain(satBar, k, d);
+            return () => seed(g, true);
+        };
+        if (sat) matched.gain.value = realGuess(sat, kind, drive);
+        else if (satBar) {
+            const g = synthGain(satBar, curveKind, drive);
+            matched.gain.value = g;
+            setGr(20 * Math.log10(1 / g));
+            // A few readings in, the follower takes over from the estimate.
+            hold = ctx.currentTime + 0.6;
+        } else
+            void prepareSatBar()
+                .then(() => {
+                    const now = live.current;
+                    if (nodes.current?.matched === matched && now.kind !== 'off') retune(now.kind, now.drive, null)?.();
+                })
+                .catch(() => {});
         const feed = startFeed(
             ctx,
             src,
             (into) => {
-                const seq = sequence(ctx, 92, 16, (step, time, dur) => {
-                    if (step === 0) bass(ctx, into, time, midi(33), dur * 6, 0.9);
-                    if (step === 8) bass(ctx, into, time, midi(36), dur * 6, 0.9);
-                    if (step % 4 === 2) for (const n of [57, 60, 64]) pluck(ctx, into, time, midi(n), dur * 2, 0.7);
-                    if (step === 4 || step === 12) snare(ctx, into, time, 0.6);
-                });
+                const seq = sequence(ctx, SAT_BPM, 16, (step, time, dur) => satStep(ctx, into, step, time, dur));
                 return () => seq.stop();
             },
             fed,
             (loop) => loopGain(loop, SAT_REAL_IN),
         );
-        nodes.current = { ctx, shaper, dry, wet, matched, feed, real: isReal };
+        nodes.current = { ctx, shaper, dry, wet, matched, feed, real: isReal, retune };
         setAnalyser(an);
-        const a = new Float32Array(2048);
-        const b = new Float32Array(2048);
-        let sa = 0;
-        let sb = 0;
+        const a = new Float32Array(SAT_BLOCK);
+        const b = new Float32Array(SAT_BLOCK);
         const timer = window.setInterval(() => {
+            const t = ctx.currentTime;
             sa = sa * 0.85 + rms(pre, a) * 0.15;
+            if (t < fresh) return;
             sb = sb * 0.85 + rms(post, b) * 0.15;
             // The real mix plays with its measured match instead (below).
-            if (sb > 1e-4 && !isReal.current) {
-                const g = Math.min(4, Math.max(0.05, sa / sb));
-                matched.gain.setTargetAtTime(g, ctx.currentTime, 0.2);
+            if (sb > 1e-4 && !isReal.current && t >= hold) {
+                const g = clampGain(sa / sb);
+                matched.gain.setTargetAtTime(g, t, 0.2);
                 setGr(20 * Math.log10(1 / g));
             }
         }, 60);
@@ -750,24 +965,34 @@ export function SaturationDemo() {
         };
     }, !loading);
 
-    // A measured match goes live with its setting, and a switch of source with its first one.
+    // A measured match goes live with its setting, and a switch of source with its first one. Clean has no
+    // match of its own: the shaped path is silent there and keeps the gain it has.
     useEffect(() => {
         const n = nodes.current;
         if (!n) return;
         n.feed.use(sat?.real ?? null);
         n.real.current = sat !== null;
-        if (sat) n.matched.gain.setTargetAtTime(sat.gain, n.ctx.currentTime, 0.01);
+        if (sat && sat.kind !== 'off') n.matched.gain.setTargetAtTime(sat.gain, n.ctx.currentTime, 0.01);
     }, [sat]);
-    const shownGr = sat ? 20 * Math.log10(1 / sat.gain) : gr;
+    const shownGr = sat && sat.kind !== 'off' ? 20 * Math.log10(1 / sat.gain) : gr;
 
-    const apply = (next: { drive?: number; kind?: 'off' | 'soft' | 'hard' }) => {
+    const apply = (next: { drive?: number; kind?: SatKind }) => {
         const d = next.drive ?? drive;
         const k = next.kind ?? kind;
         if (next.drive !== undefined) setDrive(d);
         if (next.kind) setKind(k);
+        live.current = { kind: k, drive: d };
         const n = nodes.current;
         if (!n) return;
-        if (k !== 'off') n.shaper.curve = shaperCurve(k === 'hard' ? 'hard' : 'soft', d);
+        if (k !== 'off') {
+            const curveKind = k === 'hard' ? 'hard' : 'soft';
+            // The new curve's matching gain with it, so a jump or a drag never plays louder (or quieter) while the
+            // follower or the measurement catches up. Both are worked out first, then go to the audio thread together.
+            const curve = shaperCurve(curveKind, d);
+            const match = n.retune(curveKind, d, sat);
+            n.shaper.curve = curve;
+            match?.();
+        }
         n.dry.gain.setTargetAtTime(k === 'off' ? 1 : 0, n.ctx.currentTime, 0.015);
         n.wet.gain.setTargetAtTime(k === 'off' ? 0 : 1, n.ctx.currentTime, 0.015);
     };

@@ -347,7 +347,8 @@ export function BitDepthDemo() {
             />
             <Readout
                 items={[
-                    { label: 'Quantization noise floor', value: `about -${Math.round(6.02 * bits)} dBFS` },
+                    // "About" sits in the label, so the value fits its column on any phone.
+                    { label: 'Quantization noise floor, about 6 dB per bit', value: `-${Math.round(6.02 * bits)} dBFS` },
                     { label: 'Steps between silence and full scale', value: groupThousands(2 ** (bits - 1)) },
                 ]}
             />

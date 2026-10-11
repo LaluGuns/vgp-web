@@ -675,8 +675,8 @@ export function LiveMeter({ label, active, read, full }: { label: string; active
 }
 
 /**
- * Numbers under their labels. Labels may wrap; the values always sit on one
- * line, level with each other. One column under 360 px, where two would leave
+ * Numbers under their labels. Labels may wrap (balanced, so no word is left
+ * alone on a line); the values always sit on one line, level with each other. One column under 360 px, where two would leave
  * a value 112 px. Values are kept short (the unit or "share of the time" goes
  * in the label); a value that still outgrows its column is cut with an
  * ellipsis, so it can never widen the page. Not a live region: values that
@@ -688,7 +688,7 @@ export function Readout({ items }: { items: { label: string; value: string }[] }
         <dl className="grid grid-cols-1 items-end gap-x-6 gap-y-3 min-[360px]:grid-cols-2 sm:grid-cols-3">
             {items.map((item) => (
                 <div key={item.label} className="min-w-0">
-                    <dt className="text-xs leading-4 text-white/50">{item.label}</dt>
+                    <dt className="text-balance text-xs leading-4 text-white/50">{item.label}</dt>
                     <dd className="mt-1 min-w-0 truncate text-lg font-semibold leading-6 tabular-nums text-white">{item.value}</dd>
                 </div>
             ))}

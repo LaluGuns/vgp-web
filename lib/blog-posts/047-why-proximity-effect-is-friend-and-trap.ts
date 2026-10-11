@@ -44,8 +44,8 @@ export const post047: BlogArticle = {
             alt: 'EQ gain from 50 Hz to 5 kHz. A grey curve rises to about 9 dB at the low end. A dotted curve, the same rise after a 150 Hz high-pass, peaks around 5 dB near 200 Hz and plunges below 100 Hz. A solid curve, after a low shelf, stays flat at 0 dB. A dashed line marks the 150 Hz cutoff.',
             curves: [
                 { kind: 'eq', bands: [CLOSE], label: 'Close take', muted: true },
-                { kind: 'eq', bands: [CLOSE, { type: 'highpass', freq: 150 }], label: 'High-pass 150 Hz', dotted: true },
-                { kind: 'eq', bands: [CLOSE, { ...CLOSE, gain: -9.5 }], label: 'Low shelf -9.5 dB' },
+                { kind: 'eq', bands: [CLOSE, { type: 'highpass', freq: 150 }], label: 'With high-pass 150 Hz', dotted: true },
+                { kind: 'eq', bands: [CLOSE, { ...CLOSE, gain: -9.5 }], label: 'With low shelf -9.5 dB' },
             ],
         },
     },
