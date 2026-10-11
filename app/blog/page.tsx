@@ -8,7 +8,7 @@ import { JsonLd } from '@/components/blog/article/JsonLd';
 import { startLessons } from '@/components/blog/paths/startLessons';
 import { SITE, breadcrumbs, pathsCollection } from '@/components/blog/paths/structured';
 import { BlogIndex, type BlogListItem } from './BlogIndex';
-import { lessonSearchFields } from './search-index';
+import { lessonSearchFields, searchDigestVersion } from './search-index';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -67,6 +67,7 @@ export default function BlogPage() {
                 }))}
                 startHere={startLessons()}
                 glossaryCount={glossary.length}
+                digestVersion={searchDigestVersion(articles)}
             />
         </>
     );

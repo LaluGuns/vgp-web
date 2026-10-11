@@ -1327,7 +1327,16 @@ body::before {
   .vgp-map-tap-hint:not([data-live]) {
     visibility: hidden;
   }
+}
 
+/* Without script a tap opens the lesson at once, so the hint (and the room kept for it) goes. */
+@media (hover: none) and (max-width: 1023.98px) and (scripting: none) {
+  .vgp-map-tap-hint {
+    display: none;
+  }
+}
+
+@media (hover: none) and (max-width: 1023.98px) {
   .vgp-map-readout {
     position: fixed;
     top: auto;

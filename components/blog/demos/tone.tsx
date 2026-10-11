@@ -972,7 +972,13 @@ export function SaturationDemo() {
         if (!n) return;
         n.feed.use(sat?.real ?? null);
         n.real.current = sat !== null;
-        if (sat && sat.kind !== 'off') n.matched.gain.setTargetAtTime(sat.gain, n.ctx.currentTime, 0.01);
+        if (sat && sat.kind !== 'off') {
+            const t = n.ctx.currentTime;
+            // Its own gain replaces any estimate still on its way: a rising one starts a moment ahead (seed),
+            // and would otherwise land after this and stay, since a measurement already shown is not shown again.
+            n.matched.gain.cancelScheduledValues(t);
+            n.matched.gain.setTargetAtTime(sat.gain, t, 0.01);
+        }
     }, [sat]);
     const shownGr = sat && sat.kind !== 'off' ? 20 * Math.log10(1 / sat.gain) : gr;
 

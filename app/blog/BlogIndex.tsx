@@ -14,7 +14,7 @@ import type { BlogArticle, Category } from '@/lib/blog-data';
 import { useReadArticles } from '@/components/blog/article/useReadArticles';
 import { LearnHeader } from '@/components/learn/LearnHeader';
 import { LearnNav } from '@/components/learn/LearnNav';
-import { correctWord, readDigest, scoreLesson, searchText, searchVocabulary, wordMatchers, type WordMatcher } from './search-match';
+import { readDigest, searchLessons, searchText, searchVocabulary, type DigestWords } from './search-match';
 
 /** The list only needs these fields; full article bodies stay on the server. */
 export type BlogListItem = Pick<BlogArticle, 'slug' | 'title' | 'excerpt' | 'category' | 'publishedAt' | 'readingTime'> & {
@@ -42,6 +42,8 @@ interface BlogIndexProps {
     paths: PathSummary[];
     startHere: StartLesson[];
     glossaryCount: number;
+    /** The lesson-text digest's version (search-index.ts, `searchDigestVersion`), for its URL. */
+    digestVersion: string;
 }
 
 /** Best match exists only while there is a query; it is then the default order. */
@@ -83,8 +85,28 @@ function vocabularyFor(fields: Map<string, string[]>) {
     return words;
 }
 
-/** Words from the lesson bodies (search-index.ts, `searchDigest`), fetched once the reader starts a search. */
+/**
+ * Words from the lesson text (search-index.ts, `searchDigest`), fetched once the reader starts a
+ * search and kept for the rest of the visit, so a Back to the list has them at once. The URL
+ * carries the digest's version, so the browser may keep it and a new deploy is a new URL.
+ */
 const DIGEST_URL = '/blog/search-digest.json';
+let digestLoad: Promise<Record<string, DigestWords>> | null = null;
+let digestLoaded: Record<string, DigestWords> | null = null;
+function fetchDigest(version: string) {
+    digestLoad ??= fetch(`${DIGEST_URL}?v=${encodeURIComponent(version)}`)
+        .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`${response.status}`))))
+        .then((data: unknown) => {
+            if (!data || typeof data !== 'object') throw new Error('digest');
+            digestLoaded = readDigest(data as Record<string, unknown>);
+            return digestLoaded;
+        })
+        .catch((error: unknown) => {
+            digestLoad = null;
+            throw error;
+        });
+    return digestLoad;
+}
 
 const chipClass = (active: boolean) =>
     `inline-flex min-h-11 shrink-0 items-center rounded-md border px-3.5 text-sm font-medium transition-colors vgp-focus ${
@@ -210,7 +232,7 @@ const LearningPaths = memo(function LearningPaths({ paths, read, startHere }: { 
  * history.replaceState, which Next keeps in sync with useSearchParams
  * without a server round trip.
  */
-export function BlogIndex({ articles, categories, featured, paths, startHere, glossaryCount }: BlogIndexProps) {
+export function BlogIndex({ articles, categories, featured, paths, startHere, glossaryCount, digestVersion }: BlogIndexProps) {
     const read = useReadArticles();
     const params = useSearchParams();
     const pathname = usePathname();
@@ -256,23 +278,19 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // The body digest loads once, when the reader first focuses the box, types, or opens a
     // list that already has a query. Until it arrives, search covers titles, excerpts,
     // headings and terms; a failed fetch is tried again on the next search.
-    const [digest, setDigest] = useState<Record<string, string> | null>(null);
+    const [digest, setDigest] = useState<Record<string, DigestWords> | null>(() => digestLoaded);
     const [digestFailed, setDigestFailed] = useState(false);
     const digestRequested = useRef(false);
     const loadDigest = useCallback(() => {
-        if (digestRequested.current) return;
+        if (digestRequested.current || digestLoaded) return;
         digestRequested.current = true;
-        fetch(DIGEST_URL)
-            .then((response) => (response.ok ? response.json() : Promise.reject(new Error(`${response.status}`))))
-            .then((data: unknown) => {
-                if (data && typeof data === 'object') setDigest(readDigest(data as Record<string, unknown>));
-                else setDigestFailed(true);
-            })
+        fetchDigest(digestVersion)
+            .then(setDigest)
             .catch(() => {
                 digestRequested.current = false;
                 setDigestFailed(true);
             });
-    }, []);
+    }, [digestVersion]);
     useEffect(() => {
         if (urlQuery) loadDigest();
     }, [urlQuery, loadDigest]);
@@ -371,11 +389,15 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
         return { rank, number };
     }, [paths]);
 
-    // Search fields in score order: title, excerpt, headings, keywords and glossary terms, body digest.
+    // Search fields in score order (search-match.ts, FIELD_POINTS): title, excerpt, headings, keywords and
+    // glossary terms, then the lesson text: the words it uses three times or more, and the rest.
     const fields = useMemo(
         () =>
             new Map(
-                articles.map((a) => [a.slug, [a.title, a.excerpt, a.headings, a.terms, digest?.[a.slug] ?? ''].map(searchText)]),
+                articles.map((a) => {
+                    const text = digest?.[a.slug];
+                    return [a.slug, [a.title, a.excerpt, a.headings, a.terms, text?.strong ?? '', text?.rest ?? ''].map(searchText)];
+                }),
             ),
         [articles, digest],
     );
@@ -385,40 +407,21 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // The lessons in view, and how many more the query finds outside it (in the other paths,
     // or among the lessons not saved), for the empty state. The Saved view lists every saved
     // lesson: no path chip is pressed there, so a path in the address waits until it is left.
-    // A query that finds no lesson anywhere, once the lesson text is searched too, is tried
-    // again with each word that finds nothing corrected by one letter ("compresion" ->
-    // "compression"); `corrected` is then the query the list shows.
-    const [filteredArticles, matchesElsewhere, corrected] = useMemo(() => {
-        const search = (words: WordMatcher[]) => {
-            const phrase = words.map((m) => m.word).join(' ');
-            const found: { article: BlogListItem; index: number; score: number }[] = [];
-            let outside = 0;
-            articles.forEach((article, index) => {
-                const score = words.length ? scoreLesson(fields.get(article.slug) ?? [], words, phrase) : 0;
-                if (words.length > 0 && score === 0) return;
-                const inView = showSaved ? saved.includes(article.slug) : category === 'all' || article.category === category;
-                if (inView) found.push({ article, index, score });
-                else outside += 1;
-            });
-            return { found, outside };
-        };
-        const words = wordMatchers(listQuery);
-        let { found: list, outside: elsewhere } = search(words);
-        let fixed: string | null = null;
-        if (words.length > 0 && list.length === 0 && elsewhere === 0 && bodiesSearched) {
-            const lessonFields = [...fields.values()];
-            const vocabulary = vocabularyFor(fields);
-            const findsSomething = (m: WordMatcher) => lessonFields.some((f) => scoreLesson(f, [m], m.word) > 0);
-            const typed = words.map((m) => m.word);
-            const fixedWords = words.map((m) => (findsSomething(m) ? m.word : (correctWord(m.word, vocabulary) ?? m.word)));
-            if (fixedWords.some((word, i) => word !== typed[i])) {
-                const again = search(wordMatchers(fixedWords.join(' ')));
-                if (again.found.length > 0 || again.outside > 0) {
-                    ({ found: list, outside: elsewhere } = again);
-                    fixed = fixedWords.join(' ');
-                }
-            }
-        }
+    // The query is read the way a reader asks it (search-match.ts, `searchLessons`); once the
+    // lesson text is searched too, one that finds no lesson is tried with its typos corrected
+    // (`corrected` is then the query the list shows), and then as the lessons with most of
+    // its words (`partial`).
+    const [filteredArticles, matchesElsewhere, corrected, partial] = useMemo(() => {
+        const result = hasQuery ? searchLessons([...fields.values()], listQuery, bodiesSearched, () => vocabularyFor(fields)) : null;
+        const list: { article: BlogListItem; index: number; score: number }[] = [];
+        let elsewhere = 0;
+        articles.forEach((article, index) => {
+            const score = result ? result.scores[index] : 0;
+            if (result && score === 0) return;
+            const inView = showSaved ? saved.includes(article.slug) : category === 'all' || article.category === category;
+            if (inView) list.push({ article, index, score });
+            else elsewhere += 1;
+        });
         const newest = (a: (typeof list)[number], b: (typeof list)[number]) =>
             b.article.publishedAt.localeCompare(a.article.publishedAt) || b.index - a.index;
         list.sort((a, b) => {
@@ -430,8 +433,8 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             }
             return newest(a, b);
         });
-        return [list.map(({ article }) => article), elsewhere, fixed] as const;
-    }, [articles, category, showSaved, saved, listQuery, fields, sort, pathOrder, bodiesSearched]);
+        return [list.map(({ article }) => article), elsewhere, result?.corrected ?? null, result?.partial ?? false] as const;
+    }, [articles, category, showSaved, saved, listQuery, hasQuery, fields, sort, pathOrder, bodiesSearched]);
 
     const showFeaturedArticle = Boolean(featured && !hasQuery && category === 'all' && !showSaved);
     const libraryArticles = showFeaturedArticle ? filteredArticles.filter((a) => a.slug !== featured?.slug) : filteredArticles;
@@ -468,10 +471,16 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
     // Lesson bodies are searched once the digest arrives (about a second on a slow phone
     // connection): until then a query that only a body would find says so, not "No lesson".
     const searchingBodies = hasQuery && digest === null && !digestFailed;
-    // A corrected typo says so first, the way the list does when it shows the corrected results.
+    // With nothing in view: a corrected typo leads with the corrected query, as the line over corrected
+    // results does; a query no lesson has every word of says so, then where the lessons with most of
+    // its words are.
     const emptyState = (() => {
         const typed = listQuery.trim();
-        const fixed = corrected ? `No lesson matches "${typed}". Showing results for "${corrected}": ` : '';
+        const lead = (where: string) =>
+            corrected
+                ? `Results for "${corrected}": ${where}. No lesson matches "${typed}".`
+                : `No lesson matches every word of "${typed}". Lessons that match most of them: ${where}.`;
+        const fixed = Boolean(corrected) || partial;
         const all = { label: 'Show all lessons', onClick: resetFilters };
         if (showSaved) {
             if (saved.length === 0 || !hasQuery) {
@@ -481,7 +490,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             return matchesElsewhere > 0
                 ? {
                       message: fixed
-                          ? `${fixed}none of your saved lessons, ${others}.`
+                          ? lead(`none of your saved lessons, ${others}`)
                           : `None of your saved lessons matches "${typed}". ${others} ${matchesElsewhere === 1 ? 'does' : 'do'}.`,
                       action: { label: 'Search all lessons', onClick: searchEverywhere },
                   }
@@ -493,7 +502,7 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
             const others = `${matchesElsewhere} ${matchesElsewhere === 1 ? 'lesson in another path' : 'lessons in other paths'}`;
             return {
                 message: fixed
-                    ? `${fixed}none in ${path}, ${others}.`
+                    ? lead(`none in ${path}, ${others}`)
                     : `No lesson in ${path} matches "${typed}". ${others} ${matchesElsewhere === 1 ? 'does' : 'do'}.`,
                 action: { label: 'Search all paths', onClick: searchEverywhere },
             };
@@ -514,7 +523,9 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
               ? emptyState.message
               : corrected
                 ? `Showing results for "${corrected}". ${countText}.`
-                : countText;
+                : partial
+                  ? `No lesson matches every word. Showing the lessons that match most of them. ${countText}.`
+                  : countText;
     // Every key starts the wait again (`query`), also while the count stays the same.
     const [announcement, setAnnouncement] = useState('');
     const firstMessage = useRef<string | null>(null);
@@ -709,6 +720,12 @@ export function BlogIndex({ articles, categories, featured, paths, startHere, gl
                                     <p className="border-b border-white/10 py-5 text-base leading-7 text-white/75">
                                         Showing results for <span className="font-medium text-white">&quot;{corrected}&quot;</span>. No lesson
                                         matches &quot;{listQuery.trim()}&quot;.
+                                    </p>
+                                ) : null}
+                                {partial && libraryArticles.length > 0 ? (
+                                    <p className="border-b border-white/10 py-5 text-base leading-7 text-white/75">
+                                        No lesson matches every word of <span className="font-medium text-white">&quot;{listQuery.trim()}&quot;</span>.
+                                        Showing the lessons that match most of them.
                                     </p>
                                 ) : null}
 

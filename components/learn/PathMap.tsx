@@ -62,18 +62,19 @@ function Track({ path, family, order }: { path: MapPath; family: MapFamily; orde
     const d = family.dialect;
     const total = path.lessons.length;
     // The lesson list is named by the path alone; the link to the path page also says how many lessons.
-    const nameId = `map-${path.slug}`;
     return (
         <li className="vgp-map-path">
+            {/* Named "Songwriting, 10 lessons" (PathMapLive keeps the count in it): from its two boxes the name would
+                read "Songwriting 10 lessons", and a hidden comma between them came out as "Songwriting , 10". */}
             <a
                 href={`/blog/category/${path.slug}`}
+                aria-label={`${path.name}, ${total} lessons`}
+                data-map-path={path.name}
                 className="vgp-focus group flex min-h-11 items-center justify-between gap-4 rounded-sm lg:flex-col lg:items-start lg:justify-center lg:gap-0"
             >
-                <span id={nameId} className="text-sm font-semibold leading-5 text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
+                <span className="text-sm font-semibold leading-5 text-white group-hover:underline group-hover:decoration-white/40 group-hover:underline-offset-4">
                     {path.name}
                 </span>
-                {/* Spoken as "Songwriting, 10 lessons". */}
-                <span className="sr-only">, </span>
                 <span data-map-count={path.slug} data-total={total} className="shrink-0 text-xs tabular-nums leading-4 text-white/55">
                     {total} lessons
                 </span>
@@ -84,7 +85,7 @@ function Track({ path, family, order }: { path: MapPath; family: MapFamily; orde
                 made every cell restyle on its own. */}
             <div className="vgp-map-lane" data-dialect={d.name}>
                 <div className="vgp-map-wipe" data-reveal="draw" style={{ '--o': order, '--len': total } as CSSProperties}>
-                    <ol aria-labelledby={nameId} data-dialect={d.name} data-name={path.name} className="vgp-map-track">
+                    <ol aria-label={path.name} data-dialect={d.name} data-name={path.name} className="vgp-map-track">
                         {path.lessons.map((lesson, i) => (
                             <li
                                 key={lesson.slug}

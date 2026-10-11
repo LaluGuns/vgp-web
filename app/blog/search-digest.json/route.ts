@@ -5,5 +5,6 @@ import { searchDigest } from '../search-index';
 export const dynamic = 'force-static';
 
 export function GET() {
-    return Response.json(searchDigest(articles), { headers: { 'X-Robots-Tag': 'noindex' } });
+    // The list asks for it with the digest's version in the query (BlogIndex.tsx), so the browser may keep it for a day.
+    return Response.json(searchDigest(articles), { headers: { 'X-Robots-Tag': 'noindex', 'Cache-Control': 'public, max-age=86400, s-maxage=31536000' } });
 }

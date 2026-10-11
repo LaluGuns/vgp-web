@@ -59,6 +59,8 @@ export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: s
                 const total = Number(count.dataset.total);
                 const done = track ? track.querySelectorAll('a[data-read]').length : 0;
                 count.textContent = done > 0 ? `${done} of ${total} read` : `${total} lessons`;
+                const pathLink = count.closest<HTMLElement>('a[data-map-path]');
+                pathLink?.setAttribute('aria-label', `${pathLink.dataset.mapPath}, ${count.textContent}`);
             }
         };
 
@@ -95,8 +97,9 @@ export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: s
             }
             const track = next.closest('ol');
             const place = `${next.dataset.n} of ${track?.childElementCount ?? 0} · ${next.dataset.min} min${next.hasAttribute('data-read') ? ' · read' : ''}`;
-            // A chosen mark's line leaves room for "Open lesson"; the map names its path right above its line.
-            line.textContent = isChosen ? `Lesson ${place}` : `${track?.dataset.name ?? ''} · lesson ${place}`;
+            // A chosen mark's line leaves room for "Open lesson" ("22 of 44 · 10 min · read" fits beside it at 320 px);
+            // the map names its path right above its line.
+            line.textContent = isChosen ? place : `${track?.dataset.name ?? ''} · lesson ${place}`;
             title.textContent = titleOf(next);
             readout?.setAttribute('data-active', '');
         };
@@ -129,6 +132,9 @@ export function PathMapLive({ mapId, readoutId, announceId, hintId }: { mapId: s
             link?.setAttribute('data-chosen', '');
             show(link);
             if (!link) return;
+            // A mark just tapped is on screen even where the map's top is still below the band the observer watches
+            // (the first path near the bottom of a phone held sideways), so the card shows.
+            readout?.removeAttribute('data-out');
             // The card shows over the lower part of the screen: a mark chosen there moves up clear of it, and a
             // second tap in the same place then lands on the card, which opens the same lesson.
             if (readoutBox()?.card) clearOfReadout(link);

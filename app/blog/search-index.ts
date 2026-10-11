@@ -16,7 +16,7 @@
 
 import type { BlogArticle } from '@/lib/blog-data';
 import { termsIn } from '@/lib/blog/glossary';
-import { findsWord, searchText, wordMatchers, writeDigest } from './search-match';
+import { digestMatcher, findsWord, searchText, writeDigest } from './search-match';
 
 const ROLE_PREFIX = /^(?:hook|why it matters(?: in the (?:mix|session|room))?|science model|daw experiment|common mistake|producer takeaway)\s*:?\s*/i;
 
@@ -78,6 +78,12 @@ const DIGEST_MAX_LESSONS = 5;
  * (19) and "rms" (8) found nothing, and "threshold" (31) three.
  */
 const COMMON_WORD_LESSONS = 8;
+
+/** A lesson that uses a word this many times or more leans on it: its digest says so, and the search ranks it higher. */
+const STRONG_USES = 3;
+
+/** A lesson that uses a commoner word this many times or more is about it: the digest carries it there too, beyond COMMON_WORD_LESSONS. */
+const ABOUT_USES = 5;
 
 /**
  * Numbers that are the names of instruments (drum machines, a bass synth): a reader searching "808"
@@ -186,7 +192,9 @@ let digestCache: { source: readonly BlogArticle[]; digest: Record<string, string
  *   their prose when the lesson's prose has it), and any NAMED_NUMBERS,
  *   under the lesson's slug.
  * - Each commoner word in the lessons that use it most, until the search
- *   finds it in COMMON_WORD_LESSONS of them, listed once with those lessons.
+ *   finds it in COMMON_WORD_LESSONS of them, and in every lesson that uses
+ *   it ABOUT_USES times or more, listed once with those lessons.
+ * - In both, apart, the words a lesson uses STRONG_USES times or more.
  * The browser searches it last, so a body match never outranks a title.
  */
 export function searchDigest(articles: readonly BlogArticle[]): Record<string, string> {
@@ -229,7 +237,7 @@ export function searchDigest(articles: readonly BlogArticle[]): Record<string, s
         .filter(([word]) => !isRare(word) && !isEveryday(word) && !inflected(word))
         .sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
     for (const [word] of candidates) {
-        const [matcher] = wordMatchers(word);
+        const matcher = digestMatcher(word);
         const key = matcher.word.slice(0, 3);
         let found = 0;
         // Lessons the search misses that use a form the word matches, with the form they use most.
@@ -243,7 +251,8 @@ export function searchDigest(articles: readonly BlogArticle[]): Record<string, s
             let uses = 0;
             let best = 0;
             for (const candidate of byStart[i].get(key) ?? []) {
-                if (!findsWord(searchText(` ${candidate}`), matcher)) continue;
+                // An everyday word is never listed, also not as the singular of another ("one" for "ones").
+                if (isEveryday(candidate) || !findsWord(searchText(` ${candidate}`), matcher)) continue;
                 const n = bodies[i].get(candidate) ?? 0;
                 uses += n;
                 if (n > best) [form, best] = [candidate, n];
@@ -251,21 +260,45 @@ export function searchDigest(articles: readonly BlogArticle[]): Record<string, s
             if (form) missed.push({ i, form, uses });
         });
         const missing = Math.min(COMMON_WORD_LESSONS, found + missed.length) - found;
-        if (missing <= 0) continue;
         missed.sort((a, b) => b.uses - a.uses || a.i - b.i);
-        for (const { i, form } of missed.slice(0, missing)) {
+        // A lesson that uses the word ABOUT_USES times or more is about it, so it is always found.
+        const chosen = missed.filter(({ uses }, k) => k < missing || uses >= ABOUT_USES);
+        for (const { i, form } of chosen) {
             common.set(form, [...(common.get(form) ?? []), i]);
             searched[i] += ` ${searchText(form)}`;
         }
     }
 
-    const words: Record<string, string> = {};
+    // A word the lesson uses three times or more goes first, so the browser ranks that lesson above one that uses it once.
+    const often = (i: number, word: string) => (bodies[i].get(word) ?? 0) >= STRONG_USES;
+    const words: Record<string, { strong: string[]; rest: string[] }> = {};
     articles.forEach((article, i) => {
-        words[article.slug] = rare[i].join(' ');
+        words[article.slug] = { strong: rare[i].filter((word) => often(i, word)), rest: rare[i].filter((word) => !often(i, word)) };
     });
     // Positions count the slugs in the order the browser reads them back.
     const position = new Map(Object.keys(words).map((slug, at) => [slug, at]));
-    const digest = writeDigest(words, new Map([...common].map(([word, lessons]) => [word, lessons.map((i) => position.get(articles[i].slug) ?? 0)])));
+    const at = (lessons: number[]) => lessons.map((i) => position.get(articles[i].slug) ?? 0);
+    const listed = new Map(
+        [...common].map(([word, lessons]) => [word, { strong: at(lessons.filter((i) => often(i, word))), rest: at(lessons.filter((i) => !often(i, word))) }]),
+    );
+    const digest = writeDigest(words, listed);
     digestCache = { source: articles, digest };
     return digest;
+}
+
+let versionCache: { source: readonly BlogArticle[]; version: string } | undefined;
+
+/**
+ * A short hash of the digest, for its URL (/blog/search-digest.json?v=...): the browser keeps the digest, and a
+ * deploy that changes it changes the URL, so no visitor searches an old one.
+ */
+export function searchDigestVersion(articles: readonly BlogArticle[]): string {
+    if (versionCache?.source === articles) return versionCache.version;
+    const text = JSON.stringify(searchDigest(articles));
+    // FNV-1a, 32 bits.
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 0x01000193);
+    const version = (hash >>> 0).toString(36);
+    versionCache = { source: articles, version };
+    return version;
 }

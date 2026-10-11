@@ -362,9 +362,25 @@ export function MobileContents({ headings }: { headings: OutlineItem[] }) {
         pop.addEventListener('toggle', onToggle);
         // Tab past the last section closes the sheet, so focus never moves on underneath it.
         const stopFocus = closeWhenFocusLeaves(pop);
+        // ...and goes on from the section being read, not from the top of the lesson, where the sheet sits in
+        // the page: the section's heading takes focus where it is (no scroll), and the next Tab follows it.
+        const onKey = (event: KeyboardEvent) => {
+            if (event.key !== 'Tab' || event.shiftKey || event.defaultPrevented) return;
+            const stops = pop.querySelectorAll<HTMLElement>('a[href], button');
+            if (document.activeElement !== stops[stops.length - 1]) return;
+            const heading = document.getElementById(currentSection(readNow(), ids) || ids[0]);
+            if (!heading) return;
+            event.preventDefault();
+            pop.hidePopover();
+            if (!heading.hasAttribute('tabindex')) heading.setAttribute('tabindex', '-1');
+            heading.classList.add('vgp-focus');
+            heading.focus({ preventScroll: true });
+        };
+        pop.addEventListener('keydown', onKey);
         return () => {
             narrow.removeEventListener('change', start);
             pop.removeEventListener('beforetoggle', onBeforeToggle);
+            pop.removeEventListener('keydown', onKey);
             pop.removeEventListener('toggle', onToggle);
             stopFocus();
             window.clearTimeout(idle);

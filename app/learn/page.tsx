@@ -172,7 +172,7 @@ export default function LearnHubPage() {
                             {/* The whole box is one link once a tap chooses a mark (PathMapLive gives it that lesson's href, so a
                                 second tap anywhere on the card opens it); without an href it is not a link. */}
                             <a data-open="" tabIndex={-1} className="vgp-map-readout-link block">
-                                <span className="flex items-center gap-4">
+                                <span className="flex items-center gap-3">
                                     <span data-line="" className="min-w-0 flex-1 truncate text-sm leading-5 text-white/55">
                                         <span data-hint="pointer">Point at a mark, or move to one with the Tab key, to see its lesson.</span>
                                         <span data-hint="touch">Tap a mark to see its lesson, then tap it again to open it.</span>
@@ -184,8 +184,9 @@ export default function LearnHubPage() {
                                 <span data-title="" className="mt-1 block truncate text-lg font-semibold leading-7 text-white/80" />
                             </a>
                         </div>
-                        {/* Says which lesson a first tap chose, for a screen reader on a touch screen (PathMapLive). */}
-                        <p id="map-announce" aria-live="polite" className="sr-only" />
+                        {/* Says that a first tap chose a mark, and on which path, for a screen reader on a touch screen
+                            (PathMapLive). A div, not a paragraph, so a reader reading the page skips it while it is empty. */}
+                        <div id="map-announce" aria-live="polite" className="sr-only" />
                         {/* A link per lesson and per path: a keyboard user can step over all of them at once. Shown while it has focus. */}
                         <div id="path-map" className="vgp-map-box relative mt-1">
                             <a
