@@ -1812,8 +1812,8 @@ export function LimiterDemo() {
         nodes.current = n;
         if (analysis) {
             applyLimit(n, analysis, false);
-            // Pressed while a new drive is still being measured: held back as a new drive is (below).
-            holdLimit(n, analysis, drive);
+            // Pressed while a new drive is still being measured: held back as a new drive is (below), from the start.
+            match.gain.setValueAtTime(heldLimit(analysis, drive), ctx.currentTime);
         }
         return () => {
             feed.stop();
@@ -1937,11 +1937,17 @@ function applyLimit(n: { ctx: AudioContext; norm: GainNode; lim: LimiterNodes; m
  * More drive raises the limiter's output by at most as many dB (by less once
  * it limits), so until a higher drive has been measured the last matching
  * gain is lowered by the whole rise: the moment between the two measurements
- * may play a little quieter, never louder. Less drive keeps the last gain.
+ * may play a little quieter, never louder. Less drive, or the measured drive
+ * again (its measurement is the one already showing, so nothing else would
+ * restore it), plays the measured gain itself. Always set: lower at once,
+ * higher over 20 ms, as applyLimit does.
  */
 function holdLimit(n: { ctx: AudioContext; match: GainNode }, a: LimitAnalysis, drive: number) {
-    if (drive > a.params.drive) n.match.gain.setTargetAtTime(a.match * dbToGain(a.params.drive - drive), n.ctx.currentTime, 0.005);
+    const gain = heldLimit(a, drive);
+    n.match.gain.setTargetAtTime(gain, n.ctx.currentTime, gain < n.match.gain.value ? 0.005 : 0.02);
 }
+
+const heldLimit = (a: LimitAnalysis, drive: number) => a.match * dbToGain(Math.min(0, a.params.drive - drive));
 
 // ── Clipping at the converter ───────────────────────────────────────
 

@@ -281,8 +281,8 @@ export function CompressorDemo() {
         nodes.current = n;
         if (analysis) {
             applyMatch(n, analysis, false);
-            // Pressed while a new setting is still being measured: held back as a new setting is (below).
-            if (!sameParams(analysis.params, settings)) holdBack(n, analysis, settings);
+            // Pressed while a new setting is still being measured: held back as a new setting is (below), from the start.
+            if (!sameParams(analysis.params, settings)) makeup.gain.setValueAtTime(heldGain(analysis, settings), ctx.currentTime);
         }
         return () => {
             feed.stop();
@@ -299,13 +299,17 @@ export function CompressorDemo() {
 
     // A new setting is heard at once, with the matching gain the last one had (turned down first if the new one
     // compresses less, so a jump to a gentle setting never plays louder than it should while it is measured).
+    // Back on the measured setting before the new one has been measured, that setting's own gain comes back: its
+    // measurement is the one already showing, so nothing else would put it back.
     useEffect(() => {
         const n = nodes.current;
         if (!n) return;
         const p = { threshold, ratio, attack, release };
         applyParams(n, p);
         const a = measured.current;
-        if (a && !sameParams(a.params, p)) holdBack(n, a, p);
+        if (!a) return;
+        if (sameParams(a.params, p)) applyMatch(n, a, true);
+        else holdBack(n, a, p);
     }, [threshold, ratio, attack, release]);
 
     // Its own matching gain follows once it has been measured, and a new source with its first measurement.
@@ -429,13 +433,24 @@ function gentlerBy(a: CompAnalysis, p: CompParams): number {
     return then - now;
 }
 
-function holdBack(n: CompNodes, a: CompAnalysis, p: CompParams) {
+/** The matching gain `p` plays with until it is measured (holdBack): never above the measured setting's own. */
+function heldGain(a: CompAnalysis, p: CompParams): number {
     let gain = a.match * 10 ** (-Math.max(0, gentlerBy(a, p)) / 20);
     // A slower attack (or a faster release) lets more of each hit through before the compressor acts, so the peaks
     // can rise toward the dry loop's own. Until the setting is measured, the gain then stays within the peak
     // allowance the matching itself keeps, which holds those peaks where the bypass's allowance puts them.
     if (p.attack > a.params.attack || p.release < a.params.release) gain = Math.min(gain, PEAK_ROOM);
-    if (gain < a.match) n.makeup.gain.setTargetAtTime(gain, n.ctx.currentTime, 0.005);
+    return Math.min(gain, a.match);
+}
+
+/**
+ * Always set: a lower gain lands at once; a setting held back further a moment ago comes back up to this one
+ * over the attack time, as makeup does in applyMatch.
+ */
+function holdBack(n: CompNodes, a: CompAnalysis, p: CompParams) {
+    const held = heldGain(a, p);
+    const up = held > n.makeup.gain.value;
+    n.makeup.gain.setTargetAtTime(held, n.ctx.currentTime, up ? Math.max(0.01, p.attack / 1000) : 0.005);
 }
 
 function applyMatch(n: CompNodes, a: CompAnalysis, smooth: boolean) {
