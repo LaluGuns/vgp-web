@@ -48,7 +48,13 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
                 </div>
                 {next ? (
                     <EditorialButton href={`/blog/${next.slug}`} withArrow>
-                        {label}
+                        {/* Sized by its longest everyday form, so it keeps its width when the reading state loads. */}
+                        <span className="grid [&>*]:col-start-1 [&>*]:row-start-1">
+                            <span className="invisible" aria-hidden="true">
+                                Continue with lesson {lessons.length}
+                            </span>
+                            <span>{label}</span>
+                        </span>
                     </EditorialButton>
                 ) : null}
             </div>
@@ -78,7 +84,8 @@ export function PathLessons({ lessons }: { lessons: PathLesson[] }) {
                                     <span id={`${id}-meta`} className="text-xs text-white/50">
                                         Lesson {i + 1} · {lesson.readingTime} min
                                         {lesson.features.length ? ` · ${lesson.features.join(' · ')}` : ''}
-                                        {isRead ? ' · Read' : ''}
+                                        {/* Always laid out, so the line wraps the same before and after the reading state loads. */}
+                                        <span className={isRead ? undefined : 'invisible'}> · Read</span>
                                     </span>
                                     <h2
                                         id={`${id}-title`}

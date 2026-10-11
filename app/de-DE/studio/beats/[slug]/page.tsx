@@ -17,7 +17,7 @@ import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClie
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
-import { beatShareCard, TWITTER_HANDLES } from '@/lib/og';
+import { beatShareCard, ogImage, socialMetadata, TWITTER_HANDLES } from '@/lib/og';
 import {
     getEditorialBeatWorld,
     getOfficialBeatStarsGenres,
@@ -39,10 +39,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { slug } = await params;
 
     if (slug === 'licensing') {
+        const title = 'Beat-Lizenzierungsrichtlinien & Bedingungen | Virzy Guns Production';
+        const description =
+            'Offizielle Beat-Lizenzierungsoptionen erklärt: MP3, WAV, Stems, Unbegrenzte und Exklusive Rechte von Virzy Guns.';
         return {
-            title: 'Beat-Lizenzierungsrichtlinien & Bedingungen | Virzy Guns Production',
-            description:
-                'Offizielle Beat-Lizenzierungsoptionen erklärt: MP3, WAV, Stems, Unbegrenzte und Exklusive Rechte von Virzy Guns.',
+            title,
+            description,
+            ...socialMetadata({
+                title,
+                description,
+                url: `${SITE_URL}/de-DE/studio/beats/licensing`,
+                image: ogImage({ kicker: 'Beat Store', title: 'Beat licenses, explained.', sub: 'MP3, WAV, stems, unlimited and exclusive rights.' }),
+                locale: 'de_DE',
+            }),
             keywords: [
                 'Beat-Lizenzierungsrichtlinien',
                 'Exklusive Beat-Rechte',
@@ -109,9 +118,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const category = getCategoryBySlug(slug);
     if (category) {
+        const title = category.localizedName['de-DE'] || `${category.name} | Virzy Guns`;
+        const description = category.shortDescription['de-DE'] || category.shortDescription['en-US'] || '';
         return {
-            title: category.localizedName['de-DE'] || `${category.name} | Virzy Guns`,
-            description: category.shortDescription['de-DE'] || category.shortDescription['en-US'] || '',
+            title,
+            description,
+            ...socialMetadata({
+                title,
+                description,
+                url: `${SITE_URL}/de-DE/studio/beats/${category.slug}`,
+                image: ogImage({ kicker: 'Beat Store', title: `${category.name} beats.` }),
+                locale: 'de_DE',
+            }),
             keywords: category.keywords['de-DE'] || [],
             alternates: {
                 canonical: `${SITE_URL}/de-DE/studio/beats/${category.slug}`,

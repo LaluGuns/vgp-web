@@ -17,7 +17,7 @@ import BeatDetailClient from '../../../../studio/beats/components/BeatDetailClie
 import CategoryClient from '../../../../studio/beats/components/CategoryClient';
 import LicensingClient from '../../../../studio/beats/components/LicensingClient';
 import { getBeatMetaDescription } from '@/lib/seo/beat-copy';
-import { beatShareCard, TWITTER_HANDLES } from '@/lib/og';
+import { beatShareCard, ogImage, socialMetadata, TWITTER_HANDLES } from '@/lib/og';
 import {
     getEditorialBeatWorld,
     getOfficialBeatStarsGenres,
@@ -39,10 +39,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { slug } = await params;
 
     if (slug === 'licensing') {
+        const title = 'ビートライセンス利用規約ガイド | Virzy Guns Production';
+        const description =
+            'Virzy Gunsによる公式ビートライセンス規約解説：MP3、WAV、トラックステム、無制限商用利用、独占ライセンス権。';
         return {
-            title: 'ビートライセンス利用規約ガイド | Virzy Guns Production',
-            description:
-                'Virzy Gunsによる公式ビートライセンス規約解説：MP3、WAV、トラックステム、無制限商用利用、独占ライセンス権。',
+            title,
+            description,
+            ...socialMetadata({
+                title,
+                description,
+                url: `${SITE_URL}/ja-JP/studio/beats/licensing`,
+                image: ogImage({ kicker: 'Beat Store', title: 'Beat licenses, explained.', sub: 'MP3, WAV, stems, unlimited and exclusive rights.' }),
+                locale: 'ja_JP',
+            }),
             keywords: [
                 'ビートライセンス利用規約',
                 '独占ライセンス権',
@@ -108,9 +117,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const category = getCategoryBySlug(slug);
     if (category) {
+        const title = category.localizedName['ja-JP'] || `${category.name} | Virzy Guns`;
+        const description = category.shortDescription['ja-JP'] || category.shortDescription['en-US'] || '';
         return {
-            title: category.localizedName['ja-JP'] || `${category.name} | Virzy Guns`,
-            description: category.shortDescription['ja-JP'] || category.shortDescription['en-US'] || '',
+            title,
+            description,
+            ...socialMetadata({
+                title,
+                description,
+                url: `${SITE_URL}/ja-JP/studio/beats/${category.slug}`,
+                image: ogImage({ kicker: 'Beat Store', title: `${category.name} beats.` }),
+                locale: 'ja_JP',
+            }),
             keywords: category.keywords['ja-JP'] || [],
             alternates: {
                 canonical: `${SITE_URL}/ja-JP/studio/beats/${category.slug}`,

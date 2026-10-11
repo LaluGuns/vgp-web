@@ -1,19 +1,18 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { OG_SITE, ogImage } from '@/lib/og';
+import { ogImage, socialMetadata } from '@/lib/og';
 import { PolicyPage } from '@/components/policies/PolicyPage';
 
 export const metadata: Metadata = {
     title: 'Privacy Policy',
     description: 'How Virzy Guns Production handles information across its public website and public VGP services.',
     alternates: { canonical: '/privacy' },
-    openGraph: {
+    ...socialMetadata({
         title: 'Privacy Policy | Virzy Guns Production',
         description: 'Privacy information for the public Virzy Guns Production website and services.',
         url: 'https://www.virzyguns.com/privacy',
-        ...OG_SITE,
-        images: [ogImage({ kicker: 'Privacy', title: 'Privacy Policy' })],
-    },
+        image: ogImage({ kicker: 'Privacy', title: 'Privacy Policy' }),
+    }),
     robots: {
         index: true,
         follow: true,

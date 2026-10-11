@@ -98,7 +98,7 @@ export function generateBeatProductSchema(beat: BeatProduct, locale: 'en-US' | '
                 '@type': 'ListItem',
                 position: 1,
                 name: 'Home',
-                item: locale === 'en-US' ? SITE_URL : `${SITE_URL}/${locale}`,
+                item: SITE_URL,
             },
             {
                 '@type': 'ListItem',
@@ -159,7 +159,7 @@ export function generateCategorySchema(
                         '@type': 'ListItem',
                         position: 1,
                         name: 'Home',
-                        item: locale === 'en-US' ? SITE_URL : `${SITE_URL}/${locale}`,
+                        item: SITE_URL,
                     },
                     {
                         '@type': 'ListItem',
@@ -257,7 +257,7 @@ export function generateLicensingSchema(locale: 'en-US' | 'ja-JP' | 'de-DE' = 'e
                 '@type': 'ListItem',
                 position: 1,
                 name: 'Home',
-                item: locale === 'en-US' ? SITE_URL : `${SITE_URL}/${locale}`,
+                item: SITE_URL,
             },
             {
                 '@type': 'ListItem',

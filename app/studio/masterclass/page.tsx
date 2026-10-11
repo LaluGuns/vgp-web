@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from 'next';
+import { ogImage, socialMetadata } from '@/lib/og';
 import MasterclassClient from './MasterclassClient';
 
 export const metadata: Metadata = {
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/studio/masterclass',
     },
+    ...socialMetadata({
+        title: 'Music Production Masterclass | VGP',
+        description: 'Practical courses on workflow, sound design, mixing, mastering and trap production from VGP.',
+        url: 'https://www.virzyguns.com/studio/masterclass',
+        image: ogImage({ kicker: 'Masterclass', title: 'Music production masterclass.', sub: 'Workflow, sound design, mixing, mastering and trap production.' }),
+    }),
 };
 
 export default function MasterclassPage() {

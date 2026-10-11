@@ -154,7 +154,8 @@ export async function GET(request: NextRequest) {
             width: CARD_W,
             height: CARD_H,
             ...(fonts ? { fonts } : {}),
-            headers: photo ? HEADERS : SHORT_HEADERS,
+            // Only the full card (photo, fonts and the JPEG pass) is kept for a year.
+            headers: photo && fonts && sharp ? HEADERS : SHORT_HEADERS,
         },
     );
 
@@ -162,7 +163,7 @@ export async function GET(request: NextRequest) {
     const png = Buffer.from(await card.arrayBuffer());
     try {
         const jpeg = await sharp(png).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
-        return new Response(new Uint8Array(jpeg), { headers: { ...(photo ? HEADERS : SHORT_HEADERS), 'Content-Type': 'image/jpeg' } });
+        return new Response(new Uint8Array(jpeg), { headers: { ...(photo && fonts ? HEADERS : SHORT_HEADERS), 'Content-Type': 'image/jpeg' } });
     } catch {
         // The PNG is still a valid card, only larger.
         return new Response(new Uint8Array(png), { headers: { ...SHORT_HEADERS, 'Content-Type': 'image/png' } });

@@ -32,6 +32,7 @@ export function socialMetadata({
     url,
     image,
     article,
+    locale,
 }: {
     title: string;
     description: string;
@@ -39,8 +40,10 @@ export function socialMetadata({
     image: ReturnType<typeof ogImage>;
     /** Present for a lesson: og:type article with its dates, author (a profile URL) and section (the path's name). */
     article?: { publishedTime: string; modifiedTime: string; authors: string[]; section?: string };
+    /** og:locale for a page in another language, such as 'de_DE'. */
+    locale?: string;
 }): Pick<Metadata, 'openGraph' | 'twitter'> {
-    const shared = { title, description, url, siteName: SITE_NAME, locale: SITE_LOCALE, images: [image] };
+    const shared = { title, description, url, siteName: SITE_NAME, locale: locale ?? SITE_LOCALE, images: [image] };
     return {
         openGraph: article ? { ...shared, type: 'article', ...article } : { ...shared, type: 'website' },
         twitter: { card: 'summary_large_image', title, description, images: [image.url], ...TWITTER_HANDLES },

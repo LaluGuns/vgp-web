@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { OG_SITE, ogImage } from '@/lib/og';
+import { ogImage, socialMetadata } from '@/lib/og';
 import { PolicyPage } from '@/components/policies/PolicyPage';
 import { founderEmail } from '@/lib/founder-contact';
 
@@ -8,13 +8,12 @@ export const metadata: Metadata = {
     title: 'VGP Terms of Use',
     description: 'General terms of use for VGP websites, games, and related services.',
     alternates: { canonical: '/terms' },
-    openGraph: {
+    ...socialMetadata({
         title: 'VGP Terms of Use',
         description: 'General terms governing use of VGP websites, games, and related services.',
         url: 'https://www.virzyguns.com/terms',
-        ...OG_SITE,
-        images: [ogImage({ kicker: 'Terms', title: 'Terms of Use' })],
-    },
+        image: ogImage({ kicker: 'Terms', title: 'Terms of Use' }),
+    }),
     robots: { index: true, follow: true },
 };
 

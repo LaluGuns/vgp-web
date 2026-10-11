@@ -50,7 +50,8 @@ export default function LicensingClient({ locale = 'en-US' }: LicensingClientPro
             <article className="editorial-shell min-h-screen text-white pt-24 pb-20">
                 <div className="mx-auto max-w-7xl px-6 mb-8 flex items-center justify-between">
                     <nav className="flex items-center gap-2 text-xs text-white/50 font-medium">
-                        <Link href={getLocalePath('/')} className="hover:text-white transition">{text.home}</Link>
+                        {/* The site has one home page; /de-DE and /ja-JP are not pages. */}
+                        <Link href="/" className="hover:text-white transition">{text.home}</Link>
                         <span>/</span>
                         <Link href={getLocalePath('/studio/beats')} className="hover:text-white transition">{text.beats}</Link>
                         <span>/</span>
